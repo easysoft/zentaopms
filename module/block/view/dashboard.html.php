@@ -22,7 +22,7 @@ $useGuest = $this->app->user->account == 'guest';
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->block->noData;?></span>
-      <?php echo html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus'></i> {$lang->block->createBlock}", '', "data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}' class='btn btn-info'")?> 
+      <?php echo html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus'></i> {$lang->block->createBlock}", '', "data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}' class='btn btn-info'")?>
       <?php echo html::a($this->createLink("block", "ajaxReset", "module=$module"), "<i class='icon icon-refresh'></i> {$lang->block->reset}", 'hiddenwin', 'class="btn btn-info"')?>
     </p>
   </div>
@@ -105,21 +105,6 @@ config.ordersSaved = '<?php echo $lang->block->ordersSaved; ?>';
 config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
-<?php if(!$useGuest):?>
-<?php if(!isset($config->$module->block->initVersion) or $config->$module->block->initVersion < '2'):?>
-$(function()
-{
-    if(confirm('<?php echo $lang->block->noticeNewBlock;?>'))
-    {
-        $('#hiddenwin').attr('src', '<?php echo $this->createLink('block', 'ajaxUseNew', "module=$module&confirm=yes");?>');
-    }
-    else
-    {
-        $('#hiddenwin').attr('src', '<?php echo $this->createLink('block', 'ajaxUseNew', "module=$module&confirm=no");?>');
-    }
-})
-<?php endif;?>
-<?php endif;?>
 <?php $remind = $this->loadModel('misc')->getRemind();?>
 <?php if(!empty($remind)):?>
 var myModalTrigger = new $.zui.ModalTrigger({title:'<?php echo $lang->misc->remind;?>', custom: function(){return <?php echo json_encode($remind);?>}, width:'600px'});

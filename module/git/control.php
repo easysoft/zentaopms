@@ -12,8 +12,8 @@
 class git extends control
 {
     /**
-     * Sync git. 
-     * 
+     * Sync git.
+     *
      * @access public
      * @return void
      */
@@ -24,9 +24,9 @@ class git extends control
 
     /**
      * Diff a file.
-     * 
+     *
      * @param  string $path
-     * @param  int    $revision 
+     * @param  int    $revision
      * @access public
      * @return void
      */
@@ -37,14 +37,14 @@ class git extends control
         $path = helper::safe64Decode($path);
         if(common::hasPriv('repo', 'diff'))
         {
-            $repos = $this->loadModel('repo')->getListBySCM('Git', 'haspriv');
+            $repos = $this->loadModel('repo')->getListBySCM('Git,Gitlab', 'haspriv');
             foreach($repos as $repo)
             {
                 if(strpos($path, $repo->path) === 0)
                 {
                     $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
                     $oldRevision = "$revision^";
-                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
+                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
                 }
             }
         }
@@ -52,15 +52,15 @@ class git extends control
         $this->view->path     = $path;
         $this->view->revision = $revision;
         $this->view->diff     = $this->git->diff($path, $revision);
-        
+
         $this->display();
     }
 
     /**
      * Cat a file.
-     * 
+     *
      * @param  string $path
-     * @param  int    $revision 
+     * @param  int    $revision
      * @access public
      * @return void
      */
@@ -71,13 +71,13 @@ class git extends control
         $path = helper::safe64Decode($path);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->getListBySCM('Git', 'haspriv');
+            $repos = $this->loadModel('repo')->getListBySCM('Git,Gitlab', 'haspriv');
             foreach($repos as $repo)
             {
                 if(strpos($path, $repo->path) === 0)
                 {
                     $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
-                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&entry=$entry&revision=$revision", 'html', true));
+                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
                 }
             }
         }
@@ -85,13 +85,13 @@ class git extends control
         $this->view->path     = $path;
         $this->view->revision = $revision;
         $this->view->code     = $this->git->cat($path, $revision);
-        
-       $this->display(); 
+
+       $this->display();
     }
 
     /**
      * Sync from the syncer by api.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -104,9 +104,9 @@ class git extends control
 
             $logs = array();
             $i    = 0;
-            foreach($list as $line) 
+            foreach($list as $line)
             {
-                if(!$line) 
+                if(!$line)
                 {
                     $i++;
                     continue;
@@ -143,7 +143,7 @@ class git extends control
 
     /**
      * Ajax save log.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -198,7 +198,7 @@ class git extends control
 
     /**
      * Ajax get repos.
-     * 
+     *
      * @access public
      * @return void
      */

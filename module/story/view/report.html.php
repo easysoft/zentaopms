@@ -13,7 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=$browseType&moduleID=$moduleID"), "<i class='icon icon-back icon-sm'> </i>" . $lang->goback, '', "class='btn btn-link'");?>
+    <?php $browseLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=$browseType&moduleID=$moduleID&storyType=$storyType")?>
+    <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'> </i>" . $lang->goback, '', "class='btn btn-link'");?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='text'><?php echo $lang->story->report->common;?></span>
@@ -29,6 +30,7 @@
       <div class='panel-body'>
         <form method='post' id='chartTypesForm'>
           <div class='checkboxes'>
+            <?php if($storyType == 'requirement') unset($lang->story->report->charts['storysPerPlan']);?>
             <?php echo html::checkBox('charts', $lang->story->report->charts, $checkedCharts, '', 'block');?>
           </div>
           <div class='btn-toolbar'>

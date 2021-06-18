@@ -47,19 +47,19 @@ $lang->tutorial->tasks['createStory']['nav']  = array('module' => 'story', 'meth
 $lang->tutorial->tasks['createStory']['desc'] = "<p>Tạo một câu chuyện: </p><ul><li data-target='nav'>Mở <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i>Câu chuyện <i class='icon icon-angle-right'></i>Tạo câu chuyện</span></li><li data-target='form'>Điền form thông tin câu chuyện;</li><li data-target='submit'>Lưu lại</li></ul>";
 
 $lang->tutorial->tasks['createProject']         = array('title' => 'Tạo một ' . $lang->executionCommon);
-$lang->tutorial->tasks['createProject']['nav']  = array('module' => 'project', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-project-btn', 'targetPageName' => 'Tạo ' . $lang->executionCommon);
+$lang->tutorial->tasks['createProject']['nav']  = array('module' => 'execution', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-project-btn', 'targetPageName' => 'Tạo ' . $lang->executionCommon);
 $lang->tutorial->tasks['createProject']['desc'] = "<p>Tạo một {$lang->executionCommon}: </p><ul><li data-target='nav'>Mở <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> Tạo {$lang->executionCommon} </span>;</li><li data-target='form'>Điền form thông tin {$lang->executionCommon}</li><li data-target='submit'>Lưu lại</li></ul>";
 
 $lang->tutorial->tasks['manageTeam']         = array('title' => "Quản lý thành viên {$lang->executionCommon}");
-$lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => 'Quản lý thành viên');
+$lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'execution', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => 'Quản lý thành viên');
 $lang->tutorial->tasks['manageTeam']['desc'] = "<p>Quản lý thành viên {$lang->executionCommon}: </p><ul><li data-target='nav'>Mở <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> Đội nhóm <i class='icon icon-angle-right'></i> Quản lý thành viên nhóm</span> Page；</li><li data-target='form'>Chọn người dùng cho đội nhóm</li><li data-target='submit'>Lưu lại</li></ul>";
 
 $lang->tutorial->tasks['linkStory']         = array('title' => 'Liên kết một câu chuyện');
-$lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => 'Liên kết câu chuyện');
+$lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'execution', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => 'Liên kết câu chuyện');
 $lang->tutorial->tasks['linkStory']['desc'] = "<p>Liên kết một câu chuyện tới {$lang->executionCommon}: </p><ul><li data-target='nav'>Mở <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> Câu chuyện <i class='icon icon-angle-right'></i>Liên kết câu chuyện</span></li><li data-target='form'>Chọn câu chuyện từ danh sách câu chuyện để liên kếtli><li data-target='submit'>Lưu lại</li></ul>";
 
 $lang->tutorial->tasks['createTask']         = array('title' => 'Chia nhỏ nhiệm vụ');
-$lang->tutorial->tasks['createTask']['nav']  = array('module' => 'task', 'method' => 'create', 'menuModule' => 'project', 'menu' => 'story', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Tạo nhiệm vụ');
+$lang->tutorial->tasks['createTask']['nav']  = array('module' => 'task', 'method' => 'create', 'menuModule' => 'execution', 'menu' => 'story', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Tạo nhiệm vụ');
 $lang->tutorial->tasks['createTask']['desc'] = "<p>Chia nhỏ nhiệm vụ cho một câu chuyện: </p><ul><li data-target='nav'>Mở <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> Câu chuyện <i class='icon icon-angle-right'></i> Chia nhỏ;</span></li><li data-target='form'>Điền form thông tin nhiệm vụ;</li><li data-target='submit'>Lưu lại</li></ul>";
 
 $lang->tutorial->tasks['createBug']         = array('title' => 'Báo cáo Bug');

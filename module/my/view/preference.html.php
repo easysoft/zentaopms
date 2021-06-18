@@ -11,7 +11,10 @@
  */
 ?>
 <?php if($preferenceSetted):?>
-<style> #submit{margin-top: 45px} </style>
+<style>
+#submit{margin-top: 45px}
+.chosen-container-single .chosen-single div b {top: 7px !important;}
+</style>
 <?php include '../../common/view/header.html.php';?>
 <?php else:?>
 <?php include '../../common/view/header.lite.html.php';?>
@@ -38,7 +41,7 @@ html,body {height: 100%;}
       <tr>
         <th class='w-120px'><?php echo $lang->my->storyConcept;?></th>
         <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control chosen'");?></td>
-      </tr>  
+      </tr>
       <?php if($this->config->systemMode == 'new'):?>
       <tr>
         <th><?php echo $lang->my->programLink;?></th>
@@ -49,10 +52,23 @@ html,body {height: 100%;}
         <th><?php echo $lang->my->productLink;?></th>
         <td><?php echo html::select('productLink', $lang->my->productLinkList, $productLink, "class='form-control chosen'");?></td>
       </tr>
+      <?php if($this->config->systemMode == 'new'):?>
       <tr>
         <th><?php echo $lang->my->projectLink;?></th>
         <td><?php echo html::select('projectLink', $lang->my->projectLinkList, $projectLink, "class='form-control chosen'");?></td>
       </tr>
+      <?php else:?>
+      <tr>
+        <th><?php echo $lang->my->executionLink;?></th>
+        <td><?php echo html::select('executionLink', $lang->my->executionLinkList, 'execution-task', "class='form-control chosen'");?></td>
+      </tr>
+      <?php endif;?>
+<!--
+      <tr>
+        <th><?php echo $lang->my->executionLink;?></th>
+        <td><?php echo html::select('executionLink', $lang->my->executionLinkList, $executionLink, "class='form-control chosen'");?></td>
+      </tr>
+-->
       <tr>
         <td colspan='2' class='text-center form-actions'><?php echo html::submitButton();?></td>
       </tr>

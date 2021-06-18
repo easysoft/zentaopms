@@ -1,0 +1,57 @@
+.tree li.has-list.open:before {border-left: none;}
+#taskTree li {padding: 0 0 0 8px;}
+#taskTree li.has-list {padding-left: 20px;}
+#taskTree li > a {display: block; padding: 5px 0; border-radius: 2px; padding-left: 6px; height: 30px;}
+#taskTree li > a > span {display: inline-block;}
+#taskTree li > a > span + span {margin-left: 8px;}
+#taskTree li.selected > a {background-color: #E8F3FC;}
+#taskTree li.selected > a > span.title {color: #006AF1;}
+#taskTree .label-id {border-color: #cbd0db; color: #7d8599;}
+#taskTree .label.label-type {background: #fff; border: 1px solid #7d8599; color: #7d8599;}
+
+#taskTree li > a > span.title {color: #3C4353; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; vertical-align: middle;}
+#taskTree li > a > span.user {color: #838a9d;}
+#taskTree li > a > span.user > .icon-person {font-size: 14px; position: relative; top: -1px; color: #a6aab8;}
+
+#taskTree li > .list-toggle {transform: rotate(0deg); width: 16px; height: 16px; border: 4px solid #a6aab8; border-radius: 2px; top: 7px;}
+#taskTree li > .list-toggle:before {content: ' '; display: block; position: absolute; border: 1px solid #a6aab8; top: 2px; left: -3px; right: -3px; bottom: 2px; min-width: 0; transition: all .2s;}
+#taskTree li > .list-toggle:hover:before,
+#taskTree li > .list-toggle:hover {border-color: #006AF1;}
+#taskTree li.open > .list-toggle {width: 12px; height: 12px; top: 9px; background-color: #a6aab8; border-width: 3px; left: 3px;}
+#taskTree li.open > .list-toggle:before {border: none; height: 2px; width: 6px; left: 0; top: 2px; background: #fff;}
+#taskTree li.open > .list-toggle:hover {background: #006AF1;}
+
+#taskTree ul > li:after {display: block; position: absolute; content: ' '; border-top: 2px solid #cbd0db; top: 14px; left: -12px; z-index: 1; width: 10px;}
+#taskTree ul > li:before,
+#taskTree ul > li.has-list:before {background: none; content: ' '; display: block; position: absolute; width: auto; height: auto; border: none; border-left: 2px solid #cbd0db; top: -13px; bottom: 12px; left: -12px;}
+#taskTree ul > li:last-child:before {bottom: auto; height: 29px;}
+#taskTree ul > li:first-child:before {top: -9px;}
+#taskTree ul > li.has-list:first-child:before {top: -13px;}
+#taskTree ul > li.tree-single-item:before {height: 23px;}
+#taskTree ul > li.has-list:after {width: 14px;}
+
+.tree-show-root .btn-tree-view[data-type="root"],
+.btn-tree-view[data-type="all"] {display: none;}
+.tree-show-root .btn-tree-view[data-type="all"] {display: inline-block;}
+
+#itemContent {min-height: 200px;}
+#itemContent .label {background: #fff; border: 1px solid #ddd;}
+#mainContent > .side-col {width: 460px; display: table-cell; overflow: hidden;}
+#mainContent > .side-col > .cell {display: block; width: 440px; overflow: auto;}
+#mainContent.hide-side > .side-col {display: none;}
+
+h2.detail-title {font-size: 14px;}
+h2.detail-title .label-id, h2.detail-title .label {top: -1px;}
+#itemContent > .detail:first-child {padding-top: 10px;}
+.detail-content > .btn-toolbar {margin-top: 15px;}
+.detail-content > .infos > span {display: inline-block;}
+.detail-content > .infos > span + span {margin-left: 15px;}
+.detail-content > .infos + .infos {margin-top: 5px;}
+.detail + .detail {padding-top: 10px;}
+.btn-comment.pull-right {z-index: 10;}
+details .btn-comment.pull-right {right: 30px;}
+.modal-comment .modal-dialog {min-width: 600px;}
+
+#itemContent .label-product, #taskTree .item-product > a > .label-type {border-color: #7d8599; color: #7d8599;}
+#itemContent .label-story, #taskTree .item-story > a > .label-type {border-color: #7d8599; color: #7d8599;}
+#itemContent .label-task, #taskTree .item-task > a > .label-type {border-color: #7d8599; color: #7d8599;}

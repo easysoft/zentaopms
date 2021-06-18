@@ -25,6 +25,7 @@ class user extends control
         $this->loadModel('company')->setMenu();
         $this->loadModel('dept');
         $this->loadModel('todo');
+        $this->loadModel('execution');
         $this->app->loadLang('project');
         $this->app->loadModuleConfig($this->moduleName);//Finish task #5118.(Fix bug #2271)
     }
@@ -38,7 +39,8 @@ class user extends control
      */
     public function view($userID)
     {
-        $this->locate($this->createLink('user', 'todo', "userID=$userID"));
+        $userID = (int)$userID;
+        $this->locate($this->createLink('user', 'todo', "userID=$userID&type=all"));
     }
 
     /**
@@ -54,16 +56,17 @@ class user extends control
      * @access public
      * @return void
      */
-    public function todo($userID, $type = 'today', $status = 'all', $orderBy='date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($userID, $type = 'today', $status = 'all', $orderBy = 'date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $user = $this->user->getById($userID, 'id');
+        $userID = (int)$userID;
+        $user   = $this->user->getById($userID, 'id');
         if(empty($user)) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('todoList', $uri);
-        $this->session->set('bugList',  $uri);
-        $this->session->set('taskList', $uri);
+        $this->session->set('todoList', $uri, 'my');
+        $this->session->set('bugList',  $uri, 'qa');
+        $this->session->set('taskList', $uri, 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -76,13 +79,10 @@ class user extends control
         $account = $user->account;
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        if(!isset($users[$userID])) die(js::error($this->lang->user->error->noAccess) . js::locate('back'));
 
         /* set menus. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
@@ -111,10 +111,10 @@ class user extends control
      * @access public
      * @return void
      */
-    public function story($userID, $storyType = 'story', $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($userID, $storyType = 'story', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        $this->session->set('storyList', $this->app->getURI(true));
+        $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -122,13 +122,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
-
-        /* Set menu. */
-        $this->lang->set('menugroup.user', 'company');
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* Modify story title. */
         $this->loadModel('story');
@@ -137,9 +131,10 @@ class user extends control
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
         $this->view->position[] = $this->lang->user->story;
-        $this->view->stories    = $this->story->getUserStories($account, $type, 'id_desc', $pager, $storyType);
+        $this->view->stories    = $this->story->getUserStories($account, $type, $orderBy, $pager, $storyType);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->storyType  = $storyType;
+        $this->view->orderBy    = $orderBy;
         $this->view->type       = $type;
         $this->view->user       = $user;
         $this->view->pager      = $pager;
@@ -159,10 +154,10 @@ class user extends control
      * @access public
      * @return void
      */
-    public function task($userID, $type = 'assignedTo', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
-        $this->session->set('taskList', $this->app->getURI(true));
+        $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -170,21 +165,18 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* Set the menu. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
         $this->view->position[] = $this->lang->user->task;
         $this->view->tabID      = 'task';
-        $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager);
+        $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager, $orderBy);
         $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
         $this->view->user       = $user;
         $this->view->pager      = $pager;
 
@@ -206,7 +198,7 @@ class user extends control
     public function bug($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
-        $this->session->set('bugList', $this->app->getURI(true));
+        $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -214,17 +206,13 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* Set menu. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
         $this->view->position[] = $this->lang->user->bug;
@@ -232,6 +220,7 @@ class user extends control
         $this->view->bugs       = $this->loadModel('bug')->getUserBugs($account, $type, $orderBy, 0, $pager);
         $this->view->type       = $type;
         $this->view->user       = $user;
+        $this->view->orderBy    = $orderBy;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->pager      = $pager;
 
@@ -257,22 +246,19 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* Set menu. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $this->app->loadLang('testcase');
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
         $this->view->position[] = $this->lang->user->testTask;
@@ -302,7 +288,7 @@ class user extends control
     public function testcase($userID, $type = 'case2Him', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('testcase');
 
         /* Load pager. */
@@ -311,16 +297,10 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
-
-         /* Set menu. */
-        $this->lang->set('menugroup.user', 'company');
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $cases = array();
         if($type == 'case2Him')
@@ -361,14 +341,14 @@ class user extends control
      * @access public
      * @return void
      */
-    public function execution($userID, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function execution($userID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('projectList',  $uri);
+        $this->session->set('executionList', $uri, 'execution');
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -376,17 +356,14 @@ class user extends control
 
         /* Set the menus. */
         $this->loadModel('project');
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
         $this->view->position[] = $this->lang->user->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getProjects($account, array('sprint', 'stage'), 'all', $pager);
+        $this->view->executions = $this->user->getExecutions($account, 'execution', 'all', $orderBy, $pager);
         $this->view->user       = $user;
+        $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
 
         $this->display();
@@ -407,22 +384,18 @@ class user extends control
     public function issue($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('issueList',  $uri);
+        $this->session->set('issueList', $uri, 'project');
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set the menus. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
         $this->view->position[] = $this->lang->user->issue;
@@ -451,22 +424,18 @@ class user extends control
     public function risk($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('riskList',  $uri);
+        $this->session->set('riskList', $uri, 'project');
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set the menus. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
         $this->view->position[] = $this->lang->user->risk;
@@ -492,10 +461,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
-
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->position[]   = $this->lang->user->common;
@@ -540,7 +506,6 @@ class user extends control
      */
     public function create($deptID = 0)
     {
-        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
@@ -551,9 +516,10 @@ class user extends control
                 $this->send(array('result' => 'fail', 'message' => str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
             }
 
-            $this->user->create();
+            $userID = $this->user->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $userID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
 
@@ -598,13 +564,14 @@ class user extends control
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
-        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
         if(!empty($_POST))
         {
-            $this->user->batchCreate();
+            $userIDList = $this->user->batchCreate();
+
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIDList));
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
@@ -642,7 +609,6 @@ class user extends control
      */
     public function edit($userID)
     {
-        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
         if(!empty($_POST))
@@ -689,7 +655,6 @@ class user extends control
             if($this->post->account) $this->user->batchEdit();
             die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
         }
-        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
@@ -803,12 +768,25 @@ class user extends control
      */
     public function login($referer = '', $from = '')
     {
+        /* Check if you can operating on the folder. */
+        $canModifyDIR = true;
         if($this->user->checkTmp() === false)
+        {
+            $canModifyDIR = false;
+            $floderPath   = $this->app->tmpRoot;
+        }
+        elseif(!is_dir($this->app->dataRoot) or substr(base_convert(@fileperms($this->app->dataRoot),10,8),-4) != '0777')
+        {
+            $canModifyDIR = false;
+            $floderPath   = $this->app->dataRoot;
+        }
+
+        if(!$canModifyDIR)
         {
             echo "<html><head><meta charset='utf-8'></head>";
             echo "<body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>";
-            echo "<div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>{$this->app->tmpRoot}</strong>是否存在并有操作权限。</div>";
-            echo "<div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>{$this->app->tmpRoot}</strong> exists and has permission to operate.</div>";
+            echo "<div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>{$floderPath}</strong>是否存在并有操作权限。</div>";
+            echo "<div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>{$floderPath}</strong> exists and has permission to operate.</div>";
             die("</td></tr></table></body></html>");
         }
         $this->setReferer($referer);
@@ -866,7 +844,6 @@ class user extends control
                 if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
                 $this->send($response);
             }
-
 
             if((!empty($this->config->safe->loginCaptcha) and strtolower($this->post->captcha) != strtolower($this->session->captcha) and $this->app->getViewType() != 'json'))
             {
@@ -1008,7 +985,7 @@ class user extends control
         $denyType = 'nopriv';
         if(isset($rights[$module][$method]))
         {
-            $menu = isset($this->lang->menugroup->$module) ? $this->lang->menugroup->$module : $module;
+            $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
             $menu = strtolower($menu);
 
             if(!isset($acls['views'][$menu])) $denyType = 'noview';
@@ -1097,24 +1074,24 @@ class user extends control
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
 
         /* set menus. */
-        $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         /* Save session. */
-        $uri   = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('projectList',     $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $uri = $this->app->getURI(true);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1125,10 +1102,7 @@ class user extends control
         $sort    = $this->loadModel('common')->appendOrder($orderBy);
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
-        /* Change the menu when in my module. */
-        $this->user->resetMenu();
-
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', 'all', $date, $direction);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
         $this->view->position[] = $this->lang->user->dynamic;
@@ -1143,7 +1117,7 @@ class user extends control
         $this->display();
     }
 
-	/** 
+	/**
      * crop avatar
      *
      * @param  int    $image
@@ -1151,17 +1125,17 @@ class user extends control
      * @return void
      */
     public function cropAvatar($image)
-    {   
+    {
         $image = $this->loadModel('file')->getByID($image);
 
         if(!empty($_POST))
         {
             $size = fixer::input('post')->get();
             $this->file->cropImage($image->realPath, $image->realPath, $size->left, $size->top, $size->right - $size->left, $size->bottom - $size->top, $size->scaled ? $size->scaleWidth : 0, $size->scaled ? $size->scaleHeight : 0);
-            $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
+
             $this->app->user->avatar = $image->webPath;
             exit('success');
-        }   
+        }
 
         $this->view->user  = $this->user->getById($this->app->user->account);
         $this->view->title = $this->lang->user->cropAvatar;
@@ -1221,9 +1195,9 @@ class user extends control
 
     /**
      * Ajax print templates.
-     * 
-     * @param  int    $type 
-     * @param  string $link 
+     *
+     * @param  int    $type
+     * @param  string $link
      * @access public
      * @return void
      */
@@ -1265,7 +1239,7 @@ class user extends control
 
     /**
      * Ajax get more user.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1292,7 +1266,7 @@ class user extends control
 
     /**
      * Refresh random for login
-     * 
+     *
      * @access public
      * @return void
      */

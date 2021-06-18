@@ -12,37 +12,6 @@
 class caselib extends control
 {
     /**
-     * All products.
-     *
-     * @var    array
-     * @access public
-     */
-    public $products = array();
-
-    /**
-     * Construct function.
-     *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @access public
-     * @return void
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        /* Set testtask menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
-        {
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->lang->noMenuModule[] = $this->app->rawModule;
-        }
-    }
-
-
-    /**
      * Index page, header to browse.
      *
      * @access public
@@ -73,6 +42,14 @@ class caselib extends control
                 $this->send($response);
             }
             $this->loadModel('action')->create('caselib', $libID, 'opened');
+
+            /* Return lib id when call the API. */
+            if($this->viewType == 'json')
+            {
+                $response['id'] = $libID;
+                $this->send($response);
+            }
+
             $response['locate']  = $this->createLink('caselib', 'browse', "libID=$libID");
             $this->send($response);
         }
@@ -196,24 +173,25 @@ class caselib extends control
         if(empty($libraries)) $this->locate(inlink('create'));
 
         /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        $this->session->set('caselibList', $this->app->getURI(true), 'qa');
 
         /* Set menu. */
         $libID = $this->caselib->saveLibState($libID, $libraries);
-        setcookie('preCaseLibID', $libID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('preCaseLibID', $libID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($this->cookie->preCaseLibID != $libID)
         {
             $_COOKIE['libCaseModule'] = 0;
-            setcookie('libCaseModule', 0, 0, $this->config->webRoot, '', false, true);
+            setcookie('libCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
-        if($browseType == 'bymodule') setcookie('libCaseModule', (int)$param, 0, $this->config->webRoot, '', false, true);
+        if($browseType == 'bymodule') setcookie('libCaseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($browseType != 'bymodule') $this->session->set('libBrowseType', $browseType);
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->libCaseModule ? $this->cookie->libCaseModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set lib menu. */
-        $this->caselib->setLibMenu($libraries, $libID, $moduleID);
+        $this->caselib->setLibMenu($libraries, $libID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -271,7 +249,7 @@ class caselib extends control
         {
             $this->loadModel('testcase');
             $this->config->testcase->create->requiredFields = $this->config->caselib->createcase->requiredFields;
-            setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+            setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $caseResult = $this->testcase->create($bugID = 0);
             if(!$caseResult or dao::isError()) die(js::error(dao::getError()));
 
@@ -397,7 +375,8 @@ class caselib extends control
      */
     public function view($libID)
     {
-        $lib = $this->caselib->getById($libID, true);
+        $libID = (int)$libID;
+        $lib   = $this->caselib->getById($libID, true);
         if(!isset($lib->id)) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Set lib menu. */

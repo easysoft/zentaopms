@@ -1,0 +1,29 @@
+.mgr-5px {margin-right: 5px;}
+#productsBox .col-sm-3 {margin-bottom: 5px;}
+#productsBox .input-group {table-layout: fixed; width: 100%;}
+#productsBox .has-branch select {width: 100%; display: table-cell; border-radius: 0 2px 2px 0; border-left: none;}
+#productsBox .has-branch select:focus {box-shadow: inset 1px 0 #4d90fe;}
+#productsBox .input-group-addon {display: none;}
+#productsBox .input-group.has-branch > select[name*="product"] + .chosen-container {width: 60% !important;}
+#productsBox .input-group.has-branch > select[name*="branch"] + .chosen-container {width: 40% !important;}
+#productsBox .input-group.has-branch > select[name*="product"] + .chosen-container .chosen-single {border-radius: 2px 0 0 2px;}
+#productsBox .input-group.has-branch > select[name*="branch"] + .chosen-container .chosen-single {border-radius: 0 2px 2px 0; border-left-width: 0; padding-left: 9px;}
+#productsBox .input-group.has-branch > select[name*="branch"] + .chosen-container.chosen-container-active  .chosen-single {border-left-width: 1px; padding-left: 8px;}
+
+.table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
+.table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
+.table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
+.table td.has-child > a:not(.task-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.table td.has-child > .task-toggle {color: #838a9d; position: relative; top: 1px; line-height: 16px;}
+.table td.has-child > .task-toggle:hover {color: #006af1; cursor: pointer;}
+.table td.has-child > .task-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -o-transform: rotate(-90deg); -webkit-transform: rotate(-90deg); transform: rotate(-90deg);}
+.table td.has-child > .task-toggle > .icon:before {text-align: left;}
+.table td.has-child > .task-toggle.collapsed {top: 2px;}
+.table td.has-child > .task-toggle.collapsed > .icon {-ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);}
+.main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
+@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
+
+.chosen-container-single .chosen-single > span {max-width: 300px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+
+#whitelistBox .checkbox-inline, #whitelistBox .radio-inline {margin-left: 10px; display: inline-block; padding-left: 0px; padding-right: 10px;}
+.main-table > .table-responsive {padding: 0 1px; background: #fff;}

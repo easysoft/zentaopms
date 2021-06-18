@@ -14,22 +14,29 @@ function loadAllUsers()
             var moduleID  = $('#module').val();
             var productID = $('#product').val();
             setAssignedTo(moduleID, productID);
-            $('#assignedTo').empty().append($(data).find('option')).trigger('chosen:updated').trigger('chosen:activate');
+            $('#assignedTo').replaceWith(data);
+            $('#assignedTo_chosen').remove();
+            $('#assignedTo').chosen();
         }
     });
 }
 
 /**
-  * Load team members of the latest project of a product as assignedTo list.
+  * Load team members of the latest execution of a product as assignedTo list.
   *
   * @param  int    $productID
   * @access public
   * @return void
   */
-function loadProjectTeamMembers(productID)
+function loadExecutionTeamMembers(productID)
 {
-    var link = createLink('bug', 'ajaxLoadProjectTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
-    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen();});
+    var link = createLink('bug', 'ajaxLoadExecutionTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
+    $.post(link, function(data)
+    {
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo_chosen').remove();
+        $('#assignedTo').chosen();
+    })
 }
 
 /**
@@ -92,11 +99,11 @@ $(function()
     var assignedto = $('#assignedTo').val();
     changeProductConfirmed = true;
     oldStoryID             = $('#story').val() || 0;
-    oldProjectID           = 0;
+    oldExecutionID         = 0;
     oldOpenedBuild         = '';
     oldTaskID              = $('#oldTaskID').val() || 0;
 
-    if($('#project').val()) loadProjectRelated($('#project').val());
+    if($('#execution').val()) loadExecutionRelated($('#execution').val());
     if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     notice();
 
@@ -143,4 +150,8 @@ $(function()
             return false;
         }
     });
+});
+
+$(window).unload(function(){
+    if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });

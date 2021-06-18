@@ -15,41 +15,41 @@ class adminModel extends model
 {
     /**
      * The api root.
-     * 
+     *
      * @var string
      * @access public
      */
     public $apiRoot;
 
     /**
-     * Post data form  API 
-     * 
-     * @param  string $url 
-     * @param  string $formvars 
+     * Post data form  API.
+     *
+     * @param  string $url
+     * @param  string $formvars
      * @access public
      * @return void
      */
-    public function postAPI($url, $formvars = "")
+    public function postAPI($url, $formvars = '')
     {
         return common::http($url, $formvars);
     }
 
     /**
      * Get status of zentaopms.
-     * 
+     *
      * @access public
      * @return void
      */
     public function getStatOfPMS()
     {
-        $sql = "SHOW TABLE STATUS";
+        $sql    = "SHOW TABLE STATUS";
         $tables = $this->dbh->query($sql)->fetchALL();
     }
 
     /**
      * Get state of company.
-     * 
-     * @param  int    $companyID 
+     *
+     * @param  int    $companyID
      * @access public
      * @return void
      */
@@ -59,18 +59,17 @@ class adminModel extends model
 
     /**
      * Get system info.
-     * 
+     *
      * @access public
      * @return void
      */
     public function getStatOfSys()
     {
-
     }
 
     /**
-     * Register zentao by API. 
-     * 
+     * Register zentao by API.
+     *
      * @access public
      * @return void
      */
@@ -83,7 +82,7 @@ class adminModel extends model
 
     /**
      * Login zentao by API.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -96,7 +95,7 @@ class adminModel extends model
 
     /**
      * Get secret key.
-     * 
+     *
      * @access public
      * @return object
      */
@@ -117,8 +116,8 @@ class adminModel extends model
 
     /**
      * Send code by API.
-     * 
-     * @param  string    $type 
+     *
+     * @param  string    $type
      * @access public
      * @return string
      */
@@ -138,8 +137,8 @@ class adminModel extends model
 
     /**
      * Certify by API.
-     * 
-     * @param  string    $type 
+     *
+     * @param  string    $type
      * @access public
      * @return string
      */
@@ -149,7 +148,7 @@ class adminModel extends model
         $module    = $type == 'mobile' ? 'sms' : 'mail';
         $apiURL    = $this->config->admin->apiRoot . "/{$module}-apiCertify.json";
 
-        $params['u']   = $this->config->global->community;
+        $params['u'] = $this->config->global->community;
         $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
         $params['k'] = $this->getSignature($params);
@@ -160,7 +159,7 @@ class adminModel extends model
 
     /**
      * Set company by API.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -169,7 +168,7 @@ class adminModel extends model
         $apiConfig = $this->getApiConfig();
         $apiURL    = $this->config->admin->apiRoot . "/user-apiSetCompany.json";
 
-        $params['u']   = $this->config->global->community;
+        $params['u'] = $this->config->global->community;
         $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
         $params['k'] = $this->getSignature($params);
@@ -180,8 +179,8 @@ class adminModel extends model
 
     /**
      * Get signature.
-     * 
-     * @param  array    $params 
+     *
+     * @param  array    $params
      * @access public
      * @return string
      */
@@ -194,7 +193,7 @@ class adminModel extends model
 
     /**
      * Get api config.
-     * 
+     *
      * @access public
      * @return object
      */
@@ -208,12 +207,11 @@ class adminModel extends model
             $this->session->set('apiConfig', $config);
         }
         return $this->session->apiConfig;
-
     }
 
     /**
-     * Get register information. 
-     * 
+     * Get register information.
+     *
      * @access public
      * @return object
      */
@@ -227,8 +225,8 @@ class adminModel extends model
 
     /**
      * Check weak.
-     * 
-     * @param  object    $user 
+     *
+     * @param  object    $user
      * @access public
      * @return bool
      */
@@ -251,8 +249,8 @@ class adminModel extends model
 
         if(isset($weaks[$user->password])) return true;
         if($user->password == md5($user->account)) return true;
-        if($user->phone and $user->password == md5($user->phone)) return true;
-        if($user->mobile and $user->password == md5($user->mobile)) return true;
+        if($user->phone    and $user->password == md5($user->phone))    return true;
+        if($user->mobile   and $user->password == md5($user->mobile))   return true;
         if($user->birthday and $user->password == md5($user->birthday)) return true;
         return false;
     }

@@ -10,12 +10,11 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $pageCSS .= $this->doc->appendNavCSS();?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php echo css::internal($keTableCSS);?>
 <style>.detail-content .file-image {padding: 0 50px 0 10px;}</style>
-<?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
+<?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse', 'browseType=byediteddate');?>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
 $sessionString .= session_name() . '=' . session_id();
@@ -149,8 +148,8 @@ js::set('docID', $doc->id);
         <?php
         if(!$doc->deleted)
         {
-            common::printIcon('doc', 'edit', "docID=$doc->id&comment=false&from={$lang->navGroup->doc}", $doc);
-            common::printIcon('doc', 'delete', "docID=$doc->id&confirm=no&from={$lang->navGroup->doc}", $doc, 'button', 'trash', 'hiddenwin');
+            common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
+            common::printIcon('doc', 'delete', "docID=$doc->id&confirm=no", $doc, 'button', 'trash', 'hiddenwin');
         }
         ?>
       </div>
@@ -187,10 +186,10 @@ js::set('docID', $doc->id);
                 <td><?php echo $doc->productName;?></td>
               </tr>
               <?php endif;?>
-              <?php if($doc->projectName):?>
+              <?php if($doc->executionName):?>
               <tr>
-                <th class='w-80px'><?php echo $lang->doc->project;?></th>
-                <td><?php echo $doc->projectName;?></td>
+                <th class='w-80px'><?php echo $lang->doc->execution;?></th>
+                <td><?php echo $doc->executionName;?></td>
               </tr>
               <?php endif;?>
               <tr>

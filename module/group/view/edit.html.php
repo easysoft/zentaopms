@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'> 
+<div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2 title='<?php echo $group->name;?>'>
       <span class='label label-id'><?php echo $group->id;?></span>
@@ -20,15 +20,15 @@
     </h2>
   </div>
   <form method='post' target='hiddenwin' id='dataform'>
-    <table align='center' class='table table-form'> 
+    <table align='center' class='table table-form'>
       <tr>
         <th><?php echo $lang->group->name;?></th>
         <td class='required'><?php echo html::input('name', $group->name, "class='form-control'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->group->desc;?></th>
         <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='form-control'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
       </tr>

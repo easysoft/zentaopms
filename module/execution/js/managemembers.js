@@ -1,0 +1,52 @@
+/**
+ * Set role when select an account.
+ * 
+ * @param  string $account 
+ * @param  int    $roleID 
+ * @access public
+ * @return void
+ */
+function setRole(account, roleID)
+{
+    role    = roles[account];       // get role according the account.
+    roleOBJ = $('#role' + roleID);  // get role object.
+    roleOBJ.val(role)               // set the role.
+}
+
+function addItem(obj)
+{
+    var item = $('#addItem').html().replace(/%i%/g, i);
+    $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
+    var $accounts = $('#hours' + i).closest('tr').find('select:first')
+
+    if($accounts.attr('data-pickertype') != 'remote')
+    {
+        $accounts.chosen();
+    }
+    else
+    {
+        $accounts.parent().find('.picker.picker-ready').remove();
+        var pickerremote = $accounts.attr('data-pickerremote');
+        $accounts.picker({chosenMode: true, remote: pickerremote});
+    }
+    i ++;
+}
+
+function deleteItem(obj)
+{
+    $(obj).closest('tr').remove();
+}
+
+function setDeptUsers(obj)
+{
+    dept = $(obj).val(); // Get dept ID.
+    link = createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team2Import + '&dept=' + dept); // Create manageMembers link.
+    location.href=link;
+}
+
+function choseTeam2Copy(obj)
+{
+    team = $(obj).val();
+    link = createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team);
+    location.href=link;
+}

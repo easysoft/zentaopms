@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '20.0.beta4';         // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '15.1';           // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
@@ -37,10 +37,10 @@ $config->themes['default'] = 'default';
 $config->langs['zh-cn']    = '简体';
 $config->langs['zh-tw']    = '繁體';
 $config->langs['en']       = 'English';
-$config->langs['de']       = 'Deutsch';
-$config->langs['fr']       = 'Français';
-$config->langs['vi']       = 'Tiếng Việt';
-$config->langs['ja']       = '日本語';
+//$config->langs['de']       = 'Deutsch';
+//$config->langs['fr']       = 'Français';
+//$config->langs['vi']       = 'Tiếng Việt';
+//$config->langs['ja']       = '日本語';
 
 /* 设备类型视图文件前缀。The prefix for view file for different device. */
 $config->devicePrefix['mhtml'] = '';
@@ -89,6 +89,10 @@ $config->domainPostfix .= "|villas|foundation|expert|works|tools|watch|zone|barg
 $config->domainPostfix .= "|farm|pics|photo|marketing|holiday|gift|buzz|guitars|trade|construction|";
 $config->domainPostfix .= "|international|house|coffee|florist|rich|ceo|camp|education|repair|win|site|";
 
+/* Config for Content-Security-Policy. */
+$config->CSPs = array();
+$config->CSPs[] = "form-action 'self';connect-src 'self'";
+
 /* 系统框架配置。Framework settings. */
 $config->framework = new stdclass();
 $config->framework->autoConnectDB   = true;  // 是否自动连接数据库。              Whether auto connect database or not.
@@ -106,6 +110,13 @@ $config->framework->logDays         = 14;    // 日志文件保存的天数。  
 $config->framework->autoRepairTable = true;
 $config->framework->autoLang        = false;
 $config->framework->filterCSRF      = false;
+$config->framework->setCookieSecure = true;
+$config->framework->sendXCTO        = true;   // Send X-Content-Type-Options header.
+$config->framework->sendXXP         = true;   // Send X-XSS-Protection header.
+$config->framework->sendHSTS        = true;   // Send HTTP Strict Transport Security header.
+$config->framework->sendRP          = true;   // Send Referrer-Policy header.
+$config->framework->sendXPCDP       = true;   // Send X-Permitted-Cross-Domain-Policies header.
+$config->framework->sendXDO         = true;   // Send X-Download-Options header.
 
 $config->framework->detectDevice['zh-cn'] = true; // 在zh-cn语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
 $config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
@@ -127,8 +138,9 @@ $config->features->checkClient    = true;
 
 /* 文件上传设置。 Upload settings. */
 $config->file = new stdclass();
-$config->file->dangers = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
-$config->file->allowed = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql';
+$config->file->dangers     = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
+$config->file->allowed     = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql';
+$config->file->storageType = 'fs';         // fs or s3
 
 /* Upload settings. */
 $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';
@@ -150,6 +162,10 @@ if(file_exists($filterConfig)) include $filterConfig;
 $dbConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'db.php';
 if(file_exists($dbConfig)) include $dbConfig;
 
+/* 引用自定义的配置。 Include the custom config file. */
+$myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
+if(file_exists($myConfig)) include $myConfig;
+
 /* 禅道配置文件。zentaopms settings. */
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
@@ -157,7 +173,3 @@ if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
-
-/* 引用自定义的配置。 Include the custom config file. */
-$myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
-if(file_exists($myConfig)) include $myConfig;

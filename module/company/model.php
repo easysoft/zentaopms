@@ -16,15 +16,17 @@ class companyModel extends model
     /**
      * Set menu.
      * 
-     * @param  int    $dept 
+     * @param  int    $dept
      * @access public
      * @return void
      */
     public function setMenu($dept = 0)
     {
+        /*
         common::setMenuVars($this->lang->company->menu, 'name', array($this->app->company->name));
         common::setMenuVars($this->lang->company->menu, 'addUser', array($dept));
         common::setMenuVars($this->lang->company->menu, 'batchAddUser', array($dept));
+         */
     }
 
     /**
@@ -135,7 +137,7 @@ class companyModel extends model
      */
     public function update()
     {
-        $company   = fixer::input('post')->get();        
+        $company = fixer::input('post')->get();
         if($company->website  == 'http://') $company->website  = '';
         if($company->backyard == 'http://') $company->backyard = '';
         $companyID = $this->app->company->id;

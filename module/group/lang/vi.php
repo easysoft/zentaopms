@@ -21,7 +21,7 @@ $lang->group->managePrivByGroup  = 'Quản lý Privileges by Group';
 $lang->group->managePrivByModule = 'Quản lý Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Quản lý Members';
-$lang->group->managePRJAdmin     = 'Manage Program Admins';
+$lang->group->manageProjectAdmin = 'Manage Program Admins';
 $lang->group->confirmDelete      = 'Bạn có muốn xóa người dùng này group?';
 $lang->group->successSaved       = 'Đã lưu.';
 $lang->group->errorNotSaved      = 'Thất bại.  Vui lòng select actions and groups.';
@@ -56,6 +56,7 @@ $lang->group->copyOptions['copyPriv'] = 'Copy Privileges';
 $lang->group->copyOptions['copyUser'] = 'Copy người dùng';
 
 $lang->group->versions['']           = 'Lịch sử';
+$lang->group->versions['15_0_rc1']  = 'ZenTao15.0.rc1';
 $lang->group->versions['12_5']       = 'ZenTao12.5';
 $lang->group->versions['12_3']       = 'ZenTao12.3';
 $lang->group->versions['11_6_2']     = 'ZenTao11.6.2';

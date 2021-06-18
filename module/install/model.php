@@ -15,7 +15,7 @@ class installModel extends model
 {
     /**
      * Get license according the client lang.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -32,7 +32,7 @@ class installModel extends model
 
     /**
      * Check version of zentao.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -42,7 +42,7 @@ class installModel extends model
 
     /**
      * get php version.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -53,7 +53,7 @@ class installModel extends model
 
     /**
      * Get latest release.
-     * 
+     *
      * @access public
      * @return string or bool
      */
@@ -71,7 +71,7 @@ class installModel extends model
 
     /**
      * Check php version.
-     * 
+     *
      * @access public
      * @return string   ok|fail
      */
@@ -82,7 +82,7 @@ class installModel extends model
 
     /**
      * Check PDO.
-     * 
+     *
      * @access public
      * @return string   ok|fail
      */
@@ -92,8 +92,8 @@ class installModel extends model
     }
 
     /**
-     * Check PDO::MySQL 
-     * 
+     * Check PDO::MySQL
+     *
      * @access public
      * @return string   ok|fail
      */
@@ -181,7 +181,7 @@ class installModel extends model
 
     /**
      * Get tempRoot info.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -195,7 +195,7 @@ class installModel extends model
 
     /**
      * Check tmpRoot.
-     * 
+     *
      * @access public
      * @return string   ok|fail
      */
@@ -206,10 +206,10 @@ class installModel extends model
     }
 
     /**
-     * Get session save path. 
-     * 
+     * Get session save path.
+     *
      * @access public
-     * @return array 
+     * @return array
      */
     public function getSessionSavePath()
     {
@@ -220,15 +220,15 @@ class installModel extends model
     }
 
     /**
-     * Check session save path. 
-     * 
+     * Check session save path.
+     *
      * @access public
      * @return string
      */
     public function checkSessionSavePath()
     {
         $sessionSavePath = preg_replace("/\d;/", '', session_save_path());
-        $result = (is_dir($sessionSavePath) and is_writable($sessionSavePath)) ? 'ok' : 'fail'; 
+        $result = (is_dir($sessionSavePath) and is_writable($sessionSavePath)) ? 'ok' : 'fail';
         if($result == 'fail') return $result;
 
         /* Test session path again. Fix bug #1527. */
@@ -243,8 +243,8 @@ class installModel extends model
     }
 
     /**
-     * Get data root 
-     * 
+     * Get data root
+     *
      * @access public
      * @return array
      */
@@ -257,8 +257,8 @@ class installModel extends model
     }
 
     /**
-     * Check the data root. 
-     * 
+     * Check the data root.
+     *
      * @access public
      * @return string ok|fail
      */
@@ -270,7 +270,7 @@ class installModel extends model
 
     /**
      * Get the php.ini info.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -287,7 +287,7 @@ class installModel extends model
 
     /**
      * Check config ok or not.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -345,7 +345,7 @@ class installModel extends model
 
     /**
      * Set database params.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -362,14 +362,14 @@ class installModel extends model
 
     /**
      * Connect to database.
-     * 
+     *
      * @access public
      * @return object
      */
     public function connectDB()
     {
         $dsn = "mysql:host={$this->config->db->host}; port={$this->config->db->port}";
-        try 
+        try
         {
             $dbh = new PDO($dsn, $this->config->db->user, $this->config->db->password);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
@@ -386,7 +386,7 @@ class installModel extends model
 
     /**
      * Check db exits or not.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -398,7 +398,7 @@ class installModel extends model
 
     /**
      * Check table exits or not.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -411,7 +411,7 @@ class installModel extends model
 
     /**
      * Get mysql version.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -424,8 +424,8 @@ class installModel extends model
 
     /**
      * Create database.
-     * 
-     * @param  string    $version 
+     *
+     * @param  string    $version
      * @access public
      * @return bool
      */
@@ -438,8 +438,8 @@ class installModel extends model
 
     /**
      * Create tables.
-     * 
-     * @param  string    $version 
+     *
+     * @param  string    $version
      * @access public
      * @return bool
      */
@@ -489,7 +489,7 @@ class installModel extends model
 
     /**
      * Create a comapny, set admin.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -530,8 +530,8 @@ class installModel extends model
     }
 
     /**
-     * Import demo data. 
-     * 
+     * Import demo data.
+     *
      * @access public
      * @return void
      */
@@ -541,10 +541,10 @@ class installModel extends model
         $demoDataFile = $this->app->getAppRoot() . 'db' . DS . $demoDataFile;
         $insertTables = explode(";\n", file_get_contents($demoDataFile));
         foreach($insertTables as $table)
-        { 
+        {
             $table = trim($table);
             if(empty($table)) continue;
-  
+
             $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
             $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;

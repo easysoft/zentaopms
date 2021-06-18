@@ -23,7 +23,7 @@
         <?php endif;?>
         <th class='text-left'><?php echo $lang->testtask->name;?></th>
         <?php if($longBlock):?>
-        <th class='text-left'><?php echo $lang->testtask->project . '/' . $lang->testtask->build;?></th>
+        <th class='text-left'><?php echo $lang->testtask->execution . '/' . $lang->testtask->build;?></th>
         <?php endif;?>
         <th class='w-date'><?php echo $lang->testtask->begin;?></th>
         <th class='w-date'><?php echo $lang->testtask->end;?></th>
@@ -32,17 +32,19 @@
     <tbody>
       <?php foreach($testtasks as $testtask):?>
       <?php
-      $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-      $viewLink = $this->createLink('testtask', 'view', "testtaskID={$testtask->id}");
+      $appid            = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+      $productViewLink  = $this->createLink('product', 'browse', "productID={$testtask->product}");
+      $buildViewLink    = $this->createLink('build', 'view', "buildID={$testtask->build}");
+      $testtaskViewLink = $this->createLink('testtask', 'view', "testtaskID={$testtask->id}");
       ?>
-      <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <tr class='text-center' <?php echo $appid?>>
         <?php if($longBlock):?>
         <td><?php echo sprintf('%03d', $testtask->id);?></td>
-        <td class='text-left' title='<?php echo $testtask->productName?>'><?php echo $testtask->productName?></td>
+        <td class='text-left' title='<?php echo $testtask->productName?>'><?php echo html::a($productViewLink, $testtask->productName);?></td>
         <?php endif;?>
-        <td class='text-left' title='<?php echo $testtask->name?>'><?php echo $testtask->name?></td>
+        <td class='text-left' title='<?php echo $testtask->name?>'><?php echo html::a($testtaskViewLink, $testtask->name);?></td>
         <?php if($longBlock):?>
-        <td class='text-left' title='<?php echo $testtask->projectName . '/' . $testtask->buildName?>'><?php echo $testtask->projectName . '/' . $testtask->buildName?></td>
+        <td class='text-left' title='<?php echo $testtask->projectName . '/' . $testtask->buildName?>'><?php echo html::a($buildViewLink, $testtask->projectName . '/' . $testtask->buildName);?></td>
         <?php endif;?>
         <td><?php echo $testtask->begin?></td>
         <td><?php echo $testtask->end?></td>

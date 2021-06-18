@@ -28,9 +28,10 @@ $lang->company->backyard = 'Intranet';
 $lang->company->guest    = 'Connexion Invités';
 $lang->company->admins   = 'Administrateur';
 
-$lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->executionCommon;
-$lang->company->user    = 'Utilisateurs';
+$lang->company->product   = $lang->productCommon;
+$lang->company->project   = 'Project';
+$lang->company->execution = $lang->executionCommon;
+$lang->company->user      = 'Utilisateurs';
 
 $lang->company->guestOptions[0] = 'Refusée';
 $lang->company->guestOptions[1] = 'Autorisée';

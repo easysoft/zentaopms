@@ -155,6 +155,7 @@ class customModel extends model
         $menuModuleName = $module;
         $order          = 1;
         $customMenuMap  = array();
+        $openApp        = $app->openApp;
         $isTutorialMode = commonModel::isTutorialMode();
 
         if($customMenu)
@@ -194,7 +195,7 @@ class customModel extends model
         }
         elseif($module)
         {
-            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->$module->menuOrder) ? $lang->$module->menuOrder : array());
+            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->menu->{$module}['menuOrder']) ? $lang->menu->{$module}['menuOrder'] : array());
             if($menuOrder)
             {
                 ksort($menuOrder);
@@ -226,7 +227,9 @@ class customModel extends model
             $class     = '';
             $subModule = '';
             $subMenu   = '';
+            $dropMenu  = '';
             $alias     = '';
+            $exclude   = '';
 
             $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
             /* The variable of item has not link and is not link then ignore it. */
@@ -256,25 +259,31 @@ class customModel extends model
                     if(isset($item['class']))     $class     = $item['class'];
                     if(isset($item['subModule'])) $subModule = $item['subModule'];
                     if(isset($item['subMenu']))   $subMenu   = $item['subMenu'];
+                    if(isset($item['dropMenu']))  $dropMenu  = $item['dropMenu'];
                     if(isset($item['alias']))     $alias     = $item['alias'];
+                    if(isset($item['exclude']))   $exclude   = $item['exclude'];
                 }
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
 
-                if(is_array($item) and isset($item['subMenu']))
+                if(is_array($item) and (isset($item['subMenu']) or isset($item['dropMenu'])))
                 {
-                    foreach($item['subMenu'] as $subItem)
+                    foreach(array('subMenu', 'dropMenu') as $key)
                     {
-                        if(isset($subItem->link['module']) && isset($subItem->link['method']))
+                        if(!isset($item[$key])) continue;
+                        foreach($item[$key] as $subItem)
                         {
-                            $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
+                            if(isset($subItem->link['module']) && isset($subItem->link['method']))
+                            {
+                                $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
+                            }
                         }
-                    }
-                    if(isset($customMenuMap[$name]->subMenu))
-                    {
-                        foreach($customMenuMap[$name]->subMenu as $subItem)
+                        if(isset($customMenuMap[$name]->$key))
                         {
-                            if(isset($subItem->hidden) && isset($item['subMenu'][$subItem->name])) $item['subMenu'][$subItem->name]->hidden = $subItem->hidden;
+                            foreach($customMenuMap[$name]->$key as $subItem)
+                            {
+                                if(isset($subItem->hidden) && isset($item[$key][$subItem->name])) $item[$key][$subItem->name]->hidden = $subItem->hidden;
+                            }
                         }
                     }
                 }
@@ -290,7 +299,9 @@ class customModel extends model
                 if($class)    $menuItem->class     = $class;
                 if($subModule)$menuItem->subModule = $subModule;
                 if($subMenu)  $menuItem->subMenu   = $subMenu;
+                if($dropMenu) $menuItem->dropMenu  = $dropMenu;
                 if($alias)    $menuItem->alias     = $alias;
+                if($exclude)  $menuItem->exclude   = $exclude;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
                 /* Hidden menu by config in mobile. */
@@ -302,11 +313,40 @@ class customModel extends model
         }
 
         ksort($menu, SORT_NUMERIC);
+
+        /* Set divider in main and module menu. */
+        if(!isset($lang->$openApp->menuOrder)) $lang->$openApp->menuOrder = array();
+        ksort($lang->$openApp->menuOrder, SORT_NUMERIC);
+
+        $group = 0;
+        $dividerOrders = array();
+        foreach($lang->$openApp->menuOrder as $name)
+        {
+            if(isset($lang->$openApp->dividerMenu) and strpos($lang->$openApp->dividerMenu, ",{$name},") !== false) $group++;
+            $dividerOrders[$name] = $group;
+        }
+
+        $isFirst = true; // No divider before First item.
+        $group   = 0;
+        foreach($menu as $item)
+        {
+            if(isset($dividerOrders[$item->name]) and $dividerOrders[$item->name] > $group)
+            {
+                $menu[$item->order]->divider = $isFirst ? false : true;
+                $group = $dividerOrders[$item->name];
+            }
+            else
+            {
+                $isFirst = false;
+                $menu[$item->order]->divider = false;
+            }
+        }
+
         return array_values($menu);
     }
 
     /**
-     * Get module menu data, if module is 'main' then return main menu
+     * Get module menu data, if module is 'main' then return main menu.
      * @param  string   $module
      * @param  boolean  $rebuild
      * @access public
@@ -314,18 +354,22 @@ class customModel extends model
      */
     public static function getModuleMenu($module = 'main', $rebuild = false)
     {
+        global $app, $lang, $config;
+
         if(empty($module)) $module = 'main';
 
-        global $app, $lang, $config;
-        $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
+        $allMenu = new stdclass();
+        if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
+        if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
-        if($module != 'main' and isset($lang->menugroup->$module)) $module = $lang->menugroup->$module;
         $flowModule = $config->global->flow . '_' . $module;
         $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
         if(commonModel::isTutorialMode() && $module === 'main') $customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
+
         $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
+
         return $menu;
     }
 
@@ -373,7 +417,7 @@ class customModel extends model
     {
         global $lang, $app, $dbh;
         if(!isset($lang->$module->featureBar[$method])) return;
-        $queryModule = $module == 'project' ? 'task' : ($module == 'product' ? 'story' : $module);
+        $queryModule = $module == 'execution' ? 'task' : ($module == 'product' ? 'story' : $module);
         $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where `account` = '{$app->user->account}' AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
 
         if($shortcuts)
@@ -470,9 +514,9 @@ class customModel extends model
 
     /**
      * Get UR and SR pairs.
-     * 
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function getURSRPairs()
     {
@@ -482,12 +526,17 @@ class customModel extends model
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')
             ->fetchAll();
+        if(empty($langData))
+        {
+            $URSR     = $this->loadModel('setting')->getURSR();
+            $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)->where('`key`')->eq($URSR)->andWhere('module')->eq('custom')->andWhere('section')->eq('URSRList')->fetchAll();
+        }
 
         $URSRPairs = array();
         foreach($langData as $id => $content)
         {
             $value = json_decode($content->value);
-            $URSRPairs[$content->key] = $value->URName . '/' . $value->SRName;
+            $URSRPairs[$content->key] = $this->config->URAndSR ? $value->URName . '/' . $value->SRName : $value->SRName;
         }
 
         return $URSRPairs;
@@ -495,17 +544,22 @@ class customModel extends model
 
     /**
      * Get UR pairs.
-     * 
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function getURPairs()
     {
         $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+        if(empty($URSRList))
+        {
+            $URSR     = $this->loadModel('setting')->getURSR();
+            $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('`key`')->eq($URSR)->fetchPairs();
+        }
 
         $URPairs = array();
-        foreach($URSRList as $key => $value) 
-        {    
+        foreach($URSRList as $key => $value)
+        {
             $URSR = json_decode($value);
             $URPairs[$key] = $URSR->URName;
         }
@@ -515,17 +569,22 @@ class customModel extends model
 
     /**
      * Get SR pairs.
-     * 
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function getSRPairs()
     {
         $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
+        if(empty($URSRList))
+        {
+            $URSR     = $this->loadModel('setting')->getURSR();
+            $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('`key`')->eq($URSR)->fetchPairs();
+        }
 
         $SRPairs = array();
-        foreach($URSRList as $key => $value) 
-        {    
+        foreach($URSRList as $key => $value)
+        {
             $URSR = json_decode($value);
             $SRPairs[$key] = $URSR->SRName;
         }
@@ -535,9 +594,9 @@ class customModel extends model
 
     /**
      * Get UR and SR list.
-     * 
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function getURSRList()
     {
@@ -549,6 +608,11 @@ class customModel extends model
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')
             ->fetchAll();
+        if(empty($langData))
+        {
+            $URSR     = $this->loadModel('setting')->getURSR();
+            $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)->where('`key`')->eq($URSR)->andWhere('module')->eq('custom')->andWhere('section')->eq('URSRList')->fetchAll();
+        }
 
         $URSRList = array();
         foreach($langData as $id => $content)
@@ -618,7 +682,7 @@ class customModel extends model
     }
 
     /**
-     * Set product and project concept.
+     * Set product and project and sprint concept.
      *
      * @access public
      * @return void
@@ -634,7 +698,7 @@ class customModel extends model
 
         foreach($this->config->executionCommonList as $clientLang => $executionCommonList)
         {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('source')->eq('project')->exec();
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('source')->eq('execution')->exec();
         }
     }
 
@@ -656,12 +720,13 @@ class customModel extends model
         $maxKey = $maxKey ? $maxKey : 1;
 
         /* If has custom UR and SR name. */
-        foreach($data->URName as $key => $URName)
+        foreach($data->SRName as $key => $SRName)
         {
-            $SRName = zget($data->SRName, $key, '');
+            if(isset($data->URName))  $URName = zget($data->URName, $key, '');
+            if(!isset($data->URName)) $URName = $this->lang->URCommon;
             if(!$URName || !$SRName) continue;
 
-            $URSRList = new stdclass(); 
+            $URSRList = new stdclass();
             $URSRList->SRName = $SRName;
             $URSRList->URName = $URName;
 
@@ -677,7 +742,7 @@ class customModel extends model
     /**
      * Edit UR and SR concept.
      *
-     * @param  int $key 
+     * @param  int $key
      * @access public
      * @return bool
      */
@@ -688,7 +753,7 @@ class customModel extends model
 
         if(!$data->SRName || !$data->URName) return false;
 
-        $URSRList = new stdclass(); 
+        $URSRList = new stdclass();
         $URSRList->SRName = $data->SRName;
         $URSRList->URName = $data->URName;
 
@@ -699,7 +764,7 @@ class customModel extends model
             ->andWhere('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
             ->exec();
-        
+
         return true;
     }
 

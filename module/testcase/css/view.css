@@ -1,5 +1,5 @@
-.table-fixed td{white-space: unset;}
-#tabsNav .tab-pane>.cell + .cell {border-top:1px solid #cbd0db; border-radius:4px;}
+.table-fixed td {white-space: unset;}
+#tabsNav .tab-pane>.cell + .cell {border-top: 1px solid #cbd0db; border-radius: 4px;}
 
-.case-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden}
-.case-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972'}
+.case-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden;}
+.case-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972';}

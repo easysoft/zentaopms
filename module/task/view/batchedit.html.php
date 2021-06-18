@@ -21,7 +21,7 @@ js::set('dittoNotice', $dittoNotice);
     <h2>
       <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?>
       <?php if($executionName):?>
-      <small class='text-muted'><?php echo html::icon($lang->icons[$executionType]) . ' ' . $lang->task->execution . $lang->colon . ' ' . $executionName;?></small>
+      <small class='text-muted'><?php echo $lang->task->execution . $lang->colon . ' ' . $executionName;?></small>
       <?php endif;?>
     </h2>
     <div class='pull-right btn-toolbar'>
@@ -80,8 +80,8 @@ js::set('dittoNotice', $dittoNotice);
           <?php
           if(!isset($execution))
           {
-              $prjInfo = $this->project->getById($tasks[$taskID]->project);
-              $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
+              $prjInfo = $this->execution->getById($tasks[$taskID]->execution);
+              $modules = $this->tree->getOptionMenu($tasks[$taskID]->execution, $viewType = 'task');
               foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $prjInfo->name. $moduleName;
               $modules = array('ditto' => $this->lang->task->ditto) + $modules;
           }
@@ -91,7 +91,7 @@ js::set('dittoNotice', $dittoNotice);
             <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
             $members      = array('' => '', 'ditto' => $this->lang->task->ditto);
-            $teamAccounts = array_keys($executionTeams[$tasks[$taskID]->project]);
+            $teamAccounts = !empty($executionTeams[$tasks[$taskID]->execution]) ? array_keys($executionTeams[$tasks[$taskID]->execution]) : array();
             foreach($teamAccounts as $teamAccount) $members[$teamAccount] = $users[$teamAccount];
             $members['closed'] = 'Closed';
 
@@ -104,6 +104,11 @@ js::set('dittoNotice', $dittoNotice);
             else
             {
                 $taskMembers = $members;
+            }
+
+            if($tasks[$taskID]->assignedTo and !isset($taskMembers[$tasks[$taskID]->assignedTo]))
+            {
+                $taskMembers[$tasks[$taskID]->assignedTo] = $users[$tasks[$taskID]->assignedTo];
             }
             ?>
             <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
@@ -119,7 +124,7 @@ js::set('dittoNotice', $dittoNotice);
                 </div>
               </div>
             </td>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]",     $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
             <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$taskID]", $taskMembers, $tasks[$taskID]->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></td>
             <td><?php echo html::select("types[$taskID]",    $typeList, $tasks[$taskID]->type, "class='form-control'");?></td>
             <td <?php echo zget($visibleFields, 'status',     "class='hidden'")?>><?php echo html::select("statuses[$taskID]", $statusList, $tasks[$taskID]->status, "class='form-control'");?></td>

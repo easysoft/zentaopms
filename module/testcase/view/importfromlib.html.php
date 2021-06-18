@@ -44,7 +44,6 @@
         </tr>
       </thead>
       <tbody>
-        <?php $modules['ditto'] = $lang->testcase->ditto;?>
         <?php $i = 0;?>
         <?php foreach($cases as $case):?>
         <tr>
@@ -63,6 +62,7 @@
           <?php $libModule = zget($libModules, $case->module, '');?>
           <td class='text-left' title='<?php echo $libModule?>'><?php echo $libModule;?></td>
           <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'>
+            <?php if($i > 0) $modules['ditto'] = $lang->testcase->ditto;?>
             <?php echo html::select("module[{$case->id}]", $modules, $i == 0 ? 0 : 'ditto', "class='form-control chosen'");?>
           </td>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>

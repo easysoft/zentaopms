@@ -1,4 +1,22 @@
-<?php include '../../common/view/header.html.php';?>
+<?php //include '../../common/view/header.html.php';?>
+<?php include '../../common/view/header.lite.html.php';?>
+<header id='header'>
+  <div id='mainHeader' style='height: 0px;'>
+  </div>
+</header>
+<?php
+if(!empty($config->sso->redirect))
+{
+    css::import($defaultTheme . 'bindranzhi.css');
+    js::import($jsRoot . 'bindranzhi.js');
+}
+?>
+<script>
+adjustMenuWidth();
+</script>
+<main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
+  <div class='container'>
+
 <div class='row'>
   <div class='col-md-12'>
     <form method='post' action='<?php echo inlink('index')?>' style='margin-bottom:10px;'>
@@ -17,7 +35,7 @@
         <div class='item'>
           <div class='item-heading'>
             <div class="pull-right">
-              <span><?php echo html::a($object->url . (strpos($object->url, '?') !== false ? '&onlybody=yes' : '?onlybody=yes'), "<i class='icon-eye-open'></i>" . $lang->search->preview, '', "class='iframe' data-width='90%' data-title=\"<a href='$object->url' target='_blank' class='btn'><i class='icon-eye-open'></i>$lang->preview</a>\"")?></span>
+              <span><?php echo html::a($object->url . (strpos($object->url, '?') !== false ? '&onlybody=yes' : '?onlybody=yes'), $lang->search->preview, '', "class='iframe' data-width='90%'")?></span>
             </div>
             <h4>
               <?php
@@ -42,7 +60,7 @@
       </section>
       <footer class='table-footer'>
         <?php echo str_replace($words, urlencode($words), $pager->get('right', 'short'));?>
-        <span class='execute-info text-muted'><?php printf($lang->search->executeInfo, $pager->recTotal, $consumed);?></span> 
+        <span class='execute-info text-muted'><?php printf($lang->search->executeInfo, $pager->recTotal, $consumed);?></span>
       </footer>
     </div>
   </div>

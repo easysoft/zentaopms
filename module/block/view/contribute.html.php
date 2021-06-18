@@ -6,10 +6,12 @@
         <div class="tile-title"><?php echo $lang->block->createdTodos;?></div>
         <div class="tile-amount"><?php echo empty($data['createdTodos']) ? 0 : html::a($this->createLink('my', 'todo', 'type=all'), (int)$data['createdTodos']);?></div>
       </div>
+      <?php if($config->URAndSR):?>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdRequirements;?></div>
         <div class="tile-amount"><?php echo empty($data['createdRequirements']) ? 0 : (int)$data['createdRequirements'];?></div>
       </div>
+      <?php endif;?>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdStories;?></div>
         <div class="tile-amount"><?php echo empty($data['createdStories']) ? 0 : (int)$data['createdStories'];?></div>

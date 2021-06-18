@@ -12,8 +12,8 @@
 class tutorialModel extends model
 {
     /**
-     * Check novice. 
-     * 
+     * Check novice.
+     *
      * @access public
      * @return bool
      */
@@ -33,7 +33,7 @@ class tutorialModel extends model
 
     /**
      * Get tutorial product pairs.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -44,7 +44,7 @@ class tutorialModel extends model
 
     /**
      * Get tutorial product.
-     * 
+     *
      * @access public
      * @return object
      */
@@ -72,7 +72,7 @@ class tutorialModel extends model
 
     /**
      * Get tutorial stories.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -122,59 +122,59 @@ class tutorialModel extends model
     }
 
     /**
-     * Get tutorial project pairs.
-     * 
+     * Get tutorial Execution pairs.
+     *
      * @access public
      * @return array
      */
-    public function getProjectPairs()
+    public function getExecutionPairs()
     {
-        return array(1 => 'Test project');
+        return array(1 => 'Test execution');
     }
 
     /**
-     * Get tutorial project.
-     * 
+     * Get tutorial execution.
+     *
      * @access public
      * @return object
      */
-    public function getProject()
+    public function getExecution()
     {
-        $project = new stdclass();
-        $project->id = 1;
-        $project->type = 'sprint';
-        $project->name = 'Test project';
-        $project->code = 'test';
-        $project->begin = date('Y-m-d', strtotime('-7 days'));
-        $project->end   = date('Y-m-d', strtotime('+7 days'));
-        $project->days  = 10;
-        $project->status  = 'wait';
-        $project->pri   = '1';
-        $project->desc   = '';
-        $project->goal   = '';
-        $project->acl   = 'open';
-        return $project;
+        $execution = new stdclass();
+        $execution->id = 1;
+        $execution->type = 'sprint';
+        $execution->name = 'Test execution';
+        $execution->code = 'test';
+        $execution->begin = date('Y-m-d', strtotime('-7 days'));
+        $execution->end   = date('Y-m-d', strtotime('+7 days'));
+        $execution->days  = 10;
+        $execution->status  = 'wait';
+        $execution->pri   = '1';
+        $execution->desc   = '';
+        $execution->goal   = '';
+        $execution->acl   = 'open';
+        return $execution;
     }
 
     /**
-     * Get tutorial project products.
-     * 
+     * Get tutorial execution products.
+     *
      * @access public
      * @return array
      */
-    public function getProjectProducts()
+    public function getExecutionProducts()
     {
         $product = $this->getProduct();
         return array($product->id => $product);
     }
 
     /**
-     * Get tutorial project stories.
-     * 
+     * Get tutorial execution stories.
+     *
      * @access public
      * @return array
      */
-    public function getProjectStories()
+    public function getExecutionStories()
     {
         $stories = $this->getStories();
         $story   = $stories[0];
@@ -182,12 +182,12 @@ class tutorialModel extends model
     }
 
     /**
-     * Get tutorial project story pairs.
-     * 
+     * Get tutorial execution story pairs.
+     *
      * @access public
      * @return array
      */
-    public function getProjectStoryPairs()
+    public function getExecutionStoryPairs()
     {
         $stories = $this->getStories();
         $story   = $stories[0];
@@ -196,7 +196,7 @@ class tutorialModel extends model
 
     /**
      * Get tutorial team members.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -216,8 +216,8 @@ class tutorialModel extends model
     }
 
     /**
-     * Get team members pairs. 
-     * 
+     * Get team members pairs.
+     *
      * @access public
      * @return array
      */
@@ -229,7 +229,7 @@ class tutorialModel extends model
 
     /**
      * Get tutorial user pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -245,7 +245,7 @@ class tutorialModel extends model
 
     /**
      * Get tutorialed.
-     * 
+     *
      * @access public
      * @return string
      */

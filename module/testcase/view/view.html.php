@@ -12,12 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php $browseLink  = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");?>
+<?php $browseLink  = $app->session->caseList ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!isonlybody()):?>
-    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary' data-app={$this->app->openApp}");?>
     <div class="divider"></div>
     <?php endif;?>
     <div class="page-title">
@@ -117,7 +117,7 @@
         if(!$isLibCase)
         {
             if(!isonlybody()) echo "<div class='divider'></div>";
-            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', '', '', 'showinonlybody iframe', false, "data-width='95%'");
+            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
             common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'showinonlybody iframe', false, "data-width='95%'");
 
             if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", $case, 'button', 'bug', '', 'iframe', '', "data-width='90%'");
@@ -128,7 +128,7 @@
         <?php echo $this->buildOperateMenu($case, 'view');?>
 
         <?php
-        common::printIcon('testcase', 'edit',"caseID=$case->id", $case, 'button', '', '', 'showinonlybody');
+        if(!isonlybody()) common::printIcon('testcase', 'edit',"caseID=$case->id", $case, 'button', '', '', 'showinonlybody');
         if(!$isLibCase and $case->auto != 'unit') common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
         if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
         common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', '');
@@ -146,17 +146,17 @@
             <?php if($isLibCase):?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->lib;?></th>
-              <td><?php if(!common::printLink('caselib', 'browse', "libID=$case->lib", $libName)) echo $libName;?></td>
+              <td><?php echo common::hasPriv('caselib', 'browse') ? html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libName) : $libName;?></td>
             </tr>
             <?php else:?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
-              <td><?php if(!common::printLink('product', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
+              <td><?php echo common::hasPriv('product', 'browse') ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
             </tr>
-            <?php if($this->session->currentProductType != 'normal'):?>
+            <?php if($product->type != 'normal'):?>
             <tr>
-              <th><?php echo $lang->product->branch;?></th>
-              <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$case->branch", $branchName)) echo $branchName;?></td>
+              <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
+              <td><?php echo common::hasPriv('testcase', 'browse') ? html::a($this->createLink('testcase', 'browse', "productID=$case->product&branch=$case->branch"), $branchName) : $branchName;?></td>
             </tr>
             <?php endif;?>
             <?php endif;?>
@@ -177,7 +177,19 @@
 
                     foreach($modulePath as $key => $module)
                     {
-                        if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if($this->app->openApp == 'qa' || $this->app->openApp == 'ops')
+                        {
+                            if($isLibCase)
+                            {
+                                if(!common::printLink('caselib', 'browse', "libID=$case->lib&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                            }
+                            else
+                            {
+                                if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                            }
+                        }
+                        if($this->app->openApp == 'project' and !common::printLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if($this->app->openApp == 'execution') echo $module->name;
                         if(isset($modulePath[$key + 1])) echo $lang->arrow;
                     }
                 }
@@ -190,7 +202,8 @@
               <td>
                 <?php
                 $class = isonlybody() ? 'showinonlybody' : 'iframe';
-                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story", '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
+                $param = $this->app->openApp == 'project' ? "&version=0&projectID={$this->session->project}" : '';
+                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story" . $param, '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -230,7 +243,7 @@
               <th><?php echo $lang->testcase->status;?></th>
               <td>
                 <?php
-                echo $this->processStatus($from != 'testtask' ? 'testcase' : 'testtask', $case);
+                echo $this->processStatus('testcase', $case);
                 if($case->version > $case->currentVersion and $from == 'testtask')
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromTesttask}>{$lang->testcase->changed}</span> ";
@@ -354,6 +367,7 @@ js::set('retrack', $lang->retrack);
 $(function()
 {
     $('#subNavbar [data-id=testcase]').addClass('active');
+    $('#navbar [data-id=testcase]').addClass('active');
 })
 </script>
 <?php endif;?>

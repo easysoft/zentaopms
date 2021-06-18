@@ -1,5 +1,5 @@
 <?php
-$lang->cron->common       = '計劃任務';
+$lang->cron->common       = '定時任務';
 $lang->cron->index        = '首頁';
 $lang->cron->list         = '任務列表';
 $lang->cron->create       = '添加';
@@ -54,3 +54,4 @@ $lang->cron->notice->mon  = '取值範圍:1-12';
 $lang->cron->notice->dow  = '取值範圍:0-6';
 $lang->cron->notice->help = '註：如果伺服器重啟，或者發現計劃任務沒有正常工作，那麼計劃任務已經停止工作。需要手動點擊【重啟】按鈕，或者一分鐘後刷新頁面，來開啟計劃任務。如果任務列表中第一條記錄的最後執行時間改變，說明任務開啟成功。';
 $lang->cron->notice->errorRule = '"%s" 填寫的不是合法的值';
+$lang->cron->notice->errorType = '不能創建操作系統命令類型的計劃任務';

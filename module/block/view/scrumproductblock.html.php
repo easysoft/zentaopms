@@ -30,8 +30,8 @@
       $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : "";
       $viewLink = $this->createLink('product', 'browse', 'productID=' . $id);
       ?>
-        <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-          <td class="c-num text-ellipsis" title="<?php echo $name;?>"><?php echo $name;?></td>
+        <tr class='text-center' <?php echo $appid?>>
+          <td class="c-num text-ellipsis" title="<?php echo $name;?>"><?php echo html::a($viewLink, $name);?></td>
           <td class="c-num"><?php echo empty($stories[$id]) ? 0: $stories[$id];?></td>
           <td class="c-num"><?php echo empty($bugs[$id]) ? 0: $bugs[$id];?></td>
           <td class="c-num"><?php echo empty($releases[$id]) ? 0: $releases[$id];?></td>

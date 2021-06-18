@@ -49,22 +49,22 @@ if(((is_numeric($config->version[0]) and is_numeric($config->installedVersion[0]
 /* Remove install.php and upgrade.php. */
 if(file_exists('install.php') or file_exists('upgrade.php'))
 {
-    $undeleteFiles = array();
-    if(file_exists('install.php')) $undeleteFiles[] = '<strong style="color:#ed980f">install.php</strong>';
-    if(file_exists('upgrade.php')) $undeleteFiles[] = '<strong style="color:#ed980f">upgrade.php</strong>';
+    $undeletedFiles = array();
+    if(file_exists('install.php')) $undeletedFiles[] = '<strong style="color:#ed980f">install.php</strong>';
+    if(file_exists('upgrade.php')) $undeletedFiles[] = '<strong style="color:#ed980f">upgrade.php</strong>';
     $wwwDir = dirname(__FILE__);
-    if($undeleteFiles)
+    if($undeletedFiles)
     {
         echo "<html><head><meta charset='utf-8'></head>
             <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>";
-        echo "<div style='margin-bottom:8px;'>安全起见，请删除 <strong style='color:#ed980f'>{$wwwDir}</strong> 目录下的 " . join(' 和 ', $undeleteFiles) . " 文件。</div>";
-        echo "<div>Please remove " . join(' and ', $undeleteFiles) . " under <strong style='color:#ed980f'>$wwwDir</strong> dir for security reason.</div>";
+        echo "<div style='margin-bottom:8px;'>安全起见，请删除 <strong style='color:#ed980f'>{$wwwDir}</strong> 目录下的 " . join(' 和 ', $undeletedFiles) . " 文件。</div>";
+        echo "<div>Please remove " . join(' and ', $undeletedFiles) . " under <strong style='color:#ed980f'>$wwwDir</strong> dir for security reason.</div>";
         die("</td></tr></table></body></html>");
     }
 }
 
 /* If client device is mobile and version is pro, set the default view as mthml. */
-if($app->clientDevice == 'mobile' and (strpos($config->version, 'pro') === 0 or strpos($config->version, 'biz') === 0) and $config->default->view == 'html') $config->default->view = 'mhtml';
+if($app->clientDevice == 'mobile' and (strpos($config->version, 'pro') === 0 or strpos($config->version, 'biz') === 0 or strpos($config->version, 'max') === 0) and $config->default->view == 'html') $config->default->view = 'mhtml';
 if(!empty($_GET['display']) && $_GET['display'] == 'card') $config->default->view = 'xhtml';
 
 $app->parseRequest();

@@ -11,7 +11,12 @@
  */
 ?>
 <?php include './header.html.php';?>
+<style>
+#product_chosen {border-right:1px solid #dcdcdc;}
+#branch_chosen>a {border-left:0px;}
+</style>
 <?php js::set('holders', $lang->story->placeholder); ?>
+<?php js::set('blockID', $blockID); ?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
@@ -36,15 +41,11 @@
           <tr>
             <th><?php echo $lang->story->product;?></th>
             <td colspan="2">
-              <?php if($product->type != 'normal'):?>
               <div class='input-group'>
-              <?php endif;?>
               <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
-              <?php if($product->type != 'normal'):?>
               <span class='input-group-addon fix-border fix-padding'></span>
-              <?php echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
+              <?php if($branches) echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
               </div>
-              <?php endif;?>
             </td>
             <td colspan="2">
               <div class='input-group' id='moduleIdBox'>
@@ -86,10 +87,11 @@
             <td colspan="2" class='sourceTd'>
               <div class="input-group">
                 <div class="input-group">
-                  <div class="input-group-addon"><?php echo $lang->story->source;?></div>
+                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                   <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                  <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
+                  <span class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></span>
+                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 70px;'" : "style='width: 140px;'"?>
+                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
                 </div>
               </div>
             </td>
@@ -98,23 +100,32 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <td><?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?></td>
-            <?php if(!$this->story->checkForceReview()):?>
-            <td>
-              <div class='checkbox-primary'>
-                <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
-                <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+            <?php $colspan = $type == 'story' ? "colspan='4'" : "colspan='2'";?>
+            <td <?php echo $colspan;?> id='reviewerBox'>
+              <div class="table-row">
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
+                </div>
+                <?php if(!$this->story->checkForceReview()):?>
+                <div class="table-col w-130px">
+                  <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
+                    <div class='checkbox-primary'>
+                      <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
+                      <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+                    </div>
+                  </span>
+                </div>
+                <?php endif;?>
               </div>
             </td>
-            <?php endif;?>
             <?php if($type == 'requirement'):?>
               <?php if(strpos(",$showFields,", ',source,') !== false):?>
               <td colspan="2" class='sourceTd'>
                 <div class="input-group">
                   <div class="input-group">
-                    <div class="input-group-addon"><?php echo $lang->story->source;?></div>
+                    <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                     <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                    <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
+                    <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
                     <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
                   </div>
                 </div>
@@ -125,7 +136,7 @@
           <?php if($type == 'story' and $this->config->URAndSR):?>
           <tr>
             <th><?php echo $lang->story->requirement;?></th>
-            <td colspan=2><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <td colspan="4"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
           </tr>
           <?php endif;?>
           <tr>
@@ -145,6 +156,12 @@
                   </div>
                 </div>
                 <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
+                <div class='table-col w-150px'>
+                  <div class="input-group">
+                    <span class="input-group-addon fix-border br-0"><?php echo $lang->story->category;?></span>
+                    <?php echo html::select('category', $lang->story->categoryList, 'feature', "class='form-control chosen'");?>
+                  </div>
+                </div>
                 <div class='table-col w-120px'>
                   <div class="input-group">
                     <span class="input-group-addon fix-border br-0"><?php echo $lang->story->pri;?></span>
@@ -247,8 +264,7 @@
     </form>
   </div>
 </div>
-<?php if(isset($project)) js::set('project', $project);?>
-<?php js::set('projectID', $projectID);?>
+<?php js::set('executionID', $objectID);?>
 <?php js::set('storyModule', $lang->story->module);?>
 <?php js::set('storyType', $type);?>
 <script>

@@ -1,33 +1,33 @@
-.outer > #titlebar {display: none}
+.outer > #titlebar {display: none;}
 
 .table > thead > tr > th {vertical-align: middle;}
-.btn-file {float:right; padding: 0px 5px!important}
-.fix-border td {border:0px;}
+.btn-file {float: right; padding: 0px 5px !important;}
+.fix-border td {border: 0px;}
 .fix-position td {vertical-align: middle;}
 
 #filesName {float: right;}
 .nav > li {margin-right: 5px; display: inline-block; margin-top: 5px;}
 
-#steps .step-id {text-align: center; vertical-align: middle}
-#steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
-#steps .checkbox-inline input[type="checkbox"] {top: -2px}
+#steps .step-id {text-align: center; vertical-align: middle;}
+#steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px;}
+#steps .checkbox-inline input[type="checkbox"] {top: -2px;}
 #steps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
 #steps .step-actions {width: 98px;}
 #steps .active td {transition: background-color .5s;}
 #steps .step-group .step-steps {resize: none; max-height: 30px;}
 #steps .step-group .step-expects {display: none;}
 #steps .step-item .step-item-id {display: table-cell;}
-#steps .step-item .step-id {color: transparent}
+#steps .step-item .step-id {color: transparent;}
 
-.resultSteps .step-id {text-align: right}
-.resultSteps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
-.resultSteps .checkbox-inline input[type="checkbox"] {top: -2px}
+.resultSteps .step-id {text-align: right;}
+.resultSteps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px;}
+.resultSteps .checkbox-inline input[type="checkbox"] {top: -2px;}
 .resultSteps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
 .resultSteps .step-actions {width: 98px;}
 .resultSteps .active td {transition: background-color .5s;}
 .resultSteps .step-group .step-steps {resize: none; max-height: 30px;}
 .resultSteps .step-group .step-expects {display: none;}
 .resultSteps .step-item .step-item-id {display: table-cell;}
-.resultSteps .step-item .step-id {color: transparent}
+.resultSteps .step-item .step-id {color: transparent;}
 
-.form-condensed textarea[id*='reals']{height: 35px;}
+.form-condensed textarea[id*='reals'] {height: 35px;}

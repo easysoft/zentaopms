@@ -21,7 +21,7 @@ $lang->group->managePrivByGroup  = 'Rechte';
 $lang->group->managePrivByModule = 'Modul Rechte';
 $lang->group->byModuleTips       = '<span class="tips">(SHIFT/STRG für Multi-Select)</span>';
 $lang->group->manageMember       = 'Mitglieder';
-$lang->group->managePRJAdmin     = 'Manage Program Admins';
+$lang->group->manageProjectAdmin = 'Manage Program Admins';
 $lang->group->confirmDelete      = 'Möchten Sie die Gruppe löschen?';
 $lang->group->successSaved       = 'Gespeichert!';
 $lang->group->errorNotSaved      = 'Fehlgeschlagen. Bitte aktion und Gruppe wählen.';
@@ -56,6 +56,7 @@ $lang->group->copyOptions['copyPriv'] = 'Rechte kopieren';
 $lang->group->copyOptions['copyUser'] = 'Benutzer kopieren';
 
 $lang->group->versions['']          = 'Verlauf';
+$lang->group->versions['15_0_rc1']  = 'ZenTao15.0.rc1';
 $lang->group->versions['12_5']      = 'ZenTao12.5';
 $lang->group->versions['12_3']      = 'ZenTao12.3';
 $lang->group->versions['11_6_2']    = 'ZenTao11.6.2';

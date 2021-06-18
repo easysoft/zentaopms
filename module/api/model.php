@@ -11,6 +11,14 @@
  */
 class apiModel extends model
 {
+    /**
+     * Get the details of the method by file path.
+     *
+     * @param  string $filePath
+     * @param  string $ext
+     * @access public
+     * @return object
+     */
     public function getMethod($filePath, $ext = '')
     {
         $fileName  = dirname($filePath);
@@ -34,7 +42,7 @@ class apiModel extends model
         {
             if(strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST'))
             {
-                $data->post = true; 
+                $data->post = true;
             }
         }
         return $data;
@@ -42,12 +50,12 @@ class apiModel extends model
 
     /**
      * Request the api.
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
-     * @param  string $action 
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $action
      * @access public
-     * @return void
+     * @return array
      */
     public function request($moduleName, $methodName, $action)
     {
@@ -60,9 +68,9 @@ class apiModel extends model
                 foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
                 $param = ltrim($param, ',');
             }
-            $url   = rtrim($host, '/') . inlink('getModel',  "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
-            $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
-            $url  .= $this->config->sessionVar . '=' . session_id();
+            $url  = rtrim($host, '/') . inlink('getModel',  "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
+            $url .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
+            $url .= $this->config->sessionVar . '=' . session_id();
         }
         else
         {
@@ -71,9 +79,9 @@ class apiModel extends model
                 foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
                 $param = ltrim($param, '&');
             }
-            $url   = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
-            $url  .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
-            $url  .= $this->config->sessionVar . '=' . session_id();
+            $url  = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
+            $url .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
+            $url .= $this->config->sessionVar . '=' . session_id();
         }
 
         /* Unlock session. After new request, restart session. */
@@ -85,10 +93,10 @@ class apiModel extends model
     }
 
     /**
-     * Query sql. 
-     * 
-     * @param  string    $sql 
-     * @param  string    $keyField 
+     * Query sql.
+     *
+     * @param  string    $sql
+     * @param  string    $keyField
      * @access public
      * @return array
      */

@@ -9,7 +9,6 @@
  * @version     $Id: en.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.pm
  */
-$lang->product->common        = $lang->productCommon;
 $lang->product->index         = 'Accueil ' . $lang->productCommon;
 $lang->product->browse        = 'Liste Stories';
 $lang->product->dynamic       = 'Historique';
@@ -29,6 +28,7 @@ $lang->product->updateOrder   = 'Ordre';
 $lang->product->orderAction   = "Rang {$lang->productCommon}";
 $lang->product->all           = "Tous les {$lang->productCommon}s";
 $lang->product->manageLine    = "Manage {$lang->productCommon} Line";
+$lang->product->newLine       = "Create {$lang->productCommon} Line";
 $lang->product->export        = 'Export';
 $lang->product->exportAction  = "Export {$lang->productCommon}";
 $lang->product->dashboard     = "Dashboard";
@@ -41,7 +41,8 @@ $lang->product->plans       = 'Plans';
 $lang->product->releases    = 'Releases';
 $lang->product->docs        = 'Doc';
 $lang->product->bugs        = 'Bug Liés';
-$lang->product->projects    = "{$lang->executionCommon}s Liés";
+$lang->product->projects    = "Linked Project";
+$lang->product->executions  = "{$lang->execution->common}s Liés";
 $lang->product->cases       = 'CasTests';
 $lang->product->builds      = 'Build';
 $lang->product->roadmap     = "Roadmap {$lang->productCommon}";
@@ -51,7 +52,7 @@ $lang->product->build       = 'Liste Builds';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Les Projects qui sont associés à ce {$lang->productCommon} sont listés ci-dessous.";
 
-$lang->product->currentExecution      = "Current {$lang->sprintCommon}";
+$lang->product->currentExecution      = "Current Execution";
 $lang->product->activeStories         = 'Actives [S]';
 $lang->product->activeStoriesTitle    = 'Stories Actives';
 $lang->product->changedStories        = 'Changées [S]';
@@ -65,13 +66,13 @@ $lang->product->unResolvedBugsTitle   = 'Bugs Ouverts';
 $lang->product->assignToNullBugs      = 'Orphelins [B]';
 $lang->product->assignToNullBugsTitle = 'Bugs non assignés';
 
-$lang->product->confirmDelete    = "Voulez-vous vraiment supprimer le {$lang->productCommon} ?";
-$lang->product->errorNoProduct   = "Aucun {$lang->productCommon} n'est créé pour l'instant !";
-$lang->product->accessDenied     = "Vous n'avez pas accès au {$lang->productCommon}.";
-$lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
-$lang->product->notChangePGMTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
-$lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
-$lang->product->changePGMError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
+$lang->product->confirmDelete        = "Voulez-vous vraiment supprimer le {$lang->productCommon} ?";
+$lang->product->errorNoProduct       = "Aucun {$lang->productCommon} n'est créé pour l'instant !";
+$lang->product->accessDenied         = "Vous n'avez pas accès au {$lang->productCommon}.";
+$lang->product->programChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
+$lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
+$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
@@ -92,7 +93,7 @@ $lang->product->RD             = 'Release Manager';
 $lang->product->acl            = "Contrôle accès";
 $lang->product->whitelist      = 'Liste Blanche';
 $lang->product->addWhitelist   = 'Add Whitelist';
-$lang->product->unbindWhielist = 'Remove Whitelist';
+$lang->product->unbindWhitelist = 'Remove Whitelist';
 $lang->product->branch         = '%s';
 $lang->product->qa             = 'QA';
 $lang->product->release        = 'Release';

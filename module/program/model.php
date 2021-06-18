@@ -9,31 +9,18 @@ class programModel extends model
      * @access public
      * @return int
      */
-    public function savePGMState($programID = 0, $programs = array())
+    public function saveState($programID = 0, $programs = array())
     {
-        if($programID > 0) $this->session->set('PGM', (int)$programID);
-        if($programID == 0 and $this->cookie->lastPGM) $this->session->set('PGM', (int)$this->cookie->lastPGM);
-        if($programID == 0 and $this->session->PGM == '') $this->session->set('PGM', key($programs));
-        if(!isset($programs[$this->session->PGM]))
+        if($programID > 0) $this->session->set('program', (int)$programID);
+        if($programID == 0 and $this->cookie->lastProgram) $this->session->set('program', (int)$this->cookie->lastProgram);
+        if($programID == 0 and $this->session->program == '') $this->session->set('program', key($programs));
+        if(!isset($programs[$this->session->program]))
         {
-            $this->session->set('PGM', key($programs));
-            if($programID && strpos(",{$this->app->user->view->programs},", ",{$this->session->PGM},") === false) $this->accessDenied();
+            $this->session->set('program', key($programs));
+            if($programID && strpos(",{$this->app->user->view->programs},", ",{$this->session->program},") === false) $this->accessDenied();
         }
 
-        return $this->session->PGM;
-    }
-
-    /**
-     * Get program main menu action.
-     *
-     * @access public
-     * @return string
-     */
-    public function getPGMMainAction()
-    {
-        $link = html::a(helper::createLink('program', 'pgmbrowse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-        return common::hasPriv('program', 'pgmbrowse') ? $html : '';
+        return $this->session->program;
     }
 
     /**
@@ -43,7 +30,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getPGMPairs($isQueryAll = false)
+    public function getPairs($isQueryAll = false)
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
@@ -61,12 +48,12 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getPGMProductPairs($programID = 0, $mode = 'assign', $status = 'all')
+    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all')
     {
         /* Get the top programID. */
         if($programID)
         {
-            $program   = $this->getPGMByID($programID);
+            $program   = $this->getByID($programID);
             $path      = explode(',', $program->path);
             $path      = array_filter($path);
             $programID = current($path);
@@ -89,9 +76,11 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getPGMByID($programID = 0)
+    public function getByID($programID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
+        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
+        $program = $this->loadModel('file')->replaceImgURL($program, 'desc');
+        return $program;
     }
 
     /**
@@ -103,14 +92,15 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getPGMList($status = 'all', $orderBy = 'id_asc', $pager = NULL)
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL)
     {
         return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)
-            ->andWhere('id')->in($this->app->user->view->programs)
+            ->andWhere('(id')->in($this->app->user->view->programs)
             ->orWhere('id')->in($this->app->user->view->projects)
+            ->markRight(1)
             ->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
@@ -119,27 +109,97 @@ class programModel extends model
             ->fetchAll('id');
     }
 
-    /**
-     * Set view menu.
+	  /**
+     * Get project list data.
      *
-     * @param  int    $programID
-     * @access private
-     * @return void
+     * @param  int       $programID
+     * @param  string    $browseType
+     * @param  string    $queryID
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  int       $programTitle
+     * @param  int       $involved
+     * @access public
+     * @return object
      */
-    public function setPGMViewMenu($programID = 0)
+    public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0)
     {
-        foreach($this->lang->program->viewMenu as $label => $menu)
+        $path = '';
+        if($programID)
         {
-            $this->lang->program->viewMenu->{$label}['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
+            $program = $this->getByID($programID);
+            $path    = $program->path;
         }
 
-        foreach($this->lang->personnel->menu as $label => $menu)
-        {
-            $menu['link'] = is_array($menu) ? sprintf($menu['link'], $programID) : sprintf($menu, $programID);
-            $this->lang->personnel->menu->$label = $menu;
-        }
+        $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
+            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($this->cookie->involved or $involved)
+            ->andWhere('openedBy', true)->eq($this->app->user->account)
+            ->orWhere('PM')->eq($this->app->user->account)
+            ->markRight(1)
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
 
-        $this->lang->program->menu = $this->lang->program->viewMenu;
+        /* Determine how to display the name of the program. */
+        if($programTitle and $this->config->systemMode == 'new')
+        {
+            $programList = $this->getPairs();
+            foreach($projectList as $id => $project)
+            {
+                $path = explode(',', $project->path);
+                $path = array_filter($path);
+                array_pop($path);
+                $programID = $programTitle == 'base' ? current($path) : end($path);
+                if(empty($path) || $programID == $id) continue;
+
+                $programName = isset($programList[$programID]) ? $programList[$programID] : '';
+
+                $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
+            }
+        }
+        return $projectList;
+    }
+
+    /**
+     * Get stakeholders by program id.
+     *
+     * @param  int     $programID
+     * @param  string  $orderBy
+     * @param  object  $paper
+     * @access public
+     * @return array
+     */
+    public function getStakeholders($programID = 0, $orderBy, $pager = null)
+    {
+        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
+            ->where('t1.objectID')->eq($programID)
+            ->andWhere('t1.objectType')->eq('program')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Get stakeholders by program id list.
+     *
+     * @param  string $programIdList
+     * @access public
+     * @return array
+     */
+    public function getStakeholdersByPrograms($programIdList = 0)
+    {
+        return $this->dao->select('distinct user as account')->from(TABLE_STAKEHOLDER)
+            ->where('objectID')->in($programIdList)
+            ->andWhere('objectType')->eq('program')
+            ->fetchAll();
     }
 
     /**
@@ -148,7 +208,7 @@ class programModel extends model
      * @access private
      * @return int|bool
      */
-    public function PGMCreate()
+    public function create()
     {
         $program = fixer::input('post')
             ->setDefault('status', 'wait')
@@ -160,7 +220,7 @@ class programModel extends model
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->add('type', 'program')
             ->join('whitelist', ',')
-            ->stripTags($this->config->program->editor->pgmcreate['id'], $this->config->allowedTags)
+            ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
             ->remove('delta,future')
             ->get();
 
@@ -170,19 +230,19 @@ class programModel extends model
             if($parentProgram)
             {
                 /* Child program begin cannot less than parent. */
-                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PGMBeginLetterParent, $parentProgram->begin);
+                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
 
                 /* When parent set end then child program end cannot greater than parent. */
-                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
+                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
 
                 /* When parent set end then child program cannot set longTime. */
-                if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
+                if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
 
                 /* The budget of a child program cannot beyond the remaining budget of the parent program. */
                 $program->budgetUnit = $parentProgram->budgetUnit;
                 if(isset($program->budget) and $parentProgram->budget != 0)
                 {
-                    $availableBudget = $this->getAvailableBudget($parentProgram);
+                    $availableBudget = $this->getBudgetLeft($parentProgram);
                     if($program->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
                 }
 
@@ -191,20 +251,19 @@ class programModel extends model
         }
 
         /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $this->config->program->PGMCreate->requiredFields) as $fieldName)
+        foreach(explode(',', $this->config->program->create->requiredFields) as $field)
         {
-            $fieldKey = 'PGM' . ucfirst($fieldName);
-            if(isset($this->lang->program->$fieldKey)) $this->lang->project->$fieldName = $this->lang->program->$fieldKey;
+            if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
-        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmcreate['id'], $this->post->uid);
+        $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
-            ->batchcheck($this->config->program->PGMCreate->requiredFields, 'notempty')
+            ->batchcheck($this->config->program->create->requiredFields, 'notempty')
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique')
+            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program'")
             ->exec();
 
         if(!dao::isError())
@@ -216,30 +275,8 @@ class programModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
-            $this->file->updateObjectID($this->post->uid, $programID, 'project');
+            $this->file->updateObjectID($this->post->uid, $programID, 'program');
             $this->setTreePath($programID);
-
-            /* Add program admin.*/
-            $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
-                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
-                ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('PRJAdmin')
-                ->fetch();
-
-            if(!empty($groupPriv))
-            {
-                $newProgram = $groupPriv->PRJ . ",$programID";
-                $this->dao->update(TABLE_USERGROUP)->set('PRJ')->eq($newProgram)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
-            }
-            else
-            {
-                $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
-                $groupPriv  = new stdclass();
-                $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $PRJAdminID;
-                $groupPriv->PRJ     = $programID;
-                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
-            }
 
             return $programID;
         }
@@ -252,7 +289,7 @@ class programModel extends model
      * @access public
      * @return array|bool
      */
-    public function PGMUpdate($programID)
+    public function update($programID)
     {
         $programID  = (int)$programID;
         $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
@@ -267,11 +304,11 @@ class programModel extends model
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
-            ->stripTags($this->config->program->editor->pgmedit['id'], $this->config->allowedTags)
+            ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,delta,future')
             ->get();
 
-        $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->pgmedit['id'], $this->post->uid);
+        $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
         $children = $this->getChildren($programID);
 
         if($children > 0)
@@ -279,8 +316,9 @@ class programModel extends model
             $minChildBegin = $this->dao->select('min(begin) as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch('minBegin');
             $maxChildEnd   = $this->dao->select('max(end) as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch('maxEnd');
 
-            if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->PGMBeginGreateChild, $minChildBegin);
-            if($maxChildEnd   and $program->end   < $maxChildEnd and $this->post->delta != 999) dao::$errors['end'] = sprintf($this->lang->program->PGMEndLetterChild, $maxChildEnd);
+            if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $minChildBegin);
+            if($maxChildEnd   and $program->end   < $maxChildEnd and $this->post->delta != 999) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $maxChildEnd);
+            if(dao::isError()) return false;
         }
 
         if($program->parent)
@@ -288,35 +326,34 @@ class programModel extends model
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
             if($parentProgram)
             {
-                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PGMBeginLetterParent, $parentProgram->begin);
-                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
-                if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->PGMEndGreaterParent, $parentProgram->end);
+                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $parentProgram->begin);
+                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
+                if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $parentProgram->end);
             }
 
             /* The budget of a child program cannot beyond the remaining budget of the parent program. */
             $program->budgetUnit = $parentProgram->budgetUnit;
             if($program->budget != 0 and $parentProgram->budget != 0)
             {
-                $availableBudget = $this->getAvailableBudget($parentProgram);
+                $availableBudget = $this->getBudgetLeft($parentProgram);
                 if($program->budget > $availableBudget + $oldProgram->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
         if(dao::isError()) return false;
 
         /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $this->config->program->PGMCreate->requiredFields) as $fieldName)
+        foreach(explode(',', $this->config->program->edit->requiredFields) as $field)
         {
-            $fieldKey = 'PGM' . ucfirst($fieldName);
-            if(isset($this->lang->program->$fieldKey)) $this->lang->project->$fieldName = $this->lang->program->$fieldKey;
+            if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
         $this->dao->update(TABLE_PROGRAM)->data($program)
             ->autoCheck($skipFields = 'begin,end')
-            ->batchcheck($this->config->program->PGMEdit->requiredFields, 'notempty')
+            ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->check('name', 'unique', "id!=$programID and deleted='0'")
+            ->check('name', 'unique', "id!=$programID and deleted='0' and `type`='program'")
             ->where('id')->eq($programID)
             ->limit(1)
             ->exec();
@@ -338,11 +375,10 @@ class programModel extends model
      * Get program swapper.
      *
      * @param  int     $programID
-     * @param  bool    $active
      * @access private
      * @return string
      */
-    public function getPGMSwitcher($programID = 0)
+    public function getSwitcher($programID = 0)
     {
         $currentProgramName = '';
         $currentModule      = $this->app->moduleName;
@@ -351,16 +387,16 @@ class programModel extends model
         if($programID)
         {
             setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-            $currentProgram     = $this->getPGMById($programID);
+            $currentProgram     = $this->getById($programID);
             $currentProgramName = $currentProgram->name;
         }
         else
         {
-            $currentProgramName = $this->lang->program->PGMAll;
+            $currentProgramName = $this->lang->program->all;
         }
 
-        $dropMenuLink = helper::createLink('program', 'ajaxGetPGMDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'><i class='icon icon-folder-open-o'></i> {$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'>{$currentProgramName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
 
         return $output;
@@ -372,10 +408,12 @@ class programModel extends model
      * @param  int    $programID
      * @param  string $from
      * @param  string $vars
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return string
      */
-    public function getPGMTreeMenu($programID = 0, $from = 'program', $vars = '')
+    public function getTreeMenu($programID = 0, $from = 'program', $vars = '', $moduleName = '', $methodName = '')
     {
         $programMenu = array();
         $query = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -395,8 +433,8 @@ class programModel extends model
 
         while($program = $stmt->fetch())
         {
-            $link = $from == 'program' ? helper::createLink('program', 'pgmproduct', "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
-            $linkHtml = html::a($link, html::icon($this->lang->icons[$program->type], 'icon icon-sm text-muted') . ' ' . $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
+            $link = $from == 'program' ? helper::createLink($moduleName, $methodName, "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
+            $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {
@@ -433,7 +471,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getTopPGMPairs($model = '', $mode = '')
+    public function getTopPairs($model = '', $mode = '')
     {
         return $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
@@ -453,11 +491,11 @@ class programModel extends model
      * @access public
      * @return int
      */
-    public function getTopPGMByID($programID)
+    public function getTopByID($programID)
     {
         if(empty($programID)) return 0;
 
-        $program = $this->getPGMByID($programID);
+        $program = $this->getByID($programID);
         if(empty($program)) return 0;
 
         $path = explode(',', trim($program->path, ','));
@@ -465,32 +503,9 @@ class programModel extends model
     }
 
     /**
-     * Get Multiple linked products for project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getMultiLinkedProducts($projectID)
-    {
-        $linkedProducts      = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $multiLinkedProducts = $this->dao->select('t3.id,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
-            ->where('t1.product')->in($linkedProducts)
-            ->andWhere('t1.project')->ne($projectID)
-            ->andWhere('t2.type')->eq('project')
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
-            ->fetchPairs('id', 'name');
-
-        return $multiLinkedProducts;
-    }
-
-    /**
      * Get children by program id.
      *
-     * @param  int     $programID
+     * @param  int  $programID
      * @access public
      * @return int
      */
@@ -509,48 +524,13 @@ class programModel extends model
     public function hasUnfinished($program)
     {
         $unfinished = $this->dao->select("count(IF(id != {$program->id}, true, null)) as count")->from(TABLE_PROJECT)
-            ->where('type')->in('program,project')
+            ->where('type')->in('program, project')
             ->andWhere('path')->like($program->path . '%')
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq('0')
             ->fetch('count');
 
         return $unfinished;
-    }
-
-    /**
-     * Get stakeholders by program id.
-     *
-     * @param  int     $programID
-     * @param  string  $orderBy
-     * @param  object  $paper
-     * @access public
-     * @return array
-     */
-    public function getStakeholders($programID = 0, $orderBy, $pager = null)
-    {
-        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
-            ->where('t1.objectID')->eq($programID)
-            ->andWhere('t1.objectType')->eq('program')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll();
-    }
-
-    /**
-     * Get stakeholders by program id list.
-     *
-     * @param  string $programIdList
-     * @access public
-     * @return array
-     */
-    public function getStakeholdersByPGMList($programIdList = 0)
-    {
-        return $this->dao->select('distinct user as account')->from(TABLE_STAKEHOLDER)
-            ->where('objectID')->in($programIdList)
-            ->andWhere('objectType')->eq('program')
-            ->fetchAll();
     }
 
     /**
@@ -591,31 +571,13 @@ class programModel extends model
         $this->loadModel('user')->updateUserView($programID, 'program', $changedAccounts);
 
         /* Update children user view. */
-        $childPGMList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
-        $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
+        $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
+        $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
         $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
 
-        if(!empty($childPGMList))  $this->user->updateUserView($childPGMList, 'program', $changedAccounts);
-        if(!empty($childPRJList))  $this->user->updateUserView($childPRJList, 'project', $changedAccounts);
+        if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', $changedAccounts);
+        if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', $changedAccounts);
         if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', $changedAccounts);
-    }
-
-    /**
-     * Show accessDenied response.
-     *
-     * @access private
-     * @return void
-     */
-    public function accessDenied()
-    {
-        echo(js::alert($this->lang->program->accessDenied));
-
-        if(!$this->server->http_referer) die(js::locate(helper::createLink('program', 'prjbrowse')));
-
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('program', 'browse')));
-
-        die(js::locate('back'));
     }
 
     /**
@@ -633,46 +595,11 @@ class programModel extends model
         if(empty($program)) return true;
         if(!isset($program->type)) return true;
 
-        if($action == 'pgmclose')    return $program->status != 'closed';
-        if($action == 'pgmactivate') return $program->status == 'done' or $program->status == 'closed';
-        if($action == 'pgmsuspend')  return $program->status == 'wait' or $program->status == 'doing';
-
-        if($action == 'prjstart')    return $program->status == 'wait' or $program->status == 'suspended';
-        if($action == 'prjfinish')   return $program->status == 'wait' or $program->status == 'doing';
-        if($action == 'prjclose')    return $program->status != 'closed';
-        if($action == 'prjsuspend')  return $program->status == 'wait' or $program->status == 'doing';
-        if($action == 'prjactivate') return $program->status == 'done' or $program->status == 'closed';
+        if($action == 'close')    return $program->status != 'closed';
+        if($action == 'activate') return $program->status == 'done' or $program->status == 'closed';
+        if($action == 'suspend')  return $program->status == 'wait' or $program->status == 'doing';
 
         return true;
-    }
-
-    /**
-     * Check has content for program.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return bool
-     */
-    public function checkHasContent($programID)
-    {
-        $count  = 0;
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('PRJ')->eq($programID)->fetch('count');
-
-        return $count > 0;
-    }
-
-    /**
-     * Check has children project.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return bool
-     */
-    public function checkHasChildren($programID)
-    {
-        $count = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->fetch('count');
-        return $count > 0;
     }
 
     /**
@@ -697,36 +624,23 @@ class programModel extends model
             $path['grade'] = $parent->grade + 1;
         }
         $this->dao->update(TABLE_PROGRAM)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($program->id)->exec();
+
         return !dao::isError();
     }
 
     /**
-     * Get budget unit list.
-     *
-     * @access public
-     * @return array
-     */
-    public function getBudgetUnitList()
-    {
-        $budgetUnitList = array();
-        foreach(explode(',', $this->config->program->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->program->unitList, $unit, '');
-
-        return $budgetUnitList;
-    }
-
-    /**
-     * Get available budget.
+     * Get budget left.
      *
      * @param  object  $parentProgram
      * @access public
      * @return int
      */
-    public function getAvailableBudget($parentProgram)
+    public function getBudgetLeft($parentProgram)
     {
         if(empty($parentProgram)) return;
 
         $childGrade     = $parentProgram->grade + 1;
-        $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROJECT)
+        $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROGRAM)
             ->where('path')->like("%{$parentProgram->id}%")
             ->andWhere('grade')->eq($childGrade)
             ->fetch('sumBudget');
@@ -741,11 +655,11 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getParentPairs($model = '', $mode = '')
+    public function getParentPairs($model = '', $mode = 'noclosed')
     {
         $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
-            ->beginIF(strpos($mode, 'noclosed') === false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('grade desc, `order`')
@@ -824,281 +738,6 @@ class programModel extends model
     }
 
     /**
-     * Save project state.
-     *
-     * @param  int    $projectID
-     * @param  array  $projects
-     * @access public
-     * @return int
-     */
-    public function savePRJState($projectID = 0, $projects = array())
-    {
-        if($projectID > 0) $this->session->set('PRJ', (int)$projectID);
-        if($projectID == 0 and $this->cookie->lastPRJ) $this->session->set('PRJ', (int)$this->cookie->lastPRJ);
-        if($projectID == 0 and $this->session->PRJ == '') $this->session->set('PRJ', key($projects));
-        if(!isset($projects[$this->session->PRJ]))
-        {
-            $this->session->set('PRJ', key($projects));
-            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->PRJ},") === false) $this->accessDenied();
-        }
-
-        return $this->session->PRJ;
-    }
-
-    /*
-     * Get project swapper.
-     *
-     * @param  int     $projectID
-     * @param  string  $currentModule
-     * @param  string  $currentMethod
-     * @access public
-     * @return string
-     */
-    public function getPRJSwitcher($projectID, $currentModule, $currentMethod)
-    {
-        $this->session->set('moreProjectLink', $this->app->getURI(true));
-
-        $this->loadModel('project');
-        $currentProjectName = $this->lang->program->common;
-        if($projectID)
-        {
-            $currentProject     = $this->getPRJById($projectID);
-            $currentProjectName = $currentProject->name;
-        }
-
-        $dropMenuLink = helper::createLink('program', 'ajaxGetPRJDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-angle-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'><i class='icon icon-project'></i> {$currentProjectName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-
-        return $output;
-    }
-
-    /**
-     * Get project main menu action.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return string
-     */
-    public function getPRJMainAction($module, $method)
-    {
-        $link = html::a(helper::createLink('program', 'prjbrowse'), "<i class='icon icon-list'></i>", '', "style='border: none;'");
-        $html = "<p style='padding-top:5px;'>" . $link . "</p>";
-        return common::hasPriv('program', 'prjbrowse') ? $html : '';
-    }
-
-    /**
-     * Get project list data.
-     *
-     * @param  int       $programID
-     * @param  string    $browseType
-     * @param  string    $queryID
-     * @param  string    $orderBy
-     * @param  object    $pager
-     * @param  int       $programTitle
-     * @param  int       $PRJMine
-     * @access public
-     * @return object
-     */
-    public function getPRJList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
-    {
-        $path = '';
-        if($programID)
-        {
-            $program = $this->getPGMByID($programID);
-            $path    = $program->path;
-        }
-
-        $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
-            ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($this->cookie->PRJMine or $PRJMine)
-            ->andWhere('openedBy', true)->eq($this->app->user->account)
-            ->orWhere('PM')->eq($this->app->user->account)
-            ->markRight(1)
-            ->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-
-        /* Determine how to display the name of the program. */
-        if($programTitle and $this->config->systemMode == 'new')
-        {
-            $programList = $this->getPGMPairs();
-            foreach($projectList as $id => $project)
-            {
-                $path = explode(',', $project->path);
-                $path = array_filter($path);
-                array_pop($path);
-                $programID = $programTitle == 'base' ? current($path) : end($path);
-                if(empty($path) || $programID == $id) continue;
-
-                $programName = isset($programList[$programID]) ? $programList[$programID] : '';
-
-                $projectList[$id]->name = $programName . '/' . $projectList[$id]->name;
-            }
-        }
-        return $projectList;
-    }
-
-    /**
-     * Get a project by id.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return object
-     */
-    public function getPRJByID($projectID)
-    {
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('`type`')->eq('project')->fetch();
-        if(!$project) return false;
-
-        if($project->end == '0000-00-00') $project->end = '';
-        return $project;
-    }
-
-    /**
-     * Get project info.
-     *
-     * @param  string    $status
-     * @param  int       $itemCounts
-     * @param  string    $orderBy
-     * @param  int       $pager
-     * @access public
-     * @return array
-     */
-    public function getPRJInfo($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
-    {
-        /* Init vars. */
-        $this->loadModel('project');
-        $projects = $this->getPRJList(0, $status, 0, $orderBy, $pager);
-        if(empty($projects)) return array();
-
-        $projectIdList = array_keys($projects);
-        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
-            ->where('root')->in($projectIdList)
-            ->groupBy('root')
-            ->fetchAll('root');
-
-        $estimates = $this->dao->select('PRJ, sum(estimate) as estimate')->from(TABLE_TASK)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $this->app->loadClass('pager', $static = true);
-        foreach($projects as $projectID => $project)
-        {
-            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
-            $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->project->getExecutionStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
-            $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
-            $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $this->getPRJParentName($project->parent);
-        }
-        return $projects;
-    }
-
-    /**
-     * Gets the top-level project name.
-     *
-     * @param  int       $parentID
-     * @access private
-     * @return string
-     */
-    public function getPRJParentName($parentID = 0)
-    {
-        if($parentID == 0) return '';
-
-        static $parent;
-        $parent = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
-        if($parent->parent) $this->getPRJParentName($parent->parent);
-
-        return $parent->name;
-    }
-
-    /**
-     * Get project overview for block.
-     *
-     * @param  string     $queryType byId|byStatus
-     * @param  string|int $param
-     * @param  string     $orderBy
-     * @param  int        $limit
-     * @access public
-     * @return array
-     */
-    public function getPRJOverview($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
-    {
-        $queryType = strtolower($queryType);
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($queryType == 'bystatus' and $param != 'all')->andWhere('status')->eq($param)->fi()
-            ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
-            ->orderBy($orderBy)
-            ->limit($limit)
-            ->fetchAll('id');
-
-        if(empty($projects)) return array();
-        $projectIdList = array_keys($projects);
-
-        $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)->where('root')->in($projectIdList)->groupBy('root')->fetchPairs();
-
-        $hours = $this->dao->select('PRJ,
-            cast(sum(consumed) as decimal(10,2)) as consumed,
-            cast(sum(estimate) as decimal(10,2)) as estimate')
-            ->from(TABLE_TASK)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('PRJ')
-            ->fetchAll('PRJ');
-
-        $leftTasks = $this->dao->select('PRJ, count(*) as tasks')->from(TABLE_TASK)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->in('wait,doing,pause')
-            ->groupBy('PRJ')
-            ->fetchPairs();
-
-        foreach($projectIdList as $projectID)
-        {
-            $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
-            $allStories[$projectID]  = $this->product->getTotalStoriesByProduct($productIdList, 'story');
-            $doneStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'closed');
-            $leftStories[$projectID] = $this->product->getTotalStoriesByProduct($productIdList, 'story', 'active');
-        }
-
-        $leftBugs = $this->getTotalBugByPRJ($projectIdList, 'active');
-        $allBugs  = $this->getTotalBugByPRJ($projectIdList, 'all');
-        $doneBugs = $this->getTotalBugByPRJ($projectIdList, 'resolved');
-
-        foreach($projects as $projectID => $project)
-        {
-            $project->consumed    = isset($hours[$projectID]) ? $hours[$projectID]->consumed : 0;
-            $project->estimate    = isset($hours[$projectID]) ? $hours[$projectID]->estimate : 0;
-            $project->teamCount   = isset($teams[$projectID]) ? $teams[$projectID] : 0;
-            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID] : 0;
-            $project->leftBugs    = isset($leftBugs[$projectID])  ? $leftBugs[$projectID]  : 0;
-            $project->allBugs     = isset($allBugs[$projectID])   ? $allBugs[$projectID]   : 0;
-            $project->doneBugs    = isset($doneBugs[$projectID])  ? $doneBugs[$projectID]  : 0;
-            $project->allStories  = $allStories[$projectID];
-            $project->doneStories = $doneStories[$projectID];
-            $project->leftStories = $leftStories[$projectID];
-        }
-
-        return $projects;
-    }
-
-    /**
      * Get project stats.
      *
      * @param  int    $programID
@@ -1107,14 +746,14 @@ class programModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $programTitle
-     * @param  int    $PRJMine
+     * @param  int    $involved
      * @access public
      * @return array
      */
-    public function getPRJStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $PRJMine = 0)
+    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0)
     {
         /* Init vars. */
-        $projects = $this->getPRJList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $PRJMine);
+        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
@@ -1123,12 +762,12 @@ class programModel extends model
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, PRJ, estimate, consumed, `left`, status, closedReason')
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
-            ->where('PRJ')->in($projectKeys)
+            ->where('project')->in($projectKeys)
             ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
-            ->fetchGroup('PRJ', 'id');
+            ->fetchGroup('project', 'id');
 
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $projectID => $projectTasks)
@@ -1136,11 +775,8 @@ class programModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                if($task->status != 'cancel')
-                {
-                    $hour->totalEstimate += $task->estimate;
-                    $hour->totalConsumed += $task->consumed;
-                }
+                $hour->totalEstimate += $task->estimate;
+                $hour->totalConsumed += $task->consumed;
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
@@ -1185,807 +821,59 @@ class programModel extends model
     }
 
     /**
-     * Get project workhour info.
+     * Get budget unit list.
      *
-     * @param  int    $projectID
-     * @access public
-     * @return object
-     */
-    public function getPRJWorkhour($projectID)
-    {
-        $executions = $this->loadModel('project')->getExecutionPairs($projectID);
-
-        $total = $this->dao->select('
-            ROUND(SUM(estimate), 2) AS totalEstimate,
-            ROUND(SUM(consumed), 2) AS totalConsumed,
-            ROUND(SUM(`left`), 2) AS totalLeft')
-            ->from(TABLE_TASK)
-            ->where('project')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->fetch();
-        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
-            ->where('project')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('status')->in('closed,cancel')
-            ->fetch('totalLeft');
-
-        $workhour = new stdclass();
-        $workhour->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('project')->fetch('totalHours');
-        $workhour->totalEstimate = round($total->totalEstimate, 1);
-        $workhour->totalConsumed = round($total->totalConsumed, 1);
-        $workhour->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
-
-        return $workhour;
-    }
-
-    /**
-     * Get project stat data .
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return object
-     */
-    public function getPRJStatData($projectID)
-    {
-        $executions = $this->loadModel('project')->getExecutionPairs($projectID);
-        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
-            ->where('t2.project')->eq($projectID)
-            ->andWhere('t1.deleted')->eq(0)
-            ->fetch('storyCount');
-
-        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('project')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('taskCount');
-        $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('bugCount');
-
-        $statData = new stdclass();
-        $statData->storyCount = $storyCount;
-        $statData->taskCount  = $taskCount;
-        $statData->bugCount   = $bugCount;
-
-        return $statData;
-    }
-
-    /**
-     * Get project pairs.
-     *
-     * @param  int    $programID
-     * @param  status $status    all|wait|doing|suspended|closed|noclosed
-     * @access public
-     * @return object
-     */
-    public function getPRJPairs($programID = 0, $status = 'all')
-    {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
-            ->beginIF($status != 'all' && $status != 'noclosed')->andWhere('status')->eq($status)->fi()
-            ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->fetchPairs();
-    }
-
-    /**
-     * Get project by id list.
-     *
-     * @param  array    $projectIdList
-     * @access public
-     * @return object
-     */
-    public function getPRJByIdList($projectIdList = array())
-    {
-        return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('id')->in($projectIdList)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->fetchAll('id');
-    }
-
-    /**
-     * Get project pairs by id list.
-     *
-     * @param  array  $projectIdList
      * @access public
      * @return array
      */
-    public function getPRJPairsByIdList($projectIdList = array())
+    public function getBudgetUnitList()
     {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('id')->in($projectIdList)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->fetchPairs('id', 'name');
+        $budgetUnitList = array();
+        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+
+        return $budgetUnitList;
     }
 
     /**
-     * Get project team member pairs.
+     * Get program team member pairs.
      *
      * @param  int  $programID
      * @access public
      * @return array
      */
-    public function getPRJTeamMemberPairs($programID = 0)
+    public function getTeamMemberPairs($programID = 0)
     {
-        $projectList = $this->getPRJPairs($programID);
-        if(!$projectList) return array('' => '');
+      $projectList = $this->loadModel('project')->getPairsByProgram($programID);
+      if(!$projectList) return array('' => '');
 
-        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.root')->in(array_keys($projectList))
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchAll('account');
-        if(!$users) return array('' => '');
+      $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+          ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+          ->where('t1.root')->in(array_keys($projectList))
+          ->andWhere('t1.type')->eq('project')
+          ->andWhere('t2.deleted')->eq(0)
+          ->fetchAll('account');
+      if(!$users) return array('' => '');
 
-        foreach($users as $account => $user)
-        {
-            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
-            if(!empty($this->config->isINT)) $firstLetter = '';
-            $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
-        }
+      foreach($users as $account => $user)
+      {
+        $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+        if(!empty($this->config->isINT)) $firstLetter = '';
+        $users[$account] = $firstLetter . ($user->realname ? $user->realname : $user->account);
+      }
 
-        return array('' => '') + $users;
+      return array('' => '') + $users;
     }
 
-    /**
-     * Get associated bugs by project.
+    /*
+     * Set program menu.
      *
-     * @param  array  $projectIdList
-     * @param  string $status   active|resolved|all
-     * @access public
-     * @return array
-     */
-    public function getTotalBugByPRJ($projectIdList, $status)
-    {
-        return $this->dao->select('PRJ, count(*) as bugs')->from(TABLE_BUG)
-            ->where('PRJ')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-            ->groupBy('PRJ')
-            ->fetchPairs('PRJ');
-    }
-
-    /**
-     * Build the query.
-     *
-     * @param  int    $projectID
-     * @param  string $type   list|dropmenu
-     * @access public
-     * @return object
-     */
-    public function buildPRJMenuQuery($projectID = 0, $type = 'list')
-    {
-        $path    = '';
-        $program = $this->getPRJByID($projectID);
-        if($program) $path = $program->path;
-
-        return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->beginIF($type == 'list')->andWhere('type')->eq('program')->fi()
-            ->beginIF($type == 'dropmenu')->andWhere('type')->in('program,project')->fi()
-            ->andWhere('status')->ne('closed')
-            ->beginIF(!$this->app->user->admin and $type == 'list')->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->beginIF(!$this->app->user->admin and $type == 'dropmenu')->andWhere('id')->in($this->app->user->view->programs . ',' . $this->app->user->view->projects)->fi()
-            ->beginIF($projectID > 0)->andWhere('path')->like($path . '%')->fi()
-            ->orderBy('grade desc, `order`')
-            ->get();
-    }
-
-    /**
-     * Get project pairs by model and program.
-     *
-     * @param  string $model all|scrum|waterfall
-     * @param  int    $programID
-     * @access public
-     * @return array
-     */
-    public function getPRJPairsByModel($model = 'all', $programID = 0)
-    {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
-            ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
-            ->andWhere('deleted')->eq('0')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->orderBy('id_desc')
-            ->fetchPairs();
-    }
-
-    /**
-     * Get the tree menu of project.
-     *
-     * @param  int       $projectID
-     * @param  string    $userFunc
-     * @param  int       $param
-     * @param  string    $type  list|dropmenu
-     * @access public
-     * @return string
-     */
-    public function getPRJTreeMenu($projectID = 0, $userFunc, $param = 0, $type = 'list')
-    {
-        $projectMenu = array();
-        $stmt        = $this->dbh->query($this->buildPRJMenuQuery($projectID, $type));
-
-        while($project = $stmt->fetch())
-        {
-            $linkHtml = call_user_func($userFunc, $project, $param);
-
-            if(isset($projectMenu[$project->id]) and !empty($projectMenu[$project->id]))
-            {
-                if(!isset($projectMenu[$project->parent])) $projectMenu[$project->parent] = '';
-                $projectMenu[$project->parent] .= "<li>$linkHtml";
-                $projectMenu[$project->parent] .= "<ul>".$projectMenu[$project->id]."</ul>\n";
-            }
-            else
-            {
-                if(isset($projectMenu[$project->parent]) and !empty($projectMenu[$project->parent]))
-                {
-                    $projectMenu[$project->parent] .= "<li>$linkHtml\n";
-                }
-                else
-                {
-                    $projectMenu[$project->parent] = "<li>$linkHtml\n";
-                }
-            }
-            $projectMenu[$project->parent] .= "</li>\n";
-        }
-
-        krsort($projectMenu);
-        $projectMenu = array_pop($projectMenu);
-        $lastMenu    = "<ul class='tree' data-ride='tree' id='projectTree' data-name='tree-project'>{$projectMenu}</ul>\n";
-
-        return $lastMenu;
-    }
-
-    /**
-     * Create the manage link.
-     *
-     * @param  object    $project
-     * @access public
-     * @return string
-     */
-    public function createPRJManageLink($project)
-    {
-        $link = $project->type == 'program' ? helper::createLink('program', 'PRJbrowse', "programID={$project->id}&status=all") : helper::createLink('program', 'index', "projectID={$project->id}", '', '', $project->id);
-        $icon = $project->type == 'program' ? "<i class='icon icon-folder-open-o'></i> " : "<i class='icon icon-project'></i> ";
-        return html::a($link, $icon . $project->name, '_self', "id=project{$project->id} title='{$project->name}' class='text-ellipsis'");
-    }
-
-    /**
-     * Create a project.
-     *
-     * @access public
-     * @return int|bool
-     */
-    public function PRJCreate()
-    {
-        $project = fixer::input('post')
-            ->setDefault('status', 'wait')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->delta == 999, 'days', 0)
-            ->setIF($this->post->acl   == 'open', 'whitelist', '')
-            ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', helper::now())
-            ->setDefault('team', substr($this->post->name, 0, 30))
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->add('type', 'project')
-            ->join('whitelist', ',')
-            ->stripTags($this->config->program->editor->prjcreate['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,newProduct,productName,future')
-            ->get();
-
-        $linkedProductsCount = 0;
-        if(isset($_POST['products']))
-        {
-            foreach($_POST['products'] as $product)
-            {
-                if(!empty($product)) $linkedProductsCount++;
-            }
-        }
-
-        $parentProgram = new stdClass();
-        if($project->parent)
-        {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-            if($parentProgram)
-            {
-                /* Child project begin cannot less than parent. */
-                if($project->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PRJBeginGreateChild, $parentProgram->begin);
-
-                /* When parent set end then child project end cannot greater than parent. */
-                if($parentProgram->end != '0000-00-00' and $project->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PRJEndLetterChild, $parentProgram->end);
-
-                if(dao::isError()) return false;
-            }
-
-            /* The budget of a child project cannot beyond the remaining budget of the parent program. */
-            $project->budgetUnit = $parentProgram->budgetUnit;
-            if(isset($project->budget) and $parentProgram->budget != 0)
-            {
-                $availableBudget = $this->getAvailableBudget($parentProgram);
-                if($project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
-
-            /* Judge products not empty. */
-            if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
-            {
-                dao::$errors[] = $this->lang->program->productNotEmpty;
-                return false;
-            }
-        }
-
-        /* When select create new product, product name cannot be empty and duplicate. */
-        if(isset($_POST['newProduct']))
-        {
-            if(empty($_POST['productName']))
-            {
-                $this->app->loadLang('product');
-                dao::$errors['productName'] = sprintf($this->lang->error->notempty, $this->lang->product->name);
-                return false;
-            }
-            else
-            {
-                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
-                if(!empty($existProductName))
-                {
-                    dao::$errors['productName'] = $this->lang->program->existProductName;
-                    return false;
-                }
-            }
-        }
-
-        $requiredFields = $this->config->program->PRJCreate->requiredFields;
-        if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $requiredFields) as $fieldName)
-        {
-            $fieldKey = 'PRJ' . ucfirst($fieldName);
-            if(isset($this->lang->program->$fieldKey)) $this->lang->project->$fieldName = $this->lang->program->$fieldKey;
-        }
-
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjcreate['id'], $this->post->uid);
-        $this->dao->insert(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique')
-            ->exec();
-
-        /* Add the creater to the team. */
-        if(!dao::isError())
-        {
-            $projectID = $this->dao->lastInsertId();
-
-            /* Add the creator to team. */
-            $this->app->loadLang('user');
-            $member = new stdclass();
-            $member->root    = $projectID;
-            $member->account = $this->app->user->account;
-            $member->role    = $this->lang->user->roleList[$this->app->user->role];
-            $member->join    = helper::today();
-            $member->type    = 'project';
-            $member->hours   = $this->config->project->defaultWorkhours;
-            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-
-            $whitelist = explode(',', $project->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
-
-            $this->loadModel('project')->updateProducts($projectID);
-
-            if(isset($_POST['newProduct']) || (!$project->parent && empty($linkedProductsCount)))
-            {
-                /* If parent not empty, link products or create products. */
-                $product = new stdclass();
-                $product->name         = $this->post->productName ? $this->post->productName : $project->name;
-                $product->bind         = $this->post->productName ? 0 : 1;
-                $product->program      = $project->parent ? current(array_filter(explode(',', $parentProgram->path))) : 0;
-                $product->acl          = $project->acl = 'open' ? 'open' : 'private';
-                $product->PO           = $project->PM;
-                $product->createdBy    = $this->app->user->account;
-                $product->createdDate  = helper::now();
-                $product->status       = 'normal';
-
-                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
-                $productID = $this->dao->lastInsertId();
-                if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
-
-                $projectProduct = new stdclass();
-                $projectProduct->project = $projectID;
-                $projectProduct->product = $productID;
-
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
-
-                /* Create doc lib. */
-                $this->app->loadLang('doc');
-                $lib = new stdclass();
-                $lib->product = $productID;
-                $lib->name    = $this->lang->doclib->main['product'];
-                $lib->type    = 'product';
-                $lib->main    = '1';
-                $lib->acl     = 'default';
-                $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-            }
-
-            /* Save order. */
-            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
-            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            $this->setTreePath($projectID);
-
-            /* Add project admin. */
-            $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
-                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
-                ->where('t1.account')->eq($this->app->user->account)
-                ->andWhere('t2.role')->eq('PRJAdmin')
-                ->fetch();
-
-            if(!empty($groupPriv))
-            {
-                $newProject = $groupPriv->PRJ . ",$projectID";
-                $this->dao->update(TABLE_USERGROUP)->set('PRJ')->eq($newProject)->where('account')->eq($groupPriv->account)->andWhere('`group`')->eq($groupPriv->group)->exec();
-            }
-            else
-            {
-                $PRJAdminID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('PRJAdmin')->fetch('id');
-                $groupPriv  = new stdclass();
-                $groupPriv->account = $this->app->user->account;
-                $groupPriv->group   = $PRJAdminID;
-                $groupPriv->PRJ     = $projectID;
-                $this->dao->insert(TABLE_USERGROUP)->data($groupPriv)->exec();
-            }
-
-            return $projectID;
-        }
-    }
-
-    /**
-     * Update project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function PRJUpdate($projectID = 0)
-    {
-        $oldProject        = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-        $linkedProducts    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $_POST['products'] = isset($_POST['products']) ? $_POST['products'] : $linkedProducts;
-
-        $project = fixer::input('post')
-            ->setDefault('team', substr($this->post->name, 0, 30))
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->delta == 999, 'days', 0)
-            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
-            ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->acl   == 'open', 'whitelist', '')
-            ->setIF($this->post->future, 'budget', 0)
-            ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
-            ->join('whitelist', ',')
-            ->stripTags($this->config->program->editor->prjedit['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,future')
-            ->get();
-
-        if($project->parent)
-        {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-
-            if($parentProgram)
-            {
-                /* Child project begin cannot less than parent. */
-                if($project->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PRJBeginGreateChild, $parentProgram->begin);
-
-                /* When parent set end then child project end cannot greater than parent. */
-                if($parentProgram->end != '0000-00-00' and $project->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->PRJEndLetterChild, $parentProgram->end);
-
-                if(dao::isError()) return false;
-            }
-
-            /* The budget of a child project cannot beyond the remaining budget of the parent program. */
-            $project->budgetUnit = $parentProgram->budgetUnit;
-            if($project->budget != 0 and $parentProgram->budget != 0)
-            {
-                $availableBudget = $this->getAvailableBudget($parentProgram);
-                if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
-        }
-
-        /* Judge products not empty. */
-        $linkedProductsCount = 0;
-        foreach($_POST['products'] as $product)
-        {
-            if(!empty($product)) $linkedProductsCount++;
-        }
-        if(empty($linkedProductsCount))
-        {
-            dao::$errors[] = $this->lang->program->errorNoProducts;
-            return false;
-        }
-
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->program->editor->prjedit['id'], $this->post->uid);
-
-        $requiredFields = $this->config->program->PRJEdit->requiredFields;
-        if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $requiredFields) as $fieldName)
-        {
-            $fieldKey = 'PRJ' . ucfirst($fieldName);
-            if(isset($this->lang->program->$fieldKey)) $this->lang->project->$fieldName = $this->lang->program->$fieldKey;
-        }
-
-        $this->dao->update(TABLE_PROJECT)->data($project)
-            ->autoCheck($skipFields = 'begin,end')
-            ->batchcheck($requiredFields, 'notempty')
-            ->checkIF($project->begin != '', 'begin', 'date')
-            ->checkIF($project->end != '', 'end', 'date')
-            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->check('name', 'unique', "id!=$projectID and deleted='0'")
-            ->where('id')->eq($projectID)
-            ->exec();
-
-        if(!dao::isError())
-        {
-            $this->updateProductPGM($oldProject->parent, $project->parent, $_POST['products']);
-            $this->loadModel('project')->updateProducts($projectID, $_POST['products']);
-            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-
-            $whitelist = explode(',', $project->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
-
-            if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
-
-            return common::createChanges($oldProject, $project);
-        }
-    }
-
-    /**
-     * Batch update projects.
-     *
-     * @access public
-     * @return array
-     */
-    public function PRJBatchUpdate()
-    {
-        $projects    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
-        $oldProjects = $this->getPRJByIdList($this->post->projectIdList);
-        $nameList    = array();
-
-        foreach($data->projectIdList as $projectID)
-        {
-            $projectName   = $data->names[$projectID];
-
-            $projectID = (int)$projectID;
-            $projects[$projectID] = new stdClass();
-            $projects[$projectID]->name           = $projectName;
-            $projects[$projectID]->parent         = $data->parents[$projectID];
-            $projects[$projectID]->PM             = $data->PMs[$projectID];
-            $projects[$projectID]->begin          = $data->begins[$projectID];
-            $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
-            $projects[$projectID]->days           = $data->dayses[$projectID];
-            $projects[$projectID]->acl            = $data->acls[$projectID];
-            $projects[$projectID]->lastEditedBy   = $this->app->user->account;
-            $projects[$projectID]->lastEditedDate = helper::now();
-
-            /* Check unique name for edited projects. */
-            if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID . sprintf($this->lang->error->unique, $this->lang->program->PRJName, $projectName);
-            $nameList[$projectName] = $projectName;
-
-            if($projects[$projectID]->parent)
-            {
-                $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($projects[$projectID]->parent)->fetch();
-
-                if($parentProgram)
-                {
-                    /* Child project begin cannot less than parent. */
-                    if($projects[$projectID]->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->PRJBeginGreateChild, $parentProgram->begin);
-
-                    /* When parent set end then child project end cannot greater than parent. */
-                    if($parentProgram->end != '0000-00-00' and $projects[$projectID]->end > $parentProgram->end) dao::$errors['end'] =  sprintf($this->lang->program->PRJEndLetterChild, $parentProgram->end);
-
-                }
-            }
-        }
-
-        foreach($projects as $projectID => $project)
-        {
-            $oldProject = $oldProjects[$projectID];
-            $this->dao->update(TABLE_PROJECT)->data($project)
-                ->autoCheck($skipFields = 'begin,end')
-                ->batchCheck($this->config->program->PRJEdit->requiredFields , 'notempty')
-                ->checkIF($project->begin != '', 'begin', 'date')
-                ->checkIF($project->end != '', 'end', 'date')
-                ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->check('name', 'unique', "id NOT " . helper::dbIN($data->projectIdList) . " and deleted='0'")
-                ->where('id')->eq($projectID)
-                ->exec();
-
-            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
-            if(!dao::isError())
-            {
-                $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-                $this->updateProductPGM($oldProject->parent, $project->parent, $linkedProducts);
-
-                if($oldProject->parent != $project->parent) $this->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
-                /* When acl is open, white list set empty. When acl is private,update user view. */
-                if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'project', $projectID);
-                if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
-            }
-            $allChanges[$projectID] = common::createChanges($oldProject, $project);
-        }
-        return $allChanges;
-    }
-
-    /**
-     * Update the program set of the product.
-     *
-     * @param  int    $oldProgram
-     * @param  int    $newProgram
-     * @param  array  $products
-     * @access public
-     * @return void
-     */
-    public function updateProductPGM($oldProgram, $newProgram, $products)
-    {
-        $this->loadModel('action');
-        /* Product belonging program set processing. */
-        $oldTopPGM = $this->getTopPGMByID($oldProgram);
-        $newTopPGM = $this->getTopPGMByID($newProgram);
-        if($oldTopPGM != $newTopPGM)
-        {
-            foreach($products as $productID => $product)
-            {
-                $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-                $this->dao->update(TABLE_PRODUCT)->set('program')->eq((int)$newTopPGM)->where('id')->eq((int)$productID)->exec();
-                $newProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-                $changes    = common::createChanges($oldProduct, $newProduct);
-                $actionID   = $this->action->create('product', $productID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-        }
-    }
-
-    /**
-     * Print datatable cell.
-     *
-     * @param  object $col
-     * @param  object $project
-     * @param  array  $users
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function printCell($col, $project, $users, $programID = 0)
+    public function setMenu($programID)
     {
-        $canOrder     = common::hasPriv('program', 'PRJOrderUpdate');
-        $canBatchEdit = common::hasPriv('program', 'PRJBatchEdit');
-        $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('program', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('project', 'task', "projectID=$project->id");
-        $account      = $this->app->user->account;
-        $id           = $col->id;
-
-        if($col->show)
-        {
-            $title = '';
-            $class = "c-$id" . (in_array($id, ['PRJBudget', 'teamCount']) ? ' c-number' : ' c-name');
-
-            if($id == 'id') $class .= ' cell-id';
-
-            if($id == 'PRJName')
-            {
-                $class .= ' text-left';
-                $title  = "title='{$project->name}'";
-            }
-
-            if($id == 'PRJBudget')
-            {
-                $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) && $project->budget >= 10000 ? number_format($project->budget / 10000, 1) . $this->lang->program->tenThousand : number_format((float)$project->budget, 1);
-                $budgetTitle   = $project->budget != 0 ? zget($this->lang->program->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $this->lang->program->future;
-
-                $title = "title='$budgetTitle'";
-            }
-
-            if($id == 'PRJEstimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->project->workHour}'";
-            if($id == 'PRJConsume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->project->workHour}'";
-            if($id == 'PRJSurplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->project->workHour}'";
-
-            echo "<td class='$class' $title>";
-            switch($id)
-            {
-                case 'id':
-                    if($canBatchEdit)
-                    {
-                        echo html::checkbox('projectIdList', array($project->id => '')) . html::a($projectLink, sprintf('%03d', $project->id));
-                    }
-                    else
-                    {
-                        printf('%03d', $project->id);
-                    }
-                    break;
-                case 'PRJName':
-                    echo html::a($projectLink, $project->name);
-                    if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->program->waterfall}</span>";
-                    if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->program->scrum}</span>";
-                    break;
-                case 'PM':
-                    $user   = $this->loadModel('user')->getByID($project->PM, 'account');
-                    $userID = !empty($user) ? $user->id : '';
-                    $PMLink = helper::createLink('user', 'profile', "userID=$userID", '', true);
-                    echo empty($project->PM) ? '' : html::a($PMLink, zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");
-                    break;
-                case 'begin':
-                    echo $project->begin;
-                    break;
-                case 'end':
-                    echo $project->end == LONG_TIME ? $this->lang->program->PRJLongTime : $project->end;
-                    break;
-                case 'PRJStatus':
-                    echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->program->statusList, $project->status) . "</span>";
-                    break;
-                case 'PRJBudget':
-                    echo $budgetTitle;
-                    break;
-                case 'teamCount':
-                    echo $project->teamCount;
-                    break;
-                case 'PRJEstimate':
-                    echo $project->hours->totalEstimate . ' ' . $this->lang->project->workHourUnit;
-                    break;
-                case 'PRJConsume':
-                    echo $project->hours->totalConsumed . ' ' . $this->lang->project->workHourUnit;
-                    break;
-                case 'PRJSurplus':
-                    echo $project->hours->totalLeft     . ' ' . $this->lang->project->workHourUnit;
-                    break;
-                case 'PRJProgress':
-                    echo "<div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}%</div></div>";
-                    break;
-                case 'actions':
-                    if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('program', 'PRJStart', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);
-                    if($project->status == 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);
-                    if($project->status == 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
-
-                    if(common::hasPriv('program','PRJSuspend') || (common::hasPriv('program','PRJClose') && $project->status != 'doing') || (common::hasPriv('program','PRJActivate') && $project->status != 'closed'))
-                    {
-                        echo "<div class='btn-group'>";
-                        echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
-                        echo "<ul class='dropdown-menu pull-right text-center' role='menu' style='position: unset; min-width: auto; padding: 5px 6px;'>";
-                        common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
-                        if($project->status != 'doing') common::printIcon('program', 'PRJClose', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
-                        if($project->status != 'closed') common::printIcon('program', 'PRJActivate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
-                        echo "</ul>";
-                        echo "</div>";
-                    }
-
-                    $from      = $project->from == 'PRJ' ? 'PRJ' : 'pgmproject';
-                    $openGroup = $project->from == 'PRJ' ? 'project' : 'program';
-                    common::printIcon('program', 'PRJEdit', "projectID=$project->id&from=$from", $project, 'list', 'edit', '', '', '', "data-group=$openGroup", '', $project->id);
-                    common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', '', $this->lang->project->team, $project->id);
-                    if($this->config->systemMode == 'new') common::printIcon('program', 'PRJGroup', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', '', '', $project->id);
-
-                    if(common::hasPriv('program','PRJManageProducts') || common::hasPriv('program','PRJWhitelist') || common::hasPriv('program','PRJDelete'))
-                    {
-                        echo "<div class='btn-group'>";
-                        echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
-                        echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                        common::printIcon('program', 'PRJManageProducts', "projectID=$project->id&programID=$programID&from=$from", $project, 'list', 'link', '', 'btn-action', '', "data-group=$openGroup", $this->lang->project->manageProducts, $project->id);
-                        if($this->config->systemMode == 'new') common::printIcon('program', 'PRJWhitelist', "projectID=$project->id&programID=$programID&module=program&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-group=$openGroup", '', $project->id);
-                        if(common::hasPriv('program','PRJDelete')) echo html::a(inLink("PRJDelete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->program->PRJDelete}'");
-                        echo "</ul>";
-                        echo "</div>";
-                    }
-                    break;
-            }
-            echo '</td>';
-        }
+        $this->lang->switcherMenu = $this->getSwitcher($programID);
+        common::setMenuVars('program', $programID);
     }
 }

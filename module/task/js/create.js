@@ -1,27 +1,29 @@
 /**
  * Load module, stories and members.
  *
- * @param  int    $projectID
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadAll(projectID)
+function loadAll(executionID)
 {
-    loadModuleMenu(projectID);
-    loadProjectStories(projectID);
-    loadProjectMembers(projectID);
+    loadModuleMenu(executionID);
+    loadExecutionStories(executionID);
+    loadExecutionMembers(executionID);
 }
 
 /**
- * Load team members of the project.
+ * Load team members of the execution.
  *
- * @param  int    $projectID
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadProjectMembers(projectID)
+function loadExecutionMembers(executionID)
 {
-    $.get(createLink('project', 'ajaxGetMembers', 'projectID=' + projectID + '&assignedTo=' + $('#assignedTo').val()), function(data)
+    $("#multipleBox").removeAttr("checked");
+    $('.team-group').addClass('hidden');
+    $.get(createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID + '&assignedTo=' + $('#assignedTo').val()), function(data)
     {
         $('#assignedTo_chosen').remove();
         $('#assignedTo').next('.picker').remove();
@@ -35,37 +37,67 @@ function loadProjectMembers(projectID)
             $(this).find('#team').replaceWith(data);
             $(this).find('#assignedTo').attr('id', 'team').attr('name', 'team[]').chosen();
         });
+
+        $('#testStoryBox table tbody tr').each(function(i)
+        {
+            $td = $(this).find('#testAssignedTo').closest('td');
+            $td.html(data);
+            $td.find('#assignedTo').val('').attr('id', 'testAssignedTo').attr('name', 'testAssignedTo[]').chosen();
+        });
     });
 }
 
 /**
- * Load stories of the project.
+ * Load stories of the execution.
  *
- * @param  int    $projectID
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadProjectStories(projectID)
+function loadExecutionStories(executionID)
 {
-    $.get(createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val()), function(data)
+    $.get(createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val()), function(data)
     {
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
         $('#story').replaceWith(data);
         $('#story').addClass('filled').chosen();
+
+        if($('#testStoryBox table tbody tr').length == 0)
+        {
+            var trHtml  = $('#testStoryTemplate tr').prop("outerHTML");
+            $('#testStoryBox table tbody').append(trHtml);
+
+            $td = $('#testStoryBox table tbody tr:first').find('#testStory').closest('td');
+            $td.html(data);
+            $td.find('#story').val($td.find('#story option').eq(i).val()).attr('id', 'testStory').attr('name', 'testStory[]').addClass('filled').chosen();
+
+            $td = $('#testStoryBox table tbody tr:first').find('#testPri_chosen').closest('td');
+            $td.find('#testPri_chosen').remove();
+            $td.find('#testPri').chosen();
+        }
+        else
+        {
+            $('#testStoryBox table tbody tr').each(function(i)
+            {
+                $td = $(this).find('#testStory').closest('td');
+                $td.html(data);
+                $td.find('#story').val($td.find('#story option').eq(i).val()).attr('id', 'testStory').attr('name', 'testStory[]').addClass('filled').chosen();
+            });
+        }
     });
 }
 
 /**
- * Load module of the project.
+ * Load module of the execution.
  *
- * @param  int    $projectID
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadModuleMenu(projectID)
+function loadModuleMenu(executionID)
 {
-    var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + projectID + '&viewtype=task');
+    var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task');
     $('#moduleIdBox').load(link, function(){$('#module').chosen();});
 }
 
@@ -156,12 +188,15 @@ function setPreview()
     {
         storyLink  = createLink('story', 'view', "storyID=" + $('#story').val());
         var concat = config.requestType != 'GET' ? '?'  : '&';
-        storyLink  = storyLink + concat + 'onlybody=yes';
+
+        if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
+
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
         $('.title-group.required > div').attr('id', 'copyStory-input').removeClass('.required');
-        $('div.colorpicker').css('right', '57px');//Adjust for task #4151;
+        $('div.colorpicker').css('right', '80px');//Adjust for task #4151;
+        $('#copyButton').css('width', '80px');
     }
 
     setAfter();
@@ -195,14 +230,14 @@ function setAfter()
 /**
  * Load stories.
  *
- * @param  int    $projectID
+ * @param  int    $executionID
  * @access public
  * @return void
  */
-function loadStories(projectID)
+function loadStories(executionID)
 {
     moduleID  = $('#module').val();
-    setStories(moduleID, projectID);
+    setStories(moduleID, executionID);
 }
 
 /**
@@ -213,15 +248,15 @@ function loadStories(projectID)
  */
 function loadModuleRelated()
 {
-    moduleID  = $('#module').val();
-    projectID = $('#project').val();
-    setStories(moduleID, projectID);
+    moduleID    = $('#module').val();
+    executionID = $('#execution').val();
+    setStories(moduleID, executionID);
 }
 
 /* Get select of stories.*/
-function setStories(moduleID, projectID)
+function setStories(moduleID, executionID)
 {
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=' + moduleID);
+    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID);
     $.get(link, function(stories)
     {
         var storyID = $('#story').val();
@@ -304,7 +339,6 @@ function markTestStory()
             var $tr = $(this);
             storiesHasTest[$tr.find('select[name^="testStory"]').val()] = true;
         });
-        console.log(storiesHasTest);
         return storiesHasTest;
     };
 
@@ -428,9 +462,9 @@ $(document).ready(function()
     {
         var moduleID = $('#moduleIdBox #module').val();
         var extra    = $(this).prop('checked') ? 'allModule' : '';
-        $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + projectID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
+        $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
         {
-            $('#moduleIdBox #module').val(moduleID).attr('onchange', "setStories(this.value, " + projectID + ")").chosen();
+            $('#moduleIdBox #module').val(moduleID).attr('onchange', "setStories(this.value, " + executionID + ")").chosen();
         });
     });
 });
@@ -473,4 +507,8 @@ $('#modalTeam .btn').click(function()
         $('#teamMember').val(team);
         $('#estimate').val(time);
     })
+});
+
+$(window).unload(function(){
+    if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });

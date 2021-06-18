@@ -68,7 +68,7 @@
         <?php foreach($libs as $lib):?>
         <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <div class="col">
-          <a class="file" href="<?php echo inlink('browse', "libID=$lib->id&browseType=all&param=0&orderBy=$orderBy&from=$from");?>">
+          <a class="file" href="<?php echo inlink('browse', "browseType=all");?>">
             <i class="file-icon icon icon-folder text-yellow"></i>
             <div class="file-name"><?php echo (strpos($lib->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $lib->name;?></div>
             <div class="text-primary file-info"><?php echo zget($itemCounts, $lib->id, 0) . $lang->doc->item;?></div>
@@ -87,9 +87,9 @@
         <div class="col">
           <?php
           $browseLink = '';
-          if($libType == 'project')
+          if($libType == 'execution')
           {
-              $browseLink = inlink('allLibs', "type=project&product={$currentLib->product}");
+              $browseLink = inlink('allLibs', "type=execution&product={$currentLib->product}");
           }
           elseif($libType == 'files')
           {
@@ -109,7 +109,7 @@
         <?php foreach($modules as $module):?>
         <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <div class="col">
-          <?php $browseLink = inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from");?>
+          <?php $browseLink = inlink('browse', "browseType=all");?>
           <a class="file" href="<?php echo $browseLink;?>">
             <i class="file-icon icon icon-folder text-yellow"></i>
             <div class="file-name"><?php echo (strpos($module->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $module->name;?></div>
@@ -137,8 +137,8 @@
             <?php if(common::hasPriv('doc', 'collect')):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID={$doc->id}&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
             <?php endif;?>
-            <?php common::printLink('doc', 'edit', "docID={$doc->id}&comment=false&from={$lang->navGroup->doc}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
-            <?php common::printLink('doc', 'delete', "docID={$doc->id}&confirm=no&from={$lang->navGroup->doc}", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
+            <?php common::printLink('doc', 'edit', "docID={$doc->id}&comment=false", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
+            <?php common::printLink('doc', 'delete', "docID={$doc->id}&confirm=no", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
             <?php endif;?>
           </div>
         </div>

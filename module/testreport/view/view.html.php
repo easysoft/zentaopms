@@ -15,8 +15,8 @@
 <?php include '../../common/view/chart.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php $browseLink = $this->session->reportList ? $app->session->reportList : $browseLink;?>
     <?php if(!isonlybody()):?>
-    <?php $browseLink  = $this->session->reportList != false ? $app->session->reportList : $browseLink;?>
     <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-primary'");?>
     <div class='divider'></div>
     <?php endif;?>
@@ -63,10 +63,10 @@
           <th><?php echo $lang->testreport->members?></th>
           <td colspan='2'><?php foreach(explode(',', $report->members) as $member)echo zget($users, $member) . ' &nbsp; ';?></td>
         </tr>
-        <?php if(!empty($project)):?>
+        <?php if(!empty($execution)):?>
         <tr>
           <th><?php echo $lang->testreport->goal?></th>
-          <td colspan='2'><?php echo $project->desc?></td>
+          <td colspan='2'><?php echo $execution->desc?></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -116,7 +116,8 @@
     <?php
     if(common::canBeChanged('report', $report))
     {
-        if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType&extra=$report->id"),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}'");
+        $extra = $report->objectType == 'execution' ? "&extra=$report->tasks" : '';
+        if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType" . $extra),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}' data-app='{$this->app->openApp}'");
         common::printIcon('testreport', 'edit', "reportID=$report->id", '', 'button');
         common::printIcon('testreport', 'delete', "reportID=$report->id", '', 'button', 'trash', 'hiddenwin');
     }

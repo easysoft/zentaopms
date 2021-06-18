@@ -19,9 +19,13 @@ class custom extends control
      */
     public function index()
     {
-        if(common::hasPriv('custom', 'set')) die(js::locate(inlink('set', "module=program&field=" . key($this->lang->custom->program->fields))));
-        if(common::hasPriv('custom', 'product')) die(js::locate(inlink('product')));
-        if(common::hasPriv('custom', 'project')) die(js::locate(inlink('project')));
+        if(($this->config->systemMode == 'new') and common::hasPriv('custom', 'set'))
+        {
+            die(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
+        }
+
+        if(common::hasPriv('custom', 'product'))   die(js::locate(inlink('product')));
+        if(common::hasPriv('custom', 'execution')) die(js::locate(inlink('execution')));
 
         foreach($this->lang->custom->system as $sysObject)
         {
@@ -48,12 +52,17 @@ class custom extends control
         $this->app->loadLang($module);
         $fieldList = zget($this->lang->$module, $field, '');
 
-        if($module == 'program' and $field == 'unitList')
+        if($module == 'project' and $field == 'unitList')
         {
             $this->app->loadConfig($module);
             $unitList = zget($this->config->$module, 'unitList', '');
             $this->view->unitList        = explode(',', $unitList);
             $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
+        }
+        if($module == 'story' and $field == 'reviewRules')
+        {
+            $this->app->loadConfig($module);
+            $this->view->reviewRule = zget($this->config->$module, 'reviewRules', '1');
         }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
@@ -65,9 +74,9 @@ class custom extends control
         }
         if($module == 'task' and $field == 'hours')
         {
-            $this->app->loadConfig('project');
-            $this->view->weekend   = $this->config->project->weekend;
-            $this->view->workhours = $this->config->project->defaultWorkhours;
+            $this->app->loadConfig('execution');
+            $this->view->weekend   = $this->config->execution->weekend;
+            $this->view->workhours = $this->config->execution->defaultWorkhours;
         }
         if($module == 'bug' and $field == 'longlife')
         {
@@ -90,7 +99,7 @@ class custom extends control
 
         if(strtolower($this->server->request_method) == "post")
         {
-            if($module == 'program' and $field == 'unitList')
+            if($module == 'project' and $field == 'unitList')
             {
                 $data = fixer::input('post')->join('unitList', ',')->get();
                 if(empty($data->unitList)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->currencyNotEmpty));
@@ -102,6 +111,11 @@ class custom extends control
                 $data = fixer::input('post')->join('forceReview', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
+            elseif($module == 'story' and $field == 'reviewRules')
+            {
+                $data = fixer::input('post')->get();
+                $this->loadModel('setting')->setItems("system.$module", $data);
+            }
             elseif($module == 'testcase' and $field == 'review')
             {
                 $review = fixer::input('post')->get();
@@ -111,7 +125,7 @@ class custom extends control
             }
             elseif($module == 'task' and $field == 'hours')
             {
-                $this->loadModel('setting')->setItems('system.project', fixer::input('post')->get());
+                $this->loadModel('setting')->setItems('system.execution', fixer::input('post')->get());
             }
             elseif($module == 'bug' and $field == 'longlife')
             {
@@ -145,23 +159,23 @@ class custom extends control
                     {
                         if(!is_numeric($key) or $key > 255) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidNumberKey));
                     }
-                    if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
+                    if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_A-Z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
 
                     /* The length of roleList in user module and typeList in todo module is less than 10. check it when saved. */
                     if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
                     {
                         if(strlen($key) > 10) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
                     }
-                    
+
                     /* The length of sourceList in story module and typeList in task module is less than 20, check it when saved. */
                     if($field == 'sourceList' or $module == 'task' and $field == 'typeList')
                     {
                         if(strlen($key) > 20) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twenty']));
                     }
-                    
+
                     /* The length of stageList in testcase module is less than 255, check it when saved. */
                     if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twoHundred']));
-                    
+
                     /* The length of field that in bug and testcase module and reasonList in story and task module is less than 30, check it when saved. */
                     if($module == 'bug' or $field == 'reasonList' or $module == 'testcase')
                     {
@@ -174,7 +188,7 @@ class custom extends control
                 foreach($data->keys as $index => $key)
                 {
                     //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
-                    
+
                     $value  = $data->values[$index];
                     $system = $data->systems[$index];
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
@@ -207,7 +221,7 @@ class custom extends control
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;
-        $this->view->lang2Set     = str_replace('_', '-', $lang);
+        $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
         $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;
@@ -217,10 +231,10 @@ class custom extends control
 
     /**
      * Restore the default lang. Delete the related items.
-     * 
-     * @param  string $module 
-     * @param  string $field 
-     * @param  string $confirm 
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -241,7 +255,7 @@ class custom extends control
 
     /**
      * Set working mode function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -260,8 +274,8 @@ class custom extends control
 
     /**
      * Set Required.
-     * 
-     * @param  string $moduleName 
+     *
+     * @param  string $moduleName
      * @access public
      * @return void
      */
@@ -284,8 +298,8 @@ class custom extends control
 
         if($moduleName == 'doc')
         {
-            unset($requiredFields['createLib']);
-            unset($requiredFields['editLib']);
+            unset($requiredFields['createlib']);
+            unset($requiredFields['editlib']);
         }
 
         $this->view->title      = $this->lang->custom->required;
@@ -318,7 +332,7 @@ class custom extends control
 
     /**
      * Timezone.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -332,7 +346,6 @@ class custom extends control
 
         unset($this->lang->admin->menu->custom['subModule']);
         $this->lang->admin->menu->system['subModule'] = 'custom';
-        $this->lang->custom->menu = $this->lang->admin->menu;
 
         $this->view->title = $this->lang->custom->timezone;
         $this->view->position[] = $this->lang->custom->timezone;
@@ -341,20 +354,12 @@ class custom extends control
 
     /**
      * Browse story concept.
-     * 
+     *
      * @access public
      * @return void
      */
     public function browseStoryConcept()
     {
-        /* Process menu.*/
-        $this->app->loadLang('custom');
-        $this->lang->custom->menu = $this->lang->subject->menu;
-        $this->lang->navGroup->custom = 'system';
-        $this->lang->system->menu->company['subModule'] .= ',custom';
-        $key = array_search('custom', $this->lang->noMenuModule);
-        if($key !== false) unset($this->lang->noMenuModule[$key]);
-
         $this->view->title      = $this->lang->custom->browseStoryConcept;
         $this->view->position[] = $this->lang->custom->browseStoryConcept;
         $this->view->URSRList   = $this->custom->getURSRList();
@@ -364,20 +369,20 @@ class custom extends control
 
     /**
      * Set story concept.
-     * 
+     *
      * @access public
      * @return void
      */
     public function setStoryConcept()
-    {   
+    {
         if($_POST)
-        {   
+        {
             $result = $this->custom->setURAndSR();
             if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }   
+        }
 
         $this->view->title      = $this->lang->custom->setStoryConcept;
         $this->view->position[] = $this->lang->custom->setStoryConcept;
@@ -388,20 +393,20 @@ class custom extends control
     /**
      * Edit story concept.
      * @param  int    $key
-     * 
+     *
      * @access public
      * @return void
      */
     public function editStoryConcept($key = 0)
     {
         if($_POST)
-        {   
+        {
             $result = $this->custom->updateURAndSR($key);
             if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }   
+        }
 
         $lang = $this->app->getClientLang();
         $URSR = $this->dao->select('`value`')->from(TABLE_LANG)
@@ -461,20 +466,20 @@ class custom extends control
     }
 
     /**
-     * Set whether the project is read-only.
+     * Set whether the execution is read-only.
      *
      * @access public
      * @return void
      */
-    public function project()
+    public function execution()
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.CRProject', $this->post->project);
+            $this->loadModel('setting')->setItem('system.common.CRExecution', $this->post->execution);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
-        $this->view->title      = $this->lang->custom->project;
+        $this->view->title      = $this->lang->custom->execution;
         $this->view->position[] = $this->lang->custom->common;
         $this->view->position[] = $this->view->title;
 
@@ -514,6 +519,7 @@ class custom extends control
         {
             $this->custom->setConcept();
             $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->post->URAndSR);
+            if(!isset($this->config->maxVersion)) $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
             $locate = inlink('flow');
@@ -528,7 +534,7 @@ class custom extends control
 
     /**
      * Set Mode.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -544,7 +550,7 @@ class custom extends control
         $mode = zget($this->config->global, 'mode', 'classic');
         if($mode == 'new')
         {
-            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') $this->locate($this->createLink('upgrade', 'mergeProgram'));
+            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') die(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
 
             unset($_SESSION['upgrading']);
             $this->locate(inlink('index'));
@@ -561,10 +567,10 @@ class custom extends control
 
     /**
      * Ajax save custom fields.
-     * 
-     * @param  string $module 
-     * @param  string $section 
-     * @param  string $key 
+     *
+     * @param  string $module
+     * @param  string $section
+     * @param  string $key
      * @access public
      * @return void
      */
@@ -601,7 +607,7 @@ class custom extends control
 
     /**
      * Ajax set menu
-     * 
+     *
      * @param  string $module
      * @param  string $method
      * @param  string $menus
@@ -650,7 +656,7 @@ class custom extends control
      */
     public function ajaxGetMenu($module = 'main', $method = '', $type = '')
     {
-        if($this->config->global->flow == 'full')     $this->loadModel('project')->setMenu(array(), 0);
+        if($this->config->global->flow == 'full')     $this->loadModel('execution')->setMenu(array(), 0);
         if($type === 'all')
         {
             $menu = array();
@@ -690,8 +696,8 @@ class custom extends control
 
     /**
      * Ajax restore menu.
-     * 
-     * @param  string $confirm 
+     *
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -707,7 +713,7 @@ class custom extends control
 
     /**
      * Ajax set doc setting.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -718,15 +724,15 @@ class custom extends control
             $data = fixer::input('post')->join('showLibs', ',')->get();
             if(isset($data->showLibs)) $data = $data->showLibs;
             $this->loadModel('setting')->setItem("{$this->app->user->account}.doc.custom.showLibs", $data);
-            die(js::reload('parent.parent'));
+            die(js::reload('parent'));
         }
     }
 
     /**
      * Reset required.
-     * 
-     * @param  srting $module 
-     * @param  string $confirm 
+     *
+     * @param  srting $module
+     * @param  string $confirm
      * @access public
      * @return void
      */

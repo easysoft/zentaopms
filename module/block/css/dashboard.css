@@ -13,16 +13,21 @@ body {padding-bottom: 20px;}
     #dashboard > .row {display: table; width: 100%; margin: 0;}
     #dashboard > .row > .col-main,
     #dashboard > .row > .col-side {display: table-cell; float: none; padding: 0; vertical-align: top;}
-    #dashboard > .row > .col-main {padding-right: 10px }
-    #dashboard > .row > .col-side {padding-left: 10px }
+    #dashboard > .row > .col-main {padding-right: 10px;}
+    #dashboard > .row > .col-side {padding-left: 10px;}
 }
 #dashboard.sortable-sorting .panel {margin-bottom: 10px; box-shadow: 0 1px 1px rgba(0,0,0,.075), 0 2px 6px 0 rgba(0,0,0,.075); height: 46px;}
 #dashboard.sortable-sorting .panel > * {display: none;}
-#dashboard.sortable-sorting .panel:before {display: block; content: attr(data-name); padding: 12px 20px; font-weight: bold; font-size: 14px; color: #3c4353; opacity: 1!important; text-align: left; visibility: visible;}
+#dashboard.sortable-sorting .panel:before {display: block; content: attr(data-name); padding: 12px 20px; font-weight: bold; font-size: 14px; color: #3c4353; opacity: 1 !important; text-align: left; visibility: visible;}
 #dashboard.sortable-sorting .panel.dragging {visibility: visible; background: transparent; background: rgba(0,0,0,.075); box-shadow: inset 0 2px 6px rgba(0,0,0,.075);}
 #dashboard.sortable-sorting .panel.dragging:before {color: #bbb;}
-#dashboard.sortable-sorting .panel.drag-shadow {box-shadow: 0 1px 3px rgba(0,0,0,.175), 0 3px 8px 0 rgba(0,0,0,.175)}
+#dashboard.sortable-sorting .panel.drag-shadow {box-shadow: 0 1px 3px rgba(0,0,0,.175), 0 3px 8px 0 rgba(0,0,0,.175);}
 
 #dashboard .block-sm .hide-in-sm {display: none;}
-#dashboard .block-dynamic .panel-body{overflow-x:hidden;}
-.modal-body{padding: 10px 20px 20px 20px;}
+#dashboard .block-dynamic .panel-body {overflow-x: hidden;}
+.modal-body {padding: 10px 20px 20px 20px;}
+
+#dashboard .block-scrumoverview .table {margin-bottom: 12px;}
+#dashboard .block-scrumoverview .table thead tr th {padding-left: 0; text-align: right; border-bottom: unset;}
+#dashboard .block-scrumoverview .table tbody tr td {padding-left: 0;}
+#dashboard .block-scrumoverview .table tbody tr th {text-align: right;}

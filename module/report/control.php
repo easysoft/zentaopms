@@ -11,6 +11,12 @@
  */
 class report extends control
 {
+    /**
+     * The projectID.
+     *
+     * @var float
+     * @access public
+     */
     public $projectID = 0;
 
     /**
@@ -24,14 +30,8 @@ class report extends control
         parent::__construct();
 
         /* Set report menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID) $this->lang->navGroup->report = 'report';
-        if($this->lang->navGroup->report == 'project' && isset($this->config->maxVersion))
-        {
-            $index = array_search('report', $this->lang->noMenuModule);
-            unset($this->lang->noMenuModule[$index]);
-            $this->lang->report->menu = $this->lang->report->projectMenu;
-        }
 
         if((isset($this->config->proVersion) || isset($this->config->bizVersion)) && $this->lang->navGroup->report == 'report' && common::hasPriv('report', 'custom')) $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
     }
@@ -61,10 +61,10 @@ class report extends control
         $this->view->title      = $this->lang->report->projectDeviation;
         $this->view->position[] = $this->lang->report->projectDeviation;
 
-        $this->view->projects = $this->report->getProjects($begin, $end);
-        $this->view->begin    = $begin;
-        $this->view->end      = $end;
-        $this->view->submenu  = 'project';
+        $this->view->executions = $this->report->getExecutions($begin, $end);
+        $this->view->begin      = $begin;
+        $this->view->end        = $end;
+        $this->view->submenu    = 'project';
         $this->display();
     }
 
@@ -95,10 +95,12 @@ class report extends control
      *
      * @param  int    $begin
      * @param  int    $end
+     * @param  int    $product
+     * @param  int    $execution
      * @access public
      * @return void
      */
-    public function bugCreate($begin = 0, $end = 0, $product = 0, $project = 0)
+    public function bugCreate($begin = 0, $end = 0, $product = 0, $execution = 0)
     {
         $this->app->loadLang('bug');
         $begin = $begin == 0 ? date('Y-m-d', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01'))) : date('Y-m-d', strtotime($begin));
@@ -108,11 +110,11 @@ class report extends control
         $this->view->position[] = $this->lang->report->bugCreate;
         $this->view->begin      = $begin;
         $this->view->end        = $end;
-        $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $project);
+        $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $execution);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->view->projects   = array('' => '') + $this->loadModel('project')->getExecutionPairs();
+        $this->view->executions = array('' => '') + $this->loadModel('execution')->getPairs();
         $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs();
-        $this->view->project    = $project;
+        $this->view->execution  = $execution;
         $this->view->product    = $product;
         $this->view->submenu    = 'test';
         $this->display();
@@ -160,7 +162,7 @@ class report extends control
             $workday = $data->workday;
         }
 
-        $this->app->loadConfig('project');
+        $this->app->loadConfig('execution');
         $begin  = $begin ? strtotime($begin) : time();
         $end    = $end   ? strtotime($end)   : time() + (7 * 24 * 3600);
         $end   += 24 * 3600;
@@ -168,7 +170,7 @@ class report extends control
         $begin  = date('Y-m-d', $begin);
         $end    = date('Y-m-d', $end);
 
-        if(empty($workday))$workday = $this->config->project->defaultWorkhours;
+        if(empty($workday))$workday = $this->config->execution->defaultWorkhours;
         $diffDays = helper::diffDate($end, $begin);
         if($days > $diffDays) $days = $diffDays;
         if(empty($days))
@@ -178,7 +180,7 @@ class report extends control
             for($i = 0; $i < $diffDays; $i++,$weekDay++)
             {
                 $weekDay = $weekDay % 7;
-                if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days --;
+                if(($this->config->execution->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days --;
             }
         }
 
@@ -339,7 +341,7 @@ class report extends control
         $data['actions']       = $this->report->getUserYearActions($accounts, $year);
         $data['todos']         = $this->report->getUserYearTodos($accounts, $year);
         $data['contributions'] = $this->report->getUserYearContributions($accounts, $year);
-        $data['projectStat']   = $this->report->getUserYearProjects($accounts, $year);
+        $data['executionStat'] = $this->report->getUserYearExecutions($accounts, $year);
         $data['productStat']   = $this->report->getUserYearProducts($accounts, $year);
         $data['storyStat']     = $this->report->getYearObjectStat($accounts, $year, 'story');
         $data['taskStat']      = $this->report->getYearObjectStat($accounts, $year, 'task');

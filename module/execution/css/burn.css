@@ -1,0 +1,10 @@
+.main-content > h2 {font-size: 16px;}
+#burnWrapper {max-width: 1200px; margin: 0 auto; padding: 25px 100px 10px; position: relative;}
+#burnYUnit {position: absolute; color: #CBD0DB; top: 0; left: 90px;}
+#burnXUnit {position: absolute; color: #CBD0DB; bottom: 20px; right: 60px;}
+#burnLegend {position: absolute; right: 0; width: 80px; height: 60px; top: 50%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px;}
+#burnLegend > div {position: relative; padding-left: 30px;}
+#burnLegend > div > .barline {position: absolute; width: 20px; left: 0; top: 13px; height: 3px; background: #EEEEEE;}
+#burnLegend .line-real .bg-primary {background: #1183fb;}
+
+.pull-left .input-control {margin-right: 10px;}

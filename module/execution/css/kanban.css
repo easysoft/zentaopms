@@ -1,0 +1,64 @@
+.boards {display: table; table-layout: fixed; width: auto; min-height: 50px; min-width: 140px;}
+.boards .board:not(:last-child) {border-right: 1px solid #ddd;}
+.board {display: table-cell; width: 16.666666667%; padding: 10px; border: 1px solid transparent; transition: background-color .2s, opacity .2s; vertical-align: top;}
+.board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: move; border-radius: 2px; background-color: #fff; transition: border .2s, opacity .2s; overflow: hidden;}
+.board-item.disabled {cursor: not-allowed;}
+.board-item:hover {border-color: #ccc;}
+.board-item > .title {line-height: 20px; max-height: 40px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; word-break: break-all;}
+.board-item > .info {line-height: 22px; margin-top: 6px;}
+.board-item + .board-item {margin-top: 10px;}
+.board-item .task-left {float: right; font-size: 12px; color: #a6aab8;}
+.boards-wrapper {overflow: auto;}
+.board.can-drop-in {background-color: #fff !important; opacity: 1 !important;}
+.c-board.dragging {color: #006af1;}
+.board.drop-to {background-color: #fff0d5 !important;}
+.board-drag-holder {background: #ccc; background: rgba(0, 0, 0, .1); border-radius: 2px; border: 1px solid rgba(0,0,0,.05); display: none;}
+.board.drop-to .board-drag-holder {display: block;}
+.board-item + .board-drag-holder {margin-top: 10px;}
+.board-item.dragging {opacity: .35;}
+.board-item .btn {padding: 2px 10px 2px 23px; font-size: 12px; position: relative; left: -2px; height: 24px;}
+.board-item .btn-icon-left > .icon {width: 22px; height: 22px; line-height: 20px; font-size: 14px; opacity: 1; top: 1px;}
+.board-item .btn-icon-left > span {max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;}
+.board-title {padding-right: 20px;}
+.board-actions {position: absolute; right: 3px; top: 3px;}
+.board-actions.nav > li > a {padding: 3px 3px;}
+#kanban {overflow-y: auto;}
+#kanban > .table {min-width: 1100px; table-layout: auto;}
+#kanban.dragging .boards.dragging .board {background: #eee; opacity: .35; border-color: #f1f1f1;}
+#kanban thead > tr > th {padding-left: 0; padding-right: 0;}
+#kanban thead .c-side {padding: 5px; max-width: 15%; min-width: 200px;}
+#kanban .label-pri {width: 16px; height: 16px; line-height: 12px; min-width: 16px; font-size: 12px; padding: 0;}
+#kanban tbody > tr > td {line-height: 24px;}
+#kanban .c-board {border-bottom: 4px #EAF3FC solid; min-width: 140px;}
+#kanban .c-board.s-wait {border-color: #7EC5FF;}
+#kanban .c-board.s-doing {border-color: #0991FF;}
+#kanban .c-board.s-pause {border-color: #fdc137;}
+#kanban .c-board.s-done {border-color: #0BD986;}
+#kanban .c-board.s-cancel {border-color: #CBD0DB;}
+#kanban .c-board.s-closed {border-color: #838A9D;}
+#kanban .table-grouped tbody > tr:hover {background: transparent;}
+#kanban .c-boards, #kanban td.c-side {border-bottom: 1px solid #eee;}
+#kanban .group-info > span + span {display: inline-block; margin-left: 8px;}
+#kanban th.c-board {color: #3c4353; font-weight: bold;}
+#kanban .fix-table-copy-wrapper {overflow: visible !important;}
+#kanban .fix-table-copy-wrapper th.c-board {color: #eee;}
+#kanban .fix-table-copy-wrapper th.c-board .btn-link {color: #fff;}
+#kanban .group-title {word-break: break-all; line-height: 16px; padding: 3px 0; display: block;}
+
+.table-grouped > tbody > tr,
+.table-grouped > tbody > tr:hover {background: #fff !important;}
+
+.fixedSide {position: fixed; background-color: rgb(75, 75, 75, .85); color: #eee; z-index: 999;}
+.fixedSide .dropdown-menu {background-color: rgb(75, 75, 75, .85);}
+.fixedSide .dropdown-menu > li > a {color: #eee;}
+.fixedSide .btn-link, .fixedSide a , .fixedSide .text-muted {color: #eee;}
+.fixedSide .c-board {border-bottom: 4px #EAF3FC solid; min-width: 140px;}
+.fixedSide th.c-board {color: #3c4353; font-weight: bold;}
+.fixedSide td.c-side {border-bottom: 1px solid #eee;}
+.fixedSide thead .c-side {padding: 5px !important; max-width: 15%; min-width: 200px;}
+.fixedSide thead > tr > th {padding-left: 0; padding-right: 0;}
+.fixedSide tbody > tr > td {line-height: 24px;}
+.fixedSide thead > tr > th, .fixedSide tbody > tr > td {min-height: 36px; padding: 2px 8px !important;}
+.fixedSide .group-title {word-break: break-all; line-height: 16px; padding: 3px 0; display: block;}
+.fixedSide .group-info > span + span {display: inline-block; margin-left: 8px;}
+.fixedSide .label-pri {width: 16px; height: 16px; line-height: 12px; min-width: 16px; font-size: 12px; padding: 0;}

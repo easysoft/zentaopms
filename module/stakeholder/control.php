@@ -1,23 +1,26 @@
 <?php
 class stakeholder extends control
 {
-    /**  
+    /**
      * Stakeholder list.
      *
+     * @param  int    $projectID
      * @param  string $browseType
-     * @param  string orderBy
-     * @param  int recTotal
-     * @param  int recPerPage
-     * @param  int pageID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($projectID, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $stakeholders = $this->stakeholder->getStakeholders($browseType, $orderBy, $pager);
+        $this->loadModel('project')->setMenu($projectID);
+
+        $stakeholders = $this->stakeholder->getStakeholders($projectID, $browseType, $orderBy, $pager);
 
         $this->view->title       = $this->lang->stakeholder->browse;
         $this->view->position[]  = $this->lang->stakeholder->browse;
@@ -26,6 +29,7 @@ class stakeholder extends control
         $this->view->recTotal     = $recTotal;
         $this->view->recPerPage   = $recPerPage;
         $this->view->pageID       = $pageID;
+        $this->view->projectID    = $projectID;
         $this->view->orderBy      = $orderBy;
         $this->view->browseType   = $browseType;
         $this->view->stakeholders = $stakeholders;
@@ -33,96 +37,107 @@ class stakeholder extends control
         $this->display();
     }
 
-    /**  
+    /**
      * Create a stakeholder.
      *
-     * @param  int programID
+     * @param  int objectID
      * @access public
      * @return void
      */
-    public function create($programID = 0)
+    public function create($objectID = 0)
     {
         if($_POST)
         {
-            $stakeholderID = $this->stakeholder->create($programID);
+            $stakeholderID = $this->stakeholder->create($objectID);
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
             if(!$stakeholderID or dao::isError())
-            {    
+            {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 $this->send($response);
             }
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
-            $moduleName = $programID ? 'program'              : $this->moduleName;
-            $methodName = $programID ? 'pgmstakeholder'       : 'browse';
-            $param      = $programID ? "programID=$programID" : '';
+            $moduleName = $this->app->openApp == 'program' ? 'program'              : $this->moduleName;
+            $methodName = $this->app->openApp == 'program' ? 'stakeholder'          : 'browse';
+            $param      = $this->app->openApp == 'program' ? "programID=$objectID" : "projectID=$objectID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($programID)
+        if($this->app->openApp == 'program')
         {
-            $this->loadModel('program');
-            $this->app->rawModule = 'program';
-            $this->app->rawMethod = 'pgmstakeholder';
-            $this->lang->navGroup->program = 'program';
-            $this->lang->program->switcherMenu = $this->program->getPGMSwitcher($programID, true);
-            $this->program->setPGMViewMenu($programID);
-
-            $this->view->members = $this->program->getPRJTeamMemberPairs($programID);
+            $this->loadModel('program')->setMenu($objectID);
+            $this->view->members = $this->loadModel('program')->getTeamMemberPairs($objectID);
         }
         else
         {
-            $this->view->members = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
+            $this->loadModel('project')->setMenu($objectID);
+            $this->view->members = $this->loadModel('user')->getTeamMemberPairs($objectID, 'project');
         }
 
         $this->view->title      = $this->lang->stakeholder->create;
         $this->view->position[] = $this->lang->stakeholder->create;
         $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
-        $this->view->programID  = $programID;
+        $this->view->programID  = $this->app->openApp == 'program' ? $objectID : 0;
+        $this->view->projectID  = $this->app->openApp == 'project' ? $objectID : 0;
 
         $this->display();
     }
 
-    /**  
+    /**
      * Batch create stakeholders.
      *
+     * @param  int    $projectID
+     * @param  string $dept
+     * @param  string $dept
      * @access public
      * @return void
      */
-    public function batchCreate($dept = '', $parentID = 0) 
-    {    
+    public function batchCreate($projectID, $dept = '', $parentID = 0)
+    {
         if($_POST)
-        {    
-            $this->stakeholder->batchCreate();
-            die(js::locate($this->createLink('stakeholder', 'browse'), 'parent'));
-        }    
+        {
+            $stakeholderList = $this->stakeholder->batchCreate();
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stakeholderList));
+            die(js::locate($this->createLink('stakeholder', 'browse', "projectID=$projectID"), 'parent'));
+        }
+
+        if($this->app->openApp == 'program')
+        {
+            $this->loadModel('program')->setMenu($projectID);
+        }
+        else
+        {
+            $this->loadModel('project')->setMenu($projectID);
+        }
 
         $this->loadModel('user');
         $this->loadModel('dept');
+        $this->loadModel('execution');
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
 
         $this->view->title      = $this->lang->stakeholder->batchCreate;
         $this->view->position[] = $this->lang->stakeholder->batchCreate;
 
-        $this->view->project            = $this->loadModel('program')->getPRJByID($this->session->PRJ);
+        $this->view->project            = $this->loadModel('project')->getByID($this->session->project);
         $this->view->users              = $this->user->getPairs('all|nodeleted|noclosed');
         $this->view->deptUsers          = $deptUsers;
         $this->view->dept               = $dept;
-        $this->view->projectID          = $this->session->PRJ;
+        $this->view->projectID          = $projectID;
         $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->stakeholders       = $this->stakeholder->getStakeholders('all', 'id_desc');
-        $this->view->parentStakeholders = $this->program->getStakeholders($parentID, 't1.id_desc');
+        $this->view->stakeholders       = $this->stakeholder->getStakeholders($projectID, 'all', 'id_desc');
+        $this->view->parentStakeholders = $this->loadModel('program')->getStakeholders($parentID, 't1.id_desc');
 
         $this->display();
     }
 
-    /**  
+    /**
      * Edit a stakeholder.
      *
      * @param  int $stakeholderID
@@ -132,6 +147,8 @@ class stakeholder extends control
     public function edit($stakeholderID = 0)
     {
         $stakeholder = $this->stakeholder->getByID($stakeholderID);
+        $this->loadModel('project')->setMenu($stakeholder->objectID);
+
         if($_POST)
         {
             $changes = $this->stakeholder->edit($stakeholderID);
@@ -140,7 +157,7 @@ class stakeholder extends control
             $response['message'] = $this->lang->saveSuccess;
 
             if(dao::isError())
-            {    
+            {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 $this->send($response);
@@ -148,16 +165,16 @@ class stakeholder extends control
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $response['locate'] = $this->createLink('stakeholder', 'browse', '');
+            $response['locate'] = $this->createLink('stakeholder', 'browse', "projectID=$stakeholder->objectID");
             $this->send($response);
         }
 
         $users = array('' => '');
-        if($stakeholder->type == 'team') $users = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
-        elseif($stakeholder->type == 'company')
+        if($stakeholder->from == 'team') $users = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
+        elseif($stakeholder->from == 'company')
         {
-            $members = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ);
-            $users   = $this->loadModel('user')->getPairs('noclosed');
+            $members = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
+            $users   = $this->user->getPairs('noclosed');
             $users   = array('' => '') + array_diff($users, $members);
         }
 
@@ -170,38 +187,55 @@ class stakeholder extends control
         $this->display();
     }
 
-    /**  
+    /**
      * Ajax get members.
      *
      * @param  string $user
      * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetMembers($user = '', $programID = 0)
+    public function ajaxGetMembers($user = '', $programID = 0, $projectID = 0)
     {
-        $members = $programID == 0 ? $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ) : $this->loadModel('program')->getPRJTeamMemberPairs($programID);
+        if($programID)
+        {
+            $members = $this->loadModel('program')->getTeamMemberPairs($programID);
+        }
+        else
+        {
+            $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
+        }
         die(html::select('user', $members, $user, "class='form-control chosen'"));
     }
 
-    /**  
+    /**
      * Ajax get company user.
      *
      * @param  string $user
      * @param  int    $programID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetCompanyUser($user = '', $programID = 0)
+    public function ajaxGetCompanyUser($user = '', $programID = 0, $projectID = 0)
     {
-        $members = $programID == 0 ? $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ) : $this->loadModel('program')->getPRJTeamMemberPairs($programID);
-        $users   = $this->loadModel('user')->getPairs('noclosed');
+        if($programID)
+        {
+            $members = $this->loadModel('program')->getTeamMemberPairs($programID);
+        }
+        else
+        {
+            $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
+        }
+
+        $users = $this->loadModel('user')->getPairs('noclosed');
         $companyUsers = array('' => '') + array_diff($users, $members);
 
         die(html::select('user', $companyUsers, $user, "class='form-control chosen'"));
     }
 
-    /**  
+    /**
      * Ajax get outside user.
      *
      * @access public
@@ -214,7 +248,7 @@ class stakeholder extends control
         die(html::select('user', $users, '', "class='form-control chosen' onchange=changeUser(this.value);"));
     }
 
-    /**  
+    /**
      * Ajax get control.
      *
      * @access public
@@ -235,21 +269,21 @@ class stakeholder extends control
         if(isset($stakeholders['inside']))
         {
             $insideList = array();
-            foreach($stakeholders['inside'] as $user) 
+            foreach($stakeholders['inside'] as $user)
             {
                 $partake = isset($partakeList->{$user->account}) ? $partakeList->{$user->account} : '';
                 $insideList[] = "<td style='width: 100px;'>" . html::select("partake[$activityID][$user->account]", $this->lang->stakeholder->planField->partakeList, $partake, "class='form-control'") . '</td>';
-            }   
+            }
         }
 
         if(isset($stakeholders['outside']))
         {
             $outsideList = array();
-            foreach($stakeholders['outside'] as $user) 
+            foreach($stakeholders['outside'] as $user)
             {
                 $partake = isset($partakeList->{$user->account}) ? $partakeList->{$user->account} : '';
                 $outsideList[] = "<td style='width: 100px;'>" . html::select("partake[$activityID][$user->account]", $this->lang->stakeholder->planField->partakeList, $partake, "class='form-control'") . '</td>';
-            }   
+            }
         }
 
         $partakeList = array_merge($insideList, $outsideList);
@@ -274,7 +308,7 @@ class stakeholder extends control
         else
         {
             $this->stakeholder->delete(TABLE_STAKEHOLDER, $userID);
-            $this->loadModel('user')->updateUserView($this->session->PRJ, 'project');
+            $this->loadModel('user')->updateUserView($this->session->project, 'project');
             die(js::reload('parent'));
         }
     }
@@ -288,12 +322,15 @@ class stakeholder extends control
     */
     public function view($userID = 0)
     {
+        $user = $this->stakeholder->getByID($userID);
+        $this->loadModel('project')->setMenu($user->objectID);
         $this->commonAction($userID, 'stakeholder');
+
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
         $this->view->position[] = $this->lang->stakeholder->view;
 
-        $this->view->user    = $this->stakeholder->getByID($userID);
-        $this->view->users   = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ ,'nodeleted');
+        $this->view->user    = $user;
+        $this->view->users   = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
         $this->view->expects = $this->stakeholder->getExpectByUser($userID);
 
         $this->display();
@@ -356,7 +393,7 @@ class stakeholder extends control
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
         $this->view->position[] = $this->lang->stakeholder->view;
         $this->view->user       = $this->stakeholder->getByID($userID);
-        $this->view->users      = $this->loadModel('project')->getTeamMemberPairs($this->session->PRJ ,'nodeleted');
+        $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
         $this->display();
     }
 
@@ -413,6 +450,7 @@ class stakeholder extends control
         $this->view->position[] = $this->lang->stakeholder->view;
 
         $this->view->stakeholder = $stakeholder;
+        $this->view->projectID   = $stakeholder->objectID;
         $this->view->issueList   = $this->stakeholder->getStakeholderIssue($stakeholder->user);
 
         $this->display();

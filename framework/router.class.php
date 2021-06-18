@@ -3,7 +3,7 @@
  * 此文件包括ZenTaoPHP框架的三个类：router, config, lang。
  * The router, config and lang class file of ZenTaoPHP framework.
  *
- * The author disclaims copyright to this source code. In place of 
+ * The author disclaims copyright to this source code. In place of
  * a legal notice, here is a blessing:
  *
  *  May you do good and not evil.
@@ -48,9 +48,9 @@ class router extends baseRouter
     public $rawParams;
 
     /**
-     * 原始URI 
-     * 
-     * @var string   
+     * 原始URI
+     *
+     * @var string
      * @access public
      */
     public $rawURI;
@@ -66,8 +66,8 @@ class router extends baseRouter
 
     /**
      * Get the $moduleRoot var.
-     * 
-     * @param  string $appName 
+     *
+     * @param  string $appName
      * @access public
      * @return string
      */
@@ -146,7 +146,7 @@ class router extends baseRouter
 
     /**
      * Set common lang.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -154,7 +154,6 @@ class router extends baseRouter
     {
         if(!defined('ITERATION_KEY'))     define('ITERATION_KEY', 0);
         if(!defined('SPRINT_KEY'))        define('SPRINT_KEY', 1);
-        if(!defined('STAGE_KEY'))         define('STAGE_KEY', 2);
         if(!defined('PRODUCT_KEY'))       define('PRODUCT_KEY', 0);
         if(!defined('STORYPOINT_KEY'))    define('STORYPOINT_KEY', 1);
         if(!defined('FUNCTIONPOINT_KEY')) define('FUNCTIONPOINT_KEY', 2);
@@ -171,7 +170,7 @@ class router extends baseRouter
             $commonSettings = array();
             try
             {
-                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR')")->fetchAll();
+                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -179,8 +178,9 @@ class router extends baseRouter
             }
         }
 
-        $hourKey = $planKey = $URSR = $URAndSR = 0;
-        $mode    = 'new';
+        $hourKey    = $planKey = $URSR = $URAndSR = 0;
+        $mode       = 'new';
+        $score      = '0';
         $projectKey = empty($this->config->isINT) ? ITERATION_KEY : SPRINT_KEY;
 
         foreach($commonSettings as $setting)
@@ -190,23 +190,22 @@ class router extends baseRouter
             if($setting->key == 'URSR')          $URSR       = $setting->value;
             if($setting->key == 'URAndSR')       $URAndSR    = $setting->value;
             if($setting->key == 'mode' and $setting->section == 'global') $mode = $setting->value;
+            if($setting->key == 'scoreStatus' and $setting->section == 'global') $score = $setting->value;
         }
 
         /* Record system mode. */
         $config->systemMode = $mode;
         if($config->systemMode == 'classic') $this->config->executionCommonList = $this->config->projectCommonList;
 
-        /* Record hour unit. */
-        $config->hourUnit = 'H';
-        if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'SP';
-        if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'FP';
+        /* Record system score.*/
+        $config->systemScore = $score;
 
-        $model = new stdclass();
-        $model->model = 'scrum';
-        if($this->session->PRJ) $model = $this->dbh->query('SELECT model FROM' . TABLE_PROJECT . "WHERE id = {$this->session->PRJ}")->fetch();
+        /* Record hour unit. */
+        $config->hourUnit = 'h';
+        if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'sp';
+        if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'fp';
 
         $iterationKey = $projectKey;
-        if(isset($model->model) && $model->model == 'waterfall') $projectKey = STAGE_KEY;
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
@@ -215,21 +214,23 @@ class router extends baseRouter
         $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] : $this->config->hourPointCommonList['en'][(int)$hourKey];
 
         /* User preference init. */
-        $config->URSR        = $URSR;
-        $config->URAndSR     = $URAndSR;
-        $config->programLink = 'program-pgmbrowse';
-        $config->productLink = 'product-all';
-        $config->projectLink = 'program-prjbrowse';
+        $config->URSR          = $URSR;
+        $config->URAndSR       = $URAndSR;
+        $config->programLink   = 'program-browse';
+        $config->productLink   = 'product-all';
+        $config->projectLink   = 'project-browse';
+        $config->executionLink = 'execution-task';
 
         /* Get user preference. */
         $account     = isset($this->session->user->account) ? $this->session->user->account : '';
-        if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'URSR')")->fetchAll();
+        if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
         foreach($userSetting as $setting)
         {
-             if($setting->key == 'URSR')        $config->URSR        = $setting->value;
-             if($setting->key == 'programLink') $config->programLink = $setting->value;
-             if($setting->key == 'productLink') $config->productLink = $setting->value;
-             if($setting->key == 'projectLink') $config->projectLink = $setting->value;
+             if($setting->key == 'URSR')          $config->URSR          = $setting->value;
+             if($setting->key == 'programLink')   $config->programLink   = $setting->value;
+             if($setting->key == 'productLink')   $config->productLink   = $setting->value;
+             if($setting->key == 'projectLink')   $config->projectLink   = $setting->value;
+             if($setting->key == 'executionLink') $config->executionLink = $setting->value;
         }
 
         $lang->URCommon = '';
@@ -237,12 +238,13 @@ class router extends baseRouter
         if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
         {
             /* Get story concept in project and product. */
-            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and lang = \"{$this->clientLang}\"")->fetchAll();
+            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `lang` = \"{$this->clientLang}\"")->fetchAll();
+            if(empty($URSRList)) $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
 
             /* Get UR pairs and SR pairs. */
             $URPairs  = array();
             $SRPairs  = array();
-            foreach($URSRList as $id => $value) 
+            foreach($URSRList as $id => $value)
             {
                 $URSR = json_decode($value->value);
                 $URPairs[$value->key] = $URSR->URName;
@@ -250,8 +252,8 @@ class router extends baseRouter
             }
 
             /* Set default story concept and init UR and SR concept. */
-            $lang->URCommon = zget($URPairs, $config->URSR);
-            $lang->SRCommon = zget($SRPairs, $config->URSR);
+            $lang->URCommon = isset($URPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($URPairs);
+            $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $SRPairs[$config->URSR] : reset($SRPairs);
         }
     }
 
@@ -387,7 +389,7 @@ class router extends baseRouter
      *
      * @param   bool    $exitIfNone     没有找到该控制器文件的情况：如果该参数为true，则终止程序；如果为false，则打印错误日志
      *                                  The controller file was not found: if the parameter is true, the program is terminated;
-     *                                                                     if false, the error log is printed. 
+     *                                                                     if false, the error log is printed.
      * @access  public
      * @return  bool
      */
@@ -496,6 +498,18 @@ class router extends baseRouter
             /* Prepend other params. */
             if($methodName == 'operate')      array_unshift($params, $this->rawMethod); // $params = array('close', 1);
             if($methodName == 'batchOperate') array_unshift($params, $this->rawMethod); // $params = array('close', 1);
+            if($methodName == 'browse')
+            {
+                if(isset($params[0]) and $params[0] == 'bysearch')
+                {
+                    $params[0] = '';
+                    array_unshift($params, 'bysearch');
+                }
+                else
+                {
+                    array_unshift($params, 'browse');
+                }
+            }
             array_unshift($params, $this->rawModule);                                   // $params = array($module, 'close', 1);
             array_unshift($params, $methodName);                                        // $params = array('operate', $module, 'close', 1);
             array_unshift($params, $moduleName);                                        // $params = array('flow', 'operate', $module, 'close', 1);
@@ -517,6 +531,18 @@ class router extends baseRouter
             $params = array_reverse($params);           // $params = array('label' => 1, 'mode' => 'search');
 
             /* Prepend other params. */
+            if($methodName == 'browse')
+            {
+                if(isset($params['label']) and $params['label'] == 'bysearch')
+                {
+                    $params['label'] = '';
+                    $params['mode'] = 'bysearch';
+                }
+                else
+                {
+                    $params['mode'] = 'browse';
+                }
+            }
             $params['module']                 = $this->rawModule;   // $param = array('label' => 1, 'mode' => 'search', 'module' => $module);
             $params[$this->config->methodVar] = $methodName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse');
             $params[$this->config->moduleVar] = $moduleName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse', 'm' => 'flow');
@@ -558,7 +584,7 @@ class router extends baseRouter
     /**
      * 获取$URL。
      * Get the $URL.
-     * 
+     *
      * @param  bool $full  true, the URI contains the webRoot, else only hte URI.
      * @access public
      * @return string
@@ -586,7 +612,7 @@ class router extends baseRouter
      */
     public function mergeParams($defaultParams, $passedParams)
     {
-        if(isset($_GET['PRJ'])) $this->session->set('PRJ', $_GET['PRJ']);
+        if(isset($_GET['project'])) $this->session->set('project', $_GET['project']);
         /* If the isFlow is true, reset the passed params. */
         if($this->isFlow)
         {

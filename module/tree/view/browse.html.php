@@ -10,23 +10,21 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if($lang->navGroup->doc == 'doc'):?>
-<?php $pageCSS .= $this->doc->appendNavCSS();?>
-<?php endif;?>
 <?php include '../../common/view/header.html.php';?>
 
 <?php if($viewType != 'story'):?>
 <style>
-li.tree-item-story > .tree-actions .tree-action[data-type=sort]{display:none;}
-li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
+li.tree-item-story > .tree-actions .tree-action[data-type=sort] {display: none;}
+li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none;}
 </style>
 <?php endif;?>
 <?php js::set('viewType', $viewType);?>
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php $name = $viewType == 'line' ? $lang->tree->line : (($viewType == 'doc' or $viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') ? $lang->tree->cate : $lang->tree->name);?>
-<?php $title = ($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
-<div id="mainMenu" class="clearfix">
+<?php $name = $viewType == 'doc' ? $lang->doc->catalogName : $name;?>
+<?php $title = ($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') ? '' : ((strpos($viewType, 'doc') !== false) ? $lang->doc->childType : ((strpos($viewType, 'feedback') !== false) ? $lang->tree->subCategory : $lang->tree->child));?>
+<!--div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
     <?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'class="btn btn-secondary"');?>
@@ -63,7 +61,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
       </span>
     </div>
   </div>
-</div>
+</div-->
 <div id="mainContent" class="main-row">
   <div class="side-col col-4">
     <div class="panel">
@@ -93,10 +91,10 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
               <?php if($viewType != 'line' && $viewType != 'trainskill' && $viewType != 'trainpost'):?>
               <td class="text-middle text-right with-padding">
                 <?php
-                echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&currentModuleID=0&branch=0&from=$from"), empty($root->name) ? '' : $root->name) . "<i class='icon icon-angle-right muted'></i></span>";
+                echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&currentModuleID=0&branch=0&from=$from", '', ''), empty($root->name) ? '' : $root->name, '', "data-app='{$this->app->openApp}'") . "<i class='icon icon-angle-right muted'></i></span>";
                 foreach($parentModules as $module)
                 {
-                    echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&currentModuleID=$module->id&branch=0&from=$from"), $module->name) . " <i class='icon icon-angle-right muted'></i></span>";
+                    echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&currentModuleID=$module->id&branch=0&from=$from"), $module->name, '', "data-app='{$this->app->openApp}'") . " <i class='icon icon-angle-right muted'></i></span>";
                 }
                 ?>
               </td>
@@ -162,7 +160,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
               <?php endif;?>
               <td colspan="2" class="form-actions">
                 <?php if($canBeChanged) echo html::submitButton();?>
-                <?php echo html::a($backLink, $lang->goback, '', "class='btn btn-wide'");?>
+                <?php if(!isonlybody()) echo html::a($backLink, $lang->goback, '', "class='btn btn-wide'");?>
                 <?php echo html::hidden('parentModuleID', $currentModuleID);?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
               </td>
@@ -174,7 +172,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
     </div>
   </div>
 </div>
-
+<?php js::set('openApp', $this->app->openApp);?>
 <script>
 $(function()
 {
@@ -194,7 +192,7 @@ $(function()
         },
         itemCreator: function($li, item)
         {
-            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
+            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>'.format(item.id, item.branch)) + '" data-app="' + openApp + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
@@ -213,13 +211,13 @@ $(function()
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=$viewType"); ?>',
-                title: '<?php echo $viewType == 'doc' ? $lang->doc->editType : $lang->tree->edit ?>',
+                title: '<?php echo $viewType == 'doc' ? $lang->doc->editType : ($viewType == 'feedback' ? $lang->tree->editCategory : $lang->tree->edit);?>',
                 template: '<a><i class="icon-edit"></i></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
-                title: '<?php echo $viewType == 'doc' ? $lang->doc->deleteType : $lang->tree->delete ?>',
+                title: '<?php echo $viewType == 'doc' ? $lang->doc->deleteType : ($viewType == 'feedback' ? $lang->tree->delCategory : $lang->tree->delete)?>',
                 template: '<a><i class="icon-trash"></i></a>'
             },
             subModules:
@@ -290,6 +288,7 @@ $(function()
 
     $('#subNavbar > ul > li > a[href*=tree][href*=browse]').not('[href*=<?php echo $viewType;?>]').parent().removeClass('active');
     if(window.config.viewType == 'line') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
+    if(viewType == 'case' || viewType == 'caselib') $('#subNavbar li[data-id="' + viewType +'"]').addClass('active');
 });
 </script>
 <?php

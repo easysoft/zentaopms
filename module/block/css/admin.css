@@ -1,4 +1,4 @@
 #blockAdmin {min-height: 280px;}
 #blockAdmin .form-actions {visibility: hidden;}
 #blockAdmin.form-inited .form-actions {visibility: visible;}
-.form-group .btn + .btn{margin-left: 10px;}
+.form-group .btn + .btn {margin-left: 10px;}

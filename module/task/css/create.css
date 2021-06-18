@@ -1,19 +1,19 @@
-#copyButton {width: 56px; background-color: #f1f1f1; opacity: 1;} /*Adjust for task #4151;*/
+#copyButton {width: 80px; background-color: #f1f1f1; opacity: 1;} /* Adjust for task #4151; */
 
 .title-group.required:after {display: none;}
 .title-group.required > .required:after {display: block; right: 29px; top: 5px;}
-#copyStory-input:after {display: block; right: 85px; top: 5px;}
-#pri + .chosen-container > .chosen-single {border-top-left-radius: 0!important; border-bottom-left-radius: 0!important;}
+#copyStory-input:after {display: block; right: 110px; top: 5px;}
+#pri + .chosen-container > .chosen-single {border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important;}
 
-.pri-selector > .btn {padding: 5px 8px!important; width: 100%;}
+.pri-selector > .btn {padding: 5px 8px !important; width: 100%;}
 .pri-selector > .dropdown-menu {padding: 10px;}
 
-#testStoryBox table tr td{padding:0px;}
-#testStoryBox table tr td .chosen-container .chosen-single{border:0px;}
-#testStoryBox table tr td .chosen-compact.chosen-container-single .chosen-single>.chosen-search{top:0;right:0;left:0}
-#testStoryBox table tr td input{border:0px;}
-#testStoryBox table tr td .input-group .input-group-addon{border-left:1px solid #dcdcdc;border-right:1px solid #dcdcdc;}
-#testStoryBox table button.btn{border:0px;}
+#testStoryBox table tr td {padding: 0px;}
+#testStoryBox table tr td .chosen-container .chosen-single {border: 0px;}
+#testStoryBox table tr td .chosen-compact.chosen-container-single .chosen-single>.chosen-search {top: 0; right: 0; left: 0;}
+#testStoryBox table tr td input {border: 0px;}
+#testStoryBox table tr td .input-group .input-group-addon {border-left: 1px solid #dcdcdc; border-right: 1px solid #dcdcdc;}
+#testStoryBox table button.btn {border: 0px;}
 
 .chosen-results > li.has-test,
 .chosen-results > li.has-new-test {position: relative; color: #388E3C;}

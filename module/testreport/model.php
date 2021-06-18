@@ -12,52 +12,17 @@
 class testreportModel extends model
 {
     /**
-     * Set menu.
-     * 
-     * @param  array  $products 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @access public
-     * @return void
-     */
-    public function setMenu($products, $productID, $branch = 0)
-    {
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', $this->session->PRJ, $branch);
-
-        /* Remove branch. */
-        if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
-
-        $pageNav     = $selectHtml;
-        $pageActions = '';
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
-        foreach($this->lang->testtask->menu as $key => $value)
-        {
-            $this->loadModel('qa')->setSubMenu('testreport', $key, $productID);
-            $replace = $productID;
-            common::setMenuVars($this->lang->testreport->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testreport == 'qa')
-        {
-            $this->lang->qa->menu         = $this->lang->testreport->menu;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
-    }
-
-    /**
      * Create report.
-     * 
+     *
      * @access public
      * @return int
      */
     public function create()
     {
+        $execution = $this->loadModel('execution')->getByID($this->post->execution);
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testreport != 'qa', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new', 'project', $execution->project)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')
@@ -83,9 +48,9 @@ class testreportModel extends model
     }
 
     /**
-     * Update report. 
-     * 
-     * @param  int    $reportID 
+     * Update report.
+     *
+     * @param  int    $reportID
      * @access public
      * @return array
      */
@@ -119,8 +84,8 @@ class testreportModel extends model
 
     /**
      * Get report by id.
-     * 
-     * @param  int    $reportID 
+     *
+     * @param  int    $reportID
      * @access public
      * @return object
      */
@@ -136,21 +101,22 @@ class testreportModel extends model
 
     /**
      * Get report list.
-     * 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  string $extra 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $extra
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
     public function getList($objectID, $objectType, $extra = '', $orderBy = 'id_desc', $pager = null)
     {
         $objectID = (int)$objectID;
-        return $this->dao->select('*')->from(TABLE_TESTREPORT)->where('deleted')->eq(0)
-            ->beginIF($this->lang->navGroup->testreport != 'qa')->andWhere('PRJ')->eq($this->session->PRJ)->fi()
-            ->beginIF($objectType == 'project')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->fi()
+        return $this->dao->select('*')->from(TABLE_TESTREPORT)
+            ->where('deleted')->eq(0)
+            ->beginIF($objectType == 'execution')->andWhere('execution')->eq($objectID)->fi()
+            ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)
@@ -160,35 +126,95 @@ class testreportModel extends model
 
     /**
      * Get bug info.
-     * 
-     * @param  array  $tasks 
-     * @param  array  $productIdList 
-     * @param  string $begin 
-     * @param  string $end 
-     * @param  array  $builds 
+     *
+     * @param  array  $tasks
+     * @param  array  $productIdList
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $builds
      * @access public
      * @return array
      */
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
         $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
+        $resolvedBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $foundBugs     = array();
         $legacyBugs    = array();
         $byCaseNum     = 0;
         $buildIdList   = array_keys($builds);
         $taskIdList    = array_keys($tasks);
 
+        $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = $stageGoups = $handleGroups = array();
+
+        /* Init stageGroups. */
+        $isEmptyStage = true;
+        foreach($this->lang->bug->priList as $priKey => $priValue)
+        {
+            $stageGroups[$priKey]['generated'] = 0;
+            $stageGroups[$priKey]['legacy']    = 0;
+            $stageGroups[$priKey]['resolved']  = 0;
+        }
+
+        /* Init handleGroups. */
+        $isEmptyHandle  = true;
+        $beginTimeStamp = strtotime($begin);
+        $endTimeStamp   = strtotime($end);
+        for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
+        {
+            $date = date('m-d', $i);
+            $handleGroups['generated'][$date] = 0;
+            $handleGroups['legacy'][$date]    = 0;
+            $handleGroups['resolved'][$date]  = 0;
+        }
+
+        /* Get the resolved bug data. */
+        foreach($resolvedBugs as $bug)
+        {
+            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
+            {
+                $resolvedDate = date('m-d', strtotime($bug->resolvedDate));
+                $stageGroups[$bug->pri]['resolved']      += 1;
+                $handleGroups['resolved'][$resolvedDate] += 1;
+                $isEmptyStage  = false;
+                $isEmptyHandle = false;
+            }
+        }
+
+        /* Get the generated and leagcy bug data. */
         foreach($generatedBugs as $bug)
         {
             if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
             {
+                $openedDate = date('m-d', strtotime($bug->openedDate));
+
                 $foundBugs[$bug->id] = $bug;
-                if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59") $legacyBugs[$bug->id] = $bug;
+                $stageGroups[$bug->pri]['generated']    += 1;
+                $handleGroups['generated'][$openedDate] += 1;
+                $isEmptyStage  = false;
+                $isEmptyHandle = false;
+
+                if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59")
+                {
+                    $legacyBugs[$bug->id] = $bug;
+                    $stageGroups[$bug->pri]['legacy'] += 1;
+
+                    $beginTimeStamp = strtotime($begin);
+                    $endTimeStamp   = strtotime($end);
+                    for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
+                    {
+                        $dateTime = date('Y-m-d 23:59:59', $i);
+                        if($bug->openedDate <= $dateTime and (helper::isZeroDate($bug->resolvedDate) or $bug->resolvedDate > $dateTime))
+                        {
+                            $date = date('m-d', $i);
+                            $handleGroups['legacy'][$date] += 1;
+                        }
+                    }
+                }
                 if($bug->case and !empty($bug->testtask) and in_array($bug->testtask, $taskIdList)) $byCaseNum ++;
             }
         }
 
-        $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = array();
         $resolvedBugs   = 0;
         foreach($foundBugs as $bug)
         {
@@ -208,6 +234,8 @@ class testreportModel extends model
         $bugInfo['countBugByTask']      = $byCaseNum;
         $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
+        $bugInfo['bugStageGroups']      = $isEmptyStage ? array() : $stageGroups;
+        $bugInfo['bugHandleGroups']     = $isEmptyHandle ? array() : $handleGroups;
 
         $this->app->loadLang('bug');
         $users = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted');
@@ -283,12 +311,12 @@ class testreportModel extends model
 
     /**
      * Get task cases.
-     * 
-     * @param  array  $tasks 
-     * @param  string $begin 
-     * @param  string $end 
-     * @param  string $idList 
-     * @param  object $pager 
+     *
+     * @param  array  $tasks
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $idList
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -300,30 +328,33 @@ class testreportModel extends model
             ->beginIF($idList)->andWhere('t2.id')->in($idList)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchGroup('task','id');
 
-        $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
-            ->where('t2.task')->in(array_keys($tasks))
-            ->andWhere('t1.`case`')->in(array_keys($cases))
-            ->andWhere('t1.date')->ge($begin)
-            ->andWhere('t1.date')->le($end . " 23:59:59")
-            ->orderBy('date')
-            ->fetchAll('case');
-
-        foreach($cases as $caseID => $case)
+        foreach($cases as $taskID => $caseList)
         {
-            $case->lastRunner    = '';
-            $case->lastRunDate   = '';
-            $case->lastRunResult = '';
-            $case->status        = 'wait';
-            if(isset($results[$caseID]))
+            $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
+                ->where('t2.task')->eq($taskID)
+                ->andWhere('t1.`case`')->in(array_keys($caseList))
+                ->andWhere('t1.date')->ge($begin)
+                ->andWhere('t1.date')->le($end . " 23:59:59")
+                ->orderBy('date')
+                ->fetchAll('case');
+
+            foreach($caseList as $caseID => $case)
             {
-                $result = $results[$caseID];
-                $case->lastRunner    = $result->lastRunner;
-                $case->lastRunDate   = $result->date;
-                $case->lastRunResult = $result->caseResult;
-                $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'done';
+                $case->lastRunner    = '';
+                $case->lastRunDate   = '';
+                $case->lastRunResult = '';
+                $case->status        = 'normal';
+                if(isset($results[$caseID]))
+                {
+                    $result = $results[$caseID];
+                    $case->lastRunner    = $result->lastRunner;
+                    $case->lastRunDate   = $result->date;
+                    $case->lastRunResult = $result->caseResult;
+                    $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
+                }
             }
         }
 
@@ -352,9 +383,9 @@ class testreportModel extends model
 
     /**
      * Get result summary.
-     * 
-     * @param  array    $tasks 
-     * @param  array    $cases 
+     *
+     * @param  array    $tasks
+     * @param  array    $cases
      * @param  string   $begin
      * @param  string   $end
      * @access public
@@ -362,30 +393,39 @@ class testreportModel extends model
      */
     public function getResultSummary($tasks, $cases, $begin, $end)
     {
+        $caseCount = 0;
+        $casesList = array();
+        foreach($cases as $taskID => $caseList)
+        {
+            foreach($caseList as $caseID => $case)
+            {
+                $casesList[$caseID] = $case;
+                $caseCount++;
+            }
+        }
+
         $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
             ->where('t2.task')->in(array_keys($tasks))
-            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.`case`')->in(array_keys($casesList))
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
             ->fetchAll('id');
 
-        $failResults = array();
+        $failResults = 0;
         $runCasesNum = array();
-        foreach($results as $result)
-        {
-            $runCasesNum[$result->case] = $result->case;
-            if($result->caseResult == 'fail') $failResults[$result->case] = $result->case;
-        }
-        return sprintf($this->lang->testreport->caseSummary, count($cases), count($runCasesNum), count($results), count($failResults));
+        foreach($results as $result) $runCasesNum[$result->run] = $result->caseResult;
+        foreach($runCasesNum as $lastResult) if($lastResult == 'fail') $failResults++;
+
+        return sprintf($this->lang->testreport->caseSummary, $caseCount, count($runCasesNum), count($results), $failResults);
     }
 
     /**
      * Get per run result for testreport.
-     * 
-     * @param  array    $tasks 
-     * @param  array    $cases 
+     *
+     * @param  array    $tasks
+     * @param  array    $cases
      * @param  string   $begin
      * @param  string   $end
      * @access public
@@ -398,7 +438,7 @@ class testreportModel extends model
             ->on('t1.run= t2.id')
             ->where('t2.task')->in(array_keys($tasks))
             ->andwhere('t1.date = t2.lastRunDate')
-            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.`case`')->in($cases)
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->groupBy('name')
@@ -410,14 +450,14 @@ class testreportModel extends model
         $this->app->loadLang('testcase');
         foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
 
-        return $datas; 
+        return $datas;
     }
 
     /**
      * Get per case runner for testreport.
-     * 
-     * @param  array    $tasks 
-     * @param  array    $cases 
+     *
+     * @param  array    $tasks
+     * @param  array    $cases
      * @param  string   $begin
      * @param  string   $end
      * @access public
@@ -430,7 +470,7 @@ class testreportModel extends model
             ->on('t1.run= t2.id')
             ->where('t2.task')->in(array_keys($tasks))
             ->andwhere('t1.date = t2.lastRunDate')
-            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.`case`')->in($cases)
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->groupBy('name')
@@ -442,17 +482,17 @@ class testreportModel extends model
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         foreach($datas as $result => $data) $data->name = $result ? zget($users, $result, $result) : $this->lang->testtask->unexecuted;
 
-        return $datas; 
+        return $datas;
     }
 
     /**
      * Get bugs for test
-     * 
-     * @param  array  $builds 
-     * @param  array  $product 
-     * @param  string $begin 
-     * @param  string $end 
-     * @param  string $type 
+     *
+     * @param  array  $builds
+     * @param  array  $product
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -469,13 +509,14 @@ class testreportModel extends model
             ->beginIF(is_array($builds) and $type == 'build')->andWhere('id')->in(trim($bugIdList, ','))->fi()
             ->beginIF(!is_array($builds) and $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59')")->fi()
             ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
+            ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
             ->fetchAll('id');
     }
 
     /**
      * Get stories for test
-     * 
-     * @param  array  $builds 
+     *
+     * @param  array  $builds
      * @return void
      */
     public function getStories4Test($builds)

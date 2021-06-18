@@ -9,7 +9,6 @@
  * @version  $Id: vi.php 5091 2013-07-10 06:06:46Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->product->common        = $lang->productCommon;
 $lang->product->index         = 'Trang '.$lang->productCommon;
 $lang->product->browse        = 'Danh sách câu chuyện';
 $lang->product->dynamic       = 'Lịch sử';
@@ -29,6 +28,7 @@ $lang->product->updateOrder   = 'Sắp xếp';
 $lang->product->orderAction   = "Đánh giá {$lang->productCommon}";
 $lang->product->all           = "Tất cả {$lang->productCommon}";
 $lang->product->manageLine    = "Manage {$lang->productCommon} Line";
+$lang->product->newLine       = "Create {$lang->productCommon} Line";
 $lang->product->export        = 'Xuất';
 $lang->product->exportAction  = "Xuất {$lang->productCommon}";
 $lang->product->dashboard     = "Dashboard";
@@ -41,7 +41,8 @@ $lang->product->plans       = 'Kế hoạch';
 $lang->product->releases    = 'Phát hành';
 $lang->product->docs        = 'Tài liệu';
 $lang->product->bugs        = 'Bug liên kết';
-$lang->product->projects    = "{$lang->executionCommon} liên kết";
+$lang->product->projects    = "Linked Project";
+$lang->product->executions  = "{$lang->execution->common} liên kết";
 $lang->product->cases       = 'Tình huống';
 $lang->product->builds      = 'Bản dựng';
 $lang->product->roadmap     = "Lộ trình {$lang->productCommon}";
@@ -51,7 +52,7 @@ $lang->product->build       = 'Danh sách bản dựng';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Projects đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
 
-$lang->product->currentExecution      = "Hiện {$lang->sprintCommon}";
+$lang->product->currentExecution      = "Hiện Execution";
 $lang->product->activeStories         = 'Kích hoạt [S]';
 $lang->product->activeStoriesTitle    = 'Kích hoạt câu chuyện';
 $lang->product->changedStories        = 'Đã thay đổi [S]';
@@ -65,13 +66,13 @@ $lang->product->unResolvedBugsTitle   = 'Kích hoạt Bugs';
 $lang->product->assignToNullBugs      = 'Chưa giao [B]';
 $lang->product->assignToNullBugsTitle = 'Chưa giao Bugs';
 
-$lang->product->confirmDelete    = " Bạn có muốn xóa {$lang->productCommon} này?";
-$lang->product->errorNoProduct   = "Không có {$lang->productCommon} được tạo!";
-$lang->product->accessDenied     = "Bạn không có quyền truy cập tới  {$lang->productCommon} này.";
-$lang->product->PGMChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
-$lang->product->notChangePGMTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
-$lang->product->confirmChangePGM = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
-$lang->product->changePGMError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
+$lang->product->confirmDelete        = " Bạn có muốn xóa {$lang->productCommon} này?";
+$lang->product->errorNoProduct       = "Không có {$lang->productCommon} được tạo!";
+$lang->product->accessDenied         = "Bạn không có quyền truy cập tới  {$lang->productCommon} này.";
+$lang->product->programChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
+$lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
+$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
@@ -92,7 +93,7 @@ $lang->product->RD             = 'Quản lý phát hành';
 $lang->product->acl            = 'Quyền truy cập';
 $lang->product->whitelist      = 'Danh sách trắng';
 $lang->product->addWhitelist   = 'Add Whitelist';
-$lang->product->unbindWhielist = 'Remove Whitelist';
+$lang->product->unbindWhitelist = 'Remove Whitelist';
 $lang->product->branch         = '%s';
 $lang->product->qa             = 'QA';
 $lang->product->release        = 'Phát hành';

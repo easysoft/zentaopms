@@ -1,0 +1,8 @@
+td.delayed {background: #e84e0f !important; color: white;}
+#int-dropdown {margin-left: -8px; border-radius: 4px; border: 1px solid #0c64eb;}
+#projectTaskForm table tbody tr td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+th.c-deadline {text-align: center;}
+.table td.c-estimate, .table td.c-consumed, .table td.c-left {padding-right: 12px;}
+.c-estimate {text-align: right;}
+.c-consumed {text-align: right;}
+.c-left {text-align: right;}

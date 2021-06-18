@@ -7,9 +7,9 @@ $(function()
 });
 
 /* Get select of stories.*/
-function setStories(moduleID, projectID, num)
+function setStories(moduleID, executionID, num)
 {
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=0&num=' + num + '&type=short');
+    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=0&num=' + num + '&type=short');
     $.get(link, function(stories)
     {
         var storyID = $('#story' + num).val();
@@ -194,7 +194,15 @@ $(document).on('mousedown', 'select', function()
 $(function()
 {
     /* Adjust width for ie chosen width. */
-    var chosenWidth = $('#module1_chosen').width();
+    if(!hiddenStory)
+    {
+        var chosenWidth = $('#module1_chosen').width();
+    }
+    else
+    {
+        var chosenWidth = 170;
+    }
+
     $('.chosen-container[id^=module]').width(chosenWidth);
     $('.chosen-container[id^=module]').css('max-width', chosenWidth);
 

@@ -22,14 +22,14 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $this->clear();
         $this->setTable();
         $this->convertGroup();
-        $result['users']    = $this->convertUser();
-        $result['projects'] = $this->convertProject();
-        $result['modules']  = $this->convertModule();
-        $result['bugs']     = $this->convertBug();
-        $result['cases']    = $this->convertCase();
-        $result['results']  = $this->convertResult();
-        $result['actions']  = $this->convertAction();
-        $result['files']    = $this->convertFile();
+        $result['users']      = $this->convertUser();
+        $result['executions'] = $this->convertExecution();
+        $result['modules']    = $this->convertModule();
+        $result['bugs']       = $this->convertBug();
+        $result['cases']      = $this->convertCase();
+        $result['results']    = $this->convertResult();
+        $result['actions']    = $this->convertAction();
+        $result['files']      = $this->convertFile();
         $this->dao->dbh($this->dbh);
         $this->loadModel('tree')->fixModulePath();
         return $result;
@@ -46,7 +46,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $dbPrefix = $this->post->dbPrefix;
         define('BUGFREE_TABLE_OPTION',     $dbPrefix . 'TestOptions');
         define('BUGFREE_TABLE_USER',       $dbPrefix . 'TestUser');
-        define('BUGFREE_TABLE_PROJECT',    $dbPrefix . 'TestProject');
+        define('BUGFREE_TABLE_EXECUTION',  $dbPrefix . 'TestExecution');
         define('BUGFREE_TABLE_MODULE',     $dbPrefix . 'TestModule');
         define('BUGFREE_TABLE_BUGINFO',    $dbPrefix . 'BugInfo');
         define('BUGFREE_TABLE_CASEINFO',   $dbPrefix . 'CaseInfo');
@@ -143,24 +143,24 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     }
 
     /**
-     * Convert projects.
+     * Convert executions.
      * 
      * @access public
-     * @return int      converted projects count.
+     * @return int      converted executions count.
      */
-    public function convertProject()
+    public function convertExecution()
     {
-        $projects = $this->dao->dbh($this->sourceDBH)
-            ->select("projectID AS id, projectName AS name, isDroped AS deleted")
-            ->from(BUGFREE_TABLE_PROJECT)
+        $executions = $this->dao->dbh($this->sourceDBH)
+            ->select("executionID AS id, executionName AS name, isDroped AS deleted")
+            ->from(BUGFREE_TABLE_EXECUTION)
             ->fetchAll('id');
-        foreach($projects as $projectID => $project)
+        foreach($executions as $executionID => $execution)
         {
-            unset($project->id);
-            $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($project)->exec();
-            $this->map['product'][$projectID] = $this->dao->lastInsertID();
+            unset($execution->id);
+            $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($execution)->exec();
+            $this->map['product'][$executionID] = $this->dao->lastInsertID();
         }
-        return count($projects);
+        return count($executions);
     }
 
     /**
@@ -177,7 +177,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->select(
                 'moduleID AS id, 
                 moduleType as type,
-                projectID AS root, 
+                executionID AS root, 
                 moduleName AS name, 
                 moduleGrade AS grade, 
                 parentID AS parent, 
@@ -216,7 +216,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->dbh($this->sourceDBH)
             ->select('
             bugID AS id, 
-            projectID AS product, 
+            executionID AS product, 
             moduleID AS module,
             bugTitle AS title,
             bugSeverity AS severity,
@@ -294,7 +294,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->dbh($this->sourceDBH)
             ->select('
             caseID AS id, 
-            projectID AS product, 
+            executionID AS product, 
             moduleID AS module,
             caseTitle AS title,
             caseSteps AS step,

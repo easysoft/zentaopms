@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = 'Linked Stories';
 $lang->productplan->unlinkedStories  = 'Unlinked Stories';
 $lang->productplan->updateOrder      = 'Order';
 $lang->productplan->createChildren   = "Create Child Plans";
-$lang->productplan->createExecution  = "Create {$lang->sprintCommon}";
+$lang->productplan->createExecution  = "Create {$lang->executionCommon}";
 
 $lang->productplan->linkBug          = "Link Bug";
 $lang->productplan->unlinkBug        = "Unlink Bug";
@@ -60,7 +60,7 @@ $lang->productplan->future     = 'TBD';
 $lang->productplan->stories    = 'Story';
 $lang->productplan->bugs       = 'Bug';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = $lang->sprintCommon;
+$lang->productplan->execution  = $lang->executionCommon;
 $lang->productplan->parent     = "Parent Plan";
 $lang->productplan->parentAB   = "Parent";
 $lang->productplan->children   = "Child Plan";

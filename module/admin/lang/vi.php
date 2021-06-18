@@ -9,7 +9,6 @@
  * @version  $Id: vi.php 4460 2013-02-26 02:28:02Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->admin->common        = 'Quản trị';
 $lang->admin->index         = 'Trang quản trị';
 $lang->admin->checkDB       = 'Kiểm tra CSDL';
 $lang->admin->sso           = 'Zdoo';
@@ -61,6 +60,7 @@ $lang->admin->safe->weak       = 'Mật khẩu yếu thường dùng';
 $lang->admin->safe->reason     = 'Loại';
 $lang->admin->safe->checkWeak  = 'Quét mật khẩu yếu';
 $lang->admin->safe->changeWeak = 'Chủ động thay đổi mật khẩu yếu';
+$lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Chủ động thay đổi mật khẩu sau lần đăng nhập đầu tiên';
 
 $lang->admin->safe->modeList[0] = 'Yếu';
@@ -78,6 +78,9 @@ $lang->admin->safe->reasonList['birthday'] = 'Giống ngày sinh';
 
 $lang->admin->safe->modifyPasswordList[1] = 'Có';
 $lang->admin->safe->modifyPasswordList[0] = 'Không';
+
+$lang->admin->safe->loginCaptchaList[1] = 'Yes'
+$lang->admin->safe->loginCaptchaList[0] = 'No';
 
 $lang->admin->safe->noticeMode   = 'Mật khẩu sẽ được kiểm tra khi người dùng đăng nhập hoặc người dùng thêm hoặc sửa.';
 $lang->admin->safe->noticeStrong = '';

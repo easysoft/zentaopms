@@ -18,7 +18,7 @@
         <span><?php echo $lang->stakeholder->viewIssue;?></span>
       </h2>
       <div class="pull-right">
-        <?php common::printLink('issue', 'create', 'from=stakeholder&owner=' . $stakeholder->user, "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
+        <?php common::printLink('issue', 'create', "projectID=$projectID&from=stakeholder&owner=" . $stakeholder->user, "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@
               <td><?php echo zget($lang->issue->typeList, $issue->type);?></td>
               <td><?php echo zget($lang->issue->severityList, $issue->severity);?></td>
               <td><?php echo $issue->pri;?></td>
-              <td><?php echo zget($lang->issue->resolveMethods, $issue->status);?></td>
+              <td><?php echo zget($lang->issue->statusList, $issue->status);?></td>
               <td><?php echo $issue->createdDate;?></td>
             </tr>
           <?php endforeach;?>

@@ -13,8 +13,8 @@ class branchModel extends model
 {
     /**
      * Get name by id.
-     * 
-     * @param  int    $branchID 
+     *
+     * @param  int    $branchID
      * @access public
      * @return string
      */
@@ -32,15 +32,19 @@ class branchModel extends model
 
     /**
      * Get pairs.
-     * 
-     * @param  int    $productID 
-     * @param  string $params 
+     *
+     * @param  int    $productID
+     * @param  string $params
      * @access public
      * @return array
      */
     public function getPairs($productID, $params = '')
     {
-        $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchPairs('id', 'name');
+        $branches = $this->dao->select('*')->from(TABLE_BRANCH)
+            ->where('deleted')->eq(0)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->orderBy('`order`')
+            ->fetchPairs('id', 'name');
         foreach($branches as $branchID => $branchName) $branches[$branchID] = htmlspecialchars_decode($branchName);
 
         if(strpos($params, 'noempty') === false)
@@ -55,8 +59,8 @@ class branchModel extends model
 
     /**
      * Get all pairs.
-     * 
-     * @param  string $params 
+     *
+     * @param  string $params
      * @access public
      * @return array
      */
@@ -85,16 +89,17 @@ class branchModel extends model
     }
 
     /**
-     * Manage branch 
-     * 
-     * @param  int    $productID 
+     * Manage branch
+     *
+     * @param  int    $productID
      * @access public
      * @return bool
      */
     public function manage($productID)
     {
         $oldBranches = $this->getPairs($productID, 'noempty');
-        $data = fixer::input('post')->get();
+        $data        = fixer::input('post')->get();
+
         if(isset($data->branch))
         {
             foreach($data->branch as $branchID => $branch)
@@ -102,21 +107,25 @@ class branchModel extends model
                 if($oldBranches[$branchID] != $branch) $this->dao->update(TABLE_BRANCH)->set('name')->eq($branch)->where('id')->eq($branchID)->exec();
             }
         }
+
+        $branches = array();
         foreach($data->newbranch as $i => $branch)
         {
             if(empty($branch)) continue;
             $this->dao->insert(TABLE_BRANCH)->set('name')->eq($branch)->set('product')->eq($productID)->set('`order`')->eq(count($data->branch) + $i + 1)->exec();
+            $branches[] = $this->dao->lastInsertId();
         }
 
-        return dao::isError();
+        if(dao::isError()) return false;
+        return $branches;
     }
 
     /**
-     * Get branch group by products 
-     * 
-     * @param  array  $products 
-     * @param  string $params 
-     * @param  array  $appendBranch 
+     * Get branch group by products
+     *
+     * @param  array  $products
+     * @param  string $params
+     * @param  array  $appendBranch
      * @access public
      * @return array
      */
@@ -152,8 +161,8 @@ class branchModel extends model
 
     /**
      * Get product bype by branch.
-     * 
-     * @param  int    $branchID 
+     *
+     * @param  int    $branchID
      * @access public
      * @return void
      */
@@ -166,8 +175,8 @@ class branchModel extends model
     }
 
     /**
-     * Sort branch. 
-     * 
+     * Sort branch.
+     *
      * @access public
      * @return void
      */
@@ -183,8 +192,8 @@ class branchModel extends model
 
     /**
      * Check branch data.
-     * 
-     * @param  int    $branchID 
+     *
+     * @param  int    $branchID
      * @access public
      * @return bool
      */

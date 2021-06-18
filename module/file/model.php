@@ -356,7 +356,7 @@ class fileModel extends model
 
     /**
      * Get tmp import path.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -470,7 +470,7 @@ class fileModel extends model
             $filePath = $this->dao->select('pathname')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
             $pathName = $filePath->pathname;
             $realPathName = $this->savePath . $this->getRealPathName($pathName);
-            if(!is_dir(dirname($realPathName)))mkdir(dirname($realPathName));
+            if(!is_dir(dirname($realPathName))) mkdir(dirname($realPathName));
             move_uploaded_file($file['tmpname'], $realPathName);
 
             $file['pathname'] = $pathName;
@@ -489,7 +489,7 @@ class fileModel extends model
         }
     }
 
-	/** 
+	/**
      * Compress image to config configured size.
      *
      * @param  string  $rawImage
@@ -504,7 +504,7 @@ class fileModel extends model
      * @return void
      */
     public function cropImage($rawImage, $target, $x, $y, $width, $height, $resizeWidth = 0, $resizeHeight = 0)
-    {   
+    {
         $this->app->loadClass('phpthumb', true);
 
         if(!extension_loaded('gd')) return false;
@@ -530,25 +530,32 @@ class fileModel extends model
         $dataLength = strlen($data);
         if(ini_get('pcre.backtrack_limit') < $dataLength) ini_set('pcre.backtrack_limit', $dataLength);
         preg_match_all('/<img src="(data:image\/(\S+);base64,(\S+))".*\/>/U', $data, $out);
-        foreach($out[3] as $key => $base64Image)
+        if($out[3])
         {
-            $extension = strtolower($out[2][$key]);
-            if(!in_array($extension, $this->config->file->imageExtensions)) die();
-            $imageData = base64_decode($base64Image);
+            foreach($out[3] as $key => $base64Image)
+            {
+                $extension = strtolower($out[2][$key]);
+                if(!in_array($extension, $this->config->file->imageExtensions)) die();
+                $imageData = base64_decode($base64Image);
 
-            $file['extension'] = $extension;
-            $file['pathname']  = $this->setPathName($key, $file['extension']);
-            $file['size']      = strlen($imageData);
-            $file['addedBy']   = $this->app->user->account;
-            $file['addedDate'] = helper::today();
-            $file['title']     = str_replace(".$extension", '', basename($file['pathname']));
+                $file['extension'] = $extension;
+                $file['pathname']  = $this->setPathName($key, $file['extension']);
+                $file['size']      = strlen($imageData);
+                $file['addedBy']   = $this->app->user->account;
+                $file['addedDate'] = helper::today();
+                $file['title']     = str_replace(".$extension", '', basename($file['pathname']));
 
-            file_put_contents($this->savePath . $this->getSaveName($file['pathname']), $imageData);
-            $this->dao->insert(TABLE_FILE)->data($file)->exec();
-            $fileID = $this->dao->lastInsertID();
-            if($uid) $_SESSION['album'][$uid][] = $fileID;
+                file_put_contents($this->savePath . $this->getSaveName($file['pathname']), $imageData);
+                $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                $fileID = $this->dao->lastInsertID();
+                if($uid) $_SESSION['album'][$uid][] = $fileID;
 
-            $data = str_replace($out[1][$key], helper::createLink('file', 'read', "fileID=$fileID", $file['extension']), $data);
+                $data = str_replace($out[1][$key], helper::createLink('file', 'read', "fileID=$fileID", $file['extension']), $data);
+            }
+        }
+        else
+        {
+            $data = fixer::stripDataTags(urldecode($data));
         }
 
         return $data;
@@ -759,7 +766,8 @@ class fileModel extends model
      * @access public
      * @return resource
      */
-    public function imagecreatefrombmp($filename) {
+    public function imagecreatefrombmp($filename)
+    {
         $f = fopen($filename, "rb");
 
         //read header
@@ -782,7 +790,8 @@ class fileModel extends model
         $img = imagecreatetruecolor($header['width'], $header['height']);
 
         //read pixels
-        for ($y = $hei - 1; $y >= 0; $y--) {
+        for($y = $hei - 1; $y >= 0; $y--)
+        {
             $row = fread($f, $wid2);
             $pixels = str_split($row, 3);
 
@@ -910,10 +919,10 @@ class fileModel extends model
 
     /**
      * Send the download header to the client.
-     * 
-     * @param  string    $fileName 
-     * @param  string    $fileType 
-     * @param  string    $content 
+     *
+     * @param  string    $fileName
+     * @param  string    $fileType
+     * @param  string    $content
      * @access public
      * @return void
      */
@@ -924,7 +933,7 @@ class fileModel extends model
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
-        setcookie('downloading', 1, 0, $this->config->webRoot, '', false, false);
+        setcookie('downloading', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
         /* Only download upload file that is in zentao. */
         if($type == 'file' and stripos($content, $this->savePath) !== 0) die();
@@ -955,6 +964,31 @@ class fileModel extends model
             while(!feof($handle)) echo fread($handle, $chunkSize);
             fclose($handle);
             die();
+        }
+    }
+
+    /**
+     * Get image size.
+     *
+     * @access public
+     * @param  object $file
+     * @return array
+     */
+    public function getImageSize($file)
+    {
+        if($this->config->file->storageType == 'fs')
+        {
+            return getimagesize($file->realPath);
+        }
+        else if($this->config->file->storageType == 's3')
+        {
+            $this->app->loadClass('ossclient', true);
+
+            $config    = $this->config->file;
+            $ossClient = new ossclient($config->accessKeyId, $config->accessKeySecret, $config->endpoint, $config->bucket);
+            $info      = $ossClient->getImageInfo($file->pathname);
+
+            return array($info->ImageWidth->value, $info->ImageHeight->value, 'img');
         }
     }
 }

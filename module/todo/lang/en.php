@@ -68,6 +68,7 @@ $lang->todo->finishedDate = 'FinishedDate';
 $lang->todo->closedBy     = 'ClosedBy';
 $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Expiration';
+$lang->todo->deleted      = 'Deleted';
 
 $lang->todo->every        = 'Every';
 $lang->todo->specify      = 'Specify';
@@ -97,7 +98,6 @@ $lang->todo->typeList['cycle']    = 'Recur';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Task';
 $lang->todo->typeList['story']    = 'Story';
-$lang->todo->typeList['review']   = 'Review';
 $lang->todo->typeList['testtask'] = 'Testtask';
 
 $lang->todo->confirmDelete  = "Do you want to delete this todo?";

@@ -1,5 +1,5 @@
 $(document).ready(function()
-{    
+{
     $('#startForm, #closeForm, #activateForm, #blockForm').ajaxForm(
     {
         finish:function(response)
@@ -23,7 +23,7 @@ $(document).ready(function()
 
 /**
  * Adjust priBox width.
- * 
+ *
  * @access public
  * @return void
  */
@@ -37,8 +37,8 @@ function adjustPriBoxWidth()
 
 /**
  * Create bug from fail case.
- * 
- * @param  object $obj 
+ *
+ * @param  object $obj
  * @access public
  * @return void
  */
@@ -54,35 +54,39 @@ function createBug(obj)
 
     var onlybody    = config.onlybody;
     config.onlybody = 'no';
-    window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList), '_parent');
+
+    var link = createLink('bug', 'create', params + ',stepIdList=' + stepIdList);
+    if(onlybody = 'yes') link += '#app=qa';
+    window.parent.$.apps.open(link);
+
     config.onlybody = onlybody;
 }
 
 /**
- * Load project related 
- * 
- * @param  int $projectID 
+ * Load execution related
+ *
+ * @param  int $executionID
  * @access public
  * @return void
  */
-function loadProjectRelated(projectID)
+function loadExecutionRelated(executionID)
 {
-    loadProjectBuilds(projectID);
+    loadExecutionBuilds(executionID);
 }
 
 /**
- * Load project builds.
- * 
- * @param  int $projectID 
+ * Load execution builds.
+ *
+ * @param  int $executionID
  * @access public
  * @return void
  */
-function loadProjectBuilds(projectID)
+function loadExecutionBuilds(executionID)
 {
     selectedBuild = $('#build').val();
     if(!selectedBuild) selectedBuild = 0;
-    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild, '', '', PRJID);
-    if(projectID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + $('#product').val() + '&varName=resolvedBuild&build=' + selectedBuild);
+    link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild, '', '', executionID);
+    if(executionID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + $('#product').val() + '&varName=resolvedBuild&build=' + selectedBuild);
     $('#buildBox').load(link, function()
     {
         $('#resolvedBuild').attr('id', 'build').attr('name', 'build').find('option[value=trunk]').remove();
@@ -91,9 +95,28 @@ function loadProjectBuilds(projectID)
 }
 
 /**
+ * Load test report.
+ *
+ * @param  int    buildID
+ * @access public
+ * @return void
+ */
+function loadTestReports(buildID)
+{
+    link = createLink('testtask', 'ajaxGetTestReports', 'buildID=' + buildID);
+    $.get(link, function(data)
+    {
+        if(!data) data = '<select id="testreport" name="testreport" class="form-control"></select>';
+        $('#testreport').replaceWith(data);
+        $('#testreport_chosen').remove();
+        $("#testreport").chosen();
+    });
+}
+
+/**
  * when begin date input change and end date input is null
  * change end date input to begin's after day
- * 
+ *
  * @access public
  * @return void
  */
@@ -103,15 +126,15 @@ function suitEndDate()
     if(!beginDate) return;
     endDate = $('#end').val();
     if(endDate) return;
-    
+
     endDate = $.zui.formatDate(convertStringToDate(beginDate).addDays(1), 'yyyy-MM-dd');
     $('#end').val(endDate);
 }
 
 /**
  * Convert a date string like 2011-11-11 to date object in js.
- * 
- * @param  string $date 
+ *
+ * @param  string $date
  * @access public
  * @return date
  */
@@ -119,6 +142,6 @@ function convertStringToDate(dateString)
 {
     dateString = dateString.split('-');
     dateString = dateString[1] + '/' + dateString[2] + '/' + dateString[0];
-    
+
     return Date.parse(dateString);
 }

@@ -27,7 +27,7 @@ $(function()
         var planID = $('#plan').val();
         if(planID)
         {
-            parent.location.href = createLink('project', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID);
+            parent.location.href = createLink('projectstory', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID + '&productID=' + productID);
         }
     })
 
@@ -62,4 +62,24 @@ $(function()
     });
 
     toggleFold('#productStoryForm', unfoldStories, productID, 'product');
+
+    adjustTableFooter();
+    $('body').on('click', '#toggleFold', adjustTableFooter);
+    $('body').on('click', '.icon.icon-angle-double-right', adjustTableFooter);
 });
+
+/**
+ * Adjust the table footer style.
+ *
+ * @access public
+ * @return void
+ */
+function adjustTableFooter()
+{
+    if($('.main-col').height() < $(window).height())
+    {
+        $('.table.with-footer-fixed').css('margin-bottom', '0');
+        $('.table-footer').removeClass('fixed-footer');
+        $('.table-footer').css({"left":"0", "bottom":"0", "width":"unset"});
+    }
+}

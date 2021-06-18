@@ -12,18 +12,17 @@
 class personnelModel extends model
 {
     /**
-     * Access to program set input staff.
+     * Access to program set invest staff.
      *
      * @param  int       $programID
      * @param  int       $deptID
      * @param  string    $browseType
      * @param  string    $orderBy
      * @param  int       $queryID
-     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0, $pager)
+    public function getAccessiblePersonnel($programID = 0, $deptID = 0, $browseType = 'all', $queryID = 0)
     {
         $accessibleQuery = '';
         if($browseType == 'bysearch')
@@ -39,30 +38,79 @@ class personnelModel extends model
         }
 
         /* Determine who can be accessed based on access control. */
-        $program = $this->loadModel('program')->getPGMByID($programID);
+        $program = $this->loadModel('program')->getByID($programID);
         $personnelList = array();
-        if($program->acl != 'open')
+        $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t2.deleted')->eq(0)
+            ->beginIF($program->acl != 'open')->andWhere("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
+            ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
+            ->fetchAll('id');
+
+        if($program->acl == 'open')
         {
-            $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
-                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-                ->where("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
-                ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
-                ->page($pager)
-                ->fetchAll();
+            foreach($personnelList as $personnel)
+            {
+                if(!$this->canViewProgram($programID, $personnel->account)) unset($personnelList[$personnel->id]);
+            }
         }
 
         return $personnelList;
     }
 
     /**
-     * Access to program set input staff.
+     * Check if you have permission to view the program.
      *
-     * @param  int       $programID
+     * @param  int    $programID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function canViewProgram($programID, $account)
+    {
+        if($this->app->user->admin) return true;
+
+        static $groupAcl  = array();
+        static $groupInfo = array();
+        if(empty($groupAcl))
+        {
+            $groupAcl = $this->dao->select('id,acl')->from(TABLE_GROUP)->fetchPairs();
+            foreach($groupAcl as $groupID => $group) $groupInfo[$groupID] = json_decode($groupAcl[$groupID]);
+        }
+
+        static $userGroups = array();
+        if(empty($userGroups)) $userGroups = $this->dao->select('*')->from(TABLE_USERGROUP)->fetchGroup('account', 'group');
+
+        $programRight = false;
+        if(isset($userGroups[$account]))
+        {
+            foreach($userGroups[$account] as $groupID => $userGroup)
+            {
+                $group = $groupInfo[$groupID];
+                if(!isset($group->programs))
+                {
+                    $programRight = true;
+                    continue;
+                }
+                elseif(in_array($programID, $group->programs))
+                {
+                    $programRight = true;
+                    continue;
+                }
+            }
+        }
+        return $programRight;
+    }
+
+    /**
+     * Get invest person list.
+     *
+     * @param  int    $programID
      * @access public
      * @return array
      */
-    public function getInputPersonnel($programID = 0)
+    public function getInvest($programID = 0)
     {
         $personnelList = array();
 
@@ -74,19 +122,19 @@ class personnelModel extends model
             ->orderBy('id_desc')
             ->fetchAll('id');
         if(empty($projects)) return $personnelList;
-
         $accountPairs = $this->getInvolvedProjects($projects);
+
         if(empty($accountPairs)) return $personnelList;
 
-        $executionPairs   = $this->getInvolvedExecutions($projects);
-        $taskInput        = $this->getProjectTaskInput($projects, $accountPairs);
-        $bugAndStoryInput = $this->getBugAndStoryInput($accountPairs, $programID);
+        $executionPairs    = $this->getInvolvedExecutions($projects);
+        $taskInvest        = $this->getProjectTaskInvest($projects, $accountPairs);
+        $bugAndStoryInvest = $this->getBugAndStoryInvest($accountPairs, $programID);
         if(isset($this->config->maxVersion))
         {
-            $issueInput       = $this->getIssueInput($accountPairs, $projects);
-            $riskInput        = $this->getRiskInput($accountPairs, $projects);
+            $issueInvest = $this->getIssueInvest($accountPairs, $projects);
+            $riskInvest  = $this->getRiskInvest($accountPairs, $projects);
         }
-        $userPairs        = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
+        $userPairs = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
         foreach($userPairs as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
 
         foreach($accountPairs as $account => $projects)
@@ -97,12 +145,12 @@ class personnelModel extends model
             $personnelList[$account]['projects']   = $projects;
             $personnelList[$account]['executions'] = zget($executionPairs, $account, 0);
 
-            $personnelList[$account] += $taskInput[$account];
-            $personnelList[$account] += $bugAndStoryInput[$account];
+            $personnelList[$account] += $taskInvest[$account];
+            $personnelList[$account] += $bugAndStoryInvest[$account];
             if(isset($this->config->maxVersion))
             {
-                $personnelList[$account] += $issueInput[$account];
-                $personnelList[$account] += $riskInput[$account];
+                $personnelList[$account] += $issueInvest[$account];
+                $personnelList[$account] += $riskInvest[$account];
             }
         }
 
@@ -110,82 +158,82 @@ class personnelModel extends model
     }
 
     /**
-     * Get user project risk input.
+     * Get user project risk invest.
      *
      * @param  array     $accounts
      * @param  object    $projects
      * @access public
      * @return array
      */
-    public function getRiskInput($accounts, $projects)
+    public function getRiskInvest($accounts, $projects)
     {
         $risks = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_RISK)
-            ->where('PRJ')->in(array_keys($projects))
+            ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
         /* Initialization personnel risks. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdRisk']  = 0;
-            $putInto[$account]['resolvedRisk'] = 0;
-            $putInto[$account]['pendingRisk']  = 0;
+            $invest[$account]['createdRisk']  = 0;
+            $invest[$account]['resolvedRisk'] = 0;
+            $invest[$account]['pendingRisk']  = 0;
         }
 
         foreach($risks as $risk)
         {
-            if($risk->createdBy && isset($putInto[$risk->createdBy])) $putInto[$risk->createdBy]['createdRisk'] += 1;
-            if($risk->resolvedBy && isset($putInto[$risk->resolvedBy])) $putInto[$risk->resolvedBy]['resolvedRisk'] += 1;
-            if($risk->assignedTo && $risk->status == 'active' && isset($putInto[$risk->assignedTo])) $putInto[$risk->assignedTo]['pendingRisk'] += 1;
+            if($risk->createdBy && isset($invest[$risk->createdBy])) $invest[$risk->createdBy]['createdRisk'] += 1;
+            if($risk->resolvedBy && isset($invest[$risk->resolvedBy])) $invest[$risk->resolvedBy]['resolvedRisk'] += 1;
+            if($risk->assignedTo && $risk->status == 'active' && isset($invest[$risk->assignedTo])) $invest[$risk->assignedTo]['pendingRisk'] += 1;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
-     * Get user project issue input.
+     * Get user project issue invest.
      *
      * @param  array     $accounts
      * @param  object    $projects
      * @access public
      * @return array
      */
-    public function getIssueInput($accounts, $projects)
+    public function getIssueInvest($accounts, $projects)
     {
         $issues = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_ISSUE)
-            ->where('PRJ')->in(array_keys($projects))
+            ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
         /* Initialization personnel issues. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdIssue']  = 0;
-            $putInto[$account]['resolvedIssue'] = 0;
-            $putInto[$account]['pendingIssue']  = 0;
+            $invest[$account]['createdIssue']  = 0;
+            $invest[$account]['resolvedIssue'] = 0;
+            $invest[$account]['pendingIssue']  = 0;
         }
 
         foreach($issues as $issue)
         {
-            if($issue->createdBy && isset($putInto[$issue->createdBy])) $putInto[$issue->createdBy]['createdIssue'] += 1;
-            if($issue->resolvedBy && isset($putInto[$issue->resolvedBy])) $putInto[$issue->resolvedBy]['resolvedIssue'] += 1;
-            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($putInto[$issue->assignedTo])) $putInto[$issue->assignedTo]['pendingIssue'] += 1;
+            if($issue->createdBy && isset($invest[$issue->createdBy])) $invest[$issue->createdBy]['createdIssue'] += 1;
+            if($issue->resolvedBy && isset($invest[$issue->resolvedBy])) $invest[$issue->resolvedBy]['resolvedIssue'] += 1;
+            if($issue->assignedTo && in_array($issue->status, array('unconfirmed', 'confirmed', 'active')) && isset($invest[$issue->assignedTo])) $invest[$issue->assignedTo]['pendingIssue'] += 1;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
-     * Get user bug and story input.
+     * Get user bug and story invest.
      *
      * @param  array     $accounts
      * @param  int       $programID
      * @access public
      * @return array
      */
-    public function getBugAndStoryInput($accounts, $programID)
+    public function getBugAndStoryInvest($accounts, $programID)
     {
         $productPairs = $this->loadModel('product')->getPairs('', $programID);
         $productKeys  = array_keys($productPairs);
@@ -212,26 +260,26 @@ class personnelModel extends model
             ->fetchPairs('openedBy');
 
         /* Initialize bugs and requirements related to personnel. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdBug']  = 0;
-            $putInto[$account]['resolvedBug'] = 0;
-            $putInto[$account]['pendingBug']  = 0;
-            $putInto[$account]['UR']          = 0;
-            $putInto[$account]['SR']          = 0;
+            $invest[$account]['createdBug']  = 0;
+            $invest[$account]['resolvedBug'] = 0;
+            $invest[$account]['pendingBug']  = 0;
+            $invest[$account]['UR']          = 0;
+            $invest[$account]['SR']          = 0;
         }
 
-        foreach($requirement as $account => $number) $putInto[$account]['UR'] = $number;
-        foreach($story as $account => $number)       $putInto[$account]['SR'] = $number;
+        foreach($requirement as $account => $number) $invest[$account]['UR'] = $number;
+        foreach($story as $account => $number)       $invest[$account]['SR'] = $number;
 
         foreach($bugs as $bug)
         {
-            if($bug->openedBy && isset($putInto[$bug->openedBy])) $putInto[$bug->openedBy]['createdBug'] += 1;
-            if($bug->resolvedBy && isset($putInto[$bug->resolvedBy])) $putInto[$bug->resolvedBy]['resolvedBug'] += 1;
-            if($bug->assignedTo && $bug->status == 'active' && isset($putInto[$bug->assignedTo])) $putInto[$bug->assignedTo]['pendingBug'] += 1;
+            if($bug->openedBy && isset($invest[$bug->openedBy])) $invest[$bug->openedBy]['createdBug'] += 1;
+            if($bug->resolvedBy && isset($invest[$bug->resolvedBy])) $invest[$bug->resolvedBy]['resolvedBug'] += 1;
+            if($bug->assignedTo && $bug->status == 'active' && isset($invest[$bug->assignedTo])) $invest[$bug->assignedTo]['pendingBug'] += 1;
         }
-        return $putInto;
+        return $invest;
     }
 
     /**
@@ -267,56 +315,56 @@ class personnelModel extends model
 
         return $this->dao->select('account, count(root) as executions')->from(TABLE_TEAM)
             ->where('root')->in(array_keys($executions))
-            ->andWhere('type')->in('stage,sprint')
+            ->andWhere('type')->in('execution')
             ->groupBy('account')
             ->fetchPairs('account');
     }
 
     /**
-     * Get project task inputs.
+     * Get project task invest.
      *
      * @param  object    $projects
      * @param  array     $accounts
      * @access public
      * @return array
      */
-    public function getProjectTaskInput($projects, $accounts)
+    public function getProjectTaskInvest($projects, $accounts)
     {
-        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,PRJ')->from(TABLE_TASK)
-          ->where('PRJ')->in(array_keys($projects))
+        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project')->from(TABLE_TASK)
+          ->where('project')->in(array_keys($projects))
           ->andWhere('deleted')->eq('0')
           ->fetchAll('id');
 
         /* Initialize personnel related tasks. */
-        $putInto = array();
+        $invest = array();
         foreach($accounts as $account => $project)
         {
-            $putInto[$account]['createdTask']  = 0;
-            $putInto[$account]['finishedTask'] = 0;
-            $putInto[$account]['pendingTask']  = 0;
-            $putInto[$account]['consumedTask'] = 0;
-            $putInto[$account]['leftTask']     = 0;
+            $invest[$account]['createdTask']  = 0;
+            $invest[$account]['finishedTask'] = 0;
+            $invest[$account]['pendingTask']  = 0;
+            $invest[$account]['consumedTask'] = 0;
+            $invest[$account]['leftTask']     = 0;
         }
 
         /* Number of tasks per person. */
         $userTasks = array();
         foreach($tasks as $task)
         {
-            if($task->openedBy && isset($putInto[$task->openedBy]))
+            if($task->openedBy && isset($invest[$task->openedBy]))
             {
-                $putInto[$task->openedBy]['createdTask'] += 1;
+                $invest[$task->openedBy]['createdTask'] += 1;
                 $userTasks[$task->openedBy][$task->id]    = $task->id;
             }
 
-            if($task->finishedBy && isset($putInto[$task->finishedBy]))
+            if($task->finishedBy && isset($invest[$task->finishedBy]))
             {
-                $putInto[$task->finishedBy]['finishedTask'] += 1;
+                $invest[$task->finishedBy]['finishedTask'] += 1;
                 $userTasks[$task->finishedBy][$task->id]     = $task->id;
             }
 
-            if($task->assignedTo && $task->status == 'wait' && isset($putInto[$task->assignedTo]))
+            if($task->assignedTo && $task->status == 'wait' && isset($invest[$task->assignedTo]))
             {
-                $putInto[$task->assignedTo]['pendingTask'] += 1;
+                $invest[$task->assignedTo]['pendingTask'] += 1;
                 $userTasks[$task->assignedTo][$task->id]    = $task->id;
             }
         }
@@ -334,11 +382,11 @@ class personnelModel extends model
 
         foreach($userHours as $account => $hours)
         {
-            $putInto[$account]['leftTask']     = $hours->left;
-            $putInto[$account]['consumedTask'] = $hours->consumed;
+            $invest[$account]['leftTask']     = $hours->left;
+            $invest[$account]['consumedTask'] = $hours->consumed;
         }
 
-        return $putInto;
+        return $invest;
     }
 
     /**
@@ -409,7 +457,7 @@ class personnelModel extends model
     }
 
     /**
-     * Access to program set input staff.
+     * Access to program set invest staff.
      *
      * @param  int       $objectID
      * @param  string    $objectType  program|project|product|sprint
@@ -449,25 +497,27 @@ class personnelModel extends model
      * @param  array   $users
      * @param  string  $objectType  program|project|product|sprint
      * @param  int     $objectID
-     * @param  string  $type    whitelist|blacklist
-     * @param  string  $source  upgrade|add|sync
+     * @param  string  $type        whitelist|blacklist
+     * @param  string  $source      upgrade|add|sync
+     * @param  string  $updateType  increase|replace
      * @access public
      * @return void
      */
-    public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add')
+    public function updateWhitelist($users = array(), $objectType = '', $objectID = 0, $type = 'whitelist', $source = 'add', $updateType = 'replace')
     {
         $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
-        $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
+        if($updateType == 'replace') $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
 
         $users = array_filter($users);
         $users = array_unique($users);
         $accounts = array();
         foreach($users as $account)
         {
+            $accounts[$account] = $account;
+
             if(isset($oldWhitelist[$account]))
             {
-                $this->dao->insert(TABLE_ACL)->data($oldWhitelist[$account])->exec();
-                $accounts[$account] = $account;
+                if($updateType == 'replace') $this->dao->insert(TABLE_ACL)->data($oldWhitelist[$account])->exec();
                 continue;
             }
 
@@ -479,11 +529,17 @@ class personnelModel extends model
             $acl->source     = $source;
             $this->dao->insert(TABLE_ACL)->data($acl)->autoCheck()->exec();
             if(!dao::isError()) $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, $acl->account);
-            $accounts[$account] = $account;
         }
 
-        $whitelist = ',' . implode(',', $accounts);
+        /* Update whitelist field. */
         $objectTable = $objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        if($updateType == 'increase')
+        {
+            $oldWhitelist = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($objectID)->fetch('whitelist');
+            $oldWhitelist = explode(',', $oldWhitelist);
+            $accounts     = array_unique(array_merge($accounts, $oldWhitelist));
+        }
+        $whitelist = ',' . implode(',', $accounts);
         $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
 
         $deletedAccounts = array();
@@ -501,10 +557,13 @@ class personnelModel extends model
             $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
             $newWhitelist     = array_merge($programWhitelist, $accounts);
             $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source);
+            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source, $updateType);
 
             /* Removal of persons from centralized program whitelisting. */
-            foreach($deletedAccounts as $account) $this->deleteProgramWhitelist($objectID, $account);
+            if($updateType == 'replace')
+            {
+                foreach($deletedAccounts as $account) $this->deleteProgramWhitelist($objectID, $account);
+            }
         }
 
         /* Synchronization of people from the sprint white list to the project. */
@@ -519,7 +578,10 @@ class personnelModel extends model
             $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source);
 
             /* Removal of whitelisted persons from projects. */
-            foreach($deletedAccounts as $account) $this->deleteProjectWhitelist($objectID, $account);
+            if($updateType == 'replace')
+            {
+                foreach($deletedAccounts as $account) $this->deleteProjectWhitelist($objectID, $account);
+            }
         }
     }
 
@@ -535,6 +597,23 @@ class personnelModel extends model
     {
         $users = $this->post->accounts;
         $this->updateWhitelist($users, $objectType, $objectID);
+    }
+
+    /**
+     * Delete product whitelist.
+     *
+     * @param  int    $objectID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function deleteProductWhitelist($objectID, $account = '')
+    {
+        $product = $this->dao->select('id,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch('whitelist');
+        if(empty($product)) return false;
+
+        $newWhitelist = str_replace(',' . $acl->account, '', $product->whitelist);
+        $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($objectID)->exec();
     }
 
     /**
@@ -584,6 +663,30 @@ class personnelModel extends model
             $newWhitelist = str_replace(',' . $account, '', $project->whitelist);
             $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
             $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($projectID)->andWhere('account')->eq($account)->andWhere('objectType')->eq('project')->exec();
+        }
+    }
+
+    /**
+     * Delete users in whitelist.
+     *
+     * @param  array  $users
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function deleteWhitelist($users = array(), $objectType = 'program', $objectID = 0)
+    {
+        $this->dao->delete()->from(TABLE_ACL)
+            ->where('objectID')->eq($objectID)
+            ->andWhere('account')->in($users)
+            ->exec();
+
+        foreach($users as $account)
+        {
+            if($objectType == 'program') $this->deleteProgramWhitelist($objectID, $account);
+            if($objectType == 'project') $this->deleteProjectWhitelist($objectID, $account);
+            if($objectType == 'product') $this->deleteProductWhitelist($objectID, $account);
         }
     }
 

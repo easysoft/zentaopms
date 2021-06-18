@@ -12,9 +12,9 @@
 class backupModel extends model
 {
     /**
-     * Backup SQL 
-     * 
-     * @param  string    $backupFile 
+     * Backup SQL.
+     *
+     * @param  string    $backupFile
      * @access public
      * @return object
      */
@@ -26,8 +26,8 @@ class backupModel extends model
 
     /**
      * Backup file.
-     * 
-     * @param  string    $backupFile 
+     *
+     * @param  string    $backupFile
      * @access public
      * @return object
      */
@@ -54,8 +54,8 @@ class backupModel extends model
 
     /**
      * Backup code.
-     * 
-     * @param  string    $backupFile 
+     *
+     * @param  string    $backupFile
      * @access public
      * @return object
      */
@@ -123,9 +123,9 @@ class backupModel extends model
     }
 
     /**
-     * Restore SQL 
-     * 
-     * @param  string    $backupFile 
+     * Restore SQL.
+     *
+     * @param  string    $backupFile
      * @access public
      * @return object
      */
@@ -156,9 +156,9 @@ class backupModel extends model
     }
 
     /**
-     * Restore File 
-     * 
-     * @param  string    $backupFile 
+     * Restore File.
+     *
+     * @param  string    $backupFile
      * @access public
      * @return object
      */
@@ -192,8 +192,8 @@ class backupModel extends model
 
     /**
      * Add file header.
-     * 
-     * @param  string    $fileName 
+     *
+     * @param  string    $fileName
      * @access public
      * @return bool
      */
@@ -218,7 +218,7 @@ class backupModel extends model
             {
                 $line = $compensate . $line;
             }
-            
+
             $compensate = fread($fh, $delta);
             fseek($fh, $offset);
             fwrite($fh, $line);
@@ -235,8 +235,8 @@ class backupModel extends model
 
     /**
      * Remove file header.
-     * 
-     * @param  string    $fileName 
+     *
+     * @param  string    $fileName
      * @access public
      * @return bool
      */
@@ -277,8 +277,8 @@ class backupModel extends model
 
     /**
      * Get dir size.
-     * 
-     * @param  string    $backup 
+     *
+     * @param  string    $backup
      * @access public
      * @return int
      */
@@ -316,9 +316,9 @@ class backupModel extends model
 
     /**
      * Get backup file.
-     * 
-     * @param  string    $name 
-     * @param  string    $type 
+     *
+     * @param  string    $name
+     * @param  string    $type
      * @access public
      * @return string
      */
@@ -342,8 +342,8 @@ class backupModel extends model
 
     /**
      * Get tmp log file.
-     * 
-     * @param  string $backupFile 
+     *
+     * @param  string $backupFile
      * @access public
      * @return string
      */
@@ -355,8 +355,8 @@ class backupModel extends model
 
     /**
      * Get backup dir progress.
-     * 
-     * @param  string $backup 
+     *
+     * @param  string $backup
      * @access public
      * @return array
      */
@@ -369,8 +369,8 @@ class backupModel extends model
 
     /**
      * Process filesize.
-     * 
-     * @param  int    $fileSize 
+     *
+     * @param  int    $fileSize
      * @access public
      * @return string
      */
@@ -394,12 +394,12 @@ class backupModel extends model
 
     /**
      * Process backup summary.
-     * 
-     * @param  string $file 
-     * @param  int    $count 
-     * @param  int    $size 
-     * @param  array  $errorFiles 
-     * @param  int    $allCount 
+     *
+     * @param  string $file
+     * @param  int    $count
+     * @param  int    $size
+     * @param  array  $errorFiles
+     * @param  int    $allCount
      * @param  string $action  add|delete
      * @access public
      * @return bool

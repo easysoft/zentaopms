@@ -1,11 +1,11 @@
-#loadingIcon {opacity: 0; transition: opacity .3s}
-#loadingIcon.active {opacity: 1}
+#loadingIcon {opacity: 0; transition: opacity .3s;}
+#loadingIcon.active {opacity: 1;}
 
 #menuEditor {margin-top: 10px;}
 #menuEditor .panel {border-color: #ddd;}
-#mainMenu {position: static!important; margin: 0!important; text-align: center; height: 48px; padding: 6px!important; border-top: 1px solid #eee;}
+#mainMenu {position: static !important; margin: 0 !important; text-align: center; height: 48px; padding: 6px !important; border-top: 1px solid #eee;}
 #subNavbar {margin: 0; padding: 5px; height: 50px;}
-#navbar {padding: 5px; margin-top: 0!important; height: 60px; border-radius: 4px 4px 0 0;}
+#navbar {padding: 5px; margin-top: 0 !important; height: 60px; border-radius: 4px 4px 0 0;}
 #navbar .nav > li > a {padding: 10px 15px; border-radius: 3px;}
 #mainMenu > .nav {display: inline-block;}
 #menuEditor .nav > li > a {cursor: move;}
@@ -13,4 +13,4 @@
 #menuEditor .dropdown-menu > li > a .item-hidden-icon {margin-left: 10px;}
 #menuEditor li.menu-hidden > a .item-hidden-icon {display: inline-block;}
 #menuEditor .nav > li.menu-hidden > a {border: 1px dashed #ddd; background: rgba(0,0,0,.1); margin: 0 2px; padding: 7px 11px;}
-#menuEditor .nav > li.menu-hidden > a > .dropdown{display: inline-block;}
+#menuEditor .nav > li.menu-hidden > a > .dropdown {display: inline-block;}

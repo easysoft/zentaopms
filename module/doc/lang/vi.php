@@ -13,7 +13,7 @@
 $lang->doc->common       = 'Tài liệu';
 $lang->doc->id           = 'ID';
 $lang->doc->product      = $lang->productCommon;
-$lang->doc->project      = $lang->executionCommon;
+$lang->doc->execution    = $lang->executionCommon;
 $lang->doc->lib          = 'Thư viện';
 $lang->doc->module       = 'Danh mục';
 $lang->doc->title        = 'Tên';
@@ -48,12 +48,15 @@ $lang->doc->item         = ' Items';
 $lang->doc->num          = 'Documents';
 $lang->doc->searchResult = 'Search kết quả';
 $lang->doc->mailto       = 'Mailto';
+$lang->doc->noModule     = 'No document in this lib, please create it';
+$lang->doc->noChapter    = 'No chapters or articles in this book. Please add chapters and articles.';
 
 $lang->doc->moduleDoc    = 'By Module';
 $lang->doc->searchDoc    = 'Tìm kiếm';
 $lang->doc->fast         = 'Quick Entry';
 $lang->doc->allDoc       = 'Tất cả tài liệu';
 $lang->doc->openedByMe   = 'Của bạn';
+$lang->doc->editedByMe   = 'Edited By Me';
 $lang->doc->orderByOpen  = 'Recent Added';
 $lang->doc->orderByEdit  = 'Recent Updated';
 $lang->doc->orderByVisit = 'Last Visited';
@@ -67,6 +70,7 @@ $lang->doc->index            = 'Document Home';
 $lang->doc->create           = 'Tạo tài liệu';
 $lang->doc->edit             = 'Sửa tài liệu';
 $lang->doc->delete           = 'Xóa tài liệu';
+$lang->doc->createBook       = 'Create Book';
 $lang->doc->browse           = 'Document danh sách';
 $lang->doc->view             = 'Document Detail';
 $lang->doc->diff             = 'Diff';
@@ -77,6 +81,7 @@ $lang->doc->editType         = 'Sửa';
 $lang->doc->deleteType       = 'Xóa';
 $lang->doc->addType          = 'Thêm';
 $lang->doc->childType        = 'Categories';
+$lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Thêm Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Xóa File';
@@ -96,19 +101,19 @@ $lang->doc->removeMenu = 'Remove from Menu';
 $lang->doc->search     = 'Tìm kiếm';
 
 /* Query condition list. */
-$lang->doc->allProduct = 'All' . $lang->productCommon;
-$lang->doc->allProject = 'All' . $lang->executionCommon;
+$lang->doc->allProduct    = 'All' . $lang->productCommon;
+$lang->doc->allExecutions = 'All' . $lang->executionCommon;
 
-$lang->doc->libTypeList['product'] = $lang->productCommon . ' thư viện';
-$lang->doc->libTypeList['project'] = $lang->executionCommon . ' thư viện';
-$lang->doc->libTypeList['custom']  = 'Tùy biến thư viện';
+$lang->doc->libTypeList['product']   = $lang->productCommon . ' thư viện';
+$lang->doc->libTypeList['execution'] = $lang->executionCommon . ' thư viện';
+$lang->doc->libTypeList['custom']    = 'Tùy biến thư viện';
 
-$lang->doc->libIconList['product'] = 'icon-cube';
-$lang->doc->libIconList['project'] = 'icon-stack';
-$lang->doc->libIconList['custom']  = 'icon-folder-o';
+$lang->doc->libIconList['product']   = 'icon-product';
+$lang->doc->libIconList['execution'] = 'icon-stack';
+$lang->doc->libIconList['custom']    = 'icon-folder-o';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon;
-$lang->doc->systemLibs['project'] = $lang->executionCommon;
+$lang->doc->systemLibs['product']   = $lang->productCommon;
+$lang->doc->systemLibs['execution'] = $lang->executionCommon;
 
 $lang->doc->aclList['open']    = 'Công khai';
 $lang->doc->aclList['custom']  = 'Tùy biến';
@@ -156,30 +161,36 @@ $lang->doc->mail->edit   = new stdclass();
 $lang->doc->mail->create->title = "%s created document #%s:%s";
 $lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 
-$lang->doc->confirmDelete      = "Bạn có muốn xóa this document?";
-$lang->doc->confirmDeleteLib   = "Bạn có muốn xóa this document library?";
-$lang->doc->errorEditSystemDoc = "You don't have to change system document library.";
-$lang->doc->errorEmptyProduct  = "Không có {$lang->productCommon}. It cannot be created.";
-$lang->doc->errorEmptyProject  = "Không có {$lang->executionCommon}. It cannot be created.";
-$lang->doc->errorMainSysLib    = "This library không thể xóa.";
-$lang->doc->accessDenied       = "Access bị từ chối!";
-$lang->doc->versionNotFount    = 'Nó does not exist in bản dựng này.';
-$lang->doc->noDoc              = 'Không có documents. ';
-$lang->doc->cannotCreateOffice = 'Sorry, %s can only be created in ZenTao Enterprise. Contact us at renee@easysoft.ltd to try ZenTao Enterprise.';
-$lang->doc->notSetOffice       = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
-$lang->doc->noSearchedDoc      = 'Không có documents found.';
-$lang->doc->noEditedDoc        = 'Bạn có not edited any documents.';
-$lang->doc->noOpenedDoc        = 'Bạn chưa tạo any documents.';
-$lang->doc->noCollectedDoc     = 'Bạn có not favorited any documents.';
-$lang->doc->errorEmptyLib      = 'No data in document library.';
+$lang->doc->confirmDelete        = "Bạn có muốn xóa this document?";
+$lang->doc->confirmDeleteLib     = "Bạn có muốn xóa this document library?";
+$lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
+$lang->doc->errorEditSystemDoc   = "You don't have to change system document library.";
+$lang->doc->errorEmptyProduct    = "Không có {$lang->productCommon}. It cannot be created.";
+$lang->doc->errorEmptyProject    = "Không có {$lang->executionCommon}. It cannot be created.";
+$lang->doc->errorMainSysLib      = "This library không thể xóa.";
+$lang->doc->accessDenied         = "Access bị từ chối!";
+$lang->doc->versionNotFount      = 'Nó does not exist in bản dựng này.';
+$lang->doc->noDoc                = 'Không có documents. ';
+$lang->doc->noArticle            = 'No articles.';
+$lang->doc->noLib                = 'No libraries. ';
+$lang->doc->noBook               = 'The WIKI library has not created a manual, please create a new one :)';
+$lang->doc->cannotCreateOffice   = 'Sorry, %s can only be created in ZenTao Enterprise. Contact us at renee@easysoft.ltd to try ZenTao Enterprise.';
+$lang->doc->notSetOffice         = "<p>To create a %s document, you need to configure <a href='%s' target='_parent'>office convert</a>.<p>";
+$lang->doc->noSearchedDoc        = 'Không có documents found.';
+$lang->doc->noEditedDoc          = 'Bạn có not edited any documents.';
+$lang->doc->noOpenedDoc          = 'Bạn chưa tạo any documents.';
+$lang->doc->noCollectedDoc       = 'Bạn có not favorited any documents.';
+$lang->doc->errorEmptyLib        = 'No data in document library.';
 
-$lang->doc->noticeAcl['lib']['product']['default'] = 'Users who can access the selected product có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['product']['custom']  = 'Users who can access the selected product or users in the whiltelist có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['project']['default'] = 'Users who can access the selected project có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['project']['custom']  = 'Users who can access the selected project or users in the whiltelist có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['custom']['open']     = 'Tất cả users có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['custom']['custom']   = 'Users in the whitelist có thể truy cập nó.';
-$lang->doc->noticeAcl['lib']['custom']['private']  = 'Chỉ the one who created it có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['product']['default']   = 'Users who can access the selected product có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['product']['custom']    = 'Users who can access the selected product or users in the whiltelist có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['project']['default']   = 'Users who can access the selected project có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['project']['custom']    = 'Users who can access the selected project or users in the whiltelist có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['execution']['default'] = "Users who can access the selected {$lang->executionCommon} có thể truy cập nó.";
+$lang->doc->noticeAcl['lib']['execution']['custom']  = "Users who can access the selected {$lang->executionCommon} or users in the whiltelist có thể truy cập nó.";
+$lang->doc->noticeAcl['lib']['custom']['open']       = 'Tất cả users có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['custom']['custom']     = 'Users in the whitelist có thể truy cập nó.';
+$lang->doc->noticeAcl['lib']['custom']['private']    = 'Chỉ the one who created it có thể truy cập nó.';
 
 $lang->doc->noticeAcl['doc']['open']    = 'Users who can access the document library which the document belongs có thể truy cập nó.';
 $lang->doc->noticeAcl['doc']['custom']  = 'Users in the whiltelist có thể truy cập nó.';
@@ -188,16 +199,16 @@ $lang->doc->noticeAcl['doc']['private'] = 'Chỉ the one who created it có th�
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'URL';
 
-$lang->doclib          = new stdclass();
-$lang->doclib->name    = 'Tên';
-$lang->doclib->control = 'Quyền truy cập';
-$lang->doclib->group   = 'Nhóm';
-$lang->doclib->user    = 'Người dùng';
-$lang->doclib->files   = 'Attachments';
-$lang->doclib->all     = 'Tất cả Libraries';
-$lang->doclib->select  = 'Chọn';
-$lang->doclib->project = $lang->executionCommon . ' thư viện';
-$lang->doclib->product = $lang->productCommon . ' thư viện';
+$lang->doclib            = new stdclass();
+$lang->doclib->name      = 'Tên';
+$lang->doclib->control   = 'Quyền truy cập';
+$lang->doclib->group     = 'Nhóm';
+$lang->doclib->user      = 'Người dùng';
+$lang->doclib->files     = 'Attachments';
+$lang->doclib->all       = 'Tất cả Libraries';
+$lang->doclib->select    = 'Chọn';
+$lang->doclib->execution = $lang->executionCommon . ' thư viện';
+$lang->doclib->product   = $lang->productCommon . ' thư viện';
 
 $lang->doclib->aclListA['default'] = 'Mặc định';
 $lang->doclib->aclListA['custom']  = 'Tùy biến';
@@ -207,14 +218,14 @@ $lang->doclib->aclListB['custom']  = 'Tùy biến';
 $lang->doclib->aclListB['private'] = 'Riêng tư';
 
 $lang->doclib->create['product']   = 'Tạo ' . $lang->productCommon . ' thư viện';
-$lang->doclib->create['project']   = 'Tạo ' . $lang->executionCommon . ' thư viện';
+$lang->doclib->create['execution'] = 'Tạo ' . $lang->executionCommon . ' thư viện';
 $lang->doclib->create['custom']    = 'Tạo Custom thư viện';
 
-$lang->doclib->main['product'] =  'Primary thư viện';
-$lang->doclib->main['project'] =  'Primary thư viện';
+$lang->doclib->main['product']   = 'Primary thư viện';
+$lang->doclib->main['execution'] = 'Primary thư viện';
 
-$lang->doclib->tabList['product'] = $lang->productCommon;
-$lang->doclib->tabList['project'] = $lang->executionCommon;
-$lang->doclib->tabList['custom']  = 'Tùy biến';
+$lang->doclib->tabList['product']   = $lang->productCommon;
+$lang->doclib->tabList['execution'] = $lang->executionCommon;
+$lang->doclib->tabList['custom']    = 'Tùy biến';
 
 $lang->doclib->nameList['custom'] = 'Tùy biến tên';

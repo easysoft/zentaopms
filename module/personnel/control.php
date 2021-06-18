@@ -26,18 +26,22 @@ class personnel extends control
      */
     public function accessible($programID = 0, $deptID = 0, $browseType='browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->setProgramNavMenu($programID);
+        $this->loadModel('program')->setMenu($programID);
         $this->app->loadLang('user');
 
-        $program = $this->loadModel('program')->getPGMByID($programID);
+        $program = $this->program->getByID($programID);
+
+        /* Build the search form. */
+        $queryID       = $browseType == 'bysearch' ? (int)$param : 0;
+        $actionURL     = $this->createLink('personnel', 'accessible', "pargramID=$programID&deptID=$deptID&browseType=bysearch&quertID=myQueryID");
+        $personnelList = $this->personnel->getAccessiblePersonnel($programID, $deptID, $browseType, $queryID);
 
         /* Set the pager. */
         $this->app->loadClass('pager', true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $recTotal      = count($personnelList);
+        $pager         = new pager($recTotal, $recPerPage, $pageID);
+        $personnelList = array_chunk($personnelList, $pager->recPerPage);
 
-        /* Build the search form. */
-        $queryID   = $browseType == 'bysearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('personnel', 'accessible', "pargramID=$programID&deptID=$deptID&browseType=bysearch&quertID=myQueryID");
         $this->config->personnel->accessible->search['params']['role']['values']   = $this->lang->user->roleList;
         $this->config->personnel->accessible->search['params']['gender']['values'] = $this->lang->user->genderList;
         $this->personnel->buildSearchForm($queryID, $actionURL);
@@ -54,7 +58,7 @@ class personnel extends control
         $this->view->pager         = $pager;
         $this->view->param         = $param;
         $this->view->browseType    = $browseType;
-        $this->view->personnelList = $this->personnel->getAccessiblePersonnel($programID, $deptID, $browseType, $queryID, $pager);
+        $this->view->personnelList = empty($personnelList) ? $personnelList : $personnelList[$pageID - 1];
         $this->view->deptList      = $this->loadModel('dept')->getOptionMenu();
         $this->view->dept          = $this->dept->getByID($deptID);
         $this->view->deptTree      = $this->dept->getTreeMenu($deptID = 0, array(new personnelModel, 'createMemberLink'), $programID);
@@ -70,13 +74,13 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function putInto($programID = 0)
+    public function invest($programID = 0)
     {
-        $this->setProgramNavMenu($programID);
+        $this->loadModel('program')->setMenu($programID);
 
-        $this->view->title          = $this->lang->personnel->putInto;
-        $this->view->position[]     = $this->lang->personnel->putInto;
-        $this->view->inputPersonnel = $this->personnel->getInputPersonnel($programID);
+        $this->view->title      = $this->lang->personnel->invest;
+        $this->view->position[] = $this->lang->personnel->invest;
+        $this->view->investList = $this->personnel->getInvest($programID);
 
         $this->display();
     }
@@ -92,32 +96,33 @@ class personnel extends control
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  int    $programID
-     * @param  string $from       PRJ|pgmbrowse|pgmproject
+     * @param  string $from       project|program|programproject
      * @access public
      * @return void
      */
     public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0, $from = '')
     {
-        if($module == 'personnel') $this->setProgramNavMenu($objectID);
-
-        if($module == 'product')
+        if($this->app->openApp == 'program')
         {
-            $moduleIndex = array_search('product', $this->lang->noMenuModule);
-            if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
+            $this->loadModel('program')->setMenu($objectID);
+        }
+        else if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
         }
 
         /* Load lang and set session. */
         $this->app->loadLang('user');
-        $this->app->session->set('whitelistBrowse', $this->app->getURI(true));
+        $this->app->session->set('whitelistList', $this->app->getURI(true), $this->app->openApp);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set back link. */
-        $goback = $this->session->PRJBrowse ? $this->session->PRJBrowse : $this->createLink('program', 'PRJWhitelist', "projectID=$objectID");
-        if($from == 'pgmbrowse')  $goback = $this->createLink('program', 'PGMBrowse');
-        if($from == 'pgmproject') $goback = $this->session->PGMProject ? $this->session->PGMProject : $this->createLink('program', 'PGMProject', "programID=$programID");
+        $goback = $this->session->projectList ? $this->session->projectList : $this->createLink('program', 'whitelist', "projectID=$objectID");
+        if($from == 'program')  $goback = $this->createLink('program', 'browse');
+        if($from == 'programproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID=$programID");
 
         $this->view->title      = $this->lang->personnel->whitelist;
         $this->view->position[] = $this->lang->personnel->whitelist;
@@ -142,23 +147,33 @@ class personnel extends control
      * @param  string  $objectType  program|project|product|sprint
      * @param  string  $module
      * @param  int     $programID
-     * @param  string  $from        PRJ|pgmbrowse|pgmproject
+     * @param  string  $from        project|program|programproject
      * @access public
      * @return void
      */
     public function addWhitelist($objectID = 0, $deptID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
-        if($module == 'personnel') $this->setProgramNavMenu($objectID);
-        $this->app->loadLang('project');
+        if($this->app->openApp == 'program')
+        {
+            $this->loadModel('program')->setMenu($objectID);
+        }
+        else if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
+        }
+
+        $this->app->loadLang('execution');
 
         if($_POST)
         {
             $this->personnel->addWhitelist($objectType, $objectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
-            $locateLink = $this->session->whitelistBrowse ? $this->session->whitelistBrowse : $this->createLink($module, 'whitelist', "objectID=$objectID");
-            $openGroup = $module == 'program' ? ($from == 'PRJ' || $from == 'my' ? '#open=project' : '#open=program') : '';
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $openGroup));
+            $this->loadModel('action')->create('whitelist', $objectID, 'managedWhitelist', '', $objectType);
+
+            $locateLink = $this->session->whitelistList ? $this->session->whitelistList : $this->createLink($module, 'whitelist', "objectID=$objectID");
+            $openApp = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $openApp));
         }
 
         $this->loadModel('dept');
@@ -190,11 +205,11 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function unbindWhielist($id = 0, $confirm = 'no')
+    public function unbindWhitelist($id = 0, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhielist',"id=$id&confirm=yes")));
+            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhitelist',"id=$id&confirm=yes")));
         }
         else
         {
@@ -210,23 +225,9 @@ class personnel extends control
             if($acl->objectType == 'product') $this->personnel->deleteProgramWhitelist($acl->objectID, $acl->account);
             if($acl->objectType == 'sprint')  $this->personnel->deleteProjectWhitelist($acl->objectID, $acl->account);
 
+            $this->loadModel('action')->create('whitelist', $acl->objectID, 'managedWhitelist', '', $acl->objectType);
+
             die(js::reload('parent'));
         }
-    }
-
-    /*
-     * Setting up the program's navigation menu.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function setProgramNavMenu($programID = 0)
-    {
-        $this->loadModel('program');
-        $this->lang->navGroup->program       = 'program';
-        $this->lang->program->switcherMenu   = $this->program->getPGMSwitcher($programID, true);
-        $this->lang->program->mainMenuAction = $this->program->getPGMMainAction();
-        $this->program->setPGMViewMenu($programID);
     }
 }

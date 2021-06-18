@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('storyType', $storyType);?>
+<?php js::set('app', $app->openApp);?>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
     <h2><?php echo $lang->story->common . $lang->colon . $lang->story->batchClose;?></h2>

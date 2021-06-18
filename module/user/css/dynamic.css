@@ -17,4 +17,4 @@
 .dynamic.active .dynamic-date:before {background-color: #00a9fc;}
 .dynamic.collapsed .timeline {max-height: 58px;}
 .dynamic.collapsed .timeline > li + li {display: none;}
-.dynamic.collapsed .dynamic-btn > .icon:before {content: '\f0d8'; }
+.dynamic.collapsed .dynamic-btn > .icon:before {content: '\f0d8';}

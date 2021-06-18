@@ -6,6 +6,9 @@ $lang->jenkins->edit          = '編輯Jenkins';
 $lang->jenkins->delete        = '刪除';
 $lang->jenkins->confirmDelete = '確認刪除該Jenkins嗎？';
 
+$lang->jenkins->browseAction = 'Jenkins列表';
+$lang->jenkins->deleteAction = '刪除Jenkins';
+
 $lang->jenkins->id       = 'ID';
 $lang->jenkins->name     = '名稱';
 $lang->jenkins->url      = '服務地址';

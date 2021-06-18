@@ -23,6 +23,9 @@ js::set('flow', $config->global->flow);
 js::set('stepsRequired', $stepsRequired);
 js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
 js::set('isStepsTemplate', $isStepsTemplate);
+js::set('oldProjectID', $projectID);
+js::set('blockID', $blockID);
+js::set('moduleID', $moduleID);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
@@ -69,11 +72,14 @@ js::set('isStepsTemplate', $isStepsTemplate);
               </div>
             </td>
           </tr>
-          <?php $showProject = (strpos(",$showFields,", ',project,') !== false);?>
+          <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
           <tr>
-            <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
+            <th>
+              <?php if($config->systemMode == 'classic') $lang->bug->project = $lang->bug->execution;?>
+              <?php echo ($showExecution) ? $lang->bug->project : $lang->bug->type;?>
+            </th>
 
-            <?php if(!$showProject):?>
+            <?php if(!$showExecution):?>
             <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
             <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
             <td>
@@ -90,8 +96,26 @@ js::set('isStepsTemplate', $isStepsTemplate);
               </div>
             </td>
             <?php endif;?>
-            <?php if($showProject):?>
-            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $executionID, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
+            <?php if($showExecution):?>
+            <td>
+              <?php if($config->systemMode == 'new'):?>
+              <div class='table-row'>
+                <div class='table-col' id='projectBox'>
+                  <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
+                </div>
+                <div class='table-col'>
+                  <div class='input-group' id='executionIdBox'>
+                    <span class='input-group-addon fix-border'><?php echo $lang->bug->execution;?></span>
+                    <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
+                  </div>
+                </div>
+              </div>
+              <?php else:?>
+              <div class='input-group' id='executionIdBox'>
+                <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
+              </div>
+              <?php endif;?>
+            </td>
             <?php endif;?>
             <td>
               <div class='input-group' id='buildBox'>
@@ -106,7 +130,7 @@ js::set('isStepsTemplate', $isStepsTemplate);
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
             <td>
               <div class='input-group'>
-                <?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?>
+                <?php echo html::select('assignedTo', $productMembers, $assignedTo, "class='form-control chosen'");?>
                 <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
               </div>
             </td>
@@ -120,7 +144,7 @@ js::set('isStepsTemplate', $isStepsTemplate);
             </td>
           </tr>
           <?php endif;?>
-          <?php if($showProject):?>
+          <?php if($showExecution):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
           <tr>
@@ -302,9 +326,9 @@ js::set('isStepsTemplate', $isStepsTemplate);
           <tr>
             <td colspan="3" class="text-center form-actions">
               <?php echo html::submitButton();?>
-              <?php if($caseID == 0) echo html::backButton();?>
+              <?php echo html::backButton();?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
-              <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', $testtask ? (int)$testtask->id : 0);?>
+              <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', empty($testtask) ? 0 : $testtask->id);?>
             </td>
           </tr>
         </tfoot>
@@ -313,6 +337,8 @@ js::set('isStepsTemplate', $isStepsTemplate);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
+<?php js::set('bugExecution', $lang->bug->execution);?>
+<?php js::set('systemMode', $config->systemMode);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>

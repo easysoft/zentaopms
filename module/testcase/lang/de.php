@@ -74,6 +74,8 @@ $lang->testcase->ignore           = 'Ignore';
 $lang->testcase->fromTesttask     = 'From Test Request';
 $lang->testcase->fromCaselib      = 'From CaseLib';
 $lang->testcase->deleted          = 'Deleted';
+$lang->testcase->browseUnits      = 'Unit Test';
+
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';
@@ -213,13 +215,18 @@ $lang->testcase->searchStories = 'Story suchen';
 $lang->testcase->selectLib     = 'Bibliothek wählen';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib  = array('main' => '$date, importiert von <strong>$actor</strong> aus Bibliothek <strong>$extra</strong>.');
-$lang->testcase->action->reviewed = array('main' => '$date, überprüft von <strong>$actor</strong> und Prüfungsergebnis ist <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->testcase->action->fromlib               = array('main' => '$date, importiert von <strong>$actor</strong> aus Bibliothek <strong>$extra</strong>.');
+$lang->testcase->action->reviewed              = array('main' => '$date, überprüft von <strong>$actor</strong> und Prüfungsergebnis ist <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = 'Wartend';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
-$lang->testcase->featureBar['browse']['group']       = '';
+$lang->testcase->featureBar['browse']['group']       = 'Group View';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
-$lang->testcase->featureBar['browse']['zerocase']    = '';
+$lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
+$lang->testcase->featureBar['browse']['browseunits'] = 'Unit Test';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

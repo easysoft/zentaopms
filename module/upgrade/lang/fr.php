@@ -25,7 +25,7 @@ $lang->upgrade->warnningContent = <<<EOT
 <pre>
 1. Utilisez phpMyAdmin pour faire la sauvegarde.
 2. Utilisez une commande mysql pour faire la sauvegarde.
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> 
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
    Changez le texte en rouge par les code user et le nom de la base qui correspondent.
    e.g. mysqldump -u root -p zentao >zentao.bak
 </pre>
@@ -52,7 +52,9 @@ $lang->upgrade->noticeSQL     = 'Votre base de donnée est inconsistente avec le
 $lang->upgrade->afterDeleted  = "Le fichier n'est pas supprimé. Recommencez après l'avoir supprimé.";
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->to15Guide     = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
 <p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
 <ol>
@@ -99,15 +101,15 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>These iterations can be selected to fall under a new project.</p>
 EOD;
 
-$lang->upgrade->line      = 'Product Line';
-$lang->upgrade->program   = 'Merge Project';
-$lang->upgrade->existPGM  = 'Existing programs';
-$lang->upgrade->existPRJ  = 'Existing projects';
-$lang->upgrade->existLine = 'Existing' . $lang->productCommon . ' lines';
-$lang->upgrade->product   = $lang->productCommon;
-$lang->upgrade->project   = 'Iteration';
-$lang->upgrade->repo      = 'Repo';
-$lang->upgrade->mergeRepo = 'Merge Repo';
+$lang->upgrade->line         = 'Product Line';
+$lang->upgrade->program      = 'Merge Project';
+$lang->upgrade->existProgram = 'Existing programs';
+$lang->upgrade->existProject = 'Existing projects';
+$lang->upgrade->existLine    = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->product      = $lang->productCommon;
+$lang->upgrade->project      = 'Iteration';
+$lang->upgrade->repo         = 'Repo';
+$lang->upgrade->mergeRepo    = 'Merge Repo';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
@@ -117,5 +119,9 @@ $lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select m
 $lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one large project, or merge them independently";
 $lang->upgrade->mergeByMoreLink    = "Iteration that relates multiple products: select which product the iteration belongs to.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
+
+$lang->upgrade->needBuild4Add    = 'Full text retrieval has been added in this upgrad. Please create an index.';
+$lang->upgrade->needBuild4Adjust = 'Full text retrieval has been adjusted. Please create an index.';
+$lang->upgrade->buildIndex       = 'Create Index';
 
 include dirname(__FILE__) . '/version.php';

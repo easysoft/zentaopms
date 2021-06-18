@@ -11,10 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('openApp', $app->openApp);?>
 <style>
-li.story-item > .tree-actions .tree-action[data-type=sort]{display:none;}
-li.story-item > .tree-actions .tree-action[data-type=edit]{display:none;}
-li.story-item > .tree-actions .tree-action[data-type=delete]{display:none;}
+li.story-item > .tree-actions .tree-action[data-type=sort] {display: none;}
+li.story-item > .tree-actions .tree-action[data-type=edit] {display: none;}
+li.story-item > .tree-actions .tree-action[data-type=delete] {display: none;}
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -50,10 +51,10 @@ li.story-item > .tree-actions .tree-action[data-type=delete]{display:none;}
             <tr>
               <td class="text-middle text-right with-padding">
                 <?php
-                echo "<span>" . html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&viewType=task"), $root->name) . "<i class='icon icon-angle-right muted'></i></span>";
+echo "<span>" . html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&viewType=task"), $root->name, '', "data-app='{$app->openApp}'") . "<i class='icon icon-angle-right muted'></i></span>";
                 foreach($parentModules as $module)
                 {
-                    echo "<span>" . html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&moduleID=$module->id"), $module->name) . " <i class='icon icon-angle-right muted'></i></span>";
+                    echo "<span>" . html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&moduleID=$module->id"), $module->name, '', "data-app='{$app->openApp}'") . " <i class='icon icon-angle-right muted'></i></span>";
                 }
                 ?>
               </td>
@@ -138,7 +139,7 @@ $(function()
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
 
             var title = (item.type === 'product' ? '<i class="icon icon-cube text-muted"></i> ' : '') + item.name;
-            var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browsetask', 'rootID=<?php echo $rootID ?>&viewType=task&moduleID={0}'.format(item.id)) + '">' + title + '</a>') : ('<span class="tree-toggle">' + title + '</span>');
+            var link = item.id !== undefined ? ('<a data-app=' + openApp + ' href="' + createLink('tree', 'browsetask', 'rootID=<?php echo $rootID ?>&viewType=task&moduleID={0}'.format(item.id)) + '">' + title + '</a>') : ('<span class="tree-toggle">' + title + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'task')
             {

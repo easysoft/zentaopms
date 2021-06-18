@@ -20,7 +20,7 @@
     <table class='table table-fixed table-form table-bordered'>
       <thead>
         <tr>
-          <th class='w-id'>   <?php  echo $lang->idAB;?></th> 
+          <th class='w-id'>   <?php  echo $lang->idAB;?></th>
           <th class='w-100px'><?php echo $lang->testcase->module;?></th>
           <th class='w-200px'><?php echo $lang->testcase->title;?></th>
           <th class='precondition w-90px'><?php echo $lang->testcase->precondition;?></th>
@@ -28,14 +28,20 @@
           <th><?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
         </tr>
       </thead>
-      <?php foreach($caseIDList as $caseID):?>
-      <?php if($cases[$caseID]->status == 'wait') continue;?>
-      <?php if(!$productID) $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);?>
+      <?php foreach($cases as $caseID => $case):?>
+      <?php if($case->status == 'wait') continue;?>
+      <?php
+      if(!$productID)
+      {
+          echo html::hidden("caseIDList[$case->id]", $caseID);
+          $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($case->product, $viewType = 'case', $startModuleID = 0);
+      }
+       ?>
       <tr class='text-center'>
-        <td><?php echo $caseID . html::hidden("version[$caseID]", $cases[$caseID]->version)?></td>
-        <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
-        <td class='text-left wordwrap'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?></td>
-        <td class='text-left precondition wordwrap'><?php echo "<span title='{$cases[$caseID]->precondition}'>{$cases[$caseID]->precondition}</span>"?></td>
+        <td><?php echo $caseID . html::hidden("version[$caseID]", $case->version)?></td>
+        <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$case->module] . "'>" . $moduleOptionMenu[$case->module] . "</span>"?></td>
+        <td class='text-left wordwrap'><?php echo "<span title='{$case->title}'>{$case->title}</span>"?></td>
+        <td class='text-left precondition wordwrap'><?php echo "<span title='{$case->precondition}'>{$case->precondition}</span>"?></td>
         <td class='text-left'><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'", 'block')?></td>
         <td>
           <?php if(!empty($steps[$caseID])):?>
@@ -66,7 +72,7 @@
           <span class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][]", '', "class='form-control'");?></span>
           <?php endif;?>
         </td>
-      </tr>  
+      </tr>
       <?php endforeach;?>
       <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
     </table>

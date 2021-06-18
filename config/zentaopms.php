@@ -136,7 +136,9 @@ define('TABLE_EXPECT',        '`' . $config->db->prefix . 'expect`');
 define('TABLE_STAKEHOLDER',   '`' . $config->db->prefix . 'stakeholder`');
 define('TABLE_STORY',         '`' . $config->db->prefix . 'story`');
 define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');
+define('TABLE_STORYREVIEW',   '`' . $config->db->prefix . 'storyreview`');
 define('TABLE_STORYSTAGE',    '`' . $config->db->prefix . 'storystage`');
+define('TABLE_STORYESTIMATE', '`' . $config->db->prefix . 'storyestimate`');
 define('TABLE_PRODUCTPLAN',   '`' . $config->db->prefix . 'productplan`');
 define('TABLE_PLANSTORY',     '`' . $config->db->prefix . 'planstory`');
 define('TABLE_RELEASE',       '`' . $config->db->prefix . 'release`');
@@ -149,6 +151,7 @@ define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
 define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');
 define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectstory`');
+define('TABLE_PROJECTCASE',   '`' . $config->db->prefix . 'projectcase`');
 define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',        '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
@@ -192,8 +195,8 @@ if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefi
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
-$config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['productplan'] = TABLE_PRODUCTPLAN;
+$config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['release']     = TABLE_RELEASE;
 $config->objectTables['program']     = TABLE_PROJECT;
 $config->objectTables['project']     = TABLE_PROJECT;
@@ -218,6 +221,7 @@ $config->objectTables['entry']       = TABLE_ENTRY;
 $config->objectTables['webhook']     = TABLE_WEBHOOK;
 $config->objectTables['stakeholder'] = TABLE_STAKEHOLDER;
 $config->objectTables['job']         = TABLE_JOB;
+$config->objectTables['team']        = TABLE_TEAM;
 
 /* Program privs.*/
 $config->programPriv = new stdclass();

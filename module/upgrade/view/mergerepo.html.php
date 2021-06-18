@@ -43,7 +43,7 @@
                 </tr>
                 <?php else:?>
                 <tr>
-                  <th class='w-100px'><?php echo $lang->upgrade->existPGM;?></th>
+                  <th class='w-100px'><?php echo $lang->upgrade->existProgram;?></th>
                   <td><?php echo html::select("program", $programs, '', "class='form-control chosen'");?></td>
                 </tr>
                 <tr>

@@ -38,9 +38,10 @@ $formId = 'searchForm-' . uniqid('');
 
 #queryBox select[id^="operator"] {padding-right:2px; padding-left:5px;}
 #queryBox select#groupAndOr {padding-right:2px; padding-left:5px;}
-#queryBox .chosen-container-single .chosen-single>span {margin-right:5px;}
+#queryBox .chosen-container-single .chosen-single > span {margin-right:5px;}
 
 #queryBox .form-actions .btn {margin-right: 5px;}
+@media screen and (max-width: 1366px) { #userQueries {width: 130px!important;} }
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
 #userQueries ul {list-style: none; padding-left: 0; margin: 0; max-height:75px; overflow:auto;}
@@ -55,13 +56,13 @@ $formId = 'searchForm-' . uniqid('');
 #<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 100px;}
 #queryBox.show {min-height: 66px;}
 <?php endif;?>
-#toggle-queries{position: absolute; right: 0px; top: 40px; width: 13px; background: #79cdfb; border-radius: 6px; height: 30px;cursor: pointer}
-#toggle-queries .icon{ position: absolute; top: 6px; right: -2px; color: #fff;}
+#toggle-queries {position: absolute; right: 0px; top: 40px; width: 13px; background: #79cdfb; border-radius: 6px; height: 30px;cursor: pointer}
+#toggle-queries .icon {position: absolute; top: 6px; right: -2px; color: #fff;}
 
-.fieldWidth{width:130px !important;}
-.operatorWidth{width:110px !important;}
-html[lang^='zh-'] .fieldWidth{width:110px !important;}
-html[lang^='zh-'] .operatorWidth{width:90px !important;}
+.fieldWidth {width: 130px !important;}
+.operatorWidth {width: 110px !important;}
+html[lang^='zh-'] .fieldWidth {width: 110px !important;}
+html[lang^='zh-'] .operatorWidth {width: 90px !important;}
 </style>
 <?php if($style != 'simple'):?>
   <div id='toggle-queries'>

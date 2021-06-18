@@ -3,43 +3,43 @@
 #storySearchInput {padding-left: 30px;}
 
 #searchStories .modal-body {height: 300px; overflow-y: auto !important; padding: 0;}
-#searchResult {padding-left: 0; list-style: none; width: 100%}
-#searchResult > li {display: block}
-#searchResult > li.tip {padding: 6px 15px; color: #808080}
-#searchResult > li.loading {text-align: center; padding: 50px}
+#searchResult {padding-left: 0; list-style: none; width: 100%;}
+#searchResult > li {display: block;}
+#searchResult > li.tip {padding: 6px 15px; color: #808080;}
+#searchResult > li.loading {text-align: center; padding: 50px;}
 #searchResult > li.loading > .icon-spinner:before {font-size: 28px;}
-#searchResult > li > a {display: block; padding: 6px 15px; color: #333; border-bottom: 1px solid #e5e5e5}
+#searchResult > li > a {display: block; padding: 6px 15px; color: #333; border-bottom: 1px solid #e5e5e5;}
 #searchResult > li > a:hover, #searchResult > li > a.selected {color: #1a4f85; background-color: #ddd;}
 
 #story_chosen .chosen-results > li.no-results {cursor: pointer;}
 #story_chosen .chosen-results > li.no-results:hover {color: #1a4f85; background-color: #ddd;}
 #story_chosen .chosen-results > li.no-results > span {font-weight: bold;}
 
-.row .col-sm-10{width:89%;}
-.row .col-sm-2{padding-left:0px; width:11%;}
+.row .col-sm-10 {width: 89%;}
+.row .col-sm-2 {padding-left: 0px; width: 11%;}
 
 #module + .chosen-container-single .chosen-single,
 #stage + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0;}
 #module + .chosen-container-single .chosen-single {border-top-right-radius: 0; border-bottom-right-radius: 0;}
 
-.dropdown-pris > .btn {background-color: #fff; text-shadow: none}
+.dropdown-pris > .btn {background-color: #fff; text-shadow: none;}
 
-#moduleIdBox .input-group-btn > .btn {margin-left: -1px!important;}
-#moduleIdBox .input-group-btn > .btn:first-child {border-left: none}
+#moduleIdBox .input-group-btn > .btn {margin-left: -1px !important;}
+#moduleIdBox .input-group-btn > .btn:first-child {border-left: none;}
 
 .chosen-container {max-width: 1000px;}
 
 .minw-80px {min-width: 80px;}
 
-.colorpicker.input-group-btn > .btn {border-right: none}
+.colorpicker.input-group-btn > .btn {border-right: none;}
 
 #branch {border-left-width: 0px;}
 
-.input-group-addon.w-80px{min-width:80px;}
+.input-group-addon.w-80px {min-width: 80px;}
 
 .title-group.required:after {display: none;}
 .title-group.required > .required:after {display: block; right: 29px; top: 5px;}
-.pri-selector > .btn {padding: 5px 8px!important; width: 100%;}
+.pri-selector > .btn {padding: 5px 8px !important; width: 100%;}
 .pri-selector > .dropdown-menu {padding: 10px;}
 
-.title-group .has-icon-right{min-width:700px}
+.title-group .has-icon-right {min-width: 700px;}

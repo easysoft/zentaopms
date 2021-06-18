@@ -12,31 +12,42 @@
 class action extends control
 {
     /**
-     * Trash 
-     * 
-     * @param  string $type all|hidden 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Trash.
+     *
+     * @param  string $type all|hidden
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
     public function trash($type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('backup');
+
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('projectList',     $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
-        $this->session->set('docList',         $uri);
+        $this->session->set('productList',        $uri, 'product');
+        $this->session->set('productPlanList',    $uri, 'product');
+        $this->session->set('storyList',          $uri, 'product');
+        $this->session->set('releaseList',        $uri, 'product');
+        $this->session->set('programList',        $uri, 'program');
+        $this->session->set('projectList',        $uri, 'project');
+        $this->session->set('executionList',      $uri, 'execution');
+        $this->session->set('taskList',           $uri, 'execution');
+        $this->session->set('buildList',          $uri, 'execution');
+        $this->session->set('bugList',            $uri, 'qa');
+        $this->session->set('caseList',           $uri, 'qa');
+        $this->session->set('testtaskList',       $uri, 'qa');
+        $this->session->set('docList',            $uri, 'doc');
+        $this->session->set('opportunityList',    $uri, 'project');
+        $this->session->set('riskList',           $uri, 'project');
+        $this->session->set('trainplanList',      $uri, 'project');
+        $this->session->set('roomList',           $uri, 'admin');
+        $this->session->set('researchplanList',   $uri, 'project');
+        $this->session->set('researchreportList', $uri, 'project');
+        $this->session->set('meetingList',        $uri, 'project');
 
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
@@ -60,8 +71,8 @@ class action extends control
 
     /**
      * Undelete an object.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -72,9 +83,9 @@ class action extends control
     }
 
     /**
-     * Hide an deleted object. 
-     * 
-     * @param  int    $actionID 
+     * Hide an deleted object.
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -86,8 +97,8 @@ class action extends control
 
     /**
      * Hide all deleted objects.
-     * 
-     * @param  string $confirm 
+     *
+     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
@@ -105,10 +116,10 @@ class action extends control
     }
 
     /**
-     * Comment. 
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
+     * Comment.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
      * @return void
      */
@@ -127,8 +138,8 @@ class action extends control
 
     /**
      * Edit comment of a action.
-     * 
-     * @param  int    $actionID 
+     *
+     * @param  int    $actionID
      * @access public
      * @return void
      */

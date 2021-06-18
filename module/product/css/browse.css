@@ -1,20 +1,20 @@
-#createActionMenu .dropdown-menu{width: 100%}
-#productStoryForm table tbody tr td{overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#createActionMenu .dropdown-menu {width: 100%;}
+#productStoryForm table tbody tr td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 .dropdown-menu.with-search {padding: 0; min-width: 150px; overflow: hidden; max-height: 302px;}
-.dropdown-menu > .menu-search .input-group {width:100%;}
-.dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666}
-.dropdown-menu > .menu-search .form-control {border: none!important; box-shadow: none!important; border-top: 1px solid #ddd!important;}
+.dropdown-menu > .menu-search .input-group {width: 100%;}
+.dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666;}
+.dropdown-menu > .menu-search .form-control {border: none !important; box-shadow: none !important; border-top: 1px solid #ddd !important;}
 .dropdown-list {display: block; padding: 0; max-height: 270px; overflow-y: auto;}
 .dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
 .dropdown-list > li > a:hover,
-.dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
+.dropdown-list > li > a:focus {color: #1a4f85; text-decoration: none; background-color: #ddd;}
 
-.pl-5px{padding-left:5px;}
-.popoverStage{position:relative;}
-.popoverStage .icon-caret-down{position:absolute;}
-a.removeModule{color:#ddd}
-a.removeModule:hover{color:red}
+.pl-5px {padding-left: 5px;}
+.popoverStage {position: relative;}
+.popoverStage .icon-caret-down {position: absolute;}
+a.removeModule {color: #ddd;}
+a.removeModule:hover {color: red;}
 
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
 .table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
@@ -22,8 +22,9 @@ a.removeModule:hover{color:red}
 .table td.has-child > a:not(.story-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .table td.has-child > .story-toggle {color: #838a9d; position: relative; top: 1px;}
 .table td.has-child > .story-toggle:hover {color: #006af1; cursor: pointer;}
-.table td.has-child > .story-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); -o-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); transform: rotate(-90deg);}
+.table td.has-child > .story-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -o-transform: rotate(-90deg); -webkit-transform: rotate(-90deg); transform: rotate(-90deg);}
 .table td.has-child > .story-toggle > .icon:before {text-align: left;}
-.table td.has-child > .story-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
+.table td.has-child > .story-toggle.collapsed > .icon {-ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);}
+.table td.c-estimate {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
-@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
+@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}

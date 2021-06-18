@@ -17,8 +17,9 @@ $sessionString .= session_name() . '=' . session_id();
   function deleteFile(fileID)
   {
       if(!fileID) return;
-      hiddenwin.location.href =createLink('file', 'delete', 'fileID=' + fileID);
+      hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
   }
+
   /* Download a file, append the mouse to the link. Thus we call decide to open the file in browser no download it. */
   function downloadFile(fileID, extension, imageWidth, fileTitle)
   {
@@ -52,7 +53,7 @@ $sessionString .= session_name() . '=' . session_id();
               $imageWidth = 0;
               if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
               {
-                  $imageSize  = getimagesize($file->realPath);
+                  $imageSize  = $this->file->getImageSize($file);
                   $imageWidth = $imageSize ? $imageSize[0] : 0;
               }
 

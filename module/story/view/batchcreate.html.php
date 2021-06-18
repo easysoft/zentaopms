@@ -13,9 +13,9 @@
 <?php include './header.html.php';?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate;?></h2>
+    <h2><?php echo $storyID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate;?></h2>
     <div class="pull-right btn-toolbar">
-      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
+      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=&plan=&type=$type")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
       <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
@@ -50,12 +50,14 @@
             <th class='col-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?>'><?php echo $lang->story->plan;?></th>
             <th class='col-name required has-btn'><?php echo $lang->story->title;?></th>
             <th class='w-150px<?php      echo zget($visibleFields, 'spec',     ' hidden') . zget($requiredFields, 'spec',     '', ' required');?>'><?php echo $lang->story->spec;?></th>
-            <th class='w-100px<?php      echo zget($visibleFields, 'source',   ' hidden') . zget($requiredFields, 'source',   '', ' required');?>'><?php echo $lang->story->source;?></th>
+            <th class='w-130px<?php      echo zget($visibleFields, 'source',   ' hidden') . zget($requiredFields, 'source',   '', ' required');?>'><?php echo $lang->story->source;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'sourceNote', '', ' required');?>'><?php echo $lang->story->sourceNote;?></th>
             <th class='w-150px<?php        echo zget($visibleFields, 'verify',   ' hidden') . zget($requiredFields, 'verify',   '', ' required');?>'><?php echo $lang->story->verify;?></th>
+            <th class='w-90px'><?php echo $lang->story->category;?></th>
             <th class='col-pri<?php      echo zget($visibleFields, 'pri',      ' hidden') . zget($requiredFields, 'pri',      '', ' required');?>'><?php echo $lang->story->pri;?></th>
             <th class='col-estimate<?php echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->story->estimate;?></th>
             <th class='col-review<?php   echo zget($visibleFields, 'review',   ' hidden') . zget($requiredFields, 'review',   '', ' required');?>'><?php echo $lang->story->needReview;?></th>
+            <th class='<?php echo zget($visibleFields, 'review',   ' hidden');?>' style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
@@ -87,12 +89,15 @@
               </div>
             </td>
             <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?>'><textarea name="spec[$id]" id="spec$id" rows="1" class="form-control autosize"></textarea></td>
-            <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select('source[$id]', $sourceList, '', "class='form-control'");?></td>
-            <td class='<?php echo zget($visibleFields, 'source', 'hidden')?>'><?php echo html::input('sourceNote[$id]', '', "class='form-control'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select('source[$id]', $sourceList, '', "class='form-control chosen' id='source_\$id'");?></td>
+            <td class='<?php echo zget($visibleFields, 'source', 'hidden')?>'><?php echo html::input('sourceNote[$id]', '', "class='form-control' id='sourceNote_\$id'");?></td>
             <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?>'><textarea name="verify[$id]" id="verify$id" rows="1" class="form-control autosize"></textarea></td>
+            <td class='text-left' style='overflow:visible'><?php echo html::select('category[$id]', $lang->story->categoryList, 'feature', "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('needReview[$id]', $lang->story->reviewList, $needReview, "class='form-control'");?></td>
+            <?php $isDisabled = $needReview ? '' : 'disabled';?>
+            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('reviewer[$id][]', $users, '', "class='form-control chosen' multiple $isDisabled");?></td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";?>
           </tr>
@@ -120,9 +125,10 @@ $(function()
         idEnd: <?php echo max((empty($titles) ? 0 : count($titles)), 9)?>,
         rowCreator: function($row, index)
         {
-            $row.find('select.chosen').each(function()
+            $row.find('select.chosen,select.picker-select').each(function()
             {
                 var $select = $(this);
+                if($select.hasClass('picker-select')) $select.parent().find('.picker').remove();
                 if(index == 0) $select.find("option[value='ditto']").remove();
                 if(index > 0) $select.val('ditto');
                 if($select.attr('id').indexOf('branch') >= 0) $select.val('<?php echo $branch;?>')
@@ -139,9 +145,17 @@ $(function()
               }
         }
     });
+
+    $(document).on('change', "#mainContent select[name^=needReview]", function()
+    {
+        select = $(this).parent('td').next('td').children("select[name^=reviewer]");
+        $(select).removeAttr('disabled');
+        if($(this).val() == 0) $(select).attr('disabled', 'disabled');
+        $(select).trigger("chosen:updated");
+    })
 });
 </script>
-<?php if(isset($project)) js::set('project', $project);?>
+<?php if(isset($execution)) js::set('execution', $execution);?>
 <?php js::set('storyType', $type);?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

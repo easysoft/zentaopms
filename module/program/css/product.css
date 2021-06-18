@@ -1,0 +1,4 @@
+.main-table thead>tr:first-of-type>th {border-left: 1px solid #ddd;}
+.main-table thead>tr>th {padding: 0px 8px; line-height: 24px;}
+tbody.sortable > tr > td > span.sort-handler {color: #999;}
+.icon-move {color: #16a8f8;}

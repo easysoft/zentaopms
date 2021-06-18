@@ -1,9 +1,9 @@
 $(function()
 {
-    $('#mainMenu input[name^="PRJMine"]').click(function()
+    $('#mainMenu input[name^="involved"]').click(function()
     {
-        var PRJMine = $(this).is(':checked') ? 1 : 0;
-        $.cookie('PRJMine', PRJMine, {expires:config.cookieLife, path:config.webRoot});
+        var involved = $(this).is(':checked') ? 1 : 0;
+        $.cookie('involved', involved, {expires:config.cookieLife, path:config.webRoot});
         window.location.reload();
     });
 });

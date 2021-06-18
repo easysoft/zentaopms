@@ -1,391 +1,230 @@
 <?php
-/**
- * The project module English file of ZenTaoPMS.
- *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
- * @version     $Id: en.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
- */
+/* Actions. */
+$lang->project->createGuide       = 'Select Template';
+$lang->project->index             = 'Dashboard';
+$lang->project->home              = 'Home';
+$lang->project->create            = 'Create Project';
+$lang->project->edit              = 'Edit';
+$lang->project->batchEdit         = 'Batch Edit Projects';
+$lang->project->view              = 'Project View';
+$lang->project->batchEdit         = 'Batch Edit';
+$lang->project->browse            = 'Projects';
+$lang->project->all               = 'All';
+$lang->project->start             = 'Start';
+$lang->project->finish            = 'Finish';
+$lang->project->suspend           = 'Suspend';
+$lang->project->delete            = 'Delete';
+$lang->project->close             = 'Close';
+$lang->project->activate          = 'Activate';
+$lang->project->group             = 'Privilege Group';
+$lang->project->createGroup       = 'Create Group';
+$lang->project->editGroup         = 'Edit Group';
+$lang->project->copyGroup         = 'Copy Group';
+$lang->project->manageView        = 'Manage View';
+$lang->project->managePriv        = 'Manage Privilege';
+$lang->project->manageMembers     = 'Manage Team';
+$lang->project->export            = 'Export';
+$lang->project->addProduct        = 'Add Product';
+$lang->project->manageGroupMember = 'Manage Group';
+$lang->project->moduleSetting     = 'List Settings';
+$lang->project->moduleOpen        = 'Program Name';
+$lang->project->dynamic           = 'Dynamic';
+$lang->project->execution         = 'Execution';
+$lang->project->qa                = 'QA';
+$lang->project->bug               = 'Bug List';
+$lang->project->testcase          = 'Case List';
+$lang->project->testtask          = 'Test Task';
+$lang->project->build             = 'Build';
+$lang->project->updateOrder       = 'Order';
+$lang->project->sort              = 'Order';
+$lang->project->whitelist         = 'Project Whitelist';
+$lang->project->addWhitelist      = 'Project Add Whitelist';
+$lang->project->unbindWhitelist   = 'Project Remove Whitelist';
+$lang->project->manageProducts    = 'Manage Products';
+$lang->project->copyTitle         = 'Please select an project to copy';
+$lang->project->errorSameProducts = 'Project cannot be associated with multiple identical products.';
+$lang->project->errorNoProducts   = 'At least one product is associated';
+$lang->project->copyNoProject     = 'There are no items available to copy.';
+$lang->project->searchByName      = 'Enter the project name to retrieve';
+$lang->project->deleted           = 'Deleted';
+$lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
+$lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
+$lang->project->testreport        = 'Test Report';
+
 /* Fields. */
-$lang->project->common         = $lang->executionCommon;
-$lang->project->allProjects    = 'All ' . $lang->executionCommon . 's';
-$lang->project->id             = $lang->executionCommon . ' ID';
-$lang->project->type           = 'Type';
-$lang->project->name           = "{$lang->executionCommon} Name";
-$lang->project->code           = 'Code';
-$lang->project->statge         = 'Stage';
-$lang->project->pri            = 'Priority';
-$lang->project->openedBy       = 'OpenedBy';
-$lang->project->openedDate     = 'OpenedDate';
-$lang->project->closedBy       = 'ClosedBy';
-$lang->project->closedDate     = 'ClosedDate';
-$lang->project->canceledBy     = 'CanceledBy';
-$lang->project->canceledDate   = 'CanceledDate';
-$lang->project->begin          = 'Begin';
-$lang->project->end            = 'End';
-$lang->project->dateRange      = 'Duration';
-$lang->project->to             = 'To';
-$lang->project->days           = 'Available Days';
-$lang->project->day            = ' Days';
-$lang->project->workHour       = ' Hours';
-$lang->project->workHourUnit   = 'H';
-$lang->project->totalHours     = 'Available Hours';
-$lang->project->totalDays      = 'Available Days';
-$lang->project->status         = 'Status';
-$lang->project->subStatus      = 'Sub Status';
-$lang->project->desc           = 'Description';
-$lang->project->owner          = 'Owner';
-$lang->project->PO             = "{$lang->executionCommon} Owner";
-$lang->project->PM             = "{$lang->executionCommon} Manager";
-$lang->project->QD             = 'Test Manager';
-$lang->project->RD             = 'Release Manager';
-$lang->project->qa             = 'Test';
-$lang->project->release        = 'Release';
-$lang->project->acl            = 'Access Control';
-$lang->project->teamname       = 'Team Name';
-$lang->project->order          = "Rank {$lang->executionCommon}";
-$lang->project->orderAB        = "Rank";
-$lang->project->products       = "Link {$lang->productCommon}";
-$lang->project->whitelist      = 'Whitelist';
-$lang->project->addWhitelist   = 'Add Whitelist';
-$lang->project->unbindWhielist = 'Remove Whitelist';
-$lang->project->totalEstimate  = 'Estimates';
-$lang->project->totalConsumed  = 'Cost';
-$lang->project->totalLeft      = 'Left';
-$lang->project->progress       = ' Progress';
-$lang->project->hours          = 'Estimates: %s, Cost: %s, Left: %s.';
-$lang->project->viewBug        = 'Bugs';
-$lang->project->noProduct      = "No {$lang->productCommon} yet.";
-$lang->project->createStory    = "Create Story";
-$lang->project->storyTitle     = "Story Name";
-$lang->project->all            = "All {$lang->executionCommon}s";
-$lang->project->undone         = 'Unfinished ';
-$lang->project->unclosed       = 'Unclosed';
-$lang->project->typeDesc       = "OPS {$lang->executionCommon} has no {$lang->SRCommon}, Bug, Build, or Test features.";
-$lang->project->mine           = 'Mine: ';
-$lang->project->other          = 'Others:';
-$lang->project->deleted        = 'Deleted';
-$lang->project->delayed        = 'Delayed';
-$lang->project->product        = $lang->project->products;
-$lang->project->readjustTime   = "Adjust {$lang->executionCommon} Begin and End";
-$lang->project->readjustTask   = 'Adjust Task Begin and End';
-$lang->project->effort         = 'Effort';
-$lang->project->relatedMember  = 'Team';
-$lang->project->watermark      = 'Exported by ZenTao';
-$lang->project->burnXUnit      = '(Date)';
-$lang->project->burnYUnit      = '(Hours)';
-$lang->project->waitTasks      = 'Waiting Tasks';
-$lang->project->viewByUser     = 'By User';
-$lang->project->oneProduct     = "Only one stage can be linked {$lang->productCommon}";
-$lang->project->noLinkProduct  = "Stage not linked {$lang->productCommon}";
-$lang->project->recent         = 'Recent visits: ';
+$lang->project->common             = 'Project';
+$lang->project->stage              = 'Stage';
+$lang->project->PM                 = 'Manager';
+$lang->project->name               = 'Name';
+$lang->project->category           = 'Category';
+$lang->project->desc               = 'Description';
+$lang->project->code               = 'Code';
+$lang->project->copy               = 'Copy';
+$lang->project->begin              = 'Begin';
+$lang->project->end                = 'End';
+$lang->project->status             = 'Status';
+$lang->project->budget             = 'Budget';
+$lang->project->template           = 'Template';
+$lang->project->estimate           = 'Estimates';
+$lang->project->consume            = 'Cost';
+$lang->project->surplus            = 'Left';
+$lang->project->progress           = 'Progress';
+$lang->project->dateRange          = 'Duration';
+$lang->project->to                 = ' to ';
+$lang->project->realEnd            = 'Actual End';
+$lang->project->realBegan          = 'Actual Began';
+$lang->project->bygrid             = 'Kanban';
+$lang->project->bylist             = 'List';
+$lang->project->mine               = 'My';
+$lang->project->myProject          = 'Mine: ';
+$lang->project->other              = 'Others: ';
+$lang->project->acl                = 'Access control';
+$lang->project->setPlanduration    = 'Set Duration';
+$lang->project->auth               = 'Access Control';
+$lang->project->durationEstimation = 'Estimated Workload';
+$lang->project->leftStories        = 'Left Stories';
+$lang->project->leftTasks          = 'Left Tasks';
+$lang->project->leftBugs           = 'Left Bugs';
+$lang->project->children           = 'Child Project';
+$lang->project->parent             = 'Parent Program';
+$lang->project->allStories         = 'All Stories';
+$lang->project->doneStories        = 'Finished Stories';
+$lang->project->doneProjects       = 'Finished';
+$lang->project->allInput           = 'Total Input';
+$lang->project->weekly             = 'Program Weekly';
+$lang->project->pv                 = 'PV';
+$lang->project->ev                 = 'EV';
+$lang->project->sv                 = 'SV%';
+$lang->project->ac                 = 'AC';
+$lang->project->cv                 = 'CV%';
+$lang->project->pvTitle            = 'Planed Value';
+$lang->project->evTitle            = 'Earn Value';
+$lang->project->svTitle            = 'Schedule Variance';
+$lang->project->acTitle            = 'Actual Cost';
+$lang->project->cvTitle            = 'Cost Variance';
+$lang->project->teamCount          = 'Team';
+$lang->project->longTime           = 'Long-Term Program';
+$lang->project->future             = 'TBD';
+$lang->project->moreProject        = 'More Project';
+$lang->project->days               = 'Available Days';
 
-$lang->project->start    = 'Start';
-$lang->project->activate = 'Activate';
-$lang->project->putoff   = 'Delay';
-$lang->project->suspend  = 'Suspend';
-$lang->project->close    = 'Close';
-$lang->project->export   = 'Export';
+$lang->project->productNotEmpty        = 'Please link products or create products.';
+$lang->project->existProductName       = 'Product name already exists.';
+$lang->project->changeProgram          = '%s > Change project';
+$lang->project->changeProgramTip       = 'After modifying the project set, the products linked with the project will also modify the project set to which it belongs. Please confirm whether to modify it.';
+$lang->project->linkedProjectsTip      = 'Linked projects are as follows';
+$lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
+$lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
+$lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
 
-$lang->project->endList[7]   = '1 Week';
-$lang->project->endList[14]  = '2 Weeks';
-$lang->project->endList[31]  = '1 Month';
-$lang->project->endList[62]  = '2 Months';
-$lang->project->endList[93]  = '3 Months';
-$lang->project->endList[186] = '6 Months';
-$lang->project->endList[365] = '1 Year';
+$lang->project->tenThousand = '';
 
-$lang->team = new stdclass();
-$lang->team->account    = 'User';
-$lang->team->role       = 'Role';
-$lang->team->join       = 'Joined';
-$lang->team->hours      = 'Hours/day';
-$lang->team->days       = 'Day';
-$lang->team->totalHours = 'Total Hours';
+$lang->project->unitList['CNY'] = 'RMB';
+$lang->project->unitList['USD'] = 'USD';
+$lang->project->unitList['HKD'] = 'HKD';
+$lang->project->unitList['NTD'] = 'New Taiwan';
+$lang->project->unitList['EUR'] = 'Euro';
+$lang->project->unitList['DEM'] = 'Deutsche Mark';
+$lang->project->unitList['CHF'] = 'Swiss Franc';
+$lang->project->unitList['FRF'] = 'French Franc';
+$lang->project->unitList['GBP'] = 'Pound';
+$lang->project->unitList['NLG'] = 'Florin';
+$lang->project->unitList['CAD'] = 'Canadian';
+$lang->project->unitList['RUR'] = 'Russian Ruble';
+$lang->project->unitList['INR'] = 'Indian';
+$lang->project->unitList['AUD'] = 'Australian';
+$lang->project->unitList['NZD'] = 'New Zealand';
+$lang->project->unitList['THB'] = 'Thai Baht';
+$lang->project->unitList['SGD'] = 'Singapore';
 
-$lang->team->limited            = 'Limited User';
-$lang->team->limitedList['yes'] = 'Yes';
-$lang->team->limitedList['no']  = 'No';
+$lang->project->currencySymbol['CNY'] = '¥';
+$lang->project->currencySymbol['USD'] = '$';
+$lang->project->currencySymbol['HKD'] = 'HK$';
+$lang->project->currencySymbol['NTD'] = 'NT$';
+$lang->project->currencySymbol['EUR'] = '€';
+$lang->project->currencySymbol['DEM'] = 'DEM';
+$lang->project->currencySymbol['CHF'] = '₣';
+$lang->project->currencySymbol['FRF'] = '₣';
+$lang->project->currencySymbol['GBP'] = '£';
+$lang->project->currencySymbol['NLG'] = 'ƒ';
+$lang->project->currencySymbol['CAD'] = '$';
+$lang->project->currencySymbol['RUR'] = '₽';
+$lang->project->currencySymbol['INR'] = '₹';
+$lang->project->currencySymbol['AUD'] = 'A$';
+$lang->project->currencySymbol['NZD'] = 'NZ$';
+$lang->project->currencySymbol['THB'] = '฿';
+$lang->project->currencySymbol['SGD'] = 'S$';
 
-$lang->project->basicInfo = 'Basic Information';
-$lang->project->otherInfo = 'Other Information';
+$lang->project->modelList['scrum']     = "Scrum";
+$lang->project->modelList['waterfall'] = "CMMI";
 
-/* Field value list. */
+$lang->project->featureBar['all']       = 'All';
+$lang->project->featureBar['doing']     = 'Going';
+$lang->project->featureBar['wait']      = 'Waiting';
+$lang->project->featureBar['suspended'] = 'Suspended';
+$lang->project->featureBar['closed']    = 'Closed';
+
+$lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
+$lang->project->aclList['open']    = "Open (accessible with project view permissions)";
+
+$lang->project->acls['private'] = 'Private';
+$lang->project->acls['open']    = 'Open';
+
+$lang->project->subAclList['private'] = "Private (Only the project leader, team members and stakeholders can access)";
+$lang->project->subAclList['open']    = "Open (accessible with project view permissions)";
+$lang->project->subAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members and stakeholders can access)';
+
+$lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
+$lang->project->authList['reset']  = 'Reset (project privilege only)';
+
 $lang->project->statusList['wait']      = 'Waiting';
 $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspended';
 $lang->project->statusList['closed']    = 'Closed';
 
-global $config;
-if($config->systemMode == 'new')
-{
-    $lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->project->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
-}
-else
-{
-    $lang->project->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->project->aclList['open']    = "Public (Users who can visit {$lang->executionCommon} can access it.)";
-}
+$lang->project->endList[31]  = 'One month';
+$lang->project->endList[93]  = 'Trimester';
+$lang->project->endList[186] = 'Half yearly';
+$lang->project->endList[365] = 'One year';
+$lang->project->endList[999] = 'Longtime';
 
-$lang->project->storyPoint = 'Story Point';
+$lang->project->empty                  = 'No project.';
+$lang->project->accessDenied           = 'Access denied!';
+$lang->project->chooseProgramType      = 'Select the project management model';
+$lang->project->nextStep               = 'Next step';
+$lang->project->hoursUnit              = '%s hours';
+$lang->project->membersUnit            = '%s men';
+$lang->project->lastIteration          = "Recent {$lang->executionCommon}";
+$lang->project->ongoingStage           = 'Ongoing stage';
+$lang->project->scrum                  = 'Scrum';
+$lang->project->waterfall              = 'CMMI';
+$lang->project->waterfallTitle         = 'CMMI';
+$lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
+$lang->project->confirmDelete          = "Do you want to delete [%s]?";
+$lang->project->emptyPM                = 'No manager';
+$lang->project->cannotChangeToCat      = "It is not empty, so you cannot change it to a parent.";
+$lang->project->cannotCancelCat        = "It has child projects, so you cannot unmark the parent.";
+$lang->project->parentBeginEnd         = "Parent begin&end date: %s ~ %s";
+$lang->project->childLongTime          = "If a child as long-term projects, the parent should be long-term too.";
+$lang->project->readjustTime           = 'Change the project begin&end date.';
+$lang->project->notAllowRemoveProducts = 'The story of this product is linked with the project. Unlink it before doing any action.';
 
-$lang->project->burnByList['left']       = 'View by remaining hours';
-$lang->project->burnByList['estimate']   = "View by plan hours";
-$lang->project->burnByList['storyPoint'] = 'View by story point';
+$lang->project->programTitle['0']    = 'Hidden';
+$lang->project->programTitle['base'] = 'Base-level project only';
+$lang->project->programTitle['end']  = 'End-level project only';
 
-/* Method list. */
-$lang->project->index             = "{$lang->executionCommon} Home";
-$lang->project->task              = 'Task List';
-$lang->project->groupTask         = 'Group View';
-$lang->project->story             = 'Story List';
-$lang->project->bug               = 'Bug List';
-$lang->project->dynamic           = 'Dynamics';
-$lang->project->latestDynamic     = 'Dynamics';
-$lang->project->build             = 'Build List';
-$lang->project->testtask          = 'Request';
-$lang->project->burn              = 'Burndown';
-$lang->project->computeBurn       = 'Update';
-$lang->project->burnData          = 'Burndown Data';
-$lang->project->fixFirst          = 'Edit 1st-Day Estimates';
-$lang->project->team              = 'Members';
-$lang->project->doc               = 'Document';
-$lang->project->doclib            = 'Docoment Library';
-$lang->project->manageProducts    = 'Linked ' . $lang->productCommon . 's';
-$lang->project->linkStory         = 'Link Stories';
-$lang->project->linkStoryByPlan   = 'Link Stories By Plan';
-$lang->project->linkPlan          = 'Linked Plan';
-$lang->project->unlinkStoryTasks  = 'Unlink';
-$lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
-$lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
-$lang->project->view              = "{$lang->executionCommon} Detail";
-$lang->project->startAction       = "Start {$lang->executionCommon}";
-$lang->project->activateAction    = "Activate {$lang->executionCommon}";
-$lang->project->delayAction       = "Delay {$lang->executionCommon}";
-$lang->project->suspendAction     = "Suspend {$lang->executionCommon}";
-$lang->project->closeAction       = "Close {$lang->executionCommon}";
-$lang->project->testtaskAction    = "{$lang->executionCommon} Request";
-$lang->project->teamAction        = "{$lang->executionCommon} Members";
-$lang->project->kanbanAction      = "{$lang->executionCommon} Kanban";
-$lang->project->printKanbanAction = "Print Kanban";
-$lang->project->treeAction        = "{$lang->executionCommon} Tree View";
-$lang->project->exportAction      = "Export {$lang->executionCommon}";
-$lang->project->computeBurnAction = "Update Burndown";
-$lang->project->create            = "Create {$lang->executionCommon}";
-$lang->project->copy              = "Copy {$lang->executionCommon}";
-$lang->project->delete            = "Delete {$lang->executionCommon}";
-$lang->project->browse            = "{$lang->executionCommon} List";
-$lang->project->list              = "{$lang->executionCommon} List";
-$lang->project->edit              = "Edit {$lang->executionCommon}";
-$lang->project->batchEdit         = "Batch Edit";
-$lang->project->manageMembers     = 'Manage Team';
-$lang->project->unlinkMember      = 'Remove Member';
-$lang->project->unlinkStory       = 'Unlink Story';
-$lang->project->unlinkStoryAB     = 'Unlink';
-$lang->project->batchUnlinkStory  = 'Batch Unlink Stories';
-$lang->project->importTask        = 'Transfer Task';
-$lang->project->importPlanStories = 'Link Stories By Plan';
-$lang->project->importBug         = 'Import Bug';
-$lang->project->updateOrder       = "Rank {$lang->executionCommon}";
-$lang->project->tree              = 'Tree';
-$lang->project->treeTask          = 'Show Task Only';
-$lang->project->treeStory         = 'Show Story Only';
-$lang->project->treeOnlyTask      = 'Show Task Only';
-$lang->project->treeOnlyStory     = 'Show Story Only';
-$lang->project->storyKanban       = 'Story Kanban';
-$lang->project->storySort         = 'Rank Story';
-$lang->project->importPlanStory   = $lang->executionCommon . ' is created!\nDo you want to import stories that have been linked to the plan?';
-$lang->project->iteration         = 'Iterations';
-$lang->project->iterationInfo     = '%s Iterations';
-$lang->project->viewAll           = 'View All';
-
-/* Group browsing. */
-$lang->project->allTasks     = 'All';
-$lang->project->assignedToMe = 'My';
-$lang->project->myInvolved   = 'Involved';
-
-$lang->project->statusSelects['']             = 'More';
-$lang->project->statusSelects['wait']         = 'Waiting';
-$lang->project->statusSelects['doing']        = 'Doing';
-$lang->project->statusSelects['undone']       = 'Unfinished';
-$lang->project->statusSelects['finishedbyme'] = 'FinishedByMe';
-$lang->project->statusSelects['done']         = 'Done';
-$lang->project->statusSelects['closed']       = 'Closed';
-$lang->project->statusSelects['cancel']       = 'Cancelled';
-
-$lang->project->groups['']           = 'View by Groups';
-$lang->project->groups['story']      = 'Group by Story';
-$lang->project->groups['status']     = 'Group by Status';
-$lang->project->groups['pri']        = 'Group by Priority';
-$lang->project->groups['assignedTo'] = 'Group by AssignedTo';
-$lang->project->groups['finishedBy'] = 'Group by FinishedBy';
-$lang->project->groups['closedBy']   = 'Group by ClosedBy';
-$lang->project->groups['type']       = 'Group by Type';
-
-$lang->project->groupFilter['story']['all']         = 'All';
-$lang->project->groupFilter['story']['linked']      = 'Tasks linked to stories';
-$lang->project->groupFilter['pri']['all']           = 'All';
-$lang->project->groupFilter['pri']['noset']         = 'Not Set';
-$lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';
-$lang->project->groupFilter['assignedTo']['all']    = 'All';
-
-$lang->project->byQuery = 'Search';
-
-/* Query condition list. */
-$lang->project->allProject      = "All {$lang->executionCommon}s";
-$lang->project->aboveAllProduct = "All the above {$lang->productCommon}s";
-$lang->project->aboveAllProject = "All the above {$lang->executionCommon}s";
-
-/* Page prompt. */
-$lang->project->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->executionCommon}.";
-$lang->project->selectProject       = "Select {$lang->executionCommon}";
-$lang->project->selectExecution     = "Select Stage/Sprint/Iteration";
-$lang->project->beginAndEnd         = 'Duration';
-$lang->project->begin               = 'Begin';
-$lang->project->end                 = 'End';
-$lang->project->lblStats            = 'Efforts';
-$lang->project->stats               = 'Available: <strong>%s</strong>(h). Estimates: <strong>%s</strong>(h). Cost: <strong>%s</strong>(h). Left: <strong>%s</strong>(h).';
-$lang->project->taskSummary         = "Total tasks on this page:<strong>%s</strong>. Waiting: <strong>%s</strong>. Doing: <strong>%s</strong>.  &nbsp;&nbsp;&nbsp;  Estimates: <strong>%s</strong>(h). Cost: <strong>%s</strong>(h). Left: <strong>%s</strong>(h).";
-$lang->project->pageSummary         = "Total tasks: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.    Estimates: <strong>%estimate%</strong>(h). Cost: <strong>%consumed%</strong>(h). Left: <strong>%left%</strong>(h).";
-$lang->project->checkedSummary      = "Selected: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.    Estimates: <strong>%estimate%</strong>(h). Cost: <strong>%consumed%</strong>(h). Left: <strong>%left%</strong>(h).";
-$lang->project->memberHoursAB       = "%s has <strong>%s</ strong> hours.";
-$lang->project->memberHours         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Available Hours</div><div class="segment-value">%s</div></div></div></div>';
-$lang->project->countSummary        = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Tasks</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Doing</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">Waiting</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
-$lang->project->timeSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Estimates</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Cost</div><div class="segment-value text-red">%s</div></div><div class="segment"><div class="segment-title">Left</div><div class="segment-value">%s</div></div></div></div>';
-$lang->project->groupSummaryAB      = "<div>Tasks <strong>%s ：</strong><span class='text-muted'>Waiting</span> %s &nbsp; <span class='text-muted'>Doing</span> %s</div><div>Estimates <strong>%s ：</strong><span class='text-muted'>Cost</span> %s &nbsp; <span class='text-muted'>Left</span> %s</div>";
-$lang->project->wbs                 = "Create Task";
-$lang->project->batchWBS            = "Batch Create Tasks";
-$lang->project->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='How to update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
-$lang->project->whyNoStories        = "No story can be linked. Please check whether there is any story in {$lang->executionCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
-$lang->project->productStories      = "Stories linked to {$lang->executionCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Stories</a> now.";
-$lang->project->haveDraft           = "%s stories in draft, so they can't be linked.";
-$lang->project->doneProjects        = 'Finished';
-$lang->project->selectDept          = 'Select Department';
-$lang->project->selectDeptTitle     = 'Select User';
-$lang->project->copyTeam            = 'Copy Team';
-$lang->project->copyFromTeam        = "Copy from {$lang->executionCommon} Team: <strong>%s</strong>";
-$lang->project->noMatched           = "No $lang->executionCommon including '%s'can be found.";
-$lang->project->copyTitle           = "Choose a {$lang->executionCommon} to copy.";
-$lang->project->copyTeamTitle       = "Choose a {$lang->executionCommon} Team to copy.";
-$lang->project->copyNoProject       = "No {$lang->executionCommon} can be copied.";
-$lang->project->copyFromProject     = "Copy from {$lang->executionCommon} <strong>%s</strong>";
-$lang->project->cancelCopy          = 'Cancel Copy';
-$lang->project->byPeriod            = 'By Time';
-$lang->project->byUser              = 'By User';
-$lang->project->noProject           = "No {$lang->executionCommon}. ";
-$lang->project->noMembers           = 'No team members yet. ';
-$lang->project->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
-$lang->project->linkPRJStoryTip     = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the project)";
-$lang->project->linkAllStoryTip     = "({$lang->SRCommon} has never been linked under the project, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
-
-/* Interactive prompts. */
-$lang->project->confirmDelete             = "Do you want to delete the {$lang->executionCommon}[%s]?";
-$lang->project->confirmUnlinkMember       = "Do you want to unlink this User from {$lang->executionCommon}?";
-$lang->project->confirmUnlinkStory        = "Do you want to unlink this Story from {$lang->executionCommon}?";
-$lang->project->confirmUnlinkProjectStory = "Do you want to unlink this Story from the project?";
-$lang->project->notAllowedUnlinkStory     = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
-$lang->project->notAllowRemoveProducts    = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
-$lang->project->errorNoLinkedProducts     = "No {$lang->productCommon} is linked to {$lang->executionCommon}. You will be directed to {$lang->productCommon} page to link one.";
-$lang->project->errorSameProducts         = "{$lang->executionCommon} cannot be linked to the same {$lang->productCommon} twice.";
-$lang->project->accessDenied              = "Your access to {$lang->executionCommon} is denied!";
-$lang->project->tips                      = 'Note';
-$lang->project->afterInfo                 = "{$lang->executionCommon} is created. Next you can ";
-$lang->project->setTeam                   = 'Set Team';
-$lang->project->linkStory                 = 'Link Story';
-$lang->project->createTask                = 'Create Task';
-$lang->project->goback                    = "Go Back";
-$lang->project->noweekend                 = 'Exclude Weekend';
-$lang->project->withweekend               = 'Include Weekend';
-$lang->project->interval                  = 'Intervals ';
-$lang->project->fixFirstWithLeft          = 'Update hours left too';
-$lang->project->unfinishedProject         = "This {$lang->executionCommon} has ";
-$lang->project->unfinishedTask            = "[%s] unfinished tasks. ";
-$lang->project->unresolvedBug             = "[%s] unresolved bugs. ";
-
-$lang->project->action = new stdclass();
-$lang->project->action->opened  = '$date, created by <strong>$actor</strong> . $extra' . "\n";
-$lang->project->action->managed = '$date, managed by <strong>$actor</strong> . $extra' . "\n";
-$lang->project->action->edited  = '$date, edited by <strong>$actor</strong> . $extra' . "\n";
-$lang->project->action->extra   = "The linked {$lang->productCommon}s are %s.";
-
-/* Statistics. */
-$lang->project->charts = new stdclass();
-$lang->project->charts->burn = new stdclass();
-$lang->project->charts->burn->graph = new stdclass();
-$lang->project->charts->burn->graph->caption      = " Burndown Chart";
-$lang->project->charts->burn->graph->xAxisName    = "Date";
-$lang->project->charts->burn->graph->yAxisName    = "Hour";
-$lang->project->charts->burn->graph->baseFontSize = 12;
-$lang->project->charts->burn->graph->formatNumber = 0;
-$lang->project->charts->burn->graph->animation    = 0;
-$lang->project->charts->burn->graph->rotateNames  = 1;
-$lang->project->charts->burn->graph->showValues   = 0;
-$lang->project->charts->burn->graph->reference    = 'Ideal';
-$lang->project->charts->burn->graph->actuality    = 'Actual';
-
-$lang->project->placeholder = new stdclass();
-$lang->project->placeholder->code      = "Abbreviation of {$lang->executionCommon} name";
-$lang->project->placeholder->totalLeft = "Hours estimated on the first day of the {$lang->executionCommon}.";
-
-$lang->project->selectGroup = new stdclass();
-$lang->project->selectGroup->done = '(Done)';
-
-$lang->project->orderList['order_asc']  = "Story Rank Ascending";
-$lang->project->orderList['order_desc'] = "Story Rank Descending";
-$lang->project->orderList['pri_asc']    = "Story Priority Ascending";
-$lang->project->orderList['pri_desc']   = "Story Priority Descending";
-$lang->project->orderList['stage_asc']  = "Story Phase Ascending";
-$lang->project->orderList['stage_desc'] = "Story Phase Descending";
-
-$lang->project->kanban        = "Kanban";
-$lang->project->kanbanSetting = "Settings";
-$lang->project->resetKanban   = "Reset";
-$lang->project->printKanban   = "Print";
-$lang->project->bugList       = "Bugs";
-
-$lang->project->kanbanHideCols   = 'Closed & Cancelled Columns';
-$lang->project->kanbanShowOption = 'Unfold';
-$lang->project->kanbanColsColor  = 'Customize Column Color';
-
-$lang->kanbanSetting = new stdclass();
-$lang->kanbanSetting->noticeReset     = 'Do you want to reset Kanban?';
-$lang->kanbanSetting->optionList['0'] = 'Hide';
-$lang->kanbanSetting->optionList['1'] = 'Show';
-
-$lang->printKanban = new stdclass();
-$lang->printKanban->common  = 'Print Kanban';
-$lang->printKanban->content = 'Content';
-$lang->printKanban->print   = 'Print';
-
-$lang->printKanban->taskStatus = 'Status';
-
-$lang->printKanban->typeList['all']       = 'All';
-$lang->printKanban->typeList['increment'] = 'Increment';
-
-$lang->project->typeList['']       = '';
-$lang->project->typeList['stage']  = 'Stage';
-$lang->project->typeList['sprint'] = $lang->executionCommon;
-
-$lang->project->featureBar['task']['all']          = $lang->project->allTasks;
-$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
-$lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
-$lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
-$lang->project->featureBar['task']['delayed']      = 'Delayed';
-$lang->project->featureBar['task']['needconfirm']  = 'Changed';
-$lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
-
-$lang->project->featureBar['all']['all']       = $lang->project->all;
-$lang->project->featureBar['all']['undone']    = $lang->project->undone;
-$lang->project->featureBar['all']['wait']      = $lang->project->statusList['wait'];
-$lang->project->featureBar['all']['doing']     = $lang->project->statusList['doing'];
-$lang->project->featureBar['all']['suspended'] = $lang->project->statusList['suspended'];
-$lang->project->featureBar['all']['closed']    = $lang->project->statusList['closed'];
-
-$lang->project->treeLevel = array();
-$lang->project->treeLevel['all']   = 'Expand All';
-$lang->project->treeLevel['root']  = 'Collapse All';
-$lang->project->treeLevel['task']  = 'Stories&Tasks';
-$lang->project->treeLevel['story'] = 'Only Stories';
+$lang->project->accessDenied      = 'Access denied to this project';
+$lang->project->chooseProgramType = 'Select management type';
+$lang->project->scrumTitle        = 'Agile Development Management';
+$lang->project->cannotCreateChild = 'The project has contents, so you cannot add a child project. You can create a parent project for this one and then add a child project for the parent project.';
+$lang->project->hasChildren       = 'This project has a child project, so it cannot be deleted.';
+$lang->project->confirmDelete     = 'Do you want to delete this project?';
+$lang->project->cannotChangeToCat = "The project has contents, so you cannot it to a parent project.";
+$lang->project->cannotCancelCat   = "There are child projects of this project. You cannot cancel the parent project mark.";
+$lang->project->parentBeginEnd    = "The begin and end date of the parent project: %s ~ %s";
+$lang->project->parentBudget      = "The budget of the parent project: ";
+$lang->project->beginLetterParent = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
+$lang->project->endGreaterParent  = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
+$lang->project->beginGreateChild  = "The minimum start date of the project set: %s. The start date of the project cannot be less than the minimum start date of the project set.";
+$lang->project->endLetterChild    = "The maximum finish date for the project set: %s. The completion date of a project cannot be greater than the maximum completion date of the project set.";
+$lang->project->childLongTime     = "There are long-term projects in the child project, and the parent project should also be a long-term project.";

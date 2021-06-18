@@ -1,8 +1,8 @@
 .alert-link:hover {text-decoration: underline;}
 .alert {width: 100%; display: table;}
-code{padding-left:0px;}
-.alert.with-icon .exclamation-sign{padding-top:18px;vertical-align:top;}
-.detail-actions{margin-top:10px;}
-.detail-actions .pull-right{margin-top:-10px;}
+code {padding-left: 0px;}
+.alert.with-icon .exclamation-sign {padding-top: 18px; vertical-align: top;}
+.detail-actions {margin-top: 10px;}
+.detail-actions .pull-right {margin-top: -10px;}
 
-#triggerModal[ref*="viewExt"] .modal-dialog .modal-body{max-height:600px !important;}
+#triggerModal[ref*="viewExt"] .modal-dialog .modal-body {max-height: 600px !important;}

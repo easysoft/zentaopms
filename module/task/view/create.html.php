@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
+<?php js::set('blockID', $blockID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -33,7 +34,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->task->execution;?></th>
-          <td><?php echo html::select('project', $projects, $project->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
+          <td><?php echo html::select('execution', $executions, $execution->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->type;?></th>
@@ -46,7 +47,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->task->module;?></th>
-          <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $project->id)'");?></td>
+          <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $execution->id)'");?></td>
           <td>
             <div class="checkbox-primary">
               <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
@@ -75,12 +76,12 @@
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
-        <?php if(strpos(",$showFields,", ',story,') !== false and $project->type != 'ops'):?>
+        <?php if(strpos(",$showFields,", ',story,') !== false and $execution->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
             <?php if(empty($stories)):?>
-            <span id='storyBox'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($project->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
+            <span id='storyBox'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <?php else:?>
             <div class='input-group'>
               <?php echo html::select('story', array($task->story => $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
@@ -90,7 +91,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if($stories and $project->type != 'ops'):?>
+        <?php if($stories and $execution->type != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>
@@ -234,7 +235,7 @@
           <th><?php echo $lang->story->mailto;?></th>
           <td colspan='3'>
             <div class="input-group">
-              <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+              <?php echo html::select('mailto[]', $execution->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
               <?php echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>
@@ -292,10 +293,31 @@
     </form>
   </div>
 </div>
+<table class='hidden' id='testStoryTemplate'>
+  <tr>
+    <td><?php echo html::select("testStory[]", array(0 => ''), 0, "class='form-control chosen'");?></td>
+    <td><?php echo html::select("testPri[]", $lang->task->priList, '', "class='form-control chosen'");?></td>
+    <td>
+      <div class='input-group'>
+        <?php echo html::input("testEstStarted[]", '', "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
+        <span class='input-group-addon fix-border'>~</span>
+        <?php echo html::input("testDeadline[]", '', "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
+      </div>
+    </td>
+    <td><?php echo html::select("testAssignedTo[]", array('' => ''), '', "class='form-control chosen'");?></td>
+    <td><?php echo html::input("testEstimate[]", '', "class='form-control'");?></td>
+    <td class='text-center'>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm" tabindex="-1" onclick='addItem(this)'><i class="icon icon-plus"></i></button>
+        <button type="button" class="btn btn-sm" tabindex="-1" onclick='removeItem(this)'><i class="icon icon-close"></i></button>
+      </div>
+    </td>
+  </tr>
+</table>
 <?php js::set('stories', $stories);?>
 <?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($stories) : array());?>
 <?php js::set('testStoryIdList', $testStoryIdList);?>
-<?php js::set('projectID', $project->id);?>
+<?php js::set('executionID', $execution->id);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>

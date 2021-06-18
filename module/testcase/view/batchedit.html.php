@@ -67,10 +67,9 @@
           <?php foreach($caseIDList as $caseID):?>
           <?php
           if(!isset($cases[$caseID])) continue;
-          if(!$productID and $branchProduct)
+          if(!$productID and !$cases[$caseID]->lib)
           {
-              $product = $this->product->getByID($cases[$caseID]->product);
-
+              $product  = $this->product->getByID($cases[$caseID]->product);
               $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
               if($product->type != 'normal')
               {
@@ -79,7 +78,6 @@
               }
 
               $modules = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', 0, $cases[$caseID]->branch);
-              $modules = array('ditto' => $this->lang->story->ditto) + $modules;
           }
           ?>
           <tr class='text-center'>

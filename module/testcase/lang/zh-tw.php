@@ -74,6 +74,8 @@ $lang->testcase->ignore           = '忽略';
 $lang->testcase->fromTesttask     = '來自測試單用例';
 $lang->testcase->fromCaselib      = '來自用例庫用例';
 $lang->testcase->deleted          = '是否刪除';
+$lang->testcase->browseUnits      = '單元測試';
+
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 
 $lang->testcase->stepID      = '編號';
@@ -213,8 +215,12 @@ $lang->testcase->searchStories = "鍵入來搜索{$lang->SRCommon}";
 $lang->testcase->selectLib     = '請選擇庫';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</strong> 從用例庫 <strong>$extra</strong>導入。');
-$lang->testcase->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
+$lang->testcase->action->fromlib               = array('main' => '$date, 由 <strong>$actor</strong> 從用例庫 <strong>$extra</strong>導入。');
+$lang->testcase->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
+$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 關聯到項目 <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 從項目 <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到' . $lang->executionCommon . ' <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 從' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = '待評審';
@@ -222,4 +228,5 @@ $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConf
 $lang->testcase->featureBar['browse']['group']       = '分組查看';
 $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
+$lang->testcase->featureBar['browse']['browseunits'] = '單元測試';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

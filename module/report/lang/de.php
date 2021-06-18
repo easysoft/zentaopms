@@ -9,15 +9,15 @@
  * @version     $Id: en.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->common     = 'Berichte';
-$lang->report->index      = 'Home';
-$lang->report->list       = 'Liste';
-$lang->report->item       = 'Eintrag';
-$lang->report->value      = 'Wert';
-$lang->report->percent    = '%';
-$lang->report->undefined  = 'Undefiniert';
-$lang->report->query      = 'Abfrage';
-$lang->report->annual     = 'Annual Summary';
+$lang->report->index     = 'Home';
+$lang->report->list      = 'Liste';
+$lang->report->item      = 'Eintrag';
+$lang->report->value     = 'Wert';
+$lang->report->percent   = '%';
+$lang->report->undefined = 'Undefiniert';
+$lang->report->query     = 'Abfrage';
+$lang->report->annual    = 'Annual Summary';
+$lang->report->project   = 'Project';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -33,11 +33,11 @@ $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
 $lang->report->assign['noassign'] = 'Nicht zugeordnet';
-$lang->report->assign['assign'] = 'Zugeordnet';
+$lang->report->assign['assign']   = 'Zugeordnet';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = $lang->executionCommon . ' Abweichung';
+$lang->report->projectDeviation = 'Projektabweichungsbericht';
 $lang->report->productSummary   = $lang->productCommon . ' Zusammenfassung';
 $lang->report->bugCreate        = 'Bug gemeldet';
 $lang->report->bugAssign        = 'Bug zugeordnet';
@@ -45,8 +45,10 @@ $lang->report->workload         = 'Team Arbeitslast ';
 $lang->report->workloadAB       = 'Arbeitslast';
 $lang->report->bugOpenedDate    = 'Bug gemeldet am';
 $lang->report->beginAndEnd      = ' : von';
+$lang->report->begin            = 'Begin';
+$lang->report->end              = 'End';
 $lang->report->dept             = 'Abteilung';
-$lang->report->deviationChart   = $lang->executionCommon . ' Abweichnungs Chart';
+$lang->report->deviationChart   = 'Projektabweichungskurve';
 
 $lang->reportList = new stdclass();
 $lang->reportList->project = new stdclass();
@@ -54,14 +56,14 @@ $lang->reportList->product = new stdclass();
 $lang->reportList->test    = new stdclass();
 $lang->reportList->staff   = new stdclass();
 
-$lang->reportList->project->lists[10] = $lang->executionCommon . ' Abweichnung|report|projectdeviation';
+$lang->reportList->project->lists[10] = 'Durchgeführt Abweichnung|reportprojectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Zusammenfassung|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bugs gemeldet|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bugs zugeordnet|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Team Arbeitslast|report|workload';
 
 $lang->report->id            = 'ID';
-$lang->report->project       = $lang->executionCommon;
+$lang->report->execution     = $lang->executionCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'Name';
 $lang->report->bugTotal      = 'Bug';
@@ -119,7 +121,7 @@ $lang->report->annualData->baseInfo         = "Basic Data";
 $lang->report->annualData->actionData       = "Operation Data";
 $lang->report->annualData->contributionData = "Contribution Data";
 $lang->report->annualData->radar            = "Capability Radar Chart";
-$lang->report->annualData->projects         = "{$lang->executionCommon} Data";
+$lang->report->annualData->executions       = "{$lang->executionCommon} Data";
 $lang->report->annualData->products         = "{$lang->productCommon} Data";
 $lang->report->annualData->stories          = "Story Data";
 $lang->report->annualData->tasks            = "Task Data";
@@ -150,10 +152,10 @@ $lang->report->annualData->taskMonthActions  = "Monthly task operation";
 $lang->report->annualData->bugMonthActions   = "Monthly bug operation";
 $lang->report->annualData->caseMonthActions  = "Monthly case operation";
 
-$lang->report->annualData->projectFields['name']  = "{$lang->executionCommon} name";
-$lang->report->annualData->projectFields['story'] = "Finished stories";
-$lang->report->annualData->projectFields['task']  = "Finished tasks";
-$lang->report->annualData->projectFields['bug']   = "Resolved bugs";
+$lang->report->annualData->executionFields['name']  = "{$lang->executionCommon} name";
+$lang->report->annualData->executionFields['story'] = "Finished stories";
+$lang->report->annualData->executionFields['task']  = "Finished tasks";
+$lang->report->annualData->executionFields['bug']   = "Resolved bugs";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon} name";
 $lang->report->annualData->productFields['plan'] = "Plans";
@@ -169,7 +171,7 @@ $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = $lang->SRCommon;
 $lang->report->annualData->objectTypeList['productplan'] = "Plan";
 $lang->report->annualData->objectTypeList['release']     = "Release";
-$lang->report->annualData->objectTypeList['project']     = $lang->executionCommon;
+$lang->report->annualData->objectTypeList['execution']   = $lang->executionCommon;
 $lang->report->annualData->objectTypeList['task']        = 'Task';
 $lang->report->annualData->objectTypeList['repo']        = 'Code';
 $lang->report->annualData->objectTypeList['bug']         = 'Bug';
@@ -200,8 +202,8 @@ $lang->report->annualData->todoStatus['all']    = 'All';
 $lang->report->annualData->todoStatus['undone'] = 'Undone';
 $lang->report->annualData->todoStatus['done']   = 'Done';
 
-$lang->report->annualData->radarItems['product'] = "Product";
-$lang->report->annualData->radarItems['project'] = "Project";
-$lang->report->annualData->radarItems['devel']   = "Development";
-$lang->report->annualData->radarItems['qa']      = "QA";
-$lang->report->annualData->radarItems['other']   = "Other";
+$lang->report->annualData->radarItems['product']   = "Product";
+$lang->report->annualData->radarItems['execution'] = "Project";
+$lang->report->annualData->radarItems['devel']     = "Development";
+$lang->report->annualData->radarItems['qa']        = "QA";
+$lang->report->annualData->radarItems['other']     = "Other";

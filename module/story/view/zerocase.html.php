@@ -23,7 +23,10 @@
     <table class='table has-sort-head table-fixed' id='storyList'>
       <thead>
       <tr>
-        <?php $vars = "productID=$productID&orderBy=%s";?>
+        <?php
+        $this->app->rawModule = 'story';
+        $vars = "productID=$productID&branchID=$branchID&orderBy=%s";
+        ?>
         <th class='c-id'>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
             <label></label>
@@ -45,7 +48,10 @@
       <tbody>
       <?php foreach($stories as $key => $story):?>
       <?php
-      $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
+      $param = 0;
+      if($this->app->openApp == 'project')   $param = $this->session->project;
+      if($this->app->openApp == 'execution') $param = $this->session->execution;
+      $viewLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$param");
       $canView  = common::hasPriv('story', 'view');
       ?>
       <tr>
@@ -57,7 +63,7 @@
           <?php printf('%03d', $story->id);?>
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
-        <td class='text-left' title="<?php echo $story->title?>"><nobr><?php echo html::a($viewLink, $story->title);?></nobr></td>
+        <td class='text-left' title="<?php echo $story->title?>"><nobr><?php echo html::a($viewLink, $story->title, '', "data-app='product'");?></nobr></td>
         <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
         <td><?php echo $lang->story->sourceList[$story->source];?></td>
         <td><?php echo zget($users, $story->openedBy);?></td>
@@ -68,10 +74,12 @@
         <td class='c-actions'>
           <?php
           $vars = "storyID={$story->id}";
-          common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-          common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-          common::printIcon('story', 'close',      $vars, $story, 'list', 'off');
-          common::printIcon('story', 'edit',       $vars, $story, 'list', 'pencil');
+          $this->app->openApp = 'product';
+          common::printIcon('story', 'change', $vars, $story, 'list', 'fork');
+          common::printIcon('story', 'review', $vars, $story, 'list', 'glasses');
+          common::printIcon('story', 'close',  $vars, $story, 'list', 'off', '', 'iframe', 'yes');
+          common::printIcon('story', 'edit',   $vars, $story, 'list');
+          $this->app->openApp = 'qa';
           common::printIcon('story', 'createCase', "productID=$story->product&branch=0&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
           ?>
         </td>
@@ -85,7 +93,7 @@
         <?php
         $canBatchEdit  = common::hasPriv('story', 'batchEdit');
         $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-        $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0&branch=$branch");
+        $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=$projectID&branch=$branch");
         ?>
         <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
         <?php

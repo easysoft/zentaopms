@@ -52,7 +52,7 @@ class ci extends control
         $compiles = $this->loadModel('compile')->getUnexecutedList();
         foreach($compiles as $compile)
         {
-            if($compile->atTime and date('H:i') < $compile->atTime) continue; 
+            if($compile->atTime and date('H:i') < $compile->atTime) continue;
             $this->compile->exec($compile);
         }
         echo 'success';

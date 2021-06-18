@@ -21,7 +21,7 @@ $lang->group->managePrivByGroup  = '权限维护';
 $lang->group->managePrivByModule = '按模块分配权限';
 $lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Ctrl键进行多选）</span>';
 $lang->group->manageMember       = '成员维护';
-$lang->group->managePRJAdmin     = '维护项目管理员';
+$lang->group->manageProjectAdmin = '维护项目管理员';
 $lang->group->confirmDelete      = '您确定删除该用户分组吗？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';
@@ -32,7 +32,7 @@ $lang->group->productList        = '可访问' . $lang->productCommon;
 $lang->group->projectList        = '可访问项目';
 $lang->group->dynamic            = '可查看动态';
 $lang->group->noticeVisit        = '空代表没有访问限制';
-$lang->group->noneProgram        = "暂时没有项目";
+$lang->group->noneProgram        = "暂时没有项目集";
 $lang->group->noneProduct        = "暂时没有{$lang->productCommon}";
 $lang->group->noneProject        = "暂时没有{$lang->executionCommon}";
 
@@ -56,6 +56,7 @@ $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
 $lang->group->versions['']          = '修改历史';
+$lang->group->versions['15_0_rc1']  = '禅道15.0.rc1';
 $lang->group->versions['12_5']      = '禅道12.5';
 $lang->group->versions['12_3']      = '禅道12.3';
 $lang->group->versions['11_6_2']    = '禅道11.6.2';

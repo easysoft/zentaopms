@@ -17,18 +17,9 @@ function addItem(obj)
 {
     var item = $('#addItem').html().replace(/%i%/g, i);
     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
-    var $accounts = $('#hours' + i).closest('tr').find('select:first')
-
-    if($accounts.attr('data-pickertype') != 'remote')
-    {
-        $accounts.chosen();
-    }
-    else
-    {
-        $accounts.parent().find('.picker.picker-ready').remove();
-        var pickerremote = $accounts.attr('data-pickerremote');
-        $accounts.picker({chosenMode: true, remote: pickerremote});
-    }
+    var accounts = $('#hours' + i).closest('tr').find('select:first')
+    accounts.trigger('liszt:updated');
+    accounts.chosen();
     i ++;
 }
 
@@ -39,14 +30,7 @@ function deleteItem(obj)
 
 function setDeptUsers(obj)
 {
-    dept = $(obj).val();//Get dept ID.
-    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&team2Import=' + team2Import + '&dept=' + dept);//Create manageMembers link.
-    location.href=link;
-}
-
-function choseTeam2Copy(obj)
-{
-    team = $(obj).val();
-    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&team2Import=' + team);
+    dept = $(obj).val(); // Get dept ID.
+    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept); // Create manageMembers link.
     location.href=link;
 }

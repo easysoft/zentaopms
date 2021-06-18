@@ -12,24 +12,33 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('data');?></div>
   <div class='btn-toolbar pull-right'>
     <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback, '', "class='btn'");?>
     <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
   </div>
 </div>
 
-<div id='mainContent'>
+<div id='mainContent' class="main-row">
+  <div class='side-col' id='sidebar'>
+    <div class='cell'>
+      <div class='list-group'>
+        <?php
+        echo html::a($this->createLink('backup', 'index'), $lang->backup->common);
+        echo html::a($this->createLink('action', 'trash'), $lang->action->trash, '', "class='active'");
+        ?>
+      </div>
+    </div>
+  </div>
   <div class='main-table' data-ride='table'>
     <table class='table has-sort-head'>
       <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr class='colhead'>
           <th class='w-130px'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
-          <th class='w-id'>  <?php common::printOrderLink('objectID',   $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php echo $lang->action->objectName;?></th>
-          <th class='w-100px'><?php common::printOrderLink('actor',     $orderBy, $vars, $lang->action->actor);?></th>
-          <th class='w-150px'><?php common::printOrderLink('date',      $orderBy, $vars, $lang->action->date);?></th>
+          <th class='w-100px'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th>
+          <th class='w-150px'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th>
           <th class='w-100px'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -45,8 +54,8 @@
             $methodName = 'view';
             if($module == 'caselib')
             {
-                $methodName = 'libview';
-                $module     = 'testsuite';
+                $methodName = 'view';
+                $module     = 'caselib';
             }
             if(isset($config->action->customFlows[$action->objectType]))
             {
@@ -59,7 +68,9 @@
             }
             else
             {
-                echo html::a($this->createLink($module, $methodName, $params), $action->objectName);
+                $openApp = '';
+                if($action->objectType == 'meeting') $openApp = $action->project ? "data-app='project'" : "data-app='my'";
+                echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title={$action->objectName} $openApp");
             }
             ?>
           </td>

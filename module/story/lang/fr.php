@@ -31,11 +31,13 @@ $lang->story->reviewAction      = 'Valider Story';
 $lang->story->needReview        = 'Validation requise';
 $lang->story->batchReview       = 'Validation par lot';
 $lang->story->edit              = "Editer Story";
+$lang->story->editAB            = "Editer Story";
 $lang->story->batchEdit         = "Editer par Lot";
 $lang->story->subdivide         = 'Décomposer';
 $lang->story->link              = 'Link';
 $lang->story->unlink            = 'Unlink';
 $lang->story->track             = 'Track';
+$lang->story->trackAB           = 'Track';
 $lang->story->processStoryChange= 'Process Story Change';
 $lang->story->subdivideAction   = 'Décomposer Story';
 $lang->story->splitRequirent    = 'Décompose';
@@ -80,6 +82,7 @@ $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
 $lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->SRCommon} and link {$lang->SRCommon} to the task. The closed {$lang->SRCommon} will not be converted into tasks.";
 $lang->story->successToTask   = "Converted to task.";
+$lang->story->storyRound      = '%s time estimation';
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -93,7 +96,7 @@ $lang->story->source         = 'De';
 $lang->story->sourceNote     = 'Note';
 $lang->story->fromBug        = 'Depuis Bug';
 $lang->story->title          = 'Titre';
-$lang->story->type           = 'Type';
+$lang->story->category       = 'Category';
 $lang->story->color          = 'Couleur';
 $lang->story->toBug          = 'Vers Bug';
 $lang->story->spec           = 'Description';
@@ -120,6 +123,7 @@ $lang->story->closedDate     = 'Date Fermeture';
 $lang->story->closedReason   = 'Raison';
 $lang->story->rejectedReason = 'Raison du Rejet';
 $lang->story->reviewedBy     = 'Validée par';
+$lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'Date Validation';
 $lang->story->version        = 'Version';
 $lang->story->plan           = 'Intégrée Plans';
@@ -152,6 +156,8 @@ $lang->story->noRequirement  = 'No Requirements';
 $lang->story->one            = 'One';
 $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
+$lang->story->reviewed       = 'Reviewed';
+$lang->story->toBeReviewed   = 'To Be Reviewed';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";
@@ -247,7 +253,7 @@ $lang->story->lblClose    = 'Fermer';
 $lang->story->lblTBC      = 'Tâche/Bug/CasTest';
 
 $lang->story->checkAffection       = 'Influence';
-$lang->story->affectedProjects     = '' . $lang->executionCommon . 's';
+$lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'CasTests';
 
@@ -257,6 +263,7 @@ $lang->story->successSaved         = "Story est sauvegardée !";
 $lang->story->confirmDelete        = "Voulez-vous vraiment supprimer cette story ?";
 $lang->story->errorEmptyChildStory = '『Decomposed Stories』ne peuvent être vides.';
 $lang->story->errorNotSubdivide    = "Si le statut n'est pas actif, ou l'étape n'est pas en attente, ou si c'est une sous-story, elle ne peut pas être subdivisée.";
+$lang->story->errorEmptyReviewedBy = "『ReviewedBy』ne peuvent être vides."
 $lang->story->mustChooseResult     = 'Sélect Résultat';
 $lang->story->mustChoosePreVersion = 'Sélect une version pour revenir en arrière.';
 $lang->story->noStory              = "Aucune story pour l'instant. ";
@@ -265,6 +272,7 @@ $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Ple
 $lang->story->cannotDeleteParent   = "Impossible de supprimer {$lang->SRCommon} parent";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
+$lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Périmètre';
@@ -273,22 +281,26 @@ $lang->story->form->resource = 'Qui va allouer des resources ? Combien de temps 
 $lang->story->form->file     = 'Si certains fichiers sont associés à la story, cliquez ici pour les uploader.';
 
 $lang->story->action = new stdclass();
-$lang->story->action->reviewed            = array('main' => '$date, validée par <strong>$actor</strong>. Le résultat est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->story->action->closed              = array('main' => '$date, Fermée par <strong>$actor</strong>. La raison est <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
-$lang->story->action->linked2plan         = array('main' => '$date, planifiée par <strong>$actor</strong> au Plan <strong>$extra</strong>');
-$lang->story->action->unlinkedfromplan    = array('main' => '$date, déplanifiée par <strong>$actor</strong> du Plan <strong>$extra</strong>.');
-$lang->story->action->linked2project      = array('main' => '$date, associée au ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->unlinkedfromproject = array('main' => '$date, dissociée du ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->linked2prj          = array('main' => '$date, associée au project <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->unlinkedfromprj     = array('main' => '$date, dissociée d uproject <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->linked2build        = array('main' => '$date, intégrée par <strong>$actor</strong> au Build <strong>$extra</strong>');
-$lang->story->action->unlinkedfrombuild   = array('main' => '$date, retirée par <strong>$actor</strong> du Build <strong>$extra</strong>.');
-$lang->story->action->linked2release      = array('main' => '$date, ajoutée par <strong>$actor</strong> à la Release <strong>$extra</strong>');
-$lang->story->action->unlinkedfromrelease = array('main' => '$date, retirée par <strong>$actor</strong> de la Release <strong>$extra</strong>.');
-$lang->story->action->linkrelatedstory    = array('main' => '$date, associée par <strong>$actor</strong> à la Story <strong>$extra</strong>.');
-$lang->story->action->subdividestory      = array('main' => '$date, décomposée par <strong>$actor</strong> en Story <strong>$extra</strong>.');
-$lang->story->action->unlinkrelatedstory  = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');
-$lang->story->action->unlinkchildstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
+$lang->story->action->reviewed              = array('main' => '$date, validée par <strong>$actor</strong>. Le résultat est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
+$lang->story->action->passreviewed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
+$lang->story->action->clarifyreviewed       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Review Failed</strong>. Please re-initiate the review after changing.');
+$lang->story->action->rejectreviewed        = array('main' => '$date, validée par <strong>$actor</strong>. Le résultat est <strong>$extra</strong>. La raison est <strong>$reason</strong>.', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->closed                = array('main' => '$date, Fermée par <strong>$actor</strong>. La raison est <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
+$lang->story->action->reviewclosed          = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Review Failed</strong>.');
+$lang->story->action->linked2plan           = array('main' => '$date, planifiée par <strong>$actor</strong> au Plan <strong>$extra</strong>');
+$lang->story->action->unlinkedfromplan      = array('main' => '$date, déplanifiée par <strong>$actor</strong> du Plan <strong>$extra</strong>.');
+$lang->story->action->linked2execution      = array('main' => '$date, associée au ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->unlinkedfromexecution = array('main' => '$date, dissociée du ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->linked2project        = array('main' => '$date, associée au project <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->unlinkedfromproject   = array('main' => '$date, dissociée d uproject <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->linked2build          = array('main' => '$date, intégrée par <strong>$actor</strong> au Build <strong>$extra</strong>');
+$lang->story->action->unlinkedfrombuild     = array('main' => '$date, retirée par <strong>$actor</strong> du Build <strong>$extra</strong>.');
+$lang->story->action->linked2release        = array('main' => '$date, ajoutée par <strong>$actor</strong> à la Release <strong>$extra</strong>');
+$lang->story->action->unlinkedfromrelease   = array('main' => '$date, retirée par <strong>$actor</strong> de la Release <strong>$extra</strong>.');
+$lang->story->action->linkrelatedstory      = array('main' => '$date, associée par <strong>$actor</strong> à la Story <strong>$extra</strong>.');
+$lang->story->action->subdividestory        = array('main' => '$date, décomposée par <strong>$actor</strong> en Story <strong>$extra</strong>.');
+$lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');
+$lang->story->action->unlinkchildstory      = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
@@ -384,3 +396,11 @@ $lang->story->convertToTask->fieldList['spec']       = "Description";
 $lang->story->convertToTask->fieldList['pri']        = 'Priority';
 $lang->story->convertToTask->fieldList['mailto']     = 'Mailto';
 $lang->story->convertToTask->fieldList['assignedTo'] = 'AssignTo';
+
+$lang->story->categoryList['feature']     = 'Feature';
+$lang->story->categoryList['interface']   = 'Interface';
+$lang->story->categoryList['performance'] = 'Performance';
+$lang->story->categoryList['safe']        = 'Safe';
+$lang->story->categoryList['experience']  = 'Experience';
+$lang->story->categoryList['improve']     = 'Improve';
+$lang->story->categoryList['other']       = 'Other';

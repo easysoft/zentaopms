@@ -1,5 +1,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php if(isset($config->maxVersion) or isset($config->proVersion) or isset($config->bizVersion)):?>
+<style>#mainContent > .side-col.col-lg{width: 235px}</style>
+<style>.hide-sidebar #sidebar{width: 0 !important}</style>
+<?php endif;?>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-lg' id='sidebar'>
     <?php include 'blockreportlist.html.php';?>
@@ -23,8 +27,8 @@
         </div>
         <div class='col-sm-4'>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->execution->common;?></span>
-            <?php echo html::select('project', $projects, $project, "class='form-control chosen' onchange='changeParams(this)'");?>
+            <span class='input-group-addon'><?php echo $lang->executionCommon;?></span>
+            <?php echo html::select('execution', $executions, $execution, "class='form-control chosen' onchange='changeParams(this)'");?>
           </div>
         </div>
       </div>
@@ -71,7 +75,7 @@
               </tr>
             <?php endforeach;?>
             </tbody>
-          </table> 
+          </table>
         </div>
       </div>
     </div>

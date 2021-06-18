@@ -1,7 +1,7 @@
 .chosen-container[id^="story"] {width: 200px; max-width: 150px;}
 select[id^="story"] + .picker-single {width: 130px; max-width: 130px;}
 [id^=name] {min-width: 165px;}
-#mainContent .main-header h2{max-width:300px}
+#mainContent .main-header h2 {max-width: 300px;}
 
 #batchCreateForm .input-group,
 #batchCreateForm .input-group .form-control {position: static;}

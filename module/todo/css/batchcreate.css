@@ -1,9 +1,9 @@
 #todoBatchAddHeader {padding-bottom: 12px;}
 #todoBatchAddHeader .input-group {width: 230px; position: relative; top: -3px; left: 15px;}
-#todoBatchAddForm .col-id {width: 50px; text-align: center; color: #838A9D}
+#todoBatchAddForm .col-id {width: 50px; text-align: center; color: #838A9D;}
 #todoBatchAddForm .col-type {width: 120px;}
 #todoBatchAddForm .col-pri {width: 90px;}
-html[lang="en"] #todoBatchAddForm .col-pri {width: 105px}
+html[lang="en"] #todoBatchAddForm .col-pri {width: 105px;}
 #todoBatchAddForm .col-date {width: 180px;}
 #todoBatchAddForm .col-pending {width: 70px;}
 html[lang="en"] #todoBatchAddForm .col-pending {width: 90px;}
@@ -15,4 +15,8 @@ html[lang="en"] #todoBatchAddForm .col-pending {width: 90px;}
 html[lang="en"] .main-header > .input-group {width: 250px;}
 
 #formSettingBtn {position: absolute; top: 14px; right: 20px; z-index: 1000;}
-#formSettingBtn .dropdown{margin-right:0px;}
+#formSettingBtn .dropdown {margin-right: 0px;}
+#formSettingBtn #formSetting {padding: 10px 12px;}
+#formSettingBtn .checkboxes {padding: 10px 3px;}
+#formSettingBtn .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
+#formSetting .btn {margin-right: 8px;}

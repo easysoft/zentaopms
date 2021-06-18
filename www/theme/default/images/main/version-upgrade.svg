@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>升级</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#0B64EB" offset="0%"></stop>
+            <stop stop-color="#87ADE7" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="升级" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="版本升级备份" transform="translate(-1075.000000, -418.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <g id="编组" transform="translate(1060.000000, 405.000000)">
+                <g id="升级" transform="translate(15.000000, 13.000000)">
+                    <path d="M3.86030118,12.3529581 L11.1397214,12.3529581 L11.1397214,14.7794315 L3.86030118,14.7794315 L3.86030118,12.3529581 Z M7.50001129,0.220591059 L0.220591059,5.07353788 L3.86030118,5.07353788 L3.86030118,11.1397214 L11.1397214,11.1397214 L11.1397214,5.07353788 L14.7794315,5.07353788 L7.50001129,0.220591059 Z" id="形状"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

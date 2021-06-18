@@ -12,16 +12,22 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('mode', $mode);?>
+<?php js::set('total', $pager->recTotal);?>
+<?php js::set('rawMethod', $app->rawMethod);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    if($app->rawMethod == 'work') echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
     if($app->rawMethod == 'contribute')
     {
         echo html::a(inlink($app->rawMethod, "mode=requirement&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
         echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
         echo html::a(inlink($app->rawMethod, "mode=requirement&type=closedBy&&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),  "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+    }
+    else
+    {
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->reviewByMe}</span>"   . ($type == 'reviewBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewBy'   ? ' btn-active-text' : '') . "'");
     }
     ?>
   </div>
@@ -85,7 +91,7 @@
           </td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
-          <td class='c-hours' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . ' ' . $config->hourUnit;?></td>
+          <td class='c-hours' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
           <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'> <?php echo $this->processStatus('story', $story);?></span></td>
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
@@ -93,11 +99,10 @@
             if($canBeChanged)
             {
                 $vars = "story={$story->id}";
-                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-                common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
+                common::printIcon('story', 'change',     $vars, $story, 'list', 'alter', '', 'iframe', true);
+                common::printIcon('story', 'review',     $vars, $story, 'list', 'search', '', 'iframe', true);
                 common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                common::printIcon('story', 'edit',       $vars, $story, 'list');
-                common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+                common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
             }
             ?>
           </td>
@@ -124,7 +129,7 @@
           </td>
           <td class='c-product'><?php echo $child->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
-          <td class='c-hours'><?php echo $child->estimate . ' ' . $config->hourUnit;?></td>
+          <td class='c-hours'><?php echo $child->estimate . $config->hourUnit;?></td>
           <td class='c-status'><span class='status-story status-<?php echo $child->status;?>'> <?php echo $this->processStatus('story', $child);?></span></td>
           <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
           <td class='c-actions'>
@@ -132,8 +137,8 @@
             if($canBeChanged)
             {
                 $vars = "story={$child->id}";
-                common::printIcon('story', 'change',     $vars, $child, 'list', 'fork');
-                common::printIcon('story', 'review',     $vars, $child, 'list', 'glasses');
+                common::printIcon('story', 'change',     $vars, $child, 'list', 'alter');
+                common::printIcon('story', 'review',     $vars, $child, 'list', 'search');
                 common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $child, 'list');
                 common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
@@ -155,7 +160,7 @@
         <?php
         if($canBatchEdit)
         {
-            $actionLink = $this->createLink('story', 'batchEdit');
+            $actionLink = $this->createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=requirement&from={$app->rawMethod}");
             $misc       = "data-form-action='$actionLink'";
             echo html::commonButton($lang->edit, $misc);
         }
@@ -232,7 +237,7 @@
         <?php endif;?>
         <?php if($canBatchClose):?>
         <?php
-        $actionLink = $this->createLink('story', 'batchClose');
+        $actionLink = $this->createLink('story', 'batchClose', "productID=0&executionID=0&storyType=requirement&from={$app->rawMethod}");
         $misc = "data-form-action=\"$actionLink\"";
         echo html::commonButton($lang->close, $misc);
         ?>

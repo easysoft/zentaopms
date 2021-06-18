@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      wenjie<wenjie@cnezsoft.com>
- * @package     project
+ * @package     execution
  * @version     $Id: report.html.php 1594 2011-04-10 11:00:00Z wj $
  * @link        http://www.zentao.net
  */
@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('project', 'task', "projectID=$projectID&browseType=$browseType"), $lang->goback, '', "class='btn'");?>
+    <?php echo html::a($this->createLink('execution', 'task', "executionID=$executionID&browseType=$browseType"), $lang->goback, '', "class='btn'");?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='text'><?php echo $lang->task->report->common;?></span>
@@ -46,7 +46,7 @@
         <?php echo html::a("javascript:changeChartType(\"$type\")", ($type == 'default' ? "<i class='icon icon-list-alt muted'></i> " : "<i class='icon icon-chart-{$type} muted'></i> ") . $typeName, '', "class='btn btn-link " . ($type == $chartType ? 'btn-active-line' : '') . "'")?>
         <?php endforeach;?>
       </div>
-      <div class='text-muted' style='padding-top:5px'><?php echo str_replace('%tab%', $lang->project->unclosed . $lang->task->common, $lang->report->notice->help);?></div>
+      <div class='text-muted' style='padding-top:5px'><?php echo str_replace('%tab%', $lang->execution->unclosed . $lang->task->common, $lang->report->notice->help);?></div>
       <?php foreach($charts as $chartType => $chartOption):?>
       <div class='table-row chart-row'>
         <div class='main-col'>
@@ -83,6 +83,6 @@
     </div>
   </div>
 </div>
-<?php js::set('projectID',  $projectID);?>
+<?php js::set('executionID', $executionID);?>
 <?php js::set('browseType', $browseType);?>
 <?php include '../../common/view/footer.html.php';?>

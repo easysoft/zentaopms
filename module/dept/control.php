@@ -14,8 +14,8 @@ class dept extends control
     const NEW_CHILD_COUNT = 10;
 
     /**
-     * Construct function, set menu. 
-     * 
+     * Construct function, set menu.
+     *
      * @access public
      * @return void
      */
@@ -27,8 +27,8 @@ class dept extends control
 
     /**
      * Browse a department.
-     * 
-     * @param  int    $deptID 
+     *
+     * @param  int    $deptID
      * @access public
      * @return void
      */
@@ -47,7 +47,7 @@ class dept extends control
 
     /**
      * Update the departments order.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -62,7 +62,7 @@ class dept extends control
 
     /**
      * Manage childs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -70,15 +70,16 @@ class dept extends control
     {
         if(!empty($_POST))
         {
-            $this->dept->manageChild($_POST['parentDeptID'], $_POST['depts']);
+            $deptIDList = $this->dept->manageChild($_POST['parentDeptID'], $_POST['depts']);
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $deptIDList));
             die(js::reload('parent'));
         }
     }
 
     /**
-     * Edit dept. 
-     * 
-     * @param  int    $deptID 
+     * Edit dept.
+     *
+     * @param  int    $deptID
      * @access public
      * @return void
      */
@@ -91,7 +92,8 @@ class dept extends control
         }
 
         $dept  = $this->dept->getById($deptID);
-        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all');
+        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all', $dept->manager, $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["manager"] = $this->config->user->moreLink;
 
         $this->view->optionMenu = $this->dept->getOptionMenu();
 
@@ -107,8 +109,8 @@ class dept extends control
 
     /**
      * Delete a department.
-     * 
-     * @param  int    $deptID 
+     *
+     * @param  int    $deptID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -133,10 +135,10 @@ class dept extends control
     }
 
     /**
-     * Ajax get users 
-     * 
-     * @param  int    $dept 
-     * @param  string $user 
+     * Ajax get users
+     *
+     * @param  int    $dept
+     * @param  string $user
      * @access public
      * @return void
      */

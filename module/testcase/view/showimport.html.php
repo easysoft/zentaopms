@@ -87,7 +87,7 @@ $(function()
           <?php $storyID = isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : '');?>
           <?php echo html::select("story[$key]", array($storyID => zget($stories, $storyID, '')), $storyID, "class='form-control chosen storyChange'")?></td>
           <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->pri : ''), "class='form-control chosen'")?></td>
-          <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control chosen'")?></td>
+          <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : '', "class='form-control chosen'")?></td>
           <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
           <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
           <?php if(!empty($appendFields)):?>

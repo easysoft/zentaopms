@@ -1,17 +1,17 @@
 #versionMenu {margin-left: 20px;}
-#versionMenu .dropdown-menu {min-width: 130px; max-height:180px;overflow-y:auto;}
+#versionMenu .dropdown-menu {min-width: 130px; max-height: 180px; overflow-y: auto;}
 
 #mainContent {min-height: 240px;}
 #featureList {padding: 0 10px;}
 #featureList > .item {padding: 0 0 10px 0;}
-#featureList > .item > h3 {color: #114f8e; font-size: 16px; margin: 0; padding: 10px 0}
+#featureList > .item > h3 {color: #114f8e; font-size: 16px; margin: 0; padding: 10px 0;}
 #featureList > .item > .desc {color: #666; padding-left: 18px;}
 #featureList > .item > .more-link {color: #666; padding-left: 18px;}
-#featureList > .item > .more {display: none}
+#featureList > .item > .more {display: none;}
 #featureList + #details {padding: 0;}
 #details .details-list {display: none; padding: 10px; background: #f1f1f1; border-radius: 4px;}
 #details.show-details .details-list {display: block;}
 #details > .btn > .icon-angle-right {transition: transform .2s; display: inline-block;}
-#details.show-details > .btn > .icon-angle-right {transform: rotate(90deg)}
+#details.show-details > .btn > .icon-angle-right {transform: rotate(90deg);}
 #details.show-details > .btn:focus {border-radius: 4px 4px 0 0;}
 #details.show-details > .btn:focus + .details-list {border-radius: 0 0 4px 4px;}

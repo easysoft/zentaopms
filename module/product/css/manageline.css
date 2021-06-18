@@ -4,12 +4,12 @@
 .col-module .form-control {border-radius: 2px 0 0 2px;}
 .col-module select.form-control {border-radius: 0 2px 2px 0; border-left-width: 0;} 
 .col-module select.form-control:focus {margin-left: -1px; border-left-width: 1px;}
-.col-module {padding-right: 10px}
+.col-module {padding-right: 10px;}
 .col-programs .form-control {border-radius: 0 2px 2px 0; border-left-width: 0;} 
 .col-programs .form-control:focus {margin-left: -1px; border-left-width: 1px;}
 .col-actions {width: 80px; padding-left: 5px;}
 
 #modulesTree li {padding-left: 20px;}
-#modulesTree li > .list-toggle {top: 0}
+#modulesTree li > .list-toggle {top: 0;}
 
-#lineForm table tr > td.text-middle span{display:block; float:left;}
+#lineForm table tr > td.text-middle span {display: block; float: left;}

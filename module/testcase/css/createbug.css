@@ -2,20 +2,20 @@ body {padding: 15px;}
 .table {margin-bottom: 5px;}
 .table > thead > tr > th {border-top: 1px solid #ddd;}
 .table > thead > tr > th:first-child,
-.table > tbody > tr > td:first-child {border-left: 1px solid #ddd}
+.table > tbody > tr > td:first-child {border-left: 1px solid #ddd;}
 .table > thead > tr > th:last-child,
-.table > tbody > tr > td:last-child {border-right: 1px solid #ddd}
-.table tfoot td {border-bottom: none}
+.table > tbody > tr > td:last-child {border-right: 1px solid #ddd;}
+.table tfoot td {border-bottom: none;}
 .table-actions {float: none; padding: 10px 0 0 0;}
 .table-actions .checkbox.btn {padding: 6px 11px;}
 
-.resultSteps .step-id {text-align: right}
-.resultSteps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
-.resultSteps .checkbox-inline input[type="checkbox"] {top: -2px}
+.resultSteps .step-id {text-align: right;}
+.resultSteps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px;}
+.resultSteps .checkbox-inline input[type="checkbox"] {top: -2px;}
 .resultSteps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
 .resultSteps .step-actions {width: 98px;}
 .resultSteps .active td {transition: background-color .5s;}
 .resultSteps .step-group .step-steps {resize: none; max-height: 30px;}
 .resultSteps .step-group .step-expects {display: none;}
 .resultSteps .step-item .step-item-id {display: table-cell;}
-.resultSteps .step-item .step-id {color: transparent}
+.resultSteps .step-item .step-id {color: transparent;}

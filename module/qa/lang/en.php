@@ -9,5 +9,5 @@
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->qa->common = 'QA';
-$lang->qa->index  = 'QA Home';
+$lang->qa->index       = 'QA Home';
+$lang->qa->indexAction = 'QA Index';

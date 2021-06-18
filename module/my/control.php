@@ -63,7 +63,7 @@ class my extends control
 
     /**
      * My calendar.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -74,41 +74,35 @@ class my extends control
 
     /**
      * My work view.
-     * 
-     * @param  string $mode 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $mode
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
     public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $moduleIndex = array_search('my', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
         echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
      * My contribute view.
-     * 
-     * @param  string $mode 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $mode
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
     public function contribute($mode = 'task', $type = 'openedBy', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $moduleIndex = array_search('my', $this->lang->noMenuModule);
-        if($moduleIndex !== false) unset($this->lang->noMenuModule[$moduleIndex]);
-
         if(($mode == 'issue' or $mode == 'risk') and $type == 'openedBy') $type = 'createdBy';
 
         echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -131,12 +125,11 @@ class my extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        if($this->app->viewType != 'json')
-        {
-            $this->session->set('todoList', $uri);
-            $this->session->set('bugList',  $uri);
-            $this->session->set('taskList', $uri);
-        }
+        $this->session->set('todoList',     $uri, 'my');
+        $this->session->set('bugList',      $uri, 'qa');
+        $this->session->set('taskList',     $uri, 'execution');
+        $this->session->set('storyList',    $uri, 'product');
+        $this->session->set('testtaskList', $uri, 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -188,7 +181,7 @@ class my extends control
     public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -203,7 +196,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projects   = $this->loadModel('program')->getPRJPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -229,7 +222,7 @@ class my extends control
     public function requirement($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -244,7 +237,7 @@ class my extends control
         $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projects   = $this->loadModel('program')->getPRJPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -270,11 +263,7 @@ class my extends control
     public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json')
-        {
-            $this->session->set('taskList',  $this->app->getURI(true));
-            $this->session->set('storyList', $this->app->getURI(true));
-        }
+        if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -319,13 +308,13 @@ class my extends control
         $this->view->position[] = $this->lang->my->task;
         $this->view->tabID      = 'task';
         $this->view->tasks      = $tasks;
-        $this->view->summary    = $this->loadModel('project')->summary($tasks);
+        $this->view->summary    = $this->loadModel('execution')->summary($tasks);
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
-        $this->view->projects   = $this->loadModel('program')->getPRJPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->mode       = 'task';
@@ -348,7 +337,7 @@ class my extends control
     public function bug($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. load Lang. */
-        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('bug');
 
         /* Load pager. */
@@ -397,7 +386,7 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('testtaskList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
 
         $this->app->loadLang('testcase');
 
@@ -422,7 +411,7 @@ class my extends control
     /**
      * My test case.
      *
-     * @param  string $type assigntome|openedbyme
+     * @param  string $type      assigntome|openedbyme
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -432,10 +421,11 @@ class my extends control
      */
     public function testcase($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* Save session, load lang. */
-        if($this->app->viewType != 'json') $this->session->set('caseList', $this->app->getURI(true));
         $this->loadModel('testcase');
         $this->loadModel('testtask');
+
+        /* Save session. */
+        $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -475,6 +465,37 @@ class my extends control
         $this->display();
     }
 
+    public function doc($type = 'openedbyme', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save session, load lang. */
+        if($this->app->viewType != 'json') $this->session->set('docList', $this->app->getURI(true), 'doc');
+        $this->loadModel('doc');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
+        $docs = $this->doc->getDocsByBrowseType($type, 0, 0, $sort, $pager);
+
+        /* Assign. */
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->doc;
+        $this->view->position[] = $this->lang->my->doc;
+        $this->view->docs       = $docs;
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+
+        $this->display();
+
+    }
+
     /**
      * My projects.
      *
@@ -490,8 +511,8 @@ class my extends control
         $this->loadModel('program');
         $this->app->loadLang('project');
 
-        $this->app->session->set('programList', $this->app->getURI(true));
-        $this->app->session->set('PRJBrowse', $this->app->getURI(true));
+        $this->app->session->set('programList', $this->app->getURI(true), 'program');
+        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -499,7 +520,7 @@ class my extends control
 
         /* Get PM id list. */
         $accounts = array();
-        $projects = $this->user->getProjects($this->app->user->account, 'project', $status, $pager);
+        $projects = $this->user->getExecutions($this->app->user->account, 'project', $status, 'id_desc', $pager);
         foreach($projects as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
@@ -530,6 +551,7 @@ class my extends control
     public function execution($type = 'undone', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadLang('project');
+        $this->app->loadLang('execution');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -538,7 +560,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
         $this->view->position[] = $this->lang->my->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getProjects($this->app->user->account, 'execution', $type, $pager);
+        $this->view->executions = $this->user->getExecutions($this->app->user->account, 'execution', $type, $orderBy, $pager);
         $this->view->type       = $type;
         $this->view->pager      = $pager;
         $this->view->mode       = 'execution';
@@ -550,18 +572,20 @@ class my extends control
      * My issues.
      *
      * @access public
-     * @param  string $type 
+     * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
-     * @return void   
+     * @return void
      */
     public function issue($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->app->session->set('issueList', $this->app->getURI(true), 'project');
 
         $this->view->title      = $this->lang->my->issue;
         $this->view->position[] = $this->lang->my->issue;
@@ -578,7 +602,7 @@ class my extends control
      * My risks.
      *
      * @access public
-     * @param  string $type 
+     * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -591,6 +615,8 @@ class my extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $this->app->session->set('riskList', $this->app->getURI(true), 'project');
+
         $this->view->title      = $this->lang->my->risk;
         $this->view->position[] = $this->lang->my->risk;
         $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
@@ -599,6 +625,107 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->mode       = 'risk';
+        $this->display();
+    }
+
+    /**
+     * My audits.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function audit($browseType = 'wait', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->loadModel('datatable');
+        $this->session->set('reviewList', $this->app->getURI(true));
+        $this->app->loadLang('review');
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);
+
+        $this->view->title      = $this->lang->my->myReview;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->reviewList = $reviewList;
+        $this->view->products   = $this->my->getProductPairs();
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->mode       = 'audit';
+        $this->display();
+    }
+
+    /**
+     * My ncs.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function nc($browseType = 'assignedToMe', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('nc');
+        $this->session->set('ncList', $this->app->getURI(true));
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
+
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->nc;
+        $this->view->position[] = $this->lang->my->nc;
+        $this->view->browseType = $browseType;
+        $this->view->pager      = $pager;
+        $this->view->ncs        = $this->my->getNcList($browseType, $orderBy, $pager);
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->mode       = 'nc';
+        $this->display();
+    }
+
+    /**
+     * My meeting list.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function myMeeting($browseType = 'futureMeeting', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('meeting');
+
+        $uri = $this->app->getURI(true);
+        $this->session->set('meetingList', $uri, 'my');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
+        $this->view->browseType = $browseType;
+        $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, 0, $pager);
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
+        $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
+        $this->view->mode       = 'myMeeting';
+
         $this->display();
     }
 
@@ -614,6 +741,8 @@ class my extends control
      */
     public function team($orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->lang->navGroup->my = 'system';
+
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -648,6 +777,7 @@ class my extends control
         if(!empty($_POST))
         {
             $_POST['account'] = $this->app->user->account;
+            $_POST['groups']  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
             $this->user->update($this->app->user->id);
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('my', 'profile'), 'parent'));
@@ -846,10 +976,11 @@ class my extends control
         $this->view->position[] = $this->lang->my->preference;
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
-        $this->view->URSR             = isset($this->config->URSR) ? $this->config->URSR : $this->setting->getItem('owner=system&module=custom&key=URSR');
-        $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-pgmbrowse';
+        $this->view->URSR             = $this->setting->getURSR();
+        $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-browse';
         $this->view->productLink      = isset($this->config->productLink) ? $this->config->productLink : 'product-all';
-        $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'program-prjbrowse';
+        $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'project-browse';
+        //$this->view->executionLink  = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();
@@ -865,20 +996,34 @@ class my extends control
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next', $originTotal = 0)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri);
-        $this->session->set('productPlanList', $uri);
-        $this->session->set('releaseList',     $uri);
-        $this->session->set('storyList',       $uri);
-        $this->session->set('projectList',     $uri);
-        $this->session->set('taskList',        $uri);
-        $this->session->set('buildList',       $uri);
-        $this->session->set('bugList',         $uri);
-        $this->session->set('caseList',        $uri);
-        $this->session->set('testtaskList',    $uri);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('designList',      $uri, 'project');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('programList',     $uri, 'program');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('caselibList',     $uri, 'qa');
+        $this->session->set('testsuiteList',   $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
+        $this->session->set('reportList',      $uri, 'qa');
+        $this->session->set('docList',         $uri, 'doc');
+        $this->session->set('todoList',        $uri, 'my');
+        $this->session->set('riskList',        $uri, 'project');
+        $this->session->set('issueList',       $uri, 'project');
+        $this->session->set('stakeholderList', $uri, 'project');
+        $this->session->set('meetingroomList', $uri, 'admin');
+        $this->session->set('meetingList',     $uri, 'project');
+        $this->session->set('meetingList',     $uri, 'my');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -893,19 +1038,21 @@ class my extends control
         $this->view->position[] = $this->lang->my->dynamic;
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager, 'all', 'all', $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager, 'all', 'all', 'all', $date, $direction);
+        if(empty($recTotal)) $originTotal = $pager->recTotal;
 
         /* Assign. */
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction  = $direction;
+        $this->view->type        = $type;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
+        $this->view->direction   = $direction;
+        $this->view->originTotal = $originTotal;
         $this->display();
     }
 
     /**
-     * Upload avatar. 
+     * Upload avatar.
      *
      * @access public
      * @return void
@@ -913,10 +1060,10 @@ class my extends control
     public function uploadAvatar()
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
-        {   
+        {
             $result = $this->loadModel('user')->uploadAvatar();
             $this->send($result);
-        }   
+        }
     }
 
     /**

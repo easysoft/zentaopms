@@ -10,26 +10,18 @@
  */
 class projectStory extends control
 {
-    public $products = array();
-
     /**
-     * Get the products associated with the project.
+     * All products.
      *
-     * @param  string  $moduleName
-     * @param  string  $methodName
+     * @var    array
      * @access public
-     * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-        $this->products = $this->loadModel('product')->getProductPairsByProject($this->session->PRJ);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=projectstory")));
-    }
+    public $products = array();
 
     /**
      * Get software requirements from product.
      *
+     * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $browseType
@@ -42,19 +34,11 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function story($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($projectID = 0, $productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->session->set('storyList',$this->app->getURI(true));
-        if(empty($productID)) $productID = key($this->products);
-
-        $this->lang->menugroup->product = 'projectstory';
-
-        $this->lang->story->title             = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
-        $this->lang->story->createRequirement = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createRequirement);
-        $this->lang->story->createStory       = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->createStory);
-        $this->lang->story->noStory           = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->noStory);
-
-        echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=project");
+        $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID)));
+        echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
     /**
@@ -68,15 +52,12 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function track($productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track($projectID = 0, $productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(empty($productID)) $productID = key($this->products);
-        $this->lang->menugroup->projectstory = 'track';
+        $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if(empty($productID)) $productID = key($products);
 
-        $this->lang->story->requirement = str_replace($this->lang->URCommon, $this->lang->URCommon, $this->lang->story->requirement);
-        $this->lang->story->story       = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->story);
-
-        echo $this->fetch('story', 'track', "productID=$productID&branch=$branch&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('story', 'track', "productID=$productID&branch=$branch&projectID=$projectID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -89,7 +70,7 @@ class projectStory extends control
     public function view($storyID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
-        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->PRJ);
+        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->project);
     }
 
     /**
@@ -106,7 +87,7 @@ class projectStory extends control
      */
     public function linkStory($projectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
-        echo $this->fetch('project', 'linkStory', "projectID=$projectID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('execution', 'linkStory', "projectID=$projectID&browseType=$browseType&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -120,7 +101,21 @@ class projectStory extends control
      */
     public function unlinkStory($projectID, $storyID, $confirm = 'no')
     {
-        echo $this->fetch('project', 'unlinkStory', "projectID=$projectID&storyID=$storyID&confirm=$confirm");
+        echo $this->fetch('execution', 'unlinkStory', "projectID=$projectID&storyID=$storyID&confirm=$confirm");
+    }
+
+    /**
+     * Import plan stories.
+     *
+     * @param  int    $projectID
+     * @param  int    $planID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function importPlanStories($projectID, $planID, $productID = 0)
+    {
+        echo $this->fetch('execution', 'importPlanStories', "projectID=$projectID&planID=$planID&productID=$productID");
     }
 }
 

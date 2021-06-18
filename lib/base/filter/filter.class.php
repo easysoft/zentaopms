@@ -264,9 +264,9 @@ class baseValidater
     {
         if(empty($date)) return true;
         if($date == '0000-00-00') return true;
-        $stamp = strtotime($date);
-        if(!is_numeric($stamp)) return false; 
-        return checkdate(date('m', $stamp), date('d', $stamp), date('Y', $stamp));
+        $date = substr($date, 0, 10);
+        if(preg_match ("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date, $parts)) return checkdate($parts[2], $parts[3], $parts[1]);
+        return false;
     }
 
     /**
@@ -282,9 +282,9 @@ class baseValidater
         if(empty($datetime)) return true;
         if($datetime == '0000-00-00') return true;
         if($datetime == '0000-00-00 00:00:00') return true;
-        $stamp = strtotime($datetime);
-        if(!is_numeric($stamp)) return false; 
-        return checkdate(date('m', $stamp), date('d', $stamp), date('Y', $stamp));
+        $date = substr($datetime, 0, 10);
+        if(preg_match ("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date, $parts)) return checkdate($parts[2], $parts[3], $parts[1]);
+        return false;
     }
 
     /**
@@ -1029,8 +1029,6 @@ class baseFixer
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
         {
-            if(function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc()) $this->data->$fieldName = stripslashes($this->data->$fieldName);
-
             if(!isset($this->stripedFields[$fieldName]) and (!defined('RUN_MODE') or RUN_MODE != 'admin'))
             {
                 $this->data->$fieldName = self::stripDataTags($this->data->$fieldName, $allowedTags, $attributes);

@@ -246,19 +246,19 @@ function adjustPlanBoxMargin()
 $(function()
 {
     $('#privList > tbody > tr > th input[type=checkbox]').change(function()
-    {   
+    {
         var id      = $(this).attr('id');
         var checked = $(this).prop('checked');
 
         if(id == 'allChecker')
-        {   
+        {
             $('input[type=checkbox]').prop('checked', checked);
-        }   
+        }
         else
-        {   
+        {
             $(this).parents('tr').find('input[type=checkbox]').prop('checked', checked);
-        }   
-    }); 
+        }
+    });
 })
 
 /**
@@ -285,21 +285,21 @@ $(function()
 /**
  * Set budget tips and acl list.
  *
- * @param  int    $parentProgramID
+ * @param  int    $programID
  * @access public
  * @return void
  */
-function setBudgetTipsAndAclList(parentProgramID)
+function setBudgetTipsAndAclList(programID)
 {
-    if(parentProgramID != 0)
+    if(programID != 0)
     {
-        $.get(createLink('program', 'ajaxGetAvailableBudget', "parentProgramID=" + parentProgramID), function(availableBudget)
+        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + programID), function(budgetLeft)
         {
-            parentProgram = PGMList[parentProgramID];
+            parentProgram = programList[programID];
             programBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
-            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + availableBudget) : '';
+            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + budgetLeft) : '';
             $('#budget').attr('placeholder', budgetNotes);
         });
         $('.aclBox').html($('#subPGMAcl').html());

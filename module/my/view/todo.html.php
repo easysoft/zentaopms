@@ -37,7 +37,7 @@
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "userID={$user->id}&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link export'");?>
     <?php common::printLink('todo', 'batchCreate', '', "<i class='icon icon-plus'></i> " . $lang->todo->batchCreate, '', "id='batchCreate' class='btn btn-secondary iframe' data-width='80%'", '', 'true');?>
-    <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%'", '', 'true');?>
+    <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%' data-app='my'", '', 'true');?>
   </div>
 </div>
 <div id="mainContent">
@@ -46,7 +46,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->my->noTodo;?></span>
       <?php if(common::hasPriv('todo', 'create')):?>
-      <?php echo html::a($this->createLink('todo', 'create'), "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('todo', 'create'), "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "class='btn btn-info' data-app='my'");?>
       <?php endif;?>
     </p>
   </div>
@@ -96,9 +96,9 @@
             <?php echo $todo->id?>
           </td>
           <td class="c-date"><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
-          <td class="c-type"><?php echo $lang->todo->typeList[$todo->type];?></td>
+          <td class="c-type"><?php echo zget($lang->todo->typeList, $todo->type, '');?></td>
           <td class="c-pri"><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
-          <td class="c-name" title="<?php echo $todo->name;?>"><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my", '', true), $todo->name, '', "data-toggle='modal' data-type='iframe' data-title='" . $lang->todo->view . "' data-icon='check'");?></td>
+          <td class="c-name" title="<?php echo $todo->name;?>"><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my", '', true), $todo->name, '', "data-toggle='modal' data-width='80%' data-type='iframe' data-title='" . $lang->todo->view . "' data-icon='check'");?></td>
           <td><?php echo zget($users, $todo->assignedBy);?></td>
           <td class="c-begin"><?php echo $todo->begin;?></td>
           <td class="c-end"><?php echo $todo->end;?></td>
@@ -173,5 +173,5 @@
   </form>
   <?php endif;?>
 </div>
-<?php js::set('listName', 'todoList')?>
+<?php js::set('listName', 'todoList');?>
 <?php include '../../common/view/footer.html.php';?>

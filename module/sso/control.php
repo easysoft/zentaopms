@@ -36,14 +36,37 @@ class sso extends control
 
             $callback = urlencode(common::getSysURL() . inlink('login', "type=return"));
             $location = $this->config->sso->addr;
-            if(strpos($location, '&') !== false)
+            $isGet = strpos($location, '&') !== false;
+            $requestType = $this->get->requestType;
+            if(isset($requestType)) $isGet = $this->get->requestType == 'GET' ? true : false;
+            if($isGet)
             {
+                /* Update location when dburl is path_info but need get. */
+                if(strpos($location, '&') === false)
+                {
+                    $index = strripos($location, '/');
+                    $uri = substr($location, 0 ,$index + 1);
+                    $param = str_replace('.html', '', substr($location, $index + 1));
+                    list($module, $method) = explode('-', $param);
+                    $location = $uri . 'index.php?m=' . $module . '&f=' . $method;
+                }
                 $location = rtrim($location, '&') . "&token=$token&auth=$auth&userIP=$userIP&callback=$callback&referer=$referer";
             }
             else
             {
+                /* Update location when dburl is get but need path_info. */
+                if(strpos($location, '&') !== false)
+                {
+                    list($uri, $param) = explode('index.php', $location);
+                    $param = trim($param, "?");
+                    list($module, $method) = explode('&', $param);
+                    $module = substr($module, strpos($module, '=') + 1);
+                    $method = substr($method, strpos($method, '=') + 1);
+                    $location = $uri . $module . '-' . $method . '.html';
+                }
                 $location = rtrim($location, '?') . "?token=$token&auth=$auth&userIP=$userIP&callback=$callback&referer=$referer";
             }
+
             if(!empty($_GET['sessionid']))
             {
                 $sessionConfig = json_decode(base64_decode($this->get->sessionid), false);
@@ -257,6 +280,7 @@ class sso extends control
         if($_POST)
         {
             $result = $this->sso->createUser();
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $result['id']));
             if($result['status'] != 'success') die($result['data']);
             die('success');
         }

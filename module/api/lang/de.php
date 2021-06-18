@@ -28,3 +28,4 @@ $lang->api->post      = 'Auf Seiten Liste beziehen bei POST Debug';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'Das SQL Interface erlaubt nur SELECT Abfragen.';
+$lang->api->error->disabled   = 'For security reasons, this feature is disabled. You can go to the config directory and modify the configuration item %s to open this function.';

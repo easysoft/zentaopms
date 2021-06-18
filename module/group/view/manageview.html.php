@@ -92,14 +92,29 @@
           <table class='table table-form'>
             <?php foreach($lang->mainNav as $module => $title):?>
             <?php if(!is_string($title)) continue;?>
-            <?php if($module == 'admin') continue;?>
-            <?php if(!isset($lang->action->dynamicAction->$module) and !isset($menugroup[$module])) continue;?>
+            <?php
+            /* Ignore null actions menus. */
+            $isNullActions = true;
+            if(isset($lang->action->dynamicAction->$module)) $isNullActions = false;
+            if(isset($navGroup[$module]) and $isNullActions)
+            {
+                foreach($navGroup[$module] as $subModule)
+                {
+                    if(isset($lang->action->dynamicAction->$subModule))
+                    {
+                        $isNullActions = false;
+                        break;
+                    }
+                }
+            }
+            if($isNullActions) continue;
+            ?>
             <tr id='<?php echo "{$module}ActionBox";?>'>
               <th class='w-100px text-left text-top'>
                 <div class='action-item'>
                   <div class='checkbox-primary'>
                     <input type="checkbox" id='allchecker' onclick="selectAll(this)"/>
-                    <label class='priv' for='allchecker'><?php echo $module == 'project' ? "<i class='icon icon-menu-doc'></i> " . $lang->executionCommon : substr($title, 0, strpos($title, '|'));?></label>
+                    <label class='priv' for='allchecker'><?php echo substr($title, 0, strpos($title, '|'));?></label>
                   </div>
                 </div>
               </th>
@@ -116,8 +131,8 @@
                   <?php endforeach;?>
                 </div>
                 <?php endif;?>
-                <?php if(isset($menugroup[$module])):?>
-                <?php foreach($menugroup[$module] as $subModule):?>
+                <?php if(isset($navGroup[$module])):?>
+                <?php foreach($navGroup[$module] as $subModule):?>
                 <?php if(isset($lang->action->dynamicAction->$subModule)):?>
                 <div class='clearfix'>
                   <?php foreach($lang->action->dynamicAction->$subModule as $action => $actionTitle):?>
@@ -137,7 +152,7 @@
             <?php endforeach;?>
           </table>
         </td>
-     </tr>
+      </tr>
       <tr>
         <td colspan='2' class='form-actions text-center'>
           <?php echo html::submitButton();?>

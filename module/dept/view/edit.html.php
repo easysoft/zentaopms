@@ -47,4 +47,13 @@ if(isset($pageCSS)) css::internal($pageCSS);
 <script>
 <?php if(isset($pageJS)) echo $pageJS;?>
 $('#dataform .chosen').chosen();
+$(document).ready(function()
+{
+    $("#dataform .picker-select[data-pickertype!='remote']").picker({chosenMode: true});
+    $("#dataform [data-pickertype='remote']").each(function()
+    {
+        var pickerremote = $(this).attr('data-pickerremote');
+        $(this).picker({chosenMode: true, remote: pickerremote});
+    })
+});
 </script>

@@ -10,8 +10,8 @@
     <tr class="divider">
       <th class="c-side text-left has-btn group-menu">
         <div class="table-group-btns">
-          <button type="button" class="btn btn-block btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-caret-down"></i></button>
-          <button type="button" class="btn btn-block btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-caret-up"></i></button>
+          <button type="button" class="btn btn-block btn-link group-collapse-all"><?php echo $lang->execution->treeLevel['root'];?> <i class="icon-caret-down"></i></button>
+          <button type="button" class="btn btn-block btn-link group-expand-all"><?php echo $lang->execution->treeLevel['all'];?> <i class="icon-caret-up"></i></button>
         </div>
       </th>
       <th class='c-id-sm'><?php echo $lang->idAB;?></th>

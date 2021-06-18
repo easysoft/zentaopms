@@ -19,9 +19,9 @@
   <td class='f-12px'><?php if(isset($info['products'])) echo join('<br />', $info['products']);?></td>
 </tr>
 <tr>
-  <th><?php echo $lang->convert->redmine->projects;?></th>
-  <td><?php echo $result['projects'];?></td>
-  <td class='f-12px'><?php if(isset($info['projects'])) echo join('<br />', $info['projects']);?></td>
+  <th><?php echo $lang->convert->redmine->executions;?></th>
+  <td><?php echo $result['executions'];?></td>
+  <td class='f-12px'><?php if(isset($info['executions'])) echo join('<br />', $info['executions']);?></td>
 </tr>
 <tr>
   <th><?php echo $lang->convert->redmine->stories;?></th>

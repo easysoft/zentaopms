@@ -23,10 +23,10 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        if((version_compare($this->config->installedVersion, '15', '<') 
-            || strpos($this->config->installedVersion, 'biz') !== false 
-            || strpos($this->config->installedVersion, 'pro') !== false) 
-            && strpos($this->config->installedVersion, 'max') === false)
+        $this->upgrade->deleteTmpModel();
+
+        $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+        if(empty($systemMode) && !isset($this->config->qcVersion))
         {
             /* Judge upgrade step. */
             $upgradeStep = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=upgradeStep');
@@ -60,7 +60,7 @@ class upgrade extends control
 
     /**
      * Backup.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -74,7 +74,7 @@ class upgrade extends control
 
     /**
      * Select the version of old zentao.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -90,7 +90,7 @@ class upgrade extends control
 
     /**
      * Confirm the version.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -110,7 +110,7 @@ class upgrade extends control
 
     /**
      * Execute the upgrading.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -124,7 +124,7 @@ class upgrade extends control
         $result = $this->upgrade->deleteFiles();
         if($result)
         {
-            $result[] = $this->lang->upgrade->afterDeleted; 
+            $result[] = $this->lang->upgrade->afterDeleted;
 
             $this->view->result = 'fail';
             $this->view->errors  = $result;
@@ -137,11 +137,12 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
-            if((version_compare($fromVersion, '15', '<')
-                || strpos($fromVersion, 'biz') !== false
-                || strpos($fromVersion, 'pro') !== false)
-                && strpos($fromVersion, 'max') === false
-                && !isset($this->config->qcVersion)) $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
+            $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+            if((empty($systemMode) && !isset($this->config->qcVersion) && strpos($fromVersion, 'max') === false) or
+               ($systemMode != 'new' && strpos($fromVersion, 'max') === false && strpos($this->config->version, 'max') !== false))
+            {
+                $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
+            }
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
@@ -152,8 +153,8 @@ class upgrade extends control
 
     /**
      * Guide to 15 version.
-     * 
-     * @param  string    $fromVersion 
+     *
+     * @param  string    $fromVersion
      * @access public
      * @return void
      */
@@ -165,16 +166,36 @@ class upgrade extends control
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
 
             if($mode == 'classic') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
-            if($mode == 'new') $this->locate(inlink('mergeTips'));
+            if($mode == 'new')     $this->locate(inlink('mergeTips'));
         }
 
-        $this->view->title = $this->lang->upgrade->to15Guide;
+        if(isset($this->config->maxVersion))
+        {
+            $this->lang->upgrade->to15Desc = str_replace('15', 'Max', $this->lang->upgrade->to15Desc);
+            $title = $this->lang->upgrade->toMAXGuide;
+        }
+        elseif(isset($this->config->bizVersion))
+        {
+            $this->lang->upgrade->to15Desc = str_replace('15', 'Biz5', $this->lang->upgrade->to15Desc);
+            $title = $this->lang->upgrade->toBIZ5Guide;
+        }
+        elseif(isset($this->config->proVersion))
+        {
+            $this->lang->upgrade->to15Desc = str_replace('15', 'Pro10', $this->lang->upgrade->to15Desc);
+            $title = $this->lang->upgrade->toPRO10Guide;
+        }
+        else
+        {
+            $title = $this->lang->upgrade->toPMS15Guide;
+        }
+
+        $this->view->title = $title;
         $this->display();
     }
 
     /**
      * Merge program tips.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -197,7 +218,9 @@ class upgrade extends control
     {
         $this->session->set('upgrading', true);
         $this->app->loadLang('program');
+        $this->app->loadLang('project');
         $this->app->loadLang('product');
+        $this->app->loadConfig('execution');
 
         if($_POST)
         {
@@ -263,6 +286,9 @@ class upgrade extends control
                 list($programID, $projectID, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
+                /* Process productline. */
+                $this->dao->delete()->from(TABLE_MODULE)->where('`root`')->eq(0)->andWhere('`type`')->eq('line')->exec();
+
                 /* Process merged products and projects. */
                 $this->upgrade->processMergedData($programID, $projectID, $lineID, $linkedProducts, $linkedSprints);
             }
@@ -292,10 +318,10 @@ class upgrade extends control
 
         /* Get no merged product and project count. */
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetch('count');
-        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('path')->eq('')->fetch('count');
+        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('path')->eq('')->andWhere('type')->ne('program')->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
-        if(empty($noMergedProductCount) and empty($noMergedSprintCount)) 
+        if(empty($noMergedProductCount) and empty($noMergedSprintCount))
         {
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
@@ -379,7 +405,7 @@ class upgrade extends control
             $productGroup   = array();
             foreach($sprintProducts as $sprintID => $products)
             {
-                if(count($products) > 1) 
+                if(count($products) > 1)
                 {
                     unset($noMergedSprints[$sprintID]);
                     $productGroup[] = array_keys($products);
@@ -450,7 +476,7 @@ class upgrade extends control
                     if($project) $sprint->projects[$project->id] = $project->name;
                 }
 
-                if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchPairs();
+                if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs();
             }
 
             $this->view->noMergedSprints = $noMergedSprints;
@@ -471,7 +497,7 @@ class upgrade extends control
 
     /**
      * Merge Repos.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -488,8 +514,6 @@ class upgrade extends control
         if(empty($repos))
         {
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
-
-            if($this->config->version == $this->config->installedVersion) die(js::alert($this->lang->upgrade->successTip) . js::locate($this->createLink('user', 'logout')));
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
 
@@ -509,7 +533,7 @@ class upgrade extends control
     public function ajaxGetProjectPairsByProgram($programID = 0)
     {
         $projects = array('' => '') + $this->upgrade->getProjectPairsByProgram($programID);
-        die(html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getPGMStatus(\'project\', this.value)"'));
+        die(html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getProgramStatus(\'project\', this.value)"'));
     }
 
     /**
@@ -528,9 +552,9 @@ class upgrade extends control
 
     /**
      * After execute.
-     * 
-     * @param  string $fromVersion 
-     * @param  string $processed 
+     *
+     * @param  string $fromVersion
+     * @param  string $processed
      * @access public
      * @return void
      */
@@ -543,6 +567,8 @@ class upgrade extends control
             $this->view->alterSQL = $alterSQL;
             die($this->display('upgrade', 'consistency'));
         }
+
+        unset($_SESSION['user']);
 
         if($processed == 'no')
         {
@@ -567,7 +593,7 @@ class upgrade extends control
 
     /**
      * Consistency.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -588,7 +614,7 @@ class upgrade extends control
 
     /**
      * Check extension.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -634,9 +660,9 @@ class upgrade extends control
 
     /**
      * Ajax update file.
-     * 
-     * @param  string $type 
-     * @param  int    $lastID 
+     *
+     * @param  string $type
+     * @param  int    $lastID
      * @access public
      * @return void
      */
@@ -648,8 +674,8 @@ class upgrade extends control
         if($result['type'] == 'finish')
         {
             $response['result']  = 'finished';
-            $response['type']     = $type;
-            $response['count']    = $result['count'];
+            $response['type']    = $type;
+            $response['count']   = $result['count'];
             $response['message'] = 'Finished';
         }
         else
@@ -666,7 +692,7 @@ class upgrade extends control
 
     /**
      * Ajax get product name.
-     * 
+     *
      * @param  int    $productID
      * @access public
      * @return void
@@ -683,7 +709,7 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPGMStatus($programID)
+    public function ajaxGetProgramStatus($programID)
     {
         die($this->dao->select('status')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('status'));
     }

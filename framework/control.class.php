@@ -21,17 +21,19 @@ include dirname(__FILE__) . '/base/control.class.php';
 class control extends baseControl
 {
     /**
-     * Check requiredFields and set exportFields for workflow. 
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
-     * @param  string $appName 
+     * Check requiredFields and set exportFields for workflow.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $appName
      * @access public
      * @return void
      */
     public function __construct($moduleName = '', $methodName = '', $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
+
+        $this->app->setOpenApp();
 
         if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')) $this->setPreference();
 
@@ -78,7 +80,7 @@ class control extends baseControl
 
     /**
      * Go to preference setting page if preference not setted.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -89,7 +91,7 @@ class control extends baseControl
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'preference') return true;
 
-        if(!isset($this->config->preferenceSetted)) 
+        if(!isset($this->config->preferenceSetted))
         {
             $this->locate(helper::createLink('my', 'preference'));
         }
@@ -208,7 +210,7 @@ class control extends baseControl
         chdir(dirname($viewFile));
 
         /**
-         * 使用extract安定ob方法渲染$viewFile里面的代码。
+         * 使用extract和ob方法渲染$viewFile里面的代码。
          * Use extract and ob functions to eval the codes in $viewFile.
          */
         extract((array)$this->view);
@@ -293,7 +295,7 @@ class control extends baseControl
 
     /**
      * Check require with flow field when post data.
-     * 
+     *
      * @access public
      * @return void
      */

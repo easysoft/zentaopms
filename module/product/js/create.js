@@ -1,5 +1,5 @@
 /**
-  * Load product Lines. 
+  * Load product Lines.
   *
   * @param  $rootID
   * @access public
@@ -14,6 +14,18 @@ function loadProductLines(rootID)
     });
 }
 
+/**
+ * Set parent program.
+ *
+ * @param  $parentProgram
+ * @access public
+ * @return void
+ */
+function setParentProgram(parentProgram)
+{
+    location.href = createLink('product', 'create', 'programID=' + parentProgram);
+}
+
 $('#program').change(function()
 {
     var programID = $(this).val();
@@ -25,3 +37,31 @@ $('#program').change(function()
         $('#line').chosen();
     })
 })
+
+/**
+ * Toggle line.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function toggleLine(obj)
+{
+    var $obj = $(obj);
+    if($obj.length == 0) return false;
+
+    var $line = $obj.closest('table').find('#line');
+
+    if($obj.prop('checked'))
+    {
+        $('form .line-no-exist').removeClass('hidden');
+        $('form .line-exist').addClass('hidden');
+        $line.attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('form .line-exist').removeClass('hidden');
+        $('form .line-no-exist').addClass('hidden');
+        $line.removeAttr('disabled');
+    }
+}

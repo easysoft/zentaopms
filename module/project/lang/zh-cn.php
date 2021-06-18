@@ -1,397 +1,230 @@
 <?php
-/**
- * The project module zh-cn file of ZenTaoMS.
- *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
- * @version     $Id: zh-cn.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
- */
-/* 字段列表。*/
-$lang->project->common         = $lang->executionCommon . '视图';
-$lang->project->allProjects    = '所有' . $lang->executionCommon;
-$lang->project->id             = $lang->executionCommon . '编号';
-$lang->project->type           = $lang->executionCommon . '类型';
-$lang->project->name           = $lang->executionCommon . '名称';
-$lang->project->code           = $lang->executionCommon . '代号';
-$lang->project->statge         = '阶段';
-$lang->project->pri            = '优先级';
-$lang->project->openedBy       = '由谁创建';
-$lang->project->openedDate     = '创建日期';
-$lang->project->closedBy       = '由谁关闭';
-$lang->project->closedDate     = '关闭日期';
-$lang->project->canceledBy     = '由谁取消';
-$lang->project->canceledDate   = '取消日期';
-$lang->project->begin          = '开始日期';
-$lang->project->end            = '结束日期';
-$lang->project->dateRange      = '起始日期';
-$lang->project->to             = '至';
-$lang->project->days           = '可用工作日';
-$lang->project->day            = '天';
-$lang->project->workHour       = '工时';
-$lang->project->workHourUnit   = 'H';
-$lang->project->totalHours     = '可用工时';
-$lang->project->totalDays      = '可用工日';
-$lang->project->status         = $lang->executionCommon . '状态';
-$lang->project->subStatus      = '子状态';
-$lang->project->desc           = $lang->executionCommon . '描述';
-$lang->project->owner          = '负责人';
-$lang->project->PO             = $lang->productCommon . '负责人';
-$lang->project->PM             = $lang->executionCommon . '负责人';
-$lang->project->QD             = '测试负责人';
-$lang->project->RD             = '发布负责人';
-$lang->project->qa             = '测试';
-$lang->project->release        = '发布';
-$lang->project->acl            = '访问控制';
-$lang->project->teamname       = '团队名称';
-$lang->project->order          = $lang->executionCommon . '排序';
-$lang->project->orderAB        = '排序';
-$lang->project->products       = '相关' . $lang->productCommon;
-$lang->project->whitelist      = '白名单';
-$lang->project->addWhitelist   = '添加白名单';
-$lang->project->unbindWhielist = '删除白名单';
-$lang->project->totalEstimate  = '预计';
-$lang->project->totalConsumed  = '消耗';
-$lang->project->totalLeft      = '剩余';
-$lang->project->progress       = '进度';
-$lang->project->hours          = '预计 %s 消耗 %s 剩余 %s';
-$lang->project->viewBug        = '查看bug';
-$lang->project->noProduct      = "无{$lang->executionCommon}";
-$lang->project->createStory    = "添加{$lang->SRCommon}";
-$lang->project->storyTitle     = "{$lang->SRCommon}名称";
-$lang->project->all            = '所有';
-$lang->project->undone         = '未完成';
-$lang->project->unclosed       = '未关闭';
-$lang->project->typeDesc       = "运维{$lang->executionCommon}没有{$lang->SRCommon}、bug、版本、测试功能。";
-$lang->project->mine           = '我负责：';
-$lang->project->other          = '其他：';
-$lang->project->deleted        = '已删除';
-$lang->project->delayed        = '已延期';
-$lang->project->product        = $lang->project->products;
-$lang->project->readjustTime   = "调整{$lang->executionCommon}起止时间";
-$lang->project->readjustTask   = '顺延任务的起止时间';
-$lang->project->effort         = '日志';
-$lang->project->relatedMember  = '相关成员';
-$lang->project->watermark      = '由禅道导出';
-$lang->project->burnXUnit      = '(日期)';
-$lang->project->burnYUnit      = '(工时)';
-$lang->project->waitTasks      = '待处理';
-$lang->project->viewByUser     = '按用户查看';
-$lang->project->oneProduct     = "阶段只能关联一个{$lang->productCommon}";
-$lang->project->noLinkProduct  = "阶段没有关联{$lang->productCommon}";
-$lang->project->recent         = '近期访问：';
+/* Actions. */
+$lang->project->createGuide       = '选择项目模板';
+$lang->project->index             = '项目仪表盘';
+$lang->project->home              = '项目主页';
+$lang->project->create            = '创建项目';
+$lang->project->edit              = '编辑项目';
+$lang->project->batchEdit         = '批量编辑项目';
+$lang->project->view              = '项目概况';
+$lang->project->batchEdit         = '批量编辑';
+$lang->project->browse            = '项目列表';
+$lang->project->all               = '所有项目';
+$lang->project->start             = '启动项目';
+$lang->project->finish            = '完成项目';
+$lang->project->suspend           = '挂起项目';
+$lang->project->delete            = '删除项目';
+$lang->project->close             = '关闭项目';
+$lang->project->activate          = '激活项目';
+$lang->project->group             = '项目权限分组';
+$lang->project->createGroup       = '项目创建分组';
+$lang->project->editGroup         = '项目编辑分组';
+$lang->project->copyGroup         = '项目复制分组';
+$lang->project->manageView        = '项目维护视野';
+$lang->project->managePriv        = '项目维护权限';
+$lang->project->manageMembers     = '项目团队';
+$lang->project->export            = '导出';
+$lang->project->addProduct        = '新建产品';
+$lang->project->manageGroupMember = '维护分组用户';
+$lang->project->moduleSetting     = '列表设置';
+$lang->project->moduleOpen        = '显示项目集名';
+$lang->project->dynamic           = '动态';
+$lang->project->execution         = '执行列表';
+$lang->project->qa                = '测试仪表盘';
+$lang->project->bug               = 'Bug列表';
+$lang->project->testcase          = '用例列表';
+$lang->project->testtask          = '测试单';
+$lang->project->build             = '版本';
+$lang->project->updateOrder       = '排序';
+$lang->project->sort              = '项目排序';
+$lang->project->whitelist         = '项目白名单';
+$lang->project->addWhitelist      = '项目添加白名单';
+$lang->project->unbindWhitelist   = '项目删除白名单';
+$lang->project->manageProducts    = '关联产品';
+$lang->project->copyTitle         = '请选择要复制的项目';
+$lang->project->errorSameProducts = '项目不能关联多个相同的产品。';
+$lang->project->errorNoProducts   = '最少关联一个产品';
+$lang->project->copyNoProject     = '没有可用的项目来复制';
+$lang->project->searchByName      = '输入项目名称进行检索';
+$lang->project->deleted           = '已删除';
+$lang->project->linkedProducts    = '已关联';
+$lang->project->unlinkedProducts  = '未关联';
+$lang->project->testreport        = '测试报告';
 
-$lang->project->start    = "开始";
-$lang->project->activate = "激活";
-$lang->project->putoff   = "延期";
-$lang->project->suspend  = "挂起";
-$lang->project->close    = "关闭";
-$lang->project->export   = "导出";
+/* Fields. */
+$lang->project->common             = '项目';
+$lang->project->stage              = '阶段';
+$lang->project->PM                 = '负责人';
+$lang->project->name               = '项目名称';
+$lang->project->category           = '项目类型';
+$lang->project->desc               = '项目描述';
+$lang->project->code               = '项目代号';
+$lang->project->copy               = '复制项目';
+$lang->project->begin              = '计划开始';
+$lang->project->end                = '计划完成';
+$lang->project->status             = '状态';
+$lang->project->budget             = '预算';
+$lang->project->template           = '项目模板';
+$lang->project->estimate           = '预计';
+$lang->project->consume            = '消耗';
+$lang->project->surplus            = '剩余';
+$lang->project->progress           = '进度';
+$lang->project->dateRange          = '起止日期';
+$lang->project->to                 = '至';
+$lang->project->realEnd            = '实际完成日期';
+$lang->project->realBegan          = '实际开始日期';
+$lang->project->bygrid             = '看板';
+$lang->project->bylist             = '列表';
+$lang->project->mine               = '我参与的';
+$lang->project->myProject          = '我负责：';
+$lang->project->other              = '其他：';
+$lang->project->acl                = '访问控制';
+$lang->project->setPlanduration    = '设置工期';
+$lang->project->auth               = '权限控制';
+$lang->project->durationEstimation = '工作量估算';
+$lang->project->leftStories        = '剩余需求';
+$lang->project->leftTasks          = '剩余任务';
+$lang->project->leftBugs           = '剩余Bug';
+$lang->project->children           = '子项目';
+$lang->project->parent             = '所属项目集';
+$lang->project->allStories         = '总需求';
+$lang->project->doneStories        = '已完成';
+$lang->project->doneProjects       = '已结束';
+$lang->project->allInput           = '项目总投入';
+$lang->project->weekly             = '项目周报';
+$lang->project->pv                 = 'PV';
+$lang->project->ev                 = 'EV';
+$lang->project->sv                 = 'SV';
+$lang->project->ac                 = 'AC';
+$lang->project->cv                 = 'CV';
+$lang->project->pvTitle            = '计划完成';
+$lang->project->evTitle            = '实际完成';
+$lang->project->svTitle            = '进度偏差';
+$lang->project->acTitle            = '实际花费';
+$lang->project->cvTitle            = '成本偏差';
+$lang->project->teamCount          = '人数';
+$lang->project->longTime           = '长期';
+$lang->project->future             = '待定';
+$lang->project->moreProject        = '更多项目';
+$lang->project->days               = '可用工作日';
 
-$lang->project->endList[7]   = '一星期';
-$lang->project->endList[14]  = '两星期';
-$lang->project->endList[31]  = '一个月';
-$lang->project->endList[62]  = '两个月';
-$lang->project->endList[93]  = '三个月';
-$lang->project->endList[186] = '半年';
-$lang->project->endList[365] = '一年';
+$lang->project->productNotEmpty        = '请关联产品或创建产品。';
+$lang->project->existProductName       = '产品名称已存在。';
+$lang->project->changeProgram          = '%s > 修改项目集';
+$lang->project->changeProgramTip       = '修改项目集后，该项目关联的产品也会同时修改所属项目集，请确认是否修改。';
+$lang->project->linkedProjectsTip      = '关联的项目如下';
+$lang->project->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
+$lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此项目中";
+$lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 
-$lang->team = new stdclass();
-$lang->team->account    = '用户';
-$lang->team->role       = '角色';
-$lang->team->join       = '加盟日';
-$lang->team->hours      = '可用工时/天';
-$lang->team->days       = '可用工日';
-$lang->team->totalHours = '总计';
+$lang->project->tenThousand = '万';
 
-$lang->team->limited            = '受限用户';
-$lang->team->limitedList['yes'] = '是';
-$lang->team->limitedList['no']  = '否';
+$lang->project->unitList['CNY'] = '人民币';
+$lang->project->unitList['USD'] = '美元';
+$lang->project->unitList['HKD'] = '港元';
+$lang->project->unitList['NTD'] = '台元';
+$lang->project->unitList['EUR'] = '欧元';
+$lang->project->unitList['DEM'] = '马克';
+$lang->project->unitList['CHF'] = '瑞士法郎';
+$lang->project->unitList['FRF'] = '法国法郎';
+$lang->project->unitList['GBP'] = '英镑';
+$lang->project->unitList['NLG'] = '荷兰盾';
+$lang->project->unitList['CAD'] = '加拿大元';
+$lang->project->unitList['RUR'] = '卢布';
+$lang->project->unitList['INR'] = '卢比';
+$lang->project->unitList['AUD'] = '澳大利亚元';
+$lang->project->unitList['NZD'] = '新西兰元';
+$lang->project->unitList['THB'] = '泰国铢';
+$lang->project->unitList['SGD'] = '新加坡元';
 
-$lang->project->basicInfo = '基本信息';
-$lang->project->otherInfo = '其他信息';
+$lang->project->currencySymbol['CNY'] = '¥';
+$lang->project->currencySymbol['USD'] = '$';
+$lang->project->currencySymbol['HKD'] = 'HK$';
+$lang->project->currencySymbol['NTD'] = 'NT$';
+$lang->project->currencySymbol['EUR'] = '€';
+$lang->project->currencySymbol['DEM'] = 'DEM';
+$lang->project->currencySymbol['CHF'] = '₣';
+$lang->project->currencySymbol['FRF'] = '₣';
+$lang->project->currencySymbol['GBP'] = '£';
+$lang->project->currencySymbol['NLG'] = 'ƒ';
+$lang->project->currencySymbol['CAD'] = '$';
+$lang->project->currencySymbol['RUR'] = '₽';
+$lang->project->currencySymbol['INR'] = '₹';
+$lang->project->currencySymbol['AUD'] = 'A$';
+$lang->project->currencySymbol['NZD'] = 'NZ$';
+$lang->project->currencySymbol['THB'] = '฿';
+$lang->project->currencySymbol['SGD'] = 'S$';
 
-/* 字段取值列表。*/
+$lang->project->modelList['scrum']     = "Scrum";
+$lang->project->modelList['waterfall'] = "瀑布";
+
+$lang->project->featureBar['all']       = '所有';
+$lang->project->featureBar['doing']     = '进行中';
+$lang->project->featureBar['wait']      = '未开始';
+$lang->project->featureBar['suspended'] = '已挂起';
+$lang->project->featureBar['closed']    = '已关闭';
+
+$lang->project->aclList['private'] = "私有 (只有项目团队成员和干系人可访问)";
+$lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)";
+
+$lang->project->acls['private'] = '私有';
+$lang->project->acls['open']    = '公开';
+
+$lang->project->subAclList['private'] = "私有 (只有本项目负责人、团队成员和干系人可访问)";
+$lang->project->subAclList['open']    = "公开 (有项目视图权限即可访问)";
+$lang->project->subAclList['program'] = '项目集内公开（所有上级项目集负责人和干系人、本项目负责人、团队成员和干系人可访问）';
+
+$lang->project->authList['extend'] = '继承 (取系统权限与项目权限的合集)';
+$lang->project->authList['reset']  = '重新定义 (只取项目权限)';
+
 $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';
 $lang->project->statusList['suspended'] = '已挂起';
 $lang->project->statusList['closed']    = '已关闭';
 
-global $config;
-if($config->systemMode == 'new')
-{
-    $lang->project->aclList['private'] = "私有（团队成员和项目负责人、干系人可访问）";
-    $lang->project->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
-}
-else
-{
-    $lang->project->aclList['private'] = "私有（团队成员和{$lang->executionCommon}负责人可访问）";
-    $lang->project->aclList['open']    = "公开（有{$lang->executionCommon}视图权限即可访问）";
-}
+$lang->project->endList[31]  = '一个月';
+$lang->project->endList[93]  = '三个月';
+$lang->project->endList[186] = '半年';
+$lang->project->endList[365] = '一年';
+$lang->project->endList[999] = '长期';
 
-$lang->project->storyPoint = '故事点';
+$lang->project->empty                  = '暂时没有项目';
+$lang->project->accessDenied           = '您无权访问该项目！';
+$lang->project->chooseProgramType      = '选中项目管理模型';
+$lang->project->nextStep               = '下一步';
+$lang->project->hoursUnit              = '%s 工时';
+$lang->project->membersUnit            = '%s人';
+$lang->project->lastIteration          = "近期{$lang->executionCommon}";
+$lang->project->ongoingStage           = '进行中的阶段';
+$lang->project->scrum                  = 'Scrum';
+$lang->project->waterfall              = '瀑布';
+$lang->project->waterfallTitle         = '瀑布式项目管理';
+$lang->project->cannotCreateChild      = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
+$lang->project->confirmDelete          = "您确定要删除吗？";
+$lang->project->emptyPM                = '暂无';
+$lang->project->cannotChangeToCat      = "该项目已经有实际的内容，无法修改为父项目";
+$lang->project->cannotCancelCat        = "该项目下已经有子项目，无法取消父项目标记";
+$lang->project->parentBeginEnd         = "父项目起止时间：%s ~ %s";
+$lang->project->childLongTime          = "子项目中有长期项目，父项目也应该是长期项目";
+$lang->project->readjustTime           = '重新调整项目起止时间';
+$lang->project->notAllowRemoveProducts = '该产品中的需求已与项目进行了关联，请取消关联后再操作。';
 
-$lang->project->burnByList['left']       = '按剩余工时查看';
-$lang->project->burnByList['estimate']   = "按计划工时查看";
-$lang->project->burnByList['storyPoint'] = '按故事点查看';
+$lang->project->programTitle['0']    = '不显示';
+$lang->project->programTitle['base'] = '只显示一级项目集';
+$lang->project->programTitle['end']  = '只显示最后一级项目集';
 
-/* 方法列表。*/
-$lang->project->index             = "{$lang->executionCommon}主页";
-$lang->project->task              = '任务列表';
-$lang->project->groupTask         = '分组浏览任务';
-$lang->project->story             = "{$lang->SRCommon}列表";
-$lang->project->bug               = 'Bug列表';
-$lang->project->dynamic           = '动态';
-$lang->project->latestDynamic     = '最新动态';
-$lang->project->build             = '所有版本';
-$lang->project->testtask          = '测试单';
-$lang->project->burn              = '燃尽图';
-$lang->project->computeBurn       = '更新燃尽图';
-$lang->project->burnData          = '燃尽图数据';
-$lang->project->fixFirst          = '修改首天工时';
-$lang->project->team              = '团队成员';
-$lang->project->doc               = '文档列表';
-$lang->project->doclib            = '文档库列表';
-$lang->project->manageProducts    = '关联' . $lang->productCommon;
-$lang->project->linkStory         = "关联{$lang->SRCommon}";
-$lang->project->linkStoryByPlan   = "按照计划关联";
-$lang->project->linkPlan          = "关联计划";
-$lang->project->unlinkStoryTasks  = "未关联{$lang->SRCommon}任务";
-$lang->project->linkedProducts    = '已关联';
-$lang->project->unlinkedProducts  = '未关联';
-$lang->project->view              = "{$lang->executionCommon}概况";
-$lang->project->startAction       = "开始{$lang->executionCommon}";
-$lang->project->activateAction    = "激活{$lang->executionCommon}";
-$lang->project->delayAction       = "延期{$lang->executionCommon}";
-$lang->project->suspendAction     = "挂起{$lang->executionCommon}";
-$lang->project->closeAction       = "关闭{$lang->executionCommon}";
-$lang->project->testtaskAction    = "{$lang->executionCommon}测试单";
-$lang->project->teamAction        = "{$lang->executionCommon}团队";
-$lang->project->kanbanAction      = "{$lang->executionCommon}看板";
-$lang->project->printKanbanAction = "打印看板";
-$lang->project->treeAction        = "{$lang->executionCommon}树状图";
-$lang->project->exportAction      = "导出{$lang->executionCommon}";
-$lang->project->computeBurnAction = "计算燃尽图";
-$lang->project->create            = "添加{$lang->executionCommon}";
-$lang->project->copy              = "复制{$lang->executionCommon}";
-$lang->project->delete            = "删除{$lang->executionCommon}";
-$lang->project->browse            = "浏览{$lang->executionCommon}";
-$lang->project->list              = "{$lang->executionCommon}列表";
-$lang->project->edit              = "编辑{$lang->executionCommon}";
-$lang->project->batchEdit         = "批量编辑";
-$lang->project->manageMembers     = '团队管理';
-$lang->project->unlinkMember      = '移除成员';
-$lang->project->unlinkStory       = "移除{$lang->SRCommon}";
-$lang->project->unlinkStoryAB     = "移除{$lang->SRCommon}";
-$lang->project->batchUnlinkStory  = "批量移除{$lang->SRCommon}";
-$lang->project->importTask        = '转入任务';
-$lang->project->importPlanStories = "按计划关联{$lang->SRCommon}";
-$lang->project->importBug         = '导入Bug';
-$lang->project->updateOrder       = "{$lang->executionCommon}排序";
-$lang->project->tree              = '树状图';
-$lang->project->treeTask          = '只看任务';
-$lang->project->treeStory         = "只看{$lang->SRCommon}";
-$lang->project->treeOnlyTask      = '树状图只看任务';
-$lang->project->treeOnlyStory     = "树状图只看{$lang->SRCommon}";
-$lang->project->storyKanban       = "{$lang->SRCommon}看板";
-$lang->project->storySort         = "{$lang->SRCommon}排序";
-$lang->project->importPlanStory   = '创建' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？';
-$lang->project->iteration         = '版本迭代';
-$lang->project->iterationInfo     = '迭代%s次';
-$lang->project->viewAll           = '查看所有';
-
-/* 分组浏览。*/
-$lang->project->allTasks     = '所有';
-$lang->project->assignedToMe = '指派给我';
-$lang->project->myInvolved   = '由我参与';
-
-$lang->project->statusSelects['']             = '更多';
-$lang->project->statusSelects['wait']         = '未开始';
-$lang->project->statusSelects['doing']        = '进行中';
-$lang->project->statusSelects['undone']       = '未完成';
-$lang->project->statusSelects['finishedbyme'] = '我完成';
-$lang->project->statusSelects['done']         = '已完成';
-$lang->project->statusSelects['closed']       = '已关闭';
-$lang->project->statusSelects['cancel']       = '已取消';
-
-$lang->project->groups['']           = '分组查看';
-$lang->project->groups['story']      = "{$lang->SRCommon}分组";
-$lang->project->groups['status']     = '状态分组';
-$lang->project->groups['pri']        = '优先级分组';
-$lang->project->groups['assignedTo'] = '指派给分组';
-$lang->project->groups['finishedBy'] = '完成者分组';
-$lang->project->groups['closedBy']   = '关闭者分组';
-$lang->project->groups['type']       = '类型分组';
-
-$lang->project->groupFilter['story']['all']         = '所有';
-$lang->project->groupFilter['story']['linked']      = "已关联{$lang->SRCommon}的任务";
-$lang->project->groupFilter['pri']['all']           = '所有';
-$lang->project->groupFilter['pri']['noset']         = '未设置';
-$lang->project->groupFilter['assignedTo']['undone'] = '未完成';
-$lang->project->groupFilter['assignedTo']['all']    = '所有';
-
-$lang->project->byQuery = '搜索';
-
-/* 查询条件列表。*/
-$lang->project->allProject      = "所有{$lang->executionCommon}";
-$lang->project->aboveAllProduct = "以上所有{$lang->productCommon}";
-$lang->project->aboveAllProject = "以上所有{$lang->executionCommon}";
-
-/* 页面提示。*/
-$lang->project->linkStoryByPlanTips = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此{$lang->executionCommon}中";
-$lang->project->selectProject       = "请选择{$lang->executionCommon}";
-$lang->project->selectExecution     = "请选择阶段/迭代/冲刺";
-$lang->project->beginAndEnd         = '起止时间';
-$lang->project->end                 = '截止日期';
-$lang->project->lblStats            = '工时统计';
-$lang->project->stats               = '可用工时 <strong>%s</strong> 工时，总共预计 <strong>%s</strong> 工时，已经消耗 <strong>%s</strong> 工时，预计剩余 <strong>%s</strong> 工时';
-$lang->project->taskSummary         = "本页共 <strong>%s</strong> 个任务，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>，总预计 <strong>%s</strong> 工时，已消耗 <strong>%s</strong> 工时，剩余 <strong>%s</strong> 工时。";
-$lang->project->pageSummary         = "本页共 <strong>%total%</strong> 个任务，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，总预计 <strong>%estimate%</strong> 工时，已消耗 <strong>%consumed%</strong> 工时，剩余 <strong>%left%</strong> 工时。";
-$lang->project->checkedSummary      = "选中 <strong>%total%</strong> 个任务，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，总预计 <strong>%estimate%</strong> 工时，已消耗 <strong>%consumed%</strong> 工时，剩余 <strong>%left%</strong> 工时。";
-$lang->project->memberHoursAB       = "<div>%s有 <strong>%s</strong> 工时</div>";
-$lang->project->memberHours         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s可用工时</div><div class="segment-value">%s</div></div></div></div>';
-$lang->project->countSummary        = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">总任务</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">进行中</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">未开始</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
-$lang->project->timeSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">总预计</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">已消耗</div><div class="segment-value text-red">%s</div></div><div class="segment"><div class="segment-title">剩余</div><div class="segment-value">%s</div></div></div></div>';
-$lang->project->groupSummaryAB      = "<div>总任务 <strong>%s : </strong><span class='text-muted'>未开始</span> %s &nbsp; <span class='text-muted'>进行中</span> %s</div><div>总预计 <strong>%s : </strong><span class='text-muted'>已消耗</span> %s &nbsp; <span class='text-muted'>剩余</span> %s</div>";
-$lang->project->wbs                 = "分解任务";
-$lang->project->batchWBS            = "批量分解";
-$lang->project->howToUpdateBurn     = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-link'>帮助 <i class='icon icon-help'></i></a>";
-$lang->project->whyNoStories        = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
-$lang->project->productStories      = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
-$lang->project->haveDraft           = "有%s条草稿状态的{$lang->SRCommon}无法关联到该{$lang->executionCommon}";
-$lang->project->doneProjects        = '已结束';
-$lang->project->selectDept          = '选择部门';
-$lang->project->selectDeptTitle     = '选择一个部门的成员';
-$lang->project->copyTeam            = '复制团队';
-$lang->project->copyFromTeam        = "复制自{$lang->executionCommon}团队： <strong>%s</strong>";
-$lang->project->noMatched           = "找不到包含'%s'的$lang->executionCommon";
-$lang->project->copyTitle           = "请选择一个{$lang->executionCommon}来复制";
-$lang->project->copyTeamTitle       = "选择一个{$lang->executionCommon}团队来复制";
-$lang->project->copyNoProject       = "没有可用的{$lang->executionCommon}来复制";
-$lang->project->copyFromProject     = "复制自{$lang->executionCommon} <strong>%s</strong>";
-$lang->project->cancelCopy          = '取消复制';
-$lang->project->byPeriod            = '按时间段';
-$lang->project->byUser              = '按用户';
-$lang->project->noProject           = "暂时没有{$lang->executionCommon}。";
-$lang->project->noMembers           = '暂时没有团队成员。';
-$lang->project->workloadTotal       = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
-$lang->project->linkPRJStoryTip     = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
-$lang->project->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}，可直接关联该迭代/阶段/冲刺所关联产品的{$lang->SRCommon})";
-
-/* 交互提示。*/
-$lang->project->confirmDelete             = "您确定删除{$lang->executionCommon}[%s]吗？";
-$lang->project->confirmUnlinkMember       = "您确定从该{$lang->executionCommon}中移除该用户吗？";
-$lang->project->confirmUnlinkStory        = "您确定从该{$lang->executionCommon}中移除该{$lang->SRCommon}吗？";
-$lang->project->confirmUnlinkProjectStory = "您确定从该项目中移除该{$lang->SRCommon}吗？";
-$lang->project->notAllowedUnlinkStory     = "该{$lang->SRCommon}已经与项目下{$lang->executionCommon}相关联，请从{$lang->executionCommon}中移除后再操作。";
-$lang->project->notAllowRemoveProducts    = "该{$lang->productCommon}中的{$lang->SRCommon}已与该{$lang->executionCommon}进行了关联，请取消关联后再操作。";
-$lang->project->errorNoLinkedProducts     = "该{$lang->executionCommon}没有关联的{$lang->productCommon}，系统将转到{$lang->productCommon}关联页面";
-$lang->project->errorSameProducts         = "{$lang->executionCommon}不能关联多个相同的{$lang->productCommon}。";
-$lang->project->accessDenied              = "您无权访问该{$lang->executionCommon}！";
-$lang->project->tips                      = '提示';
-$lang->project->afterInfo                 = "{$lang->executionCommon}添加成功，您现在可以进行以下操作：";
-$lang->project->setTeam                   = '设置团队';
-$lang->project->linkStory                 = "关联{$lang->SRCommon}";
-$lang->project->createTask                = '创建任务';
-$lang->project->goback                    = "返回任务列表";
-$lang->project->noweekend                 = '去除周末';
-$lang->project->withweekend               = '显示周末';
-$lang->project->interval                  = '间隔';
-$lang->project->fixFirstWithLeft          = '修改剩余工时';
-$lang->project->unfinishedProject         = "该{$lang->executionCommon}下还有";
-$lang->project->unfinishedTask            = "[%s]个未完成的任务，";
-$lang->project->unresolvedBug             = "[%s]个未解决的bug，";
-
-$lang->project->action = new stdclass();
-$lang->project->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
-$lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
-$lang->project->action->edited  = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
-$lang->project->action->extra   = '相关产品为 %s。';
-
-/* 统计。*/
-$lang->project->charts = new stdclass();
-$lang->project->charts->burn = new stdclass();
-$lang->project->charts->burn->graph = new stdclass();
-$lang->project->charts->burn->graph->caption      = "燃尽图";
-$lang->project->charts->burn->graph->xAxisName    = "日期";
-$lang->project->charts->burn->graph->yAxisName    = "HOUR";
-$lang->project->charts->burn->graph->baseFontSize = 12;
-$lang->project->charts->burn->graph->formatNumber = 0;
-$lang->project->charts->burn->graph->animation    = 0;
-$lang->project->charts->burn->graph->rotateNames  = 1;
-$lang->project->charts->burn->graph->showValues   = 0;
-$lang->project->charts->burn->graph->reference    = '参考';
-$lang->project->charts->burn->graph->actuality    = '实际';
-
-$lang->project->placeholder = new stdclass();
-$lang->project->placeholder->code      = '团队内部的简称';
-$lang->project->placeholder->totalLeft = "{$lang->executionCommon}开始时的总预计工时";
-
-$lang->project->selectGroup = new stdclass();
-$lang->project->selectGroup->done = '(已结束)';
-
-$lang->project->orderList['order_asc']  = "{$lang->SRCommon}排序正序";
-$lang->project->orderList['order_desc'] = "{$lang->SRCommon}排序倒序";
-$lang->project->orderList['pri_asc']    = "{$lang->SRCommon}优先级正序";
-$lang->project->orderList['pri_desc']   = "{$lang->SRCommon}优先级倒序";
-$lang->project->orderList['stage_asc']  = "{$lang->SRCommon}阶段正序";
-$lang->project->orderList['stage_desc'] = "{$lang->SRCommon}阶段倒序";
-
-$lang->project->kanban        = "看板";
-$lang->project->kanbanSetting = "看板设置";
-$lang->project->resetKanban   = "恢复默认";
-$lang->project->printKanban   = "打印看板";
-$lang->project->bugList       = "Bug列表";
-
-$lang->project->kanbanHideCols   = '看板隐藏已关闭、已取消列';
-$lang->project->kanbanShowOption = '显示折叠信息';
-$lang->project->kanbanColsColor  = '看板列自定义颜色';
-
-$lang->kanbanSetting = new stdclass();
-$lang->kanbanSetting->noticeReset     = '是否恢复看板默认设置？';
-$lang->kanbanSetting->optionList['0'] = '隐藏';
-$lang->kanbanSetting->optionList['1'] = '显示';
-
-$lang->printKanban = new stdclass();
-$lang->printKanban->common  = '看板打印';
-$lang->printKanban->content = '内容';
-$lang->printKanban->print   = '打印';
-
-$lang->printKanban->taskStatus = '状态';
-
-$lang->printKanban->typeList['all']       = '全部';
-$lang->printKanban->typeList['increment'] = '增量';
-
-$lang->project->typeList['']       = '';
-$lang->project->typeList['stage']  = '阶段';
-$lang->project->typeList['sprint'] = $lang->executionCommon;
-
-$lang->project->featureBar['task']['all']          = $lang->project->allTasks;
-$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
-$lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
-$lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
-$lang->project->featureBar['task']['delayed']      = '已延期';
-$lang->project->featureBar['task']['needconfirm']  = "{$lang->SRCommon}变更";
-$lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
-
-$lang->project->featureBar['all']['all']       = $lang->project->all;
-$lang->project->featureBar['all']['undone']    = $lang->project->undone;
-$lang->project->featureBar['all']['wait']      = $lang->project->statusList['wait'];
-$lang->project->featureBar['all']['doing']     = $lang->project->statusList['doing'];
-$lang->project->featureBar['all']['suspended'] = $lang->project->statusList['suspended'];
-$lang->project->featureBar['all']['closed']    = $lang->project->statusList['closed'];
-
-$lang->project->treeLevel = array();
-$lang->project->treeLevel['all']   = '全部展开';
-$lang->project->treeLevel['root']  = '全部折叠';
-$lang->project->treeLevel['task']  = '全部显示';
-$lang->project->treeLevel['story'] = "只看{$lang->SRCommon}";
-
-$lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
-$lang->execution->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
-$lang->execution->action->edited  = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
-$lang->execution->action->extra   = '相关产品为 %s。';
-
+$lang->project->accessDenied      = '您无权访问该项目！';
+$lang->project->chooseProgramType = '选择项目管理方式';
+$lang->project->scrumTitle        = '敏捷开发全流程项目管理';
+$lang->project->cannotCreateChild = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
+$lang->project->hasChildren       = '该项目有子项目存在，不能删除。';
+$lang->project->confirmDelete     = "您确定删除项目[%s]吗？";
+$lang->project->cannotChangeToCat = "该项目已经有实际的内容，无法修改为父项目";
+$lang->project->cannotCancelCat   = "该项目下已经有子项目，无法取消父项目标记";
+$lang->project->parentBeginEnd    = "父项目起止时间：%s ~ %s";
+$lang->project->parentBudget      = "父项目预算：";
+$lang->project->beginLetterParent = "父项目的开始日期：%s，开始日期不能小于父项目的开始日期";
+$lang->project->endGreaterParent  = "父项目的完成日期：%s，完成日期不能大于父项目的完成日期";
+$lang->project->beginGreateChild  = "项目集的最小开始日期：%s，项目的开始日期不能小于项目集的最小开始日期";
+$lang->project->endLetterChild    = "项目集的最大完成日期：%s，项目的完成日期不能大于项目集的最大完成日期";
+$lang->project->childLongTime     = "子项目中有长期项目，父项目也应该是长期项目";

@@ -56,6 +56,7 @@ $lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
 $lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
 $lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
+$lang->user->captcha          = 'Captcha';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
@@ -96,7 +97,7 @@ $lang->user->tplContentNotEmpty    = 'The template content cannot be empty!';
 
 $lang->user->profile   = 'Profile';
 $lang->user->project   = $lang->executionCommon . 's';
-$lang->user->execution = 'Execution';
+$lang->user->execution = $lang->execution->common;
 $lang->user->task      = 'Tasks';
 $lang->user->bug       = 'Bugs';
 $lang->user->test      = 'Test';
@@ -128,6 +129,7 @@ $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
 $lang->user->weakPassword = "Your password does not meet the requirements.";
 $lang->user->errorWeak    = "Passwords cannot use [%s] these commonly used weak passwords.";
+$lang->user->errorCaptcha = "Captcha Error";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -205,6 +207,7 @@ $lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s]
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
 $lang->user->error->companyEmpty     = "Company name must be not empty.";
+$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;

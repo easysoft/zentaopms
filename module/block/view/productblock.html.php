@@ -14,7 +14,7 @@
 <div class='empty-tip'><?php common::printLink('product', 'create', '', "<i class='icon-plus'></i> " . $lang->product->create, '', "class='btn btn-primary'") ?></div>
 <?php else:?>
 <style>
-.block-products.block-sm .c-project {display: none;}
+.block-products.block-sm .c-execution {display: none;}
 </style>
 <div class="panel-body has-table scrollbar-hover block-products">
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter table-fixed'>
@@ -22,7 +22,7 @@
       <tr>
         <th class='c-name'><?php echo $lang->product->name;?></th>
         <?php if($longBlock):?>
-        <th class='c-name c-project'><?php echo $lang->product->currentExecution;?></th>
+        <th class='c-name c-execution'><?php echo $lang->product->currentExecution;?></th>
         <?php endif;?>
         <th title='<?php echo $lang->product->plans?>' class='c-num w-120px'><?php echo $lang->product->plans;?></th>
         <th title='<?php echo $lang->product->releases?>' class='c-num w-100px'><?php echo $lang->product->releases;?></th>
@@ -36,11 +36,11 @@
       $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : "";
       $viewLink = $this->createLink('product', 'browse', 'productID=' . $product->id);
       ?>
-      <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-name text-left' title='<?php echo $product->name?>'><?php echo $product->name?></td>
+      <tr class='text-center' <?php echo $appid?>>
+        <td class='c-name text-left' title='<?php echo $product->name?>'><?php echo html::a($viewLink, $product->name);?></td>
         <?php if($longBlock):?>
-        <?php $projectName = zget($executions, $product->id, '');?>
-        <td class='c-name c-project text-left' title='<?php echo $projectName;?>'><?php echo $projectName;?></td>
+        <?php $executionName = zget($executions, $product->id, '');?>
+        <td class='c-name c-execution text-left' title='<?php echo $executionName;?>'><?php echo $executionName;?></td>
         <?php endif;?>
         <td class="c-num"><?php echo $product->plans?></td>
         <td class="c-num"><?php echo $product->releases?></td>

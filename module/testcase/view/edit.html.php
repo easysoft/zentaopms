@@ -270,4 +270,11 @@
     </div>
   </form>
 </div>
+<script>
+$(function()
+{
+    $('#subNavbar [data-id=testcase]').addClass('active');
+    $('#navbar [data-id=testcase]').addClass('active');
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

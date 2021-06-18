@@ -9,9 +9,9 @@
   <td class='f-12px'><?php if(isset($info['users'])) echo join('<br />', $info['users']);?></td>
 </tr>
 <tr>
-  <th><?php echo $lang->convert->bugfree->projects;?></th>
-  <td><?php echo $result['projects'];?></td>
-  <td class='f-12px'><?php if(isset($info['projects'])) echo join('<br />', $info['projects']);?></td>
+  <th><?php echo $lang->convert->bugfree->executions;?></th>
+  <td><?php echo $result['executions'];?></td>
+  <td class='f-12px'><?php if(isset($info['executions'])) echo join('<br />', $info['executions']);?></td>
 </tr>
 <tr>
   <th><?php echo $lang->convert->bugfree->modules;?></th>

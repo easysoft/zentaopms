@@ -25,16 +25,14 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-cases <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr class='text-center'>
-        <?php if($longBlock):?>
         <th class='c-id-xs'><?php echo $lang->idAB?></th>
-        <?php endif;?>
         <th class='c-pri'><?php echo $lang->priAB?></th>
         <th class='c-title text-left'><?php echo $lang->case->title;?></th>
         <?php if($longBlock):?>
         <th class='c-runtime'><?php echo $lang->testtask->lastRunTime;?></th>
         <th class='c-result'><?php echo $lang->testtask->lastRunResult;?></th>
-        <?php endif;?>
         <th class='c-status'><?php echo $lang->statusAB;?></th> 
+        <?php endif;?>
       </tr>
     </thead>
     <tbody>
@@ -43,22 +41,20 @@
       $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       $viewLink = $this->createLink('testcase', 'view', "caseID={$case->id}");
       ?>
-      <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <?php if($longBlock):?>
+      <tr class='text-center' <?php echo $appid?>>
         <td class='c-id-xs'><?php echo sprintf('%03d', $case->id);?></td>
-        <?php endif;?>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $case->pri?>' title='<?php echo zget($lang->case->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></span></td>
         <td class='c-title text-left' style='color: <?php echo $case->color?>' title='<?php echo $case->title?>'><?php echo $case->title?></td>
         <?php if($longBlock):?>
         <td class='c-runtime'><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
         <td class='c-result'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-        <?php endif;?>
         <?php $status = $this->processStatus('testcase', $case);?>
         <td class='c-status' title='<?php echo $status;?>'>
           <span class="case-status-<?php echo $case->status?>">
             <span class='status-text'><?php echo $status;?></span>
           </span>
         </td>
+        <?php endif;?>
       </tr>
       <?php endforeach;?>
     </tbody>

@@ -11,14 +11,17 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php if($fromModule != 'product' && !empty($project)):?>
+<?php if($this->app->openApp == 'project'):?>
 <div class="table-empty-tip">
-  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('program', 'PRJManageProducts', "projectID=$project->id&programID=$project->parent", "<i class='icon icon-plus'></i> " . $lang->program->PRJManageProducts, '', "class='btn btn-info'");?></p>
+  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('project', 'manageProducts', "projectID=$objectID", "<i class='icon icon-plus'></i> " . $lang->project->manageProducts, '', "class='btn btn-info'  data-app='project'");?></p>
 </div>
-<script>$("#menuNav .nav li a[href*='product']").closest('li').removeClass('active');</script>
+<?php elseif($this->app->openApp == 'execution'):?>
+<div class="table-empty-tip">
+  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('execution', 'manageProducts', "executionID=$objectID", "<i class='icon icon-plus'></i> " . $lang->execution->manageProducts, '', "class='btn btn-info'  data-app='execution'");?></p>
+</div>
 <?php else:?>
 <div class="table-empty-tip">
-  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('product', 'create', '', "<i class='icon icon-plus'></i> " . $lang->product->create, '', "class='btn btn-info'");?></p>
+  <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('product', 'create', '', "<i class='icon icon-plus'></i> " . $lang->product->create, '', "class='btn btn-info' data-app='product'");?></p>
 </div>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

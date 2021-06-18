@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php 
+<?php
 js::set('page'      , 'resolve');
 js::set('productID' , $bug->product);
 ?>
@@ -42,10 +42,10 @@ js::set('productID' , $bug->product);
         </tr>
         <tr>
           <th><?php echo $lang->bug->resolvedBuild;?></th>
-          <td id='newBuildProjectBox' class='hidden'>
+          <td id='newBuildExecutionBox' class='hidden'>
             <div class='input-group'>
-              <span class='input-group-addon'><?php echo $lang->build->project;?></span>
-              <?php echo html::select('buildProject', $projects, '', "class='form-control chosen'");?>
+              <span class='input-group-addon'><?php echo $lang->build->execution;?></span>
+              <?php echo html::select('buildExecution', $executions, '', "class='form-control chosen'");?>
             </div>
           </td>
           <td>
@@ -54,7 +54,7 @@ js::set('productID' , $bug->product);
           </td>
           <td>
             <?php if(common::hasPriv('build', 'create')):?>
-            <div class='checkbox-primary'> 
+            <div class='checkbox-primary'>
               <input type='checkbox' id='createBuild' name='createBuild' value='1' />
               <label for='createBuild'><?php echo $lang->bug->createBuild;?></label>
             </div>

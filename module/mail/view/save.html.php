@@ -24,7 +24,7 @@
         <?php echo $lang->mail->successSaved;?>
         <?php if($this->post->turnon):?>
         <?php if($mailExist):?>
-        <?php echo html::a(inlink('test'), $lang->mail->test . ' <i class="icon-rocket"></i>', '', "class='btn btn-primary btn-sm'");?>
+        <?php echo html::a(inlink('test'), $lang->mail->test, '', "class='btn btn-primary btn-sm'");?>
         <?php else:?>
           <span class='content alert-warning'>
             <i class="icon-exclamation-sign"></i><?php echo $lang->mail->setForUser;?>

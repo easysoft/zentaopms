@@ -153,7 +153,7 @@ $lang->install->groupList['LIMITED']['name'] = '受限用戶';
 $lang->install->groupList['LIMITED']['desc'] = '受限用戶分組(只能編輯與自己相關的內容)';
 
 $lang->install->cronList[''] = '監控定時任務';
-$lang->install->cronList['moduleName=project&methodName=computeburn']   = '更新燃盡圖';
+$lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃盡圖';
 $lang->install->cronList['moduleName=report&methodName=remind']         = '每日任務提醒';
 $lang->install->cronList['moduleName=svn&methodName=run']               = '同步SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = '同步GIT';

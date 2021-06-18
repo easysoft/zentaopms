@@ -87,4 +87,12 @@ function updateFile(link)
 }
 <?php endif;?>
 </script>
+<?php if(isset($needProcess['search'])):?>
+<script>
+$(function()
+{
+    $('.col-md-6:first').append("<div class='alert alert-info'><p><?php echo $lang->upgrade->needBuild4Add;?></p></div>");
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.lite.html.php';?>

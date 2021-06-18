@@ -3,12 +3,12 @@
  * The create view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: create.html.php $
  */
 ?>
-<?php 
+<?php
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
 include '../../common/view/kindeditor.html.php';
@@ -20,19 +20,19 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link'");?>
+    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");?>
     <div class="divider"></div>
     <div class="page-title">
       <strong>
         <?php
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID"), $repo->name);
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
         $paths= explode('/', $entry);
         $fileName = array_pop($paths);
         $postPath = '';
         foreach($paths as $pathName)
         {
             $postPath .= $pathName . '/';
-            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
         }
         echo '/' . ' ' . $fileName;
         echo $version;
@@ -41,7 +41,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&revision=$revision"), $lang->repo->allChanges, '', "class='btn btn-primary'")?>
+    <?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=$revision"), $lang->repo->allChanges, '', "class='btn btn-primary' data-app='{$app->openApp}'")?>
   </div>
 </div>
 <?php endif;?>
@@ -55,8 +55,8 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
         <div class='panel-title'><?php echo $entry?></div>
         <div class='panel-actions'>
           <?php if($suffix != 'binary' and strpos($config->repo->images, "|$suffix|") === false):?>
-          <?php 
-          if(common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary'");
+          <?php
+          if(common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary' data-app='{$app->openApp}'");
           if(common::hasPriv('repo', 'download')) echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodePath&fromRevision=$revision"), html::icon('download-alt') . $lang->repo->download, 'hiddenwin', "class='btn btn-sm btn-primary'");
           ?>
           <?php endif;?>
@@ -64,7 +64,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
             <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn btn-sm btn-primary dropdown-toggle')?>
             <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>
               <?php foreach($lang->repo->encodingList as $key => $val):?>
-              <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=$encodePath&revision=$revision&showBug=$showBug&encoding=$key", 'html', isonlybody()), $val)?></li>
+              <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&showBug=$showBug&encoding=$key", 'html', isonlybody()), $val, '', "data-app='{$app->openApp}'")?></li>
               <?php endforeach;?>
             </ul>
           </div>
@@ -91,8 +91,8 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
 <?php if(!isonlybody()):?>
 <div id="mainActions" class='main-actions'>
   <nav class="container">
-    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=$encodePath&revision={$preAndNext->pre}&showBug=$showBug", 'html', isonlybody()), "<i class='icon-pre icon-chevron-left'></i>", '', "id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'")?>
-    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=$encodePath&revision={$preAndNext->next}&showBug=$showBug", 'html', isonlybody()), "<i class='icon-pre icon-chevron-right'></i>", '', "id='nextPage' class='btn btn-info' title='{$preAndNext->next}'")?>
+    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision={$preAndNext->pre}&showBug=$showBug", 'html', isonlybody()), "<i class='icon-pre icon-chevron-left'></i>", '', "id='prevPage' class='btn btn-info' data-app='{$app->openApp}' title='{$preAndNext->pre}'")?>
+    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision={$preAndNext->next}&showBug=$showBug", 'html', isonlybody()), "<i class='icon-pre icon-chevron-right'></i>", '', "id='nextPage' class='btn btn-info' data-app='{$app->openApp}' title='{$preAndNext->next}'")?>
   </nav>
 </div>
 <?php endif;?>

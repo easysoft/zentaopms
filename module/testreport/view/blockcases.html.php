@@ -16,7 +16,8 @@
   <?php if($cases):?>
   <tbody>
     <?php $i = 0;?>
-    <?php foreach($cases as $case):?>
+    <?php foreach($cases as $taskID => $caseList):?>
+    <?php foreach($caseList as $case):?>
     <?php if(!isset($pager) and $i > 50):?>
     <?php echo html::hidden('cases[]', $case->id);?>
     <?php else:?>
@@ -29,7 +30,7 @@
       <td><?php echo zget($users, $case->lastRunner);?></td>
       <td><?php echo substr($case->lastRunDate, 2);?></td>
       <td><?php echo zget($lang->testcase->resultList, $case->lastRunResult);?></td>
-      <?php $status = $this->processStatus('testtask', $case);?>
+      <?php $status = $this->processStatus('testcase', $case);?>
       <td title='<?php echo $status;?>'>
         <span class="status-case status-<?php echo $case->status?>"><?php echo $status;?></span>
       </td>
@@ -37,9 +38,10 @@
     <?php endif;?>
     <?php $i++;?>
     <?php endforeach;?>
+    <?php endforeach;?>
     <?php if(!isset($pager) and $i > 50):?>
     <tr>
-      <td colspan='9'><?php echo sprintf($lang->testreport->hiddenCase, count($cases) - 50);?></td>
+      <td colspan='9'><?php echo sprintf($lang->testreport->hiddenCase, $i - 50);?></td>
     </tr>
     <?php endif;?>
   </tbody>

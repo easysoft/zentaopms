@@ -25,11 +25,12 @@ $lang->upgrade->warnningContent = <<<EOT
 <pre>
 1. Use phpMyAdmin to backup.
 2. Use mysqlCommand to backup.
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span> 
+   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
    Change the red text into corresponding Username and Database name.
    e.g. mysqldump -u root -p zentao >zentao.bak
 </pre>
 EOT;
+
 $lang->upgrade->createFileWinCMD   = 'Open command line and execute <strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = 'Execute command line: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions</h4>
@@ -52,7 +53,10 @@ $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard
 $lang->upgrade->afterDeleted  = 'File is not deleted. Please refresh after you delete it.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->to15Guide     = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
+$lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
 <p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
 <ol>
@@ -66,27 +70,6 @@ $lang->upgrade->to15Desc      = <<<EOD
 <p><strong>How do you plan to use the new version of ZenTao?</strong></p>
 EOD;
 
-$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
-$lang->upgrade->to15Mode['new']     = 'New program management mode';
-
-$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
-$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
-
-$lang->upgrade->demoURL       = 'http://zentao20.demo.zentao.net';
-$lang->upgrade->videoURL      = 'https://qc.zentao.net/zentao20.mp4';
-$lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
-$lang->upgrade->to20Button    = 'I have done the backup, start the upgrade!！';
-$lang->upgrade->to20TipsHeader= "<p>Dear user, thank you for your support of ZenTao。Since version 20, Zendo has been fully upgraded to a universal project management platform. Please see the following video for more information(If the video can not play properly, please visit directly <a href='http://zentao20.demo.zentao.net/zentao20.mp4' target='_blank'><u>Zentao20</u></a>)：</p><br />";
-$lang->upgrade->to20Desc      = <<<EOD
-<div class='text-warning'>
-  <p>Friendly reminder：</p>
-  <ol>
-    <li>You can start by installing a version 20 of ZenTao to experience the concepts and processes inside.</li>
-    <li>Version 20 of Zendo has made some major changes, please make a backup before upgrading.</li>
-    <li>Please feel free to upgrade, even if the first upgrade is not in place, subsequent adjustments can be made without affecting system data.</li>
-  </ol>
-</div>
-EOD;
 $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>Next, we will migrate the previous historical product and iteration data to the project set and under the project, with the following scenario for migration.</p><br />
 <h4>Option 1: Product and iteration organized by product line </h4>
@@ -99,15 +82,21 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>These iterations can be selected to fall under a new project.</p>
 EOD;
 
-$lang->upgrade->line      = 'Product Line';
-$lang->upgrade->program   = 'Merge Project';
-$lang->upgrade->existPGM  = 'Existing programs';
-$lang->upgrade->existPRJ  = 'Existing projects';
-$lang->upgrade->existLine = 'Existing' . $lang->productCommon . ' lines';
-$lang->upgrade->product   = $lang->productCommon;
-$lang->upgrade->project   = 'Iteration';
-$lang->upgrade->repo      = 'Repo';
-$lang->upgrade->mergeRepo = 'Merge Repo';
+$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
+$lang->upgrade->to15Mode['new']     = 'New program management mode';
+
+$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
+$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
+
+$lang->upgrade->line         = 'Product Line';
+$lang->upgrade->program      = 'Merge Project';
+$lang->upgrade->existProgram = 'Existing programs';
+$lang->upgrade->existProject = 'Existing projects';
+$lang->upgrade->existLine    = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->product      = $lang->productCommon;
+$lang->upgrade->project      = 'Iteration';
+$lang->upgrade->repo         = 'Repo';
+$lang->upgrade->mergeRepo    = 'Merge Repo';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
@@ -117,5 +106,6 @@ $lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select m
 $lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one large project, or merge them independently";
 $lang->upgrade->mergeByMoreLink    = "Iteration that relates multiple products: select which product the iteration belongs to.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
+$lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrade. Need create index. Please go [Admin->System->BuildIndex] page to build index.';
 
 include dirname(__FILE__) . '/version.php';

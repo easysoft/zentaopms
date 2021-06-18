@@ -1,6 +1,6 @@
-.ke-toolbar .ke-outline[data-name='savetemplate'] {display: none}
-#modulemenu .nav #dropMenu #searchResult .closed{text-decoration:none;}
-.nav #moreMenus{cursor: pointer;}
+.ke-toolbar .ke-outline[data-name='savetemplate'] {display: none;}
+#modulemenu .nav #dropMenu #searchResult .closed {text-decoration: none;}
+.nav #moreMenus {cursor: pointer;}
 
 #batchCreateForm .input-group, #batchEditForm .input-group,
 #batchCreateForm .input-group .form-control, #batchEditForm .input-group .form-control {position: static;}

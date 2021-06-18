@@ -91,9 +91,9 @@
           <td><?php echo $lang->webhook->note->product;?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->webhook->project;?></th>
-          <td><?php echo html::select('projects[]', $projects, '', "class='form-control chosen' multiple");?></td>
-          <td><?php echo $lang->webhook->note->project;?></td>
+          <th><?php echo $lang->webhook->execution;?></th>
+          <td><?php echo html::select('executions[]', $executions, '', "class='form-control chosen' multiple");?></td>
+          <td><?php echo $lang->webhook->note->execution;?></td>
         </tr>
         <tr id='paramsTR'>
           <th>

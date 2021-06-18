@@ -3,8 +3,8 @@
 <?php else:?>
 <style>
 .block-issues .c-id {width: 55px;}
-.block-issues .c-pri {width: 45px;text-align: center;}
-.block-issues .c-estimate {width: 60px;}
+.block-issues .c-pri {width: 45px; text-align: center;}
+.block-issues .c-estimate {width: 60px; text-align: right;}
 .block-issues .c-deadline {width: 95px;}
 .block-issues .c-status {width: 80px;}
 .block-issues.block-sm .c-status {text-align: center;}
@@ -19,8 +19,8 @@
         <?php if($longBlock):?>
         <th class='w-80px'><?php echo $lang->issue->severity;?></th>
         <th class='w-80px'><?php echo $lang->issue->pri;?></th>
-        <th class='w-120px'><?php echo $lang->issue->owner;?></th>
-        <th class='w-120px'><?php echo $lang->issue->assignedTo;?></th>
+        <th class='w-80px'><?php echo $lang->issue->owner;?></th>
+        <th class='w-80px'><?php echo $lang->issue->assignedTo;?></th>
         <?php endif;?>
         <th class='w-80px'><?php echo $lang->issue->status;?></th>
       </tr>

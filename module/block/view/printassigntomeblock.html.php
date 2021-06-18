@@ -10,6 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style>
+#assigntomeBlock .nav>li>a {padding: 8px 12px;}
+</style>
 <div id='assigntomeBlock'>
   <ul class="nav nav-secondary">
     <?php $isFirstTab = true; ?>

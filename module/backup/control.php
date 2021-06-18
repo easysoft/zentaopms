@@ -12,8 +12,8 @@
 class backup extends control
 {
     /**
-     * __construct 
-     * 
+     * __construct
+     *
      * @access public
      * @return void
      */
@@ -34,13 +34,15 @@ class backup extends control
     }
 
     /**
-     * Index 
-     * 
+     * Index
+     *
      * @access public
      * @return void
      */
     public function index()
     {
+        $this->loadModel('action');
+
         $backups = array();
         if(empty($this->view->error))
         {
@@ -74,8 +76,9 @@ class backup extends control
     }
 
     /**
-     * Backup 
-     * 
+     * Backup.
+     *
+     * param   string $reload yes|no
      * @access public
      * @return void
      */
@@ -166,10 +169,10 @@ class backup extends control
     }
 
     /**
-     * Restore 
-     * 
-     * @param  string $fileName 
-     * @param  string $confirm 
+     * Restore.
+     *
+     * @param  string $fileName
+     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
@@ -219,8 +222,8 @@ class backup extends control
 
     /**
      * remove PHP header.
-     * 
-     * @param  string $fileName 
+     *
+     * @param  string $fileName
      * @access public
      * @return void
      */
@@ -246,10 +249,10 @@ class backup extends control
     }
 
     /**
-     * Delete 
-     * 
-     * @param  string $fileName 
-     * @param  string $confirm 
+     * Delete.
+     *
+     * @param  string $fileName
+     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
@@ -303,8 +306,8 @@ class backup extends control
     }
 
     /**
-     * Change hold days. 
-     * 
+     * Change hold days.
+     *
      * @access public
      * @return void
      */
@@ -321,8 +324,8 @@ class backup extends control
     }
 
     /**
-     * Setting backup 
-     * 
+     * Setting backup
+     *
      * @access public
      * @return void
      */
@@ -339,8 +342,8 @@ class backup extends control
 
         if(strtolower($this->server->request_method) == "post")
         {
-            $data    = fixer::input('post')->join('setting', ',')->get();
-            
+            $data = fixer::input('post')->join('setting', ',')->get();
+
             /*save change*/
             if(isset($data->holdDays)) $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
 
@@ -366,7 +369,7 @@ class backup extends control
 
     /**
      * Ajax get progress.
-     * 
+     *
      * @access public
      * @return void
      */

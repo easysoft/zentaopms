@@ -153,7 +153,7 @@ $lang->install->groupList['LIMITED']['name'] = 'Người dùng hạn chế';
 $lang->install->groupList['LIMITED']['desc'] = 'Người dùng chỉ có thể chỉnh sửa nội dung được liên kết tới của họ.';
 
 $lang->install->cronList[''] = 'Monitor Cron';
-$lang->install->cronList['moduleName=project&methodName=computeburn']   = 'Cập nhật biểu đồ Burndown';
+$lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Cập nhật biểu đồ Burndown';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Nhắc nhở nhiệm vụ hàng ngày';
 $lang->install->cronList['moduleName=svn&methodName=run']               = 'Đồng bộ SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = 'Đồng bộ GIT';

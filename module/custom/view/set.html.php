@@ -54,20 +54,31 @@ EOT;
           <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
         </div>
       </div>
-      <?php if($module == 'program' and $field == 'unitList'):?>
+      <?php if($module == 'project' and $field == 'unitList'):?>
       <table class='table table-form'>
         <tr>
-          <th class='<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-120px' : 'w-70px';?> text-left'><?php echo $lang->custom->program->currencySetting;?></th>
+          <th class='<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-120px' : 'w-70px';?> text-left'><?php echo $lang->custom->project->currencySetting;?></th>
         </tr>
         <tr>
-          <td colspan='5'><?php echo html::checkbox('unitList', $lang->program->unitList, $unitList);?></td>
+          <td colspan='5'><?php echo html::checkbox('unitList', $lang->project->unitList, $unitList);?></td>
         </tr>
         <tr>
-          <th class='text-left'><?php echo $lang->custom->program->defaultCurrency;?></th>
-          <td><?php echo html::select('defaultCurrency', $lang->program->unitList, $defaultCurrency, "class='form-control chosen' required");?></td>
+          <th class='text-left'><?php echo $lang->custom->project->defaultCurrency;?></th>
+          <td><?php echo html::select('defaultCurrency', $lang->project->unitList, $defaultCurrency, "class='form-control chosen' required");?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center'><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
+      <?php elseif($module == 'story' and $field == 'reviewRules'):?>
+      <table class='table table-form mw-700px'>
+        <tr>
+          <th class='thWidth'><?php echo $lang->custom->reviewRule;?></th>
+          <td><?php echo html::radio('reviewRules', $lang->custom->reviewRules, $reviewRule);?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
       <?php elseif(($module == 'story' or $module == 'testcase') and $field == 'review'):?>

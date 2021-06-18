@@ -1,0 +1,16 @@
+#tipsModal {margin-top: 10%;}
+.chosen-container-single .chosen-single > span {max-width: 100%;}
+
+#copyProjectModal {padding: 0;}
+#copyProjectModal {padding: 0 2px;}
+#copyProjectModal > div {position: relative;}
+#copyProjectModal a {display: block; min-height: 30px; line-height: 30px; padding: 5px 15px; border: 1px solid #e5e5e5; color: #333; margin: 5px 0; border-radius: 3px;}
+#copyProjectModal a > i {display: inline-block; margin-right: 5px;}
+#copyProjectModal a:hover {border: 1px solid #00a9fc; background-color: #E9F2FB; text-decoration: none;}
+#copyProjectModal a.active {border-color: #00da88; color: #00da88; background-color: #E5FFE6;}
+#copyProjectModal a.active:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 25px;}
+#copyProjectModal a.cancel {color: #ff5d5d;}
+
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {margin-top: 1px;}
+
+#lifeTimeTips {display: none;}

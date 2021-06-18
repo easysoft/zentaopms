@@ -104,9 +104,9 @@
           <td><?php echo $lang->webhook->note->product;?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->webhook->project;?></th>
-          <td><?php echo html::select('projects[]', $projects, $webhook->projects, "class='form-control chosen' multiple");?></td>
-          <td><?php echo $lang->webhook->note->project;?></td>
+          <th><?php echo $lang->webhook->execution;?></th>
+          <td><?php echo html::select('executions[]', $executions, $webhook->executions, "class='form-control chosen' multiple");?></td>
+          <td><?php echo $lang->webhook->note->execution;?></td>
         </tr>
         <?php if(strpos(',bearychat,dinggroup,dinguser,wechatgroup,wechatuser,', ",$webhook->type,") === false):?>
         <tr id='paramsTR'>

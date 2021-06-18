@@ -18,12 +18,18 @@
       <h2><?php echo $lang->build->create;?></h2>
     </div>
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
+        <?php if($openApp == 'project'):?>
+        <tr>
+          <th><?php echo $lang->executionCommon;?></th>
+          <td><?php echo html::select('execution', $executions, $executionID, "onchange='loadProducts(this.value);' class='form-control chosen' required");?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->build->product;?></th>
           <?php if(!empty($products)):?>
           <td>
-            <div class='input-group'>
+            <div class='input-group' id='productBox'>
               <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
               <?php
               if(!empty($product) and $product->type != 'normal' and isset($branches[$product->branch]))
@@ -34,10 +40,14 @@
               ?>
             </div>
           </td>
-          <td></td>
           <?php else:?>
-          <td class='text-muted' colspan='2'><?php printf($lang->build->noProduct, $this->createLink('project', 'manageproducts', "executionID=$executionID&from=buildCreate"));?></td>
+          <td>
+            <div class='input-group' id='productBox'>
+              <?php printf($lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), $openApp);?>
+            </div>
+          </td>
           <?php endif;?>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->build->name;?></th>
@@ -51,19 +61,19 @@
         <tr>
           <th><?php echo $lang->build->builder;?></th>
           <td><?php echo html::select('builder', $users, $app->user->account, 'class="form-control chosen" required');?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->build->date;?></th>
           <td><?php echo html::input('date', helper::today(), "class='form-control form-date' required");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->build->scmPath;?></th>
           <td colspan='2'><?php echo html::input('scmPath', '', "class='form-control' placeholder='{$lang->build->placeholder->scmPath}'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->build->filePath;?></th>
           <td colspan='2'><?php echo html::input('filePath', '', "class='form-control' placeholder='{$lang->build->placeholder->filePath}'");?></td>
-        </tr>  
+        </tr>
         <?php $this->printExtendFields('', 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->build->files;?></th>
@@ -72,7 +82,7 @@
         <tr>
           <th><?php echo $lang->build->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', '', "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <td colspan="3" class="text-center form-actions">
             <?php echo html::submitButton();?>

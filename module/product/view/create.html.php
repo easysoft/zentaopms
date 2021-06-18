@@ -23,13 +23,30 @@
         <tbody>
           <?php if($this->config->systemMode == 'new'):?>
           <tr>
-            <th class='w-140px'><?php echo $lang->program->PGMCommon;?></th>
-            <td><?php echo html::select('program', $programs, '', "class='form-control chosen' required");?></td><td></td>
+            <th class='w-140px'><?php echo $lang->program->common;?></th>
+            <td><?php echo html::select('program', $programs, $programID, "class='form-control chosen' required  onchange='setParentProgram(this.value)'");?></td><td></td>
           </tr>
           <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
+            <?php if($programID):?>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select("line", $lines, '', "class='form-control hidden line-exist'");?>
+                <?php echo html::input("lineName", '', "class='form-control line-no-exist'");?>
+                <?php if(count($lines)):?>
+                <span class='input-group-addon'>
+                  <div class="checkbox-primary">
+                    <input type="checkbox" name="newLine" value="0" checked onchange="toggleLine(this)" id="newLine0" />
+                    <label for="newLine0"><?php echo $lang->product->newLine;?></label>
+                  </div>
+                </span>
+                <?php endif;?>
+              </div>
+            </td>
+            <?php else:?>
             <td><?php echo html::select('line', $lines, '', "class='form-control chosen'");?></td><td></td>
+            <?php endif;?>
           </tr>
           <tr>
             <th><?php echo $lang->product->name;?></th>
@@ -57,7 +74,7 @@
               <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
             </td>
             <td></td>
-          </tr>  
+          </tr>
           <tr class='hide'>
             <th><?php echo $lang->product->status;?></th>
             <td><?php echo html::hidden('status', 'normal');?></td>
@@ -75,7 +92,7 @@
             <th><?php echo $lang->product->acl;?></th>
             <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'private', "onclick='setWhite(this.value);'", 'block'));?></td>
           </tr>
-          <tr class="hidden" id="whitelistBox">
+          <tr id="whitelistBox">
             <th><?php echo $lang->whitelist;?></th>
             <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
             <td></td>

@@ -2,8 +2,17 @@ $(function()
 {
     $('#needNotReview').on('change', function()
     {
-        $('#assignedTo').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
-        getStatus('create', "product=" + $('#product').val() + ",project=" + projectID + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
+        $('#reviewer').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+        if($(this).is(':checked'))
+        {
+            $('#reviewerBox').removeClass('required');
+        }
+        else
+        {
+            $('#reviewerBox').addClass('required');
+        }
+
+        getStatus('create', "product=" + $('#product').val() + ",execution=" + executionID + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
     });
     $('#needNotReview').change();
 
@@ -21,3 +30,7 @@ function refreshPlan()
 {
     $('a.refresh').click();
 }
+
+$(window).unload(function(){
+    if(blockID) window.parent.refreshBlock($('#block' + blockID));
+});

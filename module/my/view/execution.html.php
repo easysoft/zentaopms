@@ -29,37 +29,47 @@
     </p>
   </div>
   <?php else:?>
-  <table class="table has-sort-head table-fixed" id='projectList'>
+  <table class="table has-sort-head table-fixed" id='executionList'>
     <thead>
       <tr class='text-left'>
         <th class='w-id'><?php echo $lang->idAB;?></th>
         <th class='c-name text-left'><?php echo $lang->my->name;?></th>
+        <?php if($config->systemMode == 'new'):?>
         <th class='c-name text-left'><?php echo $lang->my->projects;?></th>
-        <th class='c-date'><?php echo $lang->project->begin;?></th>
-        <th class='c-date'><?php echo $lang->project->end;?></th>
+        <?php endif;?>
+        <th class='c-date'><?php echo $lang->execution->begin;?></th>
+        <th class='c-date'><?php echo $lang->execution->end;?></th>
         <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
         <th class='w-70px'><?php echo $lang->my->hours;?></th>
-        <th class='w-90px'><?php echo $lang->project->assignedToMe;?></th>
-        <th class='w-60px'><?php echo $lang->project->progress;?></th>
+        <th class='w-90px'><?php echo $lang->execution->assignedToMe;?></th>
+        <th class='w-60px'><?php echo $lang->execution->progress;?></th>
       </tr>
     </thead>
     <tbody>
       <?php foreach($executions as $execution):?>
-      <?php $link = $this->createLink('project', 'browse', "id=$execution->id", '', '', $execution->project);?>
+      <?php $link = $this->createLink('execution', 'browse', "id=$execution->id", '', '', $execution->project);?>
       <tr class='text-left'>
         <td><?php echo html::a($link, sprintf('%03d', $execution->id));?></td>
         <td class='c-name text-left'>
-          <span class='project-type-label label label-info label-outline'><?php echo zget($lang->project->typeList, $execution->type);?></span>
-          <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
+          <?php
+          if(isset($this->config->maxVersion))
+          {
+              if($execution->type === 'stage') echo "<span class='project-type-label label label-outline label-warning'>{$lang->project->stage}</span> ";
+              if($execution->type === 'sprint') echo "<span class='project-type-label label label-outline label-info'>{$lang->executionCommon}</span> ";
+          }
+          echo html::a($link, $execution->name, '', "title='$execution->name'");
+          ?>
         </td>
-        <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'browse', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'");?></td>
+        <?php if($config->systemMode == 'new'):?>
+        <td class='c-name text-left'><?php echo html::a($this->createLink('project', 'view', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'");?></td>
+        <?php endif;?>
         <td><?php echo $execution->begin;?></td>
         <td><?php echo $execution->end;?></td>
         <td class="c-status">
           <?php if(isset($execution->delay)):?>
-          <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
+          <span class="status-project status-delayed" title='<?php echo $lang->execution->delayed;?>'><?php echo $lang->execution->delayed;?></span>
           <?php else:?>
           <?php $typeName = $this->processStatus('project', $execution);?>
           <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $typeName;?>'><?php echo $typeName;?></span>
@@ -70,8 +80,8 @@
         <td><?php echo $execution->hours;?></td>
         <td><?php echo $execution->assignedToMeTasks;?></td>
         <td>
-          <div class='progress-pie' data-doughnut-size='80' data-color='#00da88' data-value='<?php echo $execution->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo $execution->progress;?>%</div>
+          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo $execution->progress;?></div>
           </div>
         </td>
       </tr>

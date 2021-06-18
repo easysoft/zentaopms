@@ -29,7 +29,7 @@
       <?php
       $withSearch = count($accountPairs) > 8;
       $active     = $param ? 'btn-active-text' : '';
-      $current    = $param ? zget($accountPairs, $account, $account) : $lang->project->viewByUser;
+      $current    = $param ? zget($accountPairs, $account, $account) : $lang->execution->viewByUser;
       $current    = "<span class='text'>" . $current . '</span>' . ' <span class="caret"></span>';
       ?>
       <?php echo html::a('###', $current, '', "class='btn btn-link $active' data-toggle='dropdown'");?>
@@ -47,8 +47,8 @@
           foreach($userIdPairs as $userID => $name)
           {
               if(!$userID) continue;
-              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $userID, '') . '"') : '';
-              echo html::a($this->createLink('project', 'dynamic', "productID=$projectID&type=account&param=$userID"), $name);
+              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $name, '') . '"') : '';
+              echo html::a($this->createLink('project', 'dynamic', "projectID=$projectID&type=account&param=$userID"), $name, '', $searchKey);
           }
           ?>
         </div>

@@ -32,7 +32,7 @@ class admin extends control
             $this->view->ignore  = false;
         }
 
-        $this->app->loadLang('misc');
+        $this->loadModel('misc');
 
         $this->view->title      = $this->lang->admin->common;
         $this->view->position[] = $this->lang->admin->index;
@@ -56,7 +56,8 @@ class admin extends control
 
     /**
      * Register zentao.
-     * 
+     *
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -69,7 +70,7 @@ class admin extends control
             if($response->result == 'success')
             {
                 $user = $response->data;
-                $data['community'] = $user->account;
+                $data['community']    = $user->account;
                 $data['ztPrivateKey'] = $user->private;
 
                 $this->loadModel('setting');
@@ -105,7 +106,8 @@ class admin extends control
 
     /**
      * Bind zentao.
-     * 
+     *
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -118,7 +120,7 @@ class admin extends control
             if($response->result == 'success')
             {
                 $user = $response->data;
-                $data['community'] = $user->account;
+                $data['community']    = $user->account;
                 $data['ztPrivateKey'] = $user->private;
 
                 $this->loadModel('setting');
@@ -145,7 +147,7 @@ class admin extends control
 
     /**
      * Check all tables.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -162,7 +164,7 @@ class admin extends control
 
     /**
      * Account safe.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -181,7 +183,7 @@ class admin extends control
 
     /**
      * Check weak user.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -196,7 +198,7 @@ class admin extends control
 
     /**
      * Config sso for ranzhi.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -223,18 +225,18 @@ class admin extends control
         $this->view->title      = $this->lang->admin->sso;
         $this->view->position[] = $this->lang->admin->sso;
 
-        $this->view->turnon   = isset($this->config->sso->turnon) ? $this->config->sso->turnon : 1;
+        $this->view->turnon   = isset($this->config->sso->turnon)   ? $this->config->sso->turnon   : 1;
         $this->view->redirect = isset($this->config->sso->redirect) ? $this->config->sso->redirect : 0;
-        $this->view->addr     = isset($this->config->sso->addr) ? $this->config->sso->addr : '';
-        $this->view->key      = isset($this->config->sso->key) ? $this->config->sso->key : '';
-        $this->view->code     = isset($this->config->sso->code) ? $this->config->sso->code : '';
+        $this->view->addr     = isset($this->config->sso->addr)     ? $this->config->sso->addr     : '';
+        $this->view->key      = isset($this->config->sso->key)      ? $this->config->sso->key      : '';
+        $this->view->code     = isset($this->config->sso->code)     ? $this->config->sso->code     : '';
         $this->display();
     }
 
     /**
      * Certify ztEmail.
-     * 
-     * @param  string $email 
+     *
+     * @param  string $email
      * @access public
      * @return void
      */
@@ -256,9 +258,9 @@ class admin extends control
     }
 
     /**
-     * Certify ztMobile 
-     * 
-     * @param  string $mobile 
+     * Certify ztMobile.
+     *
+     * @param  string $mobile
      * @access public
      * @return void
      */
@@ -281,7 +283,7 @@ class admin extends control
 
     /**
      * Set ztCompany.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -304,8 +306,8 @@ class admin extends control
 
     /**
      * Ajax send code.
-     * 
-     * @param  int    $type 
+     *
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -315,8 +317,8 @@ class admin extends control
     }
 
     /**
-     * Set save days of log. 
-     * 
+     * Set save days of log.
+     *
      * @access public
      * @return void
      */
@@ -343,9 +345,9 @@ class admin extends control
 
     /**
      * Delete logs older than save days.
-     * 
+     *
      * @access public
-     * @return bool 
+     * @return bool
      */
     public function deleteLog()
     {

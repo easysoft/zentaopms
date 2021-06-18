@@ -153,7 +153,7 @@ $lang->install->groupList['LIMITED']['name'] = 'Eingeschränkte Benutzer';
 $lang->install->groupList['LIMITED']['desc'] = 'Können nur Inhalte bearbeiten, die sie selbst betreffen';
 
 $lang->install->cronList[''] = 'Cron Anzeigen';
-$lang->install->cronList['moduleName=project&methodName=computeburn']   = 'Update Burndown Chart';
+$lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Täglicher Aufgaben reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']               = 'Synchronisiere SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = 'Synchronisiere GIT';

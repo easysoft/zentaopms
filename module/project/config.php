@@ -1,121 +1,112 @@
 <?php
 $config->project = new stdclass();
-$config->project->defaultWorkhours = '7.0';
-$config->project->orderBy          = 'isDone,status,order_desc';
-$config->project->maxBurnDay       = '31';
-$config->project->weekend          = '2';
+$config->project->editor = new stdclass();
+
+$config->project->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->project->editor->edit     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->project->editor->close    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->suspend  = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->start    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->project->editor->view     = array('id' => 'lastComment', 'tools' => 'simpleTools');
 
 $config->project->list = new stdclass();
-$config->project->list->exportFields = 'id,name,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progress';
+$config->project->list->exportFields = 'id,name,code,template,product,status,begin,end,budget,PM,end,desc';
 
-$config->project->modelList['scrum']     = 'sprint';
-$config->project->modelList['waterfall'] = 'stage';
-
-global $lang, $app;
-$app->loadLang('task');
-$config->project->task   = new stdclass();
 $config->project->create = new stdclass();
 $config->project->edit   = new stdclass();
 $config->project->create->requiredFields = 'name,code,begin,end';
 $config->project->edit->requiredFields   = 'name,code,begin,end';
 
-$config->project->customBatchEditFields = 'days,type,teamname,status,desc,PO,QD,PM,RD';
+$config->project->sortFields         = new stdclass();
+$config->project->sortFields->id     = 'id';
+$config->project->sortFields->begin  = 'begin';
+$config->project->sortFields->end    = 'end';
+$config->project->sortFields->status = 'status';
+$config->project->sortFields->budget = 'budget';
 
-$config->project->custom = new stdclass();
-$config->project->custom->batchEditFields = 'days,status,PM';
+global $lang;
+$config->project->datatable = new stdclass();
+$config->project->datatable->defaultField = array('id', 'name', 'PM', 'status', 'begin', 'end', 'budget', 'teamCount','estimate','consume', 'progress', 'actions');
 
-$config->project->editor = new stdclass();
-$config->project->editor->create   = array('id' => 'desc',    'tools' => 'simpleTools');
-$config->project->editor->edit     = array('id' => 'desc',    'tools' => 'simpleTools');
-$config->project->editor->putoff   = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->close    = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->start    = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->suspend  = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->tree     = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->project->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->project->datatable->fieldList['id']['title']    = 'ID';
+$config->project->datatable->fieldList['id']['fixed']    = 'left';
+$config->project->datatable->fieldList['id']['width']    = '60';
+$config->project->datatable->fieldList['id']['required'] = 'yes';
+$config->project->datatable->fieldList['id']['pri']      = '1';
 
-$config->project->search['module']                   = 'task';
-$config->project->search['fields']['name']           = $lang->task->name;
-$config->project->search['fields']['id']             = $lang->task->id;
-$config->project->search['fields']['status']         = $lang->task->status;
-$config->project->search['fields']['desc']           = $lang->task->desc;
-$config->project->search['fields']['assignedTo']     = $lang->task->assignedTo;
-$config->project->search['fields']['pri']            = $lang->task->pri;
+$config->project->datatable->fieldList['name']['title']    = 'name';
+$config->project->datatable->fieldList['name']['fixed']    = 'left';
+$config->project->datatable->fieldList['name']['width']    = 'auto';
+$config->project->datatable->fieldList['name']['minWidth'] = '180';
+$config->project->datatable->fieldList['name']['required'] = 'yes';
+$config->project->datatable->fieldList['name']['sort']     = 'no';
+$config->project->datatable->fieldList['name']['pri']      = '1';
 
-$config->project->search['fields']['project']        = $lang->task->execution;
-$config->project->search['fields']['module']         = $lang->task->module;
-$config->project->search['fields']['estimate']       = $lang->task->estimate;      
-$config->project->search['fields']['left']           = $lang->task->left; 
-$config->project->search['fields']['consumed']       = $lang->task->consumed;
-$config->project->search['fields']['type']           = $lang->task->type;
-$config->project->search['fields']['fromBug']        = $lang->task->fromBug;
-$config->project->search['fields']['closedReason']   = $lang->task->closedReason;
+$config->project->datatable->fieldList['PM']['title']    = 'PM';
+$config->project->datatable->fieldList['PM']['fixed']    = 'no';
+$config->project->datatable->fieldList['PM']['width']    = '80';
+$config->project->datatable->fieldList['PM']['required'] = 'yes';
+$config->project->datatable->fieldList['PM']['sort']     = 'no';
+$config->project->datatable->fieldList['PM']['pri']      = '2';
 
-$config->project->search['fields']['openedBy']       = $lang->task->openedBy;
-$config->project->search['fields']['finishedBy']     = $lang->task->finishedBy;
-$config->project->search['fields']['closedBy']       = $lang->task->closedBy;
-$config->project->search['fields']['canceledBy']     = $lang->task->canceledBy;  
-$config->project->search['fields']['lastEditedBy']   = $lang->task->lastEditedBy;
+$config->project->datatable->fieldList['status']['title']    = 'status';
+$config->project->datatable->fieldList['status']['fixed']    = 'left';
+$config->project->datatable->fieldList['status']['width']    = '80';
+$config->project->datatable->fieldList['status']['required'] = 'no';
+$config->project->datatable->fieldList['status']['sort']     = 'yes';
+$config->project->datatable->fieldList['status']['pri']      = '2';
 
-$config->project->search['fields']['mailto']         = $lang->task->mailto;
-$config->project->search['fields']['finishedList']   = $lang->task->finishedList;
+$config->project->datatable->fieldList['begin']['title']    = 'begin';
+$config->project->datatable->fieldList['begin']['fixed']    = 'no';
+$config->project->datatable->fieldList['begin']['width']    = '90';
+$config->project->datatable->fieldList['begin']['required'] = 'no';
+$config->project->datatable->fieldList['begin']['pri']      = '9';
 
-$config->project->search['fields']['openedDate']     = $lang->task->openedDate;
-$config->project->search['fields']['deadline']       = $lang->task->deadline;
-$config->project->search['fields']['estStarted']     = $lang->task->estStarted;
-$config->project->search['fields']['realStarted']    = $lang->task->realStarted;
-$config->project->search['fields']['assignedDate']   = $lang->task->assignedDate;
-$config->project->search['fields']['finishedDate']   = $lang->task->finishedDate;
-$config->project->search['fields']['closedDate']     = $lang->task->closedDate;
-$config->project->search['fields']['canceledDate']   = $lang->task->canceledDate;
-$config->project->search['fields']['lastEditedDate'] = $lang->task->lastEditedDate;
+$config->project->datatable->fieldList['end']['title']    = 'end';
+$config->project->datatable->fieldList['end']['fixed']    = 'no';
+$config->project->datatable->fieldList['end']['width']    = '90';
+$config->project->datatable->fieldList['end']['required'] = 'no';
+$config->project->datatable->fieldList['end']['pri']      = '3';
 
-$config->project->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->project->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->statusList);
-$config->project->search['params']['desc']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->project->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->project->search['params']['pri']            = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->priList);
+$config->project->datatable->fieldList['budget']['title']    = 'budget';
+$config->project->datatable->fieldList['budget']['fixed']    = 'no';
+$config->project->datatable->fieldList['budget']['width']    = '80';
+$config->project->datatable->fieldList['budget']['required'] = 'yes';
+$config->project->datatable->fieldList['budget']['pri']      = '3';
 
-$config->project->search['params']['project']        = array('operator' => '=',       'control' => 'select', 'values' => '');
-$config->project->search['params']['module']         = array('operator' => 'belong',  'control' => 'select', 'values' => '');
-$config->project->search['params']['estimate']       = array('operator' => '=',       'control' => 'input',  'values' => '');
-$config->project->search['params']['left']           = array('operator' => '=',       'control' => 'input',  'values' => '');
-$config->project->search['params']['consumed']       = array('operator' => '=',       'control' => 'input',  'values' => '');
-$config->project->search['params']['type']           = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->typeList);
-$config->project->search['params']['fromBug']        = array('operator' => '=',       'control' => 'input', 'values' => $lang->task->typeList);
-$config->project->search['params']['closedReason']   = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->reasonList);
+$config->project->datatable->fieldList['teamCount']['title']    = 'teamCount';
+$config->project->datatable->fieldList['teamCount']['fixed']    = 'no';
+$config->project->datatable->fieldList['teamCount']['width']    = '70';
+$config->project->datatable->fieldList['teamCount']['required'] = 'no';
+$config->project->datatable->fieldList['teamCount']['sort']     = 'no';
+$config->project->datatable->fieldList['teamCount']['pri']      = '8';
 
-$config->project->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->project->search['params']['finishedBy']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->project->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->project->search['params']['cancelBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->project->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->project->datatable->fieldList['estimate']['title']    = 'estimate';
+$config->project->datatable->fieldList['estimate']['fixed']    = 'no';
+$config->project->datatable->fieldList['estimate']['width']    = '70';
+$config->project->datatable->fieldList['estimate']['maxWidth'] = '80';
+$config->project->datatable->fieldList['estimate']['required'] = 'no';
+$config->project->datatable->fieldList['estimate']['sort']     = 'no';
+$config->project->datatable->fieldList['estimate']['pri']      = '8';
 
-$config->project->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
-$config->project->search['params']['finishedList']   = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
+$config->project->datatable->fieldList['consume']['title']    = 'consume';
+$config->project->datatable->fieldList['consume']['fixed']    = 'no';
+$config->project->datatable->fieldList['consume']['width']    = '70';
+$config->project->datatable->fieldList['consume']['maxWidth'] = '80';
+$config->project->datatable->fieldList['consume']['required'] = 'no';
+$config->project->datatable->fieldList['consume']['sort']     = 'no';
+$config->project->datatable->fieldList['consume']['pri']      = '7';
 
-$config->project->search['params']['openedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['deadline']       = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['estStarted']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['realStarted']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['assignedDate']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['finishedDate']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['closedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['canceledDate']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['lastEditedDate'] = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->datatable->fieldList['progress']['title']    = 'progress';
+$config->project->datatable->fieldList['progress']['fixed']    = 'right';
+$config->project->datatable->fieldList['progress']['width']    = '60';
+$config->project->datatable->fieldList['progress']['required'] = 'no';
+$config->project->datatable->fieldList['progress']['sort']     = 'no';
+$config->project->datatable->fieldList['progress']['pri']      = '6';
 
-$config->printKanban = new stdClass();
-$config->printKanban->col['story']  = 1;
-$config->printKanban->col['wait']   = 2;
-$config->printKanban->col['doing']  = 3;
-$config->printKanban->col['done']   = 4;
-$config->printKanban->col['closed'] = 5;
-
-$config->project->kanbanSetting = new stdclass();
-$config->project->kanbanSetting->colorList['wait']   = '#7EC5FF';
-$config->project->kanbanSetting->colorList['doing']  = '#0991FF';
-$config->project->kanbanSetting->colorList['pause']  = '#fdc137';
-$config->project->kanbanSetting->colorList['done']   = '#0BD986';
-$config->project->kanbanSetting->colorList['cancel'] = '#CBD0DB';
-$config->project->kanbanSetting->colorList['closed'] = '#838A9D';
+$config->project->datatable->fieldList['actions']['title']    = 'actions';
+$config->project->datatable->fieldList['actions']['fixed']    = 'right';
+$config->project->datatable->fieldList['actions']['width']    = '180';
+$config->project->datatable->fieldList['actions']['required'] = 'yes';
+$config->project->datatable->fieldList['actions']['pri']      = '1';

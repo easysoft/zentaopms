@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <?php if(common::checkNotCN()):?>
 <style> label.col-sm-1{width:100px;} </style>
 <?php endif;?>
@@ -130,7 +132,7 @@
             <div class='input-group title-group required'>
               <div class='nameBox'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
               <span class="input-group-addon fix-border br-0" style="border-radius: 0px;"><?php echo $lang->todo->pri;?></span>
-			  <div class="input-group-btn pri-selector" data-type="pri">
+              <div class="input-group-btn pri-selector" data-type="pri">
                 <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                   <span class="pri-text"><span class="label-pri label-pri-<?php echo $todo->pri;?>"><?php echo $todo->pri;?></span></span> &nbsp;<span class="caret"></span>
                 </button>

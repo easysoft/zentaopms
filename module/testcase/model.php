@@ -27,33 +27,7 @@ class testcaseModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
     {
-        $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
-        $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
-
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
-        foreach($this->lang->testcase->menu as $key => $menu)
-        {
-            $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
-            $replace = $productID;
-            common::setMenuVars($this->lang->testcase->menu, $key, $replace);
-        }
-
-        if($this->lang->navGroup->testcase == 'qa')
-        {
-            $this->lang->qa->menu         = $this->lang->testcase->menu;
-            $this->lang->qa->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
-        }
+        $this->loadModel('qa')->setMenu($products, $productID, $branch, $moduleID, 'case');
     }
 
     /**
@@ -73,7 +47,7 @@ class testcaseModel extends model
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa', 'PRJ', $this->session->PRJ)
+            ->setIF($this->config->systemMode == 'new' && $this->app->openApp == 'project', 'project', $this->session->project)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -87,7 +61,7 @@ class testcaseModel extends model
         $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
-        /* value of story may be showmore. */
+        /* Value of story may be showmore. */
         $case->story = (int)$case->story;
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->exec();
         if(!$this->dao->isError())
@@ -111,6 +85,10 @@ class testcaseModel extends model
                 if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                 if($step->type == 'step')  $parentStepID = 0;
             }
+
+            /* If the story is linked project, make the case link the project. */
+            $this->syncCase2Project($case, $caseID);
+
             return array('status' => 'created', 'id' => $caseID);
         }
     }
@@ -119,9 +97,10 @@ class testcaseModel extends model
      * Batch create cases.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return array
      */
     function batchCreate($productID, $branch, $storyID)
     {
@@ -165,7 +144,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
-            if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa') $data[$i]->PRJ = $this->session->PRJ;
+            if($this->config->systemMode == 'new' && $this->app->openApp == 'project') $data[$i]->project = $this->session->project;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
@@ -203,6 +182,7 @@ class testcaseModel extends model
             }
         }
 
+        $caseIDList = array();
         foreach($data as $i => $case)
         {
             $this->dao->insert(TABLE_CASE)->data($case)
@@ -216,14 +196,20 @@ class testcaseModel extends model
                 die(js::reload('parent'));
             }
 
-            $caseID = $this->dao->lastInsertID();
+            $caseID       = $this->dao->lastInsertID();
+            $caseIDList[] = $caseID;
 
+            /* If the story is linked project, make the case link the project. */
+            $this->syncCase2Project($case, $caseID);
             $this->executeHooks($caseID);
 
             $this->loadModel('score')->create('testcase', 'create', $caseID);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
+            if($this->app->openApp == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
+            if($this->app->openApp == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
+        return $caseIDList;
     }
 
     /**
@@ -242,14 +228,91 @@ class testcaseModel extends model
         return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
-            ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->app->openApp == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get project cases of a module.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $auto   no|unit
+     * @access public
+     * @return array
+     */
+    public function getModuleProjectCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
+    {
+        return $this->dao->select('distinct t1.*, t2.*, t4.title as storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story=t2.story')
+            ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story=t4.id')
+            ->where('1=1')
+            ->beginIF(!empty($productID))->andWhere('t2.product')->eq((int)$productID)->fi()
+            ->beginIF($this->app->openApp == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($branch)->andWhere('t2.branch')->eq($branch)->fi()
+            ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
+            ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager, 't1.case')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get project cases.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getProjectCases($projectID, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    {
+        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('t1.project')->eq((int)$projectID)
+            ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get execution cases.
+     *
+     * @param  int    $executionID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getExecutionCases($executionID, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    {
+        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('t1.project')->eq((int)$executionID)
+            ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 
     /**
@@ -271,7 +334,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_SUITECASE)->alias('t3')->on('t1.id=t3.case')
             ->where('t1.product')->eq((int)$productID)
-            ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+            ->beginIF($this->app->openApp == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t3.suite')->eq((int)$suiteID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
@@ -349,22 +412,32 @@ class testcaseModel extends model
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType and $this->session->caseBrowseType != 'bysearch') ? $this->session->caseBrowseType : $browseType;
+        $group      = $this->lang->navGroup->testcase;
 
         /* By module or all cases. */
         $cases = array();
         if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
         {
-            $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+            if($this->app->openApp == 'project')
+            {
+                $cases = $this->getModuleProjectCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+            }
+            else
+            {
+                $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+            }
         }
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
         {
-            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
                 ->where("t2.status = 'active'")
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
-                ->andWhere('t1.product')->eq($productID)
-                ->beginIF($this->lang->navGroup->testcase != 'qa')->andWhere('t1.PRJ')->eq($this->session->PRJ)->fi()
+                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+                ->beginIF($this->app->openApp == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
@@ -432,12 +505,23 @@ class testcaseModel extends model
         if($branch and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('0','$branch')";
         if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
         $caseQuery .= ')';
+        $caseQuery  = str_replace('`version`', 't1.`version`', $caseQuery);
 
-        $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
-            ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
-            ->beginIF($auto != 'unit')->andWhere('auto')->ne('unit')->fi()
-            ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
-            ->andWhere('deleted')->eq(0)
+        if($this->app->openApp == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
+
+        /* Search criteria under compatible project. */
+        $sql = $this->dao->select('*')->from(TABLE_CASE)->alias('t1');
+        if($this->app->openApp == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
+        $cases = $sql
+            ->where($caseQuery)
+            ->beginIF($this->app->openApp == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
+            ->beginIF(!empty($productID) and $queryProductID != 'all')
+            ->beginIF($this->app->openApp == 'project' and !empty($productID))->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($this->app->openApp != 'project')->andWhere('t1.product')->eq($productID)->fi()
+            ->fi()
+            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 
         return $cases;
@@ -455,7 +539,7 @@ class testcaseModel extends model
      */
     public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
-        return $this->dao->select('t1.*,t2.PRJ,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.*,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
@@ -463,7 +547,7 @@ class testcaseModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /**
@@ -495,7 +579,7 @@ class testcaseModel extends model
      */
     public function getStoryCases($storyID)
     {
-        return $this->dao->select('id, PRJ, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
+        return $this->dao->select('id, project, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
             ->from(TABLE_CASE)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
@@ -555,7 +639,7 @@ class testcaseModel extends model
             ->get();
 
         $requiredFields = $this->config->testcase->edit->requiredFields;
-        if($case->lib != 0)
+        if($oldCase->lib != 0)
         {
             /* Remove the require field named story when the case is a lib case.*/
             $requiredFieldsArr = explode(',', $requiredFields);
@@ -570,14 +654,16 @@ class testcaseModel extends model
             $titleChanged = ($case->title != $oldCase->title);
             if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
 
+            $this->updateCase2Project($oldCase, $case, $caseID);
+
             if($stepChanged)
             {
                 $parentStepID = 0;
-                if($isLibCase) 
+                if($isLibCase)
                 {
                     $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
                     $fromcaseVersion += 1;
-                    $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec(); 
+                    $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
                 }
 
                 /* Ignore steps when post has no steps. */
@@ -609,6 +695,7 @@ class testcaseModel extends model
                     }
                 }
             }
+
 
             /* Join the steps to diff. */
             if($stepChanged and $this->post->steps)
@@ -791,6 +878,8 @@ class testcaseModel extends model
                 $isLibCase    = ($oldCase->lib and empty($oldCase->product));
                 $titleChanged = ($case->title != $oldCase->title);
                 if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
+
+                $this->updateCase2Project($oldCase, $case, $caseID);
 
                 $this->executeHooks($caseID);
 
@@ -1118,13 +1207,16 @@ class testcaseModel extends model
                     $oldCase->steps  = $this->joinStep($oldStep);
                     $caseData->steps = $this->joinStep($steps);
                     $changes  = common::createChanges($oldCase, $caseData);
+
+                    $this->updateCase2Project($oldCase, $caseData, $caseID);
+
                     $actionID = $this->action->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
             }
             else
             {
-                if($this->config->systemMode == 'new' && $this->lang->navGroup->testcase != 'qa') $caseData->PRJ = $this->session->PRJ;
+                if($this->config->systemMode == 'new' && $this->app->openApp == 'project') $caseData->project = $this->session->project;
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
@@ -1155,6 +1247,9 @@ class testcaseModel extends model
                             if($stepData->type == 'step')  $parentStepID = 0;
                         }
                     }
+
+                    $this->syncCase2Project($caseData, $caseID);
+
                     $this->action->create('case', $caseID, 'Opened');
                 }
             }
@@ -1216,7 +1311,7 @@ class testcaseModel extends model
         {
             $case->fromCaseID      = $case->id;
             $case->fromCaseVersion = $case->version;
-            $case->product    = $productID;
+            $case->product         = $productID;
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
             unset($case->id);
@@ -1234,6 +1329,20 @@ class testcaseModel extends model
                         unset($step->id);
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
                     }
+                }
+
+                /* If under the project module, the cases is imported need linking to the project. */
+                if($this->app->openApp == 'project')
+                {
+                    $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($this->session->project)->orderBy('order_desc')->limit(1)->fetch('order');
+
+                    $this->dao->insert(TABLE_PROJECTCASE)
+                        ->set('project')->eq($this->session->project)
+                        ->set('product')->eq($case->product)
+                        ->set('case')->eq($caseID)
+                        ->set('version')->eq($case->version)
+                        ->set('order')->eq(++ $lastOrder)
+                        ->exec();
                 }
 
                 /* Fix bug #1518. */
@@ -1264,9 +1373,18 @@ class testcaseModel extends model
      */
     public function buildSearchForm($productID, $products, $queryID, $actionURL)
     {
-        $this->config->testcase->search['params']['product']['values'] = array($productID => $products[$productID], 'all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
-        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        $product = ($this->app->openApp == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
+        $this->config->testcase->search['params']['product']['values'] = $product;
+
+        $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
+        if(!$productID)
+        {
+            $module = array();
+            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
+        }
+        $this->config->testcase->search['params']['module']['values'] = $module;
+
+        $this->config->testcase->search['params']['lib']['values'] = $this->loadModel('caselib')->getLibraries();
 
         if($this->session->currentProductType == 'normal')
         {
@@ -1340,7 +1458,7 @@ class testcaseModel extends model
                 if($canBatchAction)
                 {
                     $disabled = $canBeChanged ? '' : 'disabled';
-                    echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
+                    echo html::checkbox('caseIDList', array($case->id => ''), '', $disabled) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id), '', "data-app='{$this->app->openApp}'");
                 }
                 else
                 {
@@ -1355,7 +1473,7 @@ class testcaseModel extends model
             case 'title':
                 if($case->branch) echo "<span class='label label-info label-outline'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
-                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]") : html::a($caseLink, $case->title, null, "style='color: $case->color'")) : "<span style='color: $case->color'>$case->title</span>";
+                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->openApp}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]", '', "data-app='{$this->app->openApp}'") : html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->openApp}'")) : "<span style='color: $case->color'>$case->title</span>";
                 break;
             case 'branch':
                 echo $branches[$case->branch];
@@ -1370,7 +1488,7 @@ class testcaseModel extends model
                 echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
-                if($case->needconfirm) 
+                if($case->needconfirm)
                 {
                     print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>");
                 }
@@ -1547,6 +1665,103 @@ class testcaseModel extends model
         }
 
         return sprintf($this->lang->testcase->summary, count($cases), $executed);
+    }
+
+    /**
+     * Sync case to project.
+     *
+     * @param  object $case
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function syncCase2Project($case, $caseID)
+    {
+        if(!empty($case->story))
+        {
+            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
+        }
+        elseif($this->app->openApp == 'project' and empty($case->story))
+        {
+            $projects = array($this->session->project);
+        }
+        elseif($this->app->openApp == 'execution' and empty($case->story))
+        {
+            $projects = array($this->session->execution);
+        }
+
+        if(!empty($projects))
+        {
+            foreach($projects as $projectID)
+            {
+                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $case->product;
+                $data->case    = $caseID;
+                $data->version = 1;
+                $data->order   = ++ $lastOrder;
+                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            }
+        }
+    }
+
+    /**
+     * Deal with the relationship between the case and project when edit the case.
+     *
+     * @param  object  $oldCase
+     * @param  object  $case
+     * @param  int     $caseID
+     * @access public
+     * @return void
+     */
+    public function updateCase2Project($oldCase, $case, $caseID)
+    {
+        $productChanged = ($oldCase->product != $case->product);
+        $storyChanged   = ($oldCase->story   != $case->story);
+
+        if($productChanged)
+        {
+            $this->dao->update(TABLE_PROJECTCASE)
+                ->set('product')->eq($case->product)
+                ->set('version')->eq($case->version)
+                ->where('`case`')->eq($oldCase->id)
+                ->exec();
+        }
+
+        /* The related story is changed. */
+        if($storyChanged)
+        {
+            /* If the new related story isn't linked the project, unlink the case. */
+            $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldCase->story)->fetchAll('project');
+
+            $projectIdList = array_keys($projects);
+            $this->dao->delete()->from(TABLE_PROJECTCASE)
+                ->where('project')->in()
+                ->andWhere('`case`')->eq($oldCase->id)
+                ->exec();
+
+            /* If the new related story is not null, make the case link the project which link the new related story. */
+            if(!empty($case->story))
+            {
+                $projects = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchAll('project');
+                if($projects)
+                {
+                    $projects = array_keys($projects);
+                    foreach($projects as $projectID)
+                    {
+                        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+                        $data = new stdclass();
+                        $data->project = $projectID;
+                        $data->product = $case->product;
+                        $data->case    = $caseID;
+                        $data->version = $oldCase->version;
+                        $data->order   = ++ $lastOrder;
+                        $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -125,7 +125,7 @@ class scoreModel extends model
             case 'testTask':
                 if($method == 'runCase') $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;
                 break;
-            case 'project':
+            case 'execution':
                 if($method == 'close')
                 {
                     $desc      = $this->lang->score->methods[$module][$method] . ',' . $desc . 'ID:' . $param->id;
@@ -143,7 +143,7 @@ class scoreModel extends model
                     }
 
                     /* Project team user. */
-                    $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($param->id)->andWhere('type')->eq('project')->fetchPairs();
+                    $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($param->id)->andWhere('type')->eq('execution')->fetchPairs();
                     if(!empty($teams))
                     {
                         $rule['score'] = $extended['member']['close'];
@@ -158,7 +158,7 @@ class scoreModel extends model
                         }
                     }
 
-                    /* When the project is closed, no more user get score. */
+                    /* When the execution is closed, no more user get score. */
                     return true;
                 }
                 break;
@@ -251,7 +251,7 @@ class scoreModel extends model
         foreach($actions as $action)
         {
             $param = $action->objectID;
-            if($action->objectType == 'project' && $action->action == 'closed') $param = $this->dao->findById($action->objectID)->from(TABLE_PROJECT)->fetch();
+            if($action->objectType == 'execution' && $action->action == 'closed') $param = $this->dao->findById($action->objectID)->from(TABLE_PROJECT)->fetch();
             if($action->objectType == 'bug')
             {
                 $bug = $this->dao->findById($action->objectID)->from(TABLE_BUG)->fetch();

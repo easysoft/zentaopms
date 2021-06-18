@@ -12,51 +12,24 @@
 class qa extends control
 {
     /**
-     * Project id.
-     *
-     * @var    int
-     * @access public
-     */
-    public $projectID;
-
-    /**
-     * Construct.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        /* Set report menu group. */
-        $this->projectID = isset($_GET['PRJ']) ? $_GET['PRJ'] : 0;
-        if(!$this->projectID)
-        {
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->lang->noMenuModule[] = $this->app->rawModule;
-        }
-    }
-
-    /**
      * The index of qa, go to bug's browse page.
-     * 
+     *
      * @access public
      * @return void
      */
-    public function index($locate = 'auto', $productID = 0)
+    public function index($locate = 'auto', $productID = 0, $projectID = 0)
     {
-        $this->products = $this->loadModel('product')->getProductPairsByProject($this->projectID, 'noclosed');
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=qa")));
+        $products = $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
+        if(empty($products)) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=index")));
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
 
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $products);
         $branch    = (int)$this->cookie->preBranch;
-        $this->qa->setMenu($this->products, $productID, $branch);
+        $this->qa->setMenu($products, $productID, $branch);
 
         $this->view->title      = $this->lang->qa->index;
         $this->view->position[] = $this->lang->qa->index;
-        $this->view->products   = $this->products;
+        $this->view->products   = $products;
         $this->display();
     }
 }

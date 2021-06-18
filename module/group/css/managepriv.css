@@ -1,13 +1,13 @@
-.table-bymodule select.form-control {height:250px}
-.group-item {display:block; width:220px; float:left; font-size: 14px}
-.group-item .checkbox-inline label{padding-left:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.table.table-form tbody > tr:last-child td {border-top: 1px solid #ddd}
-@-moz-document url-prefix(){.table.table-form tbody > tr:last-child td, .table.table-form tbody > tr:last-child th {border-bottom: 1px solid #ddd}}
+.table-bymodule select.form-control {height: 250px;}
+.group-item {display: block; width: 220px; float: left; font-size: 14px;}
+.group-item .checkbox-inline label {padding-left: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.table.table-form tbody > tr:last-child td {border-top: 1px solid #ddd;}
+@-moz-document url-prefix() {.table.table-form tbody > tr:last-child td, .table.table-form tbody > tr:last-child th {border-bottom: 1px solid #ddd;};}
 
-#mainMenu #groupName{line-height:33px; float: left}
-.checkbox-right{padding-left:0px !important;}
+#mainMenu #groupName {line-height: 33px; float: left;}
+.checkbox-right {padding-left: 0px !important;}
 
-td.menus {border-right: 0;padding-right: 0;width: 220px !important;}
+td.menus {border-right: 0; padding-right: 0; width: 220px !important;}
 td.menus + td {border-left: 0;}
 .menus .checkbox-primary {float: left; width: 220px;}
 .menus .checkbox-primary:first-child {float: left; width: auto;}

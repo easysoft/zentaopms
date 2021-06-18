@@ -21,8 +21,8 @@ class messageModel extends model
     }
 
     /**
-     * Get objectTypes 
-     * 
+     * Get objectTypes
+     *
      * @access public
      * @return array
      */
@@ -37,8 +37,8 @@ class messageModel extends model
     }
 
     /**
-     * Get object actions. 
-     * 
+     * Get object actions.
+     *
      * @access public
      * @return array
      */
@@ -57,11 +57,11 @@ class messageModel extends model
 
     /**
      * Check send.
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
-     * @param  string $actionType 
-     * @param  int    $actionID 
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -102,11 +102,11 @@ class messageModel extends model
 
     /**
      * Save notice.
-     * 
-     * @param  string $objectType 
-     * @param  int    $objectID 
-     * @param  string $actionType 
-     * @param  int    $actionID 
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -127,10 +127,15 @@ class messageModel extends model
         $this->app->loadConfig('mail');
         $sysURL = zget($this->config->mail, 'domain', common::getSysURL());
 
+        $isonlybody = isonlybody();
+        if($isonlybody) unset($_GET['onlybody']);
+
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         $space = common::checkNotCN() ? ' ' : '';
         $data  = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
         $data .= ' ' . html::a($sysURL . helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
+
+        if($isonlybody) $_GET['onlybody'] = 'yes';
 
         $notify = new stdclass();
         $notify->objectType  = 'message';
@@ -146,9 +151,9 @@ class messageModel extends model
 
     /**
      * Get toList.
-     * 
-     * @param  object    $object 
-     * @param  string    $objectType 
+     *
+     * @param  object    $object
+     * @param  string    $objectType
      * @access public
      * @return string
      */
@@ -165,7 +170,7 @@ class messageModel extends model
 
     /**
      * Get notice todos.
-     * 
+     *
      * @access public
      * @return array
      */

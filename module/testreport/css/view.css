@@ -1,9 +1,9 @@
-.main{padding:0px !important;}
-.main .nav-tabs{padding-left:20px; padding-top:10px;}
-.main .tab-content{border:0px;}
-.tab-content #builds tr:last-child td, .tab-content #cases tr:last-child td,.tab-content #bugs tr:last-child td,.tab-content #legacyBugs tr:last-child td{border-bottom:0px;}
+.main {padding: 0px !important;}
+.main .nav-tabs {padding-left: 20px; padding-top: 10px;}
+.main .tab-content {border: 0px;}
+.tab-content #builds tr:last-child td, .tab-content #cases tr:last-child td,.tab-content #bugs tr:last-child td,.tab-content #legacyBugs tr:last-child td {border-bottom: 0px;}
 .tab-pane > table {border: 1px solid #ddd;}
 .tab-pane > table:first-child {border-top: none;}
 
-#cases .pager{margin:0px;}
-#cases .pager li .btn.dropdown-toggle{border:0px;padding-top:3px;}
+#cases .pager {margin: 0px;}
+#cases .pager li .btn.dropdown-toggle {border: 0px; padding-top: 3px;}

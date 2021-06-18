@@ -832,6 +832,28 @@ function adjustMenuWidth()
     }
 }
 
+/**
+ * Scroll to selected item in drop menu.
+ *
+ * @param  string $id
+ * @access public
+ * @return void
+ */
+function scrollToSelected(id)
+{
+    if(typeof(id) == 'undefined') id = '#dropMenu .table-col .list-group'
+
+    $id = $(id);
+    $selected = $id.find('.selected');
+
+    $id.mouseout(function(){$(this).find('.active').removeClass('active')});
+    if($selected.length > 0)
+    {
+        var offsetHeight = 75;
+        $id.scrollTop($selected.position().top - offsetHeight);
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

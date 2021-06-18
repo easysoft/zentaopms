@@ -15,14 +15,14 @@
         <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
         <th class='c-name'><?php echo $lang->risk->name;?></th>
         <?php if($longBlock):?>
-        <th class='w-80px'> <?php echo $lang->risk->strategy;?></th>
+        <th class='w-60px'> <?php echo $lang->risk->strategy;?></th>
         <?php endif;?>
-        <th class='w-80px'><?php echo $lang->risk->status;?></th>
+        <th class='w-60px'><?php echo $lang->risk->status;?></th>
         <?php if($longBlock):?>
         <th class='w-80px'><?php echo $lang->risk->rate;?></th>
         <th class='w-80px'><?php echo $lang->risk->pri;?></th>
-        <th class='w-120px'><?php echo $lang->risk->assignedTo;?></th>
-        <th class='w-120px'><?php echo $lang->risk->category;?></th>
+        <th class='w-80px'><?php echo $lang->risk->assignedTo;?></th>
+        <th class='w-80px'><?php echo $lang->risk->category;?></th>
         <?php endif;?>
       </tr>
     </thead>

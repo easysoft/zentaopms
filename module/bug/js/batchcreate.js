@@ -27,14 +27,14 @@ function setBranchRelated(branchID, productID, num)
         $("#modules" + num).chosen();
     });
 
-    projectLink = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
-    $.get(projectLink, function(projects)
+    executionLink = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
+    $.get(executionLink, function(executions)
     {
-        if(!projects) projects = '<select id="projects' + num + '" name="projects[' + num + ']" class="form-control"></select>';
-        $('#projects' + num).replaceWith(projects);
-        $("#projects" + num + "_chosen").remove();
-        $("#projects" + num).next('.picker').remove();
-        $("#projects" + num).chosen();
+        if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';
+        $('#executions' + num).replaceWith(executions);
+        $("#executions" + num + "_chosen").remove();
+        $("#executions" + num).next('.picker').remove();
+        $("#executions" + num).chosen();
     });
 
     buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
@@ -69,26 +69,26 @@ function setOpenedBuilds(link, index)
             $('#buildBox' + index + ' select').chosen();
 
             index++;
-            if($('#projects' + index).val() != 'ditto') break;
+            if($('#executions' + index).val() != 'ditto') break;
         }while(index < row)
     });
 }
 
 /**
- * Load project builds
+ * Load execution builds
  *
  * @param  int $productID
- * @param  int $projectID
+ * @param  int $executionID
  * @param  int $index
  * @access public
  * @return void
  */
-function loadProjectBuilds(productID, projectID, index)
+function loadExecutionBuilds(productID, executionID, index)
 {
     branch = $('#branches' + index).val();
-    if(projectID)
+    if(executionID)
     {
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch + "&index=" + index);
+        link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch + "&index=" + index);
     }
     else
     {

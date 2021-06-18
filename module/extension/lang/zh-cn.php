@@ -29,6 +29,8 @@ $lang->extension->eraseAction      = '清除插件';
 $lang->extension->upgrade          = '升级插件';
 $lang->extension->agreeLicense     = '我同意该授权';
 
+$lang->extension->browseAction = '插件列表';
+
 $lang->extension->structure       = '目录结构';
 $lang->extension->structureAction = '目录结构';
 $lang->extension->installed       = '已安装';
@@ -95,7 +97,7 @@ $lang->extension->noticeOkFile             = '<h5>为了安全起见，系统需
     <ol>
     <li>文件内容为空。</li>
     <li>如果之前文件存在，删除之后重新创建。</li>
-    </ol>'; 
+    </ol>';
 
 $lang->extension->upgradeExt     = '升级';
 $lang->extension->installExt     = '安装';

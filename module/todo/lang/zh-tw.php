@@ -35,7 +35,7 @@ $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期設置";
 $lang->todo->project      = "所屬項目";
 $lang->todo->product      = "所屬產品";
-$lang->todo->execution    = "所屬" . $lang->sprintCommon;
+$lang->todo->execution    = "所屬執行";
 
 $lang->todo->reasonList['story'] = "轉{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "轉任務";
@@ -68,6 +68,7 @@ $lang->todo->finishedDate = '完成時間';
 $lang->todo->closedBy     = '由誰關閉';
 $lang->todo->closedDate   = '關閉時間';
 $lang->todo->deadline     = '過期時間';
+$lang->todo->deleted      = '已刪除';
 
 $lang->todo->every        = '間隔';
 $lang->todo->specify      = '指定';
@@ -96,9 +97,7 @@ $lang->todo->typeList['custom']   = '自定義';
 $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = '任務';
-$lang->todo->typeList['story']    = '軟需';
-$lang->todo->typeList['issue']    = '問題';
-$lang->todo->typeList['risk']     = '風險';
+$lang->todo->typeList['story']    = $lang->SRCommon;
 $lang->todo->typeList['review']   = '評審';
 $lang->todo->typeList['testtask'] = '測試單';
 

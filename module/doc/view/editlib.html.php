@@ -12,15 +12,20 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
+<?php if($lib->type == 'product'):?>
+<style> .chosen-container .chosen-results {max-height: 180px;}</style>
+<?php else:?>
+<style> .chosen-container .chosen-results {max-height: 145px;}</style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
     <h2>
       <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-      <?php echo $lang->doc->editlib;?>
+      <?php echo $lib->type != 'book' ? $lang->doc->editLib : $lang->doc->editBook;?>
     </h2>
   </div>
-  <form method='post' target='hiddenwin'>
+  <form method='post' class='form-ajax'>
     <table class='table table-form'>
       <?php if(!empty($lib->product)):?>
       <tr>
@@ -28,14 +33,14 @@
         <td><?php echo $product->name?></td>
       </tr>
       <?php endif;?>
-      <?php if(!empty($lib->project)):?>
+      <?php if(!empty($lib->execution)):?>
       <tr>
-        <th class='w-130px'><?php echo $lang->doc->project?></th>
-        <td><?php echo $project->name?></td>
+        <th class='w-130px'><?php echo $lang->doc->execution?></th>
+        <td><?php echo $execution->name?></td>
       </tr>
       <?php endif;?>
       <tr>
-        <th class='w-130px'><?php echo $lang->doc->libName?></th>
+        <th class='w-130px'><?php echo $lib->type != 'book' ? $lang->doc->libName : $lang->doc->bookName;?></th>
         <td>
           <?php echo html::input('name', $lib->name, "class='form-control'");?>
           <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
@@ -43,7 +48,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
-        <?php if($lib->type == 'product' or $lib->type == 'project'):?>
+        <?php if($lib->type == 'product' or $lib->type == 'execution'):?>
         <td>
           <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
           <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>

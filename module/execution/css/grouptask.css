@@ -1,0 +1,27 @@
+.table-group-btns {width: 200px;}
+.group-menu {padding: 1px 5px !important;}
+.group-menu .btn {font-size: 14px; color: #3C4353;}
+.fixed-header-copy .group-menu .btn {background-color: transparent; color: #fff;}
+.fixed-header-copy .group-menu .btn .icon {background: transparent !important; color: #fff; opacity: .5;}
+.icon-caret-right.text-muted {color: #CBD0DB;}
+.segments-list {max-width: 700px; margin: 10px;}
+.segments-list .table-col {vertical-align: middle;}
+.segments-list .segments {width: 150px; margin: 0 auto;}
+.segment {float: left; line-height: 18px;}
+.segment + .segment > .segment-title:before {content: '/'; display: inline-block; padding: 0 4px;}
+.segment + .segment > .segment-value {padding-left: 10px;}
+.segment-title {color: #828A9D; font-size: 12px;}
+.segment-value {font-weight: bold;}
+
+.group-menu > .dropdown > .dropdown-menu {right: 0; width: 100%;}
+
+.table-grouped .c-side {padding: 0 !important; position: relative; min-height: 100px;}
+.group-header {padding: 8px; position: relative;}
+.group-header > a {line-height: 20px; display: block; max-height: 40px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;}
+.group-header > .groupSummary {margin-top: 10px; line-height: 24px;}
+.main-table > .table {box-shadow: none;}
+.c-side-lg .group-header {display: flex; flex-direction: column; position: absolute; top: 0; right: 0; left: 0; bottom: 0; justify-content: space-between;}
+.is-firefox .group-header:before {content: ' '; position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: #fff; z-index: 0;}
+.is-firefox .group-header > a,
+.is-firefox .group-header > .groupSummary {position: relative; z-index: 1;}
+.c-hours {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right;}

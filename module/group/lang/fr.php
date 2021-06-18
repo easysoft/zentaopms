@@ -21,7 +21,7 @@ $lang->group->managePrivByGroup  = 'Gérer Privilèges par Groupe';
 $lang->group->managePrivByModule = 'Gérer Privilèges par Module';
 $lang->group->byModuleTips       = '<span class="tips">(Shift/Ctrl pour sélection multiple)</span>';
 $lang->group->manageMember       = 'Gérer Membres';
-$lang->group->managePRJAdmin     = 'Manage Program Admins';
+$lang->group->manageProjectAdmin = 'Manage Program Admins';
 $lang->group->confirmDelete      = "Voulez-vous supprimer ce groupe d'utilisateurs ?";
 $lang->group->successSaved       = 'Sauvé.';
 $lang->group->errorNotSaved      = 'Echec. Veuillez sélectionner actions et groupes.';
@@ -56,6 +56,7 @@ $lang->group->copyOptions['copyPriv'] = 'Copier Privilèges';
 $lang->group->copyOptions['copyUser'] = 'Copier Utilisateurs';
 
 $lang->group->versions['']          = 'History';
+$lang->group->versions['15_0_rc1']  = 'ZenTao15.0.rc1';
 $lang->group->versions['12_5']      = 'ZenTao12.5';
 $lang->group->versions['12_3']      = 'ZenTao12.3';
 $lang->group->versions['11_6_2']    = 'ZenTao11.6.2';

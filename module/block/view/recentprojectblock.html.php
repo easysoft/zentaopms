@@ -6,8 +6,8 @@
 #cards {margin: 0; padding: 0 10px 10px 10px;}
 #cards > .col {width: 33.33%;}
 .col-side #cards > .col {width: 100%;}
-#cards .panel {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
-#cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
+#cards .panel-content {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
+#cards .panel-content:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
 #cards .panel-body {padding: 0 16px 16px;}
 #cards .panel-actions {padding: 7px 0; z-index: 0}
@@ -22,7 +22,7 @@
 #cards .project-detail .progress {height: 4px;}
 #cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
 #cards .panel-heading {cursor: pointer;}
-#cards .project-stages-container {margin: 0 -16px -16px -16px; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
+#cards .project-stages-container {margin: 0 0 -16px 0; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
 #cards .project-stages:after {content: ' '; width: 30px; display: block; right: -16px; top: 16px; bottom: -6px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
 #cards .project-stages-row {position: relative; height: 30px; z-index: 0;}
 #cards .project-stage-item {white-space: nowrap; position: absolute; top: 0; min-width: 48px; padding-top: 13px; color: #838A9D;}
@@ -32,43 +32,49 @@
 #cards .project-stage-item.is-going {color: #333;}
 #cards .project-stage-item.is-going::before {background-color: #0C64EB;}
 #dashboard .block-recentproject .panel-body {padding: 0;}
+.execution-name {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 </style>
 <div class="panel-body">
+  <?php if(empty($projects)):?>
+    <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+  <?php else:?>
   <div class='row' id='cards'>
     <?php foreach ($projects as $projectID => $project):?>
-    <div class='col' data-id='<?php echo $projectID?>'>
-      <div class='panel' data-url='<?php echo $this->createLink('project', 'index', "projectID=$project->id");?>'>
+    <?php $viewLink = $config->systemMode == 'new' ? $this->createLink('project', 'index', "projectID=$project->id") : $this->createLink('execution', 'task', "projectID=$project->id");?>
+    <div class='col'>
+      <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
-          <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name);?> </strong>
+          <?php if(isset($config->maxVersion)):?>
           <?php if($project->model === 'waterfall'): ?>
-          <span class='project-type-label label label-warning label-outline'><?php echo $lang->program->waterfall; ?></span>
+          <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
           <?php else: ?>
-          <span class='project-type-label label label-info label-outline'><?php echo $lang->program->scrum; ?></span>
+          <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
           <?php endif; ?>
+          <?php endif; ?>
+          <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
-              <a href='javascript:;' data-toggle='context-dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right cards-menu'>
-                <li><?php common::printIcon('program', 'PRJGroup', "projectID=$project->id", $project, 'button', 'group', '', '', '', '', '', $project->id);?></li>
-                <li><?php common::printIcon('program', 'PRJManageMembers', "projectID=$project->id", $project, 'button', 'persons', '', '', '', '', '', $project->id);?></li>
-                <li><?php common::printicon('program', 'PRJActivate', "projectid=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJEdit',    "projectID=$project->id", $project, 'button', ' icon-edit', '', '', '', '', '', $project->id);?></li>
-                <li><?php common::printIcon('program', 'PRJStart',   "projectID=$project->id", $project, 'button', ' icon-play', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJSuspend', "projectID=$project->id", $project, 'button', ' icon-pause', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJClose',   "projectID=$project->id", $project, 'button', ' icon-off', '', 'iframe', true);?></li>
-                <li><?php common::printIcon('program', 'PRJDelete',  "projectID=$project->id", $project, 'button', ' icon-trash', 'hiddenwin');?></li>
+                <li><?php common::printIcon('project', 'group', "projectID=$project->id", $project, 'button', 'group', '', '', '', '', '', $project->id);?></li>
+                <li><?php common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'button', 'persons', '', '', '', '', '', $project->id);?></li>
+                <li><?php common::printicon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
+                <li><?php if(common::hasPriv('project', 'edit')) echo html::a($this->createLink('project', 'edit', "projectID=$project->id"), "<i class='icon-edit'></i> " . $lang->project->edit, '', "data-app='{$app->openApp}'");?></li>
+                <li><?php common::printIcon('project', 'start',   "projectID=$project->id", $project, 'button', ' icon-play', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('project', 'suspend', "projectID=$project->id", $project, 'button', ' icon-pause', '', 'iframe', true);?></li>
+                <li><?php common::printIcon('project', 'close',   "projectID=$project->id", $project, 'button', ' icon-off', '', 'iframe', true);?></li>
+                <li><?php if(common::hasPriv('project', 'delete')) echo html::a($this->createLink('project', 'delete', "projectID=$project->id"), "<i class='icon-trash'></i> " . $lang->project->delete, 'hiddenwin', "data-app='{$app->openApp}'");?></li>
               </ul>
             </li>
           </nav>
         </div>
         <div class='panel-body'>
           <div class='project-infos'>
-            <span><i class='icon icon-group'></i> <?php printf($lang->program->membersUnit, $project->teamCount); ?></span>
-            <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $project->estimate); ?></span>
+            <span><i class='icon icon-group'></i> <?php printf($lang->project->membersUnit, $project->teamCount); ?></span>
+            <span><i class='icon icon-clock'></i> <?php printf($lang->project->hoursUnit, $project->estimate); ?></span>
           </div>
+          <?php if($config->systemMode == 'new'):?>
           <?php if($project->model === 'waterfall'): ?>
           <div class='project-detail project-stages'>
-            <p class='text-muted'><?php echo $lang->program->ongoingStage;?></p>
             <?php
             $projectProjects = array();
             foreach($project->executions as $project)
@@ -79,6 +85,7 @@
             <?php if(empty($projectProjects)): ?>
             <div class='label label-outline'><?php echo zget($lang->project->statusList, $project->status);?></div>
             <?php else: ?>
+            <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
             <div class='project-stages-container scrollbar-hover'>
               <div class='project-stages-row'>
                 <?php foreach ($projectProjects as $project): ?>
@@ -93,14 +100,14 @@
           <?php else: ?>
           <?php $project = empty($project->executions ) ? '' : end($project->executions);?>
           <div class='project-detail project-iteration'>
-            <p class='text-muted'><?php echo $lang->program->lastIteration; ?></p>
+            <p class='text-muted'><?php echo $lang->project->lastIteration; ?></p>
             <?php if($project):?>
             <div class='row'>
-              <div class='col-xs-5'><?php echo $project->name;?></div>
+              <div class='col-xs-5 execution-name' title="<?php echo $project->name;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
               <div class='col-xs-7'>
-              <div class="progress progress-text-left">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
-                <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
+                <div class="progress progress-text-left">
+                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
+                  <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
                 </div>
               </div>
               </div>
@@ -108,11 +115,13 @@
             <?php endif; ?>
           </div>
           <?php endif; ?>
+          <?php endif; ?>
         </div>
       </div>
     </div>
     <?php endforeach;?>
   </div>
+  <?php endif;?>
 </div>
 <script>
 /* Auto resize stages */

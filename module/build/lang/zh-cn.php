@@ -27,30 +27,31 @@ $lang->build->confirmUnlinkBug   = "您确认移除该Bug吗？";
 
 $lang->build->basicInfo = '基本信息';
 
-$lang->build->id            = 'ID';
-$lang->build->product       = $lang->productCommon;
-$lang->build->branch        = '平台/分支';
-$lang->build->project       = '所属' . $lang->executionCommon;
-$lang->build->name          = '名称编号';
-$lang->build->date          = '打包日期';
-$lang->build->builder       = '构建者';
-$lang->build->scmPath       = '源代码地址';
-$lang->build->filePath      = '下载地址';
-$lang->build->desc          = '描述';
-$lang->build->files         = '上传发行包';
-$lang->build->last          = '上个版本';
-$lang->build->packageType   = '包类型';
-$lang->build->unlinkStory   = "移除{$lang->SRCommon}";
-$lang->build->unlinkBug     = '移除Bug';
-$lang->build->stories       = "完成的{$lang->SRCommon}";
-$lang->build->bugs          = '解决的Bug';
-$lang->build->generatedBugs = '产生的Bug';
-$lang->build->noProduct     = " <span style='color:red'>该{$lang->executionCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a href='%s'>关联{$lang->productCommon}</a></span>";
-$lang->build->noBuild       = '暂时没有版本。';
+$lang->build->id             = 'ID';
+$lang->build->product        = $lang->productCommon;
+$lang->build->branch         = '平台/分支';
+$lang->build->execution      = '所属' . $lang->executionCommon;
+$lang->build->name           = '名称编号';
+$lang->build->date           = '打包日期';
+$lang->build->builder        = '构建者';
+$lang->build->scmPath        = '源代码地址';
+$lang->build->filePath       = '下载地址';
+$lang->build->desc           = '描述';
+$lang->build->files          = '上传发行包';
+$lang->build->last           = '上个版本';
+$lang->build->packageType    = '包类型';
+$lang->build->unlinkStory    = "移除{$lang->SRCommon}";
+$lang->build->unlinkBug      = '移除Bug';
+$lang->build->stories        = "完成的{$lang->SRCommon}";
+$lang->build->bugs           = '解决的Bug';
+$lang->build->generatedBugs  = '产生的Bug';
+$lang->build->noProduct      = " <span id='noProduct' style='color:red'>该{$lang->executionCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'>关联{$lang->productCommon}</a></span>";
+$lang->build->noBuild        = '暂时没有版本。';
+$lang->build->emptyExecution =  $lang->executionCommon . '不能为空。';
 
 $lang->build->notice = new stdclass();
-$lang->build->notice->changeProduct = "已经关联{$lang->SRCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";
-$lang->build->notice->changeProject = "提交测试单的版本，不能修改其所属{$lang->executionCommon}";
+$lang->build->notice->changeProduct   = "已经关联{$lang->SRCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";
+$lang->build->notice->changeExecution = "提交测试单的版本，不能修改其所属{$lang->executionCommon}";
 
 $lang->build->finishStories = " 本次共完成 %s 个{$lang->SRCommon}";
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';
@@ -62,4 +63,5 @@ $lang->build->placeholder->filePath = ' 该版本软件包下载存储地址';
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$extra</strong>。' . "\n";
+
 $lang->backhome = '返回';

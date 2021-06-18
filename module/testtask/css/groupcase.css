@@ -1,2 +1,2 @@
 .group-header > a {line-height: 20px; display: block; max-height: 40px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;}
-.case-title{overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
+.case-title {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

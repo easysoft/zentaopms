@@ -20,17 +20,18 @@
       </div>
       <table class='table table-form'>
         <tr class='text-center'>
+          <?php if($this->config->URAndSR):?>
           <td class='w-200px'><strong><?php echo $lang->custom->URConcept;?></strong></th>
+          <?php endif;?>
           <td class='w-200px'><strong><?php echo $lang->custom->SRConcept;?></strong></th>
           <td></td><td></td>
         </tr>
         <tr>
-          <td><?php echo html::input('URName', $URSR->URName, "class='form-control'");?></td>
+          <td class="<?php if(!$this->config->URAndSR) echo 'hide'?>"><?php echo html::input('URName', $URSR->URName, "class='form-control'");?></td>
           <td><?php echo html::input('SRName', $URSR->SRName, "class='form-control'");?></td>
         </tr>
         <tr>
-          <th></th>
-          <td class='text-center' colspan='2'><?php echo html::submitButton();?></td>
+          <td class='text-center' colspan='4'><?php echo html::submitButton();?></td>
         </tr>
       </table>
     </div>

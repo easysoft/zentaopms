@@ -1,22 +1,22 @@
-.versions .dropdown-menu{max-height:260px; overflow-y:auto;}
-.table-data > tbody > tr > th.w-80px {width:80px;}
-.detail-content .file-image{position: relative; padding: 0 10px; margin-right: 10px;}
-.detail-content .file-image > span.right-icon{position: absolute; right: -10px; top: 0;}
-#urlIframe{border:0px;}
+.versions .dropdown-menu {max-height: 260px; overflow-y: auto;}
+.table-data > tbody > tr > th.w-80px {width: 80px;}
+.detail-content .file-image {position: relative; padding: 0 10px; margin-right: 10px;}
+.detail-content .file-image > span.right-icon {position: absolute; right: -10px; top: 0;}
+#urlIframe {border: 0px;}
 
-#urlCard{border:1px solid #ccc; width:100%; min-height:100px; padding:8px; border-radius: 4px; margin:103px 0;
+#urlCard {border: 1px solid #ccc; width: 100%; min-height: 100px; padding: 8px; border-radius: 4px; margin: 103px 0;
   -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);
   box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);
 }
-#urlCard .url-icon{float:left; width:45px; height:45px; margin-right:5px;}
-#urlCard .url-content{padding-left:55px;}
-#urlCard .url-title{font-weight:bold; font-size:16px; min-height:20px}
-#urlCard .url-href a{color:#888;}
+#urlCard .url-icon {float: left; width: 45px; height: 45px; margin-right: 5px;}
+#urlCard .url-content {padding-left: 55px;}
+#urlCard .url-title {font-weight:bold; font-size: 16px; min-height: 20px;}
+#urlCard .url-href a {color: #888;}
 
 .main-row > .side-col {transition: width .2s;}
-.main-row > .main-col .article-content {transition: max-width; margin: 0 auto!important;}
-.main-row > .side-col > .cell {transition: opacity .2s;}
-.doc-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden}
-.doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972'}
-.right-icon a{color: #1183fb}
+.main-row > .main-col .article-content {transition: max-width; margin: 0 auto !important;}
+.main-row > .side-col > .cell {transition: opacity .2s; margin-bottom: 10px;}
+.doc-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden;}
+.doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972';}
+.right-icon a {color: #1183fb;}
 .cell th,td {word-break: break-word;}
