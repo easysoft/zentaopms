@@ -28,23 +28,26 @@ class action extends control
 
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri, 'product');
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('storyList',       $uri, 'product');
-        $this->session->set('releaseList',     $uri, 'product');
-        $this->session->set('programList',     $uri, 'program');
-        $this->session->set('projectList',     $uri, 'project');
-        $this->session->set('executionList',   $uri, 'execution');
-        $this->session->set('taskList',        $uri, 'execution');
-        $this->session->set('buildList',       $uri, 'execution');
-        $this->session->set('bugList',         $uri, 'qa');
-        $this->session->set('caseList',        $uri, 'qa');
-        $this->session->set('testtaskList',    $uri, 'qa');
-        $this->session->set('docList',         $uri, 'doc');
-        $this->session->set('opportunityList', $uri, 'project');
-        $this->session->set('riskList',        $uri, 'project');
-        $this->session->set('trainplanList',   $uri, 'project');
-        $this->session->set('roomList',        $uri, 'admin');
+        $this->session->set('productList',        $uri, 'product');
+        $this->session->set('productPlanList',    $uri, 'product');
+        $this->session->set('storyList',          $uri, 'product');
+        $this->session->set('releaseList',        $uri, 'product');
+        $this->session->set('programList',        $uri, 'program');
+        $this->session->set('projectList',        $uri, 'project');
+        $this->session->set('executionList',      $uri, 'execution');
+        $this->session->set('taskList',           $uri, 'execution');
+        $this->session->set('buildList',          $uri, 'execution');
+        $this->session->set('bugList',            $uri, 'qa');
+        $this->session->set('caseList',           $uri, 'qa');
+        $this->session->set('testtaskList',       $uri, 'qa');
+        $this->session->set('docList',            $uri, 'doc');
+        $this->session->set('opportunityList',    $uri, 'project');
+        $this->session->set('riskList',           $uri, 'project');
+        $this->session->set('trainplanList',      $uri, 'project');
+        $this->session->set('roomList',           $uri, 'admin');
+        $this->session->set('researchplanList',   $uri, 'project');
+        $this->session->set('researchreportList', $uri, 'project');
+        $this->session->set('meetingList',        $uri, 'project');
 
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
