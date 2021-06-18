@@ -235,10 +235,10 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function createWebhook($gitlabID, $projectID)
+    public function createWebhook($products, $gitlabID, $projectID)
     {
-        // TODO(dingguodong) add more robust code here.
-        $response = $this->apiCreateHook($gitlabID, $projectID, $this->config->gitlab->zentaoApiWebhookUrl, $this->config->gitlab->zentaoApiWebhookToken);
+        $webhook  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $gitlabID);
+        $response = $this->apiCreateHook($gitlabID, $projectID, $webhook, $this->config->gitlab->zentaoApiWebhookToken);
         return $response;
     }
 

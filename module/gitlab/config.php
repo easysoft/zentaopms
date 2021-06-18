@@ -17,7 +17,7 @@ $config->gitlab->bugLabel->description  = "bug label from zentao";
 $config->gitlab->bugLabel->color        = "#D10069";
 $config->gitlab->bugLabel->priority     = "0";
 
-$config->gitlab->zentaoApiWebhookUrl    = "https://zentao/api/v1/webhook/callback";
+$config->gitlab->zentaoApiWebhookUrl    = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s&project=%s";
 $config->gitlab->zentaoApiWebhookToken  = "<access token>";
 
 
