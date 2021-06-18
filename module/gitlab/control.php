@@ -48,15 +48,7 @@ class gitlab extends control
     {
         if($_POST)
         {
-            if(strpos($host, 'http') !== 0) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
-            if(!$this->post->token) $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
-
-            $user = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
-
-            if(!is_object($user)) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
-            if(isset($user->is_admin) and $user->is_admin == true) $this->send(array('result' => 'success'));
-            $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
-
+            $this->checkToken();
             $gitlabID = $this->gitlab->create();
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -72,6 +64,33 @@ class gitlab extends control
     }
 
     /**
+     * Edit a gitlab.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function edit($id)
+    {
+        $gitlab = $this->gitlab->getByID($id);
+        if($_POST)
+        {
+            $this->checkToken();
+            $this->gitlab->update($id);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->gitlab->common);
+        $this->view->position[] = $this->lang->gitlab->edit;
+
+        $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
+        $this->view->gitlab = $gitlab;
+
+        $this->display();
+    }
+
+    /**
      * Bind gitlab user to zentao users.
      *
      * @access public
@@ -79,7 +98,8 @@ class gitlab extends control
      */
     public function bindUser($gitlabID)
     {
-        $userPairs     = $this->loadModel('user')->getPairs();
+        $userPairs = $this->loadModel('user')->getPairs();
+
         if($_POST)
         {
             $users = $this->post->zentaoUsers;
@@ -126,43 +146,19 @@ class gitlab extends control
         $this->display();
     }
 
+    /**
+     * Bind product and gitlab projects.
+     * 
+     * @param  int    $gitlabID 
+     * @access public
+     * @return void
+     */
     public function bindProduct($gitlabID)
     {
         $this->view->projectPairs   = $this->gitlab->getProjectPairs($gitlabID);
         $this->view->title          = $this->lang->gitlab->bindProduct;
         $this->display();
-
     } 
-
-
-    /**
-     * Edit a gitlab.
-     *
-     * @param  int    $id
-     * @access public
-     * @return void
-     */
-    public function edit($id)
-    {
-        $gitlab = $this->gitlab->getByID($id);
-        if($_POST)
-        {
-            $tokenValid = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
-            if($tokenValid['result'] == 'fail') $this->send($tokenValid);
-
-            $this->gitlab->update($id);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
-        }
-
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->gitlab->common);
-        $this->view->position[] = $this->lang->gitlab->edit;
-
-        $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
-        $this->view->gitlab = $gitlab;
-
-        $this->display();
-    }
 
     /**
      * Delete a gitlab.
@@ -180,24 +176,19 @@ class gitlab extends control
     }
 
     /**
-     * Ajax get gitlab token permissions.
-     *
-     * @param  string    $host
-     * @param  string    $token
+     * Check post token has admin permissions.
+     * 
      * @access public
      * @return void
      */
-    public function ajaxCheckToken($host, $token)
+    public function checkToken()
     {
-        $host = helper::safe64Decode($host);
-        $permissions = $this->gitlab->apiGetCurrentUser($host, $token);
-        $this->send($permissions);
-    }
+        if(strpos($this->post->url, 'http') !== 0) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+        if(!$this->post->token) $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
-    public function createHook($gitlab_id, $project_id, $url, $token)
-    {
-        $res = $this->gitlab->apiCreateHook($gitlab_id, $project_id, $url, $token);
-        return $res;
-    }
+        $user = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
 
+        if(!is_object($user)) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+        if(!isset($user->is_admin) or !$user->is_admin) $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+    }
 }
