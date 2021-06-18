@@ -4,7 +4,7 @@
 <style>
 .block-meetings .c-id {width: 50px;}
 .block-meetings .c-date {width: 100px;}
-.block-meetings .c-dept {width: 80px;}
+.block-meetings .c-dept {width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .block-meetings .c-mode {width: 80px;}
 .block-meetings .c-minutedBy {width: 80px;}
 .block-meetings .c-host {width: 80px;}
@@ -34,8 +34,8 @@
         <td class='c-date'><?php echo $meeting->date == '0000-00-00' ? '' : $meeting->date;?></td>
         <td class='c-name' title='<?php echo $meeting->name?>'><?php echo html::a($this->createLink('meeting', 'view', "meetingID=$meeting->id"), $meeting->name, '', "data-app='my'")?></td>
         <?php if($longBlock):?>
-        <td class='c-dept'><?php echo zget($depts, $meeting->dept)?></td>
-        <td class='c-mode'><?php echo zget($lang->meeting->modeList, $meeting->dept)?></td>
+        <td class='c-dept' title="<?php echo zget($depts, $meeting->dept)?>"><?php echo zget($depts, $meeting->dept)?></td>
+        <td class='c-mode'><?php echo zget($lang->meeting->modeList, $meeting->mode)?></td>
         <td class='c-minutedBy'><?php echo zget($users, $meeting->minutedBy);?></td>
         <?php endif;?>
         <td class='c-host'><?php echo zget($users, $meeting->host);?></td>
