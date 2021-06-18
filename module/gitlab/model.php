@@ -203,7 +203,7 @@ class gitlabModel extends model
         return $projectPairs;
     }
 
-    public funciton getProjectDisplayName($gitlabID, $projectID)
+    public function getProjectDisplayName($gitlabID, $projectID)
     {
         return array_key_exists($gitlabID, $projectID) ? $this->gitlab->getProjectPairs($gitlabID)[$projectID]: "";
     }
