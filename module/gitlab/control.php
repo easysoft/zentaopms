@@ -126,6 +126,15 @@ class gitlab extends control
         $this->display();
     }
 
+    public function bindProduct($gitlabID)
+    {
+        $this->view->projectPairs   = $this->gitlab->getProjectPairs($gitlabID);
+        $this->view->title          = $this->lang->gitlab->bindProduct;
+        $this->display();
+
+    } 
+
+
     /**
      * Edit a gitlab.
      *

@@ -171,13 +171,13 @@ class gitlabModel extends model
     /**
      * Get projects of one gitlab.
      * 
-     * @param  int    $id 
+     * @param  int    $gitlabID 
      * @access public
      * @return void
      */
-    public function apiGetProjects($id)
+    public function apiGetProjects($gitlabID)
     {   
-        $gitlab = $this->getByID($id);
+        $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();
         $host   = rtrim($gitlab->url, '/');
         $host .= '/api/v4/projects';
@@ -191,6 +191,26 @@ class gitlabModel extends model
         }   
         return $allResults;
     }
+
+    public function getProjectPairs($gitlabID)
+    {
+        $projects = $this->apiGetProjects($gitlabID);
+        $projectPairs = array();
+        foreach($projects as $project)
+        {
+            $projectPairs[$project->id] = $project->name_with_namespace;
+        }
+
+        return $projectPairs;
+    }
+
+    public function getProjectDisplayName($gitlabID, $projectID)
+    {
+        return array_key_exists($gitlabID, $projectID) ? $this->gitlab->getProjectPairs($gitlabID)[$projectID]: "";
+    }
+
+
+
 
     /**
      * Get gitlab api base url with access_token
@@ -415,18 +435,17 @@ class gitlabModel extends model
         $apiPath = "/projects/{$projectID}/issues/";
         $url = sprintf($apiRoot, $apiPath);
         $response = commonModel::http($url, $issue);
-        $labels = json_decode($response);
-
-        return $labels;
+        return $response;
     }
 
     public function pushTask($task, $gitlabID,$projectID)
     {
-
+        $task->label = $this->config->gitlab->taskLabel->name;
     }
 
     public function pushBug($bug, $gitlabID,$projectID)
     {
         
+        $bug->label = $this->config->gitlab->bugLabel->name;
     }
 }
