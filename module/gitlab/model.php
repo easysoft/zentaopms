@@ -209,9 +209,6 @@ class gitlabModel extends model
         return array_key_exists($gitlabID, $projectID) ? $this->gitlab->getProjectPairs($gitlabID)[$projectID]: "";
     }
 
-
-
-
     /**
      * Get gitlab api base url with access_token
      * 
@@ -225,6 +222,37 @@ class gitlabModel extends model
         if(!$gitlab) return "";
         $gitlab_url = rtrim($gitlab->url, '/').'/api/v4%s'."?private_token={$gitlab->token}";
         return $gitlab_url; 
+    }
+
+    /**
+     * Create relationship between zentao product and  gitlab project.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function createAssociat($products, $gitlabID, $projectID)
+    {
+        $gitlabNamespace = $this->getProjectPairs($gitlabID);
+
+         $gitlabAssociat = new stdclass;      
+         $gitlabAssociat->execution = 0;
+         $gitlabAssociat->AVersion  = 0;
+         $gitlabAssociat->relation  = 'interrated';
+         $gitlabAssociat->BVersion  = 0;
+         $gitlabAssociat->extra     = 0;
+
+        foreach($products as $index => $prodcuct)
+        { 
+            $gitlabAssociat->BType = $gitlabNamespace[$gitlabID];
+            $gitlabAssociat->BID   = $gitlabID;
+            $gitlabAssociat->Project   = $ProjectID;;
+            $gitlabAssociat->Product   = $product;
+
+          $this->dao->insert(TABLE_RELATION)->data($gitlabAssociat)->exec();
+        }
+        return true;
     }
 
     /**

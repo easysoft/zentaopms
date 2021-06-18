@@ -233,7 +233,8 @@ class repoModel extends model
         {
             $this->loadModel("gitlab")->initLabels($this->post->gitlabHost, $this->post->gitlabProject);
 
-            // save the relationship between zentao product and  gitlab project to zt_relation table.
+            /* save the relationship between zentao product and  gitlab project to zt_relation table.*/
+            $this->loadModel("gitlab")->createAssociat($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
 
             /* create webhook for zentao */
             $this->loadModel("gitlab")->createWebhook($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
