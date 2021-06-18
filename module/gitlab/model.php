@@ -237,10 +237,15 @@ class gitlabModel extends model
      */
     public function createWebhook($products, $gitlabID, $projectID)
     {
+        $urls = $this->getWebhookUrls($gitlabID, $projectID);
+        
         foreach($products as $index => $product)
         {
-            $webhook  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $product, $gitlabID, $projectID);
-            $response = $this->apiCreateHook($gitlabID, $projectID, $webhook, $this->config->gitlab->zentaoApiWebhookToken);
+            $url  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $product, $gitlabID, $projectID);
+            if(! array_key_exists($url, array_flip($urls)))
+            {
+                $response = $this->apiCreateHook($gitlabID, $projectID, $url, $this->config->gitlab->zentaoApiWebhookToken);
+            }
         }
         return true;
     }
@@ -258,7 +263,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/hooks";
         $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url);
+        $response = json_decode(commonModel::http($url));
         return $response;
     }
 
@@ -277,8 +282,27 @@ class gitlabModel extends model
         $apiPath = "/projects/$projectID/hooks/$hookID)";
         $url = sprintf($apiRoot, $apiPath);
         $response = commonModel::http($url);
-        return;
+        return $response;
     }  
+
+    /**
+     * Get webhook urls 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return array $urls;
+     */
+    public function getWebhookUrls($gitlabID, $projectID)
+    {
+        $urls = array();
+        $webhooks = $this->apiGetHooks($gitlabID, $projectID);
+        foreach($webhooks as $index => $webhook)
+        {
+            $urls[] = $webhook->url;
+        }
+        return $urls;
+    }
 
     /**
      * Create hook.
