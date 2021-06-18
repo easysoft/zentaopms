@@ -22,6 +22,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none; white-space:nowrap; overflow: auto; overflow-x:hidden;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
 .block-todoes .todo-title {padding: 5px 15px 5px 5px;}
+.titleBox {width: 700px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
 .block-todoes .todo-pri {margin: 0 5px;}
 .block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 95px;}
 .block-todoes .todo-check {position: absolute; top: 5px; left: 10px; display: block; width: 20px; height: 20px; font-size: 20px; color: transparent; cursor: pointer; background: #fff; border: 2px solid #eee; border-radius: 50%;}
@@ -94,7 +95,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
       $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my", 'html', true);
       ?>
-      <li data-id='<?php echo $todo->id?>'>
+      <li data-id='<?php echo $todo->id?>' class='titleBox'>
         <span class="todo-check icon icon-check-circle"></span>
         <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' data-toggle='modal' <?php echo $appid?>>
           <?php if ($todo->date == '2030-01-01') :?>
