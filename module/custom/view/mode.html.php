@@ -29,7 +29,10 @@
           <p class='text-info'><?php echo $lang->upgrade->selectedModeTips['new'];?></p>
         </td>
       </tr>
-      <tr><td></td><td><?php echo html::submitButton($lang->upgrade->common);?></td></tr>
+      <tr>
+        <td></td>
+        <td><?php echo html::submitButton($lang->custom->switch);?></td>
+      </tr>
     </table>
   </form>
 </div>
