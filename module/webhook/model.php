@@ -380,7 +380,7 @@ class webhookModel extends model
             $intersect       = array_intersect($webhookProducts, $actionProduct);
             if(!$intersect) return false;
         }
-        if($webhook->executions)
+        if(isset($webhook->executions))
         {
             if(strpos(",$webhook->executions,", ",$action->execution,") === false) return false;
         }
@@ -447,13 +447,20 @@ class webhookModel extends model
     public function getViewLink($objectType, $objectID)
     {
         $oldOnlyBody = '';
+        $openApp     = '';
         if(isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
         {
             $oldOnlyBody = 'yes';
             unset($_GET['onlybody']);
         }
         if($objectType == 'case') $objectType = 'testcase';
-        $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html');
+        if($objectType == 'meeting')
+        {
+            $meeting = $this->dao->findById($objectID)->from(TABLE_MEETING)->fetch();
+            $openApp = $meeting->project ? '#app=project' : '#app=my';
+        }
+
+        $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html') . $openApp;
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
 
         return $viewLink;
