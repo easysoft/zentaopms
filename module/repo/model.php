@@ -240,9 +240,6 @@ class repoModel extends model
 
         }
 
-
-
-
         return $this->dao->lastInsertID();
     }
 
