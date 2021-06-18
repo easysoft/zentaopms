@@ -37,3 +37,5 @@ $config->block->shortBlock['']['contribute'] = 'contribute';
 
 $config->statistic = new stdclass();
 $config->statistic->storyStages = array('wait', 'planned', 'developing', 'testing', 'released');
+
+$config->block->workMethods = 'task,story,requirement,bug,testcase,testtask,issue,risk,meeting';
