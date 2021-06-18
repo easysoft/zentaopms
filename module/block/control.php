@@ -1684,7 +1684,7 @@ class block extends control
             $this->app->loadClass('date');
             $this->app->loadLang('todo');
             $stmt = $this->dao->select('*')->from(TABLE_TODO)
-                ->where("(assignedTo = '{$this->app->user->account}' or (account='{$this->app->user->account}'))")
+                ->where('assignedTo')->eq($this->app->user->account)
                 ->andWhere('cycle')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('status')->eq('wait')
