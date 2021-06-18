@@ -163,6 +163,7 @@ class messageModel extends model
         if(!empty($object->assignedTo)) $toList = $object->assignedTo;
         if(empty($toList) and $objectType == 'todo') $toList = $object->account;
         if(empty($toList) and $objectType == 'testtask') $toList = $object->owner;
+        if(empty($toList) and $objectType == 'meeting') $toList = $object->host . $object->participant;
 
         if($toList == 'closed') $toList = '';
         return $toList;
