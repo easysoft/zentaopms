@@ -1113,7 +1113,7 @@ class project extends control
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->currentMembers = $this->project->getTeamMembers($projectID);;
+        $this->view->currentMembers = $this->project->getTeamMembers($projectID);
         $this->display();
     }
 
