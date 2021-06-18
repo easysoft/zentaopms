@@ -406,6 +406,7 @@ class gitlabModel extends model
     public function isLabelExists($gitlabID, $projectID)
     {
         $labels = $this->apiGetLabels($gitlabID, $projectID);
+        if(empty($labels)) return false;
         foreach($labels as $label)
         {
             if(strpos($label->name, $this->config->gitlab->taskLabel->name) == 0) return true;
