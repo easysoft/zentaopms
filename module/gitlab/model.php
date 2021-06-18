@@ -136,7 +136,8 @@ class gitlabModel extends model
             }
         }
             
-        $bindedUsers = $this->dao->select('openID,account')->from(TABLE_OAUTH)
+        $bindedUsers = $this->dao->select('openID,account')
+                                 ->from(TABLE_OAUTH)
                                  ->where('providerType')->eq('gitlab')
                                  ->andWhere('providerID')->eq($gitlabID)
                                  ->fetchPairs();
