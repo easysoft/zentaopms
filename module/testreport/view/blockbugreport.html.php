@@ -209,7 +209,7 @@ var colorKey  = 0;
 for(var key in bugPriList)
 {
     $('.pri-' + key).css('background', colorList[colorKey]);
-    var priName  = key == 0 ? zeroPri : bugPriList[key];
+    var priName = key == 0 ? zeroPri : bugPriList[key];
     var pri = {
         label: priName,
         color: colorList[colorKey],
@@ -230,7 +230,7 @@ colorKey = 2;
 for(var key in bugHandleGroups)
 {
     $('.' + key).css('background', colorList[colorKey]);
-    var stageName  = bugStageList[key];
+    var stageName = bugStageList[key];
     var stage = {
         label: stageName,
         color: colorList[colorKey],

@@ -818,11 +818,14 @@ class commonModel extends model
         foreach($menu as $menuItem)
         {
             /* Fix work and contribute navigation permission check issues. */
-            if($menuItem->link['module'] == 'my' and ($menuItem->link['method'] == 'work' or $menuItem->link['method'] == 'contribute'))
+            if(isset($menuItem->link) and isset($menuItem->link['module']) and isset($menuItem->link['method']))
             {
-                $mode = explode('&', $menuItem->link['vars']);
-                $mode = substr($mode[0], 5);
-                $menuItem->hidden = !common::hasPriv('my', $mode);
+                if($menuItem->link['module'] == 'my' and ($menuItem->link['method'] == 'work' or $menuItem->link['method'] == 'contribute'))
+                {
+                    $mode = explode('&', $menuItem->link['vars']);
+                    $mode = substr($mode[0], 5);
+                    $menuItem->hidden = !common::hasPriv('my', $mode);
+                }
             }
 
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
