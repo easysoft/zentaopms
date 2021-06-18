@@ -735,14 +735,14 @@ class actionModel extends model
 
         if($productID == 'all' or $projectID == 'all')
         {
-            $productCondition   = $productID   == 'all' ? "INSTR('," . $products . ",', product) > 0" : '';
+            $productCondition   = $productID   == 'all' ? "product " . helper::dbIN($products) : '';
             $projectCondition   = $projectID   == 'all' ? "project " . helper::dbIN($projects) : '';
             $executionCondition = $executionID == 'all' ? "execution " . helper::dbIN($executions) : '';
             if(is_numeric($productID))   $productCondition = "product like '%,$productID,%' or product = '$productID'";
             if(is_numeric($projectID))   $projectCondition = "project = '$projectID'";
             if(is_numeric($executionID)) $executionCondition = "execution = '$executionID'";
 
-            $condition = "(product =',0,' AND project = '0' AND execution = 0)";
+            $condition = "((product =',0,' or product=0) AND project = '0' AND execution = 0)";
             if($productCondition)   $condition .= ' OR ' . $productCondition;
             if($projectCondition)   $condition .= ' OR ' . $projectCondition;
             if($executionCondition) $condition .= ' OR ' . $executionCondition;
