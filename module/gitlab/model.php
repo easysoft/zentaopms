@@ -227,6 +227,21 @@ class gitlabModel extends model
     }
 
     /**
+     * Create webhook for zentao.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function createWebhook($gitlabID, $projectID)
+    {
+        // TODO(dingguodong) add more robust code here.
+        $response = $this->apiCreateHook($gitlabID, $projectID, $this->config->gitlab->zentaoApiWebhookUrl, $this->config->gitlab->zentaoApiWebhookToken);
+        return $response;
+    }
+
+    /**
      * Get hooks.
      * 
      * @param  int    $gitlabID 
