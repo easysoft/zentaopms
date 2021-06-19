@@ -359,7 +359,6 @@ class gitlabModel extends model
         $url = sprintf($apiRoot, $apiPath);
         $response = commonModel::http($url, $postData); 
         return $response;
-
     }
 
     /**
@@ -466,8 +465,6 @@ class gitlabModel extends model
         }
 
         return false;
-
-    
     }
 
     /**
@@ -505,18 +502,21 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/issues/";
         $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url, $issue);
+        $response = json_decode(commonModel::http($url, $issue));
         return $response;
     }
 
-    public function pushTask($task, $gitlabID,$projectID)
+    public function pushTask($gitlabID, $projectID, $task)
     {
         $task->label = $this->config->gitlab->taskLabel->name;
+        $response = $this->apiCreateIssue($gitlabID, $projectID, $task);
+        return $response;
     }
 
-    public function pushBug($bug, $gitlabID,$projectID)
+    public function pushBug($gitlabID, $projectID, $bug)
     {
-        
         $bug->label = $this->config->gitlab->bugLabel->name;
+        $response = $this->apiCreateIssue($gitlabID, $projectID, $bug);
+        return $response;
     }
 }
