@@ -179,12 +179,12 @@ class gitlabModel extends model
     {   
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();
-        $host   = rtrim($gitlab->url, '/');
+        $host  = rtrim($gitlab->url, '/');
         $host .= '/api/v4/projects';
 
         $allResults = array();
         for($page = 1; true; $page ++) 
-        {   
+        {  
             $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&membership=true&page={$page}&per_page=100"));
             if(empty($results) or $page > 10) break;
             $allResults = $allResults + $results;
@@ -232,9 +232,12 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function createAssociat($products, $gitlabID, $projectID)
+    public function createAssociat($products, $gitlabID, $gitlabProjectID)
     {
-        $gitlabNamespace = $this->getProjectPairs($gitlabID);
+        $productIDs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->fetchAll();
+
+        $projectID = array();
+        foreach($productIDs as $project) $projectID[$project->id] = $project->program;
 
          $gitlabAssociat = new stdclass;      
          $gitlabAssociat->execution = 0;
@@ -242,15 +245,15 @@ class gitlabModel extends model
          $gitlabAssociat->relation  = 'interrated';
          $gitlabAssociat->BVersion  = 0;
          $gitlabAssociat->extra     = 0;
+         $gitlabAssociat->BID       = $gitlabID;
 
-        foreach($products as $index => $prodcuct)
-        { 
-            $gitlabAssociat->BType = $gitlabNamespace[$gitlabID];
-            $gitlabAssociat->BID   = $gitlabID;
-            $gitlabAssociat->Project   = $ProjectID;;
-            $gitlabAssociat->Product   = $product;
+        foreach($products as $index => $prodcut)
+        {
+            $gitlabAssociat->BType   = $this->getprojectpairs($gitlabID)[$gitlabProjectID];
+            $gitlabAssociat->Project = $projectID[$prodcut];
+            $gitlabAssociat->Product = $prodcut;
 
-          $this->dao->insert(TABLE_RELATION)->data($gitlabAssociat)->exec();
+          $this->dao->replace(TABLE_RELATION)->data($gitlabAssociat)->exec();
         }
         return true;
     }
