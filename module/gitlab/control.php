@@ -118,6 +118,12 @@ class gitlab extends control
             $user->providerID   = $gitlabID;
             $user->providerType = 'gitlab';
 
+            $this->dao->delete()
+                      ->from(TABLE_OAUTH)
+                      ->where('providerType')->eq($user->providerType)
+                      ->andWhere('providerID')->eq($user->providerID)
+                      ->exec();
+
             foreach($users as $openID => $account)
             {
                 if(!$account) continue;
