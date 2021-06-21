@@ -2388,20 +2388,25 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($objectID, $type = 'project', $params = '', $usersToAppended = '')
+    public function getTeamMemberPairs($objectID, $type = 'project', $params = '', $usersToAppended = '', $sync = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
         $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->leftJoin(TABLE_OAUTH)->alias('t3')->on('t2.account = t3.account')
             ->where('t1.root')->eq((int)$objectID)
             ->andWhere('t1.type')->eq($type)
             ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
+            ->beginIF(!empty($sync))
+            ->andWhere('providerType')->eq($sync)
+            ->fi()
             ->fetchAll($keyField);
 
+        a($this->dao->get());exit;
         if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
 
         if(!$users) return array('' => '');
