@@ -501,34 +501,6 @@
                     </ul>
                   </td>
                 </tr>
-                <tr>
-                  <th class='thWidth'><?php echo $lang->story->legendLinkStories;?></th>
-                  <td class='pd-0'>
-                    <ul class='list-unstyled'>
-                      <?php
-                      $linkStories = explode(',', $story->linkStories) ;
-                      foreach($linkStories as $linkStoryID)
-                      {
-                          if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "[S] #$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
-                      }
-                      ?>
-                    </ul>
-                  </td>
-                </tr>
-                <tr>
-                  <th><?php echo $lang->story->legendChildStories;?></th>
-                  <td class='pd-0'>
-                    <ul class='list-unstyled'>
-                      <?php
-                      $childStories = explode(',', $story->childStories) ;
-                      foreach($childStories as $childStoryID)
-                      {
-                        if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$childStoryID", '', true), "#$childStoryID " . $story->extraStories[$childStoryID], '', "class='iframe' data-width='80%'") . '</li>';
-                      }
-                      ?>
-                    </ul>
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>
