@@ -178,23 +178,9 @@ class commonModel extends model
      */
     public function isOpenMethod($module, $method)
     {
-        if($module == 'upgrade' and $method == 'ajaxupdatefile') return true;
-        if($module == 'user' and strpos('login|logout|deny|reset|refreshrandom', $method) !== false) return true;
-        if($module == 'api'  and $method == 'getsessionid') return true;
-        if($module == 'misc' and $method == 'checktable') return true;
-        if($module == 'misc' and $method == 'qrcode') return true;
-        if($module == 'misc' and $method == 'about') return true;
-        if($module == 'misc' and $method == 'checkupdate') return true;
-        if($module == 'misc' and $method == 'ping')  return true;
-        if($module == 'misc' and $method == 'captcha')  return true;
-        if($module == 'sso' and $method == 'login')  return true;
-        if($module == 'sso' and $method == 'logout') return true;
-        if($module == 'sso' and $method == 'bind') return true;
-        if($module == 'sso' and $method == 'gettodolist') return true;
+        if(in_array("$module.$method", $this->config->openMethods)) return true;
+
         if($module == 'block' and $method == 'main' and isset($_GET['hash'])) return true;
-        if($module == 'file' and $method == 'read') return true;
-        if($module == 'index' and $method == 'changelog') return true;
-        if($module == 'my' and $method == 'preference') return true;
 
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
@@ -2021,6 +2007,8 @@ EOD;
      */
     public function checkEntry()
     {
+        if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;
+
         $this->loadModel('entry');
         if($this->session->valid_entry)
         {
@@ -2033,10 +2021,10 @@ EOD;
         if(!$this->get->token) $this->response('PARAM_TOKEN_MISSING');
 
         $entry = $this->entry->getByCode($this->get->code);
-        if(!$entry)                              $this->response('EMPTY_ENTRY');
-        if(!$entry->key)                         $this->response('EMPTY_KEY');
-        if(!$this->checkIP($entry->ip))          $this->response('IP_DENIED');
-        if(!$this->checkEntryToken($entry))      $this->response('INVALID_TOKEN');
+        if(!$entry)                         $this->response('EMPTY_ENTRY');
+        if(!$entry->key)                    $this->response('EMPTY_KEY');
+        if(!$this->checkIP($entry->ip))     $this->response('IP_DENIED');
+        if(!$this->checkEntryToken($entry)) $this->response('INVALID_TOKEN');
         if($entry->freePasswd == 0 and empty($entry->account)) $this->response('ACCOUNT_UNBOUND');
 
         $isFreepasswd = ($_GET['m'] == 'user' and strtolower($_GET['f']) == 'apilogin' and $_GET['account'] and $entry->freePasswd);
