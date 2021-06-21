@@ -121,6 +121,7 @@ class todoModel extends model
         $todos = fixer::input('post')->get();
 
         $validTodos = array();
+        $now        = helper::now();
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
             $isExist = false;
@@ -146,15 +147,18 @@ class todoModel extends model
                     $todo->date = $this->post->date;
                 }
 
-                $todo->type    = $todos->types[$i];
-                $todo->pri     = $todos->pris[$i];
-                $todo->name    = isset($todos->names[$i]) ? $todos->names[$i] : '';
-                $todo->desc    = $todos->descs[$i];
-                $todo->begin   = isset($todos->begins[$i]) ? $todos->begins[$i] : 2400;
-                $todo->end     = isset($todos->ends[$i]) ? $todos->ends[$i] : 2400;
-                $todo->status  = "wait";
-                $todo->private = 0;
-                $todo->idvalue = 0;
+                $todo->type         = $todos->types[$i];
+                $todo->pri          = $todos->pris[$i];
+                $todo->name         = isset($todos->names[$i]) ? $todos->names[$i] : '';
+                $todo->desc         = $todos->descs[$i];
+                $todo->begin        = isset($todos->begins[$i]) ? $todos->begins[$i] : 2400;
+                $todo->end          = isset($todos->ends[$i]) ? $todos->ends[$i] : 2400;
+                $todo->status       = "wait";
+                $todo->private      = 0;
+                $todo->idvalue      = 0;
+                $todo->assignedTo   = $this->app->user->account;
+                $todo->assignedBy   = $this->app->user->account;
+                $todo->assignedDate = $now;
 
                 if(in_array($todo->type, $this->config->todo->moduleList)) $todo->idvalue = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
 
