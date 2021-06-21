@@ -768,7 +768,7 @@ class projectModel extends model
                 $product->name           = $this->post->productName ? $this->post->productName : $project->name;
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
-                $product->acl            = $project->acl = 'open' ? 'open' : 'private';
+                $product->acl            = $project->acl == 'open' ? 'open' : 'private';
                 $product->PO             = $project->PM;
                 $product->createdBy      = $this->app->user->account;
                 $product->createdDate    = helper::now();
