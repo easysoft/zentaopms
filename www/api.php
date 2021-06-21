@@ -42,8 +42,7 @@ $config->default->view = 'json';
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
-
-$output = json_decode(ob_get_clean());
+$output = json_decode(helper::removeUTF8Bom(ob_get_clean()));
 $data   = new stdClass();
 $data->status = isset($output->status) ? $output->status : $output->result;
 if(isset($output->message)) $data->message = $output->message;
