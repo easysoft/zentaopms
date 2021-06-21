@@ -430,6 +430,7 @@ class docModel extends model
             ->get();
 
         /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $doc->contentMarkdown = $this->post->contentMarkdown;
         if($doc->acl == 'private') $doc->users = $this->app->user->account;
 
@@ -441,7 +442,6 @@ class docModel extends model
         }
 
         $lib = $this->getLibByID($doc->lib);
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $doc->product   = $lib->product;
         $doc->project   = $lib->project;
         $doc->execution = $lib->execution;
@@ -456,13 +456,20 @@ class docModel extends model
         $docContent->content = $doc->contentType == 'html' ? $doc->content : $doc->contentMarkdown;
         $docContent->type    = $doc->contentType;
         $docContent->version = 1;
-        if($doc->contentType == 'markdown') $docContent->content = str_replace('&gt;', '>', $docContent->content);
         unset($doc->contentMarkdown);
         unset($doc->contentType);
         unset($doc->url);
 
+        $requiredFields = $this->config->doc->create->requiredFields;
+        $checkContent   = strpos(",$requiredFields,", ',content,') !== false;
+        if($checkContent)
+        {
+            $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
+            if(empty($docContent->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
+        }
+
         $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
-            ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->exec();
         if(!dao::isError())
         {
@@ -508,6 +515,7 @@ class docModel extends model
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
         if($doc->contentType == 'markdown') $doc->content = $this->post->content;
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
@@ -518,12 +526,9 @@ class docModel extends model
             $oldDoc->digest      = $oldDocContent->digest;
             $oldDoc->content     = $oldDocContent->content;
             $oldDoc->contentType = $oldDocContent->type;
-
-            if($oldDocContent->type == 'markdown') $doc->content = str_replace('&gt;', '>', $doc->content);
         }
 
         $lib = $this->getLibByID($doc->lib);
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
         $doc->product   = $lib->product;
         $doc->execution = $lib->execution;
         if(isset($doc->type) and $doc->type == 'url') $doc->content = $doc->url;
@@ -536,6 +541,14 @@ class docModel extends model
         foreach($changes as $change)
         {
             if($change['field'] == 'content' or $change['field'] == 'title') $changed = true;
+        }
+
+        $requiredFields = $this->config->doc->edit->requiredFields;
+        $checkContent   = strpos(",$requiredFields,", ',content,') !== false;
+        if($checkContent)
+        {
+            $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
+            if(isset($doc->content) and empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
         if($changed)
@@ -557,7 +570,7 @@ class docModel extends model
 
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
-            ->batchCheck($this->config->doc->edit->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq((int)$docID)
             ->exec();
         if(!dao::isError())
@@ -1903,5 +1916,26 @@ class docModel extends model
 
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
         $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed"' : '') . '>' . $li . '</li>';
+    }
+
+    /**
+     * Process markdown.
+     *
+     * @param  string  $markdown
+     * @access public
+     * @return string
+     */
+    public function processMarkdown($markdown)
+    {
+        if(empty($markdown)) return false;
+
+        $markdown = str_replace('&', '&amp;', $markdown);
+
+        $hyperdown = $this->app->loadClass('hyperdown');
+        $content   = $hyperdown->makeHtml($markdown);
+
+        $content = htmlspecialchars_decode($content);
+        $content = fixer::stripDataTags($content);
+        return $content;
     }
 }

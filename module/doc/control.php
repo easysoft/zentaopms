@@ -487,9 +487,8 @@ class doc extends control
 
         if($doc->contentType == 'markdown')
         {
-            $hyperdown    = $this->app->loadClass('hyperdown');
-            $doc->content = $hyperdown->makeHtml($doc->content);
-            $doc->digest  = $hyperdown->makeHtml($doc->digest);
+            $doc->content = $this->doc->processMarkdown($doc->content);
+            $doc->digest  = $this->doc->processMarkdown($$doc->digest);
         }
 
         /* Check priv when lib is product or project. */
@@ -917,9 +916,8 @@ class doc extends control
 
             if($doc->contentType == 'markdown')
             {
-                $hyperdown    = $this->app->loadClass('hyperdown');
-                $doc->content = $hyperdown->makeHtml($doc->content);
-                $doc->digest  = $hyperdown->makeHtml($doc->digest);
+                $doc->content = $this->doc->processMarkdown($doc->content);
+                $doc->digest  = $this->doc->processMarkdown($doc->digest);
             }
         }
 

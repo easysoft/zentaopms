@@ -170,7 +170,10 @@ class testcaseModel extends model
 
             foreach($extendFields as $extendField)
             {
-                $data[$i]->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $data[$i]->{$extendField->field} = $this->post->{$extendField->field}[$i];
+                if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
+
+                $data[$i]->{$extendField->field} = htmlspecialchars($data[$i]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -854,7 +857,10 @@ class testcaseModel extends model
 
             foreach($extendFields as $extendField)
             {
-                $case->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$caseID]);
+                $case->{$extendField->field} = $this->post->{$extendField->field}[$caseID];
+                if(is_array($case->{$extendField->field})) $case->{$extendField->field} = join(',', $case->{$extendField->field});
+
+                $case->{$extendField->field} = htmlspecialchars($case->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $case->{$extendField->field});
                 if($message) die(js::alert($message));
             }
