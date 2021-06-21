@@ -206,7 +206,8 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
+        /* see this file in 1783G: processGitlab::$repo->path */
+        if($this->post->SCM == 'Gitlab') $data->path = $this->post->gitlabProject;
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
