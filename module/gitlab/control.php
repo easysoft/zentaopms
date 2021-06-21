@@ -118,22 +118,29 @@ class gitlab extends control
             $user->providerID   = $gitlabID;
             $user->providerType = 'gitlab';
 
+            $this->dao->delete()
+                      ->from(TABLE_OAUTH)
+                      ->where('providerType')->eq($user->providerType)
+                      ->andWhere('providerID')->eq($user->providerID)
+                      ->exec();
+
             foreach($users as $openID => $account)
             {
                 if(!$account) continue;
                 $user->account = $account;
                 $user->openID  = $openID;
 
-                $this->dao->delete(TABLE_OAUTH)
+                $this->dao->delete()
+                          ->from(TABLE_OAUTH)
                           ->where('openID')->eq($user->openID)
-                          ->andWhere('providerType')->eq('gitlab')
-                          ->andWhere('providerID')->eq($id)
+                          ->andWhere('providerType')->eq($user->providerType)
+                          ->andWhere('providerID')->eq($user->providerID)
                           ->andWhere('account')->eq($user->account)
                           ->exec();
 
                 $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->sever->http_referer));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
         $gitlab      = $this->gitlab->getByID($gitlabID);

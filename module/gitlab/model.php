@@ -401,6 +401,7 @@ class gitlabModel extends model
         $postData->merge_requests_events   = "true";
         $postData->push_events             = "true";
         $postData->tag_push_events         = "true";
+        $postData->note_events             = "true";
         $postData->url                     = $url;
         $postData->token                   = $token;
 
