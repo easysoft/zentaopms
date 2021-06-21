@@ -2406,7 +2406,6 @@ class userModel extends model
             ->fi()
             ->fetchAll($keyField);
 
-        a($this->dao->get());exit;
         if($usersToAppended) $users += $this->dao->select("id, account, realname")->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
 
         if(!$users) return array('' => '');
