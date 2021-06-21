@@ -191,4 +191,35 @@ class gitlab extends control
         if(!is_object($user)) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
         if(!isset($user->is_admin) or !$user->is_admin) $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
     }
+
+    /**
+     * Webhook api.
+     * 
+     * @access public
+     * @return void
+     */
+    public function webhook()
+    {
+        $product = $this->get->product;
+        $gitlab  = $this->get->gitlab;
+        $project = $this->get->project;
+
+        $logFile = $this->app->getLogRoot() . 'webhook.'. date('Ymd') . '.log.php';
+        if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+        
+        $fh = @fopen($logFile, 'a');
+        if($fh)
+        {
+            fwrite($fh, date('Ymd H:i:s') . ": " . $this->app->getURI() . "\n");
+            if(!empty($_POST)) fwrite($fh, "data:   " . var_export($_POST, true) . "\n");
+            //fwrite($fh, "results:" . print_r($response, true) . "\n");
+            if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
+            fclose($fh);
+        }
+
+        $this->view->result = 'success';
+        $this->view->status = 'ok';
+        $this->view->data = 'ougiugjvh';
+        $this->display();
+    }
 }
