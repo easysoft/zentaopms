@@ -2011,7 +2011,7 @@ class story extends control
                     }
                     $story->plan = $plans;
                 }
-                if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
+                if(isset($relatedStories[$story->duplicateStory]) and $story->closedReason != 'duplicate') $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
                 if(isset($storyLang->statusList[$story->status]))       $story->status       = $this->processStatus('story', $story);
