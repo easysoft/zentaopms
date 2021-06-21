@@ -151,7 +151,7 @@ class groupModel extends model
     {
         return $this->dao->select('t2.*')->from(TABLE_USERGROUP)->alias('t1')
             ->leftJoin(TABLE_GROUP)->alias('t2')
-            ->on('t1.group = t2.id')
+            ->on('t1.`group` = t2.id')
             ->where('t1.account')->eq($account)
             ->fetchAll('id');
     }

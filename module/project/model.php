@@ -803,7 +803,7 @@ class projectModel extends model
 
             /* Add project admin. */
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
-                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
+                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.`group` = t2.id')
                 ->where('t1.account')->eq($this->app->user->account)
                 ->andWhere('t2.role')->eq('projectAdmin')
                 ->fetch();

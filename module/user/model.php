@@ -872,12 +872,12 @@ class userModel extends model
             $acls = empty($acl) ? array() : json_decode($acl, true);
 
             $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
-                ->on('t1.id = t2.group')->where('t1.name')->eq('guest');
+                ->on('t1.id = t2.`group`')->where('t1.name')->eq('guest');
         }
         else
         {
             $groups = $this->dao->select('t1.acl, t1.project')->from(TABLE_GROUP)->alias('t1')
-                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
+                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.role')->ne('projectAdmin')
                 ->andWhere('t1.role')->ne('limited')
@@ -936,8 +936,8 @@ class userModel extends model
             if($actionAllow)  unset($acls['actions']);
 
             $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')
-                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
-                ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group = t3.group')
+                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
+                ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.project')->eq(0);
         }
