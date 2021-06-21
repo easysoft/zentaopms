@@ -179,12 +179,12 @@ class gitlabModel extends model
     {   
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();
-        $host   = rtrim($gitlab->url, '/');
+        $host  = rtrim($gitlab->url, '/');
         $host .= '/api/v4/projects';
 
         $allResults = array();
         for($page = 1; true; $page ++) 
-        {   
+        {  
             $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&membership=true&page={$page}&per_page=100"));
             if(empty($results) or $page > 10) break;
             $allResults = $allResults + $results;
@@ -209,9 +209,6 @@ class gitlabModel extends model
         return array_key_exists($gitlabID, $projectID) ? $this->gitlab->getProjectPairs($gitlabID)[$projectID]: "";
     }
 
-
-
-
     /**
      * Get gitlab api base url with access_token
      * 
@@ -228,6 +225,40 @@ class gitlabModel extends model
     }
 
     /**
+     * Create relationship between zentao product and  gitlab project.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function createAssociat($products, $gitlabID, $gitlabProjectID)
+    {
+        $productIDs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->fetchAll();
+
+        $projectID = array();
+        foreach($productIDs as $project) $projectID[$project->id] = $project->program;
+
+         $gitlabAssociat = new stdclass;      
+         $gitlabAssociat->execution = 0;
+         $gitlabAssociat->AVersion  = 0;
+         $gitlabAssociat->relation  = 'interrated';
+         $gitlabAssociat->BVersion  = 0;
+         $gitlabAssociat->extra     = 0;
+         $gitlabAssociat->BID       = $gitlabID;
+
+        foreach($products as $index => $prodcut)
+        {
+            $gitlabAssociat->BType   = $this->getprojectpairs($gitlabID)[$gitlabProjectID];
+            $gitlabAssociat->Project = $projectID[$prodcut];
+            $gitlabAssociat->Product = $prodcut;
+
+          $this->dao->replace(TABLE_RELATION)->data($gitlabAssociat)->exec();
+        }
+        return true;
+    }
+
+    /**
      * Create webhook for zentao.
      * 
      * @param  int    $gitlabID 
@@ -237,9 +268,17 @@ class gitlabModel extends model
      */
     public function createWebhook($products, $gitlabID, $projectID)
     {
-        $webhook  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $gitlabID);
-        $response = $this->apiCreateHook($gitlabID, $projectID, $webhook, $this->config->gitlab->zentaoApiWebhookToken);
-        return $response;
+        $urls = $this->getWebhookUrls($gitlabID, $projectID);
+        
+        foreach($products as $index => $product)
+        {
+            $url  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $product, $gitlabID, $projectID);
+            if(! array_key_exists($url, array_flip($urls)))
+            {
+                $response = $this->apiCreateHook($gitlabID, $projectID, $url, $this->config->gitlab->zentaoApiWebhookToken);
+            }
+        }
+        return true;
     }
 
     /**
@@ -255,7 +294,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/hooks";
         $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url);
+        $response = json_decode(commonModel::http($url));
         return $response;
     }
 
@@ -274,8 +313,27 @@ class gitlabModel extends model
         $apiPath = "/projects/$projectID/hooks/$hookID)";
         $url = sprintf($apiRoot, $apiPath);
         $response = commonModel::http($url);
-        return;
+        return $response;
     }  
+
+    /**
+     * Get webhook urls 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return array $urls;
+     */
+    public function getWebhookUrls($gitlabID, $projectID)
+    {
+        $urls = array();
+        $webhooks = $this->apiGetHooks($gitlabID, $projectID);
+        foreach($webhooks as $index => $webhook)
+        {
+            $urls[] = $webhook->url;
+        }
+        return $urls;
+    }
 
     /**
      * Create hook.
@@ -304,7 +362,6 @@ class gitlabModel extends model
         $url = sprintf($apiRoot, $apiPath);
         $response = commonModel::http($url, $postData); 
         return $response;
-
     }
 
     /**
@@ -403,6 +460,7 @@ class gitlabModel extends model
     public function isLabelExists($gitlabID, $projectID)
     {
         $labels = $this->apiGetLabels($gitlabID, $projectID);
+        if(empty($labels)) return false;
         foreach($labels as $label)
         {
             if(strpos($label->name, $this->config->gitlab->taskLabel->name) == 0) return true;
@@ -410,8 +468,6 @@ class gitlabModel extends model
         }
 
         return false;
-
-    
     }
 
     /**
@@ -449,18 +505,21 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/issues/";
         $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url, $issue);
+        $response = json_decode(commonModel::http($url, $issue));
         return $response;
     }
 
-    public function pushTask($task, $gitlabID,$projectID)
+    public function pushTask($gitlabID, $projectID, $task)
     {
         $task->label = $this->config->gitlab->taskLabel->name;
+        $response = $this->apiCreateIssue($gitlabID, $projectID, $task);
+        return $response;
     }
 
-    public function pushBug($bug, $gitlabID,$projectID)
+    public function pushBug($gitlabID, $projectID, $bug)
     {
-        
         $bug->label = $this->config->gitlab->bugLabel->name;
+        $response = $this->apiCreateIssue($gitlabID, $projectID, $bug);
+        return $response;
     }
 }
