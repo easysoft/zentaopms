@@ -109,6 +109,29 @@ $config->charsets['fr']['GBK']      = 'GBK';
 $config->charsets['vi']['utf-8']    = 'UTF-8';
 $config->charsets['vi']['GBK']      = 'GBK';
 
+$config->openMethods = array();
+$config->openMethods[] = 'gitlab.webhook';
+$config->openMethods[] = 'upgrade.ajaxupdatefile';
+$config->openMethods[] = 'user.login';
+$config->openMethods[] = 'user.logout';
+$config->openMethods[] = 'user.deny';
+$config->openMethods[] = 'user.reset';
+$config->openMethods[] = 'user.refreshrandom';
+$config->openMethods[] = 'api.getsessionid';
+$config->openMethods[] = 'misc.checktable';
+$config->openMethods[] = 'misc.qrcode';
+$config->openMethods[] = 'misc.about';
+$config->openMethods[] = 'misc.checkupdate';
+$config->openMethods[] = 'misc.ping';
+$config->openMethods[] = 'misc.captcha';
+$config->openMethods[] = 'sso.login';
+$config->openMethods[] = 'sso.logout';
+$config->openMethods[] = 'sso.bind';
+$config->openMethods[] = 'sso.gettodolist';
+$config->openMethods[] = 'file.read';
+$config->openMethods[] = 'index.changelog';
+$config->openMethods[] = 'my.preference';
+
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
