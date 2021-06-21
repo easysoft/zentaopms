@@ -258,25 +258,26 @@ js::set('systemMode'             , $config->systemMode);
                   <th class='thWidth'><?php echo $lang->bug->linkBug;?></th>
                   <td><?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id", '', true), $lang->bug->linkBugs, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
                 </tr>
-                <?php if(isset($bug->linkBugTitles)):?>
                 <tr>
                   <th></th>
                   <td>
                     <ul class='list-unstyled'>
                       <?php
-                      foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                      if(isset($bug->linkBugTitles))
                       {
-                          echo "<li><div class='checkbox-primary'>";
-                          echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$linkBugID />";
-                          echo "<label>#{$linkBugID} {$linkBugTitle}</label>";
-                          echo '</div></li>';
+                          foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                          {
+                              echo "<li><div class='checkbox-primary'>";
+                              echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$linkBugID />";
+                              echo "<label>#{$linkBugID} {$linkBugTitle}</label>";
+                              echo '</div></li>';
+                          }
                       }
                       ?>
                       <span id='linkBugsBox'></span>
                     </ul>
                   </td>
                 </tr>
-                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->bug->testtask;?></th>
                   <td id='testtaskBox'><?php echo html::select('testtask', $testtasks, $bug->testtask, 'class="form-control chosen"');?></td>

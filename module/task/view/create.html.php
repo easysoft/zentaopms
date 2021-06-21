@@ -236,7 +236,7 @@
           <td colspan='3'>
             <div class="input-group">
               <?php echo html::select('mailto[]', $execution->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
-              <?php echo $this->fetch('my', 'buildContactLists');?>
+              <?php if($execution->acl != 'private') echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>
         </tr>
