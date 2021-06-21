@@ -113,7 +113,7 @@ $(function()
     {
         $.getJSON(createLink('misc', 'getRemind'), function(response)
         {
-            if(!response || !response.data) return;
+            if(!response || !response.data || !response.data.content) return;
 
             var myModalTrigger = new $.zui.ModalTrigger(
             {
