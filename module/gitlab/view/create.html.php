@@ -22,18 +22,16 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->name; ?></th>
-            <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
-            <td class="tips-git"><?php echo $lang->gitlab->gitlabNameTips; ?></td>
+            <td class='required'><?php echo html::input('name', '', "class='form-control' placeholder='{$lang->gitlab->placeholder->name}'"); ?></td>
+            <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->url; ?></th>
-            <td class='required'><?php echo html::input('url', '', "class='form-control'"); ?></td>
-            <td class="tips-git"><?php echo $lang->gitlab->gitlabUrlTips; ?></td>
+            <td class='required'><?php echo html::input('url', '', "class='form-control' placeholder='{$lang->gitlab->placeholder->url}'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->token;?></th>
-            <td><?php echo html::input('token', '', "class='form-control'");?></td>
-            <td class="tips-git"><?php echo $lang->gitlab->gitlabTokenTips; ?></td>
+            <td><?php echo html::input('token', '', "class='form-control' placeholder='{$lang->gitlab->placeholder->token}'");?></td>
           </tr>
           <tr>
             <th></th>
