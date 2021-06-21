@@ -522,4 +522,22 @@ class gitlabModel extends model
         $response = $this->apiCreateIssue($gitlabID, $projectID, $bug);
         return $response;
     }
+
+    public function parseWebhookBody($body)
+    {
+        $type = zget($body, 'object_kind', '');
+        if(!$type or !is_callable(array($this, "parse{$type}Webhook"))) return false;
+        return call_user_func_array(array($this, "parse{$type}Webhook"), array('body' => $body));
+    }
+
+    public function parseIssueWebhook($body)
+    {
+        $request = new stdclass;
+        $request->type    = $body->object_kind;
+        $issue   = $body->object_attributes;
+        
+        $request->labels  = $body->labels;
+        $request->project = $body->project->id;
+    }
+
 }

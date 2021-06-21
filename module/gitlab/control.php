@@ -204,6 +204,19 @@ class gitlab extends control
         $gitlab  = $this->get->gitlab;
         $project = $this->get->project;
 
+        $requestBody = json_decode(file_get_contents('php://input'));
+        $request = $this->gitlab->parseWebhookBody($requestBody);
+        
+        switch($request->type)
+        {
+            case 'issue_create':
+                $this->createTaskFromIssue($request);
+                break;
+            case 'issue_update':
+                $this->updateTaskFromIssue($request);
+                break;
+        }
+
         $logFile = $this->app->getLogRoot() . 'webhook.'. date('Ymd') . '.log.php';
         if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
         
@@ -211,8 +224,8 @@ class gitlab extends control
         if($fh)
         {
             fwrite($fh, date('Ymd H:i:s') . ": " . $this->app->getURI() . "\n");
-            if(!empty($_POST)) fwrite($fh, "data:   " . var_export($_POST, true) . "\n");
-            //fwrite($fh, "results:" . print_r($response, true) . "\n");
+            fwrite($fh, "GET:   " . var_export($_GET, true) . "\n");
+            fwrite($fh, "Body:   " . var_export($requestBody, true) . "\n");
             if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
             fclose($fh);
         }
