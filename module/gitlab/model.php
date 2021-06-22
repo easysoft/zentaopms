@@ -466,6 +466,7 @@ class gitlabModel extends model
         {
             if(strpos($label->name, $this->config->gitlab->taskLabel->name) == 0) return true;
             if(strpos($label->name, $this->config->gitlab->bugLabel->name) == 0) return true;
+            if(strpos($label->name, $this->config->gitlab->storyLabel->name) == 0) return true;
         }
 
         return false;
@@ -494,9 +495,16 @@ class gitlabModel extends model
         $bugLabel->description      = $this->config->gitlab->bugLabel->description;
         $bugLabel->color            = $this->config->gitlab->bugLabel->color;
         $bugLabel->priority         = $this->config->gitlab->bugLabel->priority;
+
+        $storyLabel = new stdclass();
+        $storyLabel->name             = $this->config->gitlab->storyLabel->name;
+        $storyLabel->description      = $this->config->gitlab->storyLabel->description;
+        $storyLabel->color            = $this->config->gitlab->storyLabel->color;
+        $storyLabel->priority         = $this->config->gitlab->storyLabel->priority;
         
         $this->apiCreateLabel($gitlabID, $projectID, $taskLabel);
         $this->apiCreateLabel($gitlabID, $projectID, $bugLabel);
+        $this->apiCreateLabel($gitlabID, $projectID, $storyLabel);
 
         return;
     }
@@ -562,9 +570,21 @@ class gitlabModel extends model
         $request = new stdclass;
         $request->type    = $body->object_kind;
         $issue   = $body->object_attributes;
+
+        $request->labels      = $labels;
+        $request->type        = $labelType;
+        $request->typeID      = $labelTypeID; 
+
+        $request->project     = $body->project->id;
+        $request->title       = $issue->title;
+        $request->description = $issue->description;
+        $request->action      = $issue->action;
+        $request->created_at  = $issue->created_at;
+        $request->due_date    = $issue->due_date;
         
-        $request->labels  = $body->labels;
-        $request->project = $body->project->id;
+        $request->assignees   = $issue->assignee_id;
+        $request->url         = $issue->url;
+        a($request);exit();
     }
 
 }
