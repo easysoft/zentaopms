@@ -466,6 +466,7 @@ class gitlabModel extends model
         {
             if(strpos($label->name, $this->config->gitlab->taskLabel->name) == 0) return true;
             if(strpos($label->name, $this->config->gitlab->bugLabel->name) == 0) return true;
+            if(strpos($label->name, $this->config->gitlab->storyLabel->name) == 0) return true;
         }
 
         return false;
@@ -494,9 +495,16 @@ class gitlabModel extends model
         $bugLabel->description      = $this->config->gitlab->bugLabel->description;
         $bugLabel->color            = $this->config->gitlab->bugLabel->color;
         $bugLabel->priority         = $this->config->gitlab->bugLabel->priority;
+
+        $storyLabel = new stdclass();
+        $storyLabel->name             = $this->config->gitlab->storyLabel->name;
+        $storyLabel->description      = $this->config->gitlab->storyLabel->description;
+        $storyLabel->color            = $this->config->gitlab->storyLabel->color;
+        $storyLabel->priority         = $this->config->gitlab->storyLabel->priority;
         
         $this->apiCreateLabel($gitlabID, $projectID, $taskLabel);
         $this->apiCreateLabel($gitlabID, $projectID, $bugLabel);
+        $this->apiCreateLabel($gitlabID, $projectID, $storyLabel);
 
         return;
     }
