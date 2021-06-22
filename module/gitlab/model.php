@@ -48,6 +48,30 @@ class gitlabModel extends model
     }
 
     /**
+     * Get gitlab user id zentao account pairs of one gitlab.
+     * 
+     * @param  int    $gitlab 
+     * @access public
+     * @return void
+     */
+    public function getUserIdAccountPairs($gitlab)
+    {
+        return $this->dao->select('id,account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andwhere('providerID')->eq($gitlabID)->fetchPairs();
+    }
+
+    /**
+     * Get zentao account gitlab user id pairs of one gitlab.
+     * 
+     * @param  int    $gitlab 
+     * @access public
+     * @return void
+     */
+    public function getUserAccountIdPairs($gitlab)
+    {
+        return $this->dao->select('account,id')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andwhere('providerID')->eq($gitlabID)->fetchPairs();
+    }
+
+    /**
      * Create a gitlab.
      *
      * @access public
@@ -556,14 +580,14 @@ class gitlabModel extends model
         return $response;
     }
 
-    public function parseWebhookBody($body)
+    public function webhookParseBody($body)
     {
         $type = zget($body, 'object_kind', '');
-        if(!$type or !is_callable(array($this, "parse{$type}Webhook"))) return false;
-        return call_user_func_array(array($this, "parse{$type}Webhook"), array('body' => $body));
+        if(!$type or !is_callable(array($this, "webhookParse{$type}"))) return false;
+        $result = call_user_func_array(array($this, "webhookParse{$type}Webhook"), array('body' => $body));
     }
 
-    public function parseIssueWebhook($body)
+    public function WebhookParseIssue($body)
     {
         $issue = new stdclass;
         $issue->action = $body->object_attributes->action . $body->object_kind;
@@ -571,7 +595,7 @@ class gitlabModel extends model
         $object = $this->parseObjectFromLabels($issue->labels);
     }
 
-    public function parseNoteWebhook($body)
+    public function webhookParseNote($body)
     {
         $request = new stdclass;
         $request->type = $body->object_kind;
@@ -601,7 +625,7 @@ class gitlabModel extends model
      * @access public
      * @return object|false
      */
-    public function parseObjectFromLabels($labels)
+    public function webhookParseZentaoLabel($labels)
     {
         foreach($body->labels as $label) 
         {
