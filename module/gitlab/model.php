@@ -536,9 +536,21 @@ class gitlabModel extends model
         $request = new stdclass;
         $request->type    = $body->object_kind;
         $issue   = $body->object_attributes;
+
+        $request->labels      = $labels;
+        $request->type        = $labelType;
+        $request->typeID      = $labelTypeID; 
+
+        $request->project     = $body->project->id;
+        $request->title       = $issue->title;
+        $request->description = $issue->description;
+        $request->action      = $issue->action;
+        $request->created_at  = $issue->created_at;
+        $request->due_date    = $issue->due_date;
         
-        $request->labels  = $body->labels;
-        $request->project = $body->project->id;
+        $request->assignees   = $issue->assignee_id;
+        $request->url         = $issue->url;
+        a($request);exit();
     }
 
 }
