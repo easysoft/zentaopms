@@ -135,7 +135,7 @@ class gitlabModel extends model
                 if($gitlabUser->email    == $zentaoUser->email)    $matches->emails[$gitlabUser->email][]     = $zentaoUser->account;
             }
         }
-            
+
         $bindedUsers = $this->dao->select('openID,account')
                                  ->from(TABLE_OAUTH)
                                  ->where('providerType')->eq('gitlab')
@@ -156,7 +156,7 @@ class gitlabModel extends model
             if(isset($matches->accounts[$gitlabUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitlabUser->account]);
             if(isset($matches->emails[$gitlabUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
             if(isset($matches->names[$gitlabUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitlabUser->realname]);
-           
+
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
@@ -239,13 +239,13 @@ class gitlabModel extends model
         $projectID = array();
         foreach($productIDs as $project) $projectID[$project->id] = $project->program;
 
-         $gitlabAssociat = new stdclass;      
-         $gitlabAssociat->execution = 0;
-         $gitlabAssociat->AVersion  = 0;
-         $gitlabAssociat->relation  = 'interrated';
-         $gitlabAssociat->BVersion  = 0;
-         $gitlabAssociat->extra     = 0;
-         $gitlabAssociat->BID       = $gitlabID;
+        $gitlabAssociat = new stdclass;      
+        $gitlabAssociat->execution = 0;
+        $gitlabAssociat->AVersion  = 0;
+        $gitlabAssociat->relation  = 'interrated';
+        $gitlabAssociat->BVersion  = 0;
+        $gitlabAssociat->extra     = 0;
+        $gitlabAssociat->BID       = $gitlabID;
 
         foreach($products as $index => $prodcut)
         {
@@ -253,7 +253,7 @@ class gitlabModel extends model
             $gitlabAssociat->Project = $projectID[$prodcut];
             $gitlabAssociat->Product = $prodcut;
 
-          $this->dao->replace(TABLE_RELATION)->data($gitlabAssociat)->exec();
+            $this->dao->replace(TABLE_RELATION)->data($gitlabAssociat)->exec();
         }
         return true;
     }
@@ -269,7 +269,7 @@ class gitlabModel extends model
     public function createWebhook($products, $gitlabID, $projectID)
     {
         $urls = $this->getWebhookUrls($gitlabID, $projectID);
-        
+
         foreach($products as $index => $product)
         {
             $url  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $product, $gitlabID, $projectID);
@@ -348,7 +348,7 @@ class gitlabModel extends model
     public function apiCreateHook($gitlabID, $projectID, $url, $token)
     {  
         $apiRoot = $this->getApiRoot($gitlabID);
-    
+
         $postData = new stdclass;
         $postData->enable_ssl_verification = "false";
         $postData->issues_events           = "true";
@@ -394,7 +394,7 @@ class gitlabModel extends model
     public function apiUpdateHook($gitlabID, $projectID, $hookID)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
-       
+
         $postData = new stdclass;
         $postData->enable_ssl_verification = "false";
         $postData->issues_events           = "true";
@@ -494,7 +494,7 @@ class gitlabModel extends model
         $bugLabel->description      = $this->config->gitlab->bugLabel->description;
         $bugLabel->color            = $this->config->gitlab->bugLabel->color;
         $bugLabel->priority         = $this->config->gitlab->bugLabel->priority;
-        
+
         $this->apiCreateLabel($gitlabID, $projectID, $taskLabel);
         $this->apiCreateLabel($gitlabID, $projectID, $bugLabel);
 
@@ -536,9 +536,69 @@ class gitlabModel extends model
         $request = new stdclass;
         $request->type    = $body->object_kind;
         $issue   = $body->object_attributes;
-        
+
         $request->labels  = $body->labels;
         $request->project = $body->project->id;
     }
 
+    public function parseNoteWebhook($body)
+    {
+        $request = new stdclass;
+        $request->type = $body->object_kind;
+        if(isset($body->issue)) $body->issue = $this->parseIssue($body->issue);
+
+        $request->labels  = $body->labels;
+        $request->project = $body->project->id;
+    }
+
+    /**
+     * Parse zentao object from labels.
+     * 
+     * @param  array    $labels 
+     * @access public
+     * @return object|false
+     */
+    public function parseObjectFromLabels($labels)
+    {
+        foreach($body->labels as $label) 
+        {
+            if($label->title == $config->gitlab->zentaoLabel) 
+            {
+                $object = json_decode($label->description);
+                if(!$object or !isset($object->type)) continue;	
+                return $object;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Parse issue from gitlab.
+     * 
+     * @param  object    $issue 
+     * @access public
+     * @return object
+     */
+    public function parseIssue($issue)
+    {
+        $object = $this->parseObjectFromLabels($issue->labels);
+        if(!$object) return false;
+        if($object->type == 'task')  $object->object = $this->issue2Task($issue);
+        if($object->type == 'story') $object->object = $this->issue2Story($issue);
+        if($object->type == 'bug')   $object->object = $this->issue2Bug($issue);
+        return $object;
+    }
+
+    public function issue2Task($issue)
+    {
+    }
+
+    public function issue2Story($issue)
+    {
+    }
+
+    public function issue2Bug($issue)
+    {
+
+    }
 }
