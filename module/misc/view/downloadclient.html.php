@@ -43,14 +43,14 @@
       <li id='downloadError' class='hidden'> <?php echo $lang->misc->client->errorInfo->downloadError;?></li>
     </ul>
     <div id='hasError' class='alert alert-info hidden'></div>
-    <div id='clearTmp' class='text-center hidden'><?php echo html::a($this->createLink('misc', 'downloadClient', "action=clearTmpPackage"), $lang->confirm, '', "class='btn btn-primary btn-wide'");?></div>
+    <div id='clearTmp' class='text-center hidden'><?php echo html::a($this->createLink('misc', 'downloadClient', "action=clearTmpPackage"), $lang->confirm, '', "class='btn btn-primary btn-wide' data-dismiss='modal'");?></div>
   </div>
   <script>
   $(document).ready(function()
   {
       getClient();
   })
-  
+
   function getClient()
   {
       var link = createLink('misc', 'ajaxGetClientPackage', 'os=' + os);
