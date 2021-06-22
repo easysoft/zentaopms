@@ -1107,10 +1107,16 @@ class docModel extends model
 
             /* Sort project. */
             $orderedProjects = array();
-            $objects         = $this->program->getList('all', 'order_asc', null, true);
+
+            $objects = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('type')->eq('project')
+                ->andWhere('deleted')->eq(0)
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+                ->orderBy('order_asc')
+                ->fetchAll('id');
+
             foreach($objects as $objectID => $object)
             {
-                if($object->type == 'program') continue;
                 $object->parent = $this->program->getTopByID($object->parent);
                 $orderedProjects[$objectID] = $object;
                 unset($objects[$object->id]);
