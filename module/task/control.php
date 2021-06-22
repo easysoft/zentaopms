@@ -170,10 +170,11 @@ class task extends control
             }
         }
 
-        $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $members          = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
-        $showAllModule    = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $moduleOptionMenu = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $users             = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $members           = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $syncGitlabMembers = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted', 'gitlab');
+        $showAllModule     = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
+        $moduleOptionMenu  = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Fix bug #3381. When the story module is the root module. */
         if($storyID)
@@ -219,17 +220,18 @@ class task extends control
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->showAllModule = $showAllModule;
 
-        $this->view->title            = $title;
-        $this->view->position         = $position;
-        $this->view->execution        = $execution;
-        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
-        $this->view->task             = $task;
-        $this->view->users            = $users;
-        $this->view->stories          = $stories;
-        $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
-        $this->view->members          = $members;
-        $this->view->blockID          = $blockID;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->title             = $title;
+        $this->view->position          = $position;
+        $this->view->execution         = $execution;
+        $this->view->syncGitlabMembers = $syncGitlabMembers;
+        $this->view->executions        = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
+        $this->view->task              = $task;
+        $this->view->users             = $users;
+        $this->view->stories           = $stories;
+        $this->view->testStoryIdList   = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
+        $this->view->members           = $members;
+        $this->view->blockID           = $blockID;
+        $this->view->moduleOptionMenu  = $moduleOptionMenu;
         $this->display();
     }
 

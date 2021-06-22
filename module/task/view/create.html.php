@@ -47,7 +47,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->task->sync;?></th>
-          <td><?php echo html::select('type', $lang->task->syncList, '', "class='form-control chosen' onchange='setOwners(this.value)'");?></td>
+          <td><?php echo html::select('sync', $syncGitlabMembers, $syncGitlabMembers->realname, "class='form-control chosen' onchange='setOwners(this.value)'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->module;?></th>

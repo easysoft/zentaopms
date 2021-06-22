@@ -64,10 +64,10 @@ class taskModel extends model
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync')
             ->add('version', 1)
             ->get();
-
+       
         if($task->type != 'test') $this->post->set('selectTestStory', 0);
 
         foreach($this->post->assignedTo as $assignedTo)
@@ -115,11 +115,14 @@ class taskModel extends model
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
                 ->exec();
-
+            
             if(dao::isError()) return false;
 
             $taskID = $this->dao->lastInsertID();
 
+            /*sync gitlab Issue*/
+            $this->loadModel('gitlab')->syncGitlabIssue($taskID, $gitlabID, $projectID);
+                
             /* Mark design version.*/
             if(isset($task->design) && !empty($task->design))
             {

@@ -466,6 +466,7 @@ class gitlabModel extends model
         {
             if(strpos($label->name, $this->config->gitlab->taskLabel->name) == 0) return true;
             if(strpos($label->name, $this->config->gitlab->bugLabel->name) == 0) return true;
+            if(strpos($label->name, $this->config->gitlab->storyLabel->name) == 0) return true;
         }
 
         return false;
@@ -495,10 +496,43 @@ class gitlabModel extends model
         $bugLabel->color            = $this->config->gitlab->bugLabel->color;
         $bugLabel->priority         = $this->config->gitlab->bugLabel->priority;
 
+        $storyLabel = new stdclass();
+        $storyLabel->name             = $this->config->gitlab->storyLabel->name;
+        $storyLabel->description      = $this->config->gitlab->storyLabel->description;
+        $storyLabel->color            = $this->config->gitlab->storyLabel->color;
+        $storyLabel->priority         = $this->config->gitlab->storyLabel->priority;
+        
         $this->apiCreateLabel($gitlabID, $projectID, $taskLabel);
         $this->apiCreateLabel($gitlabID, $projectID, $bugLabel);
+        $this->apiCreateLabel($gitlabID, $projectID, $storyLabel);
 
         return;
+    }
+
+    /**
+     * sync gitlab Issue. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function syncGitlabIssue($taskID, $task, $gitlabID, $projectID)
+    {
+        $issue = new stdClass();        
+        $issue->assignee_id = $taskID;
+        $issue->created_at  = $task->create_at;
+        $issue->description = $task->description;
+        $issue->labelType   = $task->labelType;
+        $issue->due_date    = $task->data;
+        $issue->id          = $task->project; 
+        $issue->title       = $task->title;
+        $issue->weight      = $task->weight;
+        $issue->labels      = $task->labels;
+         
+        $response = $this->loadModel('gitlab')->apiCreateIssue($gitlabID, $projectID, $issue);
+
+        return $response;
     }
 
     public function apiCreateIssue($gitlabID, $projectID, $issue)
@@ -547,8 +581,21 @@ class gitlabModel extends model
         $request->type = $body->object_kind;
         if(isset($body->issue)) $body->issue = $this->parseIssue($body->issue);
 
-        $request->labels  = $body->labels;
-        $request->project = $body->project->id;
+        $request->labels      = $body->labels;
+        $request->project     = $body->project->id;
+        $request->labels      = $labels;
+        $request->type        = $labelType;
+        $request->typeID      = $labelTypeID; 
+
+        $request->project     = $body->project->id;
+        $request->title       = $issue->title;
+        $request->description = $issue->description;
+        $request->action      = $issue->action;
+        $request->created_at  = $issue->created_at;
+        $request->due_date    = $issue->due_date;
+        
+        $request->assignees   = $issue->assignee_id;
+        $request->url         = $issue->url;
     }
 
     /**
