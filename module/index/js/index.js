@@ -683,7 +683,7 @@ $(function()
             var isQuickGo = !reg.test(val);
             $dropmenu.toggleClass('show-quick-go', isQuickGo);
             var $typeAll = $dropmenu.find('li.search-type-all > a');
-            $typeAll.html(searchAB + ' <span>"' + val + '"</span>');
+            $typeAll.text(searchAB + ' ' + val);
             if(isQuickGo)
             {
                 $typeAll.closest('li').removeClass('active');
@@ -692,7 +692,7 @@ $(function()
                     var $this = $(this);
                     var isActiveType = $this.data('value') === searchType && searchType !== 'all';
                     $this.closest('li').toggleClass('selected active', isActiveType);
-                    $this.html($this.data('name') + ' <span>#' + (val.length > 7 ? (val.substr(0, 7) + '...') : val) + "</span>");
+                    $this.text($this.data('name') + ' #' + (val.length > 7 ? (val.substr(0, 7) + '...') : val));
                     if(isActiveType) $dropmenu.addClass('with-active');
                 });
             }
