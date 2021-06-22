@@ -1747,7 +1747,7 @@ class storyModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs('project', 'branch');
 
-        $hasBranch = ($product->type != 'normal' and empty($story->branch));
+        $hasBranch = ($product and $product->type != 'normal' and empty($story->branch));
         $stages    = array();
         if($hasBranch and $story->plan)
         {
