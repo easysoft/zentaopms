@@ -650,22 +650,20 @@ class gitlabModel extends model
     }
 
     /**
-     * Get account name in zentao sys.
+     * Get account in zentaopms.
      * 
      * @param  int    $gitlabID 
      * @param  int    $userID 
      * @access public
      * @return string|false
      */
-    public function getAccountName($gitlabID, $userID)
+    public function getAccount($gitlabID, $userID)
     {
-        $account = $this->dao->select("account")
-                             ->from(TABLE_OAUTH)
-                             ->where('providerType')->eq('gitlab')
-                             ->andwhere('providerID')->eq($gitlabID)
-                             ->andwhere('openID')->eq($userID)
-                             ->fetch();
-        if(!dao::isError()) return $account->account;
-        return false;
+        retrun $this->dao->select('account')
+                         ->from(TABLE_OAUTH)
+                         ->where('providerType')->eq('gitlab')
+                         ->andwhere('providerID')->eq($gitlabID)
+                         ->andwhere('openID')->eq($userID)
+                         ->fetch('account');
     }
 }
