@@ -2,6 +2,7 @@
 $config->dev->group['index']          = 'my';
 $config->dev->group['my']             = 'my';
 $config->dev->group['todo']           = 'my';
+$config->dev->group['program']        = 'program';
 $config->dev->group['product']        = 'product';
 $config->dev->group['story']          = 'product';
 $config->dev->group['storyspec']      = 'product';
