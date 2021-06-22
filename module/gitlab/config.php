@@ -25,5 +25,5 @@ $config->gitlab->storyLabel->description  = "story label from zentao, do NOT rem
 $config->gitlab->storyLabel->color        = "##69D100";
 $config->gitlab->storyLabel->priority     = "0";
 
-config->gitlab->zentaoApiWebhookUrl    = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
+$config->gitlab->zentaoApiWebhookUrl    = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
 $config->gitlab->zentaoApiWebhookToken  = "<access token>";
