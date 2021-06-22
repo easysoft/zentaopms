@@ -380,7 +380,7 @@ class storyModel extends model
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
             $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
-            $story->stage      = ($this->app->openApp == project or $this->app->openApp == execution) ? 'projected' : 'wait';
+            $story->stage      = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
