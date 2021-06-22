@@ -7,6 +7,9 @@ $config->gitlab->edit->requiredFields = 'name,url,token';
 
 $config->gitlab->zentaoLabel = 'Zentao';
 
+$config->gitlab->actions = array();
+$config->gitlab->actions['issue'] = array();
+
 $config->gitlab->taskLabel = new stdclass();
 $config->gitlab->taskLabel->name        = "zentao task";
 $config->gitlab->taskLabel->description = "task label from zentao, do NOT remove this";
@@ -27,3 +30,24 @@ $config->gitlab->storyLabel->priority     = "0";
 
 $config->gitlab->zentaoApiWebhookUrl    = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
 $config->gitlab->zentaoApiWebhookToken  = "<access token>";
+
+$config->gitlab->maps = new stdclass;
+$config->gitlab->maps->task = array();
+$config->gitlab->maps->task['execution'] = 'execution';
+$config->gitlab->maps->task['name']      = 'title';
+$config->gitlab->maps->task['desc']      = 'description';
+$config->gitlab->maps->task['deadline']  = 'due_date';
+
+$config->gitlab->maps->task['openedBy']  = 'due_date';
+$config->gitlab->maps->task['openedDate']     = 'created_at';
+$config->gitlab->maps->task['assignedTo']     = 'due_date';
+$config->gitlab->maps->task['closedBy']       = 'due_date';
+$config->gitlab->maps->task['closedDate']     = 'due_date';
+$config->gitlab->maps->task['finishedDate']   = 'closed_at';
+$config->gitlab->maps->task['lastEditedDate'] = 'last_edited_at';
+$config->gitlab->maps->task['deadline']       = 'due_date';
+
+$config->gitlab->issueOptions = new stdclass;
+$config->gitlab->issueOptions->task['type']   = 'devel';
+$config->gitlab->issueOptions->task['pri']    = '3';
+$config->gitlab->issueOptions->task['status'] = array();

@@ -232,28 +232,26 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function createAssociat($products, $gitlabID, $gitlabProjectID)
+    public function saveRelation($products, $gitlabID, $gitlabProjectID)
     {
-        $productIDs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->fetchAll();
+        $programs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('id')->in($products)->fetchPairs();
 
-        $projectID = array();
-        foreach($productIDs as $project) $projectID[$project->id] = $project->program;
+        $relation = new stdclass;
+        $relation->execution = 0;
+        $relation->AType     = 'gitlab';
+        $relation->AID       = $gitlabID;
+        $relation->AVersion  = '';
+        $relation->relation  = 'interrated';
+        $relation->BType     = 'gitlabProject';
+        $relation->BID       = $gitlabProjectID;
+        $relation->BVersion  = '';
+        $relation->extra     = '';
 
-        $gitlabAssociat = new stdclass;      
-        $gitlabAssociat->execution = 0;
-        $gitlabAssociat->AVersion  = 0;
-        $gitlabAssociat->relation  = 'interrated';
-        $gitlabAssociat->BVersion  = 0;
-        $gitlabAssociat->extra     = 0;
-        $gitlabAssociat->BID       = $gitlabID;
-
-        foreach($products as $index => $prodcut)
+        foreach($products as $product)
         {
-            $gitlabAssociat->BType   = $this->getprojectpairs($gitlabID)[$gitlabProjectID];
-            $gitlabAssociat->Project = $projectID[$prodcut];
-            $gitlabAssociat->Product = $prodcut;
-
-            $this->dao->replace(TABLE_RELATION)->data($gitlabAssociat)->exec();
+            $relation->project = zget($programs, $product, 0);
+            $relation->product = $product;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
         return true;
     }
@@ -567,12 +565,10 @@ class gitlabModel extends model
 
     public function parseIssueWebhook($body)
     {
-        $request = new stdclass;
-        $request->type    = $body->object_kind;
-        $issue   = $body->object_attributes;
-
-        $request->labels  = $body->labels;
-        $request->project = $body->project->id;
+        $issue = new stdclass;
+        $issue->action = $body->object_attributes->action . $body->object_kind;
+        $issue->issue  = $body->object_attributes;
+        $object = $this->parseObjectFromLabels($issue->labels);
     }
 
     public function parseNoteWebhook($body)
@@ -659,13 +655,11 @@ class gitlabModel extends model
      */
     public function getAccountName($gitlabID, $userID)
     {
-        $account = $this->dao->select("account")
-                             ->from(TABLE_OAUTH)
-                             ->where('providerType')->eq('gitlab')
-                             ->andwhere('providerID')->eq($gitlabID)
-                             ->andwhere('openID')->eq($userID)
-                             ->fetch();
-        if(!dao::isError()) return $account->account;
-        return false;
+        return $this->dao->select("account")
+                         ->from(TABLE_OAUTH)
+                         ->where('providerType')->eq('gitlab')
+                         ->andwhere('providerID')->eq($gitlabID)
+                         ->andwhere('openID')->eq($userID)
+                         ->fetch('account');
     }
 }
