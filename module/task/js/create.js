@@ -491,6 +491,20 @@ $('#modalTeam .btn').click(function()
 {
     var team = '';
     var time = 0;
+
+    /* Unique team. */
+    $('[name*=team]').each(function(i)
+    {
+        value = $(this).val();
+        if(value == '') return;
+        $('[name*=team]').each(function(j)
+        {
+            if(i <= j) return;
+            if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
+        })
+    })
+    $('[name*=team]').closest('tr.hidden').remove();
+
     $('[name*=team]').each(function()
     {
         if($(this).find('option:selected').text() != '')
