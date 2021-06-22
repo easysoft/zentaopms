@@ -67,7 +67,7 @@ $lang->task->storyVersion     = "{$lang->SRCommon}版本";
 $lang->task->color            = '标题颜色';
 $lang->task->name             = '任务名称';
 $lang->task->type             = '任务类型';
-$lang->task->sync             = '同步平台';
+$lang->task->sync             = 'gitlab同步';
 $lang->task->pri              = '优先级';
 $lang->task->mailto           = '抄送给';
 $lang->task->estimate         = '最初预计';
@@ -163,9 +163,6 @@ $lang->task->typeList['discuss'] = '讨论';
 $lang->task->typeList['ui']      = '界面';
 $lang->task->typeList['affair']  = '事务';
 $lang->task->typeList['misc']    = '其他';
-
-$lang->task->syncList['']        = '';
-$lang->task->syncList['gitlab']  = 'gitlab';
 
 $lang->task->priList[0] = '';
 $lang->task->priList[1] = '1';
