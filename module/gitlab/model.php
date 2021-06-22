@@ -501,6 +501,32 @@ class gitlabModel extends model
         return;
     }
 
+    /**
+     * sync gitlab Issue. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function syncGitlabIssue($taskID, $task, $gitlabID, $projectID)
+    {
+        $issue = new stdClass();        
+        $issue->assignee_id = $taskID;
+        $issue->created_at  = $task->create_at;
+        $issue->description = $task->description;
+        $issue->labelType   = $task->labelType;
+        $issue->due_date    = $task->data;
+        $issue->id          = $task->project; 
+        $issue->title       = $task->title;
+        $issue->weight      = $task->weight;
+        $issue->labels      = $task->labels;
+         
+        $response = $this->loadModel('gitlab')->apiCreateIssue($gitlabID, $projectID, $issue);
+
+        return $response;
+    }
+
     public function apiCreateIssue($gitlabID, $projectID, $issue)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
