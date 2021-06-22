@@ -659,7 +659,7 @@ class gitlabModel extends model
      */
     public function getAccount($gitlabID, $userID)
     {
-        retrun $this->dao->select('account')
+        return $this->dao->select('account')
                          ->from(TABLE_OAUTH)
                          ->where('providerType')->eq('gitlab')
                          ->andwhere('providerID')->eq($gitlabID)
