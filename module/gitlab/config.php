@@ -1,9 +1,11 @@
 ﻿<?php
 $config->gitlab->create = new stdclass();
-$config->gitlab->edit   = new stdclass();
-
 $config->gitlab->create->requiredFields = 'name,url,token';
-$config->gitlab->edit->requiredFields   = 'name,url,token';
+
+$config->gitlab->edit = new stdclass();
+$config->gitlab->edit->requiredFields = 'name,url,token';
+
+$config->gitlab->zentaoLabel = 'Zentao';
 
 $config->gitlab->taskLabel = new stdclass();
 $config->gitlab->taskLabel->name        = "zentao task";
@@ -25,5 +27,3 @@ $config->gitlab->storyLabel->priority     = "0";
 
 $config->gitlab->zentaoApiWebhookUrl    = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
 $config->gitlab->zentaoApiWebhookToken  = "<access token>";
-
-
