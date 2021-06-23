@@ -56,7 +56,7 @@ class gitlabModel extends model
      */
     public function getUserIdAccountPairs($gitlab)
     {
-        return $this->dao->select('id,account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andwhere('providerID')->eq($gitlabID)->fetchPairs();
+        return $this->dao->select('openID,account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andwhere('providerID')->eq($gitlab)->fetchPairs();
     }
 
     /**
@@ -68,7 +68,7 @@ class gitlabModel extends model
      */
     public function getUserAccountIdPairs($gitlab)
     {
-        return $this->dao->select('account,id')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andwhere('providerID')->eq($gitlabID)->fetchPairs();
+        return $this->dao->select('account,openID')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andwhere('providerID')->eq($gitlab)->fetchPairs();
     }
 
     /**
@@ -554,38 +554,109 @@ class gitlabModel extends model
     }
 
     /**
-     * sync gitlab Issue. 
+     * Sync task to gitlab issue.
      * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
+     * @param  int    $taskID 
+     * @param  int    $gitlab 
+     * @param  int    $gitlabProject 
      * @access public
      * @return void
      */
-    public function syncGitlabIssue($taskID, $task, $gitlabID, $projectID)
+    public function syncTask($taskID, $gitlab, $gitlabProject)
     {
-        $issue = new stdClass();        
-        $issue->assignee_id = $taskID;
-        $issue->created_at  = $task->create_at;
-        $issue->description = $task->description;
-        $issue->labelType   = $task->labelType;
-        $issue->due_date    = $task->data;
-        $issue->id          = $task->project; 
-        $issue->title       = $task->title;
-        $issue->weight      = $task->weight;
-        $issue->labels      = $task->labels;
-         
-        $response = $this->loadModel('gitlab')->apiCreateIssue($gitlabID, $projectID, $issue);
+        $task = $this->loadModel('task')->getByID($taskID);
+        $syncedIssue = $this->getSyncedIssue($objectType = 'task', $objectID = $taskID, $gitlab);
 
-        return $response;
+        $issue = $this->taskToIssue($gitlab, $gitlabProject, $task);
+        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
+        $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
+
+        $this->saveSyncedIssue('task', $taskID, $gitlab, $issue);
+    }
+    
+    /**
+     * Get synced issue from relation table.
+     * 
+     * @param  string    $objectType 
+     * @param  int       $objectID 
+     * @param  int       $gitlab 
+     * @access public
+     * @return object
+     */
+    public function getSyncedIssue($objectType, $objectID, $gitlab)
+    {
+        return $this->dao->select('*')->from(TABLE_RELATION)
+            ->where('AType')->eq($objectType)
+            ->andWhere('AID')->eq($objectID)
+            ->andWhere('extra')->eq($gitlab)
+            ->fetch();
+    }
+
+    /**
+     * Save synced issue to relation table.
+     * 
+     * @param  string   $objectType 
+     * @param  object   $object 
+     * @param  int      $gitlab 
+     * @param  object   $issue 
+     * @access public
+     * @return void
+     */
+    public function saveSyncedIssue($objectType, $object, $gitlab, $issue)
+    {
+        $relation = new stdclass;
+        $relation->execution = zget($object, 'execution', 0);
+        $relation->AType     = $objectType;
+        $relation->AID       = $object->id;
+        $relation->AVersion  = '';
+        $relation->relation  = 'gitlab';
+        $relation->BType     = 'issue';
+        $relation->BID       = $issue->iid;
+        $relation->BVersion  = $issue->project_id;
+        $relation->extra     = $gitlab;
+        $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+    }
+
+    /**
+     * Parse task to issue.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $gitlabProjectID 
+     * @param  object    $task 
+     * @access public
+     * @return object
+     */
+    public function taskToIssue($gitlabID, $gitlabProjectID, $task)
+    {
+        $map = $this->config->gitlab->maps->task;
+        $issue = new stdclass;
+        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        foreach($map as $taskField => $config)
+        {
+            $value = '';
+            list($field, $optionType, $options) = explode('|', $config);
+            if($optionType == 'field') $value = $task->$taskField;
+            if($optionType == 'userPairs') $value = zget($gitlabUsers, $task->$taskField);
+            if($optionType == 'configItems') 
+            {
+                $value = zget($this->config->gitlab->$options, $task->$taskField, '');
+            }
+            if($value) $issue->$field = $value;
+        }
+        return $issue;
     }
 
     public function apiCreateIssue($gitlabID, $projectID, $issue)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/issues/";
+        foreach($this->config->gitlab->skippedFields->issueCreate as $field)
+        {
+            if(isset($issue->$field)) unset($issue->$field);
+        }
+
         $url = sprintf($apiRoot, $apiPath);
-        $response = json_decode(commonModel::http($url, $issue));
-        return $response;
+        return json_decode(commonModel::http($url, $issue));
     }
 
     public function pushTask($gitlabID, $projectID, $task)

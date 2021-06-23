@@ -31,23 +31,31 @@ $config->gitlab->storyLabel->priority     = "0";
 $config->gitlab->zentaoApiWebhookUrl    = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
 $config->gitlab->zentaoApiWebhookToken  = "<access token>";
 
+$config->gitlab->skippedFields = new stdclass;
+$config->gitlab->skippedFields->issueCreate = array();
+$config->gitlab->skippedFields->issueCreate[] = '';
+
 $config->gitlab->maps = new stdclass;
 $config->gitlab->maps->task = array();
-$config->gitlab->maps->task['execution'] = 'execution';
-$config->gitlab->maps->task['name']      = 'title';
-$config->gitlab->maps->task['desc']      = 'description';
-$config->gitlab->maps->task['deadline']  = 'due_date';
+$config->gitlab->maps->task['name']           = 'title|field|';
+$config->gitlab->maps->task['desc']           = 'description|field|';
+$config->gitlab->maps->task['openedDate']     = 'created_at|field|';
+$config->gitlab->maps->task['assignedTo']     = 'assignee_id|userPairs|';
+$config->gitlab->maps->task['lastEditedDate'] = 'updated_at|field|';
+$config->gitlab->maps->task['deadline']       = 'due_date|field|';
+$config->gitlab->maps->task['status']         = 'state_event|configItems|taskStateMap';
+$config->gitlab->maps->task['pri']            = 'weight|configItems|taskWeightMap';
 
-$config->gitlab->maps->task['openedBy']  = 'due_date';
-$config->gitlab->maps->task['openedDate']     = 'created_at';
-$config->gitlab->maps->task['assignedTo']     = 'due_date';
-$config->gitlab->maps->task['closedBy']       = 'due_date';
-$config->gitlab->maps->task['closedDate']     = 'due_date';
-$config->gitlab->maps->task['finishedDate']   = 'closed_at';
-$config->gitlab->maps->task['lastEditedDate'] = 'last_edited_at';
-$config->gitlab->maps->task['deadline']       = 'due_date';
+$config->gitlab->taskWeightMap = array();
+$config->gitlab->taskWeightMap['1'] = '1';
+$config->gitlab->taskWeightMap['2'] = '2';
+$config->gitlab->taskWeightMap['3'] = '3';
 
-$config->gitlab->issueOptions = new stdclass;
-$config->gitlab->issueOptions->task['type']   = 'devel';
-$config->gitlab->issueOptions->task['pri']    = '3';
-$config->gitlab->issueOptions->task['status'] = array();
+$config->gitlab->taskStateMap  = array();
+$config->gitlab->taskStateMap['doing']  = 'reopen';
+$config->gitlab->taskStateMap['wait']   = 'reopen';
+$config->gitlab->taskStateMap['done']   = 'close';
+$config->gitlab->taskStateMap['cancel'] = 'close';
+$config->gitlab->taskStateMap['closed'] = 'close';
+
+$config->gitlab->taskTypesToSync = 'design,devel,request,discuss,ui,affair,misc';

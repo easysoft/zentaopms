@@ -120,8 +120,8 @@ class taskModel extends model
 
             $taskID = $this->dao->lastInsertID();
 
-            /*sync gitlab Issue*/
-            $this->loadModel('gitlab')->syncGitlabIssue($taskID, $gitlabID, $projectID);
+            /* Sync this task to gitlab issue. */
+            $this->loadModel('gitlab')->syncTask($taskID, $this->post->gitlab, $this->post->gitlabProject);
                 
             /* Mark design version.*/
             if(isset($task->design) && !empty($task->design))

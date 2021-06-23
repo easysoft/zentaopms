@@ -246,4 +246,20 @@ class gitlab extends control
         $this->view->data   = 'ougiugjvh';
         $this->display();
     }
+
+    public function test($id = 11)
+    {
+        $gitlabID = 11; $projectID = 36;
+        $task = $this->loadModel('task')->getByID($id);
+        $issue = $this->gitlab->taskToIssue($gitlabID, $projectID, $task);
+        $issue = $this->gitlab->apiCreateIssue($gitlabID, $projectID, $issue);
+        a($issue);
+        $this->gitlab->saveSyncedIssue('task', $task, $gitlabID, $issue);
+        
+        exit;
+    }
+
+
+
+
 }
