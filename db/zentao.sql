@@ -750,7 +750,7 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   `BVersion` char(30) NOT NULL,
   `extra` char(30) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `relation` (`relation`,`AType`,`BType`, `AID`, `BID`)
+  UNIQUE KEY `relation` (`product`,`relation`,`AType`,`BType`, `AID`, `BID`)
 ) ENGINE='MyISAM' DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
