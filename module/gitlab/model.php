@@ -254,17 +254,20 @@ class gitlabModel extends model
      * @param  int    $gitlabID 
      * @param  int    $projectID 
      * @access public
-     * @return void
+     * @return array
      */
-    public function bindGitlabProject($executionID)
+    public function getProjectsByExecution($executionID)
     {
-        $products = $this->loadModel('execution')->getProducts($executionID, false, 'gitlab');
+        $products      = $this->loadModel('execution')->getProducts($executionID, false);
+        $productIdList = array_keys($products);
 
-        $bindGitlabAIDS = $this->dao->select('AID')->from(TABLE_RELATION)->where('product')->in($products)->fetchPairs();
-
-        $nameList = $this->dao->select('id,name')->from(TABLE_PIPELINE)->where('id')->in(implode(',' ,$bindGitlabAIDS))->fetchPairs();
-        
-        return $nameList;
+        return $this->dao->select('AID,BID as gitlabProject')
+                         ->from(TABLE_RELATION)
+                         ->where('relation')->eq('interrated') 
+                         ->andWhere('AType')->eq('gitlab')
+                         ->andWhere('BType')->eq('gitlabProject') 
+                         ->andWhere('product')->in($productIdList) 
+                         ->fetchGroup('AID');
     }
 
     /**
