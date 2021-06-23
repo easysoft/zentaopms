@@ -215,9 +215,12 @@ class task extends control
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($execution->type == 'ops') unset($customFields['story']);
 
-        /* */
-        $this->loadModel('gitlab')->bindGitlabProject($executionID);
-
+        $allGitlabs     = $this->loadModel('gitlab')->getPairs();
+        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
+        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
+        $this->view->gitlabList     = $allGitlabs;
+        $this->view->gitlabProjects = $gitlabProjects;
+    
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->showAllModule = $showAllModule;
@@ -233,6 +236,7 @@ class task extends control
         $this->view->members           = $members;
         $this->view->blockID           = $blockID;
         $this->view->moduleOptionMenu  = $moduleOptionMenu;
+
         $this->display();
     }
 
