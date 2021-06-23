@@ -2388,23 +2388,17 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($objectID, $type = 'project', $params = '', $usersToAppended = '', $sync = '')
+    public function getTeamMemberPairs($objectID, $type = 'project', $params = '', $usersToAppended = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
         $keyField = strpos($params, 'useid') !== false ? 'id' : 'account';
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->beginIF(!empty($sync))
-            ->leftJoin(TABLE_OAUTH)->alias('t3')->on('t2.account = t3.account')
-            ->fi()
             ->where('t1.root')->eq((int)$objectID)
             ->andWhere('t1.type')->eq($type)
             ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq(0)
-            ->fi()
-            ->beginIF(!empty($sync))
-            ->andWhere('providerType')->eq($sync)
             ->fi()
             ->fetchAll($keyField);
 

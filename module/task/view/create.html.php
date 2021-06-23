@@ -46,10 +46,6 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->task->sync;?></th>
-          <td><?php echo html::select('sync', $syncGitlabMembers, $syncGitlabMembers->realname, "class='form-control chosen' onchange='setOwners(this.value)'");?></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->task->module;?></th>
           <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $execution->id)'");?></td>
           <td>
@@ -245,6 +241,10 @@
           </td>
         </tr>
         <?php endif;?>
+        <tr>
+          <th><?php echo $lang->task->sync;?></th>
+          <td><?php echo html::select('sync', '', '', "class='form-control chosen' onchange='setOwners(this.value)'");?></td>
+        </tr>
         <tr id='after-tr'>
           <th><?php echo $lang->task->afterSubmit;?></th>
           <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>

@@ -1548,7 +1548,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getProducts($executionID, $withBranch = true)
+    public function getProducts($executionID, $withBranch = true, $gitlab = false)
     {
         if(defined('TUTORIAL'))
         {
@@ -1556,12 +1556,14 @@ class executionModel extends model
             return $this->loadModel('tutorial')->getExecutionProducts();
         }
 
+
         $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$executionID)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi();
+        if($gitlab) return implode(',' ,$query->fetchPairs('id','id'));
         if(!$withBranch) return $query->fetchPairs('id', 'name');
         return $query->fetchAll('id');
     }

@@ -172,7 +172,6 @@ class task extends control
 
         $users             = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $members           = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
-        $syncGitlabMembers = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted', 'gitlab');
         $showAllModule     = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $moduleOptionMenu  = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
@@ -211,10 +210,13 @@ class task extends control
         $position[] = html::a($taskLink, $execution->name);
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->create;
-
+        
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($execution->type == 'ops') unset($customFields['story']);
+
+        /* */
+        $this->loadModel('gitlab')->bindGitlabProject($executionID);
 
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
@@ -223,7 +225,6 @@ class task extends control
         $this->view->title             = $title;
         $this->view->position          = $position;
         $this->view->execution         = $execution;
-        $this->view->syncGitlabMembers = $syncGitlabMembers;
         $this->view->executions        = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
         $this->view->task              = $task;
         $this->view->users             = $users;

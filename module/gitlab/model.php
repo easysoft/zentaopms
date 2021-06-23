@@ -249,6 +249,25 @@ class gitlabModel extends model
     }
 
     /**
+     * Bind gitlab project.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function bindGitlabProject($executionID)
+    {
+        $products = $this->loadModel('execution')->getProducts($executionID, false, 'gitlab');
+
+        $bindGitlabAIDS = $this->dao->select('AID')->from(TABLE_RELATION)->where('product')->in($products)->fetchPairs();
+
+        $nameList = $this->dao->select('id,name')->from(TABLE_PIPELINE)->where('id')->in(implode(',' ,$bindGitlabAIDS))->fetchPairs();
+        
+        return $nameList;
+    }
+
+    /**
      * Create relationship between zentao product and  gitlab project.
      * 
      * @param  int    $gitlabID 

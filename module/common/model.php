@@ -2233,6 +2233,7 @@ EOD;
 
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
+
         curl_close($curl);
 
         $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
