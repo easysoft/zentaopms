@@ -1113,16 +1113,16 @@ class repo extends control
 	 * @access public
 	 * @return void
 	 */
-	public function ajaxGetGitlabProjects($host, $projectIdList)
+	public function ajaxGetGitlabProjects($host, $projectIdList = '')
 	{
         $projects = $this->loadModel('gitlab')->apiGetProjects($host);
-        
+         
         if(!$projects) $this->send(array('message' => array()));
-        $projectIdList = explode(',', $projectIdList);
+        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
-            if($project and !in_array($project->id, $projectIdList)) continue;
+            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
         }
         die($options);
