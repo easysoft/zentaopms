@@ -69,10 +69,6 @@ class taskModel extends model
             ->add('version', 1)
             ->get();
 
-        /* Remove gitlab attributes in task object */
-        if(isset($task->gitlab)) unset($task->gitlab);
-        if(isset($task->gitlabProject)) unset($task->gitlabProject);
-        
         if($task->type != 'test') $this->post->set('selectTestStory', 0);
 
         foreach($this->post->assignedTo as $assignedTo)
@@ -114,7 +110,7 @@ class taskModel extends model
 
             /* Fix Bug #2466 */
             if($this->post->multiple) $task->assignedTo = '';
-            $this->dao->insert(TABLE_TASK)->data($task)
+            $this->dao->insert(TABLE_TASK)->data($task, $skip = 'gitlab,gitlabProject')
                 ->autoCheck()
                 ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
