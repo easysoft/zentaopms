@@ -211,22 +211,10 @@ class gitlab extends control
         $gitlab  = $this->get->gitlab;
         $project = $this->get->project;
 
-        $json = '{"object_kind":"note","event_type":"note","user":{"id":1,"name":"Administrator","username":"root","avatar_url":"https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80\u0026d=identicon","email":"admin@example.com"},"project_id":36,"project":{"id":36,"name":"zenops202106dgd","description":"repo for dingguodong dev env","web_url":"http://192.168.1.161:51080/root/zenops202106dgd","avatar_url":null,"git_ssh_url":"ssh://git@192.168.1.161:51022/root/zenops202106dgd.git","git_http_url":"http://192.168.1.161:51080/root/zenops202106dgd.git","namespace":"Administrator","visibility_level":0,"path_with_namespace":"root/zenops202106dgd","default_branch":"master","ci_config_path":null,"homepage":"http://192.168.1.161:51080/root/zenops202106dgd","url":"ssh://git@192.168.1.161:51022/root/zenops202106dgd.git","ssh_url":"ssh://git@192.168.1.161:51022/root/zenops202106dgd.git","http_url":"http://192.168.1.161:51080/root/zenops202106dgd.git"},"object_attributes":{"attachment":null,"author_id":1,"change_position":null,"commit_id":null,"created_at":"2021-06-22 03:04:00 UTC","discussion_id":"1e66ea56b811ac13502252c62e1d22a6ddcf4340","id":705,"line_code":null,"note":"124ds q ew 1234 142dsf ssdfgsdg","noteable_id":32,"noteable_type":"Issue","original_position":null,"position":null,"project_id":36,"resolved_at":null,"resolved_by_id":null,"resolved_by_push":null,"st_diff":null,"system":false,"type":null,"updated_at":"2021-06-22 03:04:00 UTC","updated_by_id":null,"description":"124ds q ew 1234 142dsf ssdfgsdg","url":"http://192.168.1.161:51080/root/zenops202106dgd/-/issues/2#note_705"},"repository":{"name":"zenops202106dgd","url":"ssh://git@192.168.1.161:51022/root/zenops202106dgd.git","description":"repo for dingguodong dev env","homepage":"http://192.168.1.161:51080/root/zenops202106dgd"},"issue":{"author_id":1,"closed_at":null,"confidential":false,"created_at":"2021-06-16 10:52:00 UTC","description":"the issue description","discussion_locked":null,"due_date":null,"id":32,"iid":2,"last_edited_at":null,"last_edited_by_id":null,"milestone_id":null,"moved_to_id":null,"duplicated_to_id":null,"project_id":36,"relative_position":1026,"state_id":1,"time_estimate":0,"title":"test issue","updated_at":"2021-06-22 03:04:00 UTC","updated_by_id":1,"url":"http://192.168.1.161:51080/root/zenops202106dgd/-/issues/2","total_time_spent":0,"human_total_time_spent":null,"human_time_estimate":null,"assignee_ids":[],"assignee_id":null,"labels":[{"id":38,"title":"zentao task","color":"#0033CC","project_id":36,"created_at":"2021-06-16 12:04:23 UTC","updated_at":"2021-06-16 12:04:23 UTC","template":false,"description":"task label from zentao","type":"ProjectLabel","group_id":null},{"id":40,"title":"zentao task : 121","color":"#428BCA","project_id":36,"created_at":"2021-06-21 08:58:17 UTC","updated_at":"2021-06-21 08:58:17 UTC","template":false,"description":"121","type":"ProjectLabel","group_id":null}],"state":"opened"}}';
-        //$json = file_get_contents('php://input');
-        $requestBody = json_decode($json);
-        $request = $this->gitlab->webhookParseBody($requestBody);
-        
-        exit;
-        
-        switch($request->type)
-        {
-            case 'issue_create':
-                $this->createTaskFromIssue($request);
-                break;
-            case 'issue_update':
-                $this->updateTaskFromIssue($request);
-                break;
-        }
+        $input = '{"object_kind":"issue","event_type":"issue","user":{"id":1,"name":"Administrator","username":"root","avatar_url":"https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80\u0026d=identicon","email":"admin@example.com"},"project":{"id":36,"name":"zenops202106dgd","description":"repo for dingguodong dev env","web_url":"http://192.168.1.161:51080/root/zenops202106dgd","avatar_url":null,"git_ssh_url":"ssh://git@192.168.1.161:51022/root/zenops202106dgd.git","git_http_url":"http://192.168.1.161:51080/root/zenops202106dgd.git","namespace":"Administrator","visibility_level":0,"path_with_namespace":"root/zenops202106dgd","default_branch":"master","ci_config_path":null,"homepage":"http://192.168.1.161:51080/root/zenops202106dgd","url":"ssh://git@192.168.1.161:51022/root/zenops202106dgd.git","ssh_url":"ssh://git@192.168.1.161:51022/root/zenops202106dgd.git","http_url":"http://192.168.1.161:51080/root/zenops202106dgd.git"},"object_attributes":{"author_id":1,"closed_at":null,"confidential":false,"created_at":"2021-06-22 02:38:01 UTC","description":"扩展动作的公式保存之后再点设置按钮报js错误\nnew issue 0622 desc ee\n![elephant](http://192.168.1.161:51080/root/zenops202106dgd/uploads/9b85fd397a602b628a271ce02264f502/elephant.jpg)","discussion_locked":null,"due_date":"2021-06-25","id":33,"iid":3,"last_edited_at":"2021-06-24 02:53:52 UTC","last_edited_by_id":1,"milestone_id":null,"moved_to_id":null,"duplicated_to_id":null,"project_id":36,"relative_position":1539,"state_id":1,"time_estimate":0,"title":"new issue 0622","updated_at":"2021-06-24 02:53:52 UTC","updated_by_id":1,"url":"http://192.168.1.161:51080/root/zenops202106dgd/-/issues/3","total_time_spent":0,"human_total_time_spent":null,"human_time_estimate":null,"assignee_ids":[8],"assignee_id":8,"labels":[{"id":38,"title":"zentao_objectType","color":"#0033CC","project_id":36,"created_at":"2021-06-16 12:04:23 UTC","updated_at":"2021-06-22 05:17:29 UTC","template":false,"description":"task","type":"ProjectLabel","group_id":null},{"id":40,"title":"zentao_task/12738","color":"#428BCA","project_id":36,"created_at":"2021-06-21 08:58:17 UTC","updated_at":"2021-06-24 02:46:14 UTC","template":false,"description":"type:bug,id:1234,url:https://back.zcorp.cc/pms/project-browse-1291-all.html","type":"ProjectLabel","group_id":null}],"state":"opened","action":"update"},"labels":[{"id":38,"title":"zentao_objectType","color":"#0033CC","project_id":36,"created_at":"2021-06-16 12:04:23 UTC","updated_at":"2021-06-22 05:17:29 UTC","template":false,"description":"task","type":"ProjectLabel","group_id":null},{"id":40,"title":"zentao_task/12738","color":"#428BCA","project_id":36,"created_at":"2021-06-21 08:58:17 UTC","updated_at":"2021-06-24 02:46:14 UTC","template":false,"description":"type:bug,id:1234,url:https://back.zcorp.cc/pms/project-browse-1291-all.html","type":"ProjectLabel","group_id":null}],"changes":{},"repository":{"name":"zenops202106dgd","url":"ssh://git@192.168.1.161:51022/root/zenops202106dgd.git","description":"repo for dingguodong dev env","homepage":"http://192.168.1.161:51080/root/zenops202106dgd"},"assignees":[{"id":8,"name":"dingguodong","username":"dingguodong","avatar_url":"https://www.gravatar.com/avatar/11302c6dd9e26e9f8e4517538f51e4a2?s=80\u0026d=identicon","email":"dingguodong@easycorp.ltd"}]}';
+        //$input       = file_get_contents('php://input');
+        $requestBody = json_decode($input);
+        $result      = $this->gitlab->webhookParseBody($requestBody, $gitlab);
 
         $logFile = $this->app->getLogRoot() . 'webhook.'. date('Ymd') . '.log.php';
         if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
@@ -235,10 +223,16 @@ class gitlab extends control
         if($fh)
         {
             fwrite($fh, date('Ymd H:i:s') . ": " . $this->app->getURI() . "\n");
-            fwrite($fh, "JSON:   " . $json . "\n");
-            fwrite($fh, "GET:   " . print_r($_GET, true) . "\n");
-            fwrite($fh, "Body:  " . var_export($requestBody, true) . "\n");
+            fwrite($fh, "JSON: \n  " . $input . "\n");
+            fwrite($fh, "Parsed object: {$result->objectType} :\n  " . print_r($result->object, true) . "\n");
             fclose($fh);
+        }
+
+        switch($result->objectType)
+        {
+            case 'task':
+                $this->updateTaskFromIssue($request);
+                break;
         }
 
         $this->view->result = 'success';
@@ -253,13 +247,8 @@ class gitlab extends control
         $task = $this->loadModel('task')->getByID($id);
         $issue = $this->gitlab->taskToIssue($gitlabID, $projectID, $task);
         $issue = $this->gitlab->apiCreateIssue($gitlabID, $projectID, $issue);
-        a($issue);
         $this->gitlab->saveSyncedIssue('task', $task, $gitlabID, $issue);
         
         exit;
     }
-
-
-
-
 }

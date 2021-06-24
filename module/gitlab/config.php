@@ -5,7 +5,10 @@ $config->gitlab->create->requiredFields = 'name,url,token';
 $config->gitlab->edit = new stdclass();
 $config->gitlab->edit->requiredFields = 'name,url,token';
 
-$config->gitlab->zentaoLabel = 'Zentao';
+$config->gitlab->labelPattern = new stdclass;
+$config->gitlab->labelPattern->task  = '/^zentao_task\/\d+$/';
+$config->gitlab->labelPattern->bug   = '/^zentao_bug\/\d+$/';
+$config->gitlab->labelPattern->story = '/^zentao_story\/\d+$/';
 
 $config->gitlab->actions = array();
 $config->gitlab->actions['issue'] = array();
@@ -43,7 +46,7 @@ $config->gitlab->maps->task['openedDate']     = 'created_at|field|';
 $config->gitlab->maps->task['assignedTo']     = 'assignee_id|userPairs|';
 $config->gitlab->maps->task['lastEditedDate'] = 'updated_at|field|';
 $config->gitlab->maps->task['deadline']       = 'due_date|field|';
-$config->gitlab->maps->task['status']         = 'state_event|configItems|taskStateMap';
+$config->gitlab->maps->task['status']         = 'state|configItems|taskStateMap';
 $config->gitlab->maps->task['pri']            = 'weight|configItems|taskWeightMap';
 
 $config->gitlab->taskWeightMap = array();
