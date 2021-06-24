@@ -387,7 +387,7 @@ class todo extends control
         $this->view->title           = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
         $this->view->position[]      = $this->lang->todo->view;
         $this->view->todo            = $todo;
-        $this->view->times           = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->times           = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, 5);
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->user            = $this->user->getById($todo->account);
         $this->view->actions         = $this->loadModel('action')->getList('todo', $todoID);
