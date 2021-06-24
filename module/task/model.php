@@ -22,6 +22,7 @@ class taskModel extends model
      */
     public function create($executionID)
     {
+
         if($this->post->estimate < 0)
         {
             dao::$errors[] = $this->lang->task->error->recordMinus;
@@ -67,7 +68,7 @@ class taskModel extends model
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync')
             ->add('version', 1)
             ->get();
-       
+
         if($task->type != 'test') $this->post->set('selectTestStory', 0);
 
         foreach($this->post->assignedTo as $assignedTo)
@@ -109,7 +110,7 @@ class taskModel extends model
 
             /* Fix Bug #2466 */
             if($this->post->multiple) $task->assignedTo = '';
-            $this->dao->insert(TABLE_TASK)->data($task)
+            $this->dao->insert(TABLE_TASK)->data($task, $skip = 'gitlab,gitlabProject')
                 ->autoCheck()
                 ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')

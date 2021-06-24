@@ -56,7 +56,7 @@ class gitlabModel extends model
      */
     public function getUserIdAccountPairs($gitlab)
     {
-        return $this->dao->select('openID,account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andwhere('providerID')->eq($gitlab)->fetchPairs();
+        return $this->dao->select('openID,account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlab)->fetchPairs();
     }
 
     /**
@@ -68,7 +68,7 @@ class gitlabModel extends model
      */
     public function getUserAccountIdPairs($gitlab)
     {
-        return $this->dao->select('account,openID')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andwhere('providerID')->eq($gitlab)->fetchPairs();
+        return $this->dao->select('account,openID')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlab)->fetchPairs();
     }
 
     /**
@@ -571,7 +571,7 @@ class gitlabModel extends model
         if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
         $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
 
-        $this->saveSyncedIssue('task', $taskID, $gitlab, $issue);
+        $this->saveSyncedIssue('task', $task, $gitlab, $issue);
     }
     
     /**
@@ -819,11 +819,27 @@ class gitlabModel extends model
      */
     public function getAccount($gitlabID, $userID)
     {
-        return $this->dao->select('account')
-                         ->from(TABLE_OAUTH)
-                         ->where('providerType')->eq('gitlab')
-                         ->andwhere('providerID')->eq($gitlabID)
-                         ->andwhere('openID')->eq($userID)
-                         ->fetch('account');
+        return $this->dao->select('account')->from(TABLE_OAUTH)
+                    ->where('providerType')->eq('gitlab')
+                    ->andWhere('providerID')->eq($gitlabID)
+                    ->andWhere('openID')->eq($userID)
+                    ->fetch('account');
+    }
+
+    /**
+     * Get gitlab issue from relation by object type and id.
+     * 
+     * @param  string    $objectType 
+     * @param  int       $objectID 
+     * @access public
+     * @return object
+     */
+    public function getGitlabIssueFromRelation($objectType,$objectID)
+    {
+        return $this->dao->select('extra as gitlabID,BVersion as projectID,BID as issueID,AType,AID')->from(TABLE_RELATION)
+                    ->where('relation')->eq('gitlab')
+                    ->andWhere('AType')->eq($objectType)
+                    ->andWhere('AID')->eq($objectID)
+                    ->fetch();
     }
 }

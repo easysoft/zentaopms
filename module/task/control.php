@@ -92,6 +92,8 @@ class task extends control
 
             setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($this->post->execution) $executionID = (int)$this->post->execution;
+            
+            /* Create task here. */
             $tasksID = $this->task->create($executionID);
             if(dao::isError())
             {
