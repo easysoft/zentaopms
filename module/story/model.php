@@ -233,7 +233,7 @@ class storyModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,gitlab,gitlabProject')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -338,6 +338,9 @@ class storyModel extends model
 
             /* Callback the callable method to process the related data for object that is transfered to story. */
             if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
+
+            /* sync this story to gitlab issue */
+            $this->loadModel('gitlab')->syncStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             return array('status' => 'created', 'id' => $storyID);
         }
