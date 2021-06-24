@@ -579,7 +579,28 @@ class gitlabModel extends model
 
         $this->saveSyncedIssue('task', $task, $gitlab, $issue);
     }
-    
+
+    /**
+     * Sync story to gitlab issue. 
+     * 
+     * @param  int    $storyID 
+     * @param  int    $gitlab 
+     * @param  int    $gitlabProject 
+     * @access public
+     * @return void
+     */
+    public function syncStory($storyID, $gitlab, $gitlabProject)
+    {
+        $story = $this->loadModel('story')->getByID($storyID);
+        $syncedIssue = $this->getSyncedIssue($objectType = 'story', $objectID = $storyID, $gitlab);
+
+        $issue = $this->storyToIssue($gitlab, $gitlabProject, $story);
+        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
+        $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
+
+        $this->saveSyncedIssue('story', $story, $gitlab, $issue);
+    }
+
     /**
      * Get synced issue from relation table.
      * 
@@ -646,6 +667,35 @@ class gitlabModel extends model
             if($optionType == 'configItems') 
             {
                 $value = zget($this->config->gitlab->$options, $task->$taskField, '');
+            }
+            if($value) $issue->$field = $value;
+        }
+        return $issue;
+    }
+
+    /**
+     * Parse story to issue.
+     * 
+     * @param  int       $gitlabID 
+     * @param  int       $gitlabProjectID 
+     * @param  object    $story 
+     * @access public
+     * @return object
+     */
+    public function storyToIssue($gitlabID, $gitlabProjectID, $story)
+    {
+        $map = $this->config->gitlab->maps->story;
+        $issue = new stdclass;
+        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        foreach($map as $storyField => $config)
+        {
+            $value = '';
+            list($field, $optionType, $options) = explode('|', $config);
+            if($optionType == 'field') $value = $story->$storyField;
+            if($optionType == 'userPairs') $value = zget($gitlabUsers, $story->$storyField);
+            if($optionType == 'configItems') 
+            {
+                $value = zget($this->config->gitlab->$options, $story->$storyField, '');
             }
             if($value) $issue->$field = $value;
         }
