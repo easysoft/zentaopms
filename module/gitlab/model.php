@@ -48,6 +48,21 @@ class gitlabModel extends model
     }
 
     /**
+     * Get gitlab api base url with access_token
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return string gitlab api base url with access_token
+     */
+    public function getApiRoot($id)
+    {
+        $gitlab = $this->getByID($id);
+        if(!$gitlab) return "";
+        $gitlab_url = rtrim($gitlab->url, '/').'/api/v4%s'."?private_token={$gitlab->token}";
+        return $gitlab_url; 
+    }
+
+    /**
      * Get gitlab user id zentao account pairs of one gitlab.
      * 
      * @param  int    $gitlab 
@@ -116,7 +131,6 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-
     public function apiGetUsers($gitlab)
     {
         $api      = rtrim($gitlab->url, '/') . '/api/v4/users?private_token=' . $gitlab->token;
@@ -140,59 +154,6 @@ class gitlabModel extends model
     }
 
     /**
-     * Get matched gitlab users.
-     * 
-     * @param  array    $gitlabUsers 
-     * @param  array    $zentaoUsers 
-     * @access public
-     * @return array
-     */
-    public function getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers)
-    {
-        $matches = new stdclass;
-        foreach($gitlabUsers as $gitlabUser)
-        {
-            foreach($zentaoUsers as $zentaoUser)
-            {
-                if($gitlabUser->account  == $zentaoUser->account)  $matches->accounts[$gitlabUser->account][] = $zentaoUser->account;
-                if($gitlabUser->realname == $zentaoUser->realname) $matches->names[$gitlabUser->realname][]   = $zentaoUser->account;
-                if($gitlabUser->email    == $zentaoUser->email)    $matches->emails[$gitlabUser->email][]     = $zentaoUser->account;
-            }
-        }
-
-        $bindedUsers = $this->dao->select('openID,account')
-                                 ->from(TABLE_OAUTH)
-                                 ->where('providerType')->eq('gitlab')
-                                 ->andWhere('providerID')->eq($gitlabID)
-                                 ->fetchPairs();
-
-        $matchedUsers = array();
-        foreach($gitlabUsers as $gitlabUser)
-        {
-            if(isset($bindedUsers[$gitlabUser->id])) 
-            {
-                $gitlabUser->zentaoAccount = $bindedUsers[$gitlabUser->id];
-                $matchedUsers[] = $gitlabUser;
-                continue;
-            }
-
-            $matchedZentaoUsers = array();
-            if(isset($matches->accounts[$gitlabUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitlabUser->account]);
-            if(isset($matches->emails[$gitlabUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
-            if(isset($matches->names[$gitlabUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitlabUser->realname]);
-
-            $matchedZentaoUsers = array_unique($matchedZentaoUsers);
-            if(count($matchedZentaoUsers) == 1)
-            {
-                $gitlabUser->zentaoAccount = current($matchedZentaoUsers);
-                $matchedUsers[] = $gitlabUser;
-            }
-        }
-
-        return $matchedUsers;
-    }
-
-    /**
      * Get projects of one gitlab.
      * 
      * @param  int    $gitlabID 
@@ -200,7 +161,7 @@ class gitlabModel extends model
      * @return void
      */
     public function apiGetProjects($gitlabID)
-    {   
+    {
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();
         $host  = rtrim($gitlab->url, '/');
@@ -214,115 +175,6 @@ class gitlabModel extends model
             $allResults = $allResults + $results;
         }   
         return $allResults;
-    }
-
-    public function getProjectPairs($gitlabID)
-    {
-        $projects = $this->apiGetProjects($gitlabID);
-        $projectPairs = array();
-        foreach($projects as $project)
-        {
-            $projectPairs[$project->id] = $project->name_with_namespace;
-        }
-
-        return $projectPairs;
-    }
-
-    public function getProjectDisplayName($gitlabID, $projectID)
-    {
-        return array_key_exists($gitlabID, $projectID) ? $this->gitlab->getProjectPairs($gitlabID)[$projectID]: "";
-    }
-
-    /**
-     * Get gitlab api base url with access_token
-     * 
-     * @param  int    $id 
-     * @access public
-     * @return string gitlab api base url with access_token
-     */
-    public function getApiRoot($id)
-    {
-        $gitlab = $this->getByID($id);
-        if(!$gitlab) return "";
-        $gitlab_url = rtrim($gitlab->url, '/').'/api/v4%s'."?private_token={$gitlab->token}";
-        return $gitlab_url; 
-    }
-
-    /**
-     * Bind gitlab project.
-     * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @access public
-     * @return array
-     */
-    public function getProjectsByExecution($executionID)
-    {
-        $products      = $this->loadModel('execution')->getProducts($executionID, false);
-        $productIdList = array_keys($products);
-
-        return $this->dao->select('AID,BID as gitlabProject')
-                         ->from(TABLE_RELATION)
-                         ->where('relation')->eq('interrated') 
-                         ->andWhere('AType')->eq('gitlab')
-                         ->andWhere('BType')->eq('gitlabProject') 
-                         ->andWhere('product')->in($productIdList) 
-                         ->fetchGroup('AID');
-    }
-
-    /**
-     * Create relationship between zentao product and  gitlab project.
-     * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @access public
-     * @return void
-     */
-    public function saveRelation($products, $gitlabID, $gitlabProjectID)
-    {
-        $programs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('id')->in($products)->fetchPairs();
-
-        $relation = new stdclass;
-        $relation->execution = 0;
-        $relation->AType     = 'gitlab';
-        $relation->AID       = $gitlabID;
-        $relation->AVersion  = '';
-        $relation->relation  = 'interrated';
-        $relation->BType     = 'gitlabProject';
-        $relation->BID       = $gitlabProjectID;
-        $relation->BVersion  = '';
-        $relation->extra     = '';
-
-        foreach($products as $product)
-        {
-            $relation->project = zget($programs, $product, 0);
-            $relation->product = $product;
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-        }
-        return true;
-    }
-
-    /**
-     * Create webhook for zentao.
-     * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @access public
-     * @return void
-     */
-    public function createWebhook($products, $gitlabID, $projectID)
-    {
-        $urls = $this->getWebhookUrls($gitlabID, $projectID);
-
-        foreach($products as $index => $product)
-        {
-            $url  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $product, $gitlabID, $projectID);
-            if(! array_key_exists($url, array_flip($urls)))
-            {
-                $response = $this->apiCreateHook($gitlabID, $projectID, $url, $this->config->gitlab->zentaoApiWebhookToken);
-            }
-        }
-        return true;
     }
 
     /**
@@ -359,25 +211,6 @@ class gitlabModel extends model
         $response = commonModel::http($url);
         return $response;
     }  
-
-    /**
-     * Get webhook urls 
-     * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @access public
-     * @return array $urls;
-     */
-    public function getWebhookUrls($gitlabID, $projectID)
-    {
-        $urls = array();
-        $webhooks = $this->apiGetHooks($gitlabID, $projectID);
-        foreach($webhooks as $index => $webhook)
-        {
-            $urls[] = $webhook->url;
-        }
-        return $urls;
-    }
 
     /**
      * Create hook.
@@ -492,6 +325,172 @@ class gitlabModel extends model
         $response = commonModel::http($url);
         $labels = json_decode($response);
         return $labels;
+    }
+
+    /**
+     * Get project pairs of one gitlab.
+     * 
+     * @param  int    $gitlabID 
+     * @access public
+     * @return array
+     */
+    public function getProjectPairs($gitlabID)
+    {
+        $projects = $this->apiGetProjects($gitlabID);
+
+        $projectPairs = array();
+        foreach($projects as $project) $projectPairs[$project->id] = $project->name_with_namespace;
+
+        return $projectPairs;
+    }
+
+    /**
+     * Get matched gitlab users.
+     * 
+     * @param  array    $gitlabUsers 
+     * @param  array    $zentaoUsers 
+     * @access public
+     * @return array
+     */
+    public function getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers)
+    {
+        $matches = new stdclass;
+        foreach($gitlabUsers as $gitlabUser)
+        {
+            foreach($zentaoUsers as $zentaoUser)
+            {
+                if($gitlabUser->account  == $zentaoUser->account)  $matches->accounts[$gitlabUser->account][] = $zentaoUser->account;
+                if($gitlabUser->realname == $zentaoUser->realname) $matches->names[$gitlabUser->realname][]   = $zentaoUser->account;
+                if($gitlabUser->email    == $zentaoUser->email)    $matches->emails[$gitlabUser->email][]     = $zentaoUser->account;
+            }
+        }
+
+        $bindedUsers = $this->dao->select('openID,account')
+                            ->from(TABLE_OAUTH)
+                            ->where('providerType')->eq('gitlab')
+                            ->andWhere('providerID')->eq($gitlabID)
+                            ->fetchPairs();
+
+        $matchedUsers = array();
+        foreach($gitlabUsers as $gitlabUser)
+        {
+            if(isset($bindedUsers[$gitlabUser->id])) 
+            {
+                $gitlabUser->zentaoAccount = $bindedUsers[$gitlabUser->id];
+                $matchedUsers[] = $gitlabUser;
+                continue;
+            }
+
+            $matchedZentaoUsers = array();
+            if(isset($matches->accounts[$gitlabUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitlabUser->account]);
+            if(isset($matches->emails[$gitlabUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
+            if(isset($matches->names[$gitlabUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitlabUser->realname]);
+
+            $matchedZentaoUsers = array_unique($matchedZentaoUsers);
+            if(count($matchedZentaoUsers) == 1)
+            {
+                $gitlabUser->zentaoAccount = current($matchedZentaoUsers);
+                $matchedUsers[] = $gitlabUser;
+            }
+        }
+
+        return $matchedUsers;
+    }
+
+    /**
+     * Bind gitlab project.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getProjectsByExecution($executionID)
+    {
+        $products      = $this->loadModel('execution')->getProducts($executionID, false);
+        $productIdList = array_keys($products);
+
+        return $this->dao->select('AID,BID as gitlabProject')
+                    ->from(TABLE_RELATION)
+                    ->where('relation')->eq('interrated') 
+                    ->andWhere('AType')->eq('gitlab')
+                    ->andWhere('BType')->eq('gitlabProject') 
+                    ->andWhere('product')->in($productIdList) 
+                    ->fetchGroup('AID');
+    }
+
+    /**
+     * Create relationship between zentao product and  gitlab project.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function saveRelation($products, $gitlabID, $gitlabProjectID)
+    {
+        $programs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('id')->in($products)->fetchPairs();
+
+        $relation = new stdclass;
+        $relation->execution = 0;
+        $relation->AType     = 'gitlab';
+        $relation->AID       = $gitlabID;
+        $relation->AVersion  = '';
+        $relation->relation  = 'interrated';
+        $relation->BType     = 'gitlabProject';
+        $relation->BID       = $gitlabProjectID;
+        $relation->BVersion  = '';
+        $relation->extra     = '';
+
+        foreach($products as $product)
+        {
+            $relation->project = zget($programs, $product, 0);
+            $relation->product = $product;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Create webhook for zentao.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function createWebhook($products, $gitlabID, $projectID)
+    {
+        $urls = $this->getWebhookUrls($gitlabID, $projectID);
+
+        foreach($products as $index => $product)
+        {
+            $url  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $product, $gitlabID, $projectID);
+            if(! array_key_exists($url, array_flip($urls)))
+            {
+                $response = $this->apiCreateHook($gitlabID, $projectID, $url, $this->config->gitlab->zentaoApiWebhookToken);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get webhook urls 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @access public
+     * @return array $urls;
+     */
+    public function getWebhookUrls($gitlabID, $projectID)
+    {
+        $urls = array();
+        $webhooks = $this->apiGetHooks($gitlabID, $projectID);
+        foreach($webhooks as $index => $webhook)
+        {
+            $urls[] = $webhook->url;
+        }
+        return $urls;
     }
 
     /**
@@ -782,6 +781,14 @@ class gitlabModel extends model
         return $object;
     }
 
+    /**
+     * parse issue To Task.
+     * 
+     * @param  object    $issue 
+     * @param  int    $gitlabID 
+     * @access public
+     * @return object
+     */
     public function issueToTask($issue, $gitlabID)
     {
         $task        = new stdclass;
@@ -807,23 +814,6 @@ class gitlabModel extends model
     public function issueToBug($issue)
     {
 
-    }
-
-    /**
-     * Get account in zentaopms.
-     * 
-     * @param  int    $gitlabID 
-     * @param  int    $userID 
-     * @access public
-     * @return string|false
-     */
-    public function getAccount($gitlabID, $userID)
-    {
-        return $this->dao->select('account')->from(TABLE_OAUTH)
-                    ->where('providerType')->eq('gitlab')
-                    ->andWhere('providerID')->eq($gitlabID)
-                    ->andWhere('openID')->eq($userID)
-                    ->fetch('account');
     }
 
     /**
