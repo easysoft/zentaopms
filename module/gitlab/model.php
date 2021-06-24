@@ -571,7 +571,7 @@ class gitlabModel extends model
         if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
         $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
 
-        $this->saveSyncedIssue('task', $taskID, $gitlab, $issue);
+        $this->saveSyncedIssue('task', $task, $gitlab, $issue);
     }
     
     /**

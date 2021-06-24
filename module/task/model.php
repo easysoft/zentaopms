@@ -22,6 +22,7 @@ class taskModel extends model
      */
     public function create($executionID)
     {
+
         if($this->post->estimate < 0)
         {
             dao::$errors[] = $this->lang->task->error->recordMinus;
@@ -67,7 +68,11 @@ class taskModel extends model
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync')
             ->add('version', 1)
             ->get();
-       
+
+        /* Remove gitlab attributes in task object */
+        if(isset($task->gitlab)) unset($task->gitlab);
+        if(isset($task->gitlabProject)) unset($task->gitlabProject);
+        
         if($task->type != 'test') $this->post->set('selectTestStory', 0);
 
         foreach($this->post->assignedTo as $assignedTo)
