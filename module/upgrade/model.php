@@ -681,6 +681,7 @@ class upgradeModel extends model
             $this->appendExec('15_0_1');
         case '15_0_2':
             $this->saveLogs('Execute 15_0_2');
+            $this->execSQL($this->getUpgradeFile('15.0.2'));
             $this->uniqueProjectAdmin();
             $this->appendExec('15_0_2');
         }
