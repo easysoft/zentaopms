@@ -1037,7 +1037,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `limited` char(8) NOT NULL default 'no',
   `join` date NOT NULL default '0000-00-00',
   `days` smallint(5) unsigned NOT NULL,
-  `hours` float(2,1) unsigned NOT NULL default '0',
+  `hours` float(3,1) unsigned NOT NULL default '0',
   `estimate` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
   `consumed` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
   `left` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',

@@ -16,3 +16,4 @@ $lang->branch->deleted = '已刪除';
 
 $lang->branch->confirmDelete = '是否刪除該@branch@？';
 $lang->branch->canNotDelete  = '該@branch@下已經有數據，不能刪除！';
+$lang->branch->nameNotEmpty  = '名稱不能為空！';
