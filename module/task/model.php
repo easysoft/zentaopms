@@ -1325,6 +1325,16 @@ class taskModel extends model
             ->autoCheck()
             ->check('left', 'float')
             ->where('id')->eq($taskID)->exec();
+        
+        $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('task', $taskID);
+
+        $attribute = new stdclass();
+        $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $task->assignedTo);
+        if($attribute->assignee_id != '')
+        {
+            // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
+            $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID , $attribute);
+        }
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }

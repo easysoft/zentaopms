@@ -71,7 +71,10 @@ class gitlabModel extends model
      */
     public function getUserIdAccountPairs($gitlab)
     {
-        return $this->dao->select('openID,account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlab)->fetchPairs();
+        return $this->dao->select('openID,account')->from(TABLE_OAUTH)
+                    ->where('providerType')->eq('gitlab')
+                    ->andWhere('providerID')->eq($gitlab)
+                    ->fetchPairs();
     }
 
     /**
@@ -83,7 +86,10 @@ class gitlabModel extends model
      */
     public function getUserAccountIdPairs($gitlab)
     {
-        return $this->dao->select('account,openID')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlab)->fetchPairs();
+        return $this->dao->select('account,openID')->from(TABLE_OAUTH)
+                    ->where('providerType')->eq('gitlab')
+                    ->andWhere('providerID')->eq($gitlab)
+                    ->fetchPairs();
     }
 
     /**
@@ -284,7 +290,7 @@ class gitlabModel extends model
 
         $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
         $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'put'));
+        $response = commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
         return $response;
     }
 
@@ -658,6 +664,25 @@ class gitlabModel extends model
         return json_decode(commonModel::http($url, $issue));
     }
 
+    /**
+     * Update issue with new attribute using gitlab API.
+     * 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  int       $issueID 
+     * @param  object    $attribute 
+     * @access public
+     * @return object
+     */
+    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $attribute)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/projects/{$projectID}/issues/{$issueID}";
+        $url = sprintf($apiRoot, $apiPath);
+        $response =  json_decode(commonModel::http($url, $attribute, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        return $response;
+    }    
+
     public function pushTask($gitlabID, $projectID, $task)
     {
         $task->label = $this->config->gitlab->taskLabel->name;
@@ -782,10 +807,10 @@ class gitlabModel extends model
     }
 
     /**
-     * parse issue To Task.
+     * Parse issue to task.
      * 
      * @param  object    $issue 
-     * @param  int    $gitlabID 
+     * @param  int       $gitlabID 
      * @access public
      * @return object
      */
@@ -807,13 +832,46 @@ class gitlabModel extends model
         return $task;
     }
 
-    public function issueToStory($issue)
+    /**
+     * Parse issue to story.
+     * 
+     * @param  object    $issue 
+     * @param  int       $gitlabID 
+     * @access public
+     * @return object
+     */
+    public function issueToStory($issue, $gitlabID)
     {
     }
 
-    public function issueToBug($issue)
+    /**
+     * Parse issue to task.
+     * 
+     * @param  object    $issue 
+     * @param  int       $gitlabID 
+     * @access public
+     * @return object
+     */
+    public function issueToBug($issue, $gitlabID)
     {
 
+    }
+
+    /**
+     * Get gitlab userID by account.
+     * 
+     * @param  int       $gitlabID 
+     * @param  string    $account 
+     * @access public
+     * @return void
+     */
+    public function getGitlabUserID($gitlabID, $account)
+    {
+        return $this->dao->select('openID')->from(TABLE_OAUTH)
+                    ->where('providerType')->eq('gitlab')
+                    ->andWhere('providerID')->eq($gitlabID)
+                    ->andWhere('account')->eq($account)
+                    ->fetch('openID');
     }
 
     /**
