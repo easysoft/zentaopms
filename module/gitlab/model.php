@@ -698,21 +698,52 @@ class gitlabModel extends model
         return $response;
     }
 
-    public function webhookParseBody($body)
+    /**
+     * Parse webhook body function.
+     * 
+     * @param  object    $body 
+     * @param  int       $gitlabID
+     * @access public
+     * @return object
+     */
+    public function webhookParseBody($body, $gitlabID)
     {
         $type = zget($body, 'object_kind', '');
         if(!$type or !is_callable(array($this, "webhookParse{$type}"))) return false;
-        $result = call_user_func_array(array($this, "webhookParse{$type}Webhook"), array('body' => $body));
+        return call_user_func_array(array($this, "webhookParse{$type}"), array('body' => $body, $gitlabID));
     }
 
-    public function WebhookParseIssue($body)
+    /**
+     * Parse Webhook issue.
+     * 
+     * @param  object    $body 
+     * @param  int       $gitlabID 
+     * @access public
+     * @return object
+     */
+    public function WebhookParseIssue($body, $gitlabID)
     {
+        $object = $this->parseObjectFromLabel($body->labels);
+        if(empty($object)) return null;
+
         $issue = new stdclass;
-        $issue->action = $body->object_attributes->action . $body->object_kind;
-        $issue->issue  = $body->object_attributes;
-        $object = $this->parseObjectFromLabels($issue->labels);
+        $issue->action     = $body->object_attributes->action . $body->object_kind;
+        $issue->issue      = $body->object_attributes;
+        $issue->objectType = $object->type;
+        $issue->objectID   = $object->id;
+
+        if(!is_callable(array($this, "issueTo{$object->type}"))) return false;
+        $issue->object = call_user_func_array(array($this, "issueTo{$object->type}"), array('body' => $issue->issue, 'gitlab' => $gitlabID));
+        return $issue;
     }
 
+    /**
+     * Webhook parse note.
+     * 
+     * @param  object    $body 
+     * @access public
+     * @return void
+     */
     public function webhookParseNote($body)
     {
         $request = new stdclass;
@@ -743,18 +774,20 @@ class gitlabModel extends model
      * @access public
      * @return object|false
      */
-    public function webhookParseZentaoLabel($labels)
+    public function parseObjectFromLabel($labels)
     {
-        foreach($body->labels as $label) 
+        $object = null;
+        foreach($labels as $label) 
         {
-            if($label->title == $config->gitlab->zentaoLabel) 
+            if(preg_match($this->config->gitlab->labelPattern->task, $label->title))
             {
-                $object = json_decode($label->description);
-                if(!$object or !isset($object->type)) continue;	
-                return $object;
+                list($prefix, $id) = explode('/', $label->title);
+                $object = new stdclass;
+                $object->type = 'task';
+                $object->id   = $id;
             }
         }
-        return false;
+        return $object;
     }
 
     /**
@@ -774,15 +807,29 @@ class gitlabModel extends model
         return $object;
     }
 
-    public function issue2Task($issue)
+    public function issueToTask($issue, $gitlabID)
+    {
+        $task        = new stdclass;
+        $maps        = $this->config->gitlab->maps->task;
+        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+
+        foreach($maps as $taskField => $config)
+        {
+            $value = '';
+            list($field, $optionType, $options) = explode('|', $config);
+            if($optionType == 'field') $value = $issue->$field;
+            if($optionType == 'userPairs') $value = zget($gitlabUsers, $issue->$field);
+            if($optionType == 'configItems' and isset($issue->$field)) $value = array_search($issue->$field, $this->config->gitlab->$options);
+            if($value) $task->$taskField = $value;
+        }
+        return $task;
+    }
+
+    public function issueToStory($issue)
     {
     }
 
-    public function issue2Story($issue)
-    {
-    }
-
-    public function issue2Bug($issue)
+    public function issueToBug($issue)
     {
 
     }
