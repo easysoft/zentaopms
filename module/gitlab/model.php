@@ -457,7 +457,7 @@ class gitlabModel extends model
 
         $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
         $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'put'));
+        $response = commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
         return $response;
     }
 
