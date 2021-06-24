@@ -98,7 +98,7 @@
           }
           ?>
           <tr <?php echo $trAttrs;?>>
-            <td colspan="14">
+            <td colspan="<?php echo $this->config->URAndSR ? 14 : 10;?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>
