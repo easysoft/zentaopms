@@ -295,6 +295,13 @@ class story extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->story->custom->createFields;
 
+        $allGitlabs     = $this->loadModel('gitlab')->getPairs();
+        $executionID    = $objectID;
+        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
+        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
+        $this->view->gitlabList       = $allGitlabs;
+        $this->view->gitlabProjects   = $gitlabProjects;
+ 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
