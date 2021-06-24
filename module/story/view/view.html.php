@@ -143,7 +143,7 @@
                 <th class='w-100px'><?php echo $lang->story->assignedTo;?></th>
                 <th class='w-90px'> <?php echo $lang->story->estimate;?></th>
                 <th class='w-80px'> <?php echo $lang->story->status;?></th>
-                <th class='w-200px'><?php echo $lang->actions;?></th>
+                <th class='w-230px'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <tbody>
@@ -201,6 +201,7 @@
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
+        if(isset($this->config->maxVersion) and $this->app->openApp == 'project') common::printIcon('story', 'importToLib',  "storyID=$story->id", $story, 'button', 'assets', '', 'iframe showinonlybody', true, 'data-width="500px"');
 
         if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
         {

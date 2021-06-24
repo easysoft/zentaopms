@@ -281,8 +281,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $canBatchChangeModule = ($canBeChanged and common::hasPriv('story', 'batchChangeModule'));
       $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan'));
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv('story', 'batchAssignTo'));
+      $canBatchImportToLib  = ($canBeChanged and $this->app->moduleName == 'projectstory' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
 
-      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
+      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchImportToLib);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -514,6 +515,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               </div>
             </div>
           </div>
+          <?php endif;?>
+
+          <?php if($canBatchImportToLib):?>
           <?php endif;?>
         </div>
         <div class="table-statistic"><?php echo $summary;?></div>
