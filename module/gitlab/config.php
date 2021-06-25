@@ -39,6 +39,20 @@ $config->gitlab->maps->task['deadline']       = 'due_date|field|';
 $config->gitlab->maps->task['status']         = 'state|configItems|taskStateMap';
 $config->gitlab->maps->task['pri']            = 'weight|configItems|taskWeightMap';
 
+$config->gitlab->maps->story = array();
+$config->gitlab->maps->story['title']        = 'title|field|';
+$config->gitlab->maps->story['spec']         = 'description|fields|verify';
+$config->gitlab->maps->story['openedDate']   = 'created_at|field|';
+$config->gitlab->maps->story['openedBy']     = 'assignee_id|userPairs|';
+$config->gitlab->maps->story['pri']          = 'weight|configItems|storyWeightMap';
+
+$config->gitlab->maps->bug = array();
+$config->gitlab->maps->bug['title']      = 'title|field|';
+$config->gitlab->maps->bug['spec']       = 'description|field|';
+$config->gitlab->maps->bug['openedDate'] = 'created_at|field|';
+$config->gitlab->maps->bug['openedBy']   = 'assignee_id|userPairs|';
+$config->gitlab->maps->bug['pri']        = 'weight|configItems|bugWeightMap';
+
 $config->gitlab->taskWeightMap = array();
 $config->gitlab->taskWeightMap['1'] = '1';
 $config->gitlab->taskWeightMap['2'] = '2';
@@ -53,26 +67,10 @@ $config->gitlab->taskStateMap['closed'] = 'close';
 
 $config->gitlab->taskTypesToSync = 'design,devel,request,discuss,ui,affair,misc';
 
-$config->gitlab->maps = new stdclass;
-$config->gitlab->maps->story = array();
-$config->gitlab->maps->story['title']        = 'title|field|';
-$config->gitlab->maps->story['spec']         = 'description|fields|verify';
-$config->gitlab->maps->story['openedDate']   = 'created_at|field|';
-$config->gitlab->maps->story['openedBy']     = 'assignee_id|userPairs|';
-$config->gitlab->maps->story['pri']          = 'weight|configItems|storyWeightMap';
-
 $config->gitlab->storyWeightMap = array();
 $config->gitlab->storyWeightMap['1'] = '1';
 $config->gitlab->storyWeightMap['2'] = '2';
 $config->gitlab->storyWeightMap['3'] = '3';
-
-$config->gitlab->maps = new stdclass;
-$config->gitlab->maps->bug = array();
-$config->gitlab->maps->bug['title']      = 'title|field|';
-$config->gitlab->maps->bug['spec']       = 'description|field|';
-$config->gitlab->maps->bug['openedDate'] = 'created_at|field|';
-$config->gitlab->maps->bug['openedBy']   = 'assignee_id|userPairs|';
-$config->gitlab->maps->bug['pri']        = 'weight|configItems|bugWeightMap';
 
 $config->gitlab->bugWeightMap = array();
 $config->gitlab->bugWeightMap['1'] = '1';
@@ -84,9 +82,4 @@ $config->gitlab->bugStateMap = array();
 $config->gitlab->bugStateMap['active']   = 'reopen';
 $config->gitlab->bugStateMap['resolved'] = 'reopen';
 $config->gitlab->bugStateMap['closed']   = 'close';
-
-
-
-
-
 
