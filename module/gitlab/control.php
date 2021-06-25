@@ -207,6 +207,7 @@ class gitlab extends control
      */
     public function webhook()
     {
+        $this->gitlab->webhookCheckToken();
         $product = $this->get->product;
         $gitlab  = $this->get->gitlab;
         $project = $this->get->project;
