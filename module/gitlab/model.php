@@ -347,7 +347,7 @@ class gitlabModel extends model
         if(empty($labelID)) return false;
 
         $apiRoot = $this->getApiRoot($gitlabID);
-        $url     = sprintf($apiRoot, "/projects/{$projectID}/labels/{$labelID}";
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/labels/{$labelID}");
 
         return json_decode(commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
