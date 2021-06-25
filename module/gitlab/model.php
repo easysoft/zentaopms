@@ -139,9 +139,9 @@ class gitlabModel extends model
      */
     public function apiGetUsers($gitlab)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlab->id);
         $url      = sprintf($apiRoot, '/users');
-        $response = json_decode(commonModel::http($api));
+        $response = json_decode(commonModel::http($url));
 
         if (!$response) return array();
 
