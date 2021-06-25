@@ -139,12 +139,13 @@ class gitlabModel extends model
      */
     public function apiGetUsers($gitlab)
     {
-        $api      = rtrim($gitlab->url, '/') . '/api/v4/users?private_token=' . $gitlab->token;
+        $apiRoot  = $this->getApiRoot($gitlabID);
+        $url      = sprintf($apiRoot, '/users');
         $response = json_decode(commonModel::http($api));
 
         if (!$response) return array();
-        $users = array();
 
+        $users = array();
         foreach($response as $gitlabUser)
         {
             $user = new stdclass;
@@ -156,6 +157,7 @@ class gitlabModel extends model
 
             $users[] = $user;
         }
+
         return $users;
     }
 
@@ -221,14 +223,13 @@ class gitlabModel extends model
     /**
      * Create hook.
      * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @param  int    $url 
-     * @param  int    $token 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  string    $url 
      * @access public
      * @return void
      */
-    public function apiCreateHook($gitlabID, $projectID, $url, $token)
+    public function apiCreateHook($gitlabID, $projectID, $url)
     {  
         $apiRoot = $this->getApiRoot($gitlabID);
 
@@ -239,12 +240,9 @@ class gitlabModel extends model
         $postData->push_events             = "true";
         $postData->tag_push_events         = "true";
         $postData->url                     = $url;
-        $postData->token                   = $token;
 
-        $apiPath = "/projects/{$projectID}/hooks";
-        $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url, $postData); 
-        return $response;
+        $url = sprintf($apiRoot, "/projects/{$projectID}/hooks");
+        return commonModel::http($url, $postData); 
     }
 
     /**
@@ -259,10 +257,9 @@ class gitlabModel extends model
     public function apiDeleteHook($gitlabID, $projectID, $hookID)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
-        $apiPath = "/projects/{$projectID}/hooks/{$hookID}";
-        $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete'));
-        return $response;
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
+
+        return commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete'));
     }
 
     /**
@@ -297,22 +294,20 @@ class gitlabModel extends model
     /**
      * Create Label for gitlab project.
      * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @param  int    $label 
+     * @param  int      $gitlabID 
+     * @param  int      $projectID 
+     * @param  object   $label 
      * @access public
-     * @return void
+     * @return object
      */
     public function apiCreateLabel($gitlabID, $projectID, $label)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
-
         if(empty($label->name) or empty($label->color)) return false;
 
-        $apiPath = "/projects/{$projectID}/labels/";
-        $url = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url, $label);
-        return $response;
+        $apiRoot = $this->getApiRoot($gitlabID);
+
+        $url = sprintf($apiRoot, "/projects/{$projectID}/labels/");
+        return commonModel::http($url, $label);
     }
 
     /**
@@ -325,12 +320,11 @@ class gitlabModel extends model
      */
     public function apiGetLabels($gitlabID, $projectID)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
-        $apiPath = "/projects/{$projectID}/labels/";
-        $url = sprintf($apiRoot, $apiPath);
+        $apiRoot  = $this->getApiRoot($gitlabID);
+        $url      = sprintf($apiRoot, "/projects/{$projectID}/labels/");
         $response = commonModel::http($url);
-        $labels = json_decode($response);
-        return $labels;
+
+        return json_decode($response);
     }
 
     /**
@@ -464,10 +458,9 @@ class gitlabModel extends model
     }
 
     /**
-     * Bind gitlab project.
+     * Get projects by executionID.
      * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
+     * @param  int    $executionID 
      * @access public
      * @return array
      */
@@ -527,36 +520,16 @@ class gitlabModel extends model
      */
     public function createWebhook($products, $gitlabID, $projectID)
     {
-        $urls = $this->getWebhookUrls($gitlabID, $projectID);
-
+        $gitlab = $this->getByID($gitlabID);
+        $webhooks = $this->apiGetHooks($gitlabID, $projectID);
         foreach($products as $index => $product)
         {
-            $url  = sprintf($this->config->gitlab->zentaoApiWebhookUrl, commonModel::getSysURL(), $product, $gitlabID, $projectID);
-            if(! array_key_exists($url, array_flip($urls)))
-            {
-                $response = $this->apiCreateHook($gitlabID, $projectID, $url, $this->config->gitlab->zentaoApiWebhookToken);
-            }
+            $url = sprintf($this->config->gitlab->webhookURL, commonModel::getSysURL(), $product, $gitlabID, $gitlab->private);
+            foreach($webhooks as $webhook) if($webhook->url == $url) continue;
+            $response = $this->apiCreateHook($gitlabID, $projectID, $url);
         }
-        return true;
-    }
 
-    /**
-     * Get webhook urls 
-     * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @access public
-     * @return array $urls;
-     */
-    public function getWebhookUrls($gitlabID, $projectID)
-    {
-        $urls = array();
-        $webhooks = $this->apiGetHooks($gitlabID, $projectID);
-        foreach($webhooks as $index => $webhook)
-        {
-            $urls[] = $webhook->url;
-        }
-        return $urls;
+        return true;
     }
 
     /**
