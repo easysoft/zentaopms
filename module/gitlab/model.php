@@ -357,31 +357,31 @@ class gitlabModel extends model
      * 
      * @param  int     $gitlabID 
      * @param  int     $projectID 
-     * @param  string  $object 
+     * @param  string  $objectType
      * @param  string  $objectID
      * @access public
      * @return object
      */
-    public function createZentaoObjectLabel($gitlabID, $projectID, $object, $objectID)
+    public function createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID)
     {
         $label = new stdclass;
-        if($object == 'task')
+        if($objectType == 'task')
         {
-            $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $object, $objectID);
+            $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
             $label->color       = $this->config->gitlab->zentaoObjectLabel->taskColor;
-            $label->description = helper::createLink('task', 'view', "taskID={$object->taskID}");
+            $label->description = helper::createLink('task', 'view', "taskID={$objectID}");
         }
-        elseif($object == 'bug')
+        elseif($objectType == 'bug')
         {
-            $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $object, $objectID);
+            $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
             $label->color       = $this->config->gitlab->zentaoObjectLabel->taskColor;
-            $label->description = helper::createLink('bug', 'view', "taskID={$object->bugID}");
+            $label->description = helper::createLink('bug', 'view', "bugID={$objectID}");
         }
-        elseif($object == 'story')
+        elseif($objectType == 'story')
         {
-            $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $object, $objectID);
+            $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
             $label->color       = $this->config->gitlab->zentaoObjectLabel->taskColor;
-            $label->description = helper::createLink('story', 'view', "storyID={$object->storyID}");
+            $label->description = helper::createLink('story', 'view', "storyID={$objectID}");
         }
 
         return $this->apiCreateLabel($gitlabID, $projectID, $label);
@@ -604,6 +604,8 @@ class gitlabModel extends model
      */
     public function saveSyncedIssue($objectType, $object, $gitlab, $issue)
     {
+        if(empty($issue->iid) or empty($issue->project_id)) return false;
+
         $relation = new stdclass;
         $relation->execution = zget($object, 'execution', 0);
         $relation->AType     = $objectType;
