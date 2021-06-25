@@ -66,3 +66,27 @@ $config->gitlab->storyWeightMap['1'] = '1';
 $config->gitlab->storyWeightMap['2'] = '2';
 $config->gitlab->storyWeightMap['3'] = '3';
 
+$config->gitlab->maps = new stdclass;
+$config->gitlab->maps->bug = array();
+$config->gitlab->maps->bug['title']      = 'title|field|';
+$config->gitlab->maps->bug['spec']       = 'description|field|';
+$config->gitlab->maps->bug['openedDate'] = 'created_at|field|';
+$config->gitlab->maps->bug['openedBy']   = 'assignee_id|userPairs|';
+$config->gitlab->maps->bug['pri']        = 'weight|configItems|bugWeightMap';
+
+$config->gitlab->bugWeightMap = array();
+$config->gitlab->bugWeightMap['1'] = '1';
+$config->gitlab->bugWeightMap['2'] = '2';
+$config->gitlab->bugWeightMap['3'] = '3';
+$config->gitlab->bugWeightMap['4'] = '4';
+
+$config->gitlab->bugStateMap = array();
+$config->gitlab->bugStateMap['active']   = 'reopen';
+$config->gitlab->bugStateMap['resolved'] = 'reopen';
+$config->gitlab->bugStateMap['closed']   = 'close';
+
+
+
+
+
+
