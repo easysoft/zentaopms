@@ -772,17 +772,18 @@ class gitlabModel extends model
      */
     public function WebhookParseIssue($body, $gitlabID)
     {
-        $object = $this->parseObjectFromLabel($body->labels);
+        $object = $this->webhookParseObject($body->labels);
         if(empty($object)) return null;
 
         $issue = new stdclass;
-        $issue->action     = $body->object_attributes->action . $body->object_kind;
-        $issue->issue      = $body->object_attributes;
-        $issue->objectType = $object->type;
-        $issue->objectID   = $object->id;
+        $issue->action = $body->object_attributes->action . $body->object_kind;
+        $issue->issue  = $body->object_attributes;
 
-        if(!is_callable(array($this, "issueTo{$object->type}"))) return false;
-        $issue->object = call_user_func_array(array($this, "issueTo{$object->type}"), array('body' => $issue->issue, 'gitlab' => $gitlabID));
+        $issue->issue->objectType = $object->type;
+        $issue->issue->objectID   = $object->id;
+
+        if(!isset($this->config->gitlab->maps->$object->type)) return false;
+        $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID);
         return $issue;
     }
 
@@ -817,13 +818,29 @@ class gitlabModel extends model
     }
 
     /**
+     * Webhook sync issue.
+     * 
+     * @param  object   $issue 
+     * @param  int      $objectType 
+     * @param  int      $objectID 
+     * @access public
+     * @return void
+     */
+    public function webhookSyncIssue($issue)
+    {
+        $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
+        if($tableName) $this->dao->update($tableName)->data($issue->object)->where('id')->eq($issue->objectID)->exec();
+        return !dao::isError();
+    }
+
+    /**
      * Parse zentao object from labels.
      * 
      * @param  array    $labels 
      * @access public
      * @return object|false
      */
-    public function parseObjectFromLabel($labels)
+    public function webhookParseObject($labels)
     {
         $object = null;
         foreach($labels as $label) 
@@ -831,6 +848,7 @@ class gitlabModel extends model
             if(preg_match($this->config->gitlab->labelPattern->task, $label->title))
             {
                 list($prefix, $id) = explode('/', $label->title);
+
                 $object = new stdclass;
                 $object->type = 'task';
                 $object->id   = $id;
@@ -840,71 +858,33 @@ class gitlabModel extends model
     }
 
     /**
-     * Parse issue from gitlab.
-     * 
-     * @param  object    $issue 
-     * @access public
-     * @return object
-     */
-    public function parseIssue($issue)
-    {
-        $object = $this->parseObjectFromLabels($issue->labels);
-        if(!$object) return false;
-        if($object->type == 'task')  $object->object = $this->issue2Task($issue);
-        if($object->type == 'story') $object->object = $this->issue2Story($issue);
-        if($object->type == 'bug')   $object->object = $this->issue2Bug($issue);
-        return $object;
-    }
-
-    /**
-     * Parse issue to task.
+     * Parse issue to zentao object.
      * 
      * @param  object    $issue 
      * @param  int       $gitlabID 
      * @access public
      * @return object
      */
-    public function issueToTask($issue, $gitlabID)
+    public function issueToZentaoObject($issue, $gitlabID)
     {
-        $task        = new stdclass;
-        $maps        = $this->config->gitlab->maps->task;
+        if(!isset($this->config->gitlab->maps->{$issue->objectType}) return null;
+
+        $maps        = $this->config->gitlab->maps->{$issue->objectType};
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
 
-        foreach($maps as $taskField => $config)
+        $object      = new stdclass;
+        $object->id  = $issue->objectID;
+        foreach($maps as $zentaoField => $config)
         {
             $value = '';
-            list($field, $optionType, $options) = explode('|', $config);
-            if($optionType == 'field') $value = $issue->$field;
-            if($optionType == 'userPairs') $value = zget($gitlabUsers, $issue->$field);
-            if($optionType == 'configItems' and isset($issue->$field)) $value = array_search($issue->$field, $this->config->gitlab->$options);
-            if($value) $task->$taskField = $value;
+            list($gitlabField, $optionType, $options) = explode('|', $config);
+            if($optionType == 'field') $value = $issue->$gitlabField;
+            if($optionType == 'field') $value = $issue->$gitlabField;
+            if($optionType == 'userPairs') $value = zget($gitlabUsers, $issue->$gitlabField);
+            if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
+            if($value) $object->$zentaoField = $value;
         }
-        return $task;
-    }
-
-    /**
-     * Parse issue to story.
-     * 
-     * @param  object    $issue 
-     * @param  int       $gitlabID 
-     * @access public
-     * @return object
-     */
-    public function issueToStory($issue, $gitlabID)
-    {
-    }
-
-    /**
-     * Parse issue to task.
-     * 
-     * @param  object    $issue 
-     * @param  int       $gitlabID 
-     * @access public
-     * @return object
-     */
-    public function issueToBug($issue, $gitlabID)
-    {
-
+        return $object;
     }
 
     /**
@@ -913,7 +893,7 @@ class gitlabModel extends model
      * @param  int       $gitlabID 
      * @param  string    $account 
      * @access public
-     * @return void
+     * @return arary
      */
     public function getGitlabUserID($gitlabID, $account)
     {
