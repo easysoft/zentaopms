@@ -21,8 +21,7 @@ $config->gitlab->zentaoObjectLabel->storyColor  = '#69D100';
 $config->gitlab->zentaoObjectLabel->bugColor    = '#D10069';
 $config->gitlab->zentaoObjectLabel->priority    = "0";
 
-$config->gitlab->zentaoApiWebhookUrl    = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
-$config->gitlab->zentaoApiWebhookToken  = "<access token>";
+$config->gitlab->webhookURL = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s&token=%s";
 
 $config->gitlab->skippedFields = new stdclass;
 $config->gitlab->skippedFields->issueCreate = array();
@@ -84,9 +83,3 @@ $config->gitlab->bugStateMap = array();
 $config->gitlab->bugStateMap['active']   = 'reopen';
 $config->gitlab->bugStateMap['resolved'] = 'reopen';
 $config->gitlab->bugStateMap['closed']   = 'close';
-
-
-
-
-
-
