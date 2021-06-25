@@ -62,3 +62,17 @@ $config->gitlab->taskStateMap['cancel'] = 'close';
 $config->gitlab->taskStateMap['closed'] = 'close';
 
 $config->gitlab->taskTypesToSync = 'design,devel,request,discuss,ui,affair,misc';
+
+$config->gitlab->maps = new stdclass;
+$config->gitlab->maps->story = array();
+$config->gitlab->maps->story['title']        = 'title|field|';
+$config->gitlab->maps->story['spec']         = 'description|fields|verify';
+$config->gitlab->maps->story['openedDate']   = 'created_at|field|';
+$config->gitlab->maps->story['openedBy']     = 'assignee_id|userPairs|';
+$config->gitlab->maps->story['pri']          = 'weight|configItems|storyWeightMap';
+
+$config->gitlab->storyWeightMap = array();
+$config->gitlab->storyWeightMap['1'] = '1';
+$config->gitlab->storyWeightMap['2'] = '2';
+$config->gitlab->storyWeightMap['3'] = '3';
+

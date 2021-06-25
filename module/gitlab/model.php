@@ -592,12 +592,10 @@ class gitlabModel extends model
     {
         $story = $this->loadModel('story')->getByID($storyID);
         $syncedIssue = $this->getSyncedIssue($objectType = 'story', $objectID = $storyID, $gitlab);
-
         $issue = $this->storyToIssue($gitlab, $gitlabProject, $story);
         if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
         $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
-
-        $this->saveSyncedIssue('story', $story, $gitlab, $issue);
+        if($issue) $this->saveSyncedIssue('story', $story, $gitlab, $issue);
     }
 
     /**
@@ -686,18 +684,25 @@ class gitlabModel extends model
         $map = $this->config->gitlab->maps->story;
         $issue = new stdclass;
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        if(empty($gitlabUsers)) return false;
+
         foreach($map as $storyField => $config)
         {
             $value = '';
             list($field, $optionType, $options) = explode('|', $config);
             if($optionType == 'field') $value = $story->$storyField;
-            if($optionType == 'userPairs') $value = zget($gitlabUsers, $story->$storyField);
+            if($optionType == 'fields') $value = $story->$storyField . "\n\n" . $story->$options;
+            if($optionType == 'userPairs')
+            {
+                $value = zget($gitlabUsers, $story->$storyField);
+            }
             if($optionType == 'configItems') 
             {
                 $value = zget($this->config->gitlab->$options, $story->$storyField, '');
             }
             if($value) $issue->$field = $value;
         }
+     
         return $issue;
     }
 
