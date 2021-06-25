@@ -73,6 +73,7 @@ class pipelineModel extends model
     {
         $pipeline = fixer::input('post')
             ->add('type', $type)
+            ->add('private',md5(rand(10,113450)))
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->skipSpecial('url,token,account,password')

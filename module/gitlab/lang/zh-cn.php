@@ -21,6 +21,7 @@ $lang->gitlab->name           = '名称';
 $lang->gitlab->url            = '服务地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';
+$lang->gitlab->private        = 'MD5验证';
 
 $lang->gitlab->lblCreate  = '添加gitlab服务器';
 $lang->gitlab->desc       = '描述';
