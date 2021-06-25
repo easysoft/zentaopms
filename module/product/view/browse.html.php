@@ -281,7 +281,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $canBatchChangeModule = ($canBeChanged and common::hasPriv('story', 'batchChangeModule'));
       $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan'));
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv('story', 'batchAssignTo'));
-      $canBatchImportToLib  = ($canBeChanged and $this->app->moduleName == 'projectstory' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
+      $canBatchImportToLib  = ($canBeChanged and $this->app->openApp == 'project' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchImportToLib);
       ?>
@@ -518,6 +518,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php endif;?>
 
           <?php if($canBatchImportToLib):?>
+          <?php echo html::a('#batchImportToLib', $lang->story->importToLib, '', 'class="btn" data-toggle="modal" id="importToLib"');?>
           <?php endif;?>
         </div>
         <div class="table-statistic"><?php echo $summary;?></div>
@@ -539,6 +540,43 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php echo html::select('plan', $productPlans[$productID], '', "class='form-control chosen' id='plan'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="batchImportToLib">
+  <div class="modal-dialog mw-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->story->importToLib;?></h4>
+      </div>
+      <div class="modal-body">
+        <form method='post' class='form-ajax' action='<?php echo $this->createLink('story', 'batchImportToLib');?>'>
+          <table class='table table-form'>
+            <tr>
+              <th><?php echo $lang->story->lib;?></th>
+              <td>
+                <?php echo html::select('lib', $storyLibs, '', "class='form-control chosen' required");?>
+              </td>
+            </tr>
+            <?php if(!common::hasPriv('assetlib', 'approveStory') and !common::hasPriv('assetlib', 'batchApproveStory')):?>
+            <tr>
+              <th><?php echo $lang->story->approver;?></th>
+              <td>
+                <?php echo html::select('assignedTo', $approvers, '', "class='form-control chosen'");?>
+              </td>
+            </tr>
+            <?php endif;?>
+            <tr>
+              <td colspan='3' class='text-center'>
+                <?php echo html::hidden('storyIdList', '');?>
+                <?php echo html::submitButton($lang->story->importToLib, '', 'btn btn-primary');?>
+              </td>
+            </tr>
+          </table>
+        </form>
       </div>
     </div>
   </div>

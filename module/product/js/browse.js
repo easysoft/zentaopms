@@ -66,6 +66,17 @@ $(function()
     adjustTableFooter();
     $('body').on('click', '#toggleFold', adjustTableFooter);
     $('body').on('click', '.icon.icon-angle-double-right', adjustTableFooter);
+
+    /* Get checked stories. */
+    $('#importToLib').on('click', function()
+    {
+        var storyIdList = '';
+        $("input[name^='storyIdList']:checked").each(function()
+        {
+            storyIdList += $(this).val() + ',';
+            $('#storyIdList').val(storyIdList);
+        });
+    });
 });
 
 /**
