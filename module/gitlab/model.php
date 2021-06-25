@@ -535,9 +535,9 @@ class gitlabModel extends model
     /**
      * Sync task to gitlab issue.
      * 
-     * @param  int    $taskID 
-     * @param  int    $gitlab 
-     * @param  int    $gitlabProject 
+     * @param  int  $taskID 
+     * @param  int  $gitlab 
+     * @param  int  $gitlabProject 
      * @access public
      * @return void
      */
@@ -586,10 +586,10 @@ class gitlabModel extends model
     public function getSyncedIssue($objectType, $objectID, $gitlab)
     {
         return $this->dao->select('*')->from(TABLE_RELATION)
-            ->where('AType')->eq($objectType)
-            ->andWhere('AID')->eq($objectID)
-            ->andWhere('extra')->eq($gitlab)
-            ->fetch();
+                    ->where('AType')->eq($objectType)
+                    ->andWhere('AID')->eq($objectID)
+                    ->andWhere('extra')->eq($gitlab)
+                    ->fetch();
     }
 
     /**
@@ -684,6 +684,15 @@ class gitlabModel extends model
         return $issue;
     }
 
+    /**
+     * Api create issue.
+     * 
+     * @param  int      $gitlabID 
+     * @param  int      $projectID 
+     * @param  object   $issue 
+     * @access public
+     * @return void
+     */
     public function apiCreateIssue($gitlabID, $projectID, $issue)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
@@ -700,10 +709,10 @@ class gitlabModel extends model
     /**
      * Update issue with new attribute using gitlab API.
      * 
-     * @param  int       $gitlabID 
-     * @param  int       $projectID 
-     * @param  int       $issueID 
-     * @param  object    $attribute 
+     * @param  int      $gitlabID 
+     * @param  int      $projectID 
+     * @param  int      $issueID 
+     * @param  object   $attribute 
      * @access public
      * @return object
      */
@@ -726,7 +735,7 @@ class gitlabModel extends model
     public function pushBug($gitlabID, $projectID, $bug)
     {
         $bug->label = $this->config->gitlab->bugLabel->name;
-        $response = $this->apiCreateIssue($gitlabID, $projectID, $bug);
+        $response   = $this->apiCreateIssue($gitlabID, $projectID, $bug);
         return $response;
     }
 
@@ -771,13 +780,15 @@ class gitlabModel extends model
         if(empty($object)) return null;
 
         $issue = new stdclass;
-        $issue->action = $body->object_attributes->action . $body->object_kind;
-        $issue->issue  = $body->object_attributes;
+        $issue->action     = $body->object_attributes->action . $body->object_kind;
+        $issue->issue      = $body->object_attributes;
+        $issue->objectType = $object->type;
+        $issue->objectID   = $object->id;
 
         $issue->issue->objectType = $object->type;
         $issue->issue->objectID   = $object->id;
 
-        if(!isset($this->config->gitlab->maps->$object->type)) return false;
+        if(!isset($this->config->gitlab->maps->{$object->type})) return false;
         $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID);
         return $issue;
     }
@@ -821,10 +832,11 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function webhookSyncIssue($issue)
+    public function webhookSyncIssue($gitlabID, $issue)
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if($tableName) $this->dao->update($tableName)->data($issue->object)->where('id')->eq($issue->objectID)->exec();
+        a($this->dao->get());exit;
         return !dao::isError();
     }
 
