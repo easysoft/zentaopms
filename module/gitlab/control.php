@@ -119,10 +119,10 @@ class gitlab extends control
             $user->providerType = 'gitlab';
 
             $this->dao->delete()
-                      ->from(TABLE_OAUTH)
-                      ->where('providerType')->eq($user->providerType)
-                      ->andWhere('providerID')->eq($user->providerID)
-                      ->exec();
+                 ->from(TABLE_OAUTH)
+                 ->where('providerType')->eq($user->providerType)
+                 ->andWhere('providerID')->eq($user->providerID)
+                 ->exec();
 
             foreach($users as $openID => $account)
             {
@@ -131,12 +131,12 @@ class gitlab extends control
                 $user->openID  = $openID;
 
                 $this->dao->delete()
-                          ->from(TABLE_OAUTH)
-                          ->where('openID')->eq($user->openID)
-                          ->andWhere('providerType')->eq($user->providerType)
-                          ->andWhere('providerID')->eq($user->providerID)
-                          ->andWhere('account')->eq($user->account)
-                          ->exec();
+                     ->from(TABLE_OAUTH)
+                     ->where('openID')->eq($user->openID)
+                     ->andWhere('providerType')->eq($user->providerType)
+                     ->andWhere('providerID')->eq($user->providerID)
+                     ->andWhere('account')->eq($user->account)
+                     ->exec();
 
                 $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
             }
@@ -162,8 +162,8 @@ class gitlab extends control
      */
     public function bindProduct($gitlabID)
     {
-        $this->view->projectPairs   = $this->gitlab->getProjectPairs($gitlabID);
-        $this->view->title          = $this->lang->gitlab->bindProduct;
+        $this->view->projectPairs = $this->gitlab->getProjectPairs($gitlabID);
+        $this->view->title        = $this->lang->gitlab->bindProduct;
         $this->display();
     } 
 
@@ -215,7 +215,7 @@ class gitlab extends control
         //$input       = file_get_contents('php://input');
         $requestBody = json_decode($input);
         $result      = $this->gitlab->webhookParseBody($requestBody, $gitlab);
-
+        a($result);exit;
         $logFile = $this->app->getLogRoot() . 'webhook.'. date('Ymd') . '.log.php';
         if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
         
@@ -228,12 +228,7 @@ class gitlab extends control
             fclose($fh);
         }
 
-        switch($result->objectType)
-        {
-            case 'task':
-                $this->updateTaskFromIssue($request);
-                break;
-        }
+        if($result->action = 'updateissue') $this->gitlab->webhookSyncIssue($gitlab, $result);
 
         $this->view->result = 'success';
         $this->view->status = 'ok';
@@ -248,7 +243,6 @@ class gitlab extends control
         $issue = $this->gitlab->taskToIssue($gitlabID, $projectID, $task);
         $issue = $this->gitlab->apiCreateIssue($gitlabID, $projectID, $issue);
         $this->gitlab->saveSyncedIssue('task', $task, $gitlabID, $issue);
-        
         exit;
     }
 }
