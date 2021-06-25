@@ -3291,6 +3291,12 @@ class storyModel extends model
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return $story->status != 'draft';
         if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait')) return false;
 
+        if($action == 'importtolib')
+        {
+            $hasExisted = $app->dbh->query("select id from " . TABLE_STORY . " where fromStory=$story->id and fromVersion=$story->version")->fetch();
+            if($hasExisted) return false;
+        }
+
         return true;
     }
 
