@@ -704,6 +704,18 @@ class gitlabModel extends model
     }
 
     /**
+     * webhook check token.
+     * 
+     * @access public
+     * @return void
+     */
+    public function webhookCheckToken()
+    {
+        $gitlab = $this->getByID($this->get->gitlab);
+        if($gitlab->private != $this->get->token) die();
+    }
+
+    /**
      * Parse webhook body function.
      * 
      * @param  object    $body 
