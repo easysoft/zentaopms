@@ -848,7 +848,7 @@ class gitlabModel extends model
      */
     public function issueToZentaoObject($issue, $gitlabID)
     {
-        if(!isset($this->config->gitlab->maps->{$issue->objectType}) return null;
+        if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
         $maps        = $this->config->gitlab->maps->{$issue->objectType};
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
