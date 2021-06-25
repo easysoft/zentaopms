@@ -13,23 +13,13 @@ $config->gitlab->labelPattern->story = '/^zentao_story\/\d+$/';
 $config->gitlab->actions = array();
 $config->gitlab->actions['issue'] = array();
 
-$config->gitlab->taskLabel = new stdclass();
-$config->gitlab->taskLabel->name        = "zentao task";
-$config->gitlab->taskLabel->description = "task label from zentao, do NOT remove this";
-$config->gitlab->taskLabel->color       = "#0033CC";
-$config->gitlab->taskLabel->priority    = "0";
-
-$config->gitlab->bugLabel = new stdclass();
-$config->gitlab->bugLabel->name         = "zentao bug";
-$config->gitlab->bugLabel->description  = "bug label from zentao, do NOT remove this";
-$config->gitlab->bugLabel->color        = "#D10069";
-$config->gitlab->bugLabel->priority     = "0";
-
-$config->gitlab->storyLabel = new stdclass();
-$config->gitlab->storyLabel->name         = "zentao story";
-$config->gitlab->storyLabel->description  = "story label from zentao, do NOT remove this";
-$config->gitlab->storyLabel->color        = "##69D100";
-$config->gitlab->storyLabel->priority     = "0";
+$config->gitlab->zentaoObjectLabel = new stdclass();
+$config->gitlab->zentaoObjectLabel->name        = "zentao_%s/%s";
+$config->gitlab->zentaoObjectLabel->description = "%s";
+$config->gitlab->zentaoObjectLabel->taskColor   = '#0033CC';
+$config->gitlab->zentaoObjectLabel->storyColor  = '#69D100';
+$config->gitlab->zentaoObjectLabel->bugColor    = '#D10069';
+$config->gitlab->zentaoObjectLabel->priority    = "0";
 
 $config->gitlab->zentaoApiWebhookUrl    = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
 $config->gitlab->zentaoApiWebhookToken  = "<access token>";
