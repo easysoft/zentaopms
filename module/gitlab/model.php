@@ -334,6 +334,31 @@ class gitlabModel extends model
     }
 
     /**
+     * Delete a Label by labelName. 
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  string $labelName 
+     * @access public
+     * @return void
+     */
+    public function apiDeleteLabel($gitlabID, $projectID, $labelName)
+    {
+        $labels = $this->apiGetLabels($gitlabID, $projectID);
+        foreach($labels as $label)
+        {
+            if($label->name == $labelName) $labelID = $label->id;
+        }
+
+        if(empty($labelID)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/labels/{$labelID}";
+
+        return json_decode(commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
      * Create zentao object label for gitlab project.
      * 
      * @param  int     $gitlabID 
