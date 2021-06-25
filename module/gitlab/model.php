@@ -500,65 +500,6 @@ class gitlabModel extends model
     }
 
     /**
-     * Check if predefined label exist in project. 
-     * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @access public
-     * @return void
-     */
-    public function isLabelExists($gitlabID, $projectID)
-    {
-        $labels = $this->apiGetLabels($gitlabID, $projectID);
-        if(empty($labels)) return false;
-        foreach($labels as $label)
-        {
-            if(strpos($label->name, $this->config->gitlab->taskLabel->name) == 0) return true;
-            if(strpos($label->name, $this->config->gitlab->bugLabel->name) == 0) return true;
-            if(strpos($label->name, $this->config->gitlab->storyLabel->name) == 0) return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Create predefined labels for project. 
-     * 
-     * @param  int    $gitlabID 
-     * @param  int    $projectID 
-     * @access public
-     * @return void
-     */
-    public function initLabels($gitlabID, $projectID)
-    {
-        if($this->isLabelExists($gitlabID, $projectID)) return true;
-
-        $taskLabel = new stdclass();
-        $taskLabel->name            = $this->config->gitlab->taskLabel->name;
-        $taskLabel->description     = $this->config->gitlab->taskLabel->description;
-        $taskLabel->color           = $this->config->gitlab->taskLabel->color;
-        $taskLabel->priority        = $this->config->gitlab->taskLabel->priority;
-
-        $bugLabel = new stdclass();
-        $bugLabel->name             = $this->config->gitlab->bugLabel->name;
-        $bugLabel->description      = $this->config->gitlab->bugLabel->description;
-        $bugLabel->color            = $this->config->gitlab->bugLabel->color;
-        $bugLabel->priority         = $this->config->gitlab->bugLabel->priority;
-
-        $storyLabel = new stdclass();
-        $storyLabel->name             = $this->config->gitlab->storyLabel->name;
-        $storyLabel->description      = $this->config->gitlab->storyLabel->description;
-        $storyLabel->color            = $this->config->gitlab->storyLabel->color;
-        $storyLabel->priority         = $this->config->gitlab->storyLabel->priority;
-        
-        $this->apiCreateLabel($gitlabID, $projectID, $taskLabel);
-        $this->apiCreateLabel($gitlabID, $projectID, $bugLabel);
-        $this->apiCreateLabel($gitlabID, $projectID, $storyLabel);
-
-        return;
-    }
-
-    /**
      * Sync task to gitlab issue.
      * 
      * @param  int    $taskID 
