@@ -61,7 +61,16 @@
               <span class="text"><?php echo $action->objectLabel;?></span>
               <?php $openApp = '';?>
               <?php if($action->objectType == 'meeting') $openApp = $action->project ? "data-app='project'" : "data-app='my'";?>
-              <?php echo html::a($action->objectLink, $action->objectName, '', $openApp);?>
+              <?php
+              if(isset($config->action->assetlibModule) and strpos($config->action->assetlibModule, $action->objectType) !== false and $action->action == 'rejectapproved')
+              {
+                  echo $action->extra;
+              }
+              else
+              {
+                  echo html::a($action->objectLink, $action->objectName, '', $openApp);
+              }
+              ?>
               <span class="label label-id"><?php echo $action->objectID;?></span>
               <?php endif;?>
             </span>
