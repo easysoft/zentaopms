@@ -639,23 +639,36 @@ class gitlabModel extends model
      * @param  string   $objectType 
      * @param  int      $objectID 
      * @param  int      $gitlab 
-     * @param  int      $gitlabProject
+     * @param  int      $projectID
      * @access public
      * @return void
      */
-    public function pushToissue($objectType, $objectID, $gitlabID, $gitlabProject)
+    public function pushToissue($objectType, $objectID, $gitlabID, $projectID)
     {
-        $data = $this->loadModel($objectType)->getByID($objectID);
+        $object = $this->loadModel($objectType)->getByID($objectID);
+        if(!$gitlabID or !$projectID)
+        {
+            $result    = $this->getGitlabIDprojectID($objectType, $objectID);
+            $gitlabID  = $result->gitlabID;
+            $projectID = $result->projectID;
+        }
 
         $syncedIssue = $this->getSyncedIssue($objectType = $objectType, $objectID = $objectID, $gitlabID);
-        $issue = $this->bugToIssue($gitlabID, $gitlabProject, $data);
+        if($objectType == 'story') $issue = $this->storyToIssue($gitlabID, $projectID, $objectID);
+        if($objectType == 'task')  $issue = $this->taskToIssue($gitlabID, $projectID, $objectID);
+        if($objectType == 'bug')   $issue = $this->bugToIssue($gitlabID, $projectID, $objectID);
         
-        $this->createZentaoObjectLabel($gitlabID, $gitlabProject, $objectType, $objectID);
-        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
-        
-        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlabID, $gitlabProject, $syncedIssue, $issue);
-        $issue = $this->apiCreateIssue($gitlabID, $gitlabProject, $issue);
-        if($issue) $this->saveSyncedIssue($objectType, $data, $gitlabID, $issue);
+        if($syncedIssue)
+        {
+            $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue, $issue);
+        }
+        else
+        {
+            $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
+            $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
+            $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
+            if($issue) $this->saveSyncedIssue($objectType, $objectID, $gitlabID, $issue);
+        }
     }
 
     /**
