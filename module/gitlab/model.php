@@ -702,7 +702,7 @@ class gitlabModel extends model
                     ->where('AType')->eq($objectType)
                     ->andWhere('AID')->eq($objectID)
                     ->andWhere('relation')->eq('gitlab')
-                    ->fetch();
+                    ->fetch('id');
     }
 
     /**
