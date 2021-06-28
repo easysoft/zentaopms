@@ -852,6 +852,15 @@ class bugModel extends model
             ->autoCheck()
             ->where('id')->eq($bugID)->exec();
 
+        $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('bug', $bugID);
+        $attribute = new stdclass();
+        $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $bug->assignedTo);
+        if($attribute->assignee_id != '')
+        {
+            // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
+            $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID , $attribute);
+        }
+
         if(!dao::isError()) return common::createChanges($oldBug, $bug);
     }
 
