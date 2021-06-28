@@ -858,6 +858,23 @@ class gitlabModel extends model
         return $response;
     }    
 
+    /**
+     * Delete an issue.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  int    $issueID 
+     * @access public
+     * @return void
+     */
+    public function apiDeleteIssue($gitlabID, $projectID, $issueID)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/projects/{$projectID}/issues/{$issueID}";
+        $url = sprintf($apiRoot, $apiPath);
+        commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
+    } 
+
     public function pushTask($gitlabID, $projectID, $task)
     {
         $task->label = $this->config->gitlab->taskLabel->name;
