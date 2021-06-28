@@ -946,7 +946,7 @@ class gitlabModel extends model
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
         $maps        = $this->config->gitlab->maps->{$issue->objectType};
-        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
 
         $object      = new stdclass;
         $object->id  = $issue->objectID;
