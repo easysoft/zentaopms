@@ -1547,6 +1547,10 @@ class bug extends control
         }
         else
         {
+            /* Delete related issue in gitlab. */
+            $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('bug', $bugID);
+            $this->loadModel('gitlab')->deleteIssue($relation->gitlabID, $relation->projectID, 'bug', $bugID);
+ 
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0)
             {
