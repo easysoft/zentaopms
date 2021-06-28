@@ -672,6 +672,40 @@ class gitlabModel extends model
     }
 
     /**
+     * Delete ans issue.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function deleteIssue($gitlabID, $projectID, $objectType, $objectID)
+    {
+        $object     = $this->loadModel($objectType)->getByID($objectID);
+        $relationID = $this->getRelationID($objectType, $objectID);
+        if(!empty($relationID)) $this->dao->delete(TABLE_RELATION, $relationID);
+    }
+
+    /**
+     * Get relation id. 
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function getRelationID($objectType, $objectID)
+    {
+        return $this->dao->select('id')->from(TABLE_RELATION)
+                    ->where('AType')->eq($objectType)
+                    ->andWhere('AID')->eq($objectID)
+                    ->andWhere('relation')->eq('gitlab')
+                    ->fetch();
+    }
+
+    /**
      * Get synced issue from relation table.
      * 
      * @param  string    $objectType 
