@@ -106,7 +106,7 @@
         <tr>
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="2">
-          <?php $class = $execution->grade == 2 ? "disabled='disabled'" : '';?>
+          <?php $class = $execution->grade == 2 ? "readonly='readonly'" : '';?>
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
