@@ -1013,7 +1013,7 @@ class execution extends control
         $productList     = $this->execution->getProducts($executionID);
         if(!empty($builds))
         {
-            foreach($builds as $build) 
+            foreach($builds as $build)
             {
                 /* If product is normal, unset branch name. */
                 if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
@@ -1370,7 +1370,7 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $oldPlans       = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchPairs('plan');
+            $oldPlans       = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
             $oldPlanStories = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
                 ->where('t1.project')->eq($executionID)
@@ -1405,7 +1405,8 @@ class execution extends control
 
             /* Link the plan stories. */
             $diffResult = array_diff($oldPlans, $_POST['plans']);
-            if(!empty($_POST['plans']) and !empty($diffResult))
+            $diffResult = array_merge($diffResult, array_diff($_POST['plans'], $oldPlans));
+            if(current($_POST['plans']) and !empty($diffResult))
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
                 $this->loadModel('productplan')->linkProject($executionID, $_POST['plans'], $oldPlanStories);
