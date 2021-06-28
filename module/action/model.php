@@ -1052,7 +1052,14 @@ class actionModel extends model
                     continue;
                 }
 
-                $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                if($action->objectType == 'story' and strpos('importtostorylib,approve', $action->action) !== false)
+                {
+                    $action->objectLink = helper::createLink('assetlib', 'storyView', sprintf($vars, $action->objectID), '', '', $projectID);
+                }
+                else
+                {
+                    $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                }
                 $action->objectLabel = $objectLabel;
             }
             elseif($action->objectType == 'team')
