@@ -878,6 +878,9 @@ class gitlabModel extends model
         $issue->issue->objectType = $object->type;
         $issue->issue->objectID   = $object->id;
 
+        /* Parse markdown description to html. */
+        $issue->issue->description = $this->app->loadClass('hyperdown')->makeHtml($issue->issue->description);
+
         if(!isset($this->config->gitlab->maps->{$object->type})) return false;
         $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID);
         return $issue;
@@ -967,7 +970,7 @@ class gitlabModel extends model
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
         $maps        = $this->config->gitlab->maps->{$issue->objectType};
-        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
 
         $object      = new stdclass;
         $object->id  = $issue->objectID;

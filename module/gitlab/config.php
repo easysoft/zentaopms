@@ -82,3 +82,8 @@ $config->gitlab->bugStateMap['active']   = 'reopen';
 $config->gitlab->bugStateMap['resolved'] = 'reopen';
 $config->gitlab->bugStateMap['closed']   = 'close';
 
+$config->gitlab->objectTables = new stdclass;
+$config->gitlab->objectTables->story = TABLE_STORY;
+$config->gitlab->objectTables->task  = TABLE_TASK;
+$config->gitlab->objectTables->bug   = TABLE_BUG;
+
