@@ -558,7 +558,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             <tr>
               <th><?php echo $lang->story->lib;?></th>
               <td>
-                <?php echo html::select('lib', $storyLibs, '', "class='form-control chosen' required");?>
+                <?php echo html::select('lib', $libs, '', "class='form-control chosen' required");?>
               </td>
             </tr>
             <?php if(!common::hasPriv('assetlib', 'approveStory') and !common::hasPriv('assetlib', 'batchApproveStory')):?>
