@@ -201,7 +201,7 @@
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
-        if(isset($this->config->maxVersion) and $this->app->openApp == 'project') common::printIcon('story', 'importToLib',  "storyID=$story->id", $story, 'button', 'assets', '', 'iframe showinonlybody', true, 'data-width="500px"');
+        if(isset($this->config->maxVersion) and $this->app->openApp == 'project' and common::hasPriv('story', 'importToLib')) echo html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
 
         if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
         {
@@ -543,6 +543,42 @@
       </div>
     </div>
     <?php $this->printExtendFields($story, 'div', "position=right&inForm=0&inCell=1");?>
+  </div>
+</div>
+
+<div class="modal fade" id="importToLib">
+  <div class="modal-dialog mw-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->story->importToLib;?></h4>
+      </div>
+      <div class="modal-body">
+        <form method='post' class='form-ajax' action='<?php echo $this->createLink('story', 'importToLib', "storyID=$story->id");?>'>
+          <table class='table table-form'>
+            <tr>
+              <th><?php echo $lang->story->lib;?></th>
+              <td>
+                <?php echo html::select('lib', $storyLibs, '', "class='form-control chosen' required");?>
+              </td>
+            </tr>
+            <?php if(!common::hasPriv('assetlib', 'approveStory') and !common::hasPriv('assetlib', 'batchApproveStory')):?>
+            <tr>
+              <th><?php echo $lang->story->approver;?></th>
+              <td>
+                <?php echo html::select('assignedTo', $approvers, '', "class='form-control chosen'");?>
+              </td>
+            </tr>
+            <?php endif;?>
+            <tr>
+              <td colspan='3' class='text-center'>
+                <?php echo html::submitButton($lang->story->importToLib, '', 'btn btn-primary');?>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
