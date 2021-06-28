@@ -339,8 +339,8 @@ class storyModel extends model
             /* Callback the callable method to process the related data for object that is transfered to story. */
             if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
 
-            /* sync this story to gitlab issue */
-            $this->loadModel('gitlab')->syncStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+            /* push this story to gitlab issue */
+            $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             return array('status' => 'created', 'id' => $storyID);
         }
@@ -829,6 +829,9 @@ class storyModel extends model
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
             }
+
+            /* Push this story to gitlab issue. */
+            $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             unset($oldStory->parent);
             unset($story->parent);
@@ -1765,7 +1768,13 @@ class storyModel extends model
         $story->assignedDate   = $now;
 
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-        if(!dao::isError()) return common::createChanges($oldStory, $story);
+        if(!dao::isError())
+        {
+            /* Push this story to gitlab issue. */
+            $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+
+            return common::createChanges($oldStory, $story);
+        }
         return false;
     }
 
@@ -1794,7 +1803,13 @@ class storyModel extends model
             $story->assignedDate   = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if(!dao::isError()) 
+            {
+                /* Push this story to gitlab issue. */
+                $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+
+                $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            }
         }
         return $allChanges;
     }

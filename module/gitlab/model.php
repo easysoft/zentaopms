@@ -479,6 +479,23 @@ class gitlabModel extends model
     }
 
     /**
+     * Get gitlabID and projectID.
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return object
+     */
+    public function getGitlabIDprojectID($objectType, $objectID)
+    {
+        return $this->dao->select('extra as gitlabID, BVersion as projectID')->from(TABLE_RELATION)
+                    ->where('relation')->eq('gitlab')
+                    ->andWhere('Atype')->eq($objectType)
+                    ->andWhere('AID')->eq($objectID)
+                    ->fetch();
+    }
+                    
+    /**
      * Create relationship between zentao product and  gitlab project.
      * 
      * @param  int    $gitlabID 
@@ -558,7 +575,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Sync story to gitlab issue. 
+     * Push story to gitlab issue. 
      * 
      * @param  int    $storyID 
      * @param  int    $gitlab 
@@ -566,18 +583,30 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function syncStory($storyID, $gitlab, $gitlabProject)
+    public function pushStory($storyID, $gitlabID, $projectID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
-        $syncedIssue = $this->getSyncedIssue($objectType = 'story', $objectID = $storyID, $gitlab);
-        $issue = $this->storyToIssue($gitlab, $gitlabProject, $story);
-        
-        $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'story', $storyID);
-        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'story', $storyID);
-        
-        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
-        $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
-        if($issue) $this->saveSyncedIssue('story', $story, $gitlab, $issue);
+        if(!$gitlabID or !$projectID)
+        {
+            $result    = $this->getGitlabIDprojectID('story', $storyID);
+            $gitlabID  = $result->gitlabID;
+            $projectID = $result->projectID;
+        }
+
+        $syncedIssue = $this->getSyncedIssue($objectType = 'story', $objectID = $storyID, $gitlabID);
+        $issue = $this->storyToIssue($gitlabID, $projectID, $story);
+
+        if($syncedIssue) 
+        {
+            $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->AID, $issue);
+        }
+        else
+        {
+            $this->createZentaoObjectLabel($gitlabID, $projectID, 'story', $storyID);
+            $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'story', $storyID);
+            $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
+            if($issue) $this->saveSyncedIssue('story', $story, $gitlabID, $issue);
+        }
     }
 
     /**
@@ -735,7 +764,7 @@ class gitlabModel extends model
             }
             if($value) $issue->$field = $value;
         }
-     
+
         return $issue;
     }
 
