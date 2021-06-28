@@ -239,7 +239,7 @@ class gitlab extends control
 
     public function test($id = 11)
     {
-        $gitlabID = 11; $projectID = 36;
+        $gitlabID = 1; $projectID = 7;
         $task = $this->loadModel('task')->getByID($id);
         $issue = $this->gitlab->taskToIssue($gitlabID, $projectID, $task);
         $issue = $this->gitlab->apiCreateIssue($gitlabID, $projectID, $issue);

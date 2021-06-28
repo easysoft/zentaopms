@@ -557,6 +557,13 @@ class bug extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
+        /* Set gitlabProjects. */
+        $allGitlabs     = $this->loadModel('gitlab')->getPairs();
+        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
+        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
+        $this->view->gitlabList     = $allGitlabs;
+        $this->view->gitlabProjects = $gitlabProjects;
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
