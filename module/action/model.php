@@ -1057,7 +1057,7 @@ class actionModel extends model
                     continue;
                 }
 
-                if($action->objectType == 'story' and strpos('importtostorylib,passapproved', $action->action) !== false)
+                if($action->objectType == 'story' and strpos('import2storylib,passapproved', $action->action) !== false)
                 {
                     $action->objectLink = helper::createLink('assetlib', 'storyView', sprintf($vars, $action->objectID), '', '', $projectID);
                 }
