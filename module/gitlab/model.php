@@ -597,11 +597,35 @@ class gitlabModel extends model
         $issue = $this->bugToIssue($gitlab, $gitlabProject, $bug);
         
         $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'bug', $bugID);
-        sprintf($this->config->gitlab->zentaoObjectLabel->name, 'bug', $bugID);
+        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'bug', $bugID);
         
         if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
         $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
         if($issue) $this->saveSyncedIssue('bug', $bug, $gitlab, $issue);
+    }
+
+    /**
+     * Push to gitlab issue. 
+     * 
+     * @param  int    $storyID 
+     * @param  int    $gitlab 
+     * @param  int    $gitlabProject 
+     * @access public
+     * @return void
+     */
+    public function PushToissue($ID, $gitlabID, $gitlabProject, $type)
+    {
+        $data = $this->loadModel($type)->getByID($ID);
+
+        $syncedIssue = $this->getSyncedIssue($objectType = $type, $objectID = $ID, $gitlabID);
+        $issue = $this->bugToIssue($gitlabID, $gitlabProject, $data);
+        
+        $this->createZentaoObjectLabel($gitlabID, $gitlabProject, $type, $ID);
+        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, $type, $ID);
+        
+        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlabID, $gitlabProject, $syncedIssue, $issue);
+        $issue = $this->apiCreateIssue($gitlabID, $gitlabProject, $issue);
+        if($issue) $this->saveSyncedIssue($type, $data, $gitlabID, $issue);
     }
 
     /**
@@ -735,7 +759,7 @@ class gitlabModel extends model
             $value = '';
             list($field, $optionType, $options) = explode('|', $config);
             if($optionType == 'field') $value = $bug->$bugField;
-            if($optionType == 'fields') $value = $bug->$bugField . "\n\n" . $story->$options;
+            if($optionType == 'fields') $value = $bug->$bugField . "\n\n" . $bug->$options;
             if($optionType == 'userPairs')
             {
                 $value = zget($gitlabUsers, $bug->$bugField);

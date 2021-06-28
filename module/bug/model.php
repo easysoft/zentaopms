@@ -90,7 +90,7 @@ class bugModel extends model
             $bugID = $this->dao->lastInsertID();
             
             /* Sync this bug to gitlab issue. */
-            $this->loadModel('gitlab')->syncBug($bugID, $this->post->gitlab, $this->post->gitlabProject);
+            $this->loadModel('gitlab')->pushToissue($bugID, $this->post->gitlab, $this->post->gitlabProject,'bug');
                 
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
