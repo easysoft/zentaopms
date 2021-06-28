@@ -626,11 +626,35 @@ class gitlabModel extends model
         $issue = $this->bugToIssue($gitlab, $gitlabProject, $bug);
         
         $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'bug', $bugID);
-        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'bug', $storyID);
+        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'bug', $bugID);
         
         if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
         $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
-        if($issue) $this->saveSyncedIssue('bug', $story, $gitlab, $issue);
+        if($issue) $this->saveSyncedIssue('bug', $bug, $gitlab, $issue);
+    }
+
+    /**
+     * Push to gitlab issue. 
+     * 
+     * @param  int    $storyID 
+     * @param  int    $gitlab 
+     * @param  int    $gitlabProject 
+     * @access public
+     * @return void
+     */
+    public function PushToissue($ID, $gitlabID, $gitlabProject, $type)
+    {
+        $data = $this->loadModel($type)->getByID($ID);
+
+        $syncedIssue = $this->getSyncedIssue($objectType = $type, $objectID = $ID, $gitlabID);
+        $issue = $this->bugToIssue($gitlabID, $gitlabProject, $data);
+        
+        $this->createZentaoObjectLabel($gitlabID, $gitlabProject, $type, $ID);
+        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, $type, $ID);
+        
+        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlabID, $gitlabProject, $syncedIssue, $issue);
+        $issue = $this->apiCreateIssue($gitlabID, $gitlabProject, $issue);
+        if($issue) $this->saveSyncedIssue($type, $data, $gitlabID, $issue);
     }
 
     /**
@@ -759,15 +783,15 @@ class gitlabModel extends model
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
         if(empty($gitlabUsers)) return false;
 
-        foreach($map as $storyField => $config)
+        foreach($map as $bugField => $config)
         {
             $value = '';
             list($field, $optionType, $options) = explode('|', $config);
             if($optionType == 'field') $value = $bug->$bugField;
-            if($optionType == 'fields') $value = $bug->$bugField . "\n\n" . $story->$options;
+            if($optionType == 'fields') $value = $bug->$bugField . "\n\n" . $bug->$options;
             if($optionType == 'userPairs')
             {
-                $value = zget($gitlabUsers, $story->$bugField);
+                $value = zget($gitlabUsers, $bug->$bugField);
             }
             if($optionType == 'configItems') 
             {
@@ -776,7 +800,6 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
-       var_dump($issue);die; 
         return $issue;
     }
 
@@ -884,6 +907,9 @@ class gitlabModel extends model
         $issue->issue->objectType = $object->type;
         $issue->issue->objectID   = $object->id;
 
+        /* Parse markdown description to html. */
+        $issue->issue->description = $this->app->loadClass('hyperdown')->makeHtml($issue->issue->description);
+
         if(!isset($this->config->gitlab->maps->{$object->type})) return false;
         $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID);
         return $issue;
@@ -973,7 +999,7 @@ class gitlabModel extends model
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
         $maps        = $this->config->gitlab->maps->{$issue->objectType};
-        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
 
         $object      = new stdclass;
         $object->id  = $issue->objectID;

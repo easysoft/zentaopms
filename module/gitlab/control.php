@@ -216,7 +216,7 @@ class gitlab extends control
         //$input       = file_get_contents('php://input');
         $requestBody = json_decode($input);
         $result      = $this->gitlab->webhookParseBody($requestBody, $gitlab);
-        a($result);exit;
+
         $logFile = $this->app->getLogRoot() . 'webhook.'. date('Ymd') . '.log.php';
         if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
         
@@ -233,7 +233,7 @@ class gitlab extends control
 
         $this->view->result = 'success';
         $this->view->status = 'ok';
-        $this->view->data   = 'ougiugjvh';
+        $this->view->data   = $result->object;
         $this->display();
     }
 

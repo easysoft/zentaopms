@@ -48,9 +48,9 @@ $config->gitlab->maps->story['pri']          = 'weight|configItems|storyWeightMa
 
 $config->gitlab->maps->bug = array();
 $config->gitlab->maps->bug['title']      = 'title|field|';
-$config->gitlab->maps->bug['spec']       = 'description|field|';
+$config->gitlab->maps->bug['steps']      = 'description|field|';
 $config->gitlab->maps->bug['openedDate'] = 'created_at|field|';
-$config->gitlab->maps->bug['openedBy']   = 'assignee_id|userPairs|';
+$config->gitlab->maps->bug['assignedTo'] = 'assignee_id|userPairs|';
 $config->gitlab->maps->bug['pri']        = 'weight|configItems|bugWeightMap';
 
 $config->gitlab->taskWeightMap = array();
@@ -82,4 +82,9 @@ $config->gitlab->bugStateMap = array();
 $config->gitlab->bugStateMap['active']   = 'reopen';
 $config->gitlab->bugStateMap['resolved'] = 'reopen';
 $config->gitlab->bugStateMap['closed']   = 'close';
+
+$config->gitlab->objectTables = new stdclass;
+$config->gitlab->objectTables->story = TABLE_STORY;
+$config->gitlab->objectTables->task  = TABLE_TASK;
+$config->gitlab->objectTables->bug   = TABLE_BUG;
 

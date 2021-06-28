@@ -56,6 +56,7 @@ $filter->webhook      = new stdclass();
 $filter->git          = new stdclass();
 $filter->svn          = new stdclass();
 $filter->search       = new stdclass();
+$filter->gitlab       = new stdclass();
 
 $filter->block->default              = new stdclass();
 $filter->block->main                 = new stdclass();
@@ -130,6 +131,7 @@ $filter->webhook->bind               = new stdclass();
 $filter->user->ajaxgetmore           = new stdclass();
 $filter->repo->ajaxsynccommit        = new stdclass();
 $filter->search->index               = new stdclass();
+$filter->gitlab->webhook             = new stdclass();
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
 $filter->bug->browse->cookie['bugModule']      = 'int';
@@ -308,3 +310,8 @@ $filter->webhook->bind->cookie['selectedDepts'] = 'reg::checked';
 
 $filter->search->index->get['words'] = 'reg::any';
 $filter->search->index->get['type']  = 'code';
+
+$filter->gitlab->webhook->get['gitlab']  = 'int';
+$filter->gitlab->webhook->get['product'] = 'int';
+$filter->gitlab->webhook->get['project'] = 'int';
+$filter->gitlab->webhook->get['token']   = 'reg::any';
