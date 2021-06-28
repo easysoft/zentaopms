@@ -2230,7 +2230,6 @@ EOD;
         }
         
         if($options) curl_setopt_array($curl, $options);
-
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
 
