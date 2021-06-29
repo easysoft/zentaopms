@@ -478,6 +478,16 @@ class gitlabModel extends model
                     ->fetchGroup('AID');
     }
 
+    public function getProjectsByProduct($productID)
+    {
+        return $this->dao->select('AID, BID as gitlabProject')->from(TABLE_RELATION)
+                    ->where('relation')->eq('interrated')
+                    ->andWhere('AType')->eq('gitlab')
+                    ->andWhere('BType')->eq('gitlabProject')
+                    ->andWhere('product')->eq($productID)
+                    ->fetchGroup('AID');
+    }
+    
     /**
      * Get gitlabID and projectID.
      * 
