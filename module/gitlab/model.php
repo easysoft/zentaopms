@@ -349,7 +349,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/labels/{$labelID}");
 
-        return json_decode(commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, null, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -946,7 +946,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/issues/{$issueID}";
         $url = sprintf($apiRoot, $apiPath);
-        commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
+        return commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
     } 
 
     /**
