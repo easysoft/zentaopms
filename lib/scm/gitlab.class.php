@@ -51,18 +51,18 @@ class gitlab
             if(!isset($file->type)) continue;
 
             $info = new stdClass();
+            $info->name = $file->name;
+            $info->kind = $file->type == 'blob' ? 'file' : 'dir';
+
             if($file->type == 'blob')
             {
-                $path = $file->path;
                 $file = $this->files($file->path);
 
-                $info->name     = $file->file_name;
-                $info->kind     = 'file';
+                $info->revision = $file->revision;
+                $info->comment  = $file->comment;
                 $info->account  = $file->committer;
                 $info->date     = $file->date;
                 $info->size     = $file->size;
-                $info->comment  = $file->comment;
-                $info->revision = $file->revision;
             }
             else
             {
@@ -70,13 +70,11 @@ class gitlab
                 if(empty($commits)) continue;
                 $commit = $commits[0];
 
-                $info->name     = $file->name;
-                $info->kind     = 'dir';
                 $info->revision = $commit->id;
+                $info->comment  = $commit->message;
                 $info->account  = $commit->committer_name;
                 $info->date     = date('Y-m-d H:i:s', strtotime($commit->committed_date));
                 $info->size     = 0;
-                $info->comment  = $commit->message;
             }
 
             $infos[] = $info;
