@@ -831,7 +831,7 @@ class storyModel extends model
            }
             /* update story to gitlab issue. */
             $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
-            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
+            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
 
             unset($oldStory->parent);
             unset($story->parent);
@@ -1426,6 +1426,9 @@ class storyModel extends model
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
 
+        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
+        if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
+
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
         $this->setStage($storyID);
@@ -1769,9 +1772,9 @@ class storyModel extends model
 
         if(!dao::isError())
         {
-            /* Update this story to gitlab issue. */
+            /* Update story to gitlab issue. */
             $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
-            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
+            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
 
             return common::createChanges($oldStory, $story);
         }

@@ -1670,6 +1670,9 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
+        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('task',$taskID);
+        if($objectID) $this->loadModel('gitlab')->pushToissue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
+
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
@@ -1726,6 +1729,9 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
+        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('task',$taskID);
+        if($objectID) $this->loadModel('gitlab')->pushToissue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
+
         if(!dao::isError())
         {
             if($oldTask->parent > 0) $this->updateParentStatus($taskID);
@@ -1769,6 +1775,10 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
+        
+        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('task',$taskID);
+        if($objectID) $this->loadModel('gitlab')->pushToissue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
+
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
