@@ -58,7 +58,7 @@ class gitlabModel extends model
     {
         $gitlab = $this->getByID($id);
         if(!$gitlab) return "";
-        $gitlab_url = rtrim($gitlab->url, '/').'/api/v4%s'."?private_token={$gitlab->token}";
+        $gitlab_url = rtrim($gitlab->url, '/') . '/api/v4%s';
         return $gitlab_url; 
     }
 
@@ -551,7 +551,7 @@ class gitlabModel extends model
         $webhooks = $this->apiGetHooks($gitlabID, $projectID);
         foreach($products as $index => $product)
         {
-            $url = sprintf($this->config->gitlab->webhookURL, commonModel::getSysURL(), $product, $gitlabID, $gitlab->private);
+            $url = sprintf($this->config->gitlab->webhookURL, commonModel::getSysURL(), $product, $gitlabID);
             foreach($webhooks as $webhook) if($webhook->url == $url) continue;
             $response = $this->apiCreateHook($gitlabID, $projectID, $url);
         }
@@ -958,7 +958,7 @@ class gitlabModel extends model
     public function webhookCheckToken()
     {
         $gitlab = $this->getByID($this->get->gitlab);
-        if($gitlab->private != $this->get->token) die();
+        if($gitlab->private != $_SERVER["HTTP_X_GITLAB_TOKEN"]) die('Token error.');
     }
 
     /**
