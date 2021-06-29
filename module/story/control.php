@@ -1212,7 +1212,7 @@ class story extends control
         if(isset($skipStory) || isset($closedStory)) echo js::alert($errorTips);
 
         /* The stories of a product. */
-        if($productID)
+        if($this->app->openApp == 'product')
         {
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
