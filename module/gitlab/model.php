@@ -478,6 +478,16 @@ class gitlabModel extends model
                     ->fetchGroup('AID');
     }
 
+    public function getProjectsByProduct($productID)
+    {
+        return $this->dao->select('AID, BID as gitlabProject')->from(TABLE_RELATION)
+                    ->where('relation')->eq('interrated')
+                    ->andWhere('AType')->eq('gitlab')
+                    ->andWhere('BType')->eq('gitlabProject')
+                    ->andWhere('product')->eq($productID)
+                    ->fetchGroup('AID');
+    }
+    
     /**
      * Get gitlabID and projectID.
      * 
@@ -696,20 +706,22 @@ class gitlabModel extends model
     }
 
     /**
-     * Delete ans issue.
+     * Delete an issue.
      * 
      * @param  int    $gitlabID 
      * @param  int    $projectID 
      * @param  string $objectType 
      * @param  int    $objectID 
+     * @param  int    $issueID 
      * @access public
      * @return void
      */
-    public function deleteIssue($gitlabID, $projectID, $objectType, $objectID)
+    public function deleteIssue($gitlabID, $projectID, $objectType, $objectID, $issueID)
     {
         $object     = $this->loadModel($objectType)->getByID($objectID);
         $relationID = $this->getRelationID($objectType, $objectID);
-        if(!empty($relationID)) $this->dao->delete(TABLE_RELATION, $relationID);
+        if(!empty($relationID)) $this->dao->delete()->from(TABLE_RELATION)->where('id')->eq($relationID)->exec();
+        $this->apiDeleteIssue($gitlabID, $projectID, $issueID);
     }
 
     /**
@@ -874,6 +886,7 @@ class gitlabModel extends model
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
 
         return $issue;
     }

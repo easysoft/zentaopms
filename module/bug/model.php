@@ -646,6 +646,10 @@ class bugModel extends model
 
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
+            
+            $relation = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
+            if($relation) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $relation->gitlabID, $relation->projectID);
+
             return common::createChanges($oldBug, $bug);
         }
     }
@@ -1178,6 +1182,9 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
+        $relation = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
+        if($relation) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $relation->gitlabID, $relation->projectID);
+
         $openedBuilds = $this->post->openedBuild;
         if($openedBuilds)
         {
@@ -1185,6 +1192,7 @@ class bugModel extends model
             foreach($openedBuilds as $openedBuild)
             {
                 $build = $this->build->getByID($openedBuild);
+                if(empty($build)) continue;
                 $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
                 $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$openedBuild)->exec();
             }
@@ -1220,7 +1228,7 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
 
         $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
-        if($objectID) $this->loadModel('bug')->pushToissue('bug', $bugID, $objectID->gitlabID, $objectID->projectID);
+        if($objectID) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $objectID->gitlabID, $objectID->projectID);
 
         return common::createChanges($oldBug, $bug);
     }
