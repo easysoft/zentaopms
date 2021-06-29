@@ -479,6 +479,23 @@ class gitlabModel extends model
     }
 
     /**
+     * Get gitlabID and projectID.
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return object
+     */
+    public function getGitlabIDprojectID($objectType, $objectID)
+    {
+        return $this->dao->select('extra as gitlabID, BVersion as projectID')->from(TABLE_RELATION)
+                    ->where('relation')->eq('gitlab')
+                    ->andWhere('Atype')->eq($objectType)
+                    ->andWhere('AID')->eq($objectID)
+                    ->fetch();
+    }
+                    
+    /**
      * Create relationship between zentao product and  gitlab project.
      * 
      * @param  int    $gitlabID 
@@ -533,7 +550,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Sync task to gitlab issue.
+     * Push task to gitlab issue.
      * 
      * @param  int  $taskID 
      * @param  int  $gitlab 
@@ -541,67 +558,162 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function syncTask($taskID, $gitlab, $gitlabProject)
+    public function pushTask($taskID, $gitlab, $gitlabProject)
     {
         $task = $this->loadModel('task')->getByID($taskID);
         $syncedIssue = $this->getSyncedIssue($objectType = 'task', $objectID = $taskID, $gitlab);
 
         $issue = $this->taskToIssue($gitlab, $gitlabProject, $task);
        
-        $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'task', $taskID); 
-        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'task', $taskID);
-       
-        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
-        $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
-
-        $this->saveSyncedIssue('task', $task, $gitlab, $issue);
+        if($syncedIssue)
+        {
+            $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
+        }
+        else
+        {
+            $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'task', $taskID); 
+            $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'task', $taskID);
+            $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
+            $this->saveSyncedIssue('task', $task, $gitlab, $issue);
+        }
     }
 
     /**
-     * Sync story to gitlab issue. 
+     * Push story to gitlab issue. 
      * 
      * @param  int    $storyID 
-     * @param  int    $gitlab 
-     * @param  int    $gitlabProject 
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function syncStory($storyID, $gitlab, $gitlabProject)
+    public function pushStory($storyID, $gitlabID, $projectID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
-        $syncedIssue = $this->getSyncedIssue($objectType = 'story', $objectID = $storyID, $gitlab);
-        $issue = $this->storyToIssue($gitlab, $gitlabProject, $story);
-        
-        $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'story', $storyID);
-        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'story', $storyID);
-        
-        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
-        $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
-        if($issue) $this->saveSyncedIssue('story', $story, $gitlab, $issue);
+        if(empty($bug)) return false;
+
+        if(!$gitlabID or !$projectID)
+        {
+            $result    = $this->getGitlabIDprojectID('story', $storyID);
+            $gitlabID  = $result->gitlabID;
+            $projectID = $result->projectID;
+        }
+
+        $syncedIssue = $this->getSyncedIssue($objectType = 'story', $objectID = $storyID, $gitlabID);
+        $issue = $this->storyToIssue($gitlabID, $projectID, $story);
+
+        if($syncedIssue) 
+        {
+            $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->AID, $issue);
+        }
+        else
+        {
+            $this->createZentaoObjectLabel($gitlabID, $projectID, 'story', $storyID);
+            $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'story', $storyID);
+            $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
+            if($issue) $this->saveSyncedIssue('story', $story, $gitlabID, $issue);
+        }
     }
 
     /**
-     * Sync bug to gitlab issue. 
+     * Push bug to gitlab issue. 
      * 
-     * @param  int    $storyID 
+     * @param  int    $bugID 
      * @param  int    $gitlab 
      * @param  int    $gitlabProject 
      * @access public
      * @return void
      */
-    public function syncBug($bugID, $gitlab, $gitlabProject)
+    public function pushBug($bugID, $gitlab, $gitlabProject)
     {
         $bug = $this->loadModel('bug')->getByID($bugID);
 
         $syncedIssue = $this->getSyncedIssue($objectType = 'bug', $objectID = $bugID, $gitlab);
         $issue = $this->bugToIssue($gitlab, $gitlabProject, $bug);
         
-        $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'bug', $bugID);
-        sprintf($this->config->gitlab->zentaoObjectLabel->name, 'bug', $bugID);
+        if($syncedIssue)
+        {
+            $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
+        }
+        else
+        {
+            $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'bug', $bugID);
+            $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'bug', $bugID);
+            $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
+            if($issue) $this->saveSyncedIssue('bug', $bug, $gitlab, $issue);
+        }
+    }
+
+    /**
+     * Push to gitlab issue. 
+     * 
+     * @param  string   $objectType 
+     * @param  int      $objectID 
+     * @param  int      $gitlab 
+     * @param  int      $projectID
+     * @access public
+     * @return void
+     */
+    public function pushToIssue($objectType, $objectID, $gitlabID, $projectID)
+    {
+        $object = $this->loadModel($objectType)->getByID($objectID);
+        if(!$gitlabID or !$projectID)
+        {
+            $result    = $this->getGitlabIDprojectID($objectType, $objectID);
+            $gitlabID  = $result->gitlabID;
+            $projectID = $result->projectID;
+        }
+
+        $syncedIssue = $this->getSyncedIssue($objectType = $objectType, $objectID = $objectID, $gitlabID);
+        if($objectType == 'story') $issue = $this->storyToIssue($gitlabID, $projectID, $object);
+        if($objectType == 'task')  $issue = $this->taskToIssue($gitlabID, $projectID, $object);
+        if($objectType == 'bug')   $issue = $this->bugToIssue($gitlabID, $projectID, $object);
         
-        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
-        $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
-        if($issue) $this->saveSyncedIssue('bug', $bug, $gitlab, $issue);
+        if($syncedIssue)
+        {
+            $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue, $issue);
+        }
+        else
+        {
+            $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
+            $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
+            $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
+            if($issue) $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
+        }
+    }
+
+    /**
+     * Delete ans issue.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function deleteIssue($gitlabID, $projectID, $objectType, $objectID)
+    {
+        $object     = $this->loadModel($objectType)->getByID($objectID);
+        $relationID = $this->getRelationID($objectType, $objectID);
+        if(!empty($relationID)) $this->dao->delete(TABLE_RELATION, $relationID);
+    }
+
+    /**
+     * Get relation id. 
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function getRelationID($objectType, $objectID)
+    {
+        return $this->dao->select('id')->from(TABLE_RELATION)
+                    ->where('AType')->eq($objectType)
+                    ->andWhere('AID')->eq($objectID)
+                    ->andWhere('relation')->eq('gitlab')
+                    ->fetch('id');
     }
 
     /**
@@ -654,7 +766,7 @@ class gitlabModel extends model
      * 
      * @param  int    $gitlabID 
      * @param  int    $gitlabProjectID 
-     * @param  object    $task 
+     * @param  object $task 
      * @access public
      * @return object
      */
@@ -710,7 +822,7 @@ class gitlabModel extends model
             }
             if($value) $issue->$field = $value;
         }
-     
+
         return $issue;
     }
 
@@ -735,7 +847,7 @@ class gitlabModel extends model
             $value = '';
             list($field, $optionType, $options) = explode('|', $config);
             if($optionType == 'field') $value = $bug->$bugField;
-            if($optionType == 'fields') $value = $bug->$bugField . "\n\n" . $story->$options;
+            if($optionType == 'fields') $value = $bug->$bugField . "\n\n" . $bug->$options;
             if($optionType == 'userPairs')
             {
                 $value = zget($gitlabUsers, $bug->$bugField);
@@ -791,19 +903,22 @@ class gitlabModel extends model
         return $response;
     }    
 
-    public function pushTask($gitlabID, $projectID, $task)
+    /**
+     * Delete an issue.
+     * 
+     * @param  int    $gitlabID 
+     * @param  int    $projectID 
+     * @param  int    $issueID 
+     * @access public
+     * @return void
+     */
+    public function apiDeleteIssue($gitlabID, $projectID, $issueID)
     {
-        $task->label = $this->config->gitlab->taskLabel->name;
-        $response = $this->apiCreateIssue($gitlabID, $projectID, $task);
-        return $response;
-    }
-
-    public function pushBug($gitlabID, $projectID, $bug)
-    {
-        $bug->label = $this->config->gitlab->bugLabel->name;
-        $response   = $this->apiCreateIssue($gitlabID, $projectID, $bug);
-        return $response;
-    }
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/projects/{$projectID}/issues/{$issueID}";
+        $url = sprintf($apiRoot, $apiPath);
+        commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
+    } 
 
     /**
      * webhook check token.

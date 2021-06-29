@@ -122,7 +122,7 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
 
             /* Sync this task to gitlab issue. */
-            $this->loadModel('gitlab')->syncTask($taskID, $this->post->gitlab, $this->post->gitlabProject);
+            $this->loadModel('gitlab')->pushTask($taskID, $this->post->gitlab, $this->post->gitlabProject);
                 
             /* Mark design version.*/
             if(isset($task->design) && !empty($task->design))
@@ -1327,7 +1327,6 @@ class taskModel extends model
             ->where('id')->eq($taskID)->exec();
         
         $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('task', $taskID);
-
         $attribute = new stdclass();
         $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $task->assignedTo);
         if($attribute->assignee_id != '')
