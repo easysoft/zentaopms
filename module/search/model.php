@@ -577,29 +577,29 @@ class searchModel extends model
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
                 $table       = $this->config->objectTables[$record->objectType];
                 $projectID   = $this->dao->select('project')->from($table)->where('id')->eq($record->objectID)->fetch('project');
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, $projectID);
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}");
             }
             elseif($module == 'issue')
             {
                 $issue             = $this->dao->select('id,project,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
+                $record->url       = helper::createLink($module, $method, "id={$record->objectID}");
                 $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
             }
             elseif($module == 'execution')
             {
                 $execution         = $this->dao->select('id,type,project')->from(TABLE_EXECUTION)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}", '', false, $execution->project);
+                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
                 $record->extraType = $execution->type;
             }
             elseif($module == 'story')
             {
                 $story             = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+                $record->url       = helper::createLink($module, $method, "id={$record->objectID}");
                 $record->extraType = $story->type;
             }
             else
             {
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}");
             }
         }
 

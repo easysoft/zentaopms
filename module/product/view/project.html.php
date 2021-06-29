@@ -55,11 +55,11 @@
             <?php
             if($config->systemMode == 'new')
             {
-                echo html::a($this->createLink('project', 'index', 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');
+                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name, '_parent');
             }
             else
             {
-                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id, '', false, $project->id), $project->name, '_parent');
+                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id), $project->name, '_parent');
             }
             ?>
           </td>
