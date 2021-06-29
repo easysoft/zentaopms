@@ -874,7 +874,7 @@ class gitlabModel extends model
         }
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state)) $issue->status_event=$issue->state;
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
 
         return $issue;
     }
