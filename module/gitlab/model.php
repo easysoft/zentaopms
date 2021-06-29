@@ -994,6 +994,7 @@ class gitlabModel extends model
         $issue->issue      = $body->object_attributes;
         $issue->objectType = $object->type;
         $issue->objectID   = $object->id;
+        $issue->changes    = $body->changes;
 
         $issue->issue->objectType = $object->type;
         $issue->issue->objectID   = $object->id;
@@ -1084,16 +1085,13 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function webhookIssueAssign($gitlabID, $issue)
+    public function webhookAssignIssue($issue)
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if(!$tableName) return false;
 
-        $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
-
         $data = $issue->object;
         $data->assignedDate = $issue->object->lastEditedDate;
-        $data->assignedBy   = $issue->object->lastEditedBy;
         $data->assignedTo   = $issue->object->assignedTo;
 
         $this->dao->update($tableName)->data($data)->where('id')->eq($issue->objectID)->exec();
@@ -1101,7 +1099,36 @@ class gitlabModel extends model
 
         $oldObject = $this->dao->findById($issue->objectID)->from($tableName)->fetch();
         $changes   = common::createChanges($oldObject, $data);
-        $actionID = $this->action->create($issue->objectType, $issue->objectID, 'Assigned', '', $data->assignedTo);
+        $actionID  = $this->loadModel('action')->create($issue->objectType, $issue->objectID, 'Assigned', "Assigned by webhook by gitlab issue : {$issue->issue->url}", $data->assignedTo);
+        $this->action->logHistory($actionID, $changes);
+        return true;
+    }
+
+    /**
+     * Process issue close option.
+     * 
+     * @param  int       $gitlabID 
+     * @param  object    $issue 
+     * @access public
+     * @return void
+     */
+    public function webhookCloseIssue($issue)
+    {
+        $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
+        if(!$tableName) return false;
+
+        $data = $issue->object;
+        $data->assignedTo = 'closed';
+        $data->status     = 'closed';
+        $data->closedBy   = $issue->object->lastEditedBy;
+        $data->closedDate = $issue->object->lastEditedDate;
+
+        $this->dao->update($tableName)->data($data)->where('id')->eq($issue->objectID)->exec();
+        if(dao::isError()) return false;
+
+        $oldObject = $this->dao->findById($issue->objectID)->from($tableName)->fetch();
+        $changes   = common::createChanges($oldObject, $data);
+        $actionID  = $this->loadModel('action')->create($issue->objectType, $issue->objectID, 'Closed', "Closed by gitlab issue: {$issue->issue->url}.");
         $this->action->logHistory($actionID, $changes);
         return true;
     }
@@ -1118,6 +1145,7 @@ class gitlabModel extends model
     {
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
+		if(isset($changes->assignees)) $changes->assignee_id = true;
         $maps        = $this->config->gitlab->maps->{$issue->objectType};
         $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
 
