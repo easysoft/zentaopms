@@ -42,6 +42,23 @@ $sessionString .= session_name() . '=' . session_id();
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
             <?php endif;?>
+
+            <?php if(isset($this->config->maxVersion)):?>
+            <?php
+            $canImportToPracitceLib  = common::hasPriv('doc', 'importToPracitceLib');
+            $canImportToComponentLib = common::hasPriv('doc', 'importToComponentLib');
+
+            if($canImportToPracitceLib or $canImportToComponentLib)
+            {
+                echo "<div class='btn-group' id='more'>";
+                echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+                echo "<ul class='dropdown-menu'>";
+                if($canImportToPracitceLib) echo '<li>' . html::a('#importToPracitceLib', $lang->doc->importToPracitceLib) . '</li>';
+                if($canImportToComponentLib) echo '<li>' . html::a('#canImportToComponentLib', $lang->doc->importToComponentLib) . '</li>';
+                echo '</ul></div>';
+            }
+            ?>
+            <?php endif;?>
           </div>
         </div>
         <div class="detail-content article-content">

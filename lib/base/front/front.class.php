@@ -1002,6 +1002,10 @@ EOT;
         {
             $js .= "history.back(-1);\n";
         }
+        elseif(strpos($target, '$.apps.open') !== false)
+        {
+            $js .= "$target('$url')";
+        }
         else
         {
             $js .= "$target.location='$url';\n";
