@@ -682,7 +682,6 @@ class gitlabModel extends model
         if($objectType == 'story') $issue = $this->storyToIssue($gitlabID, $projectID, $object);
         if($objectType == 'task')  $issue = $this->taskToIssue($gitlabID, $projectID, $object);
         if($objectType == 'bug')   $issue = $this->bugToIssue($gitlabID, $projectID, $object);
-        
         if($syncedIssue)
         {
             $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->BID, $issue);

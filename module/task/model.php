@@ -122,7 +122,7 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
 
             /* Sync this task to gitlab issue. */
-            $this->loadModel('gitlab')->pushTask($taskID, $this->post->gitlab, $this->post->gitlabProject);
+            $this->loadModel('gitlab')->pushToIssue('task', $taskID, $this->post->gitlab, $this->post->gitlabProject);
                 
             /* Mark design version.*/
             if(isset($task->design) && !empty($task->design))
@@ -941,6 +941,10 @@ class taskModel extends model
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
+            /* update story to gitlab issue. */
+            $objectID = $this->loadModel('gitlab')->getGitlabidProjectID('task',$taskID);
+            if($objectID) $this->loadModel('gitlab')->pushToIssue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
+            
         if(!dao::isError())
         {
             /* Mark design version.*/

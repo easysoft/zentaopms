@@ -830,8 +830,8 @@ class storyModel extends model
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
            }
             /* update story to gitlab issue. */
-            $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
-            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
+            $objectID = $this->loadModel('gitlab')->getGitlabidProjectID('story',$storyID);
+            if($objectID) $this->loadModel('gitlab')->pushToIssue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
 
             unset($oldStory->parent);
             unset($story->parent);
