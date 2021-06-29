@@ -721,7 +721,7 @@ class gitlabModel extends model
     {
         $object     = $this->loadModel($objectType)->getByID($objectID);
         $relationID = $this->getRelationID($objectType, $objectID);
-        if(!empty($relationID)) $this->dao->delete(TABLE_RELATION, $relationID);
+        if(!empty($relationID)) $this->dao->delete()->from(TABLE_RELATION)->where('id')->eq($relationID)->exec();
         $this->apiDeleteIssue($gitlabID, $projectID, $issueID);
     }
 
