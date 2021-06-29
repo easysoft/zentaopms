@@ -43,18 +43,18 @@ $sessionString .= session_name() . '=' . session_id();
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
             <?php endif;?>
 
-            <?php if(isset($this->config->maxVersion)):?>
+            <?php if(isset($this->config->maxVersion) and $this->app->openApp == 'project'):?>
             <?php
-            $canImportToPracitceLib  = common::hasPriv('doc', 'importToPracitceLib');
+            $canImportToPracticeLib  = common::hasPriv('doc', 'importToPracticeLib');
             $canImportToComponentLib = common::hasPriv('doc', 'importToComponentLib');
 
-            if($canImportToPracitceLib or $canImportToComponentLib)
+            if($canImportToPracticeLib or $canImportToComponentLib)
             {
                 echo "<div class='btn-group' id='more'>";
                 echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
                 echo "<ul class='dropdown-menu'>";
-                if($canImportToPracitceLib) echo '<li>' . html::a('#importToPracitceLib', $lang->doc->importToPracitceLib) . '</li>';
-                if($canImportToComponentLib) echo '<li>' . html::a('#canImportToComponentLib', $lang->doc->importToComponentLib) . '</li>';
+                if($canImportToPracticeLib) echo '<li>' . html::a('#importToPracticeLib', $lang->doc->importToPracticeLib, '', 'data-toggle="modal"') . '</li>';
+                if($canImportToComponentLib) echo '<li>' . html::a('#importToComponentLib', $lang->doc->importToComponentLib, '', 'data-toggle="modal"') . '</li>';
                 echo '</ul></div>';
             }
             ?>
@@ -187,4 +187,78 @@ $sessionString .= session_name() . '=' . session_id();
     </div>
   </div>
 </div>
+
+<?php if(isset($this->config->maxVersion)):?>
+<div class="modal fade" id="importToPracticeLib">
+  <div class="modal-dialog mw-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->doc->importToPracticeLib;?></h4>
+      </div>
+      <div class="modal-body">
+        <form method='post' class='form-ajax' action='<?php echo $this->createLink('doc', 'importToPracticeLib', "doc=$doc->id");?>'>
+          <table class='table table-form'>
+            <tr>
+              <th class='w-120px'><?php echo $lang->doc->practiceLib;?></th>
+              <td>
+                <?php echo html::select('lib', $practiceLibs, '', "class='form-control chosen' required");?>
+              </td>
+            </tr>
+            <?php if(!common::hasPriv('assetlib', 'approvePractice') and !common::hasPriv('assetlib', 'batchApprovePractice')):?>
+            <tr>
+              <th><?php echo $lang->doc->approver;?></th>
+              <td>
+                <?php echo html::select('assignedTo', $practiceApprovers, '', "class='form-control chosen'");?>
+              </td>
+            </tr>
+            <?php endif;?>
+            <tr>
+              <td colspan='3' class='text-center'>
+                <?php echo html::submitButton($lang->doc->importToPracticeLib, '', 'btn btn-primary');?>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="importToComponentLib">
+  <div class="modal-dialog mw-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->doc->importToComponentLib;?></h4>
+      </div>
+      <div class="modal-body">
+        <form method='post' class='form-ajax' action='<?php echo $this->createLink('doc', 'importToComponentLib', "doc=$doc->id");?>'>
+          <table class='table table-form'>
+            <tr>
+              <th><?php echo $lang->doc->componentLib;?></th>
+              <td>
+                <?php echo html::select('lib', $componentLibs, '', "class='form-control chosen' required");?>
+              </td>
+            </tr>
+            <?php if(!common::hasPriv('assetlib', 'approveComponent') and !common::hasPriv('assetlib', 'batchApproveComponent')):?>
+            <tr>
+              <th><?php echo $lang->doc->approver;?></th>
+              <td>
+                <?php echo html::select('assignedTo', $componentApprovers, '', "class='form-control chosen'");?>
+              </td>
+            </tr>
+            <?php endif;?>
+            <tr>
+              <td colspan='3' class='text-center'>
+                <?php echo html::submitButton($lang->doc->importToComponentLib, '', 'btn btn-primary');?>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endif;?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
