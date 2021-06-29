@@ -989,7 +989,7 @@ class story extends control
         {
             /* Delete related issue in gitlab. */
             $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('story', $storyID);
-            $this->loadModel('gitlab')->deleteIssue($relation->gitlabID, $relation->projectID, 'story', $storyID);
+            $this->loadModel('gitlab')->deleteIssue($relation->gitlabID, $relation->projectID, 'story', $storyID, $relation->issueID);
  
             $this->story->delete(TABLE_STORY, $storyID);
             if($story->parent > 0)

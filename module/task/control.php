@@ -1282,7 +1282,7 @@ class task extends control
         {
             /* Delete related issue in gitlab. */
             $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('task', $taskID);
-            $this->loadModel('gitlab')->deleteIssue($relation->gitlabID, $relation->projectID, 'task', $taskID);
+            $this->loadModel('gitlab')->deleteIssue($relation->gitlabID, $relation->projectID, 'task', $taskID, $relation->issueID);
             
             $this->task->delete(TABLE_TASK, $taskID);
             if($task->parent > 0)

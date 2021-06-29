@@ -559,7 +559,9 @@ class bug extends control
 
         /* Set gitlabProjects. */
         $allGitlabs     = $this->loadModel('gitlab')->getPairs();
-        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
+        if(!empty($executionID)) $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
+        elseif(!empty($productID)) $gitlabProjects = $this->loadModel('gitlab')->getProjectsByProduct($productID);
+
         foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
         $this->view->gitlabList     = $allGitlabs;
         $this->view->gitlabProjects = $gitlabProjects;
@@ -1247,6 +1249,8 @@ class bug extends control
 
             $this->executeHooks($bugID);
 
+            $this->loadModel('gitlab')->pushBug($bugID, $this->post->gitlab, $this->post->gitlabProject);
+
             if($bug->toTask != 0)
             {
                 /* If task is not finished, update it's status. */
@@ -1549,7 +1553,7 @@ class bug extends control
         {
             /* Delete related issue in gitlab. */
             $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('bug', $bugID);
-            $this->loadModel('gitlab')->deleteIssue($relation->gitlabID, $relation->projectID, 'bug', $bugID);
+            if(!empty($relation)) $this->loadModel('gitlab')->deleteIssue($relation->gitlabID, $relation->projectID, 'bug', $bugID, $relation->issueID);
  
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0)
