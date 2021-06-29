@@ -561,6 +561,14 @@ class gitlabModel extends model
     public function pushTask($taskID, $gitlab, $gitlabProject)
     {
         $task = $this->loadModel('task')->getByID($taskID);
+        
+        if(!$gitlabID or !$projectID)
+        {
+            $result    = $this->getGitlabIDprojectID('task', $taskID);
+            $gitlabID  = $result->gitlabID;
+            $projectID = $result->projectID;
+        }
+
         $syncedIssue = $this->getSyncedIssue($objectType = 'task', $objectID = $taskID, $gitlab);
 
         $issue = $this->taskToIssue($gitlab, $gitlabProject, $task);
@@ -627,6 +635,13 @@ class gitlabModel extends model
     public function pushBug($bugID, $gitlab, $gitlabProject)
     {
         $bug = $this->loadModel('bug')->getByID($bugID);
+
+        if(!$gitlabID or !$projectID)
+        {
+            $result    = $this->getGitlabIDprojectID('bug', $bugID);
+            $gitlabID  = $result->gitlabID;
+            $projectID = $result->projectID;
+        }
 
         $syncedIssue = $this->getSyncedIssue($objectType = 'bug', $objectID = $bugID, $gitlab);
         $issue = $this->bugToIssue($gitlab, $gitlabProject, $bug);

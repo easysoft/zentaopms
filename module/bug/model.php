@@ -1219,6 +1219,9 @@ class bugModel extends model
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
 
+        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
+        if($objectID) $this->loadModel('bug')->pushToissue('bug', $bugID, $objectID->gitlabID, $objectID->projectID);
+
         return common::createChanges($oldBug, $bug);
     }
 
