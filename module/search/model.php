@@ -581,7 +581,13 @@ class searchModel extends model
             }
             elseif($module == 'issue')
             {
-                $issue             = $this->dao->select('id,project,owner')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                $issue = $this->dao->select('id,project,owner,lib')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                if(!empty($issue->lib))
+                {
+                    $module = 'assetlib';
+                    $method = 'issueView';
+                }
+
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
                 $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
             }
@@ -593,9 +599,38 @@ class searchModel extends model
             }
             elseif($module == 'story')
             {
-                $story             = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
+                $story = $this->dao->select('id,type,lib')->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
+                if(!empty($story->lib))
+                {
+                    $module = 'assetlib';
+                    $method = 'storyView';
+                }
+
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
-                $record->extraType = $story->type;
+                $record->extraType = isset($story->type) ? $story->type : '';
+            }
+            elseif($module == 'risk' or $module == 'opportunity')
+            {
+                $table  = $this->config->objectTables[$module];
+                $object = $this->dao->select('id,lib')->from($table)->where('id')->eq($record->objectID)->fetch();
+                if(!empty($object->lib))
+                {
+                    $method = $module == 'risk' ? 'riskView' : 'opportunitView';
+                    $module = 'assetlib';
+                }
+
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+            }
+            elseif($module == 'doc')
+            {
+                $doc = $this->dao->select('id,assetLib,assetLibType')->from(TABLE_DOC)->where('id')->eq($record->objectID)->fetch();
+                if(!empty($doc->assetLib))
+                {
+                    $module = 'assetlib';
+                    $method = $doc->assetLibType == 'practice' ? 'practiceView' : 'componentView';
+                }
+
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
             }
             else
             {

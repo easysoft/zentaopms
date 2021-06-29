@@ -41,7 +41,7 @@ adjustMenuWidth();
               <?php
               $objectType = $object->objectType == 'case' ? 'testcase' : $object->objectType;
               echo html::a($object->url, $object->title, '', 'title="' . strip_tags($object->title) . '"');
-              if($objectType == 'story' || $objectType == 'execution' || $objectType == 'issue')
+              if(($objectType == 'story' || $objectType == 'execution' || $objectType == 'issue') and !empty($object->extraType))
               {
                   echo "<small class=''>[{$lang->search->objectTypeList[$object->extraType]} #{$object->objectID}]</small> ";
               }
