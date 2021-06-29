@@ -571,6 +571,7 @@ class gitlabModel extends model
     public function pushTask($taskID, $gitlab, $gitlabProject)
     {
         $task = $this->loadModel('task')->getByID($taskID);
+        if(empty($task)) return false;
         
         if(!$gitlabID or !$projectID)
         {
@@ -607,7 +608,7 @@ class gitlabModel extends model
     public function pushStory($storyID, $gitlabID, $projectID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
-        if(empty($bug)) return false;
+        if(empty($story)) return false;
 
         if(!$gitlabID or !$projectID)
         {
@@ -644,6 +645,7 @@ class gitlabModel extends model
     public function pushBug($bugID, $gitlabID, $projectID)
     {
         $bug = $this->loadModel('bug')->getByID($bugID);
+        if(empty($bug)) return false;
 
         if(!$gitlabID or !$projectID)
         {
@@ -681,6 +683,7 @@ class gitlabModel extends model
     public function pushToIssue($objectType, $objectID, $gitlabID, $projectID)
     {
         $object = $this->loadModel($objectType)->getByID($objectID);
+        if(empty($object)) return false;
         if(!$gitlabID or !$projectID)
         {
             $result    = $this->getGitlabIDprojectID($objectType, $objectID);
