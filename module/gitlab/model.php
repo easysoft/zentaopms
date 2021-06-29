@@ -1116,8 +1116,8 @@ class gitlabModel extends model
             if(!isset($changes->$gitlabField)) continue;
             if($optionType == 'field') $value = $issue->$gitlabField;
             if($optionType == 'field') $value = $issue->$gitlabField;
-            if($options == 'date') $value = date('Y-m-d', $value);
-            if($options == 'datetime') $value = date('Y-m-d H:i:s', $value);
+            if($options == 'date') $value = date('Y-m-d', strtotime($value));
+            if($options == 'datetime') $value = date('Y-m-d H:i:s', strtotime($value));
             if($optionType == 'userPairs') $value = zget($gitlabUsers, $issue->$gitlabField);
             if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
             if($value) $object->$zentaoField = $value;
