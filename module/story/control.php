@@ -897,7 +897,6 @@ class story extends control
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
         if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
-        if(!empty($story->lib)) die(js::locate($this->createLink('assetlib', 'storyView', "storyID=$storyID"), 'window.parent.$.apps.open'));
 
         $story = $this->story->mergeReviewer($story, true);
 

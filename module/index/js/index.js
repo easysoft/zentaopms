@@ -639,6 +639,7 @@ $.extend(
             if(reg.test(objectValue) || objectType == 'all')
             {
                 var searchLink = createLink('search', 'index') + (config.requestType == 'PATH_INFO' ? '?' : '&') + 'words=' + objectValue;
+                $.apps.open(searchLink);
             }
             else
             {
@@ -646,10 +647,29 @@ $.extend(
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
+                var lib          = '';
+                var assetType    = 'story,issue,risk,opportunity,doc';
+                if(assetType.indexOf(searchModule) > -1)
+                {
+                    var link = createLink('index', 'ajaxGetViewMethod' , 'objectID=' + objectValue + '&objectType=' + searchModule);
+                    $.get(link, function(data)
+                    {
+                        if(data)
+                        {
+                            searchModule = 'assetlib';
+                            searchMethod = data;
+                            searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
+                            $.apps.open(searchLink);
+                        }
+                    });
+                }
+                else
+                {
+                    $.apps.open(searchLink);
+                }
             }
 
             $.post(createLink('index', 'ajaxClearObjectSession'), {objectType: objectType});
-            $.apps.open(searchLink);
             $('#globalSearchInput').click();
         }
     }

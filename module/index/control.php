@@ -86,4 +86,32 @@ class index extends control
 
         $this->session->set($objectType . 'List', '', $appGroup);
     }
+
+    /**
+     * Ajax get view method.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return string
+     */
+    public function ajaxGetViewMethod($objectID, $objectType)
+    {
+        $table     = $this->config->objectTables[$objectType];
+        $field     = $objectType == 'doc' ? 'assetLibType' : 'lib';
+        $objectLib =  $this->dao->select($field)->from($table) ->where('id')->eq($objectID)->fetchAll($field);
+        if(!empty($objectLib))
+        {
+            if($objectType == 'doc')
+            {
+                $method = $objectLib == 'practice' ? 'practiceView' : 'componentView';
+            }
+            else
+            {
+                $this->app->loadConfig('action');
+                $method = $this->config->action->assetViewMethod[$objectType];
+            }
+            die($method);
+        }
+    }
 }
