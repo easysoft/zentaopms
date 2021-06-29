@@ -16,7 +16,6 @@
 <?php if(isset($tips)):?>
 <?php $defaultURL = $config->systemMode == 'new' ? $this->createLink('project', 'execution', "status=all&projectID=$projectID") : $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('isStage', false);?>
 <body>
   <div class='modal-dialog mw-500px' id='tipsModal'>
     <div class='modal-header'>
@@ -39,6 +38,7 @@
 <?php js::set('holders', $lang->execution->placeholder);?>
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
+<?php js::set('isStage', false);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
