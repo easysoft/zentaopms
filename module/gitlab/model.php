@@ -911,20 +911,6 @@ class gitlabModel extends model
         commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
     } 
 
-    public function pushTask($gitlabID, $projectID, $task)
-    {
-        $task->label = $this->config->gitlab->taskLabel->name;
-        $response = $this->apiCreateIssue($gitlabID, $projectID, $task);
-        return $response;
-    }
-
-    public function pushBug($gitlabID, $projectID, $bug)
-    {
-        $bug->label = $this->config->gitlab->bugLabel->name;
-        $response   = $this->apiCreateIssue($gitlabID, $projectID, $bug);
-        return $response;
-    }
-
     /**
      * webhook check token.
      * 
