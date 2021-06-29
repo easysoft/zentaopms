@@ -1057,9 +1057,18 @@ class actionModel extends model
                     continue;
                 }
 
-                if($action->objectType == 'story' and strpos('import2storylib,passapproved', $action->action) !== false)
+                if(isset($this->config->maxVersion) and strpos($this->config->action->assetType, $action->objectType) !== false and strpos($this->config->action->assetlibAction[$action->objectType], $action->action) !== false)
                 {
-                    $action->objectLink = helper::createLink('assetlib', 'storyView', sprintf($vars, $action->objectID), '', '', $projectID);
+                    if($action->objectType == 'doc')
+                    {
+                        $method = strpos($action->action, 'practice') ? 'practiceView' : 'componentView';
+                    }
+                    else
+                    {
+                        $method = $this->config->action->assetViewMethod[$action->objectType];
+                    }
+
+                    $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID), '', '', $projectID);
                 }
                 else
                 {
