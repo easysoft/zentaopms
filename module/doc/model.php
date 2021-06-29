@@ -406,6 +406,23 @@ class docModel extends model
     }
 
     /**
+     * Get docs info by id list.
+     *
+     * @param  array    $docIdList
+     * @access public
+     * @return array
+     */
+    public function getByIdList($docIdList = array())
+    {
+        return $this->dao->select('*,t1.id as docID,t1.type as docType,t2.type as contentType')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc and t1.version=t2.version')
+            ->where('t1.id')->in($docIdList)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+    }
+
+    /**
      * Create a doc.
      *
      * @access public
