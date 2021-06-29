@@ -78,6 +78,21 @@ class gitlabModel extends model
     }
 
     /**
+     * Get gitlab gitlabID and gitlabProjectID.
+     * 
+     * @param  int    $gitlab 
+     * @access public
+     * @return void
+     */
+    public function getGitlabToGitlabProject($storyID)
+    {
+        return $this->dao->select('BID,BVersion')->from(TABLE_RELATION)
+                    ->where('relation')->eq('gitlab')
+                    ->andWhere('AID')->eq($storyID)
+                    ->fetchAll();
+    }
+
+    /**
      * Get zentao account gitlab user id pairs of one gitlab.
      * 
      * @param  int    $gitlab 

@@ -828,10 +828,10 @@ class storyModel extends model
                 $reviewData->version  = $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-            }
-
-            /* Push this story to gitlab issue. */
-            $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+           }
+            /* update story to gitlab issue. */
+            $objectID = $this->loadModel('gitlab')->getGitlabToGitlabProject($storyID);
+            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             unset($oldStory->parent);
             unset($story->parent);
@@ -1767,11 +1767,11 @@ class storyModel extends model
         $story->assignedTo     = $assignedTo;
         $story->assignedDate   = $now;
 
-        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError())
         {
-            /* Push this story to gitlab issue. */
-            $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+            /* Update this story to gitlab issue. */
+            $objectID = $this->loadModel('gitlab')->getGitlabToGitlabProject($storyID);
+            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             return common::createChanges($oldStory, $story);
         }
