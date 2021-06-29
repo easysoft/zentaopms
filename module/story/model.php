@@ -830,7 +830,7 @@ class storyModel extends model
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
            }
             /* update story to gitlab issue. */
-            $objectID = $this->loadModel('gitlab')->getGitlabToGitlabProject($storyID);
+            $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
             if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             unset($oldStory->parent);
@@ -1770,7 +1770,7 @@ class storyModel extends model
         if(!dao::isError())
         {
             /* Update this story to gitlab issue. */
-            $objectID = $this->loadModel('gitlab')->getGitlabToGitlabProject($storyID);
+            $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
             if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             return common::createChanges($oldStory, $story);
