@@ -90,7 +90,7 @@ class bugModel extends model
             $bugID = $this->dao->lastInsertID();
             
             /* Sync this bug to gitlab issue. */
-            $this->loadModel('gitlab')->pushToissue('bug', $bugID, $this->post->gitlab, $this->post->gitlabProject);
+            $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $this->post->gitlab, $this->post->gitlabProject);
                 
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
@@ -851,6 +851,15 @@ class bugModel extends model
             ->data($bug)
             ->autoCheck()
             ->where('id')->eq($bugID)->exec();
+
+        $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('bug', $bugID);
+        $attribute = new stdclass();
+        $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $bug->assignedTo);
+        if($attribute->assignee_id != '')
+        {
+            // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
+            $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID , $attribute);
+        }
 
         if(!dao::isError()) return common::createChanges($oldBug, $bug);
     }

@@ -593,14 +593,16 @@ class gitlabModel extends model
      * Push story to gitlab issue. 
      * 
      * @param  int    $storyID 
-     * @param  int    $gitlab 
-     * @param  int    $gitlabProject 
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
     public function pushStory($storyID, $gitlabID, $projectID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
+        if(empty($bug)) return false;
+
         if(!$gitlabID or !$projectID)
         {
             $result    = $this->getGitlabIDprojectID('story', $storyID);
@@ -627,7 +629,7 @@ class gitlabModel extends model
     /**
      * Sync bug to gitlab issue. 
      * 
-     * @param  int    $storyID 
+     * @param  int    $bugID 
      * @param  int    $gitlab 
      * @param  int    $gitlabProject 
      * @access public
@@ -658,7 +660,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function pushToissue($objectType, $objectID, $gitlabID, $projectID)
+    public function pushToIssue($objectType, $objectID, $gitlabID, $projectID)
     {
         $object = $this->loadModel($objectType)->getByID($objectID);
         if(!$gitlabID or !$projectID)
@@ -669,9 +671,9 @@ class gitlabModel extends model
         }
 
         $syncedIssue = $this->getSyncedIssue($objectType = $objectType, $objectID = $objectID, $gitlabID);
-        if($objectType == 'story') $issue = $this->storyToIssue($gitlabID, $projectID, $objectID);
-        if($objectType == 'task')  $issue = $this->taskToIssue($gitlabID, $projectID, $objectID);
-        if($objectType == 'bug')   $issue = $this->bugToIssue($gitlabID, $projectID, $objectID);
+        if($objectType == 'story') $issue = $this->storyToIssue($gitlabID, $projectID, $object);
+        if($objectType == 'task')  $issue = $this->taskToIssue($gitlabID, $projectID, $object);
+        if($objectType == 'bug')   $issue = $this->bugToIssue($gitlabID, $projectID, $object);
         
         if($syncedIssue)
         {
@@ -682,7 +684,7 @@ class gitlabModel extends model
             $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
             $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
             $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
-            if($issue) $this->saveSyncedIssue($objectType, $objectID, $gitlabID, $issue);
+            if($issue) $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
         }
     }
 
@@ -770,7 +772,7 @@ class gitlabModel extends model
      * 
      * @param  int    $gitlabID 
      * @param  int    $gitlabProjectID 
-     * @param  object    $task 
+     * @param  object $task 
      * @access public
      * @return object
      */
