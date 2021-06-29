@@ -1733,7 +1733,7 @@ class executionModel extends model
             if(isset($oldExecutionProducts[$productID][$branch]))
             {
                 $oldExecutionProduct = $oldExecutionProducts[$productID][$branch];
-                $oldPlan           = $oldExecutionProduct->plan;
+                $oldPlan = $oldExecutionProduct->plan;
             }
 
             $data = new stdclass();
