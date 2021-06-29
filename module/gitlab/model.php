@@ -713,14 +713,16 @@ class gitlabModel extends model
      * @param  int    $projectID 
      * @param  string $objectType 
      * @param  int    $objectID 
+     * @param  int    $issueID 
      * @access public
      * @return void
      */
-    public function deleteIssue($gitlabID, $projectID, $objectType, $objectID)
+    public function deleteIssue($gitlabID, $projectID, $objectType, $objectID, $issueID)
     {
         $object     = $this->loadModel($objectType)->getByID($objectID);
         $relationID = $this->getRelationID($objectType, $objectID);
         if(!empty($relationID)) $this->dao->delete(TABLE_RELATION, $relationID);
+        $this->apiDeleteIssue($gitlabID, $projectID, $issueID);
     }
 
     /**
