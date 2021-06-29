@@ -853,12 +853,12 @@ class gitlabModel extends model
 
         $issue->issue->objectType = $object->type;
         $issue->issue->objectID   = $object->id;
-
+        
         /* Parse markdown description to html. */
         $issue->issue->description = $this->app->loadClass('hyperdown')->makeHtml($issue->issue->description);
 
         if(!isset($this->config->gitlab->maps->{$object->type})) return false;
-        $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID);
+        $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID, $body->changes);
         return $issue;
     }
 
@@ -905,7 +905,6 @@ class gitlabModel extends model
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if($tableName) $this->dao->update($tableName)->data($issue->object)->where('id')->eq($issue->objectID)->exec();
-        a($this->dao->get());exit;
         return !dao::isError();
     }
 
@@ -934,6 +933,51 @@ class gitlabModel extends model
     }
 
     /**
+     * Process webhook issue assign option.
+     * 
+     * @param  int      $gitlabID 
+     * @param  object   $issue 
+     * @access public
+     * @return void
+     */
+    public function webhookIssueAssign($gitlabID, $issue)
+    {
+        $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
+        if($issue->objectType == 'task')
+        {
+            $oldTask = $this->loadModel('task')->getByID($issue->objectID);
+            $_POST['left']           = $oldTask->left;
+            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
+            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
+            $_POST['assignedDate']   = $issue->object->lastEditedDate;
+            $_POST['assignedBy']     = $issue->object->lastEditedBy;
+            $this->task->assign($issue->objectID);
+        }
+
+        if($issue->objectType == 'bug')
+        {
+            $oldBug = $this->loadModel('bug')->getByID($issue->objectID);
+            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
+            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
+            $_POST['assignedDate']   = $issue->object->lastEditedDate;
+            $_POST['assignedBy']     = $issue->object->lastEditedBy;
+            $this->bug->assign($issue->objectID);
+        }
+
+        if($issue->objectType == 'story')
+        {
+            $oldBug = $this->loadModel('story')->getByID($issue->objectID);
+            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
+            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
+            $_POST['assignedDate']   = $issue->object->lastEditedDate;
+            $_POST['assignedBy']     = $issue->object->lastEditedBy;
+            $this->story->assign($issue->objectID);
+        }
+
+
+    }
+
+    /**
      * Parse issue to zentao object.
      * 
      * @param  object    $issue 
@@ -941,7 +985,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function issueToZentaoObject($issue, $gitlabID)
+    public function issueToZentaoObject($issue, $gitlabID, $changes = null)
     {
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
@@ -954,6 +998,7 @@ class gitlabModel extends model
         {
             $value = '';
             list($gitlabField, $optionType, $options) = explode('|', $config);
+            if(!isset($changes->gitlabField)) continue;
             if($optionType == 'field') $value = $issue->$gitlabField;
             if($optionType == 'field') $value = $issue->$gitlabField;
             if($optionType == 'userPairs') $value = zget($gitlabUsers, $issue->$gitlabField);
