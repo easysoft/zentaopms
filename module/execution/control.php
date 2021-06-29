@@ -1404,9 +1404,10 @@ class execution extends control
             }
 
             /* Link the plan stories. */
-            $diffResult = array_diff($oldPlans, $_POST['plans']);
-            $diffResult = array_merge($diffResult, array_diff($_POST['plans'], $oldPlans));
-            if(current($_POST['plans']) and !empty($diffResult))
+            $newPlans   = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
+            $diffResult = array_diff($oldPlans, $newPlans);
+            $diffResult = array_merge($diffResult, array_diff($newPlans, $oldPlans));
+            if(!empty($newPlans) and !empty($diffResult))
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
                 $this->loadModel('productplan')->linkProject($executionID, $_POST['plans'], $oldPlanStories);
