@@ -803,6 +803,7 @@ class gitlabModel extends model
         $map = $this->config->gitlab->maps->task;
         $issue = new stdclass;
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+
         foreach($map as $taskField => $config)
         {
             $value = '';
@@ -815,6 +816,11 @@ class gitlabModel extends model
             }
             if($value) $issue->$field = $value;
         }
+
+        /* issue->state is null when creating it, we should put status_event when updating it. */
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+
         return $issue;
     }
 
@@ -850,6 +856,10 @@ class gitlabModel extends model
             }
             if($value) $issue->$field = $value;
         }
+
+        /* issue->state is null when creating it, we should put status_event when updating it. */
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
 
         return $issue;
     }
