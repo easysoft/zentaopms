@@ -75,6 +75,11 @@ $config->gitlab->storyWeightMap['1'] = '1';
 $config->gitlab->storyWeightMap['2'] = '2';
 $config->gitlab->storyWeightMap['3'] = '3';
 
+$config->gitlab->storyStateMap = array();
+$config->gitlab->storyStateMap['active']   = 'opened';
+$config->gitlab->storyStateMap['resolved'] = 'closed';
+$config->gitlab->storyStateMap['closed']   = 'closed';
+
 $config->gitlab->bugWeightMap = array();
 $config->gitlab->bugWeightMap['1'] = '1';
 $config->gitlab->bugWeightMap['2'] = '2';
