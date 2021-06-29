@@ -37,6 +37,7 @@ $config->gitlab->maps->task['lastEditedDate'] = 'updated_at|field|';
 $config->gitlab->maps->task['deadline']       = 'due_date|field|';
 $config->gitlab->maps->task['status']         = 'state|configItems|taskStateMap';
 $config->gitlab->maps->task['pri']            = 'weight|configItems|taskWeightMap';
+$config->gitlab->maps->task['lastEditedBy']   = 'updated_by_id|userPairs|';
 
 $config->gitlab->maps->story = array();
 $config->gitlab->maps->story['title']        = 'title|field|';
@@ -59,11 +60,11 @@ $config->gitlab->taskWeightMap['2'] = '2';
 $config->gitlab->taskWeightMap['3'] = '3';
 
 $config->gitlab->taskStateMap  = array();
-$config->gitlab->taskStateMap['doing']  = 'reopen';
-$config->gitlab->taskStateMap['wait']   = 'reopen';
+$config->gitlab->taskStateMap['doing']  = 'opened';
+$config->gitlab->taskStateMap['wait']   = 'opened';
+$config->gitlab->taskStateMap['closed'] = 'close';
 $config->gitlab->taskStateMap['done']   = 'close';
 $config->gitlab->taskStateMap['cancel'] = 'close';
-$config->gitlab->taskStateMap['closed'] = 'close';
 
 $config->gitlab->taskTypesToSync = 'design,devel,request,discuss,ui,affair,misc';
 
