@@ -646,6 +646,10 @@ class bugModel extends model
 
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
+            
+            $relation = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
+            if($relation) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $relation->gitlabID, $relation->projectID);
+
             return common::createChanges($oldBug, $bug);
         }
     }
