@@ -37,6 +37,7 @@ $config->gitlab->maps->task['lastEditedDate'] = 'updated_at|field|';
 $config->gitlab->maps->task['deadline']       = 'due_date|field|';
 $config->gitlab->maps->task['status']         = 'state|configItems|taskStateMap';
 $config->gitlab->maps->task['pri']            = 'weight|configItems|taskWeightMap';
+$config->gitlab->maps->task['lastEditedBy']   = 'updated_by_id|userPairs|';
 
 $config->gitlab->maps->story = array();
 $config->gitlab->maps->story['title']        = 'title|field|';
@@ -51,6 +52,7 @@ $config->gitlab->maps->bug['title']      = 'title|field|';
 $config->gitlab->maps->bug['steps']      = 'description|field|';
 $config->gitlab->maps->bug['openedDate'] = 'created_at|field|';
 $config->gitlab->maps->bug['assignedTo'] = 'assignee_id|userPairs|';
+$config->gitlab->maps->bug['status']     = 'state|configItems|bugStateMap';
 $config->gitlab->maps->bug['pri']        = 'weight|configItems|bugWeightMap';
 
 $config->gitlab->taskWeightMap = array();
@@ -59,11 +61,11 @@ $config->gitlab->taskWeightMap['2'] = '2';
 $config->gitlab->taskWeightMap['3'] = '3';
 
 $config->gitlab->taskStateMap  = array();
-$config->gitlab->taskStateMap['doing']  = 'reopen';
-$config->gitlab->taskStateMap['wait']   = 'reopen';
-$config->gitlab->taskStateMap['done']   = 'close';
-$config->gitlab->taskStateMap['cancel'] = 'close';
-$config->gitlab->taskStateMap['closed'] = 'close';
+$config->gitlab->taskStateMap['doing']  = 'opened';
+$config->gitlab->taskStateMap['wait']   = 'opened';
+$config->gitlab->taskStateMap['closed'] = 'closed';
+$config->gitlab->taskStateMap['done']   = 'closed';
+$config->gitlab->taskStateMap['cancel'] = 'closed';
 
 $config->gitlab->taskTypesToSync = 'design,devel,request,discuss,ui,affair,misc';
 
@@ -79,9 +81,9 @@ $config->gitlab->bugWeightMap['3'] = '3';
 $config->gitlab->bugWeightMap['4'] = '4';
 
 $config->gitlab->bugStateMap = array();
-$config->gitlab->bugStateMap['active']   = 'reopen';
-$config->gitlab->bugStateMap['resolved'] = 'reopen';
-$config->gitlab->bugStateMap['closed']   = 'close';
+$config->gitlab->bugStateMap['active']   = 'opened';
+$config->gitlab->bugStateMap['resolved'] = 'closed';
+$config->gitlab->bugStateMap['closed']   = 'closed';
 
 $config->gitlab->objectTables = new stdclass;
 $config->gitlab->objectTables->story = TABLE_STORY;

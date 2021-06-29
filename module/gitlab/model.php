@@ -550,7 +550,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Sync task to gitlab issue.
+     * Push task to gitlab issue.
      * 
      * @param  int  $taskID 
      * @param  int  $gitlab 
@@ -558,20 +558,32 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function syncTask($taskID, $gitlab, $gitlabProject)
+    public function pushTask($taskID, $gitlab, $gitlabProject)
     {
         $task = $this->loadModel('task')->getByID($taskID);
+        
+        if(!$gitlabID or !$projectID)
+        {
+            $result    = $this->getGitlabIDprojectID('task', $taskID);
+            $gitlabID  = $result->gitlabID;
+            $projectID = $result->projectID;
+        }
+
         $syncedIssue = $this->getSyncedIssue($objectType = 'task', $objectID = $taskID, $gitlab);
 
         $issue = $this->taskToIssue($gitlab, $gitlabProject, $task);
        
-        $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'task', $taskID); 
-        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'task', $taskID);
-       
-        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
-        $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
-
-        $this->saveSyncedIssue('task', $task, $gitlab, $issue);
+        if($syncedIssue)
+        {
+            $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
+        }
+        else
+        {
+            $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'task', $taskID); 
+            $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'task', $taskID);
+            $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
+            $this->saveSyncedIssue('task', $task, $gitlab, $issue);
+        }
     }
 
     /**
@@ -612,7 +624,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Sync bug to gitlab issue. 
+     * Push bug to gitlab issue. 
      * 
      * @param  int    $bugID 
      * @param  int    $gitlab 
@@ -620,19 +632,31 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function syncBug($bugID, $gitlab, $gitlabProject)
+    public function pushBug($bugID, $gitlab, $gitlabProject)
     {
         $bug = $this->loadModel('bug')->getByID($bugID);
+
+        if(!$gitlabID or !$projectID)
+        {
+            $result    = $this->getGitlabIDprojectID('bug', $bugID);
+            $gitlabID  = $result->gitlabID;
+            $projectID = $result->projectID;
+        }
 
         $syncedIssue = $this->getSyncedIssue($objectType = 'bug', $objectID = $bugID, $gitlab);
         $issue = $this->bugToIssue($gitlab, $gitlabProject, $bug);
         
-        $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'bug', $bugID);
-        $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'bug', $bugID);
-        
-        if($syncedIssue) $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
-        $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
-        if($issue) $this->saveSyncedIssue('bug', $bug, $gitlab, $issue);
+        if($syncedIssue)
+        {
+            $issue = $this->apiUpdateIssue($gitlab, $gitlabProject, $syncedIssue, $issue);
+        }
+        else
+        {
+            $this->createZentaoObjectLabel($gitlab, $gitlabProject, 'bug', $bugID);
+            $issue->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, 'bug', $bugID);
+            $issue = $this->apiCreateIssue($gitlab, $gitlabProject, $issue);
+            if($issue) $this->saveSyncedIssue('bug', $bug, $gitlab, $issue);
+        }
     }
 
     /**
@@ -911,20 +935,6 @@ class gitlabModel extends model
         commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
     } 
 
-    public function pushTask($gitlabID, $projectID, $task)
-    {
-        $task->label = $this->config->gitlab->taskLabel->name;
-        $response = $this->apiCreateIssue($gitlabID, $projectID, $task);
-        return $response;
-    }
-
-    public function pushBug($gitlabID, $projectID, $bug)
-    {
-        $bug->label = $this->config->gitlab->bugLabel->name;
-        $response   = $this->apiCreateIssue($gitlabID, $projectID, $bug);
-        return $response;
-    }
-
     /**
      * webhook check token.
      * 
@@ -973,12 +983,12 @@ class gitlabModel extends model
 
         $issue->issue->objectType = $object->type;
         $issue->issue->objectID   = $object->id;
-
+        
         /* Parse markdown description to html. */
         $issue->issue->description = $this->app->loadClass('hyperdown')->makeHtml($issue->issue->description);
 
         if(!isset($this->config->gitlab->maps->{$object->type})) return false;
-        $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID);
+        $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID, $body->changes);
         return $issue;
     }
 
@@ -1025,7 +1035,6 @@ class gitlabModel extends model
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if($tableName) $this->dao->update($tableName)->data($issue->object)->where('id')->eq($issue->objectID)->exec();
-        a($this->dao->get());exit;
         return !dao::isError();
     }
 
@@ -1054,6 +1063,51 @@ class gitlabModel extends model
     }
 
     /**
+     * Process webhook issue assign option.
+     * 
+     * @param  int      $gitlabID 
+     * @param  object   $issue 
+     * @access public
+     * @return void
+     */
+    public function webhookIssueAssign($gitlabID, $issue)
+    {
+        $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
+        if($issue->objectType == 'task')
+        {
+            $oldTask = $this->loadModel('task')->getByID($issue->objectID);
+            $_POST['left']           = $oldTask->left;
+            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
+            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
+            $_POST['assignedDate']   = $issue->object->lastEditedDate;
+            $_POST['assignedBy']     = $issue->object->lastEditedBy;
+            $this->task->assign($issue->objectID);
+        }
+
+        if($issue->objectType == 'bug')
+        {
+            $oldBug = $this->loadModel('bug')->getByID($issue->objectID);
+            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
+            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
+            $_POST['assignedDate']   = $issue->object->lastEditedDate;
+            $_POST['assignedBy']     = $issue->object->lastEditedBy;
+            $this->bug->assign($issue->objectID);
+        }
+
+        if($issue->objectType == 'story')
+        {
+            $oldBug = $this->loadModel('story')->getByID($issue->objectID);
+            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
+            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
+            $_POST['assignedDate']   = $issue->object->lastEditedDate;
+            $_POST['assignedBy']     = $issue->object->lastEditedBy;
+            $this->story->assign($issue->objectID);
+        }
+
+
+    }
+
+    /**
      * Parse issue to zentao object.
      * 
      * @param  object    $issue 
@@ -1061,7 +1115,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function issueToZentaoObject($issue, $gitlabID)
+    public function issueToZentaoObject($issue, $gitlabID, $changes = null)
     {
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
@@ -1074,6 +1128,7 @@ class gitlabModel extends model
         {
             $value = '';
             list($gitlabField, $optionType, $options) = explode('|', $config);
+            if(!isset($changes->gitlabField)) continue;
             if($optionType == 'field') $value = $issue->$gitlabField;
             if($optionType == 'field') $value = $issue->$gitlabField;
             if($optionType == 'userPairs') $value = zget($gitlabUsers, $issue->$gitlabField);
