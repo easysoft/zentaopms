@@ -1185,6 +1185,7 @@ class bugModel extends model
             foreach($openedBuilds as $openedBuild)
             {
                 $build = $this->build->getByID($openedBuild);
+                if(empty($build)) continue;
                 $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
                 $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$openedBuild)->exec();
             }
