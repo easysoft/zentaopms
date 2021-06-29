@@ -1074,39 +1074,24 @@ class gitlabModel extends model
      */
     public function webhookIssueAssign($gitlabID, $issue)
     {
+        $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
+        if(!$tableName) return false;
+
         $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
-        if($issue->objectType == 'task')
-        {
-            $oldTask = $this->loadModel('task')->getByID($issue->objectID);
-            $_POST['left']           = $oldTask->left;
-            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
-            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
-            $_POST['assignedDate']   = $issue->object->lastEditedDate;
-            $_POST['assignedBy']     = $issue->object->lastEditedBy;
-            $this->task->assign($issue->objectID);
-        }
 
-        if($issue->objectType == 'bug')
-        {
-            $oldBug = $this->loadModel('bug')->getByID($issue->objectID);
-            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
-            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
-            $_POST['assignedDate']   = $issue->object->lastEditedDate;
-            $_POST['assignedBy']     = $issue->object->lastEditedBy;
-            $this->bug->assign($issue->objectID);
-        }
+        $data = $issue->object;
+        $data->assignedDate = $issue->object->lastEditedDate;
+        $data->assignedBy   = $issue->object->lastEditedBy;
+        $data->assignedTo   = $issue->object->assignedTo;
 
-        if($issue->objectType == 'story')
-        {
-            $oldBug = $this->loadModel('story')->getByID($issue->objectID);
-            $_POST['lastEditedBy']   = $issue->object->lastEditedBy;
-            $_POST['lastEditedDate'] = $issue->object->lastEditedDate;
-            $_POST['assignedDate']   = $issue->object->lastEditedDate;
-            $_POST['assignedBy']     = $issue->object->lastEditedBy;
-            $this->story->assign($issue->objectID);
-        }
+        $this->dao->update($tableName)->data($data)->where('id')->eq($issue->objectID)->exec();
+        if(dao::isError()) return false;
 
-
+        $oldObject = $this->dao->findById($issue->objectID)->from($tableName)->fetch();
+        $changes   = common::createChanges($oldObject, $data);
+        $actionID = $this->action->create($issue->objectType, $issue->objectID, 'Assigned', '', $data->assignedTo);
+        $this->action->logHistory($actionID, $changes);
+        return true;
     }
 
     /**
@@ -1130,9 +1115,11 @@ class gitlabModel extends model
         {
             $value = '';
             list($gitlabField, $optionType, $options) = explode('|', $config);
-            if(!isset($changes->gitlabField)) continue;
+            if(!isset($changes->$gitlabField)) continue;
             if($optionType == 'field') $value = $issue->$gitlabField;
             if($optionType == 'field') $value = $issue->$gitlabField;
+            if($options == 'date') $value = date('Y-m-d', strtotime($value));
+            if($options == 'datetime') $value = date('Y-m-d H:i:s', strtotime($value));
             if($optionType == 'userPairs') $value = zget($gitlabUsers, $issue->$gitlabField);
             if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
             if($value) $object->$zentaoField = $value;
