@@ -550,7 +550,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Sync task to gitlab issue.
+     * Push task to gitlab issue.
      * 
      * @param  int  $taskID 
      * @param  int  $gitlab 
@@ -558,7 +558,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function syncTask($taskID, $gitlab, $gitlabProject)
+    public function pushTask($taskID, $gitlab, $gitlabProject)
     {
         $task = $this->loadModel('task')->getByID($taskID);
         $syncedIssue = $this->getSyncedIssue($objectType = 'task', $objectID = $taskID, $gitlab);
@@ -612,7 +612,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Sync bug to gitlab issue. 
+     * Push bug to gitlab issue. 
      * 
      * @param  int    $bugID 
      * @param  int    $gitlab 
@@ -620,7 +620,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function syncBug($bugID, $gitlab, $gitlabProject)
+    public function pushBug($bugID, $gitlab, $gitlabProject)
     {
         $bug = $this->loadModel('bug')->getByID($bugID);
 
