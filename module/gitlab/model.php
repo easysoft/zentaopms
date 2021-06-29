@@ -233,6 +233,10 @@ class gitlabModel extends model
     {  
         $apiRoot = $this->getApiRoot($gitlabID);
 
+        $accessToken = $this->dao->select('private as accessToken')->from(TABLE_PIPELINE)
+                            ->where('id')->eq($gitlabID)
+                            ->fetch('accessToken');
+        
         $postData = new stdclass;
         $postData->enable_ssl_verification = "false";
         $postData->issues_events           = "true";
@@ -240,7 +244,8 @@ class gitlabModel extends model
         $postData->push_events             = "true";
         $postData->tag_push_events         = "true";
         $postData->url                     = $url;
-
+        $postData->token                   = $accessToken;
+        
         $url = sprintf($apiRoot, "/projects/{$projectID}/hooks");
         return commonModel::http($url, $postData); 
     }
