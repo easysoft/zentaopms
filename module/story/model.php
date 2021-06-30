@@ -1407,7 +1407,7 @@ class storyModel extends model
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
         $story = fixer::input('post')
-            ->add('assignedTo',   'closed')
+            ->add('assignedTo', 'closed')
             ->add('status', 'closed')
             ->add('stage', 'closed')
             ->setDefault('lastEditedBy',   $this->app->user->account)
@@ -1427,7 +1427,7 @@ class storyModel extends model
             ->where('id')->eq($storyID)->exec();
 
         $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
-        if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
+        if($objectID) $this->loadModel('gitlab')->pushToIssue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);

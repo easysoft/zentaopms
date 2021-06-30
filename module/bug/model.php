@@ -1002,6 +1002,7 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
+
         if(!dao::isError())
         {
             $this->loadModel('score')->create('bug', 'resolve', $oldBug);
