@@ -1064,11 +1064,12 @@ class actionModel extends model
                    and strpos($this->config->action->assetType, $action->objectType) !== false
                    and empty($action->project) and empty($action->product) and empty($action->execution))
                 {
-                    if($action->objectType == 'doc' and strpos($this->config->action->docAction, $action->action) !== false)
+                    if($action->objectType == 'doc')
                     {
-                        $method = strpos($action->action, 'practice') ? 'practiceView' : 'componentView';
+                        $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
+                        $method = $assetLibType == 'practice'  ? 'practiceView' : 'componentView';
                     }
-                    elseif($action->objectType != 'doc')
+                    else
                     {
                         $method = $this->config->action->assetViewMethod[$action->objectType];
                     }
