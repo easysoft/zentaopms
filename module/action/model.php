@@ -942,6 +942,9 @@ class actionModel extends model
             $field     = $this->config->action->objectNameFields[$objectType];
             if($table != TABLE_TODO)
             {
+                $objectName    = array();
+                $objectProject = array();
+
                 if(strpos($this->config->action->needGetProjectType, $objectType) !== false)
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
