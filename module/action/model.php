@@ -1068,7 +1068,7 @@ class actionModel extends model
                     {
                         $method = strpos($action->action, 'practice') ? 'practiceView' : 'componentView';
                     }
-                    else
+                    elseif($action->objectType != 'doc')
                     {
                         $method = $this->config->action->assetViewMethod[$action->objectType];
                     }
