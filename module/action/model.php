@@ -1038,6 +1038,11 @@ class actionModel extends model
                 if(!is_array($objectLabel)) $action->objectLabel = $objectLabel;
                 if(is_array($objectLabel) and isset($objectLabel[$actionType])) $action->objectLabel = $objectLabel[$actionType];
             }
+            if(isset($this->config->maxVersion) and $action->objectType == 'assetlib')
+            {
+                $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($action->objectID)->fetch('type');
+                if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $action->objectLabel = $this->lang->action->label->{$libType . 'assetlib'};
+            }
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited')

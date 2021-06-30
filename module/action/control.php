@@ -48,6 +48,13 @@ class action extends control
         $this->session->set('researchplanList',   $uri, 'project');
         $this->session->set('researchreportList', $uri, 'project');
         $this->session->set('meetingList',        $uri, 'project');
+        $this->session->set('storyLibList',       $uri, 'assetlib');
+        $this->session->set('issueLibList',       $uri, 'assetlib');
+        $this->session->set('riskLibList',        $uri, 'assetlib');
+        $this->session->set('opportunityLibList', $uri, 'assetlib');
+        $this->session->set('practiceLibList',    $uri, 'assetlib');
+        $this->session->set('componentLibList',   $uri, 'assetlib');
+
 
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
