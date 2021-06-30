@@ -615,7 +615,7 @@ class searchModel extends model
                 $object = $this->dao->select('id,lib')->from($table)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($object->lib))
                 {
-                    $method = $module == 'risk' ? 'riskView' : 'opportunitView';
+                    $method = $module == 'risk' ? 'riskView' : 'opportunityView';
                     $module = 'assetlib';
                 }
 
