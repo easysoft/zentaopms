@@ -1772,10 +1772,14 @@ class storyModel extends model
 
         if(!dao::isError())
         {
-            /* Update story to gitlab issue. */
-            $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
-            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
-
+            $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('story', $storyID);
+            $attribute = new stdclass();
+            $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
+            if($attribute->assignee_id != '')
+            {
+                // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
+                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID , $attribute);
+            }
             return common::createChanges($oldStory, $story);
         }
         return false;

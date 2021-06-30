@@ -40,12 +40,12 @@ $config->gitlab->maps->task['pri']            = 'weight|configItems|taskWeightMa
 $config->gitlab->maps->task['lastEditedBy']   = 'updated_by_id|userPairs|';
 
 $config->gitlab->maps->story = array();
-$config->gitlab->maps->story['title']        = 'title|field|';
-$config->gitlab->maps->story['spec']         = 'description|fields|verify';
-$config->gitlab->maps->story['openedDate']   = 'created_at|field|datetime';
-$config->gitlab->maps->story['status']       = 'state|configItems|storyStateMap';
-$config->gitlab->maps->story['pri']          = 'weight|configItems|storyWeightMap';
-$config->gitlab->maps->story['lastEditedBy'] = 'assignee_id|userPairs|';
+$config->gitlab->maps->story['title']      = 'title|field|';
+$config->gitlab->maps->story['spec']       = 'description|fields|verify';
+$config->gitlab->maps->story['openedDate'] = 'created_at|field|datetime';
+$config->gitlab->maps->story['assignedTo'] = 'assignee_id|userPairs|';
+$config->gitlab->maps->story['status']     = 'state|configItems|storyStateMap';
+$config->gitlab->maps->story['pri']        = 'weight|configItems|storyWeightMap';
 
 $config->gitlab->maps->bug = array();
 $config->gitlab->maps->bug['title']      = 'title|field|';
