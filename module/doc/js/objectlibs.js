@@ -8,3 +8,10 @@ function ajaxDeleteDoc(link, replaceID, notice)
         })
     }
 }
+
+/* Delete a file. */
+function deleteFile(fileID)
+{
+    if(!fileID) return;
+    hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
+}
