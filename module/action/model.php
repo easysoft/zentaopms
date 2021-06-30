@@ -1060,7 +1060,10 @@ class actionModel extends model
                     continue;
                 }
 
-                if(isset($this->config->maxVersion) and strpos($this->config->action->assetType, $action->objectType) !== false and strpos($this->config->action->assetlibAction[$action->objectType], $action->action) !== false)
+                if(isset($this->config->maxVersion)
+                   and strpos($this->config->action->assetType, $action->objectType) !== false
+                   and strpos($this->config->action->assetlibAction[$action->objectType], $action->action) !== false
+                   and empty($action->project) and empty($action->product) and empty($action->execution))
                 {
                     if($action->objectType == 'doc')
                     {
