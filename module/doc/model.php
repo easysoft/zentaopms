@@ -517,6 +517,8 @@ class docModel extends model
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('users', '')
             ->setDefault('groups', '')
+            ->setDefault('product', 0)
+            ->setDefault('execution', 0)
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
             ->cleanInt('module')
