@@ -1062,10 +1062,9 @@ class actionModel extends model
 
                 if(isset($this->config->maxVersion)
                    and strpos($this->config->action->assetType, $action->objectType) !== false
-                   and strpos($this->config->action->assetlibAction[$action->objectType], $action->action) !== false
                    and empty($action->project) and empty($action->product) and empty($action->execution))
                 {
-                    if($action->objectType == 'doc')
+                    if($action->objectType == 'doc' and strpos($this->config->action->docAction, $action->action) !== false)
                     {
                         $method = strpos($action->action, 'practice') ? 'practiceView' : 'componentView';
                     }
