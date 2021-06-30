@@ -99,7 +99,8 @@ class index extends control
     {
         $table     = $this->config->objectTables[$objectType];
         $field     = $objectType == 'doc' ? 'assetLibType' : 'lib';
-        $objectLib =  $this->dao->select($field)->from($table) ->where('id')->eq($objectID)->fetchAll($field);
+        $objectLib = $this->dao->select($field)->from($table) ->where('id')->eq($objectID)->fetch($field);
+        $method    = '';
         if(!empty($objectLib))
         {
             if($objectType == 'doc')
@@ -111,7 +112,7 @@ class index extends control
                 $this->app->loadConfig('action');
                 $method = $this->config->action->assetViewMethod[$objectType];
             }
-            die($method);
         }
+        die($method);
     }
 }
