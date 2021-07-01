@@ -1228,14 +1228,17 @@ class bugModel extends model
 
         $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
 
-        $singleIssue = new stdclass();
-        $singleIssue = $this->loadModel('gitlab')->apiSingleIssue($relation->gitlabID, $relation->issueID);
-
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
 
-        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
-        if($objectID) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $objectID->gitlabID, $objectID->projectID);
+        $singleIssue = new stdclass();
+        $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
 
+        if($singleIssue->state != 'closed')
+        { 
+            $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
+            if($objectID) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $objectID->gitlabID, $objectID->projectID);
+        }
+        
         return common::createChanges($oldBug, $bug);
     }
 
