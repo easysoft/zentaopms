@@ -854,12 +854,12 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function deleteIssue($gitlabID, $projectID, $objectType, $objectID, $issueID)
+    public function deleteIssue($objectType, $objectID, $issueID)
     {
-        $object     = $this->loadModel($objectType)->getByID($objectID);
-        $relationID = $this->getRelationByObject($objectType, $objectID);
-        if(!empty($relationID)) $this->dao->delete()->from(TABLE_RELATION)->where('id')->eq($relationID)->exec();
-        $this->apiDeleteIssue($gitlabID, $projectID, $issueID);
+        $object   = $this->loadModel($objectType)->getByID($objectID);
+        $relation = $this->getRelationByObject($objectType, $objectID);
+        if(!empty($relation)) $this->dao->delete()->from(TABLE_RELATION)->where('id')->eq($relation->id)->exec();
+        $this->apiDeleteIssue($relation->gitlabID, $relation->projectID, $issueID);
     }
 
     /**
