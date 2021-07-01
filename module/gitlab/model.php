@@ -830,13 +830,10 @@ class gitlabModel extends model
         }
 
         $syncedIssue = $this->getSyncedIssue($objectType = $objectType, $objectID = $objectID, $gitlabID);
-        if($objectType == 'story') $issue = $this->storyToIssue($gitlabID, $projectID, $object);
-        if($objectType == 'task')  $issue = $this->taskToIssue($gitlabID, $projectID, $object);
-        if($objectType == 'bug')   $issue = $this->bugToIssue($gitlabID, $projectID, $object);
-
+        $issue = $this->parseObjectToIssue($gitlabID, $projectID, $object, $objectType);
         if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->BID, $issue);
-
-		$label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
+        
+        $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
 		$issue->labels = $label->name;
 
 		$issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
@@ -1017,6 +1014,53 @@ class gitlabModel extends model
 
         /* Append this object link in zentao to gitlab issue description */
         $zentaoLink = common::getSysURL() . helper::createLink('bug', 'view', "bugID={$bug->id}");
+        $issue->description = $issue->description . "\n\n" . $zentaoLink;
+        
+        return $issue;
+    }
+
+    /**
+     * Parse zentao object to issue. object can be task, bug and story.
+     * 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  object    $object 
+     * @param  string    $objectType 
+     * @access public
+     * @return object
+     */
+    public function parseObjectToIssue($gitlabID, $projectID, $object, $objectType)
+    {
+        $map = $this->config->gitlab->maps->$objectType;
+        $issue = new stdclass;
+        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+        if(empty($gitlabUsers)) return false;
+
+        foreach($map as $objectField => $config)
+        {
+            $value = '';
+            list($field, $optionType, $options) = explode('|', $config);
+            if($optionType == 'field') $value = $object->$bugField;
+            if($optionType == 'fields') $value = $object->$bugField . "\n\n" . $object->$options;
+            if($optionType == 'userPairs')
+            {
+                $value = zget($gitlabUsers, $object->$objectField);
+            }
+            if($optionType == 'configItems') 
+            {
+                $value = zget($this->config->gitlab->$options, $object->$objectField, '');
+            }
+            if($value) $issue->$field = $value;
+        }
+
+        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
+
+        /* issue->state is null when creating it, we should put status_event when updating it. */
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+
+        /* Append this object link in zentao to gitlab issue description */
+        $zentaoLink = common::getSysURL() . helper::createLink($objectType, 'view', "id={$object->id}");
         $issue->description = $issue->description . "\n\n" . $zentaoLink;
         
         return $issue;
