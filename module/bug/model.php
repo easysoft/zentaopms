@@ -856,7 +856,7 @@ class bugModel extends model
             ->autoCheck()
             ->where('id')->eq($bugID)->exec();
 
-        $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('bug', $bugID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
         $attribute = new stdclass();
         $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $bug->assignedTo);
         if($attribute->assignee_id != '')
@@ -1226,7 +1226,7 @@ class bugModel extends model
             ->remove('comment')
             ->get();
 
-        $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('bug', $bugID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
 
         $singleIssue = new stdclass();
         $singleIssue = $this->loadModel('gitlab')->apiSingleIssue($relation->gitlabID, $relation->issueID);
