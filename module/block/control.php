@@ -1271,12 +1271,12 @@ class block extends control
         $i = 1;
         while($begin < $end)
         {
-            $charts['labels'][] = $this->lang->block->time . $i . $this->lang->block->week;
+            $charts['labels'][] = $this->lang->block->time . $i . $this->lang->block->month;
             $charts['PV']      .= $this->weekly->getPV($projectID, $begin) . ',';
             $charts['EV']      .= $this->weekly->getEV($projectID, $begin) . ',';
             $charts['AC']      .= $this->weekly->getAC($projectID, $begin) . ',';
             $stageEnd           = $this->weekly->getThisSunday($begin);
-            $begin              = date('Y-m-d', strtotime("$stageEnd + 1 day"));
+            $begin              = date('Y-m-d', strtotime("$stageEnd + 30 day"));
             $i ++;
         }
 
