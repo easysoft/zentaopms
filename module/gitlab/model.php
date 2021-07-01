@@ -209,7 +209,7 @@ class gitlabModel extends model
      */
     public function getRelationByObject($objectType, $objectID)
     {
-        return $this->dao->select('id,extra as gitlabID, BVersion as projectID, BID as issueID')->from(TABLE_RELATION)
+        return $this->dao->select('*, extra as gitlabID, BVersion as projectID, BID as issueID')->from(TABLE_RELATION)
                     ->where('relation')->eq('gitlab')
                     ->andWhere('Atype')->eq($objectType)
                     ->andWhere('AID')->eq($objectID)
