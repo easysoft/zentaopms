@@ -1674,7 +1674,7 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('task',$taskID);
+        $objectID = $this->loadModel('gitlab')->getRelationByObject('task',$taskID);
         if($objectID) $this->loadModel('gitlab')->pushToissue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
