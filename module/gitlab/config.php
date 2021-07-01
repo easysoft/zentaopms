@@ -14,12 +14,12 @@ $config->gitlab->actions = array();
 $config->gitlab->actions['issue'] = array();
 
 $config->gitlab->zentaoObjectLabel = new stdclass();
-$config->gitlab->zentaoObjectLabel->name        = "zentao_%s/%s";
-$config->gitlab->zentaoObjectLabel->description = "%s";
-$config->gitlab->zentaoObjectLabel->taskColor   = '#0033CC';
-$config->gitlab->zentaoObjectLabel->storyColor  = '#69D100';
-$config->gitlab->zentaoObjectLabel->bugColor    = '#D10069';
-$config->gitlab->zentaoObjectLabel->priority    = "0";
+$config->gitlab->zentaoObjectLabel->name         = "zentao_%s/%s";
+$config->gitlab->zentaoObjectLabel->description  = "%s";
+$config->gitlab->zentaoObjectLabel->color->task  = '#0033CC';
+$config->gitlab->zentaoObjectLabel->color->story = '#69D100';
+$config->gitlab->zentaoObjectLabel->color->bug   = '#D10069';
+$config->gitlab->zentaoObjectLabel->priority     = "0";
 
 $config->gitlab->webhookURL = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
 
