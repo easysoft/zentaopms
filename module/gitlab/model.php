@@ -1031,17 +1031,17 @@ class gitlabModel extends model
      */
     public function parseObjectToIssue($gitlabID, $projectID, $object, $objectType)
     {
-        $map = $this->config->gitlab->maps->$objectType;
-        $issue = new stdclass;
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
         if(empty($gitlabUsers)) return false;
 
+        $issue = new stdclass;
+        $map = $this->config->gitlab->maps->$objectType;
         foreach($map as $objectField => $config)
         {
             $value = '';
             list($field, $optionType, $options) = explode('|', $config);
-            if($optionType == 'field') $value = $object->$bugField;
-            if($optionType == 'fields') $value = $object->$bugField . "\n\n" . $object->$options;
+            if($optionType == 'field')  $value = $object->$objectField;
+            if($optionType == 'fields') $value = $object->$objectField . "\n\n" . $object->$options;
             if($optionType == 'userPairs')
             {
                 $value = zget($gitlabUsers, $object->$objectField);
