@@ -829,9 +829,9 @@ class gitlabModel extends model
             $projectID = $result->projectID;
         }
 
-        $syncedIssue = $this->getSyncedIssue($objectType = $objectType, $objectID = $objectID, $gitlabID);
+        $syncedIssue = $this->getRelationByObject($objectType, $objectID);
         $issue = $this->parseObjectToIssue($gitlabID, $projectID, $object, $objectType);
-        if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->BID, $issue);
+        if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->issueID, $issue);
         
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
         $issue->labels = $label->name;

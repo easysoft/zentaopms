@@ -647,7 +647,7 @@ class bugModel extends model
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             
-            $relation = $this->loadModel('gitlab')->getRelationByObject('bug',$bugID);
+            $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
             if($relation) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $relation->gitlabID, $relation->projectID);
 
             return common::createChanges($oldBug, $bug);
@@ -1183,7 +1183,7 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
-        $relation = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('bug',$bugID);
         if($relation) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $relation->gitlabID, $relation->projectID);
 
         $openedBuilds = $this->post->openedBuild;
@@ -1226,19 +1226,20 @@ class bugModel extends model
             ->remove('comment')
             ->get();
 
-        $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
-
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
 
-        $singleIssue = new stdclass();
-        $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
+        if(!empty($relation))
+        {
+            $singleIssue = new stdclass();
+            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
 
-        if($singleIssue->state != 'closed')
-        { 
-            $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
-            if($objectID) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $objectID->gitlabID, $objectID->projectID);
+            if($singleIssue->state != 'closed')
+            { 
+                $objectID = $this->loadModel('gitlab')->getRelationByObject('bug',$bugID);
+                if($objectID) $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $objectID->gitlabID, $objectID->projectID);
+            }
         }
-        
         return common::createChanges($oldBug, $bug);
     }
 
