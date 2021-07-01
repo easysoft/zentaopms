@@ -904,6 +904,10 @@ class gitlabModel extends model
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
         if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
 
+        /* Append this object link in zentao to gitlab issue description */
+        $zentaoLink = common::getSysURL() . helper::createLink('bug', 'view', "bugID={$bug->id}");
+        $issue->description = $issue->description . "\n\n" . $zentaoLink;
+        
         return $issue;
     }
 
