@@ -1249,7 +1249,7 @@ class bug extends control
 
             $this->executeHooks($bugID);
 
-            $this->loadModel('gitlab')->pushBug($bugID, $this->post->gitlab, $this->post->gitlabProject);
+            $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $this->post->gitlab, $this->post->gitlabProject);
 
             if($bug->toTask != 0)
             {

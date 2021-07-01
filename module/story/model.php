@@ -340,7 +340,7 @@ class storyModel extends model
             if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
 
             /* push this story to gitlab issue */
-            $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+            $this->loadModel('gitlab')->pushToIssue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             return array('status' => 'created', 'id' => $storyID);
         }
@@ -1813,7 +1813,7 @@ class storyModel extends model
             if(!dao::isError()) 
             {
                 /* Push this story to gitlab issue. */
-                $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+                $this->loadModel('gitlab')->pushToIssue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
 
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
             }
