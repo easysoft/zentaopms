@@ -53,8 +53,8 @@ class gitlabModel extends model
      * @param  int    $id 
      * @access public
      * @return string 
-	 */
-	public function getApiRoot($id)
+     */
+    public function getApiRoot($id)
     {    
         $gitlab = $this->getByID($id);
         if(!$gitlab) return '';
@@ -632,7 +632,7 @@ class gitlabModel extends model
      */
     public function webhookParseNote($body)
     {
-		//@todo
+        //@todo
     }
 
     /**
@@ -747,7 +747,7 @@ class gitlabModel extends model
     public function createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID)
     {
         $label = new stdclass;
-		$label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
+        $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
         $label->color       = $this->config->gitlab->zentaoObjectLabel->colors->$objectType;
         $label->description = common::getSysURL() . helper::createLink($objectType, 'view', "id={$objectID}");
 
@@ -834,20 +834,20 @@ class gitlabModel extends model
         if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->BID, $issue);
         
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
-		$issue->labels = $label->name;
+        $issue->labels = $label->name;
 
-		$issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
-		if($issue) $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
-	}
+        $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
+        if($issue) $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
+    }
 
-	/**
-	 * Delete an issue from zentao and gitlab.
-	 * 
-     * @param  int   	$gitlabID 
-     * @param  int   	$projectID 
-     * @param  string	$objectType 
-     * @param  int   	$objectID 
-     * @param  int   	$issueID 
+    /**
+     * Delete an issue from zentao and gitlab.
+     * 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  string    $objectType 
+     * @param  int       $objectID 
+     * @param  int       $issueID 
      * @access public
      * @return void
      */
@@ -1078,7 +1078,7 @@ class gitlabModel extends model
     {
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
-		if(isset($changes->assignees)) $changes->assignee_id = true;
+        if(isset($changes->assignees)) $changes->assignee_id = true;
         $maps        = $this->config->gitlab->maps->{$issue->objectType};
         $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
 
