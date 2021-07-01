@@ -232,7 +232,7 @@ class repoModel extends model
 
         if($this->post->SCM == 'Gitlab') 
         {
-           $this->loadModel("gitlab")->saveRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
+           $this->loadModel("gitlab")->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
 
             /* create webhook for zentao */
            $this->loadModel("gitlab")->createWebhook($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
@@ -293,7 +293,7 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
-        if($repo->SCM == 'Gitlab') $this->loadModel("gitlab")->saveRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
+        if($repo->SCM == 'Gitlab') $this->loadModel("gitlab")->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
         if($repo->path != $data->path)
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();

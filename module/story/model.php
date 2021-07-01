@@ -1772,7 +1772,7 @@ class storyModel extends model
 
         if(!dao::isError())
         {
-            $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('story', $storyID);
+            $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
             $attribute = new stdclass();
             $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
             if($attribute->assignee_id != '')

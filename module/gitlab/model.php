@@ -776,7 +776,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function saveRelation($products, $gitlabID, $gitlabProjectID)
+    public function saveProjectRelation($products, $gitlabID, $gitlabProjectID)
     {
         $programs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('id')->in($products)->fetchPairs();
 

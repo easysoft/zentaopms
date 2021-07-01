@@ -1330,7 +1330,7 @@ class taskModel extends model
             ->check('left', 'float')
             ->where('id')->eq($taskID)->exec();
         
-        $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('task', $taskID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
         $attribute = new stdclass();
         $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $task->assignedTo);
         if($attribute->assignee_id != '')
