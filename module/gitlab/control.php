@@ -246,4 +246,29 @@ class gitlab extends control
         $this->gitlab->saveSyncedIssue('task', $task, $gitlabID, $issue);
         exit;
     }
+
+    public function transferIssue()
+    {
+        //TODO(dingguodong) todo next.
+        if(!empty($this->post))
+        {
+            $project;
+            $product;
+            $execution;
+            $objetcType;
+            $gitlab;
+            $gitlabProject;
+            $gitlabIssue;
+        }
+ 
+        $this->view->programs   = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
+        
+        $this->view->products        = '$projects';
+        $this->view->execution       = '$projects';
+        $this->view->objectTypes     = '$projects';
+        $this->view->gitlabs         = '$projects';
+        $this->view->gitlabProjects  = '$projects';
+        $this->view->gitlabIssues    = '$projects';
+        $this->display();
+    }
 }
