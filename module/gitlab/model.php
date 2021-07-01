@@ -506,8 +506,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleIssue($gitlabID, $projectID, $issueID)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
-        $url     = sprintf($apiRoot, "/issues/{$issueID}");
+        $url = sprintf($this->getApiRoot($gitlabID), "/issues/{$issueID}");
         return json_decode(commonModel::http($url));
     }
 
@@ -825,7 +824,7 @@ class gitlabModel extends model
         if(empty($object)) return false;
         if(!$gitlabID or !$projectID)
         {
-            $result    = $this->getGitlabIDprojectID($objectType, $objectID);
+            $result    = $this->getRelationByObject($objectType, $objectID);
             $gitlabID  = $result->gitlabID;
             $projectID = $result->projectID;
         }
@@ -858,7 +857,7 @@ class gitlabModel extends model
     public function deleteIssue($gitlabID, $projectID, $objectType, $objectID, $issueID)
     {
         $object     = $this->loadModel($objectType)->getByID($objectID);
-        $relationID = $this->getRelationID($objectType, $objectID);
+        $relationID = $this->getRelationByObject($objectType, $objectID);
         if(!empty($relationID)) $this->dao->delete()->from(TABLE_RELATION)->where('id')->eq($relationID)->exec();
         $this->apiDeleteIssue($gitlabID, $projectID, $issueID);
     }
