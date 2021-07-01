@@ -822,6 +822,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
+        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
         if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
@@ -911,6 +912,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
+        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
         if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
@@ -920,6 +922,24 @@ class gitlabModel extends model
         $issue->description = $issue->description . "\n\n" . $zentaoLink;
         
         return $issue;
+    }
+
+    /**
+     * Api get single issue.
+     * 
+     * @param  int      $gitlabID 
+     * @param  int      $projectID 
+     * @param  object   $issue 
+     * @access public
+     * @return void
+     */
+    public function apiSingleIssue($gitlabID, $projectID, $issue)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/issues/{$issue}";
+
+        $url = sprintf($apiRoot, $apiPath);
+        return json_decode(commonModel::http($url, $issue));
     }
 
     /**
