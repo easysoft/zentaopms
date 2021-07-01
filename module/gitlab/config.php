@@ -1,8 +1,8 @@
 ﻿<?php
-$config->gitlab->create = new stdclass();
+$config->gitlab->create = new stdclass;
 $config->gitlab->create->requiredFields = 'name,url,token';
 
-$config->gitlab->edit = new stdclass();
+$config->gitlab->edit = new stdclass;
 $config->gitlab->edit->requiredFields = 'name,url,token';
 
 $config->gitlab->labelPattern = new stdclass;
@@ -13,9 +13,10 @@ $config->gitlab->labelPattern->story = '/^zentao_story\/\d+$/';
 $config->gitlab->actions = array();
 $config->gitlab->actions['issue'] = array();
 
-$config->gitlab->zentaoObjectLabel = new stdclass();
+$config->gitlab->zentaoObjectLabel = new stdclass;
 $config->gitlab->zentaoObjectLabel->name         = "zentao_%s/%s";
 $config->gitlab->zentaoObjectLabel->description  = "%s";
+$config->gitlab->zentaoObjectLabel->color        =  new stdclass;
 $config->gitlab->zentaoObjectLabel->color->task  = '#0033CC';
 $config->gitlab->zentaoObjectLabel->color->story = '#69D100';
 $config->gitlab->zentaoObjectLabel->color->bug   = '#D10069';
