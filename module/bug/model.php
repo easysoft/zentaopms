@@ -1226,6 +1226,11 @@ class bugModel extends model
             ->remove('comment')
             ->get();
 
+        $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('bug', $bugID);
+
+        $singleIssue = new stdclass();
+        $singleIssue = $this->loadModel('gitlab')->apiSingleIssue($relation->gitlabID, $relation->issueID);
+
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
 
         $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('bug',$bugID);
