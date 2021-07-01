@@ -868,6 +868,11 @@ class gitlabModel extends model
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
         if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+
+        /* Append this object link in zentao to gitlab issue description */
+        $zentaoLink = common::getSysURL() . helper::createLink('story', 'view', "storyID={$story->id}");
+        $issue->description = $issue->description . "\n\n" . $zentaoLink;
+
         return $issue;
     }
 
