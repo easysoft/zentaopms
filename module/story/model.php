@@ -340,7 +340,7 @@ class storyModel extends model
             if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
 
             /* push this story to gitlab issue */
-            $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+            $this->loadModel('gitlab')->pushToIssue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
 
             return array('status' => 'created', 'id' => $storyID);
         }
@@ -1407,7 +1407,7 @@ class storyModel extends model
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
         $story = fixer::input('post')
-            ->add('assignedTo',   'closed')
+            ->add('assignedTo', 'closed')
             ->add('status', 'closed')
             ->add('stage', 'closed')
             ->setDefault('lastEditedBy',   $this->app->user->account)
@@ -1427,7 +1427,7 @@ class storyModel extends model
             ->where('id')->eq($storyID)->exec();
 
         $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
-        if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
+        if($objectID) $this->loadModel('gitlab')->pushToIssue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
@@ -1772,10 +1772,14 @@ class storyModel extends model
 
         if(!dao::isError())
         {
-            /* Update story to gitlab issue. */
-            $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
-            if($objectID) $this->loadModel('gitlab')->pushToissue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
-
+            $relation = $this->loadModel('gitlab')->getGitlabIssueFromRelation('story', $storyID);
+            $attribute = new stdclass();
+            $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
+            if($attribute->assignee_id != '')
+            {
+                // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
+                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID , $attribute);
+            }
             return common::createChanges($oldStory, $story);
         }
         return false;
@@ -1809,7 +1813,7 @@ class storyModel extends model
             if(!dao::isError()) 
             {
                 /* Push this story to gitlab issue. */
-                $this->loadModel('gitlab')->pushStory($storyID, $this->post->gitlab, $this->post->gitlabProject);
+                $this->loadModel('gitlab')->pushToIssue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
 
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
             }

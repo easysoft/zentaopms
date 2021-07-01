@@ -21,7 +21,7 @@ $config->gitlab->zentaoObjectLabel->storyColor  = '#69D100';
 $config->gitlab->zentaoObjectLabel->bugColor    = '#D10069';
 $config->gitlab->zentaoObjectLabel->priority    = "0";
 
-$config->gitlab->webhookURL = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s&token=%s";
+$config->gitlab->webhookURL = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%s";
 
 $config->gitlab->skippedFields = new stdclass;
 $config->gitlab->skippedFields->issueCreate = array();
@@ -40,13 +40,12 @@ $config->gitlab->maps->task['pri']            = 'weight|configItems|taskWeightMa
 $config->gitlab->maps->task['lastEditedBy']   = 'updated_by_id|userPairs|';
 
 $config->gitlab->maps->story = array();
-$config->gitlab->maps->story['title']        = 'title|field|';
-$config->gitlab->maps->story['spec']         = 'description|fields|verify';
-$config->gitlab->maps->story['openedDate']   = 'created_at|field|datetime';
-$config->gitlab->maps->story['openedBy']     = 'assignee_id|userPairs|';
-$config->gitlab->maps->story['assignedTo']   = 'assignee_id|userPairs|';
-$config->gitlab->maps->story['status']       = 'state|configItems|storyStateMap';
-$config->gitlab->maps->story['pri']          = 'weight|configItems|storyWeightMap';
+$config->gitlab->maps->story['title']      = 'title|field|';
+$config->gitlab->maps->story['spec']       = 'description|fields|verify';
+$config->gitlab->maps->story['openedDate'] = 'created_at|field|datetime';
+$config->gitlab->maps->story['assignedTo'] = 'assignee_id|userPairs|';
+$config->gitlab->maps->story['status']     = 'state|configItems|storyStateMap';
+$config->gitlab->maps->story['pri']        = 'weight|configItems|storyWeightMap';
 
 $config->gitlab->maps->bug = array();
 $config->gitlab->maps->bug['title']      = 'title|field|';
@@ -74,6 +73,11 @@ $config->gitlab->storyWeightMap = array();
 $config->gitlab->storyWeightMap['1'] = '1';
 $config->gitlab->storyWeightMap['2'] = '2';
 $config->gitlab->storyWeightMap['3'] = '3';
+
+$config->gitlab->storyStateMap = array();
+$config->gitlab->storyStateMap['active']   = 'opened';
+$config->gitlab->storyStateMap['resolved'] = 'closed';
+$config->gitlab->storyStateMap['closed']   = 'closed';
 
 $config->gitlab->bugWeightMap = array();
 $config->gitlab->bugWeightMap['1'] = '1';

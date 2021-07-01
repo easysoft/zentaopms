@@ -233,6 +233,10 @@ class gitlabModel extends model
     {  
         $apiRoot = $this->getApiRoot($gitlabID);
 
+        $accessToken = $this->dao->select('private as accessToken')->from(TABLE_PIPELINE)
+                            ->where('id')->eq($gitlabID)
+                            ->fetch('accessToken');
+        
         $postData = new stdclass;
         $postData->enable_ssl_verification = "false";
         $postData->issues_events           = "true";
@@ -240,7 +244,8 @@ class gitlabModel extends model
         $postData->push_events             = "true";
         $postData->tag_push_events         = "true";
         $postData->url                     = $url;
-
+        $postData->token                   = $accessToken;
+        
         $url = sprintf($apiRoot, "/projects/{$projectID}/hooks");
         return commonModel::http($url, $postData); 
     }
@@ -349,7 +354,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/labels/{$labelID}");
 
-        return json_decode(commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, null, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -571,6 +576,7 @@ class gitlabModel extends model
     public function pushTask($taskID, $gitlab, $gitlabProject)
     {
         $task = $this->loadModel('task')->getByID($taskID);
+        if(empty($task)) return false;
         
         if(!$gitlabID or !$projectID)
         {
@@ -607,7 +613,7 @@ class gitlabModel extends model
     public function pushStory($storyID, $gitlabID, $projectID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
-        if(empty($bug)) return false;
+        if(empty($story)) return false;
 
         if(!$gitlabID or !$projectID)
         {
@@ -644,6 +650,7 @@ class gitlabModel extends model
     public function pushBug($bugID, $gitlabID, $projectID)
     {
         $bug = $this->loadModel('bug')->getByID($bugID);
+        if(empty($bug)) return false;
 
         if(!$gitlabID or !$projectID)
         {
@@ -681,6 +688,7 @@ class gitlabModel extends model
     public function pushToIssue($objectType, $objectID, $gitlabID, $projectID)
     {
         $object = $this->loadModel($objectType)->getByID($objectID);
+        if(empty($object)) return false;
         if(!$gitlabID or !$projectID)
         {
             $result    = $this->getGitlabIDprojectID($objectType, $objectID);
@@ -800,6 +808,7 @@ class gitlabModel extends model
         $map = $this->config->gitlab->maps->task;
         $issue = new stdclass;
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
+
         foreach($map as $taskField => $config)
         {
             $value = '';
@@ -812,6 +821,16 @@ class gitlabModel extends model
             }
             if($value) $issue->$field = $value;
         }
+
+        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
+        /* issue->state is null when creating it, we should put status_event when updating it. */
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+
+        /* Append this object link in zentao to gitlab issue description */
+        $zentaoLink = common::getSysURL() . helper::createLink('task', 'view', "taskID={$task->id}");
+        $issue->description = $issue->description . "\n\n" . $zentaoLink;
+
         return $issue;
     }
 
@@ -847,6 +866,15 @@ class gitlabModel extends model
             }
             if($value) $issue->$field = $value;
         }
+
+        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
+        /* issue->state is null when creating it, we should put status_event when updating it. */
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+
+        /* Append this object link in zentao to gitlab issue description */
+        $zentaoLink = common::getSysURL() . helper::createLink('story', 'view', "storyID={$story->id}");
+        $issue->description = $issue->description . "\n\n" . $zentaoLink;
 
         return $issue;
     }
@@ -884,10 +912,15 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
+        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
         if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
 
+        /* Append this object link in zentao to gitlab issue description */
+        $zentaoLink = common::getSysURL() . helper::createLink('bug', 'view', "bugID={$bug->id}");
+        $issue->description = $issue->description . "\n\n" . $zentaoLink;
+        
         return $issue;
     }
 
@@ -946,7 +979,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $apiPath = "/projects/{$projectID}/issues/{$issueID}";
         $url = sprintf($apiRoot, $apiPath);
-        commonModel::http($url, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
+        return commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
     } 
 
     /**
