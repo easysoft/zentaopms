@@ -925,6 +925,24 @@ class gitlabModel extends model
     }
 
     /**
+     * Api get single issue.
+     * 
+     * @param  int      $gitlabID 
+     * @param  int      $projectID 
+     * @param  object   $issue 
+     * @access public
+     * @return void
+     */
+    public function apiSingleIssue($gitlabID, $projectID, $issue)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiPath = "/issues/{$issue}";
+
+        $url = sprintf($apiRoot, $apiPath);
+        return json_decode(commonModel::http($url, $issue));
+    }
+
+    /**
      * Api create issue.
      * 
      * @param  int      $gitlabID 
