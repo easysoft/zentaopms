@@ -53,8 +53,8 @@ class gitlabModel extends model
      * @param  int    $id 
      * @access public
      * @return string 
-	 */
-	public function getApiRoot($id)
+     */
+    public function getApiRoot($id)
     {    
         $gitlab = $this->getByID($id);
         if(!$gitlab) return '';
@@ -632,7 +632,7 @@ class gitlabModel extends model
      */
     public function webhookParseNote($body)
     {
-		//@todo
+        //@todo
     }
 
     /**
@@ -747,8 +747,8 @@ class gitlabModel extends model
     public function createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID)
     {
         $label = new stdclass;
-		$label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
-        $label->color       = $this->config->gitlab->zentaoObjectLabel->colors->$objectType;
+        $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
+        $label->color       = $this->config->gitlab->zentaoObjectLabel->color->$objectType;
         $label->description = common::getSysURL() . helper::createLink($objectType, 'view', "id={$objectID}");
 
         return $this->apiCreateLabel($gitlabID, $projectID, $label);
@@ -826,23 +826,23 @@ class gitlabModel extends model
 
         $syncedIssue = $this->getRelationByObject($objectType, $objectID);
         $issue = $this->parseObjectToIssue($gitlabID, $projectID, $object, $objectType);
-        if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->BID, $issue);
+        if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->issueID, $issue);
         
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
-		$issue->labels = $label->name;
+        $issue->labels = isset($label->name) ? '' :$label->name;
 
-		$issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
-		if($issue) $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
-	}
+        $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
+        if($issue) $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
+    }
 
-	/**
-	 * Delete an issue from zentao and gitlab.
-	 * 
-     * @param  int   	$gitlabID 
-     * @param  int   	$projectID 
-     * @param  string	$objectType 
-     * @param  int   	$objectID 
-     * @param  int   	$issueID 
+    /**
+     * Delete an issue from zentao and gitlab.
+     * 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  string    $objectType 
+     * @param  int       $objectID 
+     * @param  int       $issueID 
      * @access public
      * @return void
      */
@@ -909,7 +909,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
-        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
+        if($isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
@@ -1026,17 +1026,17 @@ class gitlabModel extends model
      */
     public function parseObjectToIssue($gitlabID, $projectID, $object, $objectType)
     {
-        $map = $this->config->gitlab->maps->$objectType;
-        $issue = new stdclass;
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
         if(empty($gitlabUsers)) return false;
 
+        $issue = new stdclass;
+        $map = $this->config->gitlab->maps->$objectType;
         foreach($map as $objectField => $config)
         {
             $value = '';
             list($field, $optionType, $options) = explode('|', $config);
-            if($optionType == 'field') $value = $object->$bugField;
-            if($optionType == 'fields') $value = $object->$bugField . "\n\n" . $object->$options;
+            if($optionType == 'field')  $value = $object->$objectField;
+            if($optionType == 'fields') $value = $object->$objectField . "\n\n" . $object->$options;
             if($optionType == 'userPairs')
             {
                 $value = zget($gitlabUsers, $object->$objectField);
@@ -1048,7 +1048,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
-        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
+        if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
@@ -1073,7 +1073,7 @@ class gitlabModel extends model
     {
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 
-		if(isset($changes->assignees)) $changes->assignee_id = true;
+        if(isset($changes->assignees)) $changes->assignee_id = true;
         $maps        = $this->config->gitlab->maps->{$issue->objectType};
         $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);
 

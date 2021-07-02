@@ -441,7 +441,6 @@ class storyModel extends model
                 dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->$field);
                 return false;
             }
-
             $data[$i] = $story;
         }
 
@@ -830,7 +829,7 @@ class storyModel extends model
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
            }
             /* update story to gitlab issue. */
-            $objectID = $this->loadModel('gitlab')->getGitlabidProjectID('story',$storyID);
+            $objectID = $this->loadModel('gitlab')->getRelationByObject('story',$storyID);
             if($objectID) $this->loadModel('gitlab')->pushToIssue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
 
             unset($oldStory->parent);
@@ -1426,8 +1425,19 @@ class storyModel extends model
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
 
-        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('story',$storyID);
-        if($objectID) $this->loadModel('gitlab')->pushToIssue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+
+        if(!empty($relation))
+        {
+            $singleIssue = new stdclass();
+            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
+
+            if($singleIssue->state != 'closed')
+            { 
+                $objectID = $this->loadModel('gitlab')->getRelationByObject('story',$storyID);
+                if($objectID) $this->loadModel('gitlab')->pushToIssue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
+            }
+        }
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
