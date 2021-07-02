@@ -3214,8 +3214,8 @@ class storyModel extends model
      */
     public function getSubject($story)
     {
-        $productName = $this->loadModel('product')->getById($story->product)->name;
-        return 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName;
+        $productName = empty($story->product) ? '' : ' - ' . $this->loadModel('product')->getById($story->product)->name;
+        return 'STORY #' . $story->id . ' ' . $story->title . $productName;
     }
 
     /**
