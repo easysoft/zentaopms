@@ -110,6 +110,9 @@ class project extends control
         /* Load module. */
         $this->loadModel('program');
 
+        /* Set cookie for show all project. */
+        $_COOKIE['showClosed'] = 1;
+
         /* Sort project. */
         $programs        = array();
         $orderedProjects = array();
@@ -959,7 +962,7 @@ class project extends control
         $productList   = $this->project->getProducts($projectID);
         if(!empty($builds))
         {
-            foreach($builds as $build) 
+            foreach($builds as $build)
             {
                 /* If product is normal, unset branch name. */
                 if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
