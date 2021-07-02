@@ -215,7 +215,7 @@ $sessionString .= session_name() . '=' . session_id();
             <?php endif;?>
             <tr>
               <td colspan='3' class='text-center'>
-                <?php echo html::submitButton($lang->doc->importToPracticeLib, '', 'btn btn-primary');?>
+                <?php echo html::submitButton($lang->import, '', 'btn btn-primary');?>
               </td>
             </tr>
           </table>
@@ -251,7 +251,7 @@ $sessionString .= session_name() . '=' . session_id();
             <?php endif;?>
             <tr>
               <td colspan='3' class='text-center'>
-                <?php echo html::submitButton($lang->doc->importToComponentLib, '', 'btn btn-primary');?>
+                <?php echo html::submitButton($lang->import, '', 'btn btn-primary');?>
               </td>
             </tr>
           </table>

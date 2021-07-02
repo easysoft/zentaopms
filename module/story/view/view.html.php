@@ -572,7 +572,7 @@
             <?php endif;?>
             <tr>
               <td colspan='3' class='text-center'>
-                <?php echo html::submitButton($lang->story->importToLib, '', 'btn btn-primary');?>
+                <?php echo html::submitButton($lang->import, '', 'btn btn-primary');?>
               </td>
             </tr>
           </table>
