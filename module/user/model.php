@@ -1677,6 +1677,7 @@ class userModel extends model
             ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'classic')->andWhere('type')->eq('execution')->fi()
             ->andWhere('root')->in(array_keys($projectProducts))
+            ->andWhere('root')->ne(0)
             ->query();
 
         while($team = $stmt->fetch())
@@ -1926,6 +1927,7 @@ class userModel extends model
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('type')->eq('project')
             ->andWhere('root')->in($projectIdList)
+            ->andWhere('root')->ne(0)
             ->query();
 
         while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
@@ -2085,6 +2087,7 @@ class userModel extends model
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('type')->in('project,execution')
             ->andWhere('root')->in(array_merge($sprintIdList, $parentIdList))
+            ->andWhere('root')->ne(0)
             ->query();
 
         while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;

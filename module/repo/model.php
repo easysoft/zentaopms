@@ -657,7 +657,7 @@ class repoModel extends model
         if($existsRevision)
         {
             if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($existsRevision->id)->set('branch')->eq($branch)->exec();
-            return true;
+            return $version;
         }
 
         $history = new stdclass();

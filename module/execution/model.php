@@ -2372,7 +2372,7 @@ class executionModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         /* Add the execution team members to the project. */
-        $this->addProjectMembers($execution->project, $executionMember);
+        if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
     }
 
@@ -2406,9 +2406,12 @@ class executionModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
-        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
-        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+        if($changedAccounts)
+        {
+            $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
+            $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+            if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+        }
     }
 
     /**

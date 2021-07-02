@@ -40,9 +40,9 @@ class execution extends control
 
         $this->loadModel('project');
 
+        $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
         if(!in_array($this->methodName, array('computeburn', 'ajaxgetdropmenu')) and $this->app->openApp == 'execution')
         {
-            $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
         $this->objectType = $this->config->systemMode == 'classic' ? 'project' : 'execution';

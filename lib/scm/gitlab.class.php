@@ -58,11 +58,11 @@ class gitlab
             {
                 $file = $this->files($file->path);
 
-                $info->revision = $file->revision;
-                $info->comment  = $file->comment;
-                $info->account  = $file->committer;
-                $info->date     = $file->date;
-                $info->size     = $file->size;
+                $info->revision = zget($file, 'revision', '');
+                $info->comment  = zget($file, 'comment', '');
+                $info->account  = zget($file, 'committer', '');
+                $info->date     = zget($file, 'date', '');
+                $info->size     = zget($file, 'size', '');
             }
             else
             {
