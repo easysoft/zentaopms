@@ -815,19 +815,19 @@ class storyModel extends model
                 $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
                 $oldStory->reviewers = implode(',', array_keys($oldReviewer));
                 $story->reviewers    = implode(',', $_POST['reviewer']);
-            }
 
-            /* Update story reviewer. */
-            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
-            foreach($_POST['reviewer'] as $reviewer)
-            {
-                if(in_array($reviewer, array_keys($oldReviewer))) continue;
+                /* Update story reviewer. */
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
+                foreach($_POST['reviewer'] as $reviewer)
+                {
+                    if(in_array($reviewer, array_keys($oldReviewer))) continue;
 
-                $reviewData = new stdclass();
-                $reviewData->story    = $storyID;
-                $reviewData->version  = $oldStory->version;
-                $reviewData->reviewer = $reviewer;
-                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                    $reviewData = new stdclass();
+                    $reviewData->story    = $storyID;
+                    $reviewData->version  = $oldStory->version;
+                    $reviewData->reviewer = $reviewer;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                }
             }
 
             unset($oldStory->parent);
