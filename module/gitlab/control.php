@@ -261,7 +261,7 @@ class gitlab extends control
         $productID  = $this->get->product;
         $gitlabID   = $this->get->gitlab;
         $projectID  = $this->get->project;
-        $relations  = $this->gitlab->getExecutionsByProduct($productID);
+        // todo next: get execution from product and execution module.
 
         $executions = array();
         foreach($relations as $relation)

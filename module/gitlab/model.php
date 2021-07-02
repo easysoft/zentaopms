@@ -183,23 +183,6 @@ class gitlabModel extends model
     }
 
     /**
-     * Get gitlab projects of one Product.
-     * 
-     * @param  int    $productID 
-     * @access public
-     * @return array
-     */
-    public function getProjectsByProduct($productID)
-    {
-        return $this->dao->select('AID, BID as gitlabProject')->from(TABLE_RELATION)
-                    ->where('relation')->eq('interrated')
-                    ->andWhere('AType')->eq('gitlab')
-                    ->andWhere('BType')->eq('gitlabProject')
-                    ->andWhere('product')->eq($productID)
-                    ->fetchGroup('AID');
-    }
-
-    /**
      * Get executions by one product for gitlab module.
      * 
      * @param  int    $productID 
