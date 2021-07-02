@@ -79,27 +79,25 @@
         <?php if(strpos(",$showFields,", ',story,') !== false and $execution->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
-          <td colspan='3'>
-            <?php if(empty($stories)):?>
-            <span id='storyBox'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
-            <?php else:?>
-            <div class='input-group'>
-              <?php echo html::select('story', array($task->story => $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
+          <td colspan='3'>           
+            <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span> 
+            <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
+              <?php echo html::select('story', array($task->story => empty($stories) ? '': $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
             </div>
-            <?php endif;?>
+            
           </td>
         </tr>
         <?php endif;?>
-        <?php if($stories and $execution->type != 'ops'):?>
+        <?php if($execution->type != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>
             <table class='table table-form mg-0 table-bordered'>
               <thead>
                 <tr>
-                  <th><?php echo $lang->task->storyAB;?></th>
-                  <th class='w-100px'><?php echo $lang->task->pri;?></th>
+                  <th class='w-150px'><?php echo $lang->task->storyAB;?></th>
+                  <th class='w-80px'><?php echo $lang->task->pri;?></th>
                   <th class='w-300px'><?php echo $lang->task->datePlan;?></th>
                   <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
                   <th class='w-80px'><?php echo $lang->task->estimate;?></th>
