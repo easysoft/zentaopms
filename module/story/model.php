@@ -809,10 +809,13 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
-            $_POST['reviewer']   = array_filter($_POST['reviewer']);
-            $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
-            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-            $story->reviewers    = implode(',', $_POST['reviewer']);
+            if(isset($_POST['reviewer']))
+            {
+                $_POST['reviewer']   = array_filter($_POST['reviewer']);
+                $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
+                $oldStory->reviewers = implode(',', array_keys($oldReviewer));
+                $story->reviewers    = implode(',', $_POST['reviewer']);
+            }
 
             /* Update story reviewer. */
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
