@@ -853,7 +853,7 @@ class productModel extends model
         }
         $this->config->product->search['params']['module']['values'] = $module;
 
-        if($this->session->currentProductType == 'normal')
+        if($this->session->currentProductType == 'normal' or $this->app->openApp == 'assetlib')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
