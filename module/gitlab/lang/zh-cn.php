@@ -6,6 +6,7 @@ $lang->gitlab->create        = '添加gitlab';
 $lang->gitlab->edit          = '编辑gitlab';
 $lang->gitlab->bindUser      = '绑定用户';
 $lang->gitlab->bindProduct   = '关联产品';
+$lang->gitlab->importIssue   = '关联议题';
 $lang->gitlab->delete        = '删除';
 $lang->gitlab->confirmDelete = '确认删除该gitlab吗？';
 $lang->gitlab->gitlabAccount = 'gitlab用户';
@@ -13,11 +14,13 @@ $lang->gitlab->zentaoAccount = '禅道用户';
 
 $lang->gitlab->browseAction  = 'gitlab列表';
 $lang->gitlab->deleteAction  = '删除gitlab';
-$lang->gitlab->gitlabProject = 'gitlab项目';
+$lang->gitlab->gitlabProject = "{$lang->gitlab->common}项目";
+$lang->gitlab->gitlabIssue   = "{$lang->gitlab->common}议题";
 $lang->gitlab->zentaoProduct = '禅道产品';
+$lang->gitlab->objectType    = '类型'; // task, bug, story
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = '名称';
+$lang->gitlab->name           = "{$lang->gitlab->common}名称";
 $lang->gitlab->url            = '服务地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';

@@ -198,7 +198,24 @@ class gitlabModel extends model
                     ->andWhere('product')->eq($productID)
                     ->fetchGroup('AID');
     }
-    
+
+    /**
+     * Get executions by one product for gitlab module.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
+    public function getExecutionsByProduct($productID)
+    {
+        return $this->dao->select('distinct execution')->from(TABLE_RELATION)
+                    ->where('relation')->eq('interrated')
+                    ->andWhere('AType')->eq('gitlab')
+                    ->andWhere('BType')->eq('gitlabProject')
+                    ->andWhere('product')->eq($productID)
+                    ->fetchAll('execution');
+    }
+
     /**
      * Get gitlabID and projectID.
      * 
@@ -324,6 +341,11 @@ class gitlabModel extends model
             $allResults = $allResults + $results;
         }   
         return $allResults;
+    }
+
+    public function apiGetIssues($gitlabID, $projectID)
+    {
+
     }
 
     /**

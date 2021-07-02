@@ -251,28 +251,32 @@ class gitlab extends control
         exit;
     }
 
-    public function transferIssue()
+    public function importIssue()
     {
-        //TODO(dingguodong) todo next.
-        if(!empty($this->post))
+        if($_POST)
         {
-            $project;
-            $product;
-            $execution;
-            $objetcType;
-            $gitlab;
-            $gitlabProject;
-            $gitlabIssue;
+            $this->post->a();
         }
- 
-        $this->view->programs   = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
-        
-        $this->view->products        = '$projects';
-        $this->view->execution       = '$projects';
-        $this->view->objectTypes     = '$projects';
-        $this->view->gitlabs         = '$projects';
-        $this->view->gitlabProjects  = '$projects';
-        $this->view->gitlabIssues    = '$projects';
+
+        $productID  = $this->get->product;
+        $gitlabID   = $this->get->gitlab;
+        $projectID  = $this->get->project;
+        $relations  = $this->gitlab->getExecutionsByProduct($productID);
+
+        $executions = array();
+        foreach($relations as $relation)
+        {
+            if($relation->execution) $executions[] = $this->loadModel("execution")->getByID($relation->execution)->name;
+        }
+
+        $this->view->productName     = $this->loadModel("product")->getByID($productID)->name;
+        $this->view->productID       = $productID;
+        $this->view->gitlabID        = $gitlabID;
+        $this->view->gitlabProjectID = $projectID;
+        $this->view->executions      = $executions; 
+        $this->view->objectTypes     = $this->config->gitlab->objectTypes;
+
+        $this->view->gitlabIssues    = $this->gitlab->apiGetIssues($gitlabID, $projectID);
         $this->display();
     }
 }
