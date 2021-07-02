@@ -661,7 +661,7 @@ $lang->error = new stdclass();
 $lang->error->companyNotFound = "Le domaine %s ne peut être trouvé !";
 $lang->error->length          = array("『 %s 』erreur de longueur. Il devrait être『%s』", "La longueur de 『%s』devrait être <=『%s』et >『%s』.");
 $lang->error->reg             = "『 %s 』erreur de format. Il devrait être『%s』.";
-$lang->error->unique          = "『 %s 』『 %s 』existes. Allez à Admin->Recycle Bin pour le restaurer, si vous êtes sûr qu'il est supprimé.";
+$lang->error->unique          = "『 %s 』『 %s 』existes. Allez à Admin->System->Data->Recycle Bin pour le restaurer, si vous êtes sûr qu'il est supprimé.";
 $lang->error->gt              = "『 %s 』devrait être > 『 %s 』.";
 $lang->error->ge              = "『 %s 』devrait être >= 『 %s 』.";
 $lang->error->lt              = "『%s』should be <『%s』。";
