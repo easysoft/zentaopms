@@ -341,7 +341,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               <?php
               $class      = $canBatchClose ? '' : "class='disabled'";
               $actionLink = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0&storyType=$storyType");
-              $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink')\"" : '';
+              $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', '', '#productStoryForm')\"" : '';
               echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
               if($canBatchReview)
@@ -367,14 +367,14 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                           {
                               $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
                               echo "<li>";
-                              echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                              echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
                               echo "</li>";
                           }
                           echo '</ul></li>';
                       }
                       else
                       {
-                        echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
+                        echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . '</li>';
                       }
                   }
                   echo '</ul></li>';
@@ -395,7 +395,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   foreach($branches as $branchID => $branchName)
                   {
                       $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
-                      echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                      echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
                   }
                   echo '</ul>';
                   if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
@@ -414,7 +414,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                           if(empty($key)) continue;
                           if(strpos('tested|verified|released|closed', $key) === false) continue;
                           $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-                          echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                          echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
                       }
                       echo '</ul></li>';
                   }
@@ -448,7 +448,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                    echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
                 }
                 ?>
               </div>
@@ -478,7 +478,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                    echo html::a('#', $plan, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                    echo html::a('#', $plan, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
                 }
                 ?>
               </div>
@@ -508,7 +508,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               <?php
               if(empty($key) or $key == 'closed') continue;
               $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
-              echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\")", $value, '', $searchKey);
+              echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#productStoryForm\")", $value, '', $searchKey);
               ?>
               <?php endforeach;?>
               </div>

@@ -1095,7 +1095,7 @@ class story extends control
 
         if(dao::isError()) die(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::reload('parent'));
+        die(js::locate($this->session->storyList, 'parent'));
     }
 
     /**
@@ -1289,7 +1289,7 @@ class story extends control
             $this->action->logHistory($actionID, $changes);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::reload('parent'));
+        die(js::locate($this->session->storyList, 'parent'));
     }
 
     /**
@@ -1340,7 +1340,7 @@ class story extends control
             $this->action->logHistory($actionID, $changes);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::reload('parent'));
+        die(js::locate($this->session->storyList, 'parent'));
     }
 
     /**
