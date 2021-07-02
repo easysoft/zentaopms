@@ -2500,13 +2500,6 @@ class execution extends control
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
-        if($executionID == 0)
-        {
-            $this->executions = array('0' => $this->lang->execution->selectExecution) + $this->executions;
-            unset($this->lang->execution->menu);
-            $this->lang->execution->menu = $this->lang->execution->indexMenu;
-            $this->lang->execution->menu->list = $this->execution->select($this->executions, 0, 'execution', 'dynamic');
-        }
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

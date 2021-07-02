@@ -129,11 +129,22 @@ class gitlab
      */
     public function tags($path, $revision = 'HEAD')
     {
-        $api = "tags";
-        $list = $this->fetch($api);
-
+        $api  = "tags";
         $tags = array();
-        foreach($list as $tag) $tags[] = $tag->name;
+
+        $params = array();
+        $params['per_page'] = '100';
+        $params['order_by'] = 'updated';
+        $params['sort']     = 'asc';
+        for($page = 1; true; $page ++)
+        {
+            $params['page'] = $page;
+            $list = $this->fetch($api, $params);
+            if(empty($list)) break;
+
+            foreach($list as $tag) $tags[] = $tag->name;
+            if(count($list) < $params['per_page']) break;
+        }
 
         return $tags;
     }
@@ -146,13 +157,22 @@ class gitlab
      */
     public function branch()
     {
-        $api  = "branches";
-        $list = $this->fetch($api);
-
         $branches = array();
-        foreach($list as $branch) $branches[$branch->name] = $branch->name;
-        asort($branches);
+        $api      = "branches";
 
+        $params = array();
+        $params['per_page'] = '100';
+        for($page = 1; true; $page ++)
+        {
+            $params['page'] = $page;
+            $list = $this->fetch($api, $params);
+            if(empty($list)) break;
+
+            foreach($list as $branch) $branches[$branch->name] = $branch->name;
+            if(count($list) < $params['per_page']) break;
+        }
+
+        asort($branches);
         return $branches;
     }
 
@@ -590,22 +610,31 @@ class gitlab
     public function getFilesByCommit($revision)
     {
         if(!scm::checkRevision($revision)) return array();
-        $api  = "commits/{$revision}/diff";
+        $api   = "commits/{$revision}/diff";
+        $files = array();
 
-        $allResults = $this->fetch($api);
-        $files      = array();
-        foreach($allResults as $row)
+        $params = array();
+        $params['per_page'] = '100';
+        for($page = 1; true; $page ++)
         {
-            $file = new stdclass();
-            $file->revision = $revision;
-            $file->path     = '/' . $row->new_path;
-            $file->type     = 'file';
+            $params['page'] = $page;
+            $allResults = $this->fetch($api, $params);
+            if(empty($allResults)) break;
 
-            $file->action   = 'M';
-            if($row->new_file) $file->action = 'A';
-            if($row->renamed_file) $file->action = 'R';
-            if($row->deleted_file) $file->action = 'D';
-            $files[] = $file;
+            foreach($allResults as $row)
+            {
+                $file = new stdclass();
+                $file->revision = $revision;
+                $file->path     = '/' . $row->new_path;
+                $file->type     = 'file';
+
+                $file->action   = 'M';
+                if($row->new_file) $file->action = 'A';
+                if($row->renamed_file) $file->action = 'R';
+                if($row->deleted_file) $file->action = 'D';
+                $files[] = $file;
+            }
+            if(count($allResults) < $params['per_page']) break;
         }
 
         return $files;
