@@ -326,11 +326,6 @@ class gitlabModel extends model
         return $allResults;
     }
 
-    public function apiGetIssues($gitlabID, $projectID)
-    {
-
-    }
-
     /**
      * Get hooks.
      * 
@@ -512,6 +507,13 @@ class gitlabModel extends model
     public function apiGetSingleIssue($gitlabID, $projectID, $issueID)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/issues/{$issueID}");
+        return json_decode(commonModel::http($url));
+    }
+
+    public function apiGetIssues($gitlabID, $projectID)
+    {
+        // TODO(dingguodong) not pagination yet.
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues/{$issueID}");
         return json_decode(commonModel::http($url));
     }
 
