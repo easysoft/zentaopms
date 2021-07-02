@@ -56,7 +56,7 @@ class gitlab
 
             if($file->type == 'blob')
             {
-                $file = $this->files($file->path);
+                $file = $this->files($file->path, $this->branch);
 
                 $info->revision = zget($file, 'revision', '');
                 $info->comment  = zget($file, 'comment', '');
@@ -102,6 +102,7 @@ class gitlab
         $param = new stdclass();
         $param->ref = $ref;
         $file = $this->fetch($api, $param);
+        if(!isset($file->file_name)) return false;
 
         $commits = $this->getCommitsByPath($path);
         $file->revision = $file->commit_id;
@@ -500,7 +501,7 @@ class gitlab
         $params = array();
         $params['ref_name'] = $branch;
         $params['per_page'] = $count;
-        $params['all']      = 1;
+        $params['all']      = 0;
 
         if($version and $version != 'HEAD')
         {
