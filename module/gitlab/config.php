@@ -16,7 +16,8 @@ $config->gitlab->actions['issue'] = array();
 $config->gitlab->zentaoObjectLabel = new stdclass;
 $config->gitlab->zentaoObjectLabel->name         = "zentao_%s/%s";
 $config->gitlab->zentaoObjectLabel->description  = "%s";
-$config->gitlab->zentaoObjectLabel->color        =  new stdclass;
+
+$config->gitlab->zentaoObjectLabel->color = new stdclass;
 $config->gitlab->zentaoObjectLabel->color->task  = '#0033CC';
 $config->gitlab->zentaoObjectLabel->color->story = '#69D100';
 $config->gitlab->zentaoObjectLabel->color->bug   = '#D10069';
