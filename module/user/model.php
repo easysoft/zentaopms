@@ -1110,7 +1110,12 @@ class userModel extends model
                 $project->waitTasks         = isset($hours[$project->id]) ? $hours[$project->id]->waitTasks : 0;
                 $project->assignedToMeTasks = isset($hours[$project->id]) ? $hours[$project->id]->assignedToMeTasks : 0;
 
-                if($project->project) $project->projectName = $projectList[$project->project]->name;
+                if($project->project)
+                {
+                    $parentProject = zget($projectList, $project->project, '');
+                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->exec();
+                    $project->projectName = $parentProject ? $parentProject->name : '';
+                }
                 $myProjects[$project->id] = $project;
             }
         }
