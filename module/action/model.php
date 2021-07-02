@@ -646,6 +646,10 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->rejectreviewed;
             }
+            elseif(isset($this->config->maxVersion) and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
+            {
+                $desc = $this->lang->action->approve->{$action->extra};
+            }
             elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
             {
                 $desc = $this->lang->$objectType->action->$actionType;
