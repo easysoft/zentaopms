@@ -770,7 +770,7 @@ class gitlabModel extends model
     {
         $label = new stdclass;
         $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
-        $label->color       = $this->config->gitlab->zentaoObjectLabel->colors->$objectType;
+        $label->color       = $this->config->gitlab->zentaoObjectLabel->color->$objectType;
         $label->description = common::getSysURL() . helper::createLink($objectType, 'view', "id={$objectID}");
 
         return $this->apiCreateLabel($gitlabID, $projectID, $label);
@@ -816,7 +816,7 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function createWebhook($products, $gitlabID, $projectID)
+    public function initWebhooks($products, $gitlabID, $projectID)
     {
         $gitlab   = $this->getByID($gitlabID);
         $webhooks = $this->apiGetHooks($gitlabID, $projectID);
@@ -844,19 +844,14 @@ class gitlabModel extends model
     {
         $object = $this->loadModel($objectType)->getByID($objectID);
         if(empty($object)) return false;
-        if(!$gitlabID or !$projectID)
-        {
-            $result    = $this->getRelationByObject($objectType, $objectID);
-            $gitlabID  = $result->gitlabID;
-            $projectID = $result->projectID;
-        }
+        if(!$gitlabID or !$projectID) return false;
 
         $syncedIssue = $this->getRelationByObject($objectType, $objectID);
         $issue = $this->parseObjectToIssue($gitlabID, $projectID, $object, $objectType);
         if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->issueID, $issue);
         
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
-        $issue->labels = $label->name;
+        $issue->labels = isset($label->name) ? '' :$label->name;
 
         $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
         if($issue) $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
@@ -936,7 +931,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
-        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
+        if($isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
@@ -1075,7 +1070,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
-        if($issue->assignee_id == 'closed') unset($issue->assignee_id);
+        if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';

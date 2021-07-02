@@ -235,7 +235,7 @@ class repoModel extends model
            $this->loadModel("gitlab")->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
 
             /* create webhook for zentao */
-           $this->loadModel("gitlab")->createWebhook($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
+           $this->loadModel("gitlab")->initWebhooks($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
         }
         return $this->dao->lastInsertID();
     }
@@ -298,7 +298,7 @@ class repoModel extends model
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
-            if($repo->SCM == 'Gitlab') $this->loadModel("gitlab")->createWebhook($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
+            if($repo->SCM == 'Gitlab') $this->loadModel("gitlab")->initWebhooks($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
             return false;    
         }
 
