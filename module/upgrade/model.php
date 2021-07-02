@@ -4991,4 +4991,30 @@ class upgradeModel extends model
         $this->dao->update(TABLE_PRODUCT)->set('createdVersion')->eq($this->config->version)->where('createdVersion')->eq('')->exec();
         return true;
     }
+
+    public function processGitlabRepo()
+    {
+        $repoList = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')->fetchAll();
+        foreach($repoList as $repo)
+        {
+            /* Create gitlab from repo. */
+            $gitlab = new stdclass;
+            $gitlab->type    = 'gitlab';
+            $gitlab->name    = $repo->client;
+            $gitlab->token   = base64_decode($repo->password);
+            $gitlab->private = md5(uniqid());
+            $this->dao->insert(TABLE_PIPELINE)->data($gitlab)->exec();
+
+            $gitlabID = $this->dao->lastInsertID();
+
+            preg_match('/projects\/(\d+)\/repository/', $repo->path, $matches);
+            $gitlabProject = $matches[1];
+            $products      = explode(',', $repo->product);
+            $this->loadModel('gitlab')->saveProjectRelation($products, $gitlabID, $gitlabProject);
+
+            $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($gitlabProject)->where('id')->eq($repo->id)->exec();
+            
+            $this->loadModel("gitlab")->initWebhooks($products, $gitlabID, $gitlabProject);
+        }
+    }
 }

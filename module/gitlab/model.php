@@ -794,7 +794,7 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function createWebhook($products, $gitlabID, $projectID)
+    public function initWebhooks($products, $gitlabID, $projectID)
     {
         $gitlab   = $this->getByID($gitlabID);
         $webhooks = $this->apiGetHooks($gitlabID, $projectID);
@@ -822,14 +822,9 @@ class gitlabModel extends model
     {
         $object = $this->loadModel($objectType)->getByID($objectID);
         if(empty($object)) return false;
-        if(!$gitlabID or !$projectID)
-        {
-            $result    = $this->getRelationByObject($objectType, $objectID);
-            $gitlabID  = $result->gitlabID;
-            $projectID = $result->projectID;
-        }
+        if(!$gitlabID or !$projectID) return false;
 
-        $syncedIssue = $this->getSyncedIssue($objectType = $objectType, $objectID = $objectID, $gitlabID);
+        $syncedIssue = $this->getRelationByObject($objectType, $objectID);
         $issue = $this->parseObjectToIssue($gitlabID, $projectID, $object, $objectType);
         if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->BID, $issue);
         
