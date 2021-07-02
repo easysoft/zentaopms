@@ -441,7 +441,6 @@ class storyModel extends model
                 dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->$field);
                 return false;
             }
-
             $data[$i] = $story;
         }
 

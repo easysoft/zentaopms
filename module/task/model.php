@@ -380,6 +380,10 @@ class taskModel extends model
             if(dao::isError()) return false;
 
             $taskID   = $this->dao->lastInsertID();
+
+            /* Sync this task to gitlab issue. */
+            $this->loadModel('gitlab')->pushToIssue('task', $taskID, $this->post->gitlab, $this->post->gitlabProject);
+
             $taskSpec = new stdClass();
             $taskSpec->task       = $taskID;
             $taskSpec->version    = $task->version;
@@ -1791,7 +1795,7 @@ class taskModel extends model
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         
-        $objectID = $this->loadModel('gitlab')->getGitlabIDprojectID('task',$taskID);
+        $objectID = $this->loadModel('gitlab')->getRelationByObject('task',$taskID);
         if($objectID) $this->loadModel('gitlab')->pushToissue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
