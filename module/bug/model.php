@@ -865,11 +865,10 @@ class bugModel extends model
             ->where('id')->eq($bugID)->exec();
 
         $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
-        $attribute = new stdclass();
+        $attribute = $this->getByID($bugID);
         $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $bug->assignedTo);
         if($attribute->assignee_id != '')
         {
-            $attribute = $this->getByID($bugID);
             // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
             $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $attribute);
         }
@@ -1255,7 +1254,7 @@ class bugModel extends model
 
             if($singleIssue->state != 'closed')
             { 
-                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $object);
+                if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $object);
             }
         }
         return common::createChanges($oldBug, $bug);

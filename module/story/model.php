@@ -838,7 +838,7 @@ class storyModel extends model
                 $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
                 if($relation)
                 {
-                    $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                    $if(!empty($object)) this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
                 } 
             }
 
@@ -1435,6 +1435,7 @@ class storyModel extends model
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
 
+        $object = $this->getByID($storyID);
         $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
 
         if(!empty($relation))
@@ -1444,11 +1445,9 @@ class storyModel extends model
 
             if($singleIssue->state != 'closed')
             { 
-                $object = $this->getByID($storyID);
-                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                $if(!empty($object)) this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
             }
         }
-    
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
@@ -1794,11 +1793,10 @@ class storyModel extends model
         if(!dao::isError())
         {
             $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-            $attribute = new stdclass();
+            $attribute = $this->getByID($storyID);
             $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
             if($attribute->assignee_id != '')
             {
-                $object = $this->getByID($storyID);
                 // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
                 $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story' $attribute);
             }
@@ -1841,7 +1839,7 @@ class storyModel extends model
                     $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
                     if($relation)
                     {
-                        $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                        $if(!empty($object)) this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
                     } 
                 }
             }

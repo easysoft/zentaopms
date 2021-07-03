@@ -958,8 +958,7 @@ class taskModel extends model
                 $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
                 if($relation)
                 {
-                    $object = $this->getByID($taskID);
-                    $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
+                    if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
                 } 
 
             }
@@ -1350,11 +1349,10 @@ class taskModel extends model
             ->where('id')->eq($taskID)->exec();
         
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        $attribute = new stdclass();
+        $attribute = $this->getByID($taskID);
         $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $task->assignedTo);
         if($attribute->assignee_id != '')
         {
-            $attribute = $this->getByID($taskID);
             // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
             $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, $attribute);
         }
@@ -1763,6 +1761,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
+        $object = $this->getByID($bugID);
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
         if(!empty($relation))
         {
@@ -1771,7 +1770,6 @@ class taskModel extends model
 
             if($singleIssue->state != 'closed')
             { 
-                $object = $this->getByID($bugID);
                 if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $object);
             }
         }
@@ -1820,6 +1818,7 @@ class taskModel extends model
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         
+        $object = $this->getByID($taskID);
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
         if(!empty($relation))
         {
@@ -1828,8 +1827,7 @@ class taskModel extends model
 
             if($singleIssue->state != 'closed')
             { 
-                $object = $this->getByID($taskID);
-                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
+                $if(!empty($object)) this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
             }
         }
 
