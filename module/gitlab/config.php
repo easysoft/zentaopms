@@ -97,3 +97,5 @@ $config->gitlab->objectTables->story = TABLE_STORY;
 $config->gitlab->objectTables->task  = TABLE_TASK;
 $config->gitlab->objectTables->bug   = TABLE_BUG;
 
+$config->gitlab->objectTypes = array('', 'task', 'bug', 'story'); 
+

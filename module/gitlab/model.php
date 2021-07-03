@@ -183,22 +183,22 @@ class gitlabModel extends model
     }
 
     /**
-     * Get gitlab projects of one Product.
+     * Get executions by one product for gitlab module.
      * 
      * @param  int    $productID 
      * @access public
      * @return array
      */
-    public function getProjectsByProduct($productID)
+    public function getExecutionsByProduct($productID)
     {
-        return $this->dao->select('AID, BID as gitlabProject')->from(TABLE_RELATION)
+        return $this->dao->select('distinct execution')->from(TABLE_RELATION)
                     ->where('relation')->eq('interrated')
                     ->andWhere('AType')->eq('gitlab')
                     ->andWhere('BType')->eq('gitlabProject')
                     ->andWhere('product')->eq($productID)
-                    ->fetchGroup('AID');
+                    ->fetchAll('execution');
     }
-    
+
     /**
      * Get gitlabID and projectID.
      * 
@@ -510,6 +510,13 @@ class gitlabModel extends model
         return json_decode(commonModel::http($url));
     }
 
+    public function apiGetIssues($gitlabID, $projectID)
+    {
+        // TODO(dingguodong) not pagination yet.
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues/{$issueID}");
+        return json_decode(commonModel::http($url));
+    }
+
     /**
      * Create issue by api.
      * 
@@ -799,7 +806,7 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function createWebhook($products, $gitlabID, $projectID)
+    public function initWebhooks($products, $gitlabID, $projectID)
     {
         $gitlab   = $this->getByID($gitlabID);
         $webhooks = $this->apiGetHooks($gitlabID, $projectID);

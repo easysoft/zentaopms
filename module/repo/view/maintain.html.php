@@ -49,6 +49,7 @@
           <td class='text-left c-actions'>
             <?php
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list',  'edit');
+            common::printIcon('gitlab', 'importissue', "product={$repo->product}&gitlab={$repo->gitlab}&project={$repo->project}", '', 'list',  'link');
             if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
             ?>
           </td>
