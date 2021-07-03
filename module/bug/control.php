@@ -1249,8 +1249,6 @@ class bug extends control
 
             $this->executeHooks($bugID);
 
-            $this->loadModel('gitlab')->pushToIssue('bug', $bugID, $this->post->gitlab, $this->post->gitlabProject);
-
             if($bug->toTask != 0)
             {
                 /* If task is not finished, update it's status. */

@@ -519,8 +519,11 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiCreateIssue($gitlabID, $projectID, $issue)
+    public function apiCreateIssue($gitlabID, $projectID, $issue, $objectType, $objectID, $object)
     {
+        $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
+        $issue->labels = isset($label->name) ? $label->name : '';
+
         foreach($this->config->gitlab->skippedFields->issueCreate as $field)
         {
             if(isset($issue->$field)) unset($issue->$field);
@@ -529,7 +532,8 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/");
 
-        return json_decode(commonModel::http($url, $issue));
+        $response = json_decode(commonModel::http($url, $issue));
+        $this->saveSyncedIssue($objectType, $object, $gitlabID, $response);
     }
 
     /**
@@ -542,8 +546,9 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $attribute)
+    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object)
     {
+        $attribute = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issueID}");
         return json_decode(commonModel::http($url, $attribute, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
@@ -809,38 +814,6 @@ class gitlabModel extends model
     }
 
     /**
-     * Push to gitlab issue. 
-     * 
-     * @param  string   $objectType 
-     * @param  int      $objectID 
-     * @param  int      $gitlabID
-     * @param  int      $projectID
-     * @access public
-     * @return void
-     */
-    public function pushToIssue($objectType, $objectID, $gitlabID, $projectID)
-    {
-        $object = $this->loadModel($objectType)->getByID($objectID);
-        if(empty($object)) return false;
-        if(!$gitlabID or !$projectID)
-        {
-            $result    = $this->getRelationByObject($objectType, $objectID);
-            $gitlabID  = $result->gitlabID;
-            $projectID = $result->projectID;
-        }
-
-        $syncedIssue = $this->getRelationByObject($objectType, $objectID);
-        $issue = $this->parseObjectToIssue($gitlabID, $projectID, $object, $objectType);
-        if($syncedIssue) return $this->apiUpdateIssue($gitlabID, $projectID, $syncedIssue->issueID, $issue);
-        
-        $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
-        $issue->labels = isset($label->name) ? '' :$label->name;
-
-        $issue = $this->apiCreateIssue($gitlabID, $projectID, $issue);
-        if($issue) $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
-    }
-
-    /**
      * Delete an issue from zentao and gitlab.
      * 
      * @param  int       $gitlabID 
@@ -1029,11 +1002,10 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function parseObjectToIssue($gitlabID, $projectID, $object, $objectType)
+    public function parseObjectToIssue($gitlabID, $projectID, $objectType, $object)
     {
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
         if(empty($gitlabUsers)) return false;
-
         $issue = new stdclass;
         $map = $this->config->gitlab->maps->$objectType;
         foreach($map as $objectField => $config)
@@ -1052,7 +1024,6 @@ class gitlabModel extends model
             }
             if($value) $issue->$field = $value;
         }
-
         if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
@@ -1062,7 +1033,7 @@ class gitlabModel extends model
         /* Append this object link in zentao to gitlab issue description */
         $zentaoLink = common::getSysURL() . helper::createLink($objectType, 'view', "id={$object->id}");
         $issue->description = $issue->description . "\n\n" . $zentaoLink;
-        
+
         return $issue;
     }
 

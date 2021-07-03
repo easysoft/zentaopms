@@ -340,8 +340,10 @@ class storyModel extends model
             if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
 
             /* push this story to gitlab issue */
-            $this->loadModel('gitlab')->pushToIssue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
-
+            $object = $this->getByID($storyID);
+            $issue = $this->loadModel('gitlab')->parseObjectToIssue($this->post->gitlab, $this->post->gitlabProject, 'story', $object);
+            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, $issue, 'story', $storyID, $object);
+            
             return array('status' => 'created', 'id' => $storyID);
         }
         return false;
@@ -829,8 +831,16 @@ class storyModel extends model
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
            }
             /* update story to gitlab issue. */
-            $objectID = $this->loadModel('gitlab')->getRelationByObject('story',$storyID);
-            if($objectID) $this->loadModel('gitlab')->pushToIssue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
+            $object = $this->getByID($storyID);
+
+            if(!empty($object)) 
+            {
+                $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+                if($relation)
+                {
+                    $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                } 
+            }
 
             unset($oldStory->parent);
             unset($story->parent);
@@ -1434,10 +1444,11 @@ class storyModel extends model
 
             if($singleIssue->state != 'closed')
             { 
-                $objectID = $this->loadModel('gitlab')->getRelationByObject('story',$storyID);
-                if($objectID) $this->loadModel('gitlab')->pushToIssue('story', $storyID, $objectID->gitlabID, $objectID->projectID);
+                $object = $this->getByID($storyID);
+                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
             }
         }
+    
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
@@ -1787,8 +1798,9 @@ class storyModel extends model
             $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
             if($attribute->assignee_id != '')
             {
+                $object = $this->getByID($storyID);
                 // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
-                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID , $attribute);
+                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story' $attribute);
             }
             return common::createChanges($oldStory, $story);
         }
@@ -1823,9 +1835,15 @@ class storyModel extends model
             if(!dao::isError()) 
             {
                 /* Push this story to gitlab issue. */
-                $this->loadModel('gitlab')->pushToIssue('story', $storyID, $this->post->gitlab, $this->post->gitlabProject);
-
-                $allChanges[$storyID] = common::createChanges($oldStory, $story);
+                $object = $this->getByID($storyID);
+                if(!empty($object)) 
+                {
+                    $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+                    if($relation)
+                    {
+                        $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                    } 
+                }
             }
         }
         return $allChanges;

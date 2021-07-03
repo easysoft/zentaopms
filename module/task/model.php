@@ -122,8 +122,11 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
 
             /* Sync this task to gitlab issue. */
-            $this->loadModel('gitlab')->pushToIssue('task', $taskID, $this->post->gitlab, $this->post->gitlabProject);
-                
+
+            $object = $this->getByID($taskID);
+            $issue = $this->loadModel('gitlab')->parseObjectToIssue($this->post->gitlab, $this->post->gitlabProject, 'task', $object);
+            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, $issue, 'task', $taskID, $object);
+
             /* Mark design version.*/
             if(isset($task->design) && !empty($task->design))
             {
@@ -382,7 +385,9 @@ class taskModel extends model
             $taskID   = $this->dao->lastInsertID();
 
             /* Sync this task to gitlab issue. */
-            $this->loadModel('gitlab')->pushToIssue('task', $taskID, $this->post->gitlab, $this->post->gitlabProject);
+            $object = $this->getByID($taskID);
+            $issue = $this->loadModel('gitlab')->parseObjectToIssue($this->post->gitlab, $this->post->gitlabProject, 'task', $object);
+            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, $issue, 'task', $taskID, $object);
 
             $taskSpec = new stdClass();
             $taskSpec->task       = $taskID;
@@ -946,9 +951,19 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)->exec();
 
             /* update story to gitlab issue. */
-            $objectID = $this->loadModel('gitlab')->getRelationByObject('task',$taskID);
-            if($objectID) $this->loadModel('gitlab')->pushToIssue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
-            
+            $object = $this->getByID($taskID);
+
+            if(!empty($object)) 
+            {
+                $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
+                if($relation)
+                {
+                    $object = $this->getByID($taskID);
+                    $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
+                } 
+
+            }
+
         if(!dao::isError())
         {
             /* Mark design version.*/
@@ -1339,8 +1354,9 @@ class taskModel extends model
         $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $task->assignedTo);
         if($attribute->assignee_id != '')
         {
+            $attribute = $this->getByID($taskID);
             // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
-            $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID , $attribute);
+            $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, $attribute);
         }
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -1678,8 +1694,18 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        $objectID = $this->loadModel('gitlab')->getRelationByObject('task',$taskID);
-        if($objectID) $this->loadModel('gitlab')->pushToissue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
+        if(!empty($relation))
+        {
+            $singleIssue = new stdclass();
+            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
+
+            if($singleIssue->state != 'closed')
+            { 
+                $object = $this->getByID($taskID);
+                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
+            }
+        }
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
@@ -1738,7 +1764,6 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-
         if(!empty($relation))
         {
             $singleIssue = new stdclass();
@@ -1746,8 +1771,8 @@ class taskModel extends model
 
             if($singleIssue->state != 'closed')
             { 
-                $objectID = $this->loadModel('gitlab')->getRelationByObject('task',$taskID);
-                if($objectID) $this->loadModel('gitlab')->pushToIssue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
+                $object = $this->getByID($bugID);
+                if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $object);
             }
         }
 
@@ -1795,8 +1820,18 @@ class taskModel extends model
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         
-        $objectID = $this->loadModel('gitlab')->getRelationByObject('task',$taskID);
-        if($objectID) $this->loadModel('gitlab')->pushToissue('task', $taskID, $objectID->gitlabID, $objectID->projectID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
+        if(!empty($relation))
+        {
+            $singleIssue = new stdclass();
+            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
+
+            if($singleIssue->state != 'closed')
+            { 
+                $object = $this->getByID($taskID);
+                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
+            }
+        }
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
