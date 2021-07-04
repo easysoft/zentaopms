@@ -1827,7 +1827,7 @@ class taskModel extends model
 
             if($singleIssue->state != 'closed')
             { 
-                $if(!empty($object)) this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
+                if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $object);
             }
         }
 

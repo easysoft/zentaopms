@@ -838,7 +838,7 @@ class storyModel extends model
                 $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
                 if($relation)
                 {
-                    $if(!empty($object)) this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                    if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
                 } 
             }
 
@@ -1445,7 +1445,7 @@ class storyModel extends model
 
             if($singleIssue->state != 'closed')
             { 
-                $if(!empty($object)) this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
             }
         }
 
@@ -1798,7 +1798,7 @@ class storyModel extends model
             if($attribute->assignee_id != '')
             {
                 // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
-                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story' $attribute);
+                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $attribute);
             }
             return common::createChanges($oldStory, $story);
         }
@@ -1839,7 +1839,7 @@ class storyModel extends model
                     $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
                     if($relation)
                     {
-                        $if(!empty($object)) this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                        if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
                     } 
                 }
             }
