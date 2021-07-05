@@ -362,6 +362,7 @@ class task extends control
     public function edit($taskID, $comment = false)
     {
         $this->commonAction($taskID);
+        $this->execution->setMenu($this->view->task->execution);
 
         if(!empty($_POST))
         {
