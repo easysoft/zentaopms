@@ -276,6 +276,28 @@ class gitlabModel extends model
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Send an api post request.
+     * 
+     * @param  int|string    $host     gitlab server ID | gitlab host url.
+     * @param  int           $api      
+     * @param  int           $data 
+     * @param  int           $options 
+     * @access public
+     * @return object
+     */
+    public function apiPost($host, $api, $data = array(), $options = array())
+    {
+        if(is_numeric($host)) $host = $this->getApiRoot($host);
+        if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
+
+        $url = sprintf($apiRoot, $api);
+        return json_decode(commonModel::http($url, $data, $options));
+    }
+
+    /**
+>>>>>>> 388f6365c925b48fc5fe9db65977f00ad4bda236
      * Get current user.
      *
      * @param  string   $host
@@ -530,7 +552,7 @@ class gitlabModel extends model
     public function apiGetIssues($gitlabID, $projectID)
     {
         // TODO(dingguodong) not pagination yet.
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues/{$issueID}");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues");
         return json_decode(commonModel::http($url));
     }
 
