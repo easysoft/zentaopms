@@ -24,7 +24,7 @@
         <thead>
           <tr>
             <?php if(common::hasPriv('custom', 'setDefaultConcept')):?>
-            <th class='w-60px text-center'><?php echo $lang->custom->default;?> </th>
+            <th class='w-70px text-center'><?php echo $lang->custom->default;?> </th>
             <?php endif;?>
             <?php if($this->config->URAndSR):?>
             <th class='text-left'><?php echo $lang->custom->URConcept;?> </th>
