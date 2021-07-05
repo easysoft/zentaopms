@@ -33,6 +33,7 @@ class projectModel extends model
     public function accessDenied()
     {
         echo(js::alert($this->lang->project->accessDenied));
+        $this->session->set('project', '');
 
         die(js::locate(helper::createLink('project', 'index')));
     }
