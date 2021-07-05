@@ -547,7 +547,7 @@
 </div>
 
 <div class="modal fade" id="importToLib">
-  <div class="modal-dialog mw-600px">
+  <div class="modal-dialog mw-500px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
@@ -571,7 +571,7 @@
             </tr>
             <?php endif;?>
             <tr>
-              <td colspan='3' class='text-center'>
+              <td colspan='2' class='text-center'>
                 <?php echo html::submitButton($lang->import, '', 'btn btn-primary');?>
               </td>
             </tr>
