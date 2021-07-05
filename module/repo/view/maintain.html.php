@@ -25,7 +25,7 @@
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->repo->id); ?></th>
           <th class='w-120px'><?php common::printOrderLink('SCM', $orderBy, $vars, $lang->repo->type); ?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
-          <th class='w-200px text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
+          <th class='w-400px text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
           <th class='text-left'><?php echo $lang->repo->path; ?></th>
           <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
