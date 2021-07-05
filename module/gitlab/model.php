@@ -285,7 +285,7 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGet($host, $api, $data = array(), $options = array())
+    public function apiPost($host, $api, $data = array(), $options = array())
     {
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;

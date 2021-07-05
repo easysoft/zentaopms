@@ -253,22 +253,19 @@ class gitlab extends control
 
     public function importIssue()
     {
+        $productID  = $this->get->product;
+        $gitlabID   = $this->get->gitlab;
+        $projectID  = $this->get->project;
+        
+        $executions = $this->loadModel('product')->getAllExecutionPairsByProduct($productID);
+        
         if($_POST)
         {
             $this->post->a();
         }
 
-        $productID  = $this->get->product;
-        $gitlabID   = $this->get->gitlab;
-        $projectID  = $this->get->project;
-        // todo next: get execution from product and execution module.
-
-        $executions = array();
-        foreach($relations as $relation)
-        {
-            if($relation->execution) $executions[] = $this->loadModel("execution")->getByID($relation->execution)->name;
-        }
-
+        $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID);
+        
         $this->view->productName     = $this->loadModel("product")->getByID($productID)->name;
         $this->view->productID       = $productID;
         $this->view->gitlabID        = $gitlabID;
@@ -276,7 +273,7 @@ class gitlab extends control
         $this->view->executions      = $executions; 
         $this->view->objectTypes     = $this->config->gitlab->objectTypes;
 
-        $this->view->gitlabIssues    = $this->gitlab->apiGetIssues($gitlabID, $projectID);
+        $this->view->gitlabIssues    = $gitlabIssues;
         $this->display();
     }
 }
