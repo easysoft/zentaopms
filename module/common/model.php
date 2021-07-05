@@ -1736,7 +1736,8 @@ EOD;
             if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
-                if($this->session->project and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
+                $viewProjects = trim($this->app->user->view->projects, ',');
+                if($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
