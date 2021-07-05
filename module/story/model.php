@@ -341,8 +341,7 @@ class storyModel extends model
 
             /* push this story to gitlab issue */
             $object = $this->getByID($storyID);
-            $issue = $this->loadModel('gitlab')->parseObjectToIssue($this->post->gitlab, $this->post->gitlabProject, 'story', $object);
-            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, $issue, 'story', $storyID, $object);
+            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, 'story', $storyID, $object);
             
             return array('status' => 'created', 'id' => $storyID);
         }
@@ -1168,6 +1167,18 @@ class storyModel extends model
                     /* Update story sort of plan when story plan has changed. */
                     if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
+                    /* update story to gitlab issue. */
+                    $object = $this->getByID($storyID);
+
+                    if(!empty($object)) 
+                    {
+                        $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+                        if($relation)
+                        {
+                            if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                        } 
+                    }
+
                     $this->executeHooks($storyID);
                     if($story->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
@@ -1440,7 +1451,6 @@ class storyModel extends model
 
         if(!empty($relation))
         {
-            $singleIssue = new stdclass();
             $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
 
             if($singleIssue->state != 'closed')
@@ -1515,6 +1525,19 @@ class storyModel extends model
                 if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
                 $this->setStage($storyID);
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
+
+                $object = $this->getByID($storyID);
+                $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+
+                if(!empty($relation))
+                {
+                    $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
+
+                    if($singleIssue->state != 'closed')
+                    { 
+                        if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
+                    }
+                }
             }
             else
             {

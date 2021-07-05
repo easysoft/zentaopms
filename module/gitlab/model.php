@@ -276,6 +276,8 @@ class gitlabModel extends model
     }
 
     /**
+<<<<<<< HEAD
+=======
      * Send an api post request.
      * 
      * @param  int|string    $host     gitlab server ID | gitlab host url.
@@ -295,6 +297,7 @@ class gitlabModel extends model
     }
 
     /**
+>>>>>>> 388f6365c925b48fc5fe9db65977f00ad4bda236
      * Get current user.
      *
      * @param  string   $host
@@ -570,7 +573,6 @@ class gitlabModel extends model
 
         $issue = $this->loadModel('gitlab')->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         if(isset($label->name)) $issue->labels = $label->name;
-
         foreach($this->config->gitlab->skippedFields->issueCreate[$objectType] as $field)
         {
             if(isset($issue->$field)) unset($issue->$field);

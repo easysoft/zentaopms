@@ -27,7 +27,9 @@ $config->gitlab->webhookURL = "%s/api.php?m=gitlab&f=webhook&product=%s&gitlab=%
 
 $config->gitlab->skippedFields = new stdclass;
 $config->gitlab->skippedFields->issueCreate = array();
-$config->gitlab->skippedFields->issueCreate[] = '';
+$config->gitlab->skippedFields->issueCreate['story'] = array();
+$config->gitlab->skippedFields->issueCreate['task']  = array();
+$config->gitlab->skippedFields->issueCreate['bug']   = array();
 
 $config->gitlab->maps = new stdclass;
 $config->gitlab->maps->task = array();
