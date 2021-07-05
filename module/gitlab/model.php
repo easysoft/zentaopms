@@ -257,6 +257,44 @@ class gitlabModel extends model
     }
 
     /**
+     * Send an api get request.
+     * 
+     * @param  int|string    $host     gitlab server ID | gitlab host url.
+     * @param  int           $api      
+     * @param  int           $data 
+     * @param  int           $options 
+     * @access public
+     * @return object
+     */
+    public function apiGet($host, $api, $data = array(), $options = array())
+    {
+        if(is_numeric($host)) $host = $this->getApiRoot($host);
+        if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
+
+        $url = sprintf($apiRoot, $api);
+        return json_decode(commonModel::http($url, $data, $options));
+    }
+
+    /**
+     * Send an api post request.
+     * 
+     * @param  int|string    $host     gitlab server ID | gitlab host url.
+     * @param  int           $api      
+     * @param  int           $data 
+     * @param  int           $options 
+     * @access public
+     * @return object
+     */
+    public function apiGet($host, $api, $data = array(), $options = array())
+    {
+        if(is_numeric($host)) $host = $this->getApiRoot($host);
+        if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
+
+        $url = sprintf($apiRoot, $api);
+        return json_decode(commonModel::http($url, $data, $options));
+    }
+
+    /**
      * Get current user.
      *
      * @param  string   $host
@@ -266,8 +304,8 @@ class gitlabModel extends model
      */
     public function apiGetCurrentUser($host, $token)
     {
-        $api = rtrim($host, '/') . "/api/v4/user?private_token=$token";
-        return json_decode(commonModel::http($api));
+        $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
+        return $this->apiGet($host, '/user');
     }
 
     /**
@@ -280,9 +318,7 @@ class gitlabModel extends model
      */
     public function apiGetUsers($gitlab)
     {
-        $apiRoot  = $this->getApiRoot($gitlab->id);
-        $url      = sprintf($apiRoot, '/users');
-        $response = json_decode(commonModel::http($url));
+        $response = $this->apiGet($gitlab->id, '/users');
 
         if (!$response) return array();
 
@@ -522,19 +558,20 @@ class gitlabModel extends model
      * 
      * @param  int       $gitlabID 
      * @param  int       $projectID 
-     * @param  object    $issue 
      * @param  string    $objectType 
      * @param  int       $objectID 
      * @param  object    $object 
      * @access public
      * @return object
      */
-    public function apiCreateIssue($gitlabID, $projectID, $issue, $objectType, $objectID, $object)
+    public function apiCreateIssue($gitlabID, $projectID, $objectType, $objectID, $object)
     {
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
-        $issue->labels = isset($label->name) ? $label->name : '';
 
-        foreach($this->config->gitlab->skippedFields->issueCreate as $field)
+        $issue = $this->loadModel('gitlab')->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
+        if(isset($label->name)) $issue->labels = $label->name;
+
+        foreach($this->config->gitlab->skippedFields->issueCreate[$objectType] as $field)
         {
             if(isset($issue->$field)) unset($issue->$field);
         }
@@ -543,12 +580,9 @@ class gitlabModel extends model
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/");
 
         $response = json_decode(commonModel::http($url, $issue));
-        if($response)
-        {
-            $this->saveSyncedIssue($objectType, $object, $gitlabID, $response);
-        }else{
-            return $issue; 
-        }
+        if(!$response) return false;
+
+        return $this->saveSyncedIssue($objectType, $object, $gitlabID, $response);
     }
 
     /**
@@ -563,10 +597,10 @@ class gitlabModel extends model
      */
     public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object)
     {
-        $attribute = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
+        $issue   = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issueID}");
-        return json_decode(commonModel::http($url, $attribute, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        return json_decode(commonModel::http($url, $issue, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }    
 
     /**
