@@ -395,7 +395,7 @@ class bug extends control
 
             if($this->app->openApp == 'execution')
             {
-                $location = $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
+                $location = $this->session->bugList ? $this->session->bugList : $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
             elseif($this->app->openApp == 'project')
             {
