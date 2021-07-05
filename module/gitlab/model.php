@@ -549,7 +549,7 @@ class gitlabModel extends model
     public function apiGetIssues($gitlabID, $projectID)
     {
         // TODO(dingguodong) not pagination yet.
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=100';
         return json_decode(commonModel::http($url));
     }
 
