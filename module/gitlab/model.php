@@ -276,25 +276,6 @@ class gitlabModel extends model
     }
 
     /**
-     * Send an api post request.
-     * 
-     * @param  int|string    $host     gitlab server ID | gitlab host url.
-     * @param  int           $api      
-     * @param  int           $data 
-     * @param  int           $options 
-     * @access public
-     * @return object
-     */
-    public function apiGet($host, $api, $data = array(), $options = array())
-    {
-        if(is_numeric($host)) $host = $this->getApiRoot($host);
-        if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
-
-        $url = sprintf($apiRoot, $api);
-        return json_decode(commonModel::http($url, $data, $options));
-    }
-
-    /**
      * Get current user.
      *
      * @param  string   $host
@@ -570,7 +551,6 @@ class gitlabModel extends model
 
         $issue = $this->loadModel('gitlab')->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         if(isset($label->name)) $issue->labels = $label->name;
-
         foreach($this->config->gitlab->skippedFields->issueCreate[$objectType] as $field)
         {
             if(isset($issue->$field)) unset($issue->$field);

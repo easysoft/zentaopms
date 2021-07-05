@@ -124,8 +124,7 @@ class taskModel extends model
             /* Sync this task to gitlab issue. */
 
             $object = $this->getByID($taskID);
-            $issue = $this->loadModel('gitlab')->parseObjectToIssue($this->post->gitlab, $this->post->gitlabProject, 'task', $object);
-            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, $issue, 'task', $taskID, $object);
+            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, 'task', $taskID, $object);
 
             /* Mark design version.*/
             if(isset($task->design) && !empty($task->design))
@@ -386,8 +385,7 @@ class taskModel extends model
 
             /* Sync this task to gitlab issue. */
             $object = $this->getByID($taskID);
-            $issue = $this->loadModel('gitlab')->parseObjectToIssue($this->post->gitlab, $this->post->gitlabProject, 'task', $object);
-            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, $issue, 'task', $taskID, $object);
+            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject,'task', $taskID, $object);
 
             $taskSpec = new stdClass();
             $taskSpec->task       = $taskID;
