@@ -520,9 +520,12 @@ class gitlabModel extends model
     /**
      * Create issue by api.
      * 
-     * @param  int      $gitlabID 
-     * @param  int      $projectID 
-     * @param  object   $issue 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  object    $issue 
+     * @param  string    $objectType 
+     * @param  int       $objectID 
+     * @param  object    $object 
      * @access public
      * @return object
      */
@@ -540,7 +543,12 @@ class gitlabModel extends model
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/");
 
         $response = json_decode(commonModel::http($url, $issue));
-        $this->saveSyncedIssue($objectType, $object, $gitlabID, $response);
+        if($response)
+        {
+            $this->saveSyncedIssue($objectType, $object, $gitlabID, $response);
+        }else{
+            return $issue; 
+        }
     }
 
     /**
@@ -1004,8 +1012,8 @@ class gitlabModel extends model
      * 
      * @param  int       $gitlabID 
      * @param  int       $projectID 
-     * @param  object    $object 
      * @param  string    $objectType 
+     * @param  object    $object 
      * @access public
      * @return object
      */
