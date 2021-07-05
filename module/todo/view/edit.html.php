@@ -15,6 +15,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
+<?php js::set('idvalue', $todo->idvalue);?>
 <?php if(common::checkNotCN()):?>
 <style> label.col-sm-1{width:100px;} </style>
 <?php endif;?>
