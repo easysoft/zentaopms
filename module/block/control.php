@@ -1393,16 +1393,11 @@ class block extends control
         $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
         $count      = isset($this->params->count) ? (int)$this->params->count : 10;
 
-        $actions = array();
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq('project')
-            ->andWhere('objectID')->eq($projectID)
-            ->beginIF(!empty($executions))->markLeft()->orWhere('execution')->in(array_keys($executions))->fi()->markRight()
-            ->orderBy('date_desc')
-            ->limit($count)
-            ->fetchAll();
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
 
-        $this->view->actions = empty($actions) ? array() : $this->loadModel('action')->transformActions($actions);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
     }
 
