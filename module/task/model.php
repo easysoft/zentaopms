@@ -122,7 +122,6 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
 
             /* Sync this task to gitlab issue. */
-
             $object = $this->getByID($taskID);
             $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, 'task', $taskID, $object);
 
@@ -453,6 +452,58 @@ class taskModel extends model
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
         return $mails;
+    }
+
+    /**
+     * Create task from gitlab issue.
+     * 
+     * @param  object    $task 
+     * @param  int       $executionID 
+     * @access public
+     * @return int
+     */
+    public function createTaskFromGitlabIssue($task, $executionID)
+    {
+        foreach($task as $feild => $value) $_POST[$feild] = $value;
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+        $requiredFields = trim($requiredFields, ',');
+        $task = fixer::input('post')
+            ->setDefault('execution', $executionID)
+            ->setDefault('estimate,left,story', 0)
+            ->setDefault('status', 'wait')
+            ->setIF($this->config->systemMode == 'new', 'project', $this->getProjectID($executionID))
+            ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
+            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setDefault('estStarted', '0000-00-00')
+            ->setDefault('deadline', '0000-00-00')
+            ->setIF(strpos($requiredFields, 'estStarted') !== false, 'estStarted', helper::isZeroDate($this->post->estStarted) ? '' : $this->post->estStarted)
+            ->setIF(strpos($requiredFields, 'deadline') !== false, 'deadline', helper::isZeroDate($this->post->deadline) ? '' : $this->post->deadline)
+            ->setIF(strpos($requiredFields, 'estimate') !== false, 'estimate', $this->post->estimate)
+            ->setIF(strpos($requiredFields, 'left') !== false, 'left', $this->post->left)
+            ->setIF(strpos($requiredFields, 'story') !== false, 'story', $this->post->story)
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
+            ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
+            ->setDefault('openedBy',   $this->app->user->account)
+            ->setDefault('openedDate', helper::now())
+            ->cleanINT('execution,story,module')
+            ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
+            ->join('mailto', ',')
+            ->remove('objectTypeList,productList,executionList,gitlabID,gitlabProjectID,after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync')
+            ->add('version', 1)
+            ->get();
+
+        $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id')
+             ->autoCheck()
+             ->batchCheck($requiredFields, 'notempty')
+             ->checkIF($task->estimate != '', 'estimate', 'float')
+             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
+             ->exec();
+            
+        if(dao::isError()) return false;
+
+        $taskID = $this->dao->lastInsertID();
+        return $taskID;
     }
 
     /**

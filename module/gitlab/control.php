@@ -251,29 +251,101 @@ class gitlab extends control
         exit;
     }
 
+    /**
+     * Import gitlab issue to zentaopms. 
+     * 
+     * @access public
+     * @return void
+     */
     public function importIssue()
     {
-        $productID  = $this->get->product;
-        $gitlabID   = $this->get->gitlab;
-        $projectID  = $this->get->project;
+        $productIDList  = explode(',', $this->get->product);
+        $gitlabID       = $this->get->gitlab;
+        $projectID      = $this->get->project;
         
-        $executions = $this->loadModel('product')->getAllExecutionPairsByProduct($productID);
         
         if($_POST)
         {
-            $this->post->a();
+            $executionList  = $this->post->executionList;
+            $objectTypeList = $this->post->objectTypeList;
+            $productList    = $this->post->productList;
+            foreach($executionList as $issueID => $executionID)
+            {
+                if($executionID) 
+                {
+                    $objectType = $this->config->gitlab->objectTypes[$objectTypeList[$issueID]];
+
+                    $issue = $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);
+                    $originalIssue = $issue;
+                    $issue->objectType    = $objectType;
+                    $issue->objectID      = 0; // meet the required parameters for issueToZentaoObject.
+                    if(isset($issue->assignee)) $issue->assignee_id   = $issue->assignee->id;
+                    $issue->updated_by_id = $issue->author->id; // here can be replaced by current zentao user.
+
+                    $object = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
+                    if($objectType == 'task')
+                    {
+                        $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($object, $executionID);
+                    }
+
+                    if($objectType == 'bug')
+                    {
+                    }
+
+                    if($objectType == 'story')
+                    {
+                    }
+                    
+                    $object->id = $objectID;
+                    $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $originalIssue, $object);
+
+               }
+            }
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
-        $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID);
-        
-        $this->view->productName     = $this->loadModel("product")->getByID($productID)->name;
-        $this->view->productID       = $productID;
+        $savedIssueIDList = $this->dao->select('BID as issueID')->from(TABLE_RELATION)
+                    ->where('relation')->eq('gitlab')
+                    ->fetchAll('issueID');
+        $iids = '';
+        foreach($savedIssueIDList as $savedIssueID) $iids = $iids . $savedIssueID->issueID . ',';
+        $options = '&not[iids]=' . trim($iids, ',');
+        $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, $options); //TODO(dingguodong) when no issues here?
+
+        $products = array();
+        $products[] = '';
+        foreach($productIDList as $productID)
+        {
+            $products[$productID] = $this->loadModel("product")->getByID($productID)->name;
+        }
+
+        $this->view->products        = $products;
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabProjectID = $projectID;
-        $this->view->executions      = $executions; 
         $this->view->objectTypes     = $this->config->gitlab->objectTypes;
 
         $this->view->gitlabIssues    = $gitlabIssues;
         $this->display();
     }
+
+    /**
+     * Ajax get executions by productID.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return string
+     */
+    public function ajaxGetExecutionsByProduct($productID)
+    {
+        if(!$productID) $this->send(array('message' => array()));
+        
+        $executions = $this->loadModel('product')->getAllExecutionPairsByProduct($productID);
+        $options = "<option value=''></option>";
+        foreach($executions as $index =>$execution)
+        {
+            $options .= "<option value='{$index}' data-name='{$execution}'>{$execution}</option>";
+        }
+        die($options);
+    }
+
 }
