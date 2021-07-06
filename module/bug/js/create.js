@@ -103,10 +103,17 @@ $(function()
     oldOpenedBuild         = '';
     oldTaskID              = $('#oldTaskID').val() || 0;
 
-    if($('#execution').val()) loadExecutionRelated($('#execution').val());
+    if(parseInt($('#execution').val()))
+    {
+        loadExecutionRelated($('#execution').val());
+    }
+    else
+    {
+        if(parseInt($('#project').val())) loadProjectTeamMembers($('#project').val());
+    }
+
     if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     notice();
-
 
     $('[data-toggle=tooltip]').tooltip();
 
@@ -149,6 +156,12 @@ $(function()
             bootbox.alert(stepsNotEmpty);
             return false;
         }
+    });
+
+    $('#project').change(function()
+    {
+        var projectID = parseInt($(this).val());
+        projectID ? loadProjectTeamMembers(projectID) : loadExecutionTeamMembers($('#product').val());
     });
 });
 

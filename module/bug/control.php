@@ -1919,4 +1919,19 @@ class bug extends control
         $this->view->lines     = $this->product->getLinePairs();
         $this->display();
     }
+
+    /**
+     * Ajax get project team members.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectTeamMembers($projectID)
+    {
+        $users       = $this->loadModel('user')->getPairs('noclosed');
+        $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
+        foreach($teamMembers as $account => $member) $teamMembers[$account] = $users[$account];
+        die(html::select('assignedTo', $teamMembers, '', 'class="form-control"'));
+    }
 }
