@@ -16,3 +16,4 @@ $lang->branch->deleted = 'Xóa';
 
 $lang->branch->confirmDelete = 'Bạn có muốn xóa @branch@ này?';
 $lang->branch->canNotDelete  = 'Có dữ liệu trong @branch@. Nó không thể bị xóa.';
+$lang->branch->nameNotEmpty  = 'Name must not be empty！';

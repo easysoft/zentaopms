@@ -95,6 +95,7 @@ zentaoxx:
 	sed -i '/getSignedTime/d' zentaoxx/module/im/control.php
 	sed -i "/loadModel('push')/d" zentaoxx/module/im/control.php
 	sed -i "/this->push/d" zentaoxx/module/im/control.php
+	sed -i "s/(int)(microtime/(double)(microtime/" zentaoxx/module/im/control.php
 	sed -i "s/'yahoo', //g" zentaoxx/module/im/config.php
 	sed -i "s/'gtalk', //g" zentaoxx/module/im/config.php
 	sed -i "s/'wangwang', //g" zentaoxx/module/im/config.php

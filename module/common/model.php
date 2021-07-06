@@ -588,7 +588,7 @@ class commonModel extends model
 
             if(!common::hasPriv($currentModule, $currentMethod)) continue;
 
-            if($divider)
+            if($divider and !empty($items))
             {
                 $items[] = 'divider';
                 $divider = false;
@@ -1748,7 +1748,8 @@ EOD;
             if(!defined('IN_UPGRADE') and $inProject)
             {
                 /* Check program priv. */
-                if($this->session->project and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
+                $viewProjects = trim($this->app->user->view->projects, ',');
+                if($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
@@ -1835,8 +1836,8 @@ EOD;
         if(!$this->app->session->project) return;
         $program       = $this->dao->findByID($this->app->session->project)->from(TABLE_PROJECT)->fetch();
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
-            ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
-            ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group=t3.group')
+            ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
+            ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
             ->where('t1.project')->eq($program->id)
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->fetchAll();
@@ -2205,9 +2206,9 @@ EOD;
     {
         $response = new stdclass();
         $response->errcode = $this->config->entry->errcode[$code];
-        $response->errmsg  = $this->lang->entry->errmsg[$code];
+        $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
 
-        die(helper::jsonEncode($response));
+        die(urldecode(json_encode($response)));
     }
 
     /**

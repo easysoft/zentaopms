@@ -279,7 +279,10 @@ class deptModel extends model
     public function getAllChildId($deptID)
     {
         if($deptID == 0) return array();
+
         $dept = $this->getById($deptID);
+        if(empty($dept)) return array();
+
         $childs = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like($dept->path . '%')->fetchPairs();
         return array_keys($childs);
     }

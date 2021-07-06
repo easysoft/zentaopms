@@ -18,7 +18,6 @@ $position[] = $this->lang->client->browse;
   <div class='main-header'>
     <div class='pull-right'>
       <?php common::printLink('client', 'create', '', $lang->client->create, '', "class='btn' data-toggle='modal'");?>
-      <?php common::printLink('client', 'checkUpgrade', '', $lang->client->checkUpgrade, '', "class='btn btn-primary'");?>
     </div>
     <div class='heading'>
       <h4><?php echo $lang->client->browseVersion;?></h4>
@@ -59,7 +58,7 @@ $(function()
     {
         if(confirm('<?php echo $lang->confirmDelete?>'))
         {
-            $.getJSON(deleter.attr('href'), function(data) 
+            $.getJSON(deleter.attr('href'), function(data)
             {
                 if(data.result != 'success') alert(data.message);
                 return location.reload();

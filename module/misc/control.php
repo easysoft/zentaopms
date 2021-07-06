@@ -13,7 +13,7 @@ class misc extends control
 {
     /**
      * Ping the server every 5 minutes to keep the session.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -25,7 +25,7 @@ class misc extends control
 
     /**
      * Show php info.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -36,7 +36,7 @@ class misc extends control
 
     /**
      * Show about info of zentao.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -47,7 +47,7 @@ class misc extends control
 
     /**
      * Update nl.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -58,8 +58,8 @@ class misc extends control
 
     /**
      * Check current version is latest or not.
-     * 
-     * @param  string    $sn 
+     *
+     * @param  string    $sn
      * @access public
      * @return void
      */
@@ -83,7 +83,7 @@ class misc extends control
 
     /**
      * Check model extension logic
-     * 
+     *
      * @access public
      * @return void
      */
@@ -95,7 +95,7 @@ class misc extends control
 
     /**
      * Down notify.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -134,7 +134,7 @@ class misc extends control
 
         $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'notify');
         if($result == 0) die("Error : " . $archive->errorInfo(true));
-        
+
         $zipContent = file_get_contents($packageFile);
         unlink($loginFile);
         unlink($packageFile);
@@ -143,7 +143,7 @@ class misc extends control
 
     /**
      * Create qrcode for mobile login.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -164,7 +164,7 @@ class misc extends control
 
     /**
      * Ajax ignore browser.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -206,7 +206,7 @@ class misc extends control
 
     /**
      * Check net connect.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -219,9 +219,9 @@ class misc extends control
 
     /**
      * Show captcha and save to session.
-     * 
-     * @param  string $sessionVar 
-     * @param  string $uuid 
+     *
+     * @param  string $sessionVar
+     * @param  string $uuid
      * @access public
      * @return void
      */
@@ -234,5 +234,17 @@ class misc extends control
         $captcha = $this->app->loadClass('captcha');
         $this->session->set($sessionVar, $captcha->getPhrase());
         $captcha->build()->output();
+    }
+
+    /**
+     * Get annual remind.
+     *
+     * @access public
+     * @return void
+     */
+    public function getRemind()
+    {
+        $data = array('content' => $this->misc->getRemind(), 'title' => $this->lang->misc->remind);
+        $this->send(array('result' => 'success', 'data' => $data));
     }
 }

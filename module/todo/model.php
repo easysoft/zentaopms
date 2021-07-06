@@ -213,7 +213,6 @@ class todoModel extends model
     public function update($todoID)
     {
         $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
-        if(in_array($oldTodo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
 
         $objectType = $this->post->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
@@ -230,6 +229,14 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
+
+        if($todo->type != 'custom')
+        {
+            $type   = $todo->type;
+            $object = $this->loadModel($type)->getByID($objectType);
+            if(isset($object->name))  $todo->name = $object->name;
+            if(isset($object->title)) $todo->name = $object->title;
+        }
 
         if($todo->end < $todo->begin)
         {

@@ -451,12 +451,10 @@ class actionModel extends model
                     $action->extra    = strtolower($extra);
                     if($id)
                     {
-                        $table     = $this->config->objectTables[$action->extra];
-                        $field     = $this->config->action->objectNameFields[$action->extra];
-                        $object    = $this->dao->select($field . ',project')->from($table)->where('id')->eq($id)->fetch();
-                        $name      = $object->$field;
-                        $projectID = $object->project;
-                        if($name) $action->appendLink = html::a(helper::createLink($action->extra, 'view', "id=$id", '', '', $projectID), "#$id " . $name);
+                        $table = $this->config->objectTables[$action->extra];
+                        $field = $this->config->action->objectNameFields[$action->extra];
+                        $name  = $this->dao->select($field)->from($table)->where('id')->eq($id)->fetch($field);
+                        if($name) $action->appendLink = html::a(helper::createLink($action->extra, 'view', "id=$id"), "#$id " . $name);
                     }
                 }
             }

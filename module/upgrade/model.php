@@ -676,6 +676,14 @@ class upgradeModel extends model
             $this->processBuildTable();
             $this->updateProductVersion();
             $this->appendExec('15_0');
+        case '15_0_1':
+            $this->saveLogs('Execute 15_0_1');
+            $this->appendExec('15_0_1');
+        case '15_0_2':
+            $this->saveLogs('Execute 15_0_2');
+            $this->execSQL($this->getUpgradeFile('15.0.2'));
+            $this->uniqueProjectAdmin();
+            $this->appendExec('15_0_2');
         }
 
         $this->deletePatch();
@@ -864,6 +872,8 @@ class upgradeModel extends model
             case '15_0_rc2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.rc2'));
             case '15_0_rc3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.rc3'));
             case '15_0': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0'));
+            case '15_0_1':
+            case '15_0_2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -4982,6 +4992,39 @@ class upgradeModel extends model
     public function updateProductVersion()
     {
         $this->dao->update(TABLE_PRODUCT)->set('createdVersion')->eq($this->config->version)->where('createdVersion')->eq('')->andWhere('createdDate')->gt('2020-01-01')->exec();
+        return true;
+    }
+
+    /**
+     * Unique projectAdmin group.
+     *
+     * @access public
+     * @return void
+     */
+    public function uniqueProjectAdmin()
+    {
+        $projectAdmins = $this->dao->select('*')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->orderBy('id')->fetchAll('id');
+        if(count($projectAdmins) == 1) return true;
+
+        $holdGroup = reset($projectAdmins);
+        unset($projectAdmins[$holdGroup->id]);
+
+        $userGroups = $this->dao->select('*')->from(TABLE_USERGROUP)->where('`group`')->in(array_keys($projectAdmins))->fetchGroup('group', 'account');
+        foreach($userGroups as $groupID => $groups)
+        {
+            foreach($groups as $account => $userGroup)
+            {
+                $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($userGroup->group)->andWhere('account')->eq($userGroup->account)->exec();
+
+                $newUserGroup = new stdclass();
+                $newUserGroup->account = $account;
+                $newUserGroup->project = $userGroup->project;
+                $newUserGroup->group   = $holdGroup->id;
+                $this->dao->replace(TABLE_USERGROUP)->data($newUserGroup)->exec();
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_GROUP)->where('id')->in(array_keys($projectAdmins))->exec();
         return true;
     }
 }

@@ -69,7 +69,7 @@ class executionModel extends model
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
 
-        if($execution->type == 'stage')
+        if($execution and $execution->type == 'stage')
         {
             global $lang;
             $this->app->loadLang('project');
@@ -98,7 +98,7 @@ class executionModel extends model
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
-        if($this->cookie->executionMode == 'noclosed' and ($execution->status == 'done' or $execution->status == 'closed'))
+        if($this->cookie->executionMode == 'noclosed' and $execution and ($execution->status == 'done' or $execution->status == 'closed'))
         {
             setcookie('executionMode', 'all');
             $this->cookie->executionMode = 'all';
@@ -298,7 +298,8 @@ class executionModel extends model
 
             /* Determine whether to add a sprint or a stage according to the model of the execution. */
             $project = $this->loadModel('project')->getByID($_POST['project']);
-            $type = zget($this->config->execution->modelList, $project->model, 'sprint');
+            $type    = 'sprint';
+            if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
             /* If the execution model is a stage, determine whether the product is linked. */
             if($type == 'stage' and empty($this->post->products[0]))
@@ -592,6 +593,7 @@ class executionModel extends model
             if(isset($nameList[$executionName])) dao::$errors['name'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->execution->name, $executionName);
             $nameList[$executionName] = $executionName;
 
+            /* Check unique code for edited executions. */
             if(empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
@@ -808,6 +810,7 @@ class executionModel extends model
         $now        = helper::now();
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
+            ->setDefault('realEnd', $now)
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -964,6 +967,7 @@ class executionModel extends model
             ->beginIF($projectID && $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all' && $this->config->systemMode == 'new')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
@@ -1027,6 +1031,7 @@ class executionModel extends model
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t2.project')->in($this->app->user->view->projects)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
@@ -1041,6 +1046,7 @@ class executionModel extends model
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
@@ -1069,6 +1075,7 @@ class executionModel extends model
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t2.project')->in($this->app->user->view->projects)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
@@ -1084,6 +1091,7 @@ class executionModel extends model
             return $this->dao->select('t1.*, IF(INSTR(" done,closed", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
                 ->where('t1.deleted')->eq(0)
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
@@ -1378,9 +1386,10 @@ class executionModel extends model
      */
     public function getProductGroupList()
     {
-        $list = $this->dao->select('t1.id, t1.name,t1.status, t2.product')->from(TABLE_EXECUTION)->alias('t1')
+        $list = $this->dao->select('t1.id,t1.name,t1.status,t2.product')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->fetchGroup('product');
 
@@ -1739,7 +1748,7 @@ class executionModel extends model
             if(isset($oldExecutionProducts[$productID][$branch]))
             {
                 $oldExecutionProduct = $oldExecutionProducts[$productID][$branch];
-                $oldPlan           = $oldExecutionProduct->plan;
+                $oldPlan = $oldExecutionProduct->plan;
             }
 
             $data = new stdclass();
@@ -2378,7 +2387,7 @@ class executionModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         /* Add the execution team members to the project. */
-        $this->addProjectMembers($execution->project, $executionMember);
+        if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
     }
 
@@ -2412,9 +2421,12 @@ class executionModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
-        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
-        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+        if($changedAccounts)
+        {
+            $this->loadModel('user')->updateUserView($projectID, $projectType, $changedAccounts);
+            $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+            if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+        }
     }
 
     /**

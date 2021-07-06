@@ -317,7 +317,10 @@ class taskModel extends model
 
             foreach($extendFields as $extendField)
             {
-                $data[$i]->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $data[$i]->{$extendField->field} = $this->post->{$extendField->field}[$i];
+                if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
+
+                $data[$i]->{$extendField->field} = htmlspecialchars($data[$i]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
                 if($message)
                 {
@@ -1089,7 +1092,10 @@ class taskModel extends model
 
             foreach($extendFields as $extendField)
             {
-                $task->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$taskID]);
+                $task->{$extendField->field} = $this->post->{$extendField->field}[$taskID];
+                if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
+
+                $task->{$extendField->field} = htmlspecialchars($task->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -2436,10 +2442,10 @@ class taskModel extends model
         if(!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
 
         /* Set product type for task. */
-        if(isset($task->product))
+        if(!empty($task->product))
         {
             $product = $this->loadModel('product')->getById($task->product);
-            $task->productType = $product->type;
+            if($product) $task->productType = $product->type;
         }
 
         /* Set closed realname. */

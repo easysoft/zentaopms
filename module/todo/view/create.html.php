@@ -22,7 +22,7 @@
       <h2><?php echo $lang->todo->create;?></h2>
     </div>
     <form method='post' target='hiddenwin' id='dataform'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <tr>
           <th class='thWidth'><?php echo $lang->todo->date;?></th>
           <td class='w-400px'>
@@ -126,7 +126,7 @@
                   <span class="pri-text"><span class="label-pri label-pri-3">3</span></span> &nbsp;<span class="caret"></span>
                 </button>
                 <div class='dropdown-menu pull-right'>
-                  <?php echo html::select('pri', $lang->todo->priList, 3, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>             
+                  <?php echo html::select('pri', $lang->todo->priList, 3, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
                 </div>
               </div>
             </div>

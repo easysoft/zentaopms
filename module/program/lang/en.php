@@ -56,6 +56,7 @@ $lang->program->closeErrorMessage       = 'There are subprograms or projects tha
 $lang->program->hasChildren             = 'The program has a child program or the project exists and can not be deleted.';
 $lang->program->confirmDelete           = "Do you want to delete it?";
 $lang->program->readjustTime            = 'Change the program begin&end date.';
+$lang->program->accessDenied            = 'You have no access to the program.';
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';

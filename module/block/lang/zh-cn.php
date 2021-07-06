@@ -71,6 +71,7 @@ $lang->block->estimatedHours      = '预计';
 $lang->block->consumedHours       = '已消耗';
 $lang->block->time                = '第';
 $lang->block->week                = '周';
+$lang->block->month               = '月';
 $lang->block->selectProduct       = '选择产品';
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩余工时';

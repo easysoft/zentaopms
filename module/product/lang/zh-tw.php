@@ -26,6 +26,7 @@ $lang->product->closed          = '已關閉';
 $lang->product->updateOrder     = '排序';
 $lang->product->all             = "所有{$lang->productCommon}";
 $lang->product->manageLine      = "維護{$lang->productCommon}綫";
+$lang->product->newLine         = "新建{$lang->productCommon}綫";
 $lang->product->export          = '導出數據';
 $lang->product->dashboard       = "{$lang->productCommon}儀表盤";
 $lang->product->changeProgram   = "{$lang->productCommon}調整所屬項目集影響範圍確認";

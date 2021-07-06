@@ -642,6 +642,7 @@ class my extends control
     public function audit($browseType = 'wait', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('datatable');
+        $this->loadModel('baseline');
         $this->session->set('reviewList', $this->app->getURI(true));
         $this->app->loadLang('review');
         $this->app->loadClass('pager', true);

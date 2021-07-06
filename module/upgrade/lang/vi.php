@@ -119,9 +119,6 @@ $lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select m
 $lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one large project, or merge them independently";
 $lang->upgrade->mergeByMoreLink    = "Iteration that relates multiple products: select which product the iteration belongs to.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
-
-$lang->upgrade->needBuild4Add    = 'Full text retrieval has been added in this upgrad. Vui lòng create an index.';
-$lang->upgrade->needBuild4Adjust = 'Full text retrieval has been adjusted. Vui lòng create an index.';
-$lang->upgrade->buildIndex       = 'Tạo Index';
+$lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrad. Vui lòng create an index.';
 
 include dirname(__FILE__) . '/version.php';

@@ -24,7 +24,7 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function accessible($programID = 0, $deptID = 0, $browseType='browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function accessible($programID = 0, $deptID = 0, $browseType = 'browse', $param = 0, $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('program')->setMenu($programID);
         $this->app->loadLang('user');
@@ -81,6 +81,7 @@ class personnel extends control
         $this->view->title      = $this->lang->personnel->invest;
         $this->view->position[] = $this->lang->personnel->invest;
         $this->view->investList = $this->personnel->getInvest($programID);
+        $this->view->programID  = $programID;
 
         $this->display();
     }

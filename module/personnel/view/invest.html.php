@@ -28,7 +28,7 @@
             <th colspan="2"><?php echo $lang->personnel->workingHours;?></th>
             <th colspan="3"><?php echo $lang->personnel->task;?></th>
             <th colspan="3"><?php echo $lang->personnel->bug;?></th>
-            <th colspan="2" class="w-150px"><?php echo $lang->personnel->createStories;?></th>
+            <th <?php echo $config->URAndSR ? "colspan='2'" : "rowspan='2'";?> class="w-150px"><?php echo $lang->personnel->createStories;?></th>
             <?php if(isset($this->config->maxVersion)): ?>
             <th colspan="3"><?php echo $lang->personnel->issue;?></th>
             <th colspan="3"><?php echo $lang->personnel->risk;?></th>
@@ -43,8 +43,10 @@
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
             <th><?php echo $lang->personnel->wait;?></th>
+            <?php if($this->config->URAndSR):?>
             <th><?php echo $lang->personnel->UR;?></th>
             <th><?php echo $lang->personnel->SR;?></th>
+            <?php endif;?>
             <?php if(isset($this->config->maxVersion)): ?>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
@@ -70,7 +72,9 @@
             <td><?php echo $personnel['createdBug'];?></td>
             <td><?php echo $personnel['resolvedBug'];?></td>
             <td><?php echo $personnel['pendingBug'];?></td>
+            <?php if($this->config->URAndSR):?>
             <td><?php echo $personnel['UR'];?></td>
+            <?php endif;?>
             <td><?php echo $personnel['SR'];?></td>
             <?php if(isset($this->config->maxVersion)): ?>
             <td><?php echo $personnel['createdIssue'];?></td>

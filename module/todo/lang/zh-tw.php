@@ -98,7 +98,6 @@ $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = '任務';
 $lang->todo->typeList['story']    = $lang->SRCommon;
-$lang->todo->typeList['review']   = '評審';
 $lang->todo->typeList['testtask'] = '測試單';
 
 $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";

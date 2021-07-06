@@ -52,7 +52,7 @@
         <td class='text-left' title='<?php $report->title?>'><?php echo html::a($viewLink, $report->title, '', "data-app='{$this->app->openApp}'")?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
-        <?php $executionName = $report->execution ? '#' . $report->execution . $executions[$report->execution] : '';?>
+        <?php $executionName = $report->execution ? '#' . $report->execution . zget($executions, $report->execution, '') : '';?>
         <td class='text-left' title='<?php echo $executionName?>'><?php echo $executionName;?></td>
         <?php
         $taskName = '';

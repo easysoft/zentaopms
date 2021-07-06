@@ -102,17 +102,11 @@ foreach(explode(',', $showFields) as $field)
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
             <?php echo html::select("plans[$storyID]", $productPlans, $story->plan, "class='form-control chosen'");?>
           </td>
-          <!-- <td title='<?php echo $story->title?>'>
-            <div class='input-group'>
-            <?php echo html::hidden("colors[$storyID]", $story->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#titles\\[{$storyID}\\]'");?>
-            <?php echo html::input("titles[$storyID]", $story->title, "class='form-control'"); ?>
-            </div>
-          </td> -->
           <td title='<?php echo $story->title?>'>
             <div class="input-group">
               <div class="input-control has-icon-right">
-                <?php echo html::input("titles[]", $story->title, "class='form-control input-story-title' disabled"); ?>
-                <?php echo html::hidden("titles[$storyID]", $story->title, "class='form-control input-story-title'"); ?>
+                <?php echo html::input("", $story->title, "class='form-control input-story-title' disabled"); ?>
+                <?php echo html::hidden("titles[$storyID]", $story->title); ?>
 
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
@@ -120,7 +114,6 @@ foreach(explode(',', $showFields) as $field)
                     <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
                   </ul>
                   <?php echo html::hidden("colors[$storyID]", $story->color, "class='colorpicker' data-wrapper='input-control-icon-right' data-icon='color' data-btn-tip='{$lang->story->colorTag}' data-update-color='#titles\\[{$storyID}\\]'");?>
-                  <!-- <input type="hidden" class="colorpicker" id="color$id" name="color[$id]" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title$id"> -->
                 </div>
               </div>
             </div>

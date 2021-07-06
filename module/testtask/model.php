@@ -1744,13 +1744,29 @@ class testtaskModel extends model
             {
                 if(isset($case->id))
                 {
-                    $caseID = $case->id;
+                    unset($case->steps);
+
+                    $caseID  = $case->id;
+                    $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
                     $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
+
+                    $changes = common::createChanges($oldCase, $case);
+                    if($changes)
+                    {
+                        $actionID = $this->action->create('case', $caseID, 'Edited');
+                        $this->action->logHistory($actionID, $changes);
+                    }
                 }
                 elseif(!isset($existCases[$case->title]))
                 {
-                    $this->dao->insert(TABLE_CASE)->data($case)->exec();
+                    $this->dao->insert(TABLE_CASE)->data($case, 'steps')->exec();
                     $caseID = $this->dao->lastInsertID();
+                    foreach($case->steps as $caseStep)
+                    {
+                        $caseStep->case    = $caseID;
+                        $caseStep->version = 1;
+                        $this->dao->insert(TABLE_CASESTEP)->data($caseStep)->exec();
+                    }
                     $this->action->create('case', $caseID, 'Opened');
                 }
                 else
@@ -2133,7 +2149,8 @@ class testtaskModel extends model
             if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
 
             $case = new stdclass();
-            $case->product    = $productID;
+            if(isset($caseResult->id)) $case->id = $caseResult->id;
+            if(!isset($caseResult->id)) $case->product = $productID;
             $case->title      = $caseResult->title;
             $case->pri        = 3;
             $case->type       = 'feature';
@@ -2144,6 +2161,7 @@ class testtaskModel extends model
             $case->version    = 1;
             $case->auto       = 'func';
             $case->frame      = $frame;
+            $case->steps      = array();
 
             $result = new stdclass();
             $result->case       = 0;
@@ -2162,8 +2180,14 @@ class testtaskModel extends model
                 foreach($caseResult->steps as $i => $step)
                 {
                     $result->stepResults[$i]['result'] = $step->status ? 'pass' : 'fail';
-                    $result->stepResults[$i]['real']   = $step->status ? '' : $step->checkPoints[0]->actual;
+                    $result->stepResults[$i]['real']   = $step->checkPoints[0]->actual;
                     if(!$step->status) $stepStatus = 'fail';
+
+                    $caseStep = new stdclass();
+                    $caseStep->type   = 'step';
+                    $caseStep->desc   = '';
+                    $caseStep->expect = $step->checkPoints[0]->expect;
+                    $case->steps[] = $caseStep;
                 }
                 $result->caseResult = $stepStatus;
             }

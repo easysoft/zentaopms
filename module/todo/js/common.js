@@ -37,6 +37,7 @@ function loadList(type, id)
             if(data.length != 0)
             {
                 $(divClass).html(data).find('select').chosen();
+                if(config.currentMethod == 'edit') $(divClass).html(data).find('select').val(idvalue).trigger('chosen:updated');
             }
             else
             {
@@ -105,7 +106,7 @@ function switchTimeList(number)
 
 function switchDateFeature(switcher)
 {
-    if(switcher.checked) 
+    if(switcher.checked)
     {
         $('#begin').attr('disabled','disabled').trigger('chosen:updated');
         $('#end').attr('disabled','disabled').trigger('chosen:updated');

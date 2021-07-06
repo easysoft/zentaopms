@@ -1797,11 +1797,11 @@ class productModel extends model
     public function setMenu($productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
     {
         $product = $this->getByID($productID);
+        $params  = array('branch' => $branch);
+        common::setMenuVars('product', $productID, $params);
         if(!$product) return;
 
         $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
-        $params = array('branch' => $branch);
-        common::setMenuVars('product', $productID, $params);
 
         if($product->type == 'normal')
         {

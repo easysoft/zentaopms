@@ -336,6 +336,17 @@ class product extends control
         }
 
         if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
+        if($this->app->getViewType() == 'mhtml')
+        {
+            if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story')
+            {
+                $this->loadModel('project')->setMenu();
+            }
+            else
+            {
+                $this->product->setMenu('');
+            }
+        }
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
@@ -1032,6 +1043,7 @@ class product extends control
             if($activeMenu == 'testtask')   $this->lang->execution->menu->qa['subMenu']->testtask['subModule']   = 'product';
             if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testreport['subModule'] = 'product';
         }
+        if($this->app->getViewType() == 'mhtml') $this->product->setMenu('');
 
         $this->view->title    = $this->lang->$moduleName->common;
         $this->view->objectID = $objectID;

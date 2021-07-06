@@ -40,9 +40,9 @@ class execution extends control
 
         $this->loadModel('project');
 
+        $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
         if(!in_array($this->methodName, array('computeburn', 'ajaxgetdropmenu')) and $this->app->openApp == 'execution')
         {
-            $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
         $this->objectType = $this->config->systemMode == 'classic' ? 'project' : 'execution';
@@ -1010,9 +1010,15 @@ class execution extends control
 
         /* Set execution builds. */
         $executionBuilds = array();
+        $productList     = $this->execution->getProducts($executionID);
         if(!empty($builds))
         {
-            foreach($builds as $build) $executionBuilds[$build->product][] = $build;
+            foreach($builds as $build)
+            {
+                /* If product is normal, unset branch name. */
+                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
+                $executionBuilds[$build->product][] = $build;
+            }
         }
 
         /* Header and position. */
@@ -1364,7 +1370,7 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $oldPlans       = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchPairs('plan');
+            $oldPlans       = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
             $oldPlanStories = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
                 ->where('t1.project')->eq($executionID)
@@ -1398,8 +1404,10 @@ class execution extends control
             }
 
             /* Link the plan stories. */
-            $diffResult = array_diff($oldPlans, $_POST['plans']);
-            if(!empty($_POST['plans']) and !empty($diffResult))
+            $newPlans   = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
+            $diffResult = array_diff($oldPlans, $newPlans);
+            $diffResult = array_merge($diffResult, array_diff($newPlans, $oldPlans));
+            if(!empty($newPlans) and !empty($diffResult))
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
                 $this->loadModel('productplan')->linkProject($executionID, $_POST['plans'], $oldPlanStories);
@@ -2492,13 +2500,6 @@ class execution extends control
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
-        if($executionID == 0)
-        {
-            $this->executions = array('0' => $this->lang->execution->selectExecution) + $this->executions;
-            unset($this->lang->execution->menu);
-            $this->lang->execution->menu = $this->lang->execution->indexMenu;
-            $this->lang->execution->menu->list = $this->execution->select($this->executions, 0, 'execution', 'dynamic');
-        }
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -2758,8 +2759,17 @@ class execution extends control
 
         if($this->app->viewType == 'mhtml')
         {
-            $executionID = $this->execution->saveState(0, $this->executions);
-            $this->execution->setMenu($executionID);
+            if($this->app->rawModule == 'project' and $this->app->rawMethod == 'execution')
+            {
+                $projects  = $this->project->getPairsByProgram();
+                $projectID = $this->project->saveState($projectID, $projects);
+                $this->project->setMenu($projectID);
+            }
+            else
+            {
+                $executionID = $this->execution->saveState(0, $this->executions);
+                $this->execution->setMenu($executionID);
+            }
         }
 
         /* Load pager and get tasks. */

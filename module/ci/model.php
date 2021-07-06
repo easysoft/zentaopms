@@ -11,7 +11,7 @@ class ciModel extends model
 {
     /**
      * Set menu.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -44,7 +44,7 @@ class ciModel extends model
 
     /**
      * Sync compile status.
-     * 
+     *
      * @param  object $compile
      * @access public
      * @return void
@@ -77,6 +77,7 @@ class ciModel extends model
                 if(empty($buildNumber)) return false;
 
                 $result = strtolower($buildInfo->result);
+                if(empty($result)) return false;
                 $this->updateBuildStatus($compile, $result);
 
                 $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $buildNumber);
@@ -100,6 +101,7 @@ class ciModel extends model
                 else
                 {
                     $result = strtolower($buildInfo->result);
+                    if(empty($result)) return false;
                     $this->updateBuildStatus($compile, $result);
 
                     $logUrl   = $buildInfo->url . 'logText/progressiveText/api/json';
@@ -126,7 +128,7 @@ class ciModel extends model
 
     /**
      * Send request.
-     * 
+     *
      * @param  string $url
      * @param  object $data
      * @param  string $userPWD

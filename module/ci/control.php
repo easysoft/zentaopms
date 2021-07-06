@@ -24,7 +24,7 @@ class ci extends control
 
     /**
      * Init compile queue.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -43,7 +43,7 @@ class ci extends control
 
     /**
      * Exec compile.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -79,7 +79,7 @@ class ci extends control
 
     /**
      * Commit result from ztf.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -134,24 +134,26 @@ class ci extends control
         }
         else
         {
-            $lastProject = $this->dao->select('t1.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $lastProject = $this->dao->select('t2.id,t2.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
-                ->orderBy('project desc')
+                ->andWhere('t2.project')->ne('0')
+                ->orderBy('t2.id desc')
                 ->limit(1)
-                ->fetch('project');
+                ->fetch();
 
             $testtask = new stdclass();
-            $testtask->product = $productID;
-            $testtask->name    = sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
-            $testtask->owner   = $this->app->user->account;
-            $testtask->project = $lastProject;
-            $testtask->build   = 'trunk';
-            $testtask->auto    = strtolower($testType);
-            $testtask->begin   = date('Y-m-d');
-            $testtask->end     = date('Y-m-d', time() + 24 * 3600);
-            $testtask->status  = 'done';
+            $testtask->product   = $productID;
+            $testtask->name      = sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
+            $testtask->owner     = $this->app->user->account;
+            $testtask->project   = $lastProject->project;
+            $testtask->execution = $lastProject->id;
+            $testtask->build     = 'trunk';
+            $testtask->auto      = strtolower($testType);
+            $testtask->begin     = date('Y-m-d');
+            $testtask->end       = date('Y-m-d', time() + 24 * 3600);
+            $testtask->status    = 'done';
 
             $this->dao->insert(TABLE_TESTTASK)->data($testtask)->exec();
             $taskID = $this->dao->lastInsertId();

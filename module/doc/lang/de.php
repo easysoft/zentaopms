@@ -38,7 +38,7 @@ $lang->doc->separator      = "<i class='icon-angle-right'></i>";
 $lang->doc->fileTitle      = 'Dateiname';
 $lang->doc->filePath       = 'Dateipfad';
 $lang->doc->extension      = 'Erweiterung';
-$lang->doc->size           = 'Größe';
+$lang->doc->size           = 'Größe der Anlage';
 $lang->doc->download       = 'Download';
 $lang->doc->acl            = 'Rechte';
 $lang->doc->fileName       = 'Files';

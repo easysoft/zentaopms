@@ -40,7 +40,9 @@
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
+            <?php if($this->config->URAndSR):?>
             <th class="w-300px" colspan="4"><?php echo $lang->story->requirement;?></th>
+            <?php endif;?>
             <th class="w-300px" colspan="4"><?php echo $lang->story->story;?></th>
             <th class="w-150px" colspan="2"><?php echo $lang->bug->common;?></th>
             <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
@@ -48,10 +50,12 @@
             <th class='c-actions w-70px' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
+            <?php if($this->config->URAndSR):?>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->close;?></th>
             <th><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->completeRate;?></th>
+            <?php endif;?>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->close;?></th>
             <th><?php echo $lang->story->draft;?></th>
@@ -69,7 +73,7 @@
         ?>
           <?php if(isset($program['programName'])):?>
           <tr <?php echo $trAttrs;?>>
-            <td colspan="14">
+            <td colspan="<?php echo $this->config->URAndSR ? 14 : 10;?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $program['programName']?>
             </td>
@@ -94,7 +98,7 @@
           }
           ?>
           <tr <?php echo $trAttrs;?>>
-            <td colspan="14">
+            <td colspan="<?php echo $this->config->URAndSR ? 14 : 10;?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>
@@ -134,10 +138,12 @@
               <span class='table-nest-icon icon icon-product'></span>
               <?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?>
             </td>
+            <?php if($this->config->URAndSR):?>
             <td><?php echo $product->requirements['active'];?></td>
             <td><?php echo $product->requirements['closed'];?></td>
             <td><?php echo $product->requirements['draft'];?></td>
             <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
+            <?php endif;?>
             <td><?php echo $product->stories['active'];?></td>
             <td><?php echo $product->stories['closed'];?></td>
             <td><?php echo $product->stories['draft'];?></td>

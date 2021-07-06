@@ -189,8 +189,6 @@ $lang->project->endList[365] = '一年';
 $lang->project->endList[999] = '长期';
 
 $lang->project->empty                  = '暂时没有项目';
-$lang->project->accessDenied           = '您无权访问该项目！';
-$lang->project->chooseProgramType      = '选中项目管理模型';
 $lang->project->nextStep               = '下一步';
 $lang->project->hoursUnit              = '%s 工时';
 $lang->project->membersUnit            = '%s人';

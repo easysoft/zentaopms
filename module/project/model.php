@@ -33,6 +33,7 @@ class projectModel extends model
     public function accessDenied()
     {
         echo(js::alert($this->lang->project->accessDenied));
+        $this->session->set('project', '');
 
         die(js::locate(helper::createLink('project', 'index')));
     }
@@ -144,6 +145,13 @@ class projectModel extends model
         {
             $currentProject     = $this->getById($projectID);
             $currentProjectName = $currentProject->name;
+        }
+
+        if($this->app->viewType == 'mhtml' and $projectID)
+        {
+            $output  = $this->lang->project->common . $this->lang->colon;
+            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '')\">{$currentProjectName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            return $output;
         }
 
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
@@ -761,7 +769,7 @@ class projectModel extends model
                 $product->name           = $this->post->productName ? $this->post->productName : $project->name;
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
-                $product->acl            = $project->acl = 'open' ? 'open' : 'private';
+                $product->acl            = $project->acl == 'open' ? 'open' : 'private';
                 $product->PO             = $project->PM;
                 $product->createdBy      = $this->app->user->account;
                 $product->createdDate    = helper::now();
@@ -796,7 +804,7 @@ class projectModel extends model
 
             /* Add project admin. */
             $groupPriv = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
-                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group = t2.id')
+                ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.`group` = t2.id')
                 ->where('t1.account')->eq($this->app->user->account)
                 ->andWhere('t2.role')->eq('projectAdmin')
                 ->fetch();

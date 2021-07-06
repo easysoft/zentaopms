@@ -1,10 +1,9 @@
-
 /**
  * Ajax delete doc.
  *
  * @param  string $link
- * @param  replaceID $replaceID
- * @param  string $notice
+ * @param  int    $replaceID
+ * @param  stirng $notice
  * @access public
  * @return void
  */

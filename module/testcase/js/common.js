@@ -301,6 +301,17 @@ function initSteps(selector)
             suggestType = suggestChild ? 'item' : 'step';
         }
         $step.find('.step-type').val(suggestType);
+
+        /* Auto insert step to group without any steps */
+        if(suggestType === 'group')
+        {
+            var $nextStep = $step.next('.step:not(.drag-shadow)');
+            if(!$nextStep.length || $nextStep.find('.step-type').val() !== 'item')
+            {
+                insertStepRow($step, 1, 'item', true);
+            }
+        }
+
         refreshSteps();
     }).on('change', '.form-control', function()
     {

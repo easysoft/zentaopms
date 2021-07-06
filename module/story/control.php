@@ -1095,7 +1095,7 @@ class story extends control
 
         if(dao::isError()) die(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList, 'parent'));
+        die(js::reload('parent'));
     }
 
     /**
@@ -1639,6 +1639,16 @@ class story extends control
         $products = $this->product->getPairs();
         $queryID  = 0;
 
+        /* Change for requirement story title. */
+        if($story->type == 'story')
+        {
+            $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+            $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
+            $this->config->product->search['fields']['title'] = $this->lang->story->title;
+            unset($this->config->product->search['fields']['plan']);
+            unset($this->config->product->search['fields']['stage']);
+        }
+
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID", '', true);
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
@@ -2040,7 +2050,7 @@ class story extends control
                     }
                     $story->plan = $plans;
                 }
-                if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
+                if(isset($relatedStories[$story->duplicateStory]) and $story->closedReason != 'duplicate') $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
                 if(isset($storyLang->statusList[$story->status]))       $story->status       = $this->processStatus('story', $story);

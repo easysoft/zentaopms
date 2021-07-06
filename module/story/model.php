@@ -410,8 +410,8 @@ class storyModel extends model
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
-            $story->status     = ($this->app->openApp == project or $this->app->openApp == execution or ($stories->needReview[$i] == 0 and !$forceReview)) ? 'active' : 'draft';
-            $story->stage      = ($this->app->openApp == project or $this->app->openApp == execution) ? 'projected' : 'wait';
+            $story->status     = ($this->app->openApp == 'project' or $this->app->openApp == 'execution' or ($stories->needReview[$i] == 0 and !$forceReview)) ? 'active' : 'draft';
+            $story->stage      = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
@@ -421,7 +421,10 @@ class storyModel extends model
 
             foreach($extendFields as $extendField)
             {
-                $story->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $story->{$extendField->field} = $this->post->{$extendField->field}[$i];
+                if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
+
+                $story->{$extendField->field} = htmlspecialchars($story->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -1122,7 +1125,10 @@ class storyModel extends model
 
                 foreach($extendFields as $extendField)
                 {
-                    $story->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$storyID]);
+                    $story->{$extendField->field} = $this->post->{$extendField->field}[$storyID];
+                    if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
+
+                    $story->{$extendField->field} = htmlspecialchars($story->{$extendField->field});
                     $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
                     if($message) die(js::alert($message));
                 }
@@ -1858,7 +1864,7 @@ class storyModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs('project', 'branch');
 
-        $hasBranch = ($product->type != 'normal' and empty($story->branch));
+        $hasBranch = ($product and $product->type != 'normal' and empty($story->branch));
         $stages    = array();
         if($hasBranch and $story->plan)
         {
@@ -2478,7 +2484,7 @@ class storyModel extends model
         else
         {
             $productParam = ($type == 'byproduct' and $param) ? $param : $this->cookie->storyProductParam;
-            $branchParam  = ($type == 'bybranch'  and $param) ? $param : $this->cookie->storyBranchParam;
+            $branchParam  = $branchID = ($type == 'bybranch'  and $param) ? $param : $this->cookie->storyBranchParam;
             $moduleParam  = ($type == 'bymodule'  and $param) ? $param : $this->cookie->storyModuleParam;
             $modules      = empty($moduleParam) ? array() : $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
             if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
@@ -2495,15 +2501,15 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($execution->type == 'project')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
-                ->beginIF($type == 'bybranch')->andWhere('t2.branch')->eq($branch)->fi()
+                ->beginIF($type == 'bybranch' and strpos($branchID, ',') !== false)->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
                 ->beginIF($execution->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
-                ->beginIF(strpos('changed|closed', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($this->session->executionStoryBrowseType and strpos('changed|closed', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
-                ->beginIF(strpos('changed|closed', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($this->session->storyBrowseType and strpos('changed|closed', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
                 ->andWhere('t2.deleted')->eq(0)

@@ -34,6 +34,7 @@ $common = $app->loadCommon();
 
 /* Check entry. */
 $common->checkEntry();
+$common->loadConfigFromDB();
 
 /* Set default params. */
 $config->requestType   = 'GET';

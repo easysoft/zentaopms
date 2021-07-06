@@ -62,16 +62,8 @@ function updateFile(link)
             $('#resultBox li span.' + response.type + '-num').html(num + response.count);
             updateFileFinish = true;
             $('#resultBox').append("<li class='text-success'>" + response.message + "</li>");
-            <?php
-            $condition = array();
-            foreach($needProcess as $processKey => $value) $condition[] = $processKey . 'Finish == true';
-            $condition = join(' && ', $condition);
-            ?>
-            if(<?php echo $condition?>)
-            {
-                $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
-                $('a#tohome').closest('.message').show();
-            }
+            $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
+            $('a#tohome').closest('.message').show();
         }
         else
         {
@@ -92,6 +84,16 @@ function updateFile(link)
 $(function()
 {
     $('.col-md-6:first').append("<div class='alert alert-info'><p><?php echo $lang->upgrade->needBuild4Add;?></p></div>");
+    searchFinish = true;
+    <?php
+    $condition = array();
+    foreach($needProcess as $processKey => $value) $condition[] = $processKey . 'Finish == true';
+    $condition = join(' && ', $condition);
+    ?>
+    if(<?php echo $condition?>)
+    {
+        $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
+    }
 })
 </script>
 <?php endif;?>

@@ -55,7 +55,7 @@
           <?php
           if($todo->type == 'cycle')
           {
-              echo html::hidden("types[$todo->id]", $todo->type); 
+              echo html::hidden("types[$todo->id]", $todo->type);
               echo $lang->todo->cycle;
           }
           else

@@ -2,6 +2,24 @@
 class programModel extends model
 {
     /**
+     * Show accessDenied response.
+     *
+     * @access private
+     * @return void
+     */
+    public function accessDenied()
+    {
+        echo(js::alert($this->lang->program->accessDenied));
+
+        if(!$this->server->http_referer) die(js::locate(helper::createLink('my', 'index')));
+
+        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('my', 'index')));
+
+        die(js::locate('back'));
+    }
+
+    /**
      * Save program state.
      *
      * @param  int    $programID
@@ -393,6 +411,13 @@ class programModel extends model
         else
         {
             $currentProgramName = $this->lang->program->all;
+        }
+
+        if($this->app->viewType == 'mhtml' and $programID)
+        {
+            $output  = $this->lang->program->common . $this->lang->colon;
+            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('program', '$programID', '$currentModule', '$currentMethod', '')\">{$currentProgramName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            return $output;
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");

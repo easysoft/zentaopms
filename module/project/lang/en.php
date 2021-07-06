@@ -189,8 +189,6 @@ $lang->project->endList[365] = 'One year';
 $lang->project->endList[999] = 'Longtime';
 
 $lang->project->empty                  = 'No project.';
-$lang->project->accessDenied           = 'Access denied!';
-$lang->project->chooseProgramType      = 'Select the project management model';
 $lang->project->nextStep               = 'Next step';
 $lang->project->hoursUnit              = '%s hours';
 $lang->project->membersUnit            = '%s men';

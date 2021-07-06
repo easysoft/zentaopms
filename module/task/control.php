@@ -362,6 +362,7 @@ class task extends control
     public function edit($taskID, $comment = false)
     {
         $this->commonAction($taskID);
+        $this->execution->setMenu($this->view->task->execution);
 
         if(!empty($_POST))
         {
@@ -1141,7 +1142,7 @@ class task extends control
             $tasks = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
-                if(empty($skipTaskIdList) and ($task->status == 'wait' or $task->status == 'doing'))
+                if(empty($skipTaskIdList) and ($task->status != 'done' and $task->status != 'cancel'))
                 {
                     $skipTasks[$taskID] = $taskID;
                     continue;

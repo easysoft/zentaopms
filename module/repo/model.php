@@ -251,7 +251,11 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
+        if($this->post->SCM == 'Gitlab')
+        {
+            $data->path   = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
+            $data->prefix = '';
+        }
         if($data->path != $repo->path) $data->synced = 0;
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -444,7 +448,7 @@ class repoModel extends model
                 ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('1=1')
                 ->andWhere('t1.repo')->eq($repo->id)
-                ->andWhere('t2.`time`')->le($revisionTime)
+                ->beginIF($revisionTime)->andWhere('t2.`time`')->le($revisionTime)->fi()
                 ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
                 ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($type == 'dir')
@@ -461,7 +465,7 @@ class repoModel extends model
         $comments = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.`time`')->le($revisionTime)
+            ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
             ->andWhere('left(t1.comment, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->beginIF($entry != '/' and !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
@@ -657,7 +661,7 @@ class repoModel extends model
         if($existsRevision)
         {
             if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($existsRevision->id)->set('branch')->eq($branch)->exec();
-            return true;
+            return $version;
         }
 
         $history = new stdclass();
@@ -1013,12 +1017,6 @@ class repoModel extends model
         if($this->post->SCM == 'Gitlab') return true;
         if(!$this->config->features->checkClient) return true;
         if(!$this->post->client) return true;
-
-        if(strpos($this->post->client, ' '))
-        {
-            dao::$errors['client'] = $this->lang->repo->error->clientPath;
-            return false;
-        }
 
         $clientVersionFile = $this->session->clientVersionFile;
         if(empty($clientVersionFile))

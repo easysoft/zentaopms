@@ -39,6 +39,7 @@ class spliter
             {
                 $i ++;
 
+                /* Stitching content in the case of words or Spaces. */
                 if($this->isLetter($letter))
                 {
                     $word = $letter;
@@ -80,6 +81,7 @@ class spliter
                 }
                 else
                 {
+                    /* When the current word has a corresponding number in the dictionary table, concatenate a space before it. */
                     if(is_numeric(substr($words, strlen($words) - 1, 1)))
                     {
                         $words .= ' ' . $letter;

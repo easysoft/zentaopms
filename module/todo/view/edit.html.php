@@ -15,6 +15,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
+<?php js::set('idvalue', $todo->idvalue);?>
 <?php if(common::checkNotCN()):?>
 <style> label.col-sm-1{width:100px;} </style>
 <?php endif;?>
@@ -137,7 +138,7 @@
                   <span class="pri-text"><span class="label-pri label-pri-<?php echo $todo->pri;?>"><?php echo $todo->pri;?></span></span> &nbsp;<span class="caret"></span>
                 </button>
                 <div class='dropdown-menu pull-right'>
-                  <?php echo html::select('pri', $lang->todo->priList, $todo->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>             
+                  <?php echo html::select('pri', $lang->todo->priList, $todo->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
                 </div>
               </div>
             </div>

@@ -62,6 +62,18 @@ function loadExecutionStories(executionID)
         $('#story').next('.picker').remove();
         $('#story').replaceWith(data);
         $('#story').addClass('filled').chosen();
+        
+        /* If there is no story option, select will be hidden and text will be displayed; otherwise, the opposite is true */
+        if($('#story option').length > 1)
+        {
+            $('#story').parent().removeClass('hidden');
+            $('#storyBox').addClass('hidden');
+        }
+        else
+        {           
+            $('#storyBox').removeClass('hidden');
+            $('#story').parent().addClass('hidden');
+        }
 
         if($('#testStoryBox table tbody tr').length == 0)
         {
@@ -491,14 +503,28 @@ $('#modalTeam .btn').click(function()
 {
     var team = '';
     var time = 0;
-    $('[name*=team]').each(function()
+
+    /* Unique team. */
+    $('select[name^=team]').each(function(i)
+    {
+        value = $(this).val();
+        if(value == '') return;
+        $('select[name^=team]').each(function(j)
+        {
+            if(i <= j) return;
+            if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
+        })
+    })
+    $('select[name^=team]').closest('tr.hidden').remove();
+
+    $('select[name^=team]').each(function()
     {
         if($(this).find('option:selected').text() != '')
         {
             team += ' ' + $(this).find('option:selected').text();
         }
 
-        estimate = parseFloat($(this).parents('td').next('td').find('[name*=teamEstimate]').val());
+        estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
         if(!isNaN(estimate))
         {
             time += estimate;

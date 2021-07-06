@@ -75,6 +75,32 @@ class control extends baseControl
                 $this->config->{$this->moduleName}->editor->{$this->methodName}['id'] .= ',' . join(',', $editorIdList);
                 trim($this->config->{$this->moduleName}->editor->{$this->methodName}['id'], ',');
             }
+
+            /* If workflow is created by a normal user, set priv. */
+            if(isset($this->app->user) and !$this->app->user->admin)
+            {
+                $actions = $this->dao->select('module, action')->from(TABLE_WORKFLOWACTION)->where('createdBy')->eq($this->app->user->account)->andWhere('buildin')->eq('0')->fetchGroup('module');
+                $labels  = $this->dao->select('module, code')->from(TABLE_WORKFLOWLABEL)->where('createdBy')->eq($this->app->user->account)->andWhere('buildin')->eq('0')->fetchGroup('module');
+                if(!empty($actions))
+                {
+                    foreach($actions as $module => $actionObj)
+                    {
+                        foreach($actionObj as $action) $this->app->user->rights['rights'][$module][$action->action] = 1;
+                    }
+                }
+
+                if(!empty($labels))
+                {
+                    foreach($labels as $module => $codeObj)
+                    {
+                        foreach($codeObj as $code)
+                        {
+                            $code = str_replace('browse', '', $code->code);
+                            $this->app->user->rights['rights'][$module][$code] = 1;
+                        }
+                    }
+                }
+            }
         }
     }
 

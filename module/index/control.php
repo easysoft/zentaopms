@@ -33,6 +33,8 @@ class index extends control
      */
     public function index($open = '')
     {
+        if($this->app->getViewType() == 'mhtml') $this->locate($this->createLink('my', 'index'));
+
         $latestVersionList = array();
         if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList);
 

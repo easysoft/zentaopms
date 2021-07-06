@@ -874,12 +874,12 @@ class userModel extends model
             $acls = empty($acl) ? array() : json_decode($acl, true);
 
             $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
-                ->on('t1.id = t2.group')->where('t1.name')->eq('guest');
+                ->on('t1.id = t2.`group`')->where('t1.name')->eq('guest');
         }
         else
         {
             $groups = $this->dao->select('t1.acl, t1.project')->from(TABLE_GROUP)->alias('t1')
-                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
+                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.role')->ne('projectAdmin')
                 ->andWhere('t1.role')->ne('limited')
@@ -938,8 +938,8 @@ class userModel extends model
             if($actionAllow)  unset($acls['actions']);
 
             $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')
-                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.group')
-                ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.group = t3.group')
+                ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
+                ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.project')->eq(0);
         }
@@ -1112,7 +1112,12 @@ class userModel extends model
                 $project->waitTasks         = isset($hours[$project->id]) ? $hours[$project->id]->waitTasks : 0;
                 $project->assignedToMeTasks = isset($hours[$project->id]) ? $hours[$project->id]->assignedToMeTasks : 0;
 
-                if($project->project) $project->projectName = $projectList[$project->project]->name;
+                if($project->project)
+                {
+                    $parentProject = zget($projectList, $project->project, '');
+                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->exec();
+                    $project->projectName = $parentProject ? $parentProject->name : '';
+                }
                 $myProjects[$project->id] = $project;
             }
         }
@@ -1679,6 +1684,7 @@ class userModel extends model
             ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'classic')->andWhere('type')->eq('execution')->fi()
             ->andWhere('root')->in(array_keys($projectProducts))
+            ->andWhere('root')->ne(0)
             ->query();
 
         while($team = $stmt->fetch())
@@ -1928,6 +1934,7 @@ class userModel extends model
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('type')->eq('project')
             ->andWhere('root')->in($projectIdList)
+            ->andWhere('root')->ne(0)
             ->query();
 
         while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
@@ -2087,6 +2094,7 @@ class userModel extends model
         $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('type')->in('project,execution')
             ->andWhere('root')->in(array_merge($sprintIdList, $parentIdList))
+            ->andWhere('root')->ne(0)
             ->query();
 
         while($team = $stmt->fetch()) $teamGroups[$team->root][$team->account] = $team->account;
@@ -2145,9 +2153,8 @@ class userModel extends model
                 $stakeholders = zget($stakeholderGroup, $sprint->project, array());
                 $teams        = zget($teamGroups, $sprint->id, array());
                 $whiteList    = zget($whiteListGroup, $sprint->id, array());
-                $parentTeams  = zget($teamGroups, $sprint->project, array());
 
-                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, array_merge($teams, $parentTeams), $whiteList);
+                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList);
                 if($hasPriv and strpos(",{$view},", ",{$sprintID},") === false)  $view .= ",{$sprintID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$sprintID},") !== false) $view  = trim(str_replace(",{$sprintID},", ',', ",{$view},"), ',');
             }

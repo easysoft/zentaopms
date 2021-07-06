@@ -39,7 +39,7 @@ $lang->doc->separator    = "<i class='icon-angle-right'></i>";
 $lang->doc->fileTitle    = 'File Name';
 $lang->doc->filePath     = 'File Path';
 $lang->doc->extension    = 'Extension';
-$lang->doc->size         = 'Size';
+$lang->doc->size         = 'Files Size';
 $lang->doc->download     = 'Download';
 $lang->doc->acl          = 'Right';
 $lang->doc->fileName     = 'Files';

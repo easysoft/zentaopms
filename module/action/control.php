@@ -55,7 +55,6 @@ class action extends control
         $this->session->set('practiceLibList',    $uri, 'assetlib');
         $this->session->set('componentLibList',   $uri, 'assetlib');
 
-
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);

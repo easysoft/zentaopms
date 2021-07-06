@@ -369,7 +369,8 @@ class doc extends control
             }
 
             $link = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
-            if(!empty($objectType) and $objectType != 'doc')
+            $doc  = $this->doc->getById($docID);
+            if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter')
             {
                 $link = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID&docID=$docID");
             }
@@ -486,9 +487,8 @@ class doc extends control
 
         if($doc->contentType == 'markdown')
         {
-            $hyperdown    = $this->app->loadClass('hyperdown');
-            $doc->content = $hyperdown->makeHtml($doc->content);
-            $doc->digest  = $hyperdown->makeHtml($doc->digest);
+            $doc->content = $this->doc->processMarkdown($doc->content);
+            $doc->digest  = $this->doc->processMarkdown($$doc->digest);
         }
 
         /* Check priv when lib is product or project. */
@@ -916,9 +916,8 @@ class doc extends control
 
             if($doc->contentType == 'markdown')
             {
-                $hyperdown    = $this->app->loadClass('hyperdown');
-                $doc->content = $hyperdown->makeHtml($doc->content);
-                $doc->digest  = $hyperdown->makeHtml($doc->digest);
+                $doc->content = $this->doc->processMarkdown($doc->content);
+                $doc->digest  = $this->doc->processMarkdown($doc->digest);
             }
         }
 
