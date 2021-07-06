@@ -830,16 +830,8 @@ class storyModel extends model
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
            }
             /* update story to gitlab issue. */
-            $object = $this->getByID($storyID);
-
-            if(!empty($object)) 
-            {
-                $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-                if($relation)
-                {
-                    if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
-                } 
-            }
+            $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+            if($relation) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
 
             unset($oldStory->parent);
             unset($story->parent);
@@ -1168,16 +1160,8 @@ class storyModel extends model
                     if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
                     /* update story to gitlab issue. */
-                    $object = $this->getByID($storyID);
-
-                    if(!empty($object)) 
-                    {
-                        $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-                        if($relation)
-                        {
-                            if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
-                        } 
-                    }
+                    $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+                    if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
 
                     $this->executeHooks($storyID);
                     if($story->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
@@ -1446,17 +1430,13 @@ class storyModel extends model
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
 
-        $object = $this->getByID($storyID);
         $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
 
         if(!empty($relation))
         {
             $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
 
-            if($singleIssue->state != 'closed')
-            { 
-                if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
-            }
+            if($singleIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
         }
 
         /* Update parent story status. */
@@ -1526,17 +1506,11 @@ class storyModel extends model
                 $this->setStage($storyID);
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
 
-                $object = $this->getByID($storyID);
                 $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-
                 if(!empty($relation))
                 {
                     $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
-
-                    if($singleIssue->state != 'closed')
-                    { 
-                        if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
-                    }
+                    if($singleIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
                 }
             }
             else
@@ -1816,13 +1790,8 @@ class storyModel extends model
         if(!dao::isError())
         {
             $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-            $attribute = $this->getByID($storyID);
-            $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
-            if($attribute->assignee_id != '')
-            {
-                // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
-                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $attribute);
-            }
+            $story->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
+            if($story->assignee_id != '') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
             return common::createChanges($oldStory, $story);
         }
         return false;
@@ -1856,15 +1825,8 @@ class storyModel extends model
             if(!dao::isError()) 
             {
                 /* Push this story to gitlab issue. */
-                $object = $this->getByID($storyID);
-                if(!empty($object)) 
-                {
-                    $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-                    if($relation)
-                    {
-                        if(!empty($object)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $object);
-                    } 
-                }
+                $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+                if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
             }
         }
         return $allChanges;
@@ -1899,6 +1861,10 @@ class storyModel extends model
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+
+        /* Push this story to gitlab issue. */
+        $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
 
         return common::createChanges($oldStory, $story);
     }
