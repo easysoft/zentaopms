@@ -2367,7 +2367,7 @@ class storyModel extends model
         else
         {
             $productParam = ($type == 'byproduct' and $param) ? $param : $this->cookie->storyProductParam;
-            $branchParam  = ($type == 'bybranch'  and $param) ? $param : $this->cookie->storyBranchParam;
+            $branchParam  = $branchID = ($type == 'bybranch'  and $param) ? $param : $this->cookie->storyBranchParam;
             $moduleParam  = ($type == 'bymodule'  and $param) ? $param : $this->cookie->storyModuleParam;
             $modules      = empty($moduleParam) ? array() : $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
             if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
@@ -2384,7 +2384,7 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($execution->type == 'project')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
-                ->beginIF($type == 'bybranch')->andWhere('t2.branch')->eq($branch)->fi()
+                ->beginIF($type == 'bybranch' and strpos($branchID, ',') !== false)->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
