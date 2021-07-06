@@ -276,8 +276,6 @@ class gitlabModel extends model
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Send an api post request.
      * 
      * @param  int|string    $host     gitlab server ID | gitlab host url.
@@ -297,7 +295,6 @@ class gitlabModel extends model
     }
 
     /**
->>>>>>> 388f6365c925b48fc5fe9db65977f00ad4bda236
      * Get current user.
      *
      * @param  string   $host
