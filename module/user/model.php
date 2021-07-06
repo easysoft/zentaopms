@@ -2151,9 +2151,8 @@ class userModel extends model
                 $stakeholders = zget($stakeholderGroup, $sprint->project, array());
                 $teams        = zget($teamGroups, $sprint->id, array());
                 $whiteList    = zget($whiteListGroup, $sprint->id, array());
-                $parentTeams  = zget($teamGroups, $sprint->project, array());
 
-                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, array_merge($teams, $parentTeams), $whiteList);
+                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList);
                 if($hasPriv and strpos(",{$view},", ",{$sprintID},") === false)  $view .= ",{$sprintID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$sprintID},") !== false) $view  = trim(str_replace(",{$sprintID},", ',', ",{$view},"), ',');
             }
