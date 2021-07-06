@@ -810,6 +810,7 @@ class executionModel extends model
         $now        = helper::now();
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
+            ->setDefault('realEnd', $now)
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
