@@ -559,9 +559,7 @@ class bug extends control
 
         /* Set gitlabProjects. */
         $allGitlabs     = $this->loadModel('gitlab')->getPairs();
-        if(!empty($executionID)) $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
-        elseif(!empty($productID)) $gitlabProjects = $this->loadModel('gitlab')->getProjectsByProduct($productID);
-
+        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
         foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
         $this->view->gitlabList     = $allGitlabs;
         $this->view->gitlabProjects = $gitlabProjects;

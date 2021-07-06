@@ -717,20 +717,24 @@ class gitlabModel extends model
      * 
      * @param  array    $labels 
      * @access public
-     * @return object|false
+     * @return object
      */
     public function webhookParseObject($labels)
     {
-        $object = null;
+        $object     = null;
+        $objectType = '';
         foreach($labels as $label) 
         {
-            if(preg_match($this->config->gitlab->labelPattern->task, $label->title))
+            if(preg_match($this->config->gitlab->labelPattern->story, $label->title)) $objectType = 'story';
+            if(preg_match($this->config->gitlab->labelPattern->task, $label->title)) $objectType = 'task';
+            if(preg_match($this->config->gitlab->labelPattern->bug, $label->title)) $objectType = 'bug';
+
+            if($objectType)
             {
                 list($prefix, $id) = explode('/', $label->title);
-
                 $object = new stdclass;
-                $object->type = 'task';
                 $object->id   = $id;
+                $object->type = $objectType;
             }
         }
 
