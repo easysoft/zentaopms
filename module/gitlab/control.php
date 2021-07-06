@@ -274,9 +274,7 @@ class gitlab extends control
                 if($executionID) 
                 {
                     $objectType = $this->config->gitlab->objectTypes[$objectTypeList[$issueID]];
-
                     $issue = $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);
-                    $originalIssue = $issue;
                     $issue->objectType    = $objectType;
                     $issue->objectID      = 0; // meet the required parameters for issueToZentaoObject.
                     if(isset($issue->assignee)) $issue->assignee_id   = $issue->assignee->id;
@@ -296,17 +294,24 @@ class gitlab extends control
                     {
                     }
                     
-                    $object->id = $objectID;
-                    $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $originalIssue, $object);
+                    $object->id        = $objectID;
+                    $object->product   = $productList[$issueID];
+                    $object->execution = $executionID;
+                    $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
 
-               }
+                }
+                else
+                {
+                    if($productList[$issueID] != 0) $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError, 'locate' => $this->server->http_referer));
+                }
             }
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
         $savedIssueIDList = $this->dao->select('BID as issueID')->from(TABLE_RELATION)
-                    ->where('relation')->eq('gitlab')
-                    ->fetchAll('issueID');
+                                 ->where('relation')->eq('gitlab')
+                                 ->andWhere('product')->in($productIDList)
+                                 ->fetchAll('issueID');
         $iids = '';
         foreach($savedIssueIDList as $savedIssueID) $iids = $iids . $savedIssueID->issueID . ',';
         $options = '&not[iids]=' . trim($iids, ',');

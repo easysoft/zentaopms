@@ -543,7 +543,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleIssue($gitlabID, $projectID, $issueID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/issues/{$issueID}");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/issues/{$issueID}");
         return json_decode(commonModel::http($url));
     }
 
@@ -907,6 +907,7 @@ class gitlabModel extends model
         if(empty($issue->iid) or empty($issue->project_id)) return false;
 
         $relation = new stdclass;
+        $relation->product   = zget($object, 'product', 0);
         $relation->execution = zget($object, 'execution', 0);
         $relation->AType     = $objectType;
         $relation->AID       = $object->id;

@@ -36,6 +36,7 @@ $lang->gitlab->placeholder->name  = '';
 $lang->gitlab->placeholder->url   = "请填写Gitlab Server首页的访问地址，如：https://gitlab.zentao.net。";
 $lang->gitlab->placeholder->token = "请填写具有admin权限账户的access token";
 
-$lang->gitlab->tokenError    = "当前token非管理员权限。";
-$lang->gitlab->hostError     = "无效的gitlab服务地址。";
-$lang->gitlab->bindUserError = "不能重复绑定用户 %s";
+$lang->gitlab->tokenError       = "当前token非管理员权限。";
+$lang->gitlab->hostError        = "无效的gitlab服务地址。";
+$lang->gitlab->bindUserError    = "不能重复绑定用户 %s";
+$lang->gitlab->importIssueError = "未选择该议题所属的执行。";
