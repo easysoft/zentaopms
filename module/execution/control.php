@@ -673,6 +673,7 @@ class execution extends control
         $type      = strtolower($type);
         $param     = $param;
         $productID = 0;
+        $branchID  = 0;
         setcookie('storyPreExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         if($this->cookie->storyPreExecutionID != $executionID)
         {
@@ -728,11 +729,20 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
+        if($this->cookie->storyModuleParam)  $this->view->module  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+        if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
+        if($this->cookie->storyBranchParam)
+        {
+            $branchID = $this->cookie->storyBranchParam;
+            if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
+            $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
+        }
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, 'story', '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, $branchID, $sort, $type, $param, 'story', '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $users = $this->user->getPairs('noletter');
@@ -770,15 +780,6 @@ class execution extends control
         if(!empty($plans))
         {
             foreach($plans as $plan) $allPlans += $plan;
-        }
-
-        if($this->cookie->storyModuleParam)  $this->view->module  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
-        if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
-        if($this->cookie->storyBranchParam)
-        {
-            $branchID = $this->cookie->storyBranchParam;
-            if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
-            $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
         }
 
         /* Get execution's product. */
