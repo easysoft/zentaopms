@@ -38,7 +38,7 @@ $lang->doc->separator    = "<i class='icon-angle-right'></i>";
 $lang->doc->fileTitle    = 'File tên';
 $lang->doc->filePath     = 'File Path';
 $lang->doc->extension    = 'Extension';
-$lang->doc->size         = 'Size';
+$lang->doc->size         = 'Cỡ miếng';
 $lang->doc->download     = 'Tải về';
 $lang->doc->acl          = 'Right';
 $lang->doc->fileName     = 'Files';
