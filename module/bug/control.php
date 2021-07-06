@@ -395,7 +395,7 @@ class bug extends control
 
             if($this->app->openApp == 'execution')
             {
-                $location = $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
+                $location = $this->session->bugList ? $this->session->bugList : $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
             elseif($this->app->openApp == 'project')
             {
@@ -1918,5 +1918,20 @@ class bug extends control
         $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->lines     = $this->product->getLinePairs();
         $this->display();
+    }
+
+    /**
+     * Ajax get project team members.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectTeamMembers($projectID)
+    {
+        $users       = $this->loadModel('user')->getPairs('noclosed');
+        $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
+        foreach($teamMembers as $account => $member) $teamMembers[$account] = $users[$account];
+        die(html::select('assignedTo', $teamMembers, '', 'class="form-control"'));
     }
 }

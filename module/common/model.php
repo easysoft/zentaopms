@@ -588,7 +588,7 @@ class commonModel extends model
 
             if(!common::hasPriv($currentModule, $currentMethod)) continue;
 
-            if($divider)
+            if($divider and !empty($items))
             {
                 $items[] = 'divider';
                 $divider = false;

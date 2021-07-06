@@ -594,8 +594,16 @@ class executionModel extends model
             $nameList[$executionName] = $executionName;
 
             /* Check unique code for edited executions. */
-            if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->execution->code, $executionCode);
-            $codeList[$executionCode] = $executionCode;
+            if(empty($executionCode))
+            {
+                dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
+            }
+            else
+            {
+                /* Check unique code for edited executions. */
+                if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
+                $codeList[$executionCode] = $executionCode;
+            }
         }
         if(dao::isError()) die(js::error(dao::getError()));
 

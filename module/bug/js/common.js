@@ -343,6 +343,7 @@ function loadProductBuilds(productID)
  */
 function loadExecutionRelated(executionID)
 {
+    executionID = parseInt(executionID);
     if(executionID)
     {
         loadExecutionTasks(executionID);
@@ -357,6 +358,7 @@ function loadExecutionRelated(executionID)
         loadProductStories($('#product').val());
         loadProductBuilds($('#product').val());
         loadTestTasks($('#product').val());
+        loadProjectTeamMembers($('#project').val());
     }
 }
 
@@ -433,6 +435,25 @@ function loadExecutionBuilds(executionID)
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
         $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
     }
+}
+
+/**
+ * Load project members.
+ *
+ * @param  projectID $projectID
+ * @access public
+ * @return void
+ */
+function loadProjectTeamMembers(projectID)
+{
+    link = createLink('bug', 'ajaxGetProjectTeamMembers', 'projectID=' + projectID);
+    $.get(link, function(data)
+    {
+        if(!data) data = '<select id="assignedTo" name="assignedTo" class="form-control"></select>';
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo_chosen').remove();
+        $("#assignedTo").chosen();
+    });
 }
 
 /**
