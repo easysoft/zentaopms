@@ -26,6 +26,7 @@ $config->task->editor->activate = array('id' => 'comment', 'tools' => 'simpleToo
 $config->task->editor->cancel   = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->task->editor->pause    = array('id' => 'comment', 'tools' => 'simpleTools');
 
+$config->task->removeFields = 'objectTypeList,productList,executionList,gitlabID,gitlabProjectID,after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync';
 $config->task->exportFields = '
     id, execution, module, story,
     name, desc,

@@ -247,7 +247,7 @@ class gitlab extends control
         a($relations);exit;
         $issue = $this->gitlab->taskToIssue($gitlabID, $projectID, $task);
         $issue = $this->gitlab->apiCreateIssue($gitlabID, $projectID, $issue);
-        $this->gitlab->saveSyncedIssue('task', $task, $gitlabID, $issue);
+        $this->gitlab->saveIssueRelation('task', $task, $gitlabID, $issue);
         exit;
     }
 
@@ -259,10 +259,10 @@ class gitlab extends control
      */
     public function importIssue()
     {
-        $productIDList  = explode(',', $this->get->product);
-        $gitlabID       = $this->get->gitlab;
-        $projectID      = $this->get->project;
-        
+        $repo = $this->loadModel('repo')->getRepoByID($this->get->repo);
+        $productIDList  = explode(',', $repo->product);
+        $gitlabID       = $repo->gitlab;
+        $projectID      = $repo->project;
         
         if($_POST)
         {
