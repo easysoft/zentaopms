@@ -21,21 +21,20 @@
         <thead>
           <tr>
             <th width='60px'><?php echo $lang->gitlab->gitlabIssue;?></th>
+            <th width='30px'><?php echo $lang->gitlab->objectType;?></th>
             <th width='30px'><?php echo $lang->product->common;?></th>
             <th width='30px'><?php echo $lang->execution->common;?></th>
-            <th width='30px'><?php echo $lang->gitlab->objectType;?></th>
           </tr>
         </thead>
         <tbody>
         <?php foreach($gitlabIssues as $issue):?>
           <tr>
-            <td><?php echo $issue->title; ?></td>
-            <td><?php echo $productName; ?></td>
-            <input type='hidden' name='productID' value='<?php echo $productID;?>' />
+            <td><?php echo "<a href='{$issue->web_url}' target='_blank'>$issue->title</a>"; ?></td>
+            <td><?php echo html::select("objectTypeList[{$issue->iid}]", $objectTypes, '', "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("productList[{$issue->iid}]", $products, '', "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("executionList[{$issue->iid}]", '', '', "class='form-control select chosen'" );?></td>
             <input type='hidden' name='gitlabID'   value='<?php echo $gitlabID;?>' />
             <input type='hidden' name='gitlabProjectID' value='<?php echo $gitlabProjectID;?>' />
-            <td><?php echo html::select("mappedIssues", $executions, '', "class='form-control select chosen'" );?></td>
-            <td><?php echo html::select("objectType", $objectTypes, '', "class='form-control select chosen'" );?></td>
          </tr>
         <?php endforeach; ?>
         </tbody>

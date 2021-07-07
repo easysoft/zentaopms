@@ -289,13 +289,11 @@ class gitlabModel extends model
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
 
-        $url = sprintf($apiRoot, $api);
+        $url = sprintf($host, $api);
         return json_decode(commonModel::http($url, $data, $options));
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Send an api post request.
      * 
      * @param  int|string    $host     gitlab server ID | gitlab host url.
@@ -315,7 +313,6 @@ class gitlabModel extends model
     }
 
     /**
->>>>>>> 388f6365c925b48fc5fe9db65977f00ad4bda236
      * Get current user.
      *
      * @param  string   $host
@@ -563,14 +560,21 @@ class gitlabModel extends model
      */
     public function apiGetSingleIssue($gitlabID, $projectID, $issueID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/issues/{$issueID}");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/issues/{$issueID}");
         return json_decode(commonModel::http($url));
     }
 
-    public function apiGetIssues($gitlabID, $projectID)
+    public function apiGetIssues($gitlabID, $projectID, $options = null)
     {
         // TODO(dingguodong) not pagination yet.
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=100';
+        if($options) 
+        {
+            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=100' . $options;
+        }
+        else
+        {
+            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=100';
+        }
         return json_decode(commonModel::http($url));
     }
 
@@ -915,11 +919,12 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function saveSyncedIssue($objectType, $object, $gitlab, $issue)
+    public function saveSyncedIssue($objectType, $object, $gitlabID, $issue)
     {
         if(empty($issue->iid) or empty($issue->project_id)) return false;
 
         $relation = new stdclass;
+        $relation->product   = zget($object, 'product', 0);
         $relation->execution = zget($object, 'execution', 0);
         $relation->AType     = $objectType;
         $relation->AID       = $object->id;
@@ -928,8 +933,31 @@ class gitlabModel extends model
         $relation->BType     = 'issue';
         $relation->BID       = $issue->iid;
         $relation->BVersion  = $issue->project_id;
-        $relation->extra     = $gitlab;
+        $relation->extra     = $gitlabID;
         $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+    }
+
+    /**
+     * Save imported issue.
+     * 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  string    $objectType 
+     * @param  int       $objectID 
+     * @param  object    $issue 
+     * @access public
+     * @return void
+     */
+    public function saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object)
+    {
+        $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
+        $data = new stdclass;
+        if(isset($label->name)) $data->labels = $label->name;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issue->iid}");
+        commonModel::http($url, $data, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
+        $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
     }
 
     /**
@@ -1132,12 +1160,12 @@ class gitlabModel extends model
         {
             $value = '';
             list($gitlabField, $optionType, $options) = explode('|', $config);
-            if(!isset($changes->$gitlabField)) continue;
+            if(!isset($changes->$gitlabField) and $object->id != 0) continue;
             if($optionType == 'field') $value = $issue->$gitlabField;
             if($optionType == 'field') $value = $issue->$gitlabField;
             if($options == 'date') $value = date('Y-m-d', strtotime($value));
             if($options == 'datetime') $value = date('Y-m-d H:i:s', strtotime($value));
-            if($optionType == 'userPairs') $value = zget($gitlabUsers, $issue->$gitlabField);
+            if($optionType == 'userPairs' and isset($issue->$gitlabField)) $value = zget($gitlabUsers, $issue->$gitlabField);
             if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
             if($value) $object->$zentaoField = $value;
         }

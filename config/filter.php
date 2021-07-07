@@ -319,5 +319,6 @@ $filter->gitlab->webhook->get['token']   = 'reg::any';
 
 $filter->gitlab->importissue->get['gitlab']  = 'int';
 $filter->gitlab->importissue->get['product'] = 'int';
+$filter->gitlab->importissue->get['product'] = 'string';
 $filter->gitlab->importissue->get['project'] = 'int';
 
