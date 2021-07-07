@@ -274,6 +274,7 @@ $lang->story->cannotDeleteParent    = "不能删除父{$lang->SRCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所属产品会将其下的子{$lang->SRCommon}也移动到所选产品下。";
 $lang->story->changeTips            = '该软件需求关联的用户需求有变更，点击“不变更”忽略此条变更，点击“变更”来进行该软件需求的变更。';
 $lang->story->estimateMustBeNumber  = '估算值必须是数字';
+$lang->story->estimateMustBePlus    = '估算值不能是负数';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "该{$lang->SRCommon}所属范围";
