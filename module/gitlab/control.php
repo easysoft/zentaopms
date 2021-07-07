@@ -259,10 +259,10 @@ class gitlab extends control
      */
     public function importIssue()
     {
-        $productIDList  = explode(',', $this->get->product);
-        $gitlabID       = $this->get->gitlab;
-        $projectID      = $this->get->project;
-        
+        $repo = $this->loadModel('repo')->getRepoByID($this->get->repo);
+        $productIDList  = explode(',', $repo->product);
+        $gitlabID       = $repo->gitlab;
+        $projectID      = $repo->project;
         
         if($_POST)
         {
