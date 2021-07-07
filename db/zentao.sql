@@ -943,7 +943,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `story` mediumint(9) NOT NULL,
   `round` smallint(6) NOT NULL,
   `estimate` text NOT NULL,
-  `average` float(10,2) NOT NULL,
+  `average` float NOT NULL,
   `openedBy` varchar(30) NOT NULL,
   `openedDate` datetime NOT NULL,
   UNIQUE KEY `story` (`story`,`round`)
