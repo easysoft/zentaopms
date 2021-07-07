@@ -1191,6 +1191,14 @@ class taskModel extends model
             $tasks[$taskID] = $task;
         }
 
+        $issues = $this->loadModel('gitlab')->getIssueListByObjects('task', $taskID);
+        foreach($tasks as $taskID => $task)
+        {
+            $issue = zget($issues, $taskID, 0);
+            if(!$issue) continue;
+            $this->loadModel('gitlab')->apiUpdateIssue($issue->gitlabID, $issue->projectID, $issue->issueID, $task);
+        }
+
         /* Check field not empty. */
         foreach($tasks as $taskID => $task)
         {
@@ -1347,13 +1355,9 @@ class taskModel extends model
             ->where('id')->eq($taskID)->exec();
         
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        $attribute = $this->getByID($taskID);
-        $attribute->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $task->assignedTo);
-        if($attribute->assignee_id != '')
-        {
-            // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
-            $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, $attribute);
-        }
+        $task     = $this->getByID($taskID);
+        // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
+        $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
