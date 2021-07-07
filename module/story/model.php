@@ -1824,6 +1824,10 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             if(!dao::isError()) 
             {
+                $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+                $story->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
+                if($story->assignee_id != '') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+                
                 /* Push this story to gitlab issue. */
                 $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
                 if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
