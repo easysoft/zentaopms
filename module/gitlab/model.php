@@ -217,6 +217,24 @@ class gitlabModel extends model
     }
 
     /**
+     * Get issue id list group by obejct.
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return object
+     */
+    public function getIssueListByObjects($objectType, $objects)
+    {
+        return $this->dao->select('*, extra as gitlabID, BVersion as projectID, BID as issueID')->from(TABLE_RELATION)
+                    ->where('relation')->eq('gitlab')
+                    ->andWhere('Atype')->eq($objectType)
+                    ->andWhere('AID')->in($objects)
+                    ->fetchAll('AID');
+    }
+
+
+    /**
      * Get gitlab userID by account.
      * 
      * @param  int       $gitlabID 
