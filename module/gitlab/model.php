@@ -543,7 +543,7 @@ class gitlabModel extends model
     public function apiGetSingleIssue($gitlabID, $projectID, $issueID)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/issues/{$issueID}");
-        return json_decode(commonModel::http($url));
+        $aaa =  json_decode(commonModel::http($url));
     }
 
     public function apiGetIssues($gitlabID, $projectID, $options = null)

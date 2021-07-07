@@ -1434,9 +1434,8 @@ class storyModel extends model
 
         if(!empty($relation))
         {
-            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
-
-            if($singleIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+            $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+            if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
         }
 
         /* Update parent story status. */
@@ -1509,8 +1508,8 @@ class storyModel extends model
                 $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
                 if(!empty($relation))
                 {
-                    $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
-                    if($singleIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+                    $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+                    if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
                 }
             }
             else

@@ -1253,13 +1253,8 @@ class bugModel extends model
         $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
         if(!empty($relation))
         {
-            $singleIssue = new stdclass();
-            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
-
-            if($singleIssue->state != 'closed')
-            { 
-                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
-            }
+            $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+            if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
         }
         return common::createChanges($oldBug, $bug);
     }
