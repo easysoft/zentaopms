@@ -546,6 +546,15 @@ class gitlabModel extends model
         return json_decode(commonModel::http($url));
     }
 
+    /**
+     * Get gitlab issues by api. 
+     * 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  string    $options 
+     * @access public
+     * @return object
+     */
     public function apiGetIssues($gitlabID, $projectID, $options = null)
     {
         // TODO(dingguodong) not pagination yet.
@@ -588,7 +597,7 @@ class gitlabModel extends model
         $response = json_decode(commonModel::http($url, $issue));
         if(!$response) return false;
 
-        return $this->saveSyncedIssue($objectType, $object, $gitlabID, $response);
+        return $this->saveIssueRelation($objectType, $object, $gitlabID, $response);
     }
 
     /**
@@ -901,7 +910,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function saveSyncedIssue($objectType, $object, $gitlabID, $issue)
+    public function saveIssueRelation($objectType, $object, $gitlabID, $issue)
     {
         if(empty($issue->iid) or empty($issue->project_id)) return false;
 
@@ -939,7 +948,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issue->iid}");
         commonModel::http($url, $data, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
-        $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
+        $this->saveIssueRelation($objectType, $object, $gitlabID, $issue);
     }
 
     /**

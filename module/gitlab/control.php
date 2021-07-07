@@ -247,7 +247,7 @@ class gitlab extends control
         a($relations);exit;
         $issue = $this->gitlab->taskToIssue($gitlabID, $projectID, $task);
         $issue = $this->gitlab->apiCreateIssue($gitlabID, $projectID, $issue);
-        $this->gitlab->saveSyncedIssue('task', $task, $gitlabID, $issue);
+        $this->gitlab->saveIssueRelation('task', $task, $gitlabID, $issue);
         exit;
     }
 
