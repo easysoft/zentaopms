@@ -572,6 +572,9 @@ class task extends control
 
         $task = $this->task->getByID($taskID);
 
+        $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
+        $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
+
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
         /* Compute next assignedTo. */
@@ -644,6 +647,9 @@ class task extends control
             {
                 if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account) continue;
                 if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
+
+                $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
+                $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
 
                 $changes = $this->task->assign($taskID);
                 if(dao::isError()) die(js::error(dao::getError()));

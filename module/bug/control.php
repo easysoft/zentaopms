@@ -1464,6 +1464,15 @@ class bug extends control
             $bugs = $this->bug->getByList($bugIDList);
             foreach($bugs as $bugID => $bug)
             {
+                $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
+                if(!empty($relation))
+                {
+                    $singleIssue = new stdclass();
+                    $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
+
+                    if($singleIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
+                }
+
                 if($bug->status != 'resolved')
                 {
                     if($bug->status != 'closed') $skipBugs[$bugID] = $bugID;
