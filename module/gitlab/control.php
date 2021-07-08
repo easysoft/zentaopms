@@ -285,6 +285,7 @@ class gitlab extends control
                     $object = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
                     $object->product   = $productList[$issueID];
                     $object->execution = $executionID;
+
                     if($objectType == 'task')
                     {
                         $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($object, $executionID);
@@ -302,7 +303,7 @@ class gitlab extends control
 
                     if($objectID)
                     { 
-                        $object->id        = $objectID;
+                        $object->id = $objectID;
                         $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
                     }
                     else

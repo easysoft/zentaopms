@@ -216,7 +216,7 @@ class storyModel extends model
 
         /* Check repeat story. */
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
-        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if(isset($result['stop']) and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         if($this->checkForceReview()) $story->status = 'draft';
         if($story->status == 'draft') $story->stage  = $this->post->plan > 0 ? 'planned' : 'wait';
@@ -345,6 +345,56 @@ class storyModel extends model
             
             return array('status' => 'created', 'id' => $storyID);
         }
+        return false;
+    }
+
+    /**
+     * Create story from gitlab issue.
+     * 
+     * @param  object    $story
+     * @param  int       $executionID 
+     * @access public
+     * @return int
+     */
+    public function createStoryFromGitlabIssue($story, $executionID)
+    {
+        foreach($story as $feild => $value) $_POST[$feild] = $value;
+        $now   = helper::now();
+        $story = fixer::input('post')
+            ->cleanInt('product,module,pri,plan')
+            ->callFunc('title', 'trim')
+            ->add('assignedDate', 0)
+            ->add('version', 1)
+            ->add('status', 'draft')
+            ->setDefault('plan,verify', '')
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', $now)
+            ->setIF($story->assignedTo != '', 'assignedDate', $now)
+            ->setIF($executionID > 0, 'status', 'active')
+            ->setIF($executionID > 0, 'stage', 'projected')
+            ->join('mailto', ',')
+            ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS')
+            ->remove($this->config->story->removeFields)
+            ->get();
+
+        $requiredFields = $this->config->story->create->requiredFields;
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,gitlab,gitlabProject')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        if(!dao::isError())
+        {
+            $storyID = $this->dao->lastInsertID();
+
+            $data          = new stdclass();
+            $data->story   = $storyID;
+            $data->version = 1;
+            $data->title   = $story->title;
+            $data->spec    = $story->spec;
+            $data->verify  = $story->spec;
+            $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+
+            return $storyID;
+        }
+
         return false;
     }
 
