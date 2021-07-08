@@ -1389,8 +1389,7 @@ class taskModel extends model
             ->where('id')->eq($taskID)->exec();
         
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        $task->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $task->assignedTo);
-        if($task->assignee_id != '') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, $task);
+        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $oldTask);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
