@@ -560,11 +560,11 @@ class gitlabModel extends model
         // TODO(dingguodong) not pagination yet.
         if($options) 
         {
-            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=100' . $options;
+            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=20' . $options;
         }
         else
         {
-            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=100';
+            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=20';
         }
         return json_decode(commonModel::http($url));
     }
