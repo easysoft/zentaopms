@@ -1153,7 +1153,7 @@ class gitlabModel extends model
             list($gitlabField, $optionType, $options) = explode('|', $config);
             if(!isset($changes->$gitlabField) and $object->id != 0) continue;
             if($optionType == 'field') $value = $issue->$gitlabField;
-            if($optionType == 'field') $value = $issue->$gitlabField;
+            if($optionType == 'fields') $value = $issue->$gitlabField;  // TODO(dingguodong) not implemented.
             if($options == 'date') $value = $value ? date('Y-m-d', strtotime($value)) : '0000-00-00';
             if($options == 'datetime') $value = $value ? date('Y-m-d H:i:s', strtotime($value)) : '0000-00-00 00:00:00';
             if($optionType == 'userPairs' and isset($issue->$gitlabField)) $value = zget($gitlabUsers, $issue->$gitlabField);
