@@ -1862,6 +1862,17 @@ class execution extends control
     }
 
     /**
+     * Execution kanban.
+     *
+     * @access public
+     * @return void
+     */
+    public function executionKanban()
+    {
+        $this->display();
+    }
+
+    /**
      * Tree view.
      * Product
      *
