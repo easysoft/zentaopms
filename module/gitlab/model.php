@@ -543,7 +543,7 @@ class gitlabModel extends model
     public function apiGetSingleIssue($gitlabID, $projectID, $issueID)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/issues/{$issueID}");
-        $aaa =  json_decode(commonModel::http($url));
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -583,7 +583,7 @@ class gitlabModel extends model
     public function apiCreateIssue($gitlabID, $projectID, $objectType, $objectID, $object)
     {
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
-
+        if(!isset($object->id)) $object->id = $objectID;
         $issue = $this->loadModel('gitlab')->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         if(isset($label->name)) $issue->labels = $label->name;
         foreach($this->config->gitlab->skippedFields->issueCreate[$objectType] as $field)
