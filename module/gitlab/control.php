@@ -269,6 +269,8 @@ class gitlab extends control
             $executionList  = $this->post->executionList;
             $objectTypeList = $this->post->objectTypeList;
             $productList    = $this->post->productList;
+
+            $failedIssues   = array();
             foreach($executionList as $issueID => $executionID)
             {
                 if($executionID) 
@@ -281,6 +283,8 @@ class gitlab extends control
                     $issue->updated_by_id = $issue->author->id; // here can be replaced by current zentao user.
 
                     $object = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
+                    $object->product   = $productList[$issueID];
+                    $object->execution = $executionID;
                     if($objectType == 'task')
                     {
                         $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($object, $executionID);
@@ -288,23 +292,31 @@ class gitlab extends control
 
                     if($objectType == 'bug')
                     {
+                        $objectID = $this->loadModel('bug')->createBugFromGitlabIssue($object, $executionID);
                     }
 
                     if($objectType == 'story')
                     {
+                        $objectID = $this->loadModel('story')->createStoryFromGitlabIssue($object, $executionID);
                     }
-                    
-                    $object->id        = $objectID;
-                    $object->product   = $productList[$issueID];
-                    $object->execution = $executionID;
-                    $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
 
+                    if($objectID)
+                    { 
+                        $object->id        = $objectID;
+                        $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
+                    }
+                    else
+                    {
+                        $failedIssues[] = $issue->iid;
+                    }
                 }
                 else
                 {
                     if($productList[$issueID] != 0) $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError, 'locate' => $this->server->http_referer));
                 }
             }
+
+            if($failedIssues) $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->importIssueWarn, 'locate' => $this->server->http_referer));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 

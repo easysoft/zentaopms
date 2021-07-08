@@ -2,6 +2,7 @@
 $config->bug = new stdClass();
 $config->bug->batchCreate = 10;
 $config->bug->longlife    = 7;
+$config->bug->removeFields= 'objectTypeList,productList,executionList,gitlabID,gitlabProjectID';
 
 $config->bug->create  = new stdclass();
 $config->bug->edit    = new stdclass();

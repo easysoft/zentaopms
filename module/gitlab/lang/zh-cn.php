@@ -40,3 +40,4 @@ $lang->gitlab->tokenError       = "当前token非管理员权限。";
 $lang->gitlab->hostError        = "无效的gitlab服务地址。";
 $lang->gitlab->bindUserError    = "不能重复绑定用户 %s";
 $lang->gitlab->importIssueError = "未选择该议题所属的执行。";
+$lang->gitlab->importIssueWarn  = "存在导入失败的议题，可再次尝试导入。";
