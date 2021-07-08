@@ -273,6 +273,7 @@ $lang->story->cannotDeleteParent   = "Không thể xóa {$lang->SRCommon} mẹ";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 $lang->story->estimateMustBeNumber = 'Estimate value must be number.';
+$lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Phạm vi';

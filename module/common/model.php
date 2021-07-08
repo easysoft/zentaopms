@@ -543,7 +543,7 @@ class commonModel extends model
         {
             $nav = $lang->mainNav->$openApp;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($openApp == 'execution') $currentMethod = 'all';
+            if($openApp == 'execution') $currentMethod = 'executionKanban';
         }
         else
         {
@@ -553,7 +553,7 @@ class commonModel extends model
         }
 
         if($config->systemMode == 'classic' and $openApp == 'execution') $icon = zget($lang->navIcons, 'project', '');
-        $link = ($openApp != 'execution' or ($config->systemMode == 'classic')) ? helper::createLink($currentModule, $currentMethod) : '';
+        $link = helper::createLink($currentModule, $currentMethod);
         $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';

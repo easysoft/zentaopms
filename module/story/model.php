@@ -4159,7 +4159,13 @@ class storyModel extends model
                 dao::$errors[] = $this->lang->story->estimateMustBeNumber;
                 return false;
             }
-            $estimates[$account]['estimate'] = $data->estimate[$key];
+
+            if(!empty($data->estimate[$key]) and $data->estimate[$key] < 0)
+            {
+                dao::$errors[] = $this->lang->story->estimateMustBePlus;
+                return false;
+            }
+            $estimates[$account]['estimate'] = strpos($data->estimate[$key], '-') !== false ? (int)$data->estimate[$key] : (float)$data->estimate[$key];
         }
 
 
