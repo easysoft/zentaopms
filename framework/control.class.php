@@ -63,7 +63,7 @@ class control extends baseControl
             }
 
             /* Append editor field to this module config from workflow. */
-            $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('textarea')->andWhere('buildin')->eq('0')->fetchAll('field');
+            $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchAll('field');
             if($textareaFields)
             {
                 $editorIdList = array();
