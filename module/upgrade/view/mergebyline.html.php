@@ -28,8 +28,8 @@
   <div class='table-col' id='source'>
     <div class='cell'>
       <div class='lineGroup-title'>
-        <div class='item'><strong><?php echo $lang->upgrade->product;?></strong></div>
-        <div class='item'><strong><?php echo $lang->upgrade->project;?></strong></div>
+        <div class='item'><strong><?php echo $lang->productCommon;?></strong></div>
+        <div class='item'><strong><?php echo $lang->projectCommon;?></strong></div>
       </div>
       <div class='line-groups'>
         <?php $i = 0;?>
