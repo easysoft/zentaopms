@@ -327,7 +327,7 @@ class gitlab extends control
                                  ->fetchAll('issueID');
         $iids = '';
         foreach($savedIssueIDList as $savedIssueID) $iids = $iids . $savedIssueID->issueID . ',';
-        $options = '&not[iids]=' . trim($iids, ',');
+        $options = '&state=opened&not[iids]=' . trim($iids, ',');
         $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, $options); //TODO(dingguodong) when no issues here?
 
         $products = array();
@@ -337,6 +337,7 @@ class gitlab extends control
             $products[$productID] = $this->loadModel("product")->getByID($productID)->name;
         }
 
+        $this->view->importable      = empty($gitlabIssues) ? false : true;
         $this->view->products        = $products;
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabProjectID = $projectID;
