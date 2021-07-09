@@ -206,27 +206,9 @@ class router extends baseRouter
         if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'fp';
 
         $iterationKey   = $projectKey;
-        if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
-        {
-            $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
-        }
-        if($productProject)
-        {
-            $productProject = $productProject->value;
-            list($productCommon, $projectCommon) = explode('_', $productProject);
-        }
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
-        if(isset($productCommon) and isset($projectCommon))
-        {
-            $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
-            $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][0];
-        }
-        else
-        {
-            $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
-        }
-
+        $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
         $lang->iterationCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$iterationKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$iterationKey] : $this->config->executionCommonList['en'][(int)$iterationKey];
         $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$projectKey];
         $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] : $this->config->hourPointCommonList['en'][(int)$hourKey];
@@ -253,25 +235,36 @@ class router extends baseRouter
 
         $lang->URCommon = '';
         $lang->SRCommon = '';
-        if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
+        if($this->dbh and !empty($this->config->db->name))
         {
-            /* Get story concept in project and product. */
-            $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `lang` = \"{$this->clientLang}\"")->fetchAll();
-            if(empty($URSRList)) $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
-
-            /* Get UR pairs and SR pairs. */
-            $URPairs  = array();
-            $SRPairs  = array();
-            foreach($URSRList as $id => $value)
+            $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
+            if($productProject)
             {
-                $URSR = json_decode($value->value);
-                $URPairs[$value->key] = $URSR->URName;
-                $SRPairs[$value->key] = $URSR->SRName;
+                $productProject = $productProject->value;
+                list($productCommon, $projectCommon) = explode('_', $productProject);
+                $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
+                $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][0];
             }
+            if(!defined('IN_UPGRADE'))
+            {
+                /* Get story concept in project and product. */
+                $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `lang` = \"{$this->clientLang}\"")->fetchAll();
+                if(empty($URSRList)) $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
 
-            /* Set default story concept and init UR and SR concept. */
-            $lang->URCommon = isset($URPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($URPairs);
-            $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $SRPairs[$config->URSR] : reset($SRPairs);
+                /* Get UR pairs and SR pairs. */
+                $URPairs  = array();
+                $SRPairs  = array();
+                foreach($URSRList as $id => $value)
+                {
+                    $URSR = json_decode($value->value);
+                    $URPairs[$value->key] = $URSR->URName;
+                    $SRPairs[$value->key] = $URSR->SRName;
+                }
+
+                /* Set default story concept and init UR and SR concept. */
+                $lang->URCommon = isset($URPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($URPairs);
+                $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $SRPairs[$config->URSR] : reset($SRPairs);
+            }
         }
     }
 
