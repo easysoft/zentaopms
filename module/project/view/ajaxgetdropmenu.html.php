@@ -76,8 +76,8 @@ foreach($projects as $programID => $programProjects)
   <div class="table-col col-left">
     <div class='list-group'>
       <ul class="nav nav-tabs">
-        <li class="active"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab'");?><li>
-        <li><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab'")?><li>
+        <li class="active"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><li>
+        <li><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="myProject">

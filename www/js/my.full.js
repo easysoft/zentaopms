@@ -846,7 +846,7 @@ function scrollToSelected(id)
     $id = $(id);
     $selected = $id.find('.selected');
 
-    $id.mouseout(function(){$(this).find('.active').removeClass('active')});
+    $id.mouseout(function(){$(this).find('a.active:not(.not-list-item)').removeClass('active')});
     if($selected.length > 0)
     {
         var offsetHeight = 75;
