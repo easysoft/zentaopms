@@ -289,6 +289,8 @@ class bugModel extends model
         $bug->openedBuild  = 1;
         $bug->story        = 0;
         $bug->task         = 0;
+        $bug->pri          = 3;
+        $bug->severity     = 3;
         $bug->project      = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('parent');
 
         $this->dao->insert(TABLE_BUG)->data($bug, $skip = 'gitlab,gitlabProject')->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
@@ -794,6 +796,11 @@ class bugModel extends model
                     $this->executeHooks($bugID);
 
                     $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+
+                    /* update bug to gitlab issue. */
+                    $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
+                    $bug->id  = $bugID; 
+                    if($relation) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
                 }
                 else
                 {

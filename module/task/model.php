@@ -978,7 +978,7 @@ class taskModel extends model
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
-        /* update story to gitlab issue. */
+        /* update task to gitlab issue. */
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
         if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
 
@@ -1281,6 +1281,10 @@ class taskModel extends model
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
+                
+                /* update task to gitlab issue. */
+                $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
+                if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
             }
             else
             {

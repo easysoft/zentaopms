@@ -694,6 +694,11 @@ class storyModel extends model
             }
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
+
+            /* update story to gitlab issue. */
+            $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
+            if($relation) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+
             return common::createChanges($oldStory, $story);
         }
     }
