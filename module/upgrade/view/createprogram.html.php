@@ -1,5 +1,12 @@
 <table class='table table-form'>
-  <caption class='strong'><?php echo $lang->upgrade->program;?></caption>
+  <caption class='strong'><?php echo $lang->upgrade->dataMethod;?></caption>
+  <tr><td><?php echo html::radio('projectType', $this->lang->upgrade->projectType, 'project');?></td></tr>
+  <tr><td class='createProjectTip'><?php echo $lang->upgrade->createProjectTip?></td></tr>
+  <tr><td class='createExecutionTip hidden'><?php echo $lang->upgrade->createExecutionTip?></td></tr>
+<tr></tr>
+</table>
+<table class='table table-form'>
+  <caption class='strong'><?php echo $lang->upgrade->setProgram;?></caption>
   <tr>
     <th>
       <span class="pgm-exist hidden"><?php echo $lang->upgrade->existProgram;?></span>

@@ -101,6 +101,7 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 EOD;
 
 $lang->upgrade->line         = 'Product Line';
+$lang->upgrade->allLines     = 'All Lines';
 $lang->upgrade->program      = 'Merge Project';
 $lang->upgrade->existProgram = 'Existing programs';
 $lang->upgrade->existProject = 'Existing projects';
@@ -109,6 +110,8 @@ $lang->upgrade->product      = $lang->productCommon;
 $lang->upgrade->project      = 'Iteration';
 $lang->upgrade->repo         = 'Repo';
 $lang->upgrade->mergeRepo    = 'Merge Repo';
+$lang->upgrade->setProgram   = 'Set the project to which the program belongs';
+$lang->upgrade->dataMethod   = 'Data migration method';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
@@ -123,4 +126,15 @@ $lang->upgrade->needBuild4Add    = 'Full text retrieval has been added in this u
 $lang->upgrade->needBuild4Adjust = 'Full text retrieval has been adjusted. Please create an index.';
 $lang->upgrade->buildIndex       = 'Create Index';
 
+$lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
+$lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";
+
+$lang->upgrade->createProjectTip = <<<EOT
+<p>The historical {$lang->projectCommon} after the upgrade corresponds to the projects in the new version one by one.</p>
+<p>The system will create an execution with the same name as the {$lang->projectCommon} according to the history {$lang->projectCommon}, and replace the previous {$lang->projectCommon} Data such as tasks, requirements, and bugs are migrated to execution.</p>
+EOT;
+
+$lang->upgrade->createExecutionTip = <<<EOT
+<p>The historical {$lang->projectCommon} after the upgrade corresponds to the executions in the new version one by one.</p>
+EOT;
 include dirname(__FILE__) . '/version.php';

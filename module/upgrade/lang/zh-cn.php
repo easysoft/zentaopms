@@ -89,6 +89,7 @@ $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自�
 $lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
 
 $lang->upgrade->line         = '产品线';
+$lang->upgrade->allLines     = '所有产品线';
 $lang->upgrade->program      = '目标项目集和项目';
 $lang->upgrade->existProgram = '已有项目集';
 $lang->upgrade->existProject = '已有项目';
@@ -97,6 +98,8 @@ $lang->upgrade->product      = $lang->productCommon;
 $lang->upgrade->project      = '迭代';
 $lang->upgrade->repo         = '版本库';
 $lang->upgrade->mergeRepo    = '归并版本库';
+$lang->upgrade->setProgram   = '设置项目所属项目集';
+$lang->upgrade->dataMethod   = '数据迁移方式';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->projectEmpty       = '所属项目不能为空！';
@@ -108,4 +111,15 @@ $lang->upgrade->mergeByMoreLink    = "关联多个产品的迭代：选择这个
 $lang->upgrade->mergeRepoTips      = "将选中的版本库归并到所选产品下。";
 $lang->upgrade->needBuild4Add      = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
 
+$lang->upgrade->projectType['project']   = "把历史的{$lang->projectCommon}作为项目升级";
+$lang->upgrade->projectType['execution'] = "把历史的{$lang->projectCommon}作为执行升级";
+
+$lang->upgrade->createProjectTip = <<<EOT
+<p>升级后历史的{$lang->projectCommon}一一对应新版本中的项目。</p>
+<p>系统会根据历史{$lang->projectCommon}分别创建一个与该{$lang->projectCommon}同名的执行，并将之前{$lang->projectCommon}的任务、需求、Bug等数据迁移至执行中。</p>
+EOT;
+
+$lang->upgrade->createExecutionTip = <<<EOT
+<p>升级后历史的{$lang->projectCommon}一一对应新版本中的迭代。</p>
+EOT;
 include dirname(__FILE__) . '/version.php';
