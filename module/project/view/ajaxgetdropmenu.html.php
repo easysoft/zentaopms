@@ -46,7 +46,7 @@ foreach($projects as $programID => $programProjects)
         $selected = $project->id == $projectID ? 'selected' : '';
         $link     = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
 
-        $project->name = $project->model == 'scrum' ? '<i class="icon icon-sprint"></i> ' . $project->name : '<i class="icon icon-waterfall"></i> ' . $project->name;
+        if(isset($this->config->maxVersion)) $project->name = $project->model == 'scrum' ? '<i class="icon icon-sprint"></i> ' . $project->name : '<i class="icon icon-waterfall"></i> ' . $project->name;
         if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
         {
             $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $project->name, '', "class='text-muted $selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
