@@ -283,30 +283,11 @@ class bugModel extends model
      */
     public function createBugFromGitlabIssue($bug, $executionID)
     {
-        foreach($bug as $feild => $value) $_POST[$feild] = $value;
-        $now = helper::now();
-        $bug = fixer::input('post')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setDefault('project,execution,story,task', 0)
-            ->setDefault('openedBuild', '1')  // todo(dingguodong) openedBuild is hard-coded.
-            ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $bug->deadline)
-            ->setIF(isset($bug->assignedTo) and $bug->assignedTo != '', 'assignedDate', $now)
-            ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,execution,module,severity')
-            ->join('openedBuild', ',')
-            ->join('mailto', ',')
-            ->remove('files, labels,uid,oldTaskID,contactListMenu')
-            ->remove($this->config->bug->removeFields)
-            ->get();
-
-        if($executionID != 0)
-        {
-            $bug->project   = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('parent');
-            $bug->execution = $executionID;
-        }
+        $bug->openedBy    = $this->app->user->account;
+        $bug->openedBuild = 0;
+        $bug->story       = 0;
+        $bug->task        = 0;
+        $bug->project     = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('parent');
 
         $this->dao->insert(TABLE_BUG)->data($bug, $skip = 'gitlab,gitlabProject')->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())

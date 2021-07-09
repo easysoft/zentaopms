@@ -358,25 +358,12 @@ class storyModel extends model
      */
     public function createStoryFromGitlabIssue($story, $executionID)
     {
-        foreach($story as $feild => $value) $_POST[$feild] = $value;
-        $now   = helper::now();
-        $story = fixer::input('post')
-            ->cleanInt('product,module,pri,plan')
-            ->callFunc('title', 'trim')
-            ->add('assignedDate', 0)
-            ->add('version', 1)
-            ->add('status', 'draft')
-            ->setDefault('plan,verify', '')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setIF($story->assignedTo != '', 'assignedDate', $now)
-            ->setIF($executionID > 0, 'status', 'active')
-            ->setIF($executionID > 0, 'stage', 'projected')
-            ->join('mailto', ',')
-            ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS')
-            ->remove($this->config->story->removeFields)
-            ->get();
+        $story->status    = 'active';
+        $story->stage     = 'projected';
+        $story->openedBy  = 'openedBy';
+        $story->version   = '1';
+
+        if(isset($story->execution)) unset($story->execution);
 
         $requiredFields = $this->config->story->create->requiredFields;
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,gitlab,gitlabProject')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
