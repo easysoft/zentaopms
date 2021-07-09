@@ -206,7 +206,10 @@ class router extends baseRouter
         if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'fp';
 
         $iterationKey   = $projectKey;
-        $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
+        if($this->dbh and !empty($this->config->db->name) and !defined('IN_UPGRADE'))
+        {
+            $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
+        }
         if($productProject)
         {
             $productProject = $productProject->value;
