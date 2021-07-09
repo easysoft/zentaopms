@@ -610,8 +610,9 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object)
+    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object, $objectID = null)
     {
+        if(!isset($object->id) && !empty($objectID)) $object->id = $objectID;
         $issue   = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issueID}");
@@ -1124,7 +1125,7 @@ class gitlabModel extends model
 
         /* Append this object link in zentao to gitlab issue description */
         $zentaoLink = common::getSysURL() . helper::createLink($objectType, 'view', "id={$object->id}");
-        $issue->description = $issue->description . "\n\n" . $zentaoLink;
+        if(strpos($issue->description, $zentaoLink) == false) $issue->description = $issue->description . "\n\n" . $zentaoLink;
 
         return $issue;
     }
