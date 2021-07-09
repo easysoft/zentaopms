@@ -137,7 +137,7 @@ class project extends control
             else
             {
                 $object->parent = $this->program->getTopByID($object->parent);
-                $orderedProjects[] = $object;
+                $orderedProjects[$object->parent][] = $object;
                 unset($objects[$object->id]);
             }
         }

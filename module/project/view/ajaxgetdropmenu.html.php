@@ -1,54 +1,92 @@
 <?php js::set('projectID', $projectID);?>
 <?php js::set('module', $module);?>
 <?php js::set('method', $method);?>
+<style>
+.table-row .table-col .list-group .nav-tabs {position: sticky; top: 0;}
+.table-row .table-col .list-group .tab-content {margin-top: 10px; padding-left: 15px;}
+.table-row .table-col .list-group .nav-tabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
+.table-row .table-col .list-group .tab-content li .label {margin-top: 2px;}
+.table-row .table-col .list-group .tab-content li ul {padding-left: 15px;}
+</style>
 <?php
-$iCharges = 0;
-$others   = 0;
-$dones    = 0;
-$projectNames = array();
+$projectCounts      = array();
+$projectNames       = array();
 $myProjectsHtml     = '';
 $normalProjectsHtml = '';
 $closedProjectsHtml = '';
-foreach($projects as $project)
+$iCharges           = 0;
+$others             = 0;
+$dones              = 0;
+foreach($projects as $programID => $programProjects)
 {
-    if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account) $iCharges++;
-    if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account)) $others++;
-    if($project->status == 'done' or $project->status == 'closed') $dones++;
-    $projectNames[] = $project->name;
+    $projectCounts[$programID]['myProject'] = 0;
+    $projectCounts[$programID]['others']    = 0;
+
+    foreach($programProjects as $project)
+    {
+        if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account) $projectCounts[$programID]['myProject']++;
+        if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account)) $projectCounts[$programID]['others']++;
+        if($project->status == 'done' or $project->status == 'closed') $dones++;
+        $projectNames[] = $project->name;
+    }
 }
 $projectsPinYin = common::convert2Pinyin($projectNames);
 
-foreach($projects as $project)
+foreach($projects as $programID => $programProjects)
 {
-    $selected    = $project->id == $projectID ? 'selected' : '';
-    $link        = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
-    $projectName = zget($programs, $project->parent, '') ? zget($programs, $project->parent) . '/' . $project->name : $project->name;
-    if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+    if($programID)
     {
-        $myProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='text-important $selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
+        if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '<ul class="list-unstyled"><li><span class="text-muted">' . zget($programs, $programID) . '</span> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
+        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<ul><li>' . zget($programs, $programID) . ' <label class="label">' . $lang->program->common . '</label></li><li><ul>';
     }
-    else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+
+    foreach($programProjects as $index => $project)
     {
-        $normalProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
+        $selected = $project->id == $projectID ? 'selected' : '';
+        $link     = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
+
+        $project->name = $project->model == 'scrum' ? '<i class="icon icon-sprint"></i> ' . $project->name : '<i class="icon icon-waterfall"></i> ' . $project->name;
+        if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+        {
+            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $project->name, '', "class='text-muted $selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+
+            $iCharges++;
+        }
+        else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+        {
+            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+
+            $others++;
+        }
+        else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+
+        if($programID and !isset($programProjects[$index + 1]))
+        {
+            if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '</ul></li>';
+            if($projectCounts[$programID]['others']) $normalProjectsHtml .= '</ul></li>';
+        }
     }
-    else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$projectName}' data-key='" . zget($projectsPinYin, $projectName, '') . "'");
+
+    if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '</ul>';
+    if($projectCounts[$programID]['others']) $normalProjectsHtml .= '</ul>';
 }
 ?>
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
-      <?php
-      if(!empty($myProjectsHtml))
-      {
-          echo "<div class='heading'>{$lang->project->myProject}</div>";
-          echo $myProjectsHtml;
-          if(!empty($myProjectsHtml))
-          {
-              echo "<div class='heading'>{$lang->project->other}</div>";
-          }
-      }
-      echo $normalProjectsHtml;
-      ?>
+      <ul class="nav nav-tabs">
+        <li class="active"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab'");?><li>
+        <li><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab'")?><li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="myProject">
+          <?php echo $myProjectsHtml;?>
+        </div>
+        <div class="tab-pane" id="other">
+          <?php echo $normalProjectsHtml;?>
+        </div>
+      </div>
     </div>
     <div class="col-footer">
       <?php //echo html::a(helper::createLink('project', 'browse', 'programID=0&browseType=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
