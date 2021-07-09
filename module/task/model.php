@@ -464,25 +464,25 @@ class taskModel extends model
      */
     public function createTaskFromGitlabIssue($task, $executionID)
     {
-        $task->version  = 1;
-        $task->openedBy = $this->app->user->account;
-        $task->story    = 0;
-        $task->module   = 0;
-        $task->estimate = 0;
-        $task->estStarted = '0000-00-00';
+        $task->version      = 1;
+        $task->openedBy     = $this->app->user->account;
+        $task->assignedDate = isset($task->assignedTo) ? helper::now() : 0;
+        $task->story        = 0;
+        $task->module       = 0;
+        $task->estimate     = 0;
+        $task->estStarted   = '0000-00-00';
+        $task->left         = 1;  
+        $task->type         = 'devel';  
 
-        if(isset($task->product)) unset($task->product);
-
-        $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id')
+        $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id,product')
              ->autoCheck()
              ->batchCheck($this->config->task->create->requiredFields, 'notempty')
              ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
              ->exec();
             
         if(dao::isError()) return false;
-
-        $taskID = $this->dao->lastInsertID();
-        return $taskID;
+        
+        return $this->dao->lastInsertID(); 
     }
 
     /**

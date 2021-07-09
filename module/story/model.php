@@ -358,10 +358,11 @@ class storyModel extends model
      */
     public function createStoryFromGitlabIssue($story, $executionID)
     {
-        $story->status    = 'active';
-        $story->stage     = 'projected';
-        $story->openedBy  = 'openedBy';
-        $story->version   = '1';
+        $story->status       = 'active';
+        $story->stage        = 'projected';
+        $story->openedBy     = $this->app->user->account;
+        $story->version      = 1;
+        $story->assignedDate = isset($story->assignedTo) ? helper::now() : 0;
 
         if(isset($story->execution)) unset($story->execution);
 

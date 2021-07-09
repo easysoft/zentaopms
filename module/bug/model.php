@@ -283,18 +283,16 @@ class bugModel extends model
      */
     public function createBugFromGitlabIssue($bug, $executionID)
     {
-        $bug->openedBy    = $this->app->user->account;
-        $bug->openedBuild = 0;
-        $bug->story       = 0;
-        $bug->task        = 0;
-        $bug->project     = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('parent');
+        $bug->openedBy     = $this->app->user->account;
+        $bug->openedDate   = helper::now(); // TODO(dingguodong) use from issue->created_at ?
+        $bug->assignedDate = isset($bug->assignedTo) ? helper::now() : 0;
+        $bug->openedBuild  = 1;
+        $bug->story        = 0;
+        $bug->task         = 0;
+        $bug->project      = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('parent');
 
         $this->dao->insert(TABLE_BUG)->data($bug, $skip = 'gitlab,gitlabProject')->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
-        if(!dao::isError())
-        {
-            $bugID = $this->dao->lastInsertID();
-            return $bugID;
-        }
+        if(!dao::isError()) return $this->dao->lastInsertID();
 
         return false;
     }
@@ -675,6 +673,7 @@ class bugModel extends model
             if(!empty($bug)) 
             {
                 $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
+                $bug->id  = $bugID; 
                 if($relation) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
             }
             return common::createChanges($oldBug, $bug);

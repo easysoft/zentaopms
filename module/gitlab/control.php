@@ -285,21 +285,11 @@ class gitlab extends control
                     $object = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
                     $object->product   = $productList[$issueID];
                     $object->execution = $executionID;
+                    $clonedObject      = clone $object;
 
-                    if($objectType == 'task')
-                    {
-                        $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($object, $executionID);
-                    }
-
-                    if($objectType == 'bug')
-                    {
-                        $objectID = $this->loadModel('bug')->createBugFromGitlabIssue($object, $executionID);
-                    }
-
-                    if($objectType == 'story')
-                    {
-                        $objectID = $this->loadModel('story')->createStoryFromGitlabIssue($object, $executionID);
-                    }
+                    if($objectType == 'task')  $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($clonedObject, $executionID);
+                    if($objectType == 'bug')   $objectID = $this->loadModel('bug')->createBugFromGitlabIssue($clonedObject, $executionID);
+                    if($objectType == 'story') $objectID = $this->loadModel('story')->createStoryFromGitlabIssue($clonedObject, $executionID);
 
                     if($objectID)
                     { 

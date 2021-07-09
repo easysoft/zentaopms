@@ -1159,6 +1159,8 @@ class gitlabModel extends model
             if($optionType == 'userPairs' and isset($issue->$gitlabField)) $value = zget($gitlabUsers, $issue->$gitlabField);
             if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
             if($value) $object->$zentaoField = $value;
+
+            if($gitlabField == "description") $object->$zentaoField .= "<br>" . $issue->web_url;
         }
         return $object;
     }
