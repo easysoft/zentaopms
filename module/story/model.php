@@ -379,6 +379,9 @@ class storyModel extends model
             $data->spec    = $story->spec;
             $data->verify  = $story->spec;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+            
+            /* Link story to execution. */
+            $this->linkStory($executionID, $story->product, $storyID);
 
             return $storyID;
         }
