@@ -573,7 +573,7 @@ class task extends control
         $task = $this->task->getByID($taskID);
 
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
+        $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
 
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 

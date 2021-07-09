@@ -697,7 +697,7 @@ class storyModel extends model
 
             /* update story to gitlab issue. */
             $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-            if($relation) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+            if($relation) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
 
             return common::createChanges($oldStory, $story);
         }
@@ -877,7 +877,7 @@ class storyModel extends model
            }
             /* update story to gitlab issue. */
             $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-            if($relation) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+            if($relation) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
 
             unset($oldStory->parent);
             unset($story->parent);
@@ -1207,7 +1207,7 @@ class storyModel extends model
 
                     /* update story to gitlab issue. */
                     $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-                    if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+                    if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
 
                     $this->executeHooks($storyID);
                     if($story->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
@@ -1481,7 +1481,7 @@ class storyModel extends model
         if(!empty($relation))
         {
             $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-            if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+            if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
         }
 
         /* Update parent story status. */
@@ -1555,7 +1555,7 @@ class storyModel extends model
                 if(!empty($relation))
                 {
                     $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-                    if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+                    if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
                 }
             }
             else
@@ -1836,7 +1836,7 @@ class storyModel extends model
         {
             $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
             $story->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
-            if($story->assignee_id != '') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+            if($story->assignee_id != '') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
             return common::createChanges($oldStory, $story);
         }
         return false;
@@ -1871,11 +1871,11 @@ class storyModel extends model
             {
                 $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
                 $story->assignee_id = $this->loadModel('gitlab')->getGitlabUserID($relation->gitlabID, $story->assignedTo);
-                if($story->assignee_id != '') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+                if($story->assignee_id != '') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
                 
                 /* Push this story to gitlab issue. */
                 $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-                if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+                if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
             }
         }
         return $allChanges;
@@ -1913,7 +1913,7 @@ class storyModel extends model
 
         /* Push this story to gitlab issue. */
         $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story);
+        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
 
         return common::createChanges($oldStory, $story);
     }
