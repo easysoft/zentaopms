@@ -77,7 +77,7 @@
               echo $member->realname;
           }
           $memberHours = $member->days * $member->hours;
-          $totalHours  += $memberHours;
+          $totalHours += $memberHours;
           ?>
           </td>
           <td title='<?php echo $member->role;?>'><?php echo $member->role;?></td>
