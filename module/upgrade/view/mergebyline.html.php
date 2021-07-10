@@ -1,4 +1,3 @@
-<style> #source .lineGroup .productList{width: 170px;} </style>
 <?php reset($productlines);?>
 <?php $selected = key($productlines);?>
 <div class='alert alert-info'>
@@ -8,15 +7,19 @@
   ?>
 </div>
 <div class='main-row'>
-  <div class='side-col'>
+  <div class='side-col' id='lineBox'>
     <div class='cell'>
       <div class='detial'>
-        <div class="detail-title"><?php echo $lang->upgrade->line;?></div>
+        <div class="checkbox-primary" title="<?php echo $lang->selectAll?>">
+          <input type='checkbox' id='checkAllLines'><label for='checkAllLines'><strong><?php echo $lang->upgrade->allLines;?></strong></label>
+        </div>
         <div class="detail-content article-content">
           <ul class='nav scrollbar-hover' id='lineList'>
           <?php foreach($productlines as $line):?>
           <li <?php if($line->id == $selected) echo "class='active' id='activeLine'";?> lineID='<?php echo $line->id;?>'>
-            <?php echo html::a("###", $line->name, '', "data-target=#line{$line->id}");?>
+            <div>
+            <?php echo html::checkbox("productLines[$line->id]", array($line->id => ''), '' ,"class='tile'") . html::a("###", $line->name, '', "data-target=#line{$line->id}");?>
+            </div>
           </li>
           <?php endforeach;?>
           </ul>
@@ -28,8 +31,12 @@
   <div class='table-col' id='source'>
     <div class='cell'>
       <div class='lineGroup-title'>
-        <div class='item'><strong><?php echo $lang->productCommon;?></strong></div>
-        <div class='item'><strong><?php echo $lang->projectCommon;?></strong></div>
+        <div class='item checkbox-primary' title="<?php echo $lang->selectAll?>">
+          <input type='checkbox' id='checkAllProducts'><label for='checkAllProducts'><strong><?php echo $lang->productCommon;?></strong></label>
+        </div>
+        <div class='item checkbox-primary' title="<?php echo $lang->selectAll?>">
+          <input type='checkbox' id='checkAllProjects'><label for='checkAllProjects'><strong><?php echo $lang->projectCommon;?></strong></label>
+        </div>
       </div>
       <div class='line-groups'>
         <?php $i = 0;?>
@@ -38,14 +45,14 @@
           <?php foreach($lineGroups[$line->id] as $productID => $product):?>
           <div class='lineGroup'>
             <div class='productList'>
-            <?php echo html::checkBox("products[$line->id]", array($productID => $product->name), $i == 0 ? $product->id : 0, "title='{$product->name}' data-productid='{$product->id}' data-line='{$line->id}' data-begin='{$product->createdDate}' data-programid='{$product->program}'");?>
+            <?php echo html::checkBox("products[$line->id]", array($productID => $product->name), $i == 0 ? $product->id : 0, "title='{$product->name}' data-productid='{$product->id}' data-line='{$line->id}' data-begin='{$product->createdDate}' data-programid='{$product->program}' class='tile'");?>
             <?php echo html::hidden("productIdList[$line->id][$productID]", $productID);?>
             </div>
             <div class='projectList'>
               <div class='scroll-handle'>
               <?php if(isset($productGroups[$productID])):?>
               <?php foreach($productGroups[$productID] as $sprint):?>
-              <?php echo html::checkBox("sprints[$line->id][$productID]", array($sprint->id => $sprint->name), $i == 0 ? $sprint->id : 0, "title='{$sprint->name}' data-product='{$product->id}' data-line='{$line->id}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
+              <?php echo html::checkBox("sprints[$line->id][$productID]", array($sprint->id => $sprint->name), $i == 0 ? $sprint->id : 0, "title='{$sprint->name}' data-product='{$product->id}' data-line='{$line->id}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}' class='tile'");?>
               <?php echo html::hidden("sprintIdList[$line->id][$productID][$sprint->id]", $sprint->id);?>
               <?php endforeach;?>
               <?php endif;?>

@@ -13,7 +13,8 @@
 div.divider {vertical-align: middle;}
 
 .main-row {margin-top: 20px; padding: 20px; background: #f1f1f1;}
-.main-row .side-col .nav li.active a {background: #006af1; color: #fff; border-radius: 4px;}
+.main-row .side-col .nav li.active div a {background: #006af1; color: #fff; border-radius: 4px;}
+.main-row .side-col .nav li div a {width: 80%; display: inline-block; padding: 8px 15px;}
 
 #source > .cell {padding: 0; position: relative; height: 450px;}
 #source > .cell > .lineGroup-title {position: absolute; top: 0; left: 0; right: 0; padding: 10px;}
@@ -25,3 +26,6 @@ div.divider {vertical-align: middle;}
 #source .lineGroup+.lineGroup {margin-top: 10px;}
 #source .lineGroup .productList {vertical-align: middle; padding: 6px;}
 #source .lineGroup .projectList .scroll-handle {max-height: 200px; overflow-y: scroll; padding: 6px;}
+#source .lineGroup .productList {width: 170px;}
+#lineList .checkbox-primary {display: inline-block;}
+.main-row .side-col .check-allLine > label {font-weight: 700}

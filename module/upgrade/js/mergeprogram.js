@@ -1,8 +1,164 @@
 $(function()
 {
+    var checkedProduct = true;
+    var productLine    = $('.nav li.active').attr('lineid');
+    $("[id^='products\[" + productLine + "\]']").each(function()
+    {
+        if(!$(this).prop('checked')) checkedProduct = false;
+    })
+    $("[id^='productLines\[" + productLine + "\]']").prop('checked', checkedProduct);
+    $('#checkAllProducts').prop('checked', checkedProduct);
+    $('#checkAllProjects').prop('checked', checkedProduct);
+
+    var options = {
+        selector: 'input',
+        listenClick: false,
+        clickBehavior:"single",
+        select: function(e)
+        {
+            $('[data-id=' + e.id + ']').prop('checked', true);
+        },
+        unselect: function(e)
+        {
+            $('[data-id=' + e.id + ']').prop('checked', false);
+        },
+        finish: function(e)
+        {
+            var lineID         = $('.nav li.active').attr('lineid');
+            var checkedLines   = true;
+            var checkedProduct = true;
+            var checkedProject = true;
+
+            /* All projects selected. */
+            $("[id^='sprints\[" + lineID + "\]']").each(function()
+            {
+                if(!$(this).prop('checked'))
+                {
+                    checkedProject = false;
+                }
+                else
+                {
+                    var productID = $(this).attr('data-product');
+                    if(productID && $('[data-productid=' + productID + ']').length > 0 && !$('[data-productid=' + productID + ']').prop('checked')) $('[data-productid=' + productID + ']').prop('checked', true);
+                }
+            })
+            $('#checkAllProjects').prop('checked', checkedProject);
+            $('#checkAllProducts').prop('checked', checkedProject);
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', checkedProject);
+
+            /* All products selected. */
+            $("[id^='products\[" + lineID + "\]']").each(function()
+            {
+                if(!$(this).prop('checked')) checkedProduct = false;
+            })
+            $('#checkAllProducts').prop('checked', checkedProduct);
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', checkedProduct);
+
+            /* Select the product line of the current page. */
+            if($('.nav li.active').find('[id^=productLines]').prop('checked'))
+            {
+
+                var lineID = $('.nav li.active').attr('lineid');
+                $('#checkAllProducts').prop('checked', true);
+                $('#checkAllProjects').prop('checked', true);
+                $("[id^='products\[" + lineID + "\]']").prop('checked', true);
+                $("[id^='sprints\[" + lineID + "\]'").prop('checked', true);
+            }
+
+            /* All product lines selected. */
+            $('[name^=productLines]').each(function()
+            {
+                if(!$(this).prop('checked'))
+                {
+                    checkedLines = false;
+                }
+                else
+                {
+                    var productLine = $(this).val();
+                    $("[id^='products\[" + productLine + "\]']").prop('checked', true);
+                    $("[id^='sprints\[" + productLine + "\]']").prop('checked', true);
+                }
+            })
+            $('#checkAllLines').prop('checked', checkedLines);
+
+            $('[id^=sprints]').each(function()
+            {
+                if($(this).prop('checked'))
+                {
+                    hiddenProject();
+                    var projectType = $('input[name="projectType"]:checked').val();
+                    if(projectType == 'project') $('.projectName').addClass('hidden');
+                    if(projectType == 'execution') $('.projectName').removeClass('hidden');
+                    return false;
+                }
+            })
+        }
+    };
+
+    $('#lineBox').selectable(options);
+    $('#source').selectable(options);
+
     $('.side-col .cell').height($('.side-col').height() - 20);
     $('#source .cell').height($('#source').height());
     $('#programBox .cell').height($('#programBox').height() - 20);
+
+    $('#checkAllLines').click(function()
+    {
+        if($(this).is(':checked'))
+        {
+            $('#checkAllProducts').prop('checked', true);
+            $('#checkAllProjects').prop('checked', true);
+            $('[name^=productLines]').prop('checked', true);
+            $('[name^=products]').prop('checked', true);
+            $('[name^=sprints]').prop('checked', true);
+        }
+        else
+        {
+            $('#checkAllProducts').prop('checked', false);
+            $('#checkAllProjects').prop('checked', false);
+            $('[name^=productLines]').prop('checked', false);
+            $('[name^=products]').prop('checked', false);
+            $('[name^=sprints]').prop('checked', false);
+        }
+    })
+
+    $('#checkAllProducts').click(function()
+    {
+        var lineID = $('li.active').attr('lineid');
+        if($(this).is(':checked'))
+        {
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
+            $('#checkAllProjects').prop('checked', true);
+            $('[name^=products]').prop('checked', true);
+            $('[name^=sprints]').prop('checked', true);
+        }
+        else
+        {
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', false);
+            $('#checkAllProjects').prop('checked', false);
+            $('[name^=products]').prop('checked', false);
+            $('[name^=sprints]').prop('checked', false);
+        }
+    })
+
+    $('#checkAllProjects').click(function()
+    {
+        var lineID = $('li.active').attr('lineid');
+        if($(this).is(':checked'))
+        {
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
+            $('#checkAllProducts').prop('checked', true);
+            $('[name^=products]').prop('checked', true);
+            $('[name^=sprints]').prop('checked', true);
+        }
+        else
+        {
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', false);
+            $('#checkAllProducts').prop('checked', false);
+            $('[name^=products]').prop('checked', false);
+            $('[name^=sprints]').prop('checked', false);
+        }
+    })
 
     programBegin = $('.programParams #begin').val();
     programEnd   = $('.programParams #end').val();
@@ -12,16 +168,48 @@ $(function()
 
     setProgramByProduct($(':checkbox:checked[data-productid]'));
 
+    $('[name^=productLines]').change(function()
+    {
+        var value = $(this).val();
+        var hidden = $('#line' + value).is(':hidden');
+        if($(this).prop('checked'))
+        {
+            if(!hidden)
+            {
+                $('#checkAllProducts').prop('checked', true);
+                $('#checkAllProjects').prop('checked', true);
+                $('[data-line=' + value + ']').prop('checked', true);
+            }
+        }
+        else
+        {
+            $('#checkAllLines').prop('checked', false);
+            if(!hidden)
+            {
+                $('#checkAllProducts').prop('checked', false);
+                $('#checkAllProjects').prop('checked', false);
+                $('[data-line=' + value + ']').prop('checked', false);
+            }
+        }
+
+        var checked = true;
+        $('[name^=productLines]').each(function()
+        {
+            if(!$(this).prop('checked') && $(this).val()) checked = false;
+        })
+        $('#checkAllLines').prop('checked', checked);
+    })
+
     $('[name^=lines]').change(function()
     {
         value = $(this).val();
         if($(this).prop('checked'))
         {
-            $('[data-line=' + value + ']').prop('checked', true)
+            $('[data-line=' + value + ']').prop('checked', true);
         }
         else
         {
-            $('[data-line=' + value + ']').prop('checked', false)
+            $('[data-line=' + value + ']').prop('checked', false);
         }
         setProgramBegin(programBegin);
         setProgramEnd(programEnd);
@@ -79,24 +267,70 @@ $(function()
         setProgramBegin(programBegin);
         setProgramEnd(programEnd);
         setProjectPM();
+
+        if($('#checkAllLines').is(':checked'))
+        {
+            $('#checkAllProducts').prop('checked', true);
+            $('#checkAllProjects').prop('checked', true);
+            $('[name^=productLines]').prop('checked', true);
+            $('[name^=products]').prop('checked', true);
+            $('[name^=sprints]').prop('checked', true);
+        }
+        else if($(this).closest("li").find('[id^=productLines]').prop('checked'))
+        {
+            var productLine = $('.nav li.active').attr('lineid');
+            $('#checkAllProducts').prop('checked', true);
+            $('#checkAllProjects').prop('checked', true);
+            $('[data-line=' + productLine + ']').prop('checked', true);
+        }
+        else
+        {
+            $('#checkAllProducts').prop('checked', false);
+            $('#checkAllProjects').prop('checked', false);
+        }
+
+        var checkedProduct = true;
+        var productLine    = $('.nav li.active').attr('lineid');
+        $("[id^='products\[" + productLine + "\]']").each(function()
+        {
+            if(!$(this).prop('checked')) checkedProduct = false;
+        })
+        $('#checkAllProducts').prop('checked', checkedProduct);
+        $('#checkAllProjects').prop('checked', checkedProduct);
     })
 
     $('[name^=products]').change(function()
     {
         setProgramByProduct($(this));
 
+        var checked = true;
+        var lineID  = $(this).attr('data-line');
+        $("[id^='products\[" + lineID + "\]']").each(function()
+        {
+            if(!$(this).prop('checked')) checked = false;
+        })
+        $('#checkAllProducts').prop('checked', checked);
+        $("[id^='productLines\[" + lineID + "\]']").prop('checked', checked);
+
         value = $(this).val();
         if($(this).prop('checked'))
         {
             $('[data-product=' + value + ']').prop('checked', true)
 
-            var lineID = $(this).attr('data-line');
             if(lineID && $('[data-lineid=' + lineID + ']').length > 0 && !$('[data-lineid=' + lineID + ']').prop('checked')) $('[data-lineid=' + lineID + ']').prop('checked', true);
         }
         else
         {
             $('[data-product=' + value + ']').prop('checked', false)
         }
+
+        var checkedSprint = true;
+        $("[id^='sprints\[" + lineID + "\]']").each(function()
+        {
+            if(!$(this).prop('checked')) checkedSprint = false;
+        })
+        $('#checkAllProjects').prop('checked', checkedSprint);
+
         setProgramBegin(programBegin);
         setProgramEnd(programEnd);
         setProjectPM();
@@ -106,9 +340,24 @@ $(function()
 
     $('[name^=sprints]').change(function()
     {
+        var checked        = true;
+        var checkedProduct = true;
+        var lineID  = $(this).attr('data-line');
+        $("[id^='sprints\[" + lineID + "\]']").each(function()
+        {
+            if(!$(this).prop('checked')) checked = false;
+        })
+        $('#checkAllProjects').prop('checked', checked);
+
+        $("[id^='products\[" + lineID + "\]']").each(function()
+        {
+            if(!$(this).prop('checked')) checkedProduct = false;
+        })
+
+        $('#checkAllProducts').prop('checked', checkedProduct);
+
         if($(this).prop('checked'))
         {
-            var lineID = $(this).attr('data-line');
             if(lineID && $('[data-lineid=' + lineID + ']').length > 0 && !$('[data-lineid=' + lineID + ']').prop('checked')) $('[data-lineid=' + lineID + ']').prop('checked', true);
 
             var productID = $(this).attr('data-product');
@@ -128,6 +377,23 @@ $(function()
     toggleProject($('form #newLine0'));
 
     hiddenProject();
+
+    $('input[name="projectType"]').change(function()
+    {
+        if($(this).val() == 'execution')
+        {
+            $('.createExecutionTip').removeClass('hidden');
+            $('.createProjectTip').addClass('hidden');
+            $('.projectName').removeClass('hidden');
+        }
+
+        if($(this).val() == 'project')
+        {
+            $('.createProjectTip').removeClass('hidden');
+            $('.createExecutionTip').addClass('hidden');
+            $('.projectName').addClass('hidden');
+        }
+    })
 });
 
 /**
