@@ -657,15 +657,16 @@ class productModel extends model
 
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
-            $products[$productID]->name   = $productName;
-            $products[$productID]->PO     = $data->POs[$productID];
-            $products[$productID]->QD     = $data->QDs[$productID];
-            $products[$productID]->RD     = $data->RDs[$productID];
-            $products[$productID]->type   = $data->types[$productID];
-            $products[$productID]->status = $data->statuses[$productID];
-            $products[$productID]->desc   = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
-            $products[$productID]->acl    = $data->acls[$productID];
-            $products[$productID]->order  = $data->orders[$productID];
+            $products[$productID]->program = $data->programs[$productID];
+            $products[$productID]->name    = $productName;
+            $products[$productID]->PO      = $data->POs[$productID];
+            $products[$productID]->QD      = $data->QDs[$productID];
+            $products[$productID]->RD      = $data->RDs[$productID];
+            $products[$productID]->type    = $data->types[$productID];
+            $products[$productID]->status  = $data->statuses[$productID];
+            $products[$productID]->desc    = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
+            $products[$productID]->acl     = $data->acls[$productID];
+            $products[$productID]->order   = $data->orders[$productID];
 
             /* Check unique name for edited products. */
             if(isset($nameList[$productName])) dao::$errors['name'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->name, $productName);
@@ -676,6 +677,8 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
+            if($oldProduct->program != $product->program) $product->line = 0;
+
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)
                 ->autoCheck()

@@ -34,4 +34,19 @@ $(function()
             $('#productListForm').table('initNestedList');
         }
     });
+
+    $(".check-all, [id^='productIDList']").click(function()
+    {
+        setTimeout(function()
+        {
+            var checkedProduct = true;
+            $("[id^='productIDList']").each(function()
+            {
+                if(!$(this).prop('checked')) checkedProduct = false;
+            })
+            console.log(checkedProduct);
+            if(checkedProduct)  $('.check-all').addClass('checked');
+            if(!checkedProduct) $('.check-all').removeClass('checked');
+        }, 100)
+    })
 });
