@@ -536,7 +536,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function batchEdit($programID)
+    public function batchEdit($programID = 0)
     {
         $this->lang->product->switcherMenu = '';
         if($this->post->names)
@@ -553,7 +553,7 @@ class product extends control
                 }
             }
 
-            $locate = $this->createLink('program', 'product', "programID=$programID");
+            $locate = $this->app->openApp == 'product' ? $this->createLink('product', 'all') : $this->createLink('program', 'product', "programID=$programID");
             die(js::locate($locate, 'parent'));
         }
 
@@ -594,6 +594,7 @@ class product extends control
         $this->view->poUsers       = $poUsers;
         $this->view->qdUsers       = $qdUsers;
         $this->view->rdUsers       = $rdUsers;
+        $this->view->programs      = array('') + $this->program->getTopPairs();
 
         unset($this->lang->product->typeList['']);
         $this->display();

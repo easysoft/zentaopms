@@ -63,6 +63,18 @@
             <td><?php echo html::input('password', '', "class='form-control'");?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->install->selectedMode;?></th>
+            <td><?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new';?>
+                <?php echo html::radio('mode', $lang->upgrade->to15Mode, $systemMode);?>
+            </td>     
+          </tr>
+          <tr>
+            <th></th>
+            <td>
+              <div class='text-info'><?php echo $lang->install->selectedModeTips;?></div>
+            </td>     
+          </tr>
+          <tr>
             <th></th><td><?php echo html::checkBox('importDemoData', $lang->install->importDemoData);?></td>
           </tr>
           <tr class='text-center'>

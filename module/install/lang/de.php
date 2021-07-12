@@ -128,6 +128,8 @@ $lang->install->company            = 'Firmenname';
 $lang->install->account            = 'Admin Konto';
 $lang->install->password           = 'Admin Passwort';
 $lang->install->errorEmptyPassword = 'Passwort sollte nicht leer sein.';
+$lang->install->selectedMode       = 'Selection mode';
+$lang->install->selectedModeTips   = 'Later, you can go to the background - Custom - mode to adjust';
 
 $lang->install->groupList['ADMIN']['name']   = 'Admin';
 $lang->install->groupList['ADMIN']['desc']   = 'System Administrator';

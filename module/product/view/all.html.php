@@ -31,12 +31,16 @@
   <?php else:?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='false' data-expand-nest-child='true'>
-      <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
-      <table id="productList" class="table has-sort-head table-fixed table-nested">
+      <?php
+      $canOrder     = common::hasPriv('product', 'updateOrder');
+      $canBatchEdit = common::hasPriv('product', 'batchEdit');
+      ?>
+      <table id="productList" class="table has-sort-head table-fixed table-nested table-form">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
         <thead>
           <tr class="text-center">
             <th class='table-nest-title text-left' rowspan="2">
+              <?php if($canBatchEdit) echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";?>
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
@@ -135,8 +139,11 @@
           ?>
           <tr class="text-center" <?php echo $trAttrs;?>>
             <td class="c-name text-left" title='<?php echo $product->name?>'>
-              <span class='table-nest-icon icon icon-product'></span>
-              <?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?>
+              <?php
+              $productLink = html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);
+              $productName = "<span class='table-nest-icon icon icon-product'></span>" . $productLink;
+              echo $canBatchEdit ? html::checkbox('productIDList', array($product->id => '')) . $productName : $productName;
+              ?>
             </td>
             <?php if($this->config->URAndSR):?>
             <td><?php echo $product->requirements['active'];?></td>
@@ -164,6 +171,17 @@
         <?php endforeach;?>
         </tbody>
       </table>
+      <?php if(!empty($product) and $canBatchEdit):?>
+      <div class='table-footer'>
+        <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <div class="table-actions btn-toolbar">
+        <?php
+        $actionLink = $this->createLink('product', 'batchEdit');
+        echo html::commonButton($lang->edit, "data-form-action='$actionLink'");
+        ?>
+        </div>
+      </div>
+      <?php endif;?>
     </form>
   </div>
   <?php endif;?>

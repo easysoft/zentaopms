@@ -183,12 +183,15 @@ class install extends control
             if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
 
             $this->loadModel('setting')->updateVersion($this->config->version);
+            $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // update mode
             $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
             $this->loadModel('setting')->setItem('system.common.safe.mode', '1');
             $this->loadModel('setting')->setItem('system.common.safe.changeWeak', '1');
             $this->loadModel('setting')->setItem('system.common.global.cron', 1);
             die(js::locate(inlink('step5'), 'parent'));
         }
+        
+        $this->app->loadLang('upgrade');
 
         $this->view->title = $this->lang->install->getPriv;
         if(!isset($this->config->installed) or !$this->config->installed)

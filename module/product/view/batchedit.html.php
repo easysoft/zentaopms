@@ -51,6 +51,7 @@
                 $full  = '';
             }
             ?>
+            <th class='w-150px<?php echo zget($visibleFields, 'program', ' hidden') . zget($requiredFields, 'program', '', ' required');?>'><?php echo $lang->product->program;?></th>
             <th class='required <?php echo $width;?>' style="<?php echo $full;?>"><?php echo $lang->product->name;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->product->PO;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->product->QD;?></th>
@@ -71,6 +72,7 @@
           ?>
           <tr>
             <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $programs, $products[$productID]->program, "class='form-control chosen'");?></td>
             <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>

@@ -540,24 +540,27 @@ class custom extends control
      */
     public function mode()
     {
-        if($this->post->mode == 'new')
+        $mode = zget($this->config->global, 'mode', 'classic');
+        if($this->post->mode && $this->post->mode != $mode) // if mode value change
         {
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             if($mode == 'new') die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
+            if($mode == 'classic') die(js::reload('top'));
         }
 
-        $mode = zget($this->config->global, 'mode', 'classic');
+        
         if($mode == 'new')
         {
             if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') die(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
 
             unset($_SESSION['upgrading']);
-            $this->locate(inlink('index'));
+            // $this->locate(inlink('index'));
         }
 
         $this->app->loadLang('upgrade');
 
+        $this->view->mode       = $mode;
         $this->view->title      = $this->lang->custom->mode;
         $this->view->position[] = $this->lang->custom->common;
         $this->view->position[] = $this->view->title;
