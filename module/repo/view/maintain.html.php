@@ -48,8 +48,8 @@
           <td class='text' title='<?php if(strtolower($repo->SCM) == "gitlab") echo $lang->repo->pathTipsForGitlab; else echo $repo->path; ?>'><?php echo $repo->path; ?></td>
           <td class='text-left c-actions'>
             <?php
-            common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list',  'edit');
-            common::printIcon('gitlab', 'importissue', "repo={$repo->id}", '', 'list',  'link');
+            common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
+            if(strtolower($repo->SCM) == "gitlab") common::printIcon('gitlab', 'importissue', "repo={$repo->id}", '', 'list', 'link');  // disable button instead of hiding it.
             if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
             ?>
           </td>
