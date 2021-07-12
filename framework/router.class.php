@@ -155,6 +155,7 @@ class router extends baseRouter
         if(!defined('ITERATION_KEY'))     define('ITERATION_KEY', 0);
         if(!defined('SPRINT_KEY'))        define('SPRINT_KEY', 1);
         if(!defined('PRODUCT_KEY'))       define('PRODUCT_KEY', 0);
+        if(!defined('PROJECT_KEY'))       define('PROJECT_KEY', 0);
         if(!defined('STORYPOINT_KEY'))    define('STORYPOINT_KEY', 1);
         if(!defined('FUNCTIONPOINT_KEY')) define('FUNCTIONPOINT_KEY', 2);
 
@@ -209,6 +210,7 @@ class router extends baseRouter
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];
+        $lang->projectCommon   = $this->config->projectCommonList[$this->clientLang][PROJECT_KEY];
         $lang->iterationCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$iterationKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$iterationKey] : $this->config->executionCommonList['en'][(int)$iterationKey];
         $lang->executionCommon = isset($this->config->executionCommonList[$this->clientLang][(int)$projectKey]) ? $this->config->executionCommonList[$this->clientLang][(int)$projectKey] : $this->config->executionCommonList['en'][(int)$projectKey];
         $lang->hourCommon      = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourKey]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourKey] : $this->config->hourPointCommonList['en'][(int)$hourKey];
@@ -222,7 +224,7 @@ class router extends baseRouter
         $config->executionLink = 'execution-task';
 
         /* Get user preference. */
-        $account     = isset($this->session->user->account) ? $this->session->user->account : '';
+        $account = isset($this->session->user->account) ? $this->session->user->account : '';
         if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
         foreach($userSetting as $setting)
         {
