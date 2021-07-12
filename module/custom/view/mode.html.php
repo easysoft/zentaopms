@@ -31,7 +31,7 @@
       </tr>
       <tr>
         <td></td>
-        <td><?php echo html::submitButton($lang->custom->switch);?></td>
+        <td><?php echo html::submitButton($lang->custom->switch, $changedMode == 'yes' ? 'disabled' : '');?></td>
       </tr>
     </table>
   </form>
