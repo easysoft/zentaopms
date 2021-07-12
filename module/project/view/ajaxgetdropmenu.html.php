@@ -2,12 +2,20 @@
 <?php js::set('module', $module);?>
 <?php js::set('method', $method);?>
 <style>
-.table-row .table-col .list-group .nav-tabs {position: sticky; top: 0;}
-.table-row .table-col .list-group .tab-content {margin-top: 10px; padding-left: 15px;}
+.table-row .table-col .list-group .nav-tabs {position: sticky; top: 0; background: #fff;}
+.table-row .table-col .list-group .nav-tabs>li>span {display: inline-block; margin-left: -6px;}
+.table-row .table-col .list-group .nav-tabs>li>a {padding: 8px 10px; display: inline-block}
+.table-row .table-col .list-group .nav-tabs>li.active>a, .nav-tabs>li.active>span {font-weight: 700; color: #0c64eb;}
 .table-row .table-col .list-group .nav-tabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
-.table-row .table-col .list-group .tab-content li .label {margin-top: 2px;}
+
+.table-row .table-col .list-group .tab-content {margin-top: 10px; padding-left: 15px;}
+.table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
+.table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
+.table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
 .table-row .table-col .list-group .tab-content li ul {padding-left: 15px;}
+.table-row .table-col .list-group .tab-content li>a {margin-top: 5px;display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
+.table-row .table-col .list-group .tab-content li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
 </style>
 <?php
 $projectCounts      = array();
@@ -35,49 +43,64 @@ $projectsPinYin = common::convert2Pinyin($projectNames);
 
 foreach($projects as $programID => $programProjects)
 {
+    /* Add the program name before project. */
     if($programID)
     {
         if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '<ul class="list-unstyled"><li><span class="text-muted">' . zget($programs, $programID) . '</span> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
-        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<ul><li>' . zget($programs, $programID) . ' <label class="label">' . $lang->program->common . '</label></li><li><ul>';
+        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<ul class="list-unstyled"><li><span class="text-muted">' . zget($programs, $programID) . '</span> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
+    }
+    else
+    {
+        $myProjectsHtml     .= '<ul class="list-unstyled">';
+        $normalProjectsHtml .= '<ul class="list-unstyled">';
     }
 
     foreach($programProjects as $index => $project)
     {
-        $selected = $project->id == $projectID ? 'selected' : '';
-        $link     = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
+        $selected    = $project->id == $projectID ? 'selected' : '';
+        $link        = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
+        $projectName = $project->name;
 
-        if(isset($this->config->maxVersion)) $project->name = $project->model == 'scrum' ? '<i class="icon icon-sprint"></i> ' . $project->name : '<i class="icon icon-waterfall"></i> ' . $project->name;
+        /* If this version is maxVersion, add the execution icon before execution name. */
+        if(isset($this->config->maxVersion)) $projectName = $project->model == 'scrum' ? '<i class="icon icon-sprint"></i> ' . $project->name : '<i class="icon icon-waterfall"></i> ' . $project->name;
+
         if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
         {
-            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $project->name, '', "class='text-muted $selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='text-muted $selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             $iCharges++;
         }
         else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
         {
-            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             $others++;
         }
         else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
 
-        if($programID and !isset($programProjects[$index + 1]))
+        /* If program id greater than 0, and the project is the last one in the program, print the closed label. */
+        if(!isset($programProjects[$index + 1]))
         {
-            if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '</ul></li>';
-            if($projectCounts[$programID]['others']) $normalProjectsHtml .= '</ul></li>';
+            if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '</ul></li>';
+            if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '</ul></li>';
         }
     }
 
-    if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '</ul>';
-    if($projectCounts[$programID]['others']) $normalProjectsHtml .= '</ul>';
+    if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '</ul>';
+    if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '</ul>';
 }
 ?>
+
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
       <ul class="nav nav-tabs">
-        <li class="active"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><li>
-        <li><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><li>
+        <?php if($iCharges): ?>
+        <li class="active"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
+        <?php endif;?>
+        <?php if($others): ?>
+        <li><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
+        <?php endif;?>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="myProject">
@@ -98,3 +121,16 @@ foreach($projects as $programID => $programProjects)
   </div>
 </div>
 <script>scrollToSelected();</script>
+<script>
+$(function()
+{
+    $('.nav-tabs li span').hide();
+    $('.nav-tabs li:first').find('span').show();
+
+    $('.nav-tabs>li').click(function()
+    {
+        $(this).find('span').show();
+        $(this).siblings('li').find('span').hide();
+    })
+})
+</script>
