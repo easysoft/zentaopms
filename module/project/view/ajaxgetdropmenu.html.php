@@ -10,6 +10,7 @@
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
 
 .table-row .table-col .list-group .tab-content {margin-top: 10px; padding-left: 15px;}
+.table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
 .table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
 .table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
 .table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
