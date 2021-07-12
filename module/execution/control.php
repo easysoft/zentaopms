@@ -2728,13 +2728,27 @@ class execution extends control
             $this->loadModel('action')->create('story', $storyID, 'estimated', '', $executionID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'storyEstimate', "executionID=$executionID&storyID=$storyID")));
         }
+
         $estimateInfo = $this->story->getEstimateInfo($storyID, $round);
+        $team         = $this->execution->getTeamMembers($executionID);
+        /* If user has been removed from team and has estimate record, join him into team.*/
+        if(!empty($estimateInfo->estimate))
+        {
+            foreach($estimateInfo->estimate as $account => $estimate)
+            {
+                if(!in_array($account, array_keys($team))) 
+                {
+                    $team[$account] = new stdclass();
+                    $team[$account]->account = $account;
+                }
+            }
+        }
 
         $this->view->estimateInfo = $estimateInfo;
         $this->view->round        = !empty($estimateInfo->round) ? $estimateInfo->round : 0;
         $this->view->rounds       = $this->story->getEstimateRounds($storyID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->team         = $this->execution->getTeamMembers($executionID);
+        $this->view->team         = $team;
         $this->view->executionID  = $executionID;
         $this->view->storyID      = $storyID;
         $this->display();
