@@ -47,13 +47,13 @@ foreach($projects as $programID => $programProjects)
     /* Add the program name before project. */
     if($programID)
     {
-        if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '<ul class="list-unstyled"><li><span class="text-muted">' . zget($programs, $programID) . '</span> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
-        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<ul class="list-unstyled"><li><span class="text-muted">' . zget($programs, $programID) . '</span> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
+        if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($programs, $programID) . '</span> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
+        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($programs, $programID) . '</span> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
     }
     else
     {
-        $myProjectsHtml     .= '<ul class="list-unstyled">';
-        $normalProjectsHtml .= '<ul class="list-unstyled">';
+        $myProjectsHtml     .= '<ul>';
+        $normalProjectsHtml .= '<ul>';
     }
 
     foreach($programProjects as $index => $project)
