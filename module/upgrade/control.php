@@ -258,10 +258,12 @@ class upgrade extends control
                 /* Process merged products and projects. */
                 if($_POST['projectType'] == 'execution')
                 {
+                    /* Use historical projects as execution upgrades. */
                     $this->upgrade->processMergedData($programID, $projectList, $lineID, $linkedProducts, $linkedSprints);
                 }
                 else
                 {
+                    /* Use historical projects as project upgrades. */
                     foreach($linkedSprints as $sprint)
                     {
                         $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $sprintProducts[$sprint], array($sprint => $sprint));

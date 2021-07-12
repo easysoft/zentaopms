@@ -37,7 +37,7 @@
             <tr>
               <th><?php echo $lang->upgrade->project;?></th>
               <th class='divider'></th>
-              <th class='w-p50'><?php echo $lang->upgrade->program;?></th>
+              <th class='w-p50'><?php echo $lang->upgrade->selectProject;?></th>
             </tr>
           </thead>
           <tbody>

@@ -71,15 +71,15 @@ $lang->upgrade->to15Desc       = <<<EOD
 EOD;
 
 $lang->upgrade->mergeProgramDesc = <<<EOD
-<p>接下来我们会把之前历史产品和迭代数据迁移到项目集和项目下，迁移的方案如下：</p><br />
-<h4>方案一：以产品线组织的产品和迭代 </h4>
-<p>可以将整个产品线及其下面的产品和迭代迁移到一个项目集和项目中，当然您也可以根据需要分开迁移。</p>
-<h4>方案二：以产品组织的迭代 </h4>
-<p>可以选择多个产品及其下面的迭代迁移到一个项目集和项目中，也可以选择某一个产品和产品下面的迭代迁移到项目集和项目中。</p>
-<h4>方案三：独立的迭代</h4>
-<p>可以选择若干个迭代迁移到一个项目集中，也可以独立迁移。</p>
-<h4>方案四：关联多个产品的迭代</h4>
-<p>可以选择这些迭代归属于某个新项目下。</p>
+<p>接下来我们会把之前历史{$lang->productCommon}和{$lang->projectCommon}数据迁移到项目集和项目下，迁移的情况如下：</p><br />
+<h4>情况一：以产品线组织的{$lang->productCommon}和{$lang->projectCommon} </h4>
+<p>可以将整个产品线及其下面的{$lang->productCommon}和{$lang->projectCommon}迁移到一个项目集中，当然您也可以根据需要分开迁移。</p>
+<h4>情况二：以{$lang->productCommon}组织的{$lang->projectCommon} </h4>
+<p>可以选择多个{$lang->productCommon}及其下面的{$lang->projectCommon}迁移到一个项目集中，也可以选择某一个{$lang->productCommon}和{$lang->productCommon}下面的{$lang->projectCommon}迁移到项目集中。</p>
+<h4>情况三：独立的{$lang->projectCommon}</h4>
+<p>可以选择若干个{$lang->projectCommon}迁移到一个项目集中，也可以独立迁移。</p>
+<h4>情况四：关联多个{$lang->productCommon}的{$lang->projectCommon}</h4>
+<p>可以选择这些{$lang->projectCommon}归属于某个新项目下。</p>
 EOD;
 
 $lang->upgrade->to15Mode['classic'] = '保持老版本的习惯';
@@ -88,20 +88,21 @@ $lang->upgrade->to15Mode['new']     = '全新项目集管理模式';
 $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';
 $lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
 
-$lang->upgrade->line         = '产品线';
-$lang->upgrade->allLines     = '所有产品线';
-$lang->upgrade->program      = '目标项目集和项目';
-$lang->upgrade->existProgram = '已有项目集';
-$lang->upgrade->existProject = '已有项目';
-$lang->upgrade->existLine    = '已有' . $lang->productCommon . '线';
-$lang->upgrade->product      = $lang->productCommon;
-$lang->upgrade->project      = '迭代';
-$lang->upgrade->repo         = '版本库';
-$lang->upgrade->mergeRepo    = '归并版本库';
-$lang->upgrade->setProgram   = '设置项目所属项目集';
-$lang->upgrade->dataMethod   = '数据迁移方式';
-$lang->upgrade->begin        = '开始日期';
-$lang->upgrade->end          = '结束日期';
+$lang->upgrade->line          = '产品线';
+$lang->upgrade->allLines      = '所有产品线';
+$lang->upgrade->program       = '目标项目集和项目';
+$lang->upgrade->existProgram  = '已有项目集';
+$lang->upgrade->existProject  = '已有项目';
+$lang->upgrade->existLine     = '已有' . $lang->productCommon . '线';
+$lang->upgrade->product       = $lang->productCommon;
+$lang->upgrade->project       = '迭代';
+$lang->upgrade->repo          = '版本库';
+$lang->upgrade->mergeRepo     = '归并版本库';
+$lang->upgrade->setProgram    = '设置项目所属项目集';
+$lang->upgrade->dataMethod    = '数据迁移方式';
+$lang->upgrade->begin         = '开始日期';
+$lang->upgrade->end           = '结束日期';
+$lang->upgrade->selectProject = '目标项目';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->projectEmpty       = '所属项目不能为空！';
@@ -109,7 +110,7 @@ $lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s�
 $lang->upgrade->mergeByProductLine = "以产品线组织的产品和迭代：将整个产品线及其下面的产品和迭代归并到一个项目集和项目中，也可以分开归并。";
 $lang->upgrade->mergeByProduct     = "以产品组织的迭代：可以选择多个产品及其下面的迭代归并到一个项目集和项目中，也可以选择某一个产品将其下面所属的迭代归并到项目集和项目中。";
 $lang->upgrade->mergeByProject     = "独立的迭代：可以选择若干迭代归并到一个项目中，也可以独立归并。";
-$lang->upgrade->mergeByMoreLink    = "关联多个产品的迭代：选择这个迭代归属于哪一个产品。";
+$lang->upgrade->mergeByMoreLink    = "关联多个{$lang->productCommon}的{$lang->projectCommon}：选择这个{$lang->projectCommon}归属于哪一个项目。";
 $lang->upgrade->mergeRepoTips      = "将选中的版本库归并到所选产品下。";
 $lang->upgrade->needBuild4Add      = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
 
