@@ -659,8 +659,8 @@ $.extend(
                             searchModule = 'assetlib';
                             searchMethod = data;
                             searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
-                            $.apps.open(searchLink);
                         }
+                        $.apps.open(searchLink);
                     });
                 }
                 else
