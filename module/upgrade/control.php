@@ -229,6 +229,7 @@ class upgrade extends control
                 $linkedProducts = array();
                 $linkedSprints  = array();
                 $unlinkSprints  = array();
+                $sprintProducts = array();
 
                 /* Compute checked products and sprints, unchecked products and sprints. */
                 foreach($_POST['products'] as $lineID => $products)
@@ -241,7 +242,8 @@ class upgrade extends control
                         {
                             foreach($_POST['sprints'][$lineID][$productID] as $sprintID)
                             {
-                                $linkedSprints[$sprintID] = $sprintID;
+                                $linkedSprints[$sprintID]  = $sprintID;
+                                $sprintProducts[$sprintID] = $productID;
                                 unset($_POST['sprintIdList'][$lineID][$productID][$sprintID]);
                             }
                             $unlinkSprints[$productID] = $this->post->sprintIdList[$lineID][$productID];
@@ -250,11 +252,21 @@ class upgrade extends control
                 }
 
                 /* Create Program. */
-                list($programID, $projectID, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+                list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
                 /* Process merged products and projects. */
-                $this->upgrade->processMergedData($programID, $projectID, $lineID, $linkedProducts, $linkedSprints);
+                if($_POST['projectType'] == 'execution')
+                {
+                    $this->upgrade->processMergedData($programID, $projectList, $lineID, $linkedProducts, $linkedSprints);
+                }
+                else
+                {
+                    foreach($linkedSprints as $sprint)
+                    {
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $sprintProducts[$sprint], array($sprint => $sprint));
+                    }
+                }
 
                 /* Process unlinked sprint and product. */
                 foreach($linkedProducts as $productID => $product)

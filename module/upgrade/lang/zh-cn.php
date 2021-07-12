@@ -100,6 +100,8 @@ $lang->upgrade->repo         = '版本库';
 $lang->upgrade->mergeRepo    = '归并版本库';
 $lang->upgrade->setProgram   = '设置项目所属项目集';
 $lang->upgrade->dataMethod   = '数据迁移方式';
+$lang->upgrade->begin        = '开始日期';
+$lang->upgrade->end          = '结束日期';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->projectEmpty       = '所属项目不能为空！';
@@ -120,6 +122,7 @@ $lang->upgrade->createProjectTip = <<<EOT
 EOT;
 
 $lang->upgrade->createExecutionTip = <<<EOT
-<p>升级后历史的{$lang->projectCommon}一一对应新版本中的迭代。</p>
+<p>系统会把历史的{$lang->projectCommon}作为迭代进行升级。</p>
+<p>升级后历史的{$lang->projectCommon}数据将对应新版本中项目下的执行。</p>
 EOT;
 include dirname(__FILE__) . '/version.php';

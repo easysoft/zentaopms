@@ -1,4 +1,4 @@
-<table class='table table-form'>
+<table class='table table-form programParams'>
   <caption class='strong'><?php echo $lang->upgrade->dataMethod;?></caption>
   <tr><td><?php echo html::radio('projectType', $this->lang->upgrade->projectType, 'project');?></td></tr>
   <tr><td class='createProjectTip'><?php echo $lang->upgrade->createProjectTip?></td></tr>
@@ -96,7 +96,8 @@
   </tr>
   <tr class='programParams'>
     <th><?php echo $lang->project->acl;?></th>
-    <td><?php echo nl2br(html::radio('acl', $lang->project->subAclList, 'open', '', 'block'));?></td>
+    <td class='programAcl'><?php echo nl2br(html::radio('programAcl', $lang->program->aclList, 'open', '', 'block'));?></td>
+    <td class='projectAcl hidden'><?php echo nl2br(html::radio('projectAcl', $lang->project->subAclList, 'open', '', 'block'));?></td>
   </tr>
 </table>
 <div class='table-foot text-center'><?php echo html::submitButton();?></div>

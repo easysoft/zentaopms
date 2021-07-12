@@ -4261,7 +4261,7 @@ class upgradeModel extends model
             $program->openedBy      = $account;
             $program->openedDate    = helper::now();
             $program->openedVersion = $this->config->version;
-            $program->acl           = 'open';
+            $program->acl           = isset($data->programAcl) ? $data->programAcl : 'open';
             $program->days          = $this->computeDaysDelta($program->begin, $program->end);
 
             $this->app->loadLang('program');
@@ -4327,66 +4327,97 @@ class upgradeModel extends model
 
         if(isset($data->newProject))
         {
-            if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->program->end)));
+            if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
 
-            /* Insert project. */
-            $project = new stdclass();
-            $project->name           = $data->projectName;
-            $project->type           = 'project';
-            $project->model          = 'scrum';
-            $project->parent         = $programID;
-            $project->status         = $data->projectStatus;
-            $project->begin          = $data->begin;
-            $project->end            = isset($data->end) ? $data->end : LONG_TIME;
-            $project->days           = $this->computeDaysDelta($project->begin, $project->end);
-            $project->PM             = $data->PM;
-            $project->auth           = 'extend';
-            $project->openedBy       = $account;
-            $project->openedDate     = helper::now();
-            $project->openedVersion  = $this->config->version;
-            $project->lastEditedBy   = $account;
-            $project->lastEditedDate = helper::now();
-            $project->acl            = $data->acl;
-
-            $programDate = $this->dao->select('begin,end')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-            if($data->begin < $programDate->begin) $this->dao->update(TABLE_PROGRAM)->set('begin')->eq($data->begin)->where('id')->eq($programID)->exec();
-            if($data->end > $programDate->end)     $this->dao->update(TABLE_PROGRAM)->set('end')->eq($data->end)->where('id')->eq($programID)->exec();
-
-            $this->dao->insert(TABLE_PROJECT)->data($project)
-                ->batchcheck('name', 'notempty')
-                ->check('name', 'unique', "deleted='0' and type = 'project'")
-                ->exec();
-            if(dao::isError()) return false;
-
-            $projectID = $this->dao->lastInsertId();
-            $this->dao->update(TABLE_PROJECT)
-                ->set('grade')->eq(2)
-                ->set('path')->eq(",{$programID},{$projectID},")
-                ->set('`order`')->eq($projectID * 5)
-                ->where('id')->eq($projectID)
-                ->exec();
-
-            /* Create doc lib. */
+            /* Create a project. */
+            $this->loadModel('action');
             $this->app->loadLang('doc');
-            $lib = new stdclass();
-            $lib->project = $projectID;
-            $lib->name    = $this->lang->doclib->main['project'];
-            $lib->type    = 'project';
-            $lib->main    = '1';
-            $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-
-            $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
-            if($data->projectStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'closedbysystem');
+            if($data->projectType == 'execution')
+            {
+                $projectList = $this->createProject($programID, $data);
+            }
+            else
+            {
+                $nameList = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
+                foreach($projectIdList as $project)
+                {
+                    $data->projectName = $nameList[$project];
+                    $projectList[$project] = $this->createProject($programID, $data);
+                }
+            }
         }
         else
         {
-            $projectID = $data->projects;
-            $this->dao->update(TABLE_PROJECT)->set('status')->eq($data->projectStatus)->where('id')->eq($projectID)->exec();
-            if($data->projectStatus == 'closed') $this->loadModel('action')->create('project', $projectID, 'openedbysystem');
+            $projectList = $data->projects;
+            $this->dao->update(TABLE_PROJECT)->set('status')->eq($data->projectStatus)->where('id')->eq($projectList)->exec();
+            if($data->projectStatus == 'closed') $this->loadModel('action')->create('project', $projectList, 'openedbysystem');
         }
 
-        return array($programID, $projectID, $lineID);
+        return array($programID, $projectList, $lineID);
+    }
+
+    /**
+     * Create a project.
+     *
+     * @param  int    $programID
+     * @param  object $data
+     * @access public
+     * @return int|bool
+     */
+    public function createProject($programID = 0, $data = null)
+    {
+        $now     = helper::now();
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
+
+        /* Insert project. */
+        $project = new stdclass();
+        $project->name           = $data->projectName;
+        $project->type           = 'project';
+        $project->model          = 'scrum';
+        $project->parent         = $programID;
+        $project->status         = $data->projectStatus;
+        $project->begin          = $data->begin;
+        $project->end            = isset($data->end) ? $data->end : LONG_TIME;
+        $project->days           = $this->computeDaysDelta($project->begin, $project->end);
+        $project->PM             = $data->PM;
+        $project->auth           = 'extend';
+        $project->openedBy       = $account;
+        $project->openedDate     = $now;
+        $project->openedVersion  = $this->config->version;
+        $project->lastEditedBy   = $account;
+        $project->lastEditedDate = $now;
+        $project->acl            = isset($data->projectAcl) ? $data->projectAcl : 'open';
+
+        $programDate = $this->dao->select('begin,end')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+        if($data->begin < $programDate->begin) $this->dao->update(TABLE_PROGRAM)->set('begin')->eq($data->begin)->where('id')->eq($programID)->exec();
+        if($data->end > $programDate->end)     $this->dao->update(TABLE_PROGRAM)->set('end')->eq($data->end)->where('id')->eq($programID)->exec();
+
+        $this->dao->insert(TABLE_PROJECT)->data($project)
+            ->batchcheck('name', 'notempty')
+            ->check('name', 'unique', "deleted='0' and type = 'project'")
+            ->exec();
+        if(dao::isError()) return false;
+
+        $projectID = $this->dao->lastInsertId();
+        $this->dao->update(TABLE_PROJECT)
+            ->set('grade')->eq(2)
+            ->set('path')->eq(",{$programID},{$projectID},")
+            ->set('`order`')->eq($projectID * 5)
+            ->where('id')->eq($projectID)
+            ->exec();
+
+        /* Create doc lib. */
+        $lib = new stdclass();
+        $lib->project = $projectID;
+        $lib->name    = $this->lang->doclib->main['project'];
+        $lib->type    = 'project';
+        $lib->main    = '1';
+        $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+        $this->action->create('project', $projectID, 'openedbysystem');
+        if($data->projectStatus == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
+        return $projectID;
     }
 
     /**

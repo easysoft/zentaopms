@@ -113,6 +113,8 @@ $lang->upgrade->repo         = 'Repo';
 $lang->upgrade->mergeRepo    = 'Merge Repo';
 $lang->upgrade->setProgram   = 'Set the project to which the program belongs';
 $lang->upgrade->dataMethod   = 'Data migration method';
+$lang->upgrade->begin        = 'Begin Date';
+$lang->upgrade->end          = 'End Date';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
@@ -131,11 +133,12 @@ $lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->proje
 $lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";
 
 $lang->upgrade->createProjectTip = <<<EOT
-<p>The historical {$lang->projectCommon} after the upgrade corresponds to the projects in the new version one by one.</p>
-<p>The system will create an execution with the same name as the {$lang->projectCommon} according to the history {$lang->projectCommon}, and replace the previous {$lang->projectCommon} Data such as tasks, requirements, and bugs are migrated to execution.</p>
+<p>After the upgrade, the existing {$lang->projectCommon} will be Project in the new version.</p>
+<p>ZenTao will create an item in Execute with the same name of {$lang->projectCommon} according to the data in {$lang->projectCommon}, and move the tasks, stories, and bugs in {$lang->projectCommon} to it.</p>
+EOT;
+$lang->upgrade->createExecutionTip = <<<EOT
+<p>ZenTao will upgrade existing {$lang->projectCommon} as Iteration.</p>
+<p>After the upgrade, the data of existing {$lang->projectCommon} will be in a Project - Execute of the new version .</p>
 EOT;
 
-$lang->upgrade->createExecutionTip = <<<EOT
-<p>The historical {$lang->projectCommon} after the upgrade corresponds to the executions in the new version one by one.</p>
-EOT;
 include dirname(__FILE__) . '/version.php';

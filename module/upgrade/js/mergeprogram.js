@@ -13,21 +13,22 @@ $(function()
     var options = {
         selector: 'input',
         listenClick: false,
-        clickBehavior:"single",
         select: function(e)
         {
             $('[data-id=' + e.id + ']').prop('checked', true);
-        },
-        unselect: function(e)
-        {
-            $('[data-id=' + e.id + ']').prop('checked', false);
-        },
-        finish: function(e)
-        {
+
             var lineID         = $('.nav li.active').attr('lineid');
             var checkedLines   = true;
             var checkedProduct = true;
             var checkedProject = true;
+
+            /* All products selected. */
+            $("[id^='products\[" + lineID + "\]']").each(function()
+            {
+                if(!$(this).prop('checked')) checkedProduct = false;
+            })
+            $('#checkAllProducts').prop('checked', checkedProduct);
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', checkedProduct);
 
             /* All projects selected. */
             $("[id^='sprints\[" + lineID + "\]']").each(function()
@@ -46,18 +47,9 @@ $(function()
             $('#checkAllProducts').prop('checked', checkedProject);
             $("[id^='productLines\[" + lineID + "\]']").prop('checked', checkedProject);
 
-            /* All products selected. */
-            $("[id^='products\[" + lineID + "\]']").each(function()
-            {
-                if(!$(this).prop('checked')) checkedProduct = false;
-            })
-            $('#checkAllProducts').prop('checked', checkedProduct);
-            $("[id^='productLines\[" + lineID + "\]']").prop('checked', checkedProduct);
-
             /* Select the product line of the current page. */
             if($('.nav li.active').find('[id^=productLines]').prop('checked'))
             {
-
                 var lineID = $('.nav li.active').attr('lineid');
                 $('#checkAllProducts').prop('checked', true);
                 $('#checkAllProjects').prop('checked', true);
@@ -81,14 +73,29 @@ $(function()
             })
             $('#checkAllLines').prop('checked', checkedLines);
 
+            /* If the project is checked, the relevant form will be displayed according to the selected mode. */
             $('[id^=sprints]').each(function()
             {
                 if($(this).prop('checked'))
                 {
                     hiddenProject();
                     var projectType = $('input[name="projectType"]:checked').val();
-                    if(projectType == 'project') $('.projectName').addClass('hidden');
-                    if(projectType == 'execution') $('.projectName').removeClass('hidden');
+                    if(projectType == 'project')
+                    {
+                        $('.projectName').addClass('hidden');
+                        $('.projectAcl').addClass('hidden');
+                        $('.programAcl').removeClass('hidden');
+                        $('[name=projectAcl]').attr('disabled', 'disabled');
+                        $('[name=programAcl]').removeAttr('disabled');
+                    }
+                    if(projectType == 'execution')
+                    {
+                        $('.projectName').removeClass('hidden');
+                        $('.programAcl').addClass('hidden');
+                        $('.projectAcl').removeClass('hidden');
+                        $('[name=programAcl]').attr('disabled', 'disabled');
+                        $('[name=projectAcl]').removeAttr('disabled');
+                    }
                     return false;
                 }
             })
@@ -120,6 +127,33 @@ $(function()
             $('[name^=products]').prop('checked', false);
             $('[name^=sprints]').prop('checked', false);
         }
+
+        /* If the project is checked, the relevant form will be displayed according to the selected mode. */
+        $('[id^=sprints]').each(function()
+        {
+            if($(this).prop('checked'))
+            {
+                hiddenProject();
+                var projectType = $('input[name="projectType"]:checked').val();
+                if(projectType == 'project')
+                {
+                    $('.projectName').addClass('hidden');
+                    $('.projectAcl').addClass('hidden');
+                    $('.programAcl').removeClass('hidden');
+                    $('[name=projectAcl]').attr('disabled', 'disabled');
+                    $('[name=programAcl]').removeAttr('disabled');
+                }
+                if(projectType == 'execution')
+                {
+                    $('.projectName').removeClass('hidden');
+                    $('.programAcl').addClass('hidden');
+                    $('.projectAcl').removeClass('hidden');
+                    $('[name=programAcl]').attr('disabled', 'disabled');
+                    $('[name=projectAcl]').removeAttr('disabled');
+                }
+                return false;
+            }
+        })
     })
 
     $('#checkAllProducts').click(function()
@@ -139,6 +173,7 @@ $(function()
             $('[name^=products]').prop('checked', false);
             $('[name^=sprints]').prop('checked', false);
         }
+        hiddenProject();
     })
 
     $('#checkAllProjects').click(function()
@@ -158,6 +193,7 @@ $(function()
             $('[name^=products]').prop('checked', false);
             $('[name^=sprints]').prop('checked', false);
         }
+        hiddenProject();
     })
 
     programBegin = $('.programParams #begin').val();
@@ -170,7 +206,7 @@ $(function()
 
     $('[name^=productLines]').change(function()
     {
-        var value = $(this).val();
+        var value  = $(this).val();
         var hidden = $('#line' + value).is(':hidden');
         if($(this).prop('checked'))
         {
@@ -178,8 +214,8 @@ $(function()
             {
                 $('#checkAllProducts').prop('checked', true);
                 $('#checkAllProjects').prop('checked', true);
-                $('[data-line=' + value + ']').prop('checked', true);
             }
+            $('[data-line=' + value + ']').prop('checked', true);
         }
         else
         {
@@ -188,8 +224,8 @@ $(function()
             {
                 $('#checkAllProducts').prop('checked', false);
                 $('#checkAllProjects').prop('checked', false);
-                $('[data-line=' + value + ']').prop('checked', false);
             }
+            $('[data-line=' + value + ']').prop('checked', false);
         }
 
         var checked = true;
@@ -198,6 +234,34 @@ $(function()
             if(!$(this).prop('checked') && $(this).val()) checked = false;
         })
         $('#checkAllLines').prop('checked', checked);
+
+        /* If the project is checked, the relevant form will be displayed according to the selected mode. */
+        $('[id^=sprints]').each(function()
+        {
+            if($(this).prop('checked'))
+            {
+                var projectType = $('input[name="projectType"]:checked').val();
+                if(projectType == 'project')
+                {
+                    $('.projectName').addClass('hidden');
+                    $('.projectAcl').addClass('hidden');
+                    $('.programAcl').removeClass('hidden');
+                    $('[name=projectAcl]').attr('disabled', 'disabled');
+                    $('[name=programAcl]').removeAttr('disabled');
+                }
+                if(projectType == 'execution')
+                {
+                    $('.projectName').removeClass('hidden');
+                    $('.programAcl').addClass('hidden');
+                    $('.projectAcl').removeClass('hidden');
+                    $('[name=programAcl]').attr('disabled', 'disabled');
+                    $('[name=projectAcl]').removeAttr('disabled');
+                }
+                hiddenProject();
+                return false;
+            }
+        })
+        hiddenProject();
     })
 
     $('[name^=lines]').change(function()
@@ -297,6 +361,32 @@ $(function()
         })
         $('#checkAllProducts').prop('checked', checkedProduct);
         $('#checkAllProjects').prop('checked', checkedProduct);
+
+        $('[id^=sprints]').each(function()
+        {
+            if($(this).prop('checked'))
+            {
+                hiddenProject();
+                var projectType = $('input[name="projectType"]:checked').val();
+                if(projectType == 'project')
+                {
+                    $('.projectName').addClass('hidden');
+                    $('.projectAcl').addClass('hidden');
+                    $('.programAcl').removeClass('hidden');
+                    $('[name=projectAcl]').attr('disabled', 'disabled');
+                    $('[name=programAcl]').removeAttr('disabled');
+                }
+                if(projectType == 'execution')
+                {
+                    $('.projectName').removeClass('hidden');
+                    $('.programAcl').addClass('hidden');
+                    $('.projectAcl').removeClass('hidden');
+                    $('[name=programAcl]').attr('disabled', 'disabled');
+                    $('[name=projectAcl]').removeAttr('disabled');
+                }
+                return false;
+            }
+        })
     })
 
     $('[name^=products]').change(function()
@@ -385,6 +475,10 @@ $(function()
             $('.createExecutionTip').removeClass('hidden');
             $('.createProjectTip').addClass('hidden');
             $('.projectName').removeClass('hidden');
+            $('.programAcl').addClass('hidden');
+            $('.projectAcl').removeClass('hidden');
+            $('[name=programAcl]').attr('disabled', 'disabled');
+            $('[name=projectAcl]').removeAttr('disabled');
         }
 
         if($(this).val() == 'project')
@@ -392,6 +486,10 @@ $(function()
             $('.createProjectTip').removeClass('hidden');
             $('.createExecutionTip').addClass('hidden');
             $('.projectName').addClass('hidden');
+            $('.projectAcl').addClass('hidden');
+            $('.programAcl').removeClass('hidden');
+            $('[name=projectAcl]').attr('disabled', 'disabled');
+            $('[name=programAcl]').removeAttr('disabled');
         }
     })
 });

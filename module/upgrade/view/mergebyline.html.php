@@ -6,7 +6,7 @@
   echo '<br />' . $lang->upgrade->mergeByProductLine;
   ?>
 </div>
-<div class='main-row'>
+<div class='main-row mergeByLine'>
   <div class='side-col' id='lineBox'>
     <div class='cell'>
       <div class='detial'>
