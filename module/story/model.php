@@ -3400,15 +3400,49 @@ class storyModel extends model
             $stories[$story->id] = $story;
         }
 
-        $allReviewers = $this->dao->select('story,reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->in(array_keys($stories))->orderBy('version')->fetchGroup('story', 'reviewer');
+        /* Set child story id into array. */
+        $storyIdList = array();
+        if(isset($stories['id']))
+        {
+            $storyIdList = array($stories['id'] => $stories['id']); 
+        }
+        else
+        {
+            $storyIdList = array_keys($stories);
+            foreach($stories as $story)
+            {
+                if(isset($story->children)) $storyIdList = array_merge($storyIdList, array_keys($story->children));
+            }
+        }
+
+        $allReviewers = $this->dao->select('story,reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
 
         foreach($allReviewers as $storyID => $reviewerList)
         {
-            $stories[$storyID]->reviewer  = array_keys($reviewerList);
-            $stories[$storyID]->notReview = array();
-            foreach($reviewerList as $reviewer => $reviewInfo)
+            if(isset($stories[$storyID]))
             {
-                if($reviewInfo->result == '') $stories[$storyID]->notReview[] = $reviewer;
+                $stories[$storyID]->reviewer  = array_keys($reviewerList);
+                $stories[$storyID]->notReview = array();
+                foreach($reviewerList as $reviewer => $reviewInfo)
+                {
+                    if($reviewInfo->result == '') $stories[$storyID]->notReview[] = $reviewer;
+                }
+            }
+            else
+            {
+                foreach($stories as $id => $story)
+                {
+                    if(!isset($story->children)) continue;
+                    if(isset($story->children[$storyID]))
+                    {
+                        $story->children[$storyID]->reviewer  = array_keys($reviewerList);
+                        $story->children[$storyID]->notReview = array();
+                    }
+                    foreach($reviewerList as $reviewer => $reviewInfo)
+                    {
+                        if($reviewInfo->result == '') $story->children[$storyID]->notReview[] = $reviewer;
+                    }
+                }
             }
         }
 
