@@ -315,10 +315,20 @@ class gitlab extends control
                                  ->where('relation')->eq('gitlab')
                                  ->andWhere('product')->in($productIDList)
                                  ->fetchAll('issueID');
-        $iids = '';
-        foreach($savedIssueIDList as $savedIssueID) $iids = $iids . $savedIssueID->issueID . ',';
-        $options = '&state=opened&not[iids]=' . trim($iids, ',');
-        $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, $options); //TODO(dingguodong) when no issues here?
+
+        /* 'not[iids]' option in gitlab API has a issue when iids is too long. */ 
+        $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, '&state=opened'); 
+        foreach($gitlabIssues as $index => $issue)
+        {
+            foreach($savedIssueIDList as $savedIssueID)
+            {
+                if($issue->iid == $savedIssueID->issueID) 
+                {
+                    unset($gitlabIssues[$index]);
+                    break;
+                }
+            }
+        }
 
         $products = array();
         $products[] = '';
