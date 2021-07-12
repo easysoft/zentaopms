@@ -9,8 +9,9 @@
 .table-row .table-col .list-group .nav-tabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
 
-.table-row .table-col .list-group .tab-content {margin-top: 10px; padding-left: 15px;}
+.table-row .table-col .list-group .tab-content {margin-top: 10px;}
 .table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
+.table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 12px;}
 .table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
 .table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
 .table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
@@ -98,16 +99,18 @@ foreach($projects as $programID => $programProjects)
       <ul class="nav nav-tabs">
         <?php if($iCharges): ?>
         <li class="active"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
-        <?php endif;?>
-        <?php if($others): ?>
         <li><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
         <?php endif;?>
       </ul>
+      <?php
+      $myProjectActive = $iCharges ? 'active' : '';
+      $otherActive     = $iCharges ? '' : 'active';
+      ?>
       <div class="tab-content">
-        <div class="tab-pane active" id="myProject">
+        <div class="tab-pane <?php echo $myProjectActive;?>" id="myProject">
           <?php echo $myProjectsHtml;?>
         </div>
-        <div class="tab-pane" id="other">
+        <div class="tab-pane <?php echo $otherActive;?>" id="other">
           <?php echo $normalProjectsHtml;?>
         </div>
       </div>
