@@ -407,10 +407,10 @@ $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList[
 
 $lang->execution->myExecutions  = 'Mine';
 $lang->execution->doingProject  = 'Ongoing Projects';
-$lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . $lang->execution->common;
-$lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . $lang->execution->common;
-$lang->execution->kanbanColType['suspended'] = $lang->execution->statusList['suspended'] . $lang->execution->common;
-$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . $lang->execution->common;
+$lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . ' ' . $lang->execution->common;
+$lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . ' ' . $lang->execution->common;
+$lang->execution->kanbanColType['suspended'] = $lang->execution->statusList['suspended'] . ' ' . $lang->execution->common;
+$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . ' ' . $lang->execution->common;
 
 $lang->execution->treeLevel = array();
 $lang->execution->treeLevel['all']   = 'Expand All';
