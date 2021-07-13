@@ -968,14 +968,18 @@ class product extends control
             foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
         }
 
+        $programProducts = array();
+
         $products = $this->app->openApp == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
+
+        foreach($products as $product) $programProducts[$product->program][] = $product;
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->products  = $products;
+        $this->view->products  = $programProducts;
         $this->view->projectID = $this->app->openApp == 'project' ? $this->session->project : 0;
         $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->lines     = $this->product->getLinePairs();

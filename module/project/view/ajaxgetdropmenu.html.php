@@ -11,7 +11,8 @@
 
 .table-row .table-col .list-group .tab-content {margin-top: 10px;}
 .table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
-.table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 12px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 7px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li span {padding-left: 5px;}
 .table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
 .table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
 .table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
@@ -29,6 +30,7 @@ $tabActive          = '';
 $iCharges           = 0;
 $others             = 0;
 $dones              = 0;
+
 foreach($projects as $programID => $programProjects)
 {
     $projectCounts[$programID]['myProject'] = 0;
@@ -54,8 +56,8 @@ foreach($projects as $programID => $programProjects)
     }
     else
     {
-        $myProjectsHtml     .= '<ul>';
-        $normalProjectsHtml .= '<ul>';
+        if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '<ul>';
+        if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '<ul>';
     }
 
     foreach($programProjects as $index => $project)
@@ -85,8 +87,8 @@ foreach($projects as $programID => $programProjects)
         }
         else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
 
-        /* If program id greater than 0, and the project is the last one in the program, print the closed label. */
-        if(!isset($programProjects[$index + 1]))
+        /* If the programID is greater than 0, the project is the last one in the program, print the closed label. */
+        if($programID and !isset($programProjects[$index + 1]))
         {
             if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '</ul></li>';
             if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '</ul></li>';
