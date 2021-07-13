@@ -314,7 +314,9 @@ class gitlab extends control
 
         $savedIssueIDList = $this->dao->select('BID as issueID')->from(TABLE_RELATION)
                                  ->where('relation')->eq('gitlab')
-                                 ->andWhere('product')->in($productIDList)
+                                 ->andWhere('BType')->eq('issue')
+                                 ->andWhere('BVersion')->eq($projectID)
+                                 ->andWhere('extra')->eq($gitlabID)
                                  ->fetchAll('issueID');
 
         /* 'not[iids]' option in gitlab API has a issue when iids is too long. */ 
