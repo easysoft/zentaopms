@@ -244,3 +244,19 @@ $lang->user->noticeResetFile = "<h5>Kontaktieren Sie den Administrator um Ihr Pa
 $lang->user->notice4Safe = "Warning: Weak password of one click package detected";
 $lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
 $lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
+$lang->user->mkdirWin = <<<EOT
+    <html><head><meta charset='utf-8'></head>
+    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div> 
+    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    </td></tr></table></body></html>
+EOT;
+$lang->user->mkdirLinux = <<<EOT
+    <html><head><meta charset='utf-8'></head>
+    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>  
+    <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
+    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>
+    </td></tr></table></body></html>
+EOT;

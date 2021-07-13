@@ -247,3 +247,19 @@ $lang->user->noticeResetFile = "<h5>普通用户请联系管理员重置密码</
 $lang->user->notice4Safe = "警告：检测到一键安装包密码口令弱";
 $lang->user->process4DIR = "检测到您可能在使用一键安装包环境，该环境中其他站点还在用简单密码，安全起见，如果不使用其他站点，请及时处理。将 %s 目录删除或改名。详情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
 $lang->user->process4DB  = "检测到您可能在使用一键安装包环境，该环境中其他站点还在用简单密码，安全起见，如果不使用其他站点，请及时处理。请登录数据库，修改 %s 数据库的zt_user表的password字段。详情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
+$lang->user->mkdirWin = <<<EOT
+    <html><head><meta charset='utf-8'></head>
+    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div> 
+    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    </td></tr></table></body></html>
+EOT;
+$lang->user->mkdirLinux = <<<EOT
+    <html><head><meta charset='utf-8'></head>
+    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>  
+    <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
+    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>
+    </td></tr></table></body></html>
+EOT;

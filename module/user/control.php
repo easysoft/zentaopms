@@ -783,12 +783,16 @@ class user extends control
 
         if(!$canModifyDIR)
         {
-            echo "<html><head><meta charset='utf-8'></head>";
-            echo "<body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>";
-            echo "<div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>{$floderPath}</strong>是否存在并有操作权限。</div>";
-            echo "<div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>{$floderPath}</strong> exists and has permission to operate.</div>";
-            die("</td></tr></table></body></html>");
+            if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+            {
+                die(sprintf($this->lang->user->mkdirWin, $floderPath, $floderPath));
+            }
+            else
+            {
+                die(sprintf($this->lang->user->mkdirLinux, $floderPath, $floderPath, $floderPath, $floderPath));
+            }
         }
+
         $this->setReferer($referer);
 
         $loginLink = $this->createLink('user', 'login');
