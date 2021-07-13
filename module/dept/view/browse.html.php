@@ -66,7 +66,7 @@
               <td></td>
               <td class='form-actions'>
                 <?php echo html::submitButton();?>
-                <?php echo html::backButton();?>
+                <?php echo html::a($this->createLink('company', 'browse'), $lang->goback, '', "class='btn btn-back btn-wide'");?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
                 <?php echo html::hidden('parentDeptID', $deptID);?>
               </td>
