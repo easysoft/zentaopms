@@ -122,8 +122,8 @@ $lang->user->testTask2Him = '%s负责的';
 $lang->user->case2Him     = '指派给%s';
 $lang->user->caseByHim    = '由%s创建';
 
-$lang->user->errorDeny    = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
-$lang->user->errorView    = "抱歉，您无权访问『<b>%s</b>』视图。请联系管理员获取权限。点击后退返回上页。";
+$lang->user->errorDeny    = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。请回到地盘或重新登录。";
+$lang->user->errorView    = "抱歉，您无权访问『<b>%s</b>』视图。请联系管理员获取权限。请回到地盘或重新登录。";
 $lang->user->loginFailed  = "登录失败，请检查您的用户名或密码是否填写正确。";
 $lang->user->lockWarning  = "您还有%s次尝试机会。";
 $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";

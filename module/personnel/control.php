@@ -226,6 +226,8 @@ class personnel extends control
             if($acl->objectType == 'product') $this->personnel->deleteProgramWhitelist($acl->objectID, $acl->account);
             if($acl->objectType == 'sprint')  $this->personnel->deleteProjectWhitelist($acl->objectID, $acl->account);
 
+            $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));
+
             $this->loadModel('action')->create('whitelist', $acl->objectID, 'managedWhitelist', '', $acl->objectType);
 
             die(js::reload('parent'));

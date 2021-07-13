@@ -1872,6 +1872,43 @@ class execution extends control
      */
     public function executionKanban()
     {
+        $this->loadModel('project');
+        $projects   = $this->project->getPairsByProgram(0, 'noclosed');
+        $executions = $this->project->getStats();
+
+        $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
+            ->where('root')->in($this->app->user->view->sprints)
+            ->andWhere('type')->eq('execution')
+            ->fetchGroup('root', 'account');
+
+        $projectCount = 0;
+        $kanbanGroup  = array();
+        $statusCount  = array();
+        foreach(array_keys($projects) as $projectID)
+        {
+            foreach(array_keys($this->lang->execution->statusList) as $status)
+            {
+                if(!isset($statusCount[$status])) $statusCount[$status] = 0;
+                foreach($executions as $execution)
+                {
+                    if($execution->status == $status)
+                    {
+                        if(isset($teams[$execution->id][$this->app->user->account])) $kanbanGroup[0][$status][$execution->id] = $execution;
+                        if($execution->project == $projectID) $kanbanGroup[$projectID][$status][$execution->id] = $execution;
+                    }
+                }
+                $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
+            }
+            $projectCount++;
+        }
+        ksort($kanbanGroup);
+
+        $this->view->title        = $this->lang->execution->executionKanban;
+        $this->view->kanbanGroup  = $kanbanGroup;
+        $this->view->projects     = $projects;
+        $this->view->projectCount = $projectCount;
+        $this->view->statusCount  = $statusCount;
+
         $this->display();
     }
 

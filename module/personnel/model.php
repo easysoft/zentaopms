@@ -628,6 +628,7 @@ class personnelModel extends model
     {
         $program = $this->dao->select('id,program,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch();
         if(empty($program)) return false;
+
         $programID = $program->program;
         $products  = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs('id');
         $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($products)->andWhere('account')->eq($account)->andWhere('objectType')->eq('product')->fetch();
@@ -639,6 +640,7 @@ class personnelModel extends model
             $this->dao->update(TABLE_PROGRAM)->set('whitelist')->eq($newWhitelist)->where('id')->eq($programID)->exec();
             $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($programID)->andWhere('account')->eq($account)->andWhere('objectType')->eq('program')->exec();
         }
+        $this->loadModel('user')->updateUserView($programID, 'program', array($account));
     }
 
     /**
@@ -653,6 +655,7 @@ class personnelModel extends model
     {
         $project = $this->dao->select('id,project,whitelist')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
         if(empty($project)) return false;
+
         $projectID = $project->project;
         $sprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetchPairs('id');
         $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($sprints)->andWhere('account')->eq($account)->andWhere('objectType')->eq('sprint')->fetch();
@@ -664,6 +667,7 @@ class personnelModel extends model
             $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
             $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($projectID)->andWhere('account')->eq($account)->andWhere('objectType')->eq('project')->exec();
         }
+        $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
     }
 
     /**

@@ -522,7 +522,7 @@ class custom extends control
             if(!isset($this->config->maxVersion)) $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
-            $locate = inlink('flow');
+            $locate = $this->config->systemMode == 'new' ? inlink('flow') : 'top';
 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }

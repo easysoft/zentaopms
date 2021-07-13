@@ -405,6 +405,13 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
+$lang->execution->myExecutions  = '我参与的';
+$lang->execution->doingProject  = '进行中的项目';
+$lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . '的' . $lang->execution->common;
+$lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . '的' . $lang->execution->common;
+$lang->execution->kanbanColType['suspended'] = $lang->execution->statusList['suspended'] . '的' . $lang->execution->common;
+$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . '的' . $lang->execution->common;
+
 $lang->execution->treeLevel = array();
 $lang->execution->treeLevel['all']   = '全部展开';
 $lang->execution->treeLevel['root']  = '全部折叠';
@@ -416,3 +423,11 @@ $lang->execution->action->opened  = '$date, 由 <strong>$actor</strong> 创建�
 $lang->execution->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
 $lang->execution->action->edited  = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
 $lang->execution->action->extra   = '相关产品为 %s。';
+
+$lang->execution->statusColorList = array();
+$lang->execution->statusColorList['wait']      = '#0991FF';
+$lang->execution->statusColorList['doing']     = '#0BD986';
+$lang->execution->statusColorList['suspended'] = '#fdc137';
+$lang->execution->statusColorList['closed']    = '#838A9D';
+
+$lang->execution->boardColorList = '#F1F3F5,#ECF4FD,#F6EDF7,#FFEDED,#FFF7EB,#FFF7E1';

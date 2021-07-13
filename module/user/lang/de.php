@@ -121,8 +121,8 @@ $lang->user->testTask2Him = 'Build';
 $lang->user->case2Him     = 'Fall zugeordnet';
 $lang->user->caseByHim    = 'Fall geöffnet';
 
-$lang->user->errorDeny    = "Sorry, Ihr Zugang zu <b>%s</b> von <b>%s</b> wurde verweigert. Bitte kontaktieren Sie Ihren Administrator um Zugriff zu erhalten. Klicken Sie auf Zurück.";
-$lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
+$lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
 $lang->user->loginFailed  = "Login fehlgeschlagen. Bitte prüfen Sie Ihren Benutzernamen und das Passwort.";
 $lang->user->lockWarning  = "Sie haben %s Versuche.";
 $lang->user->loginLocked  = "Bitte kontaktieren Sie den Administrator um Ihr Konto entsperren zu lassen oder versuchen Sie in %s Minuten noch ein mal.";
