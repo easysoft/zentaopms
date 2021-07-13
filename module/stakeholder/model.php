@@ -95,6 +95,17 @@ class stakeholderModel extends model
         if(!dao::isError())
         {
             $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $stakeholder->user);
+
+            /* Update linked products view. */
+            if($stakeholder->objectType == 'project' and $stakeholder->objectID)
+            {
+                $products = $this->loadModel('product')->getProductPairsByProject($stakeholder->objectID);
+                if(!empty($products))
+                {
+                    foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $stakeholder->user);
+                }
+            }
+
             return $stakeholderID;
         }
         return false;
@@ -106,15 +117,15 @@ class stakeholderModel extends model
      * @access public
      * @return array
      */
-    public function batchCreate()
+    public function batchCreate($projectID)
     {
         $this->loadModel('action');
         $data = (array)fixer::input('post')->get();
 
-        $members  = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project');
+        $members  = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         $accounts = array_unique($data['accounts']);
-        $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->project)->andWhere('objectType')->eq('project')->fetchPairs();
-        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$this->session->project)->andWhere('objectType')->eq('project')->exec();
+        $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq($projectID)->andWhere('objectType')->eq('project')->fetchPairs();
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq($projectID)->andWhere('objectType')->eq('project')->exec();
 
         $stakeholderList = array();
         foreach($accounts as $key => $account)
@@ -122,7 +133,7 @@ class stakeholderModel extends model
             if(empty($account)) continue;
 
             $stakeholder = new stdclass();
-            $stakeholder->objectID    = $this->session->project;
+            $stakeholder->objectID    = $projectID;
             $stakeholder->objectType  = 'project';
             $stakeholder->user        = $account;
             $stakeholder->type		  = in_array($account, array_keys($members)) ? 'inside' : 'outside';
@@ -142,7 +153,14 @@ class stakeholderModel extends model
         $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
         $changedAccounts = array_unique($changedAccounts);
 
-        $this->loadModel('user')->updateUserView($this->session->project, 'project', $changedAccounts);
+        $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
+
+        /* Update linked products view. */
+        $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if(!empty($products))
+        {
+            foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $changedAccounts);
+        }
 
         return $stakeholderList;
     }
