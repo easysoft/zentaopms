@@ -1,8 +1,10 @@
 .main-table tbody > tr > td {border-bottom: 2px solid #fff;}
 .main-table .table {cursor: default;}
+
 .boards {display: table; table-layout: fixed; width: 100%; min-width: 140px;}
 .boards .board:not(:last-child), .board-project {border-right: 2px solid #fff;}
 .board {display: table-cell; width: 25%; padding: 10px; transition: background-color .2s, opacity .2s; vertical-align: top;}
+.board > div {max-height: 230px; overflow: auto;}
 .board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: default; border-radius: 2px; background-color: #fff;}
 .board-item.disabled {cursor: not-allowed;}
 .board-item:hover {border-color: #ccc;}
@@ -26,5 +28,5 @@
 .table-grouped > tbody > tr,
 .table-grouped > tbody > tr:hover {background: #fff !important;}
 
-.table-row .table-col:last-child {width: 30px;}
+.table-row .table-col:last-child, .c-progress {width: 30px;}
 .table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

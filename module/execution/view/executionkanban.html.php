@@ -36,35 +36,37 @@
             <div class="boards">
               <?php foreach($lang->execution->kanbanColType as $colStatus => $col):?>
               <div class="board s-<?php echo $colStatus?>" data-type="<?php echo $colStatus;?>">
-                <?php if(!empty($executionList[$colStatus])):?>
-                <?php foreach($executionList[$colStatus] as $execution):?>
-                <div class='board-item' data-id='<?php echo $execution->id?>' id='task-<?php echo $execution->id?>' data-type='execution' <?php if($execution->status == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid #ff0000';";?>>
-                  <div class='table-row'>
-                    <div class='table-col'>
-                      <?php
-                      if(common::hasPriv('execution', 'task'))
-                      {
-                          echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', 'class="title kanbaniframe" title="' . $execution->name . '"');
-                      }
-                      else
-                      {
-                          echo "<span class='title' title='{$execution->name}'>{$execution->name}</span>";
-                      }
-                      ?>
-                    </div>
-                    <div class='table-col'>
-                      <?php if($colStatus == 'doing'):?>
-                      <div class="c-progress">
-                        <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                          <div class='progress-info'><?php echo $execution->hours->progress;?></div>
-                        </div>
+                <div>
+                  <?php if(!empty($executionList[$colStatus])):?>
+                  <?php foreach($executionList[$colStatus] as $execution):?>
+                  <div class='board-item' data-id='<?php echo $execution->id?>' id='task-<?php echo $execution->id?>' data-type='execution' <?php if($execution->status == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid #ff0000';";?>>
+                    <div class='table-row'>
+                      <div class='table-col'>
+                        <?php
+                        if(common::hasPriv('execution', 'task'))
+                        {
+                            echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', 'class="title kanbaniframe" title="' . $execution->name . '"');
+                        }
+                        else
+                        {
+                            echo "<span class='title' title='{$execution->name}'>{$execution->name}</span>";
+                        }
+                        ?>
                       </div>
-                      <?php endif?>
+                      <div class='table-col'>
+                        <?php if($colStatus == 'doing'):?>
+                        <div class="c-progress">
+                          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                            <div class='progress-info'><?php echo $execution->hours->progress;?></div>
+                          </div>
+                        </div>
+                        <?php endif?>
+                      </div>
                     </div>
                   </div>
+                  <?php endforeach?>
+                  <?php endif?>
                 </div>
-                <?php endforeach?>
-                <?php endif?>
               </div>
               <?php endforeach;?>
             </div>
