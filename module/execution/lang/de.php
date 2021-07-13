@@ -405,8 +405,23 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
+$lang->execution->myExecutions  = 'Ich bin beteiligt.';
+$lang->execution->doingProject  = 'Laufende Projekte';
+$lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . $lang->execution->common;
+$lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . $lang->execution->common;
+$lang->execution->kanbanColType['suspended'] = $lang->execution->statusList['suspended'] . $lang->execution->common;
+$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . $lang->execution->common;
+
 $lang->execution->treeLevel = array();
 $lang->execution->treeLevel['all']   = 'Alle aufklappen';
 $lang->execution->treeLevel['root']  = 'Alle zuklappen';
 $lang->execution->treeLevel['task']  = 'Aufgabe anzeigen';
 $lang->execution->treeLevel['story'] = 'Story anzeigen';
+
+$lang->execution->statusColorList = array();
+$lang->execution->statusColorList['wait']      = '#0991FF';
+$lang->execution->statusColorList['doing']     = '#0BD986';
+$lang->execution->statusColorList['suspended'] = '#fdc137';
+$lang->execution->statusColorList['closed']    = '#838A9D';
+
+$lang->execution->boardColorList = '#F1F3F5,#ECF4FD,#F6EDF7,#FFEDED,#FFF7EB,#FFF7E1';

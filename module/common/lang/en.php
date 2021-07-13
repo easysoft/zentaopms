@@ -209,7 +209,7 @@ $lang->my->work = 'Work';
 
 $lang->project->list = 'Project List';
 
-$lang->execution->list = "{$lang->executionCommon} List";
+$lang->execution->executionKanban = "{$lang->execution->common} Kanban";
 
 $lang->doc->recent    = 'Recent';
 $lang->doc->my        = 'My';
