@@ -864,6 +864,37 @@ class gitlabModel extends model
     }
 
     /**
+     * Delete project relation.
+     *
+     * condition: when user deleting a repo. 
+     * 
+     * @param  int    $repoID 
+     * @access public
+     * @return void
+     */
+    public function deleteProjectRelation($repoID)
+    {
+        $repo = $this->dao->select('product,path as gitlabProjectID,client as gitlabID')->from(TABLE_REPO)
+                     ->where('id')->eq($repoID)
+                     ->andWhere('deleted')->eq(0)
+                     ->fetch();
+        if(empty($repo)) return false;
+
+        $productIDList  = explode(',', $repo->product);
+        foreach($productIDList as $product)
+        {
+            $this->dao->delete()->from(TABLE_RELATION)
+                 ->where('product')->eq($product)
+                 ->andWhere('AType')->eq('gitlab')
+                 ->andWhere('BType')->eq('gitlabProject')
+                 ->andWhere('relation')->eq('interrated')
+                 ->andWhere('AID')->eq($repo->gitlabID)
+                 ->andWhere('BID')->eq($repo->gitlabProjectID)
+                 ->exec();
+        }
+    }
+
+    /**
      * Create webhook for zentao.
      * 
      * @param  int    $gitlabID 
