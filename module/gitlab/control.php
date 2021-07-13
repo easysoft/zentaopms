@@ -254,12 +254,13 @@ class gitlab extends control
     /**
      * Import gitlab issue to zentaopms. 
      * 
+     * @param  int    $repoID 
      * @access public
      * @return void
      */
-    public function importIssue()
+    public function importIssue($repoID)
     {
-        $repo = $this->loadModel('repo')->getRepoByID($this->get->repo);
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
         $productIDList  = explode(',', $repo->product);
         $gitlabID       = $repo->gitlab;
         $projectID      = $repo->project;
