@@ -612,9 +612,14 @@ class gitlabModel extends model
      */
     public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object, $objectID = null)
     {
+        $oldObject = clone $object;
         /* Get full object when desc is empty. */
         if(!isset($object->description) || (isset($object->description) && $object->description == '')) $object = $this->loadModel($objectType)->getByID($objectID);
-
+        foreach($oldObject as $index => $attribute)
+        {
+            if($index != 'description') $object->$index = $attribute;
+        }
+        
         if(!isset($object->id) && !empty($objectID)) $object->id = $objectID;
         $issue   = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         $apiRoot = $this->getApiRoot($gitlabID);
