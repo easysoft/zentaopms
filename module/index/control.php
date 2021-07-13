@@ -99,20 +99,23 @@ class index extends control
      */
     public function ajaxGetViewMethod($objectID, $objectType)
     {
-        $table     = $this->config->objectTables[$objectType];
-        $field     = $objectType == 'doc' ? 'assetLibType' : 'lib';
-        $objectLib = $this->dao->select($field)->from($table) ->where('id')->eq($objectID)->fetch($field);
-        $method    = '';
-        if(!empty($objectLib))
+        $method = '';
+        if(isset($this->config->maxVersion))
         {
-            if($objectType == 'doc')
+            $table     = $this->config->objectTables[$objectType];
+            $field     = $objectType == 'doc' ? 'assetLibType' : 'lib';
+            $objectLib = $this->dao->select($field)->from($table) ->where('id')->eq($objectID)->fetch($field);
+            if(!empty($objectLib))
             {
-                $method = $objectLib == 'practice' ? 'practiceView' : 'componentView';
-            }
-            else
-            {
-                $this->app->loadConfig('action');
-                $method = $this->config->action->assetViewMethod[$objectType];
+                if($objectType == 'doc')
+                {
+                    $method = $objectLib == 'practice' ? 'practiceView' : 'componentView';
+                }
+                else
+                {
+                    $this->app->loadConfig('action');
+                    $method = $this->config->action->assetViewMethod[$objectType];
+                }
             }
         }
         die($method);
