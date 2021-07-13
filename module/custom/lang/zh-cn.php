@@ -213,9 +213,10 @@ else
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
-$lang->custom->menuTip  = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
-$lang->custom->saveFail = '保存失败！';
-$lang->custom->page     = '页面';
+$lang->custom->menuTip          = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
+$lang->custom->saveFail         = '保存失败！';
+$lang->custom->page             = '页面';
+$lang->custom->changeClassicTip = '切换为老版本的习惯后，系统将取消项目集功能。';
 
 $lang->custom->scoreStatus[1] = '开启';
 $lang->custom->scoreStatus[0] = '关闭';
