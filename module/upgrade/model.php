@@ -4263,6 +4263,7 @@ class upgradeModel extends model
             $program->openedVersion = $this->config->version;
             $program->acl           = isset($data->programAcl) ? $data->programAcl : 'open';
             $program->days          = $this->computeDaysDelta($program->begin, $program->end);
+            $program->PM            = $data->projectType == 'project' ? $data->PM : '';
 
             $this->app->loadLang('program');
             $this->app->loadLang('project');
@@ -4340,11 +4341,16 @@ class upgradeModel extends model
             else
             {
                 /* Use historical projects as project upgrades. */
-                $nameList = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
-                foreach($projectIdList as $project)
+                $projects = $this->dao->select('id,name,begin,end,status,PM')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+                foreach($projectIdList as $projectID)
                 {
-                    $data->projectName = $nameList[$project];
-                    $projectList[$project] = $this->createProject($programID, $data);
+                    $data->projectName   = $projects[$projectID]->name;
+                    $data->begin         = $projects[$projectID]->begin;
+                    $data->end           = $projects[$projectID]->end;
+                    $data->projectStatus = $projects[$projectID]->status;
+                    $data->PM            = $projects[$projectID]->PM;
+
+                    $projectList[$projectID] = $this->createProject($programID, $data);
                 }
             }
         }
@@ -4465,17 +4471,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Compute product acl. */
-        $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
-        foreach($products as $product)
-        {
-            if($product->program) continue;
-
-            $data = new stdclass();
-            $data->program = $programID;
-            $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
-
-            $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
-        }
+        $this->computeProductAcl($productIdList, $programID);
 
         /* No project is created when there are no sprints. */
         if(!$sprintIdList) return;
@@ -4580,6 +4576,30 @@ class upgradeModel extends model
         }
 
         $this->computeObjectMembers($programID, $projectID, $productIdList, $sprintIdList);
+    }
+
+    /**
+     * Compute product acl.
+     *
+     * @param  array  $productIdList
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function computeProductAcl($productIdList = array(), $programID = 0)
+    {
+        /* Compute product acl. */
+        $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
+        foreach($products as $product)
+        {
+            if($product->program) continue;
+
+            $data = new stdclass();
+            $data->program = $programID;
+            $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
+
+            $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
+        }
     }
 
     /**

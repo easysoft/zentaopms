@@ -458,14 +458,13 @@ class executionModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
-            ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
             ->remove('products, branch, uid, plans')
             ->get();
 
-        if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
+        if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
         if(dao::isError()) return false;
 
         /* Child stage inherits parent stage permissions. */
@@ -497,25 +496,22 @@ class executionModel extends model
             ->exec();
 
         $changedAccounts = array();
-        foreach($execution as $fieldName => $value)
+        foreach($this->config->execution->ownerFields as $ownerField)
         {
-            if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
-            {
-                if(!empty($value) and !isset($team[$value]))
-                {
-                    $member = new stdclass();
-                    $member->root    = (int)$executionID;
-                    $member->account = $value;
-                    $member->join    = helper::today();
-                    $member->role    = $this->lang->execution->$fieldName;
-                    $member->days    = zget($execution, 'days', 0);
-                    $member->type    = 'execution';
-                    $member->hours   = $this->config->execution->defaultWorkhours;
-                    $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+            $owner = zget($execution, $ownerField, '');
+            if(empty($owner) or isset($team[$owner])) continue;
 
-                    $changedAccounts[] = $value;
-                }
-            }
+            $member = new stdclass();
+            $member->root    = (int)$executionID;
+            $member->account = $owner;
+            $member->join    = helper::today();
+            $member->role    = $this->lang->execution->$ownerField;
+            $member->days    = zget($execution, 'days', 0);
+            $member->type    = 'execution';
+            $member->hours   = $this->config->execution->defaultWorkhours;
+            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
+            $changedAccounts[$owner] = $owner;
         }
 
         $whitelist = explode(',', $execution->whitelist);
@@ -526,6 +522,13 @@ class executionModel extends model
 
         if(!dao::isError())
         {
+            if(isset($execution->project) and $execution->project != $oldExecution->project)
+            {
+                $execution->parent = $execution->project;
+                $execution->path   = ",{$execution->project},{$executionID},";
+                $this->changeProject($execution->project, $oldExecution->project, $executionID);
+            }
+
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
             return common::createChanges($oldExecution, $execution);
         }
@@ -578,16 +581,16 @@ class executionModel extends model
             $executions[$executionID]->QD             = $data->QDs[$executionID];
             $executions[$executionID]->RD             = $data->RDs[$executionID];
             $executions[$executionID]->lifetime       = $data->lifetimes[$executionID];
-            $executions[$executionID]->attribute      = $data->attributes[$executionID];
             $executions[$executionID]->status         = $data->statuses[$executionID];
             $executions[$executionID]->begin          = $data->begins[$executionID];
             $executions[$executionID]->end            = $data->ends[$executionID];
             $executions[$executionID]->team           = $data->teams[$executionID];
             $executions[$executionID]->desc           = htmlspecialchars_decode($data->descs[$executionID]);
             $executions[$executionID]->days           = $data->dayses[$executionID];
-            $executions[$executionID]->order          = $data->orders[$executionID];
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
+            if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
+            if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
 
             /* Check unique name for edited executions. */
             if(isset($nameList[$executionName])) dao::$errors['name'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->execution->name, $executionName);
@@ -624,26 +627,30 @@ class executionModel extends model
                 ->exec();
             if(dao::isError()) die(js::error('execution#' . $executionID . dao::getError(true)));
 
-            $changedAccounts = array();
-            foreach($execution as $fieldName => $value)
+            if(!empty($execution->project) and $oldExecution->project != $execution->project)
             {
-                if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
-                {
-                    if(!empty($value) and !isset($team[$value]))
-                    {
-                        $member = new stdClass();
-                        $member->root    = (int)$executionID;
-                        $member->type    = 'execution';
-                        $member->account = $value;
-                        $member->join    = helper::today();
-                        $member->role    = $this->lang->execution->$fieldName;
-                        $member->days    = 0;
-                        $member->hours   = $this->config->execution->defaultWorkhours;
-                        $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+                $execution->parent = $execution->project;
+                $execution->path   = ",{$execution->project},{$executionID},";
+                $this->changeProject($execution->project, $oldExecution->project, $executionID);
+            }
 
-                        $changedAccounts[] = $value;
-                    }
-                }
+            $changedAccounts = array();
+            foreach($this->config->execution->ownerFields as $ownerField)
+            {
+                $owner = zget($execution, $ownerField, '');
+                if(empty($owner) or isset($team[$owner])) continue;
+
+                $member = new stdclass();
+                $member->root    = (int)$executionID;
+                $member->account = $owner;
+                $member->join    = helper::today();
+                $member->role    = $this->lang->execution->$ownerField;
+                $member->days    = zget($execution, 'days', 0);
+                $member->type    = 'execution';
+                $member->hours   = $this->config->execution->defaultWorkhours;
+                $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
+                $changedAccounts[] = $owner;
             }
             if(!empty($changedAccounts)) $this->updateUserView($executionID, 'sprint', $changedAccounts);
 
@@ -2060,6 +2067,68 @@ class executionModel extends model
             $sql = "UPDATE " . TABLE_PROJECT . " SET parent = '$executionID' WHERE id = '$childExecutionID'";
             $this->dbh->query($sql);
         }
+    }
+
+    /**
+     * Change execution project.
+     *
+     * @param  int    $newProject
+     * @param  int    $oldProject
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function changeProject($newProject, $oldProject, $executionID)
+    {
+        if($newProject == $oldProject) return;
+
+        $this->dao->update(TABLE_EXECUTION)->set('parent')->eq($newProject)->set('path')->eq(",$newProject,$executionID,")->where('id')->eq($executionID)->exec();
+
+        $this->dao->update(TABLE_BUILD)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_CASE)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_TASK)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($newProject)->where('project')->eq($oldProject)->andWhere('execution')->eq($executionID)->exec();
+
+        $executionTeam = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+        $projectTeam   = $this->user->getTeamMemberPairs($newProject, 'project');
+        $addedAccounts = array();
+        foreach($executionTeam as $account => $realname)
+        {
+            if(isset($projectTeam[$account])) continue;
+
+            $member = new stdclass();
+            $member->root    = (int)$newProject;
+            $member->type    = 'project';
+            $member->account = $account;
+            $member->join    = helper::today();
+            $member->days    = 0;
+            $member->hours   = $this->config->execution->defaultWorkhours;
+            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
+            $addedAccounts[$account] = $account;
+        }
+
+        $executionWhitelist = $this->loadModel('personnel')->getWhitelistAccount($executionID, 'sprint');
+        $projectWhitelist   = $this->personnel->getWhitelistAccount($newProject, 'project');
+        foreach($executionWhitelist as $account)
+        {
+            if(isset($projectWhitelist[$account])) continue;
+
+            $whitelist = new stdclass();
+            $whitelist->account    = $account;
+            $whitelist->objectType = 'project';
+            $whitelist->objectID   = (int)$newProject;
+            $whitelist->type       = 'whitelist';
+            $whitelist->source     = 'sync';
+            $this->dao->replace(TABLE_ACL)->data($whitelist)->exec();
+
+            $addedAccounts[$account] = $account;
+        }
+
+        if($addedAccounts) $this->loadModel('user')->updateUserView($newProject, 'project', $addedAccounts);
     }
 
     /**

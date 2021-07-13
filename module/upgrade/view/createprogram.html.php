@@ -1,6 +1,6 @@
 <table class='table table-form programParams'>
   <caption class='strong'><?php echo $lang->upgrade->dataMethod;?></caption>
-  <tr><td><?php echo html::radio('projectType', $this->lang->upgrade->projectType, 'project');?></td></tr>
+  <tr><td><?php echo html::radio('projectType', $this->lang->upgrade->projectType, $projectType);?></td></tr>
   <tr><td class='createProjectTip'><?php echo $lang->upgrade->createProjectTip?></td></tr>
   <tr><td class='createExecutionTip hidden'><?php echo $lang->upgrade->createExecutionTip?></td></tr>
 <tr></tr>
@@ -50,7 +50,7 @@
       </div>
     </td>
   </tr>
-  <tr class='programParams'>
+  <tr class='programParams projectStatus'>
     <th><?php echo $lang->project->status;?></th>
     <td><?php echo html::select('projectStatus', $lang->project->statusList, '', "class='form-control chosen'");?></td>
   </tr>

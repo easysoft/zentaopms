@@ -221,7 +221,8 @@
           <div class="detail">
             <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
             <div class="detail-content">
-              <p><?php echo $lang->project->aclList[$project->acl];?></p>
+              <?php $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;?>
+              <p><?php echo $aclList[$project->acl];?></p>
             </div>
           </div>
           <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>

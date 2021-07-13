@@ -2,11 +2,13 @@
 $config->product = new stdclass();
 $config->product->orderBy = 'isClosed,order_desc';
 
-$config->product->customBatchEditFields = 'PO,QD,RD,status,type,desc,acl';
+$config->product->customBatchEditFields = 'line,PO,QD,RD,status,type,acl';
+if($config->systemMode == 'new') $config->product->customBatchEditFields = 'program,' . $config->product->customBatchEditFields;
 
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
-$config->product->custom->batchEditFields = 'program,PO,QD,RD,status,type,acl';
+$config->product->custom->batchEditFields = 'line,PO,QD,RD';
+if($config->systemMode == 'new') $config->product->custom->batchEditFields .= ',program';
 
 $config->product->list = new stdclass();
 $config->product->list->exportFields = 'id,name,line,activeStories,changedStories,draftStories,closedStories,plans,releases,bugs,unResolvedBugs,assignToNullBugs';

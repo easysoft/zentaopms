@@ -50,6 +50,9 @@
         <thead>
           <tr>
             <th class='w-50px'><?php echo $lang->idAB;?></th>
+            <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
+            <th class='required' style="width:100%"><?php echo $lang->execution->project;?></th>
+            <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
             <th class='w-150px required'><?php echo $lang->execution->$code;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PM',     ' hidden') . zget($requiredFields, 'PM',     '', ' required');?>'><?php echo $lang->execution->$PM;?></th>
@@ -62,7 +65,7 @@
             <th class='w-110px required'><?php echo $lang->execution->end;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->execution->$desc;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'teamname', ' hidden') . zget($requiredFields, 'teamname', '', ' required');?>'><?php echo $lang->execution->teamname;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'days',     ' hidden') . zget($requiredFields, 'days',     '', ' required');?>'><?php echo $lang->execution->days;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'days',     ' hidden') . zget($requiredFields, 'days',     '', ' required');?>'><?php echo $lang->execution->days;?></th>
           </tr>
         </thead>
         <tbody>
@@ -75,6 +78,9 @@
           ?>
           <tr>
             <td><?php echo sprintf('%03d', $executionID) . html::hidden("executionIDList[$executionID]", $executionID);?></td>
+            <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
+            <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control chosen'");?></td>
+            <?php endif;?>
             <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control'");?></td>
             <td><?php echo html::input("codes[$executionID]",     $executions[$executionID]->code, "class='form-control'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'PM',  ' hidden')?>' style='overflow:visible'><?php echo html::select("PMs[$executionID]", $pmUsers, $executions[$executionID]->PM, "class='form-control chosen'");?></td>

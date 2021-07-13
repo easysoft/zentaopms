@@ -558,14 +558,37 @@ class projectModel extends model
      */
     public function getPairsByModel($model = 'all', $programID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+        $projects = $this->dao->select('id, name, path')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_desc')
-            ->fetchPairs();
+            ->fetchAll();
+
+        $programIdList  = array();
+        $projectProgram = array();
+        foreach($projects as $project)
+        {
+            list($programID) = explode(',', trim($project->path, ','));
+            $programIdList[$programID]    = $programID;
+            $projectProgram[$project->id] = $programID;
+        }
+
+        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('id')->in($programIdList)->fetchPairs('id', 'name');
+        $pairs    = array();
+        foreach($projects as $project)
+        {
+            $projectName = $project->name;
+
+            $programID = zget($projectProgram, $project->id, '');
+            if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+
+            $pairs[$project->id] = $projectName;
+        }
+
+        return $pairs;
     }
 
     /**

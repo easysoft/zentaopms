@@ -586,15 +586,23 @@ class product extends control
         $rdUsers = $this->user->getPairs('nodeleted|devfirst', $appendRdUsers);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        /* Get product lines by programs.*/
+        $programs = $this->program->getPairs();
+        $lines    = array();
+        foreach($programs as $programID => $program)
+        {
+            $lines[$programID] = array('') + $this->product->getLinePairs($programID);
+        }
+
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
-        $this->view->lines         = array('') + $this->product->getLinePairs();
+        $this->view->lines         = $lines;
         $this->view->productIDList = $productIDList;
         $this->view->products      = $products;
         $this->view->poUsers       = $poUsers;
         $this->view->qdUsers       = $qdUsers;
         $this->view->rdUsers       = $rdUsers;
-        $this->view->programs      = array('') + $this->program->getTopPairs();
+        $this->view->programs      = array('') + $programs;
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -929,13 +937,17 @@ class product extends control
      * Ajax get product lines.
      *
      * @param  int    $programID
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function ajaxGetLine($programID)
+    public function ajaxGetLine($programID, $productID = 0)
     {
-        $lines = $this->product->getLinePairs($programID);
-        die(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
+        $lines = array();
+        if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
+
+        if($productID)  die(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control chosen'"));
+        if(!$productID) die(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
     }
 
     /**
