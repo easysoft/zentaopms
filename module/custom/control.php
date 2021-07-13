@@ -546,8 +546,18 @@ class custom extends control
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->loadModel('setting')->setItem('system.common.global.changedMode', 'yes');
-            if($mode == 'new') die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
-            if($mode == 'classic') die(js::reload('top'));
+
+            $sprintConcept = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
+            if($mode == 'new')
+            {
+                if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
+                die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
+            }
+            if($mode == 'classic')
+            {
+                if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
+                die(js::reload('top'));
+            }
         }
 
         if($mode == 'new')
