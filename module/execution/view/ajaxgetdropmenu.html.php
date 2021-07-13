@@ -1,60 +1,129 @@
 <?php js::set('module', $module);?>
 <?php js::set('method', $method);?>
 <?php js::set('extra', $extra);?>
+<style>
+.table-row .table-col .list-group .nav-tabs {position: sticky; top: 0; background: #fff;}
+.table-row .table-col .list-group .nav-tabs>li>span {display: inline-block; margin-left: -6px;}
+.table-row .table-col .list-group .nav-tabs>li>a {padding: 8px 10px; display: inline-block}
+.table-row .table-col .list-group .nav-tabs>li.active>a, .nav-tabs>li.active>span {font-weight: 700; color: #0c64eb;}
+.table-row .table-col .list-group .nav-tabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
+
+.table-row .table-col .list-group .tab-content {margin-top: 10px;}
+.table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
+.table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 7px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li span {padding-left: 5px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5);}
+.table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
+.table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
+.table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
+.table-row .table-col .list-group .tab-content li ul {padding-left: 15px;}
+.table-row .table-col .list-group .tab-content li>a {margin-top: 5px;display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
+.table-row .table-col .list-group .tab-content li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
+</style>
 <?php
-$iCharges = 0;
-$others   = 0;
-$dones    = 0;
-$executionNames = array();
-$myProjectsHtml     = '';
-$normalProjectsHtml = '';
-$closedProjectsHtml = '';
-foreach($executions as $execution)
+$executionCounts      = array();
+$executionNames       = array();
+$myExecutionsHtml     = '';
+$normalExecutionsHtml = '';
+$closedExecutionsHtml = '';
+$tabActive            = '';
+$iCharges             = 0;
+$others               = 0;
+$dones                = 0;
+
+foreach($executions as $projectID => $projectExecutions)
 {
-    if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account]))) $iCharges++;
-    if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account])) $others++;
-    if($execution->status == 'done' or $execution->status == 'closed') $dones++;
-    $executionNames[] = $execution->name;
+    $executionCounts[$projectID]['myExecution'] = 0;
+    $executionCounts[$projectID]['others']      = 0;
+
+    foreach($projectExecutions as $execution)
+    {
+        if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account]))) $executionCounts[$projectID]['myExecution']++;
+        if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account])) $executionCounts[$projectID]['others']++;
+        if($execution->status == 'done' or $execution->status == 'closed') $dones++;
+        $executionNames[] = $execution->name;
+    }
 }
 $executionsPinYin = common::convert2Pinyin($executionNames);
 
-foreach($executions as $execution)
+foreach($executions as $projectID => $projectExecutions)
 {
-    $selected      = $execution->id == $executionID ? 'selected' : '';
-    $executionName = $config->systemMode == 'new' ? zget($projects, $execution->project) . '/' . $execution->name : $execution->name;
-    if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
+
+    if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($projects, $projectID) . '</span> <label class="label">' . $lang->project->common . '</label></li><li><ul>';
+    if($executionCounts[$projectID]['others']) $normalExecutionsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($projects, $projectID) . '</span> <label class="label">' . $lang->project->common . '</label></li><li><ul>';
+
+    foreach($projectExecutions as $index => $execution)
     {
-        $myProjectsHtml .= html::a(sprintf($link, $execution->id), $executionName, '', "class='text-important $selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+        $selected = $execution->id == $executionID ? 'selected' : '';
+        if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
+        {
+            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='text-muted $selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
+
+            if($selected == 'selected') $tabActive = 'myExecution';
+
+            $iCharges++;
+        }
+        else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
+        {
+            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='text-muted $selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
+
+            if($selected == 'selected') $tabActive = 'other';
+
+            $others++;
+        }
+        else if($execution->status == 'done' or $execution->status == 'closed') $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+
+        /* If the execution is the last one in the project, print the closed label. */
+        if(!isset($projectExecutions[$index + 1]))
+        {
+            if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml     .= '</ul></li>';
+            if($executionCounts[$projectID]['others'])      $normalExecutionsHtml .= '</ul></li>';
+        }
     }
-    else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
-    {
-        $normalProjectsHtml .= html::a(sprintf($link, $execution->id), $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
-    }
-    else if($execution->status == 'done' or $execution->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $execution->id), $executionName, '', "class='$selected' title='{$executionName}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+
+    if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml     .= '</ul>';
+    if($executionCounts[$projectID]['others'])      $normalExecutionsHtml .= '</ul>';
 }
 ?>
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
-      <?php
-      if(!empty($myProjectsHtml))
-      {
-          echo "<div class='heading'>{$lang->execution->involved}</div>";
-          echo $myProjectsHtml;
-          if(!empty($myProjectsHtml))
-          {
-              echo "<div class='heading'>{$lang->execution->other}</div>";
-          }
-      }
-      echo $normalProjectsHtml;
-      ?>
+      <?php if($iCharges): ?>
+      <?php $tabActive = ($tabActive == '' or $tabActive == 'myExecution') ? 'myExecution' : 'other';?>
+      <ul class="nav nav-tabs">
+        <li class="<?php if($tabActive == 'myExecution') echo 'active';?>"><?php echo html::a('#myExecution', $lang->execution->involved, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
+        <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
+      </ul>
+      <?php endif;?>
+      <div class="tab-content">
+        <div class="tab-pane <?php if($tabActive == 'myExecution') echo 'active';?>" id="myExecution">
+          <?php echo $myExecutionsHtml;?>
+        </div>
+        <div class="tab-pane <?php if($tabActive == 'other') echo 'active';?>" id="other">
+          <?php echo $normalExecutionsHtml;?>
+        </div>
+      </div>
     </div>
     <div class="col-footer">
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->execution->doneExecutions;?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
   <div class="table-col col-right">
-   <div class='list-group'><?php echo $closedProjectsHtml;?></div>
+   <div class='list-group'><?php echo $closedExecutionsHtml;?></div>
   </div>
 </div>
 <script>scrollToSelected();</script>
+<script>
+$(function()
+{
+    $('.nav-tabs li span').hide();
+    $('.nav-tabs li.active').find('span').show();
+
+    $('.nav-tabs>li').click(function()
+    {
+        $(this).find('span').show();
+        $(this).siblings('li').find('span').hide();
+    })
+})
+</script>

@@ -2667,6 +2667,7 @@ class execution extends control
             ->andWhere('type')->eq('execution')
             ->fetchGroup('root', 'account');
 
+        $projectPairs = array();
         if($this->config->systemMode == 'new')
         {
             foreach($projects as $project)
@@ -2679,6 +2680,8 @@ class execution extends control
                     $execution->teams = zget($teams, $execution->id, array());
                     $orderedExecutions[$execution->id] = $execution;
                 }
+
+                $projectPairs[$project->id] = $project->name;
             }
         }
         else
@@ -2693,13 +2696,16 @@ class execution extends control
             }
         }
 
+        $projectExecutions = array();
+        foreach($orderedExecutions as $execution) $projectExecutions[$execution->project][] = $execution;
+
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->module      = $module;
         $this->view->method      = $method;
         $this->view->executionID = $executionID;
         $this->view->extra       = $extra;
-        $this->view->projects    = $this->project->getPairsByModel();
-        $this->view->executions  = $orderedExecutions;
+        $this->view->projects    = $projectPairs;
+        $this->view->executions  = $projectExecutions;
         $this->display();
     }
 
