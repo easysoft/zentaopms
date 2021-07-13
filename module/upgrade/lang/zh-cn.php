@@ -106,10 +106,10 @@ $lang->upgrade->selectProject = '目标项目';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->projectEmpty       = '所属项目不能为空！';
-$lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个产品，%s个迭代等待迁移。";
-$lang->upgrade->mergeByProductLine = "以产品线组织的产品和迭代：将整个产品线及其下面的产品和迭代归并到一个项目集和项目中，也可以分开归并。";
-$lang->upgrade->mergeByProduct     = "以产品组织的迭代：可以选择多个产品及其下面的迭代归并到一个项目集和项目中，也可以选择某一个产品将其下面所属的迭代归并到项目集和项目中。";
-$lang->upgrade->mergeByProject     = "独立的迭代：可以选择若干迭代归并到一个项目中，也可以独立归并。";
+$lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个{$lang->productCommon}，%s个{$lang->projectCommon}等待迁移。";
+$lang->upgrade->mergeByProductLine = "以产品线组织的{$lang->productCommon}和{$lang->projectCommon}：将整个产品线及其下面的{$lang->productCommon}和{$lang->projectCommon}归并到一个项目集和项目中，也可以分开归并。";
+$lang->upgrade->mergeByProduct     = "以{$lang->productCommon}组织的{$lang->projectCommon}：可以选择多个{$lang->productCommon}及其下面的{$lang->projectCommon}归并到一个项目集和项目中，也可以选择某一个{$lang->productCommon}将其下面所属的{$lang->projectCommon}归并到项目集和项目中。";
+$lang->upgrade->mergeByProject     = "独立的{$lang->projectCommon}：可以选择若干{$lang->projectCommon}归并到一个项目中，也可以独立归并。";
 $lang->upgrade->mergeByMoreLink    = "关联多个{$lang->productCommon}的{$lang->projectCommon}：选择这个{$lang->projectCommon}归属于哪一个项目。";
 $lang->upgrade->mergeRepoTips      = "将选中的版本库归并到所选产品下。";
 $lang->upgrade->needBuild4Add      = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
@@ -123,7 +123,7 @@ $lang->upgrade->createProjectTip = <<<EOT
 EOT;
 
 $lang->upgrade->createExecutionTip = <<<EOT
-<p>系统会把历史的{$lang->projectCommon}作为迭代进行升级。</p>
+<p>系统会把历史的{$lang->projectCommon}作为执行进行升级。</p>
 <p>升级后历史的{$lang->projectCommon}数据将对应新版本中项目下的执行。</p>
 EOT;
 include dirname(__FILE__) . '/version.php';

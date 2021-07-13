@@ -410,7 +410,7 @@ class upgrade extends control
             $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq(0)->orderBy('id_desc')->fetchAll('id');
 
             $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->in(array_keys($productlines))->orderBy('id_desc')->fetchAll('id');
-            if(empty($productlines) || empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=product'));
+            if(empty($productlines) || empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=product&programID=0&projectType=$projectType"));
 
             $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
@@ -482,7 +482,7 @@ class upgrade extends control
             /* Add products without sprints. */
             $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetchAll('id');
 
-            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=sprint'));
+            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=sprint&programID=0&projectType=$projectType"));
 
 
             /* Group project by product. */
@@ -506,7 +506,7 @@ class upgrade extends control
             $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
             foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
 
-            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=moreLink'));
+            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink"));
 
             $this->view->noMergedSprints = $noMergedSprints;
         }
