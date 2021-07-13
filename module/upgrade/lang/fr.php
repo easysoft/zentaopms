@@ -90,31 +90,32 @@ $lang->upgrade->to20Desc      = <<<EOD
 </div>
 EOD;
 $lang->upgrade->mergeProgramDesc = <<<EOD
-<p>Next, we will migrate the previous historical product and iteration data to the project set and under the project, with the following scenario for migration.</p><br />
-<h4>Option 1: Product and iteration organized by product line </h4>
-<p>It is possible to migrate the entire product line and its following products and iterations into one project set and project, although you can also migrate them separately as needed.</p>
-<h4>Option 2: Iteration of product-based organizations </h4>
-<p>You can select multiple products and the iterations below them to migrate to a project set and project, or you can select a particular product and the iterations below it to migrate to a project set and project.</p>
-<h4>Option 3: Independent iterations </h4>
-<p>Several iterations can be selected to migrate to a single project set, or independently.</p>
-<h4>Option 4: Iterations linked to multiple products.</h4>
-<p>These iterations can be selected to fall under a new project.</p>
+<p>Next, ZenTao will migrate the existing data of {$lang->productCommon} and {$lang->projectCommon} to Program and Project. It will be one of the followings:</p><br />
+<h4>1. Manage {$lang->productCommon} and {$lang->projectCommon} by Product Line </h4>
+<p>Migrate the data of {$lang->productCommon} and {$lang->projectCommon} by Product Line to a Program. You can also migrate it separately.</p>
+<h4>2. Manage {$lang->projectCommon} by {$lang->productCommon}</h4>
+<p>You can migrate the data of several {$lang->productCommon}s and {$lang->projectCommon}s to one Program. Or select {$lang->projectCommon}s of a {$lang->productCommon} and {$lang->productCommon} to a Program.</p>
+<h4>2. Independent {$lang->projectCommon}</h4>
+<p>Choose several {$lang->projectCommon}s and migrate them to one Program, or migrate them separately.</p>
+<h4>4. Link {$lang->projectCommon}s of several {$lang->productCommon}s</h4>
+<p>You can set {$lang->projectCommon}s as one new project.</p>
 EOD;
 
-$lang->upgrade->line         = 'Product Line';
-$lang->upgrade->allLines     = 'All Lines';
-$lang->upgrade->program      = 'Merge Project';
-$lang->upgrade->existProgram = 'Existing programs';
-$lang->upgrade->existProject = 'Existing projects';
-$lang->upgrade->existLine    = 'Existing' . $lang->productCommon . ' lines';
-$lang->upgrade->product      = $lang->productCommon;
-$lang->upgrade->project      = 'Iteration';
-$lang->upgrade->repo         = 'Repo';
-$lang->upgrade->mergeRepo    = 'Merge Repo';
-$lang->upgrade->setProgram   = 'Set the project to which the program belongs';
-$lang->upgrade->dataMethod   = 'Data migration method';
-$lang->upgrade->begin        = 'Begin Date';
-$lang->upgrade->end          = 'End Date';
+$lang->upgrade->line          = 'Product Line';
+$lang->upgrade->allLines      = 'All Lines';
+$lang->upgrade->program       = 'Merge Project';
+$lang->upgrade->existProgram  = 'Existing programs';
+$lang->upgrade->existProject  = 'Existing projects';
+$lang->upgrade->existLine     = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->product       = $lang->productCommon;
+$lang->upgrade->project       = 'Iteration';
+$lang->upgrade->repo          = 'Repo';
+$lang->upgrade->mergeRepo     = 'Merge Repo';
+$lang->upgrade->setProgram    = 'Set the project to which the program belongs';
+$lang->upgrade->dataMethod    = 'Data migration method';
+$lang->upgrade->begin         = 'Begin Date';
+$lang->upgrade->end           = 'End Date';
+$lang->upgrade->selectProject = 'The target project';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
@@ -122,7 +123,7 @@ $lang->upgrade->mergeSummary       = "Dear users, there are %s products and %s i
 $lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED iterations: Consolidate the entire product line and the products and iterations below it into one large project.";
 $lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select multiple products and their lower iterations to merge into a large project, or you can select a product to merge its lower iterations into a larger project";
 $lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one large project, or merge them independently";
-$lang->upgrade->mergeByMoreLink    = "Iteration that relates multiple products: select which product the iteration belongs to.";
+$lang->upgrade->mergeByMoreLink    = "{$lang->projectCommon} that relates multiple {$lang->productCommon}: select which project the {$lang->projectCommon} belongs to.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
 
 $lang->upgrade->needBuild4Add    = 'Full text retrieval has been added in this upgrad. Please create an index.';

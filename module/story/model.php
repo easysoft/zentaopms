@@ -3437,10 +3437,10 @@ class storyModel extends model
                     {
                         $story->children[$storyID]->reviewer  = array_keys($reviewerList);
                         $story->children[$storyID]->notReview = array();
-                    }
-                    foreach($reviewerList as $reviewer => $reviewInfo)
-                    {
-                        if($reviewInfo->result == '') $story->children[$storyID]->notReview[] = $reviewer;
+                        foreach($reviewerList as $reviewer => $reviewInfo)
+                        {
+                            if($reviewInfo->result == '') $story->children[$storyID]->notReview[] = $reviewer;
+                        }
                     }
                 }
             }

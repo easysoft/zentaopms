@@ -4334,10 +4334,12 @@ class upgradeModel extends model
             $this->app->loadLang('doc');
             if($data->projectType == 'execution')
             {
+                /* Use historical projects as execution upgrades. */
                 $projectList = $this->createProject($programID, $data);
             }
             else
             {
+                /* Use historical projects as project upgrades. */
                 $nameList = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
                 foreach($projectIdList as $project)
                 {

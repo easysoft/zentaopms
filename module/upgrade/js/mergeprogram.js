@@ -10,6 +10,7 @@ $(function()
     $('#checkAllProducts').prop('checked', checkedProduct);
     $('#checkAllProjects').prop('checked', checkedProduct);
 
+    /* Define drag to select relevant parameters. */
     var options = {
         selector: 'input',
         listenClick: false,
@@ -102,6 +103,7 @@ $(function()
         }
     };
 
+    /* Initialize the drag selected. */
     $('#lineBox').selectable(options);
     $('#source').selectable(options);
 
@@ -109,6 +111,7 @@ $(function()
     $('#source .cell').height($('#source').height());
     $('#programBox .cell').height($('#programBox').height() - 20);
 
+    /* Select all product line events. */
     $('#checkAllLines').click(function()
     {
         if($(this).is(':checked'))
@@ -156,6 +159,7 @@ $(function()
         })
     })
 
+    /* Select all product events. */
     $('#checkAllProducts').click(function()
     {
         var lineID = $('li.active').attr('lineid');
@@ -176,6 +180,7 @@ $(function()
         hiddenProject();
     })
 
+    /* Select all project events. */
     $('#checkAllProjects').click(function()
     {
         var lineID = $('li.active').attr('lineid');
@@ -204,6 +209,7 @@ $(function()
 
     setProgramByProduct($(':checkbox:checked[data-productid]'));
 
+    /* Select a product line event. */
     $('[name^=productLines]').change(function()
     {
         var value  = $(this).val();
@@ -228,6 +234,7 @@ $(function()
             $('[data-line=' + value + ']').prop('checked', false);
         }
 
+        /* Determine whether all product line buttons are selected. */
         var checked = true;
         $('[name^=productLines]').each(function()
         {
@@ -332,6 +339,7 @@ $(function()
         setProgramEnd(programEnd);
         setProjectPM();
 
+        /* Determine whether products and projects are selected. */
         if($('#checkAllLines').is(':checked'))
         {
             $('#checkAllProducts').prop('checked', true);
@@ -353,6 +361,7 @@ $(function()
             $('#checkAllProjects').prop('checked', false);
         }
 
+        /* Determine whether all products and all projects buttons are selected. */
         var checkedProduct = true;
         var productLine    = $('.nav li.active').attr('lineid');
         $("[id^='products\[" + productLine + "\]']").each(function()
@@ -362,6 +371,7 @@ $(function()
         $('#checkAllProducts').prop('checked', checkedProduct);
         $('#checkAllProjects').prop('checked', checkedProduct);
 
+        /* Determines whether to display an project related form control. */
         $('[id^=sprints]').each(function()
         {
             if($(this).prop('checked'))
@@ -468,6 +478,7 @@ $(function()
 
     hiddenProject();
 
+    /* Toggles data migration mode events. */
     $('input[name="projectType"]').change(function()
     {
         if($(this).val() == 'execution')
