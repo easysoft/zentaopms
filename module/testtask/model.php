@@ -1100,7 +1100,8 @@ class testtaskModel extends model
         {
             foreach($postData->steps as $stepID => $stepResult)
             {
-                if($stepResult != 'pass' and $stepResult != 'n/a')
+                if($stepResult != 'pass' and $stepResult != 'n/a') $caseResult = $stepResult;
+                if($stepResult == 'fail')
                 {
                     $caseResult = $stepResult;
                     break;
