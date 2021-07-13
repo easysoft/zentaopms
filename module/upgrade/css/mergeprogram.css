@@ -17,11 +17,11 @@ div.divider {vertical-align: middle;}
 .main-row .side-col .nav li div a {width: 80%; display: inline-block; padding: 8px 15px;}
 
 #lineBox > .cell {height: 700px;}
-#source > .cell {padding: 0; position: relative; height: 450px;}
+#source > .cell {padding: 0; position: relative; height: 700px;}
 #source > .cell > .lineGroup-title {position: absolute; top: 0; left: 0; right: 0; padding: 10px;}
 #source > .cell > .line-groups {position: absolute; top: 40px; left: 0; bottom: 0; right: 0; overflow: auto; padding: 0 10px 10px 10px;}
 #source .lineGroup-title .item {float: left;}
-#source .lineGroup-title .item:first-child {width: 176px;}
+#source .lineGroup-title .item:first-child {width: 170px; margin-left: 6px;}
 #source .lineGroup>div {display: table-cell;}
 #source .lineGroup {background: #f1f1f1; border-radius: 4px; display: table; width: 100%;}
 #source .lineGroup+.lineGroup {margin-top: 10px;}
