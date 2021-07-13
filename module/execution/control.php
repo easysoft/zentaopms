@@ -1899,6 +1899,8 @@ class execution extends control
                 }
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
             }
+
+            if(empty($kanbanGroup[$projectID])) continue;
             $projectCount++;
         }
         ksort($kanbanGroup);

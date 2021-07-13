@@ -1,8 +1,9 @@
 .main-table tbody > tr > td {border-bottom: 2px solid #fff;}
+.main-table .table {cursor: default;}
 .boards {display: table; table-layout: fixed; width: 100%; min-width: 140px;}
 .boards .board:not(:last-child), .board-project {border-right: 2px solid #fff;}
 .board {display: table-cell; width: 25%; padding: 10px; transition: background-color .2s, opacity .2s; vertical-align: top;}
-.board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: move; border-radius: 2px; background-color: #fff;}
+.board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: default; border-radius: 2px; background-color: #fff;}
 .board-item.disabled {cursor: not-allowed;}
 .board-item:hover {border-color: #ccc;}
 .board-item > .title {line-height: 25px; max-height: 40px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; word-break: break-all;}
