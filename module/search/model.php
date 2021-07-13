@@ -581,7 +581,8 @@ class searchModel extends model
             }
             elseif($module == 'issue')
             {
-                $issue = $this->dao->select('id,project,owner,lib')->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                $issueField = isset($this->config->maxVersion)? 'id,project,owner,lib' : 'id,project,owner';
+                $issue      = $this->dao->select($issueField)->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($issue->lib))
                 {
                     $module = 'assetlib';
@@ -599,7 +600,8 @@ class searchModel extends model
             }
             elseif($module == 'story')
             {
-                $story = $this->dao->select('id,type,lib')->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
+                $storyField = isset($this->config->maxVersion)? 'id,type,lib' : 'id,type';
+                $story      = $this->dao->select($storyField)->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($story->lib))
                 {
                     $module = 'assetlib';
@@ -609,7 +611,7 @@ class searchModel extends model
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
                 $record->extraType = isset($story->type) ? $story->type : '';
             }
-            elseif($module == 'risk' or $module == 'opportunity')
+            elseif(($module == 'risk' or $module == 'opportunity') and isset($this->config->maxVersion))
             {
                 $table  = $this->config->objectTables[$module];
                 $object = $this->dao->select('id,lib')->from($table)->where('id')->eq($record->objectID)->fetch();
@@ -621,7 +623,7 @@ class searchModel extends model
 
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
             }
-            elseif($module == 'doc')
+            elseif($module == 'doc' and isset($this->config->maxVersion))
             {
                 $doc = $this->dao->select('id,assetLib,assetLibType')->from(TABLE_DOC)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($doc->assetLib))
