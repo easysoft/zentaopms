@@ -37,7 +37,7 @@
           <td class='c-actions text-left'>
             <?php
             common::printIcon('gitlab', 'edit', "gitlabID=$id", '', 'list',  'edit');
-            common::printIcon('gitlab', 'binduser', "id=$id", '', 'list',  'group');
+            common::printIcon('gitlab', 'bindUser', "id=$id", '', 'list',  'group');
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn'");
             ?>
           </td>
