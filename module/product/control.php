@@ -958,6 +958,7 @@ class product extends control
      * @param  string $module
      * @param  string $method
      * @param  string $extra
+     * @param  string $from
      * @access public
      * @return void
      */
