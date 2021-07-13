@@ -35,7 +35,7 @@ $(function()
         }
     });
 
-    $(".check-all, [id^='productIDList']").click(function()
+    $('#productListForm').on('click', '.check-all, [id^="productIDList"]', function()
     {
         setTimeout(function()
         {
@@ -48,5 +48,5 @@ $(function()
             if(checkedProduct)  $('.check-all').addClass('checked');
             if(!checkedProduct) $('.check-all').removeClass('checked');
         }, 100)
-    })
+    });
 });
