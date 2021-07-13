@@ -13,6 +13,7 @@
 .table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
 .table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 7px;}
 .table-row .table-col .list-group .tab-content .tab-pane>ul>li span {padding-left: 5px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5);}
 .table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
 .table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
 .table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
