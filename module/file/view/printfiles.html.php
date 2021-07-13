@@ -30,7 +30,7 @@ $sessionString .= session_name() . '=' . session_id();
       var url            = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
       var width          = (windowWidth > imageWidth) ? ((imageWidth < windowWidth * 0.5) ? windowWidth * 0.5 : imageWidth) : windowWidth;
       var checkExtension = fileTitle.lastIndexOf('.' + extension) == (fileTitle.length - extension.length - 1);
-      if(fileTypes.indexOf(extension) >= 0 && checkExtension)
+      if(fileTypes.indexOf(extension) >= 0 && checkExtension && config.onlybody != 'yes')
       {
           $('<a>').modalTrigger({url: url, type: 'iframe', width: width}).trigger('click');
       }
@@ -80,7 +80,7 @@ $sessionString .= session_name() . '=' . session_id();
               }
               echo "<li title='{$uploadDate}'>" . html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
-              $objectType = zget($this->config->file->objectType, $file->objectType); 
+              $objectType = zget($this->config->file->objectType, $file->objectType);
               if(common::hasPriv($objectType, 'edit', $object))
               {
                   echo "<span class='right-icon'>&nbsp; ";
