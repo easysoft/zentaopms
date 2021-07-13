@@ -121,8 +121,8 @@ $lang->user->testTask2Him = 'Nhận yêu cầu';
 $lang->user->case2Him     = 'Nhận tình huống';
 $lang->user->caseByHim    = 'Tạo tình huống';
 
-$lang->user->errorDeny    = "Xin lỗi, truy cập của bạn tới <b>%s</b> of <b>%s</b> bị từ chối. Vui lòng liên lạc quản trị của bạn để nhận quyền. Click Trở lại.";
-$lang->user->errorView    = "Xin lỗi, truy cập của bạn xem <b>%s</b> bị từ chối. Vui lòng liên lạc quản trị của bạn để nhận quyền. Click Trở lại.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
+$lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
 $lang->user->loginFailed  = "Đăng nhập thất bại. Vui lòng kiểm tra tài khoản và mật khẩu của bạn.";
 $lang->user->lockWarning  = "Bạn có thể thử %s lần.";
 $lang->user->loginLocked  = "Vui lòng liên hệ với quản trị viên để mở khóa tài khoản của bạn hoặc thử lại %s phút sau.";

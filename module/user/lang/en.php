@@ -122,8 +122,8 @@ $lang->user->testTask2Him = 'RequestsAssignedTo%s';
 $lang->user->case2Him     = 'CasesAssignedTo%s';
 $lang->user->caseByHim    = 'CasesCreatedBy%s';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
-$lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
+$lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
 $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
