@@ -1874,7 +1874,7 @@ class execution extends control
     {
         $this->loadModel('project');
         $projects   = $this->project->getPairsByProgram(0, 'noclosed');
-        $executions = $this->project->getStats();
+        $executions = $this->project->getStats(0, 'all');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
