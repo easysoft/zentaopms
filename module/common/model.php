@@ -2013,7 +2013,11 @@ EOD;
                 $abbr = '';
                 foreach($wordsPinYin as $i => $wordPinyin)
                 {
-                    if($wordPinyin) $abbr .= $wordPinyin[0];
+                    if($wordPinyin)
+                    {
+                        $letter = $wordPinyin[0];
+                        if(preg_match('/\w/', $letter)) $abbr .= $letter;
+                    }
                 }
 
                 $allConverted[$item] = strtolower(join($wordsPinYin) . ' ' . $abbr);
