@@ -532,7 +532,7 @@ $lang->release->methodOrder[70] = 'changeStatus';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
-$lang->resource->execution->index             = 'index';
+//$lang->resource->execution->index             = 'index';
 $lang->resource->execution->view              = 'view';
 $lang->resource->execution->browse            = 'browse';
 $lang->resource->execution->create            = 'createExec';
@@ -571,7 +571,7 @@ $lang->resource->execution->linkStory         = 'linkStory';
 $lang->resource->execution->unlinkStory       = 'unlinkStory';
 $lang->resource->execution->batchUnlinkStory  = 'batchUnlinkStory';
 //$lang->resource->execution->updateOrder       = 'updateOrder';
-$lang->resource->execution->kanban            = 'kanbanAction';
+$lang->resource->execution->kanban            = 'kanban';
 $lang->resource->execution->printKanban       = 'printKanbanAction';
 $lang->resource->execution->tree              = 'treeAction';
 $lang->resource->execution->treeTask          = 'treeOnlyTask';
@@ -586,6 +586,7 @@ $lang->resource->execution->whitelist         = 'whitelist';
 $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 $lang->resource->execution->storyEstimate     = 'storyEstimate';
+$lang->resource->execution->executionkanban   = 'kanbanAction';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';
@@ -642,6 +643,7 @@ $lang->execution->methodOrder[245] = 'whitelist';
 $lang->execution->methodOrder[250] = 'addWhitelist';
 $lang->execution->methodOrder[255] = 'unbindWhitelist';
 $lang->execution->methodOrder[260] = 'storyEstimate';
+$lang->execution->methodOrder[265] = 'executionkanban';
 
 /* Task. */
 $lang->resource->task = new stdclass();
