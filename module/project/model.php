@@ -801,6 +801,7 @@ class projectModel extends model
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();
+                $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
                 if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
                 $projectProduct = new stdclass();
