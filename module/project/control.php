@@ -121,7 +121,7 @@ class project extends control
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->orderBy('id_asc')
+            ->orderBy('order_asc')
             ->fetchAll('id');
 
         $programs = $this->program->getPairs(true);
