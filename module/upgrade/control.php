@@ -211,10 +211,11 @@ class upgrade extends control
      *
      * @param  string $type
      * @param  int    $programID
+     * @param  string $projectType project|execution
      * @access public
      * @return void
      */
-    public function mergeProgram($type = 'productline', $programID = 0)
+    public function mergeProgram($type = 'productline', $programID = 0, $projectType = 'project')
     {
         $this->session->set('upgrading', true);
         $this->app->loadLang('program');
@@ -224,12 +225,14 @@ class upgrade extends control
 
         if($_POST)
         {
+            $projectType = isset($_POST['projectType']) ? $_POST['projectType'] : 'project';
             if($type == 'productline')
             {
                 $linkedProducts = array();
                 $linkedSprints  = array();
                 $unlinkSprints  = array();
                 $sprintProducts = array();
+                $singleProducts = array();
 
                 /* Compute checked products and sprints, unchecked products and sprints. */
                 foreach($_POST['products'] as $lineID => $products)
@@ -264,10 +267,18 @@ class upgrade extends control
                 else
                 {
                     /* Use historical projects as project upgrades. */
+                    $singleProducts = array_diff($linkedProducts, $sprintProducts);
                     foreach($linkedSprints as $sprint)
                     {
                         $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $sprintProducts[$sprint], array($sprint => $sprint));
                     }
+                }
+
+                /* When upgrading historical data as a project, handle products that are not linked with the project. */
+                if(!empty($singleProducts))
+                {
+                    $this->upgrade->computeProductAcl($singleProducts, $programID);
+                    $this->upgrade->computeObjectMembers($programID, 0, $singleProducts);
                 }
 
                 /* Process unlinked sprint and product. */
@@ -281,6 +292,8 @@ class upgrade extends control
                 $linkedProducts = array();
                 $linkedSprints  = array();
                 $unlinkSprints  = array();
+                $sprintProducts = array();
+                $singleProducts = array();
                 foreach($_POST['products'] as $productID)
                 {
                     $linkedProducts[$productID] = $productID;
@@ -289,7 +302,8 @@ class upgrade extends control
                     {
                         foreach($_POST['sprints'][$productID] as $sprintID)
                         {
-                            $linkedSprints[$sprintID] = $sprintID;
+                            $linkedSprints[$sprintID]  = $sprintID;
+                            $sprintProducts[$sprintID] = $productID;
                             unset($_POST['sprintIdList'][$productID][$sprintID]);
                         }
                         $unlinkSprints += $this->post->sprintIdList[$productID];
@@ -297,24 +311,57 @@ class upgrade extends control
                 }
 
                 /* Create Program. */
-                list($programID, $projectID, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
+                list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
                 /* Process productline. */
                 $this->dao->delete()->from(TABLE_MODULE)->where('`root`')->eq(0)->andWhere('`type`')->eq('line')->exec();
 
                 /* Process merged products and projects. */
-                $this->upgrade->processMergedData($programID, $projectID, $lineID, $linkedProducts, $linkedSprints);
+                if($_POST['projectType'] == 'execution')
+                {
+                    /* Use historical projects as execution upgrades. */
+                    $this->upgrade->processMergedData($programID, $projectList, $lineID, $linkedProducts, $linkedSprints);
+                }
+                else
+                {
+                    /* Use historical projects as project upgrades. */
+                    $singleProducts = array_diff($linkedProducts, $sprintProducts);
+                    foreach($linkedSprints as $sprint)
+                    {
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $sprintProducts[$sprint], array($sprint => $sprint));
+                    }
+                }
+
+                /* When upgrading historical data as a project, handle products that are not linked with the project. */
+                if(!empty($singleProducts))
+                {
+                    $this->upgrade->computeProductAcl($singleProducts, $programID);
+                    $this->upgrade->computeObjectMembers($programID, 0, $singleProducts);
+                }
             }
             elseif($type == 'sprint')
             {
                 $linkedSprints = $this->post->sprints;
 
                 /* Create Program. */
-                list($programID, $projectID, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
+                list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
-                $this->upgrade->processMergedData($programID, $projectID, $lineID, array(), $linkedSprints);
+                /* Process merged independent projects. */
+                if($_POST['projectType'] == 'execution')
+                {
+                    /* Use historical projects as execution upgrades. */
+                    $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
+                }
+                else
+                {
+                    /* Use historical projects as project upgrades. */
+                    foreach($linkedSprints as $sprint)
+                    {
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
+                    }
+                }
             }
             elseif($type == 'moreLink')
             {
@@ -327,7 +374,7 @@ class upgrade extends control
                 }
             }
 
-            die(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID"), 'parent'));
+            die(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID&projectType=$projectType"), 'parent'));
         }
 
         /* Get no merged product and project count. */
@@ -499,13 +546,14 @@ class upgrade extends control
         $programs = $this->upgrade->getProgramPairs();
         $currentProgramID = $programID ? $programID : key($programs);
 
-        $this->view->title     = $this->lang->upgrade->mergeProgram;
-        $this->view->programs  = $programs;
-        $this->view->programID = $programID;
-        $this->view->projects  = array('' => '') + $this->upgrade->getProjectPairsByProgram($currentProgramID);
-        $this->view->lines     = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noempty');
-        $this->view->groups    = $this->loadModel('group')->getPairs();
+        $this->view->title       = $this->lang->upgrade->mergeProgram;
+        $this->view->programs    = $programs;
+        $this->view->programID   = $programID;
+        $this->view->projects    = array('' => '') + $this->upgrade->getProjectPairsByProgram($currentProgramID);
+        $this->view->lines       = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noempty');
+        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->projectType = $projectType;
         $this->display();
     }
 

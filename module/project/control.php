@@ -117,29 +117,20 @@ class project extends control
         $programs        = array();
         $orderedProjects = array();
 
-        $objects =  $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('type')->in('program,project')
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)
-            ->andWhere('(id')->in($this->app->user->view->programs)
-            ->orWhere('id')->in($this->app->user->view->projects)
-            ->markRight(1)
-            ->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_asc')
             ->fetchAll('id');
 
-        foreach($objects as $objectID => $object)
+        $programs = $this->program->getPairs(true);
+
+        foreach($projects as $project)
         {
-            if($object->type == 'program')
-            {
-                $programs[$objectID] = $object->name;
-            }
-            else
-            {
-                $object->parent = $this->program->getTopByID($object->parent);
-                $orderedProjects[$object->parent][] = $object;
-                unset($objects[$object->id]);
-            }
+            $project->parent = $this->program->getTopByID($project->parent);
+            $orderedProjects[$project->parent][] = $project;
+            unset($projects[$project->id]);
         }
 
         $this->view->projectID = $projectID;

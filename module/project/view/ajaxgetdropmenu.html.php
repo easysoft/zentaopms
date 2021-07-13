@@ -25,6 +25,7 @@ $projectNames       = array();
 $myProjectsHtml     = '';
 $normalProjectsHtml = '';
 $closedProjectsHtml = '';
+$tabActive          = '';
 $iCharges           = 0;
 $others             = 0;
 $dones              = 0;
@@ -70,11 +71,15 @@ foreach($projects as $programID => $programProjects)
         {
             $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='text-muted $selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
+            if($selected == 'selected') $tabActive = 'myProject';
+
             $iCharges++;
         }
         else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
         {
             $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+
+            if($selected == 'selected') $tabActive = 'other';
 
             $others++;
         }
@@ -96,21 +101,18 @@ foreach($projects as $programID => $programProjects)
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
+      <?php if($iCharges): ?>
+      <?php $tabActive = ($tabActive == '' or $tabActive == 'myProject') ? 'myProject' : 'other';?>
       <ul class="nav nav-tabs">
-        <?php if($iCharges): ?>
-        <li class="active"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
-        <li><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
-        <?php endif;?>
+        <li class="<?php if($tabActive == 'myProject') echo 'active';?>"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
+        <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
       </ul>
-      <?php
-      $myProjectActive = $iCharges ? 'active' : '';
-      $otherActive     = $iCharges ? '' : 'active';
-      ?>
+      <?php endif;?>
       <div class="tab-content">
-        <div class="tab-pane <?php echo $myProjectActive;?>" id="myProject">
+        <div class="tab-pane <?php if($tabActive == 'myProject') echo 'active';?>" id="myProject">
           <?php echo $myProjectsHtml;?>
         </div>
-        <div class="tab-pane <?php echo $otherActive;?>" id="other">
+        <div class="tab-pane <?php if($tabActive == 'other') echo 'active';?>" id="other">
           <?php echo $normalProjectsHtml;?>
         </div>
       </div>
@@ -129,7 +131,7 @@ foreach($projects as $programID => $programProjects)
 $(function()
 {
     $('.nav-tabs li span').hide();
-    $('.nav-tabs li:first').find('span').show();
+    $('.nav-tabs li.active').find('span').show();
 
     $('.nav-tabs>li').click(function()
     {
