@@ -38,7 +38,7 @@
               <div class="board s-<?php echo $colStatus?>" data-type="<?php echo $colStatus;?>">
                 <?php if(!empty($executionList[$colStatus])):?>
                 <?php foreach($executionList[$colStatus] as $execution):?>
-                <div class='board-item' data-id='<?php echo $execution->id?>' id='task-<?php echo $execution->id?>' data-type='execution' <?php if(isset($execution->delay)) echo "style='border-left: 3px solid #ff0000';";?>>
+                <div class='board-item' data-id='<?php echo $execution->id?>' id='task-<?php echo $execution->id?>' data-type='execution' <?php if($execution->status == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid #ff0000';";?>>
                   <div class='table-row'>
                     <div class='table-col'>
                       <?php
