@@ -1482,6 +1482,7 @@ class execution extends control
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
+        $this->view->allProjects          = $this->project->getPairsByModel();
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
@@ -1521,6 +1522,7 @@ class execution extends control
         if($this->app->openApp == 'project')
         {
             $this->project->setMenu($this->session->project);
+            $this->view->project = $this->project->getById($this->session->project);
         }
         else
         {
@@ -1561,6 +1563,7 @@ class execution extends control
         $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
         $this->view->executions      = $executions;
+        $this->view->allProjects     = $this->project->getPairsByModel();
         $this->view->pmUsers         = $pmUsers;
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
@@ -2736,7 +2739,7 @@ class execution extends control
         {
             foreach($estimateInfo->estimate as $account => $estimate)
             {
-                if(!in_array($account, array_keys($team))) 
+                if(!in_array($account, array_keys($team)))
                 {
                     $team[$account] = new stdclass();
                     $team[$account]->account = $account;

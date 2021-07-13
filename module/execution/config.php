@@ -4,6 +4,7 @@ $config->execution->defaultWorkhours = '7.0';
 $config->execution->orderBy          = 'isDone,status,order_desc';
 $config->execution->maxBurnDay       = '31';
 $config->execution->weekend          = '2';
+$config->execution->ownerFields      = array('PO', 'PM', 'QD', 'RD');
 
 $config->execution->list = new stdclass();
 $config->execution->list->exportFields = 'id,name,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progress';
