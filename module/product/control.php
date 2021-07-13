@@ -587,11 +587,11 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         /* Get product lines by programs.*/
-        $programs = $this->program->getPairs();
+        $programs = $this->program->getTopPairs();
         $lines    = array();
-        foreach($programs as $programID => $program)
+        foreach($programs as $id => $program)
         {
-            $lines[$programID] = array('') + $this->product->getLinePairs($programID);
+            $lines[$id] = array('') + $this->product->getLinePairs($id);
         }
 
         $this->view->title         = $this->lang->product->batchEdit;
@@ -602,6 +602,7 @@ class product extends control
         $this->view->poUsers       = $poUsers;
         $this->view->qdUsers       = $qdUsers;
         $this->view->rdUsers       = $rdUsers;
+        $this->view->programID     = $programID;
         $this->view->programs      = array('') + $programs;
 
         unset($this->lang->product->typeList['']);
