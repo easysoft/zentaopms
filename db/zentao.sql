@@ -480,6 +480,7 @@ CREATE TABLE IF NOT EXISTS `zt_pipeline` (
   `account` varchar(30) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `token` varchar(255) DEFAULT NULL,
+  `private` char(32) DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
