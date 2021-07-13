@@ -1076,7 +1076,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'program_asc')
+    public function all($browseType = 'noclosed', $orderBy = 'order_asc')
     {
         /* Load module and set session. */
         $this->loadModel('program');
