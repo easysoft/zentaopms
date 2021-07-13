@@ -534,7 +534,7 @@ class docModel extends model
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
+
         if($doc->contentType == 'markdown') $doc->content = $this->post->content;
         if(!empty($doc->acl) and $doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 

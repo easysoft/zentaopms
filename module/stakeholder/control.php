@@ -103,7 +103,7 @@ class stakeholder extends control
     {
         if($_POST)
         {
-            $stakeholderList = $this->stakeholder->batchCreate();
+            $stakeholderList = $this->stakeholder->batchCreate($projectID);
             if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stakeholderList));
             die(js::locate($this->createLink('stakeholder', 'browse', "projectID=$projectID"), 'parent'));
         }

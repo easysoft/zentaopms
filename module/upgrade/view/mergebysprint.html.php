@@ -8,9 +8,11 @@
   <div class='table-col' id='source'>
     <div class='cell'>
       <div class='lineGroup-title'>
-        <div class='item'><strong><?php echo $lang->upgrade->project;?></strong></div>
+        <div class='item checkbox-primary' title="<?php echo $lang->selectAll?>">
+          <input type='checkbox' id='checkAllProjects'><label for='checkAllProjects'><strong><?php echo $lang->projectCommon;?></strong></label>
+        </div>
       </div>
-      <div class='line-groups'>
+      <div class='line-groups sprintGroup'>
         <?php foreach($noMergedSprints as $sprintID => $sprint):?>
         <?php echo html::checkBox("sprints", array($sprint->id => $sprint->name), $sprint->id, "data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
         <?php endforeach;?>

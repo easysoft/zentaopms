@@ -213,9 +213,10 @@ else
 
 $lang->custom->workingList['full'] = 'Full Management of Dev';
 
-$lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
-$lang->custom->saveFail = 'Failed to save!';
-$lang->custom->page     = ' Page';
+$lang->custom->menuTip          = 'Click to show/hide navigation bar. Drag to swtich display order.';
+$lang->custom->saveFail         = 'Failed to save!';
+$lang->custom->page             = ' Page';
+$lang->custom->changeClassicTip = 'The module of Program will be hidden, if you switch to Version 12.5.3 and below.';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';

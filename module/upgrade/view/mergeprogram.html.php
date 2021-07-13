@@ -35,7 +35,7 @@
         <table class='table table-hover table-form'>
           <thead>
             <tr>
-              <th><?php echo $lang->upgrade->project;?></th>
+              <th><?php echo $lang->projectCommon;?></th>
               <th class='divider'></th>
               <th class='w-p50'><?php echo $lang->upgrade->selectProject;?></th>
             </tr>
