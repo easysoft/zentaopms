@@ -624,7 +624,9 @@ class gitlabModel extends model
      * @param  int      $gitlabID 
      * @param  int      $projectID 
      * @param  int      $issueID 
-     * @param  object   $attribute 
+     * @param  string   $objectType 
+     * @param  object   $object
+     * @param  int      $objectID
      * @access public
      * @return object
      */
