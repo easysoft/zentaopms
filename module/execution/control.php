@@ -1329,7 +1329,7 @@ class execution extends control
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
         $this->view->acl             = $acl;
         $this->view->plan            = $plan;
         $this->view->name            = $name;
@@ -1882,9 +1882,9 @@ class execution extends control
             ->fetchGroup('root', 'account');
 
         $projectCount = 0;
-        $kanbanGroup  = array();
         $statusCount  = array();
         $myExecutions = array();
+        $kanbanGroup  = array();
         foreach(array_keys($projects) as $projectID)
         {
             foreach(array_keys($this->lang->execution->statusList) as $status)
@@ -1909,7 +1909,7 @@ class execution extends control
         krsort($kanbanGroup);
 
         $this->view->title        = $this->lang->execution->executionKanban;
-        $this->view->kanbanGroup  = array($myExecutions) + $kanbanGroup;
+        $this->view->kanbanGroup  = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
         $this->view->projects     = $projects;
         $this->view->projectCount = $projectCount;
         $this->view->statusCount  = $statusCount;
