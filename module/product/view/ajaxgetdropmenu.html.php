@@ -24,7 +24,7 @@
 .table-row .table-col .list-group .tab-content li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
 
 #swapper li.hide-in-search a:focus, #swapper li.hide-in-search a:hover {color: #838a9d; cursor: default;}
-#swapper li ul li a:focus, #swapper li ul li a:hover {background: #0c64eb; color: #fff;}
+#swapper li ul li a:focus, #swapper li ul li a:hover, .noProgram li a:focus, .noProgram li a:hover {background: #0c64eb; color: #fff;}
 </style>
 <?php
 $productCounts      = array();
@@ -65,8 +65,8 @@ foreach($products as $programID => $programProducts)
     }
     else
     {
-        if($productCounts[$programID]['myProduct']) $myProductsHtml     .= '<ul>';
-        if($productCounts[$programID]['others'])    $normalProductsHtml .= '<ul>';
+        if($productCounts[$programID]['myProduct']) $myProductsHtml     .= '<ul class="noProgram">';
+        if($productCounts[$programID]['others'])    $normalProductsHtml .= '<ul class="noProgram">';
     }
 
     foreach($programProducts as $index => $product)

@@ -23,7 +23,7 @@
 .table-row .table-col .list-group .tab-content li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
 
 #swapper li.hide-in-search>a:focus, #swapper li.hide-in-search>a:hover {color: #838a9d; cursor: default;}
-#swapper li ul li a:focus, #swapper li ul li a:hover {background: #0c64eb; color: #fff;}
+#swapper li ul li a:focus, #swapper li ul li a:hover, .noProject li a:focus, .noProject li a:hover {background: #0c64eb; color: #fff;}
 </style>
 <?php
 $executionCounts      = array();
@@ -63,8 +63,8 @@ foreach($executions as $projectID => $projectExecutions)
     }
     else
     {
-        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul>';
-        if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<ul>';
+        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul class="noProject">';
+        if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<ul class="noProject">';
     }
 
     foreach($projectExecutions as $index => $execution)
