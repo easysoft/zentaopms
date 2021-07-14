@@ -115,6 +115,7 @@ $lang->upgrade->dataMethod    = 'Data migration method';
 $lang->upgrade->begin         = 'Begin Date';
 $lang->upgrade->end           = 'End Date';
 $lang->upgrade->selectProject = 'The target project';
+$lang->upgrade->projectName   = 'Project Name';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';

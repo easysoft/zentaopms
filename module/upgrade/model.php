@@ -4310,7 +4310,7 @@ class upgradeModel extends model
                 $line->grade  = 1;
                 $line->name   = $data->lineName;
                 $line->root   = $programID;
-                $line->order = $maxOrder;
+                $line->order  = $maxOrder;
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();
                 $lineID = $this->dao->lastInsertID();
                 $path   = ",$lineID,";
@@ -4335,6 +4335,7 @@ class upgradeModel extends model
             /* Create a project. */
             $this->loadModel('action');
             $this->app->loadLang('doc');
+            $this->lang->project->name = $this->lang->upgrade->projectName;
             if($data->projectType == 'execution')
             {
                 /* Use historical projects as execution upgrades. */
@@ -4404,7 +4405,6 @@ class upgradeModel extends model
 
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->batchcheck('name', 'notempty')
-            ->check('name', 'unique', "deleted='0' and type = 'project'")
             ->exec();
         if(dao::isError()) return false;
 
