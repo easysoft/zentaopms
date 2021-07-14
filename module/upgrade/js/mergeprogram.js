@@ -490,6 +490,15 @@ $(function()
                 return false;
             }
         })
+
+        /* If the product line is selected, the product and project are selected by default. */
+        $('[id^=productLines]').each(function()
+        {
+            if($(this).prop('checked'))
+            {
+                $('[data-line=' + $(this).val() +']').prop('checked', true);
+            }
+        })
     })
 
     $('[name^=products]').change(function()
