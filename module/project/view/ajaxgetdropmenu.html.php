@@ -87,7 +87,12 @@ foreach($projects as $programID => $programProjects)
 
             $others++;
         }
-        else if($project->status == 'done' or $project->status == 'closed') $closedProjectsHtml .= html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+        else if($project->status == 'done' or $project->status == 'closed')
+        {
+            $closedProjectsHtml .= html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+
+            if($selected == 'selected') $tabActive = 'closed';
+        }
 
         /* If the programID is greater than 0, the project is the last one in the program, print the closed label. */
         if($programID and !isset($programProjects[$index + 1]))
@@ -105,8 +110,8 @@ foreach($projects as $programID => $programProjects)
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
+      <?php $tabActive = ($iCharges and ($tabActive == 'closed' or $tabActive == 'myProject')) ? 'myProject' : 'other';?>
       <?php if($iCharges): ?>
-      <?php $tabActive = ($tabActive == '' or $tabActive == 'myProject') ? 'myProject' : 'other';?>
       <ul class="nav nav-tabs">
         <li class="<?php if($tabActive == 'myProject') echo 'active';?>"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
         <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
