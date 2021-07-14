@@ -21,6 +21,8 @@
 .table-row .table-col .list-group .tab-content li ul {padding-left: 15px;}
 .table-row .table-col .list-group .tab-content li>a {margin-top: 5px;display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
 .table-row .table-col .list-group .tab-content li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
+
+#swapper li.hide-in-search>a:focus, #swapper li.hide-in-search>a:hover {color: #838a9d; cursor: default;}
 </style>
 <?php
 $projectCounts      = array();
@@ -75,7 +77,7 @@ foreach($projects as $programID => $programProjects)
 
         if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
         {
-            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='text-muted $selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myProject';
 
@@ -83,7 +85,7 @@ foreach($projects as $programID => $programProjects)
         }
         else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
         {
-            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='text-muted $selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 

@@ -13,7 +13,7 @@
 .table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
 .table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 7px;}
 .table-row .table-col .list-group .tab-content .tab-pane>ul>li.hide-in-search {position: relative;}
-.table-row .table-col .list-group .tab-content .tab-pane>ul>li>a {padding-left: 45px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li>label+a {padding-left: 45px;}
 .table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5); position: absolute; top: 0; left: 5px;}
 .table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
 .table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
@@ -21,6 +21,8 @@
 .table-row .table-col .list-group .tab-content li ul {padding-left: 15px;}
 .table-row .table-col .list-group .tab-content li>a {margin-top: 5px;display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
 .table-row .table-col .list-group .tab-content li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
+
+#swapper li.hide-in-search>a:focus, #swapper li.hide-in-search>a:hover {color: #838a9d; cursor: default;}
 </style>
 <?php
 $executionCounts      = array();
@@ -50,17 +52,26 @@ $executionsPinYin = common::convert2Pinyin($executionNames);
 
 foreach($executions as $projectID => $projectExecutions)
 {
-    $projectName = zget($projects, $projectID);
+    /* Adapt to the old version. */
+    if($projectID)
+    {
+        $projectName = zget($projects, $projectID);
 
-    if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->project->common . '</label><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a></li><li><ul>';
-    if($executionCounts[$projectID]['others']) $normalExecutionsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->project->common . '</label><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a></li><li><ul>';
+        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->project->common . '</label><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a></li><li><ul>';
+        if($executionCounts[$projectID]['others']) $normalExecutionsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->project->common . '</label><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a></li><li><ul>';
+    }
+    else
+    {
+        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul>';
+        if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<ul>';
+    }
 
     foreach($projectExecutions as $index => $execution)
     {
         $selected = $execution->id == $executionID ? 'selected' : '';
         if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
         {
-            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='text-muted $selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
+            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myExecution';
 
@@ -68,7 +79,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
         {
-            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='text-muted $selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
+            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
