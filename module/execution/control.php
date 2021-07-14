@@ -1882,9 +1882,9 @@ class execution extends control
             ->fetchGroup('root', 'account');
 
         $projectCount = 0;
-        $kanbanGroup  = array();
         $statusCount  = array();
         $myExecutions = array();
+        $kanbanGroup  = array();
         foreach(array_keys($projects) as $projectID)
         {
             foreach(array_keys($this->lang->execution->statusList) as $status)
@@ -1909,7 +1909,7 @@ class execution extends control
         krsort($kanbanGroup);
 
         $this->view->title        = $this->lang->execution->executionKanban;
-        $this->view->kanbanGroup  = array($myExecutions) + $kanbanGroup;
+        $this->view->kanbanGroup  = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
         $this->view->projects     = $projects;
         $this->view->projectCount = $projectCount;
         $this->view->statusCount  = $statusCount;
