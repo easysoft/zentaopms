@@ -727,6 +727,41 @@ class programModel extends model
     }
 
     /**
+     * Get parent PM by programIdList.
+     * 
+     * @param  array $programIdList
+     * @access public
+     * @return void
+     */
+    public function getParentPM($programIdList)
+    {
+        $objects = $this->dao->select('id, path, parent')->from(TABLE_PROGRAM)->where('id')->in($programIdList)->andWhere('acl')->ne('open')->fetchAll('id');
+
+        $parents = array();
+        foreach($objects as $object)
+        {   
+            if($object->parent == 0) continue;
+            foreach(explode(',', $object->path) as $objectID)
+            {   
+                if(empty($objectID) || $objectID == $object->id) continue;
+                $parents[$objectID][] = $object->id;
+            }   
+        }   
+
+        /* Get all parent PM.*/
+        $parentPM = $this->dao->select('id, PM')->from(TABLE_PROGRAM)->where('id')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
+
+        $parentPMGroup = array();
+        foreach($parentPM as $PM)
+        {   
+            $subPrograms = zget($parents, $PM->id, array());
+            foreach($subPrograms as $subProgramID) $parentPMGroup[$subProgramID][$PM->PM] = $PM->PM;
+        }   
+
+        return $parentPMGroup;
+    }
+
+    /**
      * Move project node.
      *
      * @param  int       $programID

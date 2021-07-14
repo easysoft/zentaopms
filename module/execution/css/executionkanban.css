@@ -15,3 +15,6 @@
 
 .s-doing .table-row .table-col:last-child, .c-progress {width: 30px;}
 .table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+.table-grouped > tbody > tr,
+.table-grouped > tbody > tr:hover {background: #fff !important;}
