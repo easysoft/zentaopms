@@ -18,7 +18,7 @@ $lang->automation->ztfSite     = 'ZTF Website';
 $lang->automation->ztfDownload = 'ZTF Download';
 $lang->automation->ztfManual   = 'ZTF Manual';
 
-$lang->automation->ztfFeature1 = 'ZTF solves problems for you.';
+$lang->automation->ztfFeature1 = 'ZTF solves problems for you';
 $lang->automation->ztfFeature2 = 'ZTF solves the following problems for you:';
 $lang->automation->ztfFeature3 = 'Management of use cases';
 $lang->automation->ztfFeature4 = 'Comparison of test results';

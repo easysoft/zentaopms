@@ -164,7 +164,7 @@ $lang->project->featureBar['wait']      = 'Waiting';
 $lang->project->featureBar['suspended'] = 'Suspended';
 $lang->project->featureBar['closed']    = 'Closed';
 
-$lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
+$lang->project->aclList['private'] = 'Private (For the project leader, team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
 
 $lang->project->acls['private'] = 'Private';
