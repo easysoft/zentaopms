@@ -129,6 +129,7 @@ class project extends control
         foreach($projects as $project)
         {
             $project->parent = $this->program->getTopByID($project->parent);
+            $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
             $orderedProjects[$project->parent][] = $project;
             unset($projects[$project->id]);
         }

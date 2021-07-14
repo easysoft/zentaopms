@@ -54,7 +54,7 @@ $projectsPinYin = common::convert2Pinyin($projectNames);
 foreach($projects as $programID => $programProjects)
 {
     /* Add the program name before project. */
-    if($programID)
+    if(isset($programs[$programID]))
     {
         $programName = zget($programs, $programID);
 
@@ -99,8 +99,8 @@ foreach($projects as $programID => $programProjects)
             if($selected == 'selected') $tabActive = 'closed';
         }
 
-        /* If the programID is greater than 0, the project is the last one in the program, print the closed label. */
-        if($programID and !isset($programProjects[$index + 1]))
+        /* If the project is the last one in the program, print the closed label. */
+        if(isset($programs[$programID]) and !isset($programProjects[$index + 1]))
         {
             if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '</ul></li>';
             if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '</ul></li>';
