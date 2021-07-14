@@ -1433,7 +1433,7 @@ class execution extends control
         $position[] = $this->lang->execution->edit;
 
         $allProducts     = array(0 => '');
-        $executionProsucts = $this->execution->getProducts($execution->project);
+        $executionProsucts = $this->execution->getProducts($execution->project, true, 'noclosed');
         foreach($executionProsucts as $product) $allProducts[$product->id] = $product->name;
 
         $linkedProducts = $this->execution->getProducts($execution->id);
