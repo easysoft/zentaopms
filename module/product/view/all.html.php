@@ -75,7 +75,7 @@
         $trClass  = 'is-top-level table-nest-child';
         $trAttrs .= " class='$trClass'";
         ?>
-          <?php if(isset($program['programName'])):?>
+          <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr <?php echo $trAttrs;?>>
             <td colspan="<?php echo $this->config->URAndSR ? 14 : 10;?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
@@ -110,6 +110,7 @@
           <?php unset($line['lineName']);?>
           <?php endif;?>
 
+          <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
           $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
@@ -124,7 +125,7 @@
               $trClass .= ' is-nest-child  table-nest';
               $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='line.{$path}'";
           }
-          elseif($product->program)
+          elseif($product->program and $this->config->systemMode == 'new')
           {
               $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
               $trClass .= ' is-nest-child  table-nest';
@@ -167,6 +168,7 @@
             </td>
           </tr>
           <?php endforeach;?>
+          <?php endif;?>
           <?php endforeach;?>
         <?php endforeach;?>
         </tbody>
