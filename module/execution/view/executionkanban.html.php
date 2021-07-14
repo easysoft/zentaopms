@@ -10,6 +10,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
+  <?php if(empty($kanbanGroup)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->execution->noExecutions;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <table class="table no-margin table-grouped text-center">
     <thead>
       <tr>
@@ -77,6 +84,7 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <style>
 <?php foreach(array_keys($lang->execution->kanbanColType) as $status):?>
