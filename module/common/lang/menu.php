@@ -227,7 +227,7 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 $lang->execution->homeMenu = new stdclass();
 //if($config->systemMode == 'new') $lang->execution->homeMenu->index = "$lang->dashboard|execution|index|";
 //$lang->execution->homeMenu->list = array('link' => "{$lang->execution->list}|execution|all|", 'alias' => 'create,batchedit');
-$lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
+if($config->systemMode == 'new') $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
 
 $lang->execution->menu = new stdclass();
 $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');

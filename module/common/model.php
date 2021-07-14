@@ -539,7 +539,7 @@ class commonModel extends model
         }
 
         if($config->systemMode == 'classic' and $openApp == 'execution') $icon = zget($lang->navIcons, 'project', '');
-        $link = helper::createLink($currentModule, $currentMethod);
+        $link = ($openApp == 'execution' and ($config->systemMode == 'classic')) ?  '' : helper::createLink($currentModule, $currentMethod);
         $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
