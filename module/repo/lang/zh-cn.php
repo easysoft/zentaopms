@@ -131,9 +131,9 @@ $lang->repo->scmList['Gitlab']     = 'Gitlab';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
 
-$lang->repo->gitlabHost    = 'Gitlab 地址';
-$lang->repo->gitlabToken   = 'Gitlab Token';
-$lang->repo->gitlabProject = '项目';
+$lang->repo->gitlabHost    = 'GitLab Sever';
+$lang->repo->gitlabToken   = 'GitLab Token';
+$lang->repo->gitlabProject = 'GitLab 项目';
 
 $lang->repo->placeholder = new stdclass;
 $lang->repo->placeholder->gitlabHost = '请填写gitlab访问地址';
