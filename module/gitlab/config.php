@@ -100,5 +100,9 @@ $config->gitlab->objectTables->story = TABLE_STORY;
 $config->gitlab->objectTables->task  = TABLE_TASK;
 $config->gitlab->objectTables->bug   = TABLE_BUG;
 
-$config->gitlab->objectTypes = array('', 'task', 'bug', 'story'); 
+$config->gitlab->objectTypes = array(); 
+$config->gitlab->objectTypes['']      = ''; 
+$config->gitlab->objectTypes['task']  = '任务'; 
+$config->gitlab->objectTypes['bug']   = 'bug'; 
+$config->gitlab->objectTypes['story'] = '需求'; 
 

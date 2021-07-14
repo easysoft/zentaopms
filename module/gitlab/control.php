@@ -276,7 +276,7 @@ class gitlab extends control
             {
                 if($executionID) 
                 {
-                    $objectType = $this->config->gitlab->objectTypes[$objectTypeList[$issueID]];
+                    $objectType = $objectTypeList[$issueID];
                     $issue = $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);
                     $issue->objectType    = $objectType;
                     $issue->objectID      = 0; // meet the required parameters for issueToZentaoObject.
