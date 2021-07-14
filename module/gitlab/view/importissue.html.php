@@ -15,6 +15,7 @@
   <div class="main-header">
     <h2><?php echo $lang->gitlab->importIssue;?></h2>
   </div>
+  <?php if($importable): ?>
   <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data'>
     <div class="table-responsive">
       <table class="table table-borderless">
@@ -46,8 +47,11 @@
             </td>
           </tr>
         </tfoot>
-      </table>
+     </table>
     </div>
-  </form>
+   </form>
+   <?php else:?>
+       <?php echo $lang->gitlab->noImportableIssues; ?>
+   <?php endif; ?> 
 </div>
 <?php include '../../common/view/footer.html.php';?>

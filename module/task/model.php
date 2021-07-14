@@ -464,46 +464,25 @@ class taskModel extends model
      */
     public function createTaskFromGitlabIssue($task, $executionID)
     {
-        foreach($task as $feild => $value) $_POST[$feild] = $value;
-        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        $requiredFields = trim($requiredFields, ',');
-        $task = fixer::input('post')
-            ->setDefault('execution', $executionID)
-            ->setDefault('estimate,left,story', 0)
-            ->setDefault('status', 'wait')
-            ->setIF($this->config->systemMode == 'new', 'project', $this->getProjectID($executionID))
-            ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
-            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setDefault('estStarted', '0000-00-00')
-            ->setDefault('deadline', '0000-00-00')
-            ->setIF(strpos($requiredFields, 'estStarted') !== false, 'estStarted', helper::isZeroDate($this->post->estStarted) ? '' : $this->post->estStarted)
-            ->setIF(strpos($requiredFields, 'deadline') !== false, 'deadline', helper::isZeroDate($this->post->deadline) ? '' : $this->post->deadline)
-            ->setIF(strpos($requiredFields, 'estimate') !== false, 'estimate', $this->post->estimate)
-            ->setIF(strpos($requiredFields, 'left') !== false, 'left', $this->post->left)
-            ->setIF(strpos($requiredFields, 'story') !== false, 'story', $this->post->story)
-            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
-            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
-            ->setDefault('openedBy',   $this->app->user->account)
-            ->setDefault('openedDate', helper::now())
-            ->cleanINT('execution,story,module')
-            ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
-            ->join('mailto', ',')
-            ->remove('objectTypeList,productList,executionList,gitlabID,gitlabProjectID,after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync')
-            ->add('version', 1)
-            ->get();
+        $task->version      = 1;
+        $task->openedBy     = $this->app->user->account;
+        $task->assignedDate = isset($task->assignedTo) ? helper::now() : 0;
+        $task->story        = 0;
+        $task->module       = 0;
+        $task->estimate     = 0;
+        $task->estStarted   = '0000-00-00';
+        $task->left         = 1;  
+        $task->type         = 'devel';  
 
-        $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id')
+        $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id,product')
              ->autoCheck()
-             ->batchCheck($requiredFields, 'notempty')
-             ->checkIF($task->estimate != '', 'estimate', 'float')
+             ->batchCheck($this->config->task->create->requiredFields, 'notempty')
              ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
              ->exec();
             
         if(dao::isError()) return false;
-
-        $taskID = $this->dao->lastInsertID();
-        return $taskID;
+        
+        return $this->dao->lastInsertID(); 
     }
 
     /**
@@ -999,9 +978,9 @@ class taskModel extends model
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
-        /* update story to gitlab issue. */
+        /* update task to gitlab issue. */
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
+        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
 
         if(!dao::isError())
         {
@@ -1310,6 +1289,10 @@ class taskModel extends model
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
+                
+                /* update task to gitlab issue. */
+                $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
+                if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
             }
             else
             {
@@ -1396,11 +1379,9 @@ class taskModel extends model
             ->check('left', 'float')
             ->where('id')->eq($taskID)->exec();
         
+        $task     = $this->getById($taskID);
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        $task     = $this->getByID($taskID);
-
-        // TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding.
-        $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
+        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1740,9 +1721,8 @@ class taskModel extends model
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
         if(!empty($relation))
         {
-            $singleIssue = new stdclass();
-            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
-            if($singleIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
+            $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+            if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
         }
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
@@ -1804,10 +1784,8 @@ class taskModel extends model
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
         if(!empty($relation))
         {
-            $singleIssue = new stdclass();
-            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
-
-            if($singleIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $task);
+            $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+            if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $task, $taskID);
         }
 
         if(!dao::isError())
@@ -1857,10 +1835,8 @@ class taskModel extends model
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
         if(!empty($relation))
         {
-            $singleIssue = new stdclass();
-            $singleIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->issueID);
-
-            if($singleIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
+            $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+            if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
         }
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -1929,7 +1905,7 @@ class taskModel extends model
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
 
         $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task);
+        if(!empty($relation)) $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }

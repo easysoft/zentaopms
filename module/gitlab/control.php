@@ -247,28 +247,31 @@ class gitlab extends control
         a($relations);exit;
         $issue = $this->gitlab->taskToIssue($gitlabID, $projectID, $task);
         $issue = $this->gitlab->apiCreateIssue($gitlabID, $projectID, $issue);
-        $this->gitlab->saveSyncedIssue('task', $task, $gitlabID, $issue);
+        $this->gitlab->saveIssueRelation('task', $task, $gitlabID, $issue);
         exit;
     }
 
     /**
      * Import gitlab issue to zentaopms. 
      * 
+     * @param  int    $repoID 
      * @access public
      * @return void
      */
-    public function importIssue()
+    public function importIssue($repoID)
     {
-        $productIDList  = explode(',', $this->get->product);
-        $gitlabID       = $this->get->gitlab;
-        $projectID      = $this->get->project;
-        
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $productIDList  = explode(',', $repo->product);
+        $gitlabID       = $repo->gitlab;
+        $projectID      = $repo->project;
         
         if($_POST)
         {
             $executionList  = $this->post->executionList;
             $objectTypeList = $this->post->objectTypeList;
             $productList    = $this->post->productList;
+
+            $failedIssues   = array();
             foreach($executionList as $issueID => $executionID)
             {
                 if($executionID) 
@@ -281,41 +284,54 @@ class gitlab extends control
                     $issue->updated_by_id = $issue->author->id; // here can be replaced by current zentao user.
 
                     $object = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
-                    if($objectType == 'task')
-                    {
-                        $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($object, $executionID);
-                    }
-
-                    if($objectType == 'bug')
-                    {
-                    }
-
-                    if($objectType == 'story')
-                    {
-                    }
-                    
-                    $object->id        = $objectID;
                     $object->product   = $productList[$issueID];
                     $object->execution = $executionID;
-                    $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
+                    $clonedObject      = clone $object;
 
+                    if($objectType == 'task')  $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($clonedObject, $executionID);
+                    if($objectType == 'bug')   $objectID = $this->loadModel('bug')->createBugFromGitlabIssue($clonedObject, $executionID);
+                    if($objectType == 'story') $objectID = $this->loadModel('story')->createStoryFromGitlabIssue($clonedObject, $executionID);
+
+                    if($objectID)
+                    { 
+                        $object->id = $objectID;
+                        $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
+                    }
+                    else
+                    {
+                        $failedIssues[] = $issue->iid;
+                    }
                 }
                 else
                 {
                     if($productList[$issueID] != 0) $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError, 'locate' => $this->server->http_referer));
                 }
             }
+
+            if($failedIssues) $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->importIssueWarn, 'locate' => $this->server->http_referer));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
         $savedIssueIDList = $this->dao->select('BID as issueID')->from(TABLE_RELATION)
                                  ->where('relation')->eq('gitlab')
-                                 ->andWhere('product')->in($productIDList)
+                                 ->andWhere('BType')->eq('issue')
+                                 ->andWhere('BVersion')->eq($projectID)
+                                 ->andWhere('extra')->eq($gitlabID)
                                  ->fetchAll('issueID');
-        $iids = '';
-        foreach($savedIssueIDList as $savedIssueID) $iids = $iids . $savedIssueID->issueID . ',';
-        $options = '&not[iids]=' . trim($iids, ',');
-        $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, $options); //TODO(dingguodong) when no issues here?
+
+        /* 'not[iids]' option in gitlab API has a issue when iids is too long. */ 
+        $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, '&state=opened'); 
+        foreach($gitlabIssues as $index => $issue)
+        {
+            foreach($savedIssueIDList as $savedIssueID)
+            {
+                if($issue->iid == $savedIssueID->issueID) 
+                {
+                    unset($gitlabIssues[$index]);
+                    break;
+                }
+            }
+        }
 
         $products = array();
         $products[] = '';
@@ -324,6 +340,7 @@ class gitlab extends control
             $products[$productID] = $this->loadModel("product")->getByID($productID)->name;
         }
 
+        $this->view->importable      = empty($gitlabIssues) ? false : true;
         $this->view->products        = $products;
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabProjectID = $projectID;

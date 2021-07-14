@@ -209,6 +209,9 @@ class repo extends control
             die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
         }
 
+        /* Delete project relation for gitlab type. */
+        $this->loadModel('gitlab')->deleteProjectRelation($repoID);
+
         $relationID = $this->dao->select('id')->from(TABLE_RELATION)->where('extra')->eq($repoID)->fetch();
         if($relationID)
         {

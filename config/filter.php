@@ -321,4 +321,5 @@ $filter->gitlab->importissue->get['gitlab']  = 'int';
 $filter->gitlab->importissue->get['product'] = 'int';
 $filter->gitlab->importissue->get['product'] = 'string';
 $filter->gitlab->importissue->get['project'] = 'int';
+$filter->gitlab->importissue->get['repo']    = 'int';
 

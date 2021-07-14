@@ -564,16 +564,25 @@ class gitlabModel extends model
         return json_decode(commonModel::http($url));
     }
 
+    /**
+     * Get gitlab issues by api. 
+     * 
+     * @param  int       $gitlabID 
+     * @param  int       $projectID 
+     * @param  string    $options 
+     * @access public
+     * @return object
+     */
     public function apiGetIssues($gitlabID, $projectID, $options = null)
     {
         // TODO(dingguodong) not pagination yet.
         if($options) 
         {
-            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=100' . $options;
+            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=20' . $options;
         }
         else
         {
-            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=100';
+            $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/issues") . '&per_page=20';
         }
         return json_decode(commonModel::http($url));
     }
@@ -592,7 +601,7 @@ class gitlabModel extends model
     public function apiCreateIssue($gitlabID, $projectID, $objectType, $objectID, $object)
     {
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
-
+        if(!isset($object->id)) $object->id = $objectID;
         $issue = $this->loadModel('gitlab')->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         if(isset($label->name)) $issue->labels = $label->name;
         foreach($this->config->gitlab->skippedFields->issueCreate[$objectType] as $field)
@@ -606,7 +615,7 @@ class gitlabModel extends model
         $response = json_decode(commonModel::http($url, $issue));
         if(!$response) return false;
 
-        return $this->saveSyncedIssue($objectType, $object, $gitlabID, $response);
+        return $this->saveIssueRelation($objectType, $object, $gitlabID, $response);
     }
 
     /**
@@ -619,8 +628,17 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object)
+    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object, $objectID = null)
     {
+        $oldObject = clone $object;
+        /* Get full object when desc is empty. */
+        if(!isset($object->description) || (isset($object->description) && $object->description == '')) $object = $this->loadModel($objectType)->getByID($objectID);
+        foreach($oldObject as $index => $attribute)
+        {
+            if($index != 'description') $object->$index = $attribute;
+        }
+        
+        if(!isset($object->id) && !empty($objectID)) $object->id = $objectID;
         $issue   = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issueID}");
@@ -869,6 +887,37 @@ class gitlabModel extends model
     }
 
     /**
+     * Delete project relation.
+     *
+     * condition: when user deleting a repo. 
+     * 
+     * @param  int    $repoID 
+     * @access public
+     * @return void
+     */
+    public function deleteProjectRelation($repoID)
+    {
+        $repo = $this->dao->select('product,path as gitlabProjectID,client as gitlabID')->from(TABLE_REPO)
+                     ->where('id')->eq($repoID)
+                     ->andWhere('deleted')->eq(0)
+                     ->fetch();
+        if(empty($repo)) return false;
+
+        $productIDList  = explode(',', $repo->product);
+        foreach($productIDList as $product)
+        {
+            $this->dao->delete()->from(TABLE_RELATION)
+                 ->where('product')->eq($product)
+                 ->andWhere('AType')->eq('gitlab')
+                 ->andWhere('BType')->eq('gitlabProject')
+                 ->andWhere('relation')->eq('interrated')
+                 ->andWhere('AID')->eq($repo->gitlabID)
+                 ->andWhere('BID')->eq($repo->gitlabProjectID)
+                 ->exec();
+        }
+    }
+
+    /**
      * Create webhook for zentao.
      * 
      * @param  int    $gitlabID 
@@ -919,7 +968,7 @@ class gitlabModel extends model
      * @access public
      * @return void
      */
-    public function saveSyncedIssue($objectType, $object, $gitlabID, $issue)
+    public function saveIssueRelation($objectType, $object, $gitlabID, $issue)
     {
         if(empty($issue->iid) or empty($issue->project_id)) return false;
 
@@ -957,7 +1006,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issue->iid}");
         commonModel::http($url, $data, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
-        $this->saveSyncedIssue($objectType, $object, $gitlabID, $issue);
+        $this->saveIssueRelation($objectType, $object, $gitlabID, $issue);
     }
 
     /**
@@ -1133,7 +1182,7 @@ class gitlabModel extends model
 
         /* Append this object link in zentao to gitlab issue description */
         $zentaoLink = common::getSysURL() . helper::createLink($objectType, 'view', "id={$object->id}");
-        $issue->description = $issue->description . "\n\n" . $zentaoLink;
+        if(strpos($issue->description, $zentaoLink) == false) $issue->description = $issue->description . "\n\n" . $zentaoLink;
 
         return $issue;
     }
@@ -1162,12 +1211,14 @@ class gitlabModel extends model
             list($gitlabField, $optionType, $options) = explode('|', $config);
             if(!isset($changes->$gitlabField) and $object->id != 0) continue;
             if($optionType == 'field') $value = $issue->$gitlabField;
-            if($optionType == 'field') $value = $issue->$gitlabField;
-            if($options == 'date') $value = date('Y-m-d', strtotime($value));
-            if($options == 'datetime') $value = date('Y-m-d H:i:s', strtotime($value));
+            if($optionType == 'fields') $value = $issue->$gitlabField;  // TODO(dingguodong) not implemented.
+            if($options == 'date') $value = $value ? date('Y-m-d', strtotime($value)) : '0000-00-00';
+            if($options == 'datetime') $value = $value ? date('Y-m-d H:i:s', strtotime($value)) : '0000-00-00 00:00:00';
             if($optionType == 'userPairs' and isset($issue->$gitlabField)) $value = zget($gitlabUsers, $issue->$gitlabField);
             if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
             if($value) $object->$zentaoField = $value;
+
+            if($gitlabField == "description") $object->$zentaoField .= "<br>" . $issue->web_url;
         }
         return $object;
     }

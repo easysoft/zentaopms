@@ -55,6 +55,7 @@ $config->gitlab->maps->bug = array();
 $config->gitlab->maps->bug['title']      = 'title|field|';
 $config->gitlab->maps->bug['steps']      = 'description|field|';
 $config->gitlab->maps->bug['openedDate'] = 'created_at|field|datetime';
+$config->gitlab->maps->bug['deadline']   = 'due_date|field|date';
 $config->gitlab->maps->bug['assignedTo'] = 'assignee_id|userPairs|';
 $config->gitlab->maps->bug['status']     = 'state|configItems|bugStateMap';
 $config->gitlab->maps->bug['pri']        = 'weight|configItems|bugWeightMap';
