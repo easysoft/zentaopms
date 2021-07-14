@@ -441,7 +441,7 @@ class project extends control
         $linkedBranches = array();
         $productPlans   = array(0 => '');
         $allProducts    = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts = $this->project->getProducts($projectID);
+        $linkedProducts = $this->project->getProducts($projectID, true, 'noclosed');
         $parentProject  = $this->program->getByID($project->parent);
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */

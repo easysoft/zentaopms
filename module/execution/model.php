@@ -1579,7 +1579,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getProducts($executionID, $withBranch = true)
+    public function getProducts($executionID, $withBranch = true, $status = 'all')
     {
         if(defined('TUTORIAL'))
         {
@@ -1592,6 +1592,7 @@ class executionModel extends model
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$executionID)
             ->andWhere('t2.deleted')->eq(0)
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi();
         if(!$withBranch) return $query->fetchPairs('id', 'name');
         return $query->fetchAll('id');
