@@ -1,7 +1,7 @@
 <?php
 $lang->gitlab = new stdclass;
 $lang->gitlab->common        = 'GitLab';
-$lang->gitlab->browse        = 'gitlab';
+$lang->gitlab->browse        = 'GitLab';
 $lang->gitlab->create        = 'Create GitLab';
 $lang->gitlab->edit          = 'Edit GitLab';
 $lang->gitlab->bindUser      = 'Bind User';
