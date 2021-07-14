@@ -1884,29 +1884,32 @@ class execution extends control
         $projectCount = 0;
         $kanbanGroup  = array();
         $statusCount  = array();
+        $myExecutions = array();
         foreach(array_keys($projects) as $projectID)
         {
             foreach(array_keys($this->lang->execution->statusList) as $status)
             {
                 if(!isset($statusCount[$status])) $statusCount[$status] = 0;
+
                 foreach($executions as $execution)
                 {
                     if($execution->status == $status)
                     {
-                        if(isset($teams[$execution->id][$this->app->user->account])) $kanbanGroup[0][$status][$execution->id] = $execution;
+                        if(isset($teams[$execution->id][$this->app->user->account])) $myExecutions[$status][$execution->id] = $execution;
                         if($execution->project == $projectID) $kanbanGroup[$projectID][$status][$execution->id] = $execution;
                     }
                 }
+
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
             }
 
             if(empty($kanbanGroup[$projectID])) continue;
             $projectCount++;
         }
-        ksort($kanbanGroup);
+        krsort($kanbanGroup);
 
         $this->view->title        = $this->lang->execution->executionKanban;
-        $this->view->kanbanGroup  = $kanbanGroup;
+        $this->view->kanbanGroup  = array($myExecutions) + $kanbanGroup;
         $this->view->projects     = $projects;
         $this->view->projectCount = $projectCount;
         $this->view->statusCount  = $statusCount;
