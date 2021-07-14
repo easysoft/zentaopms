@@ -59,8 +59,8 @@ js::set('dittoNotice', $dittoNotice);
             <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
             <th class='w-80px required'><?php echo $lang->typeAB;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'status',       ' hidden') . zget($requiredFields, 'status',       '', ' required');?>'><?php echo $lang->task->status;?></th>
-            <th class='w-90px<?php  echo zget($visibleFields, 'estStarted',   ' hidden') . zget($requiredFields, 'estStarted',   '', ' required');?>'><?php echo $lang->task->estStarted?></th>
-            <th class='w-90px<?php  echo zget($visibleFields, 'deadline',     ' hidden') . zget($requiredFields, 'deadline',     '', ' required');?>'><?php echo $lang->task->deadline?></th>
+            <th class='w-100px<?php  echo zget($visibleFields, 'estStarted',   ' hidden') . zget($requiredFields, 'estStarted',   '', ' required');?>'><?php echo $lang->task->estStarted?></th>
+            <th class='w-100px<?php  echo zget($visibleFields, 'deadline',     ' hidden') . zget($requiredFields, 'deadline',     '', ' required');?>'><?php echo $lang->task->deadline?></th>
             <th class='w-70px<?php  echo zget($visibleFields, 'pri',          ' hidden') . zget($requiredFields, 'pri',          '', ' required');?>'><?php echo $lang->task->pri;?></th>
             <th class='w-70px<?php  echo zget($visibleFields, 'estimate',     ' hidden') . zget($requiredFields, 'estimate',     '', ' required');?>'><?php echo $lang->task->estimateAB;?></th>
             <th class='w-70px<?php  echo zget($visibleFields, 'record',       ' hidden') . zget($requiredFields, 'record',       '', ' required');?>'><?php echo $lang->task->consumedThisTime;?></th>
