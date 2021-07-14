@@ -21,10 +21,7 @@ class jenkinsModel extends model
      */
     public function getByID($id)
     {
-        $jenkins = $this->dao->select('*')->from(TABLE_JENKINS)->where('id')->eq($id)->fetch();
-        $jenkins->password = base64_decode($jenkins->password);
-
-        return $jenkins;
+         return $this->loadModel('pipeline')->getByID($id);
     }
 
     /**
@@ -37,11 +34,7 @@ class jenkinsModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_JENKINS)
-            ->where('deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+         return $this->loadModel('pipeline')->getList('jenkins', $orderBy, $pager);
     }
 
     /**
@@ -51,11 +44,7 @@ class jenkinsModel extends model
      */
     public function getPairs()
     {
-        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)
-            ->where('deleted')->eq('0')
-            ->orderBy('id')->fetchPairs('id', 'name');
-        $jenkins = array('' => '') + $jenkins;
-        return $jenkins;
+       return $this->loadModel('pipeline')->getPairs('jenkins');
     }
 
     /**
@@ -94,21 +83,7 @@ class jenkinsModel extends model
      */
     public function create()
     {
-        $jenkins = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->skipSpecial('url,token,account,password')
-            ->get();
-
-        $jenkins->password = base64_encode($jenkins->password);
-
-        $this->dao->insert(TABLE_JENKINS)->data($jenkins)
-            ->batchCheck($this->config->jenkins->create->requiredFields, 'notempty')
-            ->batchCheck("url", 'URL')
-            ->autoCheck()
-            ->exec();
-        if(dao::isError()) return false;
-        return $this->dao->lastInsertId();
+       return $this->loadModel('pipeline')->create('jenkins');
     }
 
     /**
@@ -120,20 +95,6 @@ class jenkinsModel extends model
      */
     public function update($id)
     {
-        $jenkins = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
-            ->skipSpecial('url,token,account,password')
-            ->get();
-
-        $jenkins->password = base64_encode($jenkins->password);
-
-        $this->dao->update(TABLE_JENKINS)->data($jenkins)
-            ->batchCheck($this->config->jenkins->edit->requiredFields, 'notempty')
-            ->batchCheck("url", 'URL')
-            ->autoCheck()
-            ->where('id')->eq($id)
-            ->exec();
-        return !dao::isError();
+       return $this->loadModel('pipeline')->update($id);
     }
 }

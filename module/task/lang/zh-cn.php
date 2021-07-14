@@ -67,6 +67,7 @@ $lang->task->storyVersion     = "{$lang->SRCommon}版本";
 $lang->task->color            = '标题颜色';
 $lang->task->name             = '任务名称';
 $lang->task->type             = '任务类型';
+$lang->task->sync2Gitlab      = '同步到Gitlab';
 $lang->task->pri              = '优先级';
 $lang->task->mailto           = '抄送给';
 $lang->task->estimate         = '最初预计';

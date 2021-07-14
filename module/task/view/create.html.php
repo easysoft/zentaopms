@@ -15,6 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
+<?php js::set('gitlabProjects', $gitlabProjects);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -237,6 +238,13 @@
               <?php if($execution->acl != 'private') echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>
+        </tr>
+        <?php endif;?>
+        <?php if(!empty($gitlabProjects)):?>
+        <tr>
+          <th><?php echo $lang->task->sync2Gitlab;?></th>
+          <td><?php echo html::select('gitlab', $gitlabList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('gitlabProject', '', '', "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <tr id='after-tr'>

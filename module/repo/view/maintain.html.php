@@ -25,7 +25,7 @@
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->repo->id); ?></th>
           <th class='w-120px'><?php common::printOrderLink('SCM', $orderBy, $vars, $lang->repo->type); ?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
-          <th class='w-200px text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
+          <th class='w-400px text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
           <th class='text-left'><?php echo $lang->repo->path; ?></th>
           <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
@@ -45,10 +45,11 @@
           }
           ?>
           </td>
-          <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
+          <td class='text' title='<?php if(strtolower($repo->SCM) == "gitlab") echo $lang->repo->pathTipsForGitlab; else echo $repo->path; ?>'><?php echo $repo->path; ?></td>
           <td class='text-left c-actions'>
             <?php
-            common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list',  'edit');
+            common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
+            if(strtolower($repo->SCM) == "gitlab") common::printIcon('gitlab', 'importIssue', "repo={$repo->id}", '', 'list', 'link');  // disable button instead of hiding it.
             if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
             ?>
           </td>

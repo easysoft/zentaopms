@@ -557,6 +557,13 @@ class bug extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
+        /* Set gitlabProjects. */
+        $allGitlabs     = $this->loadModel('gitlab')->getPairs();
+        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
+        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
+        $this->view->gitlabList     = $allGitlabs;
+        $this->view->gitlabProjects = $gitlabProjects;
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
@@ -1457,6 +1464,13 @@ class bug extends control
             $bugs = $this->bug->getByList($bugIDList);
             foreach($bugs as $bugID => $bug)
             {
+                $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
+                if(!empty($relation))
+                {
+                    $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+                    if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
+                }
+
                 if($bug->status != 'resolved')
                 {
                     if($bug->status != 'closed') $skipBugs[$bugID] = $bugID;
@@ -1540,6 +1554,10 @@ class bug extends control
         }
         else
         {
+            /* Delete related issue in gitlab. */
+            $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
+            if(!empty($relation)) $this->loadModel('gitlab')->deleteIssue('bug', $bugID, $relation->issueID);
+ 
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0)
             {

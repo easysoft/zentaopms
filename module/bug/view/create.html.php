@@ -26,6 +26,7 @@ js::set('isStepsTemplate', $isStepsTemplate);
 js::set('oldProjectID', $projectID);
 js::set('blockID', $blockID);
 js::set('moduleID', $moduleID);
+js::set('gitlabProjects', $gitlabProjects);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
@@ -312,6 +313,13 @@ js::set('moduleID', $moduleID);
              <?php endif;?>
           </tr>
           <?php endif;?>
+        <?php if(!empty($gitlabProjects)):?>
+        <tr>
+          <th><?php echo $lang->task->sync2Gitlab;?></th>
+          <td><?php echo html::select('gitlab', $gitlabList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('gitlabProject', '', '', "class='form-control chosen'");?></td>
+        </tr>
+        <?php endif;?>
           <tr class='hide'>
             <th><?php echo $lang->bug->status;?></th>
             <td><?php echo html::hidden('status', 'active');?></td>

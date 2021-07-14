@@ -517,7 +517,7 @@ class gitlab
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
 
-        if(empty($count)) $count = 100;
+        if(empty($count)) $count = 1;
         $params = array();
         $params['ref_name'] = $branch;
         $params['per_page'] = $count;
@@ -610,31 +610,32 @@ class gitlab
     public function getFilesByCommit($revision)
     {
         if(!scm::checkRevision($revision)) return array();
-        $api   = "commits/{$revision}/diff";
-        $files = array();
+        $api  = "commits/{$revision}/diff";
+        $params = new stdclass;
+        $params->page     = 1;
+        $params->per_page = 100;
 
-        $params = array();
-        $params['per_page'] = '100';
-        for($page = 1; true; $page ++)
+        $allResults = array();
+        while(true)
         {
-            $params['page'] = $page;
-            $allResults = $this->fetch($api, $params);
-            if(empty($allResults)) break;
+            $results = $this->fetch($api, $params);
+            $params->page ++;
+            $allResults = $allResults + $results;
+            if(count($results) < 100) break;
+        }
 
-            foreach($allResults as $row)
-            {
-                $file = new stdclass();
-                $file->revision = $revision;
-                $file->path     = '/' . $row->new_path;
-                $file->type     = 'file';
+        foreach($allResults as $row)
+        {
+            $file = new stdclass();
+            $file->revision = $revision;
+            $file->path     = '/' . $row->new_path;
+            $file->type     = 'file';
 
-                $file->action   = 'M';
-                if($row->new_file) $file->action = 'A';
-                if($row->renamed_file) $file->action = 'R';
-                if($row->deleted_file) $file->action = 'D';
-                $files[] = $file;
-            }
-            if(count($allResults) < $params['per_page']) break;
+            $file->action   = 'M';
+            if($row->new_file) $file->action = 'A';
+            if($row->renamed_file) $file->action = 'R';
+            if($row->deleted_file) $file->action = 'D';
+            $files[] = $file;
         }
 
         return $files;
