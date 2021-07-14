@@ -1,4 +1,5 @@
-<?php /**
+<?php
+/**
  * ZenTaoPHP的baseControl类。
  * The baseControl class file of ZenTaoPHP framework.
  *
@@ -892,7 +893,11 @@ class baseControl
         if(helper::isAjaxRequest() or $this->viewType == 'json')
         {
             print(json_encode($data));
-            die(helper::removeUTF8Bom(ob_get_clean()));
+            $response = helper::removeUTF8Bom(ob_get_clean());
+
+            if(defined('RUN_MODE') and RUN_MODE == 'api') return print($response);
+
+            die($response);
         }
 
         /**
@@ -927,6 +932,7 @@ class baseControl
      * @param   string         $methodName    method name
      * @param   string|array   $vars          the params passed, can be array(key=>value) or key1=value1&key2=value2
      * @param   string         $viewType      the view type
+     * @param   string         $onlybody      remove header and footer or not in iframe
      * @access  public
      * @return  string the link string.
      */

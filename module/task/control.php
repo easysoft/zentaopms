@@ -99,7 +99,7 @@ class task extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             /* if the count of tasksID is 1 then check exists. */
@@ -110,7 +110,7 @@ class task extends control
                 {
                     $response['locate']  = $this->createLink('task', 'view', "taskID={$taskID['id']}");
                     $response['message'] = sprintf($this->lang->duplicate, $this->lang->task->common);
-                    $this->send($response);
+                    return $this->send($response);
                 }
             }
 
@@ -134,48 +134,48 @@ class task extends control
             $this->executeHooks($taskID);
 
             /* Return task id when call the API. */
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
 
             /* If link from no head then reload. */
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             /* Locate the browser. */
             if($this->app->getViewType() == 'xhtml')
             {
                 $taskLink  = $this->createLink('task', 'view', "taskID=$taskID");
                 $response['locate'] = $taskLink;
-                $this->send($response);
+                return $this->send($response);
             }
 
             if($this->post->after == 'continueAdding')
             {
                 $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
                 $response['locate']  = $this->createLink('task', 'create', "executionID=$executionID&storyID={$this->post->story}&moduleID=$moduleID");
-                $this->send($response);
+                return $this->send($response);
             }
             elseif($this->post->after == 'toTaskList')
             {
                 setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
-                $this->send($response);
+                return $this->send($response);
             }
             elseif($this->post->after == 'toStoryList')
             {
                 $response['locate'] = $storyLink;
-                $this->send($response);
+                return $this->send($response);
             }
             else
             {
                 $response['locate'] = $taskLink;
-                $this->send($response);
+                return $this->send($response);
             }
         }
 
-        $users             = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $members           = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
-        $showAllModule     = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $moduleOptionMenu  = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $members          = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $showAllModule    = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
+        $moduleOptionMenu = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Fix bug #3381. When the story module is the root module. */
         if($storyID)
@@ -212,7 +212,7 @@ class task extends control
         $position[] = html::a($taskLink, $execution->name);
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->create;
-        
+
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($execution->type == 'ops') unset($customFields['story']);
@@ -227,17 +227,17 @@ class task extends control
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->showAllModule = $showAllModule;
 
-        $this->view->title             = $title;
-        $this->view->position          = $position;
-        $this->view->execution         = $execution;
-        $this->view->executions        = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
-        $this->view->task              = $task;
-        $this->view->users             = $users;
-        $this->view->stories           = $stories;
-        $this->view->testStoryIdList   = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
-        $this->view->members           = $members;
-        $this->view->blockID           = $blockID;
-        $this->view->moduleOptionMenu  = $moduleOptionMenu;
+        $this->view->title            = $title;
+        $this->view->position         = $position;
+        $this->view->execution        = $execution;
+        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
+        $this->view->task             = $task;
+        $this->view->users            = $users;
+        $this->view->stories          = $stories;
+        $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
+        $this->view->members          = $members;
+        $this->view->blockID          = $blockID;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
 
         $this->display();
     }
@@ -294,17 +294,17 @@ class task extends control
         if(!empty($_POST))
         {
             $mails = $this->task->batchCreate($executionID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $taskIDList = array();
             foreach($mails as $mail) $taskIDList[] = $mail->taskID;
 
             /* Return task id list when call the API. */
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
 
             /* Locate the browser. */
-            if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
+            if(!empty($iframe)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
         }
 
         /* Set Custom*/
@@ -380,7 +380,7 @@ class task extends control
             if($comment == false)
             {
                 $changes = $this->task->update($taskID);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
                 $files = $this->loadModel('file')->saveUpload('task', $taskID);
             }
 
@@ -407,9 +407,10 @@ class task extends control
                     }
                 }
             }
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                die(array('status' => 'success', 'data' => $taskID));
+                return $this->send(array('status' => 'success', 'data' => $taskID));
             }
             else
             {
@@ -560,7 +561,10 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->assign($taskID);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(dao::isError()) die(js::error(dao::getError()));
+
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
@@ -647,7 +651,7 @@ class task extends control
             {
                 if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account) continue;
                 if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
-                
+
                 $changes = $this->task->assign($taskID);
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
@@ -754,7 +758,12 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->start($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+
+            if(dao::isError())
+            {
+                if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                die(js::error(dao::getError()));
+            }
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -909,7 +918,11 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->finish($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                die(js::error(dao::getError()));
+            }
             $files = $this->loadModel('file')->saveUpload('task', $taskID);
 
             $task = $this->task->getById($taskID);
@@ -938,7 +951,7 @@ class task extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                die(array('status' => 'success', 'data' => $taskID));
+                return $this->send(array('result' => 'success', 'data' => $taskID));
             }
             else
             {
@@ -1275,11 +1288,11 @@ class task extends control
     public function delete($executionID, $taskID, $confirm = 'no')
     {
         $task = $this->task->getById($taskID);
-        if($task->parent < 0) die(js::alert($this->lang->task->cannotDeleteParent));
+        if($task->parent < 0) return print(js::alert($this->lang->task->cannotDeleteParent));
 
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->task->confirmDelete, inlink('delete', "executionID=$executionID&taskID=$taskID&confirm=yes")));
+            return print(js::confirm($this->lang->task->confirmDelete, inlink('delete', "executionID=$executionID&taskID=$taskID&confirm=yes")));
         }
         else
         {
@@ -1298,7 +1311,7 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            die(js::locate($this->session->taskList, 'parent'));
+            return print(js::locate($this->session->taskList, 'parent'));
         }
     }
 
