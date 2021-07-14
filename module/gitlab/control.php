@@ -339,7 +339,7 @@ class gitlab extends control
         {
             $products[$productID] = $this->loadModel("product")->getByID($productID)->name;
         }
-
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->importIssue;
         $this->view->importable      = empty($gitlabIssues) ? false : true;
         $this->view->products        = $products;
         $this->view->gitlabID        = $gitlabID;
