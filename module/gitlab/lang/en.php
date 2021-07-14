@@ -1,14 +1,14 @@
 <?php
 $lang->gitlab = new stdclass;
 $lang->gitlab->common        = 'GitLab';
-$lang->gitlab->browse        = 'GitLab';
+$lang->gitlab->browse        = 'GitLab Browse';
 $lang->gitlab->create        = 'Create GitLab';
 $lang->gitlab->edit          = 'Edit GitLab';
 $lang->gitlab->bindUser      = 'Bind User';
 $lang->gitlab->webhook       = 'webhook';
 $lang->gitlab->bindProduct   = 'Import Product';
 $lang->gitlab->importIssue   = 'Import Issue';
-$lang->gitlab->delete        = 'Delete';
+$lang->gitlab->delete        = 'Delete GitLab';
 $lang->gitlab->confirmDelete = 'Do you want to delete this GitLab server?';
 $lang->gitlab->gitlabAccount = 'GitLab Account';
 $lang->gitlab->zentaoAccount = 'Zentao Account';
