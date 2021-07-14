@@ -1329,7 +1329,7 @@ class execution extends control
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
         $this->view->acl             = $acl;
         $this->view->plan            = $plan;
         $this->view->name            = $name;

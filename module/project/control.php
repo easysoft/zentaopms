@@ -366,7 +366,7 @@ class project extends control
         $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
         $this->view->copyProjects    = $this->project->getPairsByModel();
         $this->view->products        = $products;
-        $this->view->allProducts     = array('0' => '') + $this->program->getProductPairs($programID);
+        $this->view->allProducts     = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed');
         $this->view->productPlans    = array('0' => '') + $productPlans;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->programID       = $programID;
