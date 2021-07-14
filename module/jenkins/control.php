@@ -111,7 +111,7 @@ class jenkins extends control
     {
         if($confim != 'yes') die(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $this->jenkins->delete(TABLE_JENKINS, $id);
+        $this->jenkins->delete(TABLE_PIPELINE, $id);
         die(js::reload('parent'));
     }
 

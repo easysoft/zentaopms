@@ -1569,6 +1569,7 @@ class executionModel extends model
      * Get products of a execution.
      *
      * @param  int    $executionID
+     * @param  bool   $withBranch 
      * @access public
      * @return array
      */

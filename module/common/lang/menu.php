@@ -227,7 +227,7 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 $lang->execution->homeMenu = new stdclass();
 //if($config->systemMode == 'new') $lang->execution->homeMenu->index = "$lang->dashboard|execution|index|";
 //$lang->execution->homeMenu->list = array('link' => "{$lang->execution->list}|execution|all|", 'alias' => 'create,batchedit');
-$lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
+if($config->systemMode == 'new') $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
 
 $lang->execution->menu = new stdclass();
 $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
@@ -319,12 +319,14 @@ $lang->devops->menu = new stdclass();
 $lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment');
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
+$lang->devops->menu->gitlab   = array('link' => "Gitlab|gitlab|browse", 'alias' => 'create,edit');
 $lang->devops->menu->maintain = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
 $lang->devops->menu->rules    = array('link' => "{$lang->devops->rules}|repo|setrules");
 
 $lang->devops->menuOrder[5]  = 'code';
 $lang->devops->menuOrder[10] = 'compile';
 $lang->devops->menuOrder[15] = 'jenkins';
+$lang->devops->menuOrder[14] = 'gitlab';
 $lang->devops->menuOrder[20] = 'maintain';
 $lang->devops->menuOrder[25] = 'rules';
 
@@ -521,6 +523,7 @@ $lang->navGroup->devops  = 'devops';
 $lang->navGroup->repo    = 'devops';
 $lang->navGroup->job     = 'devops';
 $lang->navGroup->jenkins = 'devops';
+$lang->navGroup->gitlab  = 'devops';
 $lang->navGroup->compile = 'devops';
 $lang->navGroup->ci      = 'devops';
 $lang->navGroup->svn     = 'devops';

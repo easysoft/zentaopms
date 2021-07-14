@@ -115,6 +115,29 @@ $config->charsets['fr']['GBK']      = 'GBK';
 $config->charsets['vi']['utf-8']    = 'UTF-8';
 $config->charsets['vi']['GBK']      = 'GBK';
 
+$config->openMethods = array();
+$config->openMethods[] = 'gitlab.webhook';
+$config->openMethods[] = 'upgrade.ajaxupdatefile';
+$config->openMethods[] = 'user.login';
+$config->openMethods[] = 'user.logout';
+$config->openMethods[] = 'user.deny';
+$config->openMethods[] = 'user.reset';
+$config->openMethods[] = 'user.refreshrandom';
+$config->openMethods[] = 'api.getsessionid';
+$config->openMethods[] = 'misc.checktable';
+$config->openMethods[] = 'misc.qrcode';
+$config->openMethods[] = 'misc.about';
+$config->openMethods[] = 'misc.checkupdate';
+$config->openMethods[] = 'misc.ping';
+$config->openMethods[] = 'misc.captcha';
+$config->openMethods[] = 'sso.login';
+$config->openMethods[] = 'sso.logout';
+$config->openMethods[] = 'sso.bind';
+$config->openMethods[] = 'sso.gettodolist';
+$config->openMethods[] = 'file.read';
+$config->openMethods[] = 'index.changelog';
+$config->openMethods[] = 'my.preference';
+
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
@@ -185,7 +208,7 @@ define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
-define('TABLE_JENKINS',       '`' . $config->db->prefix . 'jenkins`');
+define('TABLE_PIPELINE',       '`' . $config->db->prefix . 'pipeline`');
 define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 
@@ -231,5 +254,5 @@ $config->objectTables['team']        = TABLE_TEAM;
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->scrum     = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'qa', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'doc', 'report', 'repo', 'svn', 'git', 'search', 'tree', 'file', 'jenkins', 'job', 'ci', 'branch');
+$config->programPriv->scrum     = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'qa', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'doc', 'report', 'repo', 'svn', 'git', 'search', 'tree', 'file', 'jenkins', 'gitlab', 'job', 'ci', 'branch');
 $config->programPriv->waterfall = $config->programPriv->scrum + array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'milestone', 'design', 'issue', 'risk', 'auditplan', 'nc', 'cm', 'pssp');

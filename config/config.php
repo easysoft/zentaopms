@@ -170,6 +170,10 @@ if(file_exists($myConfig)) include $myConfig;
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
 
+/* API路由配置。API route settings. */
+$routesConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'routes.php';
+if(file_exists($routesConfig)) include $routesConfig;
+
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;

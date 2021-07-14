@@ -1697,6 +1697,7 @@ class userModel extends model
         $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
             ->where('objectType')->eq('project')
             ->andWhere('objectID')->in(array_keys($projectProducts))
+            ->andWhere('deleted')->eq(0)
             ->query();
 
         $stakeholderGroups = array();
