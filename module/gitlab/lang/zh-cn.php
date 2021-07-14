@@ -5,6 +5,7 @@ $lang->gitlab->browse        = '浏览gitlab';
 $lang->gitlab->create        = '添加gitlab';
 $lang->gitlab->edit          = '编辑gitlab';
 $lang->gitlab->bindUser      = '绑定用户';
+$lang->gitlab->webhook       = 'webhook';
 $lang->gitlab->bindProduct   = '关联产品';
 $lang->gitlab->importIssue   = '关联issue';
 $lang->gitlab->delete        = '删除';
