@@ -2,18 +2,19 @@
 <?php js::set('method', $method);?>
 <?php js::set('extra', $extra);?>
 <style>
-.table-row .table-col .list-group .nav-tabs {position: sticky; top: 0; background: #fff;}
+.table-row .table-col .list-group .nav-tabs {position: sticky; top: 0; background: #fff; z-index: 950;}
 .table-row .table-col .list-group .nav-tabs>li>span {display: inline-block; margin-left: -6px;}
 .table-row .table-col .list-group .nav-tabs>li>a {padding: 8px 10px; display: inline-block}
 .table-row .table-col .list-group .nav-tabs>li.active>a, .nav-tabs>li.active>span {font-weight: 700; color: #0c64eb;}
 .table-row .table-col .list-group .nav-tabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
 
-.table-row .table-col .list-group .tab-content {margin-top: 10px;}
+.table-row .table-col .list-group .tab-content {margin-top: 10px; z-index: 900;}
 .table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
 .table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 7px;}
-.table-row .table-col .list-group .tab-content .tab-pane>ul>li span {padding-left: 5px;}
-.table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5);}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li.hide-in-search {position: relative;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li a {padding-left: 5px; padding-right: 45px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5); position: absolute; top: 0; right: 0;}
 .table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
 .table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
 .table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
@@ -50,7 +51,7 @@ $executionsPinYin = common::convert2Pinyin($executionNames);
 foreach($executions as $projectID => $projectExecutions)
 {
 
-    if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($projects, $projectID) . '</span> <label class="label">' . $lang->project->common . '</label></li><li><ul>';
+    if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul><li class="hide-in-search"><a class="text-muted">' . zget($projects, $projectID) . '</a> <label class="label">' . $lang->project->common . '</label></li><li><ul>';
     if($executionCounts[$projectID]['others']) $normalExecutionsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($projects, $projectID) . '</span> <label class="label">' . $lang->project->common . '</label></li><li><ul>';
 
     foreach($projectExecutions as $index => $execution)
