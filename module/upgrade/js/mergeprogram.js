@@ -221,9 +221,9 @@ $(function()
         /* If the project is checked, the relevant form will be displayed according to the selected mode. */
         $('[id^=sprints]').each(function()
         {
+            hiddenProject();
             if($(this).prop('checked'))
             {
-                hiddenProject();
                 var projectType = $('input[name="projectType"]:checked').val();
                 if(projectType == 'project')
                 {

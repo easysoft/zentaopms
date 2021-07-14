@@ -89,6 +89,8 @@ foreach($products as $programID => $programProducts)
         else if($product->status == 'closed')
         {
             $closedProductsHtml .= html::a($linkHtml, $productName, '', "class='$selected' title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
+
+            if($selected == 'selected') $tabActive = 'closed';
         }
 
         /* If the programID is greater than 0, the product is the last one in the program, print the closed label. */
@@ -106,8 +108,8 @@ foreach($products as $programID => $programProducts)
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
+      <?php $tabActive = ($iCharges and ($tabActive == 'closed' or $tabActive == 'myProduct')) ? 'myProduct' : 'other';?>
       <?php if($iCharges): ?>
-      <?php $tabActive = ($tabActive == '' or $tabActive == 'myProduct') ? 'myProduct' : 'other';?>
       <ul class="nav nav-tabs">
         <li class="<?php if($tabActive == 'myProduct') echo 'active';?>"><?php echo html::a('#myProduct', $lang->product->mine, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
         <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->product->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>

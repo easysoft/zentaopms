@@ -73,7 +73,12 @@ foreach($executions as $projectID => $projectExecutions)
 
             $others++;
         }
-        else if($execution->status == 'done' or $execution->status == 'closed') $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+        else if($execution->status == 'done' or $execution->status == 'closed')
+        {
+            $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+
+            if($selected == 'selected') $tabActive = 'closed';
+        }
 
         /* If the execution is the last one in the project, print the closed label. */
         if(!isset($projectExecutions[$index + 1]))
@@ -90,8 +95,8 @@ foreach($executions as $projectID => $projectExecutions)
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
+      <?php $tabActive = ($iCharges and ($tabActive == 'closed' or $tabActive == 'myExecution')) ? 'myExecution' : 'other';?>
       <?php if($iCharges): ?>
-      <?php $tabActive = ($tabActive == '' or $tabActive == 'myExecution') ? 'myExecution' : 'other';?>
       <ul class="nav nav-tabs">
         <li class="<?php if($tabActive == 'myExecution') echo 'active';?>"><?php echo html::a('#myExecution', $lang->execution->involved, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
         <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
