@@ -316,7 +316,7 @@ $lang->qa->dividerMenu = ',bug,testtask,caselib,';
 
 /* DevOps menu. */
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment,showsynccommit');
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
 $lang->devops->menu->gitlab   = array('link' => "Gitlab|gitlab|browse", 'alias' => 'create,edit');
