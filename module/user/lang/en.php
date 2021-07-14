@@ -11,8 +11,8 @@
  */
 $lang->user->common           = 'User';
 $lang->user->id               = 'ID';
-$lang->user->inside           = 'Inside Members';
-$lang->user->outside          = 'Outside Members';
+$lang->user->inside           = 'Internal Members';
+$lang->user->outside          = 'External Members';
 $lang->user->company          = 'Company';
 $lang->user->dept             = 'Department';
 $lang->user->account          = 'Account';
@@ -128,7 +128,7 @@ $lang->user->loginFailed  = "Login failed. Please check your account and passwor
 $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
 $lang->user->weakPassword = "Your password does not meet the requirements.";
-$lang->user->errorWeak    = "Passwords cannot use [%s] these commonly used weak passwords.";
+$lang->user->errorWeak    = "Passwords cannot use [%s] weak passwords.";
 $lang->user->errorCaptcha = "Captcha Error";
 
 $lang->user->roleList['']       = '';
@@ -199,10 +199,10 @@ $lang->user->error->account        = "ID %s，account must be >= 3 letters, unde
 $lang->user->error->accountDupl    = "ID %s，account is used.";
 $lang->user->error->realname       = "ID %s，must be real name";
 $lang->user->error->password       = "ID %s，password must be >= 6 characters.";
-$lang->user->error->mail           = "ID %s，please enter valid Email address";
+$lang->user->error->mail           = "ID %s，enter valid Email address";
 $lang->user->error->reserved       = "ID %s，account is reserved.";
 $lang->user->error->weakPassword   = "ID %s，the password strength is less than the system setting.";
-$lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s] these commonly used if-passwords.";
+$lang->user->error->dangerPassword = "ID %s，passwords cannot be used with [%s] these commonly used if-passwords.";
 
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
@@ -245,13 +245,13 @@ $lang->user->noticeResetFile = "<h5>Contact the Administrator to reset your pass
     <li>If the file exists, remove it and create it again.</li>
     </ol>";
 $lang->user->notice4Safe = "Warning: Weak password of one click package detected";
-$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
-$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
+$lang->user->process4DIR = "It is detected that you might use the one-click installation package environment. Other sites in the environment are still using weak passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
+$lang->user->process4DB  = "It is detected that you might use the one-click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
 $lang->user->mkdirWin = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
     <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div> 
-    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
     </td></tr></table></body></html>
 EOT;
 $lang->user->mkdirLinux = <<<EOT
@@ -259,7 +259,7 @@ $lang->user->mkdirLinux = <<<EOT
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
     <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>  
     <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
-    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
     <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>
     </td></tr></table></body></html>
 EOT;
