@@ -29,6 +29,12 @@ class stakeholderModel extends model
                 dao::$errors[] = $this->lang->stakeholder->userEmpty;
                 return false;
             }
+            $user = new stdclass();
+            $user->nature   = $data->nature;
+            $user->analysis = $data->analysis;
+            $user->strategy = $data->strategy;
+
+            $this->dao->update(TABLE_USER)->data($user)->where('account')->eq($account)->exec();
         }
         else
         {
