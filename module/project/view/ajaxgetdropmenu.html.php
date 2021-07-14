@@ -13,8 +13,8 @@
 .table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
 .table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 7px;}
 .table-row .table-col .list-group .tab-content .tab-pane>ul>li.hide-in-search {position: relative;}
-.table-row .table-col .list-group .tab-content .tab-pane>ul>li a {padding-left: 5px; padding-right: 45px;}
-.table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5); position: absolute; top: 0; right: 0;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li>label+a {padding-left: 55px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5); position: absolute; top: 0; left: 5px;}
 .table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
 .table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
 .table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
@@ -53,8 +53,10 @@ foreach($projects as $programID => $programProjects)
     /* Add the program name before project. */
     if($programID)
     {
-        if($projectCounts[$programID]['myProject']) $myProjectsHtml .= '<ul><li class="hide-in-search"><a class="text-muted">' . zget($programs, $programID) . '</a> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
-        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($programs, $programID) . '</span> <label class="label">' . $lang->program->common . '</label></li><li><ul>';
+        $programName = zget($programs, $programID);
+
+        if($projectCounts[$programID]['myProject']) $myProjectsHtml  .= '<ul><li class="hide-in-search"><label class="label">' . $lang->program->common . '</label> <a class="text-muted" title="' . $programName . '">' . $programName . '</a></li><li><ul>';
+        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->program->common . '</label>  <a class="text-muted" title="' . $programName . '">' . $programName . '</a></li><li><ul>';
     }
     else
     {

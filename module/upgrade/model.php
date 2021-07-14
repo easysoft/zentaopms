@@ -4246,7 +4246,7 @@ class upgradeModel extends model
     public function createProgram($productIdList = array(), $projectIdList = array())
     {
         $this->app->loadLang('program');
-        $data = fixer::input('post')->get();
+        $data    = fixer::input('post')->get();
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
         if(isset($data->newProgram))
