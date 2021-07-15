@@ -505,26 +505,21 @@ $(function()
     /* Toggles data migration mode events. */
     $('input[name="projectType"]').change(function()
     {
+        $('.createProjectTip').toggleClass('hidden');
+        $('.createExecutionTip').toggleClass('hidden');
+        $('.projectName').toggleClass('hidden');
+        $('.projectAcl').toggleClass('hidden');
+        $('.programAcl').toggleClass('hidden');
+        $('.projectStatus').toggleClass('hidden');
+
         if($(this).val() == 'project')
         {
-            $('.createProjectTip').removeClass('hidden');
-            $('.createExecutionTip').addClass('hidden');
-            $('.projectName').addClass('hidden');
-            $('.projectAcl').addClass('hidden');
-            $('.programAcl').removeClass('hidden');
-            $('.projectStatus').addClass('hidden');
             $('[name=projectAcl]').attr('disabled', 'disabled');
             $('[name=programAcl]').removeAttr('disabled');
         }
 
         if($(this).val() == 'execution')
         {
-            $('.createExecutionTip').removeClass('hidden');
-            $('.createProjectTip').addClass('hidden');
-            $('.projectName').removeClass('hidden');
-            $('.programAcl').addClass('hidden');
-            $('.projectAcl').removeClass('hidden');
-            $('.projectStatus').removeClass('hidden');
             $('[name=programAcl]').attr('disabled', 'disabled');
             $('[name=projectAcl]').removeAttr('disabled');
         }
@@ -759,21 +754,17 @@ function hiddenProject()
         if($('#newProject0').is(':checked')) $('#projects').attr('disabled', 'disabled');
 
         var projectType = $('input[name="projectType"]:checked').val();
+        $('.projectName').toggleClass('hidden');
+        $('.projectAcl').toggleClass('hidden');
+        $('.programAcl').toggleClass('hidden');
+        $('.projectStatus').toggleClass('hidden');
         if(projectType == 'project')
         {
-            $('.projectName').addClass('hidden');
-            $('.projectAcl').addClass('hidden');
-            $('.programAcl').removeClass('hidden');
-            $('.projectStatus').addClass('hidden');
             $('[name=projectAcl]').attr('disabled', 'disabled');
             $('[name=programAcl]').removeAttr('disabled');
         }
         if(projectType == 'execution')
         {
-            $('.projectName').removeClass('hidden');
-            $('.programAcl').addClass('hidden');
-            $('.projectAcl').removeClass('hidden');
-            $('.projectStatus').removeClass('hidden');
             $('[name=programAcl]').attr('disabled', 'disabled');
             $('[name=projectAcl]').removeAttr('disabled');
         }
