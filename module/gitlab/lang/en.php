@@ -21,7 +21,7 @@ $lang->gitlab->zentaoProduct = 'Zentao Product';
 $lang->gitlab->objectType    = 'Type'; // task, bug, story
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "{$lang->gitlab->common}name";
+$lang->gitlab->name           = "{$lang->gitlab->common} Name";
 $lang->gitlab->url            = 'GitLab URL';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';

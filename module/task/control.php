@@ -221,8 +221,6 @@ class task extends control
         $allGitlabs     = $this->gitlab->getPairs();
         $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
         foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
-        $this->view->gitlabList     = $allGitlabs;
-        $this->view->gitlabProjects = $gitlabProjects;
 
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
@@ -239,6 +237,8 @@ class task extends control
         $this->view->members          = $members;
         $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->gitlabList       = $allGitlabs;
+        $this->view->gitlabProjects   = $gitlabProjects;
 
         $this->display();
     }
