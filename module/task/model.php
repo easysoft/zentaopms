@@ -1387,7 +1387,7 @@ class taskModel extends model
             ->autoCheck()
             ->check('left', 'float')
             ->where('id')->eq($taskID)->exec();
-        
+
         $task     = $this->getById($taskID);
         $this->loadModel('gitlab');
         $relation = $this->gitlab->getRelationByObject('task', $taskID);

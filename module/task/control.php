@@ -576,13 +576,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $task = $this->task->getByID($taskID);
-
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('task', $taskID);
-        if($relation)$this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
-
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $task    = $this->task->getByID($taskID);
 
         /* Compute next assignedTo. */
         if(!empty($task->team))
