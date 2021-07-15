@@ -1892,7 +1892,7 @@ class storyModel extends model
                 /* Push this story to gitlab issue. */
                 $this->loadModel('gitlab');
                 $relation = $this->gitlab->getRelationByObject('story', $storyID);
-                if(!empty($relation)) gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
+                if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
             }
         }
         return $allChanges;
