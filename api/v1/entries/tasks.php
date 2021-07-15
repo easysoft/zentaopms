@@ -8,7 +8,7 @@
  */
 class tasksEntry extends entry 
 {
-    public function get($taskID)
+    public function get()
     {
     }
 
