@@ -754,17 +754,21 @@ function hiddenProject()
         if($('#newProject0').is(':checked')) $('#projects').attr('disabled', 'disabled');
 
         var projectType = $('input[name="projectType"]:checked').val();
-        $('.projectName').toggleClass('hidden');
-        $('.projectAcl').toggleClass('hidden');
-        $('.programAcl').toggleClass('hidden');
-        $('.projectStatus').toggleClass('hidden');
         if(projectType == 'project')
         {
+            $('.projectName').addClass('hidden');
+            $('.projectAcl').addClass('hidden');
+            $('.programAcl').removeClass('hidden');
+            $('.projectStatus').addClass('hidden');
             $('[name=projectAcl]').attr('disabled', 'disabled');
             $('[name=programAcl]').removeAttr('disabled');
         }
         if(projectType == 'execution')
         {
+            $('.projectName').removeClass('hidden');
+            $('.projectAcl').removeClass('hidden');
+            $('.programAcl').addClass('hidden');
+            $('.projectStatus').removeClass('hidden');
             $('[name=programAcl]').attr('disabled', 'disabled');
             $('[name=projectAcl]').removeAttr('disabled');
         }
