@@ -799,6 +799,15 @@ function toggleProgram(obj)
         var programID = $('#programs').val();
         getProgramStatus('program', programID);
     }
+    var projectType = $('input[name="projectType"]:checked').val();
+    if(projectType == 'project')
+    {
+        $('.projectStatus').addClass('hidden');
+    }
+    if(projectType == 'execution')
+    {
+        $('.projectStatus').removeClass('hidden');
+    }
 }
 
 /**
