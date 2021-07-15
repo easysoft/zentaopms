@@ -144,6 +144,7 @@ $(function()
         $(this).find('span').show();
         $(this).siblings('li').find('span').hide();
         if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
+        $("#dropMenu .search-box").width('auto');
     })
 })
 </script>
