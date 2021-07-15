@@ -251,6 +251,7 @@ $config->objectTables['webhook']     = TABLE_WEBHOOK;
 $config->objectTables['stakeholder'] = TABLE_STAKEHOLDER;
 $config->objectTables['job']         = TABLE_JOB;
 $config->objectTables['team']        = TABLE_TEAM;
+$config->objectTables['pipeline']    = TABLE_PIPELINE;
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
