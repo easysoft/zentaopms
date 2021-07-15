@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('gitlab', 'create')) common::printLink('gitlab', 'create', "", "<i class='icon icon-plus'></i> " . $lang->gitlab->create, '', "class='btn btn-primary'");?>
@@ -21,19 +21,19 @@
     <table id='gitlabList' class='table has-sort-head table-fixed'>
       <thead>
         <tr>
-          <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
-          <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id); ?></th>
-          <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->name); ?></th>
-          <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gitlab->url); ?></th>
-          <th class='w-150px c-actions-4'><?php echo $lang->actions; ?></th>
+          <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+          <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id);?></th>
+          <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->name);?></th>
+          <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gitlab->url);?></th>
+          <th class='w-150px c-actions-4'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($gitlabList as $id => $gitlab): ?>
         <tr>
-          <td class='text-center'><?php echo $id; ?></td>
-          <td class='text' title='<?php echo $gitlab->name; ?>'><?php echo $gitlab->name; ?></td>
-          <td class='text' title='<?php echo $gitlab->url; ?>'><?php echo $gitlab->url; ?></td>
+          <td class='text-center'><?php echo $id;?></td>
+          <td class='text' title='<?php echo $gitlab->name;?>'><?php echo $gitlab->name;?></td>
+          <td class='text' title='<?php echo $gitlab->url;?>'><?php echo $gitlab->url;?></td>
           <td class='c-actions text-left'>
             <?php
             common::printIcon('gitlab', 'edit', "gitlabID=$id", '', 'list',  'edit');
@@ -42,12 +42,12 @@
             ?>
           </td>
         </tr>
-        <?php endforeach; ?>
+        <?php endforeach;?>
       </tbody>
     </table>
     <?php if($gitlabList):?>
     <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
-    <?php endif; ?>
+    <?php endif;?>
   </form>
 </div>
-<?php include '../../common/view/footer.html.php'; ?>
+<?php include '../../common/view/footer.html.php';?>

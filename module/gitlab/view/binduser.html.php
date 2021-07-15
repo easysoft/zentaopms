@@ -28,10 +28,11 @@
           <?php foreach($gitlabUsers as $gitlabUser):?>
           <?php if(isset($gitlabUser->zentaoAccount)) continue;?>
           <tr>
-            <td class='w-60px'> <?php echo html::image($gitlabUser->avatar, "height=40");?> </td>
+            <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
             <td class='text-left'>
-              <strong> <?php echo $gitlabUser->realname;?> </strong>
-              <br><?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;"; ?>
+              <strong><?php echo $gitlabUser->realname;?></strong>
+              <br>
+              <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, '', "class='form-control select chosen'" );?></td>
          </tr>
@@ -39,10 +40,11 @@
          <?php foreach($gitlabUsers as $gitlabUser):?>
          <?php if(!isset($gitlabUser->zentaoAccount)) continue;?>
          <tr>
-            <td class='w-60px'> <?php echo html::image($gitlabUser->avatar, "height=40");?> </td>
+            <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
             <td>
               <strong><?php echo $gitlabUser->realname;?></strong>
-              <br><?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
+              <br>
+              <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
          </tr>
@@ -51,8 +53,8 @@
         <tfoot>
           <tr>
             <td colspan="3" class="text-center form-actions">
-              <?php echo html::submitButton(); ?>
-              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"'); ?>
+              <?php echo html::submitButton();?>
+              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
           </tr>
         </tfoot>
