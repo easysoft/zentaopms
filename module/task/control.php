@@ -217,8 +217,9 @@ class task extends control
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($execution->type == 'ops') unset($customFields['story']);
 
-        $allGitlabs     = $this->loadModel('gitlab')->getPairs();
-        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
+        $this->loadModel('gitlab');
+        $allGitlabs     = $this->gitlab->getPairs();
+        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
         foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
         $this->view->gitlabList     = $allGitlabs;
         $this->view->gitlabProjects = $gitlabProjects;
@@ -577,7 +578,8 @@ class task extends control
 
         $task = $this->task->getByID($taskID);
 
-        $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
+        $this->loadModel('gitlab');
+        $relation = $this->gitlab->getRelationByObject('task', $taskID);
         if($relation)$this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
 
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
@@ -1298,8 +1300,9 @@ class task extends control
         else
         {
             /* Delete related issue in gitlab. */
-            $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-            if(!empty($relation)) $this->loadModel('gitlab')->deleteIssue('task', $taskID, $relation->issueID);
+            $this->loadModel('gitlab');
+            $relation = $this->gitlab->getRelationByObject('task', $taskID);
+            if(!empty($relation)) $this->gitlab->deleteIssue('task', $taskID, $relation->issueID);
 
             $this->task->delete(TABLE_TASK, $taskID);
             if($task->parent > 0)

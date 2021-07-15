@@ -4344,7 +4344,7 @@ class upgradeModel extends model
             else
             {
                 /* Use historical projects as project upgrades. */
-                $projects = $this->dao->select('id,name,begin,end,status,PM')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+                $projects = $this->dao->select('id,name,begin,end,status,PM,acl')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
                 foreach($projectIdList as $projectID)
                 {
                     $data->projectName   = $projects[$projectID]->name;
@@ -4352,6 +4352,7 @@ class upgradeModel extends model
                     $data->end           = $projects[$projectID]->end;
                     $data->projectStatus = $projects[$projectID]->status;
                     $data->PM            = $projects[$projectID]->PM;
+                    $data->projectAcl    = $projects[$projectID]->acl == 'custom' ? 'private' : $projects[$projectID]->acl;
 
                     $projectList[$projectID] = $this->createProject($programID, $data);
                 }

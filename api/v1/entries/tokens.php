@@ -18,7 +18,7 @@ class tokensEntry extends baseEntry
         if($user)
         {
             $this->user->login($user);
-            $this->send(200, array('token' => session_id()));
+            $this->send(201, array('token' => session_id()));
         }
 
         $this->sendError(400, $this->app->lang->user->loginFailed);

@@ -72,8 +72,8 @@ EOD;
 
 $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>接下来我们会把之前历史{$lang->productCommon}和{$lang->projectCommon}数据迁移到项目集和项目下，迁移的情况如下：</p><br />
-<h4>情况一：以产品线组织的{$lang->productCommon}和{$lang->projectCommon} </h4>
-<p>可以将整个产品线及其下面的{$lang->productCommon}和{$lang->projectCommon}迁移到一个项目集中，当然您也可以根据需要分开迁移。</p>
+<h4>情况一：以{$lang->productCommon}线组织的{$lang->productCommon}和{$lang->projectCommon} </h4>
+<p>可以将整个{$lang->productCommon}线及其下面的{$lang->productCommon}和{$lang->projectCommon}迁移到一个项目集中，当然您也可以根据需要分开迁移。</p>
 <h4>情况二：以{$lang->productCommon}组织的{$lang->projectCommon} </h4>
 <p>可以选择多个{$lang->productCommon}及其下面的{$lang->projectCommon}迁移到一个项目集中，也可以选择某一个{$lang->productCommon}和{$lang->productCommon}下面的{$lang->projectCommon}迁移到项目集中。</p>
 <h4>情况三：独立的{$lang->projectCommon}</h4>
@@ -108,7 +108,7 @@ $lang->upgrade->projectName   = '项目名称';
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->projectEmpty       = '所属项目不能为空！';
 $lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个{$lang->productCommon}，%s个{$lang->projectCommon}等待迁移。";
-$lang->upgrade->mergeByProductLine = "以产品线组织的{$lang->productCommon}和{$lang->projectCommon}：将整个产品线及其下面的{$lang->productCommon}和{$lang->projectCommon}归并到一个项目集和项目中，也可以分开归并。";
+$lang->upgrade->mergeByProductLine = "以{$lang->productCommon}线组织的{$lang->productCommon}和{$lang->projectCommon}：将整个{$lang->productCommon}线及其下面的{$lang->productCommon}和{$lang->projectCommon}归并到一个项目集和项目中，也可以分开归并。";
 $lang->upgrade->mergeByProduct     = "以{$lang->productCommon}组织的{$lang->projectCommon}：可以选择多个{$lang->productCommon}及其下面的{$lang->projectCommon}归并到一个项目集和项目中，也可以选择某一个{$lang->productCommon}将其下面所属的{$lang->projectCommon}归并到项目集和项目中。";
 $lang->upgrade->mergeByProject     = "独立的{$lang->projectCommon}：可以选择若干{$lang->projectCommon}归并到一个项目中，也可以独立归并。";
 $lang->upgrade->mergeByMoreLink    = "关联多个{$lang->productCommon}的{$lang->projectCommon}：选择这个{$lang->projectCommon}归属于哪一个项目。";

@@ -558,9 +558,13 @@ class bug extends control
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
         /* Set gitlabProjects. */
-        $allGitlabs     = $this->loadModel('gitlab')->getPairs();
-        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
-        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
+        $this->loadModel('gitlab');
+        $allGitlabs     = $this->gitlab->getPairs();
+        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
+        foreach($allGitlabs as $id => $name)
+        {
+            if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
+        }
         $this->view->gitlabList     = $allGitlabs;
         $this->view->gitlabProjects = $gitlabProjects;
 
@@ -1462,13 +1466,14 @@ class bug extends control
             $_POST = array();
 
             $bugs = $this->bug->getByList($bugIDList);
+            $this->loadModel('gitlab');
             foreach($bugs as $bugID => $bug)
             {
-                $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
+                $relation = $this->gitlab->getRelationByObject('bug', $bugID);
                 if(!empty($relation))
                 {
-                    $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-                    if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
+                    $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+                    if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
                 }
 
                 if($bug->status != 'resolved')
@@ -1555,8 +1560,9 @@ class bug extends control
         else
         {
             /* Delete related issue in gitlab. */
-            $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
-            if(!empty($relation)) $this->loadModel('gitlab')->deleteIssue('bug', $bugID, $relation->issueID);
+            $this->loadModel('gitlab');
+            $relation = $this->gitlab->getRelationByObject('bug', $bugID);
+            if(!empty($relation)) $this->gitlab->deleteIssue('bug', $bugID, $relation->issueID);
  
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0)

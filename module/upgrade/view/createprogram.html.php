@@ -57,7 +57,7 @@
   <tr class='LineName'>
     <th>
       <span class="line-exist hidden"><?php echo $lang->upgrade->existLine;?></span>
-      <span class="line-no-exist"><?php echo $lang->product->lineName;?></span>
+      <span class="line-no-exist"><?php echo $lang->upgrade->line;?></span>
     </th>
     <td>
       <div class='input-group'>

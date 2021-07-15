@@ -42,9 +42,9 @@
         <tfoot>
           <tr>
             <th></th>
-            <td class="text-center form-actions">
+            <td class='text-center form-actions' colspan='2'>
               <?php echo html::submitButton($lang->save);?>
-              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"'); ?>
+              <?php if(!isonlybody()) echo html::a($this->createLink('repo', 'maintain', ""), $lang->goback, '', 'class="btn btn-wide"'); ?>
             </td>
           </tr>
         </tfoot>
