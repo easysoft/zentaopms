@@ -859,6 +859,7 @@ class gitlabModel extends model
     /**
      * Create relationship between zentao product and  gitlab project.
      * 
+     * @param  array  $products
      * @param  int    $gitlabID 
      * @param  int    $projectID 
      * @access public
@@ -922,6 +923,7 @@ class gitlabModel extends model
     /**
      * Create webhook for zentao.
      * 
+     * @param  int    $products
      * @param  int    $gitlabID 
      * @param  int    $projectID 
      * @access public
@@ -944,8 +946,6 @@ class gitlabModel extends model
     /**
      * Delete an issue from zentao and gitlab.
      * 
-     * @param  int       $gitlabID 
-     * @param  int       $projectID 
      * @param  string    $objectType 
      * @param  int       $objectID 
      * @param  int       $issueID 
@@ -965,7 +965,7 @@ class gitlabModel extends model
      * 
      * @param  string   $objectType 
      * @param  object   $object 
-     * @param  int      $gitlab 
+     * @param  int      $gitlabID
      * @param  object   $issue 
      * @access public
      * @return void
@@ -1103,7 +1103,7 @@ class gitlabModel extends model
      * 
      * @param  int       $gitlabID 
      * @param  int       $projectID 
-     * @param  object    $story 
+     * @param  object    $bug
      * @access public
      * @return object
      */
@@ -1194,6 +1194,7 @@ class gitlabModel extends model
      * 
      * @param  object    $issue 
      * @param  int       $gitlabID 
+     * @param  object    $changes
      * @access public
      * @return object
      */
