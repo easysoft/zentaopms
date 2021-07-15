@@ -103,6 +103,7 @@ $lang->action->objectTypes['entry']       = '应用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = '团队';
 $lang->action->objectTypes['whitelist']   = '白名单';
+$lang->action->objectTypes['pipeline']    = 'GitLib';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
