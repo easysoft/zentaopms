@@ -71,8 +71,8 @@ $lang->upgrade->to15Desc      = <<<EOD
 EOD;
 $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>Next, ZenTao will migrate the existing data of {$lang->productCommon} and {$lang->projectCommon} to Program and Project. It will be one of the followings:</p><br />
-<h4>1. Manage {$lang->productCommon} and {$lang->projectCommon} by Product Line </h4>
-<p>Migrate the data of {$lang->productCommon} and {$lang->projectCommon} by Product Line to a Program. You can also migrate it separately.</p>
+<h4>1. Manage {$lang->productCommon} and {$lang->projectCommon} by {$lang->productCommon} Line </h4>
+<p>Migrate the data of {$lang->productCommon} and {$lang->projectCommon} by {$lang->productCommon} Line to a Program. You can also migrate it separately.</p>
 <h4>2. Manage {$lang->projectCommon} by {$lang->productCommon}</h4>
 <p>You can migrate the data of several {$lang->productCommon}s and {$lang->projectCommon}s to one Program. Or select {$lang->projectCommon}s of a {$lang->productCommon} and {$lang->productCommon} to a Program.</p>
 <h4>2. Independent {$lang->projectCommon}</h4>

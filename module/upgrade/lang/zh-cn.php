@@ -72,8 +72,8 @@ EOD;
 
 $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>接下来我们会把之前历史{$lang->productCommon}和{$lang->projectCommon}数据迁移到项目集和项目下，迁移的情况如下：</p><br />
-<h4>情况一：以产品线组织的{$lang->productCommon}和{$lang->projectCommon} </h4>
-<p>可以将整个产品线及其下面的{$lang->productCommon}和{$lang->projectCommon}迁移到一个项目集中，当然您也可以根据需要分开迁移。</p>
+<h4>情况一：以{$lang->productCommon}线组织的{$lang->productCommon}和{$lang->projectCommon} </h4>
+<p>可以将整个{$lang->productCommon}线及其下面的{$lang->productCommon}和{$lang->projectCommon}迁移到一个项目集中，当然您也可以根据需要分开迁移。</p>
 <h4>情况二：以{$lang->productCommon}组织的{$lang->projectCommon} </h4>
 <p>可以选择多个{$lang->productCommon}及其下面的{$lang->projectCommon}迁移到一个项目集中，也可以选择某一个{$lang->productCommon}和{$lang->productCommon}下面的{$lang->projectCommon}迁移到项目集中。</p>
 <h4>情况三：独立的{$lang->projectCommon}</h4>
