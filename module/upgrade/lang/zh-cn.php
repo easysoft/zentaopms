@@ -89,7 +89,7 @@ $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自�
 $lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
 
 $lang->upgrade->line          = '产品线';
-$lang->upgrade->allLines      = '所有产品线';
+$lang->upgrade->allLines      = "所有{$lang->productCommon}线";
 $lang->upgrade->program       = '目标项目集和项目';
 $lang->upgrade->existProgram  = '已有项目集';
 $lang->upgrade->existProject  = '已有项目';

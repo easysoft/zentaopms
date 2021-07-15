@@ -101,7 +101,7 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 EOD;
 
 $lang->upgrade->line          = 'Product Line';
-$lang->upgrade->allLines      = 'All Lines';
+$lang->upgrade->allLines      = "All {$lang->productComon} Lines";
 $lang->upgrade->program       = 'Merge Project';
 $lang->upgrade->existProgram  = 'Existing programs';
 $lang->upgrade->existProject  = 'Existing projects';

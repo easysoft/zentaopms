@@ -88,7 +88,7 @@ $lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new pr
 $lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
 
 $lang->upgrade->line          = 'Product Line';
-$lang->upgrade->allLines      = 'All Lines';
+$lang->upgrade->allLines      = "All {$lang->productComon} Lines";
 $lang->upgrade->program       = 'Merge Project';
 $lang->upgrade->existProgram  = 'Existing programs';
 $lang->upgrade->existProject  = 'Existing projects';
