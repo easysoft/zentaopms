@@ -320,11 +320,11 @@ class product extends control
         if(!empty($_POST))
         {
             $productID = $this->product->create();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
 
             $this->executeHooks($productID);
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
 
             $openApp    = $this->app->openApp;
             $moduleName = $openApp == 'program'? 'program' : $this->moduleName;
@@ -332,7 +332,7 @@ class product extends control
             $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             if($openApp == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
@@ -457,7 +457,7 @@ class product extends control
                 }
             }
 
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
                 $this->loadModel('action');
@@ -479,7 +479,7 @@ class product extends control
             $locate     = $this->createLink($moduleName, $methodName, $param);
 
             if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         $productID = $this->product->saveState($productID, $this->products);
@@ -702,6 +702,8 @@ class product extends control
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
             $this->session->set('product', '');
             $this->executeHooks($productID);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }
     }

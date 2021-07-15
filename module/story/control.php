@@ -100,7 +100,7 @@ class story extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             $storyID   = $storyResult['id'];
@@ -119,7 +119,7 @@ class story extends control
                     $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID";
                     $response['locate'] = $this->createLink($moduleName, 'story', $param);
                 }
-                $this->send($response);
+                return $this->send($response);
             }
 
             $action = $bugID == 0 ? 'Opened' : 'Frombug';
@@ -146,16 +146,16 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
 
             /* If link from no head then reload. */
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
                 $response['locate']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=0&objectID=$objectID&bugID=$bugID");
-                $this->send($response);
+                return $this->send($response);
             }
 
             $moduleID = $this->post->module ? $this->post->module : 0;
@@ -175,7 +175,7 @@ class story extends control
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
-            $this->send($response);
+            return $this->send($response);
         }
 
         /* Set products, users and module. */
@@ -414,7 +414,7 @@ class story extends control
                 if(dao::isError()) die(js::error(dao::getError()));
             }
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
 
             if($storyID)
@@ -584,14 +584,8 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {
-                die(array('status' => 'success', 'data' => $storyID));
-            }
-            else
-            {
-                die(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
-            }
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
+            die(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -817,7 +811,11 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->change($storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
+                die(js::error(dao::getError()));
+            }
             $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
             $files   = $this->loadModel('file')->saveUpload('story', $storyID, $version);
 
@@ -833,6 +831,8 @@ class story extends control
             $this->executeHooks($storyID);
 
             $module = $this->app->openApp == 'project' ? 'projectstory' : 'story';
+
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -1005,6 +1005,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::locate($this->session->storyList, 'parent'));
         }
     }
@@ -1325,12 +1326,12 @@ class story extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
             $response['locate'] = $this->createLink('execution', 'task', "executionID=$executionID");
-            $this->send($response);
+            return $this->send($response);
         }
     }
 
