@@ -56,16 +56,21 @@ $lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
 $lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
 $lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
-<p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
-<ol>
-<p><li>Added the concept of program. A program set can include multiple products and multiple projects.</li></p>
-<p><li>Subdivided the concept of project and iteration, a project can contain multiple iterations.</li></p>
-<p><li>The navigation adds a left menu and supports multi-page operations.</li></p>
-</ol>
+<p>ZenTao version 15.0 has major upgrade of features, including:</p>
+<p><strong>1. Add the concept of Program</strong></p>
+<p>A program is a collection of interrelated and coordinated projects. It is at the highest level and belongs to the concept of a strategic level. It has multi-level project management, helping managers to form strategic directions and allocate resources at a macro level.</p>
+<p><strong>2. Clarify the concept of Product and Project</strong></p>
+<p>Product defines what should be done and focuses on requirement management. Project defines how to do it and focuses on finishing tasks of the project within the specified time, budget and quality objectives. A project can be done in Agile or Waterfall, which is the management of the campaign level.</p> <p><strong>3. Add the concept of Project Model</strong></p>
+<p>The new version 15.0 adds a Waterfall model (available in ZenTao Max) to help the project team choose the right project management method according to their needs. Kanban model will be coming soon.</p> <p><strong>4. Add the concept of Execution</strong></p>
+<p>In Version 15.0, depending on the management model, a project can have multiple iterations/sprints/ phases which are Executions in ZenTao. Through executions, the project tasks are completed and the final outcome is delivered.</p> <p><strong>5. Adjust the Navigation</strong></p>
+<p>The top level navigation is moved to the left, and multi-application switching is added as new UI/UX.</p>
 <br/>
-<p>You can experience the latest version of the function online to decide whether to enable the mode: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>Demo</a></p>
-</br>
-<p><strong>How do you plan to use the new version of ZenTao?</strong></p>
+<p>You can try the online demo before you decide to enable new features: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>New Features Online Demo</a></p>
+<p>You can also download an introduction PPT to help you understand it：<a class='text-info' href='' target='_blank'> New Features Introduction PPT</a></p>
+<video src="https://dl.cnezsoft.com/zentao/program.mp4" width="100%" controls ="controls"></video>
+<p style="text-align:center"><small>ZenTao Version 15.0 Introduction</small></p>
+<br/>
+<p><strong>How do you like to use ZenTao?</strong></p>
 EOD;
 
 $lang->upgrade->to15Mode['classic'] = 'Keep the old version';
@@ -102,7 +107,7 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 EOD;
 
 $lang->upgrade->line          = 'Product Line';
-$lang->upgrade->allLines      = 'All Lines';
+$lang->upgrade->allLines      = "All {$lang->productComon} Lines";
 $lang->upgrade->program       = 'Merge Project';
 $lang->upgrade->existProgram  = 'Existing programs';
 $lang->upgrade->existProject  = 'Existing projects';

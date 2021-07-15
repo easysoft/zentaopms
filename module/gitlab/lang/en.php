@@ -15,13 +15,13 @@ $lang->gitlab->zentaoAccount = 'Zentao Account';
 
 $lang->gitlab->browseAction  = 'GitLab List';
 $lang->gitlab->deleteAction  = 'Delete GitLab';
-$lang->gitlab->gitlabProject = "{$lang->gitlab->common} project";
-$lang->gitlab->gitlabIssue   = "{$lang->gitlab->common} issue";
+$lang->gitlab->gitlabProject = "GitLab Project";
+$lang->gitlab->gitlabIssue   = "GitLab Issue";
 $lang->gitlab->zentaoProduct = 'Zentao Product';
 $lang->gitlab->objectType    = 'Type'; // task, bug, story
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "{$lang->gitlab->common} Name";
+$lang->gitlab->name           = "GitLab Name";
 $lang->gitlab->url            = 'GitLab URL';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';
@@ -43,4 +43,3 @@ $lang->gitlab->hostError          = "Invalid GitLab service address.";
 $lang->gitlab->bindUserError      = "Can not bind users repeatedly %s";
 $lang->gitlab->importIssueError   = "The execution to which this issue belongs is not selected.";
 $lang->gitlab->importIssueWarn    = "There is a problem of import failure, you can try to import again.";
-
