@@ -103,6 +103,7 @@ $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = 'Team';
 $lang->action->objectTypes['whitelist']   = 'Whitelist';
+$lang->action->objectTypes['pipeline']    = 'GitLib';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
