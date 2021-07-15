@@ -229,16 +229,17 @@ class repoModel extends model
             ->exec();
 
         if(!dao::isError()) $this->rmClientVersionFile();
+        $repoID = $this->dao->lastInsertID();
 
         $this->loadModel('gitlab');
-        if($this->post->SCM == 'Gitlab') 
+        if($this->post->SCM == 'Gitlab')
         {
            $this->gitlab->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
 
             /* create webhook for zentao */
            $this->gitlab->initWebhooks($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
         }
-        return $this->dao->lastInsertID();
+        return $repoID;
     }
 
     /**
@@ -301,7 +302,7 @@ class repoModel extends model
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
             if($repo->SCM == 'Gitlab') $this->gitlab->initWebhooks($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
-            return false;    
+            return false;
         }
 
         return true;
