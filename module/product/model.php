@@ -1368,7 +1368,7 @@ class productModel extends model
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
-        if($orderBy == 'program_asc')
+        if($orderBy == 'program_asc' and $this->config->systemMode == 'new')
         {
             $products = $this->dao->select('t1.id as id, t1.*')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')

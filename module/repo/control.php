@@ -345,6 +345,7 @@ class repo extends control
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
+        if($branchID) $branchID = base64_decode($branchID);
 
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
@@ -1145,6 +1146,7 @@ class repo extends control
     {
         $repo     = $this->repo->getRepoByID($repoID);
         $branches = $this->repo->getBranches($repo);
+        if($branchID) $branchID = base64_decode($branchID);
 
         $branchesHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
         foreach($branches as $id => $branchName)
