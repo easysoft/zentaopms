@@ -116,16 +116,16 @@ class testsuite extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
             $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
 
             $this->executeHooks($suiteID);
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $suiteID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $suiteID));
 
             $response['locate']  = $this->createLink('testsuite', 'browse', "productID=$productID");
-            $this->send($response);
+            return $this->send($response);
         }
 
         /* Set menu. */
@@ -215,7 +215,7 @@ class testsuite extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
             if($changes)
             {
@@ -226,7 +226,7 @@ class testsuite extends control
             $this->executeHooks($suiteID);
 
             $response['locate']  = inlink('view', "suiteID=$suiteID");
-            $this->send($response);
+            return $this->send($response);
         }
 
         if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
@@ -280,7 +280,7 @@ class testsuite extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::reload('parent'));
         }
@@ -371,7 +371,7 @@ class testsuite extends control
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
             }
-            $this->send($response);
+            return $this->send($response);
         }
     }
 

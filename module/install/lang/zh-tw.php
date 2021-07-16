@@ -128,6 +128,7 @@ $lang->install->company  = '公司名稱';
 $lang->install->account  = '管理員帳號';
 $lang->install->password = '管理員密碼';
 $lang->install->errorEmptyPassword = '密碼不能為空';
+
 $lang->install->selectedMode       = '選擇模式';
 $lang->install->selectedModeTips   = '後續您還可以去後臺-自定義-模式中進行調整';
 

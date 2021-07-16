@@ -168,13 +168,13 @@ class personnel extends control
         if($_POST)
         {
             $this->personnel->addWhitelist($objectType, $objectID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
             $this->loadModel('action')->create('whitelist', $objectID, 'managedWhitelist', '', $objectType);
 
             $locateLink = $this->session->whitelistList ? $this->session->whitelistList : $this->createLink($module, 'whitelist', "objectID=$objectID");
             $openApp = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $openApp));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $openApp));
         }
 
         $this->loadModel('dept');

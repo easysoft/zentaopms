@@ -140,9 +140,9 @@ class block extends control
         {
             $this->dao->delete()->from(TABLE_BLOCK)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
         }
-        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $this->loadModel('score')->create('block', 'set');
-        $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -167,9 +167,9 @@ class block extends control
             $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
         }
 
-        if(dao::isError()) $this->send(array('result' => 'fail'));
+        if(dao::isError()) return $this->send(array('result' => 'fail'));
         $this->loadModel('score')->create('block', 'set');
-        $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -186,17 +186,17 @@ class block extends control
             $field = '';
             if($type == 'vertical') $field = 'height';
             if($type == 'horizontal') $field = 'grid';
-            if(empty($field)) $this->send(array('result' => 'fail', 'code' => 400));
+            if(empty($field)) return $this->send(array('result' => 'fail', 'code' => 400));
 
             $block->$field = $data;
             $block->params = helper::jsonEncode($block->params);
             $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'code' => 500));
-            $this->send(array('result' => 'success'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'code' => 500));
+            return $this->send(array('result' => 'success'));
         }
         else
         {
-            $this->send(array('result' => 'fail', 'code' => 404));
+            return $this->send(array('result' => 'fail', 'code' => 404));
         }
     }
 

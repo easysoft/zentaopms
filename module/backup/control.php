@@ -178,7 +178,7 @@ class backup extends control
      */
     public function restore($fileName, $confirm = 'no')
     {
-        if($confirm == 'no') $this->send(array('result' => 'fail', 'message' => $this->lang->backup->confirmRestore));
+        if($confirm == 'no') return $this->send(array('result' => 'fail', 'message' => $this->lang->backup->confirmRestore));
 
         set_time_limit(0);
 
@@ -189,12 +189,12 @@ class backup extends control
             $this->backup->removeFileHeader($sqlBackup);
             $result = $this->backup->restoreSQL($sqlBackup);
             $this->backup->addFileHeader($sqlBackup);
-            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
+            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
         }
         elseif(file_exists("{$this->backupPath}{$fileName}.sql"))
         {
             $result = $this->backup->restoreSQL("{$this->backupPath}{$fileName}.sql");
-            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
+            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
         }
 
         /* Restore attatchments. */
@@ -204,20 +204,20 @@ class backup extends control
             $this->backup->removeFileHeader($fileBackup);
             $result = $this->backup->restoreFile($fileBackup);
             $this->backup->addFileHeader($fileBackup);
-            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
+            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
         }
         elseif(file_exists("{$this->backupPath}{$fileName}.file.zip"))
         {
             $result = $this->backup->restoreFile("{$this->backupPath}{$fileName}.file.zip");
-            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
+            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
         }
         elseif(file_exists("{$this->backupPath}{$fileName}.file"))
         {
             $result = $this->backup->restoreFile("{$this->backupPath}{$fileName}.file");
-            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
+            if(!$result->result) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
         }
 
-        $this->send(array('result' => 'success', 'message' => $this->lang->backup->success->restore));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->backup->success->restore));
     }
 
     /**

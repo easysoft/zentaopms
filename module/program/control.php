@@ -125,11 +125,11 @@ class program extends control
         if($_POST)
         {
             $programID = $this->program->create();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID));
 
             $this->loadModel('action')->create('program', $programID, 'opened');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title      = $this->lang->program->create;
@@ -159,14 +159,14 @@ class program extends control
         if($_POST)
         {
             $changes = $this->program->update($programID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('program', $programID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
         }
 
         $program       = $this->program->getByID($programID);

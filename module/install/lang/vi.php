@@ -128,8 +128,9 @@ $lang->install->company            = 'Tên doanh nghiệp';
 $lang->install->account            = 'Tài khoản quản trị';
 $lang->install->password           = 'Mật khẩu quản trị';
 $lang->install->errorEmptyPassword = 'Mật khẩu không nên là blank.';
+
 $lang->install->selectedMode       = 'Selection mode';
-$lang->install->selectedModeTips   = 'Later, you can go to the background - Custom - mode to adjust';
+$lang->install->selectedModeTips   = 'You can go to the Admin - Custom - Mode to set it later.';
 
 $lang->install->groupList['ADMIN']['name']   = 'Quản trị';
 $lang->install->groupList['ADMIN']['desc']   = 'Quản trị hệ thống';

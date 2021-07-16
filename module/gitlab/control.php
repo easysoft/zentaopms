@@ -47,8 +47,8 @@ class gitlab extends control
             $this->checkToken();
             $gitlabID = $this->gitlab->create();
 
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->create;
@@ -70,8 +70,8 @@ class gitlab extends control
         {
             $this->checkToken();
             $this->gitlab->update($id);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
@@ -103,7 +103,7 @@ class gitlab extends control
                 $accountList[$user] = $openID;
             }
 
-            if(count($repeatUsers)) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->bindUserError, join(',', $repeatUsers))));
+            if(count($repeatUsers)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->bindUserError, join(',', $repeatUsers))));
 
             $user = new stdclass;
             $user->providerID   = $gitlabID;
@@ -127,7 +127,7 @@ class gitlab extends control
 
                 $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
         $gitlab      = $this->gitlab->getByID($gitlabID);
@@ -177,13 +177,13 @@ class gitlab extends control
      */
     public function checkToken()
     {
-        if(strpos($this->post->url, 'http') !== 0) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
-        if(!$this->post->token) $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+        if(strpos($this->post->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+        if(!$this->post->token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
         $user = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
 
-        if(!is_object($user)) $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
-        if(!isset($user->is_admin) or !$user->is_admin) $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+        if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+        if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
     }
 
     /**
@@ -283,12 +283,12 @@ class gitlab extends control
                 }
                 else
                 {
-                    if($productList[$issueID] != 0) $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError, 'locate' => $this->server->http_referer));
+                    if($productList[$issueID] != 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError, 'locate' => $this->server->http_referer));
                 }
             }
 
-            if($failedIssues) $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->importIssueWarn, 'locate' => $this->server->http_referer));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            if($failedIssues) return $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->importIssueWarn, 'locate' => $this->server->http_referer));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
         $savedIssueIDList = $this->dao->select('BID as issueID')->from(TABLE_RELATION)
@@ -336,8 +336,8 @@ class gitlab extends control
      */
     public function ajaxGetExecutionsByProduct($productID)
     {
-        if(!$productID) $this->send(array('message' => array()));
-
+        if(!$productID) return $this->send(array('message' => array()));
+        
         $executions = $this->loadModel('product')->getAllExecutionPairsByProduct($productID);
         $options    = "<option value=''></option>";
         foreach($executions as $index =>$execution)

@@ -59,7 +59,7 @@ class group extends control
         {
             $groupID = $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
@@ -130,10 +130,10 @@ class group extends control
         if($_POST)
         {
             $this->group->updateView($groupID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = isonlybody() ? 'parent' : $this->createLink('group', 'browse');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         /* Get the group data by id. */
@@ -179,9 +179,9 @@ class group extends control
         {
             if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         if($type == 'byGroup')
@@ -345,7 +345,7 @@ class group extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
