@@ -2188,6 +2188,7 @@ class testtaskModel extends model
                     $caseStep->type   = 'step';
                     $caseStep->desc   = '';
                     $caseStep->expect = $step->checkPoints[0]->expect;
+
                     $case->steps[] = $caseStep;
                 }
                 $result->caseResult = $stepStatus;

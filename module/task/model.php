@@ -116,7 +116,7 @@ class taskModel extends model
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
                 ->exec();
-            
+
             if(dao::isError()) return false;
 
             $taskID = $this->dao->lastInsertID();
@@ -459,9 +459,9 @@ class taskModel extends model
 
     /**
      * Create task from gitlab issue.
-     * 
-     * @param  object    $task 
-     * @param  int       $executionID 
+     *
+     * @param  object    $task
+     * @param  int       $executionID
      * @access public
      * @return int
      */
@@ -474,18 +474,18 @@ class taskModel extends model
         $task->module       = 0;
         $task->estimate     = 0;
         $task->estStarted   = '0000-00-00';
-        $task->left         = 1;  
-        $task->type         = 'devel';  
+        $task->left         = 1;
+        $task->type         = 'devel';
 
         $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id,product')
              ->autoCheck()
              ->batchCheck($this->config->task->create->requiredFields, 'notempty')
              ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
              ->exec();
-            
+
         if(dao::isError()) return false;
-        
-        return $this->dao->lastInsertID(); 
+
+        return $this->dao->lastInsertID();
     }
 
     /**
@@ -1297,8 +1297,8 @@ class taskModel extends model
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
-                
-                /* update task to gitlab issue. */
+
+                /* Update task to gitlab issue. */
                 $this->loadModel('gitlab');
                 $relation = $this->gitlab->getRelationByObject('task', $taskID);
                 if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
