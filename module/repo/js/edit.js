@@ -7,11 +7,12 @@ $(function()
         $form.css('min-height', $form.height());
     })
 
-    $('#gitlabHost').change(function()
+    $('#gitlabHost, #gitlabToken').change(function()
     {
-        host = $('#gitlabHost').val();
-        if(host == '') return false;
-        url  = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
+        host  = Base64.encode($('#gitlabHost').val());
+        token = $('#gitlabToken').val();
+        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host + '&token=' + token);
+        if(host == '' || token == '') return false;
 
         $.get(url, function(response)
         {
@@ -27,6 +28,7 @@ $(function()
         $('#name').val($option.data('name'));
         $(this).chosen().trigger("chosen:updated");
     });
+   
 });
 
 function scmChanged(scm)
