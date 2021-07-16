@@ -6,7 +6,7 @@ $(function()
         $form = $(this).closest('form');
         $form.css('min-height', $form.height());
     })
-    
+
     $('#gitlabHost, #gitlabToken').change(function()
     {
         host  = Base64.encode($('#gitlabHost').val());
@@ -20,13 +20,13 @@ $(function()
             $('#gitlabProject').chosen().trigger("chosen:updated");;
         });
     });
-    
+
     $('#gitlabProject').change(function()
     {
         $option = $(this).find('option:selected');
         $('#name').val($option.data('name'));
     });
-    
+
 });
 
 function scmChanged(scm)
@@ -37,7 +37,7 @@ function scmChanged(scm)
 
         $('.tips-git').removeClass('hidden');
         $('.tips-svn').addClass('hidden');
-    } 
+    }
     else
     {
         $('.account-fields').removeClass('hidden');

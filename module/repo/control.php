@@ -1118,17 +1118,18 @@ class repo extends control
 	 */
 	public function ajaxGetGitlabProjects($host, $token)
 	{
-        $host  = helper::safe64Decode($host);
-        $projects = $this->repo->getGitlabProjects($host, $token);
-        if(!$projects) return $this->send(array('message' => array()));
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
+        $host  = helper::safe64decode($host);
+        $projects = $this->repo->getgitlabprojects($host, $token);
+
+        if(!$projects) $this->send(array('message' => array()));
+
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
-            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
+            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name}:{$project->http_url_to_repo}</option>";
         }
         die($options);
+
     }
 
     /**
