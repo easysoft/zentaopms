@@ -517,7 +517,7 @@ class gitlab
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
 
-        if(empty($count)) $count = 1;
+        if(empty($count)) $count = 100;
         $params = array();
         $params['ref_name'] = $branch;
         $params['per_page'] = $count;
@@ -624,6 +624,7 @@ class gitlab
             if(count($results) < 100) break;
         }
 
+        $files = array();
         foreach($allResults as $row)
         {
             $file = new stdclass();

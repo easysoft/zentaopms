@@ -177,8 +177,7 @@ class html extends baseHTML
             }
         }
 
-        $string  = '';
-        $string .= "<select name='$name' {$id} $attrib>\n";
+        $string = "<select name='$name' {$id} $attrib>\n";
 
         /* The options. */
         if(is_array($selectedItems)) $selectedItems = implode(',', $selectedItems);

@@ -1416,11 +1416,18 @@ class project extends control
 
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
-            if(empty($executionIdList)) die(js::reload('parent'));
+
+            if(empty($executionIdList))
+            {
+                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+                die(js::reload('parent'));
+            }
 
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
             foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->user->updateUserView($executionIdList, 'sprint');
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $this->session->set('project', '');
             die(js::reload('parent'));

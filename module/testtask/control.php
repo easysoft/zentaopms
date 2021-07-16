@@ -597,6 +597,8 @@ class testtask extends control
         {
             $this->loadModel('qa')->setMenu($this->products, $productID, $branchID, $taskID);
         }
+        unset($this->lang->testtask->report->charts['bugStageGroups']);
+        unset($this->lang->testtask->report->charts['bugHandleGroups']);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
         $this->view->position[]    = html::a($this->createLink('testtask', 'cases', "taskID=$taskID"), $this->products[$productID]);

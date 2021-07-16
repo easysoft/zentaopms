@@ -446,7 +446,7 @@ class testcaseModel extends model
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
                 ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
                 ->orderBy($sort)
-                ->page($pager)
+                ->page($pager, 't1.id')
                 ->fetchAll();
         }
         elseif($browseType == 'bysuite')

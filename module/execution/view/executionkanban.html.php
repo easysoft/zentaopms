@@ -27,7 +27,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php $rowIndex = 0; ?>
+      <?php $rowIndex = 0;?>
       <?php foreach($kanbanGroup as $projectID => $executionList):?>
       <tr>
         <td class='board-project color-<?php echo $rowIndex;?>'>

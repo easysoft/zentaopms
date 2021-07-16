@@ -225,8 +225,6 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 
 /* Execution menu. */
 $lang->execution->homeMenu = new stdclass();
-//if($config->systemMode == 'new') $lang->execution->homeMenu->index = "$lang->dashboard|execution|index|";
-//$lang->execution->homeMenu->list = array('link' => "{$lang->execution->list}|execution|all|", 'alias' => 'create,batchedit');
 if($config->systemMode == 'new') $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
 
 $lang->execution->menu = new stdclass();
@@ -316,7 +314,7 @@ $lang->qa->dividerMenu = ',bug,testtask,caselib,';
 
 /* DevOps menu. */
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccomment,showsynccommit');
+$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
 $lang->devops->menu->maintain = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');

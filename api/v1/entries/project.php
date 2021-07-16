@@ -20,27 +20,40 @@ class projectEntry extends entry
         $this->sendError(400, 'error');
     }
 
-    public function put($productID)
+    public function put($projectID)
     {
-        $oldProduct = $this->loadModel('product')->getByID($productID);
+        $oldProject     = $this->loadModel('project')->getByID($projectID);
+        $linkedProducts = $this->project->getProducts($projectID);
 
         /* Set $_POST variables. */
-        $fields = 'program,line,name,PO,QD,RD,type,desc,whitelist,status,acl';
-        $this->batchSetPost($fields, $oldProduct);
+        $fields = 'name,begin,end,acl,parent,desc,PM,whitelist';
+        $this->batchSetPost($fields, $oldProject);
 
-        $control = $this->loadController('product', 'edit');
-        $control->edit($productID);
+        $products = array();
+        $plans    = array();
+        foreach($linkedProducts as $product)
+        {
+            $products[] =  $product->id;
+            $plans[]    =  $product->plan;
+        }
+        $this->setPost('products', $products);
+        $this->setPost('plans', $plans);
+
+        $control = $this->loadController('project', 'edit');
+        $control->edit($projectID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(!isset($data->result)) return $this->sendError(400, 'error');
 
-        $this->sendSuccess(200, 'success');
+        $project = $this->project->getByID($projectID);
+        $this->send(200, $project);
     }
 
-    public function delete($productID)
+    public function delete($projectID)
     {
-        $control = $this->loadController('product', 'delete');
-        $control->delete($productID, 'yes');
+        $control = $this->loadController('project', 'delete');
+        $control->delete($projectID, 'yes');
 
         $this->getData();
         $this->sendSuccess(200, 'success');

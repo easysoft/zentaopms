@@ -405,8 +405,9 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
-$lang->execution->myExecutions  = "J'étais impliqué";
-$lang->execution->doingProject  = 'Projets en cours';
+$lang->execution->myExecutions = "J'étais impliqué";
+$lang->execution->doingProject = 'Projets en cours';
+
 $lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . ' ' . $lang->execution->common;
 $lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . ' ' . $lang->execution->common;
 $lang->execution->kanbanColType['suspended'] = $lang->execution->statusList['suspended'] . ' ' . $lang->execution->common;
