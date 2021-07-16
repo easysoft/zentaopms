@@ -139,13 +139,23 @@ class group extends control
         /* Get the group data by id. */
         $group = $this->group->getByID($groupID);
 
+        $projects = array();
+        if($this->config->systemMode == 'classic')
+        {
+            $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
+        }
+        else
+        {
+            $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
+        }
+
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
         $this->view->position[] = $group->name;
         $this->view->position[] = $this->lang->group->manageView;
 
         $this->view->group    = $group;
         $this->view->programs = $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq('0')->andWhere('type')->eq('program')->orderBy('order_desc')->fetchPairs('id', 'name');
-        $this->view->projects = $this->config->systemMode == 'classic' ? $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name') : $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->projects = $projects;
         $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
         $navGroup = array();
