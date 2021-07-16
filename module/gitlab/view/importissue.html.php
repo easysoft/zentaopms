@@ -18,22 +18,22 @@
   <?php if($importable):?>
   <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data'>
     <div class="table-responsive">
-      <table class="table table-borderless">
+      <table class="table table-form with-border">
         <thead>
           <tr>
-            <th width='60px'><?php echo $lang->gitlab->gitlabIssue;?></th>
-            <th width='30px'><?php echo $lang->gitlab->objectType;?></th>
-            <th width='30px'><?php echo $lang->product->common;?></th>
-            <th width='30px'><?php echo $lang->execution->common;?></th>
+            <th class='w-60px'><?php echo $lang->gitlab->gitlabIssue;?></th>
+            <th class='w-30px'><?php echo $lang->gitlab->objectType;?></th>
+            <th class='w-30px'><?php echo $lang->product->common;?></th>
+            <th class='w-30px'><?php echo $lang->execution->common;?></th>
           </tr>
         </thead>
         <tbody>
         <?php foreach($gitlabIssues as $issue):?>
           <tr>
             <td><?php echo "<a href='{$issue->web_url}' target='_blank'>$issue->title</a>";?></td>
-            <td><?php echo html::select("objectTypeList[{$issue->iid}]", $objectTypes, '', "class='form-control select chosen'" );?></td>
-            <td><?php echo html::select("productList[{$issue->iid}]", $products, '', "class='form-control select chosen'" );?></td>
-            <td><?php echo html::select("executionList[{$issue->iid}]", '', '', "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("objectTypeList[{$issue->iid}]", $objectTypes, '', "class='form-control'" );?></td>
+            <td><?php echo html::select("productList[{$issue->iid}]", $products, '', "class='form-control'" );?></td>
+            <td><?php echo html::select("executionList[{$issue->iid}]", '', '', "class='form-control'" );?></td>
             <input type='hidden' name='gitlabID'   value='<?php echo $gitlabID;?>' />
             <input type='hidden' name='gitlabProjectID' value='<?php echo $gitlabProjectID;?>'/>
          </tr>
