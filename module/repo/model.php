@@ -1741,32 +1741,41 @@ class repoModel extends model
         return $buildedURL;
     }
 
-	/**
-	 * Get gitlab projects.
-	 *
-	 * @param  string   $host
-	 * @param  string   $token
-	 * @access public
-	 * @return array
-	 */
-	public function getGitlabProjects($host, $token)
-	{
-		$host  = rtrim($host, '/');
-		$host .= '/api/v4/projects';
+    /**
+     * Get gitlab projects.
+     *
+     * @param  string   $host
+     * @param  string   $token
+     * @access public
+     * @return array
+     */
+    public function getGitlabProjects($host, $token)
+    {
+        $host  = rtrim($host, '/');
+        $host .= '/api/v4/projects';
 
-		$allResults = array();
-		for($page = 1; true; $page ++)
-		{
-			$results = json_decode(common::http($host . "?private_token=$token&simple=true&membership=true&page={$page}&per_page=100"));
-			if(empty($results) or $page > 10) break;
-			$allResults = $allResults + $results;
-		}
+        $allResults = array();
+        for($page = 1; true; $page ++)
+        {
+            $results = json_decode(common::http($host . "?private_token=$token&simple=true&membership=true&page={$page}&per_page=100"));
+            if(empty($results) or $page > 10) break;
+            $allResults = $allResults + $results;
+        }
 
-		return $allResults;
-	}
+        return $allResults;
+    }
 
+    /**
+     * Process gitlab repo.
+     * 
+     * @param  oobject    $repo
+     * @access public
+     * @return object
+     */
     public function processGitlab($repo)
     {
+        return $repo;
+
         $gitlab = $this->loadModel('gitlab')->getByID($repo->client);
         if(!$gitlab) return $repo;
         $repo->gitlab   = $gitlab->id;
