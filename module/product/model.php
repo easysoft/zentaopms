@@ -874,19 +874,23 @@ class productModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  int    $appendProject
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct($productID, $branch = 0)
+    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0)
     {
-        return $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projects = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
-            ->fetchPairs();
+            ->fetchPairs('id', 'name');
+
+        if($appendProject) $projects += $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($appendProject)->fetchPairs('id', 'name');
+        return $projects;
     }
 
     /**

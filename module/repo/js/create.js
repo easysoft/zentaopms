@@ -7,11 +7,12 @@ $(function()
         $form.css('min-height', $form.height());
     })
     
-    $('#gitlabHost').change(function()
+    $('#gitlabHost, #gitlabToken').change(function()
     {
-        host  = $('#gitlabHost').val();
-        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
-        if(host == '') return false;
+        host  = Base64.encode($('#gitlabHost').val());
+        token = $('#gitlabToken').val();
+        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host + '&token=' + token);
+        if(host == '' || token == '') return false;
 
         $.get(url, function(response)
         {

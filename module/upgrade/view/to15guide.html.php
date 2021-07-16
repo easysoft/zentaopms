@@ -46,7 +46,6 @@
       <hr/>
       <div class='panel-footer text-center'>
         <?php echo html::submitButton($lang->upgrade->start . $lang->upgrade->common);?>
-        <?php echo html::backButton();?>
       </div>
     </form>
   </div>

@@ -1947,25 +1947,4 @@ class docModel extends model
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
         $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed"' : '') . '>' . $li . '</li>';
     }
-
-    /**
-     * Process markdown.
-     *
-     * @param  string  $markdown
-     * @access public
-     * @return string
-     */
-    public function processMarkdown($markdown)
-    {
-        if(empty($markdown)) return false;
-
-        $markdown = str_replace('&', '&amp;', $markdown);
-
-        $hyperdown = $this->app->loadClass('hyperdown');
-        $content   = $hyperdown->makeHtml($markdown);
-
-        $content = htmlspecialchars_decode($content);
-        $content = fixer::stripDataTags($content);
-        return $content;
-    }
 }

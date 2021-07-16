@@ -51,7 +51,7 @@
           <tr>
             <th class='w-50px'><?php echo $lang->idAB;?></th>
             <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
-            <th class='required' style="width:100%"><?php echo $lang->execution->project;?></th>
+            <th class='w-150px required' style="width:100%"><?php echo $lang->execution->project;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
             <th class='w-150px required'><?php echo $lang->execution->$code;?></th>
@@ -123,7 +123,7 @@
           <tr>
             <td colspan='<?php echo count($visibleFields) + 6?>' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::backButton();?>
+              <?php echo html::linkButton($lang->goback, $this->session->executionList, 'self', '', 'btn btn-wide');;?>
             </td>
           </tr>
         </tfoot>

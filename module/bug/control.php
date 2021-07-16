@@ -519,7 +519,16 @@ class bug extends control
         /* Get products and projects. */
         $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc');
         $projects = array(0 => '');
-        if($projectID)
+        if($executionID)
+        {
+            $products    = array();
+            $linkedProducts = $this->loadModel('execution')->getProducts($executionID);
+            foreach($linkedProducts as $product) $products[$product->id] = $product->name;
+
+            $project  = $this->loadModel('project')->getByID($projectID);
+            $projects = array($projectID => $project->name);
+        }
+        elseif($projectID)
         {
             $products    = array();
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
@@ -899,7 +908,7 @@ class bug extends control
         $this->view->product          = $product;
         $this->view->productName      = $this->products[$productID];
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
-        $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch);
+        $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch, $bug->project);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->executions       = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
@@ -1563,7 +1572,7 @@ class bug extends control
             $this->loadModel('gitlab');
             $relation = $this->gitlab->getRelationByObject('bug', $bugID);
             if(!empty($relation)) $this->gitlab->deleteIssue('bug', $bugID, $relation->issueID);
- 
+
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0)
             {
