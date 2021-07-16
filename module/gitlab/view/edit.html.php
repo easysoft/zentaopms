@@ -10,34 +10,33 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->gitlab->edit; ?></h2>
+        <h2><?php echo $lang->gitlab->edit;?></h2>
       </div>
       <form id='gitlabForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->gitlab->name; ?></th>
-            <td class='required'><?php echo html::input('name', $gitlab->name, "class='form-control' placeholder='{$lang->gitlab->placeholder->name}'"); ?></td>
+            <th><?php echo $lang->gitlab->name;?></th>
+            <td class='required'><?php echo html::input('name', $gitlab->name, "class='form-control' placeholder='{$lang->gitlab->placeholder->name}'");?></td>
             <td class="tips-git"></td>
           </tr>
           <tr>
-            <th><?php echo $lang->gitlab->url; ?></th>
-            <td class='required'><?php echo html::input('url', $gitlab->url, "class='form-control' placeholder='{$lang->gitlab->placeholder->url}'"); ?></td>
+            <th><?php echo $lang->gitlab->url;?></th>
+            <td class='required'><?php echo html::input('url', $gitlab->url, "class='form-control' placeholder='{$lang->gitlab->placeholder->url}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->token;?></th>
             <td><?php echo html::input('token', $gitlab->token, "class='form-control' placeholder='{$lang->gitlab->placeholder->token}'");?></td>
           </tr>
-
-           <tr>
+          <tr>
             <th></th>
             <td class='text-center form-actions'>
-              <?php echo html::submitButton(); ?>
-              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"'); ?>
+              <?php echo html::submitButton();?>
+              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
           </tr>
         </table>
@@ -45,4 +44,4 @@
     </div>
   </div>
 </div>
-<?php include '../../common/view/footer.html.php'; ?>
+<?php include '../../common/view/footer.html.php';?>

@@ -684,6 +684,11 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('15.0.2'));
             $this->uniqueProjectAdmin();
             $this->appendExec('15_0_2');
+        case '15_0_3':
+            $this->saveLogs('Execute 15_0_3');
+            $this->execSQL($this->getUpgradeFile('15.0.3'));
+            $this->processGitlabRepo();
+            $this->appendExec('15_0_3');
         }
 
         $this->deletePatch();
@@ -874,6 +879,7 @@ class upgradeModel extends model
             case '15_0': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0'));
             case '15_0_1':
             case '15_0_2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.2'));
+            case '15_0_3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -4344,7 +4350,7 @@ class upgradeModel extends model
             else
             {
                 /* Use historical projects as project upgrades. */
-                $projects = $this->dao->select('id,name,begin,end,status,PM')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+                $projects = $this->dao->select('id,name,begin,end,status,PM,acl')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
                 foreach($projectIdList as $projectID)
                 {
                     $data->projectName   = $projects[$projectID]->name;
@@ -4352,6 +4358,7 @@ class upgradeModel extends model
                     $data->end           = $projects[$projectID]->end;
                     $data->projectStatus = $projects[$projectID]->status;
                     $data->PM            = $projects[$projectID]->PM;
+                    $data->projectAcl    = $projects[$projectID]->acl == 'custom' ? 'private' : $projects[$projectID]->acl;
 
                     $projectList[$projectID] = $this->createProject($programID, $data);
                 }
@@ -5083,6 +5090,12 @@ class upgradeModel extends model
         return true;
     }
 
+    /**
+     * Process gitlab repo data.
+     *
+     * @access public
+     * @return void
+     */
     public function processGitlabRepo()
     {
         $repoList = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')->fetchAll();
@@ -5104,7 +5117,7 @@ class upgradeModel extends model
             $this->loadModel('gitlab')->saveProjectRelation($products, $gitlabID, $gitlabProject);
 
             $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($gitlabProject)->where('id')->eq($repo->id)->exec();
-            
+
             $this->loadModel("gitlab")->initWebhooks($products, $gitlabID, $gitlabProject);
         }
     }

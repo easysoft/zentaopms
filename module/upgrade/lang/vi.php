@@ -56,16 +56,21 @@ $lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
 $lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
 $lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
-<p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
-<ol>
-<p><li>Added the concept of program. A program set can include multiple products and multiple projects.</li></p>
-<p><li>Subdivided the concept of project and iteration, a project can contain multiple iterations.</li></p>
-<p><li>The navigation adds a left menu and supports multi-page operations.</li></p>
-</ol>
+<p>ZenTao version 15.0 has major upgrade of features, including:</p>
+<p><strong>1. Add the concept of Program</strong></p>
+<p>A program is a collection of interrelated and coordinated projects. It is at the highest level and belongs to the concept of a strategic level. It has multi-level project management, helping managers to form strategic directions and allocate resources at a macro level.</p>
+<p><strong>2. Clarify the concept of Product and Project</strong></p>
+<p>Product defines what should be done and focuses on requirement management. Project defines how to do it and focuses on finishing tasks of the project within the specified time, budget and quality objectives. A project can be done in Agile or Waterfall, which is the management of the campaign level.</p> <p><strong>3. Add the concept of Project Model</strong></p>
+<p>The new version 15.0 adds a Waterfall model (available in ZenTao Max) to help the project team choose the right project management method according to their needs. Kanban model will be coming soon.</p> <p><strong>4. Add the concept of Execution</strong></p>
+<p>In Version 15.0, depending on the management model, a project can have multiple iterations/sprints/ phases which are Executions in ZenTao. Through executions, the project tasks are completed and the final outcome is delivered.</p> <p><strong>5. Adjust the Navigation</strong></p>
+<p>The top level navigation is moved to the left, and multi-application switching is added as new UI/UX.</p>
 <br/>
-<p>You can experience the latest version of the function online to decide whether to enable the mode: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>Demo</a></p>
-</br>
-<p><strong>How do you plan to use the new version of ZenTao?</strong></p>
+<p>You can try the online demo before you decide to enable new features: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>New Features Online Demo</a></p>
+<p>You can also download an introduction PPT to help you understand it：<a class='text-info' href='' target='_blank'> New Features Introduction PPT</a></p>
+<video src="https://dl.cnezsoft.com/zentao/program.mp4" width="100%" controls ="controls"></video>
+<p style="text-align:center"><small>ZenTao Version 15.0 Introduction</small></p>
+<br/>
+<p><strong>How do you like to use ZenTao?</strong></p>
 EOD;
 
 $lang->upgrade->to15Mode['classic'] = 'Keep the old version';
@@ -102,7 +107,7 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 EOD;
 
 $lang->upgrade->line          = 'Product Line';
-$lang->upgrade->allLines      = 'All Lines';
+$lang->upgrade->allLines      = "All {$lang->productComon} Lines";
 $lang->upgrade->program       = 'Merge Project';
 $lang->upgrade->existProgram  = 'Existing programs';
 $lang->upgrade->existProject  = 'Existing projects';
@@ -121,7 +126,7 @@ $lang->upgrade->projectName   = 'Project Name';
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
 $lang->upgrade->mergeSummary       = "Dear users, there are %s {$lang->productCommon} and %s {$lang->projectCommon} in your system waiting for Migration. By System Calculation, we recommend your migration plan as follows, you can also adjust according to your own situation:";
-$lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED {$lang->projectCommon}: Consolidate the entire product line and the {$lang->productCommon} and {$lang->projectCommon} below it into one large project.";
+$lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED {$lang->projectCommon}: Consolidate the entire {$lang->productCommon} line and the {$lang->productCommon} and {$lang->projectCommon} below it into one large project.";
 $lang->upgrade->mergeByProduct     = "PRODUCT-BASED {$lang->projectCommon}: You can select multiple {$lang->productCommon} and their lower {$lang->projectCommon} to merge into a large project, or you can select a {$lang->productCommon} to merge its lower {$lang->projectCommon} into a larger project";
 $lang->upgrade->mergeByProject     = "Independent {$lang->projectCommon}: You can select several {$lang->projectCommon} and merge them into one large project, or merge them independently";
 $lang->upgrade->mergeByMoreLink    = "{$lang->projectCommon} that relates multiple {$lang->productCommon}: select which project the {$lang->projectCommon} belongs to.";

@@ -54,7 +54,7 @@ $projectsPinYin = common::convert2Pinyin($projectNames);
 foreach($projects as $programID => $programProjects)
 {
     /* Add the program name before project. */
-    if(isset($programs[$programID]))
+    if(isset($programs[$programID]) and $config->systemMode == 'new')
     {
         $programName = zget($programs, $programID);
 

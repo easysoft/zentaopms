@@ -3,7 +3,6 @@
   <tr><td><?php echo html::radio('projectType', $this->lang->upgrade->projectType, $projectType);?></td></tr>
   <tr><td class='createProjectTip'><?php echo $lang->upgrade->createProjectTip?></td></tr>
   <tr><td class='createExecutionTip hidden'><?php echo $lang->upgrade->createExecutionTip?></td></tr>
-<tr></tr>
 </table>
 <table class='table table-form'>
   <caption class='strong'><?php echo $lang->upgrade->setProgram;?></caption>

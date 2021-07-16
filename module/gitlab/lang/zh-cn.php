@@ -16,7 +16,7 @@ $lang->gitlab->zentaoAccount = '禅道用户';
 $lang->gitlab->browseAction  = 'GitLab列表';
 $lang->gitlab->deleteAction  = '删除GitLab';
 $lang->gitlab->gitlabProject = "{$lang->gitlab->common}项目";
-$lang->gitlab->gitlabIssue   = "{$lang->gitlab->common}issue";
+$lang->gitlab->gitlabIssue   = "{$lang->gitlab->common} issue";
 $lang->gitlab->zentaoProduct = '禅道产品';
 $lang->gitlab->objectType    = '类型'; // task, bug, story
 

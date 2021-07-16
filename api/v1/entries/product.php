@@ -13,7 +13,7 @@ class productEntry extends Entry
         $control = $this->loadController('product', 'view');
         $control->view($productID);
 
-        $data    = $this->getData();
+        $data = $this->getData();
         if(isset($data->status) and $data->status == 'success') return $this->send(200, $data->data->product);
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 

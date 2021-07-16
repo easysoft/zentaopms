@@ -58,15 +58,23 @@ $lang->upgrade->toPRO10Guide   = '禅道专业版10版本升级';
 $lang->upgrade->toBIZ5Guide    = '禅道企业版5版本升级';
 $lang->upgrade->toMAXGuide     = '禅道旗舰版版本升级';
 $lang->upgrade->to15Desc       = <<<EOD
-<p>尊敬的用户，禅道从15版本开始对导航和概念做了调整，主要改动如下：</p>
-<ol>
-<p><li>增加了项目集概念。一个项目集可以包括多个产品和多个项目。</li></p>
-<p><li>细分了项目和迭代概念，一个项目可以包含多个迭代。</li></p>
-<p><li>导航增加了左侧菜单并支持多页面操作。</li></p>
-</ol>
+<p>尊敬的用户，禅道从15版本开始系统功能做了重大升级，主要改动如下：</p>
+<p><strong>一、增加了项目集概念</strong></p>
+<p>项目集是一组相互关联，且被协调管理的项目集合，处于最高层级，属于战略层面的概念。它可以进行多层级管理，帮助管理者站在宏观的视角去制定战略方向和分配资源。</p>
+<p><strong>二、明确了产品和项目概念</strong></p>
+<p>产品是定义做什么，主要管理需求；项目是定义如何做，主要是在规定的时间、预算和质量目标范围内完成项目的各种工作，可以通过敏捷迭代的方式，也可以通过瀑布阶段的方式，属于战役层面的管理。</p>
+<p><strong>三、增加了项目模型概念</strong></p>
+<p>新版本在敏捷管理模型的基础上增加了瀑布管理模型（旗舰版提供），后续还会支持看板管理模型，帮助项目团队按需选择适合的项目管理方式。</p>
+<p><strong>四、增加了执行概念</strong></p>
+<p>新版本中，根据选择管理模型的不同，一个项目可以包含多个迭代/冲刺或阶段，我们把多个迭代/冲刺或阶段统称为执行，通过执行去完成项目的任务，交付最终的结果。</p>
+<p><strong>五、调整了导航结构</strong></p>
+<p>将一级导航调整到了界面左侧，同时增加了多应用切换的全新交互体验。</p>
 <br/>
-<p>您可以在线体验最新版本的功能，以决定是否启用的模式：<a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>演示demo</a></p>
-</br>
+<p>您可以在线体验最新版本的功能，以决定是否启用新的模式：<a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>最新版演示demo</a></p>
+<p>您还可以下载新版本功能介绍PPT：<a class='text-info' href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank'>最新版功能介绍PPT</a></p>
+<video src="https://dl.cnezsoft.com/zentao/program.mp4"  width="100%" controls ="controls"></video>
+<p style="text-align:center"><small>禅道15.0版本介绍</small></p>
+<br/>
 <p><strong>请问您计划如何使用禅道的新版本呢？</strong></p>
 EOD;
 
@@ -89,7 +97,7 @@ $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自�
 $lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
 
 $lang->upgrade->line          = '产品线';
-$lang->upgrade->allLines      = '所有产品线';
+$lang->upgrade->allLines      = "所有{$lang->productCommon}线";
 $lang->upgrade->program       = '目标项目集和项目';
 $lang->upgrade->existProgram  = '已有项目集';
 $lang->upgrade->existProject  = '已有项目';
@@ -108,7 +116,7 @@ $lang->upgrade->projectName   = '项目名称';
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->projectEmpty       = '所属项目不能为空！';
 $lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个{$lang->productCommon}，%s个{$lang->projectCommon}等待迁移。";
-$lang->upgrade->mergeByProductLine = "以产品线组织的{$lang->productCommon}和{$lang->projectCommon}：将整个产品线及其下面的{$lang->productCommon}和{$lang->projectCommon}归并到一个项目集和项目中，也可以分开归并。";
+$lang->upgrade->mergeByProductLine = "以{$lang->productCommon}线组织的{$lang->productCommon}和{$lang->projectCommon}：将整个{$lang->productCommon}线及其下面的{$lang->productCommon}和{$lang->projectCommon}归并到一个项目集和项目中，也可以分开归并。";
 $lang->upgrade->mergeByProduct     = "以{$lang->productCommon}组织的{$lang->projectCommon}：可以选择多个{$lang->productCommon}及其下面的{$lang->projectCommon}归并到一个项目集和项目中，也可以选择某一个{$lang->productCommon}将其下面所属的{$lang->projectCommon}归并到项目集和项目中。";
 $lang->upgrade->mergeByProject     = "独立的{$lang->projectCommon}：可以选择若干{$lang->projectCommon}归并到一个项目中，也可以独立归并。";
 $lang->upgrade->mergeByMoreLink    = "关联多个{$lang->productCommon}的{$lang->projectCommon}：选择这个{$lang->projectCommon}归属于哪一个项目。";
