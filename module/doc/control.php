@@ -488,7 +488,7 @@ class doc extends control
         if($doc->contentType == 'markdown')
         {
             $doc->content = $this->doc->processMarkdown($doc->content);
-            $doc->digest  = $this->doc->processMarkdown($$doc->digest);
+            $doc->digest  = $this->doc->processMarkdown($doc->digest);
         }
 
         /* Check priv when lib is product or project. */
