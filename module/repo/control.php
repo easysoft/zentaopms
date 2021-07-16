@@ -1110,16 +1110,17 @@ class repo extends control
         die($reposHtml);
     }
 
-	/**
-	 * Ajax get gitlab projects.
-	 *
-	 * @param  int       $host
-	 * @access public
-	 * @return void
-	 */
-	public function ajaxGetGitlabProjects($host, $token)
-	{
-        $host  = helper::safe64decode($host);
+    /**
+     * Ajax get gitlab projects.
+     *
+     * @param  string    $host
+     * @param  string    $token
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGitlabProjects($host, $token)
+    {
+        $host     = helper::safe64decode($host);
         $projects = $this->repo->getgitlabprojects($host, $token);
 
         if(!$projects) $this->send(array('message' => array()));
@@ -1129,8 +1130,8 @@ class repo extends control
         {
             $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name}:{$project->http_url_to_repo}</option>";
         }
-        die($options);
 
+        die($options);
     }
 
     /**
