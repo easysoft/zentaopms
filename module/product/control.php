@@ -586,12 +586,20 @@ class product extends control
         $rdUsers = $this->user->getPairs('nodeleted|devfirst', $appendRdUsers);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
-        /* Get product lines by programs.*/
-        $programs = $this->program->getTopPairs();
-        $lines    = array();
-        foreach($programs as $id => $program)
+        $programs = array();
+        if($this->config->systemMode == 'new')
         {
-            $lines[$id] = array('') + $this->product->getLinePairs($id);
+            /* Get product lines by programs.*/
+            $programs = $this->program->getTopPairs();
+            $lines    = array(0 => '');
+            foreach($programs as $id => $program)
+            {
+                $lines[$id] = array('') + $this->product->getLinePairs($id);
+            }
+        }
+        else
+        {
+            $lines = array('') + $this->product->getLinePairs();
         }
 
         $this->view->title         = $this->lang->product->batchEdit;
@@ -603,7 +611,7 @@ class product extends control
         $this->view->qdUsers       = $qdUsers;
         $this->view->rdUsers       = $rdUsers;
         $this->view->programID     = $programID;
-        $this->view->programs      = array('') + $programs;
+        $this->view->programs      = array('' => '') + $programs;
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -949,7 +957,7 @@ class product extends control
         $lines = array();
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
 
-        if($productID)  die(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control chosen'"));
+        if($productID)  die(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
         if(!$productID) die(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
     }
 
