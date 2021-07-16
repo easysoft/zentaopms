@@ -252,14 +252,13 @@
             </td>
           </tr>
           <?php endif;?>
-        <?php if(!empty($gitlabProjects)):?>
-        <tr>
-          <th><?php echo $lang->story->sync2Gitlab;?></th>
-          <td><?php echo html::select('gitlab', $gitlabList, '', "class='form-control chosen'");?></td>
-          <td><?php echo html::select('gitlabProject', '', '', "class='w-50px form-control chosen'");?></td>
-        </tr>
-        <?php endif;?>
-
+          <?php if(!empty($gitlabProjects)):?>
+          <tr>
+            <th><?php echo $lang->story->sync2Gitlab;?></th>
+            <td><?php echo html::select('gitlab', $gitlabList, '', "class='form-control chosen'");?></td>
+            <td><?php echo html::select('gitlabProject', '', '', "class='w-50px form-control chosen'");?></td>
+          </tr>
+          <?php endif;?>
         </tbody>
         <tfoot>
           <tr>
