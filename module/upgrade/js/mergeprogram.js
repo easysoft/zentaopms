@@ -262,6 +262,7 @@ $(function()
         }
 
         var currentLine = $(this).closest('li').attr('lineid');
+        $(this).closest('ul').find('li').removeClass('currentPage');
         $(this).closest('li').addClass('currentPage');
 
         /* Active current li and remove active before li. */
