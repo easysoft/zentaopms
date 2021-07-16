@@ -197,6 +197,7 @@ $(function()
             }
             $('[data-line=' + value + ']').prop('checked', true);
             $('[lineid=' + value + ']').addClass('active');
+            $('#programName').val($("[lineid='" + value + "']").find('a').text());
         }
         else
         {
@@ -208,6 +209,9 @@ $(function()
             }
             $('[data-line=' + value + ']').prop('checked', false);
             $('[lineid=' + value + ']').removeClass('active');
+            $('#programName').val('');
+            $('#programStatus').val('wait');
+            $('#programStatus').trigger('chosen:updated');
         }
 
         /* Determine whether all product line buttons are selected. */
@@ -287,7 +291,7 @@ $(function()
         $(target).removeClass('hidden');
 
         /* Replace program name. */
-        $('#programName').val($(this).text());
+        if($("[id^='productLines\[" + currentLine +"\]'").prop('checked')) $('#programName').val($(this).text());
 
         /* Replace project name. */
         var productID = $(target).find('.lineGroup .productList input[name*="product"]').val();
@@ -369,10 +373,17 @@ $(function()
             $('[data-product=' + value + ']').prop('checked', true)
 
             if(lineID && $('[data-lineid=' + lineID + ']').length > 0 && !$('[data-lineid=' + lineID + ']').prop('checked')) $('[data-lineid=' + lineID + ']').prop('checked', true);
+
+            $('#programName').val($("[lineid='" + lineID + "']").find('a').text());
+            $('#programStatus').val('wait');
+            $('#programStatus').trigger('chosen:updated');
         }
         else
         {
             $('[data-product=' + value + ']').prop('checked', false)
+            $('#programName').val('');
+            $('#programStatus').val('wait');
+            $('#programStatus').trigger('chosen:updated');
         }
 
         var checkedProject = true;
@@ -395,6 +406,7 @@ $(function()
 
     $('[name^=sprints]').change(function()
     {
+        var lineID = $(this).attr('data-line');
         if($(this).prop('checked'))
         {
             if(lineID && $('[data-lineid=' + lineID + ']').length > 0 && !$('[data-lineid=' + lineID + ']').prop('checked')) $('[data-lineid=' + lineID + ']').prop('checked', true);
@@ -402,6 +414,8 @@ $(function()
             var productID = $(this).attr('data-product');
             if(productID && $('[data-productid=' + productID + ']').length > 0 && !$('[data-productid=' + productID + ']').prop('checked')) $('[data-productid=' + productID + ']').prop('checked', true);
 
+
+            $('#programName').val($("[lineid='" + lineID + "']").find('a').text());
             setProgramByProduct($(':checkbox[data-productid=' + productID + ']'));
         }
 
