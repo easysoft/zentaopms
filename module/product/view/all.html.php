@@ -69,6 +69,7 @@
           </tr>
         </thead>
         <tbody id="productTableList">
+        <?php $lineNames = array();?>
         <?php foreach($productStructure as $programID => $program):?>
         <?php
         $trAttrs  = "data-id='program.$programID' data-parent='0' data-nested='true'";
@@ -86,7 +87,8 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName'])):?>
+          <?php if(isset($line['lineName']) and !in_array($line['lineName'], $lineNames)):?>
+          <?php $lineNames[] = $line['lineName'];?>
           <?php
           if($this->config->systemMode == 'new' and $programID)
           {
