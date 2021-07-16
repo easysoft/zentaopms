@@ -1740,12 +1740,12 @@ class executionModel extends model
     {
         $this->loadModel('user');
         $products    = isset($_POST['products']) ? $_POST['products'] : $products;
-        $oldProdcuts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
+        $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
         if(empty($products))
         {
-            $this->user->updateUserView(array_keys($oldProdcuts), 'product', $members);
+            $this->user->updateUserView(array_keys($oldProducts), 'product', $members);
             return true;
         }
 
@@ -1760,10 +1760,10 @@ class executionModel extends model
 
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
-            if(isset($oldProdcuts[$productID][$branch]))
+            if(isset($oldProducts[$productID][$branch]))
             {
-                $oldProdcuts= $oldProdcuts[$productID][$branch];
-                $oldPlan    = $oldProdcuts>plan;
+                $oldProducts = $oldProducts[$productID][$branch];
+                $oldPlan     = $oldProducts->plan;
             }
 
             $data = new stdclass();
@@ -1775,7 +1775,7 @@ class executionModel extends model
             $existedProducts[$productID] = true;
         }
 
-        $oldProductKeys = array_keys($oldProdcuts);
+        $oldProductKeys = array_keys($oldProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
     }
