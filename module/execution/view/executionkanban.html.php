@@ -52,7 +52,7 @@
                         <?php
                         if(common::hasPriv('execution', 'task'))
                         {
-                            echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title=$execution->name");
+                            echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title='{$execution->name}'");
                         }
                         else
                         {
