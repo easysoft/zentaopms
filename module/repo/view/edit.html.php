@@ -106,7 +106,7 @@
             <th></th>
             <td colspan='2' class='text-center form-actions'>
               <?php echo html::submitButton(); ?>
-              <?php echo html::backButton() ?>
+              <?php if(!isonlybody()) echo html::a(inlink('maintain', ""), $lang->goback, '', 'class="btn btn-wide"'); ?>
             </td>
           </tr>
         </table>

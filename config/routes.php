@@ -17,6 +17,10 @@ $routes['/products/:id']     = 'product';
 $routes['/productlines']     = 'productLines';
 $routes['/productlines/:id'] = 'productLine';
 
+$routes['/products/:id/stories'] = 'stories';
+$routes['/stories/:id']          = 'story';
+$routes['/stories/:id/change']   = 'storyChange';
+
 $routes['/executions/:execution/tasks'] = 'tasks';
 $routes['/tasks/:id']                   = 'task';
 $routes['/tasks/:id/assignto']          = 'taskAssignTo';

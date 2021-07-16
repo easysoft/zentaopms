@@ -62,6 +62,7 @@ $lang->moduleOrder[200] = 'backup';
 $lang->moduleOrder[205] = 'cron';
 $lang->moduleOrder[210] = 'dev';
 $lang->moduleOrder[215] = 'message';
+$lang->moduleOrder[220] = 'gitlab';
 
 $lang->resource = new stdclass();
 
@@ -1115,6 +1116,24 @@ $lang->resource->svn->apiSync = 'apiSync';
 $lang->svn->methodOrder[5]  = 'diff';
 $lang->svn->methodOrder[10] = 'cat';
 $lang->svn->methodOrder[15] = 'apiSync';
+
+/* GitLab. */
+$lang->resource->gitlab = new stdclass();
+$lang->resource->gitlab->browse      = 'browse';
+$lang->resource->gitlab->create      = 'create';
+$lang->resource->gitlab->edit        = 'edit';
+$lang->resource->gitlab->importIssue = 'importIssue';
+$lang->resource->gitlab->delete      = 'delete';
+$lang->resource->gitlab->bindUser    = 'bindUser';
+$lang->resource->gitlab->bindProduct = 'bindProduct';
+
+$lang->gitlab->methodOrder[5]  = 'browse';
+$lang->gitlab->methodOrder[10] = 'create';
+$lang->gitlab->methodOrder[15] = 'edit';
+$lang->gitlab->methodOrder[20] = 'importIssue';
+$lang->gitlab->methodOrder[30] = 'delete';
+$lang->gitlab->methodOrder[35] = 'bindUser';
+$lang->gitlab->methodOrder[40] = 'bindProduct'; 
 
 /* Git. */
 $lang->resource->git = new stdclass();

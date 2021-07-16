@@ -1119,7 +1119,7 @@ class repo extends control
 	public function ajaxGetGitlabProjects($host, $projectIdList = '')
 	{
         $projects = $this->loadModel('gitlab')->apiGetProjects($host);
-         
+
         if(!$projects) $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
         $options = "<option value=''></option>";

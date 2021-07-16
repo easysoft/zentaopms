@@ -2,24 +2,28 @@
 <?php js::set('method', $method);?>
 <?php js::set('extra', $extra);?>
 <style>
-.table-row .table-col .list-group .nav-tabs {position: sticky; top: 0; background: #fff;}
+.table-row .table-col .list-group .nav-tabs {position: sticky; top: 0; background: #fff; z-index: 950;}
 .table-row .table-col .list-group .nav-tabs>li>span {display: inline-block; margin-left: -6px;}
 .table-row .table-col .list-group .nav-tabs>li>a {padding: 8px 10px; display: inline-block}
 .table-row .table-col .list-group .nav-tabs>li.active>a, .nav-tabs>li.active>span {font-weight: 700; color: #0c64eb;}
 .table-row .table-col .list-group .nav-tabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
 
-.table-row .table-col .list-group .tab-content {margin-top: 10px;}
+.table-row .table-col .list-group .tab-content {margin-top: 10px; z-index: 900;}
 .table-row .table-col .list-group .tab-content ul {list-style: none; margin: 0}
 .table-row .table-col .list-group .tab-content .tab-pane>ul {padding-left: 7px;}
-.table-row .table-col .list-group .tab-content .tab-pane>ul>li span {padding-left: 5px;}
-.table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5);}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li.hide-in-search {position: relative;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li>label+a {padding-left: 45px;}
+.table-row .table-col .list-group .tab-content .tab-pane>ul>li label {background: rgba(131,138,157,0.5); position: absolute; top: 0; left: 5px;}
 .table-row .table-col .list-group .tab-content li a i.icon {font-size: 15px !important;}
 .table-row .table-col .list-group .tab-content li a i.icon:before {min-width: 16px !important;}
 .table-row .table-col .list-group .tab-content li .label {margin-top: 2px; position: unset;}
 .table-row .table-col .list-group .tab-content li ul {padding-left: 15px;}
 .table-row .table-col .list-group .tab-content li>a {margin-top: 5px;display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
 .table-row .table-col .list-group .tab-content li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
+
+#swapper li.hide-in-search>a:focus, #swapper li.hide-in-search>a:hover {color: #838a9d; cursor: default;}
+#swapper li ul li a:focus, #swapper li ul li a:hover, .noProject li a:focus, .noProject li a:hover {background: #0c64eb; color: #fff;}
 </style>
 <?php
 $executionCounts      = array();
@@ -49,16 +53,26 @@ $executionsPinYin = common::convert2Pinyin($executionNames);
 
 foreach($executions as $projectID => $projectExecutions)
 {
+    /* Adapt to the old version. */
+    if($projectID and $config->systemMode == 'new')
+    {
+        $projectName = zget($projects, $projectID);
 
-    if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($projects, $projectID) . '</span> <label class="label">' . $lang->project->common . '</label></li><li><ul>';
-    if($executionCounts[$projectID]['others']) $normalExecutionsHtml .= '<ul><li class="hide-in-search"><span class="text-muted">' . zget($projects, $projectID) . '</span> <label class="label">' . $lang->project->common . '</label></li><li><ul>';
+        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->project->common . '</label><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a></li><li><ul>';
+        if($executionCounts[$projectID]['others']) $normalExecutionsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->project->common . '</label><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a></li><li><ul>';
+    }
+    else
+    {
+        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul class="noProject">';
+        if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<ul class="noProject">';
+    }
 
     foreach($projectExecutions as $index => $execution)
     {
         $selected = $execution->id == $executionID ? 'selected' : '';
         if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
         {
-            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='text-muted $selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
+            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myExecution';
 
@@ -66,13 +80,18 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
         {
-            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='text-muted $selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
+            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
             $others++;
         }
-        else if($execution->status == 'done' or $execution->status == 'closed') $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+        else if($execution->status == 'done' or $execution->status == 'closed')
+        {
+            $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+
+            if($selected == 'selected') $tabActive = 'closed';
+        }
 
         /* If the execution is the last one in the project, print the closed label. */
         if(!isset($projectExecutions[$index + 1]))
@@ -89,8 +108,8 @@ foreach($executions as $projectID => $projectExecutions)
 <div class="table-row">
   <div class="table-col col-left">
     <div class='list-group'>
+      <?php $tabActive = ($iCharges and ($tabActive == 'closed' or $tabActive == 'myExecution')) ? 'myExecution' : 'other';?>
       <?php if($iCharges): ?>
-      <?php $tabActive = ($tabActive == '' or $tabActive == 'myExecution') ? 'myExecution' : 'other';?>
       <ul class="nav nav-tabs">
         <li class="<?php if($tabActive == 'myExecution') echo 'active';?>"><?php echo html::a('#myExecution', $lang->execution->involved, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $iCharges;?></span><li>
         <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
@@ -124,6 +143,8 @@ $(function()
     {
         $(this).find('span').show();
         $(this).siblings('li').find('span').hide();
+        if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
+        $("#dropMenu .search-box").width('auto');
     })
 })
 </script>

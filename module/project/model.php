@@ -490,11 +490,12 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getProducts($projectID, $withBranch = true)
+    public function getProducts($projectID, $withBranch = true, $status = 'all')
     {
         $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$projectID)
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t2.deleted')->eq(0);
         if(!$withBranch) return $query->fetchPairs('id', 'name');
@@ -750,7 +751,6 @@ class projectModel extends model
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project'")
             ->exec();
 
         /* Add the creater to the team. */
@@ -937,7 +937,6 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->check('name', 'unique', "id != $projectID and deleted='0' and `type`='project'")
             ->where('id')->eq($projectID)
             ->exec();
 
@@ -1016,7 +1015,6 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->check('name', 'unique', "id NOT " . helper::dbIN($data->projectIdList) . " and deleted='0'")
                 ->where('id')->eq($projectID)
                 ->exec();
 

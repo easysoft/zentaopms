@@ -65,7 +65,7 @@ $config->gitlab->taskWeightMap['1'] = '1';
 $config->gitlab->taskWeightMap['2'] = '2';
 $config->gitlab->taskWeightMap['3'] = '3';
 
-$config->gitlab->taskStateMap  = array();
+$config->gitlab->taskStateMap = array();
 $config->gitlab->taskStateMap['doing']  = 'opened';
 $config->gitlab->taskStateMap['wait']   = 'opened';
 $config->gitlab->taskStateMap['closed'] = 'closed';
@@ -100,5 +100,8 @@ $config->gitlab->objectTables->story = TABLE_STORY;
 $config->gitlab->objectTables->task  = TABLE_TASK;
 $config->gitlab->objectTables->bug   = TABLE_BUG;
 
-$config->gitlab->objectTypes = array('', 'task', 'bug', 'story'); 
-
+$config->gitlab->objectTypes = array();
+$config->gitlab->objectTypes['']      = '';
+$config->gitlab->objectTypes['task']  = '任务';
+$config->gitlab->objectTypes['bug']   = 'Bug';
+$config->gitlab->objectTypes['story'] = '需求';

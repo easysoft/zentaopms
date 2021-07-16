@@ -86,9 +86,6 @@ $lang->repo->group     = '分组';
 $lang->repo->user      = '用户';
 $lang->repo->info      = '版本信息';
 
-$lang->repo->gitlabHost  = 'Gitlab URL';
-$lang->repo->gitlabToken = '版本信息';
-
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
 $lang->repo->openedBy   = '创建者';
@@ -131,12 +128,12 @@ $lang->repo->scmList['Gitlab']     = 'Gitlab';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
 
-$lang->repo->gitlabHost    = 'Gitlab 地址';
-$lang->repo->gitlabToken   = 'Gitlab Token';
-$lang->repo->gitlabProject = '项目';
+$lang->repo->gitlabHost    = 'GitLab Server';
+$lang->repo->gitlabToken   = 'GitLab Token';
+$lang->repo->gitlabProject = 'GitLab 项目';
 
 $lang->repo->placeholder = new stdclass;
-$lang->repo->placeholder->gitlabHost = '请填写gitlab访问地址';
+$lang->repo->placeholder->gitlabHost = '请填写GitLab访问地址';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';

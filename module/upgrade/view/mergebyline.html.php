@@ -18,7 +18,7 @@
           <?php foreach($productlines as $line):?>
           <li <?php if($line->id == $selected) echo "class='active' id='activeLine'";?> lineID='<?php echo $line->id;?>'>
             <div>
-            <?php echo html::checkbox("productLines[$line->id]", array($line->id => ''), '' ,"class='tile'") . html::a("###", $line->name, '', "data-target=#line{$line->id}");?>
+              <?php echo html::checkbox("productLines[$line->id]", array($line->id => ''), '' ,"class='tile'") . html::a("###", $line->name, '', "data-target=#line{$line->id}");?>
             </div>
           </li>
           <?php endforeach;?>

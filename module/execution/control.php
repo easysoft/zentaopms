@@ -1329,7 +1329,7 @@ class execution extends control
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
         $this->view->acl             = $acl;
         $this->view->plan            = $plan;
         $this->view->name            = $name;
@@ -1433,7 +1433,7 @@ class execution extends control
         $position[] = $this->lang->execution->edit;
 
         $allProducts     = array(0 => '');
-        $executionProsucts = $this->execution->getProducts($execution->project);
+        $executionProsucts = $this->execution->getProducts($execution->project, true, 'noclosed');
         foreach($executionProsucts as $product) $allProducts[$product->id] = $product->name;
 
         $linkedProducts = $this->execution->getProducts($execution->id);
@@ -1882,31 +1882,34 @@ class execution extends control
             ->fetchGroup('root', 'account');
 
         $projectCount = 0;
-        $kanbanGroup  = array();
         $statusCount  = array();
+        $myExecutions = array();
+        $kanbanGroup  = array();
         foreach(array_keys($projects) as $projectID)
         {
             foreach(array_keys($this->lang->execution->statusList) as $status)
             {
                 if(!isset($statusCount[$status])) $statusCount[$status] = 0;
+
                 foreach($executions as $execution)
                 {
                     if($execution->status == $status)
                     {
-                        if(isset($teams[$execution->id][$this->app->user->account])) $kanbanGroup[0][$status][$execution->id] = $execution;
+                        if(isset($teams[$execution->id][$this->app->user->account])) $myExecutions[$status][$execution->id] = $execution;
                         if($execution->project == $projectID) $kanbanGroup[$projectID][$status][$execution->id] = $execution;
                     }
                 }
+
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
             }
 
             if(empty($kanbanGroup[$projectID])) continue;
             $projectCount++;
         }
-        ksort($kanbanGroup);
+        krsort($kanbanGroup);
 
         $this->view->title        = $this->lang->execution->executionKanban;
-        $this->view->kanbanGroup  = $kanbanGroup;
+        $this->view->kanbanGroup  = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
         $this->view->projects     = $projects;
         $this->view->projectCount = $projectCount;
         $this->view->statusCount  = $statusCount;
@@ -2511,8 +2514,9 @@ class execution extends control
             foreach($storyIdList as $storyID)
             {
                 /* Delete related issue in gitlab. */
-                $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-                if(!empty($relation)) $this->loadModel('gitlab')->deleteIssue('story', $storyID, $relation->issueID);
+                $this->loadModel('gitlab');
+                $relation = $this->gitlab->getRelationByObject('story', $storyID);
+                if(!empty($relation)) $this->gitlab->deleteIssue('story', $storyID, $relation->issueID);
 
                 $this->execution->unlinkStory($executionID, $storyID);
             }

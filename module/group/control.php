@@ -145,7 +145,7 @@ class group extends control
 
         $this->view->group    = $group;
         $this->view->programs = $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq('0')->andWhere('type')->eq('program')->orderBy('order_desc')->fetchPairs('id', 'name');
-        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->projects = $this->config->systemMode == 'classic' ? $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name') : $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
         $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
         $navGroup = array();

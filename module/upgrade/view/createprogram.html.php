@@ -3,7 +3,6 @@
   <tr><td><?php echo html::radio('projectType', $this->lang->upgrade->projectType, $projectType);?></td></tr>
   <tr><td class='createProjectTip'><?php echo $lang->upgrade->createProjectTip?></td></tr>
   <tr><td class='createExecutionTip hidden'><?php echo $lang->upgrade->createExecutionTip?></td></tr>
-<tr></tr>
 </table>
 <table class='table table-form'>
   <caption class='strong'><?php echo $lang->upgrade->setProgram;?></caption>
@@ -57,7 +56,7 @@
   <tr class='LineName'>
     <th>
       <span class="line-exist hidden"><?php echo $lang->upgrade->existLine;?></span>
-      <span class="line-no-exist"><?php echo $lang->product->lineName;?></span>
+      <span class="line-no-exist"><?php echo $lang->upgrade->line;?></span>
     </th>
     <td>
       <div class='input-group'>

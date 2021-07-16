@@ -64,7 +64,7 @@ class actionModel extends model
 
         /* Get product project and execution for this object. */
         $relation          = $this->getRelatedFields($action->objectType, $objectID, $actionType, $extra);
-        $action->product   = (int)$relation['product'];
+        $action->product   = $relation['product'];
         $action->project   = (int)$relation['project'];
         $action->execution = (int)$relation['execution'];
 

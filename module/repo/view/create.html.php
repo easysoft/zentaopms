@@ -38,7 +38,7 @@
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabProject;?></th>
-            <td><?php echo html::select('gitlabProject', array(''), '', "class='form-control chosen'");?>
+            <td class='required'><?php echo html::select('gitlabProject', array(''), '', "class='form-control chosen'");?>
           </tr>
           <tr>
             <th><?php echo $lang->repo->name; ?></th>
