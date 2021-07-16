@@ -2425,6 +2425,29 @@ EOD;
 
         return $menu;
     }
+
+    /**
+     * Process markdown.
+     *
+     * @param  string  $markdown
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function processMarkdown($markdown)
+    {
+        if(empty($markdown)) return false;
+
+        $markdown = str_replace('&', '&amp;', $markdown);
+
+        global $app;
+        $hyperdown = $app->loadClass('hyperdown');
+        $content   = $hyperdown->makeHtml($markdown);
+
+        $content = htmlspecialchars_decode($content);
+        $content = fixer::stripDataTags($content);
+        return $content;
+    }
 }
 
 class common extends commonModel

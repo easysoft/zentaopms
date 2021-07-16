@@ -617,6 +617,7 @@ class gitlab
         $params->per_page = 100;
 
         $allResults = array();
+        $files = array();
         while(true)
         {
             $results = $this->fetch($api, $params);

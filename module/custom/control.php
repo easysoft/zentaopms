@@ -545,7 +545,7 @@ class custom extends control
         {
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-            $this->loadModel('setting')->setItem('system.common.global.changedMode', 'yes');
+            $this->setting->setItem('system.common.global.changedMode', 'yes');
 
             $sprintConcept = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
             if($mode == 'new')
