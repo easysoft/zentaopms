@@ -127,7 +127,7 @@ $lang->typeAB       = 'Type';
 $lang->nameAB       = 'Name';
 
 $lang->common->common     = 'Common Module';
-$lang->my->common         = 'Home';
+$lang->my->common         = 'My';
 $lang->program->common    = 'Program';
 $lang->product->common    = 'Product';
 $lang->project->common    = 'Project';
@@ -165,7 +165,7 @@ $lang->release->common     = 'Release';
 $lang->message->common     = 'Message';
 $lang->mail->common        = 'Mail';
 
-$lang->my->shortCommon          = 'Home';
+$lang->my->shortCommon          = 'My';
 $lang->testcase->shortCommon    = 'Case';
 $lang->productplan->shortCommon = 'Plan';
 $lang->score->shortCommon       = 'Score';
