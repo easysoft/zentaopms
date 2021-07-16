@@ -123,14 +123,14 @@ $lang->install->save2File          = '<div class="alert alert-warning">拷貝上
 $lang->install->saved2File         = '配置信息已經成功保存到" <strong>%s</strong> "中。您後面還可繼續修改此檔案。';
 $lang->install->errorNotSaveConfig = '還沒有保存配置檔案';
 
-$lang->install->getPriv  = '設置帳號';
-$lang->install->company  = '公司名稱';
-$lang->install->account  = '管理員帳號';
-$lang->install->password = '管理員密碼';
+$lang->install->getPriv            = '設置帳號';
+$lang->install->company            = '公司名稱';
+$lang->install->account            = '管理員帳號';
+$lang->install->password           = '管理員密碼';
 $lang->install->errorEmptyPassword = '密碼不能為空';
 
-$lang->install->selectedMode       = '選擇模式';
-$lang->install->selectedModeTips   = '後續您還可以去後臺-自定義-模式中進行調整';
+$lang->install->selectedMode     = '選擇模式';
+$lang->install->selectedModeTips = '後續您還可以去後臺-自定義-模式中進行調整';
 
 $lang->install->groupList['ADMIN']['name']   = '管理員';
 $lang->install->groupList['ADMIN']['desc']   = '系統管理員';
