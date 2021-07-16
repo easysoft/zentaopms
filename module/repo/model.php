@@ -104,7 +104,7 @@ class repoModel extends model
 
                 $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
 
-                $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu', "repID=$repoID&branchID=$branchID&objectID=$objectID");
+                $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu', "repID=$repoID&branchID=" . base64_encode($branchID) . "&objectID=$objectID");
                 $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
                 $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
                 $output .= "</div></div>";
@@ -235,9 +235,6 @@ class repoModel extends model
         if($this->post->SCM == 'Gitlab')
         {
            $this->gitlab->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
-
-            /* create webhook for zentao */
-           $this->gitlab->initWebhooks($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
         }
         return $repoID;
     }
@@ -301,7 +298,6 @@ class repoModel extends model
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
-            if($repo->SCM == 'Gitlab') $this->gitlab->initWebhooks($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
             return false;
         }
 

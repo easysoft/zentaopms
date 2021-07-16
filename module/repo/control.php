@@ -345,6 +345,7 @@ class repo extends control
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
+        if($branchID) $branchID = base64_decode($branchID);
 
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
@@ -1109,25 +1110,27 @@ class repo extends control
         die($reposHtml);
     }
 
-	/**
-	 * Ajax get gitlab projects.
-	 *
-	 * @param  int       $host
-	 * @access public
-	 * @return void
-	 */
-	public function ajaxGetGitlabProjects($host, $token)
-	{
-        $host  = helper::safe64Decode($host);
-        $projects = $this->repo->getGitlabProjects($host, $token);
-        if(!$projects) return $this->send(array('message' => array()));
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
+    /**
+     * Ajax get gitlab projects.
+     *
+     * @param  string    $host
+     * @param  string    $token
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGitlabProjects($host, $token)
+    {
+        $host     = helper::safe64decode($host);
+        $projects = $this->repo->getgitlabprojects($host, $token);
+
+        if(!$projects) $this->send(array('message' => array()));
+
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
-            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
+            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name}:{$project->http_url_to_repo}</option>";
         }
+
         die($options);
     }
 
@@ -1144,6 +1147,7 @@ class repo extends control
     {
         $repo     = $this->repo->getRepoByID($repoID);
         $branches = $this->repo->getBranches($repo);
+        if($branchID) $branchID = base64_decode($branchID);
 
         $branchesHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
         foreach($branches as $id => $branchName)

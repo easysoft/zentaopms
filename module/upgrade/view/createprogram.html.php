@@ -14,7 +14,7 @@
     <td class='required'>
       <div class='input-group'>
         <?php echo html::select("programs", $programs, $programID, "class='form-control hidden pgm-exist' onchange='getProjectByProgram(this)'");?>
-        <?php echo html::input("programName", isset($programName) ? $programName : '', "class='form-control pgm-no-exist'");?>
+        <?php echo html::input("programName", '', "class='form-control pgm-no-exist'");?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />

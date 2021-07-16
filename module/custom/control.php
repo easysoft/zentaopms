@@ -553,7 +553,7 @@ class custom extends control
                 if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
                 die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
             }
-            if($mode == 'classic')
+            else
             {
                 if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
                 die(js::reload('top'));
@@ -565,7 +565,6 @@ class custom extends control
             if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') die(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
 
             unset($_SESSION['upgrading']);
-            // $this->locate(inlink('index'));
         }
 
         $this->app->loadLang('upgrade');
