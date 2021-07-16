@@ -354,7 +354,7 @@ class bug extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             $bugID = $bugResult['id'];
@@ -362,7 +362,7 @@ class bug extends control
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->bug->common);
                 $response['locate']  = $this->createLink('bug', 'view', "bugID=$bugID");
-                $this->send($response);
+                return $this->send($response);
             }
 
             /* Record related action, for example FromFeedback. */
@@ -386,12 +386,12 @@ class bug extends control
             $this->executeHooks($bugID);
 
             /* Return bug id when call the API. */
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
 
             /* If link from no head then reload. */
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
 
             if($this->app->openApp == 'execution')
             {
@@ -408,7 +408,7 @@ class bug extends control
             }
             if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID");
             $response['locate'] = $location;
-            $this->send($response);
+            return $this->send($response);
         }
 
         /* Get product, then set menu. */
@@ -627,7 +627,7 @@ class bug extends control
             if($this->viewType == 'json')
             {
                 $bugIDList = array_keys($actions);
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
             }
 
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
@@ -784,7 +784,7 @@ class bug extends control
                 {
                     if(defined('RUN_MODE') && RUN_MODE == 'api')
                     {
-                        $this->send(array('status' => 'error', 'message' => dao::getError()));
+                        return $this->send(array('status' => 'error', 'message' => dao::getError()));
                     }
                     else
                     {
@@ -801,7 +801,7 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
             $bug = $this->bug->getById($bugID);
 
             $this->executeHooks($bugID);

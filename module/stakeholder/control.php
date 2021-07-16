@@ -57,17 +57,17 @@ class stakeholder extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
             $moduleName = $this->app->openApp == 'program' ? 'program'              : $this->moduleName;
             $methodName = $this->app->openApp == 'program' ? 'stakeholder'          : 'browse';
             $param      = $this->app->openApp == 'program' ? "programID=$objectID" : "projectID=$objectID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         if($this->app->openApp == 'program')
@@ -104,7 +104,7 @@ class stakeholder extends control
         if($_POST)
         {
             $stakeholderList = $this->stakeholder->batchCreate($projectID);
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stakeholderList));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stakeholderList));
             die(js::locate($this->createLink('stakeholder', 'browse', "projectID=$projectID"), 'parent'));
         }
 
@@ -160,13 +160,13 @@ class stakeholder extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'Edited');
             $this->action->logHistory($actionID, $changes);
             $response['locate'] = $this->createLink('stakeholder', 'browse', "projectID=$stakeholder->objectID");
-            $this->send($response);
+            return $this->send($response);
         }
 
         $users = array('' => '');

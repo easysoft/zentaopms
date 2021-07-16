@@ -1327,7 +1327,7 @@ class story extends control
                 return $this->send($response);
             }
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
             $response['locate'] = $this->createLink('execution', 'task', "executionID=$executionID");
             return $this->send($response);
         }

@@ -46,11 +46,11 @@ class entry extends control
         if($_POST)
         {
             $id = $this->entry->create();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('entry', $id, 'created');
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $id));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $id));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title      = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->create;
@@ -73,14 +73,14 @@ class entry extends control
         if($_POST)
         {
             $changes = $this->entry->update($id);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('entry', $id, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $entry = $this->entry->getById($id);
@@ -103,9 +103,9 @@ class entry extends control
     public function delete($id)
     {
         $this->entry->delete(TABLE_ENTRY, $id);
-        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success'));
     }
 
     /**

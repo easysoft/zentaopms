@@ -117,11 +117,11 @@ class repo extends control
         {
             $repoID = $this->repo->create();
 
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         $repoID = $this->repo->saveState(0, $objectID);
@@ -155,14 +155,14 @@ class repo extends control
         if($_POST)
         {
             $noNeedSync = $this->repo->update($repoID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!$noNeedSync)
             {
                 $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
         }
 
         $this->app->loadLang('action');
@@ -833,7 +833,7 @@ class repo extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.repo.rules', json_encode($this->post->rules));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setRules')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setRules')));
         }
 
         $repoID = $this->session->repoID;
@@ -1120,7 +1120,7 @@ class repo extends control
 	{
         $projects = $this->loadModel('gitlab')->apiGetProjects($host);
          
-        if(!$projects) $this->send(array('message' => array()));
+        if(!$projects) return $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
         $options = "<option value=''></option>";
         foreach($projects as $project)

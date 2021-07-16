@@ -29,17 +29,17 @@ class build extends control
         {
             $executionID = empty($executionID) ? $this->post->execution : $executionID;
             if(empty($executionID)) dao::$errors['execution'] = $this->lang->build->emptyExecution;
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $buildID = $this->build->create($executionID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
 
             $this->executeHooks($buildID);
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $buildID));
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadExecutionBuilds($executionID)")); // Code for task #5126.
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $buildID));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadExecutionBuilds($executionID)")); // Code for task #5126.
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
         /* Set menu. */
@@ -96,7 +96,7 @@ class build extends control
         if(!empty($_POST))
         {
             $changes = $this->build->update($buildID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('build', $buildID);
 
             if($changes or $files)
@@ -109,7 +109,7 @@ class build extends control
 
             $this->executeHooks($buildID);
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
         }
 
         $this->loadModel('execution');
@@ -296,7 +296,7 @@ class build extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
 
             $link = $this->app->openApp == 'project' ? $this->createLink('project', 'build', "projectID=$build->project") : $this->createLink('execution', 'build', "executionID=$build->execution");
@@ -517,7 +517,7 @@ class build extends control
                 $response['result']  = 'success';
                 $response['message'] = '';
             }
-            $this->send($response);
+            return $this->send($response);
         }
         die(js::reload('parent'));
     }
@@ -637,7 +637,7 @@ class build extends control
                 $response['result']  = 'success';
                 $response['message'] = '';
             }
-            $this->send($response);
+            return $this->send($response);
         }
         die(js::reload('parent'));
     }
