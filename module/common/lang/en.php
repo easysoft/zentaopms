@@ -210,6 +210,7 @@ $lang->my->work = 'Work';
 $lang->project->list = 'Project List';
 
 $lang->execution->executionKanban = "{$lang->execution->common} Kanban";
+$lang->execution->all             = "{$lang->execution->common} List";
 
 $lang->doc->recent    = 'Recent';
 $lang->doc->my        = 'My';
