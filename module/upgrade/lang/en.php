@@ -86,8 +86,8 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>You can set {$lang->projectCommon}s as one new project.</p>
 EOD;
 
-$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
-$lang->upgrade->to15Mode['new']     = 'New program management mode';
+$lang->upgrade->to15Mode['classic'] = 'Keep the classic mode';
+$lang->upgrade->to15Mode['new']     = 'Use the program mode';
 
 $lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
 $lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
