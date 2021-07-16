@@ -518,6 +518,7 @@ class gitlab
         $api = "commits";
 
         if(empty($count)) $count = 100;
+
         $params = array();
         $params['ref_name'] = $branch;
         $params['per_page'] = $count;

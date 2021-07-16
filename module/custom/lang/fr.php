@@ -231,8 +231,9 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['execution']   = $lang->custom->execution;
 
-$lang->custom->conceptQuestions['overview'] = "1. Quelle combinaison de gestion convient le mieux à votre entreprise ?";
-$lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
+$lang->custom->conceptQuestions['overview']   = "1. Quelle combinaison de gestion convient le mieux à votre entreprise ?";
+$lang->custom->conceptQuestions['URAndSR']    = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
+$lang->custom->conceptQuestions['storypoint'] = "3. Which of the following units is your company using for scale estimation?";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();
