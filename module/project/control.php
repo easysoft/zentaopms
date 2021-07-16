@@ -277,7 +277,7 @@ class project extends control
         if($_POST)
         {
             $projectID = $this->project->create();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
@@ -305,15 +305,15 @@ class project extends control
                 }
             }
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
 
             if($this->app->openApp == 'program')
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
             }
             elseif($this->app->openApp == 'doc')
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=project&objectID=$projectID")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=project&objectID=$projectID")));
             }
             else
             {
@@ -321,10 +321,10 @@ class project extends control
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
                     $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
-                    $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
 
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=0&browseType=all", '', '', $projectID)));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=0&browseType=all", '', '', $projectID)));
             }
         }
 
@@ -419,7 +419,7 @@ class project extends control
             $diffResult = array_diff($oldPlans, $_POST['plans']);
 
             $changes = $this->project->update($projectID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {
@@ -433,10 +433,10 @@ class project extends control
                 $this->loadModel('productplan')->linkProject($projectID, $_POST['plans'], $oldPlanStories);
             }
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             $locateLink = $this->session->projectList ? $this->session->projectList : inLink('view', "projectID=$projectID");
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         $linkedBranches = array();
@@ -621,7 +621,7 @@ class project extends control
             $_POST['project'] = $projectID;
             $groupID = $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
             die(js::closeModal('parent.parent'));
         }
 
@@ -994,9 +994,9 @@ class project extends control
         if($_POST)
         {
             $this->group->updateView($groupID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$projectID&programID=$programID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$projectID&programID=$programID")));
         }
 
         $this->project->setMenu($projectID);
@@ -1043,9 +1043,9 @@ class project extends control
         if(!empty($_POST))
         {
             if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$group->project")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$group->project")));
         }
 
         $this->project->setMenu($projectID);
@@ -1108,7 +1108,7 @@ class project extends control
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
             $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
-            $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 
         $project   = $this->project->getById($projectID);
@@ -1518,12 +1518,12 @@ class project extends control
             if(!isset($_POST['products']))
             {
                 dao::$errors['message'][] = $this->lang->project->errorNoProducts;
-                $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             $oldProducts = $this->project->getProducts($projectID);
             $this->project->updateProducts($projectID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->project->getProducts($projectID);
@@ -1534,7 +1534,7 @@ class project extends control
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
             if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         $project = $this->project->getById($projectID);

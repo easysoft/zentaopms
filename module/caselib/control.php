@@ -39,7 +39,7 @@ class caselib extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
             $this->loadModel('action')->create('caselib', $libID, 'opened');
 
@@ -47,11 +47,11 @@ class caselib extends control
             if($this->viewType == 'json')
             {
                 $response['id'] = $libID;
-                $this->send($response);
+                return $this->send($response);
             }
 
             $response['locate']  = $this->createLink('caselib', 'browse', "libID=$libID");
-            $this->send($response);
+            return $this->send($response);
         }
 
         /* Set menu. */
@@ -84,7 +84,7 @@ class caselib extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
             if($changes)
             {
@@ -95,7 +95,7 @@ class caselib extends control
             $this->executeHooks($libID);
 
             $response['locate']  = inlink('view', "libID=$libID");
-            $this->send($response);
+            return $this->send($response);
         }
 
         /* Set lib menu. */
@@ -145,7 +145,7 @@ class caselib extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::reload('parent'));
         }

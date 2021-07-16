@@ -280,7 +280,7 @@ class sso extends control
         if($_POST)
         {
             $result = $this->sso->createUser();
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $result['id']));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $result['id']));
             if($result['status'] != 'success') die($result['data']);
             die('success');
         }

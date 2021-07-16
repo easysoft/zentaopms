@@ -306,7 +306,7 @@ class testcase extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             $caseID = $caseResult['id'];
@@ -314,7 +314,7 @@ class testcase extends control
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->testcase->common);
                 $response['locate']  = $this->createLink('testcase', 'view', "caseID=$caseID");
-                $this->send($response);
+                return $this->send($response);
             }
 
             $this->loadModel('action');
@@ -324,13 +324,13 @@ class testcase extends control
 
             $this->executeHooks($caseID);
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $caseID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $caseID));
             /* If link from no head then reload. */
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $response['locate'] = ($this->session->caseList and strpos($this->session->caseList, 'dynamic') === false) ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
-            $this->send($response);
+            return $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -478,7 +478,7 @@ class testcase extends control
             if(dao::isError()) die(js::error(dao::getError()));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
@@ -1006,7 +1006,7 @@ class testcase extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::locate($this->session->caseList, 'parent'));
         }

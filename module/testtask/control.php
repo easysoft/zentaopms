@@ -212,17 +212,17 @@ class testtask extends control
         if(!empty($_POST))
         {
             $taskID = $this->testtask->create($projectID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
 
             $this->executeHooks($taskID);
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
 
             $task = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch();
             if($this->app->openApp == 'project') $link = $this->createLink('project', 'testtask', "projectID=$task->project");
             if($this->app->openApp == 'execution') $link = $this->createLink('execution', 'testtask', "executionID=$task->execution");
             if($this->app->openApp == 'qa') $link = $this->createLink('testtask', 'browse', "productID=$productID");
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         /* Set menu. */
@@ -597,6 +597,8 @@ class testtask extends control
         {
             $this->loadModel('qa')->setMenu($this->products, $productID, $branchID, $taskID);
         }
+        unset($this->lang->testtask->report->charts['bugStageGroups']);
+        unset($this->lang->testtask->report->charts['bugHandleGroups']);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
         $this->view->position[]    = html::a($this->createLink('testtask', 'cases', "taskID=$taskID"), $this->products[$productID]);
@@ -712,7 +714,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->update($taskID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes or $this->post->comment)
             {
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited', $this->post->comment);
@@ -722,7 +724,7 @@ class testtask extends control
             $this->executeHooks($taskID);
 
             $link = isonlybody() ? 'parent' : $this->session->testtaskList;
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         /* Set menu. */
@@ -774,7 +776,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->start($taskID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -784,8 +786,8 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
         /* Get task info. */
@@ -816,7 +818,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->activate($taskID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -826,8 +828,8 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
         /* Get task info. */
@@ -858,7 +860,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->close($taskID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -868,8 +870,8 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->success, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->success, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
         /* Get task info. */
@@ -901,7 +903,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->block($taskID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -911,8 +913,8 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
         /* Get task info. */
@@ -965,7 +967,7 @@ class testtask extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
 
             $browseList = $this->createLink('testtask', 'browse', "productID=$task->product");
@@ -1085,7 +1087,7 @@ class testtask extends control
                 $response['message'] = dao::getError();
             }
             $this->loadModel('action')->create('case' ,$testRun->case, 'unlinkedfromtesttask', '', $testRun->task);
-            $this->send($response);
+            return $this->send($response);
         }
     }
 
@@ -1145,7 +1147,7 @@ class testtask extends control
 
                 $response['result']  = 'success';
                 $response['locate']  = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");
-                die($this->send($response));
+                return $this->send($response);
             }
             else
             {
@@ -1161,14 +1163,14 @@ class testtask extends control
                     $response['result'] = 'success';
                     $response['next']   = 'success';
                     $response['locate'] = inlink('runCase', "runID=$nextRunID&caseID=$nextCaseID&version=$nextVersion");
-                    die($this->send($response));
+                    return $this->send($response);
                 }
                 else
                 {
                     $response['result'] = 'success';
                     $response['locate'] = 'reload';
                     $response['target'] = 'parent';
-                    die($this->send($response));
+                    return $this->send($response);
                 }
             }
         }

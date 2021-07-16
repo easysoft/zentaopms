@@ -63,9 +63,9 @@ class webhook extends control
         if($_POST)
         {
             $webhookID = $this->webhook->create();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $webhookID));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $webhookID));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->app->loadLang('action');
@@ -90,8 +90,8 @@ class webhook extends control
         if($_POST)
         {
             $this->webhook->update($id);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $webhook = $this->webhook->getByID($id);
@@ -118,7 +118,7 @@ class webhook extends control
     public function delete($id)
     {
         $this->webhook->delete(TABLE_WEBHOOK, $id);
-        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
     }

@@ -533,7 +533,6 @@ $lang->release->methodOrder[70] = 'changeStatus';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
-//$lang->resource->execution->index             = 'index';
 $lang->resource->execution->view              = 'view';
 $lang->resource->execution->browse            = 'browse';
 $lang->resource->execution->create            = 'createExec';
@@ -1133,7 +1132,7 @@ $lang->gitlab->methodOrder[15] = 'edit';
 $lang->gitlab->methodOrder[20] = 'importIssue';
 $lang->gitlab->methodOrder[30] = 'delete';
 $lang->gitlab->methodOrder[35] = 'bindUser';
-$lang->gitlab->methodOrder[40] = 'bindProduct'; 
+$lang->gitlab->methodOrder[40] = 'bindProduct';
 
 /* Git. */
 $lang->resource->git = new stdclass();

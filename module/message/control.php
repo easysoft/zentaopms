@@ -57,11 +57,11 @@ class message extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             $response['locate'] = $this->createLink('message', 'browser');
-            $this->send($response);
+            return $this->send($response);
         }
 
         $this->view->title      = $this->lang->message->browser;
@@ -85,7 +85,7 @@ class message extends control
             $data = fixer::input('post')->get();
             $data->messageSetting = json_encode($data->messageSetting);
             $this->loadModel('setting')->setItem('system.message.setting', $data->messageSetting);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->loadModel('webhook');
