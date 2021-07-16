@@ -1575,7 +1575,7 @@ class executionModel extends model
      * Get products of a execution.
      *
      * @param  int    $executionID
-     * @param  bool   $withBranch 
+     * @param  bool   $withBranch
      * @access public
      * @return array
      */
@@ -1739,13 +1739,13 @@ class executionModel extends model
     public function updateProducts($executionID, $products = '')
     {
         $this->loadModel('user');
-        $products = isset($_POST['products']) ? $_POST['products'] : $products;
-        $oldExecutionProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
+        $products    = isset($_POST['products']) ? $_POST['products'] : $products;
+        $oldProdcuts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
         if(empty($products))
         {
-            $this->user->updateUserView(array_keys($oldExecutionProducts), 'product', $members);
+            $this->user->updateUserView(array_keys($oldProdcuts), 'product', $members);
             return true;
         }
 
@@ -1760,10 +1760,10 @@ class executionModel extends model
 
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
-            if(isset($oldExecutionProducts[$productID][$branch]))
+            if(isset($oldProdcuts[$productID][$branch]))
             {
-                $oldExecutionProduct = $oldExecutionProducts[$productID][$branch];
-                $oldPlan = $oldExecutionProduct->plan;
+                $oldProdcuts= $oldProdcuts[$productID][$branch];
+                $oldPlan    = $oldProdcuts>plan;
             }
 
             $data = new stdclass();
@@ -1775,7 +1775,7 @@ class executionModel extends model
             $existedProducts[$productID] = true;
         }
 
-        $oldProductKeys = array_keys($oldExecutionProducts);
+        $oldProductKeys = array_keys($oldProdcuts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
     }
