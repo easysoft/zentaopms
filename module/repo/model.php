@@ -638,6 +638,7 @@ class repoModel extends model
             {
                 $commitID = $this->dao->lastInsertID();
                 if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($commitID)->set('branch')->eq($branch)->exec();
+                $file = array();
                 foreach($logs['files'][$i] as $file)
                 {
                     $parentPath = dirname($file->path);
