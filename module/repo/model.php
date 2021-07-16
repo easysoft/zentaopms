@@ -1754,7 +1754,6 @@ class repoModel extends model
     {
         $host  = rtrim($host, '/');
         $host .= '/api/v4/projects';
-
         $allResults = array();
         for($page = 1; true; $page ++)
         {
@@ -1768,7 +1767,7 @@ class repoModel extends model
 
     /**
      * Process gitlab repo.
-     * 
+     *
      * @param  oobject    $repo
      * @access public
      * @return object

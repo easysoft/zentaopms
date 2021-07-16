@@ -178,13 +178,13 @@ $(document).ready(function()
          projects = '';
          $.each(gitlabProjects[host], function(id, obj){projects = projects + ',' + obj.gitlabProject});
          url = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host + "&projects=" + projects);
-    
+
          $.get(url, function(response)
          {
              $('#gitlabProject').html('').append(response);
-             $('#gitlabProject').chosen().trigger("chosen:updated");;
+             $('#gitlabProject').chosen().trigger("chosen:updated");
          });
 
     });
-    
+
 });
