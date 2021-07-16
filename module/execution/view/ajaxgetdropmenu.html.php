@@ -54,7 +54,7 @@ $executionsPinYin = common::convert2Pinyin($executionNames);
 foreach($executions as $projectID => $projectExecutions)
 {
     /* Adapt to the old version. */
-    if($projectID)
+    if($projectID and $config->systemMode == 'new')
     {
         $projectName = zget($projects, $projectID);
 
