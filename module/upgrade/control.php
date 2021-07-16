@@ -165,6 +165,20 @@ class upgrade extends control
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
 
+            /* Update sprint concept. */
+            $sprintConcept = 0;
+            if(isset($this->config->custom->sprintConcept))
+            {
+                if($this->config->custom->sprintConcept == 2 and $mode == 'new') $sprintConcept = 1;
+            }
+            elseif(isset($this->config->custom->productProject))
+            {
+                list($productConcept, $projectConcept) = explode('_', $this->config->custom->productProject);
+                if($mode == 'classic') $sprintConcept = $projectConcept;
+                if($mode == 'new' and $projectConcept == 2) $sprintConcept = 1;
+            }
+            $this->setting->setItem('system.custom.sprintConcept', $sprintConcept);
+
             if($mode == 'classic') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
             if($mode == 'new')     $this->locate(inlink('mergeTips'));
         }

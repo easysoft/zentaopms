@@ -941,7 +941,8 @@ class actionModel extends model
 
             $objectIds = array_unique($objectIds);
             $table     = $objectType == 'makeup' ? '`zt_overtime`' : $this->config->objectTables[$objectType];
-            $field     = $this->config->action->objectNameFields[$objectType];
+            $field     = zget($this->config->action->objectNameFields, $objectType, '');
+            if(empty($field)) continue;
             if($table != TABLE_TODO)
             {
                 $objectName    = array();

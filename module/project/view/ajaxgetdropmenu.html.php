@@ -3,10 +3,11 @@
 <?php js::set('method', $method);?>
 <style>
 #navTabs {position: sticky; top: 0; background: #fff; z-index: 950;}
-#navTabs>li>span {display: inline-block; margin-left: -6px;}
-#navTabs>li>a {padding: 8px 10px; display: inline-block}
-#navTabs>li.active>a, .nav-tabs>li.active>span {font-weight: 700; color: #0c64eb;}
-#navTabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
+#navTabs>li {padding: 0px 10px; display: inline-block}
+#navTabs>li>span {display: inline-block;}
+#navTabs>li>a {padding: 8px 0px; display: inline-block}
+#navTabs>li.active>a {font-weight: 700; color: #0c64eb;}
+#navTabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb;}
 #navTabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
 
 #tabContent {margin-top: 10px; z-index: 900;}
@@ -118,8 +119,8 @@ foreach($projects as $programID => $programProjects)
       <?php $tabActive = ($myProjects and ($tabActive == 'closed' or $tabActive == 'myProject')) ? 'myProject' : 'other';?>
       <?php if($myProjects): ?>
       <ul class="nav nav-tabs" id="navTabs">
-        <li class="<?php if($tabActive == 'myProject') echo 'active';?>"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $myProjects;?></span><li>
-        <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
+        <li class="<?php if($tabActive == 'myProject') echo 'active';?>"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="label label-light label-badge"><?php echo $myProjects;?></span><li>
+        <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="label label-light label-badge"><?php echo $others;?></span><li>
       </ul>
       <?php endif;?>
       <div class="tab-content" id="tabContent">
@@ -147,10 +148,10 @@ $(function()
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 
-    $('.nav-tabs>li').click(function()
+    $('.nav-tabs>li a').click(function()
     {
-        $(this).find('span').show();
-        $(this).siblings('li').find('span').hide();
+        $(this).siblings().show();
+        $(this).parent().siblings('li').find('span').hide();
         if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
         $("#dropMenu .search-box").width('auto');
     })

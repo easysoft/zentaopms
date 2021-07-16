@@ -88,7 +88,7 @@ class bugModel extends model
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
-            
+
             $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, 'bug', $bugID, $bug);
 
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
@@ -278,9 +278,9 @@ class bugModel extends model
 
     /**
      * Create bug from gitlab issue.
-     * 
-     * @param  object    $bug 
-     * @param  int       $executionID 
+     *
+     * @param  object    $bug
+     * @param  int       $executionID
      * @access public
      * @return int|bool
      */
@@ -675,7 +675,7 @@ class bugModel extends model
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
 
-            if(!empty($bug)) 
+            if(!empty($bug))
             {
                 $this->loadModel('gitlab');
                 $relation = $this->gitlab->getRelationByObject('bug', $bugID);
@@ -862,7 +862,7 @@ class bugModel extends model
         $this->loadModel('gitlab');
         foreach($activateBugs as $bugID => $bug)
         {
-            if(!empty($bug)) 
+            if(!empty($bug))
             {
                 $relation = $this->gitlab->getRelationByObject('bug', $bugID);
                 if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', (Object)$bug, $bugID);
@@ -904,7 +904,7 @@ class bugModel extends model
 
         $this->loadModel('gitlab');
         $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-        $bug = $this->getById($bugID); // get full bug object to update issue.
+        $bug      = $this->getById($bugID); // Get full bug object to update issue.
         $bug->assignee_id = $this->gitlab->getGitlabUserID($relation->gitlabID, $bug->assignedTo);
         if($bug->assignee_id != '')
         {
@@ -967,7 +967,7 @@ class bugModel extends model
             $bug->lastEditedDate = $now;
             $bug->confirmed      = 1;
 
-            if(!empty($bug)) 
+            if(!empty($bug))
             {
                 $relation = $this->gitlab->getRelationByObject('bug', $bugID);
                 if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
@@ -1259,7 +1259,7 @@ class bugModel extends model
             }
         }
 
-        if(!empty($bug)) 
+        if(!empty($bug))
         {
             $this->loadModel('gitlab');
             $relation = $this->gitlab->getRelationByObject('bug', $bugID);

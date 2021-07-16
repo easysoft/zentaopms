@@ -1739,7 +1739,8 @@ EOD;
             {
                 /* Check program priv. */
                 $viewProjects = trim($this->app->user->view->projects, ',');
-                if($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
+                $accessDenied = ($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false);
+                if($accessDenied and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
