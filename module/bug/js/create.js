@@ -184,7 +184,5 @@ $(document).ready(function()
              $('#gitlabProject').html('').append(response);
              $('#gitlabProject').chosen().trigger("chosen:updated");
          });
-
     });
-
 });
