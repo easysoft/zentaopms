@@ -170,7 +170,7 @@ class storyModel extends model
     {
         return $this->dao->select('id,title')->from(TABLE_STORY)
            ->where('deleted')->eq(0)
-           ->andWhere('status')->ne('draft')
+           ->andWhere('status')->notIN('draft,closed')
            ->andWhere('product')->eq($productID)
            ->andWhere('type')->eq('requirement')
            ->fetchPairs();

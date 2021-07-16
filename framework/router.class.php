@@ -206,7 +206,7 @@ class router extends baseRouter
         if($hourKey == STORYPOINT_KEY)    $config->hourUnit = 'sp';
         if($hourKey == FUNCTIONPOINT_KEY) $config->hourUnit = 'fp';
 
-        $iterationKey   = $projectKey;
+        $iterationKey = $projectKey;
 
         /* Set productCommon, projectCommon and hourCommon. Default english lang. */
         $lang->productCommon   = $this->config->productCommonList[$this->clientLang][PRODUCT_KEY];

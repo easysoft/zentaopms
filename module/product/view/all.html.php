@@ -41,7 +41,7 @@
           <tr class="text-center">
             <th class='table-nest-title text-left' rowspan="2">
               <?php if($canBatchEdit) echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";?>
-              <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
+              <a class='table-nest-toggle table-nest-toggle-global <?php echo $canBatchEdit ? 'nest-has-checkbox' : 'nest-none-checkbox';?>' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
             <?php if($this->config->URAndSR):?>

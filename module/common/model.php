@@ -529,7 +529,11 @@ class commonModel extends model
         {
             $nav = $lang->mainNav->$openApp;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($openApp == 'execution') $currentMethod = 'executionKanban';
+            if($openApp == 'execution')
+            {
+                if($config->systemMode == 'new')     $currentMethod = 'executionKanban';
+                if($config->systemMode == 'classic') $currentMethod = 'all';
+            }
         }
         else
         {
@@ -539,7 +543,7 @@ class commonModel extends model
         }
 
         if($config->systemMode == 'classic' and $openApp == 'execution') $icon = zget($lang->navIcons, 'project', '');
-        $link = ($openApp == 'execution' and ($config->systemMode == 'classic')) ?  '' : helper::createLink($currentModule, $currentMethod);
+        $link = helper::createLink($currentModule, $currentMethod);
         $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
@@ -2248,7 +2252,7 @@ EOD;
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
-        
+
         if($options) curl_setopt_array($curl, $options);
         $response = curl_exec($curl);
         $errors   = curl_error($curl);

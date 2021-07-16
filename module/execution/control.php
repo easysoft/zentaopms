@@ -1411,7 +1411,7 @@ class execution extends control
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
                 $this->loadModel('productplan')->linkProject($executionID, $_POST['plans'], $oldPlanStories);
-                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans']);
+                $this->productplan->linkProject($projectID, $_POST['plans']);
             }
 
             $this->executeHooks($executionID);
@@ -1432,7 +1432,7 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->edit;
 
-        $allProducts     = array(0 => '');
+        $allProducts       = array(0 => '');
         $executionProsucts = $this->execution->getProducts($execution->project, true, 'noclosed');
         foreach($executionProsucts as $product) $allProducts[$product->id] = $product->name;
 
