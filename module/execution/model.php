@@ -1762,8 +1762,8 @@ class executionModel extends model
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
             if(isset($oldProducts[$productID][$branch]))
             {
-                $oldProducts = $oldProducts[$productID][$branch];
-                $oldPlan     = $oldProducts->plan;
+                $oldProduct = $oldProducts[$productID][$branch];
+                $oldPlan    = $oldProduct->plan;
             }
 
             $data = new stdclass();
