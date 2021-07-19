@@ -4,13 +4,14 @@
 <?php js::set('extra', $extra);?>
 <style>
 #navTabs {position: sticky; top: 0; background: #fff; z-index: 950;}
-#navTabs>li>span {display: inline-block; margin-left: -6px;}
-#navTabs>li>a {padding: 8px 10px; display: inline-block}
-#navTabs>li.active>a, .nav-tabs>li.active>span {font-weight: 700; color: #0c64eb;}
+#navTabs>li {padding: 0px 10px; display: inline-block}
+#navTabs>li>span {display: inline-block;}
+#navTabs>li>a {padding: 8px 0px; display: inline-block}
+#navTabs>li.active>a {font-weight: 700; color: #0c64eb;}
 #navTabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
 #navTabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
 
-#tabContent {margin-top: 10px;}
+#tabContent {margin-top: 10px; z-index: 900;}
 #tabContent ul {list-style: none; margin: 0}
 #tabContent .tab-pane>ul {padding-left: 7px;}
 #tabContent .tab-pane>ul>li.hide-in-search {position: relative;}
@@ -23,7 +24,7 @@
 #tabContent li>a {margin-top: 5px;display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
 #tabContent li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
 
-#swapper li.hide-in-search a:focus, #swapper li.hide-in-search a:hover {color: #838a9d; cursor: default;}
+#swapper li.hide-in-search>a:focus, #swapper li.hide-in-search>a:hover {color: #838a9d; cursor: default;}
 #swapper li ul li a:focus, #swapper li ul li a:hover, .noProgram li a:focus, .noProgram li a:hover {background: #0c64eb; color: #fff;}
 </style>
 <?php
@@ -116,8 +117,8 @@ foreach($products as $programID => $programProducts)
       <?php $tabActive = ($myProducts and ($tabActive == 'closed' or $tabActive == 'myProduct')) ? 'myProduct' : 'other';?>
       <?php if($myProducts): ?>
       <ul class="nav nav-tabs" id="navTabs">
-        <li class="<?php if($tabActive == 'myProduct') echo 'active';?>"><?php echo html::a('#myProduct', $lang->product->mine, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="text-muted"><?php echo $myProducts;?></span><li>
-        <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->product->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="text-muted"><?php echo $others;?></span><li>
+        <li class="<?php if($tabActive == 'myProduct') echo 'active';?>"><?php echo html::a('#myProduct', $lang->product->mine, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="label label-light label-badge"><?php echo $myProducts;?></span><li>
+        <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->product->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="label label-light label-badge"><?php echo $others;?></span><li>
       </ul>
       <?php endif;?>
       <div class="tab-content" id="tabContent">
@@ -146,10 +147,10 @@ $(function()
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 
-    $('.nav-tabs>li').click(function()
+    $('.nav-tabs>li a').click(function()
     {
-        $(this).find('span').show();
-        $(this).siblings('li').find('span').hide();
+        $(this).siblings().show();
+        $(this).parent().siblings('li').find('span').hide();
         if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
         $("#dropMenu .search-box").width('auto');
     })

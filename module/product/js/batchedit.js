@@ -24,6 +24,6 @@ function loadProductLines(programID, productID)
     var link = createLink('product', 'ajaxGetLine', 'programID=' + programID + '&productID=' + productID);
     $('#line_' + productID).load(link, function()
     {
-        $('#lines' + productID).chosen();
+        $('#lines' + productID).picker();
     });
 }

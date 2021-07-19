@@ -39,14 +39,11 @@ $(function()
     {
         setTimeout(function()
         {
-            var checkedProduct = true;
-            $("[id^='productIDList']").each(function()
-            {
-                if(!$(this).prop('checked')) checkedProduct = false;
-            })
-            console.log(checkedProduct);
-            if(checkedProduct)  $('.check-all').addClass('checked');
-            if(!checkedProduct) $('.check-all').removeClass('checked');
+            var allCount     = $("[id^='productIDList']").length;
+            var checkedCount = $("[id^='productIDList']:checked").length;
+
+            if(allCount == checkedCount) $('.check-all').addClass('checked');
+            if(allCount != checkedCount) $('.check-all').removeClass('checked');
         }, 100)
     });
 });

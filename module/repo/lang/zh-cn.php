@@ -126,7 +126,6 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
 $lang->repo->scmList['Subversion'] = 'Subversion';
-$lang->repo->scmList['Gitlab']     = 'Gitlab';
 
 $lang->repo->gitlabHost    = 'GitLab Server';
 $lang->repo->gitlabToken   = 'GitLab Token';

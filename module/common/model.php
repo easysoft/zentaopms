@@ -1739,7 +1739,8 @@ EOD;
             {
                 /* Check program priv. */
                 $viewProjects = trim($this->app->user->view->projects, ',');
-                if($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
+                $accessDenied = ($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false);
+                if($accessDenied and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
@@ -2423,6 +2424,29 @@ EOD;
         }
 
         return $menu;
+    }
+
+    /**
+     * Process markdown.
+     *
+     * @param  string  $markdown
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function processMarkdown($markdown)
+    {
+        if(empty($markdown)) return false;
+
+        $markdown = str_replace('&', '&amp;', $markdown);
+
+        global $app;
+        $hyperdown = $app->loadClass('hyperdown');
+        $content   = $hyperdown->makeHtml($markdown);
+
+        $content = htmlspecialchars_decode($content);
+        $content = fixer::stripDataTags($content);
+        return $content;
     }
 }
 

@@ -487,7 +487,7 @@ class task extends control
         if($executionID)
         {
             $execution = $this->execution->getById($executionID);
-            $this->execution->setMenu($this->execution->getPairs(), $execution->id);
+            $this->execution->setMenu($execution->id);
 
             /* Set modules and members. */
             $showAllModule = isset($this->config->task->allModule) ? $this->config->task->allModule : '';

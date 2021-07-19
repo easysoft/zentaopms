@@ -893,7 +893,14 @@ class baseControl
         $data = (array) $data;
         if(helper::isAjaxRequest() or $this->viewType == 'json')
         {
-            print(json_encode($data));
+            /* Process for zh-cn in json. */
+            foreach($data as $key => $value)
+            {
+                if(!is_string($value)) continue;
+                $data[$key] = urlencode($value);
+            }
+
+            print(urldecode(json_encode($data)));
             $response = helper::removeUTF8Bom(ob_get_clean());
 
             if(defined('RUN_MODE') and RUN_MODE == 'api') return print($response);

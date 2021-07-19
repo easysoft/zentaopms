@@ -52,7 +52,9 @@
                 $full  = '';
             }
             ?>
+            <?php if($this->config->systemMode == 'new'):?>
             <th class='w-150px<?php echo zget($visibleFields, 'program', ' hidden') . zget($requiredFields, 'program', '', ' required');?>'><?php echo $lang->product->program;?></th>
+            <?php endif;?>
             <th class='required <?php echo $width;?>' style="<?php echo $full;?>"><?php echo $lang->product->name;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'line',   ' hidden') . zget($requiredFields, 'line',   '', ' required');?>'><?php echo $lang->product->line;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->product->PO;?></th>
@@ -73,9 +75,16 @@
           ?>
           <tr>
             <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
+            <?php if($this->config->systemMode == 'new'):?>
+            <?php if(isset($unauthorizedPrograms[$products[$productID]->program])):?>
+            <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $unauthorizedPrograms, $products[$productID]->program, "class='form-control' disabled");?></td>
+            <?php else:?>
             <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $programs, $products[$productID]->program, "class='form-control picker-select' onchange='loadProductLines(this.value, $productID)'");?></td>
+            <?php endif;?>
+            <?php endif;?>
             <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'line', ' hidden')?>' style='overflow:visible' id="line_<?php echo $productID;?>"><?php echo html::select("lines[$productID]", isset($lines[$products[$productID]->program]) ? $lines[$products[$productID]->program] : '', $products[$productID]->line, "class='form-control picker-select'");?></td>
+            <?php $productLines = isset($lines[$products[$productID]->program]) ? $lines[$products[$productID]->program] : '';?>
+            <td class='text-left<?php echo zget($visibleFields, 'line', ' hidden')?>' style='overflow:visible' id="line_<?php echo $productID;?>"><?php echo html::select("lines[$productID]", $this->config->systemMode == 'new' ? $productLines : $lines, $products[$productID]->line, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control picker-select'");?></td>

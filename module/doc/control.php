@@ -487,8 +487,8 @@ class doc extends control
 
         if($doc->contentType == 'markdown')
         {
-            $doc->content = $this->doc->processMarkdown($doc->content);
-            $doc->digest  = $this->doc->processMarkdown($$doc->digest);
+            $doc->content = commonModel::processMarkdown($doc->content);
+            $doc->digest  = commonModel::processMarkdown($doc->digest);
         }
 
         /* Check priv when lib is product or project. */
@@ -916,8 +916,8 @@ class doc extends control
 
             if($doc->contentType == 'markdown')
             {
-                $doc->content = $this->doc->processMarkdown($doc->content);
-                $doc->digest  = $this->doc->processMarkdown($doc->digest);
+                $doc->content = commonModel::processMarkdown($doc->content);
+                $doc->digest  = commonModel::processMarkdown($doc->digest);
             }
         }
 

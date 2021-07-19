@@ -29,13 +29,14 @@
     <div class="page-title">
       <?php
       echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
-      $paths    = explode('/', $entry);
-      $fileName = array_pop($paths);
-      $postPath = '';
+      $paths          = explode('/', $entry);
+      $fileName       = array_pop($paths);
+      $postPath       = '';
+      $base64BranchID = base64_encode($branchID);
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';
-          echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
+          echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
       }
       echo '/' . ' ' . $fileName;
       if(strpos($repo->SCM, 'Subversion') === false)
