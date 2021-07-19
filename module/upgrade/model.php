@@ -4520,9 +4520,7 @@ class upgradeModel extends model
 
         foreach($sprintCases as $projectCase)
         {
-            $projectCase->order = $projectCase * 5;
-            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
-
+            $projectCase->order   = $projectCase * 5;
             $projectCase->project = $projectID;
             $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
         }
@@ -4531,7 +4529,7 @@ class upgradeModel extends model
         $project      = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $sprints      = $this->dao->select('id, type, acl, begin, end')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll();
         $minBeginDate = $project->begin;
-        $maxEndData   = $project->end;
+        $maxEndDate   = $project->end;
         foreach($sprints as $sprint)
         {
             $data = new stdclass();
@@ -4545,7 +4543,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
 
             $minBeginDate = ($sprint->begin < $minBeginDate) ? $sprint->begin : $minBeginDate;
-            $maxEndData   = $sprint->end > $maxEndData ? $sprint->end : $maxEndData;
+            $maxEndDate   = $sprint->end > $maxEndDate ? $sprint->end : $maxEndDate;
         }
 
         /* Compute project date and status. */
@@ -4564,10 +4562,10 @@ class upgradeModel extends model
             $data->closedDate = $maxRealEnd;
         }
 
-        if($minBeginDate != $project->begin or $maxEndData != $project->end)
+        if($minBeginDate != $project->begin or $maxEndDate != $project->end)
         {
             $data->begin = $minBeginDate;
-            $data->end   = $maxEndData;
+            $data->end   = $maxEndDate;
             $data->days  = $this->computeDaysDelta($data->begin, $data->end);
         }
 
@@ -4582,8 +4580,6 @@ class upgradeModel extends model
 
             $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
         }
-
-        $this->computeObjectMembers($programID, $projectID, $productIdList, $sprintIdList);
     }
 
     /**
@@ -4613,95 +4609,112 @@ class upgradeModel extends model
     /**
      * Compute program and project members.
      *
-     * @param  int    $programID
-     * @param  int    $projectID
-     * @param  array  $productIdList
-     * @param  array  $sprintIdList
      * @access public
      * @return void
      */
-    public function computeObjectMembers($programID, $projectID, $productIdList = array(), $sprintIdList = array())
+    public function computeObjectMembers()
     {
+        $projects = $this->dao->select('id,days')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+        $projectIdList = array_keys($projects);
+
         /* Get product and sprint team. */
-        $teams    = array();
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
-        $sprints  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($sprintIdList)->fetchAll('id');
-        foreach($products as $product)
-        {
-            $teams[$product->PO] = $product->PO;
-            $teams[$product->QD] = $product->QD;
-            $teams[$product->RD] = $product->RD;
-            if(isset($product->feedback)) $teams[$product->feedback] = $product->feedback;
-        }
+        $teams         = array();
+        $productGroups = $this->dao->select('t1.project,t1.product,t3.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+            ->where('t2.id')->in($projectIdList)
+            ->fetchGroup('project', 'product');
+        $sprintGroups  = $this->dao->select('*')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->fetchGroup('project', 'id');
+        $teamGroups = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('execution')->fetchGroup('root', 'account');
+        $users = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
+        $groupAccounts = $this->dao->select('*')->from(TABLE_USERGROUP)->fetchGroup('group', 'account');
 
-        foreach($sprints as $sprint)
+        $projectTeams = array();
+        foreach($projectIdList as $projectID)
         {
-            $teams[$sprint->PO] = $sprint->PO;
-            $teams[$sprint->PM] = $sprint->PM;
-            $teams[$sprint->QD] = $sprint->QD;
-            $teams[$sprint->RD] = $sprint->RD;
-            if(isset($sprint->feedback)) $teams[$sprint->feedback] = $sprint->feedback;
-        }
+            $teams    = array();
+            $products = zget($productGroups, $projectID, array());
+            foreach($products as $product)
+            {
+                $teams[$product->PO] = $product->PO;
+                $teams[$product->QD] = $product->QD;
+                $teams[$product->RD] = $product->RD;
+                if(isset($product->feedback)) $teams[$product->feedback] = $product->feedback;
+            }
 
-        $teams += $this->dao->select('account')->from(TABLE_TEAM)->where('type')->eq('execution')->andWhere('root')->in($sprintIdList)->fetchPairs('account', 'account');
-        $users = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs('account', 'account');
+            $sprints = zget($sprintGroups, $projectID, array());
+            foreach($sprints as $sprint)
+            {
+                $teams[$sprint->PO] = $sprint->PO;
+                $teams[$sprint->PM] = $sprint->PM;
+                $teams[$sprint->QD] = $sprint->QD;
+                $teams[$sprint->RD] = $sprint->RD;
+                if(isset($sprint->feedback)) $teams[$sprint->feedback] = $sprint->feedback;
+
+                $sprintTeams = zget($teamGroups, $sprint->id, array());
+                foreach($sprintTeams as $account => $team) $teams[$account] = $account;
+            }
+
+            $projectTeams[$projectID] = $teams;
+        }
 
         /* Insert product and sprint team into project team. */
-        $today         = helper::today();
-        $project       = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-        $projectMember = $this->dao->select('*')->from(TABLE_TEAM)->where('account')->in($teams)->fetchAll('account');
-        foreach($projectMember as $account => $user)
+        $today = helper::today();
+        foreach($projectTeams as $projectID => $projectMember)
         {
-            if(empty($account)) continue;
-            if(!isset($users[$account])) continue;
+            $project = zget($projects, $projectID, '');
+            foreach($projectMember as $account)
+            {
+                if(empty($account)) continue;
+                if(!isset($users[$account])) continue;
 
-            $team = new stdclass();
-            $team->root    = $projectID;
-            $team->type    = 'project';
-            $team->account = $account;
-            $team->role    = $user->role;
-            $team->join    = $today;
-            $team->days    = $project->days;
-            $team->hours   = '7.0';
-            $this->dao->replace(TABLE_TEAM)->data($team)->exec();
+                $user = $users[$account];
+                $team = new stdclass();
+                $team->root    = $projectID;
+                $team->type    = 'project';
+                $team->account = $account;
+                $team->role    = $user->role;
+                $team->join    = $today;
+                $team->days    = $project->days;
+                $team->hours   = '7.0';
+                $this->dao->replace(TABLE_TEAM)->data($team)->exec();
+            }
         }
-
-        /* Get all actor in sprint and product. */
-        foreach($productIdList as $productID) $productIdList[$productID] = ",{$productID},";
-        $whiteList = $this->dao->select('actor')->from(TABLE_ACTION)->where('execution')->in($sprintIdList)->orWhere('product')->in($productIdList)->fetchPairs('actor', 'actor');
-        $whiteList = array_diff($whiteList, $teams);
 
         /* Get all white list in sprint and product. */
         $this->loadModel('group');
         $this->loadModel('personnel');
 
-        foreach($products as $product)
+        $customProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('whitelist')->ne('')->fetchAll('id');
+        $whitelistACL   = $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->in(array_keys($customProducts))->andWhere('objectType')->eq('product')->andWhere('type')->eq('whitelist')->fetchPairs('account');
+        foreach($customProducts as $productID => $product)
         {
             if($product->acl != 'private') continue;
 
-            $groups        = explode(',', $product->whitelist);
-            $groupAccounts = $this->group->getGroupAccounts($groups);
+            $whitelist = array();
+            foreach(explode(',', $product->whitelist) as $group)
+            {
+                foreach(zget($groupAccounts, $group, array()) as $account => $userGroup) $whitelist[$account] = $account;
+            }
 
-            /* Get the whitelist data from the classic version mode upgrade. */
-            $groupAccounts += $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($product->id)->andWhere('objectType')->eq('product')->andWhere('type')->eq('whitelist')->fetchPairs('account');
+            $whitelist += zget($whitelistACL, $productID, array());
 
-            $whiteList    += $groupAccounts;
-            $this->personnel->updateWhitelist($groupAccounts, 'product', $product->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade');
         }
 
-        $this->personnel->updateWhitelist($whiteList, 'project', $projectID, 'whitelist', 'upgrade');
-
-        foreach($sprints as $sprint)
+        $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage')->fetchAll('id');
+        $whitelistACL   = $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->in(array_keys($customSprints))->andWhere('objectType')->eq('sprint')->andWhere('type')->eq('whitelist')->fetchPairs('account');
+        foreach($customSprints as $sprint)
         {
             if($sprint->acl != 'private') continue;
 
-            $groups        = explode(',', $sprint->whitelist);
-            $groupAccounts = $this->group->getGroupAccounts($groups);
+            $whitelist = array();
+            foreach(explode(',', $sprint->whitelist) as $group)
+            {
+                foreach(zget($groupAccounts, $group, array()) as $account => $userGroup) $whitelist[$account] = $account;
+            }
 
-            /* Get the whitelist data from the classic version mode upgrade. */
-            $groupAccounts += $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($sprint->id)->andWhere('objectType')->eq('sprint')->andWhere('type')->eq('whitelist')->fetchPairs('account');
-
-            $this->personnel->updateWhitelist($groupAccounts, 'sprint', $sprint->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade');
         }
     }
 
