@@ -8,7 +8,7 @@ $(function()
         {
             $('[data-id=' + e.id + ']').prop('checked', true);
 
-            var lineID         = $('.nav li.active').attr('lineid');
+            var lineID         = $('.nav li.currentPage').attr('lineid');
             var checkedLines   = true;
             var checkedProduct = true;
             var checkedProject = true;
@@ -19,7 +19,7 @@ $(function()
             {
                 if($('.nav li.currentPage').find('[id^=productLines]').prop('checked'))
                 {
-                    var lineID = $('.nav li.active').attr('lineid');
+                    var lineID = $('.nav li.currentPage').attr('lineid');
                     $('#checkAllProducts').prop('checked', true);
                     $('#checkAllProjects').prop('checked', true);
                     $("[id^='products\[" + lineID + "\]']").prop('checked', true);
@@ -118,6 +118,7 @@ $(function()
             $('[name^=products]').prop('checked', true);
             $('[name^=sprints]').prop('checked', true);
             $('.main-row .side-col .nav li').addClass('active');
+            $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
         }
         else
         {
@@ -127,6 +128,7 @@ $(function()
             $('[name^=products]').prop('checked', false);
             $('[name^=sprints]').prop('checked', false);
             $('.main-row .side-col .nav li').removeClass('active');
+            $('#programName').val('');
         }
 
         /* If the project is checked, the relevant form will be displayed according to the selected mode. */
@@ -136,13 +138,14 @@ $(function()
     /* Select all product events. */
     $('#checkAllProducts').click(function()
     {
-        var lineID = $('li.active').attr('lineid');
+        var lineID = $('li.currentPage').attr('lineid');
         if($(this).is(':checked'))
         {
             $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
             $('#checkAllProjects').prop('checked', true);
             $('[name^=products]').prop('checked', true);
             $('[name^=sprints]').prop('checked', true);
+            $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
         }
         else
         {
@@ -150,6 +153,7 @@ $(function()
             $('#checkAllProjects').prop('checked', false);
             $('[name^=products]').prop('checked', false);
             $('[name^=sprints]').prop('checked', false);
+            $('#programName').val('');
         }
         hiddenProject();
     })
@@ -157,13 +161,14 @@ $(function()
     /* Select all project events. */
     $('#checkAllProjects').click(function()
     {
-        var lineID = $('li.active').attr('lineid');
+        var lineID = $('li.currentPage').attr('lineid');
         if($(this).is(':checked'))
         {
             $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
             $('#checkAllProducts').prop('checked', true);
             $('[name^=products]').prop('checked', true);
             $('[name^=sprints]').prop('checked', true);
+            $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
         }
         else
         {
@@ -171,6 +176,7 @@ $(function()
             $('#checkAllProducts').prop('checked', false);
             $('[name^=products]').prop('checked', false);
             $('[name^=sprints]').prop('checked', false);
+            $('#programName').val('');
         }
         hiddenProject();
     })
@@ -266,11 +272,12 @@ $(function()
         }
 
         var currentLine = $(this).closest('li').attr('lineid');
-        $(this).closest('ul').find('li').removeClass('currentPage');
-        $(this).closest('li').addClass('currentPage');
 
         /* Active current li and remove active before li. */
         $(this).closest('li').addClass('active');
+        $(this).closest('ul').find('li').removeClass('currentPage');
+        $(this).closest('li').addClass('currentPage');
+
         $('[id^=productLines]').each(function()
         {
             var lineID = $(this).val();

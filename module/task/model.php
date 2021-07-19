@@ -935,7 +935,7 @@ class taskModel extends model
             foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
 
             /* Assign the left hours to zero who will be skipped. */
-            $skipMembers = $this->loadModel('execution')->getTeamSkip($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            $skipMembers = $this->loadModel('execution')->getTeamSkip($oldTask->team, $oldTask->assignedTo, isset($task->assignedTo) ? $task->assignedTo : $oldTask->assignedTo);
             foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
@@ -1389,8 +1389,7 @@ class taskModel extends model
             ->where('id')->eq($taskID)->exec();
 
         $task     = $this->getById($taskID);
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('task', $taskID);
+        $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
         if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);

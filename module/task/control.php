@@ -487,7 +487,7 @@ class task extends control
         if($executionID)
         {
             $execution = $this->execution->getById($executionID);
-            $this->execution->setMenu($this->execution->getPairs(), $execution->id);
+            $this->execution->setMenu($execution->id);
 
             /* Set modules and members. */
             $showAllModule = isset($this->config->task->allModule) ? $this->config->task->allModule : '';
@@ -564,14 +564,18 @@ class task extends control
             $this->loadModel('action');
             $changes = $this->task->assign($taskID);
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                die(js::error(dao::getError()));
+            }
 
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -787,6 +791,7 @@ class task extends control
                 }
             }
 
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }

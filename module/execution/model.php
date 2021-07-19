@@ -340,6 +340,12 @@ class executionModel extends model
 
         $sprint = $this->loadModel('file')->processImgURL($sprint, $this->config->execution->editor->create['id'], $this->post->uid);
 
+        /* Redefines the language entries for the fields in the project table. */
+        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
+        {
+            if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
+        }
+
         /* Replace required language. */
         if($this->app->openApp == 'project')
         {
@@ -484,7 +490,7 @@ class executionModel extends model
         }
 
         /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
+        foreach(explode(',', $this->config->execution->edit->requiredFields) as $field)
         {
             if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
         }

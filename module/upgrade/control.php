@@ -289,11 +289,7 @@ class upgrade extends control
                 }
 
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts))
-                {
-                    $this->upgrade->computeProductAcl($singleProducts, $programID);
-                    $this->upgrade->computeObjectMembers($programID, 0, $singleProducts);
-                }
+                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
 
                 /* Process unlinked sprint and product. */
                 foreach($linkedProducts as $productID => $product)
@@ -348,11 +344,7 @@ class upgrade extends control
                 }
 
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts))
-                {
-                    $this->upgrade->computeProductAcl($singleProducts, $programID);
-                    $this->upgrade->computeObjectMembers($programID, 0, $singleProducts);
-                }
+                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
             }
             elseif($type == 'sprint')
             {
@@ -398,6 +390,7 @@ class upgrade extends control
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedSprintCount))
         {
+            $this->upgrade->computeObjectMembers();
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
             $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();

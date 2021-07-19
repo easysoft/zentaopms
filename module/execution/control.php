@@ -2147,6 +2147,8 @@ class execution extends control
 
             $this->session->set('execution', '');
             $this->executeHooks($executionID);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             die(js::reload('parent'));
         }
     }
@@ -2208,7 +2210,7 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->manageProducts;
 
-        $allProducts     = $this->product->getProductPairsByProject($execution->project);
+        $allProducts     = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($execution->project);
         $linkedProducts  = $this->execution->getProducts($execution->id);
         $linkedBranches  = array();
 

@@ -54,8 +54,8 @@ class baseEntry
     }
 
     /**
-     * 获取请求数据(POST PUT) 
-     * Get request data(POST or PUT).
+     * 获取请求数据(POST PUT)
+     * Get request data(POST or PUT)
      *
      * @param  string $key
      * @param  mixed  $defaultValue
@@ -65,6 +65,21 @@ class baseEntry
     public function request($key, $defaultValue = '')
     {
         if(isset($this->requestBody->$key)) return $this->requestBody->$key;
+        return $defaultValue;
+    }
+
+    /**
+     * 获取请求参数
+     * Get request params.
+     *
+     * @param  string $key
+     * @param  string $defaultValue
+     * @access public
+     * @return mixed
+     */
+    public function param($key, $defaultValue = '')
+    {
+        if(isset($_GET[$key])) return $_GET[$key];
         return $defaultValue;
     }
 

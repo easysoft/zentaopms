@@ -216,7 +216,7 @@ $lang->custom->workingList['full'] = 'Application Lifecycle Management';
 $lang->custom->menuTip          = 'Click to show/hide the menu. Drag to switch display order.';
 $lang->custom->saveFail         = 'Failed to save!';
 $lang->custom->page             = ' Page';
-$lang->custom->changeClassicTip = 'The module of Program will be hidden, if you switch to Version 12.5.3 and below.';
+$lang->custom->changeClassicTip = 'The Program module will be hidden, if you switch to the classic mode.';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';

@@ -32,7 +32,16 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->parent;?></th>
-          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen'");?></td>
+          <?php
+          $attr = '';
+          if(!isset($programList[$project->parent]))
+          {
+              echo html::hidden('parent', $project->parent);
+              $attr        = 'disabled';
+              $programList = array($project->parent => $program->name);
+          }
+          ?>
+          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' $attr");?></td>
           <td></td>
           <td></td>
         </tr>

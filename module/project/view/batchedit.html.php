@@ -37,7 +37,11 @@
         <?php $aclList = $project->parent ? $lang->program->subAcls : $lang->project->acls;?>
         <tr>
           <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIdList[$projectID]", $projectID);?></td>
-          <td><?php echo html::select("parents[$projectID]", $programList, $project->parent, "class='form-control chosen' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}'");?></td>
+          <?php if(isset($unauthorizedPrograms[$project->parent])):?>
+          <td><?php echo html::select("parents[$projectID]", $unauthorizedPrograms, $project->parent, "class='form-control chosen' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}' disabled");?></td>
+          <?php else:?>
+          <td><?php echo html::select("parents[$projectID]", $programs, $project->parent, "class='form-control chosen' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}'");?></td>
+          <?php endif;?>
           <td title='<?php echo $project->name;?>'><?php echo html::input("names[$projectID]", $project->name, "class='form-control'");?></td>
           <td><?php echo html::select("PMs[$projectID]", $PMUsers, $project->PM, "class='form-control chosen'");?></td>
           <td>
