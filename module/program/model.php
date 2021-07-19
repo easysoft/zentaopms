@@ -106,7 +106,7 @@ class programModel extends model
      *
      * @param  string|array $programIDList
      * @access public
-     * @return void
+     * @return array
      */
     public function getPairsByList($programIDList = '')
     {
