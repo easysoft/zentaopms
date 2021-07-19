@@ -416,7 +416,6 @@ class project extends control
                 ->where('t1.project')->eq($projectID)
                 ->andWhere('t2.plan')->in(array_keys($oldPlans))
                 ->fetchAll('story');
-            $diffResult = array_diff($oldPlans, $_POST['plans']);
 
             $changes = $this->project->update($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -428,6 +427,7 @@ class project extends control
             }
 
             /* Link the plan stories. */
+            $diffResult = array_diff($oldPlans, $_POST['plans']);
             if(!empty($_POST['plans']) and !empty($diffResult))
             {
                 $this->loadModel('productplan')->linkProject($projectID, $_POST['plans'], $oldPlanStories);
@@ -471,6 +471,7 @@ class project extends control
         $this->view->users                = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project              = $project;
         $this->view->programList          = $this->program->getParentPairs();
+        $this->view->program              = $this->program->getByID($project->parent);
         $this->view->projectID            = $projectID;
         $this->view->allProducts          = array('0' => '') + $allProducts;
         $this->view->productPlans         = $productPlans;
@@ -519,14 +520,23 @@ class project extends control
         $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->projectList, 'parent'));
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
-        foreach($projects as $project) $appendPMUsers[$project->PM] = $project->PM;
+        /* Get program list. */
+        $programs           = $this->loadModel('program')->getParentPairs();
+        $unauthorizedIDList = array();
+        foreach($projects as $project)
+        {
+            if(!isset($programs[$project->parent]) and !in_array($project->parent, $unauthorizedIDList)) $unauthorizedIDList[] = $project->parent;
+            $appendPMUsers[$project->PM] = $project->PM;
+        }
+        $unauthorizedPrograms = $this->program->getPairsByList($unauthorizedIDList);
 
         $this->view->title      = $this->lang->project->batchEdit;
         $this->view->position[] = $this->lang->project->batchEdit;
 
-        $this->view->projects      = $projects;
-        $this->view->programList   = $this->loadModel('program')->getParentPairs();
-        $this->view->PMUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $appendPMUsers);
+        $this->view->projects             = $projects;
+        $this->view->programs             = $programs;
+        $this->view->unauthorizedPrograms = $unauthorizedPrograms;
+        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $appendPMUsers);
 
         $this->display();
     }
