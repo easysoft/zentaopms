@@ -30,7 +30,8 @@ class taskEntry extends Entry
         $control->edit($taskID);
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        $task = $this->task->getByID($taskID);
+        $this->send(200, $task);
     }
 
     public function delete($taskID)

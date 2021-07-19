@@ -701,7 +701,7 @@ class user extends control
             }
 
             /* if ajax request, send result. */
-            if($this->server->ajax)
+            if($this->server->ajax or $this->viewType == 'json')
             {
                 if(dao::isError())
                 {

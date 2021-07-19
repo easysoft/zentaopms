@@ -153,8 +153,6 @@ class repoModel extends model
                     if(!$hasPriv) unset($repos[$i]);
                 }
             }
-
-            if($repo->SCM == 'Gitlab') $repo = $this->processGitlab($repo);
         }
 
         return $repos;
@@ -198,16 +196,15 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         $data = fixer::input('post')
-            ->setIf($this->post->SCM == 'Gitlab', 'password', '')
-            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
             ->get();
 
-        /* see this file in 1783G: processGitlab::$repo->path */
-        if($this->post->SCM == 'Gitlab') $data->path = $this->post->gitlabProject;
+        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -229,14 +226,8 @@ class repoModel extends model
             ->exec();
 
         if(!dao::isError()) $this->rmClientVersionFile();
-        $repoID = $this->dao->lastInsertID();
 
-        $this->loadModel('gitlab');
-        if($this->post->SCM == 'Gitlab')
-        {
-           $this->gitlab->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
-        }
-        return $repoID;
+        return $this->dao->lastInsertID();
     }
 
     /**
@@ -251,9 +242,9 @@ class repoModel extends model
         $repo = $this->getRepoByID($id);
 
         $data = fixer::input('post')
-            ->setIf($this->post->SCM == 'Gitlab', 'password', '')
-            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->setDefault('client', 'svn')
             ->setDefault('prefix', $repo->prefix)
             ->setDefault('product', '')
@@ -261,6 +252,7 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
+        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
         if($data->path != $repo->path) $data->synced = 0;
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -281,7 +273,6 @@ class repoModel extends model
         if($data->client != $repo->client and !$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
-
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
@@ -292,15 +283,12 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
-        $this->loadModel('gitlab');
-        if($repo->SCM == 'Gitlab') $this->gitlab->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
         if($repo->path != $data->path)
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
             return false;
         }
-
         return true;
     }
 
@@ -384,7 +372,6 @@ class repoModel extends model
         if(!$repo) return false;
 
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-        if($repo->SCM == 'Gitlab') $reps = $this->processGitlab($repo);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }

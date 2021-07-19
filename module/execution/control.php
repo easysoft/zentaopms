@@ -2147,6 +2147,8 @@ class execution extends control
 
             $this->session->set('execution', '');
             $this->executeHooks($executionID);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             die(js::reload('parent'));
         }
     }
