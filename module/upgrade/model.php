@@ -3075,8 +3075,9 @@ class upgradeModel extends model
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->exec('TRUNCATE TABLE ' . TABLE_NOTIFY);
         $this->saveLogs($this->dao->get());
-        $mailQueueTable   = '`' . $this->config->db->prefix . 'mailqueue`';
-        $stmt = $this->dao->select('*')->from($mailQueueTable)->query();
+
+        $mailQueueTable = '`' . $this->config->db->prefix . 'mailqueue`';
+        $stmt  = $this->dao->select('*')->from($mailQueueTable)->where('addedDate')->like(date('Y-m-') . '%')->orderBy('id')->query();
         while($mailQueue = $stmt->fetch())
         {
             $notify = new stdclass();
@@ -3095,7 +3096,7 @@ class upgradeModel extends model
         }
 
         $webhookDataTable = '`' . $this->config->db->prefix . 'webhookdatas`';
-        $stmt = $this->dao->select('*')->from($webhookDataTable)->query();
+        $stmt  = $this->dao->select('*')->from($webhookDataTable)->orderBy('id')->limit($offset, $rows)->query();
         while($webhookData = $stmt->fetch())
         {
             $notify = new stdclass();
@@ -3109,6 +3110,7 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
             $this->saveLogs($this->dao->get());
         }
+
         return true;
     }
 

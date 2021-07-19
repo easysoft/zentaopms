@@ -27,7 +27,9 @@
     <?php endforeach;?>
     <div class="input-control space w-150px"><?php echo html::select('account', $userIdPairs, $user ? $user->id : '', 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
+    <?php if($config->systemMode == 'new'):?>
     <div class="input-control space w-150px"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen"');?></div>
+    <?php endif;?>
     <div class="input-control space w-150px"><?php echo html::select('execution', $executions, $execution, 'onchange=changeExecution(this.value) class="form-control chosen"'); ?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>
   </div>
