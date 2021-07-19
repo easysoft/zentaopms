@@ -832,6 +832,7 @@ class baseControl
          * Parse the params, create the $module control object.
          */
         $module = new $className($moduleName, $methodName, $appName);
+        $module->viewType = $this->viewType;
 
         /**
          * 调用对应方法，使用ob方法获取输出内容。

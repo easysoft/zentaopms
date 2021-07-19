@@ -783,7 +783,7 @@ class bug extends control
             $files   = array();
             if($comment == false)
             {
-                $changes  = $this->bug->update($bugID);
+                $changes = $this->bug->update($bugID);
                 if(dao::isError())
                 {
                     if(defined('RUN_MODE') && RUN_MODE == 'api')
@@ -1579,6 +1579,7 @@ class bug extends control
 
             $this->executeHooks($bugID);
 
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             die(js::locate($this->session->bugList, 'parent'));
         }
     }

@@ -22,7 +22,7 @@ class taskStartEntry extends Entry
         $data = $this->getData();
         if($data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $task = $this->loadModel('task')->getByID($dataID);
+        $task = $this->loadModel('task')->getByID($taskID);
 
         $this->send(200, $task);
     }

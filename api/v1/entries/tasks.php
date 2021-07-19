@@ -8,13 +8,31 @@
  */
 class tasksEntry extends entry 
 {
-    public function get()
+    public function get($executionID)
     {
+        $control = $this->loadController('execution', 'task');
+        $control->task($executionID);
+        $data = $this->getData();
+
+        if(isset($data->status) and $data->status == 'success')
+        {
+            $tasks  = $data->data->tasks;
+            $result = array();
+            foreach($tasks as $task)
+            {
+                $result[] = $task;
+            }
+            return $this->send(200, $result);
+        }
+
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+
+        return $this->sendError(400, 'error');
     }
 
     public function post($executionID)
     {
-        $fields = 'name,type,assignedTo,estimate,story,parent,execution,module';
+        $fields = 'name,type,assignedTo,estimate,story,parent,execution,module,pri,desc';
         $this->batchSetPost($fields);
 
         $control = $this->loadController('task', 'create');
@@ -27,6 +45,6 @@ class tasksEntry extends entry
 
         $task = $this->loadModel('task')->getByID($data->id);
 
-        $this->send(200, $task);
+        $this->send(201, $task);
     }
 }
