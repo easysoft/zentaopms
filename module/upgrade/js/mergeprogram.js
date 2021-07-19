@@ -178,6 +178,11 @@ $(function()
             $('[name^=sprints]').prop('checked', false);
             $('#programName').val('');
         }
+        programBegin = $('.programParams #begin').val();
+        programEnd   = $('.programParams #end').val();
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
+
         hiddenProject();
     })
 
