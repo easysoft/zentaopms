@@ -462,8 +462,6 @@ $(function()
         $('#checkAllProjects').prop('checked', checked);
         $('#checkAllProducts').prop('checked', checkedProduct);
 
-        programBegin = $('.programParams #begin').val();
-        programEnd   = $('.programParams #end').val();
         setProgramBegin(programBegin);
         setProgramEnd(programEnd);
         setProjectPM();
