@@ -416,7 +416,6 @@ class project extends control
                 ->where('t1.project')->eq($projectID)
                 ->andWhere('t2.plan')->in(array_keys($oldPlans))
                 ->fetchAll('story');
-            $diffResult = array_diff($oldPlans, $_POST['plans']);
 
             $changes = $this->project->update($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -428,6 +427,7 @@ class project extends control
             }
 
             /* Link the plan stories. */
+            $diffResult = array_diff($oldPlans, $_POST['plans']);
             if(!empty($_POST['plans']) and !empty($diffResult))
             {
                 $this->loadModel('productplan')->linkProject($projectID, $_POST['plans'], $oldPlanStories);
