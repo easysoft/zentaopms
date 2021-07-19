@@ -118,6 +118,7 @@ $(function()
             $('[name^=products]').prop('checked', true);
             $('[name^=sprints]').prop('checked', true);
             $('.main-row .side-col .nav li').addClass('active');
+            $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
         }
         else
         {
@@ -127,6 +128,7 @@ $(function()
             $('[name^=products]').prop('checked', false);
             $('[name^=sprints]').prop('checked', false);
             $('.main-row .side-col .nav li').removeClass('active');
+            $('#programName').val('');
         }
 
         /* If the project is checked, the relevant form will be displayed according to the selected mode. */
