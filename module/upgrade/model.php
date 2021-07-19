@@ -4614,7 +4614,7 @@ class upgradeModel extends model
      */
     public function computeObjectMembers()
     {
-        $projects = $this->dao->select('id,days')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+        $projects      = $this->dao->select('id,days')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
         $projectIdList = array_keys($projects);
 
         /* Get product and sprint team. */
@@ -4625,8 +4625,8 @@ class upgradeModel extends model
             ->where('t2.id')->in($projectIdList)
             ->fetchGroup('project', 'product');
         $sprintGroups  = $this->dao->select('*')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->fetchGroup('project', 'id');
-        $teamGroups = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('execution')->fetchGroup('root', 'account');
-        $users = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
+        $teamGroups    = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('execution')->fetchGroup('root', 'account');
+        $users         = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $groupAccounts = $this->dao->select('*')->from(TABLE_USERGROUP)->fetchGroup('group', 'account');
 
         $projectTeams = array();
@@ -4703,7 +4703,7 @@ class upgradeModel extends model
         }
 
         $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage')->fetchAll('id');
-        $whitelistACL   = $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->in(array_keys($customSprints))->andWhere('objectType')->eq('sprint')->andWhere('type')->eq('whitelist')->fetchPairs('account');
+        $whitelistACL  = $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->in(array_keys($customSprints))->andWhere('objectType')->eq('sprint')->andWhere('type')->eq('whitelist')->fetchPairs('account');
         foreach($customSprints as $sprint)
         {
             if($sprint->acl != 'private') continue;

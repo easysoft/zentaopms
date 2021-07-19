@@ -284,7 +284,7 @@ class upgrade extends control
                     $singleProducts = array_diff($linkedProducts, $sprintProducts);
                     foreach($linkedSprints as $sprint)
                     {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $sprintProducts[$sprint], array($sprint => $sprint));
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array($sprintProducts[$sprint] => $sprintProducts[$sprint]), array($sprint => $sprint));
                     }
                 }
 
@@ -339,7 +339,7 @@ class upgrade extends control
                     $singleProducts = array_diff($linkedProducts, $sprintProducts);
                     foreach($linkedSprints as $sprint)
                     {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $sprintProducts[$sprint], array($sprint => $sprint));
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array($sprintProducts[$sprint] => $sprintProducts[$sprint]), array($sprint => $sprint));
                     }
                 }
 
