@@ -976,8 +976,8 @@ class projectModel extends model
             $projectName = $data->names[$projectID];
 
             $projects[$projectID] = new stdClass();
+            if(isset($data->parents[$projectID])) $projects[$projectID]->parent = $data->parents[$projectID];
             $projects[$projectID]->name           = $projectName;
-            $projects[$projectID]->parent         = $data->parents[$projectID];
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
             $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
