@@ -871,7 +871,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=$repoID&branchID=$branch&objectID=$objectID", '', false);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->openApp == 'devops' ? $repoID : '') . "&branchID=$branch&objectID=$objectID", '', false);
         $this->display();
     }
 

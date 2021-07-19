@@ -178,6 +178,11 @@ $(function()
             $('[name^=sprints]').prop('checked', false);
             $('#programName').val('');
         }
+        programBegin = $('.programParams #begin').val();
+        programEnd   = $('.programParams #end').val();
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
+
         hiddenProject();
     })
 
@@ -451,7 +456,7 @@ $(function()
         }
         else if($('[id^=sprints]').length > 0)
         {
-            checkedProduct = isSelectAll(0, 'product');
+            checked = isSelectAll(0, 'project');
         }
 
         $('#checkAllProjects').prop('checked', checked);
