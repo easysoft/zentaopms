@@ -525,8 +525,11 @@ class bug extends control
             $linkedProducts = $this->loadModel('execution')->getProducts($executionID);
             foreach($linkedProducts as $product) $products[$product->id] = $product->name;
 
-            $project  = $this->loadModel('project')->getByID($projectID);
-            $projects = array($projectID => $project->name);
+            if($projectID)
+            {
+                $project  = $this->loadModel('project')->getByID($projectID);
+                $projects = array($projectID => $project->name);
+            }
         }
         elseif($projectID)
         {
