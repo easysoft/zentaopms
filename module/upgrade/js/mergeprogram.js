@@ -323,7 +323,7 @@ $(function()
         }
         else if($(this).closest("li").find('[id^=productLines]').prop('checked'))
         {
-            var productLine      = $('.nav li.currentPage').attr('lineid');
+            var productLine      = $('.nav li.active').attr('lineid');
             var objectNum        = $('[data-line='+ productLine +']').length;
             var checkedObjectNum = $('[data-line='+ productLine +']:checked').length;
             if(objectNum == checkedObjectNum)
