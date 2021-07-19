@@ -129,12 +129,11 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->position[]  = $this->lang->repo->create;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products    = $this->loadModel('product')->getProductPairsByProject($objectID);
-        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->position[] = $this->lang->repo->create;
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->products   = $this->loadModel('product')->getProductPairsByProject($objectID);
 
         $this->display();
     }
@@ -177,16 +176,15 @@ class repo extends control
             $this->view->projects = $options;
         }
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
-        $repo->repoType          = $repo->id . '-' . $repo->SCM;
-        $this->view->repo        = $repo;
-        $this->view->repoID      = $repoID;
-        $this->view->objectID    = $objectID;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products    = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-		$this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $repo->repoType       = $repo->id . '-' . $repo->SCM;
+        $this->view->repo     = $repo;
+        $this->view->repoID   = $repoID;
+        $this->view->objectID = $objectID;
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->products = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
 
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
 
@@ -208,9 +206,6 @@ class repo extends control
         {
             die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
         }
-
-        /* Delete project relation for gitlab type. */
-        $this->loadModel('gitlab')->deleteProjectRelation($repoID);
 
         $relationID = $this->dao->select('id')->from(TABLE_RELATION)->where('extra')->eq($repoID)->fetch();
         if($relationID)
