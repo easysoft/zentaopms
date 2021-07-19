@@ -657,7 +657,7 @@ class productModel extends model
 
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
-            if($this->config->systemMode == 'new') $products[$productID]->program = $data->programs[$productID];
+            if($this->config->systemMode == 'new' and isset($data->programs[$productID])) $products[$productID]->program = $data->programs[$productID];
             $products[$productID]->name    = $productName;
             $products[$productID]->line    = (int)$data->lines[$productID];
             $products[$productID]->PO      = $data->POs[$productID];

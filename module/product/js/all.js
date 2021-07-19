@@ -44,7 +44,7 @@ $(function()
             {
                 if(!$(this).prop('checked')) checkedProduct = false;
             })
-            console.log(checkedProduct);
+
             if(checkedProduct)  $('.check-all').addClass('checked');
             if(!checkedProduct) $('.check-all').removeClass('checked');
         }, 100)

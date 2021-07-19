@@ -102,6 +102,22 @@ class programModel extends model
     }
 
     /**
+     * Get program pairs by id list.
+     *
+     * @param  string|array $programIDList
+     * @access public
+     * @return void
+     */
+    public function getPairsByList($programIDList = '')
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)
+            ->where('id')->in($programIDList)
+            ->andWhere('`type`')->eq('program')
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
+    }
+
+    /**
      * Get program list.
      *
      * @param  string $status
@@ -728,7 +744,7 @@ class programModel extends model
 
     /**
      * Get parent PM by programIdList.
-     * 
+     *
      * @param  array $programIdList
      * @access public
      * @return void
@@ -739,24 +755,24 @@ class programModel extends model
 
         $parents = array();
         foreach($objects as $object)
-        {   
+        {
             if($object->parent == 0) continue;
             foreach(explode(',', $object->path) as $objectID)
-            {   
+            {
                 if(empty($objectID) || $objectID == $object->id) continue;
                 $parents[$objectID][] = $object->id;
-            }   
-        }   
+            }
+        }
 
         /* Get all parent PM.*/
         $parentPM = $this->dao->select('id, PM')->from(TABLE_PROGRAM)->where('id')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
 
         $parentPMGroup = array();
         foreach($parentPM as $PM)
-        {   
+        {
             $subPrograms = zget($parents, $PM->id, array());
             foreach($subPrograms as $subProgramID) $parentPMGroup[$subProgramID][$PM->PM] = $PM->PM;
-        }   
+        }
 
         return $parentPMGroup;
     }
