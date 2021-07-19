@@ -3077,7 +3077,8 @@ class upgradeModel extends model
         $this->saveLogs($this->dao->get());
 
         $mailQueueTable = '`' . $this->config->db->prefix . 'mailqueue`';
-        $stmt  = $this->dao->select('*')->from($mailQueueTable)->where('addedDate')->like(date('Y-m-') . '%')->orderBy('id')->query();
+        $syncBeginDate  = date('Y-m-d', time() - 15 * 24 * 3600);
+        $stmt           = $this->dao->select('*')->from($mailQueueTable)->where('addedDate')->ge($syncBeginDate)->orderBy('id')->query();
         while($mailQueue = $stmt->fetch())
         {
             $notify = new stdclass();
@@ -3096,7 +3097,7 @@ class upgradeModel extends model
         }
 
         $webhookDataTable = '`' . $this->config->db->prefix . 'webhookdatas`';
-        $stmt  = $this->dao->select('*')->from($webhookDataTable)->orderBy('id')->limit($offset, $rows)->query();
+        $stmt = $this->dao->select('*')->from($webhookDataTable)->orderBy('id')->limit($offset, $rows)->query();
         while($webhookData = $stmt->fetch())
         {
             $notify = new stdclass();
