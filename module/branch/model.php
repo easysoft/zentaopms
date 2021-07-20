@@ -141,7 +141,7 @@ class branchModel extends model
         {
             if($products[$branch->product]->type == 'normal')
             {
-                $branchGroups[$branch->product][0] = '';
+                if(strpos($params, 'ignoreNormal') === false) $branchGroups[$branch->product][0] = '';
             }
             else
             {

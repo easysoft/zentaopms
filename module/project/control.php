@@ -1589,7 +1589,7 @@ class project extends control
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal', $linkedBranches);
 
         $this->display();
     }
