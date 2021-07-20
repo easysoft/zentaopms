@@ -691,6 +691,7 @@ class customModel extends model
     {
         $this->loadModel('setting');
         $this->setting->setItem('system.custom.sprintConcept', $this->post->sprintConcept);
+        $this->setting->setItem('system.custom.productProject', '0_' . $this->post->sprintConcept);
 
         /* Change block title. */
         $oldConfig = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
