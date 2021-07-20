@@ -74,6 +74,10 @@ $lang->upgrade->to15Desc      = <<<EOD
 <br/>
 <p><strong>How do you like to use ZenTao?</strong></p>
 EOD;
+
+
+
+
 $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>Next, ZenTao will migrate the existing data of {$lang->productCommon} and {$lang->projectCommon} to Program and Project. It will be one of the followings:</p><br />
 <h4>1. Manage {$lang->productCommon} and {$lang->projectCommon} by {$lang->productCommon} Line </h4>
@@ -126,9 +130,9 @@ $lang->upgrade->createProjectTip = <<<EOT
 <p>After the upgrade, the existing {$lang->projectCommon} will be Project in the new version.</p>
 <p>ZenTao will create an item in Execute with the same name of {$lang->projectCommon} according to the data in {$lang->projectCommon}, and move the tasks, stories, and bugs in {$lang->projectCommon} to it.</p>
 EOT;
+
 $lang->upgrade->createExecutionTip = <<<EOT
 <p>ZenTao will upgrade existing {$lang->projectCommon} as execution.</p>
 <p>After the upgrade, the data of existing {$lang->projectCommon} will be in a Project - Execute of the new version .</p>
 EOT;
-
 include dirname(__FILE__) . '/version.php';
