@@ -1,5 +1,13 @@
 $(function()
 {
+    programBegin = $('.programParams #begin').val();
+    programEnd   = $('.programParams #end').val();
+    setProgramBegin(programBegin);
+    setProgramEnd(programEnd);
+    setProjectPM();
+
+    setProgramByProduct($(':checkbox:checked[data-productid]'));
+
     /* Define drag to select relevant parameters. */
     var options = {
         selector: 'input',
@@ -36,14 +44,17 @@ $(function()
                     var productID      = $('[data-id=' + e.id  + ']').val();
                     $('[data-product=' + productID +']').prop('checked', true);
                     if(!$("[id^='productLines\[" + lineID + "\]']").prop('checked')) $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
+                    var checkedProject = isSelectAll(lineID, 'project');
                 }
                 else
                 {
                     var checkedProduct = isSelectAll(0, 'product');
                     var productID      = $('[data-id=' + e.id  + ']').val();
                     $('[data-product=' + productID +']').prop('checked', true);
+                    var checkedProject = isSelectAll(0, 'project');
                 }
                 $('#checkAllProducts').prop('checked', checkedProduct);
+                $('#checkAllProjects').prop('checked', checkedProject);
             }
 
             /* All projects selected. */
@@ -94,6 +105,17 @@ $(function()
                 $('#checkAllLines').prop('checked', checkedLines);
             }
 
+            var checkAllLines  = true;
+            var lineNum        = $("[id^='productLines'").length;
+            var checkedLineNum = $("[id^='productLines']:checked").length;
+
+            if(lineNum > checkedLineNum) checkAllLines = false;
+            $("[id='checkAllLines']").prop('checked', checkAllLines);
+
+            setProgramBegin(programBegin);
+            setProgramEnd(programEnd);
+            setProjectPM();
+
             /* If the project is checked, the relevant form will be displayed according to the selected mode. */
             hiddenProject();
         }
@@ -106,14 +128,6 @@ $(function()
     $('.side-col .cell').height($('.side-col').height() - 20);
     $('#source .cell').height($('#source').height());
     $('#programBox .cell').height($('#programBox').height() - 20);
-
-    programBegin = $('.programParams #begin').val();
-    programEnd   = $('.programParams #end').val();
-    setProgramBegin(programBegin);
-    setProgramEnd(programEnd);
-    setProjectPM();
-
-    setProgramByProduct($(':checkbox:checked[data-productid]'));
 
     /* Select all product line events. */
     $('#checkAllLines').click(function()
