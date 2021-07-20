@@ -9,7 +9,7 @@
     <div class='cell'>
       <div class='lineGroup-title'>
         <div class='item checkbox-primary' title="<?php echo $lang->selectAll?>">
-          <input type='checkbox' id='checkAllProjects'><label for='checkAllProjects'><strong><?php echo $lang->projectCommon;?></strong></label>
+          <input type='checkbox' id='checkAllProjects'><label for='checkAllProjects'><strong><?php echo $lang->executionCommon;?></strong></label>
         </div>
       </div>
       <div class='line-groups sprintGroup'>
