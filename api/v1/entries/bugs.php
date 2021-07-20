@@ -17,12 +17,13 @@ class bugsEntry extends entry
         if(isset($data->status) and $data->status == 'success')
         {
             $bugs   = $data->data->bugs;
+            $pager  = $data->data->pager;
             $result = array();
             foreach($bugs as $bug)
             {
                 $result[] = $bug;
             }
-            return $this->send(200, $result);
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'bugs' => $result));
         }
         if(isset($data->status) and $data->status == 'fail')
         {

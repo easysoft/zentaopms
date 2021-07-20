@@ -17,12 +17,13 @@ class tasksEntry extends entry
         if(isset($data->status) and $data->status == 'success')
         {
             $tasks  = $data->data->tasks;
+            $pager  = $data->data->pager;
             $result = array();
             foreach($tasks as $task)
             {
                 $result[] = $task;
             }
-            return $this->send(200, $result);
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'tasks' => $result));
         }
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);

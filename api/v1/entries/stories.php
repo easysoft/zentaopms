@@ -17,13 +17,15 @@ class storiesEntry extends entry
         if(isset($data->status) and $data->status == 'success')
         {
             $stories = $data->data->stories;
+            $pager   = $data->data->pager;
             $result  = array();
             foreach($stories as $story)
             {
                 $result[] = $story;
             }
-            return $this->send(200, $result);
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
         }
+
         if(isset($data->status) and $data->status == 'fail')
         {
             return $this->sendError(400, $data->message);
