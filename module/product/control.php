@@ -792,7 +792,7 @@ class product extends control
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
 
-        $this->product->setMenu($productID);
+        $this->product->setMenu($productID, 0, 0, '', $type);
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
