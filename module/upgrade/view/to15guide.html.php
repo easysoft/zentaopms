@@ -45,7 +45,7 @@
       </div>
       <hr/>
       <div class='panel-footer text-center'>
-        <?php echo html::submitButton($lang->upgrade->start . $lang->upgrade->common);?>
+        <?php echo html::submitButton($lang->upgrade->start . (strpos($this->app->getClientLang(), 'zh') === false ? ' ' : '') . $lang->upgrade->common);?>
       </div>
     </form>
   </div>
