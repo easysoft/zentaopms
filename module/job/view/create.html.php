@@ -73,14 +73,14 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->job->jkHost; ?></th>
+            <th><?php echo $lang->job->server; ?></th>
             <td colspan='2'>
               <div class='table-row'>
-                <div class='table-col'><?php echo html::select('jkHost', $jkHostList, '', "class='form-control chosen'"); ?></div>
-                <div id='jkJobBox' class='table-col'>
+                <div class='table-col'><?php echo html::select('server', $serverList, '', "class='form-control chosen'"); ?></div>
+                <div id='pipelineBox' class='table-col'>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->job->jkJob; ?></span>
-                    <?php echo html::select('jkJob', array('' => ''), '', "class='form-control chosen'"); ?>
+                    <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
+                    <?php echo html::select('pipeline', array('' => ''), '', "class='form-control chosen'"); ?>
                   </div>
                 </div>
               </div>
