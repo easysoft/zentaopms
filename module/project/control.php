@@ -1614,6 +1614,10 @@ class project extends control
         $response  = array();
         $response['result']  = true;
         $response['message'] = $this->lang->project->changeProgramTip;
+        
+        /* Get new program products. */
+        $newProducts = $this->program->getProductPairs($programID, 'assign', 'noclosed');
+        $response['newProducts'] = html::select("newProducts", array('0' => '') + $newProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
 
         $multiLinkedProducts = $this->project->getMultiLinkedProducts($projectID);
         if($multiLinkedProducts)
