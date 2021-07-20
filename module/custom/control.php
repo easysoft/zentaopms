@@ -551,10 +551,12 @@ class custom extends control
             if($mode == 'new')
             {
                 if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
+                if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 0);
                 die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
             }
             else
             {
+                if($sprintConcept == 0) $this->setting->setItem('system.custom.sprintConcept', 1);
                 if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
                 die(js::reload('top'));
             }
