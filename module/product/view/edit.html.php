@@ -17,6 +17,7 @@
 <?php js::set('canChangeProgram', $canChangeProgram);?>
 <?php js::set('singleLinkProjects', $singleLinkProjects);?>
 <?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
+<?php js::set('changeProjectsHtml', html::hidden('changeProjects', ''));?>
 <style>
 #changeProgram .icon-project {padding-right: 5px;}
 </style>
@@ -84,7 +85,6 @@
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>
-              <?php echo html::hidden('changeProjects', '');?>
               <?php echo html::submitButton();?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>
