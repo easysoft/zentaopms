@@ -162,18 +162,22 @@ $(function()
         var lineID = $('li.currentPage').attr('lineid');
         if($(this).is(':checked'))
         {
-            $('#checkAllProjects').prop('checked', true);
             $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
             if($('[id^=productLines]').length > 0)
             {
                 $('[data-line=' + lineID + ']').prop('checked', true);
                 $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
+
+                var projectNum = $("[id^='sprints\[" + lineID + "\]']").length;
             }
             else
             {
                 $('[name^=products]').prop('checked', true);
                 $('[name^=sprints]').prop('checked', true);
+
+                var projectNum = $("[id^='sprints']").length;
             }
+            if(projectNum !== 0) $('#checkAllProjects').prop('checked', true);
         }
         else
         {
@@ -1133,6 +1137,6 @@ function isSelectAll(lineID = 0, type = 'product')
             var checkedObjectNum = $("[id^='productLines']:checked").length;
         }
     }
-    if(objectNum > checkedObjectNum) checked = false;
+    if(objectNum > checkedObjectNum || objectNum == 0) checked = false;
     return checked;
 }
