@@ -12,11 +12,12 @@ class productsEntry extends entry
     {
         $control = $this->loadController('product', 'all');
         $control->all();
-        $data = $this->getData();
+        $data  = $this->getData();
+        $pager = $data->data->pager;
 
         if(isset($data->status) and $data->status == 'success')
         {
-            return $this->send(200, $data->data->productStats);
+            return $this->send(200, array('products' => $data->data->productStats));
         }
         if(isset($data->status) and $data->status == 'fail')
         {

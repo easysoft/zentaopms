@@ -14,7 +14,11 @@ class executionsEntry extends entry
         $control->all($this->param('status', 'all'), $this->param('project', $projectID));
         $data = $this->getData();
 
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $data->data->executionStats);
+        if(isset($data->status) and $data->status == 'success')
+        {
+            $pager = $data->data->pager;
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'executions' => $data->data->executionStats));
+        }
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         return $this->sendError(400, 'error');

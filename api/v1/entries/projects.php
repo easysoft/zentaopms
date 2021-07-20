@@ -16,7 +16,8 @@ class projectsEntry extends entry
 
         if(isset($data->status) and $data->status == 'success')
         {
-            return $this->send(200, $data->data->projectStats);
+            $pager = $data->data->pager;
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'projects' => $data->data->projectStats));
         }
         if(isset($data->status) and $data->status == 'fail')
         {

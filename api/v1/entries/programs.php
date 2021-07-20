@@ -1,4 +1,11 @@
 <?php
+/**
+ * 禅道API的programs资源类
+ * 版本V1
+ *
+ * The programs entry point of zentaopms
+ * Version 1
+ */
 class ProgramsEntry extends Entry 
 {
     public function get()
@@ -15,7 +22,7 @@ class ProgramsEntry extends Entry
             {
                 $result[] = $program;
             }
-            return $this->send(200, $result);
+            return $this->send(200, array('programs' => $result));
         }
         if(isset($data->status) and $data->status == 'fail')
         {
