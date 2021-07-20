@@ -490,7 +490,7 @@ class productModel extends model
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
-        if(isset($currentProduct->type) and $currentProduct->type != 'normal' and $currentModule != 'testsuite')
+        if(isset($currentProduct->type) and $currentProduct->type != 'normal' and $currentModule != 'testsuite' and $currentModule != 'testreport')
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
             $branches     = $this->loadModel('branch')->getPairs($productID);
