@@ -164,15 +164,15 @@ $lang->project->featureBar['wait']      = '未開始';
 $lang->project->featureBar['suspended'] = '已掛起';
 $lang->project->featureBar['closed']    = '已關閉';
 
-$lang->project->aclList['private'] = "私有 (只有項目團隊成員和干係人可訪問)";
+$lang->project->aclList['private'] = "私有 (只有項目負責人、團隊成員和干係人可訪問)";
 $lang->project->aclList['open']    = "公開 (有項目視圖權限即可訪問)";
 
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公開';
 
-$lang->project->subAclList['private'] = "私有 (只有本項目負責人、團隊成員和干係人可訪問)";
+$lang->project->subAclList['private'] = "私有 (只有項目負責人、團隊成員和干係人可訪問)";
 $lang->project->subAclList['open']    = "公開 (有項目視圖權限即可訪問)";
-$lang->project->subAclList['program'] = '項目集內公開（所有上級項目集負責人和干係人、本項目負責人、團隊成員和干係人可訪問）';
+$lang->project->subAclList['program'] = '項目集內公開（所有上級項目集負責人和干係人、項目負責人、團隊成員和干係人可訪問）';
 
 $lang->project->authList['extend'] = '繼承 (取系統權限與項目權限的合集)';
 $lang->project->authList['reset']  = '重新定義 (只取項目權限)';
@@ -189,8 +189,6 @@ $lang->project->endList[365] = '一年';
 $lang->project->endList[999] = '長期';
 
 $lang->project->empty                  = '暫時沒有項目';
-$lang->project->accessDenied           = '您無權訪問該項目！';
-$lang->project->chooseProgramType      = '選中項目管理模型';
 $lang->project->nextStep               = '下一步';
 $lang->project->hoursUnit              = '%s 工時';
 $lang->project->membersUnit            = '%s人';

@@ -122,8 +122,8 @@ $lang->user->testTask2Him = '%s負責的';
 $lang->user->case2Him     = '指派給%s';
 $lang->user->caseByHim    = '由%s創建';
 
-$lang->user->errorDeny    = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
-$lang->user->errorView    = "抱歉，您無權訪問『<b>%s</b>』視圖。請聯繫管理員獲取權限。點擊後退返回上頁。";
+$lang->user->errorDeny    = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。請回到地盤或重新登錄。";
+$lang->user->errorView    = "抱歉，您無權訪問『<b>%s</b>』視圖。請聯繫管理員獲取權限。請回到地盤或重新登錄。";
 $lang->user->loginFailed  = "登錄失敗，請檢查您的用戶名或密碼是否填寫正確。";
 $lang->user->lockWarning  = "您還有%s次嘗試機會。";
 $lang->user->loginLocked  = "密碼嘗試次數太多，請聯繫管理員解鎖，或%s分鐘後重試。";
@@ -247,3 +247,19 @@ $lang->user->noticeResetFile = "<h5>普通用戶請聯繫管理員重置密碼</
 $lang->user->notice4Safe = "警告：檢測到一鍵安裝包密碼口令弱";
 $lang->user->process4DIR = "檢測到您可能在使用一鍵安裝包環境，該環境中其他站點還在用簡單密碼，安全起見，如果不使用其他站點，請及時處理。將 %s 目錄刪除或改名。詳情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
 $lang->user->process4DB  = "檢測到您可能在使用一鍵安裝包環境，該環境中其他站點還在用簡單密碼，安全起見，如果不使用其他站點，請及時處理。請登錄資料庫，修改 %s 資料庫的zt_user表的password欄位。詳情查看：<a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
+$lang->user->mkdirWin = <<<EOT
+    <html><head><meta charset='utf-8'></head>
+    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
+    <div style='margin-bottom:8px;'>不能創建臨時目錄，請確認目錄<strong style='color:#ed980f'>%s</strong>是否存在並有操作權限。</div> 
+    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    </td></tr></table></body></html>
+EOT;
+$lang->user->mkdirLinux = <<<EOT
+    <html><head><meta charset='utf-8'></head>
+    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
+    <div style='margin-bottom:8px;'>不能創建臨時目錄，請確認目錄<strong style='color:#ed980f'>%s</strong>是否存在並有操作權限。</div>  
+    <div style='margin-bottom:8px;'>命令為：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
+    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>
+    </td></tr></table></body></html>
+EOT;

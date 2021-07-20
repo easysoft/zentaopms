@@ -124,8 +124,8 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Git']        = 'Git';
-$lang->repo->scmList['Subversion'] = 'SVN';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Subversion'] = 'SVN';
 
 $lang->repo->gitlabHost    = 'Gitlab Host';
 $lang->repo->gitlabToken   = 'Gitlab Token';
@@ -174,8 +174,9 @@ $lang->repo->error->encoding      = "The encoding might be wrong. Please change 
 $lang->repo->error->deleted       = "Deletion of the repository failed. The current repository has a commit record associated with the design.";
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
 
-$lang->repo->syncTips      = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
-$lang->repo->encodingsTips = "The encodings of comments can be comma separated values, e.g. utf-8.";
+$lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
+$lang->repo->encodingsTips     = "The encodings of comments can be comma separated values, e.g. utf-8.";
+$lang->repo->pathTipsForGitlab = "GitLab Project URL";
 
 $lang->repo->example              = new stdclass();
 $lang->repo->example->client      = new stdclass();

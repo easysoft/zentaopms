@@ -53,7 +53,6 @@ $lang->export       = '導出';
 $lang->setFileName  = '檔案名：';
 $lang->submitting   = '稍候...';
 $lang->save         = '保存';
-$lang->saveSuccess  = '保存成功';
 $lang->confirm      = '確認';
 $lang->preview      = '查看';
 $lang->goback       = '返回';
@@ -81,6 +80,7 @@ $lang->switchDisplay   = '切換顯示';
 $lang->expand          = '展開全部';
 $lang->collapse        = '收起';
 $lang->saveSuccess     = '保存成功';
+$lang->importSuccess   = '導入成功';
 $lang->fail            = '失敗';
 $lang->addFiles        = '上傳了附件 ';
 $lang->files           = '附件 ';
@@ -209,7 +209,8 @@ $lang->my->work = '待處理';
 
 $lang->project->list = '項目列表';
 
-$lang->execution->list = "{$lang->executionCommon}列表";
+$lang->execution->executionKanban = "{$lang->execution->common}看板";
+$lang->execution->all             = "{$lang->execution->common}列表";
 
 $lang->doc->recent    = '最近文檔';
 $lang->doc->my        = '我的文檔';
