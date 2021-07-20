@@ -15,7 +15,6 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
-<?php js::set('gitlabProjects', $gitlabProjects);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -80,13 +79,13 @@
         <?php if(strpos(",$showFields,", ',story,') !== false and $execution->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
-          <td colspan='3'>           
-            <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span> 
+          <td colspan='3'>
+            <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
               <?php echo html::select('story', array($task->story => empty($stories) ? '': $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
             </div>
-            
+
           </td>
         </tr>
         <?php endif;?>
@@ -238,13 +237,6 @@
               <?php if($execution->acl != 'private') echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>
-        </tr>
-        <?php endif;?>
-        <?php if(!empty($gitlabProjects)):?>
-        <tr>
-          <th><?php echo $lang->task->sync2Gitlab;?></th>
-          <td><?php echo html::select('gitlab', $gitlabList, '', "class='form-control chosen'");?></td>
-          <td><?php echo html::select('gitlabProject', '', '', "class='w-50px form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <tr id='after-tr'>
