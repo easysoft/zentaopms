@@ -18,7 +18,7 @@ class entry extends baseEntry
  * The baseEntry class file of ZenTao API.
  *
  */
-class baseEntry 
+class baseEntry
 {
     /**
      * 全局对象 $app。
@@ -164,7 +164,7 @@ class baseEntry
     {
         header("Content-type: application/json");
         header("HTTP/1.1 {$this->statusCode[$code]}");
-        echo json_encode($data); 
+        echo json_encode($data);
         exit;
     }
 
@@ -341,8 +341,8 @@ class baseEntry
         $fields = explode(',', $fields);
         foreach($fields as $field)
         {
-            /* 
-             * If the field exists in request body, use it. 
+            /*
+             * If the field exists in request body, use it.
              * Otherwise set default value from $object.
              */
             if(isset($this->requestBody->$field))
