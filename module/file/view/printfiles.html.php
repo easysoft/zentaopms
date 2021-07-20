@@ -1,6 +1,6 @@
 <?php if($files):?>
 <?php
-$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
+$sessionString  = ($config->requestType == 'PATH_INFO' and !isonlybody()) ? '?' : '&';
 $sessionString .= session_name() . '=' . session_id();
 ?>
 <?php if($fieldset == 'true'):?>
