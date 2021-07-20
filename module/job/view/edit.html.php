@@ -112,6 +112,7 @@
           <tr>
             <th><?php echo $lang->job->customParam;?></th>
             <td colspan='2' id='paramDiv'>
+              <?php if($job->customParam):?>
               <?php foreach(json_decode($job->customParam) as $paramName => $paramValue):?>
               <div class='table-row input-group'>
                 <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
@@ -135,6 +136,7 @@
                 <span class='input-group-addon w-40px'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
               </div>
               <?php endforeach;?>
+              <?php endif;?>
               <div class='table-row input-group'>
                 <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
                 <?php echo html::input('paramName[]', '', "class='form-control' id='paramName'"); ?>
