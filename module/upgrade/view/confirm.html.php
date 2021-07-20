@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <form method='post' action='<?php echo inlink('execute');?>'>
+  <form method='post' onsubmit="submit.disabled=1" action='<?php echo inlink('execute');?>'>
     <div class='modal-dialog'>
       <div class='modal-header'>
         <strong><?php echo $lang->upgrade->confirm;?></strong>
@@ -23,4 +23,6 @@
     </div>
   </form>
 </div>
+<script>
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>

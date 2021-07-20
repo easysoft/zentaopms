@@ -138,7 +138,7 @@ $(function()
         {
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
 
-            var title = (item.type === 'product' ? '<i class="icon icon-cube text-muted"></i> ' : '') + item.name;
+            var title = (item.type === 'product' ? '<i class="icon icon-product text-muted"></i> ' : '') + item.name;
             var link = item.id !== undefined ? ('<a data-app=' + openApp + ' href="' + createLink('tree', 'browsetask', 'rootID=<?php echo $rootID ?>&viewType=task&moduleID={0}'.format(item.id)) + '">' + title + '</a>') : ('<span class="tree-toggle">' + title + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'task')
