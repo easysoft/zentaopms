@@ -35,7 +35,7 @@ class jobModel extends model
     {
         return $this->dao->select('t1.*, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
-            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t1.server=t3.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t1.jkHost=t3.id')
             ->where('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -288,9 +288,9 @@ class jobModel extends model
      */
     public function exec($id)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.jkJob,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
-            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($id)
             ->fetch();
         if(!$job) return false;

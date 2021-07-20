@@ -28,10 +28,10 @@ class ciModel extends model
      */
     public function checkCompileStatus()
     {
-        $compiles = $this->dao->select('t1.*, t2.pipeline, t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')
+        $compiles = $this->dao->select('t1.*, t2.jkJob, t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')
             ->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
-            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t2.server=t3.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t2.jkHost=t3.id')
             ->where('t1.status')->ne('success')
             ->andWhere('t1.status')->ne('failure')
             ->andWhere('t1.status')->ne('create_fail')

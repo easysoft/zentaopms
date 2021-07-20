@@ -86,30 +86,30 @@ $('#triggerType').change(function()
     }
 });
 
-$('#server').change(function()
+$('#jkHost').change(function()
 {
     var jenkinsID = $(this).val();
-    $('#pipelineBox #pipeline').remove();
-    $('#pipelineBox #pipeline_chosen').remove();
-    $('#pipelineBox .input-group').append("<div class='load-indicator loading'></div>");
+    $('#jkJobBox #jkJob').remove();
+    $('#jkJobBox #jkJob_chosen').remove();
+    $('#jkJobBox .input-group').append("<div class='load-indicator loading'></div>");
     $.getJSON(createLink('jenkins', 'ajaxGetTasks', 'jenkinsID=' + jenkinsID), function(tasks)
     {
-        html  = "<select id='pipeline' name='pipeline' class='form-control'>";
+        html  = "<select id='jkJob' name='jkJob' class='form-control'>";
         for(taskKey in tasks)
         {
             var task = tasks[taskKey];
             html += "<option value='" + taskKey + "'>" + task + "</option>";
         }
         html += '</select>';
-        $('#pipelineBox .loading').remove();
-        $('#pipelineBox .input-group').append(html);
+        $('#jkJobBox .loading').remove();
+        $('#jkJobBox .input-group').append(html);
 
-        $('#pipelineBox #pipeline').val(pipeline).chosen({drop_direction: 'auto'});
+        $('#jkJobBox #jkJob').val(jkJob).chosen({drop_direction: 'auto'});
     })
 })
 
 $(function()
 {
-    $('#server').change();
+    $('#jkHost').change();
     $('#triggerType').change();
 });

@@ -34,10 +34,10 @@ class compileModel extends model
      */
     public function getList($jobID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate,t1.testtask, t2.pipeline,t2.triggerType,t2.comment,t2.atDay,t2.atTime, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
+        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate,t1.testtask, t2.jkJob,t2.triggerType,t2.comment,t2.atDay,t2.atTime, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
-            ->leftJoin(TABLE_PIPELINE)->alias('t4')->on('t2.server=t4.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t4')->on('t2.jkHost=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.job')->ne('0')
             ->beginIF(!empty($jobID))->andWhere('t1.job')->eq($jobID)->fi()
@@ -84,7 +84,7 @@ class compileModel extends model
 
         $url = new stdclass();
         $url->userPWD = "$jenkinsUser:$jenkinsPassword";
-        $url->url     = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->pipeline);
+        $url->url     = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jkJob);
 
         return $url;
     }
@@ -121,9 +121,9 @@ class compileModel extends model
      */
     public function exec($compile)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
-            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($compile->job)
             ->fetch();
 

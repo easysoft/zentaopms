@@ -42,7 +42,7 @@
           <td class='text-center'><?php echo $id;?></td>
           <td title='<?php echo $build->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$build->job}&compileID={$build->id}", 'html', true), $build->name, '', "class='iframe' data-width='90%'") : $build->name;?></td>
           <td title='<?php echo $build->repoName;?>'><?php echo $build->repoName;?></td>
-          <?php $jenkins = urldecode($build->pipeline) . '@' . $build->jenkinsName;?>
+          <?php $jenkins = urldecode($build->jkJob) . '@' . $build->jenkinsName;?>
           <td title='<?php echo $jenkins; ?>'><?php echo $jenkins; ?></td>
           <?php $triggerConfig = $this->loadModel('job')->getTriggerConfig($build);?>
           <td title='<?php echo $triggerConfig;?>'><?php echo $triggerConfig;?></td>
