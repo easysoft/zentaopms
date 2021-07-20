@@ -48,7 +48,7 @@
         <table class='table table-form mw-400px' style='margin: 0 auto'>
           <tr>
             <th class="<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-150px' : 'w-80px';?>"><?php echo $lang->install->company;?></th>
-            <td class='w-300px'><?php echo html::input('company', '', "class='form-control'");?></td>
+            <td class="<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-350px' : 'w-300px';?>"><?php echo html::input('company', '', "class='form-control'");?></td>
           </tr>
           <tr class='hidden'>
             <th><?php echo $lang->install->working;?></th>
