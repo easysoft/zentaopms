@@ -107,6 +107,14 @@ $(function()
     $('#source .cell').height($('#source').height());
     $('#programBox .cell').height($('#programBox').height() - 20);
 
+    programBegin = $('.programParams #begin').val();
+    programEnd   = $('.programParams #end').val();
+    setProgramBegin(programBegin);
+    setProgramEnd(programEnd);
+    setProjectPM();
+
+    setProgramByProduct($(':checkbox:checked[data-productid]'));
+
     /* Select all product line events. */
     $('#checkAllLines').click(function()
     {
@@ -130,6 +138,9 @@ $(function()
             $('.main-row .side-col .nav li').removeClass('active');
             $('#programName').val('');
         }
+
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
 
         /* If the project is checked, the relevant form will be displayed according to the selected mode. */
         hiddenProject();
@@ -155,6 +166,9 @@ $(function()
             $('[name^=sprints]').prop('checked', false);
             $('#programName').val('');
         }
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
+
         hiddenProject();
     })
 
@@ -178,21 +192,11 @@ $(function()
             $('[name^=sprints]').prop('checked', false);
             $('#programName').val('');
         }
-        programBegin = $('.programParams #begin').val();
-        programEnd   = $('.programParams #end').val();
         setProgramBegin(programBegin);
         setProgramEnd(programEnd);
 
         hiddenProject();
     })
-
-    programBegin = $('.programParams #begin').val();
-    programEnd   = $('.programParams #end').val();
-    setProgramBegin(programBegin);
-    setProgramEnd(programEnd);
-    setProjectPM();
-
-    setProgramByProduct($(':checkbox:checked[data-productid]'));
 
     /* Select a product line event. */
     $('[name^=productLines]').change(function()
@@ -232,6 +236,9 @@ $(function()
 
         if(lineNum > checkedLineNum) checked = false;
         $('#checkAllLines').prop('checked', checked);
+
+        setProgramBegin(programBegin);
+        setProgramEnd(programEnd);
 
         /* If the project is checked, the relevant form will be displayed according to the selected mode. */
         hiddenProject();
