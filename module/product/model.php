@@ -1744,8 +1744,6 @@ class productModel extends model
      */
     public function updateProjects($productID, $singleLinkProjects = array(), $multipleLinkProjects = array())
     {
-        if(!isset($_POST['changeProjects'])) return;
-
         $programID = $_POST['program'];
         foreach($singleLinkProjects as $projectID => $projectName)
         {

@@ -19,8 +19,6 @@ $(function()
             $('#line').replaceWith(data);
             $('#line').chosen();
         })
-
-        $("button[type='submit']").before(changeProjectsHtml);
     })
 });
 

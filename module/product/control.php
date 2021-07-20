@@ -451,7 +451,7 @@ class product extends control
             if($this->config->systemMode == 'new')
             {
                 /* Change the projects set of the program. */
-                if(($_POST['program'] != $product->program) and $singleLinkProjects or $multipleLinkProjects)
+                if(($_POST['program'] != $product->program) and ($singleLinkProjects or $multipleLinkProjects))
                 {
                     $this->product->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
                 }
