@@ -11,4 +11,3 @@ RENAME TABLE `zt_jenkins` TO `zt_pipeline`;
 
 ALTER TABLE `zt_relation` DROP INDEX `relation`;
 ALTER TABLE `zt_relation` ADD UNIQUE INDEX `relation`(`product`, `relation`, `AType`, `BType`, `AID`, `BID`);
-
