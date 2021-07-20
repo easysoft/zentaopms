@@ -12,17 +12,18 @@ class productsEntry extends entry
     {
         $control = $this->loadController('product', 'all');
         $control->all();
-        $data  = $this->getData();
-        $pager = $data->data->pager;
 
+        /* Response */
+        $data = $this->getData();
         if(isset($data->status) and $data->status == 'success')
         {
-            return $this->send(200, array('products' => $data->data->productStats));
+            $result   = array();
+            $products = $data->data->productStats;
+            foreach($products as $product) $result[] = $this->format($product, 'createdDate:time');
+
+            return $this->send(200, array('products' => $result));
         }
-        if(isset($data->status) and $data->status == 'fail')
-        {
-            return $this->sendError(400, $data->message);
-        }
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         return $this->sendError(400, 'error');
     }
@@ -43,7 +44,9 @@ class productsEntry extends entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
+        /* Response */
         $product = $this->loadModel('product')->getByID($data->id);
+        $product = $this->format($product, 'createdDate:time,whitelist:[]string');
 
         $this->send(200, $product);
     }

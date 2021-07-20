@@ -17,7 +17,12 @@ class projectsEntry extends entry
         if(isset($data->status) and $data->status == 'success')
         {
             $pager = $data->data->pager;
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'projects' => $data->data->projectStats));
+            $result = array();
+            foreach($data->data->projectStats as $project)
+            {
+                $result[] = $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
+            }
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'projects' => $result));
         }
         if(isset($data->status) and $data->status == 'fail')
         {
@@ -49,6 +54,6 @@ class projectsEntry extends entry
 
         $project = $this->loadModel('project')->getByID($data->id);
 
-        $this->send(201, $project);
+        $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
     }
 }

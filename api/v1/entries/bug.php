@@ -15,7 +15,7 @@ class bugEntry extends entry
 
         $data = $this->getData();
         $bug  = $data->data->bug;
-        $this->send(200, $bug);
+        $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time'));
     }
 
     public function put($bugID)
@@ -35,7 +35,7 @@ class bugEntry extends entry
         if(!isset($data->status)) return $this->sendError(400, 'error');
 
         $bug = $this->bug->getByID($bugID);
-        $this->send(200, $bug);
+        $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time'));
     }
 
     public function delete($bugID)

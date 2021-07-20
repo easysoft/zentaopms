@@ -15,7 +15,7 @@ class storyEntry extends Entry
 
         $data  = $this->getData();
         $story = $data->data->story;
-        $this->send(200, $story);
+        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
     }
 
     public function put($storyID)
@@ -31,7 +31,8 @@ class storyEntry extends Entry
         $control->edit($storyID);
 
         $this->getData();
-        $this->sendSuccess(200, 'success');
+        $story = $this->story->getByID($storyID);
+        $this->sendSuccess(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
     }
 
     public function delete($storyID)

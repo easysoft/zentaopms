@@ -14,7 +14,7 @@ class productEntry extends Entry
         $control->view($productID);
 
         $data = $this->getData();
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $data->data->product);
+        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->product, 'createdDate:time'));
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         $this->sendError(400, 'error');
@@ -34,7 +34,8 @@ class productEntry extends Entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $this->sendSuccess(200, 'success');
+        $product = $this->product->getByID($productID);
+        $this->sendSuccess(200, $this->format($product, 'createdDate:time'));
     }
 
     public function delete($productID)

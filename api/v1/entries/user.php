@@ -17,7 +17,7 @@ class userEntry extends Entry
         $user = $data->data->user;
         unset($user->password);
 
-        $this->send(200, $user);
+        $this->send(200, $this->format($user, 'last:time,locked:time'));
     }
 
     public function put($userID)
@@ -39,7 +39,7 @@ class userEntry extends Entry
         $user = $this->user->getByID($userID, 'id');
         unset($user->password);
 
-        $this->send(200, $user);
+        $this->send(200, $this->format($user, 'last:time,locked:time'));
     }
 
     public function delete($userID)

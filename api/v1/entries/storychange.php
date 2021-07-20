@@ -34,6 +34,6 @@ class storyChangeEntry extends Entry
 
         $story = $this->loadModel('story')->getByID($storyID);
 
-        $this->send(200, $story);
+        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
     }
 }

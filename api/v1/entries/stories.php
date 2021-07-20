@@ -21,7 +21,7 @@ class storiesEntry extends entry
             $result  = array();
             foreach($stories as $story)
             {
-                $result[] = $story;
+                $result[] = $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
         }
@@ -54,6 +54,6 @@ class storiesEntry extends entry
 
         $story = $this->loadModel('story')->getByID($data->id);
 
-        $this->send(200, $story);
+        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
     }
 }

@@ -14,7 +14,7 @@ class projectEntry extends entry
         $control->view($projectID);
 
         $data = $this->getData();
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $data->data->project);
+        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         $this->sendError(400, 'error');
@@ -47,7 +47,7 @@ class projectEntry extends entry
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $project = $this->project->getByID($projectID);
-        $this->send(200, $project);
+        $this->send(200, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
     }
 
     public function delete($projectID)

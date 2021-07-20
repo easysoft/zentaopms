@@ -25,6 +25,6 @@ class taskAssignToEntry extends Entry
 
         $task = $this->loadModel('task')->getByID($taskID);
 
-        $this->send(200, $task);
+        $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
     }
 }

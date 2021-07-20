@@ -2207,6 +2207,8 @@ class baseRouter
             if(!isset($params->emulatePrepare) and PHP_OS == 'Linux') $params->emulatePrepare = true;
             if(!isset($params->bufferQuery) and PHP_OS == 'Linux')    $params->bufferQuery = true;
 
+            if(defined('RUN_MODE') and RUN_MODE == 'api') $params->emulatePrepare = false;
+
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             if(isset($params->strictMode) and $params->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
