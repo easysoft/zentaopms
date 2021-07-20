@@ -1106,7 +1106,7 @@ function getProgramStatus(objectType, objectID)
  * @param  int    lineID
  * @param  string type
  * @access public
- * @return void
+ * @return bool
  */
 function isSelectAll(lineID = 0, type = 'product')
 {
