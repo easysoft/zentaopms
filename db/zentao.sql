@@ -478,6 +478,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `repo` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `frame` varchar(20) NOT NULL,
+  `engine` varchar(20) NOT NULL,
   `server` mediumint(8) unsigned NOT NULL,
   `pipeline` varchar(500) NOT NULL,
   `triggerType` varchar(255) NOT NULL,
