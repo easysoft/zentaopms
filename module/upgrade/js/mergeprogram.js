@@ -152,18 +152,32 @@ $(function()
         var lineID = $('li.currentPage').attr('lineid');
         if($(this).is(':checked'))
         {
-            $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
             $('#checkAllProjects').prop('checked', true);
-            $('[name^=products]').prop('checked', true);
-            $('[name^=sprints]').prop('checked', true);
             $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
+            if($('[id^=productLines]').length > 0)
+            {
+                $('[data-line=' + lineID + ']').prop('checked', true);
+                $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
+            }
+            else
+            {
+                $('[name^=products]').prop('checked', true);
+                $('[name^=sprints]').prop('checked', true);
+            }
         }
         else
         {
-            $("[id^='productLines\[" + lineID + "\]']").prop('checked', false);
             $('#checkAllProjects').prop('checked', false);
-            $('[name^=products]').prop('checked', false);
-            $('[name^=sprints]').prop('checked', false);
+            if($('[id^=productLines]').length > 0)
+            {
+                $('[data-line=' + lineID + ']').prop('checked', false);
+                $("[id^='productLines\[" + lineID + "\]']").prop('checked', false);
+            }
+            else
+            {
+                $('[name^=products]').prop('checked', false);
+                $('[name^=sprints]').prop('checked', false);
+            }
             $('#programName').val('');
         }
         setProgramBegin(programBegin);
@@ -178,19 +192,33 @@ $(function()
         var lineID = $('li.currentPage').attr('lineid');
         if($(this).is(':checked'))
         {
-            $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
             $('#checkAllProducts').prop('checked', true);
-            $('[name^=products]').prop('checked', true);
-            $('[name^=sprints]').prop('checked', true);
             $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
+            if($('[id^=productLines]').length > 0)
+            {
+                $('[data-line=' + lineID + ']').prop('checked', true);
+                $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
+            }
+            else
+            {
+                $('[name^=products]').prop('checked', true);
+                $('[name^=sprints]').prop('checked', true);
+            }
         }
         else
         {
-            $("[id^='productLines\[" + lineID + "\]']").prop('checked', false);
             $('#checkAllProducts').prop('checked', false);
-            $('[name^=products]').prop('checked', false);
-            $('[name^=sprints]').prop('checked', false);
             $('#programName').val('');
+            if($('[id^=productLines]').length > 0)
+            {
+                $('[data-line=' + lineID + ']').prop('checked', false);
+                $("[id^='productLines\[" + lineID + "\]']").prop('checked', false);
+            }
+            else
+            {
+                $('[name^=products]').prop('checked', false);
+                $('[name^=sprints]').prop('checked', false);
+            }
         }
         setProgramBegin(programBegin);
         setProgramEnd(programEnd);
