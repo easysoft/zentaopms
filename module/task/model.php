@@ -1130,6 +1130,7 @@ class taskModel extends model
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
+            $task->parent         = $oldTask->parent;
 
             if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
             {
@@ -1257,7 +1258,7 @@ class taskModel extends model
                 ->checkIF($task->estimate != false, 'estimate', 'float')
                 ->checkIF($task->consumed != false, 'consumed', 'float')
                 ->checkIF($task->left     != false, 'left',     'float')
-                ->checkIF($task->left     == 0 and $task->status != 'cancel' and $task->status != 'closed' and $task->status != 'wait' and $task->consumed != 0, 'status', 'equal', 'done')
+                ->checkIF($task->parent > 0 and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed' and $task->status != 'wait' and $task->consumed != 0, 'status', 'equal', 'done')
 
                 ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
