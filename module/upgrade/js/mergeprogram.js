@@ -403,6 +403,13 @@ $(function()
                 checkedLine = false;
             }
             $("[id^='productLines\[" + lineID + "\]']").prop('checked', checkedLine);
+
+            var checkAllLines  = true;
+            var lineNum        = $("[id^='productLines'").length;
+            var checkedLineNum = $("[id^='productLines']:checked").length;
+
+            if(lineNum > checkedLineNum) checkAllLines = false;
+            $("[id='checkAllLines']").prop('checked', checkAllLines);
         }
         else if($('[id^=products]').length > 0)
         {
@@ -483,6 +490,13 @@ $(function()
                 checkedLine = false;
             }
             $("[id^='productLines\["+ lineID +"\]").prop('checked', checkedLine);
+
+            var checkAllLines  = true;
+            var lineNum        = $("[id^='productLines'").length;
+            var checkedLineNum = $("[id^='productLines']:checked").length;
+
+            if(lineNum > checkedLineNum) checkAllLines = false;
+            $("[id='checkAllLines']").prop('checked', checkAllLines);
         }
         else if($('[id^=products]').length > 0)
         {
