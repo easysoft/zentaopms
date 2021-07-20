@@ -556,6 +556,7 @@ class custom extends control
             }
             else
             {
+                if($sprintConcept == 0) $this->setting->setItem('system.custom.sprintConcept', 1);
                 if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
                 die(js::reload('top'));
             }
