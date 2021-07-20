@@ -218,7 +218,6 @@ class caselibModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where('lib')->eq((int)$libID)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib == 'project')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq(0)
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()

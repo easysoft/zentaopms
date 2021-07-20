@@ -354,7 +354,7 @@ class bug extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             $bugID = $bugResult['id'];
@@ -362,7 +362,7 @@ class bug extends control
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->bug->common);
                 $response['locate']  = $this->createLink('bug', 'view', "bugID=$bugID");
-                $this->send($response);
+                return $this->send($response);
             }
 
             /* Record related action, for example FromFeedback. */
@@ -386,12 +386,12 @@ class bug extends control
             $this->executeHooks($bugID);
 
             /* Return bug id when call the API. */
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
 
             /* If link from no head then reload. */
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
 
             if($this->app->openApp == 'execution')
             {
@@ -408,7 +408,7 @@ class bug extends control
             }
             if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID");
             $response['locate'] = $location;
-            $this->send($response);
+            return $this->send($response);
         }
 
         /* Get product, then set menu. */
@@ -519,7 +519,19 @@ class bug extends control
         /* Get products and projects. */
         $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc');
         $projects = array(0 => '');
-        if($projectID)
+        if($executionID)
+        {
+            $products    = array();
+            $linkedProducts = $this->loadModel('execution')->getProducts($executionID);
+            foreach($linkedProducts as $product) $products[$product->id] = $product->name;
+
+            if($projectID)
+            {
+                $project  = $this->loadModel('project')->getByID($projectID);
+                $projects = array($projectID => $project->name);
+            }
+        }
+        elseif($projectID)
         {
             $products    = array();
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
@@ -558,9 +570,13 @@ class bug extends control
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
         /* Set gitlabProjects. */
-        $allGitlabs     = $this->loadModel('gitlab')->getPairs();
-        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
-        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
+        $this->loadModel('gitlab');
+        $allGitlabs     = $this->gitlab->getPairs();
+        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
+        foreach($allGitlabs as $id => $name)
+        {
+            if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
+        }
         $this->view->gitlabList     = $allGitlabs;
         $this->view->gitlabProjects = $gitlabProjects;
 
@@ -627,7 +643,7 @@ class bug extends control
             if($this->viewType == 'json')
             {
                 $bugIDList = array_keys($actions);
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
             }
 
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
@@ -779,12 +795,12 @@ class bug extends control
             $files   = array();
             if($comment == false)
             {
-                $changes  = $this->bug->update($bugID);
+                $changes = $this->bug->update($bugID);
                 if(dao::isError())
                 {
                     if(defined('RUN_MODE') && RUN_MODE == 'api')
                     {
-                        $this->send(array('status' => 'error', 'message' => dao::getError()));
+                        return $this->send(array('status' => 'error', 'message' => dao::getError()));
                     }
                     else
                     {
@@ -801,7 +817,7 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
             $bug = $this->bug->getById($bugID);
 
             $this->executeHooks($bugID);
@@ -895,7 +911,7 @@ class bug extends control
         $this->view->product          = $product;
         $this->view->productName      = $this->products[$productID];
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
-        $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch);
+        $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch, $bug->project);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->executions       = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
@@ -1462,13 +1478,14 @@ class bug extends control
             $_POST = array();
 
             $bugs = $this->bug->getByList($bugIDList);
+            $this->loadModel('gitlab');
             foreach($bugs as $bugID => $bug)
             {
-                $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
+                $relation = $this->gitlab->getRelationByObject('bug', $bugID);
                 if(!empty($relation))
                 {
-                    $currentIssue = $this->loadModel('gitlab')->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-                    if($currentIssue->state != 'closed') $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
+                    $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
+                    if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
                 }
 
                 if($bug->status != 'resolved')
@@ -1555,9 +1572,10 @@ class bug extends control
         else
         {
             /* Delete related issue in gitlab. */
-            $relation = $this->loadModel('gitlab')->getRelationByObject('bug', $bugID);
-            if(!empty($relation)) $this->loadModel('gitlab')->deleteIssue('bug', $bugID, $relation->issueID);
- 
+            $this->loadModel('gitlab');
+            $relation = $this->gitlab->getRelationByObject('bug', $bugID);
+            if(!empty($relation)) $this->gitlab->deleteIssue('bug', $bugID, $relation->issueID);
+
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0)
             {
@@ -1573,6 +1591,7 @@ class bug extends control
 
             $this->executeHooks($bugID);
 
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             die(js::locate($this->session->bugList, 'parent'));
         }
     }

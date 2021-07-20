@@ -340,6 +340,12 @@ class executionModel extends model
 
         $sprint = $this->loadModel('file')->processImgURL($sprint, $this->config->execution->editor->create['id'], $this->post->uid);
 
+        /* Redefines the language entries for the fields in the project table. */
+        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
+        {
+            if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
+        }
+
         /* Replace required language. */
         if($this->app->openApp == 'project')
         {
@@ -484,7 +490,7 @@ class executionModel extends model
         }
 
         /* Redefines the language entries for the fields in the project table. */
-        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
+        foreach(explode(',', $this->config->execution->edit->requiredFields) as $field)
         {
             if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
         }
@@ -976,11 +982,11 @@ class executionModel extends model
         /* Order by status's content whether or not done */
         $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->beginIF($type == 'all' && $this->config->systemMode == 'new')->andWhere('type')->in('stage,sprint')->fi()
-            ->beginIF($projectID && $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($type != 'all' && $this->config->systemMode == 'new')->andWhere('type')->eq($type)->fi()
+            ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint')->fi()
+            ->beginIF($projectID and $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type != 'all' and $this->config->systemMode == 'new')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
@@ -1575,11 +1581,11 @@ class executionModel extends model
      * Get products of a execution.
      *
      * @param  int    $executionID
-     * @param  bool   $withBranch 
+     * @param  bool   $withBranch
      * @access public
      * @return array
      */
-    public function getProducts($executionID, $withBranch = true)
+    public function getProducts($executionID, $withBranch = true, $status = 'all')
     {
         if(defined('TUTORIAL'))
         {
@@ -1592,6 +1598,7 @@ class executionModel extends model
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$executionID)
             ->andWhere('t2.deleted')->eq(0)
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi();
         if(!$withBranch) return $query->fetchPairs('id', 'name');
         return $query->fetchAll('id');
@@ -1738,13 +1745,13 @@ class executionModel extends model
     public function updateProducts($executionID, $products = '')
     {
         $this->loadModel('user');
-        $products = isset($_POST['products']) ? $_POST['products'] : $products;
-        $oldExecutionProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
+        $products    = isset($_POST['products']) ? $_POST['products'] : $products;
+        $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
         if(empty($products))
         {
-            $this->user->updateUserView(array_keys($oldExecutionProducts), 'product', $members);
+            $this->user->updateUserView(array_keys($oldProducts), 'product', $members);
             return true;
         }
 
@@ -1759,10 +1766,10 @@ class executionModel extends model
 
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
-            if(isset($oldExecutionProducts[$productID][$branch]))
+            if(isset($oldProducts[$productID][$branch]))
             {
-                $oldExecutionProduct = $oldExecutionProducts[$productID][$branch];
-                $oldPlan = $oldExecutionProduct->plan;
+                $oldProduct = $oldProducts[$productID][$branch];
+                $oldPlan    = $oldProduct->plan;
             }
 
             $data = new stdclass();
@@ -1774,7 +1781,7 @@ class executionModel extends model
             $existedProducts[$productID] = true;
         }
 
-        $oldProductKeys = array_keys($oldExecutionProducts);
+        $oldProductKeys = array_keys($oldProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
     }

@@ -513,14 +513,14 @@ class user extends control
         {
             if(strtolower($_POST['account']) == 'guest')
             {
-                $this->send(array('result' => 'fail', 'message' => str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
+                return $this->send(array('result' => 'fail', 'message' => str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
             }
 
             $userID = $this->user->create();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $userID));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $userID));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
 
         $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
@@ -571,7 +571,7 @@ class user extends control
         {
             $userIDList = $this->user->batchCreate();
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIDList));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIDList));
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
@@ -614,10 +614,10 @@ class user extends control
         if(!empty($_POST))
         {
             $this->user->update($userID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         $user       = $this->user->getById($userID, 'id');
@@ -701,7 +701,7 @@ class user extends control
             }
 
             /* if ajax request, send result. */
-            if($this->server->ajax)
+            if($this->server->ajax or $this->viewType == 'json')
             {
                 if(dao::isError())
                 {
@@ -713,7 +713,7 @@ class user extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::locate($this->session->userList, 'parent.parent'));
         }
@@ -740,7 +740,7 @@ class user extends control
     }
 
     /**
-     * Unbind  Ranzhi
+     * Unbind Ranzhi
      *
      * @param  string $userID
      * @param  string $confirm
@@ -821,12 +821,12 @@ class user extends control
             )
             {
                 $response['locate']  = $this->referer;
-                $this->send($response);
+                return $this->send($response);
             }
             else
             {
                 $response['locate']  = $this->config->webRoot;
-                $this->send($response);
+                return $this->send($response);
             }
         }
 
@@ -846,14 +846,14 @@ class user extends control
                 $response['result']  = 'fail';
                 $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
                 if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
-                $this->send($response);
+                return $this->send($response);
             }
 
             if((!empty($this->config->safe->loginCaptcha) and strtolower($this->post->captcha) != strtolower($this->session->captcha) and $this->app->getViewType() != 'json'))
             {
                 $response['result']  = 'fail';
                 $response['message'] = $this->lang->user->errorCaptcha;
-                $this->send($response);
+                return $this->send($response);
             }
 
             $user = $this->user->identify($account, $password);
@@ -896,12 +896,12 @@ class user extends control
                     if(common::hasPriv($module, $method))
                     {
                         $response['locate']  = $this->post->referer;
-                        $this->send($response);
+                        return $this->send($response);
                     }
                     else
                     {
                         $response['locate']  = $this->config->webRoot;
-                        $this->send($response);
+                        return $this->send($response);
                     }
                 }
                 else
@@ -914,7 +914,7 @@ class user extends control
 
                     $response['locate']  = $this->config->webRoot;
                     $response['result']  = 'success';
-                    $this->send($response);
+                    return $this->send($response);
                 }
             }
             else
@@ -926,16 +926,16 @@ class user extends control
                 if($remainTimes <= 0)
                 {
                     $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                    $this->send($response);
+                    return $this->send($response);
                 }
                 else if($remainTimes <= 3)
                 {
                     $response['message'] = sprintf($this->lang->user->lockWarning, $remainTimes);
-                    $this->send($response);
+                    return $this->send($response);
                 }
 
                 $response['message'] = $this->lang->user->loginFailed;
-                $this->send($response);
+                return $this->send($response);
             }
         }
         else

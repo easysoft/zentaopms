@@ -274,6 +274,7 @@ $lang->story->cannotDeleteParent    = "不能刪除父{$lang->SRCommon}";
 $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所屬產品會將其下的子{$lang->SRCommon}也移動到所選產品下。";
 $lang->story->changeTips            = '該軟件需求關聯的用戶需求有變更，點擊“不變更”忽略此條變更，點擊“變更”來進行該軟件需求的變更。';
 $lang->story->estimateMustBeNumber  = '估算值必須是數字';
+$lang->story->estimateMustBePlus    = '估算值不能是負數';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "該{$lang->SRCommon}所屬範圍";
@@ -405,3 +406,5 @@ $lang->story->categoryList['safe']        = '安全';
 $lang->story->categoryList['experience']  = '體驗';
 $lang->story->categoryList['improve']     = '改進';
 $lang->story->categoryList['other']       = '其他';
+
+$lang->story->sync2Gitlab = '同步到Gitlab';

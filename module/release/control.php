@@ -65,14 +65,14 @@ class release extends control
         if(!empty($_POST))
         {
             $releaseID = $this->release->create($productID, $branch);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
             $this->executeHooks($releaseID);
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
         $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'notrunk|withbranch', false);
@@ -101,7 +101,7 @@ class release extends control
         if(!empty($_POST))
         {
             $changes = $this->release->update($releaseID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('release', $releaseID);
             if($changes or $files)
             {
@@ -111,7 +111,7 @@ class release extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($releaseID);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -248,7 +248,7 @@ class release extends control
                     $release = $this->release->getById($releaseID);
                     $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->build)->andWhere('name')->eq($release->name)->exec();
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::locate($this->session->releaseList, 'parent'));
         }
@@ -463,7 +463,7 @@ class release extends control
                 $response['result']  = 'success';
                 $response['message'] = '';
             }
-            $this->send($response);
+            return $this->send($response);
         }
         die(js::reload('parent'));
     }
@@ -593,7 +593,7 @@ class release extends control
                 $response['result']  = 'success';
                 $response['message'] = '';
             }
-            $this->send($response);
+            return $this->send($response);
         }
         die(js::reload('parent'));
     }

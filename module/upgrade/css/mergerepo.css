@@ -15,3 +15,4 @@ div.divider {vertical-align: middle;}
 .main-row {margin-top: 20px; padding: 20px; background: #f1f1f1;}
 .main-row .side-col .nav li.active a {background: #006af1; color: #fff; border-radius: 4px;}
 #source .lineGroup-body {padding: 10px;}
+#source .lineGroup-title {margin-left: 10px;}

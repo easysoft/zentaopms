@@ -1285,20 +1285,20 @@ class execution extends control
         if(!empty($_POST))
         {
             $executionID = $this->execution->create($copyExecutionID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->execution->updateProducts($executionID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', join(',', $_POST['products']));
 
             $this->executeHooks($executionID);
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $executionID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $executionID));
 
             if($this->app->openApp == 'doc')
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
             }
 
             $planID = '';
@@ -1312,11 +1312,11 @@ class execution extends control
 
             if(!empty($planID))
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
             }
             else
             {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID")));
             }
         }
 
@@ -1379,10 +1379,10 @@ class execution extends control
 
             $oldProducts = $this->execution->getProducts($executionID);
             $changes     = $this->execution->update($executionID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->execution->updateProducts($executionID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
                 $this->loadModel('action');
@@ -1411,11 +1411,11 @@ class execution extends control
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
                 $this->loadModel('productplan')->linkProject($executionID, $_POST['plans'], $oldPlanStories);
-                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans']);
+                $this->productplan->linkProject($projectID, $_POST['plans']);
             }
 
             $this->executeHooks($executionID);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
 
         /* Set menu. */
@@ -1432,8 +1432,8 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->edit;
 
-        $allProducts     = array(0 => '');
-        $executionProsucts = $this->execution->getProducts($execution->project);
+        $allProducts       = array(0 => '');
+        $executionProsucts = $this->execution->getProducts($execution->project, true, 'noclosed');
         foreach($executionProsucts as $product) $allProducts[$product->id] = $product->name;
 
         $linkedProducts = $this->execution->getProducts($execution->id);
@@ -2147,6 +2147,8 @@ class execution extends control
 
             $this->session->set('execution', '');
             $this->executeHooks($executionID);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             die(js::reload('parent'));
         }
     }
@@ -2208,7 +2210,7 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->manageProducts;
 
-        $allProducts     = $this->product->getProductPairsByProject($execution->project);
+        $allProducts     = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($execution->project);
         $linkedProducts  = $this->execution->getProducts($execution->id);
         $linkedBranches  = array();
 
@@ -2234,7 +2236,7 @@ class execution extends control
         $this->view->execution              = $execution;
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal', $linkedBranches);
 
         $this->display();
     }
@@ -2335,7 +2337,7 @@ class execution extends control
                 $response['result']  = 'success';
                 $response['message'] = '';
             }
-            $this->send($response);
+            return $this->send($response);
         }
         die(js::locate($this->inlink('team', "executionID=$executionID"), 'parent'));
     }
@@ -2492,7 +2494,7 @@ class execution extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::locate($this->app->session->storyList, 'parent'));
         }
@@ -2514,8 +2516,9 @@ class execution extends control
             foreach($storyIdList as $storyID)
             {
                 /* Delete related issue in gitlab. */
-                $relation = $this->loadModel('gitlab')->getRelationByObject('story', $storyID);
-                if(!empty($relation)) $this->loadModel('gitlab')->deleteIssue('story', $storyID, $relation->issueID);
+                $this->loadModel('gitlab');
+                $relation = $this->gitlab->getRelationByObject('story', $storyID);
+                if(!empty($relation)) $this->gitlab->deleteIssue('story', $storyID, $relation->issueID);
 
                 $this->execution->unlinkStory($executionID, $storyID);
             }
@@ -2777,11 +2780,11 @@ class execution extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                $this->send($response);
+                return $this->send($response);
             }
 
             $this->loadModel('action')->create('story', $storyID, 'estimated', '', $executionID);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'storyEstimate', "executionID=$executionID&storyID=$storyID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'storyEstimate', "executionID=$executionID&storyID=$storyID")));
         }
 
         $estimateInfo = $this->story->getEstimateInfo($storyID, $round);

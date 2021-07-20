@@ -165,6 +165,20 @@ class upgrade extends control
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
 
+            /* Update sprint concept. */
+            $sprintConcept = 0;
+            if(isset($this->config->custom->sprintConcept))
+            {
+                if($this->config->custom->sprintConcept == 2 and $mode == 'new') $sprintConcept = 1;
+            }
+            elseif(isset($this->config->custom->productProject))
+            {
+                list($productConcept, $projectConcept) = explode('_', $this->config->custom->productProject);
+                if($mode == 'classic') $sprintConcept = $projectConcept;
+                if($mode == 'new' and $projectConcept == 2) $sprintConcept = 1;
+            }
+            $this->setting->setItem('system.custom.sprintConcept', $sprintConcept);
+
             if($mode == 'classic') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
             if($mode == 'new')     $this->locate(inlink('mergeTips'));
         }
@@ -270,16 +284,12 @@ class upgrade extends control
                     $singleProducts = array_diff($linkedProducts, $sprintProducts);
                     foreach($linkedSprints as $sprint)
                     {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $sprintProducts[$sprint], array($sprint => $sprint));
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array($sprintProducts[$sprint] => $sprintProducts[$sprint]), array($sprint => $sprint));
                     }
                 }
 
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts))
-                {
-                    $this->upgrade->computeProductAcl($singleProducts, $programID);
-                    $this->upgrade->computeObjectMembers($programID, 0, $singleProducts);
-                }
+                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
 
                 /* Process unlinked sprint and product. */
                 foreach($linkedProducts as $productID => $product)
@@ -329,16 +339,12 @@ class upgrade extends control
                     $singleProducts = array_diff($linkedProducts, $sprintProducts);
                     foreach($linkedSprints as $sprint)
                     {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $sprintProducts[$sprint], array($sprint => $sprint));
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array($sprintProducts[$sprint] => $sprintProducts[$sprint]), array($sprint => $sprint));
                     }
                 }
 
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts))
-                {
-                    $this->upgrade->computeProductAcl($singleProducts, $programID);
-                    $this->upgrade->computeObjectMembers($programID, 0, $singleProducts);
-                }
+                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
             }
             elseif($type == 'sprint')
             {
@@ -384,6 +390,7 @@ class upgrade extends control
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedSprintCount))
         {
+            $this->upgrade->computeObjectMembers();
             $this->upgrade->initUserView();
             $this->upgrade->setDefaultPriv();
             $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();

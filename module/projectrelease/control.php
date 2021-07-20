@@ -104,13 +104,13 @@ class projectrelease extends control
         if(!empty($_POST))
         {
             $releaseID = $this->projectrelease->create();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
             $this->executeHooks($releaseID);
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
         /* Get the builds that can select. */
@@ -146,7 +146,7 @@ class projectrelease extends control
         if(!empty($_POST))
         {
             $changes = $this->projectrelease->update($releaseID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('release', $releaseID);
             if($changes or $files)
             {
@@ -156,7 +156,7 @@ class projectrelease extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($releaseID);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -298,7 +298,7 @@ class projectrelease extends control
                     $release = $this->release->getById($releaseID);
                     $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->build)->andWhere('name')->eq($release->name)->exec();
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::locate($this->session->releaseList, 'parent'));
         }
@@ -514,7 +514,7 @@ class projectrelease extends control
                 $response['result']  = 'success';
                 $response['message'] = '';
             }
-            $this->send($response);
+            return $this->send($response);
         }
         die(js::reload('parent'));
     }
@@ -644,7 +644,7 @@ class projectrelease extends control
                 $response['result']  = 'success';
                 $response['message'] = '';
             }
-            $this->send($response);
+            return $this->send($response);
         }
         die(js::reload('parent'));
     }

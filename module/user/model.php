@@ -1867,6 +1867,9 @@ class userModel extends model
         /* Get all parent program and subprogram relation. */
         $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($programIdList);
 
+        /* Get all parent program and subprogram relation. */
+        $parentPMGroup = $this->loadModel('program')->getParentPM($programIdList);
+
         $whiteListGroup = array();
         $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
             ->where('objectType')->eq('program')
@@ -1884,7 +1887,11 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 $whiteList    = zget($whiteListGroup, $program->id, array());
-                if($program->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
+                if($program->acl == 'program') 
+                {
+                    $stakeholders += zget($parentStakeholderGroup, $program->id, array());
+                    $stakeholders += zget($parentPMGroup, $program->id, array());
+                }
                 $authedUsers += $this->getProgramAuthedUsers($program, $stakeholders, $whiteList);
             }
         }
@@ -1904,7 +1911,11 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 $whiteList    = zget($whiteListGroup, $program->id, array());
-                if($program->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $program->id, array());
+                if($program->acl == 'program') 
+                {
+                    $stakeholders += zget($parentStakeholderGroup, $program->id, array());
+                    $stakeholders += zget($parentPMGroup, $program->id, array());
+                }
 
                 $hasPriv = $this->checkProgramPriv($program, $account, $stakeholders, $whiteList);
                 if($hasPriv and strpos(",{$view},", ",{$programID},") === false)  $view .= ",{$programID}";

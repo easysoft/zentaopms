@@ -3,7 +3,6 @@
   <tr><td><?php echo html::radio('projectType', $this->lang->upgrade->projectType, $projectType);?></td></tr>
   <tr><td class='createProjectTip'><?php echo $lang->upgrade->createProjectTip?></td></tr>
   <tr><td class='createExecutionTip hidden'><?php echo $lang->upgrade->createExecutionTip?></td></tr>
-<tr></tr>
 </table>
 <table class='table table-form'>
   <caption class='strong'><?php echo $lang->upgrade->setProgram;?></caption>
@@ -15,7 +14,7 @@
     <td class='required'>
       <div class='input-group'>
         <?php echo html::select("programs", $programs, $programID, "class='form-control hidden pgm-exist' onchange='getProjectByProgram(this)'");?>
-        <?php echo html::input("programName", isset($programName) ? $programName : '', "class='form-control pgm-no-exist'");?>
+        <?php echo html::input("programName", '', "class='form-control pgm-no-exist'");?>
         <span class='input-group-addon'>
           <div class="checkbox-primary">
             <input type="checkbox" name="newProgram" value="0" checked onchange="toggleProgram(this)" id="newProgram0" />
@@ -57,7 +56,7 @@
   <tr class='LineName'>
     <th>
       <span class="line-exist hidden"><?php echo $lang->upgrade->existLine;?></span>
-      <span class="line-no-exist"><?php echo $lang->product->lineName;?></span>
+      <span class="line-no-exist"><?php echo $lang->upgrade->line;?></span>
     </th>
     <td>
       <div class='input-group'>

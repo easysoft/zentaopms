@@ -71,6 +71,7 @@ $lang->block->estimatedHours      = '預計';
 $lang->block->consumedHours       = '已消耗';
 $lang->block->time                = '第';
 $lang->block->week                = '周';
+$lang->block->month               = '月';
 $lang->block->selectProduct       = '選擇產品';
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩餘工時';
@@ -279,63 +280,69 @@ $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
 
-$lang->block->default['full']['my']['3']['title']           = '我的待辦';
-$lang->block->default['full']['my']['3']['block']           = 'list';
-$lang->block->default['full']['my']['3']['grid']            = 4;
-$lang->block->default['full']['my']['3']['source']          = 'todo';
-$lang->block->default['full']['my']['3']['params']['count'] = '20';
+$lang->block->default['full']['my']['3']['title']  = '流程圖';
+$lang->block->default['full']['my']['3']['block']  = 'flowchart';
+$lang->block->default['full']['my']['3']['source'] = '';
+$lang->block->default['full']['my']['3']['grid']   = 8;
+
+$lang->block->default['full']['my']['4']['title']           = '我的待辦';
+$lang->block->default['full']['my']['4']['block']           = 'list';
+$lang->block->default['full']['my']['4']['grid']            = 4;
+$lang->block->default['full']['my']['4']['source']          = 'todo';
+$lang->block->default['full']['my']['4']['params']['count'] = '20';
 
 if($config->systemMode == 'new')
 {
-    $lang->block->default['full']['my']['4']['title']           = '項目統計';
-    $lang->block->default['full']['my']['4']['block']           = 'statistic';
-    $lang->block->default['full']['my']['4']['source']          = 'project';
-    $lang->block->default['full']['my']['4']['grid']            = 8;
-    $lang->block->default['full']['my']['4']['params']['count'] = '20';
+    $lang->block->default['full']['my']['5']['title']           = '項目統計';
+    $lang->block->default['full']['my']['5']['block']           = 'statistic';
+    $lang->block->default['full']['my']['5']['source']          = 'project';
+    $lang->block->default['full']['my']['5']['grid']            = 8;
+    $lang->block->default['full']['my']['5']['params']['count'] = '20';
 }
 
-$lang->block->default['full']['my']['5']['title']  = '我的貢獻';
-$lang->block->default['full']['my']['5']['block']  = 'contribute';
-$lang->block->default['full']['my']['5']['source'] = '';
-$lang->block->default['full']['my']['5']['grid']   = 4;
+$lang->block->default['full']['my']['6']['title']  = '我的貢獻';
+$lang->block->default['full']['my']['6']['block']  = 'contribute';
+$lang->block->default['full']['my']['6']['source'] = '';
+$lang->block->default['full']['my']['6']['grid']   = 4;
 
-$lang->block->default['full']['my']['6']['title']  = '我近期參與的項目';
-$lang->block->default['full']['my']['6']['block']  = 'recentproject';
-$lang->block->default['full']['my']['6']['source'] = 'project';
-$lang->block->default['full']['my']['6']['grid']   = 8;
-
-$lang->block->default['full']['my']['7']['title']  = '待處理';
-$lang->block->default['full']['my']['7']['block']  = 'assigntome';
-$lang->block->default['full']['my']['7']['source'] = '';
+$lang->block->default['full']['my']['7']['title']  = '我近期參與的項目';
+$lang->block->default['full']['my']['7']['block']  = 'recentproject';
+$lang->block->default['full']['my']['7']['source'] = 'project';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['params']['todoNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['taskNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['bugNum']   = '20';
-$lang->block->default['full']['my']['7']['params']['riskNum']  = '20';
-$lang->block->default['full']['my']['7']['params']['issueNum'] = '20';
-$lang->block->default['full']['my']['7']['params']['storyNum'] = '20';
+$lang->block->default['full']['my']['8']['title']  = '待處理';
+$lang->block->default['full']['my']['8']['block']  = 'assigntome';
+$lang->block->default['full']['my']['8']['source'] = '';
+$lang->block->default['full']['my']['8']['grid']   = 8;
+
+$lang->block->default['full']['my']['8']['params']['todoNum']    = '20';
+$lang->block->default['full']['my']['8']['params']['taskNum']    = '20';
+$lang->block->default['full']['my']['8']['params']['bugNum']     = '20';
+$lang->block->default['full']['my']['8']['params']['riskNum']    = '20';
+$lang->block->default['full']['my']['8']['params']['issueNum']   = '20';
+$lang->block->default['full']['my']['8']['params']['storyNum']   = '20';
+$lang->block->default['full']['my']['8']['params']['meetingNum'] = '20';
 
 if($config->systemMode == 'new')
 {
-    $lang->block->default['full']['my']['8']['title']  = '項目人力投入';
-    $lang->block->default['full']['my']['8']['block']  = 'projectteam';
-    $lang->block->default['full']['my']['8']['source'] = 'project';
-    $lang->block->default['full']['my']['8']['grid']   = 8;
+    $lang->block->default['full']['my']['9']['title']  = '項目人力投入';
+    $lang->block->default['full']['my']['9']['block']  = 'projectteam';
+    $lang->block->default['full']['my']['9']['source'] = 'project';
+    $lang->block->default['full']['my']['9']['grid']   = 8;
 }
 
-$lang->block->default['full']['my']['9']['title']  = '項目列表';
-$lang->block->default['full']['my']['9']['block']  = 'project';
-$lang->block->default['full']['my']['9']['source'] = 'project';
-$lang->block->default['full']['my']['9']['grid']   = 8;
+$lang->block->default['full']['my']['10']['title']  = '項目列表';
+$lang->block->default['full']['my']['10']['block']  = 'project';
+$lang->block->default['full']['my']['10']['source'] = 'project';
+$lang->block->default['full']['my']['10']['grid']   = 8;
 if($config->systemMode == 'classic')
 {
-    $lang->block->default['full']['my']['9']['block']  = 'execution';
-    $lang->block->default['full']['my']['9']['source'] = 'execution';
+    $lang->block->default['full']['my']['10']['block']  = 'execution';
+    $lang->block->default['full']['my']['10']['source'] = 'execution';
 }
 
-$lang->block->default['full']['my']['9']['params']['orderBy'] = 'id_desc';
-$lang->block->default['full']['my']['9']['params']['count']   = '15';
+$lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
+$lang->block->default['full']['my']['10']['params']['count']   = '15';
 
 $lang->block->count   = '數量';
 $lang->block->type    = '類型';
@@ -355,6 +362,7 @@ $lang->block->availableBlocks->build     = '版本列表';
 $lang->block->availableBlocks->testtask  = '測試版本列表';
 $lang->block->availableBlocks->risk      = '我的風險';
 $lang->block->availableBlocks->issue     = '我的問題';
+$lang->block->availableBlocks->meeting   = '我的會議';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = '項目';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -472,12 +480,13 @@ $lang->block->orderByList->story['status_desc'] = '狀態倒序';
 $lang->block->orderByList->story['stage_asc']   = '階段正序';
 $lang->block->orderByList->story['stage_desc']  = '階段倒序';
 
-$lang->block->todoNum  = '待辦數';
-$lang->block->taskNum  = '任務數';
-$lang->block->bugNum   = 'Bug數';
-$lang->block->riskNum  = '風險數';
-$lang->block->issueNum = '問題數';
-$lang->block->storyNum = '需求數';
+$lang->block->todoNum    = '待辦數';
+$lang->block->taskNum    = '任務數';
+$lang->block->bugNum     = 'Bug數';
+$lang->block->riskNum    = '風險數';
+$lang->block->issueNum   = '問題數';
+$lang->block->storyNum   = '需求數';
+$lang->block->meetingNum = '會議數';
 
 $lang->block->typeList = new stdclass();
 
@@ -568,9 +577,11 @@ $lang->block->welcomeList['19:00'] = '%s，晚上好！';
 $lang->block->gridOptions[8] = '左側';
 $lang->block->gridOptions[4] = '右側';
 
-$lang->block->flowchart              = array();
-$lang->block->flowchart['admin']     = array('管理員', '維護公司', '添加用戶', '維護權限');
-$lang->block->flowchart['product']   = array($lang->productCommon . '經理', '創建' . $lang->productCommon, '維護模組', "維護計劃", "維護{$lang->SRCommon}", '創建發佈');
-$lang->block->flowchart['execution'] = array($lang->executionCommon . '經理', '創建' . $lang->executionCommon, '維護團隊', '關聯' . $lang->productCommon, "關聯{$lang->SRCommon}", '分解任務');
-$lang->block->flowchart['dev']       = array('研發人員', '領取任務和Bug', '更新狀態', '完成任務和Bug');
-$lang->block->flowchart['tester']    = array('測試人員', '撰寫用例', '執行用例', '提交Bug', '驗證Bug', '關閉Bug');
+$lang->block->flowchart            = array();
+$lang->block->flowchart['admin']   = array('管理員', '維護公司', '添加用戶', '維護權限');
+if($config->systemMode == 'new') $lang->block->flowchart['program'] = array('項目集負責人', '創建項目集', '關聯產品', "創建項目", "制定預算和規劃", '添加干係人');
+$lang->block->flowchart['product'] = array($lang->productCommon . '經理', '創建' . $lang->productCommon, '維護模組', "維護計劃", "維護需求", '創建發佈');
+$lang->block->flowchart['project'] = array('項目經理', '創建' . $lang->executionCommon, '維護團隊', "關聯需求", '分解任務', '跟蹤進度');
+if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('項目經理', '創建項目、' . $lang->executionCommon, '維護團隊', "關聯需求", '分解任務', '跟蹤進度');
+$lang->block->flowchart['dev']     = array('研發人員', '領取任務和Bug', '設計實現方案', '更新狀態', '完成任務和Bug', '提交代碼');
+$lang->block->flowchart['tester']  = array('測試人員', '撰寫用例', '執行用例', '提交Bug', '驗證Bug', '關閉Bug');

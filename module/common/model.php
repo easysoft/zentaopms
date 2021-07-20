@@ -529,7 +529,11 @@ class commonModel extends model
         {
             $nav = $lang->mainNav->$openApp;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($openApp == 'execution') $currentMethod = 'executionKanban';
+            if($openApp == 'execution')
+            {
+                if($config->systemMode == 'new')     $currentMethod = 'executionKanban';
+                if($config->systemMode == 'classic') $currentMethod = 'all';
+            }
         }
         else
         {
@@ -539,7 +543,7 @@ class commonModel extends model
         }
 
         if($config->systemMode == 'classic' and $openApp == 'execution') $icon = zget($lang->navIcons, 'project', '');
-        $link = ($openApp == 'execution' and ($config->systemMode == 'classic')) ?  '' : helper::createLink($currentModule, $currentMethod);
+        $link = helper::createLink($currentModule, $currentMethod);
         $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
@@ -1735,7 +1739,8 @@ EOD;
             {
                 /* Check program priv. */
                 $viewProjects = trim($this->app->user->view->projects, ',');
-                if($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
+                $accessDenied = ($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false);
+                if($accessDenied and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
                 $this->resetProgramPriv($module, $method);
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
             }
@@ -1820,7 +1825,10 @@ EOD;
     {
         /* Get user program priv. */
         if(!$this->app->session->project) return;
-        $program       = $this->dao->findByID($this->app->session->project)->from(TABLE_PROJECT)->fetch();
+
+        $program = $this->dao->findByID($this->app->session->project)->from(TABLE_PROJECT)->fetch();
+        if(empty($program)) return;
+
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
@@ -2245,7 +2253,7 @@ EOD;
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
-        
+
         if($options) curl_setopt_array($curl, $options);
         $response = curl_exec($curl);
         $errors   = curl_error($curl);
@@ -2416,6 +2424,29 @@ EOD;
         }
 
         return $menu;
+    }
+
+    /**
+     * Process markdown.
+     *
+     * @param  string  $markdown
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function processMarkdown($markdown)
+    {
+        if(empty($markdown)) return false;
+
+        $markdown = str_replace('&', '&amp;', $markdown);
+
+        global $app;
+        $hyperdown = $app->loadClass('hyperdown');
+        $content   = $hyperdown->makeHtml($markdown);
+
+        $content = htmlspecialchars_decode($content);
+        $content = fixer::stripDataTags($content);
+        return $content;
     }
 }
 

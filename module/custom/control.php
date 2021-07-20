@@ -102,8 +102,8 @@ class custom extends control
             if($module == 'project' and $field == 'unitList')
             {
                 $data = fixer::input('post')->join('unitList', ',')->get();
-                if(empty($data->unitList)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->currencyNotEmpty));
-                if(empty($data->defaultCurrency)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->defaultNotEmpty));
+                if(empty($data->unitList)) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->currencyNotEmpty));
+                if(empty($data->defaultCurrency)) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->defaultNotEmpty));
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'story' and $field == 'review')
@@ -157,29 +157,29 @@ class custom extends control
                     /* Invalid key. It should be numbers. (It includes severityList in bug module and priList in stroy, task, bug, testcasea, testtask and todo module.) */
                     if($field == 'priList' or $field == 'severityList')
                     {
-                        if(!is_numeric($key) or $key > 255) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidNumberKey));
+                        if(!is_numeric($key) or $key > 255) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidNumberKey));
                     }
-                    if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_A-Z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
+                    if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_A-Z_0-9]+$/')) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
 
                     /* The length of roleList in user module and typeList in todo module is less than 10. check it when saved. */
                     if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
                     {
-                        if(strlen($key) > 10) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
+                        if(strlen($key) > 10) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
                     }
 
                     /* The length of sourceList in story module and typeList in task module is less than 20, check it when saved. */
                     if($field == 'sourceList' or $module == 'task' and $field == 'typeList')
                     {
-                        if(strlen($key) > 20) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twenty']));
+                        if(strlen($key) > 20) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twenty']));
                     }
 
                     /* The length of stageList in testcase module is less than 255, check it when saved. */
-                    if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twoHundred']));
+                    if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twoHundred']));
 
                     /* The length of field that in bug and testcase module and reasonList in story and task module is less than 30, check it when saved. */
                     if($module == 'bug' or $field == 'reasonList' or $module == 'testcase')
                     {
-                        if(strlen($key) > 30) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['thirty']));
+                        if(strlen($key) > 30) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['thirty']));
                     }
                 }
 
@@ -194,8 +194,8 @@ class custom extends control
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
                 }
             }
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . str_replace('-', '_', isset($this->config->langs[$lang]) ? $lang : 'all'))));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . str_replace('-', '_', isset($this->config->langs[$lang]) ? $lang : 'all'))));
         }
 
         /* Check whether the current language has been customized. */
@@ -264,7 +264,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->title      = $this->lang->custom->working;
@@ -286,7 +286,7 @@ class custom extends control
         if($this->server->request_method == 'POST')
         {
             $this->custom->saveRequiredFields($moduleName);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('required', "moduleName=$moduleName")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('required', "moduleName=$moduleName")));
         }
 
         foreach($this->config->custom->requiredModules as $requiredModule) $this->app->loadLang($requiredModule);
@@ -321,7 +321,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.global.scoreStatus', $this->post->score);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->title      = $this->lang->custom->score;
@@ -341,7 +341,7 @@ class custom extends control
         if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
         {
             $this->loadModel('setting')->setItems('system.common', fixer::input('post')->get());
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         unset($this->lang->admin->menu->custom['subModule']);
@@ -378,10 +378,10 @@ class custom extends control
         if($_POST)
         {
             $result = $this->custom->setURAndSR();
-            if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $this->view->title      = $this->lang->custom->setStoryConcept;
@@ -402,10 +402,10 @@ class custom extends control
         if($_POST)
         {
             $result = $this->custom->updateURAndSR($key);
-            if(!$result) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $lang = $this->app->getClientLang();
@@ -476,7 +476,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.CRExecution', $this->post->execution);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->title      = $this->lang->custom->execution;
@@ -497,7 +497,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.CRProduct', $this->post->product);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->title      = $this->lang->custom->product;
@@ -524,7 +524,7 @@ class custom extends control
             $this->app->loadLang('common');
             $locate = $this->config->systemMode == 'new' ? inlink('flow') : 'top';
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         $this->view->title      = $this->lang->custom->flow;
@@ -541,11 +541,11 @@ class custom extends control
     public function mode()
     {
         $mode = zget($this->config->global, 'mode', 'classic');
-        if($this->post->mode && $this->post->mode != $mode) // if mode value change
+        if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-            $this->loadModel('setting')->setItem('system.common.global.changedMode', 'yes');
+            $this->setting->setItem('system.common.global.changedMode', 'yes');
 
             $sprintConcept = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
             if($mode == 'new')
@@ -553,7 +553,7 @@ class custom extends control
                 if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
                 die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
             }
-            if($mode == 'classic')
+            else
             {
                 if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
                 die(js::reload('top'));
@@ -565,7 +565,6 @@ class custom extends control
             if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') die(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
 
             unset($_SESSION['upgrading']);
-            // $this->locate(inlink('index'));
         }
 
         $this->app->loadLang('upgrade');
@@ -641,7 +640,7 @@ class custom extends control
             $menus = header::safe64Decode($menus);
         }
 
-        if(empty($menus)) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->saveFail));
+        if(empty($menus)) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->saveFail));
 
         if(is_array($menus))
         {
@@ -656,7 +655,7 @@ class custom extends control
             $this->custom->saveCustomMenu($menus, $module, $method);
         }
 
-        $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success'));
     }
 
     /**

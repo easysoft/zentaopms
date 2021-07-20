@@ -380,7 +380,7 @@ class webhookModel extends model
             $intersect       = array_intersect($webhookProducts, $actionProduct);
             if(!$intersect) return false;
         }
-        if(isset($webhook->executions))
+        if($webhook->executions)
         {
             if(strpos(",$webhook->executions,", ",$action->execution,") === false) return false;
         }

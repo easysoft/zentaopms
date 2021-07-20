@@ -92,7 +92,7 @@ js::set('dittoNotice', $dittoNotice);
             <?php
             $members      = array('' => '', 'ditto' => $this->lang->task->ditto);
             $teamAccounts = !empty($executionTeams[$tasks[$taskID]->execution]) ? array_keys($executionTeams[$tasks[$taskID]->execution]) : array();
-            foreach($teamAccounts as $teamAccount) $members[$teamAccount] = $users[$teamAccount];
+            foreach($teamAccounts as $teamAccount) $members[$teamAccount] = zget($users, $teamAccount);
             $members['closed'] = 'Closed';
 
             $taskMembers = array();

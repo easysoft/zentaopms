@@ -35,7 +35,7 @@
         ?>
       </div>
       <div class='panel-body'>
-        <div style='width:600px; margin: auto;'>
+        <div style='max-width:900px; margin: auto;'>
           <?php echo $lang->upgrade->to15Desc;?>
           <?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new';?>
           <?php echo html::radio('mode', $lang->upgrade->to15Mode, $systemMode);?>
@@ -46,7 +46,6 @@
       <hr/>
       <div class='panel-footer text-center'>
         <?php echo html::submitButton($lang->upgrade->start . $lang->upgrade->common);?>
-        <?php echo html::backButton();?>
       </div>
     </form>
   </div>

@@ -86,9 +86,6 @@ $lang->repo->group     = '分组';
 $lang->repo->user      = '用户';
 $lang->repo->info      = '版本信息';
 
-$lang->repo->gitlabHost  = 'Gitlab URL';
-$lang->repo->gitlabToken = '版本信息';
-
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
 $lang->repo->openedBy   = '创建者';
@@ -129,14 +126,13 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
 $lang->repo->scmList['Subversion'] = 'Subversion';
-$lang->repo->scmList['Gitlab']     = 'Gitlab';
 
-$lang->repo->gitlabHost    = 'Gitlab 地址';
-$lang->repo->gitlabToken   = 'Gitlab Token';
-$lang->repo->gitlabProject = '项目';
+$lang->repo->gitlabHost    = 'GitLab Server';
+$lang->repo->gitlabToken   = 'GitLab Token';
+$lang->repo->gitlabProject = 'GitLab 项目';
 
 $lang->repo->placeholder = new stdclass;
-$lang->repo->placeholder->gitlabHost = '请填写gitlab访问地址';
+$lang->repo->placeholder->gitlabHost = '请填写GitLab访问地址';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';
@@ -178,9 +174,9 @@ $lang->repo->error->encoding      = "编码可能错误，请更换编码重试�
 $lang->repo->error->deleted       = "删除版本库失败，当前版本库有提交记录与设计关联";
 $lang->repo->error->clientPath    = "客户端安装目录不能有空格！";
 
-$lang->repo->syncTips             = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。';
-$lang->repo->encodingsTips        = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
-$lang->repo->pathTipsForGitlab    = "GitLab 项目URL";
+$lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。';
+$lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
+$lang->repo->pathTipsForGitlab = "GitLab 项目URL";
 
 $lang->repo->example              = new stdclass();
 $lang->repo->example->client      = new stdclass();

@@ -13,8 +13,9 @@
 div.divider {vertical-align: middle;}
 
 .main-row {margin-top: 20px; padding: 20px; background: #f1f1f1;}
-.main-row .side-col .nav li.active div a {background: #006af1; color: #fff; border-radius: 4px;}
-.main-row .side-col .nav li div a {width: 80%; display: inline-block; padding: 8px 15px;}
+.main-row .side-col .nav li.active div a {background: #e3f2fd; color: #000; border-radius: 4px;}
+.main-row .side-col .nav li.currentPage div a {background: #006af1; color: #fff; border-radius: 4px;}
+.main-row .side-col .nav li div a {width: 80%; display: inline-block; padding: 5px 15px; margin-bottom: 5px;}
 
 #lineBox > .cell {height: 700px;}
 #source > .cell {padding: 0; position: relative; height: 700px;}

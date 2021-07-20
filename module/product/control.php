@@ -320,11 +320,11 @@ class product extends control
         if(!empty($_POST))
         {
             $productID = $this->product->create();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
 
             $this->executeHooks($productID);
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
 
             $openApp    = $this->app->openApp;
             $moduleName = $openApp == 'program'? 'program' : $this->moduleName;
@@ -332,7 +332,7 @@ class product extends control
             $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             if($openApp == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
@@ -457,7 +457,7 @@ class product extends control
                 }
             }
 
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
                 $this->loadModel('action');
@@ -479,7 +479,7 @@ class product extends control
             $locate     = $this->createLink($moduleName, $methodName, $param);
 
             if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         $productID = $this->product->saveState($productID, $this->products);
@@ -505,6 +505,15 @@ class product extends control
         if($product->program) $lines = array('') + $this->product->getLinePairs($product->program);
         if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
 
+        /* Get programs. */
+        $programs = $this->loadModel('program')->getTopPairs();
+        if(!isset($programs[$product->program]) and $product->program)
+        {
+            $program  = $this->program->getByID($product->program);
+            $programs = array($product->program => $program->name);
+        }
+
+
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->edit;
@@ -517,7 +526,7 @@ class product extends control
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->programs             = array('') + $this->loadModel('program')->getTopPairs();
+        $this->view->programs             = array('') + $programs;
         $this->view->lines                = $lines;
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
         $this->view->canChangeProgram     = $canChangeProgram;
@@ -586,24 +595,43 @@ class product extends control
         $rdUsers = $this->user->getPairs('nodeleted|devfirst', $appendRdUsers);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
-        /* Get product lines by programs.*/
-        $programs = $this->program->getTopPairs();
-        $lines    = array();
-        foreach($programs as $id => $program)
+        $programs             = array();
+        $unauthorizedPrograms = array();
+        if($this->config->systemMode == 'new')
         {
-            $lines[$id] = array('') + $this->product->getLinePairs($id);
+            $programs = $this->program->getTopPairs();
+
+            /* Get unauthorized programs. */
+            $programIDList = array();
+            foreach($products as $product)
+            {
+                if($product->program and !isset($programs[$product->program]) and !in_array($product->program, $programIDList)) $programIDList[] = $product->program;
+            }
+            $unauthorizedPrograms = $this->program->getPairsByList($programIDList);
+
+            /* Get product lines by programs.*/
+            $lines = array(0 => '');
+            foreach($programs + $unauthorizedPrograms as $id => $program)
+            {
+                $lines[$id] = array('') + $this->product->getLinePairs($id);
+            }
+        }
+        else
+        {
+            $lines = array('') + $this->product->getLinePairs();
         }
 
-        $this->view->title         = $this->lang->product->batchEdit;
-        $this->view->position[]    = $this->lang->product->batchEdit;
-        $this->view->lines         = $lines;
-        $this->view->productIDList = $productIDList;
-        $this->view->products      = $products;
-        $this->view->poUsers       = $poUsers;
-        $this->view->qdUsers       = $qdUsers;
-        $this->view->rdUsers       = $rdUsers;
-        $this->view->programID     = $programID;
-        $this->view->programs      = array('') + $programs;
+        $this->view->title                = $this->lang->product->batchEdit;
+        $this->view->position[]           = $this->lang->product->batchEdit;
+        $this->view->lines                = $lines;
+        $this->view->productIDList        = $productIDList;
+        $this->view->products             = $products;
+        $this->view->poUsers              = $poUsers;
+        $this->view->qdUsers              = $qdUsers;
+        $this->view->rdUsers              = $rdUsers;
+        $this->view->programID            = $programID;
+        $this->view->programs             = array('' => '') + $programs;
+        $this->view->unauthorizedPrograms = $unauthorizedPrograms;
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -702,6 +730,8 @@ class product extends control
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
             $this->session->set('product', '');
             $this->executeHooks($productID);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }
     }
@@ -947,7 +977,7 @@ class product extends control
         $lines = array();
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
 
-        if($productID)  die(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control chosen'"));
+        if($productID)  die(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
         if(!$productID) die(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
     }
 

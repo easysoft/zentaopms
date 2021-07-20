@@ -64,7 +64,7 @@ class actionModel extends model
 
         /* Get product project and execution for this object. */
         $relation          = $this->getRelatedFields($action->objectType, $objectID, $actionType, $extra);
-        $action->product   = (int)$relation['product'];
+        $action->product   = $relation['product'];
         $action->project   = (int)$relation['project'];
         $action->execution = (int)$relation['execution'];
 
@@ -941,7 +941,8 @@ class actionModel extends model
 
             $objectIds = array_unique($objectIds);
             $table     = $objectType == 'makeup' ? '`zt_overtime`' : $this->config->objectTables[$objectType];
-            $field     = $this->config->action->objectNameFields[$objectType];
+            $field     = zget($this->config->action->objectNameFields, $objectType, '');
+            if(empty($field)) continue;
             if($table != TABLE_TODO)
             {
                 $objectName    = array();

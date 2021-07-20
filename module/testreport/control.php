@@ -165,7 +165,7 @@ class testreport extends control
             $reportID = $this->testreport->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('testreport', $reportID, 'Opened');
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $reportID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $reportID));
             die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 

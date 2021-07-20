@@ -159,14 +159,14 @@ class search extends control
         if(helper::isAjaxRequest())
         {
             $result = $this->search->buildAllIndex($type, $lastID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(isset($result['finished']) and $result['finished'])
             {
-                $this->send(array('result' => 'finished', 'message' => $this->lang->search->buildSuccessfully));
+                return $this->send(array('result' => 'finished', 'message' => $this->lang->search->buildSuccessfully));
             }
             else
             {
-                $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, zget($this->lang->searchObjects, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']), $result['count']),'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
+                return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, zget($this->lang->searchObjects, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']), $result['count']),'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
             }
         }
 

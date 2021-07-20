@@ -216,7 +216,7 @@ $lang->custom->workingList['full'] = 'Full Management of Dev';
 $lang->custom->menuTip          = 'Click to show/hide navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail         = 'Failed to save!';
 $lang->custom->page             = ' Page';
-$lang->custom->changeClassicTip = 'The module of Program will be hidden, if you switch to Version 12.5.3 and below.';
+$lang->custom->changeClassicTip = 'The Program module will be hidden, if you switch to the classic mode.';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
@@ -231,8 +231,9 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['execution']   = $lang->custom->execution;
 
-$lang->custom->conceptQuestions['overview'] = "1. Which combination of management fits your company?";
-$lang->custom->conceptQuestions['URAndSR']  = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
+$lang->custom->conceptQuestions['overview']   = "1. Which combination of management fits your company?";
+$lang->custom->conceptQuestions['URAndSR']    = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
+$lang->custom->conceptQuestions['storypoint'] = "3. Which of the following units is your company using for scale estimation?";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

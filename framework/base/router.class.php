@@ -852,7 +852,7 @@ class baseRouter
         if(!defined('SESSION_STARTED'))
         {
             /* If request header has token, use it as session for authentication. */
-            $this->sessionID = isset($_SERVER['HTTP_TOKEN']) ? session_id($_SERVER['HTTP_TOKEN']) : session_id();
+            $this->sessionID = isset($_SERVER['HTTP_AUTHORIZATION']) ? session_id($_SERVER['HTTP_AUTHORIZATION']) : session_id();
 
             $sessionName = $this->config->sessionVar;
             session_name($sessionName);

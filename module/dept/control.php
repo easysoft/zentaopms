@@ -71,7 +71,7 @@ class dept extends control
         if(!empty($_POST))
         {
             $deptIDList = $this->dept->manageChild($_POST['parentDeptID'], $_POST['depts']);
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $deptIDList));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $deptIDList));
             die(js::reload('parent'));
         }
     }

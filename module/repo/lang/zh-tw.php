@@ -123,16 +123,16 @@ $lang->repo->logStyles['D'] = '刪除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Git']        = 'Git';
-$lang->repo->scmList['Subversion'] = 'Subversion';
+$lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Subversion'] = 'Subversion';
 
-$lang->repo->gitlabHost    = 'Gitlab 地址';
-$lang->repo->gitlabToken   = 'Gitlab Token';
-$lang->repo->gitlabProject = '項目';
+$lang->repo->gitlabHost    = 'GitLab Server';
+$lang->repo->gitlabToken   = 'GitLab Token';
+$lang->repo->gitlabProject = 'GitLab 項目';
 
 $lang->repo->placeholder = new stdclass;
-$lang->repo->placeholder->gitlabHost = '請填寫gitlab訪問地址';
+$lang->repo->placeholder->gitlabHost = '請填寫GitLab訪問地址';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 請稍等...';
@@ -174,8 +174,9 @@ $lang->repo->error->encoding      = "編碼可能錯誤，請更換編碼重試�
 $lang->repo->error->deleted       = "刪除版本庫失敗，當前版本庫有提交記錄與設計關聯";
 $lang->repo->error->clientPath    = "客戶端安裝目錄不能有空格！";
 
-$lang->repo->syncTips      = '請參照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">這裡</a>，設置版本庫定時同步。';
-$lang->repo->encodingsTips = "提交日誌的編碼，可以用逗號連接起來的多個，比如utf-8。";
+$lang->repo->syncTips          = '請參照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">這裡</a>，設置版本庫定時同步。';
+$lang->repo->encodingsTips     = "提交日誌的編碼，可以用逗號連接起來的多個，比如utf-8。";
+$lang->repo->pathTipsForGitlab = "GitLab 項目URL";
 
 $lang->repo->example              = new stdclass();
 $lang->repo->example->client      = new stdclass();

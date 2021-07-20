@@ -30,6 +30,7 @@ $config->action->objectNameFields['stakeholder'] = 'user';
 $config->action->objectNameFields['budget']      = 'name';
 $config->action->objectNameFields['job']         = 'name';
 $config->action->objectNameFields['team']        = 'name';
+$config->action->objectNameFields['pipeline']    = 'name';
 
 $config->action->commonImgSize = 870;
 

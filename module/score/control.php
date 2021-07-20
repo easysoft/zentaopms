@@ -51,15 +51,15 @@ class score extends control
         if(helper::isAjaxRequest())
         {
             $result = $this->score->reset($lastID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($result['status'] == 'finish')
             {
-                $this->send(array('result' => 'finished', 'message' => $this->lang->score->resetFinish));
+                return $this->send(array('result' => 'finished', 'message' => $this->lang->score->resetFinish));
             }
             else
             {
-                $this->send(array('result' => 'unfinished', 'message' => $this->lang->score->resetLoading, 'lastID' => $result['lastID'], 'total' => $result['number']));
+                return $this->send(array('result' => 'unfinished', 'message' => $this->lang->score->resetLoading, 'lastID' => $result['lastID'], 'total' => $result['number']));
             }
         }
         $this->display();

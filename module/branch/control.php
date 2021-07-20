@@ -25,7 +25,7 @@ class branch extends control
         if($_POST)
         {
             $newBranches = $this->branch->manage($productID);
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $newBranches));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $newBranches));
             die(js::reload('parent'));
         }
 

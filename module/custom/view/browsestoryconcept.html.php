@@ -66,7 +66,7 @@ var $SRBox = $('.table-form .SRBox');
 $SRBox.each(function(i)
 {
     var $this = $(this);
-    var name = $this.html();
+    var name  = $this.html();
     $SRBox.each(function(j)
     {
         if(j <= i) return;

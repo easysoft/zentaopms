@@ -123,13 +123,14 @@ $lang->install->save2File          = '<div class="alert alert-warning">拷贝上
 $lang->install->saved2File         = '配置信息已经成功保存到" <strong>%s</strong> "中。您后面还可继续修改此文件。';
 $lang->install->errorNotSaveConfig = '还没有保存配置文件';
 
-$lang->install->getPriv  = '设置帐号';
-$lang->install->company  = '公司名称';
-$lang->install->account  = '管理员帐号';
-$lang->install->password = '管理员密码';
+$lang->install->getPriv            = '设置帐号';
+$lang->install->company            = '公司名称';
+$lang->install->account            = '管理员帐号';
+$lang->install->password           = '管理员密码';
 $lang->install->errorEmptyPassword = '密码不能为空';
-$lang->install->selectedMode       = '选择模式';
-$lang->install->selectedModeTips   = '后续您还可以去后台-自定义-模式中进行调整';
+
+$lang->install->selectedMode     = '选择模式';
+$lang->install->selectedModeTips = '后续您还可以去后台-自定义-模式中进行调整';
 
 $lang->install->groupList['ADMIN']['name']   = '管理员';
 $lang->install->groupList['ADMIN']['desc']   = '系统管理员';

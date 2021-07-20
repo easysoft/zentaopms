@@ -59,7 +59,7 @@ class group extends control
         {
             $groupID = $this->group->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
@@ -130,14 +130,20 @@ class group extends control
         if($_POST)
         {
             $this->group->updateView($groupID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = isonlybody() ? 'parent' : $this->createLink('group', 'browse');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         /* Get the group data by id. */
         $group = $this->group->getByID($groupID);
+
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->beginIF($this->config->systemMode != 'classic')->andWhere('type')->eq('project')->fi()
+            ->orderBy('order_desc')
+            ->fetchPairs('id', 'name');
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
         $this->view->position[] = $group->name;
@@ -145,7 +151,7 @@ class group extends control
 
         $this->view->group    = $group;
         $this->view->programs = $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq('0')->andWhere('type')->eq('program')->orderBy('order_desc')->fetchPairs('id', 'name');
-        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('type')->eq('project')->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->projects = $projects;
         $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
 
         $navGroup = array();
@@ -179,9 +185,9 @@ class group extends control
         {
             if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         if($type == 'byGroup')
@@ -345,7 +351,7 @@ class group extends control
                     $response['result']  = 'success';
                     $response['message'] = '';
                 }
-                $this->send($response);
+                return $this->send($response);
             }
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }

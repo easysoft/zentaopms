@@ -158,8 +158,8 @@ class action extends control
         else
         {
             dao::$errors['submit'][] = $this->lang->action->historyEdit;
-            $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-        $this->send(array('result' => 'success', 'locate' => 'reload'));
+        return $this->send(array('result' => 'success', 'locate' => 'reload'));
     }
 }

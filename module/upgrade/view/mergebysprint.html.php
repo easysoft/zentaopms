@@ -14,7 +14,7 @@
       </div>
       <div class='line-groups sprintGroup'>
         <?php foreach($noMergedSprints as $sprintID => $sprint):?>
-        <?php echo html::checkBox("sprints", array($sprint->id => $sprint->name), $sprint->id, "data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
+        <?php echo html::checkBox("sprints", array($sprint->id => $sprint->name), '', "data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
         <?php endforeach;?>
       </div>
     </div>

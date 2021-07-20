@@ -142,7 +142,7 @@ class doc extends control
 
                 $this->action->create('docLib', $libID, 'Created');
 
-                if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
+                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
                 die(js::locate($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
@@ -199,7 +199,7 @@ class doc extends control
             $response['message'] = $this->lang->saveSuccess;
             $response['result']  = 'success';
             $response['locate']  = 'parent';
-            $this->send($response);
+            return $this->send($response);
         }
 
         $lib = $this->doc->getLibByID($libID);
@@ -275,25 +275,25 @@ class doc extends control
         {
             setcookie('lastDocModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $docResult = $this->doc->create();
-            if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!$docResult or dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $docID = $docResult['id'];
             $files = zget($docResult, 'files', '');
             $lib   = $this->doc->getLibByID($this->post->lib);
             if($docResult['status'] == 'exists')
             {
-                $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
+                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
             }
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, '');
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = $this->createLink('doc', 'objectLibs', $params);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         if($this->app->openApp == 'product')
@@ -355,7 +355,7 @@ class doc extends control
             if($comment == false || $comment == 'false')
             {
                 $result = $this->doc->update($docID);
-                if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 $changes = $result['changes'];
                 $files   = $result['files'];
             }
@@ -375,8 +375,8 @@ class doc extends control
                 $link = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID&docID=$docID");
             }
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         /* Get doc and set menu. */
@@ -487,8 +487,8 @@ class doc extends control
 
         if($doc->contentType == 'markdown')
         {
-            $doc->content = $this->doc->processMarkdown($doc->content);
-            $doc->digest  = $this->doc->processMarkdown($$doc->digest);
+            $doc->content = commonModel::processMarkdown($doc->content);
+            $doc->digest  = commonModel::processMarkdown($doc->digest);
         }
 
         /* Check priv when lib is product or project. */
@@ -553,7 +553,7 @@ class doc extends control
                         $response['locate']  = $this->createLink('doc', 'objectLibs', "type=$objectType");
                     }
                 }
-                $this->send($response);
+                return $this->send($response);
             }
 
             die(js::locate($this->session->docList, 'parent'));
@@ -625,7 +625,7 @@ class doc extends control
 
         $this->dao->update($table)->set('collector')->eq($collectors)->where('id')->eq($objectID)->exec();
 
-        $this->send(array('status' => $hasCollect ? 'no' : 'yes'));
+        return $this->send(array('status' => $hasCollect ? 'no' : 'yes'));
     }
 
     /**
@@ -639,11 +639,11 @@ class doc extends control
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            if(empty($_POST)) $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEmptyLib));
+            if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEmptyLib));
             foreach($_POST as $id => $order) $this->dao->update(TABLE_DOCLIB)->set('order')->eq($order)->where('id')->eq($id)->exec();
 
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success'));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
         }
 
         if($type)
@@ -916,8 +916,8 @@ class doc extends control
 
             if($doc->contentType == 'markdown')
             {
-                $doc->content = $this->doc->processMarkdown($doc->content);
-                $doc->digest  = $this->doc->processMarkdown($doc->digest);
+                $doc->content = commonModel::processMarkdown($doc->content);
+                $doc->digest  = commonModel::processMarkdown($doc->digest);
             }
         }
 

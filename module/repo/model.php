@@ -104,7 +104,7 @@ class repoModel extends model
 
                 $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
 
-                $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu', "repID=$repoID&branchID=$branchID&objectID=$objectID");
+                $dropMenuLink = helper::createLink('repo', 'ajaxGetBranchDropMenu', "repID=$repoID&branchID=" . base64_encode($branchID) . "&objectID=$objectID");
                 $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
                 $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
                 $output .= "</div></div>";
@@ -153,8 +153,6 @@ class repoModel extends model
                     if(!$hasPriv) unset($repos[$i]);
                 }
             }
-
-            if($repo->SCM == 'Gitlab') $repo = $this->processGitlab($repo);
         }
 
         return $repos;
@@ -198,16 +196,15 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         $data = fixer::input('post')
-            ->setIf($this->post->SCM == 'Gitlab', 'password', '')
-            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
             ->get();
 
-        /* see this file in 1783G: processGitlab::$repo->path */
-        if($this->post->SCM == 'Gitlab') $data->path = $this->post->gitlabProject;
+        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -230,13 +227,6 @@ class repoModel extends model
 
         if(!dao::isError()) $this->rmClientVersionFile();
 
-        if($this->post->SCM == 'Gitlab') 
-        {
-           $this->loadModel("gitlab")->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
-
-            /* create webhook for zentao */
-           $this->loadModel("gitlab")->initWebhooks($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
-        }
         return $this->dao->lastInsertID();
     }
 
@@ -252,9 +242,9 @@ class repoModel extends model
         $repo = $this->getRepoByID($id);
 
         $data = fixer::input('post')
-            ->setIf($this->post->SCM == 'Gitlab', 'password', '')
-            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->setDefault('client', 'svn')
             ->setDefault('prefix', $repo->prefix)
             ->setDefault('product', '')
@@ -262,12 +252,7 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab')
-        {
-            $data->path   = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
-            $data->prefix = '';
-        }
-
+        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
         if($data->path != $repo->path) $data->synced = 0;
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -288,7 +273,6 @@ class repoModel extends model
         if($data->client != $repo->client and !$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
-
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
@@ -299,15 +283,12 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
-        if($repo->SCM == 'Gitlab') $this->loadModel("gitlab")->saveProjectRelation($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
         if($repo->path != $data->path)
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
-            if($repo->SCM == 'Gitlab') $this->loadModel("gitlab")->initWebhooks($this->post->product, $this->post->gitlabHost, $this->post->gitlabProject);
-            return false;    
+            return false;
         }
-
         return true;
     }
 
@@ -391,7 +372,6 @@ class repoModel extends model
         if(!$repo) return false;
 
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-        if($repo->SCM == 'Gitlab') $reps = $this->processGitlab($repo);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
@@ -641,6 +621,7 @@ class repoModel extends model
             {
                 $commitID = $this->dao->lastInsertID();
                 if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($commitID)->set('branch')->eq($branch)->exec();
+                $file = array();
                 foreach($logs['files'][$i] as $file)
                 {
                     $parentPath = dirname($file->path);
@@ -1744,32 +1725,40 @@ class repoModel extends model
         return $buildedURL;
     }
 
-	/**
-	 * Get gitlab projects.
-	 *
-	 * @param  string   $host
-	 * @param  string   $token
-	 * @access public
-	 * @return array
-	 */
-	public function getGitlabProjects($host, $token)
-	{
-		$host  = rtrim($host, '/');
-		$host .= '/api/v4/projects';
+    /**
+     * Get gitlab projects.
+     *
+     * @param  string   $host
+     * @param  string   $token
+     * @access public
+     * @return array
+     */
+    public function getGitlabProjects($host, $token)
+    {
+        $host  = rtrim($host, '/');
+        $host .= '/api/v4/projects';
+        $allResults = array();
+        for($page = 1; true; $page ++)
+        {
+            $results = json_decode(common::http($host . "?private_token=$token&simple=true&membership=true&page={$page}&per_page=100"));
+            if(empty($results) or $page > 10) break;
+            $allResults = $allResults + $results;
+        }
 
-		$allResults = array();
-		for($page = 1; true; $page ++)
-		{
-			$results = json_decode(common::http($host . "?private_token=$token&simple=true&membership=true&page={$page}&per_page=100"));
-			if(empty($results) or $page > 10) break;
-			$allResults = $allResults + $results;
-		}
+        return $allResults;
+    }
 
-		return $allResults;
-	}
-
+    /**
+     * Process gitlab repo.
+     *
+     * @param  oobject    $repo
+     * @access public
+     * @return object
+     */
     public function processGitlab($repo)
     {
+        return $repo;
+
         $gitlab = $this->loadModel('gitlab')->getByID($repo->client);
         if(!$gitlab) return $repo;
         $repo->gitlab   = $gitlab->id;

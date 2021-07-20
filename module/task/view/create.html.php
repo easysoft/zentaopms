@@ -244,7 +244,7 @@
         <tr>
           <th><?php echo $lang->task->sync2Gitlab;?></th>
           <td><?php echo html::select('gitlab', $gitlabList, '', "class='form-control chosen'");?></td>
-          <td><?php echo html::select('gitlabProject', '', '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('gitlabProject', '', '', "class='w-50px form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <tr id='after-tr'>

@@ -34,15 +34,21 @@
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>
             <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, $repo->SCM, "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
-            <td><span class="tips-git"><?php echo $lang->repo->syncTips; ?></span></td>
+            <td>
+                <span class="tips-git"><?php echo $lang->repo->syncTips; ?></span>
+            </td>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabHost;?></th>
-            <td><?php echo html::select('gitlabHost', $gitlabHosts, $repo->gitlab, "class='form-control' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
+            <td><?php echo html::input('gitlabHost', $repo->client, "class='form-control' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
+          </tr>
+          <tr class='gitlab hide'>
+            <th><?php echo $lang->repo->gitlabToken;?></th>
+            <td><?php echo html::input('gitlabToken', $repo->password, "class='form-control'");?>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabProject;?></th>
-            <td><?php echo html::select('gitlabProject', $projects, $repo->project, "class='form-control chosen'");?>
+            <td><?php echo html::select('gitlabProject', $projects, $repo->extra, "class='form-control chosen'");?>
           </tr>
           <tr>
             <th><?php echo $lang->repo->name; ?></th>
@@ -53,8 +59,8 @@
             <th><?php echo $lang->repo->path; ?></th>
             <td class='required'><?php echo html::input('path', $repo->path, "class='form-control'"); ?></td>
             <td class='muted'>
-              <span class="tips-git"><?php echo $lang->repo->example->path->git;?></span>
-              <span class="tips-svn"><?php echo $lang->repo->example->path->svn;?></span>
+                <span class="tips-git"><?php echo $lang->repo->example->path->git;?></span>
+                <span class="tips-svn"><?php echo $lang->repo->example->path->svn;?></span>
             </td>
           </tr>
           <tr>
@@ -66,8 +72,8 @@
             <th><?php echo $lang->repo->client;?></th>
             <td class='required'><?php echo html::input('client',  $repo->client, "class='form-control'")?></td>
             <td class='muted'>
-              <span class="tips-git"><?php echo $lang->repo->example->client->git;?></span>
-              <span class="tips-svn"><?php echo $lang->repo->example->client->svn;?></span>
+                <span class="tips-git"><?php echo $lang->repo->example->client->git;?></span>
+                <span class="tips-svn"><?php echo $lang->repo->example->client->svn;?></span>
             </td>
           </tr>
           <tr class="account-fields hide-gitlab">

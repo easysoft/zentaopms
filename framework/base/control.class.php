@@ -832,6 +832,7 @@ class baseControl
          * Parse the params, create the $module control object.
          */
         $module = new $className($moduleName, $methodName, $appName);
+        $module->viewType = $this->viewType;
 
         /**
          * 调用对应方法，使用ob方法获取输出内容。
@@ -892,7 +893,14 @@ class baseControl
         $data = (array) $data;
         if(helper::isAjaxRequest() or $this->viewType == 'json')
         {
-            print(json_encode($data));
+            /* Process for zh-cn in json. */
+            foreach($data as $key => $value)
+            {
+                if(!is_string($value)) continue;
+                $data[$key] = urlencode($value);
+            }
+
+            print(urldecode(json_encode($data)));
             $response = helper::removeUTF8Bom(ob_get_clean());
 
             if(defined('RUN_MODE') and RUN_MODE == 'api') return print($response);

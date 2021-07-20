@@ -252,7 +252,7 @@ class productModel extends model
             ->orWhere('t1.createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+            ->orderBy('t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
@@ -657,7 +657,7 @@ class productModel extends model
 
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
-            $products[$productID]->program = $data->programs[$productID];
+            if($this->config->systemMode == 'new' and isset($data->programs[$productID])) $products[$productID]->program = (int)$data->programs[$productID];
             $products[$productID]->name    = $productName;
             $products[$productID]->line    = (int)$data->lines[$productID];
             $products[$productID]->PO      = $data->POs[$productID];
@@ -874,19 +874,23 @@ class productModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  int    $appendProject
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct($productID, $branch = 0)
+    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0)
     {
-        return $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projects = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
-            ->fetchPairs();
+            ->fetchPairs('id', 'name');
+
+        if($appendProject) $projects += $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($appendProject)->fetchPairs('id', 'name');
+        return $projects;
     }
 
     /**
@@ -1364,7 +1368,7 @@ class productModel extends model
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
-        if($orderBy == 'program_asc')
+        if($orderBy == 'program_asc' and $this->config->systemMode == 'new')
         {
             $products = $this->dao->select('t1.id as id, t1.*')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')

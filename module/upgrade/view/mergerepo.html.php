@@ -25,7 +25,9 @@
           <div class='table-col' id='source'>
             <div class='cell'>
               <div class='lineGroup-title'>
-                <div class='item'><strong><?php echo $lang->upgrade->repo;?></strong></div>
+               <div class="checkbox-primary item" title="<?php echo $lang->selectAll?>">
+                 <input type='checkbox' id='checkAllRepos'><label for='checkAllRepos'><strong><?php echo $lang->upgrade->repo;?></strong></label>
+               </div>
               </div>
               <div class='lineGroup-body'>
               <?php echo html::checkBox("repos", $repos, "class='form-control'");?>

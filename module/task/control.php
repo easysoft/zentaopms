@@ -92,7 +92,7 @@ class task extends control
 
             setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($this->post->execution) $executionID = (int)$this->post->execution;
-            
+
             /* Create task here. */
             $tasksID = $this->task->create($executionID);
             if(dao::isError())
@@ -217,12 +217,11 @@ class task extends control
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($execution->type == 'ops') unset($customFields['story']);
 
-        $allGitlabs     = $this->loadModel('gitlab')->getPairs();
-        $gitlabProjects = $this->loadModel('gitlab')->getProjectsByExecution($executionID);
+        $this->loadModel('gitlab');
+        $allGitlabs     = $this->gitlab->getPairs();
+        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
         foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
-        $this->view->gitlabList     = $allGitlabs;
-        $this->view->gitlabProjects = $gitlabProjects;
-    
+
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->showAllModule = $showAllModule;
@@ -238,6 +237,8 @@ class task extends control
         $this->view->members          = $members;
         $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->gitlabList       = $allGitlabs;
+        $this->view->gitlabProjects   = $gitlabProjects;
 
         $this->display();
     }
@@ -486,7 +487,7 @@ class task extends control
         if($executionID)
         {
             $execution = $this->execution->getById($executionID);
-            $this->execution->setMenu($this->execution->getPairs(), $execution->id);
+            $this->execution->setMenu($execution->id);
 
             /* Set modules and members. */
             $showAllModule = isset($this->config->task->allModule) ? $this->config->task->allModule : '';
@@ -563,24 +564,24 @@ class task extends control
             $this->loadModel('action');
             $changes = $this->task->assign($taskID);
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                die(js::error(dao::getError()));
+            }
 
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $task = $this->task->getByID($taskID);
-
-        $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        $this->loadModel('gitlab')->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
-
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $task    = $this->task->getByID($taskID);
 
         /* Compute next assignedTo. */
         if(!empty($task->team))
@@ -790,6 +791,7 @@ class task extends control
                 }
             }
 
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -1298,9 +1300,10 @@ class task extends control
         else
         {
             /* Delete related issue in gitlab. */
-            $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-            if(!empty($relation)) $this->loadModel('gitlab')->deleteIssue('task', $taskID, $relation->issueID);
-            
+            $this->loadModel('gitlab');
+            $relation = $this->gitlab->getRelationByObject('task', $taskID);
+            if(!empty($relation)) $this->gitlab->deleteIssue('task', $taskID, $relation->issueID);
+
             $this->task->delete(TABLE_TASK, $taskID);
             if($task->parent > 0)
             {

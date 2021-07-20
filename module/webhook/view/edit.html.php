@@ -34,7 +34,7 @@
           <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
           <td><?php echo zget($lang->webhook->note->typeList, $webhook->type, '');?></td>
         </tr>
-        <?php if($webhook->type == 'dinggroup'):?>
+        <?php if($webhook->type == 'dinggroup' or $webhook->type == 'feishugroup'):?>
         <tr id='secretTR'>
           <th><?php echo $lang->webhook->secret;?></th>
           <td><?php echo html::input('secret', $webhook->secret, "class='form-control'");?></td>
@@ -91,7 +91,7 @@
           <td><?php echo html::input('domain', $webhook->domain, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <?php if(strpos("dinggroup|dinguser|wechatgroup|wechatuser|feishuuser", $webhook->type) === false):?>
+        <?php if(strpos("dinggroup|dinguser|wechatgroup|wechatuser|feishuuser|feishugroup", $webhook->type) === false):?>
         <tr>
           <th><?php echo $lang->webhook->sendType;?></th>
           <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, $webhook->sendType, "class='form-control'");?></td>
@@ -108,7 +108,7 @@
           <td><?php echo html::select('executions[]', $executions, $webhook->executions, "class='form-control chosen' multiple");?></td>
           <td><?php echo $lang->webhook->note->execution;?></td>
         </tr>
-        <?php if(strpos(',bearychat,dinggroup,dinguser,wechatgroup,wechatuser,', ",$webhook->type,") === false):?>
+        <?php if(strpos(',bearychat,dinggroup,dinguser,wechatgroup,wechatuser,feishuuser,feishugroup,', ",$webhook->type,") === false):?>
         <tr id='paramsTR'>
           <th>
             <div class='checkbox-primary'>

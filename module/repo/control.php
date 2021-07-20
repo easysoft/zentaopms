@@ -117,11 +117,11 @@ class repo extends control
         {
             $repoID = $this->repo->create();
 
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         $repoID = $this->repo->saveState(0, $objectID);
@@ -129,12 +129,11 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->position[]  = $this->lang->repo->create;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products    = $this->loadModel('product')->getProductPairsByProject($objectID);
-        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->position[] = $this->lang->repo->create;
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->products   = $this->loadModel('product')->getProductPairsByProject($objectID);
 
         $this->display();
     }
@@ -155,38 +154,37 @@ class repo extends control
         if($_POST)
         {
             $noNeedSync = $this->repo->update($repoID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!$noNeedSync)
             {
                 $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
         }
 
         $this->app->loadLang('action');
 
         if($repo->SCM == 'Gitlab')
         {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->gitlab, $repo->password);
 
+            $projects = $this->repo->getGitlabProjects($repo->client, $repo->password);
             $options  = array();
-            foreach($projects as $project) $options[$project->id] = $project->name_with_namespace;
+            foreach($projects as $project) $options[$project->id] = $project->name . ':' . $project->http_url_to_repo;
 
             $this->view->projects = $options;
         }
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
-        $repo->repoType          = $repo->id . '-' . $repo->SCM;
-        $this->view->repo        = $repo;
-        $this->view->repoID      = $repoID;
-        $this->view->objectID    = $objectID;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products    = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-		$this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $repo->repoType       = $repo->id . '-' . $repo->SCM;
+        $this->view->repo     = $repo;
+        $this->view->repoID   = $repoID;
+        $this->view->objectID = $objectID;
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->products = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
 
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
 
@@ -208,9 +206,6 @@ class repo extends control
         {
             die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
         }
-
-        /* Delete project relation for gitlab type. */
-        $this->loadModel('gitlab')->deleteProjectRelation($repoID);
 
         $relationID = $this->dao->select('id')->from(TABLE_RELATION)->where('extra')->eq($repoID)->fetch();
         if($relationID)
@@ -345,6 +340,7 @@ class repo extends control
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
+        if($branchID) $branchID = base64_decode($branchID);
 
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
@@ -833,7 +829,7 @@ class repo extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.repo.rules', json_encode($this->post->rules));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setRules')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setRules')));
         }
 
         $repoID = $this->session->repoID;
@@ -875,7 +871,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=$repoID&branchID=$branch&objectID=$objectID", '', false);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->openApp == 'devops' ? $repoID : '') . "&branchID=$branch&objectID=$objectID", '', false);
         $this->display();
     }
 
@@ -1109,25 +1105,27 @@ class repo extends control
         die($reposHtml);
     }
 
-	/**
-	 * Ajax get gitlab projects.
-	 *
-	 * @param  int       $host
-	 * @access public
-	 * @return void
-	 */
-	public function ajaxGetGitlabProjects($host, $projectIdList = '')
-	{
-        $projects = $this->loadModel('gitlab')->apiGetProjects($host);
-         
+    /**
+     * Ajax get gitlab projects.
+     *
+     * @param  string    $host
+     * @param  string    $token
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGitlabProjects($host, $token)
+    {
+        $host     = helper::safe64decode($host);
+        $projects = $this->repo->getgitlabprojects($host, $token);
+
         if(!$projects) $this->send(array('message' => array()));
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
+
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
-            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
+            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name}:{$project->http_url_to_repo}</option>";
         }
+
         die($options);
     }
 
@@ -1144,6 +1142,7 @@ class repo extends control
     {
         $repo     = $this->repo->getRepoByID($repoID);
         $branches = $this->repo->getBranches($repo);
+        if($branchID) $branchID = base64_decode($branchID);
 
         $branchesHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
         foreach($branches as $id => $branchName)

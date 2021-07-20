@@ -41,7 +41,7 @@
           <tr class="text-center">
             <th class='table-nest-title text-left' rowspan="2">
               <?php if($canBatchEdit) echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";?>
-              <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
+              <a class='table-nest-toggle table-nest-toggle-global <?php echo $canBatchEdit ? 'nest-has-checkbox' : 'nest-none-checkbox';?>' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
             <?php if($this->config->URAndSR):?>
@@ -69,13 +69,14 @@
           </tr>
         </thead>
         <tbody id="productTableList">
+        <?php $lineNames = array();?>
         <?php foreach($productStructure as $programID => $program):?>
         <?php
         $trAttrs  = "data-id='program.$programID' data-parent='0' data-nested='true'";
         $trClass  = 'is-top-level table-nest-child';
         $trAttrs .= " class='$trClass'";
         ?>
-          <?php if(isset($program['programName'])):?>
+          <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr <?php echo $trAttrs;?>>
             <td colspan="<?php echo $this->config->URAndSR ? 14 : 10;?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
@@ -86,7 +87,8 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName'])):?>
+          <?php if(isset($line['lineName']) and !in_array($line['lineName'], $lineNames)):?>
+          <?php $lineNames[] = $line['lineName'];?>
           <?php
           if($this->config->systemMode == 'new' and $programID)
           {
@@ -110,6 +112,7 @@
           <?php unset($line['lineName']);?>
           <?php endif;?>
 
+          <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
           $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
@@ -124,7 +127,7 @@
               $trClass .= ' is-nest-child  table-nest';
               $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='line.{$path}'";
           }
-          elseif($product->program)
+          elseif($product->program and $this->config->systemMode == 'new')
           {
               $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
               $trClass .= ' is-nest-child  table-nest';
@@ -167,6 +170,7 @@
             </td>
           </tr>
           <?php endforeach;?>
+          <?php endif;?>
           <?php endforeach;?>
         <?php endforeach;?>
         </tbody>
