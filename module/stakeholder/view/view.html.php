@@ -25,6 +25,9 @@ $createLink = $this->createLink('stakeholder', 'create', "projectID=$user->objec
     <div class="page-title">
       <span class="label label-id"><?php echo $user->id?></span>
       <span class="text" title="<?php echo $user->name?>"><?php echo $user->name?></span>
+      <?php if($user->deleted):?>
+      <span class='label label-danger'><?php echo $lang->stakeholder->deleted;?></span>
+      <?php endif; ?>
     </div>
   </div>
   <div class="btn-toolbar pull-right">

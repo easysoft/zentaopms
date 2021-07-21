@@ -471,23 +471,6 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_pipeline`;
-CREATE TABLE IF NOT EXISTS `zt_pipeline` (
-  `id` smallint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `type` char(30) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `account` varchar(30) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `token` varchar(255) DEFAULT NULL,
-  `private` char(32) DEFAULT NULL,
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_job`;
 CREATE TABLE IF NOT EXISTS `zt_job` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -495,8 +478,9 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `repo` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `frame` varchar(20) NOT NULL,
-  `jkHost` mediumint(8) unsigned NOT NULL,
-  `jkJob` varchar(500) NOT NULL,
+  `engine` varchar(20) NOT NULL,
+  `server` mediumint(8) unsigned NOT NULL,
+  `pipeline` varchar(500) NOT NULL,
   `triggerType` varchar(255) NOT NULL,
   `svnDir` varchar(255) NOT NULL,
   `atDay` varchar(255) DEFAULT NULL,
@@ -587,6 +571,23 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
   KEY `account` (`account`),
   KEY `providerType` (`providerType`),
   KEY `providerID` (`providerID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_pipeline`;
+CREATE TABLE IF NOT EXISTS `zt_pipeline` (
+  `id` smallint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `type` char(30) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `account` varchar(30) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `private` char(32) DEFAULT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_planstory`;
 CREATE TABLE IF NOT EXISTS `zt_planstory` (

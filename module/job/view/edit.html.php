@@ -14,7 +14,7 @@
 
 <?php js::set('repoTypes', $repoTypes)?>
 <?php js::set('triggerType', $job->triggerType);?>
-<?php js::set('jkJob', $job->jkJob);?>
+<?php js::set('pipeline', $job->pipeline);?>
 <?php js::set('dirChange', $lang->job->dirChange);?>
 <?php js::set('buildTag', $lang->job->buildTag);?>
 
@@ -96,14 +96,14 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->job->jkHost; ?></th>
+            <th><?php echo $lang->job->server; ?></th>
             <td colspan='2'>
               <div class='table-row'>
-                <div class='table-col'><?php echo html::select('jkHost', $jkHostList, $job->jkHost, "class='form-control chosen'");?></div>
-                <div id='jkJobBox' class='table-col'>
+                <div class='table-col'><?php echo html::select('server', $serverList, $job->server, "class='form-control chosen'");?></div>
+                <div id='pipelineBox' class='table-col'>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->job->jkJob; ?></span>
-                    <?php echo html::select('jkJob', array('' => ''), $job->jkJob, "class='form-control chosen'");?>
+                    <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
+                    <?php echo html::select('pipeline', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
                   </div>
                 </div>
               </div>
@@ -112,6 +112,7 @@
           <tr>
             <th><?php echo $lang->job->customParam;?></th>
             <td colspan='2' id='paramDiv'>
+              <?php if($job->customParam):?>
               <?php foreach(json_decode($job->customParam) as $paramName => $paramValue):?>
               <div class='table-row input-group'>
                 <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
@@ -135,6 +136,7 @@
                 <span class='input-group-addon w-40px'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
               </div>
               <?php endforeach;?>
+              <?php endif;?>
               <div class='table-row input-group'>
                 <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
                 <?php echo html::input('paramName[]', '', "class='form-control' id='paramName'"); ?>
