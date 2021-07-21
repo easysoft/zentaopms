@@ -11,7 +11,7 @@ class productsEntry extends entry
     public function get()
     {
         $control = $this->loadController('product', 'all');
-        $control->all();
+        $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'));
 
         /* Response */
         $data = $this->getData();

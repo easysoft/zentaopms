@@ -24,6 +24,7 @@ class projectsEntry extends entry
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'projects' => $result));
         }
+
         if(isset($data->status) and $data->status == 'fail')
         {
             return $this->sendError(400, $data->message);

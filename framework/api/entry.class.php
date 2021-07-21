@@ -476,6 +476,9 @@ class baseEntry
                 return gmdate("Y-m-d\TH:i:s\Z", strtotime($value));
             }
             return $value;
+        case 'int':
+        case 'bool':
+            return $value;
         default:
             return $value;
         }
