@@ -513,12 +513,7 @@ class router extends baseRouter
             if($methodName == 'batchOperate') array_unshift($params, $this->rawMethod); // $params = array('close', 1);
             if($methodName == 'browse')
             {
-                if(isset($params[0]) and $params[0] == 'bysearch')
-                {
-                    $params[0] = '';
-                    array_unshift($params, 'bysearch');
-                }
-                else
+                if(!(isset($params[0]) and $params[0] == 'bysearch'))
                 {
                     array_unshift($params, 'browse');
                 }

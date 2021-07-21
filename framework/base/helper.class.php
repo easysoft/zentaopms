@@ -284,7 +284,7 @@ class baseHelper
             $secret = $config->encryptSecret;
             if(function_exists('mcrypt_encrypt'))
             {
-                $encrypted = base64_encode(@mcrypt_encrypt(MCRYPT_DES, $secret, $password, MCRYPT_MODE_CBC));
+                $encrypted = base64_encode(@mcrypt_encrypt(MCRYPT_DES, substr($secret, 0, 8), $password, MCRYPT_MODE_CBC));
             }
             elseif(function_exists('openssl_encrypt'))
             {
@@ -322,7 +322,7 @@ class baseHelper
             }
             elseif(function_exists('openssl_decrypt'))
             {
-                $decryptedPassword = openssl_decrypt($password, 'DES-CBC', $secret, OPENSSL_ZERO_PADDING);
+                $decryptedPassword = openssl_decrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING);
             }
 
             /* Check decrypted password. Judge whether there is garbled code. */
