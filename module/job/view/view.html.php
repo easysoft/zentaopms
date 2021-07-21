@@ -50,8 +50,8 @@
             <td><?php echo zget($lang->job->frameList, $job->frame);?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->job->jkHost;?></th>
-            <td><?php echo urldecode($job->jkJob) . '@' . $jenkins->name;?></td>
+            <th><?php echo $lang->job->server;?></th>
+            <td><?php echo urldecode($job->pipeline) . '@' . $jenkins->name;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->triggerType;?></th>

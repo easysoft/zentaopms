@@ -11,7 +11,7 @@ class usersEntry extends entry
     public function get()
     {
         $control = $this->loadController('company', 'browse');
-        $control->browse();
+        $control->browse('inside', 0, $this->param('type', 'bydept'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
