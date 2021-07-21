@@ -104,7 +104,8 @@
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('product', explode('-', $config->productLink)[1], "productID=$bug->product"), $bug->productName, null, "title={$bug->productName}");?></td>
+          <?php $param = $config->productLink == 'product-all' ? '' : "productID=$bug->product";?>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('product', explode('-', $config->productLink)[1], $param), $bug->productName, null, "title={$bug->productName}");?></td>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <?php if($type != 'openedBy'): ?>
           <td><?php echo zget($users, $bug->openedBy);?></td>
