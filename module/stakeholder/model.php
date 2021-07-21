@@ -382,8 +382,6 @@ class stakeholderModel extends model
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->where('t1.id')->eq($userID)
-            ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($this->session->project)
             ->fetch();
 
         return $stakeholder;

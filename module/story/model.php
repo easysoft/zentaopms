@@ -1846,6 +1846,7 @@ class storyModel extends model
         $story->assignedTo     = $assignedTo;
         $story->assignedDate   = $now;
 
+        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError())
         {
             $this->loadModel('gitlab');
