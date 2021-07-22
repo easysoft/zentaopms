@@ -337,7 +337,7 @@ class gitlab extends control
     public function ajaxGetExecutionsByProduct($productID)
     {
         if(!$productID) return $this->send(array('message' => array()));
-        
+
         $executions = $this->loadModel('product')->getAllExecutionPairsByProduct($productID);
         $options    = "<option value=''></option>";
         foreach($executions as $index =>$execution)
@@ -345,5 +345,25 @@ class gitlab extends control
             $options .= "<option value='{$index}' data-name='{$execution}'>{$execution}</option>";
         }
         die($options);
+    }
+
+    /**
+     * AJAX: Get gitlab project pipeline.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPipeline($repoID)
+    {
+        if(empty($repoID)) die(json_encode(array('' => '')));
+        $this->loadModel('repo');
+        $repo = $this->repo->getRepoByID($repoID);
+        if(empty($repo)) die(json_encode(array('' => '')));
+
+        $gitlabID  = $repo->gitlab;
+        $projectID = $repo->projectID;
+        $pipeline  = $this->gitlab->getPipeline($gitlabID, $projectID);
+        die(json_encode($pipeline));
     }
 }
