@@ -5,7 +5,7 @@ $sessionString .= session_name() . '=' . session_id();
 ?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
-    <div class="cell">
+    <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
           <div class="title"><?php echo $doc->title;?></div>
@@ -31,6 +31,7 @@ $sessionString .= session_name() . '=' . session_id();
           </div>
           <div class="actions">
             <?php
+            echo html::a("javascript:fullScreen()", '<i class="icon-fullscreen"></i>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");
             if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link' data-app='{$this->app->openApp}'");
             if(common::hasPriv('doc', 'delete'))
             {
