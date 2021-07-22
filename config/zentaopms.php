@@ -137,6 +137,8 @@ $config->openMethods[] = 'sso.gettodolist';
 $config->openMethods[] = 'file.read';
 $config->openMethods[] = 'index.changelog';
 $config->openMethods[] = 'my.preference';
+$config->openMethods[] = 'my.changepassword';
+$config->openMethods[] = 'my.profile';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
