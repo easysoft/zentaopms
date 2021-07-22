@@ -54,6 +54,9 @@
           <?php if($type != 'openedBy'): ?>
           <th class='c-user w-90px'>       <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
           <?php endif;?>
+          <?php if($app->rawMethod == 'work'):?>
+          <th class='w-70px text-center'>  <?php common::printOrderLink('deadline',   $orderBy, $vars, $lang->task->deadlineAB);?></th>
+          <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <th class='c-assignedTo w-110px'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedTo);?></th>
           <?php endif;?>
@@ -90,6 +93,9 @@
           <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution", '', '', $task->project), $task->executionName, '', "data-group='execution'");?></td>
           <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
+          <?php endif;?>
+          <?php if($app->rawMethod == 'work'):?>
+          <td class="text-center <?php echo isset($task->delay) ? 'delayed' : '';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>

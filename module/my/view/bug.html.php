@@ -61,13 +61,16 @@
           <?php if($type != 'openedBy'): ?>
           <th class='w-90px'> <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <?php endif;?>
+          <?php if($app->rawMethod == 'work'):?>
+          <th class='w-70px text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->bug->deadlineAB);?></th>
+          <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
-          <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->bug->assignedTo);?></th>
+          <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <?php endif;?>
           <?php if($type != 'resolvedBy'): ?>
-          <th class='w-100px'><?php common::printOrderLink('resolvedBy',  $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+          <th class='w-100px'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <?php endif;?>
-          <th class='w-100px'><?php common::printOrderLink('resolution',  $orderBy, $vars, $lang->bug->resolutionAB);?></th>
+          <th class='w-100px'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='c-actions-5'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -109,6 +112,9 @@
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <?php if($type != 'openedBy'): ?>
           <td><?php echo zget($users, $bug->openedBy);?></td>
+          <?php endif;?>
+          <?php if($app->rawMethod == 'work'):?>
+          <td class='text-center'><?php if(substr($bug->deadline, 0, 4) > 0) echo substr($bug->deadline, 5, 6);?></td>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <td class='c-assignedTo has-btn'><?php $this->bug->printAssignedHtml($bug, $users);?></td>

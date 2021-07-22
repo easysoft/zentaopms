@@ -60,6 +60,7 @@ $lang->bug->resolvedBuild    = 'Build';
 $lang->bug->resolvedDate     = 'Resolved Date';
 $lang->bug->resolvedDateAB   = 'ResolvedDate';
 $lang->bug->deadline         = 'Deadline';
+$lang->bug->deadlineAB       = 'Deadline';
 $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'ClosedBy';
 $lang->bug->closedDate       = 'ClosedDate';
