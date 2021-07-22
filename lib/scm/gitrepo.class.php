@@ -125,10 +125,11 @@ class GitRepo
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
 
+
         $branches = array();
         foreach($list as $localBranch)
         {
-            if($localBranch[0] == '*') $localBranch = substr($localBranch, 1);
+            if(substr($localBranch, 0, 1) == '*') $localBranch = substr($localBranch, 1);
 
             $localBranch = trim($localBranch);
             if(empty($localBranch))continue;
