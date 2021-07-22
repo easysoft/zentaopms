@@ -1823,19 +1823,43 @@ class docModel extends model
     {
         if($type != 'custom' and $type != 'book' and empty($objects)) return '';
 
-        $output = '';
+        $output             = '';
+        $closedProjectsHtml = '';
+        $clseedProjects     = array();
+        $maxHeight          = ($type == 'project' and $this->app->openApp == 'doc') ? '260px' : '290px';
+        $class              = ($type == 'project' and $this->app->openApp == 'doc') ? 'col-left' : '';
 
         if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
-            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
-            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-            $output .= "<div class='table-col'><div class='list-group'>";
+            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input"/><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "<div class='list-group'><div class='table-row'><div class='table-col $class'><div class='list-group' style='max-height: $maxHeight'>";
+            if($type == 'project' and $this->app->openApp == 'doc')
+            {
+                $clseedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
+            }
+
             foreach($objects as $key => $object)
             {
                 $selected = $key == $objectID ? 'selected' : '';
-                $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                if(isset($clseedProjects[$key]))
+                {
+                    $closedProjectsHtml .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                    if($selected == 'selected') $tabActive = 'closed';
+                }
+                else
+                {
+                    $output .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                }
             }
-            $output .= "</div></div></div></div></div>";
+            if($type == 'project' and $this->app->openApp == 'doc')
+            {
+                $output .= "</div><div class='col-footer'><a class='pull-right toggle-right-col not-list-item'>{$this->lang->project->doneProjects}<i class='icon icon-angle-right'></i></a></div></div><div class='table-col col-right'> <div class='list-group'>$closedProjectsHtml</div></div></div></div></div></div></div>";
+            }
+            else
+            {
+                $output .= "</div></div></div></div></div></div></div>";
+            }
         }
 
         if(!empty($libs))
