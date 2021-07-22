@@ -372,6 +372,7 @@ class repoModel extends model
         if(!$repo) return false;
 
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+        if($repo->SCM == 'Gitlab') $reps = $this->processGitlab($repo);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
@@ -1757,15 +1758,13 @@ class repoModel extends model
      */
     public function processGitlab($repo)
     {
-        return $repo;
-
-        $gitlab = $this->loadModel('gitlab')->getByID($repo->client);
+        $gitlab = $this->loadModel('gitlab')->getByID($repo->client); // $repo->client is gitlabID
         if(!$gitlab) return $repo;
-        $repo->gitlab   = $gitlab->id;
-        $repo->project  = $repo->path;
-        $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path);
-        $repo->client   = $gitlab->url;
-        $repo->password = $gitlab->token;
+        $repo->gitlab    = $gitlab->id;
+        $repo->project   = $repo->path; // projectID in gitlab
+        $repo->path      = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path);
+        $repo->client    = $gitlab->url;
+        $repo->password  = $gitlab->token;
         return $repo;
     }
 }
