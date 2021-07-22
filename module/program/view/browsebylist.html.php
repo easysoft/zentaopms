@@ -55,8 +55,14 @@
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td>
-          <?php $userID = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : ''?>
-          <?php if(!empty($program->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $program->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
+          <?php if(!empty($program->PM)):?>
+          <div class='avatar bg-secondary avatar-circle'>
+            <?php echo !empty(zget($usersAvatar, $program->PM, '')) ? html::image(zget($usersAvatar, $program->PM)) : strtoupper($program->PM[0]);?>
+          </div>
+          <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
+          <?php $userName = zget($users, $program->PM);?>
+          <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
+          <?php endif;?>
         </td>
         <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$program->budget / 10000, 2) . $lang->project->tenThousand : round((float)$program->budget, 2);?>
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
