@@ -68,7 +68,7 @@
             </td>
           </tr>
 
-         <tr>
+          <tr>
             <th><?php echo $lang->job->frame; ?></th>
             <td><?php echo html::select('frame', $lang->job->frameList, '', "class='form-control chosen'"); ?></td>
           </tr>
