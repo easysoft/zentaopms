@@ -82,13 +82,13 @@ $('#triggerType').change(function()
     }
 });
 
-$('#server').change(function()
+$('#gitlabServer').change(function()
 {
-    var jenkinsID = $(this).val();
-    $('#pipelineBox #pipeline').remove();
-    $('#pipelineBox #pipeline_chosen').remove();
-    $('#pipelineBox .input-group').append("<div class='load-indicator loading'></div>");
-    $.getJSON(createLink('jenkins', 'ajaxGetTasks', 'jenkinsID=' + jenkinsID), function(tasks)
+    var repoID = $('#repo').val();
+    $('#gitlabServerTR #pipeline').remove();
+    $('#gitlabServerTR #pipeline_chosen').remove();
+    $('#gitlabServerTR .input-group').append("<div class='load-indicator loading'></div>");
+    $.getJSON(createLink('gitlab', 'ajaxGetGitlabPipeline', 'repoID=' + repoID), function(tasks)
     {
         html  = "<select id='pipeline' name='pipeline' class='form-control'>";
         for(taskKey in tasks)
@@ -97,12 +97,42 @@ $('#server').change(function()
             html += "<option value='" + taskKey + "'>" + task + "</option>";
         }
         html += '</select>';
-        $('#pipelineBox .loading').remove();
-        $('#pipelineBox .input-group').append(html);
+        $('#gitlabServerTR .loading').remove();
+        $('#gitlabServerTR .input-group').append(html);
 
-        $('#pipelineBox #pipeline').chosen({drop_direction: 'auto'});
+        $('#gitlabServerTR #pipeline').chosen({drop_direction: 'auto'});
     })
 })
+
+$('#jkServer').change(function()
+{
+    var jenkinsID = $(this).val();
+    $('#jenkinsServerTR #JkTask').remove();
+    $('#jenkinsServerTR #JkTask_chosen').remove();
+    $('#jenkinsServerTR .input-group').append("<div class='load-indicator loading'></div>");
+    $.getJSON(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
+    {
+        html  = "<select id='JkTask' name='JkTask' class='form-control'>";
+        for(taskKey in tasks)
+        {
+            var task = tasks[taskKey];
+            html += "<option value='" + taskKey + "'>" + task + "</option>";
+        }
+        html += '</select>';
+        $('#jenkinsServerTR .loading').remove();
+        $('#jenkinsServerTR .input-group').append(html);
+
+        $('#jenkinsServerTR #JkTask').chosen({drop_direction: 'auto'});
+    })
+})
+
+$('#engine').change(function()
+{
+    $('#jenkinsServerTR').toggle($('#engine').val() == 'jenkins');
+    $('#gitlabServerTR').toggle($('#engine').val() == 'gitlab');
+});
+
+$('#engine').change();
 
 $(function()
 {

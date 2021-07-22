@@ -68,3 +68,14 @@ $lang->job->paramValueList['$zentao_version']  = '当前版本号';
 $lang->job->paramValueList['$zentao_account']  = '当前用户名';
 $lang->job->paramValueList['$zentao_product']  = '当前产品ID';
 $lang->job->paramValueList['$zentao_repopath'] = '当前版本库路径';
+
+
+$lang->job->engineList = array();
+$lang->job->engineList['']        = '';
+$lang->job->engineList['gitlab']  = 'GitLab';
+$lang->job->engineList['jenkins'] = 'Jenkins';
+
+$lang->job->engineTips = new stdclass;
+$lang->job->engineTips->success = '构建引擎将使用GitLab项目内置的流水线';
+$lang->job->engineTips->error   = '当前GitLab项目内没有可用的流水线，请先前往GitLab配置';
+
