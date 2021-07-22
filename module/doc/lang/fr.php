@@ -67,6 +67,7 @@ $lang->doc->myCollection   = 'Mes Favoris';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Accueil Documents';
+$lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Ajouter Document';
 $lang->doc->edit             = 'Editer Document';
 $lang->doc->delete           = 'Supprimer Document';

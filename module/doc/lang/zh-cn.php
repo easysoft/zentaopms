@@ -68,6 +68,7 @@ $lang->doc->myCollection = '我的收藏';
 
 /* 方法列表。*/
 $lang->doc->index            = '文档主页';
+$lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
 $lang->doc->edit             = '编辑文档';
 $lang->doc->delete           = '删除文档';

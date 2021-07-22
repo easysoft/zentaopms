@@ -68,6 +68,7 @@ $lang->doc->myCollection = 'My Favorites';
 
 /* Methods list */
 $lang->doc->index            = 'Document Home';
+$lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Create Document';
 $lang->doc->edit             = 'Edit Document';
 $lang->doc->delete           = 'Delete Document';

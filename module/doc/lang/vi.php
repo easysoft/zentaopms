@@ -67,6 +67,7 @@ $lang->doc->myCollection = 'My Favorites';
 
 /* Methods list */
 $lang->doc->index            = 'Document Home';
+$lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Tạo tài liệu';
 $lang->doc->edit             = 'Sửa tài liệu';
 $lang->doc->delete           = 'Xóa tài liệu';
