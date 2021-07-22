@@ -314,6 +314,9 @@ class doc extends control
         else
         {
             $this->app->rawMethod = $objectType;
+            unset($this->lang->doc->menu->product['subMenu']);
+            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->custom['subMenu']);
         }
 
         $lib  = $this->doc->getLibByID($libID);
