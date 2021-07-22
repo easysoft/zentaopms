@@ -928,6 +928,7 @@ class actionModel extends model
     public function transformActions($actions)
     {
         $this->app->loadLang('todo');
+        $this->app->loadLang('stakeholder');
         $requirements = array();
 
         /* Get commiters. */
@@ -989,6 +990,13 @@ class actionModel extends model
                         if($object->type == 'project') $objectProject[$object->id] = $object->id;
                     }
                 }
+                elseif($objectType == 'stakeholder'){
+                    $objectName = $this->dao->select("t1.id, t2.realname")->from($table)->alias('t1')
+                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.{$field} = t2.account")
+                        ->where('t1.id')->in($objectIds)
+                        ->fetchPairs();
+                    $objectProject = array();
+                }
                 else
                 {
                     $objectName    = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
@@ -1029,7 +1037,7 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
-            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
+            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : (isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action);
             $action->objectLabel  = $objectType;
             if(isset($this->lang->action->label->$objectType))
             {
