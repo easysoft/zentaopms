@@ -26,12 +26,12 @@
     <?php echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
   </div>
   <div class='pull-right'>
-    <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
     <?php if(isset($this->config->maxVersion)):?>
-    <?php common::printLink('project', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php common::printLink('project', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-secondary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
-    <?php common::printLink('project', 'create', "mode=scrum&programID=0", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('project', 'create', "mode=scrum&programID=0", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-secondary"');?>
     <?php endif;?>
+    <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>
@@ -44,7 +44,7 @@
   </div>
   <?php else:?>
   <div class='main-col'>
-    <?php 
+    <?php
     if($programType == 'bygrid')
     {
         include 'browsebygrid.html.php';

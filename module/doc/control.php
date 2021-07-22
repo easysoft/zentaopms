@@ -314,6 +314,9 @@ class doc extends control
         else
         {
             $this->app->rawMethod = $objectType;
+            unset($this->lang->doc->menu->product['subMenu']);
+            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->custom['subMenu']);
         }
 
         $lib  = $this->doc->getLibByID($libID);
@@ -388,7 +391,7 @@ class doc extends control
         $lib  = $this->doc->getLibByID($libID);
         $type = $lib->type;
 
-        /* set menus. */
+        /* Set menus. */
         if($this->app->openApp == 'product')
         {
             $this->product->setMenu($objectID);
@@ -414,6 +417,10 @@ class doc extends control
         else
         {
             $this->app->rawMethod = $objectType;
+
+            unset($this->lang->doc->menu->product['subMenu']);
+            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->custom['subMenu']);
 
             /* High light menu. */
             if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)

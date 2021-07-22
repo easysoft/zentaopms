@@ -8,9 +8,9 @@
           <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
           <?php echo $lang->nameAB;?>
         </th>
+        <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
         <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
-        <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin',  $orderBy, $vars, $lang->project->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end',    $orderBy, $vars, $lang->project->end);?></th>
         <th class='text-center w-180px'><?php echo $lang->actions;?></th>
@@ -53,13 +53,13 @@
           <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name);?>
           <?php endif;?>
         </td>
+        <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td>
           <?php $userID = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : ''?>
           <?php if(!empty($program->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $program->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
         </td>
         <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$program->budget / 10000, 2) . $lang->project->tenThousand : round((float)$program->budget, 2);?>
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
-        <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td class='c-actions'>

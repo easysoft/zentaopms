@@ -59,6 +59,7 @@ $lang->bug->resolvedBuild    = 'Build';
 $lang->bug->resolvedDate     = 'Date Correction';
 $lang->bug->resolvedDateAB   = 'Date Correction';
 $lang->bug->deadline         = 'Date Butoir';
+$lang->bug->deadlineAB       = 'Butoir';
 $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'Fermé par';
 $lang->bug->closedDate       = 'Date Fermeture';
