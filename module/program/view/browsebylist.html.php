@@ -11,8 +11,9 @@
         <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
         <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
-        <th class='w-100px'><?php common::printOrderLink('begin',  $orderBy, $vars, $lang->project->begin);?></th>
-        <th class='w-100px'><?php common::printOrderLink('end',    $orderBy, $vars, $lang->project->end);?></th>
+        <th class='w-100px'><?php common::printOrderLink('begin',    $orderBy, $vars, $lang->project->begin);?></th>
+        <th class='w-100px'><?php common::printOrderLink('end',      $orderBy, $vars, $lang->project->end);?></th>
+        <th class='w-60px'><?php  common::printOrderLink('progress', $orderBy, $vars, $lang->project->progress);?></th>
         <th class='text-center w-180px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -68,6 +69,7 @@
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
+        <td></td>
         <td class='c-actions'>
           <?php if($program->type == 'program'):?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>
