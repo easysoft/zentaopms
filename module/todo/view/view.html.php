@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('systemMode', $config->systemMode);?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <style>.chosen-container .chosen-results{max-height: 170px; overflow-y: initial;}</style>
 <div id="mainMenu" class="clearfix">
@@ -201,7 +202,7 @@
         <h4 class="modal-title"><?php echo $lang->execution->selectExecution;?></h4>
       </div>
       <div class="modal-body">
-        <?php if(empty($projects)):?>
+        <?php if((empty($projects) and $config->systemMode == 'new') || ($config->systemMode == 'classic') and empty($executions)):?>
         <div class="table-empty-tip">
           <p>
             <span class="text-muted"><?php echo $lang->project->empty;?></span>
@@ -210,10 +211,12 @@
         </div>
         <?php else:?>
         <table align='center' class='table table-form'>
+          <?php if($config->systemMode == 'new'):?>
           <tr>
             <th><?php echo $lang->todo->project;?></th>
             <td><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getExecutionByProject(this.value);");?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->todo->execution;?></th>
             <td id='executionIdBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen'");?></td>

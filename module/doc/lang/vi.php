@@ -67,6 +67,7 @@ $lang->doc->myCollection = 'My Favorites';
 
 /* Methods list */
 $lang->doc->index            = 'Document Home';
+$lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Tạo tài liệu';
 $lang->doc->edit             = 'Sửa tài liệu';
 $lang->doc->delete           = 'Xóa tài liệu';
@@ -85,6 +86,7 @@ $lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Thêm Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Xóa File';
+$lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->libName    = 'Thư viện tài liệu';
 $lang->doc->libType    = 'Danh mục';

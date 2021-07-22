@@ -78,7 +78,7 @@ function createProject()
     var onlybody    = config.onlybody;
     config.onlybody = 'no';
 
-    var link      = createLink('project', 'create');
+    var link = systemMode == 'new' ? createLink('project', 'create') : createLink('execution', 'create');
 
     config.onlybody      = onlybody;
     parent.location.href = link;

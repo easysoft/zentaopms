@@ -67,6 +67,7 @@ $lang->doc->myCollection   = 'Meine Favoriten';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Home';
+$lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Dokument hinzufügen';
 $lang->doc->edit             = 'Bearbeiten';
 $lang->doc->delete           = 'Löschen';
@@ -85,6 +86,7 @@ $lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Favorit hinzufügen';
 $lang->doc->cancelCollection = 'Favorit entfernen';
 $lang->doc->deleteFile       = 'Delete File';
+$lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Kategorie';

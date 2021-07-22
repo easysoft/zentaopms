@@ -1651,7 +1651,7 @@ class docModel extends model
         elseif($libID)
         {
             $html  = "<div class='dropdown' id='createDropdown'>";
-            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . " <span class='caret'></span></button>";
+            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->createAB . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
@@ -1932,7 +1932,8 @@ class docModel extends model
 
         if(empty($treeMenu)) return '';
 
-        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
+        $menu  = "<ul class='tree' id='title'><li>{$this->lang->doc->menuTitle}</li></ul>";
+        $menu .= "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
         return $menu;
     }
 
