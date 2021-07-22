@@ -221,7 +221,7 @@ $(function()
                 <span><?php echo $lang->project->budget . ':';?></span>
                 <span class='project-info'>
                 <?php
-                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
+                $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
                 echo $project->budget != 0 ? $projectBudget : $this->lang->project->future;
                 ?>
                 </span>
@@ -229,7 +229,7 @@ $(function()
               <div class="col-1-5"></div>
             </div>
             <div class="table-row text-center waterfall-title small col-12 center-block">
-              <?php $isChineseLang = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']);?>
+              <?php $isChineseLang = in_array($this->app->getClientLang(), array('zh-cn','zh-tw'));?>
               <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->pv . '(' . $lang->project->pvTitle . ')' : $lang->project->pv; ?></div>
               <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->ev . '(' . $lang->project->evTitle . ')' : $lang->project->ev;?></div>
               <div class="col-1-5"><?php echo $isChineseLang ? $lang->project->ac . '(' . $lang->project->acTitle . ')' : $lang->project->ac;?></div>
