@@ -86,6 +86,7 @@ $lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Ajouter aux Favoris';
 $lang->doc->cancelCollection = 'Retirer des Favoris';
 $lang->doc->deleteFile       = 'Supprimer Fichier';
+$lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->libName        = 'Bibliothèque de Documents';
 $lang->doc->libType        = 'Catégorie';

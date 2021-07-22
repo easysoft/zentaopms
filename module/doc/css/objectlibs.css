@@ -18,6 +18,7 @@
 #sidebar {width: 275px;}
 #sidebar>.cell {width: 100%;}
 #sidebar>.sidebar-toggle {left: 3px; right: auto;}
+#title {font-size: 15px; font-weight: 600;}
 .hide-sidebar #sidebar>.cell {left: -270px;}
 .hide-sidebar #sidebar>.sidebar-toggle>.icon:before {content: "\e314";}
 .detail.empty {line-height: 200px;}

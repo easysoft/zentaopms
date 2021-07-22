@@ -1908,7 +1908,8 @@ class docModel extends model
 
         if(empty($treeMenu)) return '';
 
-        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
+        $menu  = "<ul class='tree' id='title'><li>{$this->lang->doc->menuTitle}</li></ul>";
+        $menu .= "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
         return $menu;
     }
 

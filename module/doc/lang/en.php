@@ -87,6 +87,7 @@ $lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Add Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Delete File';
+$lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->collectAction = 'Add Favorite';
 

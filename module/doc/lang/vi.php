@@ -86,6 +86,7 @@ $lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Thêm Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Xóa File';
+$lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->libName    = 'Thư viện tài liệu';
 $lang->doc->libType    = 'Danh mục';
