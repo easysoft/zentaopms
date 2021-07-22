@@ -248,4 +248,18 @@ class job extends control
         echo js::alert(sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $status)));
         die(js::reload('parent'));
     }
+
+    /**
+     * AJAX: Get product by repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductByRepo($repoID)
+    {
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        if($repo) return $repo->product;
+        die(js::error("Access Violation. 非法访问。"));
+    }
 }
