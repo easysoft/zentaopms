@@ -17,9 +17,9 @@
     <?php $recTotalLabel = $browseType == $key ? " <span class='label label-light label-badge'>{$recTotal}</span>" : '';?>
     <?php echo html::a(inlink("all", "browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
-    <?php common::printLink('product', 'manageLine', '', $lang->product->line, '', 'class="btn btn-link"');?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php common::printLink('product', 'manageLine', '', "<i class='icon-edit'></i> &nbsp;" . $lang->product->line, '', 'class="btn btn-link"');?>
     <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
 </div>
