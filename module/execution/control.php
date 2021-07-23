@@ -874,6 +874,7 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
         $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->checkDelayBugs($bugs);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
