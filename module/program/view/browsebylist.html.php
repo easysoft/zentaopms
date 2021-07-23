@@ -74,7 +74,11 @@
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
-        <td></td>
+        <td>
+          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='48' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo '48'; ?></div>
+          </div>
+        </td>
         <td class='c-actions'>
           <?php if($program->type == 'program'):?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>
