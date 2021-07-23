@@ -9,7 +9,7 @@ body {padding-left: 96px;}
 #menu .nav > li > a > .icon + .text {margin-left: 4px;}
 #menu .nav > li.active > a, #menu .nav > li > a:hover, #menu .nav > li > a:focus {background-color: #0c64eb;}
 #menu .nav > li.divider {margin: 8px; background-color: #fff; opacity: 0.24; height: 1px; padding: 0 !important;}
-#menuFooter {position: absolute; bottom: 0; left: 0; right: 0; background-color: #3C495C;}
+#menuFooter {position: absolute; bottom: 0; left: 0; right: 0;}
 #menu .nav > li.has-avatar {padding: 1px 6px;}
 #menu .nav > li.has-avatar > a {padding: 4px 0; text-align: center;}
 body.menu-hide {padding-left: 0;}

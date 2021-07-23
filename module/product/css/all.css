@@ -35,7 +35,7 @@
 #sidebar>.cell {width: 100%;}
 
 .main-table thead>tr:first-of-type>th {border-left: 1px solid #ddd;}
-th.table-nest-title .nest-has-checkbox {margin-top: 8px; margin-left: 35px;}
+th.table-nest-title .nest-has-checkbox {margin-top: 7px; margin-left: 35px;}
 th.table-nest-title .nest-none-checkbox {margin-top: 8px; margin-left: 5px;}
 th.table-nest-title .header {margin-left: 5px;}
 th.table-nest-title .sort-up {padding-left: 5px;}

@@ -288,6 +288,7 @@ $lang->lang = 'Language';
 /* 風格列表。*/
 $lang->theme                = '主題';
 $lang->themes['default']    = '禪道藍（預設）';
+$lang->themes['blue']       = '青春藍';
 $lang->themes['green']      = '葉蘭綠';
 $lang->themes['red']        = '赤誠紅';
 $lang->themes['purple']     = '玉煙紫';
