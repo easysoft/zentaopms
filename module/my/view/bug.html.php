@@ -62,7 +62,7 @@
           <th class='w-90px'> <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <?php endif;?>
           <?php if($app->rawMethod == 'work'):?>
-          <th class='w-70px text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->bug->deadlineAB);?></th>
+          <th class='w-90px text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->bug->deadline);?></th>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
@@ -114,7 +114,7 @@
           <td><?php echo zget($users, $bug->openedBy);?></td>
           <?php endif;?>
           <?php if($app->rawMethod == 'work'):?>
-          <td class='text-center'><?php if(substr($bug->deadline, 0, 4) > 0) echo substr($bug->deadline, 5, 6);?></td>
+          <td class="text-center <?php echo (isset($bug->delay) and $bug->status == 'active') ? 'delayed' : '';?>"><?php echo $bug->deadline;?></td>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <td class='c-assignedTo has-btn'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
