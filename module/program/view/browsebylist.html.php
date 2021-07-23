@@ -189,5 +189,11 @@ $(function()
             $('#programForm').table('initNestedList')
         }
     });
+
+    $('#programForm').on('tableNestStateChanged', function()
+    {
+        /* Ensure visible progress pie inited after toggle nest states */
+        $('.progress-pie:visible').progressPie();
+    });
 });
 </script>
