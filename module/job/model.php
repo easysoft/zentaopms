@@ -122,16 +122,19 @@ class jobModel extends model
 
         if($job->engine == 'jenkins')
         {
-            $job->server = $job->jkServer;
+            $job->server   = $job->jkServer;
             $job->pipeline = $job->jkTask;
-            unset($job->jkServer);
-            unset($job->jkTask);
         }
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            var_dump($job);exit;
+            $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
+            $job->server   = $repo->gitlab;
+            $job->pipeline = $repo->project;
         }
+
+        unset($job->jkServer);
+        unset($job->jkTask);
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
@@ -175,8 +178,12 @@ class jobModel extends model
             ->autoCheck()
             ->exec();
 
+        if(dao::isError()) return dao::getError();
+
         $id = $this->dao->lastInsertId();
-        $this->initJob($id, $job, $this->post->repoType);
+        if($id == 0) return false;
+
+        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $this->post->repoType);
         return $id;
     }
 
