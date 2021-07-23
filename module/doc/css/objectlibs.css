@@ -15,10 +15,10 @@
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
 .main-col .doc-title .actions a {margin-right: 8px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
-#project {min-height: 160px;}
 #sidebar {width: 275px;}
 #sidebar>.cell {width: 100%;}
 #sidebar>.sidebar-toggle {left: 3px; right: auto;}
+#project, #product, #custom, #book {min-height: 160px;}
 #title .menu-title {font-size: 15px; font-weight: 600; position: relative; padding: 2px 0 2px 15px;list-style: none;}
 #title .dropdown-menu-book {left: -67px; top: 38px;}
 #title .dropdown-menu-doc {left: -80px; top: 38px;}
