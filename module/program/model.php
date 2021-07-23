@@ -256,6 +256,7 @@ class programModel extends model
         {
             $TotalProgress[$programID] = 0;
             $projectCount[$programID]  = 0;
+            $progressList[$programID]  = 0;
 
             foreach($projectStats as $project)
             {
@@ -265,7 +266,7 @@ class programModel extends model
             }
 
             if(empty($projectCount[$programID])) continue;
-            $progressList[$programID] = $TotalProgress[$programID] / $projectCount[$programID];
+            $progressList[$programID] = round($TotalProgress[$programID] / $projectCount[$programID]);
         }
 
         /* Add project progress. */
