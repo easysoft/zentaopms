@@ -171,6 +171,7 @@ class gitlabpipelineModel extends model
      *
      * @param integer $projectID
      * @param integer $jobID
+     * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-log-file
      */
     public function apiPipelineGetlog($projectID, $jobID)
@@ -185,6 +186,7 @@ class gitlabpipelineModel extends model
      *
      * @param integer $projectID
      * @param integer $pipelineID
+     * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs
      */
     public function apiGetPipelineJobs($projectID, $pipelineID)
@@ -199,6 +201,7 @@ class gitlabpipelineModel extends model
      *
      * @param integer $projectID
      * @param integer $jobID
+     * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
      */
 	public function apiGetSingleJob($projectID, $jobID)
