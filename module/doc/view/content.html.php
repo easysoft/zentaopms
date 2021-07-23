@@ -67,7 +67,7 @@ $sessionString .= session_name() . '=' . session_id();
         </div>
         <div class="detail-content article-content">
           <?php if($doc->keywords):?>
-          <p>
+          <p class='keywords'>
             <?php foreach($doc->keywords as $keywords):?>
             <?php if($keywords) echo "<span class='label label-outline'>$keywords</span>";?>
             <?php endforeach;?>
