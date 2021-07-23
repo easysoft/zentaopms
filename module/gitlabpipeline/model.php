@@ -6,8 +6,6 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
- * @package     product
- * @version     $Id: $
  * @link        http://www.zentao.net
  */
 
@@ -210,16 +208,5 @@ class gitlabpipelineModel extends model
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}");
         return json_decode(commonModel::http($url));
-    }
-
-    /**
-     * Run pipeline.
-     *
-     * @param  int    $jobID
-     * @access public
-     * @return void
-     */
-    public function runPipeline($jobID)
-    {
     }
 }
