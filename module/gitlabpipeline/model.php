@@ -206,9 +206,20 @@ class gitlabpipelineModel extends model
      * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
      */
-	public function apiGetSingleJob($gitlabID, $projectID, $jobID)
+    public function apiGetSingleJob($gitlabID, $projectID, $jobID)
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}");
         return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Run pipeline.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return void
+     */
+    public function runPipeline($jobID)
+    {
     }
 }

@@ -11,7 +11,7 @@ $(function()
     {
         host = $('#gitlabHost').val();
         if(host == '') return false;
-        url  = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
+        url  = createLink('repo', 'ajaxGetGitlabProjects', "host=" + host);
 
         $.get(url, function(response)
         {
