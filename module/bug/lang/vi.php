@@ -79,6 +79,7 @@ $lang->bug->lastEditedDate   = 'Ngày sửa';
 $lang->bug->fromCase         = 'Từ tình huống';
 $lang->bug->toCase           = 'Tới tình huống';
 $lang->bug->colorTag         = 'Màu';
+$lang->bug->repairRate       = 'Repair Rate';
 
 /* Method list. */
 $lang->bug->index              = 'Trang Bug';
