@@ -30,6 +30,7 @@
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name);?></th>
           <th class='w-150px text-left'><?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo);?></th>
           <th class='w-80px'><?php common::printOrderLink('frame', $orderBy, $vars, $lang->job->frame);?></th>
+          <th class='w-80px'><?php common::printOrderLink('engine', $orderBy, $vars, $lang->job->engine);?></th>
           <th class='w-250px text-left'><?php common::printOrderLink('server', $orderBy, $vars, $lang->job->jenkins);?></th>
           <th class='text-left'><?php echo $lang->job->triggerType;?></th>
           <th class='w-100px text-center'><?php common::printOrderLink('lastStatus', $orderBy, $vars, $lang->job->lastStatus);?></th>
@@ -44,6 +45,7 @@
           <td title='<?php echo $job->name; ?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$job->id}", 'html', true), $job->name, '', "class='iframe' data-width='90%'") : $job->name;?></td>
           <td title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
           <td><?php echo zget($lang->job->frameList, $job->frame);?></td>
+          <td><?php echo $job->engine;?></td>
           <?php $jenkins = urldecode($job->pipeline) . '@' . $job->jenkinsName;?>
           <td title='<?php echo $jenkins; ?>'><?php echo $jenkins; ?></td>
           <?php $triggerConfig = $this->job->getTriggerConfig($job);?>

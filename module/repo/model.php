@@ -153,6 +153,8 @@ class repoModel extends model
                     if(!$hasPriv) unset($repos[$i]);
                 }
             }
+
+            if($repo->SCM == 'Gitlab') $repo = $this->processGitlab($repo);
         }
 
         return $repos;
@@ -197,6 +199,7 @@ class repoModel extends model
 
         $data = fixer::input('post')
             ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
+            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->skipSpecial('path,client,account,password')
@@ -204,7 +207,7 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
+        if($this->post->SCM == 'Gitlab') $data->path = $this->post->gitlabProject;
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -243,6 +246,7 @@ class repoModel extends model
 
         $data = fixer::input('post')
             ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
+            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->setDefault('client', 'svn')
@@ -252,7 +256,6 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab') $data->path = sprintf($this->config->repo->gitlab->apiPath, $data->gitlabHost, $this->post->gitlabProject);
         if($data->path != $repo->path) $data->synced = 0;
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -622,7 +625,6 @@ class repoModel extends model
             {
                 $commitID = $this->dao->lastInsertID();
                 if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($commitID)->set('branch')->eq($branch)->exec();
-                $file = array();
                 foreach($logs['files'][$i] as $file)
                 {
                     $parentPath = dirname($file->path);

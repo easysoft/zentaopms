@@ -119,6 +119,20 @@ class jobModel extends model
             ->add('createdDate', helper::now())
             ->remove('repoType')
             ->get();
+
+        if($job->engine == 'jenkins')
+        {
+            $job->server = $job->jkServer;
+            $job->pipeline = $job->jkTask;
+            unset($job->jkServer);
+            unset($job->jkTask);
+        }
+
+        if(strtolower($job->engine) == 'gitlab')
+        {
+            var_dump($job);exit;
+        }
+
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
         $job->svnDir = '';
@@ -158,7 +172,6 @@ class jobModel extends model
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
-
             ->autoCheck()
             ->exec();
 
