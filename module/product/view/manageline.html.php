@@ -11,12 +11,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left">
-    <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("all", "browseType=$key"), "<span class='text'>{$label}</span>", '', "class='btn btn-link'");?>
-    <?php endforeach;?>
-    <?php common::printLink('product', 'manageLine', '', "<span class='text'>{$lang->product->line}</span>", '', 'class="btn btn-link btn-active-text"');?>
-  </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>

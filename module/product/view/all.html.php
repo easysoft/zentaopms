@@ -17,9 +17,9 @@
     <?php $recTotalLabel = $browseType == $key ? " <span class='label label-light label-badge'>{$recTotal}</span>" : '';?>
     <?php echo html::a(inlink("all", "browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
-    <?php common::printLink('product', 'manageLine', '', $lang->product->line, '', 'class="btn btn-link"');?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php common::printLink('product', 'manageLine', '', "<i class='icon-edit'></i> &nbsp;" . $lang->product->line, '', 'class="btn btn-link"');?>
     <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
 </div>
@@ -48,24 +48,25 @@
             <th class="w-300px" colspan="4"><?php echo $lang->story->requirement;?></th>
             <?php endif;?>
             <th class="w-300px" colspan="4"><?php echo $lang->story->story;?></th>
-            <th class="w-150px" colspan="2"><?php echo $lang->bug->common;?></th>
-            <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
+            <th class="w-200px" colspan="3"><?php echo $lang->bug->common;?></th>
             <th class="w-80px"  rowspan="2"><?php echo $lang->product->plan;?></th>
+            <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
             <th class='c-actions w-70px' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
             <?php if($this->config->URAndSR):?>
-            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->activate;?></th>
-            <th><?php echo $lang->story->close;?></th>
-            <th><?php echo $lang->story->draft;?></th>
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
+            <th><?php echo $lang->story->activate;?></th>
+            <th><?php echo $lang->story->change;?></th>
             <th><?php echo $lang->story->completeRate;?></th>
             <?php endif;?>
-            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->activate;?></th>
-            <th><?php echo $lang->story->close;?></th>
-            <th><?php echo $lang->story->draft;?></th>
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
+            <th><?php echo $lang->story->activate;?></th>
+            <th><?php echo $lang->story->change;?></th>
             <th><?php echo $lang->story->completeRate;?></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
             <th><?php echo $lang->close;?></th>
+            <th><?php echo $lang->bug->repairRate;?></th>
           </tr>
         </thead>
         <tbody id="productTableList">
@@ -78,7 +79,7 @@
         ?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr <?php echo $trAttrs;?>>
-            <td colspan="<?php echo $this->config->URAndSR ? 14 : 10;?>">
+            <td colspan="<?php echo $this->config->URAndSR ? 15 : 11;?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $program['programName']?>
             </td>
@@ -104,7 +105,7 @@
           }
           ?>
           <tr <?php echo $trAttrs;?>>
-            <td colspan="<?php echo $this->config->URAndSR ? 14 : 10;?>">
+            <td colspan="<?php echo $this->config->URAndSR ? 15 : 11;?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>
@@ -149,19 +150,20 @@
               ?>
             </td>
             <?php if($this->config->URAndSR):?>
-            <td><?php echo $product->requirements['active'];?></td>
-            <td><?php echo $product->requirements['closed'];?></td>
             <td><?php echo $product->requirements['draft'];?></td>
+            <td><?php echo $product->requirements['active'];?></td>
+            <td><?php echo $product->requirements['changed'];?></td>
             <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
             <?php endif;?>
-            <td><?php echo $product->stories['active'];?></td>
-            <td><?php echo $product->stories['closed'];?></td>
             <td><?php echo $product->stories['draft'];?></td>
+            <td><?php echo $product->stories['active'];?></td>
+            <td><?php echo $product->stories['changed'];?></td>
             <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $product->unResolved;?></td>
             <td><?php echo $product->closedBugs;?></td>
-            <td><?php echo $product->releases;?></td>
+            <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>
+            <td><?php echo $product->releases;?></td>
             <td class='c-actions sort-handler'>
               <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
               <?php if($canOrder):?>

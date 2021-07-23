@@ -1463,6 +1463,15 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
+        $fixedBugs = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andwhere('status')->eq('closed')
+            ->andWhere('product')->in($productKeys)
+            ->andWhere('resolution')->eq('fixed')
+            ->groupBy('product')
+            ->fetchPairs();
+
         $closedBugs = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -1502,6 +1511,7 @@ class productModel extends model
             $product->bugs         = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
             $product->unResolved   = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
             $product->closedBugs   = isset($closedBugs[$product->id]) ? $closedBugs[$product->id] : 0;
+            $product->fixedBugs    = isset($fixedBugs[$product->id]) ? $fixedBugs[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
             $stats[] = $product;
         }

@@ -28,8 +28,8 @@
           <?php $vars = "jobID={$jobID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->compile->id);?></th>
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
+          <th class='w-150px text-left'><?php echo $lang->compile->buildType;?></th>
           <th class='w-150px text-left'><?php echo $lang->job->repo;?></th>
-          <th class='w-250px text-left'><?php echo $lang->job->jenkins;?></th>
           <th class='text-left'><?php echo $lang->job->triggerType;?></th>
           <th class='w-80px text-center'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
           <th class='w-130px text-center'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
@@ -41,9 +41,9 @@
         <tr>
           <td class='text-center'><?php echo $id;?></td>
           <td title='<?php echo $build->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$build->job}&compileID={$build->id}", 'html', true), $build->name, '', "class='iframe' data-width='90%'") : $build->name;?></td>
+          <td title='<?php echo $build->engine;?>'><?php echo $build->engine;?></td>
           <td title='<?php echo $build->repoName;?>'><?php echo $build->repoName;?></td>
           <?php $jenkins = urldecode($build->pipeline) . '@' . $build->jenkinsName;?>
-          <td title='<?php echo $jenkins; ?>'><?php echo $jenkins; ?></td>
           <?php $triggerConfig = $this->loadModel('job')->getTriggerConfig($build);?>
           <td title='<?php echo $triggerConfig;?>'><?php echo $triggerConfig;?></td>
           <?php $buildStatus = zget($lang->compile->statusList, $build->status);?>
