@@ -79,10 +79,26 @@
         ?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr <?php echo $trAttrs;?>>
-            <td colspan="<?php echo $this->config->URAndSR ? 15 : 11;?>">
+            <td>
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $program['programName']?>
             </td>
+            <?php if($this->config->URAndSR):?>
+            <td class='text-center'><?php echo $program['draftRequirments'];?></td>
+            <td class='text-center'><?php echo $program['activeRequirments'];?></td>
+            <td class='text-center'><?php echo $program['changedRequirments'];?></td>
+            <td class='text-center'><?php echo $program['totalRequirements'] == 0 ? 0 : round($program['closedRequirements'] / $program['totalRequirements'], 3) * 100;?>%</td>
+            <?php endif;?>
+            <td class='text-center'><?php echo $program['draftStories'];?></td>
+            <td class='text-center'><?php echo $program['activeStories'];?></td>
+            <td class='text-center'><?php echo $program['changedStories'];?></td>
+            <td class='text-center'><?php echo $program['totalStories'] == 0 ? 0 : round($program['closedStories'] / $program['totalStories'], 3) * 100;?>%</td>
+            <td class='text-center'><?php echo $program['unResolvedBugs'];?></td>
+            <td class='text-center'><?php echo $program['closedBugs'];?></td>
+            <td class='text-center'><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
+            <td class='text-center'><?php echo $program['plans'];?></td>
+            <td class='text-center'><?php echo $program['releases'];?></td>
+            <td></td>
           </tr>
           <?php unset($program['programName']);?>
           <?php endif;?>
@@ -105,10 +121,26 @@
           }
           ?>
           <tr <?php echo $trAttrs;?>>
-            <td colspan="<?php echo $this->config->URAndSR ? 15 : 11;?>">
+            <td>
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>
+            <?php if($this->config->URAndSR):?>
+            <td class='text-center'><?php echo $line['draftRequirments'];?></td>
+            <td class='text-center'><?php echo $line['activeRequirments'];?></td>
+            <td class='text-center'><?php echo $line['changedRequirments'];?></td>
+            <td class='text-center'><?php echo $line['totalRequirements'] == 0 ? 0 : round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100;?>%</td>
+            <?php endif;?>
+            <td class='text-center'><?php echo $line['draftStories'];?></td>
+            <td class='text-center'><?php echo $line['activeStories'];?></td>
+            <td class='text-center'><?php echo $line['changedStories'];?></td>
+            <td class='text-center'><?php echo $line['totalStories'] == 0 ? 0 : round($line['closedStories'] / $line['totalStories'], 3) * 100;?>%</td>
+            <td class='text-center'><?php echo $line['unResolvedBugs'];?></td>
+            <td class='text-center'><?php echo $line['closedBugs'];?></td>
+            <td class='text-center'><?php echo ($line['unResolvedBugs'] + $line['fixedBugs']) == 0 ? 0 : round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100;?>%</td>
+            <td class='text-center'><?php echo $line['plans'];?></td>
+            <td class='text-center'><?php echo $line['releases'];?></td>
+            <td></td>
           </tr>
           <?php unset($line['lineName']);?>
           <?php endif;?>
