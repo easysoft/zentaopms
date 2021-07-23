@@ -55,16 +55,16 @@
                 <div class='table-col'>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
-                    <?php echo html::select('JkTask', array('' => ''), '', "class='form-control chosen'"); ?>
+                    <?php echo html::select('jkTask', array('' => ''), '', "class='form-control chosen'"); ?>
                   </div>
                 </div>
               </div>
             </td>
           </tr>
           <tr id="gitlabServerTR">
-            <th><?php echo $lang->job->server; ?></th>
+            <th></th>
             <td>
-                <?php echo 'gitlabServer'; ?>
+                <?php echo $lang->job->engineTips->success; ?>
             </td>
           </tr>
 

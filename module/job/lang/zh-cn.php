@@ -76,6 +76,6 @@ $lang->job->engineList['gitlab']  = 'GitLab';
 $lang->job->engineList['jenkins'] = 'Jenkins';
 
 $lang->job->engineTips = new stdclass;
-$lang->job->engineTips->success = '构建引擎将使用GitLab项目内置的流水线';
-$lang->job->engineTips->error   = '当前GitLab项目内没有可用的流水线，请先前往GitLab配置';
+$lang->job->engineTips->success = '构建引擎将使用GitLab项目内置的流水线.';
+$lang->job->engineTips->error   = '当前GitLab项目内没有可用的流水线，请先前往GitLab配置.';
 
