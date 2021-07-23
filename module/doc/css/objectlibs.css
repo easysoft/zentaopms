@@ -18,15 +18,9 @@
 #sidebar {width: 275px;}
 #sidebar>.cell {width: 100%;}
 #sidebar>.sidebar-toggle {left: 3px; right: auto;}
-#project, #product, #custom, #book {min-height: 160px;}
-#title .menu-title {font-size: 15px; font-weight: 600; position: relative; padding: 2px 0 2px 15px;list-style: none;}
-#title .dropdown-menu-book {left: -67px; top: 38px;}
-#title .dropdown-menu-doc {left: -80px; top: 38px;}
 .hide-sidebar #sidebar>.cell {left: -270px;}
 .hide-sidebar #sidebar>.sidebar-toggle>.icon:before {content: "\e314";}
 .detail.empty {line-height: 200px;}
 .main-col+.side-col {padding-left: 16px;}
 .main-col iframe {min-height: 380px;}
-.menu-actions {position: absolute; top: 0; right: 0; padding: 7px 8px;}
-.menu-actions i {font-size: 15px; color: #8c8c8c;}
 .article-content .keywords {margin-bottom: 15px;}
