@@ -921,6 +921,12 @@ class doc extends control
             $doc = $this->doc->getById($docID, $version, true);
             if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
 
+            if($doc->keywords)
+            {
+                $doc->keywords = preg_replace("/(\n)|(\s)|(\t)|(\')|(')|(，)/", ',', $doc->keywords);
+                $doc->keywords = explode(',', $doc->keywords);
+            }
+
             if($doc->contentType == 'markdown')
             {
                 $doc->content = commonModel::processMarkdown($doc->content);

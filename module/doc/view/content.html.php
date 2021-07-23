@@ -66,6 +66,13 @@ $sessionString .= session_name() . '=' . session_id();
           </div>
         </div>
         <div class="detail-content article-content">
+          <?php if($doc->keywords):?>
+          <p>
+            <?php foreach($doc->keywords as $keywords):?>
+            <?php if($keywords) echo "<span class='label label-outline'>$keywords</span>";?>
+            <?php endforeach;?>
+          </p>
+          <?php endif;?>
           <?php
           if($doc->type == 'url')
           {
@@ -138,14 +145,6 @@ $sessionString .= session_name() . '=' . session_id();
       </details>
     </div>
     <?php endif;?>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->keywords;?></summary>
-        <div class="detail-content">
-          <?php echo !empty($doc->keywords) ? $doc->keywords : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
-        </div>
-      </details>
-    </div>
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->basicInfo;?></summary>

@@ -91,19 +91,20 @@ $lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->collectAction = 'Add Favorite';
 
-$lang->doc->libName        = 'Document Library';
-$lang->doc->libType        = 'Category';
-$lang->doc->custom         = 'Custom Document Library';
-$lang->doc->customAB       = 'Custom Doc Lib';
-$lang->doc->createLib      = 'Create Document Library';
-$lang->doc->allLibs        = 'Library List';
-$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
-$lang->doc->showFiles      = 'Attachments';
-$lang->doc->editLib        = 'Edit Document Library';
-$lang->doc->deleteLib      = 'Delete Document Library';
-$lang->doc->fixedMenu      = 'Fix to Menu';
-$lang->doc->removeMenu     = 'Remove from Menu';
-$lang->doc->search         = 'Search';
+$lang->doc->libName      = 'Document Library';
+$lang->doc->libType      = 'Category';
+$lang->doc->custom       = 'Custom Document Library';
+$lang->doc->customAB     = 'Custom Doc Lib';
+$lang->doc->createLib    = 'Create Document Library';
+$lang->doc->allLibs      = 'Library List';
+$lang->doc->objectLibs   = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
+$lang->doc->showFiles    = 'Attachments';
+$lang->doc->editLib      = 'Edit Document Library';
+$lang->doc->deleteLib    = 'Delete Document Library';
+$lang->doc->fixedMenu    = 'Fix to Menu';
+$lang->doc->removeMenu   = 'Remove from Menu';
+$lang->doc->search       = 'Search';
+$lang->doc->keywordsTips = 'Please use commas to separate multiple keywords.';
 
 global $config;
 /* Query condition list. */
