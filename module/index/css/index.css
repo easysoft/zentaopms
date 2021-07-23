@@ -84,6 +84,7 @@ body.menu-hide {padding-left: 0;}
 #globalBarLogo a:first-child {margin-right: 10px;}
 #globalBarLogo a {float: right; margin: 0px 2px;}
 #globalBarLogo a .icon {font-size: 24px; color: #16a8f8;}
+#globalBarLogo a .version {font-size: 13px; position: relative; bottom: 3px;}
 
 #searchbox a {float: left; width: 100%;}
 #searchbox a:hover {color: white;}
