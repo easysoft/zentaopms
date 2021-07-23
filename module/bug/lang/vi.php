@@ -59,6 +59,7 @@ $lang->bug->resolvedBuild    = 'Bản dựng';
 $lang->bug->resolvedDate     = 'Ngày giải quyết';
 $lang->bug->resolvedDateAB   = 'Ngày giải quyết';
 $lang->bug->deadline         = 'Hạn chót';
+$lang->bug->deadlineAB       = 'Hạn chót';
 $lang->bug->plan             = 'Kế hoạch';
 $lang->bug->closedBy         = 'Người đóng';
 $lang->bug->closedDate       = 'Ngày đóng';
@@ -78,6 +79,7 @@ $lang->bug->lastEditedDate   = 'Ngày sửa';
 $lang->bug->fromCase         = 'Từ tình huống';
 $lang->bug->toCase           = 'Tới tình huống';
 $lang->bug->colorTag         = 'Màu';
+$lang->bug->repairRate       = 'Repair Rate';
 
 /* Method list. */
 $lang->bug->index              = 'Trang Bug';

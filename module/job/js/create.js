@@ -1,6 +1,12 @@
 $('#repo').change(function()
 {
     var repoID = $(this).val();
+    $.getJSON(createLink('job', 'ajaxGetProductByRepo', 'repoID=' + repoID), function(product)
+      {
+        console.log(product);
+      }
+    );
+
     var type   = 'Git';
     if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
 
@@ -82,27 +88,35 @@ $('#triggerType').change(function()
     }
 });
 
-$('#jkHost').change(function()
+$('#jkServer').change(function()
 {
     var jenkinsID = $(this).val();
-    $('#jkJobBox #jkJob').remove();
-    $('#jkJobBox #jkJob_chosen').remove();
-    $('#jkJobBox .input-group').append("<div class='load-indicator loading'></div>");
-    $.getJSON(createLink('jenkins', 'ajaxGetTasks', 'jenkinsID=' + jenkinsID), function(tasks)
+    $('#jenkinsServerTR #jkTask').remove();
+    $('#jenkinsServerTR #jkTask_chosen').remove();
+    $('#jenkinsServerTR .input-group').append("<div class='load-indicator loading'></div>");
+    $.getJSON(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
     {
-        html  = "<select id='jkJob' name='jkJob' class='form-control'>";
+        html  = "<select id='jkTask' name='jkTask' class='form-control'>";
         for(taskKey in tasks)
         {
             var task = tasks[taskKey];
             html += "<option value='" + taskKey + "'>" + task + "</option>";
         }
         html += '</select>';
-        $('#jkJobBox .loading').remove();
-        $('#jkJobBox .input-group').append(html);
+        $('#jenkinsServerTR .loading').remove();
+        $('#jenkinsServerTR .input-group').append(html);
 
-        $('#jkJobBox #jkJob').chosen({drop_direction: 'auto'});
+        $('#jenkinsServerTR #jkTask').chosen({drop_direction: 'auto'});
     })
 })
+
+$('#engine').change(function()
+{
+    $('#jenkinsServerTR').toggle($('#engine').val() == 'jenkins');
+    $('#gitlabServerTR').toggle($('#engine').val() == 'gitlab');
+});
+
+$('#engine').change();
 
 $(function()
 {

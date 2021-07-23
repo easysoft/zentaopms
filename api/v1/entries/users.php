@@ -11,7 +11,7 @@ class usersEntry extends entry
     public function get()
     {
         $control = $this->loadController('company', 'browse');
-        $control->browse();
+        $control->browse('inside', 0, $this->param('type', 'bydept'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
@@ -19,7 +19,7 @@ class usersEntry extends entry
             $users  = $data->data->users;
             $pager  = $data->data->pager;
             $result = array();
-            foreach($users as $user) $result[] = $user;
+            foreach($users as $user) $result[] = $this->format($user, 'locked:time');
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'users' => $result));
         }
 
@@ -50,6 +50,6 @@ class usersEntry extends entry
         $user = $this->loadModel('user')->getByID($data->id, 'id');
         unset($user->password);
 
-        $this->send(201, $user);
+        $this->send(201, $this->format($user, 'last:time,locked:time'));
     }
 }

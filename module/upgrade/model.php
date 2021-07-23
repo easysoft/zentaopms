@@ -4555,24 +4555,29 @@ class upgradeModel extends model
         $minRealBegan        = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('started')->orderBy('date_asc')->fetch('date');
         $maxRealEnd          = $this->dao->select('date')->from(TABLE_ACTION)->where('objectID')->in($linkedSprintIdList)->andWhere('objectType')->eq('project')->andWhere('action')->eq('closed')->orderBy('date_desc')->fetch('date');
 
-        $data = new stdClass();
-        $data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
-
-        $projectStatus = $this->dao->select('status')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('status');
-        if($projectStatus == 'closed')
+        /* Historical projects are used as the start and end dates of the updated projects and programs when performing upgrades. */
+        if($_POST['projectType'] == 'execution')
         {
-            $data->realEnd    = substr($maxRealEnd, 0, 10);
-            $data->closedDate = $maxRealEnd;
-        }
+            $data = new stdClass();
+            $data->realBegan = $minRealBegan ? substr($minRealBegan, 0, 10) : '0000-00-00';
 
-        if($minBeginDate != $project->begin or $maxEndDate != $project->end)
-        {
-            $data->begin = $minBeginDate;
-            $data->end   = $maxEndDate;
-            $data->days  = $this->computeDaysDelta($data->begin, $data->end);
-        }
+            $projectStatus = $this->dao->select('status')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('status');
+            if($projectStatus == 'closed')
+            {
+                $data->realEnd    = substr($maxRealEnd, 0, 10);
+                $data->closedDate = $maxRealEnd;
+            }
 
-        $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
+            if($minBeginDate != $project->begin or $maxEndDate != $project->end)
+            {
+                $data->begin = $minBeginDate;
+                $data->end   = $maxEndDate;
+                $data->days  = $this->computeDaysDelta($data->begin, $data->end);
+            }
+
+            $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
+            $this->dao->update(TABLE_PROGRAM)->data($data)->where('id')->eq($programID)->exec();
+        }
 
         /* Set product and project relation. */
         foreach($productIdList as $productID)

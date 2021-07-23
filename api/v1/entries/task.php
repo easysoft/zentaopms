@@ -15,7 +15,7 @@ class taskEntry extends Entry
 
         $data = $this->getData();
         $task = $data->data->task;
-        $this->send(200, $task);
+        $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
     }
 
     public function put($taskID)
@@ -31,7 +31,7 @@ class taskEntry extends Entry
 
         $this->getData();
         $task = $this->task->getByID($taskID);
-        $this->send(200, $task);
+        $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
     }
 
     public function delete($taskID)

@@ -68,6 +68,7 @@ $lang->doc->myCollection = '我的收藏';
 
 /* 方法列表。*/
 $lang->doc->index            = '文档主页';
+$lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
 $lang->doc->edit             = '编辑文档';
 $lang->doc->delete           = '删除文档';
@@ -86,6 +87,7 @@ $lang->doc->catalogName      = '目录名称';
 $lang->doc->collect          = '收藏';
 $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '删除附件';
+$lang->doc->menuTitle        = '目录';
 
 $lang->doc->collectAction = '收藏文档';
 
@@ -102,6 +104,7 @@ $lang->doc->deleteLib      = '删除文档库';
 $lang->doc->fixedMenu      = '固定到菜单栏';
 $lang->doc->removeMenu     = '从菜单栏移除';
 $lang->doc->search         = '搜索';
+$lang->doc->keywordsTips   = '多个关键字请用逗号分隔。';
 
 global $config;
 /* 查询条件列表 */

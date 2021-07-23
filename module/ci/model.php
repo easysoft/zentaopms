@@ -28,10 +28,10 @@ class ciModel extends model
      */
     public function checkCompileStatus()
     {
-        $compiles = $this->dao->select('t1.*, t2.jkJob, t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')
+        $compiles = $this->dao->select('t1.*, t2.pipeline, t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')
             ->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
-            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t2.jkHost=t3.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t2.server=t3.id')
             ->where('t1.status')->ne('success')
             ->andWhere('t1.status')->ne('failure')
             ->andWhere('t1.status')->ne('create_fail')
@@ -68,7 +68,7 @@ class ciModel extends model
         $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
         if(strripos($response, "404") > -1)
         {
-            $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->jkJob, $compile->queue);
+            $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->pipeline, $compile->queue);
             $response = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
             if($response)
             {
@@ -80,7 +80,7 @@ class ciModel extends model
                 if(empty($result)) return false;
                 $this->updateBuildStatus($compile, $result);
 
-                $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $buildNumber);
+                $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->pipeline, $buildNumber);
                 $response = common::http($logUrl, '', array(CURLOPT_USERPWD => $userPWD));
                 $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
             }

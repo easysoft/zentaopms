@@ -35,7 +35,7 @@ class jobModel extends model
     {
         return $this->dao->select('t1.*, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
-            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t1.jkHost=t3.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t1.server=t3.id')
             ->where('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -119,6 +119,23 @@ class jobModel extends model
             ->add('createdDate', helper::now())
             ->remove('repoType')
             ->get();
+
+        if($job->engine == 'jenkins')
+        {
+            $job->server   = $job->jkServer;
+            $job->pipeline = $job->jkTask;
+        }
+
+        if(strtolower($job->engine) == 'gitlab')
+        {
+            $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
+            $job->server   = $repo->gitlab;
+            $job->pipeline = $repo->project;
+        }
+
+        unset($job->jkServer);
+        unset($job->jkTask);
+
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
         $job->svnDir = '';
@@ -158,12 +175,15 @@ class jobModel extends model
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
-
             ->autoCheck()
             ->exec();
 
+        if(dao::isError()) return dao::getError();
+
         $id = $this->dao->lastInsertId();
-        $this->initJob($id, $job, $this->post->repoType);
+        if($id == 0) return false;
+
+        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $this->post->repoType);
         return $id;
     }
 
@@ -288,9 +308,9 @@ class jobModel extends model
      */
     public function exec($id)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.jkJob,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
-            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.jkHost=t2.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
             ->fetch();
         if(!$job) return false;

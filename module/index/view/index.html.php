@@ -68,7 +68,7 @@ js::set('defaultOpen', $open);
   <div id='poweredBy'>
     <div id="globalBarLogo">
       <a href='javascript:void(0)' id='proLink' class='btn btn-link' style='color: red;'><?php echo $lang->index->upgrade;?> <i class='text-danger icon-pro-version'></i></a>
-      <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $config->version;?>'><i class="icon icon-zentao" style="font-size: 24px;"></i></a>
+      <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $config->version;?>'><i class="icon icon-zentao" style="font-size: 24px;"></i> <?php echo $config->version;?></a>
       <!--<a href='javascript:void(0)' class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>-->
       <div id="globalSearchDiv">
         <div class="input-group">

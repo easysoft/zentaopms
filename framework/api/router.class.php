@@ -88,7 +88,7 @@ class api extends router
         }
         else
         {
-            $this->path = rtrim((strpos($_SERVER['REQUEST_URI'], '?') > 0 ? strstr($_SERVER['REQUEST_URI'], '?', true) : $_SERVER['REQUEST_URI']), '/');
+            $this->path = trim((strpos($_SERVER['REQUEST_URI'], '?') > 0 ? strstr($_SERVER['REQUEST_URI'], '?', true) : $_SERVER['REQUEST_URI']), '/');
         }
 
         $dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
@@ -96,8 +96,8 @@ class api extends router
 
         $subPos = strpos($this->path, '/', 1);
 
-        $this->version = substr($this->path, 1, $subPos-1);
-        $this->path    = substr($this->path, $subPos);
+        $this->version = $subPos ? substr($this->path, 1, $subPos - 1) : '';
+        $this->path    = $subPos ? substr($this->path, $subPos) : $this->path;
     }
 
     /**
@@ -128,15 +128,15 @@ class api extends router
             $this->action = strtolower($_SERVER['REQUEST_METHOD']);
 
             /* Set params */
-            foreach($this->paramNames as $name) 
+            foreach($this->paramNames as $name)
             {
                 if(!isset($paramValues[$name])) continue;
 
-                if(isset($this->paramNamesPath[$name])) 
+                if(isset($this->paramNamesPath[$name]))
                 {
                     $this->params[$name] = explode('/', urldecode($paramValues[$name]));
-                } 
-                else 
+                }
+                else
                 {
                     $this->params[$name] = urldecode($paramValues[$name]);
                 }
@@ -220,6 +220,7 @@ class api extends router
         $data->status = isset($output->status) ? $output->status : $output->result;
         if(isset($output->message)) $data->message = $output->message;
         if(isset($output->data))    $data->data    = json_decode($output->data);
+        if(isset($output->id))      $data->id      = $output->id;
         $output = json_encode($data);
 
         unset($_SESSION['ENTRY_CODE']);

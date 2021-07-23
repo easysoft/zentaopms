@@ -116,13 +116,13 @@ class jenkins extends control
     }
 
     /**
-     * Ajax get tasks.
+     * AJAX: Get jenkins tasks.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function ajaxGetTasks($id)
+    public function ajaxGetJenkinsTasks($id)
     {
         if(empty($id)) die(json_encode(array('' => '')));
 

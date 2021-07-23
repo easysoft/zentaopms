@@ -53,9 +53,9 @@ $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard
 $lang->upgrade->afterDeleted  = 'File is not deleted. Please refresh after you delete it.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
-$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
-$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5 upgrade';
 $lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
 <p>ZenTao version 15.0 has major upgrade of features, including:</p>
@@ -93,11 +93,11 @@ EOD;
 $lang->upgrade->to15Mode['classic'] = 'Keep the classic mode';
 $lang->upgrade->to15Mode['new']     = 'Use the program mode';
 
-$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
+$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the Program mode in the Admin-Custom-Custom later.';
 $lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
 
 $lang->upgrade->line          = 'Product Line';
-$lang->upgrade->allLines      = "All {$lang->productComon} Lines";
+$lang->upgrade->allLines      = "All Product Lines";
 $lang->upgrade->program       = 'Merge Project';
 $lang->upgrade->existProgram  = 'Existing programs';
 $lang->upgrade->existProject  = 'Existing projects';

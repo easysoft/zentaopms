@@ -1,3 +1,8 @@
+$(function()
+{
+    if($.cookie('isFullScreen') == 1) fullScreen();
+})
+
 /**
  * Ajax delete doc.
  *
@@ -30,3 +35,47 @@ function deleteFile(fileID)
     if(!fileID) return;
     hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
 }
+
+/**
+ * Display the document in full screen.
+ *
+ * @access public
+ * @return void
+ */
+function fullScreen()
+{
+    var element       = document.getElementById("content");
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    if(requestMethod)
+    {
+        $('#content .actions').addClass('hidden');
+        requestMethod.call(element);
+        $.cookie('isFullScreen', 1);
+    }
+}
+
+function exitFullScreen()
+{
+    $('#content .actions').removeClass('hidden');
+    $.cookie('isFullScreen', 0);
+}
+
+document.addEventListener("fullscreenchange", function (e)
+{
+    if(!document.fullscreenElement) exitFullScreen();
+})
+
+document.addEventListener("webkitfullscreenchange", function (e)
+{
+    if(!document.webkitFullscreenElement) exitFullScreen();
+})
+
+document.addEventListener("mozfullscreenchange", function (e)
+{
+    if(!document.mozFullScreenElement) exitFullScreen();
+})
+
+document.addEventListener("msfullscreenChange", function (e)
+{
+    if(!document.msfullscreenElement) exitFullScreen();
+})

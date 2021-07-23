@@ -98,9 +98,9 @@ class bug extends control
     {
         $this->loadModel('datatable');
 
-        $products = $this->loadModel('product')->getPairs('noclosed');
+        $products  = $this->loadModel('product')->getPairs('noclosed');
         $productID = $this->product->saveState($productID, $products);
-        $this->qa->setMenu($products, $productID);
+        $this->qa->setMenu($products, $productID, $branch);
 
         /* Set browse type. */
         $browseType = strtolower($browseType);

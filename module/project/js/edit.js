@@ -15,8 +15,16 @@ $(function()
             {
                 changed = confirm(data.message);
                 if(changed)
-                {
-                    $('#productsBox select').prop('disabled', true).trigger("chosen:updated");
+                {  
+                    /* Select change to the new program products. */
+                    var lastProductSelect = $('#productsBox .input-group:last select:first');
+                    if($(lastProductSelect).val() == 0) {
+                        var lastProductSelectID = $(lastProductSelect).attr("id");
+                        var lastProductSelectName = $(lastProductSelect).attr("name");
+                        $('#'+lastProductSelectID+'_chosen').remove();
+                        $(lastProductSelect).replaceWith(data.newProducts);
+                        $('#productsBox .input-group:last select:first').attr('name', lastProductSelectName).attr('id', lastProductSelectID).chosen();
+                    }
                 }
             }
 

@@ -866,7 +866,7 @@ class projectModel extends model
     {
         $oldProject        = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $linkedProducts    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        $_POST['products'] = isset($_POST['products']) ? $_POST['products'] : $linkedProducts;
+        $_POST['products'] = isset($_POST['products']) ? array_filter($_POST['products']) : $linkedProducts;
 
         $project = fixer::input('post')
             ->setDefault('team', substr($this->post->name, 0, 30))
@@ -1225,7 +1225,7 @@ class projectModel extends model
         $newTopProgram = $this->program->getTopByID($newProgram);
         if($oldTopProgram != $newTopProgram)
         {
-            foreach($products as $productID => $product)
+            foreach($products as $productID)
             {
                 $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
                 $this->dao->update(TABLE_PRODUCT)->set('program')->eq((int)$newTopProgram)->where('id')->eq((int)$productID)->exec();

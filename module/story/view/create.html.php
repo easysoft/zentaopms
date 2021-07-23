@@ -17,7 +17,6 @@
 </style>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
-<?php js::set('gitlabProjects', $gitlabProjects);?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
@@ -250,13 +249,6 @@
             <td colspan="4">
               <?php echo html::input('keywords', $keywords, 'class="form-control"');?>
             </td>
-          </tr>
-          <?php endif;?>
-          <?php if(!empty($gitlabProjects)):?>
-          <tr>
-            <th><?php echo $lang->story->sync2Gitlab;?></th>
-            <td><?php echo html::select('gitlab', $gitlabList, '', "class='form-control chosen'");?></td>
-            <td><?php echo html::select('gitlabProject', '', '', "class='w-50px form-control chosen'");?></td>
           </tr>
           <?php endif;?>
         </tbody>

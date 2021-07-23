@@ -1,3 +1,6 @@
+<style>
+.title {font-size: 20px !important;}
+</style>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
@@ -5,7 +8,7 @@ $sessionString .= session_name() . '=' . session_id();
 ?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
-    <div class="cell">
+    <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
           <div class="title"><?php echo $doc->title;?></div>
@@ -31,6 +34,7 @@ $sessionString .= session_name() . '=' . session_id();
           </div>
           <div class="actions">
             <?php
+            echo html::a("javascript:fullScreen()", '<i class="icon-fullscreen"></i>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");
             if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link' data-app='{$this->app->openApp}'");
             if(common::hasPriv('doc', 'delete'))
             {
@@ -62,6 +66,13 @@ $sessionString .= session_name() . '=' . session_id();
           </div>
         </div>
         <div class="detail-content article-content">
+          <?php if($doc->keywords):?>
+          <p class='keywords'>
+            <?php foreach($doc->keywords as $keywords):?>
+            <?php if($keywords) echo "<span class='label label-outline'>$keywords</span>";?>
+            <?php endforeach;?>
+          </p>
+          <?php endif;?>
           <?php
           if($doc->type == 'url')
           {
@@ -134,14 +145,6 @@ $sessionString .= session_name() . '=' . session_id();
       </details>
     </div>
     <?php endif;?>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->keywords;?></summary>
-        <div class="detail-content">
-          <?php echo !empty($doc->keywords) ? $doc->keywords : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
-        </div>
-      </details>
-    </div>
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->basicInfo;?></summary>

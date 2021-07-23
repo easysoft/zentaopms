@@ -874,6 +874,7 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
         $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->checkDelayBugs($bugs);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -2985,7 +2986,7 @@ class execution extends control
 
         $this->loadModel('project');
         $project = $this->project->getByID($this->session->project);
-        if($project->model == 'waterfall') $this->lang->executionCommon = $this->lang->project->stage;
+        if(!empty($project->model) and $project->model == 'waterfall') $this->lang->executionCommon = $this->lang->project->stage;
 
         $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->executionCommon;
 

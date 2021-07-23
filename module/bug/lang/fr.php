@@ -59,6 +59,7 @@ $lang->bug->resolvedBuild    = 'Build';
 $lang->bug->resolvedDate     = 'Date Correction';
 $lang->bug->resolvedDateAB   = 'Date Correction';
 $lang->bug->deadline         = 'Date Butoir';
+$lang->bug->deadlineAB       = 'Butoir';
 $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'Fermé par';
 $lang->bug->closedDate       = 'Date Fermeture';
@@ -78,6 +79,7 @@ $lang->bug->lastEditedDate   = 'Date Modif';
 $lang->bug->fromCase         = 'du CasTest';
 $lang->bug->toCase           = 'vers CasTest';
 $lang->bug->colorTag         = 'Couleur';
+$lang->bug->repairRate       = 'Repair Rate';
 
 /* 方法列表。*/
 $lang->bug->index              = 'Accueil Bug';

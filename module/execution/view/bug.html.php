@@ -59,6 +59,7 @@
           <th class='c-pri'>     <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
           <th>                   <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
           <th class='c-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-70px text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->bug->deadlineAB);?></th>
           <th class='w-110px c-user'><?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
           <th class='w-100px'><?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th class='w-100px'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
@@ -101,6 +102,7 @@
         <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
         <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->openApp}");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
+        <td class="text-center <?php echo (isset($bug->delay) and $bug->status == 'active') ? 'delayed' : '';?>"><?php if(substr($bug->deadline, 0, 4) > 0) echo substr($bug->deadline, 5, 6);?></td>
         <td class='c-assignedTo has-btn text-left'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
         <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>

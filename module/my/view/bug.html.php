@@ -61,13 +61,16 @@
           <?php if($type != 'openedBy'): ?>
           <th class='w-90px'> <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <?php endif;?>
+          <?php if($app->rawMethod == 'work'):?>
+          <th class='w-90px text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->bug->deadline);?></th>
+          <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
-          <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->bug->assignedTo);?></th>
+          <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <?php endif;?>
           <?php if($type != 'resolvedBy'): ?>
-          <th class='w-100px'><?php common::printOrderLink('resolvedBy',  $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+          <th class='w-100px'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <?php endif;?>
-          <th class='w-100px'><?php common::printOrderLink('resolution',  $orderBy, $vars, $lang->bug->resolutionAB);?></th>
+          <th class='w-100px'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='c-actions-5'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -104,10 +107,14 @@
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('product', explode('-', $config->productLink)[1], "productID=$bug->product"), $bug->productName, null, "title={$bug->productName}");?></td>
+          <?php $param = $config->productLink == 'product-all' ? '' : "productID=$bug->product";?>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('product', explode('-', $config->productLink)[1], $param), $bug->productName, null, "title={$bug->productName}");?></td>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <?php if($type != 'openedBy'): ?>
           <td><?php echo zget($users, $bug->openedBy);?></td>
+          <?php endif;?>
+          <?php if($app->rawMethod == 'work'):?>
+          <td class="text-center <?php echo (isset($bug->delay) and $bug->status == 'active') ? 'delayed' : '';?>"><?php echo $bug->deadline;?></td>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <td class='c-assignedTo has-btn'><?php $this->bug->printAssignedHtml($bug, $users);?></td>

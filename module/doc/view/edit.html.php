@@ -24,37 +24,37 @@
       <div class='pull-right'><?php echo html::a('###', $lang->save, '', 'id="top-submit" class="btn btn-primary"');?></div>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <tr>
           <th class='w-110px'><?php echo $lang->doc->lib;?></th>
           <td> <?php echo html::select('lib', $libs, $doc->lib, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td><td></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->doc->module;?></th>
           <td>
             <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->module, "class='form-control chosen'");?></span>
           </td><td></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->doc->title;?></th>
           <td colspan='2'><?php echo html::input('title', $doc->title, "class='form-control' required");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->doc->keywords;?></th>
-          <td colspan='2'><?php echo html::input('keywords', $doc->keywords, "class='form-control'");?></td>
+          <td colspan='2'><?php echo html::input('keywords', $doc->keywords, "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->doc->type;?></th>
           <td><?php echo html::radio('type', $lang->doc->types, $doc->type);?></td>
-        </tr> 
+        </tr>
         <tr id='contentBox' <?php if($doc->type == 'url') echo "class='hidden'"?>>
           <th><?php echo $lang->doc->content;?></th>
           <td colspan='2'><?php echo html::textarea('content', $doc->type == 'url' ? '' : htmlspecialchars($doc->content), "style='width:100%; height:200px'") . html::hidden('contentType', $doc->contentType);?></td>
-        </tr>  
+        </tr>
         <tr id='urlBox' <?php if($doc->type != 'url') echo "class='hidden'"?>>
           <th><?php echo $lang->doc->url;?></th>
           <td colspan='2'><?php echo html::input('url', $doc->type == 'url' ? $doc->content : '', "class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr id='fileBox'>
           <th><?php echo $lang->doc->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>

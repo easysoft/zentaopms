@@ -15,7 +15,7 @@ class executionEntry extends Entry
 
         $data      = $this->getData();
         $execution = $data->data->execution;
-        $this->send(200, $execution);
+        $this->send(200, $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
     }
 
     public function put($executionID)
@@ -36,7 +36,7 @@ class executionEntry extends Entry
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $execution = $this->execution->getByID($executionID);
-        $this->sendSuccess(200, $execution);
+        $this->send(200, $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
     }
 
     public function delete($executionID)

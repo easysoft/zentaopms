@@ -60,6 +60,7 @@ $lang->bug->resolvedBuild    = 'Build';
 $lang->bug->resolvedDate     = 'Resolved Date';
 $lang->bug->resolvedDateAB   = 'ResolvedDate';
 $lang->bug->deadline         = 'Deadline';
+$lang->bug->deadlineAB       = 'Deadline';
 $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'ClosedBy';
 $lang->bug->closedDate       = 'ClosedDate';
@@ -79,6 +80,7 @@ $lang->bug->lastEditedDate   = 'EditedDate';
 $lang->bug->fromCase         = 'From Case';
 $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
+$lang->bug->repairRate       = 'Repair Rate';
 
 /* Method list. */
 $lang->bug->index              = 'Bug Home';

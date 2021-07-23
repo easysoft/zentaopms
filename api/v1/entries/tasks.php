@@ -11,7 +11,7 @@ class tasksEntry extends entry
     public function get($executionID)
     {
         $control = $this->loadController('execution', 'task');
-        $control->task($executionID);
+        $control->task($executionID, 'all');
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
@@ -21,7 +21,7 @@ class tasksEntry extends entry
             $result = array();
             foreach($tasks as $task)
             {
-                $result[] = $task;
+                $result[] = $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'tasks' => $result));
         }
@@ -46,6 +46,6 @@ class tasksEntry extends entry
 
         $task = $this->loadModel('task')->getByID($data->id);
 
-        $this->send(201, $task);
+        $this->send(201, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
     }
 }

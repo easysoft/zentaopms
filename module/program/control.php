@@ -28,7 +28,7 @@ class program extends control
      */
     public function browse($status = 'all', $orderBy = 'order_asc')
     {
-        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-secondary'");
+        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i>" . $this->lang->program->create, '', "class='btn btn-primary'");
 
         $this->session->set('programList', $this->app->getURI(true), 'program');
         $this->session->set('projectList', $this->app->getURI(true), 'project');
@@ -59,6 +59,7 @@ class program extends control
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
         $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->usersAvatar = $this->user->getAvatarPairs();
         $this->view->programType = $programType;
         $this->view->PMList      = $PMList;
 

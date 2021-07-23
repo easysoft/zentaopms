@@ -16,8 +16,13 @@ class executionsEntry extends entry
 
         if(isset($data->status) and $data->status == 'success')
         {
-            $pager = $data->data->pager;
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'executions' => $data->data->executionStats));
+            $pager  = $data->data->pager;
+            $result = array();
+            foreach($data->data->executionStats as $execution)
+            {
+                $result[] = $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
+            }
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'executions' => $result));
         }
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
@@ -46,6 +51,6 @@ class executionsEntry extends entry
 
         $execution = $this->loadModel('execution')->getByID($data->id);
 
-        $this->send(200, $execution);
+        $this->send(201, $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
     }
 }

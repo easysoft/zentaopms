@@ -30,6 +30,7 @@ $lang->upgrade->warnningContent = <<<EOT
    ví dụ:  mysqldump -u root -p zentao >zentao.bak
 </pre>
 EOT;
+
 $lang->upgrade->createFileWinCMD   = 'Mở dòng lệnh và xử lý <strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = 'Xử lý dòng lệnh: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions</h4>
@@ -52,9 +53,10 @@ $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard
 $lang->upgrade->afterDeleted  = 'File không là deleted. Vui lòng refresh after you xóa it.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
-$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
-$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5 upgrade';
+$lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
 <p>ZenTao version 15.0 has major upgrade of features, including:</p>
 <p><strong>1. Add the concept of Program</strong></p>
@@ -73,27 +75,9 @@ $lang->upgrade->to15Desc      = <<<EOD
 <p><strong>How do you like to use ZenTao?</strong></p>
 EOD;
 
-$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
-$lang->upgrade->to15Mode['new']     = 'New program management mode';
 
-$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
-$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
 
-$lang->upgrade->demoURL       = 'http://zentao20.demo.zentao.net';
-$lang->upgrade->videoURL      = 'https://qc.zentao.net/zentao20.mp4';
-$lang->upgrade->to20Tips      = 'Zentao 20 upgrade tips';
-$lang->upgrade->to20Button    = 'I have done the backup, start the upgrade!！';
-$lang->upgrade->to20TipsHeader= "<p>Dear user, thank you for your support of ZenTao。Since version 20, Zendo has been fully upgraded to a universal project management platform. Please see the following video for more information：</p><br />";
-$lang->upgrade->to20Desc      = <<<EOD
-<div class='text-warning'>
-  <p>Friendly reminder：</p>
-  <ol>
-    <li>You can start by installing a version 20 of ZenTao to experience the concepts and processes inside.</li>
-    <li>Version 20 of Zendo has made some major changes, please make a backup before upgrading.</li>
-    <li>Please feel free to upgrade, even if the first upgrade is not in place, subsequent adjustments can be made without affecting system data.</li>
-  </ol>
-</div>
-EOD;
+
 $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>Next, ZenTao will migrate the existing data of {$lang->productCommon} and {$lang->projectCommon} to Program and Project. It will be one of the followings:</p><br />
 <h4>1. Manage {$lang->productCommon} and {$lang->projectCommon} by {$lang->productCommon} Line </h4>
@@ -106,8 +90,14 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>You can set {$lang->projectCommon}s as one new project.</p>
 EOD;
 
+$lang->upgrade->to15Mode['classic'] = 'Keep the classic mode';
+$lang->upgrade->to15Mode['new']     = 'Use the program mode';
+
+$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the Program mode in the Admin-Custom-Custom later.';
+$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
+
 $lang->upgrade->line          = 'Product Line';
-$lang->upgrade->allLines      = "All {$lang->productComon} Lines";
+$lang->upgrade->allLines      = "All Product Lines";
 $lang->upgrade->program       = 'Merge Project';
 $lang->upgrade->existProgram  = 'Existing programs';
 $lang->upgrade->existProject  = 'Existing projects';
@@ -131,7 +121,7 @@ $lang->upgrade->mergeByProduct     = "PRODUCT-BASED {$lang->projectCommon}: You 
 $lang->upgrade->mergeByProject     = "Independent {$lang->projectCommon}: You can select several {$lang->projectCommon} and merge them into one large project, or merge them independently";
 $lang->upgrade->mergeByMoreLink    = "{$lang->projectCommon} that relates multiple {$lang->productCommon}: select which project the {$lang->projectCommon} belongs to.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
-$lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrad. Vui lòng create an index.';
+$lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrade. Need create index. Please go [Admin->System->BuildIndex] page to build index.';
 
 $lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
 $lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";
@@ -140,9 +130,9 @@ $lang->upgrade->createProjectTip = <<<EOT
 <p>After the upgrade, the existing {$lang->projectCommon} will be Project in the new version.</p>
 <p>ZenTao will create an item in Execute with the same name of {$lang->projectCommon} according to the data in {$lang->projectCommon}, and move the tasks, stories, and bugs in {$lang->projectCommon} to it.</p>
 EOT;
+
 $lang->upgrade->createExecutionTip = <<<EOT
 <p>ZenTao will upgrade existing {$lang->projectCommon} as execution.</p>
 <p>After the upgrade, the data of existing {$lang->projectCommon} will be in a Project - Execute of the new version .</p>
 EOT;
-
 include dirname(__FILE__) . '/version.php';

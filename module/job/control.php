@@ -86,7 +86,8 @@ class job extends control
         $this->view->repoPairs  = $repoPairs;
         $this->view->repoTypes  = $repoTypes;
         $this->view->products   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
-        $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
+
+        $this->view->jenkinsServerList = $this->loadModel('jenkins')->getPairs();
 
         $this->display();
     }
@@ -129,8 +130,8 @@ class job extends control
         $this->view->repoType   = zget($repoTypes, $job->repo, 'Git');
         $this->view->job        = $job;
         $this->view->products   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
-        $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
-        $this->view->jkJobs     = $this->jenkins->getTasks($job->jkHost);
+        $this->view->serverList = $this->loadModel('jenkins')->getPairs();
+        $this->view->pipelines  = $this->jenkins->getTasks($job->server);
 
         $this->display();
     }
@@ -226,7 +227,7 @@ class job extends control
         $this->view->job     = $job;
         $this->view->compile = $compile;
         $this->view->repo    = $this->loadModel('repo')->getRepoByID($job->repo);
-        $this->view->jenkins = $this->loadModel('jenkins')->getById($job->jkHost);
+        $this->view->jenkins = $this->loadModel('jenkins')->getById($job->server);
         $this->view->product = $this->loadModel('product')->getById($job->product);
         $this->display();
     }
@@ -246,5 +247,37 @@ class job extends control
         $this->app->loadLang('compile');
         echo js::alert(sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $status)));
         die(js::reload('parent'));
+    }
+
+    /**
+     * AJAX: Get product by repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProductByRepo($repoID)
+    {
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        if(empty($repo)) die(json_encode(array(""=>"")));
+
+        $product = $repo->product;
+        if(strpos($product, ','))
+        {
+            $productList     = explode(',', $product);
+            $matchedProducts = array();
+            $productPair     = $this->loadModel('product')->getPairs();
+            foreach($productList as $productLeft)
+            {
+                foreach($productPair as $productRight => $productName)
+                {
+                    if($productLeft == $productRight) $matchedProducts[$productName] = $productRight;
+                }
+            }
+            die(json_encode($matchedProduct));
+        }
+
+        $productName = $this->loadModel('product')->getByID($repo->product)->name;
+        die(json_encode(array($productName => $repo->product)));
     }
 }

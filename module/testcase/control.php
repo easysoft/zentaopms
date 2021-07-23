@@ -1448,7 +1448,7 @@ class testcase extends control
     }
 
     /**
-     * Export templet
+     * Export template.
      *
      * @param  int    $productID
      * @access public
@@ -1505,7 +1505,7 @@ class testcase extends control
             $this->post->set('kind', 'testcase');
             $this->post->set('rows', $rows);
             $this->post->set('extraNum', $num);
-            $this->post->set('fileName', 'templet');
+            $this->post->set('fileName', 'template');
             $this->fetch('file', 'export2csv', $_POST);
         }
 

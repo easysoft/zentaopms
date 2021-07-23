@@ -490,7 +490,7 @@ class productModel extends model
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
-        if(isset($currentProduct->type) and $currentProduct->type != 'normal' and $currentModule != 'testsuite')
+        if(isset($currentProduct->type) and $currentProduct->type != 'normal' and $currentModule != 'testsuite' and $currentModule != 'testreport')
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
             $branches     = $this->loadModel('branch')->getPairs($productID);
@@ -1463,6 +1463,15 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
+        $fixedBugs = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andwhere('status')->eq('closed')
+            ->andWhere('product')->in($productKeys)
+            ->andWhere('resolution')->eq('fixed')
+            ->groupBy('product')
+            ->fetchPairs();
+
         $closedBugs = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -1502,6 +1511,7 @@ class productModel extends model
             $product->bugs         = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
             $product->unResolved   = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
             $product->closedBugs   = isset($closedBugs[$product->id]) ? $closedBugs[$product->id] : 0;
+            $product->fixedBugs    = isset($fixedBugs[$product->id]) ? $fixedBugs[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
             $stats[] = $product;
         }
@@ -1583,6 +1593,121 @@ class productModel extends model
         if($storyType == 'story')       $storyCommon = $this->lang->SRCommon;
 
         return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
+    }
+
+    /**
+     * Statistics program data.
+     *
+     * @param  object $productStats
+     * @access public
+     * @return array
+     */
+    public function statisticProgam($productStats)
+    {
+        $productStructure = array();
+
+        foreach($productStats as $product)
+        {
+            $productStructure[$product->program][$product->line]['products'][$product->id] = $product;
+            if($product->line)
+            {
+                /* Init vars. */
+                if(!isset($productStructure[$product->program][$product->line]['totalRequirements']))  $productStructure[$product->program][$product->line]['totalRequirements']  = 0;
+                if(!isset($productStructure[$product->program][$product->line]['draftRequirments']))   $productStructure[$product->program][$product->line]['draftRequirments']   = 0;
+                if(!isset($productStructure[$product->program][$product->line]['activeRequirments']))  $productStructure[$product->program][$product->line]['activeRequirments']  = 0;
+                if(!isset($productStructure[$product->program][$product->line]['changedRequirments'])) $productStructure[$product->program][$product->line]['changedRequirments'] = 0;
+                if(!isset($productStructure[$product->program][$product->line]['closedRequirements'])) $productStructure[$product->program][$product->line]['closedRequirements'] = 0;
+
+                if(!isset($productStructure[$product->program][$product->line]['totalStories']))   $productStructure[$product->program][$product->line]['totalStories']   = 0;
+                if(!isset($productStructure[$product->program][$product->line]['draftStories']))   $productStructure[$product->program][$product->line]['draftStories']   = 0;
+                if(!isset($productStructure[$product->program][$product->line]['activeStories']))  $productStructure[$product->program][$product->line]['activeStories']  = 0;
+                if(!isset($productStructure[$product->program][$product->line]['changedStories'])) $productStructure[$product->program][$product->line]['changedStories'] = 0;
+                if(!isset($productStructure[$product->program][$product->line]['closedStories']))  $productStructure[$product->program][$product->line]['closedStories']  = 0;
+
+                if(!isset($productStructure[$product->program][$product->line]['unResolvedBugs'])) $productStructure[$product->program][$product->line]['unResolvedBugs'] = 0;
+                if(!isset($productStructure[$product->program][$product->line]['closedBugs']))     $productStructure[$product->program][$product->line]['closedBugs']     = 0;
+                if(!isset($productStructure[$product->program][$product->line]['fixedBugs']))      $productStructure[$product->program][$product->line]['fixedBugs']      = 0;
+
+                if(!isset($productStructure[$product->program][$product->line]['plans']))    $productStructure[$product->program][$product->line]['plans']    = 0;
+                if(!isset($productStructure[$product->program][$product->line]['releases'])) $productStructure[$product->program][$product->line]['releases'] = 0;
+
+                /* Line name. */
+                $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
+
+                /* Requirements. */
+                $productStructure[$product->program][$product->line]['totalRequirements']  += $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
+                $productStructure[$product->program][$product->line]['draftRequirments']   += $product->requirements['draft'];
+                $productStructure[$product->program][$product->line]['activeRequirments']  += $product->requirements['active'];
+                $productStructure[$product->program][$product->line]['changedRequirments'] += $product->requirements['changed'];
+                $productStructure[$product->program][$product->line]['closedRequirements'] += $product->requirements['closed'];
+
+                /* Stories. */
+                $productStructure[$product->program][$product->line]['totalStories']   += $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
+                $productStructure[$product->program][$product->line]['draftStories']   += $product->stories['draft'];
+                $productStructure[$product->program][$product->line]['activeStories']  += $product->stories['active'];
+                $productStructure[$product->program][$product->line]['changedStories'] += $product->stories['changed'];
+                $productStructure[$product->program][$product->line]['closedStories']  += $product->stories['closed'];
+
+                /* Bugs. */
+                $productStructure[$product->program][$product->line]['unResolvedBugs'] += $product->unResolved;
+                $productStructure[$product->program][$product->line]['closedBugs']     += $product->closedBugs;
+                $productStructure[$product->program][$product->line]['fixedBugs']      += $product->fixedBugs;
+
+                /* Plans and releases. */
+                $productStructure[$product->program][$product->line]['plans']    += $product->plans;
+                $productStructure[$product->program][$product->line]['releases'] += $product->releases;
+            }
+
+            if($product->program)
+            {
+                /* Init vars. */
+                if(!isset($productStructure[$product->program]['totalRequirements']))  $productStructure[$product->program]['totalRequirements']  = 0;
+                if(!isset($productStructure[$product->program]['draftRequirments']))   $productStructure[$product->program]['draftRequirments']   = 0;
+                if(!isset($productStructure[$product->program]['activeRequirments']))  $productStructure[$product->program]['activeRequirments']  = 0;
+                if(!isset($productStructure[$product->program]['changedRequirments'])) $productStructure[$product->program]['changedRequirments'] = 0;
+                if(!isset($productStructure[$product->program]['closedRequirements'])) $productStructure[$product->program]['closedRequirements'] = 0;
+
+                if(!isset($productStructure[$product->program]['totalStories']))   $productStructure[$product->program]['totalStories']   = 0;
+                if(!isset($productStructure[$product->program]['draftStories']))   $productStructure[$product->program]['draftStories']   = 0;
+                if(!isset($productStructure[$product->program]['activeStories']))  $productStructure[$product->program]['activeStories']  = 0;
+                if(!isset($productStructure[$product->program]['changedStories'])) $productStructure[$product->program]['changedStories'] = 0;
+                if(!isset($productStructure[$product->program]['closedStories']))  $productStructure[$product->program]['closedStories']  = 0;
+
+                if(!isset($productStructure[$product->program]['unResolvedBugs'])) $productStructure[$product->program]['unResolvedBugs'] = 0;
+                if(!isset($productStructure[$product->program]['closedBugs']))     $productStructure[$product->program]['closedBugs']     = 0;
+                if(!isset($productStructure[$product->program]['fixedBugs']))      $productStructure[$product->program]['fixedBugs']      = 0;
+
+                if(!isset($productStructure[$product->program]['plans']))    $productStructure[$product->program]['plans']    = 0;
+                if(!isset($productStructure[$product->program]['releases'])) $productStructure[$product->program]['releases'] = 0;
+
+                /* Program name. */
+                $productStructure[$product->program]['programName'] = $product->programName;
+
+                /* Requirements. */
+                $productStructure[$product->program]['totalRequirements']  += $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
+                $productStructure[$product->program]['draftRequirments']   += $product->requirements['draft'];
+                $productStructure[$product->program]['activeRequirments']  += $product->requirements['active'];
+                $productStructure[$product->program]['changedRequirments'] += $product->requirements['changed'];
+                $productStructure[$product->program]['closedRequirements'] += $product->requirements['closed'];
+
+                /* Stories. */
+                $productStructure[$product->program]['totalStories']   += $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
+                $productStructure[$product->program]['draftStories']   += $product->stories['draft'];
+                $productStructure[$product->program]['activeStories']  += $product->stories['active'];
+                $productStructure[$product->program]['changedStories'] += $product->stories['changed'];
+                $productStructure[$product->program]['closedStories']  += $product->stories['closed'];
+
+                /* Bugs. */
+                $productStructure[$product->program]['unResolvedBugs'] += $product->unResolved;
+                $productStructure[$product->program]['closedBugs']     += $product->closedBugs;
+                $productStructure[$product->program]['fixedBugs']      += $product->fixedBugs;
+
+                /* Plans and releases. */
+                $productStructure[$product->program]['plans']    += $product->plans;
+                $productStructure[$product->program]['releases'] += $product->releases;
+            }
+        }
+        return $productStructure;
     }
 
     /**

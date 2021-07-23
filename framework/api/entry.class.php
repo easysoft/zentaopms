@@ -18,7 +18,7 @@ class entry extends baseEntry
  * The baseEntry class file of ZenTao API.
  *
  */
-class baseEntry 
+class baseEntry
 {
     /**
      * 全局对象 $app。
@@ -164,7 +164,7 @@ class baseEntry
     {
         header("Content-type: application/json");
         header("HTTP/1.1 {$this->statusCode[$code]}");
-        echo json_encode($data); 
+        echo json_encode($data);
         exit;
     }
 
@@ -341,8 +341,8 @@ class baseEntry
         $fields = explode(',', $fields);
         foreach($fields as $field)
         {
-            /* 
-             * If the field exists in request body, use it. 
+            /*
+             * If the field exists in request body, use it.
              * Otherwise set default value from $object.
              */
             if(isset($this->requestBody->$field))
@@ -379,6 +379,108 @@ class baseEntry
                 $name   = isset($this->app->lang->$module->$field) ? $this->app->lang->$module->$field : $field;
                 $this->sendError(400, sprintf($this->app->lang->error->notempty, $name));
             }
+        }
+    }
+
+    /**
+     * 格式化数据的字段类型.
+     * Format fields of response data.
+     *
+     * @param  object|array $data
+     * @param  string $fields
+     * @access public
+     * @return object|array
+     */
+    public function format($data, $fields)
+    {
+        if(is_array($data))
+        {
+            foreach($data as $object) $this->formatFields($object, $fields);
+        }
+        $this->formatFields($data, $fields);
+
+        return $data;
+    }
+
+    /**
+     * 格式化对象的字段类型.
+     * Format fields of object.
+     *
+     * @param  object $object
+     * @param  string $fields
+     * @access public
+     * @return object
+     */
+    private function formatFields(&$object, $fields)
+    {
+        $fields = explode(',', $fields);
+
+        foreach($fields as $field)
+        {
+            $field   = explode(':', $field);
+            $key     = $field[0];
+            $type    = $field[1];
+            $isArray = false;
+
+            $pos = strpos($type, ']');
+            if($pos !== FALSE)
+            {
+                $is_array = true;
+                $type = substr($type, $pos + 1);
+            }
+
+            /* Format value. */
+            if(!$isArray)
+            {
+                $object->$key = $this->cast($object->$key, $type);
+                continue;
+            }
+
+            /* Format array. */
+            $value = array();
+            if(is_array($object->$key))
+            {
+                foreach($object->$key as $v) $value[] = $this->cast($v, $type);
+            }
+            else
+            {
+                $vs = implode(',', $object->$key);
+                foreach($vs as $v)
+                {
+                    if($v === '') continue;
+                    $value[] = $this->cast($v, $type);
+                }
+            }
+            $object->$key = $value;
+        }
+    }
+
+    /**
+     * 类型转换.
+     * Typecasting.
+     *
+     * @param  mixed  $vaule
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    private function cast($value, $type)
+    {
+        switch($type)
+        {
+        case 'time':
+            $timeFormat = $this->param('timeFormat', '');
+            if($timeFormat == 'utc')
+            {
+                if(!$value or $value == '0000-00-00 00:00:00') return null;
+                return gmdate("Y-m-d\TH:i:s\Z", strtotime($value));
+            }
+            return $value;
+        case 'int':
+        case 'bool':
+            return $value;
+        default:
+            return $value;
         }
     }
 }

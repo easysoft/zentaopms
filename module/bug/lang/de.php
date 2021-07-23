@@ -59,6 +59,7 @@ $lang->bug->resolvedBuild    = 'Lösungs Build';
 $lang->bug->resolvedDate     = 'Gelöst am';
 $lang->bug->resolvedDateAB   = 'Gelöst';
 $lang->bug->deadline         = 'Fällig am';
+$lang->bug->deadlineAB       = 'Fällig';
 $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'Geschlossen von';
 $lang->bug->closedDate       = 'Geschlossen am';
@@ -78,6 +79,7 @@ $lang->bug->lastEditedDate   = 'Bearbeitet am';
 $lang->bug->fromCase         = 'Von Fall';
 $lang->bug->toCase           = 'Zu Fall';
 $lang->bug->colorTag         = 'Farb Tag';
+$lang->bug->repairRate       = 'Repair Rate';
 
 /* 方法列表。*/
 $lang->bug->index              = 'Home';

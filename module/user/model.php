@@ -133,6 +133,21 @@ class userModel extends model
     }
 
     /**
+     * Get user's avatar pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAvatarPairs()
+    {
+        $avatarPairs = array();
+        $userList    = $this->getList();
+        foreach($userList as $user) $avatarPairs[$user->account] = $user->avatar;
+
+        return $avatarPairs;
+    }
+
+    /**
      * Get commiters from the user table.
      *
      * @access public
@@ -1887,7 +1902,7 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 $whiteList    = zget($whiteListGroup, $program->id, array());
-                if($program->acl == 'program') 
+                if($program->acl == 'program')
                 {
                     $stakeholders += zget($parentStakeholderGroup, $program->id, array());
                     $stakeholders += zget($parentPMGroup, $program->id, array());
@@ -1911,7 +1926,7 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 $whiteList    = zget($whiteListGroup, $program->id, array());
-                if($program->acl == 'program') 
+                if($program->acl == 'program')
                 {
                     $stakeholders += zget($parentStakeholderGroup, $program->id, array());
                     $stakeholders += zget($parentPMGroup, $program->id, array());

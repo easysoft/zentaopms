@@ -21,7 +21,7 @@ class bugsEntry extends entry
             $result = array();
             foreach($bugs as $bug)
             {
-                $result[] = $bug;
+                $result[] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'bugs' => $result));
         }
@@ -51,6 +51,6 @@ class bugsEntry extends entry
 
         $bug = $this->loadModel('bug')->getByID($data->id);
 
-        $this->send(200, $bug);
+        $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time'));
     }
 }
