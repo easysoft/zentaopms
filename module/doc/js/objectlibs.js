@@ -1,3 +1,8 @@
+$(function()
+{
+    if($.cookie('isFullScreen') == 1) fullScreen();
+})
+
 /**
  * Ajax delete doc.
  *
@@ -45,25 +50,32 @@ function fullScreen()
     {
         $('#content .actions').addClass('hidden');
         requestMethod.call(element);
+        $.cookie('isFullScreen', 1);
     }
+}
+
+function exitFullScreen()
+{
+    $('#content .actions').removeClass('hidden');
+    $.cookie('isFullScreen', 0);
 }
 
 document.addEventListener("fullscreenchange", function (e)
 {
-    if(!document.fullscreenElement) $('#content .actions').removeClass('hidden');
+    if(!document.fullscreenElement) exitFullScreen();
 })
 
 document.addEventListener("webkitfullscreenchange", function (e)
 {
-    if(!document.webkitFullscreenElement) $('#content .actions').removeClass('hidden');
+    if(!document.webkitFullscreenElement) exitFullScreen();
 })
 
 document.addEventListener("mozfullscreenchange", function (e)
 {
-    if(!document.mozFullScreenElement) $('#content .actions').removeClass('hidden');
+    if(!document.mozFullScreenElement) exitFullScreen();
 })
 
 document.addEventListener("msfullscreenChange", function (e)
 {
-    if(!document.msfullscreenElement) $('#content .actions').removeClass('hidden');
+    if(!document.msfullscreenElement) exitFullScreen();
 })
