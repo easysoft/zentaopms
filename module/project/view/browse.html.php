@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datatable.fix.html.php';?>
 <?php
 js::set('orderBy', $orderBy);
 js::set('programID', $programID);
@@ -80,10 +81,15 @@ js::set('browseType', $browseType);
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-        $vars = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+        $vars         = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+        $datatableId  = $this->moduleName . ucfirst($this->methodName);
+        $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+        
+        if($useDatatable) include '../../common/view/datatable.html.php';
         $setting = $this->datatable->getSetting('project');
       ?>
-      <table class='table has-sort-head'>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table has-sort-head <?php if($useDatatable) echo 'datatable';?>'>
       <?php $canBatchEdit = $this->config->systemMode == 'new' ? common::hasPriv('project', 'batchEdit') : common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
@@ -106,6 +112,7 @@ js::set('browseType', $browseType);
           <?php endforeach;?>
         </tbody>
       </table>
+      <?php if(!$useDatatable) echo '</div>';?>
       <div class='table-footer'>
         <?php if($canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>

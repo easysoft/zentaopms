@@ -92,14 +92,14 @@ $config->project->datatable->fieldList['estimate']['pri']      = '8';
 
 $config->project->datatable->fieldList['consume']['title']    = 'consume';
 $config->project->datatable->fieldList['consume']['fixed']    = 'no';
-$config->project->datatable->fieldList['consume']['width']    = '70';
+$config->project->datatable->fieldList['consume']['width']    = '80';
 $config->project->datatable->fieldList['consume']['maxWidth'] = '80';
 $config->project->datatable->fieldList['consume']['required'] = 'no';
 $config->project->datatable->fieldList['consume']['sort']     = 'no';
 $config->project->datatable->fieldList['consume']['pri']      = '7';
 
 $config->project->datatable->fieldList['progress']['title']    = 'progress';
-$config->project->datatable->fieldList['progress']['fixed']    = 'right';
+$config->project->datatable->fieldList['progress']['fixed']    = 'no';
 $config->project->datatable->fieldList['progress']['width']    = '60';
 $config->project->datatable->fieldList['progress']['required'] = 'no';
 $config->project->datatable->fieldList['progress']['sort']     = 'no';
