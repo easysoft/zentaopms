@@ -375,7 +375,7 @@ class repoModel extends model
         if(!$repo) return false;
 
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-        if($repo->SCM == 'Gitlab') $reps = $this->processGitlab($repo);
+        if(strtolower($repo->SCM) == 'gitlab') $repo = $this->processGitlab($repo);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
