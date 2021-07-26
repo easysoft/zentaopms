@@ -12,6 +12,7 @@
 .detail ul {position: relative;}
 .tail-info {position: absolute; right: 0; padding-left: 10px; padding-top: 1px;}
 .tail-info, .doc-title, span.item {background: #fff;}
+span.item>a {padding-left: 6px;}
 span.dotted-line+a {display: block;}
 #modules li.tree-single-item:before, .chapterNode:before, .independent:before {content: " "; width: 100%; border-bottom: 1px dashed #b5b9c5; position: absolute; top: 50%; right: 0; left: 30px;}
 .doc-title {display: inline-block !important; position: relative; padding-right: 10px;}
