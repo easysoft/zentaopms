@@ -1689,7 +1689,7 @@ class docModel extends model
             ->limit($this->config->doc->defaultShowNumber)
             ->fetchAll();
 
-        $html  = "<div class='btn-group'>";
+        $html  = "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
         $html .= "<ul class='dropdown-menu'>";
 
@@ -1913,6 +1913,7 @@ class docModel extends model
                 $selected = $key == $libID ? 'selected' : '';
                 $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
+            if($type != 'custom') $output .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "data-app='{$this->app->openApp}'");
             $output .= "</div></div></div></div></div>";
         }
 
