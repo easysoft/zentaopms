@@ -67,7 +67,7 @@ js::set('defaultOpen', $open);
   <ul id='bars' class='nav nav-default'></ul>
   <div id='poweredBy'>
     <div id="globalBarLogo">
-      <a href='javascript:void(0)' id='proLink' class='btn btn-link' style='color: red;'><?php echo $lang->index->upgrade;?> <i class='text-danger icon-pro-version'></i></a>
+      <a href='javascript:void(0)' id='proLink' class='btn btn-link' style='color: #B57D4F;'><span class='upgrade'><?php echo $lang->proName;?></span> <i class='text-danger icon-pro-version'></i></a>
       <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $config->version;?>'>
         <i class="icon icon-zentao" style="font-size: 24px;"></i>
         <span class='version'><?php echo $lang->zentaoPMS . $config->version;?></span>
