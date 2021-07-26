@@ -12,9 +12,9 @@
 class compileModel extends model
 {
     /**
-     * Get by id 
-     * 
-     * @param  int    $buildID 
+     * Get by id
+     *
+     * @param  int    $buildID
      * @access public
      * @return object
      */
@@ -25,10 +25,10 @@ class compileModel extends model
 
     /**
      * Get build list.
-     * 
-     * @param  int    $jobID 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $jobID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -48,7 +48,7 @@ class compileModel extends model
 
     /**
      * Get unexecuted list.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -59,7 +59,7 @@ class compileModel extends model
 
     /**
      * Get last result.
-     * 
+     *
      * @param  int    $jobID
      * @access public
      * @return object
@@ -71,7 +71,7 @@ class compileModel extends model
 
     /**
      * Get build url.
-     * 
+     *
      * @param  object $jenkins
      * @access public
      * @return object
@@ -91,10 +91,10 @@ class compileModel extends model
 
     /**
      * Save build by job
-     * 
-     * @param  int    $jobID 
-     * @param  string $data 
-     * @param  string $type 
+     *
+     * @param  int    $jobID
+     * @param  string $data
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -114,7 +114,7 @@ class compileModel extends model
 
     /**
      * Execute compile
-     * 
+     *
      * @param  object $compile
      * @access public
      * @return bool

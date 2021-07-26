@@ -1011,19 +1011,20 @@ $lang->job->methodOrder[25] = 'exec';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
-$lang->resource->doc->index      = 'index';
-$lang->resource->doc->browse     = 'browse';
-$lang->resource->doc->createLib  = 'createLib';
-$lang->resource->doc->editLib    = 'editLib';
-$lang->resource->doc->deleteLib  = 'deleteLib';
-$lang->resource->doc->create     = 'create';
-$lang->resource->doc->view       = 'view';
-$lang->resource->doc->edit       = 'edit';
-$lang->resource->doc->delete     = 'delete';
-$lang->resource->doc->deleteFile = 'deleteFile';
-$lang->resource->doc->allLibs    = 'allLibs';
-$lang->resource->doc->objectLibs = 'objectLibs';
-$lang->resource->doc->collect    = 'collectAction';
+$lang->resource->doc->index         = 'index';
+$lang->resource->doc->browse        = 'browse';
+$lang->resource->doc->createLib     = 'createLib';
+$lang->resource->doc->editLib       = 'editLib';
+$lang->resource->doc->deleteLib     = 'deleteLib';
+$lang->resource->doc->create        = 'create';
+$lang->resource->doc->view          = 'view';
+$lang->resource->doc->edit          = 'edit';
+$lang->resource->doc->delete        = 'delete';
+$lang->resource->doc->deleteFile    = 'deleteFile';
+$lang->resource->doc->allLibs       = 'allLibs';
+$lang->resource->doc->objectLibs    = 'objectLibs';
+$lang->resource->doc->collect       = 'collectAction';
+$lang->resource->doc->tableContents = 'tableContents';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';
