@@ -386,7 +386,7 @@ class jobModel extends model
         }
         elseif($job->engine == 'gitlab')
         {
-            $pipeline = $this->loadModel('gitlabpipeline')->apiCreatePipeline($job->server, $job->pipeline, array('ref' => 'master'));
+            $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $job->pipeline, array('ref' => 'master'));
             $compile->queue  = $pipeline->id;
             $compile->status = zget($pipeline, 'status', 'create_fail');
         }
