@@ -1691,7 +1691,7 @@ class docModel extends model
 
         $html  = "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
-        $html .= "<ul class='dropdown-menu'>";
+        $html .= "<ul class='dropdown-menu pull-right'>";
 
         if(empty($docs)) $html .= "<li>{$this->lang->noData}</li>";
 
@@ -1982,7 +1982,7 @@ class docModel extends model
                     $treeMenu[0] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                 }
 
-                $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title'");
+                $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title' title='{$doc->title}'");
 
                 $treeMenu[0] .= '</li>';
             }
@@ -2025,13 +2025,13 @@ class docModel extends model
                 {
                     $treeMenu[$module->id] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                 }
-                $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title'");
+                $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title' title='{$doc->title}'");
 
                 $treeMenu[$module->id] .= '</li>';
             }
         }
 
-        $li = '<a>' . $module->name . '</a>';
+        $li = "<a title='{$module->name}'>" . $module->name . '</a>';
         if($treeMenu[$module->id])
         {
             $li .= '<ul>' . $treeMenu[$module->id] . '</ul>';

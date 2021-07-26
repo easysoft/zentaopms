@@ -50,6 +50,8 @@ function fullScreen()
     {
         $('#content').addClass('scrollbar-hover');
         $('#content .actions').addClass('hidden');
+        $('#content .file-image .right-icon').addClass('hidden');
+        $('#content .files-list .right-icon').addClass('hidden');
         requestMethod.call(element);
         $.cookie('isFullScreen', 1);
     }
@@ -65,6 +67,8 @@ function exitFullScreen()
 {
     $('#content').removeClass('scrollbar-hover');
     $('#content .actions').removeClass('hidden');
+    $('#content .file-image .right-icon').removeClass('hidden');
+    $('#content .files-list .right-icon').removeClass('hidden');
     $.cookie('isFullScreen', 0);
 }
 

@@ -28,7 +28,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
         {
             echo "<div class='menu-actions'>";
             echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
-            echo "<ul class='dropdown-menu dropdown-menu-doc pull-left'>";
+            echo "<ul class='dropdown-menu pull-right'>";
             if($canManageMenu)
             {
                 echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->doc->manageType, '', "class='iframe'") . '</li>';
@@ -43,7 +43,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
         {
             echo "<div class='menu-actions'>";
             echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
-            echo "<ul class='dropdown-menu dropdown-menu-book pull-left'>";
+            echo "<ul class='dropdown-menu pull-right'>";
             if($canEditLib) echo '<li>' . html::a($this->createLink('doc', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->doc->editBook, '', "class='iframe'") . '</li>';
             if($canManageBook) echo '<li>' . html::a($this->createLink('doc', 'manageBook', "bookID=$libID"), '<i class="icon-cog-outline"></i> ' . $lang->doc->manageBook) . '</li>';
             echo '</ul></div>';
