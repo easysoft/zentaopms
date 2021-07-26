@@ -78,7 +78,24 @@ function createProject()
     var onlybody    = config.onlybody;
     config.onlybody = 'no';
 
-    var link      = createLink('project', 'create');
+    var link = createLink('project', 'create');
+
+    config.onlybody      = onlybody;
+    parent.location.href = link;
+}
+
+/**
+ * Create execution.
+ *
+ * @access public
+ * @return void
+ */
+function createExecution()
+{
+    var onlybody    = config.onlybody;
+    config.onlybody = 'no';
+
+    var link = createLink('execution', 'create');
 
     config.onlybody      = onlybody;
     parent.location.href = link;

@@ -201,21 +201,23 @@
         <h4 class="modal-title"><?php echo $lang->execution->selectExecution;?></h4>
       </div>
       <div class="modal-body">
-        <?php if(empty($projects)):?>
+        <?php if((empty($projects) and $config->systemMode == 'new') or (empty($executions) and $config->systemMode == 'classic')):?>
         <div class="table-empty-tip">
           <p>
             <span class="text-muted"><?php echo $lang->project->empty;?></span>
-            <?php echo html::a("javascript:createProject()", "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
+            <?php echo html::a("javascript:" . ($config->systemMode == 'new' ? "createProject()" : "createExecution()"), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
           </p>
         </div>
         <?php else:?>
         <table align='center' class='table table-form'>
+          <?php if($config->systemMode == 'new'):?>
           <tr>
             <th><?php echo $lang->todo->project;?></th>
             <td><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange=getExecutionByProject(this.value);");?></td>
           </tr>
+          <?php endif;?>
           <tr>
-            <th><?php echo $lang->todo->execution;?></th>
+            <th><?php echo $config->systemMode == 'new' ? $lang->todo->execution : $lang->todo->project;?></th>
             <td id='executionIdBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
@@ -261,7 +263,7 @@
         <h4 class="modal-title"><?php echo $lang->product->select;?></h4>
       </div>
       <div class="modal-body">
-        <?php if(empty($projects)):?>
+        <?php if(empty($projects) and $config->systemMode == 'new'):?>
         <div class="table-empty-tip">
           <p>
             <span class="text-muted"><?php echo $lang->project->empty;?></span>
@@ -270,10 +272,12 @@
         </div>
         <?php else:?>
         <table align='center' class='table table-form'>
+          <?php if($config->systemMode == 'new'):?>
           <tr>
             <th><?php echo $lang->todo->project;?></th>
             <td><?php echo html::select('bugProject', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->todo->product;?></th>
             <td id='productIdBox'><?php echo html::select('bugProduct', $projectProducts, '', "class='form-control chosen'");?></td>
