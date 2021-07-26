@@ -15,24 +15,43 @@ class gitlabpipeline extends control
      *
      * @param  int    $jobID
      * @access public
-     * @return int|false
+     * @return string|false
      */
     public function runPipeline($jobID)
     {
-        $job = $this->loadModel('job')->getByID($jobID);
-        $pipeline = $this->gitlabpipeline->apiCreatePipeline($job->server, $job->pipeline, array('ref' => 'master'));
-
-        if(isset($pipeline->id))
+        $now    = helper::now();
+        $job    = $this->loadModel('job')->getByID($jobID);
+        $status = $job->lastStatus;
+        if($status and $status != 'success' and $status != 'create_fail')
         {
-            a($pipeline); // todo(dingguodong) save $pipeline->id to zt_compile, zt_job.
-            echo js::alert(sprintf($this->lang->gitlabpipeline->sendExec, $pipeline->status));
+            $compile = $this->loadModel('compile')->getLastResult($jobID);
+            if($compile)
+            {
+                $pipeline = $this->gitlabpipeline->apiGetPiplineByID($job->server, $job->pipeline, $compile->queue);
+                $this->dao->update(TABLE_COMPILE)->set('status')->eq($pipeline->status)->set('updateDate')->eq($now)->where('id')->eq($compile->id)->exec();
+                $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($jobID)->exec();
+            }
+            echo js::alert($this->lang->gitlabpipeline->execError);
             die(js::reload('parent'));
         }
-        else
-        {
-            return false;
-        }
-    }
 
+        $pipeline = $this->gitlabpipeline->apiCreatePipeline($job->server, $job->pipeline, array('ref' => 'master'));
+        $status   = isset($pipeline->id) ? 'created' : 'create_fail';
+
+        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($status)->where('id')->eq($jobID)->exec();
+
+        if(!isset($pipeline->id)) return false;
+        $build = new stdclass;
+        $build->job         = $jobID;
+        $build->name        = $job->name;
+        $build->queue       = $pipeline->id; // use `queue` to save gitlab project pipeline id.
+        $build->status      = $pipeline->status;
+        $build->createdBy   = $this->app->user->account;
+        $build->createdDate = $now;
+        $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
+
+        echo js::alert(sprintf($this->lang->gitlabpipeline->sendExec, $pipeline->status));
+        die(js::reload('parent'));
+    }
 }
 

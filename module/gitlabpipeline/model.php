@@ -24,7 +24,7 @@ class gitlabpipelineModel extends model
 
     public function apiGetPiplineByID($gitlabID, $projectID, $pipelineID)
     {
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$piplinesID}");
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}");
         return json_decode(commonModel::http($url));
     }
 
