@@ -50,6 +50,7 @@ $lang->project->deleted           = '已删除';
 $lang->project->linkedProducts    = '已关联';
 $lang->project->unlinkedProducts  = '未关联';
 $lang->project->testreport        = '测试报告';
+$lang->project->selectProgram     = '筛选项目集';
 
 /* Fields. */
 $lang->project->common             = '项目';
@@ -75,6 +76,7 @@ $lang->project->realEnd            = '实际完成日期';
 $lang->project->realBegan          = '实际开始日期';
 $lang->project->bygrid             = '看板';
 $lang->project->bylist             = '列表';
+$lang->project->bycard             = '卡片';
 $lang->project->mine               = '我参与的';
 $lang->project->myProject          = '我负责';
 $lang->project->other              = '其他';

@@ -891,7 +891,7 @@ class programModel extends model
             $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
 
             $project->teamCount = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
-            $stats[] = $project;
+            $stats[$key] = $project;
         }
         return $stats;
     }
