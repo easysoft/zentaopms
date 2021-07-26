@@ -7,7 +7,7 @@ $('#repo').change(function()
       }
     );
 
-    var type   = 'Git';
+    var type = 'Git';
     if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
 
     $('.svn-fields').addClass('hidden');

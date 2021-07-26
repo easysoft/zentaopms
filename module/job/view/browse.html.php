@@ -57,8 +57,7 @@
             <?php
             common::printIcon('compile', 'browse', "jobID=$id", '', 'list', 'history');
             common::printIcon('job', 'edit', "jobID=$id", '', 'list',  'edit');
-            if(strtolower($job->engine) == 'jenkins') common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play', 'hiddenwin');
-            if(strtolower($job->engine) == 'gitlab')  common::printIcon('gitlabpipeline', 'runPipeline', "jobID=$id", '', 'list',  'play', 'hiddenwin');
+            common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play', 'hiddenwin');
             if(common::hasPriv('job', 'delete')) echo html::a($this->createLink('job', 'delete', "jobID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->job->delete}' class='btn'");
             ?>
           </td>

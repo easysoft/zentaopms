@@ -308,7 +308,7 @@ class jobModel extends model
      */
     public function exec($id)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
@@ -319,7 +319,6 @@ class jobModel extends model
         $build->job  = $job->id;
         $build->name = $job->name;
 
-        $url  = $this->loadModel('compile')->getBuildUrl($job);
         $now  = helper::now();
         $data = new stdclass();
         $repo = $this->loadModel('repo')->getRepoById($job->repo);
@@ -378,10 +377,21 @@ class jobModel extends model
         }
 
         $compile = new stdclass();
-        $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
-        $compile->status = $compile->queue ? 'created' : 'create_fail';
-        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
+        if($job->engine == 'jenkins') 
+        {
+            $url = $this->loadModel('compile')->getBuildUrl($job);
+            $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
+            $compile->status = $compile->queue ? 'created' : 'create_fail';
+        }
+        elseif($job->engine == 'gitlab')
+        {
+            $pipeline = $this->loadModel('gitlabpipeline')->apiCreatePipeline($job->server, $job->pipeline, array('ref' => 'master'));
+            $compile->queue  = $pipeline->id;
+            $compile->status = zget($pipeline, 'status', 'create_fail');
+        }
+
+        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($compile->status)->where('id')->eq($job->id)->exec();
 
         return $compile->status;
