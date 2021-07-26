@@ -112,7 +112,7 @@ $lang->loading       = 'Loading...';
 $lang->notFound      = 'Not found!';
 $lang->notPage       = 'Sorry, the features you are visiting are in development!';
 $lang->showAll       = '[[Show All]]';
-$lang->selectedItems = 'Seleted <strong>{0}</strong> items';
+$lang->selectedItems = 'Selected <strong>{0}</strong> items';
 
 $lang->future      = 'Waiting';
 $lang->year        = 'Year';

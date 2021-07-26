@@ -48,6 +48,8 @@ $lang->project->copyNoProject     = 'There are no items available to copy.';
 $lang->project->searchByName      = 'Enter the project name to search';
 $lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
 $lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
+$lang->project->testreport        = 'Testreport';
+$lang->project->selectProgram     = 'Select Program';
 
 /* Fields. */
 $lang->project->common             = 'Program';
@@ -74,6 +76,7 @@ $lang->project->realEnd            = 'Actual End';
 $lang->project->realBegan          = 'Actual Began';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
+$lang->project->bycard             = 'Card';
 $lang->project->mine               = 'My';
 $lang->project->myProject          = 'Meine Zuständigkeit';
 $lang->project->other              = 'Andere';

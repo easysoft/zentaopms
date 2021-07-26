@@ -383,6 +383,20 @@ class gitlabModel extends model
     }
 
     /**
+     * Get single project by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleProject($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
      * Get hooks.
      *
      * @param  int    $gitlabID

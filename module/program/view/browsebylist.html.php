@@ -75,9 +75,11 @@
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>
+          <?php if(isset($progressList[$program->id])):?>
           <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $progressList[$program->id]?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
             <div class='progress-info'><?php echo $progressList[$program->id];?></div>
           </div>
+          <?php endif;?>
         </td>
         <td class='c-actions'>
           <?php if($program->type == 'program'):?>

@@ -1676,6 +1676,47 @@ class docModel extends model
         return $html;
     }
 
+    public function buildCollectButton4Doc()
+    {
+        $allLibs = array_keys($this->getLibs('all'));
+        $docs    = $this->dao->select('t1.id,t1.title,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.lib')->in($allLibs)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+            ->andWhere('t1.collector')->like("%,{$this->app->user->account},%")
+            ->orderBy('t1.id_desc')
+            ->limit($this->config->doc->defaultShowNumber)
+            ->fetchAll();
+
+        $html  = "<div class='btn-group dropdown-hover'>";
+        $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
+        $html .= "<ul class='dropdown-menu'>";
+
+        if(empty($docs)) $html .= "<li>{$this->lang->noData}</li>";
+
+        foreach($docs as $doc)
+        {
+            $objectID = 0;
+            if($doc->type == 'product')   $objectID = $doc->product;
+            if($doc->type == 'project')   $objectID = $doc->project;
+            if($doc->type == 'execution') $objectID = $doc->execution;
+
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i>" . $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
+        }
+
+        $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('lib')->in($allLibs)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+            ->andWhere('collector')->like("%,{$this->app->user->account},%")
+            ->fetch('count');
+        if($collectionCount > 10) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
+
+        $html .= '</ul></div>';
+        return $html;
+    }
+
     /**
      * Set past menu.
      *
@@ -1875,6 +1916,7 @@ class docModel extends model
                 $selected = $key == $libID ? 'selected' : '';
                 $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
+            if($type != 'custom') $output .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "data-app='{$this->app->openApp}'");
             $output .= "</div></div></div></div></div>";
         }
 

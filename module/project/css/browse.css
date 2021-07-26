@@ -5,3 +5,6 @@
 th.c-budget,{text-align:right;}
 td.c-actions {overflow: visible;}
 .c-actions .btn {overflow: visible;}
+#programBox {float: left; margin-right: 10px;}
+#switchButton {background: #fff !important;}
+.panel-actions {position: relative; display: inline-block; vertical-align: middle; padding: 0 0;}
