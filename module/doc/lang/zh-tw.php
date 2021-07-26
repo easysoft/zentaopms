@@ -52,19 +52,20 @@ $lang->doc->mailto       = '抄送給';
 $lang->doc->noModule     = '文檔庫下沒有目錄和文檔，請維護目錄或者創建文檔';
 $lang->doc->noChapter    = '手冊下沒有章節和文章，請維護手冊';
 
-$lang->doc->moduleDoc    = '按模組瀏覽';
-$lang->doc->searchDoc    = '搜索';
-$lang->doc->fast         = '快速訪問';
-$lang->doc->allDoc       = '所有文檔';
-$lang->doc->openedByMe   = '由我創建';
-$lang->doc->editedByMe   = '由我編輯';
-$lang->doc->orderByOpen  = '最近添加';
-$lang->doc->orderByEdit  = '最近更新';
-$lang->doc->orderByVisit = '最近訪問';
-$lang->doc->todayEdited  = '今日更新';
-$lang->doc->pastEdited   = '往日更新';
-$lang->doc->myDoc        = '我的文檔';
-$lang->doc->myCollection = '我的收藏';
+$lang->doc->moduleDoc     = '按模組瀏覽';
+$lang->doc->searchDoc     = '搜索';
+$lang->doc->fast          = '快速訪問';
+$lang->doc->allDoc        = '所有文檔';
+$lang->doc->openedByMe    = '由我創建';
+$lang->doc->editedByMe    = '由我編輯';
+$lang->doc->orderByOpen   = '最近添加';
+$lang->doc->orderByEdit   = '最近更新';
+$lang->doc->orderByVisit  = '最近訪問';
+$lang->doc->todayEdited   = '今日更新';
+$lang->doc->pastEdited    = '往日更新';
+$lang->doc->myDoc         = '我的文檔';
+$lang->doc->myCollection  = '我的收藏';
+$lang->doc->tableContents = '目錄';
 
 /* 方法列表。*/
 $lang->doc->index            = '文檔主頁';

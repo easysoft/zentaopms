@@ -32,6 +32,11 @@
             <td colspan="2" ></td>
           </tr>
           <tr>
+            <th><?php echo $lang->job->engine; ?></th>
+            <td><?php echo html::select('engine', $lang->job->engineList, $job->engine, "class='form-control chosen'");?>
+            </td>
+          </tr>
+          <tr>
             <th><?php echo $lang->job->repo; ?></th>
             <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control chosen'");?>
             </td>
@@ -95,6 +100,7 @@
               </div>
             </td>
           </tr>
+          <?php if($job->engine == 'jenkins'):?>
           <tr>
             <th><?php echo $lang->job->server; ?></th>
             <td colspan='2'>
@@ -109,6 +115,7 @@
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->job->customParam;?></th>
             <td colspan='2' id='paramDiv'>

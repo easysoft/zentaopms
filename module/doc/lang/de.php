@@ -64,6 +64,7 @@ $lang->doc->todayEdited    = 'Heute aktualisiert';
 $lang->doc->pastEdited     = 'Aktualisiert';
 $lang->doc->myDoc          = 'Meine Dokumente';
 $lang->doc->myCollection   = 'Meine Favoriten';
+$lang->doc->tableContents  = 'Catalog';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Home';

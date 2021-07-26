@@ -1870,6 +1870,9 @@ class docModel extends model
         $maxHeight          = ($type == 'project' and $this->app->openApp == 'doc') ? '260px' : '290px';
         $class              = ($type == 'project' and $this->app->openApp == 'doc') ? 'col-left' : '';
 
+        $currentMethod = $this->app->getMethodName();
+        $methodName    = $currentMethod == 'tablecontents' ? 'tablecontents' : 'objectLibs';
+
         if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
             $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>";
@@ -1885,12 +1888,12 @@ class docModel extends model
                 $selected = $key == $objectID ? 'selected' : '';
                 if(isset($clseedProjects[$key]))
                 {
-                    $closedProjectsHtml .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                    $closedProjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
                     if($selected == 'selected') $tabActive = 'closed';
                 }
                 else
                 {
-                    $output .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
                 }
             }
             if($type == 'project' and $this->app->openApp == 'doc')
@@ -1911,8 +1914,9 @@ class docModel extends model
             foreach($libs as $key => $lib)
             {
                 $selected = $key == $libID ? 'selected' : '';
-                $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
+                $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
+            if($type != 'custom') $output .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "data-app='{$this->app->openApp}'");
             $output .= "</div></div></div></div></div>";
         }
 
@@ -1922,16 +1926,19 @@ class docModel extends model
     /**
      * Get doc tree menu.
      *
-     * @param  string $type
-     * @param  int    $objectID
-     * @param  int    $rootID
-     * @param  int    $startModule
+     * @param  string  $type
+     * @param  int     $objectID
+     * @param  int     $rootID
+     * @param  int     $startModule
+     * @param  pointer $docID
      * @access public
      * @return string
      */
     public function getTreeMenu($type, $objectID, $rootID, $startModule = 0, & $docID = 0)
     {
         $startModulePath = '';
+        $currentMethod   = $this->app->getMethodName();
+        $users           = $this->loadModel('user')->getPairs('noletter');
         if($startModule > 0)
         {
             $startModule = $this->tree->getById($startModule);
@@ -1966,8 +1973,18 @@ class docModel extends model
 
             foreach($moduleDocs[0] as $doc)
             {
-                if(!$docID) $docID = $doc->id;
-                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
+                if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+
+                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . '>';
+
+                if($currentMethod == 'tablecontents')
+                {
+                    $treeMenu[0] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                }
+
+                $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title'");
+
+                $treeMenu[0] .= '</li>';
             }
         }
 
@@ -1986,20 +2003,31 @@ class docModel extends model
      * @param  int     $libID
      * @param  object  $module
      * @param  array   $moduleDocs
-     * @param  int     $docID
-     * @access public
+     * @param  pointer $docID
+     * @access private
      * @return string
      */
     private function buildTree(& $treeMenu, $type, $objectID, $libID, $module, $moduleDocs, & $docID)
     {
         if(!isset($treeMenu[$module->id])) $treeMenu[$module->id] = '';
 
+        $users         = $this->loadModel('user')->getPairs('noletter');
+        $currentMethod = $this->app->getMethodName();
+
         if(isset($moduleDocs[$module->id]))
         {
             foreach($moduleDocs[$module->id] as $doc)
             {
-                if(!$docID) $docID = $doc->id;
-                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
+                if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+                $treeMenu[$module->id] = '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>';
+
+                if($currentMethod == 'tablecontents')
+                {
+                    $treeMenu[$module->id] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                }
+                $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title'");
+
+                $treeMenu[$module->id] .= '</li>';
             }
         }
 
@@ -2010,6 +2038,6 @@ class docModel extends model
         }
 
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
-        $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed"' : '') . '>' . $li . '</li>';
+        $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed catalog"' : ' class="catalog"') . '>' . $li . '</li>';
     }
 }
