@@ -442,7 +442,7 @@ class executionModel extends model
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         /* Judgment of required items. */
-        if($this->post->code == '')
+        if($oldExecution->type != 'stage' and $this->post->code == '')
         {
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             return false;
@@ -502,7 +502,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-            ->check('code', 'unique', "id!=$executionID and deleted='0'")
+            ->check('code', 'unique', "id!=$executionID and code!='' and deleted='0'")
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
@@ -609,11 +609,11 @@ class executionModel extends model
             $nameList[$executionName] = $executionName;
 
             /* Check unique code for edited executions. */
-            if(empty($executionCode))
+            if($projectModel == 'scrum' and empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
             }
-            else
+            elseif(!empty($executionCode))
             {
                 /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
