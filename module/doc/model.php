@@ -1913,6 +1913,7 @@ class docModel extends model
                 $selected = $key == $libID ? 'selected' : '';
                 $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
+            if($type != 'custom') $output .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "data-app='{$this->app->openApp}'");
             $output .= "</div></div></div></div></div>";
         }
 
