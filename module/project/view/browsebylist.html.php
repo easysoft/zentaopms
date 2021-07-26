@@ -33,9 +33,9 @@
     <?php echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <div class="btn-group">
+    <div class="btn-group panel-actions">
       <?php echo html::a('#',"<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->project->bycard}' id='switchButton' data-type='bycard'");?>
-      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon active' title='{$lang->project->bylist}' id='switchButton' data-type='bylist'");?>
+      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->project->bylist}' id='switchButton' data-type='bylist'");?>
     </div>
     <?php if(isset($this->config->maxVersion)):?>
     <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>

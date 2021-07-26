@@ -7,4 +7,4 @@ td.c-actions {overflow: visible;}
 .c-actions .btn {overflow: visible;}
 #programBox {float: left; margin-right: 10px;}
 #switchButton {background: #fff !important;}
-.btn-group .active {color: #0c64eb !important;}
+.panel-actions {position: relative; display: inline-block; vertical-align: middle; padding: 0 0;}
