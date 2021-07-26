@@ -58,7 +58,7 @@
           <?php $rowspan = count($track);?>
           <tr>
             <?php if($config->URAndSR):?>
-            <td <?php if($rowspan != 0) echo "rowspan=" . $rowspan;?> class='requirement'>
+            <td <?php if($rowspan != 0) echo "rowspan=" . $rowspan;?> class='requirement' title='<?php echo $key != 'noRequirement' ? $requirement->title : $lang->story->noRequirement;?>'>
               <?php if($key != 'noRequirement'):?>
               <span class="label label-primary label-outline"><?php echo zget($lang->story->statusList, $requirement->status);?></span>
               <?php endif;?>
