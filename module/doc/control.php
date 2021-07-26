@@ -911,7 +911,8 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
 
-        $this->lang->TRActions = common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
+        $this->lang->TRActions  = $this->doc->buildCollectButton4Doc();
+        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 
@@ -923,7 +924,7 @@ class doc extends control
 
             if($doc->keywords)
             {
-                $doc->keywords = preg_replace("/(\n)|(\s)|(\t)|(\')|(')|(，)/", ',', $doc->keywords);
+                $doc->keywords = preg_replace("/(，)/", ',', $doc->keywords);
                 $doc->keywords = explode(',', $doc->keywords);
             }
 

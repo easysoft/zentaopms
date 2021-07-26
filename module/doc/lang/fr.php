@@ -88,20 +88,21 @@ $lang->doc->cancelCollection = 'Retirer des Favoris';
 $lang->doc->deleteFile       = 'Supprimer Fichier';
 $lang->doc->menuTitle        = 'Menu';
 
-$lang->doc->libName      = 'Bibliothèque de Documents';
-$lang->doc->libType      = 'Catégorie';
-$lang->doc->custom       = 'Personnaliser Bibliothèque de Documents';
-$lang->doc->customAB     = 'Person. Bib Doc';
-$lang->doc->createlib    = 'Créer une Bibliothèque';
-$lang->doc->allLibs      = 'Liste des Bibliothèque';
-$lang->doc->objectLibs   = "{$lang->productCommon}/{$lang->executionCommon} Bibliothèque";
-$lang->doc->showFiles    = 'Pièces Jointes';
-$lang->doc->editlib      = 'Editer Bibliothèque';
-$lang->doc->deleteLib    = 'Supprimer Bibliothèque';
-$lang->doc->fixedMenu    = 'Coller au Menu';
-$lang->doc->removeMenu   = 'Décoller du Menu';
-$lang->doc->search       = 'Rechercher';
-$lang->doc->keywordsTips = 'Please use commas to separate multiple keywords.';
+$lang->doc->libName        = 'Bibliothèque de Documents';
+$lang->doc->libType        = 'Catégorie';
+$lang->doc->custom         = 'Personnaliser Bibliothèque de Documents';
+$lang->doc->customAB       = 'Person. Bib Doc';
+$lang->doc->createlib      = 'Créer une Bibliothèque';
+$lang->doc->allLibs        = 'Liste des Bibliothèque';
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Bibliothèque";
+$lang->doc->showFiles      = 'Pièces Jointes';
+$lang->doc->editlib        = 'Editer Bibliothèque';
+$lang->doc->deleteLib      = 'Supprimer Bibliothèque';
+$lang->doc->fixedMenu      = 'Coller au Menu';
+$lang->doc->removeMenu     = 'Décoller du Menu';
+$lang->doc->search         = 'Rechercher';
+$lang->doc->allCollections = 'All Collections';
+$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
 
 /* 查询条件列表 */
 $lang->doc->allProduct    = 'Tous les' . $lang->productCommon . 's';

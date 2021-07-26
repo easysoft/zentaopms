@@ -88,20 +88,21 @@ $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Xóa File';
 $lang->doc->menuTitle        = 'Menu';
 
-$lang->doc->libName      = 'Thư viện tài liệu';
-$lang->doc->libType      = 'Danh mục';
-$lang->doc->custom       = 'Tùy biến thư viện tài liệu';
-$lang->doc->customAB     = 'Tùy biến Doc Lib';
-$lang->doc->createlib    = 'Tạo thư viện tài liệu';
-$lang->doc->allLibs      = 'Library danh sách';
-$lang->doc->objectLibs   = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
-$lang->doc->showFiles    = 'Attachments';
-$lang->doc->editlib      = 'Sửa thư viện tài liệu';
-$lang->doc->deleteLib    = 'Xóa thư viện tài liệu';
-$lang->doc->fixedMenu    = 'Sửa to Menu';
-$lang->doc->removeMenu   = 'Remove from Menu';
-$lang->doc->search       = 'Tìm kiếm';
-$lang->doc->keywordsTips = 'Please use commas to separate multiple keywords.';
+$lang->doc->libName        = 'Thư viện tài liệu';
+$lang->doc->libType        = 'Danh mục';
+$lang->doc->custom         = 'Tùy biến thư viện tài liệu';
+$lang->doc->customAB       = 'Tùy biến Doc Lib';
+$lang->doc->createlib      = 'Tạo thư viện tài liệu';
+$lang->doc->allLibs        = 'Library danh sách';
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
+$lang->doc->showFiles      = 'Attachments';
+$lang->doc->editlib        = 'Sửa thư viện tài liệu';
+$lang->doc->deleteLib      = 'Xóa thư viện tài liệu';
+$lang->doc->fixedMenu      = 'Sửa to Menu';
+$lang->doc->removeMenu     = 'Remove from Menu';
+$lang->doc->search         = 'Tìm kiếm';
+$lang->doc->allCollections = 'All Collections';
+$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
 
 /* Query condition list. */
 $lang->doc->allProduct    = 'All' . $lang->productCommon;
