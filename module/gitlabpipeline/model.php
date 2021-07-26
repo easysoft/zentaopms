@@ -6,8 +6,6 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
- * @package     product
- * @version     $Id: $
  * @link        http://www.zentao.net
  */
 
@@ -16,6 +14,7 @@ class gitlabpipelineModel extends model
     /**
      * Get single pipline by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $pipelineID
      * @access public
@@ -32,6 +31,7 @@ class gitlabpipelineModel extends model
     /**
      * Get piplines list by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @access public
      * @return object
@@ -47,6 +47,7 @@ class gitlabpipelineModel extends model
     /**
      * Get a pipeline’s report by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $pipelineID
      * @access public
@@ -62,6 +63,7 @@ class gitlabpipelineModel extends model
     /**
      * Create a new pipeline by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param string  $reference
      * @access public
@@ -77,6 +79,7 @@ class gitlabpipelineModel extends model
     /**
      * Retry jobs in a pipeline by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $pipelineID
      * @return object
@@ -91,12 +94,13 @@ class gitlabpipelineModel extends model
     /**
      * Cancel a pipeline’s jobs by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $pipelineID
      * @return object
      * @docment https://docs.gitlab.com/ee/api/pipelines.html#cancel-a-pipelines-jobs
      */
-    public function apiPipelineCancel($$gitlabID, $projectID, $piplineID)
+    public function apiPipelineCancel($gitlabID, $projectID, $piplineID)
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}/cancel");
         return json_decode(commonModel::http($url));
@@ -105,6 +109,7 @@ class gitlabpipelineModel extends model
     /**
      * Delete a pipeline-·· by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $pipelineID
      * @return object
@@ -119,6 +124,7 @@ class gitlabpipelineModel extends model
     /**
      * Get all pipeline schedules by api.
      *
+     * @param  integer $gitlabID
      * @param  integer $projectID
      * @return object
      * @docment https://docs.gitlab.com/ee/api/pipeline_schedules.html#get-all-pipeline-schedules
@@ -132,6 +138,7 @@ class gitlabpipelineModel extends model
     /**
      * Delete a pipeline schedule by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $pipelineScheduleID
      * @return object
@@ -146,6 +153,7 @@ class gitlabpipelineModel extends model
     /**
      * Run a scheduled pipeline immediately by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $pipelineScheduleID
      * @return object
@@ -160,6 +168,7 @@ class gitlabpipelineModel extends model
     /**
      * Get a log file by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $jobID
      * @return object
@@ -174,6 +183,7 @@ class gitlabpipelineModel extends model
     /**
      * List pipeline jobs by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $pipelineID
      * @return object
@@ -188,12 +198,13 @@ class gitlabpipelineModel extends model
     /**
      * Get a single job by api.
      *
+     * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $jobID
      * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
      */
-	public function apiGetSingleJob($gitlabID, $projectID, $jobID)
+    public function apiGetSingleJob($gitlabID, $projectID, $jobID)
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}");
         return json_decode(commonModel::http($url));

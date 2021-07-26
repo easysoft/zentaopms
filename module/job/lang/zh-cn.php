@@ -20,6 +20,7 @@ $lang->job->svnDir      = 'SVN监控路径';
 $lang->job->jenkins     = 'Jenkins';
 $lang->job->jkHost      = 'Jenkins服务器';
 $lang->job->jkJob       = 'Jenkins任务';
+$lang->job->buildSpec   = '构建对象'; // 'pipeline@server'
 $lang->job->engine      = '构建引擎';
 $lang->job->server      = '服务器';
 $lang->job->pipeline    = '流水线';

@@ -9,7 +9,7 @@ body {padding-left: 96px;}
 #menu .nav > li > a > .icon + .text {margin-left: 4px;}
 #menu .nav > li.active > a, #menu .nav > li > a:hover, #menu .nav > li > a:focus {background-color: #0c64eb;}
 #menu .nav > li.divider {margin: 8px; background-color: #fff; opacity: 0.24; height: 1px; padding: 0 !important;}
-#menuFooter {position: absolute; bottom: 0; left: 0; right: 0; background-color: #3C495C;}
+#menuFooter {position: absolute; bottom: 0; left: 0; right: 0;}
 #menu .nav > li.has-avatar {padding: 1px 6px;}
 #menu .nav > li.has-avatar > a {padding: 4px 0; text-align: center;}
 body.menu-hide {padding-left: 0;}
@@ -84,6 +84,7 @@ body.menu-hide {padding-left: 0;}
 #globalBarLogo a:first-child {margin-right: 10px;}
 #globalBarLogo a {float: right; margin: 0px 2px;}
 #globalBarLogo a .icon {font-size: 24px; color: #16a8f8;}
+#globalBarLogo a .version {font-size: 13px; position: relative; bottom: 3px;}
 
 #searchbox a {float: left; width: 100%;}
 #searchbox a:hover {color: white;}

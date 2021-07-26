@@ -48,14 +48,22 @@ function fullScreen()
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
     if(requestMethod)
     {
+        $('#content').addClass('scrollbar-hover');
         $('#content .actions').addClass('hidden');
         requestMethod.call(element);
         $.cookie('isFullScreen', 1);
     }
 }
 
+/**
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
 function exitFullScreen()
 {
+    $('#content').removeClass('scrollbar-hover');
     $('#content .actions').removeClass('hidden');
     $.cookie('isFullScreen', 0);
 }
