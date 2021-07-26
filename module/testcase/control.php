@@ -1505,7 +1505,7 @@ class testcase extends control
             $this->post->set('kind', 'testcase');
             $this->post->set('rows', $rows);
             $this->post->set('extraNum', $num);
-            $this->post->set('fileName', 'template');
+            $this->post->set('fileName', 'Template');
             $this->fetch('file', 'export2csv', $_POST);
         }
 

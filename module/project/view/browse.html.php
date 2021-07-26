@@ -81,15 +81,16 @@ js::set('browseType', $browseType);
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-        $vars         = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
-        $datatableId  = $this->moduleName . ucfirst($this->methodName);
-        $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-        
-        if($useDatatable) include '../../common/view/datatable.html.php';
-        $setting = $this->datatable->getSetting('project');
+      $vars         = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+      $datatableId  = $this->moduleName . ucfirst($this->methodName);
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+      $setting      = $this->datatable->getSetting('project');
+      $widths       = $this->datatable->setFixedFieldWidth($setting);
+      
+      if($useDatatable) include '../../common/view/datatable.html.php';
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
-      <table class='table has-sort-head <?php if($useDatatable) echo 'datatable';?>'>
+      <table class='table has-sort-head <?php if($useDatatable) echo 'datatable';?>' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
       <?php $canBatchEdit = $this->config->systemMode == 'new' ? common::hasPriv('project', 'batchEdit') : common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
