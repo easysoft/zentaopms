@@ -343,7 +343,7 @@ class storyModel extends model
             /* push this story to gitlab issue */
             $object = $this->getByID($storyID);
             $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, 'story', $storyID, $object);
-            
+
             return array('status' => 'created', 'id' => $storyID);
         }
         return false;
@@ -351,9 +351,9 @@ class storyModel extends model
 
     /**
      * Create story from gitlab issue.
-     * 
+     *
      * @param  object    $story
-     * @param  int       $executionID 
+     * @param  int       $executionID
      * @access public
      * @return int
      */
@@ -380,7 +380,7 @@ class storyModel extends model
             $data->spec    = $story->spec;
             $data->verify  = $story->spec;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
-            
+
             /* Link story to execution. */
             $this->linkStory($executionID, $story->product, $storyID);
 
@@ -1883,13 +1883,13 @@ class storyModel extends model
             $story->assignedDate   = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-            if(!dao::isError()) 
+            if(!dao::isError())
             {
                 $this->loadModel('gitlab');
                 $relation = $this->gitlab->getRelationByObject('story', $storyID);
                 $story->assignee_id = $this->gitlab->getGitlabUserID($relation->gitlabID, $story->assignedTo);
                 if($story->assignee_id != '') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
-                
+
                 /* Push this story to gitlab issue. */
                 $this->loadModel('gitlab');
                 $relation = $this->gitlab->getRelationByObject('story', $storyID);
@@ -3504,7 +3504,7 @@ class storyModel extends model
         $storyIdList = array();
         if(isset($stories['id']))
         {
-            $storyIdList = array($stories['id'] => $stories['id']); 
+            $storyIdList = array($stories['id'] => $stories['id']);
         }
         else
         {
@@ -3938,11 +3938,12 @@ class storyModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  int    $projectID
      * @param  object $pager
      * @access public
      * @return bool|array
      */
-    public function getTracks($productID = 0, $branch = 0, $pager = null)
+    public function getTracks($productID = 0, $branch = 0, $projectID = 0, $pager = null)
     {
         $tracks         = array();
         $sourcePageID   = $pager->pageID;
@@ -3950,7 +3951,24 @@ class storyModel extends model
 
         if($this->config->URAndSR)
         {
-            $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+            $projectStories = array();
+            if($projectID)
+            {
+                $requirements = $this->dao->select('t3.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_RELATION)->alias('t2')->on("t1.story=t2.AID && t2.AType='story'")
+                    ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.BID=t3.id && t2.BType='requirement'")
+                    ->where('t1.project')->eq($projectID)
+                    ->andWhere('t1.product')->eq($productID)
+                    ->andWhere('t3.id')->ne('')
+                    ->page($pager, 't3.id')
+                    ->fetchAll('id');
+                $projectStories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story');
+            }
+            else
+            {
+                $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+            }
+
             if($pager->pageID != $sourcePageID)
             {
                 $requirements  = array();
@@ -3963,6 +3981,12 @@ class storyModel extends model
                 $stories = empty($stories) ? array() : $stories;
                 foreach($stories as $id => $title)
                 {
+                    if($projectStories and !isset($projectStories[$id]))
+                    {
+                        unset($stories[$id]);
+                        continue;
+                    }
+
                     $stories[$id] = new stdclass();
                     $stories[$id]->title = $title;
                     $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
@@ -3991,12 +4015,26 @@ class storyModel extends model
                 ->andWhere('relation')->eq('subdivideinto')
                 ->andWhere('product')->eq($productID)
                 ->fetchPairs('BID', 'BID');
-            $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
-            if($stories) $pager->recTotal += 1;
+            if($projectID)
+            {
+                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories);
+            }
+            else
+            {
+                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
+            }
+            if($stories) $pager->recTotal += count($stories);
         }
         else
         {
-            $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
+            if($projectID)
+            {
+                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, $pager);
+            }
+            else
+            {
+                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
+            }
         }
 
         if(count($tracks) < $pager->recPerPage)
