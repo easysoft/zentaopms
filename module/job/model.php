@@ -386,4 +386,22 @@ class jobModel extends model
 
         return $compile->status;
     }
+
+    /**
+     * Get gitlab project name by jobID.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return string|false
+     */
+    public function getGitlabProjectName($jobID)
+    {
+        $job  = $this->getByID($jobID);
+        if(strtolower($job->engine) != 'gitlab') return false;
+        $gitlabID  = $job->server;
+        $projectID = $job->pipeline;
+        $project   = $this->loadModel('gitlab')->apiGetSingleProject($gitlabID, $projectID);
+        if(isset($project->name)) return $project->name;
+        return false;
+    }
 }
