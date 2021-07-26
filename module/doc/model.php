@@ -1691,7 +1691,7 @@ class docModel extends model
 
         $html  = "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
-        $html .= "<ul class='dropdown-menu'>";
+        $html .= "<ul class='dropdown-menu pull-right'>";
 
         if(empty($docs)) $html .= "<li>{$this->lang->noData}</li>";
 
