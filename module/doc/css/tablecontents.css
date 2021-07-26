@@ -1,0 +1,19 @@
+.main-content {padding-top: 0; padding-bottom: 0;}
+.main-content #createDropdown {display: inline-block;}
+.main-content #createDropdown ul {position: absolute;}
+
+.no-content {width: 100px; height: 100px; margin: 0 auto;}
+.notice {text-align: center; padding-left: 15px; padding-top: 20px;}
+.no-content-button {text-align: center; padding-top: 20px;}
+.no-content-button a:nth-child(2) {margin-left: 20px;}
+
+.cell .detail .detail-title {padding-left: 5px;}
+.catalog>a {color: #838a9d !important;}
+.detail ul {position: relative;}
+.tail-info {position: absolute; right: 0; padding-left: 10px; padding-top: 1px;}
+.tail-info, .doc-title, span.item {background: #fff;}
+span.dotted-line+a {display: block;}
+#modules li.tree-single-item:before, .chapterNode:before, .independent:before {content: " "; width: 100%; border-bottom: 1px dashed #b5b9c5; position: absolute; top: 50%; right: 0; left: 30px;}
+.doc-title {display: inline-block !important; position: relative; padding-right: 10px;}
+.tree li.has-list.open:before {content: unset;}
+i.icon-file-text {color: #D0D2D6; font-size: 14px;}

@@ -51,19 +51,20 @@ $lang->doc->mailto       = 'Mailto';
 $lang->doc->noModule     = 'No document in this lib, please create it';
 $lang->doc->noChapter    = 'No chapters or articles in this book. Please add chapters and articles.';
 
-$lang->doc->moduleDoc    = 'By Module';
-$lang->doc->searchDoc    = 'Tìm kiếm';
-$lang->doc->fast         = 'Quick Entry';
-$lang->doc->allDoc       = 'Tất cả tài liệu';
-$lang->doc->openedByMe   = 'Của bạn';
-$lang->doc->editedByMe   = 'Edited By Me';
-$lang->doc->orderByOpen  = 'Recent Added';
-$lang->doc->orderByEdit  = 'Recent Updated';
-$lang->doc->orderByVisit = 'Last Visited';
-$lang->doc->todayEdited  = 'Updated Today';
-$lang->doc->pastEdited   = 'Tổng Updated';
-$lang->doc->myDoc        = 'My tài liệu';
-$lang->doc->myCollection = 'My Favorites';
+$lang->doc->moduleDoc     = 'By Module';
+$lang->doc->searchDoc     = 'Tìm kiếm';
+$lang->doc->fast          = 'Quick Entry';
+$lang->doc->allDoc        = 'Tất cả tài liệu';
+$lang->doc->openedByMe    = 'Của bạn';
+$lang->doc->editedByMe    = 'Edited By Me';
+$lang->doc->orderByOpen   = 'Recent Added';
+$lang->doc->orderByEdit   = 'Recent Updated';
+$lang->doc->orderByVisit  = 'Last Visited';
+$lang->doc->todayEdited   = 'Updated Today';
+$lang->doc->pastEdited    = 'Tổng Updated';
+$lang->doc->myDoc         = 'My tài liệu';
+$lang->doc->myCollection  = 'My Favorites';
+$lang->doc->tableContents = 'Catalog';
 
 /* Methods list */
 $lang->doc->index            = 'Document Home';

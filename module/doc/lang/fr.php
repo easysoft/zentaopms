@@ -64,6 +64,7 @@ $lang->doc->todayEdited    = "Mis à Jour Aujourd'hui";
 $lang->doc->pastEdited     = 'Total Mis à Jour';
 $lang->doc->myDoc          = 'Mes Documents';
 $lang->doc->myCollection   = 'Mes Favoris';
+$lang->doc->tableContents  = 'Catalog';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Accueil Documents';
