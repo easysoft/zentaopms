@@ -55,6 +55,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->server;?></th>
+            <?php if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->job->getGitlabProjectName($job->id);?>
             <td><?php echo urldecode($job->pipeline) . '@' . $jenkins->name;?></td>
           </tr>
           <tr>
