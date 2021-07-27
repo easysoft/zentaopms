@@ -3368,7 +3368,7 @@ class storyModel extends model
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
             unset($reviewerList[$story->assignedTo]);
 
-            $ccList .= ',' . join(',', array_keys($reviewerList))
+            $ccList .= ',' . join(',', array_keys($reviewerList));
         }
 
         if(empty($toList))
