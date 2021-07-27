@@ -429,7 +429,7 @@ class repoModel extends model
     public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
     {
         $entry = ltrim($entry, '/');
-        $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
+        if($repo->SCM != 'Gitlab') $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
 
         $repoID       = $repo->id;
         $revisionTime = $this->dao->select('time')->from(TABLE_REPOHISTORY)->alias('t1')
@@ -442,6 +442,7 @@ class repoModel extends model
             ->fetch('time');
 
         $historyIdList = array();
+
         if($entry != '/' and !empty($entry))
         {
             $historyIdList = $this->dao->select('DISTINCT t2.id')->from(TABLE_REPOFILES)->alias('t1')
