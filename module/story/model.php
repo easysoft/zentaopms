@@ -198,13 +198,11 @@ class storyModel extends model
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
             ->callFunc('title', 'trim')
-            ->add('assignedDate', 0)
             ->add('version', 1)
             ->add('status', 'draft')
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview or $executionID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
@@ -254,14 +252,20 @@ class storyModel extends model
             /* Save the story reviewer to storyreview table. */
             if(isset($_POST['reviewer']))
             {
+                $assignedTo = '';
                 foreach($this->post->reviewer as $reviewer)
                 {
+                    if(empty($reviewer)) continue;
+
                     $reviewData = new stdclass();
                     $reviewData->story    = $storyID;
                     $reviewData->version  = 1;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    if(empty($assignedTo)) $assignedTo = $reviewer;
                 }
+                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             }
 
             /* Project or execution linked story. */
@@ -551,14 +555,20 @@ class storyModel extends model
             /* Save the story reviewer to storyreview table. */
             if(isset($_POST['reviewer'][$i]))
             {
+                $assignedTo = '';
                 foreach($_POST['reviewer'][$i] as $reviewer)
                 {
+                    if(empty($reviewer)) continue;
+
                     $reviewData = new stdclass();
                     $reviewData->story    = $storyID;
                     $reviewData->version  = 1;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    if(empty($assignedTo)) $assignedTo = $reviewer;
                 }
+                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
             }
 
             $this->executeHooks($storyID);
@@ -686,6 +696,7 @@ class storyModel extends model
 
             /* Update the reviewer. */
             $oldReviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
+            $assignedTo      = '';
             foreach($_POST['reviewer'] as $reviewer)
             {
                 if(!$specChanged and in_array($reviewer, array_keys($oldReviewerList))) continue;
@@ -695,7 +706,10 @@ class storyModel extends model
                 $reviewData->version  = $specChanged ? $story->version : $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
+            if($assignedTo and $assignedTo != $oldStory->assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
 
@@ -3347,6 +3361,14 @@ class storyModel extends model
                 $ccList .= ',' . join(',', $prjMembers);
                 $ccList = ltrim($ccList, ',');
             }
+        }
+
+        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'opened')
+        {
+            $reviewerList = $this->getReviewerPairs($story->id, $story->version);
+            unset($reviewerList[$story->assignedTo]);
+
+            $ccList .= ',' . join(',', array_keys($reviewerList))
         }
 
         if(empty($toList))
