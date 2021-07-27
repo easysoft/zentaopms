@@ -929,11 +929,24 @@ class executionModel extends model
     {
         if($currentModule == 'execution' and in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return;
 
+        $projectNameSpan      = '';
+        $projectNameTitle     = '';
         $currentExecutionName = $this->lang->execution->common;
         if($executionID)
         {
             $currentExecution     = $this->getById($executionID);
             $currentExecutionName = $currentExecution->name;
+
+            if($this->config->systemMode == 'new')
+            {
+                $project = $this->loadModel('project')->getByID($currentExecution->project);
+
+                if($project)
+                {
+                    $projectNameTitle = $project->name . '/';
+                    $projectNameSpan  = "<span class='text'>{$project->name}</span>/";
+                }
+            }
         }
 
         if($this->app->viewType == 'mhtml' and $executionID)
@@ -944,7 +957,7 @@ class executionModel extends model
         }
 
         $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "executionID=$executionID&module=$currentModule&method=$currentMethod&extra=");
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'>{$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$projectNameTitle}{$currentExecutionName}'>{$projectNameSpan}<span class='text'>{$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 

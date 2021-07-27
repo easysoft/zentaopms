@@ -17,6 +17,7 @@
 <?php js::set('pipeline', $job->pipeline);?>
 <?php js::set('dirChange', $lang->job->dirChange);?>
 <?php js::set('buildTag', $lang->job->buildTag);?>
+<?php js::set('jkTask', $job->pipeline);?>
 
 <div id='mainContent' class='main-row'>
   <div class='main-content'>
@@ -30,6 +31,11 @@
             <th class='w-120px'><?php echo $lang->job->name; ?></th>
             <td class='required'><?php echo html::input('name', $job->name, "class='form-control'"); ?></td>
             <td colspan="2" ></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->job->engine; ?></th>
+            <td class='required'><?php echo html::select('engine', $lang->job->engineList, $job->engine, "class='form-control chosen'");?>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->job->repo; ?></th>
@@ -95,20 +101,22 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <?php if($job->engine == 'jenkins'):?>
+          <tr id="jenkinsServerTR">
             <th><?php echo $lang->job->server; ?></th>
             <td colspan='2'>
               <div class='table-row'>
-                <div class='table-col'><?php echo html::select('server', $serverList, $job->server, "class='form-control chosen'");?></div>
-                <div id='pipelineBox' class='table-col'>
+                <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, $job->server, "class='form-control chosen'");?></div>
+                <div class='table-col'>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
-                    <?php echo html::select('pipeline', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
+                    <?php echo html::select('jkTask', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
                   </div>
                 </div>
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->job->customParam;?></th>
             <td colspan='2' id='paramDiv'>

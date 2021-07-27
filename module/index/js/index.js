@@ -34,7 +34,7 @@
 
             item.icon = ($link.find('.icon').attr('class') || '').replace('icon ', '');
             item.text = $link.text().trim();
-            $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>');
+            $link.html('<i class="icon ' + item.icon + '"></i><span class="text num">' + item.text + '</span>');
             appsMap[item.code] = item;
 
             $('<li></li>').attr('data-app', item.code)

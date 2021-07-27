@@ -50,6 +50,8 @@ $lang->project->deleted           = 'Deleted';
 $lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
 $lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
 $lang->project->testreport        = 'Test Report';
+$lang->project->testreport        = 'Testreport';
+$lang->project->selectProgram     = 'Select Program';
 
 /* Fields. */
 $lang->project->common             = 'Project';
@@ -75,6 +77,7 @@ $lang->project->realEnd            = 'Actual End';
 $lang->project->realBegan          = 'Actual Began';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
+$lang->project->bycard             = 'Card';
 $lang->project->mine               = 'My';
 $lang->project->myProject          = 'Mine';
 $lang->project->other              = 'Others';

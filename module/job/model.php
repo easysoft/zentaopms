@@ -119,6 +119,23 @@ class jobModel extends model
             ->add('createdDate', helper::now())
             ->remove('repoType')
             ->get();
+
+        if($job->engine == 'jenkins')
+        {
+            $job->server   = $job->jkServer;
+            $job->pipeline = $job->jkTask;
+        }
+
+        if(strtolower($job->engine) == 'gitlab')
+        {
+            $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
+            $job->server   = $repo->gitlab;
+            $job->pipeline = $repo->project;
+        }
+
+        unset($job->jkServer);
+        unset($job->jkTask);
+
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
         $job->svnDir = '';
@@ -158,12 +175,15 @@ class jobModel extends model
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
-
             ->autoCheck()
             ->exec();
 
+        if(dao::isError()) return dao::getError();
+
         $id = $this->dao->lastInsertId();
-        $this->initJob($id, $job, $this->post->repoType);
+        if($id == 0) return false;
+
+        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $this->post->repoType);
         return $id;
     }
 
@@ -288,7 +308,7 @@ class jobModel extends model
      */
     public function exec($id)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
@@ -299,7 +319,6 @@ class jobModel extends model
         $build->job  = $job->id;
         $build->name = $job->name;
 
-        $url  = $this->loadModel('compile')->getBuildUrl($job);
         $now  = helper::now();
         $data = new stdclass();
         $repo = $this->loadModel('repo')->getRepoById($job->repo);
@@ -358,12 +377,41 @@ class jobModel extends model
         }
 
         $compile = new stdclass();
-        $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
-        $compile->status = $compile->queue ? 'created' : 'create_fail';
-        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
+        if($job->engine == 'jenkins') 
+        {
+            $url = $this->loadModel('compile')->getBuildUrl($job);
+            $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
+            $compile->status = $compile->queue ? 'created' : 'create_fail';
+        }
+        elseif($job->engine == 'gitlab')
+        {
+            $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $job->pipeline, array('ref' => 'master'));
+            $compile->queue  = $pipeline->id;
+            $compile->status = zget($pipeline, 'status', 'create_fail');
+        }
+
+        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($compile->status)->where('id')->eq($job->id)->exec();
 
         return $compile->status;
+    }
+
+    /**
+     * Get gitlab project name by jobID.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return string|false
+     */
+    public function getGitlabProjectName($jobID)
+    {
+        $job  = $this->getByID($jobID);
+        if(strtolower($job->engine) != 'gitlab') return false;
+        $gitlabID  = $job->server;
+        $projectID = $job->pipeline;
+        $project   = $this->loadModel('gitlab')->apiGetSingleProject($gitlabID, $projectID);
+        if(isset($project->name)) return $project->name;
+        return false;
     }
 }

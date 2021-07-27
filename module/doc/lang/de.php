@@ -64,9 +64,11 @@ $lang->doc->todayEdited    = 'Heute aktualisiert';
 $lang->doc->pastEdited     = 'Aktualisiert';
 $lang->doc->myDoc          = 'Meine Dokumente';
 $lang->doc->myCollection   = 'Meine Favoriten';
+$lang->doc->tableContents  = 'Catalog';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Home';
+$lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Dokument hinzufügen';
 $lang->doc->edit             = 'Bearbeiten';
 $lang->doc->delete           = 'Löschen';
@@ -85,6 +87,7 @@ $lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Favorit hinzufügen';
 $lang->doc->cancelCollection = 'Favorit entfernen';
 $lang->doc->deleteFile       = 'Delete File';
+$lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Kategorie';
@@ -99,6 +102,8 @@ $lang->doc->deleteLib      = 'Bibliothek löschen';
 $lang->doc->fixedMenu      = 'Im Menü fixieren';
 $lang->doc->removeMenu     = 'Vom Menü entfernen';
 $lang->doc->search         = 'Suche';
+$lang->doc->allCollections = 'All Collections';
+$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
 
 /* 查询条件列表 */
 $lang->doc->allProduct    = 'Alle' . $lang->productCommon;

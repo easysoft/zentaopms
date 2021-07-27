@@ -52,22 +52,24 @@ $lang->doc->mailto       = '抄送给';
 $lang->doc->noModule     = '文档库下没有目录和文档，请维护目录或者创建文档';
 $lang->doc->noChapter    = '手册下没有章节和文章，请维护手册';
 
-$lang->doc->moduleDoc    = '按模块浏览';
-$lang->doc->searchDoc    = '搜索';
-$lang->doc->fast         = '快速访问';
-$lang->doc->allDoc       = '所有文档';
-$lang->doc->openedByMe   = '由我创建';
-$lang->doc->editedByMe   = '由我编辑';
-$lang->doc->orderByOpen  = '最近添加';
-$lang->doc->orderByEdit  = '最近更新';
-$lang->doc->orderByVisit = '最近访问';
-$lang->doc->todayEdited  = '今日更新';
-$lang->doc->pastEdited   = '往日更新';
-$lang->doc->myDoc        = '我的文档';
-$lang->doc->myCollection = '我的收藏';
+$lang->doc->moduleDoc     = '按模块浏览';
+$lang->doc->searchDoc     = '搜索';
+$lang->doc->fast          = '快速访问';
+$lang->doc->allDoc        = '所有文档';
+$lang->doc->openedByMe    = '由我创建';
+$lang->doc->editedByMe    = '由我编辑';
+$lang->doc->orderByOpen   = '最近添加';
+$lang->doc->orderByEdit   = '最近更新';
+$lang->doc->orderByVisit  = '最近访问';
+$lang->doc->todayEdited   = '今日更新';
+$lang->doc->pastEdited    = '往日更新';
+$lang->doc->myDoc         = '我的文档';
+$lang->doc->myCollection  = '我的收藏';
+$lang->doc->tableContents = '目录';
 
 /* 方法列表。*/
 $lang->doc->index            = '文档主页';
+$lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
 $lang->doc->edit             = '编辑文档';
 $lang->doc->delete           = '删除文档';
@@ -86,6 +88,7 @@ $lang->doc->catalogName      = '目录名称';
 $lang->doc->collect          = '收藏';
 $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '删除附件';
+$lang->doc->menuTitle        = '目录';
 
 $lang->doc->collectAction = '收藏文档';
 
@@ -102,6 +105,8 @@ $lang->doc->deleteLib      = '删除文档库';
 $lang->doc->fixedMenu      = '固定到菜单栏';
 $lang->doc->removeMenu     = '从菜单栏移除';
 $lang->doc->search         = '搜索';
+$lang->doc->allCollections = '全部收藏文档';
+$lang->doc->keywordsTips   = '多个关键字请用逗号分隔。';
 
 global $config;
 /* 查询条件列表 */

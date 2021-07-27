@@ -52,22 +52,24 @@ $lang->doc->mailto       = 'Mailto';
 $lang->doc->noModule     = 'No document in this lib, please create it';
 $lang->doc->noChapter    = 'No chapters or articles in this book. Please add chapters and articles.';
 
-$lang->doc->moduleDoc    = 'By Module';
-$lang->doc->searchDoc    = 'Search';
-$lang->doc->fast         = 'Quick Entry';
-$lang->doc->allDoc       = 'All Documents';
-$lang->doc->openedByMe   = 'My';
-$lang->doc->editedByMe   = 'Edited By Me';
-$lang->doc->orderByOpen  = 'Recent Added';
-$lang->doc->orderByEdit  = 'Recent Updated';
-$lang->doc->orderByVisit = 'Last Visited';
-$lang->doc->todayEdited  = 'Updated Today';
-$lang->doc->pastEdited   = 'Total Updated';
-$lang->doc->myDoc        = 'My Documents';
-$lang->doc->myCollection = 'My Favorites';
+$lang->doc->moduleDoc     = 'By Module';
+$lang->doc->searchDoc     = 'Search';
+$lang->doc->fast          = 'Quick Entry';
+$lang->doc->allDoc        = 'All Documents';
+$lang->doc->openedByMe    = 'My';
+$lang->doc->editedByMe    = 'Edited By Me';
+$lang->doc->orderByOpen   = 'Recent Added';
+$lang->doc->orderByEdit   = 'Recent Updated';
+$lang->doc->orderByVisit  = 'Last Visited';
+$lang->doc->todayEdited   = 'Updated Today';
+$lang->doc->pastEdited    = 'Total Updated';
+$lang->doc->myDoc         = 'My Documents';
+$lang->doc->myCollection  = 'My Favorites';
+$lang->doc->tableContents = 'Catalog';
 
 /* Methods list */
 $lang->doc->index            = 'Document Home';
+$lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Create Document';
 $lang->doc->edit             = 'Edit Document';
 $lang->doc->delete           = 'Delete Document';
@@ -86,6 +88,7 @@ $lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Add Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Delete File';
+$lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->collectAction = 'Add Favorite';
 
@@ -102,6 +105,8 @@ $lang->doc->deleteLib      = 'Delete Document Library';
 $lang->doc->fixedMenu      = 'Fix to Menu';
 $lang->doc->removeMenu     = 'Remove from Menu';
 $lang->doc->search         = 'Search';
+$lang->doc->allCollections = 'All Collections';
+$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
 
 global $config;
 /* Query condition list. */

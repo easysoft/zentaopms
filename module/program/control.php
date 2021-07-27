@@ -52,16 +52,17 @@ class program extends control
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
-        $this->view->title       = $this->lang->program->browse;
-        $this->view->position[]  = $this->lang->program->browse;
+        $this->view->title      = $this->lang->program->browse;
+        $this->view->position[] = $this->lang->program->browse;
 
-        $this->view->programs    = $programs;
-        $this->view->status      = $status;
-        $this->view->orderBy     = $orderBy;
-        $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->usersAvatar = $this->user->getAvatarPairs();
-        $this->view->programType = $programType;
-        $this->view->PMList      = $PMList;
+        $this->view->programs     = $programs;
+        $this->view->status       = $status;
+        $this->view->orderBy      = $orderBy;
+        $this->view->users        = $this->user->getPairs('noletter');
+        $this->view->usersAvatar  = $this->user->getAvatarPairs();
+        $this->view->programType  = $programType;
+        $this->view->PMList       = $PMList;
+        $this->view->progressList = $this->program->getProgressList();
 
         $this->display();
     }

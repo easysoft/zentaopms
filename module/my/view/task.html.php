@@ -158,6 +158,9 @@
             <?php if($type != 'openedBy'): ?>
             <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
             <?php endif;?>
+            <?php if($app->rawMethod == 'work'):?>
+            <td class="text-center <?php echo isset($child->delay) ? 'delayed' : '';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo substr($child->deadline, 5, 6);?></td>
+            <?php endif;?>
             <?php if($type != 'assignedTo'): ?>
             <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($child, $users);?></td>
             <?php endif;?>

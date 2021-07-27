@@ -122,16 +122,16 @@ class job extends control
             $repoTypes[$repo->id] = $repo->SCM;
         }
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[] = $this->lang->job->edit;
-        $this->view->repoPairs  = $repoPairs;
-        $this->view->repoTypes  = $repoTypes;
-        $this->view->repoType   = zget($repoTypes, $job->repo, 'Git');
-        $this->view->job        = $job;
-        $this->view->products   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
-        $this->view->serverList = $this->loadModel('jenkins')->getPairs();
-        $this->view->pipelines  = $this->jenkins->getTasks($job->server);
+        $this->view->title             = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
+        $this->view->position[]        = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[]        = $this->lang->job->edit;
+        $this->view->repoPairs         = $repoPairs;
+        $this->view->repoTypes         = $repoTypes;
+        $this->view->repoType          = zget($repoTypes, $job->repo, 'Git');
+        $this->view->job               = $job;
+        $this->view->products          = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
+        $this->view->jenkinsServerList = $this->loadModel('jenkins')->getPairs();
+        $this->view->pipelines         = $this->jenkins->getTasks($job->server);
 
         $this->display();
     }
@@ -254,12 +254,30 @@ class job extends control
      *
      * @param  int    $repoID
      * @access public
-     * @return void
+     * @return string
      */
     public function ajaxGetProductByRepo($repoID)
     {
         $repo = $this->loadModel('repo')->getRepoByID($repoID);
-        if($repo) return $repo->product;
-        die(js::error("Access Violation. 非法访问。"));
+        if(empty($repo)) die(json_encode(array(""=>"")));
+
+        $product = $repo->product;
+        if(strpos($product, ','))
+        {
+            $productList     = explode(',', $product);
+            $matchedProducts = array();
+            $productPair     = $this->loadModel('product')->getPairs();
+            foreach($productList as $productLeft)
+            {
+                foreach($productPair as $productRight => $productName)
+                {
+                    if($productLeft == $productRight) $matchedProducts[$productName] = $productRight;
+                }
+            }
+            die(json_encode($matchedProduct));
+        }
+
+        $productName = $this->loadModel('product')->getByID($repo->product)->name;
+        die(json_encode(array($productName => $repo->product)));
     }
 }

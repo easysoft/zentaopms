@@ -383,6 +383,20 @@ class gitlabModel extends model
     }
 
     /**
+     * Get single project by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleProject($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
      * Get hooks.
      *
      * @param  int    $gitlabID
@@ -667,6 +681,83 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issueID}");
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
+     * Create a new pipeline by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param string  $reference
+     * @access public
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
+     */
+    public function apiCreatePipeline($gitlabID, $projectID, $reference)
+    {
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
+        return json_decode(commonModel::http($url, $reference));
+    }
+
+    /**
+     * Get single pipline by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param integer $pipelineID
+     * @access public
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/pipelines.html#get-a-single-pipeline
+     */
+    public function apiGetSinglePipeline($gitlabID, $projectID, $pipelineID)
+    {
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * List pipeline jobs by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param integer $pipelineID
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs
+     */
+    public function apiGetJobs($gitlabID, $projectID, $pipelineID)
+    {
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}/jobs");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get a single job by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param integer $jobID
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
+     */
+    public function apiGetSingleJob($gitlabID, $projectID, $jobID)
+    {
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get a log file by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param integer $jobID
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-log-file
+     */
+    public function apiGetJobLog($gitlabID, $projectID, $jobID)
+    {
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}/trace");
+        return json_decode(commonModel::http($url));
     }
 
     /**

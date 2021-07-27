@@ -216,6 +216,8 @@ class project extends control
         $this->loadModel('execution');
         $this->session->set('projectList', $this->app->getURI(true), 'project');
 
+        $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
+
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -232,10 +234,15 @@ class project extends control
         $this->view->programID    = $programID;
         $this->view->program      = $this->program->getByID($programID);
         $this->view->programTree  = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
+        $this->view->programs     = array('0' => '') + $this->program->getParentPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
+        $this->view->projectType  = $projectType;
         $this->view->param        = $param;
         $this->view->orderBy      = $orderBy;
+        $this->view->recTotal     = $recTotal;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
 
         $this->display();
     }

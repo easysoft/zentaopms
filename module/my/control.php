@@ -348,6 +348,7 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
+        $bugs = $this->bug->checkDelayBugs($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
 
         /* assign. */
@@ -821,6 +822,12 @@ class my extends control
         $this->view->user       = $this->user->getById($this->app->user->account);
         $this->view->rand       = $this->user->updateSessionRandom();
 
+        $this->display();
+    }
+
+    public function guideChangeTheme()
+    {
+        $this->loadModel('setting')->setItem('system.common.global.skipThemeGuide', 'yes');
         $this->display();
     }
 

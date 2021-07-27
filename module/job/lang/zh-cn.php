@@ -20,6 +20,7 @@ $lang->job->svnDir      = 'SVN监控路径';
 $lang->job->jenkins     = 'Jenkins';
 $lang->job->jkHost      = 'Jenkins服务器';
 $lang->job->jkJob       = 'Jenkins任务';
+$lang->job->buildSpec   = '构建对象'; // 'pipeline@server'
 $lang->job->engine      = '构建引擎';
 $lang->job->server      = '服务器';
 $lang->job->pipeline    = '流水线';
@@ -76,6 +77,6 @@ $lang->job->engineList['gitlab']  = 'GitLab';
 $lang->job->engineList['jenkins'] = 'Jenkins';
 
 $lang->job->engineTips = new stdclass;
-$lang->job->engineTips->success = '构建引擎将使用GitLab项目内置的流水线';
-$lang->job->engineTips->error   = '当前GitLab项目内没有可用的流水线，请先前往GitLab配置';
+$lang->job->engineTips->success = '构建引擎将使用GitLab项目内置的流水线.';
+$lang->job->engineTips->error   = '当前GitLab项目内没有可用的流水线，请先前往GitLab配置.';
 

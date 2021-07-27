@@ -58,7 +58,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->doc->keywords;?></th>
-            <td colspan='2'><?php echo html::input('keywords', '', "class='form-control'");?></td>
+            <td colspan='2'><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->doc->type;?></th>

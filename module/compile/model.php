@@ -12,9 +12,9 @@
 class compileModel extends model
 {
     /**
-     * Get by id 
-     * 
-     * @param  int    $buildID 
+     * Get by id
+     *
+     * @param  int    $buildID
      * @access public
      * @return object
      */
@@ -25,16 +25,16 @@ class compileModel extends model
 
     /**
      * Get build list.
-     * 
-     * @param  int    $jobID 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $jobID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
     public function getList($jobID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate,t1.testtask, t2.pipeline,t2.triggerType,t2.comment,t2.atDay,t2.atTime, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
+        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t4')->on('t2.server=t4.id')
@@ -48,7 +48,7 @@ class compileModel extends model
 
     /**
      * Get unexecuted list.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -59,7 +59,7 @@ class compileModel extends model
 
     /**
      * Get last result.
-     * 
+     *
      * @param  int    $jobID
      * @access public
      * @return object
@@ -71,7 +71,7 @@ class compileModel extends model
 
     /**
      * Get build url.
-     * 
+     *
      * @param  object $jenkins
      * @access public
      * @return object
@@ -91,10 +91,10 @@ class compileModel extends model
 
     /**
      * Save build by job
-     * 
-     * @param  int    $jobID 
-     * @param  string $data 
-     * @param  string $type 
+     *
+     * @param  int    $jobID
+     * @param  string $data
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -114,7 +114,7 @@ class compileModel extends model
 
     /**
      * Execute compile
-     * 
+     *
      * @param  object $compile
      * @access public
      * @return bool

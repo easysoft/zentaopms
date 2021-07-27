@@ -1,7 +1,13 @@
 $('#repo').change(function()
 {
     var repoID = $(this).val();
-    var type   = 'Git';
+    $.getJSON(createLink('job', 'ajaxGetProductByRepo', 'repoID=' + repoID), function(product)
+      {
+        console.log(product);
+      }
+    );
+
+    var type = 'Git';
     if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
 
     $('.svn-fields').addClass('hidden');
@@ -86,30 +92,38 @@ $('#triggerType').change(function()
     }
 });
 
-$('#server').change(function()
+$('#jkServer').change(function()
 {
     var jenkinsID = $(this).val();
-    $('#pipelineBox #pipeline').remove();
-    $('#pipelineBox #pipeline_chosen').remove();
-    $('#pipelineBox .input-group').append("<div class='load-indicator loading'></div>");
-    $.getJSON(createLink('jenkins', 'ajaxGetTasks', 'jenkinsID=' + jenkinsID), function(tasks)
+    $('#jenkinsServerTR #jkTask').remove();
+    $('#jenkinsServerTR #jkTask_chosen').remove();
+    $('#jenkinsServerTR .input-group').append("<div class='load-indicator loading'></div>");
+    $.getJSON(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
     {
-        html  = "<select id='pipeline' name='pipeline' class='form-control'>";
+        html  = "<select id='jkTask' name='jkTask' class='form-control'>";
         for(taskKey in tasks)
         {
             var task = tasks[taskKey];
             html += "<option value='" + taskKey + "'>" + task + "</option>";
         }
         html += '</select>';
-        $('#pipelineBox .loading').remove();
-        $('#pipelineBox .input-group').append(html);
+        $('#jenkinsServerTR .loading').remove();
+        $('#jenkinsServerTR .input-group').append(html);
 
-        $('#pipelineBox #pipeline').val(pipeline).chosen({drop_direction: 'auto'});
+        $('#jenkinsServerTR #jkTask').val(jkTask).chosen();
     })
 })
 
+$('#engine').change(function()
+  {
+    $('#jenkinsServerTR').toggle($('#engine').val() == 'jenkins');
+    $('#gitlabServerTR').toggle($('#engine').val() == 'gitlab');
+});
+
+$('#engine').change();
+$('#jkServer').change();
+
 $(function()
 {
-    $('#server').change();
     $('#triggerType').change();
 });

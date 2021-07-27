@@ -16,6 +16,40 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
 ?>
 <div class="side-col" style="width:<?php echo $sideWidth;?>px" data-min-width="<?php echo $sideWidth;?>">
     <div class="cell" id="<?php echo $type;?>">
+      <div id='title'>
+        <li class='menu-title'><?php echo $this->lang->doc->menuTitle;?></li>
+        <?php
+        $canEditLib    = common::hasPriv('doc', 'editLib');
+        $canManageBook = common::hasPriv('doc', 'manageBook');
+        $canManageMenu = common::hasPriv('tree', 'browse');
+        $canEditLib    = common::hasPriv('doc', 'editLib');
+        $canDeleteLib  = common::hasPriv('doc', 'deleteLib');
+        if($type != 'book' and ($canManageMenu or $canEditLib or $canDeleteLib))
+        {
+            echo "<div class='menu-actions'>";
+            echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+            echo "<ul class='dropdown-menu pull-right'>";
+            if($canManageMenu)
+            {
+                echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->doc->manageType, '', "class='iframe'") . '</li>';
+                echo "<li class='divider'></li>";
+            }
+            if($canEditLib) echo '<li>' . html::a($this->createLink('doc', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->doc->editLib, '', "class='iframe'") . '</li>';
+            if($canDeleteLib) echo '<li>' . html::a($this->createLink('doc', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->doc->deleteLib, 'hiddenwin') . '</li>';
+            echo '</ul></div>';
+        }
+
+        if($type == 'book' and ($canEditLib or $canManageBook))
+        {
+            echo "<div class='menu-actions'>";
+            echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+            echo "<ul class='dropdown-menu pull-right'>";
+            if($canEditLib) echo '<li>' . html::a($this->createLink('doc', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->doc->editBook, '', "class='iframe'") . '</li>';
+            if($canManageBook) echo '<li>' . html::a($this->createLink('doc', 'manageBook', "bookID=$libID"), '<i class="icon-cog-outline"></i> ' . $lang->doc->manageBook) . '</li>';
+            echo '</ul></div>';
+        }
+        ?>
+      </div>
       <?php if(!$moduleTree):?>
       <hr class="space">
       <div class="text-center text-muted tips">
@@ -28,22 +62,6 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
       <?php else:?>
       <?php echo $moduleTree;?>
       <?php endif;?>
-      <div class="text-center action">
-        <?php
-        if($type == 'book')
-        {
-            common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editBook, '', "class='btn btn-info btn-wide iframe'", '', true);
-            common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide'");
-        }
-        else
-        {
-            common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
-            common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editLib, '', "class='btn btn-info btn-wide iframe'", '', true);
-            common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->doc->deleteLib, 'hiddenwin', "class='btn btn-info btn-wide'");
-        }
-        ?>
-        <hr class="space-sm" />
-      </div>
     </div>
 <script>
 $(function()

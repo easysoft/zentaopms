@@ -129,11 +129,12 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->position[] = $this->lang->repo->create;
-        $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products   = $this->loadModel('product')->getProductPairsByProject($objectID);
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->position[]  = $this->lang->repo->create;
+        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->products    = $this->loadModel('product')->getProductPairsByProject($objectID);
+        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
 
         $this->display();
     }
@@ -166,25 +167,26 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        if($repo->SCM == 'Gitlab')
+        if(strtolower($repo->SCM) == 'gitlab')
         {
+            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->gitlab);
 
-            $projects = $this->repo->getGitlabProjects($repo->client, $repo->password);
             $options  = array();
-            foreach($projects as $project) $options[$project->id] = $project->name . ':' . $project->http_url_to_repo;
+            foreach($projects as $project) $options[$project->id] = $project->name_with_namespace;
 
             $this->view->projects = $options;
         }
 
-        $repo->repoType       = $repo->id . '-' . $repo->SCM;
-        $this->view->repo     = $repo;
-        $this->view->repoID   = $repoID;
-        $this->view->objectID = $objectID;
-        $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $repo->repoType          = $repo->id . '-' . $repo->SCM;
+        $this->view->repo        = $repo;
+        $this->view->repoID      = $repoID;
+        $this->view->objectID    = $objectID;
+        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->products    = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
 
@@ -440,6 +442,7 @@ class repo extends control
         {
             $infos = unserialize(file_get_contents($cacheFile));
         }
+
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Set logType and revisions. */
@@ -1108,22 +1111,22 @@ class repo extends control
     /**
      * Ajax get gitlab projects.
      *
-     * @param  string    $host
+     * @param  string    $gitlabID
      * @param  string    $token
      * @access public
      * @return void
      */
-    public function ajaxGetGitlabProjects($host, $token)
+    public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '')
     {
-        $host     = helper::safe64decode($host);
-        $projects = $this->repo->getgitlabprojects($host, $token);
+        $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
 
         if(!$projects) $this->send(array('message' => array()));
-
+        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
-            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name}:{$project->http_url_to_repo}</option>";
+            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
+            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
         }
 
         die($options);

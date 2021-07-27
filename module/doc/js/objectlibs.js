@@ -1,3 +1,8 @@
+$(function()
+{
+    if($.cookie('isFullScreen') == 1) fullScreen();
+})
+
 /**
  * Ajax delete doc.
  *
@@ -43,27 +48,46 @@ function fullScreen()
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
     if(requestMethod)
     {
+        $('#content').addClass('scrollbar-hover');
         $('#content .actions').addClass('hidden');
+        $('#content .file-image .right-icon').addClass('hidden');
+        $('#content .files-list .right-icon').addClass('hidden');
         requestMethod.call(element);
+        $.cookie('isFullScreen', 1);
     }
+}
+
+/**
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
+function exitFullScreen()
+{
+    $('#content').removeClass('scrollbar-hover');
+    $('#content .actions').removeClass('hidden');
+    $('#content .file-image .right-icon').removeClass('hidden');
+    $('#content .files-list .right-icon').removeClass('hidden');
+    $.cookie('isFullScreen', 0);
 }
 
 document.addEventListener("fullscreenchange", function (e)
 {
-    if(!document.fullscreenElement) $('#content .actions').removeClass('hidden');
+    if(!document.fullscreenElement) exitFullScreen();
 })
 
 document.addEventListener("webkitfullscreenchange", function (e)
 {
-    if(!document.webkitFullscreenElement) $('#content .actions').removeClass('hidden');
+    if(!document.webkitFullscreenElement) exitFullScreen();
 })
 
 document.addEventListener("mozfullscreenchange", function (e)
 {
-    if(!document.mozFullScreenElement) $('#content .actions').removeClass('hidden');
+    if(!document.mozFullScreenElement) exitFullScreen();
 })
 
 document.addEventListener("msfullscreenChange", function (e)
 {
-    if(!document.msfullscreenElement) $('#content .actions').removeClass('hidden');
+    if(!document.msfullscreenElement) exitFullScreen();
 })

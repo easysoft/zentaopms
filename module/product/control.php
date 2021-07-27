@@ -1120,15 +1120,8 @@ class product extends control
         }
 
         /* Process product structure. */
-        $productStructure = array();
         $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story');
-
-        foreach($productStats as $product)
-        {
-            $productStructure[$product->program][$product->line]['products'][$product->id]      = $product;
-            if($product->line) $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
-            if($product->program) $productStructure[$product->program]['programName']           = $product->programName;
-        }
+        $productStructure = $this->product->statisticProgam($productStats);
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;

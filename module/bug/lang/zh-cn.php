@@ -80,6 +80,7 @@ $lang->bug->lastEditedDate   = '修改日期';
 $lang->bug->fromCase         = '来源用例';
 $lang->bug->toCase           = '生成用例';
 $lang->bug->colorTag         = '颜色标签';
+$lang->bug->repairRate       = '修复率';
 
 /* 方法列表。*/
 $lang->bug->index              = '首页';

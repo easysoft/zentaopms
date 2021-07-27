@@ -7,12 +7,11 @@ $(function()
         $form.css('min-height', $form.height());
     })
 
-    $('#gitlabHost, #gitlabToken').change(function()
+    $('#gitlabHost').change(function()
     {
-        host  = Base64.encode($('#gitlabHost').val());
-        token = $('#gitlabToken').val();
-        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host + '&token=' + token);
-        if(host == '' || token == '') return false;
+        host = $('#gitlabHost').val();
+        if(host == '') return false;
+        url  = createLink('repo', 'ajaxGetGitlabProjects', "host=" + host);
 
         $.get(url, function(response)
         {
@@ -20,7 +19,7 @@ $(function()
             $('#gitlabProject').chosen().trigger("chosen:updated");;
         });
     });
-    
+
     $('#gitlabProject').change(function()
     {
         $option = $(this).find('option:selected');
@@ -28,7 +27,6 @@ $(function()
         $('#name').val($option.data('name'));
         $(this).chosen().trigger("chosen:updated");
     });
-   
 });
 
 function scmChanged(scm)

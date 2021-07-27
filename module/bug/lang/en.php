@@ -80,6 +80,7 @@ $lang->bug->lastEditedDate   = 'EditedDate';
 $lang->bug->fromCase         = 'From Case';
 $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
+$lang->bug->repairRate       = 'Repair Rate';
 
 /* Method list. */
 $lang->bug->index              = 'Bug Home';

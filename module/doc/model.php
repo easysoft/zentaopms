@@ -1651,7 +1651,7 @@ class docModel extends model
         elseif($libID)
         {
             $html  = "<div class='dropdown' id='createDropdown'>";
-            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . " <span class='caret'></span></button>";
+            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->createAB . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
@@ -1673,6 +1673,47 @@ class docModel extends model
             $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i>' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe"');
         }
 
+        return $html;
+    }
+
+    public function buildCollectButton4Doc()
+    {
+        $allLibs = array_keys($this->getLibs('all'));
+        $docs    = $this->dao->select('t1.id,t1.title,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.lib')->in($allLibs)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
+            ->andWhere('t1.collector')->like("%,{$this->app->user->account},%")
+            ->orderBy('t1.id_desc')
+            ->limit($this->config->doc->defaultShowNumber)
+            ->fetchAll();
+
+        $html  = "<div class='btn-group dropdown-hover'>";
+        $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
+        $html .= "<ul class='dropdown-menu pull-right'>";
+
+        if(empty($docs)) $html .= "<li>{$this->lang->noData}</li>";
+
+        foreach($docs as $doc)
+        {
+            $objectID = 0;
+            if($doc->type == 'product')   $objectID = $doc->product;
+            if($doc->type == 'project')   $objectID = $doc->project;
+            if($doc->type == 'execution') $objectID = $doc->execution;
+
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i>" . $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
+        }
+
+        $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('lib')->in($allLibs)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+            ->andWhere('collector')->like("%,{$this->app->user->account},%")
+            ->fetch('count');
+        if($collectionCount > 10) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
+
+        $html .= '</ul></div>';
         return $html;
     }
 
@@ -1823,19 +1864,46 @@ class docModel extends model
     {
         if($type != 'custom' and $type != 'book' and empty($objects)) return '';
 
-        $output = '';
+        $output             = '';
+        $closedProjectsHtml = '';
+        $clseedProjects     = array();
+        $maxHeight          = ($type == 'project' and $this->app->openApp == 'doc') ? '260px' : '290px';
+        $class              = ($type == 'project' and $this->app->openApp == 'doc') ? 'col-left' : '';
+
+        $currentMethod = $this->app->getMethodName();
+        $methodName    = $currentMethod == 'tablecontents' ? 'tablecontents' : 'objectLibs';
 
         if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
-            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
-            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-            $output .= "<div class='table-col'><div class='list-group'>";
+            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input"/><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "<div class='list-group'><div class='table-row'><div class='table-col $class'><div class='list-group' style='max-height: $maxHeight'>";
+            if($type == 'project' and $this->app->openApp == 'doc')
+            {
+                $clseedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
+            }
+
             foreach($objects as $key => $object)
             {
                 $selected = $key == $objectID ? 'selected' : '';
-                $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                if(isset($clseedProjects[$key]))
+                {
+                    $closedProjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                    if($selected == 'selected') $tabActive = 'closed';
+                }
+                else
+                {
+                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                }
             }
-            $output .= "</div></div></div></div></div>";
+            if($type == 'project' and $this->app->openApp == 'doc')
+            {
+                $output .= "</div><div class='col-footer'><a class='pull-right toggle-right-col not-list-item'>{$this->lang->project->doneProjects}<i class='icon icon-angle-right'></i></a></div></div><div class='table-col col-right'> <div class='list-group'>$closedProjectsHtml</div></div></div></div></div></div></div>";
+            }
+            else
+            {
+                $output .= "</div></div></div></div></div></div></div>";
+            }
         }
 
         if(!empty($libs))
@@ -1846,8 +1914,9 @@ class docModel extends model
             foreach($libs as $key => $lib)
             {
                 $selected = $key == $libID ? 'selected' : '';
-                $output  .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
+                $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
+            if($type != 'custom') $output .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "data-app='{$this->app->openApp}'");
             $output .= "</div></div></div></div></div>";
         }
 
@@ -1857,16 +1926,19 @@ class docModel extends model
     /**
      * Get doc tree menu.
      *
-     * @param  string $type
-     * @param  int    $objectID
-     * @param  int    $rootID
-     * @param  int    $startModule
+     * @param  string  $type
+     * @param  int     $objectID
+     * @param  int     $rootID
+     * @param  int     $startModule
+     * @param  pointer $docID
      * @access public
      * @return string
      */
     public function getTreeMenu($type, $objectID, $rootID, $startModule = 0, & $docID = 0)
     {
         $startModulePath = '';
+        $currentMethod   = $this->app->getMethodName();
+        $users           = $this->loadModel('user')->getPairs('noletter');
         if($startModule > 0)
         {
             $startModule = $this->tree->getById($startModule);
@@ -1901,8 +1973,18 @@ class docModel extends model
 
             foreach($moduleDocs[0] as $doc)
             {
-                if(!$docID) $docID = $doc->id;
-                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
+                if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+
+                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . '>';
+
+                if($currentMethod == 'tablecontents')
+                {
+                    $treeMenu[0] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                }
+
+                $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title' title='{$doc->title}'");
+
+                $treeMenu[0] .= '</li>';
             }
         }
 
@@ -1921,30 +2003,41 @@ class docModel extends model
      * @param  int     $libID
      * @param  object  $module
      * @param  array   $moduleDocs
-     * @param  int     $docID
-     * @access public
+     * @param  pointer $docID
+     * @access private
      * @return string
      */
     private function buildTree(& $treeMenu, $type, $objectID, $libID, $module, $moduleDocs, & $docID)
     {
         if(!isset($treeMenu[$module->id])) $treeMenu[$module->id] = '';
 
+        $users         = $this->loadModel('user')->getPairs('noletter');
+        $currentMethod = $this->app->getMethodName();
+
         if(isset($moduleDocs[$module->id]))
         {
             foreach($moduleDocs[$module->id] as $doc)
             {
-                if(!$docID) $docID = $doc->id;
-                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>' . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
+                if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+                $treeMenu[$module->id] = '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>';
+
+                if($currentMethod == 'tablecontents')
+                {
+                    $treeMenu[$module->id] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                }
+                $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title' title='{$doc->title}'");
+
+                $treeMenu[$module->id] .= '</li>';
             }
         }
 
-        $li = '<a>' . $module->name . '</a>';
+        $li = "<a title='{$module->name}'>" . $module->name . '</a>';
         if($treeMenu[$module->id])
         {
             $li .= '<ul>' . $treeMenu[$module->id] . '</ul>';
         }
 
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
-        $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed"' : '') . '>' . $li . '</li>';
+        $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed catalog"' : ' class="catalog"') . '>' . $li . '</li>';
     }
 }

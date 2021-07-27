@@ -11,8 +11,9 @@
         <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
         <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
-        <th class='w-100px'><?php common::printOrderLink('begin',  $orderBy, $vars, $lang->project->begin);?></th>
-        <th class='w-100px'><?php common::printOrderLink('end',    $orderBy, $vars, $lang->project->end);?></th>
+        <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
+        <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->project->end);?></th>
+        <th class='w-60px'><?php echo $lang->project->progress;?></th>
         <th class='text-center w-180px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -45,8 +46,13 @@
 
       <tr <?php echo $trAttrs;?>>
         <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?>' title='<?php echo $program->name?>'>
-          <?php $class = $program->type == 'program' ? ' table-nest-toggle' : '';?>
-          <span class="table-nest-icon icon icon-<?php echo $program->type;?> <?php echo $class;?>"></span>
+          <?php
+          $icon = '';
+          if($program->type == 'program') $icon = ' icon-program';
+          if($program->type == 'project') $icon = ' icon-common icon-' . (isset($this->config->maxVersion) ? $program->model : $program->type);
+          $class = $program->type == 'program' ? ' table-nest-toggle' : '';
+          ?>
+          <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
           <?php if($program->type == 'program'):?>
           <?php echo html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name);?>
           <?php else:?>
@@ -68,6 +74,13 @@
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
+        <td>
+          <?php if(isset($progressList[$program->id])):?>
+          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $progressList[$program->id]?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo $progressList[$program->id];?></div>
+          </div>
+          <?php endif;?>
+        </td>
         <td class='c-actions'>
           <?php if($program->type == 'program'):?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>
@@ -130,7 +143,10 @@
 #programList > thead > tr > th .table-nest-toggle-global {top: 6px}
 #programList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
 #programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
-#programTableList .icon-project:before {content: '\e99c'; width: 22px; height: 22px; background: none; color: #16a8f8; top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
+#programTableList .icon-common:before {width: 22px; height: 22px; background: none; color: rgb(166, 170, 184); top: 0; line-height: 22px; margin-right: 2px; font-size: 14px}
+#programTableList .icon-project:before {content: '\e99c';}
+#programTableList .icon-scrum:before {content: '\e9a2';}
+#programTableList .icon-waterfall:before {content: '\e9a4';}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
@@ -174,6 +190,12 @@ $(function()
             $list.children('.drop-not-allowed').removeClass('drop-not-allowed');
             $('#programForm').table('initNestedList')
         }
+    });
+
+    $('#programForm').on('tableNestStateChanged', function()
+    {
+        /* Ensure visible progress pie inited after toggle nest states */
+        $('.progress-pie:visible').progressPie();
     });
 });
 </script>
