@@ -825,6 +825,12 @@ class my extends control
         $this->display();
     }
 
+    public function guideChangeTheme()
+    {
+        $this->loadModel('setting')->setItem('system.common.global.skipThemeGuide', 'yes');
+        $this->display();
+    }
+
     /**
      * Manage contacts.
      *
