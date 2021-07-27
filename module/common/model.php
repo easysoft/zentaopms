@@ -2027,6 +2027,29 @@ EOD;
     }
 
     /**
+     * Check an entry of new API.
+     *
+     * @access public
+     * @return void
+     */
+    private function checkNewEntry()
+    {
+        $entry = $this->loadModel('entry')->getByKey(session_id());
+        if(!$entry or !$entry->account or !$this->checkIP($entry->ip)) return false;
+
+        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
+        if(!$user) return false;
+
+        $user->last   = time();
+        $user->rights = $this->loadModel('user')->authorize($user->account);
+        $user->groups = $this->user->getGroups($user->account);
+        $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
+        $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
+        $this->session->set('user', $user);
+        $this->app->user = $user;
+    }
+
+    /**
      * Check an entry.
      *
      * @access public
@@ -2034,20 +2057,17 @@ EOD;
      */
     public function checkEntry()
     {
-        if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;
+        /* if the API is new version, goto checkNewEntry. */
+        if($this->app->version) return $this->checkNewEntry();
 
-        $this->loadModel('entry');
-        if($this->session->valid_entry)
-        {
-            if(!$this->session->entry_code) $this->response('SESSION_CODE_MISSING');
-            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response('SESSION_VERIFY_FAILED');
-            return true;
-        }
+        /* Old version. */
+        if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;
 
         if(!$this->get->code)  $this->response('PARAM_CODE_MISSING');
         if(!$this->get->token) $this->response('PARAM_TOKEN_MISSING');
 
-        $entry = $this->entry->getByCode($this->get->code);
+        $entry = $this->loadModel('entry')->getByCode($this->get->code);
+
         if(!$entry)                         $this->response('EMPTY_ENTRY');
         if(!$entry->key)                    $this->response('EMPTY_KEY');
         if(!$this->checkIP($entry->ip))     $this->response('IP_DENIED');

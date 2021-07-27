@@ -28,15 +28,15 @@ class ciModel extends model
      */
     public function checkCompileStatus()
     {
-        $compiles = $this->dao->select('t1.*, t2.pipeline, t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')
-            ->from(TABLE_COMPILE)->alias('t1')
-            ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
-            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t2.server=t3.id')
-            ->where('t1.status')->ne('success')
-            ->andWhere('t1.status')->ne('failure')
-            ->andWhere('t1.status')->ne('create_fail')
-            ->andWhere('t1.status')->ne('timeout')
-            ->andWhere('t1.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
+        $compiles = $this->dao->select('compile.*, job.engine,job.pipeline, pipeline.name as jenkinsName,job.server,pipeline.url,pipeline.account,pipeline.token,pipeline.password')
+            ->from(TABLE_COMPILE)->alias('compile')
+            ->leftJoin(TABLE_JOB)->alias('job')->on('compile.job=job.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('pipeline')->on('job.server=pipeline.id')
+            ->where('compile.status')->ne('success')
+            ->andWhere('compile.status')->ne('failure')
+            ->andWhere('compile.status')->ne('create_fail')
+            ->andWhere('compile.status')->ne('timeout')
+            ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
         foreach($compiles as $compile) $this->syncCompileStatus($compile);
@@ -57,6 +57,7 @@ class ciModel extends model
             return false;
         }
 
+        if($compile->engine == 'gitlab') return $this->syncGitlabTaskStatus($compile);
         $jenkinsServer   = $compile->url;
         $jenkinsUser     = $compile->account;
         $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
@@ -110,6 +111,22 @@ class ciModel extends model
                 }
             }
         }
+    }
+
+    /**
+     * Sync gitlab task status.
+     * 
+     * @param  int    $compile
+     * @access public
+     * @return bool
+     */
+    public function syncGitlabTaskStatus($compile)
+    {
+        $now = helper::now();
+        $pipeline = $this->loadModel('gitlab')->apiGetSinglePipeline($compile->server, $compile->pipeline, $compile->queue);
+        $this->dao->update(TABLE_COMPILE)->set('status')->eq($pipeline->status)->set('updateDate')->eq($now)->where('id')->eq($compile->id)->exec();
+        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
+        return !dao::isError();
     }
 
     /**

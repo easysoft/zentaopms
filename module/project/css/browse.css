@@ -7,4 +7,5 @@ td.c-actions {overflow: visible;}
 .c-actions .btn {overflow: visible;}
 #programBox {float: left; margin-right: 10px;}
 #switchButton {background: #fff !important;}
-.panel-actions {position: relative; display: inline-block; vertical-align: middle; padding: 0 0;}
+.panel-actions {position: relative; padding: 0 0;}
+.icon-cards-view {padding-left: 7px;}

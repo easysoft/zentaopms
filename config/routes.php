@@ -38,4 +38,7 @@ $routes['/user']      = 'user';
 $routes['/programs']     = 'programs';
 $routes['/programs/:id'] = 'program';
 
+$routes['/issues/:issueID']            = 'productIssue';
+$routes['/products/:productID/issues'] = 'productIssues';
+
 $config->routes = $routes;

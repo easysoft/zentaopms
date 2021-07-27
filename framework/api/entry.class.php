@@ -10,6 +10,8 @@ class entry extends baseEntry
         parent::__construct();
 
         if(!isset($this->app->user)) $this->sendError(401, 'Unauthorized');
+
+        $this->dao = $this->loadModel('common')->dao;
     }
 }
 
@@ -47,8 +49,9 @@ class baseEntry
      */
     public function __construct()
     {
-        global $app;
-        $this->app = $app;
+        global $app, $config;
+        $this->app    = $app;
+        $this->config = $config;
 
         $this->parseRequestBody();
     }
@@ -476,9 +479,8 @@ class baseEntry
                 return gmdate("Y-m-d\TH:i:s\Z", strtotime($value));
             }
             return $value;
-        case 'int':
         case 'bool':
-            return $value;
+            return boolval($value) ? true : false;
         default:
             return $value;
         }

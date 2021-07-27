@@ -442,6 +442,7 @@ class repo extends control
         {
             $infos = unserialize(file_get_contents($cacheFile));
         }
+
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Set logType and revisions. */

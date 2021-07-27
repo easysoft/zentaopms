@@ -11,7 +11,7 @@ class storiesEntry extends entry
     public function get($productID)
     {
         $control = $this->loadController('product', 'browse');
-        $control->browse($productID);
+        $control->browse($productID, $this->param('branch', 0), $this->param('type', ''), 0, 'story', $this->param('order', ''), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
