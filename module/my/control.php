@@ -32,7 +32,12 @@ class my extends control
      */
     public function index()
     {
-        $this->view->title = $this->lang->my->common;
+        $skipThemeGuide = true;
+        $accounts       = zget($this->config->global, 'skipThemeGuide', '');
+        if(strpos(",$accounts,", $this->app->user->account) === false) $skipThemeGuide = false;
+
+        $this->view->title          = $this->lang->my->common;
+        $this->view->skipThemeGuide = $skipThemeGuide;
         $this->display();
     }
 
@@ -825,9 +830,18 @@ class my extends control
         $this->display();
     }
 
+    /**
+     * Guide the user to change the theme.
+     *
+     * @access public
+     * @return void
+     */
     public function guideChangeTheme()
     {
-        $this->loadModel('setting')->setItem('system.common.global.skipThemeGuide', 'yes');
+        $accounts = zget($this->config->global, 'skipThemeGuide', '');
+        if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
+        $this->loadModel('setting')->setItem('system.common.global.skipThemeGuide', $accounts);
+
         $this->display();
     }
 

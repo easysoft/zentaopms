@@ -1,6 +1,6 @@
 $(function()
 {
-    if(skipThemeGuide == 'no') $('#changeTheme').click();
+    if(!skipThemeGuide) $('#changeTheme').click();
 
     /* Set the heights of every block to keep them same height. */
     projectBoxHeight = $('#projectbox').height();

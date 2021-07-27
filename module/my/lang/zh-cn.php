@@ -114,3 +114,11 @@ if($config->systemMode == 'new')
     $lang->my->executionLinkList['execution-all']   = '默认进入执行列表，可以查看所有的执行';
 }
 if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "默认进入最近一个{$lang->executionCommon}的任务列表，可以查看当前{$lang->executionCommon}下的任务信息";
+
+$lang->my->guideChangeTheme = <<<EOT
+<p class='theme-title'>全新<span style='color: #0c60e1'>“青春蓝”</span>主题上线了！</p>
+<div>
+  <p>只需一步，您就可以体验全新的“青春蓝”主题了，赶紧去设置吧！</p>
+  <p>鼠标经过<span style='color: #0c60e1'>【头像-主题-青春蓝】</span>，点击青春蓝，设置成功！</p>
+</div>
+EOT;

@@ -114,3 +114,11 @@ $lang->my->executionLinkList['execution-all']   = 'Enter the execution list by d
 $lang->my->executionLinkList['execution-task']  = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
 }
 if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "By default, enter the list of the most recently {$lang->executionCommon} task, and you can view the task information under the current {$lang->executionCommon}";
+
+$lang->my->guideChangeTheme = <<<EOT
+<p class='theme-title'><span style='color: #0c60e1'>"Young Blue"</span> theme is available now!</p>
+<div>
+  <p>Just one step and you will have it.</p>
+  <p>Click <span style='color: #0c60e1'>Avatar-Theme-Young Blue</span>. It is done!</p>
+</div>
+EOT;

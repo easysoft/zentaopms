@@ -185,6 +185,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
+            if($module == 'my' and $method == 'guidechangetheme') return true;
             if($module == 'misc' and $method == 'downloadclient') return true;
             if($module == 'misc' and $method == 'changelog')  return true;
             if($module == 'tutorial' and $method == 'start')  return true;
