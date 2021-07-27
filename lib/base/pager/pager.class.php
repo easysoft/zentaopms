@@ -131,10 +131,10 @@ class basePager
         $this->setModuleName();
         $this->setMethodName();
 
-        $this->setRecTotal($recTotal);
-        $this->setRecPerPage($recPerPage);
+        $this->setRecTotal((int)$recTotal);
+        $this->setRecPerPage((int)$recPerPage);
         $this->setPageTotal();
-        $this->setPageID($pageID);
+        $this->setPageID((int)$pageID);
     }
 
     /**

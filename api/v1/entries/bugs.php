@@ -11,7 +11,7 @@ class bugsEntry extends entry
     public function get($productID)
     {
         $control = $this->loadController('bug', 'browse');
-        $control->browse($productID);
+        $control->browse($productID, $this->param('branch', ''), $this->param('status', ''), 0, $this->param('order', ''), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')

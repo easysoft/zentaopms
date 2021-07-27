@@ -36,6 +36,18 @@ class entryModel extends model
     }
 
     /**
+     * Get an entry by key.
+     *
+     * @param  string $key
+     * @access public
+     * @return object
+     */
+    public function getByKey($key)
+    {
+        return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('`key`')->eq($key)->fetch();
+    }
+
+    /**
      * Get entry list. 
      * 
      * @param  string $orderBy

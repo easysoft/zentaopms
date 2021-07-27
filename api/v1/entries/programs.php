@@ -11,7 +11,7 @@ class ProgramsEntry extends Entry
     public function get()
     {
         $program = $this->loadController('program', 'browse');
-        $program->browse();
+        $program->browse($this->param('status', 'all'), $this->param('order', 'order_asc'));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'success')

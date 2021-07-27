@@ -11,7 +11,7 @@ class tasksEntry extends entry
     public function get($executionID)
     {
         $control = $this->loadController('execution', 'task');
-        $control->task($executionID, 'all');
+        $control->task($executionID, $this->param('status', 'all'), 0, $this->param('order', ''), $this->param('total', 0), $this->param('limit', 100), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
