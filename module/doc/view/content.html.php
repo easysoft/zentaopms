@@ -124,6 +124,9 @@ $sessionString .= session_name() . '=' . session_id();
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true', 'object' => $doc));?>
+      <div id="mainActions" class='main-actions hidden'>
+        <?php common::printPreAndNext($preAndNext);?>
+      </div>
     </div>
     <div class='cell'>
       <?php

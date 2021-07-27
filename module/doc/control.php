@@ -955,6 +955,7 @@ class doc extends control
         $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
         $this->view->actions      = $docID ? $this->action->getList('doc', $docID) : array();
         $this->view->users        = $this->user->getPairs('noclosed,noletter');
+        $this->view->preAndNext   = $this->doc->getPreAndNextDoc($docID, $libID);
         $this->display();
     }
 

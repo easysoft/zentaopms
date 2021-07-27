@@ -48,6 +48,7 @@ function fullScreen()
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
     if(requestMethod)
     {
+        $('#mainActions').removeClass('hidden');
         $('#content').addClass('scrollbar-hover');
         $('#content .actions').addClass('hidden');
         $('#content .file-image .right-icon').addClass('hidden');
@@ -65,6 +66,7 @@ function fullScreen()
  */
 function exitFullScreen()
 {
+    $('#mainActions').addClass('hidden');
     $('#content').removeClass('scrollbar-hover');
     $('#content .actions').removeClass('hidden');
     $('#content .file-image .right-icon').removeClass('hidden');
