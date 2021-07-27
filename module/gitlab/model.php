@@ -757,7 +757,7 @@ class gitlabModel extends model
     public function apiGetJobLog($gitlabID, $projectID, $jobID)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}/trace");
-        return json_decode(commonModel::http($url));
+        return commonModel::http($url);
     }
 
     /**
