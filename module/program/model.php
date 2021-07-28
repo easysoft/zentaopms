@@ -884,15 +884,24 @@ class programModel extends model
     {
         /* Init vars. */
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
+
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
         $stats       = array();
         $hours       = array();
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $leftTasks   = array();
+        $teamMembers = array();
+
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->in($projectKeys)
+            ->andWhere('type')->in('sprint,stage')
+            ->fetchAll('id');
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
             ->from(TABLE_TASK)
             ->where('project')->in($projectKeys)
             ->andWhere('parent')->lt(1)
@@ -905,9 +914,9 @@ class programModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                $hour->totalEstimate += $task->estimate;
+                if(in_array($task->execution, array_keys($executions))) $hour->totalEstimate += $task->estimate;
                 $hour->totalConsumed += $task->consumed;
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+                if($task->status != 'cancel' and $task->status != 'closed' and in_array($task->execution, array_keys($executions))) $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
         }
@@ -922,12 +931,32 @@ class programModel extends model
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
         }
 
+        /* Get the number of lefting tasks. */
+        if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
+        {
+            $leftTasks = $this->dao->select('project,count(*) as tasks')->from(TABLE_TASK)
+                ->where('project')->in($projectKeys)
+                ->andWhere('status')->notIn('cancel,closed')
+                ->andWhere('execution')->in(array_keys($executions))
+                ->groupBy('project')
+                ->fetchAll('project');
+        }
+
         /* Get the number of project teams. */
         $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
             ->where('root')->in($projectKeys)
             ->andWhere('type')->eq('project')
             ->groupBy('root')
             ->fetchAll('root');
+
+        /* Get the members of project teams. */
+        if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
+        {
+            $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
+                ->where('root')->in($projectKeys)
+                ->andWhere('type')->eq('project')
+                ->fetchGroup('root', 'account');
+        }
 
         /* Process projects. */
         foreach($projects as $key => $project)
@@ -944,7 +973,9 @@ class programModel extends model
             /* Process the hours. */
             $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
 
-            $project->teamCount = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
+            $project->teamCount   = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
+            $project->leftTasks   = isset($leftTasks[$project->id]) ? $leftTasks[$project->id]->tasks : '—';
+            $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
             $stats[$key] = $project;
         }
         return $stats;
