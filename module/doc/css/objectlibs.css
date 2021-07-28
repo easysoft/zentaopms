@@ -25,3 +25,14 @@
 .main-col+.side-col {padding-left: 16px;}
 .main-col iframe {min-height: 380px;}
 .article-content .keywords {margin-bottom: 15px;}
+
+.article-content {width: 100%; display: inline-block;}
+.outline {position: relative;}
+.outline .outline-toggle i.icon-angle-right, i.icon-angle-left {width: 18px; height: 18px; background: #efefef; border-radius: 50%; position: absolute;}
+.outline .outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
+.outline .outline-toggle i.icon-angle-left:before {content: "\e315"; cursor: pointer;}
+.outline ul li {list-style: none;}
+.outline-content {display: none; padding-top: 18px;}
+.outline-content a {color: #838A9D;}
+.outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
+#outline li.has-list.open:before {content: unset;}

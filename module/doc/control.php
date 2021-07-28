@@ -935,6 +935,71 @@ class doc extends control
             }
         }
 
+        if(isset($doc) and $doc->type == 'text')
+        {
+            /* Split content into an array. */
+            $content = explode("\n", $doc->content);
+
+            /* Get the head element, for example h1,h2,etc. */
+            $includeHeadElement = array();
+            foreach($content as $index => $element)
+            {
+                preg_match('/<(h[1-6])>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+                if(isset($headElement[1]) and !in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[2]) != '') $includeHeadElement[] = $headElement[1];
+            }
+
+            /* Get the two elements with the highest rank. */
+            sort($includeHeadElement);
+            $includeHeadElement = array_slice($includeHeadElement, 0, 2);
+
+            if($includeHeadElement)
+            {
+                $outline    = '<ul class="tree tree-angles" data-ride="tree" id="outline">';
+                $preElement = '';
+                foreach($content as $index => $element)
+                {
+                    preg_match('/<(h[1-6])>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+                    /* The current element is existed, the element is in the includeHeadElement, and the text in the element is not null. */
+                    if(isset($headElement[1]) and in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[2]) != '')
+                    {
+                        /* The element is the first level. */
+                        if(array_search($headElement[1], $includeHeadElement) == 0)
+                        {
+                            /* The second level is existed, and previous element is the second level element. */
+                            if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1]) $outline .= '</ul></li>';
+                            if($preElement == $includeHeadElement[0]) $outline .= '</li>';
+
+                            /* Add the anchor to the element. */
+                            $content[$index] = str_replace('<' . $includeHeadElement[0] . '>', '<' . $includeHeadElement[0] . " id='anchor{$index}'" . '>', $content[$index]);
+                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[2]), '', "title='" . strip_tags($headElement[2]) . "'");
+
+                            $preElement = $headElement[1];
+                        }
+                        elseif(array_search($headElement[1], $includeHeadElement) == 1)
+                        {
+                            if($preElement == '') $outline .= '<li><ul>';
+                            if($preElement == $includeHeadElement[0]) $outline .= '<ul>';
+
+                            /* Add the anchor to the element. */
+                            $content[$index] = str_replace('<' . $includeHeadElement[1] . '>', '<' . $includeHeadElement[1] . " id='anchor{$index}'" . '>', $content[$index]);
+                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[2]), '', "title='" . strip_tags($headElement[2]) . "'") . '</li>';
+
+                            $preElement = $includeHeadElement[1];
+                        }
+                    }
+                    /* */
+                    if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1] and !isset($content[$index+1])) $outline .= '</ul></li>';
+                }
+                $outline .= '</ul>';
+
+                $doc->content = implode("\n", $content);
+
+                $this->view->outline = $outline;
+            }
+        }
+
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
 
