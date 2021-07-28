@@ -126,9 +126,9 @@
                 if($project->status != 'closed') common::printIcon('project', 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
                 ?>
               </ul>
+              <?php endif;?>
             </div>
           </div>
-          <?php endif;?>
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ td.c-actions {overflow: visible;}
 
 #cards {margin: 0 0;}
 #cards > .col {width: 25%;}
-#cards .panel {margin: 10px 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; height: 146px; cursor: pointer; height: 180px;}
+#cards .panel {margin: 10px 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 170px;}
 #cards .pager .btn {padding-top: 4px;}
 #cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel .projectStatus .label{float: right;}
@@ -27,7 +27,7 @@ td.c-actions {overflow: visible;}
 #cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
 #cards .project-infos > span + span {margin-left: 15px;}
 #cards .project-detail {position: absolute; top: 75px; left: 16px; right: 16px; font-size: 12px;}
-#cards .project-footer {position: absolute; bottom: 15px;}
+#cards .project-footer {position: absolute; bottom: 5px;}
 #cards .pager {margin: 0; float: right;}
 #cards .pager .btn {border: none}
 #cards .panel .label-wait {background: #EFEFEF !important; color: #838A9D;}
@@ -51,4 +51,4 @@ td.c-actions {overflow: visible;}
 #cards .project-actions .menu-actions {padding-right: 20px;}
 #cards .project-actions ul {min-width: 35px; padding: 5px 6px;}
 #cards .project-actions .dropdown-hover:hover>.dropdown-menu ul, .open>.dropdown-menu ul {display: flex;}
-#cards .btn.btn-action, .c-actions .btn {margin-bottom: -3px !important;}
+#cards .btn.btn-action, .c-actions .btn {margin-bottom: -3px !important; margin-right: 5px;}
