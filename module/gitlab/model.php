@@ -751,7 +751,7 @@ class gitlabModel extends model
      * @param integer $gitlabID
      * @param integer $projectID
      * @param integer $jobID
-     * @return object
+     * @return string
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-log-file
      */
     public function apiGetJobLog($gitlabID, $projectID, $jobID)
@@ -759,6 +759,34 @@ class gitlabModel extends model
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}/trace");
         return commonModel::http($url);
     }
+
+    /**
+     * Get project repository branches by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetBranches($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/branches");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get project repository tags by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+     public function apiGetTags($gitlabID, $projectID)
+     {
+         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/tags");
+         return json_decode(commonModel::http($url));
+     }
 
     /**
      * Check webhook token by HTTP_X_GITLAB_TOKEN.
