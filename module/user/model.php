@@ -1115,7 +1115,7 @@ class userModel extends model
                 if($project->project)
                 {
                     $parentProject = zget($projectList, $project->project, '');
-                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->exec();
+                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
                     $project->projectName = $parentProject ? $parentProject->name : '';
                 }
                 $myProjects[$project->id] = $project;
@@ -1887,7 +1887,7 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 $whiteList    = zget($whiteListGroup, $program->id, array());
-                if($program->acl == 'program') 
+                if($program->acl == 'program')
                 {
                     $stakeholders += zget($parentStakeholderGroup, $program->id, array());
                     $stakeholders += zget($parentPMGroup, $program->id, array());
@@ -1911,7 +1911,7 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 $whiteList    = zget($whiteListGroup, $program->id, array());
-                if($program->acl == 'program') 
+                if($program->acl == 'program')
                 {
                     $stakeholders += zget($parentStakeholderGroup, $program->id, array());
                     $stakeholders += zget($parentPMGroup, $program->id, array());
