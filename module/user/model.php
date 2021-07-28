@@ -2205,6 +2205,14 @@ class userModel extends model
 
         if($program->PM == $account || $program->openedBy == $account) return true;
 
+        /* Parent program managers. */
+        if($program->parent != 0 && $program->acl == 'program')
+        {
+            $path    = str_replace(",{$program->id},", ',', "{$program->path}");
+            $parents = $this->dao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
+            foreach($parents as $parent) if($parent->PM == $account) return true;
+        }
+
         if($program->acl == 'open') return true;
 
         if(isset($stakeholders[$account])) return true;
@@ -2238,10 +2246,7 @@ class userModel extends model
         {
             $path     = str_replace(",{$project->id},", ',', "{$project->path}");
             $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
-            foreach($programs as $program)
-            {
-                if($program->PM == $account || $program->openedBy == $account) return true;
-            }
+            foreach($programs as $program) if($program->PM == $account) return true;
         }
 
         /* Judge sprint auth. */
