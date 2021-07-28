@@ -1713,7 +1713,7 @@ class docModel extends model
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
                 $icon  = zget($this->lang->doc->iconList, $typeKey);
                 $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon'></i> '" . $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
+                $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
                 $html .= "</li>";
                 if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }
@@ -1721,13 +1721,13 @@ class docModel extends model
             if(common::hasPriv('doc', 'createLib'))
             {
                 $html .= '<li class="divider"></li>';
-                $html .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
+                $html .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), "<i class='icon-doc-lib'></i> " . $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
             }
             $html .= "</ul></div>";
         }
         else
         {
-            $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i>' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe"');
+            $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe"');
         }
 
         return $html;
