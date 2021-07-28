@@ -1814,7 +1814,7 @@ class docModel extends model
 
         $html  = "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
-        $html .= "<ul class='dropdown-menu pull-right'>";
+        $html .= "<ul class='dropdown-menu pull-right' id='collection-menu'>";
 
         if(empty($docs)) $html .= "<li>{$this->lang->noData}</li>";
 
@@ -1825,7 +1825,7 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i>" . $doc->title, '', "data-app='{$this->app->openApp}'") . '</li>';
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i>" . $doc->title, '', "data-app='{$this->app->openApp}' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)

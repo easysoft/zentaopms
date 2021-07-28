@@ -106,7 +106,7 @@ $lang->doc->deleteLib      = '删除文档库';
 $lang->doc->fixedMenu      = '固定到菜单栏';
 $lang->doc->removeMenu     = '从菜单栏移除';
 $lang->doc->search         = '搜索';
-$lang->doc->allCollections = '全部收藏文档';
+$lang->doc->allCollections = '查看全部收藏文档';
 $lang->doc->keywordsTips   = '多个关键字请用逗号分隔。';
 
 global $config;
