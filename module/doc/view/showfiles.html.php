@@ -15,6 +15,7 @@
   <div class="main-col" data-min-width="400">
     <div class="panel block-files block-sm no-margin">
       <?php if($viewType == 'list'):?>
+      <?php if(!empty($files)):?>
       <form class='main-table' id='fileForm' method='post' action='<?php echo inLink('batchDownload');?>' data-ride='table'>
         <table class="table has-sort-head">
           <thead>
@@ -77,6 +78,9 @@
           <?php $pager->show('right', 'pagerjs');?>
         </div>
       </form>
+      <?php else:?>
+      <div class='table-empty-tip text-muted'><?php echo $lang->pager->noRecord;?></div>
+      <?php endif?>
       <?php else:?>
       <div class="panel-body">
         <div class="row row-grid files-grid" data-size="300">
