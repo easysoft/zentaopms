@@ -52,7 +52,7 @@ class pager extends basePager
     {
         /* 如果设置了请求的原始方法名，则把其赋值给$this->methodName。*/
         /* If the original method name of the request is set, assign it to $this->methodName. */
-        if(isset($this->app->rawMethod) and $this->app->rawModule != 'doc')
+        if(isset($this->app->rawMethod))
         {
             $this->methodName = $this->app->rawMethod;
         }
