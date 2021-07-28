@@ -137,11 +137,32 @@ class ciModel extends model
         foreach($jobs as $job)
         {
             if(empty($job->duration) or $job->duration == '') $job->duration = '-';
-            $log .= "Name: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration \r\n Web URL: $job->web_url \r\n";
-            $log .= $this->loadModel('gitlab')->apiGetJobLog($compile->server, $compile->pipeline, $job->id) . "\r\n\r\n\r\n";
+            $log .= "<font style='font-weight:bold'>&gt;&gt;&gt; Name: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration \r\n </font>";
+            $log .= "Web URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
+            $log .= $this->transformAnsiToHtml($this->loadModel('gitlab')->apiGetJobLog($compile->server, $compile->pipeline, $job->id));
         }
         $this->dao->update(TABLE_COMPILE)->set('status')->eq($pipeline->status)->set('updateDate')->eq($now)->set('logs')->eq($log)->where('id')->eq($compile->id)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
+    }
+
+    /**
+     * Transform ansi text to html.
+     *
+     * @param  string $text
+     * @access public
+     * @return string
+     */
+    public function transformAnsiToHtml($text)
+    {
+        $text = preg_replace("/\x1B\[31;40m/", '<font style="color: red">',       $text);
+        $text = preg_replace("/\x1B\[32;1m/",  '<font style="color: green">',     $text);
+        $text = preg_replace("/\x1B\[32;1m/",  '<font style="color: green">',     $text);
+        $text = preg_replace("/\x1B\[36;1m/",  '<font style="color: cyan">',      $text);
+        $text = preg_replace("/\x1B\[0;33m/",  '<font style="color: yellow">',    $text);
+        $text = preg_replace("/\x1B\[1m/",     '<font style="font-weight:bold">', $text);
+        $text = preg_replace("/\x1B\[0;m/",    '</font><br>', $text);
+        $text = preg_replace("/\x1B\[0K/",     '<br>', $text);
+        return $text;
     }
 
     /**
