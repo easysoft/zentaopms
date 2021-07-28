@@ -11,7 +11,7 @@
  */
 /* 字段列表。*/
 $lang->doc->common       = '文档';
-$lang->doc->id           = '文档编号';
+$lang->doc->id           = '编号';
 $lang->doc->product      = '所属' . $lang->productCommon;
 $lang->doc->project      = '所属项目';
 $lang->doc->execution    = '所属' . $lang->executionCommon;
@@ -36,10 +36,11 @@ $lang->doc->fileObject   = '所属对象';
 $lang->doc->whiteList    = '白名单';
 $lang->doc->contentType  = '文档格式';
 $lang->doc->separator    = "<i class='icon-angle-right'></i>";
-$lang->doc->fileTitle    = '附件名';
+$lang->doc->fileTitle    = '附件名称';
 $lang->doc->filePath     = '地址';
 $lang->doc->extension    = '类型';
 $lang->doc->size         = '附件大小';
+$lang->doc->source       = '来源';
 $lang->doc->download     = '下载';
 $lang->doc->acl          = '权限';
 $lang->doc->fileName     = '附件';
@@ -216,6 +217,10 @@ $lang->doc->noticeAcl['doc']['private'] = '只有创建者自己可以访问。'
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';
+
+$lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
+$lang->doc->ge      = '个';
+$lang->doc->point   = '、';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name      = '文档库名称';

@@ -1393,6 +1393,65 @@ class docModel extends model
     }
 
     /**
+     * Get file source pairs.
+     *
+     * @param  array    $files
+     * @access public
+     * @return array
+     */
+    public function getFileSourcePairs($files)
+    {
+        $sourceList  = array();
+        $sourcePairs = array();
+
+        foreach($files as $file)
+        {
+            if(!isset($sourceList[$file->objectType])) $sourceList[$file->objectType] = array();
+            $sourceList[$file->objectType][$file->objectID] = $file->objectID;
+        }
+
+        foreach($sourceList as $type => $idList)
+        {
+            $table = $this->config->objectTables[$type];
+            $title = $type == 'task' ? 'name' : 'title';
+            $name  = $this->dao->select('id,' . $title)->from($table)->where('id')->in($idList)->fetchPairs('id');
+            $sourcePairs[$type] = $name;
+        }
+
+        return $sourcePairs;
+    }
+
+    /**
+     * Get file icon.
+     *
+     * @param  array    $files
+     * @access public
+     * @return array
+     */
+    public function getFileIcon($files)
+    {
+        foreach($files as $file)
+        {
+            if(in_array($file->extension, $this->config->file->imageExtensions)) continue;
+
+            $iconClass = 'icon-file';
+            if(strpos('zip,tar,gz,bz2,rar', $file->extension) !== false) $iconClass = 'icon-file-archive';
+            else if(strpos('csv,xls,xlsx', $file->extension) !== false) $iconClass = 'icon-file-excel';
+            else if(strpos('doc,docx', $file->extension) !== false) $iconClass = 'icon-file-word';
+            else if(strpos('ppt,pptx', $file->extension) !== false) $iconClass = 'icon-file-powerpoint';
+            else if(strpos('pdf', $file->extension) !== false) $iconClass = 'icon-file-pdf';
+            else if(strpos('mp3,ogg,wav', $file->extension) !== false) $iconClass = 'icon-file-audio';
+            else if(strpos('avi,mp4,mov', $file->extension) !== false) $iconClass = 'icon-file-video';
+            else if(strpos('txt,md', $file->extension) !== false) $iconClass = 'icon-file-text';
+            else if(strpos('html,htm', $file->extension) !== false) $iconClass = 'icon-globe';
+
+            $fileIcon[$file->id] = "<i class='file-icon icon $iconClass'></i>";
+        }
+
+        return $fileIcon;
+    }
+
+    /**
      * Get doc tree.
      *
      * @param  int    $libID
@@ -1775,6 +1834,25 @@ class docModel extends model
     }
 
     /**
+     * Build browse switch button.
+     *
+     * @param  int    $type
+     * @param  int    $objectID
+     * @param  int    $viewType
+     * @access public
+     * @return void
+     */
+    public function buildBrowseSwitch($type, $objectID, $viewType)
+    {
+        $html  = "<div class='btn-group'>";
+        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$this->lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "'");
+        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$this->lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "'");
+        $html .= "</div>";
+
+        return $html;
+    }
+
+    /**
      * Set past menu.
      *
      * @param  string $fastLib
@@ -1928,7 +2006,7 @@ class docModel extends model
         $class              = ($type == 'project' and $this->app->openApp == 'doc') ? 'col-left' : '';
 
         $currentMethod = $this->app->getMethodName();
-        $methodName    = $currentMethod == 'tablecontents' ? 'tablecontents' : 'objectLibs';
+        $methodName    = in_array($currentMethod, array('tablecontents', 'showfiles')) ? 'tablecontents' : 'objectLibs';
 
         if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
@@ -1965,7 +2043,8 @@ class docModel extends model
 
         if(!empty($libs))
         {
-            $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libs[$libID]->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
+            $libName = empty($libID) ? $this->lang->doclib->files : $libs[$libID]->name;
+            $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "<div class='table-col'><div class='list-group'>";
             foreach($libs as $key => $lib)
@@ -1973,7 +2052,11 @@ class docModel extends model
                 $selected = $key == $libID ? 'selected' : '';
                 $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
-            if($type != 'custom') $output .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "data-app='{$this->app->openApp}'");
+            if($type != 'custom')
+            {
+                $selected = empty($libID) ? 'selected' : '';
+                $output  .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->openApp}'");
+            }
             $output .= "</div></div></div></div></div>";
         }
 
@@ -2096,5 +2179,53 @@ class docModel extends model
 
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
         $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed catalog"' : ' class="catalog"') . '>' . $li . '</li>';
+    }
+
+    /**
+     * Summary.
+     *
+     * @param  arary    $files
+     * @access public
+     * @return string
+     */
+    public function summary($files)
+    {
+        $filesCount       = 0;
+        $sizeCount        = 0;
+        $extensionCount   = array();
+        $extensionSummary = '';
+
+        foreach($files as $file)
+        {
+            if(!isset($extensionCount[$file->extension])) $extensionCount[$file->extension] = 0;
+
+            $filesCount++;
+
+            $sizeCount += $file->size;
+
+            $extensionCount[$file->extension]++;
+        }
+
+        /* Unit conversion. */
+        $i = 0;
+        while($sizeCount > 1024)
+        {
+            $sizeCount = $sizeCount / 1024;
+            $i++;
+        }
+        $unitList  = array('B', 'K', 'M', 'G');
+        $sizeCount = round($sizeCount, 1) . $unitList[$i];
+
+        /* Summary of each type. */
+        $extensionNum = count($extensionCount);
+        foreach($extensionCount as $extension => $count)
+        {
+            $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge;
+
+            $extensionNum--;
+            if(!empty($extensionNum)) $extensionSummary .= $this->lang->doc->point;
+        }
+
+        return sprintf($this->lang->doc->summary, $filesCount, $sizeCount, $extensionSummary);
     }
 }
