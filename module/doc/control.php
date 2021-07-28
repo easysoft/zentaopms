@@ -1224,6 +1224,7 @@ class doc extends control
 
         $this->view->title      = $title;
         $this->view->type       = $type;
+        $this->view->libs       = $libs;
         $this->view->objectID   = $objectID;
         $this->view->libID      = $libID;
         $this->view->moduleTree = $moduleTree;
