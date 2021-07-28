@@ -76,11 +76,11 @@ if(empty($type)) $type = 'product';
       <div class="no-content-button">
         <?php
         $html = '';
-        if($type == 'book')
+        if($type == 'book' and common::hasPriv('doc', 'createLib'))
         {
             $html = html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i>' . $this->lang->doc->createBook, '', 'class="btn btn-info btn-wide iframe"');
         }
-        elseif($libID)
+        elseif($libID and common::hasPriv('doc', 'create'))
         {
             $html  = "<div class='dropdown' id='createDropdown'>";
             $html .= "<button class='btn btn-info btn-wide' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->createAB . " <span class='caret'></span></button>";
