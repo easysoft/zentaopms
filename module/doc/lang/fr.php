@@ -39,6 +39,7 @@ $lang->doc->fileTitle      = 'Nom du Fichier';
 $lang->doc->filePath       = 'Chemin Fichier';
 $lang->doc->extension      = 'Extension';
 $lang->doc->size           = 'Taille de la pièce jointe';
+$lang->doc->source         = 'Source';
 $lang->doc->download       = 'Téléchargement';
 $lang->doc->acl            = 'Droit';
 $lang->doc->fileName       = 'Fichiers';
@@ -211,6 +212,10 @@ $lang->doc->noticeAcl['doc']['private'] = 'Seulement celui qui a ajouté le docu
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'URL';
+
+$lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>";
+$lang->doc->ge      = ':';
+$lang->doc->point   = '.';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name      = 'Nom';

@@ -39,6 +39,7 @@ $lang->doc->fileTitle      = 'Dateiname';
 $lang->doc->filePath       = 'Dateipfad';
 $lang->doc->extension      = 'Erweiterung';
 $lang->doc->size           = 'Größe der Anlage';
+$lang->doc->source         = 'Source';
 $lang->doc->download       = 'Download';
 $lang->doc->acl            = 'Rechte';
 $lang->doc->fileName       = 'Files';
@@ -211,6 +212,10 @@ $lang->doc->noticeAcl['doc']['private'] = 'Only the one who created it can acces
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'Url';
+
+$lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>";
+$lang->doc->ge      = ':';
+$lang->doc->point   = '.';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name      = 'Name';

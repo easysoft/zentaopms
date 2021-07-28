@@ -42,7 +42,7 @@ if(empty($type)) $type = 'product';
           echo "<div class='menu-actions'>";
           echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
           echo "<ul class='dropdown-menu pull-left'>";
-          if($canManageMenu)
+          if($canManageMenu and !empty($libs))
           {
               echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->doc->manageType, '', "class='iframe'") . '</li>';
               echo "<li class='divider'></li>";
@@ -104,7 +104,7 @@ if(empty($type)) $type = 'product';
         {
             common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide'");
         }
-        else
+        elseif(!empty($libs))
         {
             common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
         }

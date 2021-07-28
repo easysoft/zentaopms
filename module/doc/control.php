@@ -776,8 +776,6 @@ class doc extends control
             $libs = $this->doc->getLibsByObject('product', $objectID);
 
             $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
-
-            $this->app->rawMethod = 'product';
         }
         else if($type == 'project')
         {
@@ -787,8 +785,6 @@ class doc extends control
             $libs = $this->doc->getLibsByObject('project', $objectID);
 
             $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
-
-            $this->app->rawMethod = 'project';
         }
         else if($type == 'execution')
         {
@@ -797,8 +793,6 @@ class doc extends control
             $libs  = $this->doc->getLibsByObject('execution', $objectID);
 
             $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
-
-            $this->app->rawMethod = 'execution';
         }
 
         $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
@@ -1230,6 +1224,7 @@ class doc extends control
 
         $this->view->title      = $title;
         $this->view->type       = $type;
+        $this->view->libs       = $libs;
         $this->view->objectID   = $objectID;
         $this->view->libID      = $libID;
         $this->view->moduleTree = $moduleTree;

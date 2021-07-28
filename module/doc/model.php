@@ -1069,7 +1069,7 @@ class docModel extends model
         }
         else
         {
-            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->andWhere('type')->eq($type)->orderBy('`order`, id')->fetchAll('id');
         }
 
         if($type == 'product')
@@ -1302,7 +1302,6 @@ class docModel extends model
                 ->orWhere("(objectType = 'story' and objectID in ($storyIdList))")
                 ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
                 ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
-                ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
                 ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
                 ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
                 ->markRight(1)
@@ -1793,6 +1792,12 @@ class docModel extends model
         return $html;
     }
 
+    /**
+     * Build collect button from document.
+     *
+     * @access public
+     * @return string
+     */
     public function buildCollectButton4Doc()
     {
         $allLibs = array_keys($this->getLibs('all'));
@@ -2053,7 +2058,7 @@ class docModel extends model
                 $selected = $key == $libID ? 'selected' : '';
                 $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
-            if($type != 'custom')
+            if($type != 'custom' and $type != 'book')
             {
                 $selected = empty($libID) ? 'selected' : '';
                 $output  .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->openApp}'");
@@ -2160,7 +2165,7 @@ class docModel extends model
             foreach($moduleDocs[$module->id] as $doc)
             {
                 if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
-                $treeMenu[$module->id] = '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>';
+                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>';
 
                 if($currentMethod == 'tablecontents')
                 {
@@ -2221,10 +2226,17 @@ class docModel extends model
         $extensionNum = count($extensionCount);
         foreach($extensionCount as $extension => $count)
         {
-            $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge;
+            if(in_array($this->app->getClientLang(), ['zh-cn','zh-tw']))
+            {
+                $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge;
 
-            $extensionNum--;
-            if(!empty($extensionNum)) $extensionSummary .= $this->lang->doc->point;
+                $extensionNum--;
+                if(!empty($extensionNum)) $extensionSummary .= $this->lang->doc->point;
+            }
+            else
+            {
+                $extensionSummary .= $extension . ' ' . $this->lang->doc->ge . ' ' . $count . $this->lang->doc->point;
+            }
         }
 
         return sprintf($this->lang->doc->summary, $filesCount, $sizeCount, $extensionSummary);

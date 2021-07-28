@@ -11,7 +11,7 @@
  */
 /* 欄位列表。*/
 $lang->doc->common       = '文檔';
-$lang->doc->id           = '文檔編號';
+$lang->doc->id           = '文檔';
 $lang->doc->product      = '所屬' . $lang->productCommon;
 $lang->doc->project      = '所屬項目';
 $lang->doc->execution    = '所屬' . $lang->executionCommon;
@@ -36,10 +36,11 @@ $lang->doc->fileObject   = '所屬對象';
 $lang->doc->whiteList    = '白名單';
 $lang->doc->contentType  = '文檔格式';
 $lang->doc->separator    = "<i class='icon-angle-right'></i>";
-$lang->doc->fileTitle    = '附件名';
+$lang->doc->fileTitle    = '附件名稱';
 $lang->doc->filePath     = '地址';
 $lang->doc->extension    = '類型';
 $lang->doc->size         = '附件大小';
+$lang->doc->source       = '來源';
 $lang->doc->download     = '下載';
 $lang->doc->acl          = '權限';
 $lang->doc->fileName     = '附件';
@@ -204,6 +205,10 @@ $lang->doc->noticeAcl['doc']['private'] = '只有創建者自己可以訪問。'
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相應的連結地址';
+
+$lang->doc->summary = "本頁共 <strong>%s</strong> 個附件，共計 <strong>%s</strong>，其中<strong>%s</strong>。";
+$lang->doc->ge      = '個';
+$lang->doc->point   = '、';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name      = '文檔庫名稱';

@@ -51,5 +51,5 @@ td.c-actions {overflow: visible;}
 #cards .project-actions .menu-actions {padding-right: 20px;}
 #cards .project-actions ul {min-width: 35px; padding: 5px 6px;}
 #cards .project-actions .dropdown-hover:hover>.dropdown-menu ul, .open>.dropdown-menu ul {display: flex;}
-#cards .btn.btn-action, .c-actions .btn {margin-bottom: -3px !important; margin-right: 5px;}
+#cards .menu-actions .btn.btn-action {margin-bottom: -3px !important; margin-right: 5px;}
 #cards .icon-ellipsis-v {font-size: 13px;}
