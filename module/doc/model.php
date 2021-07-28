@@ -1334,7 +1334,7 @@ class docModel extends model
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
                 ->andWhere("(objectType = 'project' and objectID = $objectID)", true)
-                ->orWhere("(objectType = 'execution' and objectID in ($executionIdList))")
+                ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
                 ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
@@ -1430,6 +1430,7 @@ class docModel extends model
      */
     public function getFileIcon($files)
     {
+        $fileIcon = array();
         foreach($files as $file)
         {
             if(in_array($file->extension, $this->config->file->imageExtensions)) continue;
