@@ -1707,15 +1707,17 @@ class docModel extends model
         {
             $html  = "<div class='dropdown' id='createDropdown'>";
             $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->createAB . " <span class='caret'></span></button>";
-            $html .= "<ul class='dropdown-menu' style='left:0px'>";
+            $html .= "<ul class='dropdown-menu pull-right'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+                $icon  = zget($this->lang->doc->iconList, $typeKey);
                 $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
+                $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon'></i> '" . $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
                 $html .= "</li>";
-
+                if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }
+
             if(common::hasPriv('doc', 'createLib'))
             {
                 $html .= '<li class="divider"></li>';

@@ -87,11 +87,12 @@ if(empty($type)) $type = 'product';
             $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
+                $icon  = zget($this->lang->doc->iconList, $typeKey);
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
                 $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
+                $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon'></i> '" . $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
                 $html .= "</li>";
-
+                if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }
             $html .= "</ul></div>";
         }

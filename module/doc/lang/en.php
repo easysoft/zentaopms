@@ -136,6 +136,13 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
+$lang->doc->iconList['html']     = 'rich-text';
+$lang->doc->iconList['markdown'] = 'markdown';
+$lang->doc->iconList['url']      = 'text-link';
+$lang->doc->iconList['word']     = 'word';
+$lang->doc->iconList['ppt']      = 'ppt';
+$lang->doc->iconList['excel']    = 'excel';
+
 $lang->doc->types['text'] = 'Text';
 $lang->doc->types['url']  = 'URL';
 
