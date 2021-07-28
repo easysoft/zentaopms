@@ -68,7 +68,7 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projects = $this->project->getList($status, $orderBy, null);
+            $projects = $this->project->getInfoList($status, 30, $orderBy, null);
             $users    = $this->loadModel('user')->getPairs('noletter');
             foreach($projects as $i => $project)
             {
@@ -77,6 +77,10 @@ class project extends control
                 $project->model    = zget($projectLang->modelList, $project->model);
                 $project->product  = zget($projectLang->productList, $project->product);
                 $project->budget   = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
+                $project->parent   = $project->parentName;
+                
+                $linkedProducts = $this->project->getProducts($project->id, false);
+                $project->linkedProducts = implode('，', $linkedProducts);
 
                 if($this->post->exportType == 'selected')
                 {

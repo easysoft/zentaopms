@@ -11,7 +11,7 @@ $config->product->custom->batchEditFields = 'line,PO,QD,RD';
 if($config->systemMode == 'new') $config->product->custom->batchEditFields .= ',program';
 
 $config->product->list = new stdclass();
-$config->product->list->exportFields = 'id,name,line,activeStories,changedStories,draftStories,closedStories,plans,releases,bugs,unResolvedBugs,assignToNullBugs';
+$config->product->list->exportFields = 'id,program,name,line,activeRequirements,changedRequirements,draftRequirements,closedRequirements,activeStories,changedStories,draftStories,closedStories,plans,releases,bugs,unResolvedBugs,assignToNullBugs';
 
 global $lang, $app;
 $app->loadLang('story');

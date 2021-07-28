@@ -11,7 +11,7 @@ $config->project->editor->activate = array('id' => 'comment', 'tools' => 'simple
 $config->project->editor->view     = array('id' => 'lastComment', 'tools' => 'simpleTools');
 
 $config->project->list = new stdclass();
-$config->project->list->exportFields = 'id,name,code,template,product,status,begin,end,budget,PM,end,desc';
+$config->project->list->exportFields = 'id,parent,name,linkedProducts,status,begin,end,budget,PM,end,desc';
 
 $config->project->create = new stdclass();
 $config->project->edit   = new stdclass();

@@ -20,6 +20,7 @@
     <?php common::printLink('product', 'manageLine', '', $lang->product->line, '', 'class="btn btn-link"');?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php common::printLink('product', 'export', "status=$browseType&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
     <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
 </div>
