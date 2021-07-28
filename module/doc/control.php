@@ -839,9 +839,7 @@ class doc extends control
     {
         $this->loadModel('file');
         $fileIDList = $this->post->fileIDList;
-        foreach($fileIDList as $fileID)
-        {
-        }
+        $this->fetch('file', 'filesToZip', array('fileIDList' => $fileIDList));
     }
 
     /**

@@ -158,6 +158,36 @@ class file extends control
         }
     }
 
+    public function filesToZip($fileIDList)
+    {
+        $files = array();
+        foreach($fileIDList as $fileID)
+        {
+            $files[$fileID] = $this->file->getById($fileID);
+        }
+
+        $zip = new ZipArchive();
+        $zipName = 'download.zip';
+        $zipPath = $this->file->savePath . $zipName;
+        if (!file_exists($zipName))
+        {
+            if($zip->open($zipPath, ZipArchive::OVERWRITE | ZipArchive::OVERWRITE) == true)
+            {
+                foreach($files as $file)
+                {
+                    $zip->addFile($file->realPath, $file->pathname);
+                }
+
+                $zip->close();
+                $this->sendDownHeader($zipName, 'zip', $zipPath, 'file');
+            }
+            else
+            {
+                die(js::locate('Create failed!'));
+            }
+        }
+    }
+
     /**
      * Export as csv format.
      *
