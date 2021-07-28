@@ -39,6 +39,7 @@ $lang->doc->fileTitle    = 'File tên';
 $lang->doc->filePath     = 'File Path';
 $lang->doc->extension    = 'Extension';
 $lang->doc->size         = 'Cỡ miếng';
+$lang->doc->source       = 'Source';
 $lang->doc->download     = 'Tải về';
 $lang->doc->acl          = 'Right';
 $lang->doc->fileName     = 'Files';
@@ -211,6 +212,10 @@ $lang->doc->noticeAcl['doc']['private'] = 'Chỉ the one who created it có th�
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'URL';
+
+$lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>";
+$lang->doc->ge      = ':';
+$lang->doc->point   = '.';
 
 $lang->doclib            = new stdclass();
 $lang->doclib->name      = 'Tên';

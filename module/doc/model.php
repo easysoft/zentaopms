@@ -2059,7 +2059,7 @@ class docModel extends model
                 $selected = $key == $libID ? 'selected' : '';
                 $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
             }
-            if($type != 'custom')
+            if($type != 'custom' and $type != 'book')
             {
                 $selected = empty($libID) ? 'selected' : '';
                 $output  .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->openApp}'");
@@ -2227,10 +2227,17 @@ class docModel extends model
         $extensionNum = count($extensionCount);
         foreach($extensionCount as $extension => $count)
         {
-            $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge;
+            if(in_array($this->app->getClientLang(), ['zh-cn','zh-tw']))
+            {
+                $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge;
 
-            $extensionNum--;
-            if(!empty($extensionNum)) $extensionSummary .= $this->lang->doc->point;
+                $extensionNum--;
+                if(!empty($extensionNum)) $extensionSummary .= $this->lang->doc->point;
+            }
+            else
+            {
+                $extensionSummary .= $extension . ' ' . $this->lang->doc->ge . ' ' . $count . $this->lang->doc->point;
+            }
         }
 
         return sprintf($this->lang->doc->summary, $filesCount, $sizeCount, $extensionSummary);
