@@ -1302,7 +1302,6 @@ class docModel extends model
                 ->orWhere("(objectType = 'story' and objectID in ($storyIdList))")
                 ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
                 ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
-                ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
                 ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
                 ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
                 ->markRight(1)
