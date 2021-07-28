@@ -1069,7 +1069,7 @@ class docModel extends model
         }
         else
         {
-            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->andWhere('type')->eq($type)->orderBy('`order`, id')->fetchAll('id');
         }
 
         if($type == 'product')
