@@ -1793,6 +1793,12 @@ class docModel extends model
         return $html;
     }
 
+    /**
+     * Build collect button from document.
+     *
+     * @access public
+     * @return string
+     */
     public function buildCollectButton4Doc()
     {
         $allLibs = array_keys($this->getLibs('all'));
@@ -2160,7 +2166,7 @@ class docModel extends model
             foreach($moduleDocs[$module->id] as $doc)
             {
                 if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
-                $treeMenu[$module->id] = '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>';
+                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>';
 
                 if($currentMethod == 'tablecontents')
                 {
