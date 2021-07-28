@@ -4,6 +4,7 @@ $lang->job->browse        = '浏览构建任务';
 $lang->job->create        = '创建构建任务';
 $lang->job->edit          = '编辑构建任务';
 $lang->job->exec          = '执行构建';
+$lang->job->runPipeline   = '运行流水线';
 $lang->job->view          = '执行详情';
 $lang->job->delete        = '删除构建任务';
 $lang->job->confirmDelete = '确认删除该构建任务';
@@ -80,3 +81,9 @@ $lang->job->engineTips = new stdclass;
 $lang->job->engineTips->success = '构建引擎将使用GitLab项目内置的流水线.';
 $lang->job->engineTips->error   = '当前GitLab项目内没有可用的流水线，请先前往GitLab配置.';
 
+$lang->job->pipeline = new stdclass;
+$lang->job->pipeline->pipelineTips              = "选择要运行流水线的分支名或标签名";
+$lang->job->pipeline->variables                 = "变量";
+$lang->job->pipeline->variablesKeyPlaceHolder   = "输入变量的名称";
+$lang->job->pipeline->variablesValuePlaceHolder = "输入变量的值";
+$lang->job->pipeline->variablesTips             = "指定要在此次运行中使用的变量值。CI/CD设置中指定的值将用作默认值.";

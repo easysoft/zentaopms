@@ -250,6 +250,32 @@ class job extends control
     }
 
     /**
+     * Run GitLab pipeline for a job.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function runPipeline($id)
+    {
+        $job = $this->job->getByID($id);
+        if($_POST)
+        {
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+        $refList  = array();
+        $branches = $this->loadModel('gitlab')->apiGetBranches($job->server, $job->pipeline);
+        $tags     = $this->loadModel('gitlab')->apiGetTags($job->server, $job->pipeline);
+        foreach($branches as $branch) $refList[] = $branch->name;
+        foreach($tags     as $tag)    $refList[] = $tag->name;
+
+        $this->view->title          = $this->lang->job->runPipeline;
+        $this->view->refList        = $refList;
+        $this->view->pipelineTips   = $this->lang->job->pipeline->pipelineTips;
+        $this->display();
+    }
+
+    /**
      * AJAX: Get product by repo.
      *
      * @param  int    $repoID
