@@ -236,6 +236,7 @@ class project extends control
         $this->view->programTree  = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
         $this->view->programs     = array('0' => '') + $this->program->getParentPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->usersAvatar  = $this->user->getAvatarPairs();
         $this->view->browseType   = $browseType;
         $this->view->projectType  = $projectType;
         $this->view->param        = $param;

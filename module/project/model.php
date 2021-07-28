@@ -359,16 +359,23 @@ class projectModel extends model
         $executions = $this->loadModel('execution')->getPairs($projectID);
 
         $total = $this->dao->select('
-            ROUND(SUM(estimate), 2) AS totalEstimate,
-            ROUND(SUM(consumed), 2) AS totalConsumed,
+            ROUND(SUM(estimate), 1) AS totalEstimate,
             ROUND(SUM(`left`), 2) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
+
+        $totalConsumed = $this->dao->select('ROUND(SUM(consumed), 1) AS totalConsumed')
+            ->from(TABLE_TASK)
+            ->where('project')->eq($projectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->fetch('totalConsumed');
+
         $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
-            ->where('project')->in(array_keys($executions))
+            ->where('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->andWhere('status')->in('closed,cancel')
@@ -376,8 +383,8 @@ class projectModel extends model
 
         $workhour = new stdclass();
         $workhour->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('project')->fetch('totalHours');
-        $workhour->totalEstimate = round($total->totalEstimate, 1);
-        $workhour->totalConsumed = round($total->totalConsumed, 1);
+        $workhour->totalEstimate = $total->totalEstimate;
+        $workhour->totalConsumed = $totalConsumed;
         $workhour->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
 
         return $workhour;

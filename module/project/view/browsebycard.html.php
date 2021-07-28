@@ -12,9 +12,7 @@
 ?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolBar pull-left">
-    <?php if($this->config->systemMode == 'new'):?>
-      <div class="input-control space w-150px" id='programBox'><?php echo html::select('programID', $programs, $programID, "onchange=changeProgram(this.value) class='form-control chosen' data-placeholder='{$lang->project->selectProgram}'");?></div>
-    <?php endif;?>
+    <div class="input-control space w-150px" id='programBox'><?php echo html::select('programID', $programs, $programID, "onchange=changeProgram(this.value) class='form-control chosen' data-placeholder='{$lang->project->selectProgram}'");?></div>
     <?php foreach($lang->project->featureBar as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
@@ -38,9 +36,27 @@
   </div>
 </div>
 <div class='row cell' id='cards'>
+  <?php if(empty($projectStats)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->project->empty;?></span>
+      <?php if(isset($this->config->maxVersion)):?>
+      <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal" data-target="#guideDialog"');?>
+      <?php elseif($this->config->systemMode == 'new'):?>
+      <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info"');?>
+      <?php else:?>
+      <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i>' . $lang->execution->create, '', 'class="btn btn-info"');?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <?php foreach ($projectStats as $projectID => $project):?>
   <div class='col' data-id='<?php echo $projectID?>'>
     <div class='panel'>
+      <div class='projectStatus'>
+        <?php $status = ($project->status == 'doing' and isset($project->delay)) ? 'delay' : $project->status;?>
+        <span class="label label-<?php echo $status;?>"><?php echo $lang->project->statusList[$status];?></span>
+      </div>
       <div class='panel-heading'>
         <?php if(isset($config->maxVersion) and $project->model === 'waterfall'):?>
         <span class='project-type-label label label-warning label-outline'><i class='icon icon-waterfall'></i></span>
@@ -49,47 +65,83 @@
         <?php endif;?>
         <strong class='project-name' title='<?php echo $project->name;?>'><?php echo html::a(helper::createLink('project', 'index', "projectID=$projectID"), $project->name);?></strong>
       </div>
+      <div class='panel-body'>
+        <div class='project-infos'>
+          <?php
+          $projectBudget = in_array($app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $lang->project->tenThousand : round((float)$project->budget, 2);
+          $budgetTitle   = $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->budget . $lang->project->future;
+          $project->end  = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+          $project->date = str_replace('-', '.', $project->begin) . ' - ' . str_replace('-', '.', $project->end);
+          ?>
+          <span title="<?php echo $budgetTitle;?>" class='label label-outline'><?php echo $budgetTitle;?></span>
+          <span title="<?php echo $project->date;?>" class="label label-outline <?php echo $status == 'delay' ? 'text-red' : '';?>"><?php echo $project->date;?></span>
+        </div>
+        <div class='project-detail'>
+          <div class='row'>
+            <div class='col-xs-2'>
+              <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value="<?php echo $project->hours->progress?>" data-width='24' data-height='24' data-back-color='#e8edf3'>
+                <div class='progress-info'><?php echo $project->hours->progress;?></div>
+              </div>
+            </div>
+            <div class='col-xs-4'>
+              <span><?php echo $lang->project->leftTasks;?></span>
+              <span title="<?php echo $project->leftTasks;?>"><?php echo $project->leftTasks;?></span>
+            </div>
+            <div class='col-xs-4'>
+              <span><?php echo $lang->project->leftHours;?></span>
+              <span title="<?php echo empty($project->hours->totalLeft) ? '—' : $project->hours->totalLeft . $lang->execution->workHour;?>"><?php echo empty($project->hours->totalLeft) ? '—' : $project->hours->totalLeft . $lang->execution->workHourUnit;?></span>
+            </div>
+          </div>
+        </div>
+        <div class='project-footer table-row'>
+          <div class='project-members table-col'>
+          <?php if(!empty($project->teamMembers)):?>
+            <a href='<?php echo helper::createLink('project', 'manageMembers', "projectID=$projectID");?>'>
+            <?php foreach($project->teamMembers as $key => $member):?>
+            <?php if($key > 4) continue;?>
+              <div class='avatar bg-secondary avatar-circle'>
+                <?php echo !empty(zget($usersAvatar, $member, '')) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
+              </div>
+            <?php endforeach;?>
+            </a>
+            <?php if($project->teamCount > 5):?>
+              <div class='moreMembers'><?php echo html::a(helper::createLink('project', 'manageMembers', "projectID=$projectID"), '+' . ($project->teamCount - 5));?></div>
+            <?php endif;?>
+          <?php endif;?>
+          </div>
+          <div class='project-actions table-col'>
+            <div class='menu-actions'>
+              <?php
+              if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('project', 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe btn-action', true);
+              if($project->status == 'doing') common::printIcon('project', 'close', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
+              if($project->status == 'closed') common::printIcon('project', 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
+              ?>
+              <?php $canActions = (common::hasPriv('project','suspend') || (common::hasPriv('project','close') && $project->status != 'doing') || (common::hasPriv('project','activate') && $project->status != 'closed'));?>
+              <?php if($canActions):?>
+              <?php echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");?>
+              <ul class='dropdown-menu pull-right'>
+                <?php
+                common::printIcon('project', 'suspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
+                if($project->status != 'doing') common::printIcon('project', 'close', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
+                if($project->status != 'closed') common::printIcon('project', 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
+                ?>
+              </ul>
+            </div>
+          </div>
+          <?php endif;?>
+        </div>
+      </div>
     </div>
   </div>
   <?php endforeach;?>
+  <?php endif;?>
   <div class='col-xs-12' id='cardsFooter'>
     <?php $pager->show('right', 'pagerjs');?>
   </div>
 </div>
 <style>
 #mainMenu {padding-left: 10px; padding-right: 10px; margin-bottom: -10px;}
-#cards {margin: 0 0;}
-#cards > .col {width: 25%;}
-#cards .panel {margin: 10px 0;  border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
-#cards .pager .btn {padding-top: 4px;}
-#cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
-#cards .panel-heading {padding: 12px 24px 10px 16px;}
-#cards .panel-body {padding: 0 16px 16px;}
-#cards .panel-actions {padding: 7px 0;}
-#cards .panel-actions .dropdown-menu > li > a {padding-left: 5px; text-align: left;}
-#cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
-#cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
-#cards .project-type-label {padding: 1px 2px;}
-#cards .icon {font-size: 8px;}
-#cards .project-name {font-size: 14px; display: inline-block; max-width: 80%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
-#cards .project-infos {font-size: 12px;}
-#cards .project-infos > span {display: inline-block; line-height: 12px;}
-#cards .program-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
-#cards .program-infos > span + span {margin-left: 15px;}
-#cards .program-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
-#cards .program-detail > p {margin-bottom: 8px;}
-#cards .program-detail .progress {height: 4px;}
-#cards .program-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
-#cards .pager {margin: 0; float: right;}
-#cards .pager .btn {border: none}
-#cards .program-stages-container {margin: 0 -16px -16px -16px; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
-#cards .program-stages:after {content: ' '; width: 30px; display: block; right: -16px; top: 16px; bottom: -6px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
-#cards .program-stages-row {position: relative; height: 30px; z-index: 0;}
-#cards .program-stage-item {white-space: nowrap; position: absolute; top: 0; min-width: 48px; padding-top: 13px; color: #838A9D;}
-#cards .program-stage-item > div {white-space: nowrap; overflow: visible; text-align: center; text-overflow: ellipsis;}
-#cards .program-stage-item:before {content: ' '; display: block; width: 8px; height: 8px; border-radius: 50%; background: #D1D1D1; position: absolute; left: 50%; margin-left: -4px; top: 0; z-index: 1;}
-#cards .program-stage-item + .program-stage-item:after {content: ' '; display: block; left: -50%; right: 50%; height: 2px; background-color: #D1D1D1; top: 3px; position: absolute; z-index: 0;}
-#cards .program-stage-item.is-going {color: #333;}
-#cards .program-stage-item.is-going::before {background-color: #0C64EB;}
-.chosen-drop.chosen-auto-max-width.in {width: 150px !important;}
 </style>
+<script>
+$('.progress-pie:visible').progressPie();
+</script>
