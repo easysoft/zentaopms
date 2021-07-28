@@ -180,6 +180,7 @@ $lang->doc->mail->edit->title   = "%s编辑了文档 #%s:%s";
 
 $lang->doc->confirmDelete        = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib     = "您确定删除该文档库吗？";
+$lang->doc->confirmDeleteBook    = "您确定删除该手册吗？";
 $lang->doc->confirmDeleteChapter = "您确定删除该章节吗？";
 $lang->doc->errorEditSystemDoc   = "系统文档库无需修改。";
 $lang->doc->errorEmptyProduct    = "没有{$lang->productCommon}，无法创建文档";

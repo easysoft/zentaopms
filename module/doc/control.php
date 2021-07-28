@@ -223,16 +223,18 @@ class doc extends control
      * Delete a library.
      *
      * @param  int    $libID
-     * @param  string $confirm  yes|no
+     * @param  string $confirm yes|no
+     * @param  string $from    lib|book
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no')
+    public function deleteLib($libID, $confirm = 'no', $from = 'lib')
     {
         if($libID == 'product' or $libID == 'execution') die();
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->doc->confirmDeleteLib, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
+            $deleteTip = $from == 'book' ? $this->lang->doc->confirmDeleteBook : $this->lang->doc->confirmDeleteLib;
+            die(js::confirm($deleteTip, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
         }
         else
         {

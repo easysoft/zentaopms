@@ -175,6 +175,7 @@ $lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 
 $lang->doc->confirmDelete        = "Voulez-vous supprimer ce document ?";
 $lang->doc->confirmDeleteLib     = "Voulez-vous supprimer cette Bibliothèque ?";
+$lang->doc->confirmDeleteBook    = "Do you want to delete this book?";
 $lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
 $lang->doc->errorEditSystemDoc   = "Vous n'avez pas besoin de changer de système de Bibliothèque.";
 $lang->doc->errorEmptyProduct    = "Aucun {$lang->productCommon}. Il ne peut pas être créé.";
