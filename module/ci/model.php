@@ -26,7 +26,7 @@ class ciModel extends model
      * @access public
      * @return void
      */
-    public function checkCompileStatus()
+    public function checkCompileStatus($gitlabOnly = 'no')
     {
         $compiles = $this->dao->select('compile.*, job.engine,job.pipeline, pipeline.name as jenkinsName,job.server,pipeline.url,pipeline.account,pipeline.token,pipeline.password')
             ->from(TABLE_COMPILE)->alias('compile')
@@ -39,7 +39,14 @@ class ciModel extends model
             ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        foreach($compiles as $compile) $this->syncCompileStatus($compile);
+        if($gitlabOnly == 'yes')
+        {
+            foreach($compiles as $compile) if($compile->engine == 'gitlab') $this->syncCompileStatus($compile);
+        }
+        elseif($gitlabOnly == 'no')
+        {
+            foreach($compiles as $compile) $this->syncCompileStatus($compile);
+        }
     }
 
     /**
@@ -57,7 +64,7 @@ class ciModel extends model
             return false;
         }
 
-        if($compile->engine == 'gitlab') return $this->syncGitlabTaskStatus($compile);
+        if($compile->engine == 'gitlab') $this->syncGitlabTaskStatus($compile);
         $jenkinsServer   = $compile->url;
         $jenkinsUser     = $compile->account;
         $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
@@ -66,7 +73,7 @@ class ciModel extends model
 
         $response = common::http($queueUrl, '', array(CURLOPT_USERPWD => $userPWD));
 
-        $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
+        if($compile->engine != 'gitlab') $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
         if(strripos($response, "404") > -1)
         {
             $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->pipeline, $compile->queue);
@@ -118,15 +125,44 @@ class ciModel extends model
      * 
      * @param  int    $compile
      * @access public
-     * @return bool
+     * @return void
      */
     public function syncGitlabTaskStatus($compile)
     {
         $now = helper::now();
         $pipeline = $this->loadModel('gitlab')->apiGetSinglePipeline($compile->server, $compile->pipeline, $compile->queue);
-        $this->dao->update(TABLE_COMPILE)->set('status')->eq($pipeline->status)->set('updateDate')->eq($now)->where('id')->eq($compile->id)->exec();
+        $jobs     = $this->loadModel('gitlab')->apiGetJobs($compile->server, $compile->pipeline, $compile->queue);
+
+        $log = "";
+        foreach($jobs as $job)
+        {
+            if(empty($job->duration) or $job->duration == '') $job->duration = '-';
+            $log .= "<font style='font-weight:bold'>&gt;&gt;&gt; Name: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration \r\n </font>";
+            $log .= "Web URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
+            $log .= $this->transformAnsiToHtml($this->loadModel('gitlab')->apiGetJobLog($compile->server, $compile->pipeline, $job->id));
+        }
+        $this->dao->update(TABLE_COMPILE)->set('status')->eq($pipeline->status)->set('updateDate')->eq($now)->set('logs')->eq($log)->where('id')->eq($compile->id)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
-        return !dao::isError();
+    }
+
+    /**
+     * Transform ansi text to html.
+     *
+     * @param  string $text
+     * @access public
+     * @return string
+     */
+    public function transformAnsiToHtml($text)
+    {
+        $text = preg_replace("/\x1B\[31;40m/", '<font style="color: red">',       $text);
+        $text = preg_replace("/\x1B\[32;1m/",  '<font style="color: green">',     $text);
+        $text = preg_replace("/\x1B\[32;1m/",  '<font style="color: green">',     $text);
+        $text = preg_replace("/\x1B\[36;1m/",  '<font style="color: cyan">',      $text);
+        $text = preg_replace("/\x1B\[0;33m/",  '<font style="color: yellow">',    $text);
+        $text = preg_replace("/\x1B\[1m/",     '<font style="font-weight:bold">', $text);
+        $text = preg_replace("/\x1B\[0;m/",    '</font><br>', $text);
+        $text = preg_replace("/\x1B\[0K/",     '<br>', $text);
+        return $text;
     }
 
     /**

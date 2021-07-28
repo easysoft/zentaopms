@@ -131,6 +131,13 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
+$lang->doc->iconList['html']     = 'rich-text';
+$lang->doc->iconList['markdown'] = 'markdown';
+$lang->doc->iconList['url']      = 'text-link';
+$lang->doc->iconList['word']     = 'word';
+$lang->doc->iconList['ppt']      = 'ppt';
+$lang->doc->iconList['excel']    = 'excel';
+
 $lang->doc->types['text'] = 'Text';
 $lang->doc->types['url']  = 'URL';
 
@@ -169,6 +176,7 @@ $lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 $lang->doc->confirmDelete        = "Bạn có muốn xóa this document?";
 $lang->doc->confirmDeleteLib     = "Bạn có muốn xóa this document library?";
 $lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
+$lang->doc->confirmDeleteBook    = "Do you want to delete this book?";
 $lang->doc->errorEditSystemDoc   = "You don't have to change system document library.";
 $lang->doc->errorEmptyProduct    = "Không có {$lang->productCommon}. It cannot be created.";
 $lang->doc->errorEmptyProject    = "Không có {$lang->executionCommon}. It cannot be created.";

@@ -223,16 +223,18 @@ class doc extends control
      * Delete a library.
      *
      * @param  int    $libID
-     * @param  string $confirm  yes|no
+     * @param  string $confirm yes|no
+     * @param  string $from    lib|book
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no')
+    public function deleteLib($libID, $confirm = 'no', $from = 'lib')
     {
         if($libID == 'product' or $libID == 'execution') die();
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->doc->confirmDeleteLib, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
+            $deleteTip = $from == 'book' ? $this->lang->doc->confirmDeleteBook : $this->lang->doc->confirmDeleteLib;
+            die(js::confirm($deleteTip, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
         }
         else
         {
@@ -743,6 +745,112 @@ class doc extends control
     }
 
     /**
+     * Show files.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $viewType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function showFiles($type, $objectID, $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('taskList',  $uri);
+        $this->app->session->set('storyList', $uri);
+        $this->app->session->set('docList',   $uri);
+
+        if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
+        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        $objects = $this->doc->getOrderedObjects($type);
+        if($type == 'product')
+        {
+            $objectID = $this->product->saveState($objectID, $objects);
+            $table    = TABLE_PRODUCT;
+
+            $libs = $this->doc->getLibsByObject('product', $objectID);
+
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
+
+            $this->app->rawMethod = 'product';
+        }
+        else if($type == 'project')
+        {
+            $objectID = $this->project->saveState($objectID, $objects);
+            $table    = TABLE_PROJECT;
+
+            $libs = $this->doc->getLibsByObject('project', $objectID);
+
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
+
+            $this->app->rawMethod = 'project';
+        }
+        else if($type == 'execution')
+        {
+            $objectID = $this->execution->saveState($objectID, $objects);
+            $table = TABLE_EXECUTION;
+            $libs  = $this->doc->getLibsByObject('execution', $objectID);
+
+            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
+
+            $this->app->rawMethod = 'execution';
+        }
+
+        $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
+        if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
+
+        $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+
+        $this->lang->TRActions  = $this->doc->buildCollectButton4Doc();
+        $this->lang->TRActions .= $this->doc->buildBrowseSwitch($type, $objectID, $viewType);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $files = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+
+        $this->view->title      = $object->name;
+        $this->view->position[] = $object->name;
+
+        $this->view->type         = $type;
+        $this->view->object       = $object;
+        $this->view->files        = $files;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+        $this->view->viewType     = $viewType;
+        $this->view->orderBy      = $orderBy;
+        $this->view->objectID     = $objectID;
+        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->summary      = $this->doc->summary($files);
+        $this->view->sourcePairs  = $this->doc->getFileSourcePairs($files);
+        $this->view->fileIcon     = $this->doc->getFileIcon($files);
+
+        $this->display();
+    }
+
+    /**
+     * Batch download.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchDownload()
+    {
+        $this->loadModel('file');
+        $fileIDList = $this->post->fileIDList;
+        foreach($fileIDList as $fileID)
+        {
+        }
+    }
+
+    /**
      * Show all libs by type.
      *
      * @param  string $type
@@ -1113,7 +1221,8 @@ class doc extends control
         $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
         if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
 
-        $this->lang->TRActions = common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
+        $this->lang->TRActions  = $this->doc->buildCollectButton4Doc();
+        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID);
 

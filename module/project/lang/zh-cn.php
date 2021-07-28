@@ -87,6 +87,7 @@ $lang->project->durationEstimation = '工作量估算';
 $lang->project->leftStories        = '剩余需求';
 $lang->project->leftTasks          = '剩余任务';
 $lang->project->leftBugs           = '剩余Bug';
+$lang->project->leftHours          = '剩余工时';
 $lang->project->children           = '子项目';
 $lang->project->parent             = '所属项目集';
 $lang->project->allStories         = '总需求';
@@ -183,6 +184,7 @@ $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';
 $lang->project->statusList['suspended'] = '已挂起';
 $lang->project->statusList['closed']    = '已关闭';
+$lang->project->statusList['delay']     = '已延期';
 
 $lang->project->endList[31]  = '一个月';
 $lang->project->endList[93]  = '三个月';

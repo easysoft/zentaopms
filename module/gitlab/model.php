@@ -619,7 +619,7 @@ class gitlabModel extends model
     {
         if(!isset($object->id)) $object->id = $objectID;
 
-        $issue = $this->loadModel('gitlab')->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
+        $issue = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
         if(isset($label->name)) $issue->labels = $label->name;
 
@@ -695,7 +695,7 @@ class gitlabModel extends model
      */
     public function apiCreatePipeline($gitlabID, $projectID, $reference)
     {
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
         return json_decode(commonModel::http($url, $reference));
     }
 
@@ -711,7 +711,7 @@ class gitlabModel extends model
      */
     public function apiGetSinglePipeline($gitlabID, $projectID, $pipelineID)
     {
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}");
         return json_decode(commonModel::http($url));
     }
 
@@ -726,7 +726,7 @@ class gitlabModel extends model
      */
     public function apiGetJobs($gitlabID, $projectID, $pipelineID)
     {
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}/jobs");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}/jobs");
         return json_decode(commonModel::http($url));
     }
 
@@ -741,7 +741,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleJob($gitlabID, $projectID, $jobID)
     {
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}");
         return json_decode(commonModel::http($url));
     }
 
@@ -756,8 +756,8 @@ class gitlabModel extends model
      */
     public function apiGetJobLog($gitlabID, $projectID, $jobID)
     {
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}/trace");
-        return json_decode(commonModel::http($url));
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}/trace");
+        return commonModel::http($url);
     }
 
     /**

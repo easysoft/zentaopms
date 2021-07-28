@@ -80,7 +80,7 @@ td.c-name a:visited {color: #082999;}
 
 #pageNav .dropdown-menu {max-height: 350px; overflow-y: auto;}
 
-#createDropdown ul.dropdown-menu {width: 100%;}
+#createDropdown ul.dropdown-menu {text-align: left;}
 #project, #product, #custom, #book {min-height: 160px;}
 #title .menu-title {font-size: 15px; font-weight: 600; position: relative; padding: 2px 0 2px 15px; list-style: none;}
 #title .dropdown-menu {top: 38px;}

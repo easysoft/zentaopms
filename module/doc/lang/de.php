@@ -131,6 +131,13 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
+$lang->doc->iconList['html']     = 'rich-text';
+$lang->doc->iconList['markdown'] = 'markdown';
+$lang->doc->iconList['url']      = 'text-link';
+$lang->doc->iconList['word']     = 'word';
+$lang->doc->iconList['ppt']      = 'ppt';
+$lang->doc->iconList['excel']    = 'excel';
+
 $lang->doc->types['text'] = 'Text';
 $lang->doc->types['url']  = 'URL';
 
@@ -168,6 +175,7 @@ $lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 
 $lang->doc->confirmDelete        = "Möchten Sie dieses Dokument löschen?";
 $lang->doc->confirmDeleteLib     = "Möchten Sie diese Bibliothek löschen?";
+$lang->doc->confirmDeleteBook    = "Do you want to delete this book?";
 $lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
 $lang->doc->errorEditSystemDoc   = "System Dokumentenbibliothek darf nicht geändert werden.";
 $lang->doc->errorEmptyProduct    = "Kein {$lang->productCommon}. Kann nicht erstellt werden.";

@@ -64,8 +64,11 @@ class compile extends control
     public function logs($buildID)
     {
         $build = $this->compile->getByID($buildID);
+        $job   = $this->loadModel('job')->getByID($build->job);
+
         $this->view->logs  = str_replace("\r\n","<br />", $build->logs);
         $this->view->build = $build;
+        $this->view->job   = $job;
 
         $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->logs;
         $this->view->position[] = html::a($this->createLink('job', 'browse'), $this->lang->ci->job);

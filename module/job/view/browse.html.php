@@ -41,7 +41,7 @@
       <tbody class='text-left'>
         <?php foreach($jobList as $id => $job):?>
         <tr class='text-left'>
-          <td><?php echo $id; ?></td>
+          <td class='text-center'><?php echo $id; ?></td>
           <td class='text-left' title='<?php echo $job->name; ?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$job->id}", 'html', true), $job->name, '', "class='iframe' data-width='90%'") : $job->name;?></td>
           <td title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
           <td><?php echo zget($lang->job->engineList, $job->engine);?></td>

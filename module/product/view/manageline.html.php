@@ -14,7 +14,7 @@
   <div class='side-col col-4'>
     <div class='panel'>
       <div class='panel-heading'>
-        <div class="panel-title"></div>
+        <div class="panel-title"><?php echo $lang->product->line;?></div>
       </div>
       <div class='panel-body'>
         <ul id='modulesTree' data-name='tree-line'></ul>

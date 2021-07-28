@@ -88,6 +88,7 @@ $lang->project->durationEstimation = 'Estimated Workload';
 $lang->project->leftStories        = 'Left Stories';
 $lang->project->leftTasks          = 'Left Tasks';
 $lang->project->leftBugs           = 'Left Bugs';
+$lang->project->leftHours          = 'Left Hours';
 $lang->project->children           = 'Child Project';
 $lang->project->parent             = 'Parent Program';
 $lang->project->allStories         = 'All Stories';

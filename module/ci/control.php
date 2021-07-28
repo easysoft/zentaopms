@@ -59,21 +59,22 @@ class ci extends control
     }
 
     /**
-     * Send a request to jenkins to check build status.
+     * Send a request to jenkins or gitlab to check build status.
      *
+     * @param  string $gitlabOnly
      * @access public
-     * @return void
+     * @return string
      */
-    public function checkCompileStatus()
+    public function checkCompileStatus($gitlabOnly = 'no')
     {
-        $this->ci->checkCompileStatus();
+        $this->ci->checkCompileStatus($gitlabOnly);
         if(dao::isError())
         {
             echo json_encode(dao::getError());
         }
         else
         {
-            echo 'success';
+            echo $gitlabOnly == 'yes' ? 'gitlab success' : 'success';
         }
     }
 

@@ -76,22 +76,23 @@ if(empty($type)) $type = 'product';
       <div class="no-content-button">
         <?php
         $html = '';
-        if($type == 'book')
+        if($type == 'book' and common::hasPriv('doc', 'createLib'))
         {
             $html = html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i>' . $this->lang->doc->createBook, '', 'class="btn btn-info btn-wide iframe"');
         }
-        elseif($libID)
+        elseif($libID and common::hasPriv('doc', 'create'))
         {
             $html  = "<div class='dropdown' id='createDropdown'>";
             $html .= "<button class='btn btn-info btn-wide' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->createAB . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
+                $icon  = zget($this->lang->doc->iconList, $typeKey);
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
                 $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
+                $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
                 $html .= "</li>";
-
+                if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }
             $html .= "</ul></div>";
         }
