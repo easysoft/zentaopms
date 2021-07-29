@@ -37,6 +37,7 @@ $lang->tree->dragAndSort        = "Faites glisser pour ordonner";
 $lang->tree->sort               = "Ordonnez";
 $lang->tree->addChild           = "Ajout Sous-Module";
 $lang->tree->confirmDelete      = 'Voulez-vous supprimer ce module et tous ses sous-modules ?';
+$lang->tree->confirmDeleteMenu  = 'Do you want to delete this menu and its child menus?';
 $lang->tree->confirmDelCategory = 'Voulez-vous supprimer cette catégorie et ses sous-catégories?';
 $lang->tree->confirmDeleteLine  = 'Voulez-vous supprimer cette ligne de produit ?';
 $lang->tree->confirmRoot        = "Les changements du {$lang->productCommon} vont impacter les stories, bugs, casTests du {$lang->productCommon} auquel ils appartiennent, ainsi que les associations de {$lang->executionCommon} et {$lang->productCommon}, ce qui est dangereux. Voulez-vous malgré tout effectuer le changement ?";
