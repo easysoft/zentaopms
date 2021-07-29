@@ -113,6 +113,7 @@
   </div>
 </div>
 <?php js::set('type', $type);?>
+<?php js::set('openApp', $this->app->openApp);?>
 <script>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
