@@ -1035,7 +1035,7 @@ class doc extends control
             }
         }
 
-        if(isset($doc) and $doc->type == 'text')
+        if(isset($doc) and ($doc->type == 'text' || $doc->type == 'article'))
         {
             /* Split content into an array. */
             $content = explode("\n", $doc->content);
