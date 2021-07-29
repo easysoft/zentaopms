@@ -37,12 +37,12 @@ if(empty($type)) $type = 'product';
       $canManageMenu = common::hasPriv('tree', 'browse');
       $canEditLib    = common::hasPriv('doc', 'editLib');
       $canDeleteLib  = common::hasPriv('doc', 'deleteLib');
-      if($type != 'book' and ($canManageMenu or $canEditLib or $canDeleteLib))
+      if($type != 'book' and ($canManageMenu or $canEditLib or $canDeleteLib) and !empty($libs))
       {
           echo "<div class='menu-actions'>";
           echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
           echo "<ul class='dropdown-menu pull-left'>";
-          if($canManageMenu and !empty($libs))
+          if($canManageMenu)
           {
               echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->doc->manageType, '', "class='iframe'") . '</li>';
               echo "<li class='divider'></li>";
