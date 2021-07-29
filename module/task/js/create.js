@@ -479,23 +479,6 @@ $(document).ready(function()
             $('#moduleIdBox #module').val(moduleID).attr('onchange', "setStories(this.value, " + executionID + ")").chosen();
         });
     });
-    
-    $('#gitlab').change(function()
-    {
-         host = $('#gitlab').val();
-         if(host == '') return false;
-         projects = '';
-         $.each(gitlabProjects[host], function(id, obj){projects = projects + ',' + obj.gitlabProject});
-         url = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host + "&projects=" + projects);
-    
-         $.get(url, function(response)
-         {
-             $('#gitlabProject').html('').append(response);
-             $('#gitlabProject').chosen().trigger("chosen:updated");;
-         });
-
-    });
-    
 });
 
 $(document).on('click', '#testStory_chosen,#story_chosen', function()
