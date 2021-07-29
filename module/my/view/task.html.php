@@ -55,7 +55,7 @@
           <th class='c-user w-90px'>       <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
           <?php endif;?>
           <?php if($app->rawMethod == 'work'):?>
-          <th class='w-70px text-center'>  <?php common::printOrderLink('deadline',   $orderBy, $vars, $lang->task->deadlineAB);?></th>
+          <th class='w-90px text-center'>  <?php common::printOrderLink('deadline',   $orderBy, $vars, $lang->task->deadline);?></th>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <th class='c-assignedTo w-110px'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedTo);?></th>
@@ -95,7 +95,7 @@
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
           <?php endif;?>
           <?php if($app->rawMethod == 'work'):?>
-          <td class="text-center <?php echo isset($task->delay) ? 'delayed' : '';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
+          <td class="text-center <?php echo isset($task->delay) ? 'delayed' : '';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
           <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
@@ -159,7 +159,7 @@
             <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
             <?php endif;?>
             <?php if($app->rawMethod == 'work'):?>
-            <td class="text-center <?php echo isset($child->delay) ? 'delayed' : '';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo substr($child->deadline, 5, 6);?></td>
+            <td class="text-center <?php echo isset($child->delay) ? 'delayed' : '';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo $child->deadline;?></td>
             <?php endif;?>
             <?php if($type != 'assignedTo'): ?>
             <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($child, $users);?></td>
