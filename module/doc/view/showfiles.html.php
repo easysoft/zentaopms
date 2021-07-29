@@ -15,22 +15,19 @@
   <div class="main-col" data-min-width="400">
     <?php if($viewType == 'list'):?>
     <?php if(!empty($files)):?>
-    <form class='main-table' id='fileForm' method='post' action='<?php echo inLink('batchDownload');?>' data-ride='table'>
+    <div class='main-table'>
       <table class="table has-sort-head">
         <thead>
           <tr>
             <?php $this->app->rawMethod = 'showfiles';?>
             <?php $vars = "type=$type&objectID=$objectID&viewType=$viewType&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
-            <th class="c-id">
-              <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>"><label></label></div>
-              <?php common::printOrderLink('id', $orderBy, $vars, $lang->doc->id);?>
-            </th>
+            <th class="w-60px"><?php common::printOrderLink('id', $orderBy, $vars, $lang->doc->id);?></th>
             <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->fileTitle);?></th>
             <th class="w-300px"><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->doc->source);?></th>
             <th class="w-100px"><?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?></th>
             <th class="w-100px"><?php common::printOrderLink('size', $orderBy, $vars, $lang->doc->size);?></th>
             <th class="w-100px"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedBy);?></th>
-            <th class="w-160px"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
+            <th class="w-100px"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
             <th class="c-actions-1"><?php echo $lang->actions;?></th>
           </tr>
         </thead>
@@ -38,13 +35,8 @@
           <?php foreach($files as $file):?>
           <?php if(empty($file->pathname)) continue;?>
             <tr>
-              <td class="c-id">
-                <div class="checkbox-primary">
-                  <input type='checkbox' name='fileIDList[<?php echo $file->id;?>]' value='<?php echo $file->id;?>' autocomplete='off' /><label></label>
-                </div>
-                <?php echo sprintf('%03d', $file->id);?>
-              </td>
-              <td>
+              <td><?php echo sprintf('%03d', $file->id);?></td>
+              <td class='c-name' title='<?php echo str_replace('.' . $file->extension, '', $file->title);?>'>
               <?php
               if(in_array($file->extension, $config->file->imageExtensions))
               {
@@ -57,7 +49,7 @@
               ?>
               <?php echo str_replace('.' . $file->extension, '', $file->title);?>
               </td>
-              <td><?php echo $lang->{$file->objectType}->common . ' : ';?><a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></td>
+              <td class='c-name'><?php echo $lang->{$file->objectType}->common . ' : ';?><a title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></td>
               <td><?php echo $file->extension;?></td>
               <td><?php echo number_format($file->size / 1024, 1) . 'K';?></td>
               <td><?php echo isset($file->addedBy) ? zget($users, $file->addedBy) : '';?></td>
@@ -67,13 +59,8 @@
           <?php endforeach;?>
         </tbody>
       </table>
-      <div class='table-footer'>
-        <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-        <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->doc->download, '', 'btn');?></div>
-        <div class="table-statistic"><?php echo $summary;?></div>
-        <?php $pager->show('right', 'pagerjs');?>
-      </div>
-    </form>
+    </div>
+    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     <?php else:?>
     <div class='table-empty-tip text-muted'><?php echo $lang->pager->noRecord;?></div>
     <?php endif?>
@@ -112,7 +99,7 @@
                   }
                   ?>
                 </a>
-                <div class='file-name'><?php echo $file->title;?></a></div>
+                <div class='file-name' title='<?php echo $file->title;?>'><?php echo $file->title;?></a></div>
                 <div class='text-muted'><?php echo $lang->{$file->objectType}->common . ' : ';?><a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>' title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></div>
               </div>
             </div>

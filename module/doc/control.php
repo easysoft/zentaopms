@@ -830,19 +830,6 @@ class doc extends control
     }
 
     /**
-     * Batch download.
-     *
-     * @access public
-     * @return void
-     */
-    public function batchDownload()
-    {
-        $this->loadModel('file');
-        $fileIDList = $this->post->fileIDList;
-        $this->fetch('file', 'filesToZip', array('fileIDList' => $fileIDList));
-    }
-
-    /**
      * Show all libs by type.
      *
      * @param  string $type
