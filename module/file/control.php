@@ -171,7 +171,7 @@ class file extends control
         $zipPath = $this->file->savePath . $zipName;
         if (!file_exists($zipName))
         {
-            if($zip->open($zipPath, ZipArchive::OVERWRITE | ZipArchive::OVERWRITE) == true)
+            if($zip->open($zipPath, ZipArchive::OVERWRITE) == true)
             {
                 foreach($files as $file)
                 {
@@ -179,11 +179,12 @@ class file extends control
                 }
 
                 $zip->close();
+
                 $this->sendDownHeader($zipName, 'zip', $zipPath, 'file');
             }
             else
             {
-                die(js::locate('Create failed!'));
+                die(js::error('Create failed!'));
             }
         }
     }
