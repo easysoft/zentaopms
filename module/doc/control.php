@@ -1031,9 +1031,9 @@ class doc extends control
             $includeHeadElement = array();
             foreach($content as $index => $element)
             {
-                preg_match('/<(h[1-6])>([\S\s]*?)<\/\1>/', $element, $headElement);
+                preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
 
-                if(isset($headElement[1]) and !in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[2]) != '') $includeHeadElement[] = $headElement[1];
+                if(isset($headElement[1]) and !in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[3]) != '') $includeHeadElement[] = $headElement[1];
             }
 
             /* Get the two elements with the highest rank. */
@@ -1046,10 +1046,10 @@ class doc extends control
                 $preElement = '';
                 foreach($content as $index => $element)
                 {
-                    preg_match('/<(h[1-6])>([\S\s]*?)<\/\1>/', $element, $headElement);
+                    preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
 
                     /* The current element is existed, the element is in the includeHeadElement, and the text in the element is not null. */
-                    if(isset($headElement[1]) and in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[2]) != '')
+                    if(isset($headElement[1]) and in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[3]) != '')
                     {
                         /* The element is the first level. */
                         if(array_search($headElement[1], $includeHeadElement) == 0)
@@ -1059,8 +1059,8 @@ class doc extends control
                             if($preElement == $includeHeadElement[0]) $outline .= '</li>';
 
                             /* Add the anchor to the element. */
-                            $content[$index] = str_replace('<' . $includeHeadElement[0] . '>', '<' . $includeHeadElement[0] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[2]), '', "title='" . strip_tags($headElement[2]) . "'");
+                            $content[$index] = str_replace('<' . $includeHeadElement[0] . $headElement[2] . '>', '<' . $includeHeadElement[0] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
+                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'");
 
                             $preElement = $headElement[1];
                         }
@@ -1070,13 +1070,12 @@ class doc extends control
                             if($preElement == $includeHeadElement[0]) $outline .= '<ul>';
 
                             /* Add the anchor to the element. */
-                            $content[$index] = str_replace('<' . $includeHeadElement[1] . '>', '<' . $includeHeadElement[1] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[2]), '', "title='" . strip_tags($headElement[2]) . "'") . '</li>';
+                            $content[$index] = str_replace('<' . $includeHeadElement[1] . $headElement[2] . '>', '<' . $includeHeadElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
+                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'") . '</li>';
 
                             $preElement = $includeHeadElement[1];
                         }
                     }
-                    /* */
                     if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1] and !isset($content[$index+1])) $outline .= '</ul></li>';
                 }
                 $outline .= '</ul>';
