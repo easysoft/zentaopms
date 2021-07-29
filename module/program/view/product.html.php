@@ -52,7 +52,7 @@
             <th class="w-300px" colspan="4"><?php echo $lang->story->requirement;?></th>
             <?php endif;?>
             <th class="w-300px" colspan="4"><?php echo $lang->story->story;?></th>
-            <th class="w-150px" colspan="3"><?php echo $lang->bug->common;?></th>
+            <th class="w-200px" colspan="3"><?php echo $lang->bug->common;?></th>
             <th class="w-80px"  rowspan="2"><?php echo $lang->product->plan;?></th>
             <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
             <th class='c-actions w-70px' rowspan="2"><?php echo $lang->actions;?></th>
