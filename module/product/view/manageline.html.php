@@ -108,7 +108,7 @@ $(function()
         itemCreator: function($li, item)
         {
             var name = item.name;
-            var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + name + '</span>');
+            var $toggle = $('<span class="module-name" data-id="' + item.id + '" title="' + name + '">' + name + '</span>');
             $li.append($toggle);
             if(item.nodeType || item.type) $li.addClass('tree-item-' + (item.nodeType || item.type));
             return true;
