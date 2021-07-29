@@ -117,8 +117,7 @@
     <?php endif?>
   </div>
 </div>
-
-<?php js::set('type', 'doc');?>
+<?php js::set('type', $type);?>
 <script>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
