@@ -23,10 +23,11 @@ class ciModel extends model
     /**
      * Send a request to jenkins to check build status.
      *
+     * @param  int    $compileID
      * @access public
      * @return void
      */
-    public function checkCompileStatus($gitlabOnly = 'no')
+    public function checkCompileStatus($compileID = 0)
     {
         $compiles = $this->dao->select('compile.*, job.engine,job.pipeline, pipeline.name as jenkinsName,job.server,pipeline.url,pipeline.account,pipeline.token,pipeline.password')
             ->from(TABLE_COMPILE)->alias('compile')
@@ -36,17 +37,11 @@ class ciModel extends model
             ->andWhere('compile.status')->ne('failure')
             ->andWhere('compile.status')->ne('create_fail')
             ->andWhere('compile.status')->ne('timeout')
+            ->beginIf($compileID)->andWhere('compile.id')->eq($compileID)->fi()
             ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        if($gitlabOnly == 'yes')
-        {
-            foreach($compiles as $compile) if($compile->engine == 'gitlab') $this->syncCompileStatus($compile);
-        }
-        elseif($gitlabOnly == 'no')
-        {
-            foreach($compiles as $compile) $this->syncCompileStatus($compile);
-        }
+        foreach($compiles as $compile) $this->syncCompileStatus($compile);
     }
 
     /**
