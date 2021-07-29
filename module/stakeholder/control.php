@@ -318,6 +318,13 @@ class stakeholder extends control
                 {
                     foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product',$stakeholder->user);
                 }
+
+                /* Update the viewers of the project main doc library. */
+                $canViewUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
+                $canViewUsers = explode(',', trim($canViewUsers->users, ','));
+                unset($canViewUsers[array_search($stakeholder->user, $canViewUsers)]);
+                $canViewUsers = ',' . implode(',', $canViewUsers) . ',';
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq($canViewUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
             }
             die(js::reload('parent'));
         }

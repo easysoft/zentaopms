@@ -782,12 +782,17 @@ class projectModel extends model
 
             /* Create doc lib. */
             $this->app->loadLang('doc');
+
+            $canViewUsers = $project->whitelist . ',' . $project->PM . ',' . $project->openedBy . ',';
+            $canViewUsers = array_unique(explode(',', trim($canViewUsers, ',')));
+
             $lib = new stdclass();
             $lib->project = $projectID;
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
+            if($project->acl == 'private') $lib->users = ',' . implode(',', $canViewUsers) . ',';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -956,6 +961,17 @@ class projectModel extends model
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+
+            if($project->acl == 'private')
+            {
+                /* Update the viewers of the project main doc library. */
+                $projectStakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($projectID);
+                $projectStakeHolders = implode(',', $projectStakeHolders);
+                $canViewUsers        = $project->whitelist . ',' . $project->PM . ',' . $oldProject->openedBy . ',' . $projectStakeHolders;
+                $canViewUsers        = array_unique(explode(',', trim($canViewUsers, ',')));
+                $canViewUsers        = ',' . implode(',', $canViewUsers) . ',';
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq($canViewUsers)->where('type')->eq('project')->andWhere('project')->eq($projectID)->andWhere('main')->eq(1)->exec();
+            }
 
             if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
 

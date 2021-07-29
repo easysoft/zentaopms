@@ -110,6 +110,15 @@ class stakeholderModel extends model
                 {
                     foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $stakeholder->user);
                 }
+
+                /* Update the viewers of the project main doc library. */
+                $canViewUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
+                $canViewUsers = explode(',', trim($canViewUsers->users, ','));
+                if(!in_array($stakeholder->user, $canViewUsers))
+                {
+                    $canViewUsers = ',' . implode(',', $canViewUsers) . ',' . $stakeholder->user . ',';
+                    $this->dao->update(TABLE_DOCLIB)->set('users')->eq($canViewUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
+                }
             }
 
             if($stakeholder->objectType == 'program' and $stakeholder->objectID)
@@ -133,6 +142,7 @@ class stakeholderModel extends model
     /**
      * Batch create stakeholders for a project.
      *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -155,7 +165,7 @@ class stakeholderModel extends model
             $stakeholder->objectID    = $projectID;
             $stakeholder->objectType  = 'project';
             $stakeholder->user        = $account;
-            $stakeholder->type		  = in_array($account, array_keys($members)) ? 'inside' : 'outside';
+            $stakeholder->type        = in_array($account, array_keys($members)) ? 'inside' : 'outside';
             $stakeholder->createdBy   = $this->app->user->account;
             $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
 
@@ -180,6 +190,12 @@ class stakeholderModel extends model
         {
             foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $changedAccounts);
         }
+
+        /* Update the viewers of the project main doc library. */
+        $canViewUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
+        $canViewUsers = array_merge(explode(',', trim($canViewUsers->users, ',')), array_filter($accounts));
+        $canViewUsers = ',' . implode(',', array_unique($canViewUsers)) . ',';
+        $this->dao->update(TABLE_DOCLIB)->set('users')->eq($canViewUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
 
         if($stakeholder->objectType == 'program' and $stakeholder->objectID)
         {
@@ -284,7 +300,7 @@ class stakeholderModel extends model
     {
         $stakeholders = $this->dao->select('id, user')->from(TABLE_STAKEHOLDER)
             ->where('deleted')->eq('0')
-            ->andWhere('objectID')->eq($this->session->project)
+            ->andWhere('objectID')->eq($projectID)
             ->orderBy('id_desc')
             ->fetchPairs();
 
@@ -438,7 +454,7 @@ class stakeholderModel extends model
      */
     public function getIssues()
     {
-        $stakeholders = $this->getStakeHolderPairs();
+        $stakeholders = $this->getStakeHolderPairs($this->session->project);
         return $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq(0)
             ->andWhere('project')->eq($this->session->project)
