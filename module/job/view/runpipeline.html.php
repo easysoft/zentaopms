@@ -5,7 +5,7 @@
           <td><?php echo $pipelineTips;?></td>
         </tr>
         <tr>
-          <td class='required'><?php echo html::select("references", $refList, '', "class='form-control chosen'");?></td>
+          <td class='required'><?php echo html::select("ref", $refList, '', "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <td><?php echo $lang->job->pipeline->variables; ?></td>

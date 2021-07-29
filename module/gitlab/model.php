@@ -696,7 +696,7 @@ class gitlabModel extends model
     public function apiCreatePipeline($gitlabID, $projectID, $reference)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
-        return json_decode(commonModel::http($url, $reference));
+        return json_decode(commonModel::http($url, $reference, null, array("Content-Type: application/json")));
     }
 
     /**
