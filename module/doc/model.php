@@ -2166,7 +2166,7 @@ class docModel extends model
             foreach($moduleDocs[$module->id] as $doc)
             {
                 if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
-                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : '') . '>';
+                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
 
                 if($currentMethod == 'tablecontents')
                 {
