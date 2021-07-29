@@ -46,7 +46,7 @@
           <td title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
           <td><?php echo zget($lang->job->engineList, $job->engine);?></td>
           <td><?php echo zget($lang->job->frameList, $job->frame);?></td>
-          <?php if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->job->getGitlabProjectName($job->id);?>
+          <?php if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->loadModel('gitlab')->getObjectNameForJob($job->server, $job->pipeline);?>
           <?php $jenkins = urldecode($job->pipeline) . '@' . $job->jenkinsName;?>
           <td title='<?php echo $jenkins; ?>'><?php echo $jenkins; ?></td>
           <?php $triggerConfig = $this->job->getTriggerConfig($job);?>
