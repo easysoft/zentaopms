@@ -74,7 +74,7 @@
             $project->end  = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
             $project->date = str_replace('-', '.', $project->begin) . ' - ' . str_replace('-', '.', $project->end);
             ?>
-            <span title="<?php echo $budgetTitle;?>" class='label label-outline'><?php echo $budgetTitle;?></span>
+            <span title="<?php echo $budgetTitle;?>" class='label label-outline budget'><?php echo $budgetTitle;?></span>
             <span title="<?php echo $project->date;?>" class="label label-outline <?php echo $status == 'delay' ? 'text-red' : '';?>"><?php echo $project->date;?></span>
           </div>
           <div class='project-detail'>

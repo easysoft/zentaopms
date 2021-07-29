@@ -26,6 +26,7 @@ td.c-actions {overflow: visible;}
 #cards .project-infos > span {display: inline-block; line-height: 12px; border: 1px solid #E4E9F7;}
 #cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
 #cards .project-infos > span + span {margin-left: 15px;}
+#cards .project-infos > .budget {max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #cards .project-detail {position: absolute; top: 75px; left: 16px; right: 16px; font-size: 12px;}
 #cards .project-footer {position: absolute; bottom: 5px;}
 #cards .pager {margin: 0; float: right;}
