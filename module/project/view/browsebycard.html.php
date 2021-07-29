@@ -134,10 +134,10 @@
     </div>
   </div>
   <?php endforeach;?>
-  <?php endif;?>
   <div class='col-xs-12' id='cardsFooter'>
     <?php $pager->show('right', 'pagerjs');?>
   </div>
+  <?php endif;?>
 </div>
 <style>
 #mainMenu {padding-left: 10px; padding-right: 10px; margin-bottom: -10px;}
