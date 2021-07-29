@@ -406,4 +406,3 @@ $lang->story->categoryList['experience']  = 'Experience';
 $lang->story->categoryList['improve']     = 'Improve';
 $lang->story->categoryList['other']       = 'Other';
 
-$lang->story->sync2Gitlab = 'Synchroniser avec Gitlab';

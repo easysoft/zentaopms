@@ -2092,7 +2092,10 @@ class docModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        $docs = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($rootID)->andWhere('deleted')->eq(0)->fetchAll();
+        $docs = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('lib')->eq($rootID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
         $moduleDocs = array();
         foreach($docs as $doc)
         {

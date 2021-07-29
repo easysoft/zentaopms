@@ -407,4 +407,3 @@ $lang->story->categoryList['experience']  = '体验';
 $lang->story->categoryList['improve']     = '改进';
 $lang->story->categoryList['other']       = '其他';
 
-$lang->story->sync2Gitlab = '同步到Gitlab';

@@ -217,11 +217,6 @@ class task extends control
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($execution->type == 'ops') unset($customFields['story']);
 
-        $this->loadModel('gitlab');
-        $allGitlabs     = $this->gitlab->getPairs();
-        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
-        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
-
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->showAllModule = $showAllModule;
@@ -237,8 +232,6 @@ class task extends control
         $this->view->members          = $members;
         $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->gitlabList       = $allGitlabs;
-        $this->view->gitlabProjects   = $gitlabProjects;
 
         $this->display();
     }
@@ -1299,11 +1292,6 @@ class task extends control
         }
         else
         {
-            /* Delete related issue in gitlab. */
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('task', $taskID);
-            if(!empty($relation)) $this->gitlab->deleteIssue('task', $taskID, $relation->issueID);
-
             $this->task->delete(TABLE_TASK, $taskID);
             if($task->parent > 0)
             {

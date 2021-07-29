@@ -37,6 +37,7 @@ $lang->tree->dragAndSort        = "Drag để sắp xếp";
 $lang->tree->sort               = "Thứ tự";
 $lang->tree->addChild           = "Thêm Module con";
 $lang->tree->confirmDelete      = 'Bạn có muốn xóa module này và module con của nó?';
+$lang->tree->confirmDeleteMenu  = 'Do you want to delete this menu and its child menus?';
 $lang->tree->confirmDelCategory = 'Bạn có muốn xoá hạng mục này và loại con của nó không?';
 $lang->tree->confirmDeleteLine  = "Bạn có muốn xóa dòng {$lang->productCommon} này không?";
 $lang->tree->confirmRoot        = "Mọi sự thay đổi tới {$lang->productCommon} này sẽ thay đổi the câu chuyện, bugs, tình huống của  {$lang->productCommon} nó sở hữu, cũng như liên kết của {$lang->executionCommon} và {$lang->productCommon}, điều này nguy hiểm. Bạn có muốn thay đổi nó?";
