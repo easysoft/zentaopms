@@ -684,7 +684,7 @@ class searchModel extends model
         $index->content = $contentSplited['words'];
 
         $this->saveDict($titleSplited['dict'] + $contentSplited['dict']);
-        $this->dao->replace(TABLE_SEARCHINDEX)->data($index)->exec();
+        $this->dao->insert(TABLE_SEARCHINDEX)->data($index)->exec();
         return true;
     }
 
@@ -697,10 +697,15 @@ class searchModel extends model
      */
     public function saveDict($dict)
     {
+        static $savedDict;
+        if(empty($savedDict)) $savedDict = $this->dao->select("`key`")->from(TABLE_SEARCHDICT)->fetchPairs('key', 'key');
         foreach($dict as $key => $value)
         {
             if(!is_numeric($key) or empty($value) or strlen($key) != 5) continue;
-            $this->dao->replace(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+            if(isset($savedDict[$key])) continue;
+
+            $this->dao->insert(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+            $savedDict[$key] = $key;
         }
     }
 
@@ -1112,7 +1117,14 @@ class searchModel extends model
                     }
                 }
 
-                foreach($dataList as $data) $this->saveIndex($module, $data);
+                $savedIndex = $this->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->fetchPairs('objectID', 'objectID');
+                $fields     = $this->config->search->fields->{$module};
+                foreach($dataList as $data)
+                {
+                    if(empty($fields)) continue;
+                    if(isset($savedIndex[$data->{$fields->id}])) continue;
+                    $this->saveIndex($module, $data);
+                }
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
             }
         }

@@ -858,7 +858,7 @@ CREATE TABLE IF NOT EXISTS `zt_searchdict` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` char(20) NOT NULL,
   `objectID` mediumint(9) NOT NULL,
   `title` text NOT NULL,
