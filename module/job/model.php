@@ -303,10 +303,11 @@ class jobModel extends model
      * Exec job.
      *
      * @param  int    $id
+     * @param  object $reference
      * @access public
-     * @return bool
+     * @return string|bool
      */
-    public function exec($id)
+    public function exec($id, $reference = null)
     {
         $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
@@ -378,17 +379,24 @@ class jobModel extends model
 
         $compile = new stdclass();
 
-        if($job->engine == 'jenkins') 
+        if($job->engine == 'jenkins')
         {
             $url = $this->loadModel('compile')->getBuildUrl($job);
             $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
             $compile->status = $compile->queue ? 'created' : 'create_fail';
         }
-        elseif($job->engine == 'gitlab')
+        elseif($job->engine == 'gitlab' and $reference)
         {
-            $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $job->pipeline, array('ref' => 'master'));
-            $compile->queue  = $pipeline->id;
-            $compile->status = zget($pipeline, 'status', 'create_fail');
+            $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $job->pipeline, $reference);
+            if(empty($pipeline->id))
+            {
+                $compile->status = 'create_fail';
+            }
+            else
+            {
+                $compile->queue  = $pipeline->id;
+                $compile->status = zget($pipeline, 'status', 'create_fail');
+            }
         }
 
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();

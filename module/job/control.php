@@ -259,15 +259,34 @@ class job extends control
     public function runPipeline($id)
     {
         $job = $this->job->getByID($id);
-        if($_POST)
-        {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
-        }
+
         $refList  = array();
         $branches = $this->loadModel('gitlab')->apiGetBranches($job->server, $job->pipeline);
         $tags     = $this->loadModel('gitlab')->apiGetTags($job->server, $job->pipeline);
-        foreach($branches as $branch) $refList[] = $branch->name;
-        foreach($tags     as $tag)    $refList[] = $tag->name;
+        foreach($branches as $branch) $refList[] = "branch::" . $branch->name;
+        foreach($tags     as $tag)    $refList[] = "tag::" . $tag->name;
+
+        if($_POST)
+        {
+            $reference = new stdclass;
+            $reference->ref = explode("::", $refList[$this->post->ref])[1];
+
+            $variable       = array();
+            $variablesParam = array();
+            $variables      = array_combine(array_values($this->post->keys), array_values($this->post->values));
+            foreach($variables as $key => $value)
+            {
+                if($key == "") continue;
+                $variable['key']           = $key;
+                $variable['variable_type'] = "env_var";
+                $variable['value']         = $value;
+                $variablesParam[]          = $variable;
+            }
+            $reference->variables = $variablesParam;
+            $reference = json_encode($reference);
+            $this->job->exec($id, $reference);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
 
         $this->view->title          = $this->lang->job->runPipeline;
         $this->view->refList        = $refList;
