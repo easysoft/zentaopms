@@ -48,13 +48,35 @@ function fullScreen()
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
     if(requestMethod)
     {
-        $('#mainActions').removeClass('hidden');
-        $('#content').addClass('scrollbar-hover');
-        $('#content .actions').addClass('hidden');
-        $('#content .file-image .right-icon').addClass('hidden');
-        $('#content .files-list .right-icon').addClass('hidden');
-        requestMethod.call(element);
-        $.cookie('isFullScreen', 1);
+        var afterEnterFullscreen = function()
+        {
+            $('#mainActions').removeClass('hidden');
+            $('#content').addClass('scrollbar-hover');
+            $('#content .actions').addClass('hidden');
+            $('#content .file-image .right-icon').addClass('hidden');
+            $('#content .files-list .right-icon').addClass('hidden');
+            $.cookie('isFullScreen', 1);
+        };
+        var whenFailEnterFullscreen = function(error)
+        {
+            $.cookie('isFullScreen', 0);
+        };
+        try
+        {
+            var result = requestMethod.call(element);
+            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
+            {
+                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
+            }
+            else
+            {
+                afterEnterFullscreen();
+            }
+        }
+        catch (error)
+        {
+            whenFailEnterFullscreen(error);
+        }
     }
 }
 
@@ -127,6 +149,10 @@ $(function()
             $('#content').html($tmpDiv.find('#content').html());
             $('#sidebarContent').html($tmpDiv.find('#sidebarContent').html());
             $('#actionbox .histories-list').html($tmpDiv.find('#actionbox .histories-list').html());
+            if($.cookie('isFullScreen') == 1) fullScreen();
+            $('#content [data-ride="tree"]').tree();
+            $('#outline li.has-list').addClass('open in');
+            $('#outline li.has-list>i+ul').prev('i').remove();
         });
     });
 })
