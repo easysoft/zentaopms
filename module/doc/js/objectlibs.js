@@ -98,28 +98,22 @@ $(function()
 {
     $('.outline').height($('.article-content').height());
 
-    $(document).on('click', '.outline .outline-toggle i.icon-angle-right', function()
+    $('#content').on('click', '.outline .outline-toggle i.icon-angle-right', function()
     {
         $('.article-content').width('85%');
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
         $(this).removeClass('icon-angle-right').addClass('icon-angle-left').css('left', '-9px');
         $('.outline-content').show();
-    })
-
-    $(document).on('click', '.outline .outline-toggle i.icon-angle-left', function()
+    }).on('click', '.outline .outline-toggle i.icon-angle-left', function()
     {
         $('.article-content').width('100%');
         $(this).removeClass('icon-angle-left').addClass('icon-angle-right');
         $('.outline-content').hide();
-    })
-
-    $('.outline-content li.text-ellipsis').click(function(event)
+    }).on('click', '#outline li', function(e)
     {
-        $('.outline-content li.text-ellipsis.active').removeClass('active');
-        $(this).addClass('active');
-
-        event.stopPropagation();
-    })
+        $('#outline li.active').removeClass('active');
+        $(e.target).closest('li').addClass('active');
+    });
 
     $('#outline li.has-list').addClass('open in');
     $('#outline li.has-list>i+ul').prev('i').remove();
