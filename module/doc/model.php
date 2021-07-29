@@ -1413,7 +1413,7 @@ class docModel extends model
         foreach($sourceList as $type => $idList)
         {
             $table = $this->config->objectTables[$type];
-            $title = in_array($type, array('story', 'bug', 'issue', 'case', 'doc')) ? 'title' : 'name';
+            $title = in_array($type, array('story', 'bug', 'issue', 'case', 'testcase', 'doc')) ? 'title' : 'name';
             $name  = $this->dao->select('id,' . $title)->from($table)->where('id')->in($idList)->fetchPairs('id');
             $sourcePairs[$type] = $name;
         }
