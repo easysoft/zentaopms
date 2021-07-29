@@ -684,7 +684,7 @@ class searchModel extends model
         $index->content = $contentSplited['words'];
 
         $this->saveDict($titleSplited['dict'] + $contentSplited['dict']);
-        $this->dao->insert(TABLE_SEARCHINDEX)->data($index)->exec();
+        $this->dao->replace(TABLE_SEARCHINDEX)->data($index)->exec();
         return true;
     }
 
@@ -1117,14 +1117,7 @@ class searchModel extends model
                     }
                 }
 
-                $savedIndex = $this->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->fetchPairs('objectID', 'objectID');
-                $fields     = $this->config->search->fields->{$module};
-                foreach($dataList as $data)
-                {
-                    if(empty($fields)) continue;
-                    if(isset($savedIndex[$data->{$fields->id}])) continue;
-                    $this->saveIndex($module, $data);
-                }
+                foreach($dataList as $data) $this->saveIndex($module, $data);
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
             }
         }
