@@ -569,17 +569,6 @@ class bug extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
-        /* Set gitlabProjects. */
-        $this->loadModel('gitlab');
-        $allGitlabs     = $this->gitlab->getPairs();
-        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
-        foreach($allGitlabs as $id => $name)
-        {
-            if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
-        }
-        $this->view->gitlabList     = $allGitlabs;
-        $this->view->gitlabProjects = $gitlabProjects;
-
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
@@ -1478,16 +1467,8 @@ class bug extends control
             $_POST = array();
 
             $bugs = $this->bug->getByList($bugIDList);
-            $this->loadModel('gitlab');
             foreach($bugs as $bugID => $bug)
             {
-                $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-                if(!empty($relation))
-                {
-                    $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-                    if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
-                }
-
                 if($bug->status != 'resolved')
                 {
                     if($bug->status != 'closed') $skipBugs[$bugID] = $bugID;
@@ -1571,11 +1552,6 @@ class bug extends control
         }
         else
         {
-            /* Delete related issue in gitlab. */
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-            if(!empty($relation)) $this->gitlab->deleteIssue('bug', $bugID, $relation->issueID);
-
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0)
             {
