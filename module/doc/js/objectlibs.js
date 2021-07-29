@@ -126,6 +126,7 @@ $(function()
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
         $(this).removeClass('icon-angle-right').addClass('icon-angle-left').css('left', '-9px');
         $('.outline-content').show();
+        if($('#sidebar>.cell').is(':visible')) $('#sidebar .icon.icon-angle-right').trigger("click");
     }).on('click', '.outline .outline-toggle i.icon-angle-left', function()
     {
         $('.article-content').width('100%');
@@ -155,4 +156,12 @@ $(function()
             $('#outline li.has-list>i+ul').prev('i').remove();
         });
     });
+
+    $('#sidebar .icon.icon-angle-right').click(function()
+    {
+        if($('#sidebar>.cell').is(':hidden') && $('.outline-content').is(':visible'))
+        {
+            $('.outline .outline-toggle i.icon-angle-left').trigger("click");
+        }
+    })
 })
