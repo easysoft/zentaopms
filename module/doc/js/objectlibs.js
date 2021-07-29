@@ -123,4 +123,16 @@ $(function()
 
     $('#outline li.has-list').addClass('open in');
     $('#outline li.has-list>i+ul').prev('i').remove();
+
+    /* Update doc content silently on switch doc version, story #40503 */
+    $(document).on('click', '.doc-version-menu a', function(event)
+    {
+        var $tmpDiv = $('<div>');
+        $tmpDiv.load($(this).data('url') + ' #mainContent', function()
+        {
+            $('#content').html($tmpDiv.find('#content').html());
+            $('#sidebarContent').html($tmpDiv.find('#sidebarContent').html());
+            $('#actionbox .histories-list').html($tmpDiv.find('#actionbox .histories-list').html());
+        });
+    });
 })

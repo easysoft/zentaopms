@@ -19,13 +19,10 @@ $sessionString .= session_name() . '=' . session_id();
                 #<?php echo $version ? $version : $doc->version;?>
                 <span class="caret"></span>
               </a>
-                <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-                <?php
-                for($version = $doc->version; $version > 0; $version--)
-                {
-                    echo "<li>" . html::a($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"), '#' . $version, '', "data-app='{$this->app->openApp}'") . "</li>";
-                }
-                ?>
+                <ul class='dropdown-menu doc-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+                <?php for($version = $doc->version; $version > 0; $version--): ?>
+                  <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"); ?>'>#<?php echo $version; ?></a></li>
+                <?php endfor; ?>
                 </ul>
               </div>
             </div>
@@ -149,7 +146,7 @@ $sessionString .= session_name() . '=' . session_id();
   <div class="side-col col-4" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-right"></i></div>
     <?php if(!empty($doc->digest)):?>
-    <div class="cell">
+    <div class="cell" id='sidebarContent'>
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
         <div class="detail-content">
