@@ -84,12 +84,10 @@ class bugModel extends model
         /* Use classic mode to replace required project. */
         if($this->config->systemMode == 'classic' and strpos($this->config->bug->create->requiredFields, 'project') !== false) $this->config->bug->create->requiredFields = str_replace('project', 'execution', $this->config->bug->create->requiredFields);
 
-        $this->dao->insert(TABLE_BUG)->data($bug, $skip = 'gitlab,gitlabProject')->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
-
-            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, 'bug', $bugID, $bug);
 
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
@@ -675,12 +673,6 @@ class bugModel extends model
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
 
-            if(!empty($bug))
-            {
-                $this->loadModel('gitlab');
-                $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-                if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
-            }
             return common::createChanges($oldBug, $bug);
         }
     }
@@ -802,11 +794,6 @@ class bugModel extends model
                     $this->executeHooks($bugID);
 
                     $allChanges[$bugID] = common::createChanges($oldBug, $bug);
-
-                    /* update bug to gitlab issue. */
-                    $this->loadModel('gitlab');
-                    $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-                    if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
                 }
                 else
                 {
@@ -859,15 +846,8 @@ class bugModel extends model
         }
 
         /* Update bugs. */
-        $this->loadModel('gitlab');
         foreach($activateBugs as $bugID => $bug)
         {
-            if(!empty($bug))
-            {
-                $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-                if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', (Object)$bug, $bugID);
-            }
-
             $oldBug = $bugs[$bugID];
             $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(dao::isError()) die(js::error('bug#' . $bugID . dao::getError(true)));
@@ -901,16 +881,6 @@ class bugModel extends model
             ->data($bug)
             ->autoCheck()
             ->where('id')->eq($bugID)->exec();
-
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-        $bug      = $this->getById($bugID); // Get full bug object to update issue.
-        $bug->assignee_id = $this->gitlab->getGitlabUserID($relation->gitlabID, $bug->assignedTo);
-        if($bug->assignee_id != '')
-        {
-            /* TODO(dingguodong) we should alert to operator when can not find the user, and the operator should reconfigure user binding. */
-            $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
-        }
 
         if(!dao::isError()) return common::createChanges($oldBug, $bug);
     }
@@ -956,7 +926,6 @@ class bugModel extends model
     {
         $now  = helper::now();
         $bugs = $this->getByList($bugIDList);
-        $this->loadModel('gitlab');
         foreach($bugIDList as $bugID)
         {
             if($bugs[$bugID]->confirmed) continue;
@@ -966,12 +935,6 @@ class bugModel extends model
             $bug->lastEditedBy   = $this->app->user->account;
             $bug->lastEditedDate = $now;
             $bug->confirmed      = 1;
-
-            if(!empty($bug))
-            {
-                $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-                if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
-            }
 
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
             $this->executeHooks($bugID);
@@ -1063,10 +1026,6 @@ class bugModel extends model
 
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
-
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-            if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
 
             return common::createChanges($oldBug, $bug);
         }
@@ -1197,11 +1156,6 @@ class bugModel extends model
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
             $this->executeHooks($bugID);
 
-            /* batch resolve issure  bugs.*/
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-            if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
-
             $changes[$bugID] = common::createChanges($oldBug, $bug);
         }
 
@@ -1259,13 +1213,6 @@ class bugModel extends model
             }
         }
 
-        if(!empty($bug))
-        {
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-            if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
-        }
-
         $bug->activatedCount += 1;
         return common::createChanges($oldBug, $bug);
     }
@@ -1295,13 +1242,6 @@ class bugModel extends model
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
 
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-        if(!empty($relation))
-        {
-            $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-            if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug, $bugID);
-        }
         return common::createChanges($oldBug, $bug);
     }
 
