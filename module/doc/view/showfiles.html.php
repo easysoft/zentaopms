@@ -37,17 +37,12 @@
             <tr>
               <td><?php echo sprintf('%03d', $file->id);?></td>
               <td class='c-name' title='<?php echo str_replace('.' . $file->extension, '', $file->title);?>'>
-              <?php
-              if(in_array($file->extension, $config->file->imageExtensions))
-              {
-                  echo "<div style='display: inline-block'><img width='19' height='19' src='$file->webPath'/></div>";
-              }
-              else
-              {
-                  echo $fileIcon[$file->id];
-              }
-              ?>
-              <?php echo str_replace('.' . $file->extension, '', $file->title);?>
+                <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
+                <div style='display: inline-block'><img onload='setImageSize(this, 19)' src='<?php echo $file->webPath;?>'/></div>
+                <?php else:?>
+                <?php echo $fileIcon[$file->id];?>
+                <?php endif;?>
+                <?php echo str_replace('.' . $file->extension, '', $file->title);?>
               </td>
               <td class='c-name'><?php echo $lang->{$file->objectType}->common . ' : ';?><a title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></td>
               <td><?php echo $file->extension;?></td>
@@ -118,6 +113,7 @@
   </div>
 </div>
 <?php js::set('type', $type);?>
+<?php js::set('openApp', $this->app->openApp);?>
 <script>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';

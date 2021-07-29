@@ -18,7 +18,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if($job->engine == 'gitlab') echo html::a(helper::createLink('ci', "checkCompileStatus", "gitlabOnly=yes"), "<i class='icon icon-eye icon-sm'></i> ". $lang->compile->refresh, '', "class='btn btn-secondary' id='refreshBtn'");?>
+    <?php if($job->engine == 'gitlab') echo html::a(helper::createLink('ci', "checkCompileStatus", "compileID={$build->id}"), "<i class='icon icon-eye icon-sm'></i> ". $lang->compile->refresh, '', "class='btn btn-secondary' id='refreshBtn'");?>
     <?php echo html::a(helper::createLink('compile', "browse", "jobID=$build->job"), "<i class='icon icon-back icon-sm'></i> ". $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
 </div>

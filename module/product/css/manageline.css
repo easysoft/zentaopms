@@ -13,3 +13,4 @@
 #modulesTree li > .list-toggle {top: 0;}
 
 #lineForm table tr > td.text-middle span {display: block; float: left;}
+.tree li> .module-name {display: inline-block; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
