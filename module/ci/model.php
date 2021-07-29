@@ -123,25 +123,29 @@ class ciModel extends model
     /**
      * Sync gitlab task status.
      * 
-     * @param  int    $compile
+     * @param  object    $compile
      * @access public
      * @return void
      */
     public function syncGitlabTaskStatus($compile)
     {
-        $now = helper::now();
+        $now      = helper::now();
         $pipeline = $this->loadModel('gitlab')->apiGetSinglePipeline($compile->server, $compile->pipeline, $compile->queue);
         $jobs     = $this->loadModel('gitlab')->apiGetJobs($compile->server, $compile->pipeline, $compile->queue);
 
-        $log = "";
+        $data = new stdclass;
+        $data->status     = $pipeline->status;
+        $data->updateDate = $now;
+
         foreach($jobs as $job)
         {
             if(empty($job->duration) or $job->duration == '') $job->duration = '-';
-            $log .= "<font style='font-weight:bold'>&gt;&gt;&gt; Name: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration \r\n </font>";
-            $log .= "Web URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
-            $log .= $this->transformAnsiToHtml($this->loadModel('gitlab')->apiGetJobLog($compile->server, $compile->pipeline, $job->id));
+            $data->logs = "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
+            $data->logs .= "Job URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
+            $data->logs .= $this->transformAnsiToHtml($this->loadModel('gitlab')->apiGetJobLog($compile->server, $compile->pipeline, $job->id));
         }
-        $this->dao->update(TABLE_COMPILE)->set('status')->eq($pipeline->status)->set('updateDate')->eq($now)->set('logs')->eq($log)->where('id')->eq($compile->id)->exec();
+
+        $this->dao->update(TABLE_COMPILE)->data($data)->where('id')->eq($compile->id)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
     }
 
