@@ -51,7 +51,7 @@ $lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
 $lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
 $lang->project->testreport        = 'Test Report';
 $lang->project->testreport        = 'Testreport';
-$lang->project->selectProgram     = 'Select Program';
+$lang->project->selectProgram     = 'Program filtering';
 
 /* Fields. */
 $lang->project->common             = 'Project';

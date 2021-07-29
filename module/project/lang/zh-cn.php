@@ -50,7 +50,7 @@ $lang->project->deleted           = '已删除';
 $lang->project->linkedProducts    = '已关联';
 $lang->project->unlinkedProducts  = '未关联';
 $lang->project->testreport        = '测试报告';
-$lang->project->selectProgram     = '筛选项目集';
+$lang->project->selectProgram     = '项目集筛选';
 
 /* Fields. */
 $lang->project->common             = '项目';
