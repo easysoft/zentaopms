@@ -105,11 +105,7 @@ class stakeholderModel extends model
             /* Update linked products view. */
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
-                $products = $this->loadModel('product')->getProductPairsByProject($stakeholder->objectID);
-                if(!empty($products))
-                {
-                    foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $stakeholder->user);
-                }
+                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
             }
 
             if($stakeholder->objectType == 'program' and $stakeholder->objectID)
@@ -173,26 +169,7 @@ class stakeholderModel extends model
         $changedAccounts = array_unique($changedAccounts);
 
         $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
-
-        /* Update linked products view. */
-        $products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        if(!empty($products))
-        {
-            foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $changedAccounts);
-        }
-
-        if($stakeholder->objectType == 'program' and $stakeholder->objectID)
-        {
-            $programID = $stakeholder->objectID;
-            /* Update children user view. */
-            $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
-            $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
-            $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
-
-            if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', $stakeholder->user);
-            if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', $stakeholder->user);
-            if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', $stakeholder->user);
-        }
+        $this->loadModel('project')->updateInvolvedUserView($projectID, $changedAccounts);
 
         return $stakeholderList;
     }

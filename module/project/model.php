@@ -771,7 +771,6 @@ class projectModel extends model
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             /* Create doc lib. */
             $this->app->loadLang('doc');
@@ -948,7 +947,13 @@ class projectModel extends model
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open')
+            {
+                $this->loadModel('user')->updateUserView($projectID, 'project');
+
+                $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
+                if($executions) $this->user->updateUserView($executions, 'sprint');
+            }
 
             if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
 
@@ -1484,6 +1489,23 @@ class projectModel extends model
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
+    }
+
+    /**
+     * Update userview for involved product and execution.
+     *
+     * @param  int    $projectID
+     * @param  array  $users
+     * @access public
+     * @return void
+     */
+    public function updateInvolvedUserView($projectID, $users = array())
+    {
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product', 'product');
+        $this->loadModel('user')->updateUserView($products, 'product', $stakeholder);
+
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
+        if($executions) $this->user->updateUserView($executions, 'sprint', $stakeholder);
     }
 
     /**

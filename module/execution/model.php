@@ -3630,6 +3630,7 @@ class executionModel extends model
     public function updateUserView($executionID, $objectType = 'sprint', $users = array())
     {
         $this->loadModel('user')->updateUserView($executionID, $objectType, $users);
+
         $products = $this->getProducts($executionID, $withBranch = false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);
     }
