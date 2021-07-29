@@ -20,7 +20,7 @@
 #sidebar {width: 275px;}
 #sidebar>.cell {width: 100%;}
 #sidebar>.sidebar-toggle {left: 3px; right: auto;}
-.hide-sidebar #sidebar>.cell {right: -270px; left: auto; display: none;}
+.hide-sidebar #sidebar>.cell {display: none;}
 .hide-sidebar #sidebar>.sidebar-toggle>.icon:before {content: "\e314";}
 .detail.empty {line-height: 200px;}
 .main-col+.side-col {padding-left: 16px;}

@@ -19,7 +19,7 @@ function ajaxDeleteDoc(link, replaceID, notice)
         $.get(link, function(data)
         {
             location.href = JSON.parse(data).locate;
-        })
+        });
     }
 }
 
@@ -44,7 +44,7 @@ function deleteFile(fileID)
  */
 function fullScreen()
 {
-    var element       = document.getElementById("content");
+    var element       = document.getElementById('content');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
     if(requestMethod)
     {
@@ -74,25 +74,25 @@ function exitFullScreen()
     $.cookie('isFullScreen', 0);
 }
 
-document.addEventListener("fullscreenchange", function (e)
+document.addEventListener('fullscreenchange', function (e)
 {
     if(!document.fullscreenElement) exitFullScreen();
-})
+});
 
-document.addEventListener("webkitfullscreenchange", function (e)
+document.addEventListener('webkitfullscreenchange', function (e)
 {
     if(!document.webkitFullscreenElement) exitFullScreen();
-})
+});
 
-document.addEventListener("mozfullscreenchange", function (e)
+document.addEventListener('mozfullscreenchange', function (e)
 {
     if(!document.mozFullScreenElement) exitFullScreen();
-})
+});
 
-document.addEventListener("msfullscreenChange", function (e)
+document.addEventListener('msfullscreenChange', function (e)
 {
     if(!document.msfullscreenElement) exitFullScreen();
-})
+});
 
 $(function()
 {
@@ -113,9 +113,8 @@ $(function()
         $('.outline-content').hide();
     })
 
-    $('.outline-content li.text-ellipsis').click(function()
+    $('.outline-content li.text-ellipsis').click(function(event)
     {
-        console.log(this);
         $('.outline-content li.text-ellipsis.active').removeClass('active');
         $(this).addClass('active');
 
