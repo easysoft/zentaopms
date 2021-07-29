@@ -235,63 +235,53 @@ class job extends control
     /**
      * Exec a job.
      *
-     * @param  int    $id
+     * @param  int     $id
+     * @param  string  $showForm
      * @access public
      * @return void
      */
-    public function exec($id)
+    public function exec($id, $showForm = 'no')
     {
-        $status = $this->job->exec($id);
+        if($showForm == 'yes' or $_POST)
+        {
+            $job     = $this->job->getByID($id);
+            $refList = $this->loadModel('gitlab')->getRefOptions($job->server, $job->pipeline);
+
+            if($_POST)
+            {
+                $reference = new stdclass;
+                $reference->ref = explode("::", $refList[$this->post->ref])[1];
+
+                $variables = array();
+                foreach($this->post->keys as $key => $field)
+                {
+                    $variable = array();
+                    if(!trim($this->post->values[$key])) continue;
+                    $variable['key']           = $field;
+                    $variable['value']         = $this->post->values[$key];
+                    $variable['variable_type'] = "env_var";
+
+                    $variables[] = $variable;
+                }
+
+                $reference->variables = $variables;
+                $compile = $this->job->exec($id, json_encode($reference));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->job->execSuccess, 'locate' => $this->createLink('compile', 'logs', "buildID={$compile->id}")));
+            }
+
+            $this->view->title        = $this->lang->job->runPipeline;
+            $this->view->refList      = $refList;
+            $this->view->job          = $job;
+            $this->view->pipelineTips = $this->lang->job->pipeline->pipelineTips;
+            return $this->display();
+        }
+
+        $compile = $this->job->exec($id);
         if(dao::isError()) die(js::error(dao::getError()));
 
         $this->app->loadLang('compile');
-        echo js::alert(sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $status)));
+        echo js::alert(sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status)));
         die(js::reload('parent'));
-    }
-
-    /**
-     * Run GitLab pipeline for a job.
-     *
-     * @param  int    $id
-     * @access public
-     * @return void
-     */
-    public function runPipeline($id)
-    {
-        $job = $this->job->getByID($id);
-
-        $refList  = array();
-        $branches = $this->loadModel('gitlab')->apiGetBranches($job->server, $job->pipeline);
-        $tags     = $this->loadModel('gitlab')->apiGetTags($job->server, $job->pipeline);
-        foreach($branches as $branch) $refList[] = "branch::" . $branch->name;
-        foreach($tags     as $tag)    $refList[] = "tag::" . $tag->name;
-
-        if($_POST)
-        {
-            $reference = new stdclass;
-            $reference->ref = explode("::", $refList[$this->post->ref])[1];
-
-            $variable       = array();
-            $variablesParam = array();
-            $variables      = array_combine(array_values($this->post->keys), array_values($this->post->values));
-            foreach($variables as $key => $value)
-            {
-                if($key == "") continue;
-                $variable['key']           = $key;
-                $variable['variable_type'] = "env_var";
-                $variable['value']         = $value;
-                $variablesParam[]          = $variable;
-            }
-            $reference->variables = $variablesParam;
-            $reference = json_encode($reference);
-            $this->job->exec($id, $reference);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
-        }
-
-        $this->view->title          = $this->lang->job->runPipeline;
-        $this->view->refList        = $refList;
-        $this->view->pipelineTips   = $this->lang->job->pipeline->pipelineTips;
-        $this->display();
     }
 
     /**

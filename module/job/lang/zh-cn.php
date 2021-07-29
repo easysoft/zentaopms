@@ -10,6 +10,7 @@ $lang->job->delete        = '删除构建任务';
 $lang->job->confirmDelete = '确认删除该构建任务';
 $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
+$lang->job->execSuccess   = '执行成功';
 
 $lang->job->browseAction = '构建任务列表';
 

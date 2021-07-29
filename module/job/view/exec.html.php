@@ -1,5 +1,5 @@
-<?php include '../../common/view/header.html.php';?>
-    <form id='childrenForm' method='post' target='hiddenwin'>
+<?php include '../../common/view/header.lite.html.php';?>
+    <form id='childrenForm' class='form-ajax' action="<?php echo inlink('exec', "jobID={$job->id}");?>" method='post'>
       <table class='table table-form table-auto'>
         <tr>
           <td><?php echo $pipelineTips;?></td>
@@ -29,4 +29,4 @@
         </tr>
       </table>
     </form>
-<?php include '../../common/view/footer.html.php';?>
+<?php include '../../common/view/footer.lite.html.php';?>

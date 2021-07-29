@@ -267,6 +267,24 @@ class gitlabModel extends model
     }
 
     /**
+     * Get ref option menus.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getRefOptions($gitlabID, $projectID)
+    {
+        $refList  = array();
+        $branches = $this->loadModel('gitlab')->apiGetBranches($gitlabID, $projectID);
+        $tags     = $this->loadModel('gitlab')->apiGetTags($gitlabID, $projectID);
+        foreach($branches as $branch) $refList[] = "Branch::" . $branch->name;
+        foreach($tags as $tag) $refList[] = "Tag::" . $tag->name;
+        return $refList;
+    }
+
+    /**
      * Create a gitlab.
      *
      * @access public
