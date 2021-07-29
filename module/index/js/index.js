@@ -202,6 +202,7 @@
                 '<iframe',
                     'id="appIframe-' + appCode + '"',
                     'name="app-' + appCode + '"',
+                    'allowfullscreen="true"',
                     'frameborder="no"',
                     'allowtransparency="true"',
                     'scrolling="auto"',
