@@ -1668,6 +1668,7 @@ class docModel extends model
         $query = $this->dao->select('t1.id,t1.title,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.assetLib')->eq(0)
             ->andWhere('t1.lib')->eq($libID)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->get();
@@ -2092,7 +2093,11 @@ class docModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        $docs = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($rootID)->andWhere('deleted')->eq(0)->fetchAll();
+        $docs = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('lib')->eq($rootID)
+            ->andWhere('assetLib')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
         $moduleDocs = array();
         foreach($docs as $doc)
         {
