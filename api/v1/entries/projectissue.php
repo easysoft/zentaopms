@@ -34,7 +34,7 @@ class projectIssueEntry extends entry
             $issue->assignedTo     = $story->assignedTo;
             $issue->openedDate     = $story->openedDate;
             $issue->openedBy       = $story->openedBy;
-            $issue->lastEditedDate = $story->lastEditedDate;
+            $issue->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
             $issue->status         = $storyStatus[$story->status];
             $issue->url            = $this->createLink('story', 'view', "storyID=$id");
 
@@ -53,7 +53,7 @@ class projectIssueEntry extends entry
             $issue->assignedTo     = $bug->assignedTo;
             $issue->openedDate     = $bug->openedDate;
             $issue->openedBy       = $bug->openedBy;
-            $issue->lastEditedDate = $bug->lastEditedDate;
+            $issue->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
             $issue->status         = $bugStatus[$bug->status];
             $issue->url            = $this->createLink('bug', 'view', "bugID=$id");
             $issue->desc           = $bug->steps;
@@ -71,7 +71,7 @@ class projectIssueEntry extends entry
             $issue->assignedTo     = $task->assignedTo;
             $issue->openedDate     = $task->openedDate;
             $issue->openedBy       = $task->openedBy;
-            $issue->lastEditedDate = $task->lastEditedDate;
+            $issue->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
             $issue->status         = $taskStatus[$task->status];
             $issue->url            = $this->createLink('task', 'view', "taskID=$id");
             $issue->desc           = $task->desc;
