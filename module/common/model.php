@@ -1335,7 +1335,14 @@ EOD;
 
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}");
             $link .= '#app=' . $app->openApp;
-            echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}'");
+            if(isset($preAndNext->pre->objectType) and $preAndNext->pre->objectType == 'doc')
+            {
+                echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}' data-url='{$link}'");
+            }
+            else
+            {
+                echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}'");
+            }
         }
         if(isset($preAndNext->next) and $preAndNext->next)
         {
@@ -1344,7 +1351,14 @@ EOD;
             $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}");
             $link .= '#app=' . $app->openApp;
-            echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title'");
+            if(isset($preAndNext->next->objectType) and $preAndNext->next->objectType == 'doc')
+            {
+                echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title' data-url='{$link}'");
+            }
+            else
+            {
+                echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title'");
+            }
         }
         echo '</nav>';
     }

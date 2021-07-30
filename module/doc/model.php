@@ -1693,6 +1693,8 @@ class docModel extends model
         $preDoc = false;
         foreach($docs as $doc)
         {
+            $doc->objectType = 'doc';
+
             /* Get next object. */
             if($preDoc === true)
             {
