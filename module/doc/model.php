@@ -1313,6 +1313,7 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
+            $issueIdList = $meetingIdList = $designIdList = '';
             if(isset($this->config->maxVersion))
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->products)->get();
