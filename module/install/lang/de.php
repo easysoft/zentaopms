@@ -113,6 +113,7 @@ $lang->install->errorDBName         = 'Datenbankname darf keinen Punkt enthalten
 $lang->install->errorCreateDB       = 'Erstellung der Datenbank fehlgeschlagen.';
 $lang->install->errorTableExists    = 'Die Tabellen existieren bereits. Wenn ZenTao bereits installiert war, kehren Sie zum letzen Schritt zurück und wählen Sie den Punkt Tabellen leeren. Dann fahren Sie fort.';
 $lang->install->errorCreateTable    = 'Erstellung der Tabellen fehlgeschlagen.';
+$lang->install->errorEngineInnodb   = 'Your MySQL version is too low to support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->install->errorImportDemoData = 'Import der Demodaten fehlgeschlagen.';
 
 $lang->install->setConfig          = 'Konfigurationsdatei erstellen';

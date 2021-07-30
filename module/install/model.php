@@ -467,6 +467,13 @@ class installModel extends model
                     $table = str_replace('--', '', $table);
                 }
 
+                $tableToLower = strtolower($table);
+                if(strpos($tableToLower, 'fulltext') !== false and strpos($tableToLower, 'innodb') !== false and $version < 5.6)
+                {
+                    $this->lang->install->errorCreateTable = $this->lang->install->errorEngineInnodb;
+                    return false;
+                }
+
                 $table = str_replace('__DELIMITER__', ';', $table);
                 $table = str_replace('__TABLE__', $this->config->db->name, $table);
 

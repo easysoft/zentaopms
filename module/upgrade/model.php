@@ -1557,6 +1557,13 @@ class upgradeModel extends model
                 $sql = str_replace('CHARACTER SET utf8 COLLATE utf8_general_ci', '', $sql);
             }
 
+            $sqlToLower = strtolower($sql);
+            if(strpos($sqlToLower, 'fulltext') !== false and strpos($sqlToLower, 'innodb') !== false and $mysqlVersion < 5.6)
+            {
+                self::$errors[] = $this->lang->install->errorEngineInnodb;
+                return false;
+            }
+
             $sql = str_replace('zt_', $this->config->db->prefix, $sql);
             $sql = str_replace('__DELIMITER__', ';', $sql);
             $sql = str_replace('__TABLE__', $this->config->db->name, $sql);
