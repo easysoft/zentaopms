@@ -1255,6 +1255,30 @@ class docModel extends model
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
 
+        $bugIdList = $testReportIdList = $caseIdList = 0;
+        $userView  = $type == 'product' ? $this->app->user->view->products : ($type == 'project' ? $this->app->user->view->projects : $this->app->user->view->sprints);
+
+        $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
+        if(!empty($bugPairs))
+        {
+            $bugIdList = array_keys($bugPairs);
+            $bugIdList = implode(',', $bugIdList);
+        }
+
+        $testReportPairs = $this->dao->select('id')->from(TABLE_TESTREPORT)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
+        if(!empty($testReportPairs))
+        {
+            $testReportIdList = array_keys($testReportPairs);
+            $testReportIdList = implode(',', $testReportIdList);
+        }
+
+        $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
+        if(!empty($casePairs))
+        {
+            $caseIdList = array_keys($casePairs);
+            $caseIdList = implode(',', $caseIdList);
+        }
+
         $idList    = array_keys($docs);
         $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in($idList)->get();
         $searchTitle = $this->get->title;
@@ -1263,37 +1287,12 @@ class docModel extends model
             $storyIdList      = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $planIdList       = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
 
-            $bugIdList        = 0;
-            $releaseIdList    = 0;
-            $testReportIdList = 0;
-            $caseIdList       = 0;
-
-            $bugPairs = $this->dao->select('id')->from(TABLE_BUG)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id');
-            if(!empty($bugPairs))
-            {
-                $bugIdList = array_keys($bugPairs);
-                $bugIdList = implode(',', $bugIdList);
-            }
-
-            $releasePairs = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id');
+            $releaseIdList = 0;
+            $releasePairs  = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id');
             if(!empty($releasePairs))
             {
                 $releaseIdList = array_keys($releasePairs);
                 $releaseIdList = implode(',', $releaseIdList);
-            }
-
-            $testReportPairs = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id');
-            if(!empty($testReportPairs))
-            {
-                $testReportIdList = array_keys($testReportPairs);
-                $testReportIdList = implode(',', $testReportIdList);
-            }
-
-            $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id');
-            if(!empty($casePairs))
-            {
-                $caseIdList = array_keys($casePairs);
-                $caseIdList = implode(',', $caseIdList);
             }
 
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
@@ -1330,36 +1329,12 @@ class docModel extends model
                 $taskIdList = implode(',', $taskIdList);
             }
 
-            $buildPairs  = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             $buildIdList = 0;
+            $buildPairs  = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($buildPairs))
             {
                 $buildIdList = array_keys($buildPairs);
                 $buildIdList = implode(',', $buildIdList);
-            }
-
-            $bugIdList = 0;
-            $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->fetchPairs('id');
-            if(!empty($bugPairs))
-            {
-                $bugIdList = array_keys($bugPairs);
-                $bugIdList = implode(',', $bugIdList);
-            }
-
-            $testReportIdList = 0;
-            $testReportPairs  = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->fetchPairs('id');
-            if(!empty($testReportPairs))
-            {
-                $testReportIdList = array_keys($testReportPairs);
-                $testReportIdList = implode(',', $testReportIdList);
-            }
-
-            $caseIdList = 0;
-            $casePairs  = $this->dao->select('id')->from(TABLE_CASE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->fetchPairs('id');
-            if(!empty($casePairs))
-            {
-                $caseIdList = array_keys($casePairs);
-                $caseIdList = implode(',', $caseIdList);
             }
 
             $executionIdList = join(',', $executionIdList);
@@ -1398,30 +1373,6 @@ class docModel extends model
             {
                 $buildIdList = array_keys($buildPairs);
                 $buildIdList = implode(',', $buildIdList);
-            }
-
-            $bugIdList = 0;
-            $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($bugPairs))
-            {
-                $bugIdList = array_keys($bugPairs);
-                $bugIdList = implode(',', $bugIdList);
-            }
-
-            $testReportIdList = 0;
-            $testReportPairs  = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($testReportPairs))
-            {
-                $testReportIdList = array_keys($testReportPairs);
-                $testReportIdList = implode(',', $testReportIdList);
-            }
-
-            $caseIdList = 0;
-            $casePairs  = $this->dao->select('id')->from(TABLE_CASE)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($casePairs))
-            {
-                $caseIdList = array_keys($casePairs);
-                $caseIdList = implode(',', $caseIdList);
             }
 
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
