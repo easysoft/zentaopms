@@ -1370,13 +1370,7 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $oldPlans       = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
-            $oldPlanStories = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
-                ->where('t1.project')->eq($executionID)
-                ->andWhere('t2.plan')->in(array_keys($oldPlans))
-                ->fetchAll('story');
-
+            $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
             $oldProducts = $this->execution->getProducts($executionID);
             $changes     = $this->execution->update($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1410,7 +1404,7 @@ class execution extends control
             if(!empty($newPlans) and !empty($diffResult))
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-                $this->loadModel('productplan')->linkProject($executionID, $_POST['plans'], $oldPlanStories);
+                $this->loadModel('productplan')->linkProject($executionID, $_POST['plans']);
                 $this->productplan->linkProject($projectID, $_POST['plans']);
             }
 

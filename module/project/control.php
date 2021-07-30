@@ -78,7 +78,7 @@ class project extends control
                 $project->product  = zget($projectLang->productList, $project->product);
                 $project->budget   = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
                 $project->parent   = $project->parentName;
-                
+
                 $linkedProducts = $this->project->getProducts($project->id, false);
                 $project->linkedProducts = implode('，', $linkedProducts);
 
@@ -414,12 +414,7 @@ class project extends control
 
         if($_POST)
         {
-            $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('plan');
-            $oldPlanStories = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
-                ->where('t1.project')->eq($projectID)
-                ->andWhere('t2.plan')->in(array_keys($oldPlans))
-                ->fetchAll('story');
+            $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('plan')->ne(0)->fetchPairs('plan');
 
             $changes = $this->project->update($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -434,7 +429,7 @@ class project extends control
             $diffResult = array_diff($oldPlans, $_POST['plans']);
             if(!empty($_POST['plans']) and !empty($diffResult))
             {
-                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans'], $oldPlanStories);
+                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans']);
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -1618,7 +1613,7 @@ class project extends control
         $response  = array();
         $response['result']  = true;
         $response['message'] = $this->lang->project->changeProgramTip;
-        
+
         /* Get new program products. */
         $newProducts = $this->program->getProductPairs($programID, 'assign', 'noclosed');
         $response['newProducts'] = html::select("newProducts", array('0' => '') + $newProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");

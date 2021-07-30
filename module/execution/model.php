@@ -2177,7 +2177,7 @@ class executionModel extends model
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
             $data->order   = ++$lastOrder;
-            $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
+            $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
             $this->linkCases($executionID, (int)$products[$storyID], $storyID);
