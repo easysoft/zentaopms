@@ -12,12 +12,12 @@ table td{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
         <?php endif;?>
       </h2>
       <div class='pull-right'>
-        <?php common::printLink('issue', 'create', 'owner=show&account=&activityID=' . $activity->id, "<i class='icon icon-plus'></i>" . $lang->issue->create, '', "class='btn btn-primary'");?>
+        <?php common::printLink('issue', 'create', 'owner=show&account=&activityID=' . $activity->id, "<i class='icon icon-plus'></i> " . $lang->issue->create, '', "class='btn btn-primary'");?>
       </div>
     </div>
     <?php if(!empty($issues)):?>
     <table class='table'>
-      <thead> 
+      <thead>
         <tr>
           <th class='w-50px'><?php echo $lang->issue->id;?></th>
           <th class='w-100px'><?php echo $lang->issue->type;?></th>
@@ -27,8 +27,8 @@ table td{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
           <th class='w-80px'><?php echo $lang->issue->owner;?></th>
           <th class='w-150px'><?php echo $lang->issue->desc;?></th>
         </tr>
-      </thead> 
-      <tbody> 
+      </thead>
+      <tbody>
         <?php foreach($issues as $issue):?>
         <tr>
          <td><?php echo $issue->id;?></td>
@@ -40,7 +40,7 @@ table td{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
          <td><?php echo $issue->desc;?></td>
         </tr>
         <?php endforeach;?>
-      </tbody> 
+      </tbody>
     </table>
     <?php else:?>
     <div class='table-empty-tip'><?php echo $lang->noData;?></div>

@@ -20,7 +20,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php $vars = $module == 'program' ? "objectID=$objectID&deptID=0&programID=$programID&from=$from" : "objectID=$objectID";?>
-    <?php common::printLink($module, 'addWhitelist', $vars, "<i class='icon icon-plus'></i>" . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $openApp");?>
+    <?php common::printLink($module, 'addWhitelist', $vars, "<i class='icon icon-plus'></i> " . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $openApp");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>

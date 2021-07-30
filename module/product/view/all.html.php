@@ -20,7 +20,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'manageLine', '', "<i class='icon-edit'></i> &nbsp;" . $lang->product->line, '', 'class="btn btn-link iframe"', '', true);?>
-    <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">

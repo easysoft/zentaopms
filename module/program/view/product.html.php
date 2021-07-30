@@ -21,7 +21,7 @@
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('product', 'create', "programID=$program->id", '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('product', 'create', "programID=$program->id", '<i class="icon icon-plus"></i> ' . $lang->product->create, '', 'class="btn btn-primary"');?>
   </div>
   <?php endif;?>
 </div>

@@ -27,11 +27,11 @@
       <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->project->bylist}' id='switchButton' data-type='bylist'");?>
     </div>
     <?php if(isset($this->config->maxVersion)):?>
-    <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
-    <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary"');?>
     <?php else:?>
-    <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i>' . $lang->execution->create, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-primary"');?>
     <?php endif;?>
   </div>
 </div>
@@ -42,11 +42,11 @@
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
         <?php if(isset($this->config->maxVersion)):?>
-        <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal" data-target="#guideDialog"');?>
+        <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal" data-target="#guideDialog"');?>
         <?php elseif($this->config->systemMode == 'new'):?>
-        <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i>' . $lang->project->create, '', 'class="btn btn-info"');?>
+        <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info"');?>
         <?php else:?>
-        <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i>' . $lang->execution->create, '', 'class="btn btn-info"');?>
+        <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
         <?php endif;?>
       </p>
     </div>

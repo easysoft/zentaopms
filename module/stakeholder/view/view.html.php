@@ -19,7 +19,7 @@ $createLink = $this->createLink('stakeholder', 'create', "projectID=$user->objec
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
-    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'class="btn btn-secondary"');?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'class="btn btn-secondary"');?>
     <div class="divider"></div>
     <?php endif;?>
     <div class="page-title">

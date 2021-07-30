@@ -13,7 +13,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::backButton("<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', 'btn btn-link');
+    echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', 'btn btn-link');
     echo '<div class="divider"></div>';
     ?>
     <div class="page-title">

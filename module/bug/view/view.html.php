@@ -32,7 +32,7 @@
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('product', $product)):?>
     <?php $openApp = strpos('|execution|project|qa|', $this->app->openApp) !== false ? $this->app->openApp : 'qa';?>
-    <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module},projectID={$bug->project},executionID={$bug->execution}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary' data-app='$openApp'"); ?>
+    <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module},projectID={$bug->project},executionID={$bug->execution}", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary' data-app='$openApp'"); ?>
     <?php endif;?>
   </div>
   <?php endif;?>

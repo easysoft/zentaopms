@@ -1748,12 +1748,12 @@ class docModel extends model
     {
         if($objectType == 'book')
         {
-            $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i>' . $this->lang->doc->createBook, '', 'class="btn btn-secondary iframe"');
+            $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createBook, '', 'class="btn btn-secondary iframe"');
         }
         elseif($libID)
         {
             $html  = "<div class='dropdown' id='createDropdown'>";
-            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->createAB . " <span class='caret'></span></button>";
+            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->doc->createAB . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu pull-right'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
@@ -1812,7 +1812,7 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i>" . $doc->title, '', "data-app='{$this->app->openApp}' title='{$doc->title}'") . '</li>';
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='{$this->app->openApp}' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
@@ -1856,7 +1856,7 @@ class docModel extends model
     public function setFastMenu($fastLib)
     {
         $actions  = '';
-        $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
+        $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->doc->search . '</a>';
         $actions .= "<a data-toggle='dropdown' class='btn btn-link' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
