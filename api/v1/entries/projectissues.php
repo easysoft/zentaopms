@@ -26,12 +26,18 @@ class projectIssuesEntry extends entry
         $storyStatus = array('' => '');
         $storyStatus['wait']   = 'draft';
         $storyStatus['active'] = 'active,changed';
+        $storyStatus['done']   = '';
+        $storyStatus['pause']  = '';
+        $storyStatus['cancel'] = '';
         $storyStatus['closed'] = 'closed';
 
         $bugFields = 'id,status';
         $bugStatus = array('' => '');
+        $bugStatus['wait']   = '';
         $bugStatus['active'] = 'active';
         $bugStatus['done']   = 'resolved';
+        $bugStatus['pause']  = '';
+        $bugStatus['cancel'] = '';
         $bugStatus['closed'] = 'closed';
 
         $productID = (int)$productID;
