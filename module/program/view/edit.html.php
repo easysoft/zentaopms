@@ -18,6 +18,8 @@
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>
 <?php js::set('programList', $programList);?>
+<?php js::set('budgetUnitList', $budgetUnitList);?>
+<?php js::set('oldBudgetUnit', $program->budgetUnit);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -47,10 +49,12 @@
               <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
               <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
-              <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
+              <span class='input-group-addon'><?php echo zget($budgetUnitList, $program->budgetUnit);?></span>
               <?php else:?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $budgetUnitList, $program->budgetUnit, "class='form-control'");?>
+              <?php echo html::hidden('isChangeUnit', false);?>
+              <?php echo html::hidden('exchangeRate', '');?>
               <?php endif;?>
             </div>
           </td>
@@ -112,5 +116,36 @@
 </div>
 <div id='subAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->program->subAclList, $program->acl, "onclick='setWhite(this.value);'", 'block'));?>
+</div>
+
+<div class="modal fade" id="changeUnitTip">
+  <div class="modal-dialog mw-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->program->changePRJUnit;?></h4>
+      </div>
+      <div class="modal-body">
+        <form method='post'>
+          <table class='table table-form'>
+            <tr>
+              <td colspan='3'><div class='alert alert-info no-margin'><?php echo $lang->program->confirmChangePRJUint;?></div></td>
+            </tr>
+            <tr>
+              <th><?php echo '1' . zget($budgetUnitList, $program->budgetUnit);?></th>
+              <td><div class='input-group'><span class='input-group-addon'><?php echo "=";?></span><?php echo html::input('rate', '', "class='form-control'");?> <span class='input-group-addon' id='currentUnit'></span></div></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan='3' class='text-center'>
+                <?php echo html::commonButton($lang->confirm, "id='confirm'", 'btn btn-primary btn-wide');?>
+                <?php echo html::commonButton($lang->cancel, "data-dismiss='modal' id='cancel'", 'btn btn-default btn-wide');?>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -808,8 +808,9 @@ class story extends control
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
                 die(js::error(dao::getError()));
             }
+            $story   = $this->story->getByID($storyID);
             $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
-            $files   = $this->loadModel('file')->saveUpload('story', $storyID, $version);
+            $files   = $this->loadModel('file')->saveUpload($story->type, $storyID, $version);
 
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
@@ -902,7 +903,7 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $story->files = $this->loadModel('file')->getByObject('story', $storyID);
+        $story->files = $this->loadModel('file')->getByObject($story->type, $storyID);
         $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();

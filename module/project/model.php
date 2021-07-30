@@ -1347,6 +1347,13 @@ class projectModel extends model
                 $title  = "title='{$project->name}'";
             }
 
+            if($id == 'end')
+            {
+                $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+                $class .= ' c-name';
+                $title  = "title='{$project->end}'";
+            }
+
             if($id == 'budget')
             {
                 $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
@@ -1390,7 +1397,7 @@ class projectModel extends model
                     echo $project->begin;
                     break;
                 case 'end':
-                    echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+                    echo $project->end;
                     break;
                 case 'status':
                     echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";

@@ -52,6 +52,8 @@ $lang->program->beginGreateChild        = "Child earliest begin: %s, parent begi
 $lang->program->endLetterChild          = "Child latest end: %s, parent end date >                        = child latest end date.";
 $lang->program->closeErrorMessage       = 'There are subprograms or projects that are not closed';
 $lang->program->confirmDelete           = "Do you want to delete it?";
+$lang->program->confirmChangePRJUint    = 'Do you want to update the budget unit of the project of the program? If yes, please the current exchange rate.';
+$lang->program->changePRJUnit           = 'Update the budget unit of the project';
 $lang->program->hasChildren             = 'It has child programs or projects. You cannot delete it.';
 $lang->program->readjustTime            = 'Change the program begin&end date.';
 

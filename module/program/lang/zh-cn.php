@@ -55,6 +55,8 @@ $lang->program->endLetterChild          = "子项目的最大完成日期：%s�
 $lang->program->closeErrorMessage       = '存在子项目集或项目为未关闭状态';
 $lang->program->hasChildren             = '该项目集有子项目集或项目存在，不能删除。';
 $lang->program->confirmDelete           = "您确定要删除吗？";
+$lang->program->confirmChangePRJUint    = '是否同步更新项目集下项目的预算的单位？若确认更新,请填写今日汇率。';
+$lang->program->changePRJUnit           = '更新项目预算单位';
 $lang->program->readjustTime            = '重新调整项目集起止时间';
 $lang->program->accessDenied            = '你无权访问该项目集';
 
