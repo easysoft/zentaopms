@@ -1255,7 +1255,8 @@ class docModel extends model
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
 
-        $bugIdList = $testReportIdList = $caseIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = 0;
+
         $userView  = $type == 'product' ? $this->app->user->view->products : ($type == 'project' ? $this->app->user->view->projects : $this->app->user->view->sprints);
 
         $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
@@ -1279,40 +1280,23 @@ class docModel extends model
             $caseIdList = implode(',', $caseIdList);
         }
 
-        $idList    = array_keys($docs);
-        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in($idList)->get();
+        $idList      = array_keys($docs);
+        $docIdList   = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in($idList)->get();
         $searchTitle = $this->get->title;
         if($type == 'product')
         {
             $storyIdList      = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $planIdList       = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
 
-            $releaseIdList = 0;
             $releasePairs  = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id');
             if(!empty($releasePairs))
             {
                 $releaseIdList = array_keys($releasePairs);
                 $releaseIdList = implode(',', $releaseIdList);
             }
-
-            $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
-                ->where('size')->gt('0')
-                ->andWhere("(objectType = 'product' and objectID = $objectID)", true)
-                ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
-                ->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")
-                ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
-                ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
-                ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
-                ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
-                ->markRight(1)
-                ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
         }
         elseif($type == 'project')
         {
-            $issueIdList = $meetingIdList = $designIdList = '';
             if(isset($this->config->maxVersion))
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
@@ -1321,15 +1305,13 @@ class docModel extends model
             }
 
             $executionIdList = $this->loadModel('execution')->getIdList($objectID);
-            $taskPairs  = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            $taskIdList = 0;
+            $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($taskPairs))
             {
                 $taskIdList = array_keys($taskPairs);
                 $taskIdList = implode(',', $taskIdList);
             }
 
-            $buildIdList = 0;
             $buildPairs  = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($buildPairs))
             {
@@ -1338,58 +1320,44 @@ class docModel extends model
             }
 
             $executionIdList = join(',', $executionIdList);
-            $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
-                ->where('size')->gt('0')
-                ->andWhere("(objectType = 'project' and objectID = $objectID)", true)
-                ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
-                ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
-                ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
-                ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
-                ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
-                ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
-                ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
-                ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")->fi()
-                ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")->fi()
-                ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'design' and objectID in ($designIdList))")->fi()
-                ->markRight(1)
-                ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
         }
         elseif($type == 'execution')
         {
-            $taskPairs  = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            $taskIdList = 0;
+            $taskPairs = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($taskPairs))
             {
                 $taskIdList = array_keys($taskPairs);
                 $taskIdList = implode(',', $taskIdList);
             }
 
-            $buildPairs  = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            $buildIdList = 0;
+            $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($buildPairs))
             {
                 $buildIdList = array_keys($buildPairs);
                 $buildIdList = implode(',', $buildIdList);
             }
-
-            $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
-                ->where('size')->gt('0')
-                ->andWhere("(objectType = 'execution' and objectID = $objectID)", true)
-                ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
-                ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
-                ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
-                ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
-                ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
-                ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
-                ->markRight(1)
-                ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
         }
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
+            ->where('size')->gt('0')
+            ->andWhere("(objectType = '$type' and objectID = $objectID)", true)
+            ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
+            ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
+            ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
+            ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
+            ->beginIF($type == 'product')->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")->fi()
+            ->beginIF($type == 'product')->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")->fi()
+            ->beginIF($type == 'project')->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")->fi()
+            ->beginIF($type == 'project' or $type == 'execution')->orWhere("(objectType = 'task' and objectID in ($taskIdList))")->fi()
+            ->beginIF($type == 'project' or $type == 'execution')->orWhere("(objectType = 'build' and objectID in ($buildIdList))")->fi()
+            ->beginIF(isset($this->config->maxVersion) and $type == 'project')->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")->fi()
+            ->beginIF(isset($this->config->maxVersion) and $type == 'project')->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")->fi()
+            ->beginIF(isset($this->config->maxVersion) and $type == 'project')->orWhere("(objectType = 'design' and objectID in ($designIdList))")->fi()
+            ->markRight(1)
+            ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
 
         foreach($files as $fileID => $file)
         {
