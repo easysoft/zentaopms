@@ -72,7 +72,6 @@ $lang->job->paramValueList['$zentao_account']  = '当前用户名';
 $lang->job->paramValueList['$zentao_product']  = '当前产品ID';
 $lang->job->paramValueList['$zentao_repopath'] = '当前版本库路径';
 
-
 $lang->job->engineList = array();
 $lang->job->engineList['']        = '';
 $lang->job->engineList['gitlab']  = 'GitLab';
