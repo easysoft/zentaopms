@@ -1338,6 +1338,30 @@ class docModel extends model
                 $buildIdList = implode(',', $buildIdList);
             }
 
+            $bugIdList = 0;
+            $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->fetchPairs('id');
+            if(!empty($bugPairs))
+            {
+                $bugIdList = array_keys($bugPairs);
+                $bugIdList = implode(',', $bugIdList);
+            }
+
+            $testReportIdList = 0;
+            $testReportPairs  = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->fetchPairs('id');
+            if(!empty($testReportPairs))
+            {
+                $testReportIdList = array_keys($testReportPairs);
+                $testReportIdList = implode(',', $testReportIdList);
+            }
+
+            $caseIdList = 0;
+            $casePairs  = $this->dao->select('id')->from(TABLE_CASE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->fetchPairs('id');
+            if(!empty($casePairs))
+            {
+                $caseIdList = array_keys($casePairs);
+                $caseIdList = implode(',', $caseIdList);
+            }
+
             $executionIdList = join(',', $executionIdList);
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
@@ -1346,6 +1370,9 @@ class docModel extends model
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
                 ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
+                ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
+                ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
+                ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
                 ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")->fi()
                 ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")->fi()
                 ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'design' and objectID in ($designIdList))")->fi()
@@ -1372,12 +1399,40 @@ class docModel extends model
                 $buildIdList = array_keys($buildPairs);
                 $buildIdList = implode(',', $buildIdList);
             }
+
+            $bugIdList = 0;
+            $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
+            if(!empty($bugPairs))
+            {
+                $bugIdList = array_keys($bugPairs);
+                $bugIdList = implode(',', $bugIdList);
+            }
+
+            $testReportIdList = 0;
+            $testReportPairs  = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
+            if(!empty($testReportPairs))
+            {
+                $testReportIdList = array_keys($testReportPairs);
+                $testReportIdList = implode(',', $testReportIdList);
+            }
+
+            $caseIdList = 0;
+            $casePairs  = $this->dao->select('id')->from(TABLE_CASE)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
+            if(!empty($casePairs))
+            {
+                $caseIdList = array_keys($casePairs);
+                $caseIdList = implode(',', $caseIdList);
+            }
+
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
                 ->andWhere("(objectType = 'execution' and objectID = $objectID)", true)
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
                 ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
+                ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
+                ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
+                ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
                 ->markRight(1)
                 ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
                 ->orderBy($orderBy)
