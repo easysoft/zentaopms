@@ -111,6 +111,7 @@ class gitlab
         if(!empty($commits))
         {
             $commit = $commits[0];
+            $file->revision  = $commit->id;
             $file->committer = $commit->committer_name;
             $file->comment   = $commit->message;
             $file->date      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
