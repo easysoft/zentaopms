@@ -155,5 +155,7 @@ $(function()
         if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
         $("#dropMenu .search-box").width('auto');
     })
+
+    if(config.clientLang == 'en') $('#tabContent .tab-pane>ul>li>label+a').css('padding-left', '65px');
 })
 </script>
