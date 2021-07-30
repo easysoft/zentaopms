@@ -1316,9 +1316,9 @@ class docModel extends model
             $issueIdList = $meetingIdList = $designIdList = '';
             if(isset($this->config->maxVersion))
             {
-                $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->products)->get();
-                $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->products)->get();
-                $designIdList  = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->products)->get();
+                $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+                $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+                $designIdList  = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             }
 
             $executionIdList = $this->loadModel('execution')->getIdList($objectID);
