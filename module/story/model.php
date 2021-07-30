@@ -238,8 +238,8 @@ class storyModel extends model
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
-            $this->file->saveUpload('story', $storyID, $extra = 1);
+            $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
+            $this->file->saveUpload($story->type, $storyID, $extra = 1);
 
             if(!empty($story->plan)) $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
 
@@ -347,9 +347,9 @@ class storyModel extends model
 
     /**
      * Create story from gitlab issue.
-     * 
+     *
      * @param  object    $story
-     * @param  int       $executionID 
+     * @param  int       $executionID
      * @access public
      * @return int
      */
@@ -3444,7 +3444,7 @@ class storyModel extends model
         $storyIdList = array();
         if(isset($stories['id']))
         {
-            $storyIdList = array($stories['id'] => $stories['id']); 
+            $storyIdList = array($stories['id'] => $stories['id']);
         }
         else
         {

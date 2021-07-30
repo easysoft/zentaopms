@@ -226,6 +226,7 @@ if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefi
 $config->objectTables['product']     = TABLE_PRODUCT;
 $config->objectTables['productplan'] = TABLE_PRODUCTPLAN;
 $config->objectTables['story']       = TABLE_STORY;
+$config->objectTables['requirement'] = TABLE_STORY;
 $config->objectTables['release']     = TABLE_RELEASE;
 $config->objectTables['program']     = TABLE_PROJECT;
 $config->objectTables['project']     = TABLE_PROJECT;

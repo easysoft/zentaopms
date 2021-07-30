@@ -1300,7 +1300,7 @@ class docModel extends model
                 ->where('size')->gt('0')
                 ->andWhere("(objectType = 'product' and objectID = $objectID)", true)
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
-                ->orWhere("(objectType = 'story' and objectID in ($storyIdList))")
+                ->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")
                 ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
                 ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
                 ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
@@ -1424,7 +1424,7 @@ class docModel extends model
         foreach($sourceList as $type => $idList)
         {
             $table = $this->config->objectTables[$type];
-            $title = in_array($type, array('story', 'bug', 'issue', 'case', 'testcase', 'testreport', 'doc')) ? 'title' : 'name';
+            $title = in_array($type, array('story', 'bug', 'issue', 'case', 'testcase', 'testreport', 'doc', 'requirement')) ? 'title' : 'name';
             $name  = $this->dao->select('id,' . $title)->from($table)->where('id')->in($idList)->fetchPairs('id');
             $sourcePairs[$type] = $name;
         }
