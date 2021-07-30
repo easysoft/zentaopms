@@ -833,16 +833,22 @@ class my extends control
     /**
      * Guide the user to change the theme.
      *
+     * @param  string $saveSkipUser
      * @access public
      * @return void
      */
-    public function guideChangeTheme()
+    public function guideChangeTheme($saveSkipUser = false)
     {
-        $accounts = zget($this->config->global, 'skipThemeGuide', '');
-        if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
-        $this->loadModel('setting')->setItem('system.common.global.skipThemeGuide', $accounts);
-
-        $this->display();
+        if($saveSkipUser)
+        {
+            $accounts = zget($this->config->global, 'skipThemeGuide', '');
+            if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
+            $this->loadModel('setting')->setItem('system.common.global.skipThemeGuide', $accounts);
+        }
+        else
+        {
+            $this->display();
+        }
     }
 
     /**
