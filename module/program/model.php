@@ -392,7 +392,7 @@ class programModel extends model
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,delta,future')
+            ->remove('uid,delta,future,isChangeUnit,exchangeRate')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
@@ -447,6 +447,33 @@ class programModel extends model
 
         if(!dao::isError())
         {
+            /* If the program changes, the budget unit will be updated to the project and sub-programs simultaneously. */
+            if($program->budgetUnit != $oldProgram->budgetUnit and $_POST['isChangeUnit'] == 'true')
+            {
+                $this->dao->update(TABLE_PROJECT)
+                    ->set('budgetUnit')->eq($program->budgetUnit)
+                    ->where('parent')->eq($programID)
+                    ->andWhere('type')->eq('project')
+                    ->exec();
+
+                if(!empty($_POST['exchangeRate']))
+                {
+                    $projectBudgets = $this->dao->select('id,budget')->from(TABLE_PROJECT)
+                        ->where('parent')->eq($programID)
+                        ->andWhere('type')->eq('project')
+                        ->andWhere('budget')->ne('')
+                        ->fetchAll('id');
+
+                    foreach($projectBudgets as $id => $budget)
+                    {
+                        $this->dao->update(TABLE_PROJECT)
+                            ->set('budget')->eq($_POST['exchangeRate'] * $budget->budget)
+                            ->where('id')->eq($id)
+                            ->exec();
+                    }
+                }
+            }
+
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
             $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
