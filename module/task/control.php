@@ -350,7 +350,7 @@ class task extends control
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs(), $this->view->execution->id);
+        $this->execution->setMenu($this->view->execution->id);
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 
@@ -365,7 +365,6 @@ class task extends control
     public function edit($taskID, $comment = false)
     {
         $this->commonAction($taskID);
-        $this->execution->setMenu($this->view->task->execution);
 
         if(!empty($_POST))
         {
