@@ -1,16 +1,18 @@
 <?php
 /**
- * 禅道API的product issues资源类
+ * 禅道API的project issues资源类
  * 版本V1
  * 目前适用于Gitlab
  *
- * The product issues entry point of zentaopms
+ * The project issues entry point of zentaopms
  * Version 1
  */
-class productIssueEntry extends entry
+class projectIssueEntry extends entry
 {
     public function get($issueID)
     {
+        $this->setParam('timeFormat', 'utc');
+
         $idParams = explode('-', $issueID);
         if(count($idParams) < 2) $this->sendError(400, 'The id of issue is wrong.');
 

@@ -4,13 +4,15 @@
  * 版本V1
  * 目前适用于Gitlab
  *
- * The product issues entry point of zentaopms
+ * The project issues entry point of zentaopms
  * Version 1
  */
-class productIssuesEntry extends entry
+class projectIssuesEntry extends entry
 {
     public function get($productID)
     {
+        $this->setParam('timeFormat', 'utc');
+
         $taskFields = 'id,status';
         $taskStatus = array('' => '');
         $taskStatus['wait']   = 'wait';
@@ -50,10 +52,16 @@ class productIssuesEntry extends entry
             $taskFields  .= ',name as title';
             $storyFields .= ',title';
             $bugFields   .= ',title';
+        case 'lastEditedDate':
+            $taskFields  .= ",if(lastEditedDate < '1970-01-01 01-01-01', openedDate, lastEditedDate) as lastEditedDate";
+            $storyFields .= ",if(lastEditedDate < '1970-01-01 01-01-01', openedDate, lastEditedDate) as lastEditedDate";
+            $bugFields   .= ",if(lastEditedDate < '1970-01-01 01-01-01', openedDate, lastEditedDate) as lastEditedDate";
         default:
             $taskFields  .= ',openedDate';
             $storyFields .= ',openedDate';
             $bugFields   .= ',openedDate';
+
+            $order = 'openedDate';
         }
 
         $issues = array();
@@ -136,8 +144,9 @@ class productIssuesEntry extends entry
                 $r->assignedTo     = $task->assignedTo;
                 $r->openedDate     = $task->openedDate;
                 $r->openedBy       = $task->openedBy;
-                $r->lastEditedDate = $task->lastEditedDate;
+                $r->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
                 $r->status         = $task->status;
+                $r->url            = $this->createLink('task', 'view', "taskID=$task->id");
             }
             else if($issue['type'] == 'story')
             {
@@ -150,8 +159,9 @@ class productIssuesEntry extends entry
                 $r->assignedTo     = $story->assignedTo;
                 $r->openedDate     = $story->openedDate;
                 $r->openedBy       = $story->openedBy;
-                $r->lastEditedDate = $story->lastEditedDate;
+                $r->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
                 $r->status         = $story->status;
+                $r->url            = $this->createLink('story', 'view', "storyID=$story->id");
             }
             else if($issue['type'] == 'bug')
             {
@@ -164,9 +174,11 @@ class productIssuesEntry extends entry
                 $r->assignedTo     = $bug->assignedTo;
                 $r->openedDate     = $bug->openedDate;
                 $r->openedBy       = $bug->openedBy;
-                $r->lastEditedDate = $bug->lastEditedDate;
+                $r->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
                 $r->status         = $bug->status;
+                $r->url            = $this->createLink('bug', 'view', "bugID=$bug->id");
             }
+
             $result[] = $this->format($r, 'openedDate:time,lastEditedDate:time');
         }
 
@@ -189,5 +201,25 @@ class productIssuesEntry extends entry
         }
 
         return '';
+    }
+
+    /**
+     * Create url of issue.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $vars
+     * @access private
+     * @return string
+     */
+    private function createLink($module, $method, $vars)
+    {
+        $link = helper::createLink($module, $method, $vars, 'html');
+        if($this->config->requestType == 'GET')
+        {
+            $pos  = strpos($link, '.php');
+            $link = '/index' . substr($link, $pos);
+        }
+        return common::getSysURL() . $link;
     }
 }
