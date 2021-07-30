@@ -95,7 +95,7 @@
                   ?>
                 </a>
                 <div class='file-name' title='<?php echo $file->title;?>'><?php echo $file->title;?></a></div>
-                <div class='text-muted'><?php echo $lang->{$file->objectType}->common . ' : ';?><a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>' title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></div>
+                <div class='text-muted'><?php echo ($file->objectType == 'requirement' ? $lang->file->requirement : $lang->{$file->objectType}->common) . ' : ';?><a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID");?>' title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></div>
               </div>
             </div>
           </div>
