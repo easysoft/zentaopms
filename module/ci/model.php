@@ -37,6 +37,7 @@ class ciModel extends model
             ->andWhere('compile.status')->ne('failure')
             ->andWhere('compile.status')->ne('create_fail')
             ->andWhere('compile.status')->ne('timeout')
+            ->andWhere('compile.status')->ne('canceled')
             ->beginIf($compileID)->andWhere('compile.id')->eq($compileID)->fi()
             ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
@@ -59,7 +60,7 @@ class ciModel extends model
             return false;
         }
 
-        if($compile->engine == 'gitlab') $this->syncGitlabTaskStatus($compile);
+        if($compile->engine == 'gitlab') return $this->syncGitlabTaskStatus($compile);
         $jenkinsServer   = $compile->url;
         $jenkinsUser     = $compile->account;
         $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
