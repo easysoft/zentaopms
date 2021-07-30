@@ -1313,6 +1313,13 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
+            if(isset($this->config->maxVersion))
+            {
+                $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->products)->get();
+                $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->products)->get();
+                $designIdList  = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->products)->get();
+            }
+
             $executionIdList = $this->loadModel('execution')->getIdList($objectID);
             $taskPairs  = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             $taskIdList = 0;
@@ -1338,6 +1345,9 @@ class docModel extends model
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
                 ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
+                ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")->fi()
+                ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")->fi()
+                ->beginIF(isset($this->config->maxVersion))->orWhere("(objectType = 'design' and objectID in ($designIdList))")->fi()
                 ->markRight(1)
                 ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
                 ->orderBy($orderBy)
