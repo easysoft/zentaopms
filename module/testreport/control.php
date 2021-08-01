@@ -474,7 +474,8 @@ class testreport extends control
         if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->session->project = $report->project;
 
-        $execution = $this->execution->getById($report->execution);
+        $browseLink = '';
+        $execution  = $this->execution->getById($report->execution);
         if($this->app->openApp == 'qa' and !empty($report->product))
         {
             $product   = $this->product->getById($report->product);

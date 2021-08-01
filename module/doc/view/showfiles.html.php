@@ -44,7 +44,7 @@
                 <?php endif;?>
                 <?php echo str_replace('.' . $file->extension, '', $file->title);?>
               </td>
-              <td class='c-name'><?php echo ($file->objectType == 'requirement' ? $lang->file->requirement : $lang->{$file->objectType}->common) . ' : ';?><a title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID");?>'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></td>
+              <td class='c-name'><?php echo ($file->objectType == 'requirement' ? $lang->file->requirement : $lang->{$file->objectType}->common) . ' : ';?><a title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' class='iframe' data-width='90%'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></td>
               <td><?php echo $file->extension;?></td>
               <td><?php echo number_format($file->size / 1024, 1) . 'K';?></td>
               <td><?php echo isset($file->addedBy) ? zget($users, $file->addedBy) : '';?></td>
@@ -95,7 +95,7 @@
                   ?>
                 </a>
                 <div class='file-name' title='<?php echo $file->title;?>'><?php echo $file->title;?></a></div>
-                <div class='file-name text-muted'><?php echo ($file->objectType == 'requirement' ? $lang->file->requirement : $lang->{$file->objectType}->common) . ' : ';?><a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID");?>' title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></div>
+                <div class='file-name text-muted'><?php echo ($file->objectType == 'requirement' ? $lang->file->requirement : $lang->{$file->objectType}->common) . ' : ';?><a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' class='iframe' data-width='90%'><?php echo $sourcePairs[$file->objectType][$file->objectID];?></a></div>
               </div>
             </div>
           </div>
