@@ -50,6 +50,7 @@ $lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
 $lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
 $lang->project->testreport        = 'Testreport';
 $lang->project->selectProgram     = 'Program filtering';
+$lang->project->teamMember        = 'Team Member';
 
 /* Fields. */
 $lang->project->common             = 'Project';
@@ -85,6 +86,7 @@ $lang->project->setPlanduration    = 'Set Duration';
 $lang->project->auth               = 'Access Control';
 $lang->project->durationEstimation = 'Estimated Workload';
 $lang->project->teamCount          = 'Man';
+$lang->project->teamSumCount       = '%s people in total';
 $lang->project->leftStories        = 'Left Stories';
 $lang->project->leftTasks          = 'Left Tasks';
 $lang->project->leftBugs           = 'Left Bugs';

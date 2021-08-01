@@ -51,6 +51,7 @@ $lang->project->linkedProducts    = '已关联';
 $lang->project->unlinkedProducts  = '未关联';
 $lang->project->testreport        = '测试报告';
 $lang->project->selectProgram     = '项目集筛选';
+$lang->project->teamMember        = '团队成员';
 
 /* Fields. */
 $lang->project->common             = '项目';
@@ -106,6 +107,7 @@ $lang->project->svTitle            = '进度偏差';
 $lang->project->acTitle            = '实际花费';
 $lang->project->cvTitle            = '成本偏差';
 $lang->project->teamCount          = '人数';
+$lang->project->teamSumCount       = '共%s人';
 $lang->project->longTime           = '长期';
 $lang->project->future             = '待定';
 $lang->project->moreProject        = '更多项目';
