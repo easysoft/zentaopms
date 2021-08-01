@@ -9,4 +9,5 @@ td.c-actions {overflow: visible;}
 #programID_chosen div.chosen-drop.chosen-auto-max-width.in {width: 150px !important;}
 #switchButton {background: #fff !important;}
 .panel-actions {position: relative; padding: 0 0;}
-.icon-cards-view {padding-left: 7px;}
+.icon-cards-view {padding-left: 7px; font-size: 16px;}
+.icon-list {padding-left: 7px;}
