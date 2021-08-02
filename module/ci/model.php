@@ -125,9 +125,11 @@ class ciModel extends model
      */
     public function syncGitlabTaskStatus($compile)
     {
+        $this->loadModel('gitlab');
+
         $now      = helper::now();
-        $pipeline = $this->loadModel('gitlab')->apiGetSinglePipeline($compile->server, $compile->pipeline, $compile->queue);
-        $jobs     = $this->loadModel('gitlab')->apiGetJobs($compile->server, $compile->pipeline, $compile->queue);
+        $pipeline = $this->apiGetSinglePipeline($compile->server, $compile->pipeline, $compile->queue);
+        $jobs     = $this->apiGetJobs($compile->server, $compile->pipeline, $compile->queue);
 
         $data = new stdclass;
         $data->status     = $pipeline->status;
@@ -136,7 +138,7 @@ class ciModel extends model
         foreach($jobs as $job)
         {
             if(empty($job->duration) or $job->duration == '') $job->duration = '-';
-            $data->logs = "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
+            $data->logs  = "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
             $data->logs .= "Job URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
             $data->logs .= $this->transformAnsiToHtml($this->loadModel('gitlab')->apiGetJobLog($compile->server, $compile->pipeline, $job->id));
         }
