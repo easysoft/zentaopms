@@ -128,8 +128,8 @@ class ciModel extends model
         $this->loadModel('gitlab');
 
         $now      = helper::now();
-        $pipeline = $this->apiGetSinglePipeline($compile->server, $compile->pipeline, $compile->queue);
-        $jobs     = $this->apiGetJobs($compile->server, $compile->pipeline, $compile->queue);
+        $pipeline = $this->gitlab->apiGetSinglePipeline($compile->server, $compile->pipeline, $compile->queue);
+        $jobs     = $this->gitlab->apiGetJobs($compile->server, $compile->pipeline, $compile->queue);
 
         $data = new stdclass;
         $data->status     = $pipeline->status;
