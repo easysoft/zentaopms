@@ -141,6 +141,12 @@ $(function()
     $('#outline li.has-list').addClass('open in');
     $('#outline li.has-list>i+ul').prev('i').remove();
 
+    $(document).on('click', '.detail-content a', function(event)
+    {
+        var target = $(this).attr('target');
+        if($.cookie('isFullScreen') == 1 && target != '_blank') exitFullScreen();
+    })
+
     /* Update doc content silently on switch doc version, story #40503 */
     $(document).on('click', '.doc-version-menu a, #mainActions .container a', function(event)
     {
