@@ -1257,43 +1257,29 @@ class docModel extends model
 
         $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = 0;
 
-        $userView  = $type == 'product' ? $this->app->user->view->products : ($type == 'project' ? $this->app->user->view->projects : $this->app->user->view->sprints);
+        $userView = $this->app->user->view->products;
+        if($type == 'project')   $userView = $this->app->user->view->projects;
+        if($type == 'execution') $userView = $this->app->user->view->sprints;
 
-        $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
-        if(!empty($bugPairs))
-        {
-            $bugIdList = array_keys($bugPairs);
-            $bugIdList = implode(',', $bugIdList);
-        }
+        $bugPairs = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
+        if(!empty($bugPairs)) $bugIdList = implode(',', $bugPairs);
 
         $testReportPairs = $this->dao->select('id')->from(TABLE_TESTREPORT)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
-        if(!empty($testReportPairs))
-        {
-            $testReportIdList = array_keys($testReportPairs);
-            $testReportIdList = implode(',', $testReportIdList);
-        }
+        if(!empty($testReportPairs)) $testReportIdList = implode(',', $testReportPairs);
 
         $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
-        if(!empty($casePairs))
-        {
-            $caseIdList = array_keys($casePairs);
-            $caseIdList = implode(',', $caseIdList);
-        }
+        if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
 
         $idList      = array_keys($docs);
         $docIdList   = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in($idList)->get();
         $searchTitle = $this->get->title;
         if($type == 'product')
         {
-            $storyIdList      = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
-            $planIdList       = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
+            $storyIdList = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->get();
+            $planIdList  = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->get();
 
-            $releasePairs  = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->fetchPairs('id');
-            if(!empty($releasePairs))
-            {
-                $releaseIdList = array_keys($releasePairs);
-                $releaseIdList = implode(',', $releaseIdList);
-            }
+            $releasePairs = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->fetchPairs('id');
+            if(!empty($releasePairs)) $releaseIdList = implode(',', $releasePairs);
         }
         elseif($type == 'project')
         {
