@@ -28,7 +28,7 @@ $config->doc->editor->view   = array('id' => 'comment,lastComment', 'tools' => '
 $config->doc->markdown = new stdclass();
 $config->doc->markdown->create = array('id' => 'contentMarkdown', 'tools' => 'withchange');
 
-$config->doc->defaultShowNumber = 10;
+$config->doc->collectionLimit = 10;
 
 $config->doc->search['module']                   = 'doc';
 $config->doc->search['fields']['title']          = $lang->doc->title;

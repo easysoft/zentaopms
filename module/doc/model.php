@@ -1292,36 +1292,20 @@ class docModel extends model
 
             $executionIdList = $this->loadModel('execution')->getIdList($objectID);
             $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($taskPairs))
-            {
-                $taskIdList = array_keys($taskPairs);
-                $taskIdList = implode(',', $taskIdList);
-            }
+            if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
 
             $buildPairs  = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($buildPairs))
-            {
-                $buildIdList = array_keys($buildPairs);
-                $buildIdList = implode(',', $buildIdList);
-            }
+            if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
             $executionIdList = join(',', $executionIdList);
         }
         elseif($type == 'execution')
         {
-            $taskPairs = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($taskPairs))
-            {
-                $taskIdList = array_keys($taskPairs);
-                $taskIdList = implode(',', $taskIdList);
-            }
+            $taskPairs = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
+            if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
 
-            $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
-            if(!empty($buildPairs))
-            {
-                $buildIdList = array_keys($buildPairs);
-                $buildIdList = implode(',', $buildIdList);
-            }
+            $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
+            if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
         }
 
         $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
@@ -1336,9 +1320,13 @@ class docModel extends model
             ->beginIF($type == 'project')->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")->fi()
             ->beginIF($type == 'project' or $type == 'execution')->orWhere("(objectType = 'task' and objectID in ($taskIdList))")->fi()
             ->beginIF($type == 'project' or $type == 'execution')->orWhere("(objectType = 'build' and objectID in ($buildIdList))")->fi()
-            ->beginIF(isset($this->config->maxVersion) and $type == 'project')->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")->fi()
-            ->beginIF(isset($this->config->maxVersion) and $type == 'project')->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")->fi()
-            ->beginIF(isset($this->config->maxVersion) and $type == 'project')->orWhere("(objectType = 'design' and objectID in ($designIdList))")->fi()
+
+            ->beginIF($type == 'project')
+            ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
+            ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
+            ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
+            ->fi()
+
             ->markRight(1)
             ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
             ->orderBy($orderBy)
@@ -1627,14 +1615,14 @@ class docModel extends model
      */
     public function getPreAndNextDoc($docID, $libID)
     {
-        $orderBy = 0;
-        $modules = $this->dao->select('id')->from(TABLE_MODULE)
+        $sortedModules = 0;
+        $modules       = $this->dao->select('id')->from(TABLE_MODULE)
             ->where('root')->eq($libID)
             ->andWhere('type')->eq('doc')
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->fetchPairs();
-        if(!empty($modules)) $orderBy = implode(',', array_keys($modules)) . ',0';
+        if(!empty($modules)) $sortedModules = implode(',', array_keys($modules)) . ',0';
 
         $query = $this->dao->select('t1.id,t1.title,t1.acl,t1.groups,t1.users,t1.addedBy,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
@@ -1642,7 +1630,7 @@ class docModel extends model
             ->andWhere('t1.lib')->eq($libID)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->get();
-        $query .= " order by field(module, $orderBy)";
+        $query .= " order by field(module, $sortedModules)";
         $stmt   = $this->dbh->query($query);
         $docs   = $stmt->fetchAll();
 
@@ -1782,7 +1770,7 @@ class docModel extends model
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->andWhere('t1.collector')->like("%,{$this->app->user->account},%")
             ->orderBy('t1.id_desc')
-            ->limit($this->config->doc->defaultShowNumber)
+            ->limit($this->config->doc->collectionLimit)
             ->fetchAll();
 
         $html  = "<div class='btn-group dropdown-hover'>";
@@ -1807,7 +1795,7 @@ class docModel extends model
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->andWhere('collector')->like("%,{$this->app->user->account},%")
             ->fetch('count');
-        if($collectionCount > 10) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
+        if($collectionCount > $this->config->doc->collectionLimit) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
 
         $html .= '</ul></div>';
         return $html;
@@ -1990,9 +1978,14 @@ class docModel extends model
 
         if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
-            $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'><span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>";
-            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input"/><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-            $output .= "<div class='list-group'><div class='table-row'><div class='table-col $class'><div class='list-group' style='max-height: $maxHeight'>";
+            $output  = <<<EOT
+<div class='btn-group angle-btn'>
+  <div class='btn-group'>
+    <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'>
+    <span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
+    <div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input"/><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+<div class='list-group'><div class='table-row'><div class='table-col $class'><div class='list-group' style='max-height: $maxHeight'>
+EOT;
             if($type == 'project' and $this->app->openApp == 'doc')
             {
                 $clseedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
