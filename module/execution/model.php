@@ -442,7 +442,7 @@ class executionModel extends model
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         /* Judgment of required items. */
-        if($this->post->code == '')
+        if($oldExecution->type != 'stage' and $this->post->code == '')
         {
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             return false;
@@ -502,7 +502,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-            ->check('code', 'unique', "id!=$executionID and deleted='0'")
+            ->check('code', 'unique', "id!=$executionID and code!='' and deleted='0'")
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
@@ -609,11 +609,11 @@ class executionModel extends model
             $nameList[$executionName] = $executionName;
 
             /* Check unique code for edited executions. */
-            if(empty($executionCode))
+            if($projectModel == 'scrum' and empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
             }
-            else
+            elseif(!empty($executionCode))
             {
                 /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
@@ -2190,7 +2190,7 @@ class executionModel extends model
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
             $data->order   = ++$lastOrder;
-            $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
+            $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
             $this->linkCases($executionID, (int)$products[$storyID], $storyID);
@@ -3643,6 +3643,7 @@ class executionModel extends model
     public function updateUserView($executionID, $objectType = 'sprint', $users = array())
     {
         $this->loadModel('user')->updateUserView($executionID, $objectType, $users);
+
         $products = $this->getProducts($executionID, $withBranch = false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);
     }

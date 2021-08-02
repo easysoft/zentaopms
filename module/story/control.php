@@ -1488,7 +1488,7 @@ class story extends control
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $tracks = $this->story->getTracks($productID, $branch, $pager);
+        $tracks = $this->story->getTracks($productID, $branch, $projectID, $pager);
 
         if($projectID)
         {

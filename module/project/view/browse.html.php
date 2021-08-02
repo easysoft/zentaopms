@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datatable.fix.html.php';?>
 <?php
 js::set('orderBy', $orderBy);
 js::set('programID', $programID);

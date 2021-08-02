@@ -105,11 +105,7 @@ class stakeholderModel extends model
             /* Update linked products view. */
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
-                $products = $this->loadModel('product')->getProductPairsByProject($stakeholder->objectID);
-                if(!empty($products))
-                {
-                    foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $stakeholder->user);
-                }
+                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
 
                 /* Update the viewers of the project main doc library. */
                 $canViewUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
@@ -184,12 +180,7 @@ class stakeholderModel extends model
 
         $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
 
-        /* Update linked products view. */
-        $products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        if(!empty($products))
-        {
-            foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $changedAccounts);
-        }
+        $this->loadModel('project')->updateInvolvedUserView($projectID, $changedAccounts);
 
         /* Update the viewers of the project main doc library. */
         $canViewUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();

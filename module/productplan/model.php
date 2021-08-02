@@ -582,14 +582,11 @@ class productplanModel extends model
      *
      * @param  int    $projectID
      * @param  array  $newPlans
-     * @param  array  $oldPlanStories
      * @access public
      * @return void
      */
-    public function linkProject($projectID, $newPlans, $oldPlanStories = '')
+    public function linkProject($projectID, $newPlans)
     {
-        if(!empty($oldPlanStories)) $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->in(array_keys($oldPlanStories))->exec();
-
         $this->loadModel('execution');
         foreach($newPlans as $planID)
         {
