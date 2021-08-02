@@ -16,6 +16,7 @@ clean:
 	rm -fr lampp
 common:
 	mkdir zentaopms
+	cp -fr api zentaopms/
 	cp -fr bin zentaopms/
 	cp -fr config zentaopms/ && rm -fr zentaopms/config/my.php
 	cp -fr db zentaopms/
