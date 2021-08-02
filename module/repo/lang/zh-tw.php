@@ -123,8 +123,8 @@ $lang->repo->logStyles['D'] = '刪除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->gitlabHost    = 'GitLab Server';
