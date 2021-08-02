@@ -1636,7 +1636,7 @@ class docModel extends model
             ->fetchPairs();
         if(!empty($modules)) $orderBy = implode(',', array_keys($modules)) . ',0';
 
-        $query = $this->dao->select('t1.id,t1.title,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
+        $query = $this->dao->select('t1.id,t1.title,t1.acl,t1.groups,t1.users,t1.addedBy,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.lib')->eq($libID)
@@ -1656,7 +1656,7 @@ class docModel extends model
             $doc->objectType = 'doc';
 
             /* Get next object. */
-            if($preDoc === true)
+            if($preDoc === true and $this->checkPrivDoc($doc))
             {
                 $preAndNextDoc->next = $doc;
                 break;
@@ -1668,7 +1668,7 @@ class docModel extends model
                 if($preDoc) $preAndNextDoc->pre = $preDoc;
                 $preDoc = true;
             }
-            if($preDoc !== true) $preDoc = $doc;
+            if($preDoc !== true and $this->checkPrivDoc($doc)) $preDoc = $doc;
         }
 
         return $preAndNextDoc;
