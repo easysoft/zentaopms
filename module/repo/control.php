@@ -168,7 +168,6 @@ class repo extends control
 
         if($repo->SCM == 'Gitlab')
         {
-
             $projects = $this->repo->getGitlabProjects($repo->client, $repo->password);
             $options  = array();
             foreach($projects as $project) $options[$project->id] = $project->name . ':' . $project->http_url_to_repo;
