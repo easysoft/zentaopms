@@ -68,7 +68,7 @@
             if(empty($suiteList))
             {
                 echo '<li>';
-                echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i>" . $lang->testsuite->create);
+                echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i> " . $lang->testsuite->create);
                 echo '</li>';
             }
         }
@@ -195,7 +195,7 @@
         <li <?php echo $disabled?>>
         <?php
         $batchLink = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
-        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->testcase->batchCreate, '', "data-app='{$this->app->openApp}'") . "</li>";
+        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->testcase->batchCreate, '', "data-app='{$this->app->openApp}'") . "</li>";
         ?>
         </li>
       </ul>

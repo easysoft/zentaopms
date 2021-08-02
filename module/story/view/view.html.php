@@ -57,7 +57,7 @@
         $openGroup  = 'project';
     }
     ?>
-    <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&type=$story->type", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary' data-app='$openApp'"); ?>
+    <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&type=$story->type", "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-primary' data-app='$openApp'"); ?>
     <?php endif;?>
   </div>
   <?php endif;?>

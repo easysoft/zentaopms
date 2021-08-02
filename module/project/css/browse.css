@@ -9,49 +9,5 @@ td.c-actions {overflow: visible;}
 #programID_chosen div.chosen-drop.chosen-auto-max-width.in {width: 150px !important;}
 #switchButton {background: #fff !important;}
 .panel-actions {position: relative; padding: 0 0;}
-.icon-cards-view {padding-left: 7px;}
-
-#cards {margin: 0 0;}
-#cards > .col {width: 25%;}
-#cards .panel {margin: 10px 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 170px;}
-#cards .pager .btn {padding-top: 4px;}
-#cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
-#cards .panel .projectStatus .label{float: right;}
-#cards .panel-heading {padding: 12px 24px 10px 16px;}
-#cards .panel-body {padding: 0 16px 16px;}
-#cards .project-type-label {padding: 1px 0px;}
-#cards .icon {font-size: 8px;}
-#cards .project-name {font-size: 14px; display: inline-block; max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
-#cards .project-infos {font-size: 12px;}
-#cards .project-infos > span {display: inline-block; line-height: 12px; border: 1px solid #E4E9F7;}
-#cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
-#cards .project-infos > span + span {margin-left: 15px;}
-#cards .project-infos > .budget {max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-#cards .project-detail {position: absolute; top: 75px; left: 16px; right: 16px; font-size: 12px;}
-#cards .project-footer {position: absolute; bottom: 5px;}
-#cards .pager {margin: 0; float: right;}
-#cards .pager .btn {border: none}
-#cards .panel .label-wait {background: #EFEFEF !important; color: #838A9D;}
-#cards .panel .label-doing {background: #E9F2FB !important; color: #2B80FF;}
-#cards .panel .label-suspended {background: #AAA !important; color: #FFF;}
-#cards .panel .label-closed {background: #D4F7F9 !important; color: #00A78E;}
-#cards .panel .label-delay {background: #F85A40 !important; color: #FFF;}
-#cards .project-infos .text-red {color: #F85A40 !important;}
-#cards .project-detail .progress-pie {width: 24px; position: absolute; top: 5px;}
-#cards .project-detail .col-xs-4 {width: 70px;}
-#cards .project-members {float: left;}
-#cards .project-members .avatar {display: inline-block; width: 25px; height: 25px; line-height: 25px;}
-#cards .project-members .avatar:not(:first-child) {margin-left: -15px;}
-#cards .project-members .avatar:first-child {z-index: 500;}
-#cards .project-members .avatar:nth-child(2) {z-index: 400;}
-#cards .project-members .avatar:nth-child(3) {z-index: 300;}
-#cards .project-members .avatar:nth-child(4) {z-index: 200;}
-#cards .project-members .avatar:nth-child(5) {z-index: 100;}
-#cards .project-members .moreMembers{display: inline-block; margin-left: 6px; position: absolute; bottom: 8px;}
-#cards .project-actions {float: right;}
-#cards .project-actions .menu-actions {padding-right: 20px;}
-#cards .project-actions ul {min-width: 35px; padding: 5px 6px;}
-#cards .project-actions .dropdown-hover:hover>.dropdown-menu ul,
-#cards .project-actions .open>.dropdown-menu ul {display: flex;}
-#cards .menu-actions .btn.btn-action {margin-bottom: -3px !important; margin-right: 5px;}
-#cards .icon-ellipsis-v {font-size: 13px;}
+.icon-cards-view {padding-left: 7px; font-size: 16px;}
+.icon-list {padding-left: 7px;}

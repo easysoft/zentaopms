@@ -52,6 +52,7 @@ $lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
 $lang->project->testreport        = 'Test Report';
 $lang->project->testreport        = 'Testreport';
 $lang->project->selectProgram     = 'Program filtering';
+$lang->project->teamMember        = 'Team Member';
 
 /* Fields. */
 $lang->project->common             = 'Project';
@@ -107,6 +108,7 @@ $lang->project->svTitle            = 'Schedule Variance';
 $lang->project->acTitle            = 'Actual Cost';
 $lang->project->cvTitle            = 'Cost Variance';
 $lang->project->teamCount          = 'Team';
+$lang->project->teamSumCount       = '%s people in total';
 $lang->project->longTime           = 'Long-Term Program';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = 'More Project';

@@ -77,8 +77,9 @@ body.menu-hide {padding-left: 0;}
 #searchbox .dropdown-menu.show-quick-go > li {padding: 0 5px;}
 #searchbox .dropdown-menu {min-width: 150px;}
 
-#globalSearchInput {width: 150px; height: 28px; padding-left: 10px; border-right: 0px;}
+#globalSearchInput {height: 28px; padding-left: 10px; border-right: 0px;}
 #globalSearchButton {height: 28px;}
+#globalSearchButton > i {position: relative; top: -2px}
 
 #globalBarLogo {width: 100%; float: right;}
 #globalBarLogo a:first-child {margin-right: 10px;}

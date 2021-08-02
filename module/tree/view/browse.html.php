@@ -27,7 +27,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
 <!--div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
-    <?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'class="btn btn-secondary"');?>
+    <?php echo html::a($backLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'class="btn btn-secondary"');?>
     <div class="divider"></div>
     <div class="page-title">
       <?php $rootName = $viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost' ? '' : $root->name;?>

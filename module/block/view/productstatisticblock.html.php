@@ -157,7 +157,7 @@ $(function()
               </div>
               <?php else:?>
               <div class="actions">
-                <?php common::printLink('productplan', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i>" . $lang->productplan->create, '', "class='btn btn-info'");?>
+                <?php common::printLink('productplan', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
               </div>
               <?php endif;?>
               <div class="type-info">
@@ -190,7 +190,7 @@ $(function()
               </div>
               <?php else:?>
               <div class="actions">
-                <?php common::printLink('release', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i>" . $lang->release->create, '', "class='btn btn-info'");?>
+                <?php common::printLink('release', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
               </div>
               <?php endif;?>
               <div class="type-info">

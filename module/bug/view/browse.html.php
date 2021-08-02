@@ -181,7 +181,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <li <?php echo $disabled?>>
         <?php
           $batchLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID");
-          echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate) . "</li>";
+          echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->bug->batchCreate) . "</li>";
         ?>
         </li>
       </ul>

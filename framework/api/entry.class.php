@@ -87,6 +87,20 @@ class baseEntry
     }
 
     /**
+     * 设置请求参数
+     * Set request param.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @access public
+     * @return mixed
+     */
+    public function setParam($key, $value)
+    {
+        $_GET[$key] = $value;
+    }
+
+    /**
      * 解析请求数据
      * Parse body of request data.
      *

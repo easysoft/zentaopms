@@ -29,7 +29,7 @@
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' id='projectForm' method='post' data-ride='table' data-nested='true' data-checkable='false'>
+  <form class='main-table' id='projectForm' method='post' data-ride='table' data-checkable='false'>
     <table class='table table-fixed' id='projectList'>
       <thead>
         <tr>
