@@ -1350,13 +1350,14 @@ EOD;
     /**
      * Create changes of one object.
      *
-     * @param mixed $old    the old object
-     * @param mixed $new    the new object
+     * @param mixed  $old        the old object
+     * @param mixed  $new        the new object
+     * @param string $moduleName
      * @static
      * @access public
      * @return array
      */
-    public static function createChanges($old, $new)
+    public static function createChanges($old, $new, $moduleName = '')
     {
         global $app, $config;
 
@@ -1373,7 +1374,7 @@ EOD;
 
             if($oldID && $oldStatus && $newStatus && !$newSubStatus && $oldStatus != $newStatus)
             {
-                $moduleName = $app->getModuleName();
+                if(empty($moduleName)) $moduleName = $app->getModuleName();
 
                 $field = $app->dbh->query('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
                 if(!empty($field->options)) $field->options = json_decode($field->options, true);
