@@ -1,20 +1,21 @@
 <?php
 /* Fields. */
-$lang->program->name      = 'Name';
-$lang->program->template  = 'Template';
-$lang->program->category  = 'Type';
-$lang->program->desc      = 'Description';
-$lang->program->copy      = 'Copy Program';
-$lang->program->status    = 'Status';
-$lang->program->PM        = 'Manager';
-$lang->program->budget    = 'Budget';
-$lang->program->progress  = 'Progress';
-$lang->program->children  = 'Child';
-$lang->program->parent    = 'Parent';
-$lang->program->allInput  = 'Input';
-$lang->program->teamCount = 'Team';
-$lang->program->longTime  = 'Long-Term';
-$lang->program->view      = 'Program Detail';
+$lang->program->name         = 'Name';
+$lang->program->template     = 'Template';
+$lang->program->category     = 'Type';
+$lang->program->desc         = 'Description';
+$lang->program->copy         = 'Copy Program';
+$lang->program->status       = 'Status';
+$lang->program->PM           = 'Manager';
+$lang->program->budget       = 'Budget';
+$lang->program->progress     = 'Progress';
+$lang->program->children     = 'Child';
+$lang->program->parent       = 'Parent';
+$lang->program->allInput     = 'Input';
+$lang->program->teamCount    = 'Team';
+$lang->program->longTime     = 'Long-Term';
+$lang->program->view         = 'Program Detail';
+$lang->program->exchangeRate = 'Exchange Rate';
 
 /* Actions. */
 $lang->program->common                  = 'Program';

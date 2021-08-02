@@ -58,6 +58,11 @@ $(function()
     $('#confirm').click(function()
     {
         var exchangeRate = $('#rate').val();
+        if(!exchangeRate)
+        {
+            alert(exRateNotEmpty);
+            return false;
+        }
 
         $('#isChangeUnit').val(true);
         $('#exchangeRate').val(exchangeRate);

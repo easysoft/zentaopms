@@ -1,20 +1,21 @@
 <?php
 /* Fields. */
-$lang->program->name      = '项目集名称';
-$lang->program->template  = '项目集模板';
-$lang->program->category  = '项目集类型';
-$lang->program->desc      = '项目集描述';
-$lang->program->copy      = '复制项目集';
-$lang->program->status    = '状态';
-$lang->program->PM        = '负责人';
-$lang->program->budget    = '预算';
-$lang->program->progress  = '项目进度';
-$lang->program->children  = '子项目集';
-$lang->program->parent    = '父项目集';
-$lang->program->allInput  = '项目集总投入';
-$lang->program->teamCount = '总人数';
-$lang->program->longTime  = '长期';
-$lang->program->view      = '项目集详情';
+$lang->program->name         = '项目集名称';
+$lang->program->template     = '项目集模板';
+$lang->program->category     = '项目集类型';
+$lang->program->desc         = '项目集描述';
+$lang->program->copy         = '复制项目集';
+$lang->program->status       = '状态';
+$lang->program->PM           = '负责人';
+$lang->program->budget       = '预算';
+$lang->program->progress     = '项目进度';
+$lang->program->children     = '子项目集';
+$lang->program->parent       = '父项目集';
+$lang->program->allInput     = '项目集总投入';
+$lang->program->teamCount    = '总人数';
+$lang->program->longTime     = '长期';
+$lang->program->view         = '项目集详情';
+$lang->program->exchangeRate = '汇率';
 
 /* Actions. */
 $lang->program->common                  = '项目集';
