@@ -1010,7 +1010,7 @@ class docModel extends model
                 }
                 $libs[$docLib->id] = $docLib->name;
 
-                $i++;
+                $i ++;
             }
         }
 
@@ -2175,11 +2175,11 @@ EOT;
         {
             if(!isset($extensionCount[$file->extension])) $extensionCount[$file->extension] = 0;
 
-            $filesCount++;
+            $filesCount ++;
 
             $sizeCount += $file->size;
 
-            $extensionCount[$file->extension]++;
+            $extensionCount[$file->extension] ++;
         }
 
         /* Unit conversion. */
@@ -2187,7 +2187,7 @@ EOT;
         while($sizeCount > 1024)
         {
             $sizeCount = $sizeCount / 1024;
-            $i++;
+            $i ++;
         }
         $unitList  = array('B', 'K', 'M', 'G');
         $sizeCount = round($sizeCount, 1) . $unitList[$i];
