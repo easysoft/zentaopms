@@ -12,6 +12,7 @@ $lang->gitlab->delete        = '刪除GitLab';
 $lang->gitlab->confirmDelete = '確認刪除該GitLab嗎？';
 $lang->gitlab->gitlabAccount = 'GitLab用戶';
 $lang->gitlab->zentaoAccount = '禪道用戶';
+$lang->gitlab->serverFail    = '連接GitLab服務器異常，請檢查GitLab服務器。';
 
 $lang->gitlab->browseAction  = 'GitLab列表';
 $lang->gitlab->deleteAction  = '刪除GitLab';
