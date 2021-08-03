@@ -44,9 +44,9 @@ foreach($executions as $projectID => $projectExecutions)
 
     foreach($projectExecutions as $execution)
     {
-        if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account]))) $executionCounts[$projectID]['myExecution']++;
-        if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account])) $executionCounts[$projectID]['others']++;
-        if($execution->status == 'done' or $execution->status == 'closed') $dones++;
+        if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account]))) $executionCounts[$projectID]['myExecution'] ++;
+        if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account])) $executionCounts[$projectID]['others'] ++;
+        if($execution->status == 'done' or $execution->status == 'closed') $dones ++;
         $executionNames[] = $execution->name;
     }
 }
@@ -77,7 +77,7 @@ foreach($executions as $projectID => $projectExecutions)
 
             if($selected == 'selected') $tabActive = 'myExecution';
 
-            $myExecutions++;
+            $myExecutions ++;
         }
         else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
         {
@@ -85,7 +85,7 @@ foreach($executions as $projectID => $projectExecutions)
 
             if($selected == 'selected') $tabActive = 'other';
 
-            $others++;
+            $others ++;
         }
         else if($execution->status == 'done' or $execution->status == 'closed')
         {
