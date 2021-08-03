@@ -31,9 +31,9 @@
         <?php foreach($gitlabIssues as $issue):?>
           <tr>
             <td><?php echo "<a href='{$issue->web_url}' target='_blank'>$issue->title</a>";?></td>
-            <td><?php echo html::select("objectTypeList[{$issue->iid}]", $objectTypes, '', "class='form-control'" );?></td>
-            <td><?php echo html::select("productList[{$issue->iid}]", $products, '', "class='form-control'" );?></td>
-            <td><?php echo html::select("executionList[{$issue->iid}]", '', '', "class='form-control'" );?></td>
+            <td><?php echo html::select("objectTypeList[{$issue->iid}]", $objectTypes, '', "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("productList[{$issue->iid}]", $products, '', "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("executionList[{$issue->iid}]", '', '', "class='form-control select chosen'" );?></td>
             <input type='hidden' name='gitlabID'   value='<?php echo $gitlabID;?>' />
             <input type='hidden' name='gitlabProjectID' value='<?php echo $gitlabProjectID;?>'/>
          </tr>

@@ -300,6 +300,7 @@ class gitlab extends control
 
         /* 'not[iids]' option in gitlab API has a issue when iids is too long. */
         $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, '&state=opened');
+        if(empty($gitlabIssues)) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->serverFail, 'locate' => $this->server->http_referer));
         foreach($gitlabIssues as $index => $issue)
         {
             foreach($savedIssueIDList as $savedIssueID)
@@ -344,26 +345,6 @@ class gitlab extends control
         {
             $options .= "<option value='{$index}' data-name='{$execution}'>{$execution}</option>";
         }
-        die($options);
-    }
-
-    /**
-     * AJAX: Get gitlab project pipeline.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPipeline($repoID)
-    {
-        if(empty($repoID)) die(json_encode(array('' => '')));
-        $this->loadModel('repo');
-        $repo = $this->repo->getRepoByID($repoID);
-        if(empty($repo)) die(json_encode(array('' => '')));
-
-        $gitlabID  = $repo->gitlab;
-        $projectID = $repo->projectID;
-        $pipeline  = $this->gitlab->getPipeline($gitlabID, $projectID);
-        die(json_encode($pipeline));
+        return $this->send($options);
     }
 }
