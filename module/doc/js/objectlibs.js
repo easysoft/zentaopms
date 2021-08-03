@@ -170,4 +170,6 @@ $(function()
             $('.outline .outline-toggle i.icon-angle-left').trigger("click");
         }
     })
+
+    $('.outline .outline-toggle i.icon-angle-right').trigger("click");
 })
