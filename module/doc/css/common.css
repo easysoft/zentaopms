@@ -81,7 +81,7 @@ td.c-name a:visited {color: #082999;}
 #pageNav .dropdown-menu {max-height: 350px; overflow-y: auto;}
 
 ol, ul {margin-bottom: 0}
-#dropMenu .table-col .list-group {padding-top: 5px;}
+#subHeader #dropMenu .table-col .list-group {padding-top: 5px;}
 #createDropdown ul.dropdown-menu {text-align: left;}
 #collection-menu {max-width: 300px;}
 #collection-menu li a {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
