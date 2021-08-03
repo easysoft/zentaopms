@@ -1969,7 +1969,7 @@ class docModel extends model
 
         $output             = '';
         $closedProjectsHtml = '';
-        $clseedProjects     = array();
+        $closedProjects     = array();
         $maxHeight          = ($type == 'project' and $this->app->openApp == 'doc') ? '260px' : '290px';
         $class              = ($type == 'project' and $this->app->openApp == 'doc') ? 'col-left' : '';
 
@@ -1998,13 +1998,13 @@ class docModel extends model
 EOT;
             if($type == 'project' and $this->app->openApp == 'doc')
             {
-                $clseedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
+                $closedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
             }
 
             foreach($objects as $key => $object)
             {
                 $selected = $key == $objectID ? 'selected' : '';
-                if(isset($clseedProjects[$key]))
+                if(isset($closedProjects[$key]))
                 {
                     $closedProjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
                     if($selected == 'selected') $tabActive = 'closed';
