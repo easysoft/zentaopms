@@ -317,11 +317,11 @@ class stakeholder extends control
                 $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
 
                 /* Update the viewers of the project main doc library. */
-                $canViewUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
-                $canViewUsers = explode(',', trim($canViewUsers->users, ','));
-                unset($canViewUsers[array_search($stakeholder->user, $canViewUsers)]);
-                $canViewUsers = ',' . implode(',', $canViewUsers) . ',';
-                $this->dao->update(TABLE_DOCLIB)->set('users')->eq($canViewUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
+                $authorizedUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
+                $authorizedUsers = explode(',', trim($authorizedUsers->users, ','));
+                unset($authorizedUsers[array_search($stakeholder->user, $authorizedUsers)]);
+                $authorizedUsers = ',' . implode(',', $authorizedUsers) . ',';
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
             }
             die(js::reload('parent'));
         }

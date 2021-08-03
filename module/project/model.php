@@ -784,8 +784,8 @@ class projectModel extends model
             /* Create doc lib. */
             $this->app->loadLang('doc');
 
-            $canViewUsers = $project->whitelist . ',' . $project->PM . ',' . $project->openedBy . ',';
-            $canViewUsers = array_unique(explode(',', trim($canViewUsers, ',')));
+            $authorizedUsers = $project->whitelist . ',' . $project->PM . ',' . $project->openedBy . ',';
+            $authorizedUsers = array_unique(explode(',', trim($authorizedUsers, ',')));
 
             $lib = new stdclass();
             $lib->project = $projectID;
@@ -793,7 +793,7 @@ class projectModel extends model
             $lib->type    = 'project';
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
-            if($project->acl == 'private') $lib->users = ',' . implode(',', $canViewUsers) . ',';
+            if($project->acl == 'private') $lib->users = ',' . implode(',', $authorizedUsers) . ',';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -974,10 +974,10 @@ class projectModel extends model
                 /* Update the viewers of the project main doc library. */
                 $projectStakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($projectID);
                 $projectStakeHolders = implode(',', $projectStakeHolders);
-                $canViewUsers        = $project->whitelist . ',' . $project->PM . ',' . $oldProject->openedBy . ',' . $projectStakeHolders;
-                $canViewUsers        = array_unique(explode(',', trim($canViewUsers, ',')));
-                $canViewUsers        = ',' . implode(',', $canViewUsers) . ',';
-                $this->dao->update(TABLE_DOCLIB)->set('users')->eq($canViewUsers)->where('type')->eq('project')->andWhere('project')->eq($projectID)->andWhere('main')->eq(1)->exec();
+                $authorizedUsers     = $project->whitelist . ',' . $project->PM . ',' . $oldProject->openedBy . ',' . $projectStakeHolders;
+                $authorizedUsers     = array_unique(explode(',', trim($authorizedUsers, ',')));
+                $authorizedUsers     = ',' . implode(',', $authorizedUsers) . ',';
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($projectID)->andWhere('main')->eq(1)->exec();
             }
 
             if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);

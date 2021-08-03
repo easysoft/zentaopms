@@ -108,12 +108,12 @@ class stakeholderModel extends model
                 $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
 
                 /* Update the viewers of the project main doc library. */
-                $canViewUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
-                $canViewUsers = explode(',', trim($canViewUsers->users, ','));
-                if(!in_array($stakeholder->user, $canViewUsers))
+                $authorizedUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
+                $authorizedUsers = explode(',', trim($authorizedUsers->users, ','));
+                if(!in_array($stakeholder->user, $authorizedUsers))
                 {
-                    $canViewUsers = ',' . implode(',', $canViewUsers) . ',' . $stakeholder->user . ',';
-                    $this->dao->update(TABLE_DOCLIB)->set('users')->eq($canViewUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
+                    $authorizedUsers = ',' . implode(',', $authorizedUsers) . ',' . $stakeholder->user . ',';
+                    $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
                 }
             }
 
@@ -183,10 +183,10 @@ class stakeholderModel extends model
         $this->loadModel('project')->updateInvolvedUserView($projectID, $changedAccounts);
 
         /* Update the viewers of the project main doc library. */
-        $canViewUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
-        $canViewUsers = array_merge(explode(',', trim($canViewUsers->users, ',')), array_filter($accounts));
-        $canViewUsers = ',' . implode(',', array_unique($canViewUsers)) . ',';
-        $this->dao->update(TABLE_DOCLIB)->set('users')->eq($canViewUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
+        $authorizedUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
+        $authorizedUsers = array_merge(explode(',', trim($authorizedUsers->users, ',')), array_filter($accounts));
+        $authorizedUsers = ',' . implode(',', array_unique($authorizedUsers)) . ',';
+        $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
 
         if($stakeholder->objectType == 'program' and $stakeholder->objectID)
         {
