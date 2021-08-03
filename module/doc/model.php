@@ -1732,7 +1732,7 @@ class docModel extends model
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-                $icon  = zget($this->lang->doc->iconList, $typeKey);
+                $icon  = zget($this->config->doc->iconList, $typeKey);
                 $html .= "<li>";
                 $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
                 $html .= "</li>";
