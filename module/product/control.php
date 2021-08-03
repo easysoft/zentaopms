@@ -1121,7 +1121,7 @@ class product extends control
 
         /* Process product structure. */
         $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story');
-        $productStructure = $this->product->statisticProgam($productStats);
+        $productStructure = $this->product->statisticProgram($productStats);
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
