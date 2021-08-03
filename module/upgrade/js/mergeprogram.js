@@ -23,7 +23,7 @@ $(function()
             var type           = $('[data-id=' + e.id + ']').attr('name');
 
             /* Select the product line of the current page. */
-            if(typeof(type) != 'undefined' && type.indexOf('productLines') > -1)
+            if(typeof(type) != 'undefined' && type.indexOf('productLines') != -1)
             {
                 if($('.nav li.currentPage').find('[id^=productLines]').prop('checked'))
                 {
@@ -36,7 +36,7 @@ $(function()
             }
 
             /* All products selected. */
-            if(typeof(type) != 'undefined' && type.indexOf('products') > -1)
+            if(typeof(type) != 'undefined' && type.indexOf('products') != -1)
             {
                 if($('[id^=productLines]').length > 0)
                 {
@@ -58,7 +58,7 @@ $(function()
             }
 
             /* All projects selected. */
-            if(typeof(type) != 'undefined' && type.indexOf('sprints') > -1)
+            if(typeof(type) != 'undefined' && type.indexOf('sprints') != -1)
             {
                 if($('[id^=productLines]').length > 0)
                 {
@@ -87,7 +87,7 @@ $(function()
             }
 
             /* All product lines selected. */
-            if(typeof(type) != 'undefined' && type.indexOf('productLines') > -1)
+            if(typeof(type) != 'undefined' && type.indexOf('productLines') != -1)
             {
                 $('[name^=productLines]').each(function()
                 {
