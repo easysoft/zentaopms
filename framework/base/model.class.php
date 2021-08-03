@@ -254,8 +254,9 @@ class baseModel
         if(empty($extensionName)) return false;
 
         /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
-        $extensionName = strtolower($extensionName);
         $moduleName    = $moduleName ? $moduleName : $this->getModuleName();
+        $moduleName    = strtolower($moduleName);
+        $extensionName = strtolower($extensionName);
         $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'model');
         if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
