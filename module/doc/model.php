@@ -2193,7 +2193,7 @@ EOT;
     }
 
     /**
-     * Summary.
+     * Count the number and size of files on the current page.
      *
      * @param  arary    $files
      * @access public
