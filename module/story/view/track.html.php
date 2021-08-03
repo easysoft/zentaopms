@@ -104,15 +104,6 @@
             <?php if($i != 1) echo '</tr>';?>
             <?php $i++;?>
             <?php endforeach;?>
-            <?php else:?>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <?php if(isset($config->maxVersion)):?>
-            <td></td>
-            <td></td>
-            <?php endif;?>
             <?php endif;?>
           </tr>
           <?php endforeach;?>

@@ -2496,7 +2496,7 @@ class execution extends control
     }
 
     /**
-     * batch unlink story.
+     * Batch unlink story.
      *
      * @param  int    $executionID
      * @access public
