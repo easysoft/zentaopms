@@ -1,6 +1,3 @@
-<style>
-.title {font-size: 20px !important;}
-</style>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';

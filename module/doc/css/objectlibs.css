@@ -37,3 +37,5 @@
 .outline-content a {color: #838A9D;}
 .outline-content li.text-ellipsis.active>a {font-weight: 700; color: #0c64eb;}
 #outline li.has-list.open:before {content: unset;}
+
+.title {font-size: 20px !important;}
