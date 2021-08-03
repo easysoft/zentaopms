@@ -31,7 +31,6 @@ $lang->file->preview       = "Apperçu";
 $lang->file->addFile       = 'Ajouter';
 $lang->file->beginUpload   = 'Clic pour Charger';
 $lang->file->uploadSuccess = 'Chargé !';
-$lang->file->requirement   = $lang->URCommon;
 
 $lang->file->pathname  = 'Nom Chemin';
 $lang->file->title     = 'Titre';

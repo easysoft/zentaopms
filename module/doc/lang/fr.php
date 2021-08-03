@@ -206,7 +206,7 @@ $lang->doc->noticeAcl['doc']['private'] = 'Seulement celui qui a ajouté le docu
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'URL';
 
-$lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>";
+$lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>.";
 $lang->doc->ge      = ':';
 $lang->doc->point   = '.';
 

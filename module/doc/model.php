@@ -2193,7 +2193,7 @@ EOT;
     }
 
     /**
-     * Summary.
+     * Count the number and size of files on the current page.
      *
      * @param  arary    $files
      * @access public
@@ -2219,31 +2219,123 @@ EOT;
 
         /* Unit conversion. */
         $i = 0;
-        while($sizeCount > 1024)
+        while($sizeCount > 1024 and $i <= 4)
         {
             $sizeCount = $sizeCount / 1024;
             $i ++;
         }
-        $unitList  = array('B', 'K', 'M', 'G');
+        $unitList  = array('B', 'K', 'M', 'G', 'T');
         $sizeCount = round($sizeCount, 1) . $unitList[$i];
 
         /* Summary of each type. */
-        $extensionNum = count($extensionCount);
         foreach($extensionCount as $extension => $count)
         {
             if(in_array($this->app->getClientLang(), ['zh-cn','zh-tw']))
             {
-                $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge;
-
-                $extensionNum--;
-                if(!empty($extensionNum)) $extensionSummary .= $this->lang->doc->point;
+                $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge . $this->lang->doc->point;
             }
             else
             {
                 $extensionSummary .= $extension . ' ' . $this->lang->doc->ge . ' ' . $count . $this->lang->doc->point;
             }
         }
+        $extensionSummary = rtrim($extensionSummary, $this->lang->doc->point);
 
         return sprintf($this->lang->doc->summary, $filesCount, $sizeCount, $extensionSummary);
+    }
+
+    /**
+     * Set doc menu by type.
+     *
+     * @param  string    $type
+     * @param  int       $objectID
+     * @param  int       $libID
+     * @access public
+     * @return array
+     */
+    public function setMenuByType($type, $objectID, $libID)
+    {
+        if(empty($type))
+        {
+            $doclib   = $this->doc->getLibById($libID);
+            $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
+            $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
+        }
+
+        $this->session->set('docList', $this->app->getURI(true), $this->app->openApp);
+
+        $objects = $this->getOrderedObjects($type);
+
+        if($type == 'custom')
+        {
+            $libs = $this->getLibsByObject('custom', 0);
+            $this->app->rawMethod = 'custom';
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
+
+            $object = new stdclass();
+            $object->id = 0;
+        }
+        elseif($type == 'book')
+        {
+            $libs = $this->getLibsByObject('book', 0);
+            $this->app->rawMethod = 'book';
+            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
+            $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
+
+            $object = new stdclass();
+            $object->id = 0;
+        }
+        else
+        {
+            if($type == 'product')
+            {
+                $objectID = $this->product->saveState($objectID, $objects);
+                $table    = TABLE_PRODUCT;
+
+                $libs = $this->getLibsByObject('product', $objectID);
+
+                if($libID == 0) $libID = key($libs);
+                $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
+
+                $this->app->rawMethod = 'product';
+            }
+            else if($type == 'project')
+            {
+                $objectID = $this->loadModel('project')->saveState($objectID, $objects);
+                $table    = TABLE_PROJECT;
+
+                $libs = $this->getLibsByObject('project', $objectID);
+
+                if($libID == 0) $libID = key($libs);
+                $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
+
+                $this->app->rawMethod = 'project';
+            }
+            else if($type == 'execution')
+            {
+                $objectID = $this->loadModel('execution')->saveState($objectID, $objects);
+                $table    = TABLE_EXECUTION;
+                $libs     = $this->getLibsByObject('execution', $objectID);
+
+                if($libID == 0) $libID = key($libs);
+                $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
+
+                $this->app->rawMethod = 'execution';
+            }
+
+            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+            if(empty($object)) die(js::locate(helper::createLink($type, 'create')));
+        }
+
+        if(!$libID) $libID = key($libs);
+
+        $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
+        if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
+
+        $this->lang->TRActions  = $this->buildCollectButton4Doc();
+        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->buildCreateButton4Doc($type, $objectID, $libID) : '';
+
+        return array($libs, $libID, $object, $objectID);
     }
 }
