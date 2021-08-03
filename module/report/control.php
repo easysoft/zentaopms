@@ -353,7 +353,7 @@ class report extends control
 
         if(empty($dept) and empty($userID)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
 
-        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? $users[$userID] : ($dept ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
+        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? zget($users, $userID, '') : ($dept ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
         $this->view->data   = $data;
         $this->view->year   = $year;
         $this->view->users  = $users;
