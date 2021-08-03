@@ -340,7 +340,7 @@ class bugModel extends model
         elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productIDList, $branch, $queryID, $sort, '', $pager, $projectID);
         elseif($browseType == 'overduebugs')   $bugs = $this->getOverdueBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
 
-        return $this->checkDelayBugs($bugs);
+        return $this->checkDelayedBugs($bugs);
     }
 
     /**
@@ -350,7 +350,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function checkDelayBugs($bugs)
+    public function checkDelayedBugs($bugs)
     {
         foreach ($bugs as $bug) $bug = $this->checkDelayBug($bug);
 
