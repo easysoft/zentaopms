@@ -1638,6 +1638,8 @@ class productModel extends model
      */
     public function statisticData($type = 'program', $productStructure = array(), $product = null)
     {
+        if(empty($productStructure)) return $productStructure;
+
         /* Init vars. */
         $data = $type == 'program' ? $productStructure[$product->program] : $productStructure[$product->program][$product->line];
         foreach($this->config->product->statisticFields as $key => $fields)

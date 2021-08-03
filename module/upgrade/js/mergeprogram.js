@@ -129,26 +129,24 @@ $(function()
     /* Select all product line events. */
     $('#checkAllLines').click(function()
     {
+        var checked = true;
         if($(this).is(':checked'))
         {
-            $('#checkAllProducts').prop('checked', true);
-            $('#checkAllProjects').prop('checked', true);
-            $('[name^=productLines]').prop('checked', true);
-            $('[name^=products]').prop('checked', true);
-            $('[name^=sprints]').prop('checked', true);
             $('.main-row .side-col .nav li').addClass('active');
             $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
         }
         else
         {
-            $('#checkAllProducts').prop('checked', false);
-            $('#checkAllProjects').prop('checked', false);
-            $('[name^=productLines]').prop('checked', false);
-            $('[name^=products]').prop('checked', false);
-            $('[name^=sprints]').prop('checked', false);
+            checked = false;
             $('.main-row .side-col .nav li').removeClass('active');
             $('#programName').val('');
         }
+
+        $('#checkAllProducts').prop('checked', checked);
+        $('#checkAllProjects').prop('checked', checked);
+        $('[name^=productLines]').prop('checked', checked);
+        $('[name^=products]').prop('checked', checked);
+        $('[name^=sprints]').prop('checked', checked);
 
         setProgramBegin(programBegin);
         setProgramEnd(programEnd);
@@ -160,40 +158,37 @@ $(function()
     /* Select all product events. */
     $('#checkAllProducts').click(function()
     {
-        var lineID = $('li.currentPage').attr('lineid');
+        var lineID  = $('li.currentPage').attr('lineid');
+        var checked = true;
         if($(this).is(':checked'))
         {
             $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
             if($('[id^=productLines]').length > 0)
             {
-                $('[data-line=' + lineID + ']').prop('checked', true);
-                $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
-
                 var projectNum = $("[id^='sprints\[" + lineID + "\]']").length;
             }
             else
             {
-                $('[name^=products]').prop('checked', true);
-                $('[name^=sprints]').prop('checked', true);
-
                 var projectNum = $("[id^='sprints']").length;
             }
             if(projectNum !== 0) $('#checkAllProjects').prop('checked', true);
         }
         else
         {
+            checked = false;
             $('#checkAllProjects').prop('checked', false);
-            if($('[id^=productLines]').length > 0)
-            {
-                $('[data-line=' + lineID + ']').prop('checked', false);
-                $("[id^='productLines\[" + lineID + "\]']").prop('checked', false);
-            }
-            else
-            {
-                $('[name^=products]').prop('checked', false);
-                $('[name^=sprints]').prop('checked', false);
-            }
             $('#programName').val('');
+        }
+
+        if($('[id^=productLines]').length > 0)
+        {
+            $('[data-line=' + lineID + ']').prop('checked', checked);
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', checked);
+        }
+        else
+        {
+            $('[name^=products]').prop('checked', checked);
+            $('[name^=sprints]').prop('checked', checked);
         }
 
         var checkAllLines = isSelectAll(0, 'line');
@@ -208,37 +203,30 @@ $(function()
     /* Select all project events. */
     $('#checkAllProjects').click(function()
     {
-        var lineID = $('li.currentPage').attr('lineid');
+        var lineID  = $('li.currentPage').attr('lineid');
+        var checked = true;
         if($(this).is(':checked'))
         {
-            $('#checkAllProducts').prop('checked', true);
             $('#programName').val($('.main-row .side-col .nav li.currentPage div a').text());
-            if($('[id^=productLines]').length > 0)
-            {
-                $('[data-line=' + lineID + ']').prop('checked', true);
-                $("[id^='productLines\[" + lineID + "\]']").prop('checked', true);
-            }
-            else
-            {
-                $('[name^=products]').prop('checked', true);
-                $('[name^=sprints]').prop('checked', true);
-            }
         }
         else
         {
-            $('#checkAllProducts').prop('checked', false);
+            checked = false;
             $('#programName').val('');
-            if($('[id^=productLines]').length > 0)
-            {
-                $('[data-line=' + lineID + ']').prop('checked', false);
-                $("[id^='productLines\[" + lineID + "\]']").prop('checked', false);
-            }
-            else
-            {
-                $('[name^=products]').prop('checked', false);
-                $('[name^=sprints]').prop('checked', false);
-            }
         }
+
+        $('#checkAllProducts').prop('checked', checked);
+        if($('[id^=productLines]').length > 0)
+        {
+            $('[data-line=' + lineID + ']').prop('checked', checked);
+            $("[id^='productLines\[" + lineID + "\]']").prop('checked', checked);
+        }
+        else
+        {
+            $('[name^=products]').prop('checked', checked);
+            $('[name^=sprints]').prop('checked', checked);
+        }
+
         var checkAllLines = isSelectAll(0, 'line');
         $("[id='checkAllLines']").prop('checked', checkAllLines);
 

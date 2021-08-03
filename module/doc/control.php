@@ -163,9 +163,9 @@ class doc extends control
         }
 
         $libTypeList = $this->lang->doc->libTypeList;
-        if(empty($products))   unset($libTypeList['product']);
-        if(empty($projects))   unset($libTypeList['project']);
-        if(empty($executions) or ($type == 'custom' and $this->config->systemMode == 'new')) unset($libTypeList['execution']);
+        if(empty($products)) unset($libTypeList['product']);
+        if(empty($projects)) unset($libTypeList['project']);
+        if(empty($executions) or ($this->config->systemMode == 'new' and $this->app->openApp == 'doc')) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('nocode');
