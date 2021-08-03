@@ -38,7 +38,6 @@
 #cards .panel .label-delay {background: #F85A40 !important; color: #FFF;}
 #cards .project-infos .text-red {color: #F85A40 !important;}
 #cards .project-detail .progress-pie {width: 24px; position: absolute; top: 18px;}
-#cards .project-detail .col-xs-4 {width: 70px;}
 #cards .project-detail  .leftTasks, .totalLeft {display:block; margin-top: 8px;}
 #cards .project-members {float: left;}
 #cards .project-members .avatar {display: inline-block; width: 25px; height: 25px; line-height: 25px; border: 1px solid #fff}
@@ -122,7 +121,7 @@
           </div>
           <div class='project-detail'>
             <div class='row'>
-              <div class='col-xs-3'>
+              <div class='col-xs-4'>
                 <div><?php echo $lang->project->progress;?></div>
                 <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value="<?php echo $project->hours->progress?>" data-width='24' data-height='24' data-back-color='#e8edf3'>
                   <div class='progress-info'><?php echo $project->hours->progress;?></div>
