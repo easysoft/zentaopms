@@ -907,7 +907,7 @@ class doc extends control
      */
     public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0)
     {
-        list($libs, $libID, $object, $objectID) = $this->doc->setMenu($type, $objectID, $libID);
+        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
 
         /* Set Custom. */
         foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];
@@ -1035,7 +1035,7 @@ class doc extends control
      */
     public function tableContents($type, $objectID = 0, $libID = 0)
     {
-        list($libs, $libID, $object, $objectID) = $this->doc->setMenu($type, $objectID, $libID);
+        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID);
 
