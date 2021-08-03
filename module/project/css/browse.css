@@ -6,8 +6,5 @@ th.c-budget,{text-align:right;}
 td.c-actions {overflow: visible;}
 .c-actions .btn {overflow: visible;}
 #programBox {float: left; margin-right: 10px; width: 170px !important;}
-#programID_chosen div.chosen-drop.chosen-auto-max-width.in {width: 150px !important;}
+#programID_chosen div.chosen-drop.chosen-auto-max-width.in {width: 450px !important;}
 #switchButton {background: #fff !important;}
-.panel-actions {position: relative; padding: 0 0;}
-.icon-cards-view {padding-left: 7px; font-size: 16px;}
-.icon-list {padding-left: 7px;}
