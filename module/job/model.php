@@ -109,7 +109,7 @@ class jobModel extends model
      * Create a job.
      *
      * @access public
-     * @return bool
+     * @return int|bool
      */
     public function create()
     {
@@ -177,12 +177,9 @@ class jobModel extends model
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
             ->autoCheck()
             ->exec();
-
         if(dao::isError()) return dao::getError();
 
         $id = $this->dao->lastInsertId();
-        if($id == 0) return false;
-
         if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $this->post->repoType);
         return $id;
     }

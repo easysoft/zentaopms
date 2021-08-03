@@ -3,12 +3,6 @@ $(document).ready(function()
     $('#repo').change(function()
     {
         var repoID = $(this).val();
-        $.getJSON(createLink('job', 'ajaxGetProductByRepo', 'repoID=' + repoID), function(product)
-          {
-            console.log(product);
-          }
-        );
-
         var type = 'Git';
         if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
 

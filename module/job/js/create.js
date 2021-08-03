@@ -3,12 +3,6 @@ $(document).ready(function()
     $('#repo').change(function()
     {
         var repoID = $(this).val();
-        $.getJSON(createLink('job', 'ajaxGetProductByRepo', 'repoID=' + repoID), function(product)
-          {
-            console.log(product);
-          }
-        );
-
         var type = 'Git';
         if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
 
@@ -97,7 +91,7 @@ $(document).ready(function()
         $('#jenkinsServerTR .input-group').append("<div class='load-indicator loading'></div>");
         $.getJSON(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
         {
-            html  = "<select id='jkTask' name='jkTask' class='form-control'>";
+            html = "<select id='jkTask' name='jkTask' class='form-control'>";
             for(taskKey in tasks)
             {
                 var task = tasks[taskKey];

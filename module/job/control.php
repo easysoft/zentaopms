@@ -299,6 +299,7 @@ class job extends control
         $product = $repo->product;
         if(strpos($product, ','))
         {
+            /* Do not use `array_intersect()` here. */
             $productList     = explode(',', $product);
             $matchedProducts = array();
             $productPair     = $this->loadModel('product')->getPairs();
