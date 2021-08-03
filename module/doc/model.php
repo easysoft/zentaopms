@@ -2219,30 +2219,27 @@ EOT;
 
         /* Unit conversion. */
         $i = 0;
-        while($sizeCount > 1024)
+        while($sizeCount > 1024 and $i <= 4)
         {
             $sizeCount = $sizeCount / 1024;
             $i ++;
         }
-        $unitList  = array('B', 'K', 'M', 'G');
+        $unitList  = array('B', 'K', 'M', 'G', 'T');
         $sizeCount = round($sizeCount, 1) . $unitList[$i];
 
         /* Summary of each type. */
-        $extensionNum = count($extensionCount);
         foreach($extensionCount as $extension => $count)
         {
             if(in_array($this->app->getClientLang(), ['zh-cn','zh-tw']))
             {
-                $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge;
-
-                $extensionNum--;
-                if(!empty($extensionNum)) $extensionSummary .= $this->lang->doc->point;
+                $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge . $this->lang->doc->point;
             }
             else
             {
                 $extensionSummary .= $extension . ' ' . $this->lang->doc->ge . ' ' . $count . $this->lang->doc->point;
             }
         }
+        $extensionSummary = rtrim($extensionSummary, $this->lang->doc->point);
 
         return sprintf($this->lang->doc->summary, $filesCount, $sizeCount, $extensionSummary);
     }
