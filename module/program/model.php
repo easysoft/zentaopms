@@ -941,9 +941,9 @@ class programModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                if(in_array($task->execution, array_keys($executions))) $hour->totalEstimate += $task->estimate;
                 $hour->totalConsumed += $task->consumed;
-                if($task->status != 'cancel' and $task->status != 'closed' and in_array($task->execution, array_keys($executions))) $hour->totalLeft += $task->left;
+                if(isset($executions[$task->execution])) $hour->totalEstimate += $task->estimate;
+                if($task->status != 'cancel' and $task->status != 'closed' and isset($executions[$task->execution])) $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
         }

@@ -51,7 +51,7 @@ $(function()
 
     $('#cancel').click(function()
     {
-        $('#isChangeUnit').val(false);
+        $('#isChangeUnit').val('false');
         $('#exchangeRate').val('');
     })
 
@@ -64,7 +64,7 @@ $(function()
             return false;
         }
 
-        $('#isChangeUnit').val(true);
+        $('#isChangeUnit').val('true');
         $('#exchangeRate').val(exchangeRate);
         $('#changeUnitTip').modal('hide');
     })

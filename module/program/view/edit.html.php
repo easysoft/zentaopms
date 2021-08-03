@@ -54,7 +54,7 @@
               <?php else:?>
               <span class='input-group-addon'></span>
               <?php echo html::select('budgetUnit', $budgetUnitList, $program->budgetUnit, "class='form-control'");?>
-              <?php echo html::hidden('isChangeUnit', false);?>
+              <?php echo html::hidden('isChangeUnit', 'false');?>
               <?php echo html::hidden('exchangeRate', '');?>
               <?php endif;?>
             </div>

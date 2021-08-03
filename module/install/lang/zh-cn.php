@@ -113,7 +113,7 @@ $lang->install->errorDBName         = '数据库名不能含有 “.” ';
 $lang->install->errorCreateDB       = '数据库创建失败';
 $lang->install->errorTableExists    = '数据表已经存在，您之前应该有安装过禅道，继续安装请返回前页并选择清空数据';
 $lang->install->errorCreateTable    = '创建表失败';
-$lang->install->errorEngineInnodb   = '您的数据库版本过低，不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
+$lang->install->errorEngineInnodb   = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
 $lang->install->errorImportDemoData = '导入demo数据失败';
 
 $lang->install->setConfig          = '生成配置文件';
