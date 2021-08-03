@@ -452,26 +452,10 @@ class programModel extends model
             {
                 $this->dao->update(TABLE_PROJECT)
                     ->set('budgetUnit')->eq($program->budgetUnit)
+                    ->beginIF(!empty($_POST['exchangeRate']))->set("budget = {$_POST['exchangeRate']} * `budget`")->fi()
                     ->where('parent')->eq($programID)
                     ->andWhere('type')->eq('project')
                     ->exec();
-
-                if(!empty($_POST['exchangeRate']))
-                {
-                    $projectBudgets = $this->dao->select('id,budget')->from(TABLE_PROJECT)
-                        ->where('parent')->eq($programID)
-                        ->andWhere('type')->eq('project')
-                        ->andWhere('budget')->ne('')
-                        ->fetchAll('id');
-
-                    foreach($projectBudgets as $id => $budget)
-                    {
-                        $this->dao->update(TABLE_PROJECT)
-                            ->set('budget')->eq($_POST['exchangeRate'] * $budget->budget)
-                            ->where('id')->eq($id)
-                            ->exec();
-                    }
-                }
             }
 
             $this->file->updateObjectID($this->post->uid, $programID, 'project');

@@ -63,6 +63,11 @@ $(function()
             alert(exRateNotEmpty);
             return false;
         }
+        else if(exchangeRate < 0)
+        {
+            alert(exRateNotNegative);
+            return false;
+        }
 
         $('#isChangeUnit').val('true');
         $('#exchangeRate').val(exchangeRate);
