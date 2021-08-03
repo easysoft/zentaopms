@@ -453,8 +453,8 @@ class programModel extends model
                 $this->dao->update(TABLE_PROJECT)
                     ->set('budgetUnit')->eq($program->budgetUnit)
                     ->beginIF(!empty($_POST['exchangeRate']))->set("budget = {$_POST['exchangeRate']} * `budget`")->fi()
-                    ->where('parent')->eq($programID)
-                    ->andWhere('type')->eq('project')
+                    ->where('path')->like(",{$programID},%")
+                    ->andWhere('type')->in('program,project')
                     ->exec();
             }
 

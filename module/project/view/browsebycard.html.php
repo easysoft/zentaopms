@@ -11,9 +11,6 @@
  */
 ?>
 <style>
-.panel-actions {position: relative; padding: 0 0;}
-.icon-cards-view {padding-left: 7px; font-size: 16px;}
-.icon-list {padding-left: 7px;}
 #cards {margin: 0 0;}
 #cards > .col {width: 25%;}
 #cards .panel {margin: 10px 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 190px;}

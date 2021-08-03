@@ -140,8 +140,8 @@
             </tr>
             <tr>
               <td colspan='3' class='text-center'>
-                <?php echo html::commonButton($lang->confirm, "id='confirm'", 'btn btn-primary btn-wide');?>
-                <?php echo html::commonButton($lang->cancel, "data-dismiss='modal' id='cancel'", 'btn btn-default btn-wide');?>
+                <?php echo html::commonButton($lang->confirm, "id='confirmBtn'", 'btn btn-primary btn-wide');?>
+                <?php echo html::commonButton($lang->cancel, "data-dismiss='modal' id='cancelBtn'", 'btn btn-default btn-wide');?>
               </td>
             </tr>
           </table>
