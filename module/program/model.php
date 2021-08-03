@@ -245,9 +245,9 @@ class programModel extends model
      */
     public function getProgressList()
     {
-        $TotalProgress = array();
+        $totalProgress = array();
         $projectCount  = array();
-        $viewPrjCount  = array();
+        $userPrjCount  = array();
         $progressList  = array();
         $programPairs  = $this->getPairs();
         $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
@@ -255,9 +255,9 @@ class programModel extends model
         /* Add program progress. */
         foreach(array_keys($programPairs) as $programID)
         {
-            $TotalProgress[$programID] = 0;
+            $totalProgress[$programID] = 0;
             $projectCount[$programID]  = 0;
-            $viewPrjCount[$programID]  = 0;
+            $userPrjCount[$programID]  = 0;
             $progressList[$programID]  = 0;
 
             foreach($projectStats as $project)
@@ -265,22 +265,22 @@ class programModel extends model
                 if(strpos($project->path, ',' . $programID . ',') === false) continue;
 
                 /* The number of projects under this program that the user can view. */
-                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $viewPrjCount[$programID]++;
+                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPrjCount[$programID] ++;
 
-                $TotalProgress[$programID] += $project->hours->progress;
-                $projectCount[$programID]++;
+                $totalProgress[$programID] += $project->hours->progress;
+                $projectCount[$programID] ++;
             }
 
             if(empty($projectCount[$programID])) continue;
 
             /* Program progress can't see when this user don't have all projects priv. */
-            if(!$this->app->user->admin and $viewPrjCount[$programID] != $projectCount[$programID])
+            if(!$this->app->user->admin and $userPrjCount[$programID] != $projectCount[$programID])
             {
                 unset($progressList[$programID]);
                 continue;
             }
 
-            $progressList[$programID] = round($TotalProgress[$programID] / $projectCount[$programID]);
+            $progressList[$programID] = round($totalProgress[$programID] / $projectCount[$programID]);
         }
 
         /* Add project progress. */
