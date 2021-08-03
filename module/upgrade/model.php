@@ -5170,5 +5170,7 @@ class upgradeModel extends model
             ->where('objectID')->in($requirementList)
             ->andWhere('objectType')->eq('story')
             ->exec();
+
+        return true;
     }
 }
