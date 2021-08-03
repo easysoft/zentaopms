@@ -235,10 +235,7 @@ class search extends control
         $this->session->set('searchIngWord',   $words);
         $this->session->set('searchIngType',   $type);
 
-        if(strpos($this->server->http_referer, 'search') === false)
-        {
-            $this->session->set('referer', $this->server->http_referer);
-        }
+        if(strpos($this->server->http_referer, 'search') === false) $this->session->set('referer', $this->server->http_referer);
 
         $this->view->results    = $result;
         $this->view->consumed   = time() - $begin;
