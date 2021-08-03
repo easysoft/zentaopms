@@ -513,7 +513,6 @@ class product extends control
             $programs = array($product->program => $program->name);
         }
 
-
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->edit;
@@ -1121,7 +1120,7 @@ class product extends control
 
         /* Process product structure. */
         $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story');
-        $productStructure = $this->product->statisticProgam($productStats);
+        $productStructure = $this->product->statisticProgram($productStats);
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;

@@ -1602,7 +1602,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function statisticProgam($productStats)
+    public function statisticProgram($productStats)
     {
         $productStructure = array();
 
