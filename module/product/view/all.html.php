@@ -67,7 +67,7 @@
             <th><?php echo $lang->story->completeRate;?></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
             <th><?php echo $lang->close;?></th>
-            <th><?php echo $lang->bug->repairRate;?></th>
+            <th><?php echo $lang->bug->fixedRate;?></th>
           </tr>
         </thead>
         <tbody id="productTableList">
@@ -75,30 +75,30 @@
         <?php foreach($productStructure as $programID => $program):?>
         <?php
         $trAttrs  = "data-id='program.$programID' data-parent='0' data-nested='true'";
-        $trClass  = 'is-top-level table-nest-child';
+        $trClass  = 'is-top-level table-nest-child text-center';
         $trAttrs .= " class='$trClass'";
         ?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr <?php echo $trAttrs;?>>
-            <td>
+            <td class='text-left'>
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $program['programName']?>
             </td>
             <?php if($this->config->URAndSR):?>
-            <td class='text-center'><?php echo $program['draftRequirments'];?></td>
-            <td class='text-center'><?php echo $program['activeRequirments'];?></td>
-            <td class='text-center'><?php echo $program['changedRequirments'];?></td>
-            <td class='text-center'><?php echo $program['totalRequirements'] == 0 ? 0 : round($program['closedRequirements'] / $program['totalRequirements'], 3) * 100;?>%</td>
+            <td><?php echo $program['draftRequirments'];?></td>
+            <td><?php echo $program['activeRequirments'];?></td>
+            <td><?php echo $program['changedRequirments'];?></td>
+            <td><?php echo $program['totalRequirements'] == 0 ? 0 : round($program['closedRequirements'] / $program['totalRequirements'], 3) * 100;?>%</td>
             <?php endif;?>
-            <td class='text-center'><?php echo $program['draftStories'];?></td>
-            <td class='text-center'><?php echo $program['activeStories'];?></td>
-            <td class='text-center'><?php echo $program['changedStories'];?></td>
-            <td class='text-center'><?php echo $program['totalStories'] == 0 ? 0 : round($program['closedStories'] / $program['totalStories'], 3) * 100;?>%</td>
-            <td class='text-center'><?php echo $program['unResolvedBugs'];?></td>
-            <td class='text-center'><?php echo $program['closedBugs'];?></td>
-            <td class='text-center'><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
-            <td class='text-center'><?php echo $program['plans'];?></td>
-            <td class='text-center'><?php echo $program['releases'];?></td>
+            <td><?php echo $program['draftStories'];?></td>
+            <td><?php echo $program['activeStories'];?></td>
+            <td><?php echo $program['changedStories'];?></td>
+            <td><?php echo $program['totalStories'] == 0 ? 0 : round($program['closedStories'] / $program['totalStories'], 3) * 100;?>%</td>
+            <td><?php echo $program['unResolvedBugs'];?></td>
+            <td><?php echo $program['closedBugs'];?></td>
+            <td><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
+            <td><?php echo $program['plans'];?></td>
+            <td><?php echo $program['releases'];?></td>
             <td></td>
           </tr>
           <?php unset($program['programName']);?>
@@ -111,36 +111,36 @@
           if($this->config->systemMode == 'new' and $programID)
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
-              $trClass .= ' is-nest-child  table-nest';
+              $trClass .= ' is-nest-child  table-nest text-center';
               $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'";
           }
           else
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='0' data-nested='true'";
-              $trClass  = 'is-top-level table-nest-child';
+              $trClass  = 'is-top-level table-nest-child text-center';
               $trAttrs .= " class='$trClass'";
           }
           ?>
           <tr <?php echo $trAttrs;?>>
-            <td>
+            <td class='text-left'>
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>
             <?php if($this->config->URAndSR):?>
-            <td class='text-center'><?php echo $line['draftRequirments'];?></td>
-            <td class='text-center'><?php echo $line['activeRequirments'];?></td>
-            <td class='text-center'><?php echo $line['changedRequirments'];?></td>
-            <td class='text-center'><?php echo $line['totalRequirements'] == 0 ? 0 : round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100;?>%</td>
+            <td><?php echo $line['draftRequirments'];?></td>
+            <td><?php echo $line['activeRequirments'];?></td>
+            <td><?php echo $line['changedRequirments'];?></td>
+            <td><?php echo $line['totalRequirements'] == 0 ? 0 : round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100;?>%</td>
             <?php endif;?>
-            <td class='text-center'><?php echo $line['draftStories'];?></td>
-            <td class='text-center'><?php echo $line['activeStories'];?></td>
-            <td class='text-center'><?php echo $line['changedStories'];?></td>
-            <td class='text-center'><?php echo $line['totalStories'] == 0 ? 0 : round($line['closedStories'] / $line['totalStories'], 3) * 100;?>%</td>
-            <td class='text-center'><?php echo $line['unResolvedBugs'];?></td>
-            <td class='text-center'><?php echo $line['closedBugs'];?></td>
-            <td class='text-center'><?php echo ($line['unResolvedBugs'] + $line['fixedBugs']) == 0 ? 0 : round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100;?>%</td>
-            <td class='text-center'><?php echo $line['plans'];?></td>
-            <td class='text-center'><?php echo $line['releases'];?></td>
+            <td><?php echo $line['draftStories'];?></td>
+            <td><?php echo $line['activeStories'];?></td>
+            <td><?php echo $line['changedStories'];?></td>
+            <td><?php echo $line['totalStories'] == 0 ? 0 : round($line['closedStories'] / $line['totalStories'], 3) * 100;?>%</td>
+            <td><?php echo $line['unResolvedBugs'];?></td>
+            <td><?php echo $line['closedBugs'];?></td>
+            <td><?php echo ($line['unResolvedBugs'] + $line['fixedBugs']) == 0 ? 0 : round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100;?>%</td>
+            <td><?php echo $line['plans'];?></td>
+            <td><?php echo $line['releases'];?></td>
             <td></td>
           </tr>
           <?php unset($line['lineName']);?>

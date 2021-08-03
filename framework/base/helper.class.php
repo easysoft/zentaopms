@@ -843,7 +843,7 @@ function getWebRoot($full = false)
 
 /**
  * 当数组/对象变量$var存在$key项时，返回存在的对应值或设定值，否则返回$key或不存在的设定值。
- * When the $var has the $key, return it, esle result one default value.
+ * When there is a $key in the array/object $var, it returns it or $valueWhenExists, otherwise returns $key or $valueWhenNone.
  *
  * @param  array|object    $var
  * @param  string|int      $key

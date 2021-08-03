@@ -24,7 +24,6 @@ $lang->bug->storyVersion     = 'Story Version';
 $lang->bug->color            = 'Color';
 $lang->bug->task             = 'Task';
 $lang->bug->title            = 'Title';
-$lang->bug->sync2gitlab      = 'Sync gitlab';
 $lang->bug->severity         = 'Severity';
 $lang->bug->severityAB       = 'S';
 $lang->bug->pri              = 'Priority';
@@ -80,7 +79,7 @@ $lang->bug->lastEditedDate   = 'EditedDate';
 $lang->bug->fromCase         = 'From Case';
 $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
-$lang->bug->repairRate       = 'Repair Rate';
+$lang->bug->fixedRate        = 'Fixed Rate';
 
 /* Method list. */
 $lang->bug->index              = 'Bug Home';

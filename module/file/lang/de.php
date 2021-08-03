@@ -31,7 +31,6 @@ $lang->file->preview       = "Vorschau";
 $lang->file->addFile       = 'Hinzufügen';
 $lang->file->beginUpload   = 'Upload';
 $lang->file->uploadSuccess = 'Hochgeladen!';
-$lang->file->requirement   = $lang->URCommon;
 
 $lang->file->pathname  = 'Pfadname';
 $lang->file->title     = 'Titel';

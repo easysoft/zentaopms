@@ -140,7 +140,7 @@ class ciModel extends model
             if(empty($job->duration) or $job->duration == '') $job->duration = '-';
             $data->logs  = "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
             $data->logs .= "Job URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
-            $data->logs .= $this->transformAnsiToHtml($this->loadModel('gitlab')->apiGetJobLog($compile->server, $compile->pipeline, $job->id));
+            $data->logs .= $this->transformAnsiToHtml($this->gitlab->apiGetJobLog($compile->server, $compile->pipeline, $job->id));
         }
 
         $this->dao->update(TABLE_COMPILE)->data($data)->where('id')->eq($compile->id)->exec();

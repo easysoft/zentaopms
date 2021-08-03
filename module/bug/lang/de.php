@@ -79,7 +79,7 @@ $lang->bug->lastEditedDate   = 'Bearbeitet am';
 $lang->bug->fromCase         = 'Von Fall';
 $lang->bug->toCase           = 'Zu Fall';
 $lang->bug->colorTag         = 'Farb Tag';
-$lang->bug->repairRate       = 'Repair Rate';
+$lang->bug->fixedRate        = 'Fixed Rate';
 
 /* 方法列表。*/
 $lang->bug->index              = 'Home';

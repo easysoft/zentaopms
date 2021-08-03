@@ -89,3 +89,4 @@ td.c-name a:visited {color: #082999;}
 .tree li > a {white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .side-col .menu-actions {position: absolute; top: 0; right: 0; padding: 7px 8px;}
 .menu-actions i {font-size: 15px; color: #8c8c8c;}
+#dropMenu .table-col .list-group {padding-top: 5px;}

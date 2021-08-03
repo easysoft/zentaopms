@@ -79,7 +79,7 @@ $lang->bug->lastEditedDate   = 'Date Modif';
 $lang->bug->fromCase         = 'du CasTest';
 $lang->bug->toCase           = 'vers CasTest';
 $lang->bug->colorTag         = 'Couleur';
-$lang->bug->repairRate       = 'Repair Rate';
+$lang->bug->fixedRate        = 'Repair Rate';
 
 /* 方法列表。*/
 $lang->bug->index              = 'Accueil Bug';
