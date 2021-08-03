@@ -227,18 +227,19 @@ class buildModel extends model
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $branch
      * @param  string $params       noempty|notrunk, can be a set of them
-     * @param  int    $buildID
+     * @param  int    $buildIDList
      * @access public
      * @return array
      */
-    public function getExecutionBuildPairs($executionID, $productID, $branch = 0, $params = '', $buildID = 0)
+    public function getExecutionBuildPairs($executionID, $productID, $branch = 0, $params = '', $buildIDList = '')
     {
         $sysBuilds      = array();
         $selectedBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
-        if($buildID != 0) $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($buildID)->andWhere('execution')->eq($executionID)->fetchPairs();
+        if($buildIDList) $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($buildIDList)->andWhere('execution')->eq($executionID)->fetchPairs();
 
         $executionBuilds = $this->dao->select('t1.id, t1.name, t1.execution, t2.status as executionStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
