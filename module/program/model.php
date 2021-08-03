@@ -392,7 +392,7 @@ class programModel extends model
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,delta,future,isChangeUnit,exchangeRate')
+            ->remove('uid,delta,future,syncPRJUnit,exchangeRate')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
@@ -448,7 +448,7 @@ class programModel extends model
         if(!dao::isError())
         {
             /* If the program changes, the budget unit will be updated to the project and sub-programs simultaneously. */
-            if($program->budgetUnit != $oldProgram->budgetUnit and $_POST['isChangeUnit'] == 'true')
+            if($program->budgetUnit != $oldProgram->budgetUnit and $_POST['syncPRJUnit'] == 'true')
             {
                 $this->dao->update(TABLE_PROJECT)
                     ->set('budgetUnit')->eq($program->budgetUnit)

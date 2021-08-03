@@ -194,7 +194,7 @@ $(function()
 
     $('#programForm').on('tableNestStateChanged', function()
     {
-        /* Ensure visible progress pie inited after toggle nest states */
+        /* Ensure visible progress pie inited after toggle nest states. */
         $('.progress-pie:visible').progressPie();
     });
 });

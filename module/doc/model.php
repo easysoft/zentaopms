@@ -1010,7 +1010,7 @@ class docModel extends model
                 }
                 $libs[$docLib->id] = $docLib->name;
 
-                $i++;
+                $i ++;
             }
         }
 
@@ -1983,7 +1983,7 @@ class docModel extends model
   <div class='btn-group'>
     <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'>
     <span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
-    <div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input"/><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+    <div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input"/><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>
 <div class='list-group'><div class='table-row'><div class='table-col $class'><div class='list-group' style='max-height: $maxHeight'>
 EOT;
             if($type == 'project' and $this->app->openApp == 'doc')
@@ -2175,11 +2175,11 @@ EOT;
         {
             if(!isset($extensionCount[$file->extension])) $extensionCount[$file->extension] = 0;
 
-            $filesCount++;
+            $filesCount ++;
 
             $sizeCount += $file->size;
 
-            $extensionCount[$file->extension]++;
+            $extensionCount[$file->extension] ++;
         }
 
         /* Unit conversion. */
@@ -2187,7 +2187,7 @@ EOT;
         while($sizeCount > 1024)
         {
             $sizeCount = $sizeCount / 1024;
-            $i++;
+            $i ++;
         }
         $unitList  = array('B', 'K', 'M', 'G');
         $sizeCount = round($sizeCount, 1) . $unitList[$i];

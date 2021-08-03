@@ -54,7 +54,7 @@ function fullScreen()
             $('#content').addClass('scrollbar-hover');
             $('#content .actions').addClass('hidden');
             $('#content .file-image .right-icon').addClass('hidden');
-            $('#content .files-list .right-icon').addClass('hidden');
+            $('#content .detail').eq(1).addClass('hidden');
             $.cookie('isFullScreen', 1);
         };
         var whenFailEnterFullscreen = function(error)
@@ -92,7 +92,7 @@ function exitFullScreen()
     $('#content').removeClass('scrollbar-hover');
     $('#content .actions').removeClass('hidden');
     $('#content .file-image .right-icon').removeClass('hidden');
-    $('#content .files-list .right-icon').removeClass('hidden');
+    $('#content .detail').eq(1).removeClass('hidden');
     $.cookie('isFullScreen', 0);
 }
 
