@@ -300,7 +300,6 @@ class gitlab extends control
 
         /* 'not[iids]' option in gitlab API has a issue when iids is too long. */
         $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, '&state=opened');
-        if(empty($gitlabIssues)) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->serverFail, 'locate' => $this->server->http_referer));
         foreach($gitlabIssues as $index => $issue)
         {
             foreach($savedIssueIDList as $savedIssueID)
