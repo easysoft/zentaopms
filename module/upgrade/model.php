@@ -693,6 +693,11 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('15.2'));
             $this->processGitlabRepo();
             $this->appendExec('15_2');
+        case '15_3':
+            $this->saveLogs('Execute 15_3');
+            $this->execSQL($this->getUpgradeFile('15.3'));
+            $this->processStoryFileType();
+            $this->appendExec('15_3');
         }
 
         $this->deletePatch();
@@ -5148,6 +5153,24 @@ class upgradeModel extends model
             $gitlabID = $this->dao->lastInsertID();
             $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($repo->extra)->where('id')->eq($repo->id)->exec();
         }
+        return true;
+    }
+
+    /**
+     * Process story file type to requirement.
+     *
+     * @access public
+     * @return void
+     */
+    public function processStoryFileType()
+    {
+        $requirementList = $this->dao->select('id')->from(TABLE_STORY)->where('type')->eq('requirement')->fetchPairs('id');
+
+        $this->dao->update(TABLE_FILE)->set('objectType')->eq('requirement')
+            ->where('objectID')->in($requirementList)
+            ->andWhere('objectType')->eq('story')
+            ->exec();
+
         return true;
     }
 }
