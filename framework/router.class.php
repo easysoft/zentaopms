@@ -513,11 +513,9 @@ class router extends baseRouter
             if($methodName == 'batchOperate') array_unshift($params, $this->rawMethod); // $params = array('close', 1);
             if($methodName == 'browse')
             {
-                if(!(isset($params[0]) and $params[0] == 'bysearch'))
-                {
-                    array_unshift($params, 'browse');
-                }
+                if(!(isset($params[0]) and $params[0] == 'bysearch')) array_unshift($params, 'browse');
             }
+
             array_unshift($params, $this->rawModule);                                   // $params = array($module, 'close', 1);
             array_unshift($params, $methodName);                                        // $params = array('operate', $module, 'close', 1);
             array_unshift($params, $moduleName);                                        // $params = array('flow', 'operate', $module, 'close', 1);
@@ -541,21 +539,22 @@ class router extends baseRouter
             /* Prepend other params. */
             if($methodName == 'browse')
             {
-                if(isset($params['label']) and $params['label'] == 'bysearch')
-                {
-                    $params['label'] = '';
-                    $params['mode'] = 'bysearch';
-                }
-                else
-                {
-                    $params['mode'] = 'browse';
-                }
+                if(!(isset($params['mode']) and $params['mode'] == 'bysearch')) $params['mode'] = 'browse';
             }
+
             $params['module']                 = $this->rawModule;   // $param = array('label' => 1, 'mode' => 'search', 'module' => $module);
             $params[$this->config->methodVar] = $methodName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse');
             $params[$this->config->moduleVar] = $moduleName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse', 'm' => 'flow');
 
             $params = array_reverse($params);   // $params = array('m' => 'flow', 'f' => 'browse', 'module' => $module, 'mode' => 'search', 'label' => 1);
+
+            /* Reset $_GET for setParamsByGET. */
+            $get = $params;
+            foreach($_GET as $key => $value)
+            {
+                if(!isset($get[$key])) $get[$key] = $value;
+            }
+            $_GET = $get;
 
             $this->URI = $path . '?' . http_build_query($params);   // $this->URI = '/index.php?m=flow&f=browse&module=$module&mode=search&label=1';
         }

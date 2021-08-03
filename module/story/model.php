@@ -198,13 +198,11 @@ class storyModel extends model
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
             ->callFunc('title', 'trim')
-            ->add('assignedDate', 0)
             ->add('version', 1)
             ->add('status', 'draft')
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview or $executionID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
@@ -254,14 +252,20 @@ class storyModel extends model
             /* Save the story reviewer to storyreview table. */
             if(isset($_POST['reviewer']))
             {
+                $assignedTo = '';
                 foreach($this->post->reviewer as $reviewer)
                 {
+                    if(empty($reviewer)) continue;
+
                     $reviewData = new stdclass();
                     $reviewData->story    = $storyID;
                     $reviewData->version  = 1;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    if(empty($assignedTo)) $assignedTo = $reviewer;
                 }
+                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             }
 
             /* Project or execution linked story. */
@@ -547,14 +551,20 @@ class storyModel extends model
             /* Save the story reviewer to storyreview table. */
             if(isset($_POST['reviewer'][$i]))
             {
+                $assignedTo = '';
                 foreach($_POST['reviewer'][$i] as $reviewer)
                 {
+                    if(empty($reviewer)) continue;
+
                     $reviewData = new stdclass();
                     $reviewData->story    = $storyID;
                     $reviewData->version  = 1;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    if(empty($assignedTo)) $assignedTo = $reviewer;
                 }
+                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
             }
 
             $this->executeHooks($storyID);
@@ -682,6 +692,7 @@ class storyModel extends model
 
             /* Update the reviewer. */
             $oldReviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
+            $assignedTo      = '';
             foreach($_POST['reviewer'] as $reviewer)
             {
                 if(!$specChanged and in_array($reviewer, array_keys($oldReviewerList))) continue;
@@ -691,7 +702,10 @@ class storyModel extends model
                 $reviewData->version  = $specChanged ? $story->version : $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
+            if($assignedTo and $assignedTo != $oldStory->assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
 
@@ -3289,6 +3303,14 @@ class storyModel extends model
             }
         }
 
+        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'opened')
+        {
+            $reviewerList = $this->getReviewerPairs($story->id, $story->version);
+            unset($reviewerList[$story->assignedTo]);
+
+            $ccList .= ',' . join(',', array_keys($reviewerList));
+        }
+
         if(empty($toList))
         {
             if(empty($ccList)) return false;
@@ -3878,11 +3900,12 @@ class storyModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  int    $projectID
      * @param  object $pager
      * @access public
      * @return bool|array
      */
-    public function getTracks($productID = 0, $branch = 0, $pager = null)
+    public function getTracks($productID = 0, $branch = 0, $projectID = 0, $pager = null)
     {
         $tracks         = array();
         $sourcePageID   = $pager->pageID;
@@ -3890,7 +3913,24 @@ class storyModel extends model
 
         if($this->config->URAndSR)
         {
-            $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+            $projectStories = array();
+            if($projectID)
+            {
+                $requirements = $this->dao->select('t3.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_RELATION)->alias('t2')->on("t1.story=t2.AID && t2.AType='story'")
+                    ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.BID=t3.id && t2.BType='requirement'")
+                    ->where('t1.project')->eq($projectID)
+                    ->andWhere('t1.product')->eq($productID)
+                    ->andWhere('t3.id')->ne('')
+                    ->page($pager, 't3.id')
+                    ->fetchAll('id');
+                $projectStories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story');
+            }
+            else
+            {
+                $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+            }
+
             if($pager->pageID != $sourcePageID)
             {
                 $requirements  = array();
@@ -3903,6 +3943,12 @@ class storyModel extends model
                 $stories = empty($stories) ? array() : $stories;
                 foreach($stories as $id => $title)
                 {
+                    if($projectStories and !isset($projectStories[$id]))
+                    {
+                        unset($stories[$id]);
+                        continue;
+                    }
+
                     $stories[$id] = new stdclass();
                     $stories[$id]->title = $title;
                     $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
@@ -3931,12 +3977,26 @@ class storyModel extends model
                 ->andWhere('relation')->eq('subdivideinto')
                 ->andWhere('product')->eq($productID)
                 ->fetchPairs('BID', 'BID');
-            $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
-            if($stories) $pager->recTotal += 1;
+            if($projectID)
+            {
+                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories);
+            }
+            else
+            {
+                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
+            }
+            if($stories) $pager->recTotal += count($stories);
         }
         else
         {
-            $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
+            if($projectID)
+            {
+                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, $pager);
+            }
+            else
+            {
+                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
+            }
         }
 
         if(count($tracks) < $pager->recPerPage)

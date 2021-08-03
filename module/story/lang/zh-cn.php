@@ -406,4 +406,3 @@ $lang->story->categoryList['safe']        = '安全';
 $lang->story->categoryList['experience']  = '体验';
 $lang->story->categoryList['improve']     = '改进';
 $lang->story->categoryList['other']       = '其他';
-

@@ -109,7 +109,7 @@
                 <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, $job->server, "class='form-control chosen'");?></div>
                 <div class='table-col'>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
+                    <span class='input-group-addon'><?php echo $lang->job->Pipeline; ?></span>
                     <?php echo html::select('jkTask', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
                   </div>
                 </div>

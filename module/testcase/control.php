@@ -642,11 +642,10 @@ class testcase extends control
             if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
-            $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             $this->view->product     = $product;
             $this->view->branches    = $branches;
-            $this->view->productName = $this->products[$productID];
+            $this->view->productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
@@ -1505,7 +1504,7 @@ class testcase extends control
             $this->post->set('kind', 'testcase');
             $this->post->set('rows', $rows);
             $this->post->set('extraNum', $num);
-            $this->post->set('fileName', 'template');
+            $this->post->set('fileName', 'Template');
             $this->fetch('file', 'export2csv', $_POST);
         }
 

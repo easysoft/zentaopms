@@ -65,7 +65,7 @@
             if($this->app->user->admin or ($this->app->user->account == $todo->account) or ($this->app->user->account == $todo->assignedTo))
             {
                 if($todo->status == 'wait') common::printLink('todo', 'start', "todoID=$todo->id", "<i class='icon icon-play'></i>", 'hiddenwin', "title='{$lang->todo->start}' class='btn showinonlybody'");
-                if($todo->status == 'done' || $todo->status == 'closed') common::printLink('todo', 'activate', "todoID=$todo->id", "<i class='icon icon-magic'></i>", 'hiddenwin', "title='{$lang->todo->activate}' class='btn showinonlybody'");
+                if($todo->status == 'done' or $todo->status == 'closed') common::printLink('todo', 'activate', "todoID=$todo->id", "<i class='icon icon-magic'></i>", 'hiddenwin', "title='{$lang->todo->activate}' class='btn showinonlybody'");
                 if($todo->status == 'done') common::printLink('todo', 'close', "todoID=$todo->id", "<i class='icon icon-off'></i>", 'hiddenwin', "title='{$lang->todo->close}' class='btn showinonlybody'");
                 common::printLink('todo', 'edit', "todoID=$todo->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
                 common::printLink('todo', 'delete', "todoID=$todo->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->todo->delete}' class='btn showinonlybody'");
@@ -202,11 +202,11 @@
         <h4 class="modal-title"><?php echo $lang->execution->selectExecution;?></h4>
       </div>
       <div class="modal-body">
-        <?php if((empty($projects) and $config->systemMode == 'new') || ($config->systemMode == 'classic') and empty($executions)):?>
+        <?php if((empty($projects) and $config->systemMode == 'new') or (empty($executions) and $config->systemMode == 'classic')):?>
         <div class="table-empty-tip">
           <p>
             <span class="text-muted"><?php echo $lang->project->empty;?></span>
-            <?php echo html::a("javascript:createProject()", "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
+            <?php echo html::a("javascript:" . ($config->systemMode == 'new' ? "createProject()" : "createExecution()"), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
           </p>
         </div>
         <?php else:?>
@@ -218,7 +218,7 @@
           </tr>
           <?php endif;?>
           <tr>
-            <th><?php echo $lang->todo->execution;?></th>
+            <th><?php echo $config->systemMode == 'new' ? $lang->todo->execution : $lang->todo->project;?></th>
             <td id='executionIdBox'><?php echo html::select('execution', $executions, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
@@ -264,7 +264,7 @@
         <h4 class="modal-title"><?php echo $lang->product->select;?></h4>
       </div>
       <div class="modal-body">
-        <?php if(empty($projects)):?>
+        <?php if(empty($projects) and $config->systemMode == 'new'):?>
         <div class="table-empty-tip">
           <p>
             <span class="text-muted"><?php echo $lang->project->empty;?></span>
@@ -273,10 +273,12 @@
         </div>
         <?php else:?>
         <table align='center' class='table table-form'>
+          <?php if($config->systemMode == 'new'):?>
           <tr>
             <th><?php echo $lang->todo->project;?></th>
             <td><?php echo html::select('bugProject', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->todo->product;?></th>
             <td id='productIdBox'><?php echo html::select('bugProduct', $projectProducts, '', "class='form-control chosen'");?></td>

@@ -688,6 +688,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0_3');
             $this->execSQL($this->getUpgradeFile('15.0.3'));
             $this->appendExec('15_0_3');
+        case '15_2':
+            $this->saveLogs('Execute 15_2');
+            $this->execSQL($this->getUpgradeFile('15.2'));
+            $this->processGitlabRepo();
+            $this->appendExec('15_2');
         }
 
         $this->deletePatch();
@@ -4639,6 +4644,7 @@ class upgradeModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t2.id')->in($projectIdList)
             ->fetchGroup('project', 'product');
+
         $sprintGroups  = $this->dao->select('*')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->fetchGroup('project', 'id');
         $teamGroups    = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('execution')->fetchGroup('root', 'account');
         $users         = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
@@ -5121,31 +5127,27 @@ class upgradeModel extends model
      * Process gitlab repo data.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function processGitlabRepo()
     {
         $repoList = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')->fetchAll();
         foreach($repoList as $repo)
         {
+            if(is_numeric($repo->path)) continue;
+
             /* Create gitlab from repo. */
             $gitlab = new stdclass;
             $gitlab->type    = 'gitlab';
             $gitlab->name    = $repo->client;
-            $gitlab->token   = base64_decode($repo->password);
+            $gitlab->url     = $repo->client;
+            $gitlab->token   = $repo->encrypt == 'base64' ? base64_decode($repo->password) : $repo->password;
             $gitlab->private = md5(uniqid());
             $this->dao->insert(TABLE_PIPELINE)->data($gitlab)->exec();
 
             $gitlabID = $this->dao->lastInsertID();
-
-            preg_match('/projects\/(\d+)\/repository/', $repo->path, $matches);
-            $gitlabProject = $matches[1];
-            $products      = explode(',', $repo->product);
-            $this->loadModel('gitlab')->saveProjectRelation($products, $gitlabID, $gitlabProject);
-
-            $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($gitlabProject)->where('id')->eq($repo->id)->exec();
-
-            $this->loadModel("gitlab")->initWebhooks($products, $gitlabID, $gitlabProject);
+            $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($repo->extra)->where('id')->eq($repo->id)->exec();
         }
+        return true;
     }
 }

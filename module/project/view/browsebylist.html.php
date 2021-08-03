@@ -37,6 +37,7 @@
       <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->project->bylist}' id='switchButton' data-type='bylist'");?>
       <?php echo html::a('#',"<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->project->bycard}' id='switchButton' data-type='bycard'");?>
     </div>
+    <?php common::printLink('project', 'export', "status=$browseType&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
     <?php if(isset($this->config->maxVersion)):?>
     <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php elseif($this->config->systemMode == 'new'):?>
@@ -78,10 +79,16 @@
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-        $vars = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
-        $setting = $this->datatable->getSetting('project');
+      $vars         = "programID=$programID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+      $datatableId  = $this->moduleName . ucfirst($this->methodName);
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+      $setting      = $this->datatable->getSetting('project');
+      $widths       = $this->datatable->setFixedFieldWidth($setting);
+
+      if($useDatatable) include '../../common/view/datatable.html.php';
       ?>
-      <table class='table has-sort-head'>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table has-sort-head <?php if($useDatatable) echo 'datatable';?>' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
       <?php $canBatchEdit = $this->config->systemMode == 'new' ? common::hasPriv('project', 'batchEdit') : common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
@@ -104,6 +111,7 @@
           <?php endforeach;?>
         </tbody>
       </table>
+      <?php if(!$useDatatable) echo '</div>';?>
       <div class='table-footer'>
         <?php if($canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>

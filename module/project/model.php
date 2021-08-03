@@ -780,7 +780,6 @@ class projectModel extends model
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             /* Create doc lib. */
             $this->app->loadLang('doc');
@@ -962,7 +961,13 @@ class projectModel extends model
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open')
+            {
+                $this->loadModel('user')->updateUserView($projectID, 'project');
+
+                $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
+                if($executions) $this->user->updateUserView($executions, 'sprint');
+            }
 
             if($project->acl == 'private')
             {
@@ -1356,7 +1361,7 @@ class projectModel extends model
 
             if($id == 'budget')
             {
-                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
+                $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
@@ -1367,6 +1372,7 @@ class projectModel extends model
             if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
 
             echo "<td class='$class' $title>";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('project', $project, $id);
             switch($id)
             {
                 case 'id':
@@ -1515,6 +1521,23 @@ class projectModel extends model
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
+    }
+
+    /**
+     * Update userview for involved product and execution.
+     *
+     * @param  int    $projectID
+     * @param  array  $users
+     * @access public
+     * @return void
+     */
+    public function updateInvolvedUserView($projectID, $users = array())
+    {
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product', 'product');
+        $this->loadModel('user')->updateUserView($products, 'product', $stakeholder);
+
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
+        if($executions) $this->user->updateUserView($executions, 'sprint', $stakeholder);
     }
 
     /**

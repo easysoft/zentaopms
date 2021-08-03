@@ -1238,13 +1238,18 @@ class product extends control
             $productStats = $this->product->getStats($orderBy, null, $status);
             foreach($productStats as $i => $product)
             {
-                $product->line             = zget($lines, $product->line, '');
-                $product->activeStories    = (int)$product->stories['active'];
-                $product->changedStories   = (int)$product->stories['changed'];
-                $product->draftStories     = (int)$product->stories['draft'];
-                $product->closedStories    = (int)$product->stories['closed'];
-                $product->unResolvedBugs   = (int)$product->unResolved;
-                $product->assignToNullBugs = (int)$product->assignToNull;
+                $product->line                = zget($lines, $product->line, '');
+                $product->activeRequirements  = (int)$product->requirements['active'];
+                $product->changedRequirements = (int)$product->requirements['changed'];
+                $product->draftRequirements   = (int)$product->requirements['draft'];
+                $product->closedRequirements  = (int)$product->requirements['closed'];
+                $product->activeStories       = (int)$product->stories['active'];
+                $product->changedStories      = (int)$product->stories['changed'];
+                $product->draftStories        = (int)$product->stories['draft'];
+                $product->closedStories       = (int)$product->stories['closed'];
+                $product->unResolvedBugs      = (int)$product->unResolved;
+                $product->assignToNullBugs    = (int)$product->assignToNull;
+                $product->program             = $product->programName;
 
                 if($this->post->exportType == 'selected')
                 {

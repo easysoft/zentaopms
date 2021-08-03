@@ -1130,7 +1130,7 @@ class userModel extends model
                 if($project->project)
                 {
                     $parentProject = zget($projectList, $project->project, '');
-                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->exec();
+                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
                     $project->projectName = $parentProject ? $parentProject->name : '';
                 }
                 $myProjects[$project->id] = $project;

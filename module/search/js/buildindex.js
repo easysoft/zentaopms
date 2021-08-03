@@ -13,8 +13,19 @@ $(document).ready(function()
             }
             else
             {
+                className = response.type + 'count';
+                $typeCount = $('#resultBox .' + className)
+                if($typeCount.length == 0)
+                {
+                    $('#resultBox').append("<li class='text-success'>" + response.message + "</li>");
+                }
+                else
+                {
+                    count = parseInt($typeCount.html()) + parseInt(response.count);
+                    $typeCount.html(count);
+                }
+
                 $('#execButton').attr('href', response.next);
-                $('#resultBox').append("<li class='text-success'>" + response.message + "</li>");
                 return $('#execButton').click();
             }
         });

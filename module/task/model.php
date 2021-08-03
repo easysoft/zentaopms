@@ -662,6 +662,9 @@ class taskModel extends model
 
                 if($parentTask->story) $this->loadModel('story')->setStage($parentTask->story);
                 $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+
+                unset($oldParentTask->subStatus);
+                unset($newParentTask->subStatus);
                 $changes = common::createChanges($oldParentTask, $newParentTask);
                 $action  = '';
                 if($status == 'done' and $parentTask->status != 'done')     $action = 'Finished';

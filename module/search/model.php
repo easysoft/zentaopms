@@ -31,6 +31,8 @@ class searchModel extends model
             if($module == 'projectBug')   $flowModule = 'bug';
 
             $fields = $this->loadModel('workflowfield')->getList($flowModule);
+            $maxCount = $this->config->maxCount;
+            $this->config->maxCount = 0;
 
             foreach($fields as $field)
             {
@@ -60,6 +62,7 @@ class searchModel extends model
                 $searchConfig['fields'][$field->field] = $field->name;
                 $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options, 'class' => $class);
             }
+            $this->config->maxCount = $maxCount;
         }
 
         $searchParams['module']       = $searchConfig['module'];
@@ -263,7 +266,7 @@ class searchModel extends model
 
         if($hasUser)
         {
-            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers);
             $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->project);
@@ -694,10 +697,15 @@ class searchModel extends model
      */
     public function saveDict($dict)
     {
+        static $savedDict;
+        if(empty($savedDict)) $savedDict = $this->dao->select("`key`")->from(TABLE_SEARCHDICT)->fetchPairs('key', 'key');
         foreach($dict as $key => $value)
         {
             if(!is_numeric($key) or empty($value) or strlen($key) != 5) continue;
-            $this->dao->replace(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+            if(isset($savedDict[$key])) continue;
+
+            $this->dao->insert(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+            $savedDict[$key] = $key;
         }
     }
 

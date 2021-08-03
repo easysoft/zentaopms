@@ -151,7 +151,7 @@
             <?php else:?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
-              <td><?php echo common::hasPriv('product', 'browse') ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
+              <td><?php echo (common::hasPriv('product', 'browse') and $productName) ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
             </tr>
             <?php if($product->type != 'normal'):?>
             <tr>
