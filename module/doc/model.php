@@ -1982,9 +1982,19 @@ class docModel extends model
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'>
-    <span class='text'>{$objects[$objectID]}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
-    <div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input"/><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>
-<div class='list-group'><div class='table-row'><div class='table-col $class'><div class='list-group' style='max-height: $maxHeight'>
+      <span class='text'>{$objects[$objectID]}</span>
+      <span class='caret'></span>
+    </button>
+    <div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
+    <div class="input-control search-box has-icon-left has-icon-right search-example">
+      <input type="search" class="form-control search-input"/>
+      <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+      <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+    </div>
+    <div class='list-group'>
+      <div class='table-row'>
+        <div class='table-col $class'>
+          <div class='list-group' style='max-height: $maxHeight'>
 EOT;
             if($type == 'project' and $this->app->openApp == 'doc')
             {
@@ -2006,7 +2016,21 @@ EOT;
             }
             if($type == 'project' and $this->app->openApp == 'doc')
             {
-                $output .= "</div><div class='col-footer'><a class='pull-right toggle-right-col not-list-item'>{$this->lang->project->doneProjects}<i class='icon icon-angle-right'></i></a></div></div><div class='table-col col-right'> <div class='list-group'>$closedProjectsHtml</div></div></div></div></div></div></div>";
+                $output .= <<<EOT
+            </div>
+            <div class='col-footer'>
+              <a class='pull-right toggle-right-col not-list-item'>{$this->lang->project->doneProjects}<i class='icon icon-angle-right'></i></a>
+            </div>
+          </div>
+          <div class='table-col col-right'>
+            <div class='list-group'>$closedProjectsHtml</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+EOT;
             }
             else
             {
@@ -2017,9 +2041,20 @@ EOT;
         if(!empty($libs))
         {
             $libName = empty($libID) ? $this->lang->doclib->files : $libs[$libID]->name;
-            $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>";
-            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-            $output .= "<div class='table-col'><div class='list-group'>";
+            $output .= <<<EOT
+<div class='btn-group angle-btn'>
+  <div class='btn-group'>
+    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libName} <span class='caret'></span>
+    </button>
+    <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
+      <div class="input-control search-box has-icon-left has-icon-right search-example">
+        <input type="search" class="form-control search-input" />
+        <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+        <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+      </div>
+      <div class='table-col'>
+        <div class='list-group'>
+EOT;
             foreach($libs as $key => $lib)
             {
                 $selected = $key == $libID ? 'selected' : '';
