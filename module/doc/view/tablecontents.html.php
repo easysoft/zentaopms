@@ -112,22 +112,6 @@ if(empty($type)) $type = 'product';
       </div>
       <?php endif;?>
     </div>
-    <div class="text-center action">
-      <?php
-      if($type == 'book')
-      {
-          //common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editBook, '', "class='btn btn-info btn-wide iframe'", '', true);
-          //common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide'");
-      }
-      else
-      {
-          //common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
-          //common::printLink('doc', 'editLib', "rootID=$libID", $lang->doc->editLib, '', "class='btn btn-info btn-wide iframe'", '', true);
-          //common::printLink('doc', 'deleteLib', "rootID=$libID", $lang->doc->deleteLib, 'hiddenwin', "class='btn btn-info btn-wide'");
-      }
-      ?>
-      <hr class="space-sm" />
-    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
