@@ -1011,7 +1011,7 @@ class doc extends control
 
             if($doc->keywords)
             {
-                $doc->keywords = preg_replace("/(，)/", ',', $doc->keywords);
+                $doc->keywords = str_replace("，", ',', $doc->keywords);
                 $doc->keywords = explode(',', $doc->keywords);
             }
 
