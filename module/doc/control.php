@@ -759,46 +759,18 @@ class doc extends control
      */
     public function showFiles($type, $objectID, $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',  $uri);
-        $this->app->session->set('storyList', $uri);
-        $this->app->session->set('docList',   $uri);
-
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $objects = $this->doc->getOrderedObjects($type);
-        if($type == 'product')
-        {
-            $objectID = $this->product->saveState($objectID, $objects);
-            $table    = TABLE_PRODUCT;
-
-            $libs = $this->doc->getLibsByObject('product', $objectID);
-
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
-        }
-        else if($type == 'project')
-        {
-            $objectID = $this->project->saveState($objectID, $objects);
-            $table    = TABLE_PROJECT;
-
-            $libs = $this->doc->getLibsByObject('project', $objectID);
-
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
-        }
-        else if($type == 'execution')
-        {
-            $objectID = $this->execution->saveState($objectID, $objects);
-            $table = TABLE_EXECUTION;
-            $libs  = $this->doc->getLibsByObject('execution', $objectID);
-
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
-        }
+        $objects  = $this->doc->getOrderedObjects($type);
+        $objectID = $this->{$type}->saveState($objectID, $objects);
+        $libs     = $this->doc->getLibsByObject($type, $objectID);
+        $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
 
         $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
         if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
 
-        $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $table  = $this->config->objectTables[$type];
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
         $this->lang->TRActions  = $this->doc->buildCollectButton4Doc();
