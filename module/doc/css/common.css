@@ -81,11 +81,11 @@ td.c-name a:visited {color: #082999;}
 #pageNav .dropdown-menu {max-height: 350px; overflow-y: auto;}
 
 ol, ul {margin-bottom: 0}
-#dropMenu .table-col .list-group {padding-top: 5px;}
+#subHeader #dropMenu .table-col .list-group {padding-top: 5px;}
 #createDropdown ul.dropdown-menu {text-align: left;}
 #collection-menu {max-width: 300px;}
 #collection-menu li a {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-#project, #product, #custom, #book {min-height: 160px;}
+#project, #product, #custom, #book, #execution {min-height: 160px;}
 #title .menu-title {font-size: 15px; font-weight: 600; position: relative; padding: 2px 0 2px 15px; list-style: none;}
 #title .dropdown-menu {top: 38px;}
 .tree li > a {white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}

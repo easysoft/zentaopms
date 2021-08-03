@@ -10,9 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if($app->openApp == 'execution'): ?>
-<style>#heading {padding: 8px 0;}</style>
-<?php endif;?>
 <?php if(isset($tips)):?>
 <?php $defaultURL = $config->systemMode == 'new' ? $this->createLink('project', 'execution', "status=all&projectID=$projectID") : $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
 <?php include '../../common/view/header.html.php';?>

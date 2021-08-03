@@ -405,6 +405,12 @@ class treeModel extends model
                 if($type == 'story' or $type == 'bug')
                 {
                     $branchLink = helper::createLink($this->app->rawModule, $this->app->rawMethod, "productID=$rootID&branch=$branchID&browseType=bybranch" . $extraParams);
+
+                    if($type == 'story' and $this->app->rawModule == 'projectstory')
+                    {
+                        $projectID  = zget($extra, 'projectID', 0);
+                        $branchLink = helper::createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&productID=$rootID&branch=$branchID&browseType=bybranch" . $extraParams);
+                    }
                     $linkHtml   = html::a($branchLink, $branch, "", "id=branch" . $branchID);
                 }
                 if($firstBranch and $product->type != 'normal')

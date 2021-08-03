@@ -2288,41 +2288,14 @@ EOT;
         }
         else
         {
-            if($type == 'product')
-            {
-                $objectID = $this->product->saveState($objectID, $objects);
-                $table    = TABLE_PRODUCT;
+            $objectID = $this->loadModel($type)->saveState($objectID, $objects);
+            $table    = $this->config->objectTables[$type];
+            $libs     = $this->getLibsByObject($type, $objectID);
 
-                $libs = $this->getLibsByObject('product', $objectID);
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'product';
-            }
-            else if($type == 'project')
-            {
-                $objectID = $this->loadModel('project')->saveState($objectID, $objects);
-                $table    = TABLE_PROJECT;
-
-                $libs = $this->getLibsByObject('project', $objectID);
-
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'project';
-            }
-            else if($type == 'execution')
-            {
-                $objectID = $this->loadModel('execution')->saveState($objectID, $objects);
-                $table    = TABLE_EXECUTION;
-                $libs     = $this->getLibsByObject('execution', $objectID);
-
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'execution';
-            }
+            $this->app->rawMethod = $type;
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
             if(empty($object)) die(js::locate(helper::createLink($type, 'create')));

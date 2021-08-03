@@ -85,9 +85,9 @@
               <?php echo $program['programName']?>
             </td>
             <?php if($this->config->URAndSR):?>
-            <td><?php echo $program['draftRequirments'];?></td>
-            <td><?php echo $program['activeRequirments'];?></td>
-            <td><?php echo $program['changedRequirments'];?></td>
+            <td><?php echo $program['draftRequirements'];?></td>
+            <td><?php echo $program['activeRequirements'];?></td>
+            <td><?php echo $program['changedRequirements'];?></td>
             <td><?php echo $program['totalRequirements'] == 0 ? 0 : round($program['closedRequirements'] / $program['totalRequirements'], 3) * 100;?>%</td>
             <?php endif;?>
             <td><?php echo $program['draftStories'];?></td>
@@ -111,8 +111,7 @@
           if($this->config->systemMode == 'new' and $programID)
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
-              $trClass .= ' is-nest-child  table-nest text-center';
-              $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'";
+              $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'" . "class='text-center'";
           }
           else
           {
@@ -127,9 +126,9 @@
               <?php echo $line['lineName']?>
             </td>
             <?php if($this->config->URAndSR):?>
-            <td><?php echo $line['draftRequirments'];?></td>
-            <td><?php echo $line['activeRequirments'];?></td>
-            <td><?php echo $line['changedRequirments'];?></td>
+            <td><?php echo $line['draftRequirements'];?></td>
+            <td><?php echo $line['activeRequirements'];?></td>
+            <td><?php echo $line['changedRequirements'];?></td>
             <td><?php echo $line['totalRequirements'] == 0 ? 0 : round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100;?>%</td>
             <?php endif;?>
             <td><?php echo $line['draftStories'];?></td>
