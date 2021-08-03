@@ -51,7 +51,7 @@ $(function()
 
     $('#cancel').click(function()
     {
-        $('#isChangeUnit').val('false');
+        $('#syncPRJUnit').val('false');
         $('#exchangeRate').val('');
     })
 
@@ -69,7 +69,7 @@ $(function()
             return false;
         }
 
-        $('#isChangeUnit').val('true');
+        $('#syncPRJUnit').val('true');
         $('#exchangeRate').val(exchangeRate);
         $('#changeUnitTip').modal('hide');
     })
