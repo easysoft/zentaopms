@@ -29,7 +29,7 @@
           </tr>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>
-            <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Git', "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
+            <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Gitlab', "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
             <td class="tips-git"><?php echo $lang->repo->syncTips; ?></td>
           </tr>
           <tr class='gitlab hide'>
