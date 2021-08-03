@@ -931,7 +931,7 @@ class searchModel extends model
                 }
             }
         }
-        if($total != count($results)) $pager->recTotal = $pager->recTotal - $total + count($results);
+        if($total != count($results)) $pager->recTotal = $pager->recTotal - ($total - count($results));
         return $results;
     }
 
