@@ -122,7 +122,7 @@ $lang->upgrade->mergeByProject     = "独立的{$lang->projectCommon}：可以�
 $lang->upgrade->mergeByMoreLink    = "关联多个{$lang->productCommon}的{$lang->projectCommon}：选择这个{$lang->projectCommon}归属于哪一个项目。";
 $lang->upgrade->mergeRepoTips      = "将选中的版本库归并到所选产品下。";
 $lang->upgrade->needBuild4Add      = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
-$lang->upgrade->errorEngineInnodb  = '您的数据库版本过低，不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
+$lang->install->errorEngineInnodb  = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
 
 $lang->upgrade->projectType['project']   = "把历史的{$lang->projectCommon}作为项目升级";
 $lang->upgrade->projectType['execution'] = "把历史的{$lang->projectCommon}作为执行升级";
