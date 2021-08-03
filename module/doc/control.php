@@ -907,99 +907,13 @@ class doc extends control
      */
     public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0)
     {
-        if(empty($type))
-        {
-            $doclib   = $this->doc->getLibById($libID);
-            $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
-            $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
-        }
-
-        $this->session->set('docList', $this->app->getURI(true), $this->app->openApp);
-
-        $objects = $this->doc->getOrderedObjects($type);
-
-        if($type == 'custom')
-        {
-            $libs = $this->doc->getLibsByObject('custom', 0);
-            $this->app->rawMethod = 'custom';
-            if($libID == 0) $libID = key($libs);
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-            $object = new stdclass();
-            $object->id = 0;
-        }
-        elseif($type == 'book')
-        {
-            $libs = $this->doc->getLibsByObject('book', 0);
-            $this->app->rawMethod = 'book';
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-            if(!$docID) $docID = $this->dao->select('id')->from(TABLE_DOC)
-                ->where('lib')->eq($libID)
-                ->andWhere('type')->eq('article')
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('editedDate_desc,id_desc')
-                ->fetch('id');
-
-            $object = new stdclass();
-            $object->id = 0;
-        }
-        else
-        {
-            if($type == 'product')
-            {
-                $objectID = $this->product->saveState($objectID, $objects);
-                $table    = TABLE_PRODUCT;
-
-                $libs = $this->doc->getLibsByObject('product', $objectID);
-
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'product';
-            }
-            else if($type == 'project')
-            {
-                $objectID = $this->project->saveState($objectID, $objects);
-                $table    = TABLE_PROJECT;
-
-                $libs = $this->doc->getLibsByObject('project', $objectID);
-
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'project';
-            }
-            else if($type == 'execution')
-            {
-                $objectID = $this->execution->saveState($objectID, $objects);
-                $table = TABLE_EXECUTION;
-                $libs  = $this->doc->getLibsByObject('execution', $objectID);
-
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'execution';
-            }
-
-            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-            if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
-        }
-
-        if(!$libID) $libID = key($libs);
-
-        $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
-        if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
+        list($libs, $libID, $object, $objectID) = $this->doc->setMenu($type, $objectID, $libID);
 
         /* Set Custom. */
         foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];
 
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
-
-        $this->lang->TRActions  = $this->doc->buildCollectButton4Doc();
-        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 
@@ -1121,86 +1035,7 @@ class doc extends control
      */
     public function tableContents($type, $objectID = 0, $libID = 0)
     {
-        if(empty($type))
-        {
-            $doclib   = $this->doc->getLibById($libID);
-            $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
-            $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
-        }
-
-        $this->session->set('docList', $this->app->getURI(true), $this->app->openApp);
-
-        $objects = $this->doc->getOrderedObjects($type);
-
-        if($type == 'custom')
-        {
-            $libs = $this->doc->getLibsByObject('custom', 0);
-            $this->app->rawMethod = 'custom';
-            if($libID == 0) $libID = key($libs);
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-            $object = new stdclass();
-            $object->id = 0;
-        }
-        elseif($type == 'book')
-        {
-            $libs = $this->doc->getLibsByObject('book', 0);
-            $this->app->rawMethod = 'book';
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
-            $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-            $object = new stdclass();
-            $object->id = 0;
-        }
-        else
-        {
-            if($type == 'product')
-            {
-                $objectID = $this->product->saveState($objectID, $objects);
-                $table    = TABLE_PRODUCT;
-
-                $libs = $this->doc->getLibsByObject('product', $objectID);
-
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'product';
-            }
-            else if($type == 'project')
-            {
-                $objectID = $this->project->saveState($objectID, $objects);
-                $table    = TABLE_PROJECT;
-
-                $libs = $this->doc->getLibsByObject('project', $objectID);
-
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'project';
-            }
-            else if($type == 'execution')
-            {
-                $objectID = $this->execution->saveState($objectID, $objects);
-                $table    = TABLE_EXECUTION;
-                $libs     = $this->doc->getLibsByObject('execution', $objectID);
-
-                if($libID == 0) $libID = key($libs);
-                $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs, $libID);
-
-                $this->app->rawMethod = 'execution';
-            }
-
-            $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
-            if(empty($object)) $this->locate($this->createLink($type, 'create', '', '', '', $this->session->project));
-        }
-
-        if(!$libID) $libID = key($libs);
-
-        $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
-        if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
-
-        $this->lang->TRActions  = $this->doc->buildCollectButton4Doc();
-        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($type, $objectID, $libID) : '';
+        list($libs, $libID, $object, $objectID) = $this->doc->setMenu($type, $objectID, $libID);
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID);
 
