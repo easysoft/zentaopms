@@ -518,7 +518,8 @@ class gitlab
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
 
-        if(empty($count)) $count = 100;
+        /* TODO Put getCommits into cron job. And check best size of $count. */
+        if(empty($count)) $count = 1;
 
         $params = array();
         $params['ref_name'] = $branch;
