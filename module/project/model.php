@@ -1534,10 +1534,10 @@ class projectModel extends model
     public function updateInvolvedUserView($projectID, $users = array())
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product', 'product');
-        $this->loadModel('user')->updateUserView($products, 'product', $stakeholder);
+        $this->loadModel('user')->updateUserView($products, 'product', $users);
 
         $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
-        if($executions) $this->user->updateUserView($executions, 'sprint', $stakeholder);
+        if($executions) $this->user->updateUserView($executions, 'sprint', $users);
     }
 
     /**
