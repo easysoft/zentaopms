@@ -253,6 +253,7 @@ $(function()
                     var item = $li.data();
                     orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
                 });
+
                 $.post('<?php echo $this->createLink('tree', 'updateOrder', "rootID=$rootID&viewType=$viewType");?>', orders, function(data)
                 {
                     $('.main-col').load(location.href + ' .main-col .panel');

@@ -958,7 +958,7 @@ class programModel extends model
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
         }
 
-        /* Get the number of lefting tasks. */
+        /* Get the number of left tasks. */
         if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
         {
             $leftTasks = $this->dao->select('project,count(*) as tasks')->from(TABLE_TASK)
@@ -1003,6 +1003,7 @@ class programModel extends model
             $project->teamCount   = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
             $project->leftTasks   = isset($leftTasks[$project->id]) ? $leftTasks[$project->id]->tasks : '—';
             $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
+
             $stats[$key] = $project;
         }
         return $stats;

@@ -80,6 +80,7 @@ $(function()
                 {
                     var checkedProject = isSelectAll(0, 'project');
                 }
+
                 var checkedProduct = isSelectAll(lineID, 'product');
                 $('#checkAllProjects').prop('checked', checkedProject);
                 $('#checkAllProducts').prop('checked', checkedProduct);
@@ -466,7 +467,6 @@ $(function()
             var productID = $(this).attr('data-product');
             if(productID && $('[data-productid=' + productID + ']').length > 0 && !$('[data-productid=' + productID + ']').prop('checked')) $('[data-productid=' + productID + ']').prop('checked', true);
 
-
             $('#programName').val($("[lineid='" + lineID + "']").find('a').text());
             setProgramByProduct($(':checkbox[data-productid=' + productID + ']'));
         }
@@ -477,10 +477,11 @@ $(function()
         {
             var lineID            = $(this).attr('data-line');
             var checkedProductNum = $("[id^='products\[" + lineID + "\]']:checked").length;
+            var checkedLine       = true;
+
             checked        = isSelectAll(lineID, 'project');
             checkedProduct = isSelectAll(lineID, 'product');
 
-            var checkedLine    = true;
             if(checkedProductNum > 0) $('[lineid=' + lineID + ']').addClass('active');
             if(checkedProductNum == 0)
             {
@@ -653,6 +654,7 @@ function toggleProgram(obj)
         var programID = $('#programs').val();
         getProgramStatus('program', programID);
     }
+
     var projectType = $('input[name="projectType"]:checked').val();
     if(projectType == 'project')
     {
@@ -779,6 +781,7 @@ function hiddenProject()
             $('[name=projectAcl]').attr('disabled', 'disabled');
             $('[name=programAcl]').removeAttr('disabled');
         }
+
         if(projectType == 'execution')
         {
             $('.projectName').removeClass('hidden');
@@ -1122,6 +1125,7 @@ function isSelectAll(lineID = 0, type = 'product')
             var checkedObjectNum = $("[id^='productLines']:checked").length;
         }
     }
+
     if(objectNum > checkedObjectNum || objectNum == 0) checked = false;
     return checked;
 }

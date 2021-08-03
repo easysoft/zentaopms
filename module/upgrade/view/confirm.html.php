@@ -23,6 +23,4 @@
     </div>
   </form>
 </div>
-<script>
-</script>
 <?php include '../../common/view/footer.lite.html.php';?>
