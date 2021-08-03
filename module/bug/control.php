@@ -521,7 +521,7 @@ class bug extends control
         $projects = array(0 => '');
         if($executionID)
         {
-            $products    = array();
+            $products       = array();
             $linkedProducts = $this->loadModel('execution')->getProducts($executionID);
             foreach($linkedProducts as $product) $products[$product->id] = $product->name;
 
