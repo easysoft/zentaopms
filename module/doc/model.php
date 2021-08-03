@@ -1315,16 +1315,22 @@ class docModel extends model
             ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
             ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
             ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
-            ->beginIF($type == 'product')->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")->fi()
-            ->beginIF($type == 'product')->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")->fi()
-            ->beginIF($type == 'project')->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")->fi()
-            ->beginIF($type == 'project' or $type == 'execution')->orWhere("(objectType = 'task' and objectID in ($taskIdList))")->fi()
-            ->beginIF($type == 'project' or $type == 'execution')->orWhere("(objectType = 'build' and objectID in ($buildIdList))")->fi()
+
+            ->beginIF($type == 'product')
+            ->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")
+            ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
+            ->fi()
 
             ->beginIF($type == 'project')
+            ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
             ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
             ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
+            ->fi()
+
+            ->beginIF($type == 'project' or $type == 'execution')
+            ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
+            ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
             ->fi()
 
             ->markRight(1)
@@ -1335,14 +1341,6 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
-            if($type == 'product' && $file->objectType == 'bug')        $file->project = $bugPairs[$file->objectID];
-            if($type == 'product' && $file->objectType == 'release')    $file->project = $releasePairs[$file->objectID];
-            if($type == 'product' && $file->objectType == 'testreport') $file->project = $testReportPairs[$file->objectID];
-            if($type == 'product' && $file->objectType == 'testcase')   $file->project = $casePairs[$file->objectID];
-
-            if($type == 'execution' && $file->objectType == 'task')  $file->project = $taskPairs[$file->objectID];
-            if($type == 'execution' && $file->objectType == 'build') $file->project = $buildPairs[$file->objectID];
-
             $pathName       = $this->file->getRealPathName($file->pathname);
             $file->realPath = $this->file->savePath . $pathName;
             $file->webPath  = $this->file->webPath  . $pathName;
