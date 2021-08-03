@@ -24,7 +24,6 @@ $lang->bug->storyVersion     = "{$lang->SRCommon}版本";
 $lang->bug->color            = '标题颜色';
 $lang->bug->task             = '相关任务';
 $lang->bug->title            = 'Bug标题';
-$lang->bug->sync2gitlab      = '同步gitlab';
 $lang->bug->severity         = '严重程度';
 $lang->bug->severityAB       = '级别';
 $lang->bug->pri              = '优先级';

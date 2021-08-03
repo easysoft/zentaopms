@@ -24,7 +24,6 @@ $lang->bug->storyVersion     = 'Story Version';
 $lang->bug->color            = 'Color';
 $lang->bug->task             = 'Task';
 $lang->bug->title            = 'Title';
-$lang->bug->sync2gitlab      = 'Sync gitlab';
 $lang->bug->severity         = 'Severity';
 $lang->bug->severityAB       = 'S';
 $lang->bug->pri              = 'Priority';
