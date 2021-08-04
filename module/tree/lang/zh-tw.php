@@ -37,6 +37,7 @@ $lang->tree->dragAndSort        = "拖放排序";
 $lang->tree->sort               = "排序";
 $lang->tree->addChild           = "增加子模組";
 $lang->tree->confirmDelete      = '該模組及其子模組都會被刪除，您確定刪除嗎？';
+$lang->tree->confirmDeleteMenu  = '該目錄及其子目錄都會被刪除，您確定刪除嗎？';
 $lang->tree->confirmDelCategory = '該分類及其子分類都會被刪除，您確定刪除嗎？';
 $lang->tree->confirmDeleteLine  = "您確定刪除該{$lang->productCommon}綫嗎？";
 $lang->tree->confirmRoot        = "模組的所屬{$lang->productCommon}修改，會關聯修改該模組下的{$lang->SRCommon}、Bug、用例的所屬{$lang->productCommon}，以及{$lang->executionCommon}和{$lang->productCommon}的關聯關係。該操作比較危險，請謹慎操作。是否確認修改？";

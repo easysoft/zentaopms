@@ -164,6 +164,7 @@ if($config->systemMode == 'new')
     $lang->resource->program->batchUnlinkStakeholders = 'batchUnlinkStakeholders';
     $lang->resource->program->unbindWhitelist         = 'unbindWhitelist';
     $lang->resource->program->export                  = 'export';
+    $lang->resource->program->updateOrder             = 'updateOrder';
 
     $lang->program->methodOrder[5]  = 'browse';
     $lang->program->methodOrder[10] = 'view';
@@ -183,6 +184,7 @@ if($config->systemMode == 'new')
     $lang->program->methodOrder[80] = 'batchUnlinkStakeholders';
     $lang->program->methodOrder[85] = 'unbindWhitelist';
     $lang->program->methodOrder[90] = 'export';
+    $lang->program->methodOrder[95] = 'updateOrder';
 
     /* Project. */
     $lang->resource->project = new stdclass();
@@ -220,6 +222,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->execution           = 'execution';
     $lang->resource->project->export              = 'export';
     $lang->resource->project->createGuide         = 'createGuide';
+    $lang->resource->project->updateOrder         = 'updateOrder';
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
@@ -257,6 +260,7 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[165] = 'execution';
     $lang->project->methodOrder[170] = 'export';
     $lang->project->methodOrder[175] = 'createGuide';
+    $lang->project->methodOrder[180] = 'updateOrder';
 
     $lang->resource->projectbuild = new stdclass();
     $lang->resource->projectbuild->browse = 'browse';
@@ -570,7 +574,7 @@ $lang->resource->execution->unlinkMember      = 'unlinkMember';
 $lang->resource->execution->linkStory         = 'linkStory';
 $lang->resource->execution->unlinkStory       = 'unlinkStory';
 $lang->resource->execution->batchUnlinkStory  = 'batchUnlinkStory';
-//$lang->resource->execution->updateOrder       = 'updateOrder';
+$lang->resource->execution->updateOrder       = 'updateOrder';
 $lang->resource->execution->kanban            = 'kanban';
 $lang->resource->execution->printKanban       = 'printKanbanAction';
 $lang->resource->execution->tree              = 'treeAction';
@@ -1129,6 +1133,7 @@ $lang->resource->gitlab->importIssue = 'importIssue';
 $lang->resource->gitlab->delete      = 'delete';
 $lang->resource->gitlab->bindUser    = 'bindUser';
 $lang->resource->gitlab->bindProduct = 'bindProduct';
+$lang->resource->gitlab->webhook     = 'webhook';
 
 $lang->gitlab->methodOrder[5]  = 'browse';
 $lang->gitlab->methodOrder[10] = 'create';
@@ -1137,6 +1142,7 @@ $lang->gitlab->methodOrder[20] = 'importIssue';
 $lang->gitlab->methodOrder[30] = 'delete';
 $lang->gitlab->methodOrder[35] = 'bindUser';
 $lang->gitlab->methodOrder[40] = 'bindProduct';
+$lang->gitlab->methodOrder[45] = 'webhook';
 
 /* Git. */
 $lang->resource->git = new stdclass();

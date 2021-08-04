@@ -11,7 +11,7 @@
  */
 /* 欄位列表。*/
 $lang->doc->common       = '文檔';
-$lang->doc->id           = '文檔';
+$lang->doc->id           = '編號';
 $lang->doc->product      = '所屬' . $lang->productCommon;
 $lang->doc->project      = '所屬項目';
 $lang->doc->execution    = '所屬' . $lang->executionCommon;
@@ -70,6 +70,7 @@ $lang->doc->tableContents = '目錄';
 
 /* 方法列表。*/
 $lang->doc->index            = '文檔主頁';
+$lang->doc->createAB         = '創建';
 $lang->doc->create           = '創建文檔';
 $lang->doc->edit             = '編輯文檔';
 $lang->doc->delete           = '刪除文檔';
@@ -88,6 +89,7 @@ $lang->doc->catalogName      = '目錄名稱';
 $lang->doc->collect          = '收藏';
 $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '刪除附件';
+$lang->doc->menuTitle        = '目錄';
 
 $lang->doc->collectAction = '收藏文檔';
 
@@ -104,6 +106,8 @@ $lang->doc->deleteLib      = '刪除文檔庫';
 $lang->doc->fixedMenu      = '固定到菜單欄';
 $lang->doc->removeMenu     = '從菜單欄移除';
 $lang->doc->search         = '搜索';
+$lang->doc->allCollections = '查看全部收藏文檔';
+$lang->doc->keywordsTips   = '多個關鍵字請用逗號分隔。';
 
 global $config;
 /* 查詢條件列表 */
@@ -170,6 +174,7 @@ $lang->doc->mail->edit->title   = "%s編輯了文檔 #%s:%s";
 
 $lang->doc->confirmDelete        = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib     = "您確定刪除該文檔庫嗎？";
+$lang->doc->confirmDeleteBook    = "您確定刪除該手冊嗎？";
 $lang->doc->confirmDeleteChapter = "您確定刪除該章節嗎？";
 $lang->doc->errorEditSystemDoc   = "系統文檔庫無需修改。";
 $lang->doc->errorEmptyProduct    = "沒有{$lang->productCommon}，無法創建文檔";
