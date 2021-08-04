@@ -1096,7 +1096,8 @@ class actionModel extends model
                     if($action->objectType == 'doclib')
                     {
                         $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
-                        $docLib->objectID   = strpos('product,project,execution', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
+                        $docLib->type       = $docLib->type == 'execution' ? 'project' : $docLib->type;
+                        $docLib->objectID   = strpos('product,project', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
                         $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                         $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
                     }
