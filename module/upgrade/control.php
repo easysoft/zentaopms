@@ -738,6 +738,7 @@ class upgrade extends control
     public function ajaxUpdateFile($type = '', $lastID = 0)
     {
         set_time_limit(0);
+        $this->app->loadLang('search');
         $result = $this->upgrade->updateFileObjectID($type, $lastID);
         $response = array();
         if($result['type'] == 'finish')
@@ -745,7 +746,7 @@ class upgrade extends control
             $response['result']  = 'finished';
             $response['type']    = $type;
             $response['count']   = $result['count'];
-            $response['message'] = 'Finished';
+            $response['message'] = $this->lang->search->buildSuccessfully;
         }
         else
         {
@@ -754,7 +755,7 @@ class upgrade extends control
             $response['count']    = $result['count'];
             $response['type']     = $type;
             $response['nextType'] = $result['type'];
-            $response['message']  = strtoupper($result['type']) . " <span class='{$result['type']}-num'>0</span>";
+            $response['message']  = zget($this->lang->searchObjects, $result['type']) . " <span class='{$result['type']}-num'>0</span>";
         }
         die(json_encode($response));
     }
