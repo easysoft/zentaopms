@@ -48,7 +48,6 @@ class testcaseModel extends model
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->config->systemMode == 'new' and $this->app->openApp == 'project', 'project', $this->session->project)
-            ->setIF($this->config->systemMode == 'new' and $this->app->openApp == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
