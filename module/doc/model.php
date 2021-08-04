@@ -1267,7 +1267,8 @@ class docModel extends model
         $testReportPairs = $this->dao->select('id')->from(TABLE_TESTREPORT)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
         if(!empty($testReportPairs)) $testReportIdList = implode(',', $testReportPairs);
 
-        $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
+        $field     = $type == 'execution' ? 'project' : $type;
+        $casePairs = $this->dao->select('`case`')->from(TABLE_PROJECTCASE)->where($field)->eq($objectID)->andWhere($field)->in($userView)->fetchPairs('case');
         if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
 
         $idList      = array_keys($docs);
@@ -1280,6 +1281,9 @@ class docModel extends model
 
             $releasePairs = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->fetchPairs('id');
             if(!empty($releasePairs)) $releaseIdList = implode(',', $releasePairs);
+
+            $casePairs = $this->dao->select('id')->from(TABLE_CASE)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
+            if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
         }
         elseif($type == 'project')
         {
