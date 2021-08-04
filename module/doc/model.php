@@ -1780,9 +1780,8 @@ class docModel extends model
         foreach($docs as $doc)
         {
             $objectID = 0;
-            if($doc->type == 'product')   $objectID = $doc->product;
-            if($doc->type == 'project')   $objectID = $doc->project;
-            if($doc->type == 'execution') $objectID = $doc->execution;
+            if($doc->type == 'product') $objectID = $doc->product;
+            if($doc->type == 'project' or $doc->type == 'execution') $objectID = $doc->project;
 
             $docType = ($doc->type == 'execution') ? 'project' : $doc->type;
 
