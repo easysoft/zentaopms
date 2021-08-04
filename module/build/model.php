@@ -229,7 +229,7 @@ class buildModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $params       noempty|notrunk, can be a set of them
-     * @param  int    $buildIDList
+     * @param  string $buildIDList
      * @access public
      * @return array
      */
