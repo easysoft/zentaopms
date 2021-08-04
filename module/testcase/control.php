@@ -42,25 +42,29 @@ class testcase extends control
         $this->loadModel('qa');
 
         /* Get product data. */
+        $products = array();
         $objectID = 0;
-        if($this->app->openApp == 'project')
+        $openApp  = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        if(!isonlybody())
         {
-            $objectID = $this->session->project;
-            $products  = $this->loadModel('project')->getProducts($objectID, false);
-        }
-        elseif($this->app->openApp == 'execution')
-        {
-            $objectID = $this->session->execution;
-            $products = $this->loadModel('execution')->getProducts($objectID, false);
-        }
-        else
-        {
-            $products = $this->product->getPairs();
-        }
+            if($this->app->openApp == 'project')
+            {
+                $objectID = $this->session->project;
+                $products  = $this->loadModel('project')->getProducts($objectID, false);
+            }
+            elseif($this->app->openApp == 'execution')
+            {
+                $objectID = $this->session->execution;
+                $products = $this->loadModel('execution')->getProducts($objectID, false);
+            }
+            else
+            {
+                $products = $this->product->getPairs();
+            }
 
+            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testcase&objectID=$objectID")));
+        }
         $this->view->products = $this->products = $products;
-        $openApp = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
-        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testcase&objectID=$objectID")));
     }
 
     /**

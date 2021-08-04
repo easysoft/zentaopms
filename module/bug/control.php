@@ -101,15 +101,13 @@ class bug extends control
     {
         $this->loadModel('datatable');
 
-        $products  = $this->loadModel('product')->getPairs('noclosed');
-        $productID = $this->product->saveState($productID, $products);
-        $this->qa->setMenu($products, $productID, $branch);
+        $productID = $this->product->saveState($productID, $this->products);
+        $this->qa->setMenu($this->products, $productID, $branch);
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
 
         /* Set productID, moduleID, queryID and branch. */
-        if(!$this->projectID) $productID = $this->product->saveState($productID, $this->products);
         $branch = ($branch == '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
