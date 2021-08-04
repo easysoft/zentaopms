@@ -106,15 +106,6 @@ class stakeholderModel extends model
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
                 $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
-
-                /* Update the viewers of the project main doc library. */
-                $authorizedUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
-                $authorizedUsers = empty($authorizedUsers) ? array() : explode(',', trim($authorizedUsers->users, ','));
-                if(!in_array($stakeholder->user, $authorizedUsers))
-                {
-                    $authorizedUsers = ',' . implode(',', $authorizedUsers) . ',' . $stakeholder->user . ',';
-                    $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
-                }
             }
 
             if($stakeholder->objectType == 'program' and $stakeholder->objectID)
@@ -181,13 +172,6 @@ class stakeholderModel extends model
         $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
 
         $this->loadModel('project')->updateInvolvedUserView($projectID, $changedAccounts);
-
-        /* Update the viewers of the project main doc library. */
-        $authorizedUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
-        $authorizedUsers = empty($authorizedUsers) ? array() : explode(',', trim($authorizedUsers->users, ','));
-        $authorizedUsers = array_merge($authorizedUsers, array_filter($accounts));
-        $authorizedUsers = ',' . implode(',', array_unique($authorizedUsers)) . ',';
-        $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
 
         if($stakeholder->objectType == 'program' and $stakeholder->objectID)
         {

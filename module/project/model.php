@@ -969,17 +969,6 @@ class projectModel extends model
                 if($executions) $this->user->updateUserView($executions, 'sprint');
             }
 
-            if($project->acl == 'private')
-            {
-                /* Update the viewers of the project main doc library. */
-                $projectStakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($projectID);
-                $projectStakeHolders = implode(',', $projectStakeHolders);
-                $authorizedUsers     = $project->whitelist . ',' . $project->PM . ',' . $oldProject->openedBy . ',' . $projectStakeHolders;
-                $authorizedUsers     = array_unique(explode(',', trim($authorizedUsers, ',')));
-                $authorizedUsers     = ',' . implode(',', $authorizedUsers) . ',';
-                $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($projectID)->andWhere('main')->eq(1)->exec();
-            }
-
             if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
 
             return common::createChanges($oldProject, $project);
@@ -1306,13 +1295,6 @@ class projectModel extends model
             $projectMember[$account] = $member;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
-
-        /* Update the viewers of the project main doc library. */
-        $authorizedUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($projectID)->andWhere('main')->eq(1)->fetch();
-        $authorizedUsers = empty($authorizedUsers) ? array() : explode(',', trim($authorizedUsers->users, ','));
-        $authorizedUsers = array_merge($authorizedUsers, array_filter($accounts));
-        $authorizedUsers = ',' . implode(',', array_unique($authorizedUsers)) . ',';
-        $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($projectID)->andWhere('main')->eq(1)->exec();
 
         /* Only changed account update userview. */
         $oldAccounts     = array_keys($oldJoin);
