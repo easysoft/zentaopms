@@ -1758,7 +1758,7 @@ class execution extends control
      */
     public function view($executionID)
     {
-        $executionID = (int)$executionID;
+        $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 

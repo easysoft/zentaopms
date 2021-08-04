@@ -875,12 +875,16 @@ class doc extends control
      * @param  int    $libID
      * @param  int    $docID
      * @param  int    $version
+     * @param  int    $appendLib
      * @access public
      * @return void
      */
-    public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0)
+    public function objectLibs($type, $objectID = 0, $libID = 0, $docID = 0, $version = 0, $appendLib = 0)
     {
-        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
+        $lib = $this->doc->getLibById($libID);
+        if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
+
+        list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID, $appendLib);
 
         /* Set Custom. */
         foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];

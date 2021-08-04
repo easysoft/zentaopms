@@ -519,7 +519,7 @@ class gitlab
         $api = "commits";
 
         /* TODO Put getCommits into cron job. And check best size of $count. */
-        if(empty($count)) $count = 1;
+        if(empty($count)) $count = 10;
 
         $params = array();
         $params['ref_name'] = $branch;

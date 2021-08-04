@@ -39,3 +39,4 @@
 #outline li.has-list.open:before {content: unset;}
 
 .title {font-size: 20px !important;}
+.article-content.comment {width: 100% !important;}

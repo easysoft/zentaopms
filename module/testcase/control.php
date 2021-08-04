@@ -121,7 +121,7 @@ class testcase extends control
         /* Set menu, save session. */
         if($this->app->openApp == 'project')
         {
-            $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($this->session->project, false);
+            $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($projectID, false);
             $this->loadModel('project')->setMenu($projectID);
         }
         else

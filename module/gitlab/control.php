@@ -23,6 +23,9 @@ class gitlab extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* This is essential when changing tab(menu) from gitlab to repo. */
+        common::setMenuVars('devops', $this->session->repoID);
+
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
