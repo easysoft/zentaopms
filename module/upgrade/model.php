@@ -5151,6 +5151,7 @@ class upgradeModel extends model
             $gitlabID = $this->dao->lastInsertID();
             $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($repo->extra)->where('id')->eq($repo->id)->exec();
         }
+        $this->dao->update(TABLE_REPO)->set('prefix')->eq('')->where('SCM')->eq('Gitlab')->exec();
         return true;
     }
 
