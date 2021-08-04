@@ -2260,7 +2260,7 @@ EOT;
     {
         if(empty($type))
         {
-            $doclib   = $this->doc->getLibById($libID);
+            $doclib   = $this->getLibById($libID);
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
             $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
         }
