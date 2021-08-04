@@ -2677,6 +2677,8 @@ class storyModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('parent')->le(0)
             ->andWhere('type')->eq('story')
+            ->andWhere('stage')->eq('wait')
+            ->andWhere('plan')->in('0,')
             ->andWhere('status')->notin('closed,draft')
             ->andWhere('product')->eq($productID)
             ->beginIF($append)->orWhere('id')->in($append)->fi()
@@ -3361,7 +3363,7 @@ class storyModel extends model
         if($action == 'createcase') return $story->type != 'requirement';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return $story->status != 'draft';
-        if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait')) return false;
+        if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait' or !empty($story->plan))) return false;
 
         return true;
     }
