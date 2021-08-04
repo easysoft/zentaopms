@@ -1093,7 +1093,18 @@ class actionModel extends model
                 }
                 else
                 {
-                    $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                    if($action->objectType == 'doclib')
+                    {
+                        $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
+                        $docLib->type       = $docLib->type == 'execution' ? 'project' : $docLib->type;
+                        $docLib->objectID   = strpos('product,project', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
+                        $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
+                        $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                    }
+                    else
+                    {
+                        $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                    }
                 }
                 $action->objectLabel = $objectLabel;
             }

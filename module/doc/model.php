@@ -1050,16 +1050,18 @@ class docModel extends model
      * @param  string $type
      * @param  int    $objectID
      * @param  string $mode
+     * @param  int    $appendLib
      * @access public
      * @return array
      */
-    public function getLibsByObject($type, $objectID, $mode = '')
+    public function getLibsByObject($type, $objectID, $mode = '', $appendLib = 0)
     {
         if($type == 'custom' or $type == 'book')
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->eq($type)
+                ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->beginIF($type == 'custom')->orderBy('`order`, id')->fi()
                 ->beginIF($type == 'book')->orderBy('id_desc')->fi()
                 ->fetchAll('id');
@@ -1070,12 +1072,17 @@ class docModel extends model
         }
         else
         {
-            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where('deleted')->eq(0)
+                ->andWhere($type)->eq($objectID)
+                ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
+                ->orderBy('`order`, id')
+                ->fetchAll('id');
         }
 
         if($type == 'product')
         {
-            $hasProject  = $this->dao->select('DISTINCT t1.product, count(t1.project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $hasProject = $this->dao->select('DISTINCT t1.product, count(t1.project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($objectID)
                 ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
@@ -2253,10 +2260,11 @@ EOT;
      * @param  string    $type
      * @param  int       $objectID
      * @param  int       $libID
+     * @param  int       $appendLib
      * @access public
      * @return array
      */
-    public function setMenuByType($type, $objectID, $libID)
+    public function setMenuByType($type, $objectID, $libID, $appendLib = 0)
     {
         if(empty($type))
         {
@@ -2271,7 +2279,7 @@ EOT;
 
         if($type == 'custom')
         {
-            $libs = $this->getLibsByObject('custom', 0);
+            $libs = $this->getLibsByObject('custom', 0, '', $appendLib);
             $this->app->rawMethod = 'custom';
             if($libID == 0) $libID = key($libs);
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
@@ -2281,7 +2289,7 @@ EOT;
         }
         elseif($type == 'book')
         {
-            $libs = $this->getLibsByObject('book', 0);
+            $libs = $this->getLibsByObject('book', 0, '', $appendLib);
             $this->app->rawMethod = 'book';
             if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
@@ -2293,7 +2301,7 @@ EOT;
         {
             $objectID = $this->loadModel($type)->saveState($objectID, $objects);
             $table    = $this->config->objectTables[$type];
-            $libs     = $this->getLibsByObject($type, $objectID);
+            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
 
             if($libID == 0) $libID = key($libs);
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);

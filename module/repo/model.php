@@ -202,6 +202,7 @@ class repoModel extends model
             ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
@@ -249,8 +250,9 @@ class repoModel extends model
             ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
-            ->setDefault('client', 'svn')
             ->setDefault('prefix', $repo->prefix)
+            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
+            ->setDefault('client', 'svn')
             ->setDefault('product', '')
             ->skipSpecial('path,client,account,password')
             ->join('product', ',')
@@ -429,7 +431,7 @@ class repoModel extends model
     public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
     {
         $entry = ltrim($entry, '/');
-        if($repo->SCM != 'Gitlab') $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
+        $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
 
         $repoID       = $repo->id;
         $revisionTime = $this->dao->select('time')->from(TABLE_REPOHISTORY)->alias('t1')

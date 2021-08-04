@@ -25,6 +25,7 @@ $lang->stakeholder->viewExpect   = '期望信息';
 $lang->stakeholder->issue        = '問題管理';
 $lang->stakeholder->viewIssue    = '活動問題列表';
 $lang->stakeholder->userIssue    = '干係人問題列表';
+$lang->stakeholder->deleted      = '已刪除';
 
 $lang->stakeholder->viewAction      = '干係人詳情';
 $lang->stakeholder->viewIssueAction = '問題列表';

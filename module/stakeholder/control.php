@@ -315,13 +315,6 @@ class stakeholder extends control
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
                 $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
-
-                /* Update the viewers of the project main doc library. */
-                $authorizedUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->fetch();
-                $authorizedUsers = explode(',', trim($authorizedUsers->users, ','));
-                unset($authorizedUsers[array_search($stakeholder->user, $authorizedUsers)]);
-                $authorizedUsers = ',' . implode(',', $authorizedUsers) . ',';
-                $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($stakeholder->objectID)->andWhere('main')->eq(1)->exec();
             }
             die(js::reload('parent'));
         }

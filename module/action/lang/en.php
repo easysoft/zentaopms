@@ -477,7 +477,7 @@ $lang->action->label->testtask    = 'Request|testtask|view|caseID=%s';
 $lang->action->label->testsuite   = 'Test Suite|testsuite|view|suiteID=%s';
 $lang->action->label->caselib     = 'Case Library|caselib|view|libID=%s';
 $lang->action->label->todo        = 'Todo|todo|view|todoID=%s';
-$lang->action->label->doclib      = 'Doc Library|doc|browse|libID=%s';
+$lang->action->label->doclib      = 'Doc Library|doc|objectLibs|type=%s&objectID=%s&libID=%s&docID=&version=&appendLib=%s';
 $lang->action->label->doc         = 'Doc|doc|view|docID=%s';
 $lang->action->label->user        = 'User|user|view|account=%s';
 $lang->action->label->testreport  = 'Report|testreport|view|report=%s';

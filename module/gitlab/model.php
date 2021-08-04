@@ -1367,15 +1367,16 @@ class gitlabModel extends model
             $value = '';
             list($gitlabField, $optionType, $options) = explode('|', $config);
             if(!isset($changes->$gitlabField) and $object->id != 0) continue;
-            if($optionType == 'field')  $value = $issue->$gitlabField;
-            if($optionType == 'fields') $value = $issue->$gitlabField;  // TODO(dingguodong) not implemented.
+            if($optionType == 'field' or $optionType == 'fields') $value = $issue->$gitlabField;
             if($options == 'date')      $value = $value ? date('Y-m-d', strtotime($value)) : '0000-00-00';
             if($options == 'datetime')  $value = $value ? date('Y-m-d H:i:s', strtotime($value)) : '0000-00-00 00:00:00';
             if($optionType == 'userPairs' and isset($issue->$gitlabField))   $value = zget($gitlabUsers, $issue->$gitlabField);
             if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
-            if($value) $object->$zentaoField = $value;
 
-            if($gitlabField == "description") $object->$zentaoField .= "<br>" . $issue->web_url;
+            /* Execute this line even `$value == ""`, such as `$issue->description == ""`. */
+            if($value or $value == "") $object->$zentaoField = $value;
+
+            if($gitlabField == "description") $object->$zentaoField .= "<br><br><a href=\"{$issue->web_url}\" target=\"_blank\">{$issue->web_url}</a>";
         }
         return $object;
     }

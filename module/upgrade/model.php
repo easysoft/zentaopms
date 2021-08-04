@@ -692,13 +692,9 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_2');
             $this->execSQL($this->getUpgradeFile('15.2'));
             $this->processGitlabRepo();
-            $this->appendExec('15_2');
-        case '15_3':
-            $this->saveLogs('Execute 15_3');
-            $this->execSQL($this->getUpgradeFile('15.3'));
             $this->processStoryFileType();
             $this->processProductDoc();
-            $this->appendExec('15_3');
+            $this->appendExec('15_2');
         }
 
         $this->deletePatch();
@@ -890,6 +886,7 @@ class upgradeModel extends model
             case '15_0_1':
             case '15_0_2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.2'));
             case '15_0_3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.3'));
+            case '15_2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -5163,6 +5160,7 @@ class upgradeModel extends model
             $gitlabID = $this->dao->lastInsertID();
             $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($repo->extra)->where('id')->eq($repo->id)->exec();
         }
+        $this->dao->update(TABLE_REPO)->set('prefix')->eq('')->where('SCM')->eq('Gitlab')->exec();
         return true;
     }
 
