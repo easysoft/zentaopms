@@ -519,10 +519,8 @@ class testcaseModel extends model
         $cases = $sql
             ->where($caseQuery)
             ->beginIF($this->app->openApp == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
-            ->beginIF(!empty($productID) and $queryProductID != 'all')
-            ->beginIF($this->app->openApp == 'project' and !empty($productID))->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($this->app->openApp != 'project')->andWhere('t1.product')->eq($productID)->fi()
-            ->fi()
+            ->beginIF($this->app->openApp == 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($this->app->openApp != 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->andWhere('t1.deleted')->eq(0)
