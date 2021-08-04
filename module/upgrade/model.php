@@ -697,6 +697,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_3');
             $this->execSQL($this->getUpgradeFile('15.3'));
             $this->processStoryFileType();
+            $this->processProductDoc();
             $this->appendExec('15_3');
         }
 
@@ -4511,7 +4512,6 @@ class upgradeModel extends model
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
 
         /* Project linked objects. */
         $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
@@ -5160,7 +5160,7 @@ class upgradeModel extends model
      * Process story file type to requirement.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function processStoryFileType()
     {
@@ -5169,6 +5169,22 @@ class upgradeModel extends model
         $this->dao->update(TABLE_FILE)->set('objectType')->eq('requirement')
             ->where('objectID')->in($requirementList)
             ->andWhere('objectType')->eq('story')
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Leave the project field of the product document blank.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processProductDoc()
+    {
+        $this->dao->update(TABLE_DOC)->set('project')->eq(0)
+            ->where('product')->ne(0)
+            ->andWhere('project')->ne(0)
             ->exec();
 
         return true;

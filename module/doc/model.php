@@ -1070,7 +1070,7 @@ class docModel extends model
         }
         else
         {
-            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->andWhere('type')->eq($type)->orderBy('`order`, id')->fetchAll('id');
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         }
 
         if($type == 'product')
@@ -1315,16 +1315,22 @@ class docModel extends model
             ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
             ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
             ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
-            ->beginIF($type == 'product')->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")->fi()
-            ->beginIF($type == 'product')->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")->fi()
-            ->beginIF($type == 'project')->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")->fi()
-            ->beginIF($type == 'project' or $type == 'execution')->orWhere("(objectType = 'task' and objectID in ($taskIdList))")->fi()
-            ->beginIF($type == 'project' or $type == 'execution')->orWhere("(objectType = 'build' and objectID in ($buildIdList))")->fi()
+
+            ->beginIF($type == 'product')
+            ->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")
+            ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
+            ->fi()
 
             ->beginIF($type == 'project')
+            ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
             ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
             ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
+            ->fi()
+
+            ->beginIF($type == 'project' or $type == 'execution')
+            ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
+            ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
             ->fi()
 
             ->markRight(1)
@@ -1335,14 +1341,6 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
-            if($type == 'product' && $file->objectType == 'bug')        $file->project = $bugPairs[$file->objectID];
-            if($type == 'product' && $file->objectType == 'release')    $file->project = $releasePairs[$file->objectID];
-            if($type == 'product' && $file->objectType == 'testreport') $file->project = $testReportPairs[$file->objectID];
-            if($type == 'product' && $file->objectType == 'testcase')   $file->project = $casePairs[$file->objectID];
-
-            if($type == 'execution' && $file->objectType == 'task')  $file->project = $taskPairs[$file->objectID];
-            if($type == 'execution' && $file->objectType == 'build') $file->project = $buildPairs[$file->objectID];
-
             $pathName       = $this->file->getRealPathName($file->pathname);
             $file->realPath = $this->file->savePath . $pathName;
             $file->webPath  = $this->file->webPath  . $pathName;
@@ -1782,11 +1780,12 @@ class docModel extends model
         foreach($docs as $doc)
         {
             $objectID = 0;
-            if($doc->type == 'product')   $objectID = $doc->product;
-            if($doc->type == 'project')   $objectID = $doc->project;
-            if($doc->type == 'execution') $objectID = $doc->execution;
+            if($doc->type == 'product') $objectID = $doc->product;
+            if($doc->type == 'project' or $doc->type == 'execution') $objectID = $doc->project;
 
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='{$this->app->openApp}' title='{$doc->title}'") . '</li>';
+            $docType = ($doc->type == 'execution') ? 'project' : $doc->type;
+
+            $html   .= '<li>' . html::a(inlink('objectLibs', "type={$docType}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='doc' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
@@ -2300,8 +2299,6 @@ EOT;
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
             if(empty($object)) die(js::locate(helper::createLink($type, 'create')));
         }
-
-        if(!$libID) $libID = key($libs);
 
         $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
         if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
