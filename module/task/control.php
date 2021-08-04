@@ -784,7 +784,7 @@ class task extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success'));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -943,7 +943,7 @@ class task extends control
                     }
                 }
             }
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('result' => 'success', 'data' => $taskID));
@@ -1087,7 +1087,7 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 die(array('status' => 'success', 'data' => $taskID));

@@ -578,7 +578,24 @@ class commonModel extends model
             /* When last divider is not used in mainNav, use it next menu. */
             $divider = ($divider || ($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
 
-            if(!common::hasPriv($currentModule, $currentMethod)) continue;
+            if(!common::hasPriv($currentModule, $currentMethod))
+            {
+                $hidden = true;
+                if($currentModule == 'assetlib')
+                {
+                    $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
+                    foreach($methodList as $method)
+                    {
+                        if(common::hasPriv($currentModule, $method))
+                        {
+                            $hidden        = false;
+                            $currentMethod = $method;
+                            break;
+                        }
+                    }
+                }
+                if($hidden) continue;
+            }
 
             if($divider and !empty($items))
             {

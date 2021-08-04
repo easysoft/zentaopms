@@ -1307,6 +1307,13 @@ class projectModel extends model
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
 
+        /* Update the viewers of the project main doc library. */
+        $authorizedUsers = $this->dao->select('users')->from(TABLE_DOCLIB)->where('type')->eq('project')->andWhere('project')->eq($projectID)->andWhere('main')->eq(1)->fetch();
+        $authorizedUsers = empty($authorizedUsers) ? array() : explode(',', trim($authorizedUsers->users, ','));
+        $authorizedUsers = array_merge($authorizedUsers, array_filter($accounts));
+        $authorizedUsers = ',' . implode(',', array_unique($authorizedUsers)) . ',';
+        $this->dao->update(TABLE_DOCLIB)->set('users')->eq($authorizedUsers)->where('type')->eq('project')->andWhere('project')->eq($projectID)->andWhere('main')->eq(1)->exec();
+
         /* Only changed account update userview. */
         $oldAccounts     = array_keys($oldJoin);
         $changedAccounts = array_diff($accounts, $oldAccounts);
