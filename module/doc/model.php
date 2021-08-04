@@ -1784,7 +1784,7 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $docType = ($doc->type == 'execution' and $this->app->openApp != 'execution') ? 'project' : $doc->type;
+            $docType = ($doc->type == 'execution') ? 'project' : $doc->type;
 
             $html   .= '<li>' . html::a(inlink('objectLibs', "type={$docType}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='doc' title='{$doc->title}'") . '</li>';
         }
