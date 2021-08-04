@@ -1070,7 +1070,7 @@ class docModel extends model
         }
         else
         {
-            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->andWhere('type')->eq($type)->orderBy('`order`, id')->fetchAll('id');
+            $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         }
 
         if($type == 'product')
@@ -1784,9 +1784,9 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $locateApp = $doc->type == 'execution' ? 'execution' : 'doc';
+            $docType = ($doc->type == 'execution' and $this->app->openApp != 'execution') ? 'project' : $doc->type;
 
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='{$locateApp}' title='{$doc->title}'") . '</li>';
+            $html   .= '<li>' . html::a(inlink('objectLibs', "type={$docType}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='doc' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
