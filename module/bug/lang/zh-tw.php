@@ -59,6 +59,7 @@ $lang->bug->resolvedBuild    = '解決版本';
 $lang->bug->resolvedDate     = '解決日期';
 $lang->bug->resolvedDateAB   = '解決日期';
 $lang->bug->deadline         = '截止日期';
+$lang->bug->deadlineAB       = '截止';
 $lang->bug->plan             = '所屬' . '計劃';
 $lang->bug->closedBy         = '由誰關閉';
 $lang->bug->closedDate       = '關閉日期';
@@ -78,6 +79,7 @@ $lang->bug->lastEditedDate   = '修改日期';
 $lang->bug->fromCase         = '來源用例';
 $lang->bug->toCase           = '生成用例';
 $lang->bug->colorTag         = '顏色標籤';
+$lang->bug->fixedRate        = '修復率';
 
 /* 方法列表。*/
 $lang->bug->index              = '首頁';

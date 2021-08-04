@@ -63,7 +63,7 @@ $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '員工負載表|report|workload';
 
 $lang->report->id            = '編號';
-$lang->report->execution     = $lang->executionCommon;
+$lang->report->execution     = '執行';
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = '姓名';
 $lang->report->bugTotal      = 'Bug';
@@ -164,8 +164,8 @@ if(!empty($config->URAndSR))
 {
     $lang->report->annualData->productFields['requirement'] = "創建{$lang->URCommon}數";
 }
-$lang->report->annualData->productFields['story']    = "創建{$lang->SRCommon}數";
-$lang->report->annualData->productFields['finished'] = "完成需求數";
+$lang->report->annualData->productFields['story']  = "創建{$lang->SRCommon}數";
+$lang->report->annualData->productFields['closed'] = "關閉需求數";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = "需求";

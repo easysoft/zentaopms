@@ -84,6 +84,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Detail';
 
+$lang->misc->releaseDate['15.3']        = '2021-08-04';
 $lang->misc->releaseDate['15.2']        = '2021-07-20';
 $lang->misc->releaseDate['15.0.3']      = '2021-06-24';
 $lang->misc->releaseDate['15.0.2']      = '2021-06-12';
@@ -146,6 +147,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['15.3'][] = array('title' => 'Adjust interface style and document, fix bug', 'desc' => '');
 $lang->misc->feature->all['15.2'][] = array('title' => 'Optimize the new version upgrade process, add execution kanban.', 'desc' => '');
 
 $lang->misc->feature->all['15.0.3'][]      = array('title' => 'Fix Bug', 'desc' => '');
