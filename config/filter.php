@@ -215,6 +215,12 @@ $filter->story->export->cookie['checkedItem']       = 'reg::checked';
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';
 
+$filter->execution->story->cookie['storyPreExecutionID'] = 'int';
+$filter->execution->story->cookie['storyModuleParam']    = 'int';
+$filter->execution->story->cookie['storyProductParam']   = 'int';
+$filter->execution->story->cookie['storyBranchParam']    = 'int';
+$filter->execution->story->cookie['executionStoryOrder'] = 'code';
+
 $filter->testcase->browse->cookie['caseModule']     = 'int';
 $filter->testcase->browse->cookie['caseSuite']      = 'int';
 $filter->testcase->browse->cookie['preBranch']      = 'int';
