@@ -691,13 +691,13 @@ class upgradeModel extends model
         case '15_2':
             $this->saveLogs('Execute 15_2');
             $this->execSQL($this->getUpgradeFile('15.2'));
-            $this->processGitlabRepo();
             $this->appendExec('15_2');
         case '15_3':
             $this->saveLogs('Execute 15_3');
             $this->execSQL($this->getUpgradeFile('15.3'));
             $this->processStoryFileType();
             $this->processProductDoc();
+            $this->processGitlabRepo();
             $this->appendExec('15_3');
         }
 
