@@ -172,6 +172,7 @@ $lang->repo->error->output        = "执行命令：%s\n错误结果(%s)： %s\n
 $lang->repo->error->clientVersion = "客户端版本过低，请升级或更换SVN客户端";
 $lang->repo->error->encoding      = "编码可能错误，请更换编码重试。";
 $lang->repo->error->deleted       = "删除版本库失败，当前版本库有提交记录与设计关联";
+$lang->repo->error->linkedJob     = "删除版本库失败，当前版本库与构建有关联，请取消关联或删除构建。";
 $lang->repo->error->clientPath    = "客户端安装目录不能有空格！";
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。';
