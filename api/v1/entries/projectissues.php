@@ -38,7 +38,7 @@ class projectIssuesEntry extends entry
 
         $orderParams = explode('_', $order);
         $order       = $orderParams[0];
-        $sort        = (isset($orderParams[1]) and strtolower($orderParams[1]) == 'desc') ? 'desc' : 'asc';
+        $sort        = (isset($orderParams[1]) and strtolower($orderParams[1]) == 'asc') ? 'asc' : 'desc';
 
         if($status == 'all') $status = '';
         if(!in_array($status, array('opened', 'closed', ''))) return $this->sendError(400, 'The status is not supported');
@@ -128,7 +128,7 @@ class projectIssuesEntry extends entry
 
         if(!empty($tasks))   $tasks   = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($tasks)->fetchAll('id');
         if(!empty($stories)) $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($stories)->fetchAll('id');
-        if(!empty($bugs))    $bugs    = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($bugs)->fetchAll('id');
+        if(!empty($bugs))    $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
 
         $result = array();
         foreach($issues as $issue)
