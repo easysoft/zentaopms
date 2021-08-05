@@ -101,11 +101,11 @@
             if($canBeChanged)
             {
                 $vars = "story={$story->id}";
-                common::printIcon('story', 'change',     $vars, $story, 'list', 'alter', '', 'iframe', true);
-                common::printIcon('story', 'review',     $vars, $story, 'list', 'search', '', 'iframe', true);
-                common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
-                common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+                echo common::buildIconButton('story', 'change',     $vars, $story, 'list', 'alter', '', 'iframe', true);
+                echo common::buildIconButton('story', 'review',     $vars, $story, 'list', 'search', '', 'iframe', true);
+                echo common::buildIconButton('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
+                echo common::buildIconButton('story', 'edit',       $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
+                echo common::buildIconButton('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
             }
             ?>
           </td>

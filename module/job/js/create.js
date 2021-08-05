@@ -1,5 +1,10 @@
 $(document).ready(function()
 {
+    $('#gitlabRepo').change(function()
+    {
+        $('#repo').val($(this).val()).change();
+    })
+
     $('#repo').change(function()
     {
         var repoID = $(this).val();
@@ -125,10 +130,14 @@ $(document).ready(function()
         if($(this).val() == 'gitlab')
         {
             $('#triggerType').find('[value=schedule]').remove();
+            $('tr.gitlabRepo').show();
+            $('tr.commonRepo').hide();
         }
         else if($('#triggerType').find('[value=schedule]').size() == 0 )
         {
             $('#triggerType').append(scheduleOption);
+            $('tr.gitlabRepo').hide();
+            $('tr.commonRepo').show();
         }
     });
 
