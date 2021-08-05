@@ -34,7 +34,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->engine;?></th>
-            <td class='required'><?php echo zget($lang->job->engineList, $job->engine, '') . html::hidden('engine', $job->engine);?>
+            <td><?php echo zget($lang->job->engineList, $job->engine, '') . html::hidden('engine', $job->engine);?>
             </td>
           </tr>
           <tr>

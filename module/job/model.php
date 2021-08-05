@@ -117,19 +117,19 @@ class jobModel extends model
             ->setDefault('atDay', '')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->remove('repoType')
+            ->remove('repoType,gitlabRepo')
             ->get();
 
         if($job->engine == 'jenkins')
         {
-            $job->server   = zget($job, 'jkServer', '');
+            $job->server   = (int)zget($job, 'jkServer', 0);
             $job->pipeline = zget($job, 'jkTask', '');
         }
 
         if(strtolower($job->engine) == 'gitlab')
         {
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
-            $job->server   = zget($repo, 'gitlab', '');
+            $job->server   = (int)zget($repo, 'gitlab', 0);
             $job->pipeline = zget($repo, 'project', '');
         }
 
@@ -206,14 +206,14 @@ class jobModel extends model
 
         if($job->engine == 'jenkins')
         {
-            $job->server   = zget($job, 'jkServer', '');
+            $job->server   = (int)zget($job, 'jkServer', 0);
             $job->pipeline = zget($job, 'jkTask', '');
         }
 
         if(strtolower($job->engine) == 'gitlab')
         {
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
-            $job->server   = zget($repo, 'gitlab', '');
+            $job->server   = (int)zget($repo, 'gitlab', 0);
             $job->pipeline = zget($repo, 'project', '');
         }
 
