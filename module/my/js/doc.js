@@ -17,3 +17,8 @@ $('.ajaxCollect').click(function (event) {
     }, 'json');
     return false;
 });
+
+$('.ajaxCollect').click(function()
+{
+    window.location.reload();
+})
