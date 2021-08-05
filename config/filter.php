@@ -36,6 +36,7 @@ $filter->branch       = new stdclass();
 $filter->qa           = new stdclass();
 $filter->story        = new stdclass();
 $filter->task         = new stdclass();
+$filter->execution    = new stdclass();
 $filter->testcase     = new stdclass();
 $filter->program      = new stdclass();
 $filter->project      = new stdclass();
