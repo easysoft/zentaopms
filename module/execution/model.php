@@ -1300,7 +1300,10 @@ class executionModel extends model
             $link = helper::createLink($module, $method, "executionID=%s");
         }
 
-        if($module == 'doc') $link = helper::createLink('doc', 'objectLibs', "type=execution&objectID=%s&from=execution");
+        if($module == 'doc')
+        {
+            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
+        }
         return $link;
     }
 

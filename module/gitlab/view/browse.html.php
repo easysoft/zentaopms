@@ -16,6 +16,16 @@
     <?php if(common::hasPriv('gitlab', 'create')) common::printLink('gitlab', 'create', "", "<i class='icon icon-plus'></i> " . $lang->gitlab->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
+<?php if(empty($gitlabList)):?>
+<div class="table-empty-tip">
+  <p>
+    <span class="text-muted"><?php echo $lang->noData;?></span>
+    <?php if(common::hasPriv('gitlab', 'create')):?>
+    <?php echo html::a($this->createLink('gitlab', 'create'), "<i class='icon icon-plus'></i> " . $lang->gitlab->create, '', "class='btn btn-info'");?>
+    <?php endif;?>
+  </p>
+</div>
+<?php else:?>
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='gitlabList' class='table has-sort-head table-fixed'>
@@ -25,14 +35,14 @@
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id);?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->name);?></th>
           <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gitlab->url);?></th>
-          <th class='w-150px c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($gitlabList as $id => $gitlab): ?>
         <tr>
           <td class='text-center'><?php echo $id;?></td>
-          <td class='text' title='<?php echo $gitlab->name;?>'><?php echo $gitlab->name;?></td>
+          <td class='text c-name' title='<?php echo $gitlab->name;?>'><?php echo $gitlab->name;?></td>
           <td class='text' title='<?php echo $gitlab->url;?>'><?php echo $gitlab->url;?></td>
           <td class='c-actions text-left'>
             <?php
@@ -50,4 +60,5 @@
     <?php endif;?>
   </form>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

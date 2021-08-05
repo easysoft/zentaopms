@@ -54,6 +54,7 @@ $lang->execution->RD              = 'Release Manager';
 $lang->execution->release         = 'Release';
 $lang->execution->acl             = 'Access Control';
 $lang->execution->teamname        = 'Team Name';
+$lang->execution->updateOrder     = 'Rank';
 $lang->execution->order           = "Rank {$lang->executionCommon}";
 $lang->execution->orderAB         = "Rank";
 $lang->execution->products        = "Link {$lang->productCommon}";

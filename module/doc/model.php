@@ -1791,12 +1791,11 @@ class docModel extends model
         foreach($docs as $doc)
         {
             $objectID = 0;
-            if($doc->type == 'product') $objectID = $doc->product;
-            if($doc->type == 'project' or $doc->type == 'execution') $objectID = $doc->project;
+            if($doc->type == 'product')   $objectID = $doc->product;
+            if($doc->type == 'project')   $objectID = $doc->project;
+            if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $docType = ($doc->type == 'execution') ? 'project' : $doc->type;
-
-            $html   .= '<li>' . html::a(inlink('objectLibs', "type={$docType}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='doc' title='{$doc->title}'") . '</li>';
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='doc' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
@@ -2306,7 +2305,7 @@ EOT;
             if($libID == 0) $libID = key($libs);
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
-            $this->app->rawMethod = $type;
+            if($this->app->openApp == 'doc') $this->app->rawMethod = $type;
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
             if(empty($object)) die(js::locate(helper::createLink($type, 'create')));

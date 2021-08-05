@@ -17,7 +17,8 @@
         <?php
         foreach($repos as $id => $repoName)
         {
-            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "title='{$repoName}' class='text-ellipsis' data-app='{$app->openApp}'") . "</li>";
+            $isSelected = $id == $repoID ? 'class="selected"' : '';
+            echo "<li $isSelected>" . html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "title='{$repoName}' class='text-ellipsis' data-app='{$app->openApp}'") . "</li>";
         }
         ?>
       </ul>

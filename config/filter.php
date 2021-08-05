@@ -36,6 +36,7 @@ $filter->branch       = new stdclass();
 $filter->qa           = new stdclass();
 $filter->story        = new stdclass();
 $filter->task         = new stdclass();
+$filter->execution    = new stdclass();
 $filter->testcase     = new stdclass();
 $filter->program      = new stdclass();
 $filter->project      = new stdclass();
@@ -214,6 +215,12 @@ $filter->story->export->cookie['checkedItem']       = 'reg::checked';
 
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';
+
+$filter->execution->story->cookie['storyPreExecutionID'] = 'int';
+$filter->execution->story->cookie['storyModuleParam']    = 'int';
+$filter->execution->story->cookie['storyProductParam']   = 'int';
+$filter->execution->story->cookie['storyBranchParam']    = 'int';
+$filter->execution->story->cookie['executionStoryOrder'] = 'code';
 
 $filter->testcase->browse->cookie['caseModule']     = 'int';
 $filter->testcase->browse->cookie['caseSuite']      = 'int';

@@ -694,6 +694,7 @@ class upgradeModel extends model
             $this->processGitlabRepo();
             $this->processStoryFileType();
             $this->processProductDoc();
+            $this->adjustPriv15_3();
             $this->appendExec('15_2');
         }
 
@@ -4505,7 +4506,6 @@ class upgradeModel extends model
         if(!$projectID) die(js::alert($this->lang->upgrade->projectEmpty));
 
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_CASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
@@ -4516,6 +4516,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->exec();
         $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
 
         /* Put sprint stories into project story mdoule. */
         $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
@@ -4536,9 +4537,18 @@ class upgradeModel extends model
             ->where('t1.execution')->in($sprintIdList)
             ->fetchAll();
 
+        $sprintCases += $this->dao->select('`case`,product,project,count,version')->from(TABLE_PROJECTCASE)->where('project')->in($sprintIdList)->fetchAll();
+
         foreach($sprintCases as $projectCase)
         {
-            $projectCase->order   = $projectCase * 5;
+            $caes = new stdClass();
+            $case->case    = $projectCase->case;
+            $case->order   = $projectCase->case * 5;
+            $case->project = $projectCase->project;
+            $case->product = $projectCase->product;
+            $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
+
+            $projectCase->order   = $projectCase->case * 5;
             $projectCase->project = $projectID;
             $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
         }
@@ -5186,6 +5196,32 @@ class upgradeModel extends model
             ->andWhere('project')->ne(0)
             ->exec();
 
+        return true;
+    }
+
+    /**
+     * Adjust priv 15.3
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv15_3()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('view')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'doc';
+            $groupPriv->method = 'objectlibs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+
+            $groupPriv->method = 'tablecontents';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+
+            $groupPriv->method = 'showfiles';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+        }
         return true;
     }
 }

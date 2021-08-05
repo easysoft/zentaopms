@@ -54,6 +54,7 @@ $lang->execution->RD              = '發佈負責人';
 $lang->execution->release         = '發佈';
 $lang->execution->acl             = '訪問控制';
 $lang->execution->teamname        = '團隊名稱';
+$lang->execution->updateOrder     = '排序';
 $lang->execution->order           = $lang->executionCommon . '排序';
 $lang->execution->orderAB         = '排序';
 $lang->execution->products        = '相關' . $lang->productCommon;

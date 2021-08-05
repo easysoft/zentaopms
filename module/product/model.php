@@ -1785,7 +1785,7 @@ class productModel extends model
         }
         else if($module == 'doc')
         {
-            $link = helper::createLink('doc', 'objectLibs', "type=product&objectID=%s&from=product");
+            $link = helper::createLink('doc', $method, "type=product&objectID=%s&from=product");
         }
         elseif($module == 'design')
         {
