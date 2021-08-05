@@ -597,6 +597,22 @@ class repoModel extends model
     }
 
     /**
+     * Get products by repoID.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return array
+     */
+    public function getProductsByRepo($repoID)
+    {
+        $repo = $this->getRepoByID($repoID);
+        return $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('id')->in($repo->product)
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
+    }
+
+    /**
      * Save commit.
      *
      * @param  int    $repoID

@@ -15,59 +15,53 @@ class projectIssuesEntry extends entry
 
         $taskFields = 'id,status';
         $taskStatus = array('' => '');
-        $taskStatus['wait']   = 'wait';
-        $taskStatus['active'] = 'doing';
-        $taskStatus['done']   = 'done';
-        $taskStatus['pause']  = 'pause';
-        $taskStatus['cancel'] = 'cancel';
+        $taskStatus['opened'] = 'wait,doing,done,pause';
         $taskStatus['closed'] = 'closed';
 
         $storyFields = 'id,status';
         $storyStatus = array('' => '');
-        $storyStatus['wait']   = 'draft';
-        $storyStatus['active'] = 'active,changed';
-        $storyStatus['done']   = '';
-        $storyStatus['pause']  = '';
-        $storyStatus['cancel'] = '';
+        $storyStatus['opened'] = 'draft,active,changed';
         $storyStatus['closed'] = 'closed';
 
         $bugFields = 'id,status';
         $bugStatus = array('' => '');
-        $bugStatus['wait']   = '';
-        $bugStatus['active'] = 'active';
-        $bugStatus['done']   = 'resolved';
-        $bugStatus['pause']  = '';
-        $bugStatus['cancel'] = '';
+        $bugStatus['opened'] = 'active,resolved';
         $bugStatus['closed'] = 'closed';
 
         $productID = (int)$productID;
         $status    = $this->param('status', '');
         $label     = $this->param('label', '');
         $search    = $this->param('search', '');
-        $page      = $this->param('page', 0);
+        $page      = intval($this->param('page', 1));
         $limit     = $this->param('limit', 20);
         $order     = $this->param('order', 'openedDate_desc');
 
         $orderParams = explode('_', $order);
         $order       = $orderParams[0];
-        $sort        = (isset($orderParams[1]) and strtolower($orderParams[1]) == 'desc') ? 'desc' : 'asc';
+        $sort        = (isset($orderParams[1]) and strtolower($orderParams[1]) == 'asc') ? 'asc' : 'desc';
+
+        if($status == 'all') $status = '';
+        if(!in_array($status, array('opened', 'closed', ''))) return $this->sendError(400, 'The status is not supported');
 
         switch($order)
         {
+        case 'openedDate':
+            $taskFields  .= ',openedDate';
+            $storyFields .= ',openedDate';
+            $bugFields   .= ',openedDate';
+            break;
         case 'title':
             $taskFields  .= ',name as title';
             $storyFields .= ',title';
             $bugFields   .= ',title';
+            break;
         case 'lastEditedDate':
             $taskFields  .= ",if(lastEditedDate < '1970-01-01 01-01-01', openedDate, lastEditedDate) as lastEditedDate";
             $storyFields .= ",if(lastEditedDate < '1970-01-01 01-01-01', openedDate, lastEditedDate) as lastEditedDate";
             $bugFields   .= ",if(lastEditedDate < '1970-01-01 01-01-01', openedDate, lastEditedDate) as lastEditedDate";
+            break;
         default:
-            $taskFields  .= ',openedDate';
-            $storyFields .= ',openedDate';
-            $bugFields   .= ',openedDate';
-
-            $order = 'openedDate';
+            $this->sendError(400, 'The order is not supported');
         }
 
         $issues = array();
@@ -100,10 +94,11 @@ class projectIssuesEntry extends entry
         }
 
         array_multisort(array_column($issues, 'order'), $sort == 'asc' ? SORT_ASC : SORT_DESC, $issues);
-        $issues = array_slice($issues, $page * $limit, $limit);
+        $total  = count($issues);
+        $issues = $page < 1 ? array() : array_slice($issues, ($page-1) * $limit, $limit);
 
         $result = $this->processIssues($issues);
-        $this->send(200, array('page' => $page, 'total' => count($issues),'limit' => $limit, 'issues' => $result));
+        $this->send(200, array('page' => $page, 'total' => $total, 'limit' => $limit, 'issues' => $result));
     }
 
     /**
@@ -133,7 +128,7 @@ class projectIssuesEntry extends entry
 
         if(!empty($tasks))   $tasks   = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($tasks)->fetchAll('id');
         if(!empty($stories)) $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($stories)->fetchAll('id');
-        if(!empty($bugs))    $bugs    = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($bugs)->fetchAll('id');
+        if(!empty($bugs))    $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
 
         $result = array();
         foreach($issues as $issue)
@@ -151,7 +146,8 @@ class projectIssuesEntry extends entry
                 $r->openedDate     = $task->openedDate;
                 $r->openedBy       = $task->openedBy;
                 $r->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
-                $r->status         = $task->status;
+                $r->lastEditedBy   = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedBy   : $task->lastEditedBy;
+                $r->status         = $issue['status'];
                 $r->url            = $this->createLink('task', 'view', "taskID=$task->id");
             }
             else if($issue['type'] == 'story')
@@ -166,7 +162,8 @@ class projectIssuesEntry extends entry
                 $r->openedDate     = $story->openedDate;
                 $r->openedBy       = $story->openedBy;
                 $r->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
-                $r->status         = $story->status;
+                $r->lastEditedBy   = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedBy   : $story->lastEditedBy;
+                $r->status         = $issue['status'];
                 $r->url            = $this->createLink('story', 'view', "storyID=$story->id");
             }
             else if($issue['type'] == 'bug')
@@ -181,7 +178,8 @@ class projectIssuesEntry extends entry
                 $r->openedDate     = $bug->openedDate;
                 $r->openedBy       = $bug->openedBy;
                 $r->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
-                $r->status         = $bug->status;
+                $r->lastEditedBy   = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedBy   : $bug->lastEditedBy;
+                $r->status         = $issue['status'];
                 $r->url            = $this->createLink('bug', 'view', "bugID=$bug->id");
             }
 
@@ -203,7 +201,7 @@ class projectIssuesEntry extends entry
     {
         foreach($array as $key => $values)
         {
-            if($values and strpos($value, $values) !== FALSE) return $key;
+            if($values and strpos($values, $value) !== FALSE) return $key;
         }
 
         return '';

@@ -373,6 +373,8 @@ class project extends control
             }
         }
 
+        if($this->app->openApp == 'doc') unset($this->lang->doc->menu->project['subMenu']);
+
         $this->view->title      = $this->lang->project->create;
         $this->view->position[] = $this->lang->project->create;
 

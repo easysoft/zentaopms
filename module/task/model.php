@@ -467,6 +467,7 @@ class taskModel extends model
         $task->estimate     = 0;
         $task->estStarted   = '0000-00-00';
         $task->left         = 1;
+        $task->pri          = 3;
         $task->type         = 'devel';
 
         $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id,product')

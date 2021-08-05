@@ -48,7 +48,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->product; ?></th>
-            <td><?php echo html::select('product', $products, '', "class='form-control chosen'"); ?></td>
+            <td><?php echo html::select('product', '', '', "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->frame; ?></th>
@@ -56,7 +56,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->triggerType; ?></th>
-            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, '', "class='form-control chosen'");?></td>
+            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, '', "class='form-control'");?></td>
             <td colspan="2"></td>
           </tr>
           <tr id='svnDirBox' class='svn-fields'>
