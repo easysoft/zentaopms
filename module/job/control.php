@@ -272,7 +272,7 @@ class job extends control
             $this->view->title        = $this->lang->job->runPipeline;
             $this->view->refList      = $refList;
             $this->view->job          = $job;
-            $this->view->pipelineTips = $this->lang->job->pipeline->pipelineTips;
+            $this->view->pipelineTips = $this->lang->job->pipelineTips;
             return $this->display();
         }
 

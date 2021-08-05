@@ -43,7 +43,7 @@ $lang->repo->line     = '行';
 $lang->repo->expand   = '點擊展開';
 $lang->repo->collapse = '點擊摺疊';
 
-$lang->repo->id        = '編號';
+$lang->repo->id        = 'ID';
 $lang->repo->SCM       = '類型';
 $lang->repo->name      = '名稱';
 $lang->repo->path      = '地址';

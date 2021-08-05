@@ -86,12 +86,12 @@
           </tr>
           <tr id="jenkinsServerTR">
             <th><?php echo $lang->job->jkHost; ?></th>
-            <td colspan='2'>
+            <td colspan='2' class='required'>
               <div class='table-row'>
                 <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, '', "class='form-control chosen'"); ?></div>
                 <div class='table-col'>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->job->Pipeline; ?></span>
+                    <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
                     <?php echo html::select('jkTask', array('' => ''), '', "class='form-control chosen'"); ?>
                   </div>
                 </div>
