@@ -25,7 +25,7 @@
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->jenkins->id); ?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->jenkins->name); ?></th>
           <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->jenkins->url); ?></th>
-          <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
+          <th class='c-actions-2'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
