@@ -44,7 +44,7 @@
         <?php foreach($buildList as $id => $build):?>
         <tr>
           <td class='text-center'><?php echo $id;?></td>
-          <td title='<?php echo $build->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$build->job}&compileID={$build->id}", 'html', true), $build->name, '', "class='iframe' data-width='90%'") : $build->name;?></td>
+          <td class='c-name' title='<?php echo $build->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$build->job}&compileID={$build->id}", 'html', true), $build->name, '', "class='iframe' data-width='90%'") : $build->name;?></td>
           <td title='<?php echo $build->engine;?>'><?php echo $build->engine;?></td>
           <td title='<?php echo $build->repoName;?>'><?php echo $build->repoName;?></td>
           <?php $jenkins = urldecode($build->pipeline) . '@' . $build->jenkinsName;?>

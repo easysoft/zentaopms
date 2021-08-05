@@ -318,8 +318,9 @@ class doc extends control
         {
             $this->app->rawMethod = $objectType;
             unset($this->lang->doc->menu->product['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
+            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
         }
 
         $lib  = $this->doc->getLibByID($libID);
@@ -422,8 +423,9 @@ class doc extends control
             $this->app->rawMethod = $objectType;
 
             unset($this->lang->doc->menu->product['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
+            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
 
             /* High light menu. */
             if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)

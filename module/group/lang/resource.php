@@ -977,9 +977,11 @@ $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
 
 $lang->resource->ci = new stdclass();
-$lang->resource->ci->commitResult = 'commitResult';
+$lang->resource->ci->commitResult       = 'commitResult';
+$lang->resource->ci->checkCompileStatus = 'checkCompileStatus';
 
-$lang->ci->methodOrder[5] = 'commitResult';
+$lang->ci->methodOrder[5]  = 'commitResult';
+$lang->ci->methodOrder[10] = 'checkCompileStatus';
 
 $lang->resource->compile = new stdclass();
 $lang->resource->compile->browse = 'browse';
@@ -1133,7 +1135,7 @@ $lang->resource->gitlab->importIssue = 'importIssue';
 $lang->resource->gitlab->delete      = 'delete';
 $lang->resource->gitlab->bindUser    = 'bindUser';
 $lang->resource->gitlab->bindProduct = 'bindProduct';
-$lang->resource->gitlab->webhook     = 'webhook';
+//$lang->resource->gitlab->webhook     = 'webhook';
 
 $lang->gitlab->methodOrder[5]  = 'browse';
 $lang->gitlab->methodOrder[10] = 'create';
@@ -1142,7 +1144,7 @@ $lang->gitlab->methodOrder[20] = 'importIssue';
 $lang->gitlab->methodOrder[30] = 'delete';
 $lang->gitlab->methodOrder[35] = 'bindUser';
 $lang->gitlab->methodOrder[40] = 'bindProduct';
-$lang->gitlab->methodOrder[45] = 'webhook';
+//$lang->gitlab->methodOrder[45] = 'webhook';
 
 /* Git. */
 $lang->resource->git = new stdclass();

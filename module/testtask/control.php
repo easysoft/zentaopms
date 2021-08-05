@@ -62,6 +62,10 @@ class testtask extends control
 
             if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testtask&objectID=$objectID")));
         }
+        else
+        {
+            $products = $this->product->getPairs();
+        }
         $this->view->products = $this->products = $products;
     }
 

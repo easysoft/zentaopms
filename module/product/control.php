@@ -362,6 +362,8 @@ class product extends control
         if($programID) $lines = array('') + $this->product->getLinePairs($programID);
         if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
 
+        if($this->app->openApp == 'doc') unset($this->lang->doc->menu->product['subMenu']);
+
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();

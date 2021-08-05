@@ -34,7 +34,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->engine;?></th>
-            <td class='required'><?php echo html::select('engine', $lang->job->engineList, $job->engine, "class='form-control chosen'");?>
+            <td class='required'><?php echo zget($lang->job->engineList, $job->engine, '') . html::hidden('engine', $job->engine);?>
             </td>
           </tr>
           <tr>
@@ -104,12 +104,12 @@
           <?php if($job->engine == 'jenkins'):?>
           <tr id="jenkinsServerTR">
             <th><?php echo $lang->job->server;?></th>
-            <td colspan='2'>
+            <td colspan='2' class='required'>
               <div class='table-row'>
                 <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, $job->server, "class='form-control chosen'");?></div>
                 <div class='table-col'>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->job->Pipeline;?></span>
+                    <span class='input-group-addon'><?php echo $lang->job->pipeline;?></span>
                     <?php echo html::select('jkTask', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
                   </div>
                 </div>
