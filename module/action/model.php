@@ -569,12 +569,29 @@ class actionModel extends model
             $objectIds = array_unique($objectIds);
             $table     = $this->config->objectTables[$objectType];
             $field     = $this->config->action->objectNameFields[$objectType];
-
-            $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+            if($objectType == 'pipeline')
+            {
+                $objectNames['jenkins'] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->andWhere('type')->eq('jenkins')->fetchPairs();
+                $objectNames['gitlab']  = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->andWhere('type')->eq('gitlab')->fetchPairs();
+            }
+            else
+            {
+                $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+            }
         }
 
         /* Add name field to the trashes. */
-        foreach($trashes as $trash) $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
+        foreach($trashes as $trash)
+        {
+            $objectType = $trash->objectType;
+            if($objectType == 'pipeline')
+            {
+                if(isset($objectNames['gitlab'][$trash->objectID]))  $objectType = 'gitlab';
+                if(isset($objectNames['jenkins'][$trash->objectID])) $objectType = 'jenkins';
+                $trash->objectType = $objectType;
+            }
+            $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
+        }
         return $trashes;
     }
 

@@ -1,5 +1,10 @@
 $(document).ready(function()
 {
+    $('#gitlabRepo').change(function()
+    {
+        $('#repo').val($(this).val()).change();
+    })
+
     $('#repo').change(function()
     {
         var repoID = $(this).val();
