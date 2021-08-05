@@ -4061,9 +4061,25 @@ class storyModel extends model
 
         if(count($tracks) < $pager->recPerPage)
         {
+            /* Show of child story */
+            $storiesCopy = array();
+            foreach($stories as $id => $story)
+            {
+                $storiesCopy[$id] = $story;
+                if(isset($story->children) and count($story->children) > 0)
+                {
+                    foreach($story->children as $childID => $children)
+                    {
+                        $storiesCopy[$childID] = $children;
+                    }
+                }
+            }
+            $stories = $storiesCopy;
+
             foreach($stories as $id => $story)
             {
                 $stories[$id] = new stdclass();
+                $stories[$id]->parent = $story->parent;
                 $stories[$id]->title = $story->title;
                 $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs  = $this->loadModel('bug')->getStoryBugs($id);
