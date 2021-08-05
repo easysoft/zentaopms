@@ -122,6 +122,13 @@ class job extends control
             $repoTypes[$repo->id] = $repo->SCM;
         }
 
+        $products = $this->repo->getProductsByRepo($job->repo);
+        if(!isset($products[$job->product]))
+        {
+            $jobProduct = $this->loadModel('product')->getByID($job->product);
+            if($jobProduct and $jobProduct->deleted == 0) $products += array($job->product => $jobProduct->name);
+        }
+
         $this->view->title             = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
         $this->view->position[]        = html::a(inlink('browse'), $this->lang->ci->job);
         $this->view->position[]        = $this->lang->job->edit;
@@ -129,7 +136,7 @@ class job extends control
         $this->view->repoTypes         = $repoTypes;
         $this->view->repoType          = zget($repoTypes, $job->repo, 'Git');
         $this->view->job               = $job;
-        $this->view->products          = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
+        $this->view->products          = array(0 => '') + $products;
         $this->view->jenkinsServerList = $this->loadModel('jenkins')->getPairs();
         $this->view->pipelines         = $this->jenkins->getTasks($job->server);
 

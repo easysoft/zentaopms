@@ -48,7 +48,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->product; ?></th>
-            <td><?php echo html::select('product', $products, '', "class='form-control chosen'"); ?></td>
+            <td><?php echo html::select('product', '', '', "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->frame; ?></th>

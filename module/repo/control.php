@@ -1156,4 +1156,17 @@ class repo extends control
 
         die($branchesHtml);
     }
+
+    /**
+     * Ajax load product by repoID.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxLoadPorducts($repoID)
+    {
+        $productPairs = $this->repo->getProductsByRepo($repoID);
+        echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
+    }
 }
