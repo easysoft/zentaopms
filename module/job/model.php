@@ -117,7 +117,7 @@ class jobModel extends model
             ->setDefault('atDay', '')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->remove('repoType,gitlabRepo')
+            ->remove('repoType')
             ->get();
 
         if($job->engine == 'jenkins')

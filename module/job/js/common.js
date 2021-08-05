@@ -21,7 +21,7 @@ function addItem(obj)
  */
 function deleteItem(obj)
 {
-    if($('#paramDiv').find("input").size() <= 2) return;
+    if($('#paramDiv').find(".table-row").size() <= 2) return;
     $(obj).closest('.input-group').remove();
 }
 
