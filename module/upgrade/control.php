@@ -582,8 +582,6 @@ class upgrade extends control
 
         if(empty($repos))
         {
-            $this->dao->delete()->from(TABLE_BLOCK)->exec();
-            $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('blockInited')->exec();
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
