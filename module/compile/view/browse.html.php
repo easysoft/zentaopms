@@ -19,7 +19,11 @@
     ?>
   </div>
 </div>
-
+<?php if(empty($buildList)):?>
+<div class="table-empty-tip">
+  <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+</div>
+<?php else:?>
 <div id='mainContent'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='buildList' class='table has-sort-head table-fixed'>
@@ -67,4 +71,5 @@
     <?php endif; ?>
   </form>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
