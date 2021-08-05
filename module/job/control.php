@@ -64,7 +64,30 @@ class job extends control
         if($_POST)
         {
             $jobID = $this->job->create();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                if($this->post->engine == 'gitlab' and isset($errors['server']))
+                {
+                    $errors['gitlabRepo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repo);
+                    unset($errors['server']);
+                    unset($errors['pipeline']);
+                }
+                elseif($this->post->engine == 'jenkins')
+                {
+                    if(isset($errors['server']))
+                    {
+                        $errors['jkServer'] = $errors['server'];
+                        unset($errors['server']);
+                    }
+                    if(isset($errors['pipeline']))
+                    {
+                        $errors['jkTask'] = $errors['pipeline'];
+                        unset($errors['pipeline']);
+                    }
+                }
+                return $this->send(array('result' => 'fail', 'message' => $errors));
+            }
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -108,7 +131,30 @@ class job extends control
         if($_POST)
         {
             $this->job->update($id);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                if($this->post->engine == 'gitlab' and isset($errors['server']))
+                {
+                    $errors['gitlabRepo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repo);
+                    unset($errors['server']);
+                    unset($errors['pipeline']);
+                }
+                elseif($this->post->engine == 'jenkins')
+                {
+                    if(isset($errors['server']))
+                    {
+                        $errors['jkServer'] = $errors['server'];
+                        unset($errors['server']);
+                    }
+                    if(isset($errors['pipeline']))
+                    {
+                        $errors['jkTask'] = $errors['pipeline'];
+                        unset($errors['pipeline']);
+                    }
+                }
+                return $this->send(array('result' => 'fail', 'message' => $errors));
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
