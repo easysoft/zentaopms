@@ -477,7 +477,7 @@ $lang->action->label->testtask    = '測試單|testtask|view|caseID=%s';
 $lang->action->label->testsuite   = '測試套件|testsuite|view|suiteID=%s';
 $lang->action->label->caselib     = '用例庫|caselib|view|libID=%s';
 $lang->action->label->todo        = '待辦|todo|view|todoID=%s';
-$lang->action->label->doclib      = '文檔庫|doc|objectLibs|type=&objectID=&libID=%s';
+$lang->action->label->doclib      = '文檔庫|doc|objectLibs|type=%s&objectID=%s&libID=%s&docID=&version=&appendLib=%s';
 $lang->action->label->doc         = '文檔|doc|view|docID=%s';
 $lang->action->label->user        = '用戶|user|view|account=%s';
 $lang->action->label->testreport  = '報告|testreport|view|report=%s';
