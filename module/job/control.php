@@ -70,22 +70,25 @@ class job extends control
         }
 
         $this->app->loadLang('action');
-        $repoList  = $this->loadModel('repo')->getList($this->projectID);
-        $repoPairs = array(0 => '');
-        $repoTypes = array();
+        $repoList    = $this->loadModel('repo')->getList($this->projectID);
+        $repoPairs   = array(0 => '');
+        $gitlabRepos = array(0 => '');
+        $repoTypes   = array();
         foreach($repoList as $repo)
         {
             if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
+            if($repo->SCM == 'Gitlab') $gitlabRepos[$repo->id] = $repo->name;
         }
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[] = $this->lang->job->create;
-        $this->view->repoPairs  = $repoPairs;
-        $this->view->repoTypes  = $repoTypes;
-        $this->view->products   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
+        $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
+        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[]  = $this->lang->job->create;
+        $this->view->repoPairs   = $repoPairs;
+        $this->view->gitlabRepos = $gitlabRepos;
+        $this->view->repoTypes   = $repoTypes;
+        $this->view->products    = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
         $this->view->jenkinsServerList = $this->loadModel('jenkins')->getPairs();
 
