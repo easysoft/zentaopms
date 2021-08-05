@@ -20,7 +20,7 @@ $(function()
                     var lastProductSelect = $('#productsBox .input-group:last select:first');
                     if($(lastProductSelect).val() == 0)
                     {
-                        var lastProductSelectID = $(lastProductSelect).attr("id");
+                        var lastProductSelectID   = $(lastProductSelect).attr("id");
                         var lastProductSelectName = $(lastProductSelect).attr("name");
                         $('#' + lastProductSelectID + '_chosen').remove();
                         $(lastProductSelect).replaceWith(data.newProducts);

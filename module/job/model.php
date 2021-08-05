@@ -122,8 +122,8 @@ class jobModel extends model
 
         if($job->engine == 'jenkins')
         {
-            $job->server   = $job->jkServer;
-            $job->pipeline = $job->jkTask;
+            $job->server   = zget($job, 'jkServer', '');
+            $job->pipeline = zget($job, 'jkTask', '');
         }
 
         if(strtolower($job->engine) == 'gitlab')
@@ -177,7 +177,7 @@ class jobModel extends model
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
             ->autoCheck()
             ->exec();
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return false;
 
         $id = $this->dao->lastInsertId();
         if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $this->post->repoType);
@@ -206,8 +206,8 @@ class jobModel extends model
 
         if($job->engine == 'jenkins')
         {
-            $job->server   = $job->jkServer;
-            $job->pipeline = $job->jkTask;
+            $job->server   = zget($job, 'jkServer', '');
+            $job->pipeline = zget($job, 'jkTask', '');
         }
 
         if(strtolower($job->engine) == 'gitlab')
@@ -263,6 +263,7 @@ class jobModel extends model
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
+        if(dao::isError()) return false;
 
         $this->initJob($id, $job, $this->post->repoType);
         return true;

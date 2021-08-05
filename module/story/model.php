@@ -363,6 +363,7 @@ class storyModel extends model
         $story->stage        = 'projected';
         $story->openedBy     = $this->app->user->account;
         $story->version      = 1;
+        $story->pri          = 3;
         $story->assignedDate = isset($story->assignedTo) ? helper::now() : 0;
 
         if(isset($story->execution)) unset($story->execution);

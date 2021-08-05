@@ -20,6 +20,16 @@
     <?php if(common::hasPriv('job', 'create')) common::printLink('job', 'create', "", "<i class='icon icon-plus'></i> " . $lang->job->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
+<?php if(empty($jobList)):?>
+<div class="table-empty-tip">
+  <p>
+    <span class="text-muted"><?php echo $lang->noData;?></span>
+    <?php if(common::hasPriv('job', 'create')):?>
+    <?php echo html::a($this->createLink('job', 'create'), "<i class='icon icon-plus'></i> " . $lang->job->create, '', "class='btn btn-info'");?>
+    <?php endif;?>
+  </p>
+</div>
+<?php else:?>
 <div id='mainContent'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='jobList' class='table has-sort-head table-fixed'>
@@ -42,13 +52,13 @@
         <?php foreach($jobList as $id => $job):?>
         <tr class='text-left'>
           <td class='text-center'><?php echo $id;?></td>
-          <td class='text-left' title='<?php echo $job->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$job->id}", 'html', true), $job->name, '', "class='iframe' data-width='90%'") : $job->name;?></td>
+          <td class='text-left c-name' title='<?php echo $job->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$job->id}", 'html', true), $job->name, '', "class='iframe' data-width='90%'") : $job->name;?></td>
           <td title='<?php echo $job->repoName;?>'><?php echo $job->repoName;?></td>
           <td><?php echo zget($lang->job->engineList, $job->engine);?></td>
           <td><?php echo zget($lang->job->frameList, $job->frame);?></td>
           <?php if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->loadModel('gitlab')->getObjectNameForJob($job->server, $job->pipeline);?>
           <?php $jenkins = urldecode($job->pipeline) . '@' . $job->jenkinsName;?>
-          <td title='<?php echo $jenkins;?>'><?php echo $jenkins;?></td>
+          <td class='c-name' title='<?php echo $jenkins;?>'><?php echo $jenkins;?></td>
           <?php $triggerConfig = $this->job->getTriggerConfig($job);?>
           <td title='<?php echo $triggerConfig;?>'><?php echo $triggerConfig;?></td>
           <td class='text-center'><?php if($job->lastStatus) echo zget($lang->compile->statusList, $job->lastStatus);?></td>
@@ -71,4 +81,5 @@
     <?php endif;?>
   </form>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

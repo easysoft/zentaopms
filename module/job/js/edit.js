@@ -3,6 +3,17 @@ $(document).ready(function()
     $('#repo').change(function()
     {
         var repoID = $(this).val();
+        var link = createLink('repo', 'ajaxLoadPorducts', 'repoID=' + repoID);
+        $.get(link, function(data)
+        {
+            if(data)
+            {
+                $('#product').replaceWith(data);
+                $('#product_chosen').remove();
+                $('#product').chosen();
+            }
+        });
+
         var type = 'Git';
         if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
 
@@ -110,10 +121,20 @@ $(document).ready(function()
         })
     })
 
+    var scheduleOption = "<option value='schedule'>" + $('#triggerType').find('[value=schedule]').text() + "</option>";
     $('#engine').change(function()
-      {
+    {
         $('#jenkinsServerTR').toggle($('#engine').val() == 'jenkins');
         $('#gitlabServerTR').toggle($('#engine').val() == 'gitlab');
+
+        if($(this).val() == 'gitlab')
+        {
+            $('#triggerType').find('[value=schedule]').remove();
+        }
+        else if($('#triggerType').find('[value=schedule]').size() == 0 )
+        {
+            $('#triggerType').append(scheduleOption);
+        }
     });
 
     $('#engine').change();
