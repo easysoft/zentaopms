@@ -219,8 +219,7 @@ class jobModel extends model
             $job->server   = zget($repo, 'gitlab', '');
             $job->pipeline = zget($repo, 'project', '');
             unset($job->gitlabRepo);
-       }
-       }
+        }
 
         unset($job->jkServer);
         unset($job->jkTask);
