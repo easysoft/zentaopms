@@ -201,6 +201,7 @@
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->testcase->type;?></th>
+                <?php unset($lang->testcase->typeList['unit']);?>
                 <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, "class='form-control chosen'");?></td>
               </tr>
               <tr>
