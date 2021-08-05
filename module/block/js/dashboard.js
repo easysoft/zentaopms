@@ -250,7 +250,7 @@ $(function()
                 var targetCol = $targetCol.hasClass('col-main') ? 'main' : 'side';
                 if(targetCol !== fixedCol)
                 {
-                    !sortMessager.isShow && sortMessager.show(fixedCol === 'main' ? config.cannotPlaceInLeft : config.cannotPlaceInRight);
+                    !sortMessager.isShow && sortMessager.show(fixedCol === 'main' ? config.cannotPlaceInRight : config.cannotPlaceInRight);
                     return false;
                 }
                 else
