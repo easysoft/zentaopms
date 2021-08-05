@@ -38,11 +38,8 @@
                 </div>
               </div>
             </td>
-          </tr>
-          <tr id="gitlabServerTR">
-            <th></th>
-            <td>
-                <?php echo $lang->job->engineTips->success; ?>
+            <td colspan='2'>
+              <span id="gitlabServerTR"><?php echo $lang->job->engineTips->success;?></span>
             </td>
           </tr>
          <tr>

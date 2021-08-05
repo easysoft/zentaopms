@@ -169,10 +169,15 @@ class gitlab
             $list = $this->fetch($api, $params);
             if(empty($list)) break;
 
-            foreach($list as $branch) $branches[$branch->name] = $branch->name;
+            foreach($list as $branch)
+            {
+                if(!isset($branch->name)) continue;
+                $branches[$branch->name] = $branch->name;
+            }
             if(count($list) < $params['per_page']) break;
         }
 
+        if(empty($branches)) $branches['master'] = 'master';
         asort($branches);
         return $branches;
     }
