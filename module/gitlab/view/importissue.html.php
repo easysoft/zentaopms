@@ -11,9 +11,17 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+.chosen-container .chosen-drop.chosen-auto-max-width {max-width: 100%;}
+</style>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->gitlab->importIssue;?></h2>
+    <?php if(!isonlybody() and empty($importable)):?>
+    <div class='pull-right'>
+      <?php echo html::linkButton($lang->goback, $this->createLink('repo', 'maintain'), 'self', '', 'btn btn-primary');?>
+    </div>
+    <?php endif;?>
   </div>
   <?php if($importable):?>
   <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data'>

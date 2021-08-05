@@ -130,8 +130,8 @@ class jobModel extends model
         {
             $job->repo     = $job->gitlabRepo;
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
-            $job->server   = $repo->gitlab;
-            $job->pipeline = $repo->project;
+            $job->server   = zget($repo, 'gitlab', '');
+            $job->pipeline = zget($repo, 'project', '');
             unset($job->gitlabRepo);
         }
 
@@ -216,9 +216,10 @@ class jobModel extends model
         {
             $job->repo     = $job->gitlabRepo;
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
-            $job->server   = $repo->gitlab;
-            $job->pipeline = $repo->project;
+            $job->server   = zget($repo, 'gitlab', '');
+            $job->pipeline = zget($repo, 'project', '');
             unset($job->gitlabRepo);
+       }
        }
 
         unset($job->jkServer);

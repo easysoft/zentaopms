@@ -60,7 +60,7 @@
           <?php $jenkins = urldecode($job->pipeline) . '@' . $job->jenkinsName;?>
           <td class='c-name' title='<?php echo $jenkins;?>'><?php echo $jenkins;?></td>
           <?php $triggerConfig = $this->job->getTriggerConfig($job);?>
-          <td title='<?php echo $triggerConfig;?>'><?php echo $triggerConfig;?></td>
+          <td class='c-name' title='<?php echo $triggerConfig;?>'><?php echo $triggerConfig;?></td>
           <td class='text-center'><?php if($job->lastStatus) echo zget($lang->compile->statusList, $job->lastStatus);?></td>
           <td><?php if($job->lastStatus) echo $job->lastExec;?></td>
           <td class='c-actions text-center'>
