@@ -203,6 +203,23 @@ class jobModel extends model
             ->add('editedDate', helper::now())
             ->remove('repoType')
             ->get();
+
+        if($job->engine == 'jenkins')
+        {
+            $job->server   = $job->jkServer;
+            $job->pipeline = $job->jkTask;
+        }
+
+        if(strtolower($job->engine) == 'gitlab')
+        {
+            $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
+            $job->server   = $repo->gitlab;
+            $job->pipeline = $repo->project;
+        }
+
+        unset($job->jkServer);
+        unset($job->jkTask);
+
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
         $job->svnDir = '';
