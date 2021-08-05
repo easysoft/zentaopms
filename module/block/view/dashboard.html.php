@@ -121,7 +121,6 @@ $(function()
                 custom: response.data.content,
                 width: 600
             });
-            myModalTrigger.show();
             $('#showAnnual').click(function(){myModalTrigger.close()});
         });
     }

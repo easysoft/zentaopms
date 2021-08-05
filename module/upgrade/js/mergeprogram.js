@@ -158,6 +158,7 @@ $(function()
     /* Select all product events. */
     $('#checkAllProducts').click(function()
     {
+
         var lineID  = $('li.currentPage').attr('lineid');
         var checked = true;
         if($(this).is(':checked'))
@@ -189,6 +190,18 @@ $(function()
         {
             $('[name^=products]').prop('checked', checked);
             $('[name^=sprints]').prop('checked', checked);
+
+            if(checked)
+            {
+                $('[name^=products]').each(function()
+                {
+                    if($(this).prop('checked'))
+                    {
+                        setProgramByProduct($(this));
+                        return false;
+                    }
+                })
+            }
         }
 
         var checkAllLines = isSelectAll(0, 'line');
@@ -225,6 +238,18 @@ $(function()
         {
             $('[name^=products]').prop('checked', checked);
             $('[name^=sprints]').prop('checked', checked);
+
+            if(checked)
+            {
+                $('[name^=products]').each(function()
+                {
+                    if($(this).prop('checked'))
+                    {
+                        setProgramByProduct($(this));
+                        return false;
+                    }
+                })
+            }
         }
 
         var checkAllLines = isSelectAll(0, 'line');
