@@ -64,8 +64,11 @@ class testreport extends control
             {
                 $products = $this->product->getPairs();
             }
-
             if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testreport&objectID=$objectID")));
+        }
+        else
+        {
+            $products = $this->product->getPairs();
         }
         $this->view->products = $this->products = $products;
     }

@@ -66,8 +66,11 @@ class bug extends control
             {
                 $products = $this->product->getPairs('', 0, 'program_asc');
             }
-
             if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=bug&objectID=$objectID")));
+        }
+        else
+        {
+            $products = $this->product->getPairs('', 0, 'program_asc');
         }
         $this->view->products = $this->products = $products;
     }
