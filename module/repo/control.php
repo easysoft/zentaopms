@@ -1164,7 +1164,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxLoadPorducts($repoID)
+    public function ajaxLoadProducts($repoID)
     {
         $productPairs = $this->repo->getProductsByRepo($repoID);
         echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
