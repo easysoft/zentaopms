@@ -43,7 +43,7 @@ $lang->repo->line     = '行';
 $lang->repo->expand   = '点击展开';
 $lang->repo->collapse = '点击折叠';
 
-$lang->repo->id        = '编号';
+$lang->repo->id        = 'ID';
 $lang->repo->SCM       = '类型';
 $lang->repo->name      = '名称';
 $lang->repo->path      = '地址';
