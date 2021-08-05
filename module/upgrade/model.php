@@ -694,6 +694,7 @@ class upgradeModel extends model
             $this->processGitlabRepo();
             $this->processStoryFileType();
             $this->processProductDoc();
+            $this->adjustPriv15_3();
             $this->appendExec('15_2');
         }
 
@@ -5195,6 +5196,32 @@ class upgradeModel extends model
             ->andWhere('project')->ne(0)
             ->exec();
 
+        return true;
+    }
+
+    /**
+     * Adjust priv 15.3
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv15_3()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('view')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'doc';
+            $groupPriv->method = 'objectlibs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+
+            $groupPriv->method = 'tablecontents';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+
+            $groupPriv->method = 'showfiles';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+        }
         return true;
     }
 }
