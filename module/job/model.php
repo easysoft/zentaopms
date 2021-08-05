@@ -132,11 +132,11 @@ class jobModel extends model
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
             $job->server   = zget($repo, 'gitlab', '');
             $job->pipeline = zget($repo, 'project', '');
-            unset($job->gitlabRepo);
         }
 
         unset($job->jkServer);
         unset($job->jkTask);
+        unset($job->gitlabRepo);
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
@@ -218,11 +218,11 @@ class jobModel extends model
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
             $job->server   = zget($repo, 'gitlab', '');
             $job->pipeline = zget($repo, 'project', '');
-            unset($job->gitlabRepo);
         }
 
         unset($job->jkServer);
         unset($job->jkTask);
+        unset($job->gitlabRepo);
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
