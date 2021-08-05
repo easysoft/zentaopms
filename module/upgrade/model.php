@@ -688,6 +688,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0_3');
             $this->execSQL($this->getUpgradeFile('15.0.3'));
             $this->appendExec('15_0_3');
+        case '15_3':
+            $this->saveLogs('Execute 15_3');
+            $this->execSQL($this->getUpgradeFile('15.3'));
+            $this->adjustBugRequired();
+            $this->appendExec('15_3');
         }
 
         $this->deletePatch();
@@ -5140,5 +5145,25 @@ class upgradeModel extends model
 
             $this->loadModel("gitlab")->initWebhooks($products, $gitlabID, $gitlabProject);
         }
+    }
+
+    /**
+     * Required to adjust the bug.
+     *
+     * @access public
+     * @return void
+     */
+    public function adjustBugRequired()
+    {
+        $data = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('bug')
+            ->andWhere('section')->eq('create')
+            ->andWhere('`key`')->eq('requiredFields')
+            ->fetch();
+
+        $data->value = ',' . $data->value . ',';
+        $data->value = str_replace(',project,', ',', $data->value);
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
     }
 }
