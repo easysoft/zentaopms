@@ -196,10 +196,13 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
+        $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
