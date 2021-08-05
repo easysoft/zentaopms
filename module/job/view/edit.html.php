@@ -37,10 +37,13 @@
             <td class='required'><?php echo zget($lang->job->engineList, $job->engine, '') . html::hidden('engine', $job->engine);?>
             </td>
           </tr>
-          <tr>
-            <th><?php echo $lang->job->repo;?></th>
-            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control chosen'");?>
-            </td>
+          <tr class='commonRepo'>
+            <th><?php echo $lang->job->repo; ?></th>
+            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control'"); ?></td>
+          </tr>
+          <tr class='gitlabRepo hide'>
+            <th><?php echo $lang->job->repo; ?></th>
+            <td><?php echo html::select('gitlabRepo', $gitlabRepos, '', "class='form-control'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->product;?></th>
@@ -166,7 +169,7 @@
             <th></th>
             <td colspan="2" class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::backButton();?>
+              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
               <?php echo html::hidden('repoType', zget($repoTypes, $job->repo, 'Git'));?>
             </td>
           </tr>
