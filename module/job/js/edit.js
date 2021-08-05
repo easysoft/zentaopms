@@ -1,9 +1,14 @@
 $(document).ready(function()
 {
+    $('#gitlabRepo').change(function()
+    {
+        $('#repo').val($(this).val()).change();
+    })
+
     $('#repo').change(function()
     {
         var repoID = $(this).val();
-        var link = createLink('repo', 'ajaxLoadPorducts', 'repoID=' + repoID);
+        var link = createLink('repo', 'ajaxLoadProducts', 'repoID=' + repoID);
         $.get(link, function(data)
         {
             if(data)
@@ -107,7 +112,7 @@ $(document).ready(function()
         $('#jenkinsServerTR .input-group').append("<div class='load-indicator loading'></div>");
         $.getJSON(createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID), function(tasks)
         {
-            html  = "<select id='jkTask' name='jkTask' class='form-control'>";
+            html = "<select id='jkTask' name='jkTask' class='form-control'>";
             for(taskKey in tasks)
             {
                 var task = tasks[taskKey];
@@ -130,10 +135,14 @@ $(document).ready(function()
         if($(this).val() == 'gitlab')
         {
             $('#triggerType').find('[value=schedule]').remove();
+            $('tr.gitlabRepo').show();
+            $('tr.commonRepo').hide();
         }
         else if($('#triggerType').find('[value=schedule]').size() == 0 )
         {
             $('#triggerType').append(scheduleOption);
+            $('tr.gitlabRepo').hide();
+            $('tr.commonRepo').show();
         }
     });
 

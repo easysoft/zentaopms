@@ -8,7 +8,7 @@ $(document).ready(function()
     $('#repo').change(function()
     {
         var repoID = $(this).val();
-        var link = createLink('repo', 'ajaxLoadPorducts', 'repoID=' + repoID);
+        var link = createLink('repo', 'ajaxLoadProducts', 'repoID=' + repoID);
         $.get(link, function(data)
         {
             if(data)

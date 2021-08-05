@@ -64,7 +64,30 @@ class job extends control
         if($_POST)
         {
             $jobID = $this->job->create();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                if($this->post->engine == 'gitlab' and isset($errors['server']))
+                {
+                    $errors['gitlabRepo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repo);
+                    unset($errors['server']);
+                    unset($errors['pipeline']);
+                }
+                elseif($this->post->engine == 'jenkins')
+                {
+                    if(isset($errors['server']))
+                    {
+                        $errors['jkServer'] = $errors['server'];
+                        unset($errors['server']);
+                    }
+                    if(isset($errors['pipeline']))
+                    {
+                        $errors['jkTask'] = $errors['pipeline'];
+                        unset($errors['pipeline']);
+                    }
+                }
+                return $this->send(array('result' => 'fail', 'message' => $errors));
+            }
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -79,7 +102,7 @@ class job extends control
             if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
-            if($repo->SCM == 'Gitlab') $gitlabRepos[$repo->id] = $repo->name;
+            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = $repo->name;
         }
 
         $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
@@ -108,21 +131,46 @@ class job extends control
         if($_POST)
         {
             $this->job->update($id);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                if($this->post->engine == 'gitlab' and isset($errors['server']))
+                {
+                    $errors['gitlabRepo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repo);
+                    unset($errors['server']);
+                    unset($errors['pipeline']);
+                }
+                elseif($this->post->engine == 'jenkins')
+                {
+                    if(isset($errors['server']))
+                    {
+                        $errors['jkServer'] = $errors['server'];
+                        unset($errors['server']);
+                    }
+                    if(isset($errors['pipeline']))
+                    {
+                        $errors['jkTask'] = $errors['pipeline'];
+                        unset($errors['pipeline']);
+                    }
+                }
+                return $this->send(array('result' => 'fail', 'message' => $errors));
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
 
-        $repoList  = $this->repo->getList($this->projectID);
-        $repoPairs = array(0 => '', $repo->id => $repo->name);
+        $repoList             = $this->repo->getList($this->projectID);
+        $repoPairs            = array(0 => '', $repo->id => $repo->name);
+        $gitlabRepos          = array(0 => '');
         $repoTypes[$repo->id] = $repo->SCM;
         foreach($repoList as $repo)
         {
             if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
+            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = $repo->name;
         }
 
         $products = $this->repo->getProductsByRepo($job->repo);
@@ -136,6 +184,7 @@ class job extends control
         $this->view->position[]        = html::a(inlink('browse'), $this->lang->ci->job);
         $this->view->position[]        = $this->lang->job->edit;
         $this->view->repoPairs         = $repoPairs;
+        $this->view->gitlabRepos       = $gitlabRepos;
         $this->view->repoTypes         = $repoTypes;
         $this->view->repoType          = zget($repoTypes, $job->repo, 'Git');
         $this->view->job               = $job;
