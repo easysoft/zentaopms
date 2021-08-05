@@ -20,3 +20,6 @@ $lang->jenkins->lblCreate  = 'Create Jenkins Server';
 $lang->jenkins->desc       = 'Description';
 $lang->jenkins->tokenFirst = 'Use token if not empty.';
 $lang->jenkins->tips       = 'Cancel "Prevent Cross Site Request Forgery exploits" when using password.';
+
+$lang->jenkins->error = new stdclass();
+$lang->jenkins->error->linkedJob = 'Failed. This jenkins has associated with the compile.';

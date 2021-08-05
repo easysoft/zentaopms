@@ -123,6 +123,7 @@ class ci extends control
             $caseResult = $post->funcResult;
             $firstCase  = array_shift($caseResult);
             $productID  = $firstCase->productId;
+            if(empty($productID) and !empty($firstCase->id)) $productID = $this->dao->select('product')->from(TABLE_CASE)->where('id')->eq((int)$firstCase->id)->fetch('product');
         }
         if(empty($productID)) die(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
 

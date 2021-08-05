@@ -111,6 +111,9 @@ class jenkins extends control
     {
         if($confim != 'yes') die(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
+        $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('server')->eq($id)->andWhere('engine')->eq('jenkins')->andWhere('deleted')->eq('0')->fetchAll();
+        if($jobs) die(js::alert($this->lang->jenkins->error->linkedJob));
+
         $this->jenkins->delete(TABLE_PIPELINE, $id);
         die(js::reload('parent'));
     }

@@ -1220,6 +1220,10 @@ class execution extends control
             if($this->config->systemMode == 'new') $selectedExecutionID = key($this->executions);
             $this->execution->setMenu($selectedExecutionID);
         }
+        elseif($this->app->openApp == 'doc')
+        {
+            unset($this->lang->doc->menu->execution['subMenu']);
+        }
 
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
