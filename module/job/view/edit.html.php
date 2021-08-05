@@ -43,7 +43,7 @@
           </tr>
           <tr class='gitlabRepo hide'>
             <th><?php echo $lang->job->repo; ?></th>
-            <td><?php echo html::select('gitlabRepo', $gitlabRepos, '', "class='form-control'"); ?></td>
+            <td><?php echo html::select('gitlabRepo', $gitlabRepos, $job->repo, "class='form-control'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->product;?></th>
