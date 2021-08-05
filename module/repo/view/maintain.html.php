@@ -41,7 +41,11 @@
           $productList = explode(',', str_replace(' ', '', $repo->product));
           if(isset($productList) and $productList[0])
           {
-              foreach($productList as $productID) echo ' ' . html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID, $productID));
+              foreach($productList as $productID)
+              {
+                  if(!isset($products[$productID])) continue;
+                  echo ' ' . html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID, $productID));
+              }
           }
           ?>
           </td>
