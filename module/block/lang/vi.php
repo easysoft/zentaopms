@@ -93,6 +93,8 @@ $lang->block->refresh            = 'Refresh';
 $lang->block->nbsp               = ' ';
 $lang->block->hidden             = 'Ẩn';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
+$lang->block->cannotPlaceInLeft  = 'Khối này không thể được đặt ở bên trái.';
+$lang->block->cannotPlaceInRight = 'Khối này không thể được đặt ở bên phải.';
 
 $lang->block->productName  = $lang->productCommon . ' Name';
 $lang->block->totalStory   = 'The Total ' . $lang->SRCommon;

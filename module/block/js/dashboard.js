@@ -235,11 +235,31 @@ $(function()
     });
 
     // Init dashboard
+    var sortMessager = new $.zui.Messager({close: false});
     $('#dashboard').sortable(
     {
         selector: '.panel',
         trigger: '.panel-heading:not(.not-move-handler),.panel-move-handler',
         containerSelector: '.col-main,.col-side',
+        canMoveHere: function($ele, $target)
+        {
+            var fixedCol = $ele.data('fixed');
+            if(fixedCol)
+            {
+                var $targetCol = $target.closest('.col-main,.col-side');
+                var targetCol = $targetCol.hasClass('col-main') ? 'main' : 'side';
+                if(targetCol !== fixedCol)
+                {
+                    !sortMessager.isShow && sortMessager.show(fixedCol === 'main' ? config.cannotPlaceInLeft : config.cannotPlaceInRight);
+                    return false;
+                }
+                else
+                {
+                    sortMessager.isShow && sortMessager.hide();
+                }
+                return true;
+            }
+        },
         start: function()
         {
             $('body').css('overflow', 'hidden');
@@ -259,7 +279,8 @@ $(function()
             });
 
             e.element.toggleClass('block-sm', isSideCol);
-        }
+        },
+        always: function(){sortMessager.isShow && sortMessager.hide();}
     }).on('click', '.refresh-panel', function()
     {
         refreshBlock($(this).closest('.panel'));
