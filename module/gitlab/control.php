@@ -345,7 +345,7 @@ class gitlab extends control
         $options    = "<option value=''></option>";
         foreach($executions as $index =>$execution)
         {
-            $options .= "<option value='{$index}' data-name='{$execution}'>{$execution}</option>";
+            $options .= "<option title='{$execution}' value='{$index}' data-name='{$execution}'>{$execution}</option>";
         }
         return $this->send($options);
     }

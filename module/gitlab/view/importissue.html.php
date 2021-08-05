@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+.chosen-container .chosen-drop.chosen-auto-max-width {max-width: 100%;}
+</style>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->gitlab->importIssue;?></h2>
