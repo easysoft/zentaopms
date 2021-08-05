@@ -20,6 +20,16 @@
     <?php if(common::hasPriv('job', 'create')) common::printLink('job', 'create', "", "<i class='icon icon-plus'></i> " . $lang->job->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
+<?php if(empty($jobList)):?>
+<div class="table-empty-tip">
+  <p>
+    <span class="text-muted"><?php echo $lang->noData;?></span>
+    <?php if(common::hasPriv('job', 'create')):?>
+    <?php echo html::a($this->createLink('job', 'create'), "<i class='icon icon-plus'></i> " . $lang->job->create, '', "class='btn btn-info'");?>
+    <?php endif;?>
+  </p>
+</div>
+<?php else:?>
 <div id='mainContent'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='jobList' class='table has-sort-head table-fixed'>
@@ -71,4 +81,5 @@
     <?php endif;?>
   </form>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
