@@ -4758,32 +4758,7 @@ class upgradeModel extends model
             ->join('products', ',')
             ->get();
 
-        foreach($data->repos as $repoID)
-        {
-            /* If have no products, add it. */
-            if(isset($data->name))
-            {
-                $product = new stdclass();
-                $product->program        = $data->program;
-                $product->name           = $data->name;
-                $product->acl            = 'open';
-                $product->PO             = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdBy      = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdDate    = helper::now();
-                $product->status         = 'normal';
-                $product->createdVersion = $this->config->version;
-
-                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
-                $productID = $this->dao->lastInsertID();
-                $this->loadModel('action')->create('product', $productID, 'openedbysystem');
-
-                $this->dao->update(TABLE_REPO)->set('product')->eq($productID)->where('id')->eq($repoID)->exec();
-            }
-            else
-            {
-                $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
-            }
-        }
+        foreach($data->repos as $repoID) $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
     }
 
     /**

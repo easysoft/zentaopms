@@ -886,6 +886,7 @@ class doc extends control
         $lib = $this->doc->getLibById($libID);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
 
+        if($this->config->systemMode == 'classic' and $type == 'project') $type = 'execution';
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID, $appendLib);
 
         /* Set Custom. */
