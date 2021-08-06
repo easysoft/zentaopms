@@ -33,7 +33,7 @@ class projectIssuesEntry extends entry
         $label     = $this->param('label', '');
         $search    = $this->param('search', '');
         $page      = intval($this->param('page', 1));
-        $limit     = $this->param('limit', 20);
+        $limit     = intval($this->param('limit', 20));
         $order     = $this->param('order', 'openedDate_desc');
 
         $orderParams = explode('_', $order);
@@ -66,7 +66,8 @@ class projectIssuesEntry extends entry
 
         $issues = array();
 
-        $tasks = $this->dao->select($taskFields)->from(TABLE_TASK)->where('project')->in('(SELECT project FROM ' . TABLE_PROJECTPRODUCT . " WHERE product = $productID)")
+        $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
+        $tasks = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
                  ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
                  ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
                  ->andWhere('deleted')->eq(0)
