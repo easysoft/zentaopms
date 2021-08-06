@@ -1077,8 +1077,9 @@ class docModel extends model
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->beginIF($type == 'project')
-                ->andWhere('execution')->gt(0)
-                ->andWhere('main')->eq(0)
+                ->andWhere('(execution')->eq(0)
+                ->orWhere('main')->eq(0)
+                ->markRight(1)
                 ->fi()
                 ->orderBy('`order`, id')
                 ->fetchAll('id');
