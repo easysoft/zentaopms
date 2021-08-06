@@ -575,7 +575,7 @@ class personnelModel extends model
             $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
             $newWhitelist     = array_merge($projectWhitelist, $accounts);
             $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source);
+            $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source, $updateType);
 
             /* Removal of whitelisted persons from projects. */
             if($updateType == 'replace')
