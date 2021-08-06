@@ -103,7 +103,9 @@ $lang->action->objectTypes['entry']       = '應用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = '團隊';
 $lang->action->objectTypes['whitelist']   = '白名單';
-$lang->action->objectTypes['pipeline']    = 'GitLib';
+$lang->action->objectTypes['pipeline']    = 'GitLab';
+$lang->action->objectTypes['gitlab']      = 'GitLab';
+$lang->action->objectTypes['jenkins']     = 'Jenkins';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
