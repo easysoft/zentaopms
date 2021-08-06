@@ -58,8 +58,7 @@
           <td title="<?php echo $user->email;?>"><?php echo $user->email;?></td>
           <td class='c-actions'>
             <?php
-            $deleteClass = common::hasPriv($module, 'unbindWhitelist') ? 'btn' : 'btn disabled';
-            echo html::a($this->createLink($module, 'unbindWhitelist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='{$deleteClass}' $openApp");
+            if(common::hasPriv($module, 'unbindWhitelist')) echo html::a($this->createLink($module, 'unbindWhitelist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='btn' $openApp");
             ?>
           </td>
         </tr>
