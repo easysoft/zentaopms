@@ -65,7 +65,7 @@
         ?>
         <td class='c-id-sm'><?php echo sprintf('%03d', $run->case);?></td>
         <td><span class='label-pri <?php echo 'label-pri-' . $run->pri;?>' title='<?php echo zget($lang->testcase->priList, $run->pri, $run->pri);?>'><?php echo zget($lang->testcase->priList, $run->pri, $run->pri);?></span></td>
-        <td class='text-left case-title' title='<?php echo $run->title?>'><?php if(!common::printLink('testcase', 'view', "case=$run->case", $run->title)) echo $run->title;?></td>
+        <td class='text-left case-title' title='<?php echo $run->title?>'><?php if(!common::printLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task", $run->title)) echo $run->title;?></td>
         <td><?php echo zget($lang->testcase->typeList, $run->type, '');?></td>
         <td><?php echo zget($users, $run->assignedTo);?></td>
         <td><?php echo zget($users, $run->lastRunner);?></td>
