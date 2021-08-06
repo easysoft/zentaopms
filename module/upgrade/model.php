@@ -5213,13 +5213,13 @@ class upgradeModel extends model
             $groupPriv = new stdclass();
             $groupPriv->group  = $groupID;
             $groupPriv->module = 'doc';
-            $groupPriv->method = 'objectlibs';
+            $groupPriv->method = 'objectLibs';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
 
-            $groupPriv->method = 'tablecontents';
+            $groupPriv->method = 'tableContents';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
 
-            $groupPriv->method = 'showfiles';
+            $groupPriv->method = 'showFiles';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
         return true;
