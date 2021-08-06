@@ -4530,6 +4530,15 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_PROJECTSTORY)->data($projectStory)->exec();
         }
 
+        /* Sync testcases of executions to projects when classic mode switched to new mode. */
+        $projectCases = $this->dao->select('`case`,product,project,count,version')->from(TABLE_PROJECTCASE)->where('project')->in($sprintIdList)->fetchAll();
+        foreach($projectCases as $projectCase)
+        {
+            $projectCase->project = $projectID;
+            $projectCase->order   = $projectCase->case * 5;
+            $this->dao->insert(TABLE_PROJECTCASE)->data($projectCase)->exec();
+        }
+
         /* Put sprint cases into project case table. */
         $sprintCases = $this->dao->select('t2.case,t2.version,t1.product,t1.execution as project')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -4537,20 +4546,11 @@ class upgradeModel extends model
             ->where('t1.execution')->in($sprintIdList)
             ->fetchAll();
 
-        $sprintCases += $this->dao->select('`case`,product,project,count,version')->from(TABLE_PROJECTCASE)->where('project')->in($sprintIdList)->fetchAll();
-
-        foreach($sprintCases as $projectCase)
+        foreach($sprintCases as $sprintCase)
         {
-            $caes = new stdClass();
-            $case->case    = $projectCase->case;
-            $case->order   = $projectCase->case * 5;
-            $case->project = $projectCase->project;
-            $case->product = $projectCase->product;
-            $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
-
-            $projectCase->order   = $projectCase->case * 5;
-            $projectCase->project = $projectID;
-            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
+            $sprintCase->order   = $sprintCase->case * 5;
+            $sprintCase->project = $projectID;
+            $this->dao->replace(TABLE_PROJECTCASE)->data($sprintCase)->exec();
         }
 
         /* Compute sprint path, grade and the minimum start date and end date of the project. */
