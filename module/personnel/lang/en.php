@@ -1,7 +1,7 @@
 <?php
 $lang->personnel->common     = 'Program Personnel';
 $lang->personnel->accessible = 'Acess List';
-$lang->personnel->invest    = 'Input Resource';
+$lang->personnel->invest     = 'Input Resource';
 $lang->personnel->department = 'Department';
 $lang->personnel->realName   = 'Name';
 $lang->personnel->userName   = 'Account';
