@@ -1076,6 +1076,11 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
+                ->beginIF($type == 'project')
+                ->andWhere('(execution')->eq(0)
+                ->orWhere('main')->eq(0)
+                ->markRight(1)
+                ->fi()
                 ->orderBy('`order`, id')
                 ->fetchAll('id');
         }
@@ -1795,7 +1800,10 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='doc' title='{$doc->title}'") . '</li>';
+            $app = $this->app->openApp;
+            if($app != 'doc') $app = $objectID ? $doc->type : 'doc';
+
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='$app' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)

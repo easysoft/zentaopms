@@ -169,7 +169,7 @@ class releaseModel extends model
             }
         }
 
-        if($release->build) 
+        if($release->build)
         {
             $buildInfo = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
             $release->branch  = $buildInfo->branch;
@@ -227,15 +227,15 @@ class releaseModel extends model
             ->remove('files,labels,allchecker,uid')
             ->get();
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);
-        
+
         /* update release project and branch */
-        if($release->build) 
+        if($release->build)
         {
             $buildInfo = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
             $release->branch  = $buildInfo->branch;
             $release->project = $buildInfo->project;
-        } 
-        
+        }
+
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
