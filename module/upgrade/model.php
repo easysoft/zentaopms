@@ -4733,7 +4733,7 @@ class upgradeModel extends model
 
             $whitelist += zget($whitelistACL, $productID, array());
 
-            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade', 'increase');
         }
 
         $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage')->fetchAll('id');
@@ -4748,7 +4748,7 @@ class upgradeModel extends model
                 foreach(zget($groupAccounts, $group, array()) as $account => $userGroup) $whitelist[$account] = $account;
             }
 
-            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade', 'increase');
         }
     }
 
