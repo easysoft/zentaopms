@@ -586,6 +586,7 @@ class upgrade extends control
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
 
+        $this->view->title    = $this->lang->upgrade->mergeRepo;
         $this->view->repos    = $repos;
         $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
         $this->view->programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs();
