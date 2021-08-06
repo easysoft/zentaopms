@@ -5207,7 +5207,7 @@ class upgradeModel extends model
      */
     public function adjustPriv15_3()
     {
-        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('view')->fetchPairs('group', 'group');
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->in('view,objectLibs')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
             $groupPriv = new stdclass();
