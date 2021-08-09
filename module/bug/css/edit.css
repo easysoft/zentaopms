@@ -5,3 +5,4 @@
 .chosen-choices li.search-choice {word-break: break-all;}
 #linkBugBox > li {margin-left: -56px;}
 #branch {width: 95px;}
+#storyIdBox .chosen-auto-max-width {width: 215px !important;}
