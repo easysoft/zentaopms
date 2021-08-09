@@ -541,7 +541,7 @@ class personnelModel extends model
             $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('id')->in($oldWhitelist)->fetchPairs('id', 'id');
             if($groups)
             {
-                $oldWhitelist = $this->dao->select('account')->from(TABLE_GROUPPRIV)->where('`group`')->in($groups)->fetchPairs('account', 'account');
+                $oldWhitelist = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account', 'account');
                 if($oldWhitelist) $accounts = array_unique(array_merge($accounts, $oldWhitelist));
             }
             else
