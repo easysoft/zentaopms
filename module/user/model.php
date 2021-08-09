@@ -1597,6 +1597,10 @@ class userModel extends model
                 while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectID][$stakeholder->user] = $stakeholder->user;
             }
 
+            /* Compute parent stakeholders. */
+            $programStakeholderGroup = $this->loadModel('stakeholder')->getParentStakeholderGroup(array_keys($allPrograms)); 
+            $projectStakeholderGroup = $this->loadModel('stakeholder')->getParentStakeholderGroup(array_keys($allProjects)); 
+
             list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
 
             /* Init user view. */
@@ -1620,7 +1624,9 @@ class userModel extends model
                 $programs = array();
                 foreach($allPrograms as $id => $program)
                 {
-                    if($this->checkProgramPriv($program, $account, zget($stakeholders, $id, array()), zget($whiteList, $id, array()))) $programs[$id] = $id;
+                    $programStakeholders = zget($stakeholders, $id, array());
+                    if($program->acl == 'program') $programStakeholders += zget($programStakeholderGroup, $id, array());
+                    if($this->checkProgramPriv($program, $account, $programStakeholders, zget($whiteList, $id, array()))) $programs[$id] = $id;
                 }
                 $userView->programs = join(',', $programs);
 
@@ -1638,6 +1644,7 @@ class userModel extends model
                 {
                     $projectTeams        = zget($teams, $id, array());
                     $projectStakeholders = zget($stakeholders, $id, array());
+                    if($project->acl == 'program') $projectStakeholders += zget($projectStakeholderGroup, $id, array());
                     if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams, zget($whiteList, $id, array()))) $projects[$id] = $id;
                 }
                 $userView->projects = join(',', $projects);
