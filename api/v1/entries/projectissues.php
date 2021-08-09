@@ -255,8 +255,8 @@ class projectIssuesEntry extends entry
     /**
      * Get the details of assigned users.
      *
-     * @param  sting  $objectType
-     * @param  int    $object
+     * @param  string    $objectType
+     * @param  object    $object
      * @access public
      * @return object|array
      */
