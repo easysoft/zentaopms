@@ -636,6 +636,7 @@ class testtask extends control
         $this->app->loadLang('execution');
         $this->app->loadLang('task');
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        setcookie('taskCaseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Get task and product info, set menu. */
         $groupBy = empty($groupBy) ? 'story' : $groupBy;

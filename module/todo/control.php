@@ -345,7 +345,7 @@ class todo extends control
         }
 
         $this->view->todo    = $this->todo->getById($todoID);
-        $this->view->members = $this->loadModel('user')->getPairs();
+        $this->view->members = $this->loadModel('user')->getPairs('noclosed');
         $this->view->times   = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time    = date::now();
         $this->display();

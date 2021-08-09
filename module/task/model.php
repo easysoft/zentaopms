@@ -192,7 +192,7 @@ class taskModel extends model
             }
 
             $teams = array();
-            if($this->post->multiple)
+            if($this->post->multiple and count(array_filter($this->post->team)) > 1)
             {
                 foreach($this->post->team as $row => $account)
                 {
@@ -897,7 +897,7 @@ class taskModel extends model
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
         $teams = array();
-        if($this->post->multiple)
+        if($this->post->multiple and count(array_unique(array_filter($this->post->team))) > 1)
         {
             if(strpos(',done,closed,cancel,', ",{$task->status},") === false && $this->post->assignedTo && !in_array($this->post->assignedTo, $this->post->team))
             {
@@ -1216,7 +1216,7 @@ class taskModel extends model
         {
             if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
-            if($task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
+            if(!empty($task->deadline) and $task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -3016,7 +3016,7 @@ class taskModel extends model
                 echo $this->lang->task->typeList[$task->type];
                 break;
             case 'status':
-                $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");
+                $storyChanged ? print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}' title='{$this->processStatus('task', $task)}'> " . $this->processStatus('task', $task) . "</span>");
                 break;
             case 'estimate':
                 echo round($task->estimate, 1) . $this->lang->execution->workHourUnit;
