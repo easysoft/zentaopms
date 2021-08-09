@@ -63,7 +63,7 @@
         <td>
           <?php if(!empty($program->PM)):?>
           <div class='avatar bg-secondary avatar-circle'>
-            <?php echo !empty(zget($usersAvatar, $program->PM, '')) ? html::image(zget($usersAvatar, $program->PM)) : strtoupper($program->PM[0]);?>
+            <?php echo isset($usersAvatar[$program->PM]) ? html::image(zget($usersAvatar, $program->PM)) : strtoupper($program->PM[0]);?>
           </div>
           <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
           <?php $userName = zget($users, $program->PM);?>
