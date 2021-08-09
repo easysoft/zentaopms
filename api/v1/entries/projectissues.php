@@ -145,7 +145,7 @@ class projectIssuesEntry extends entry
                 $r->title          = $task->name;
                 $r->labels         = array($this->app->lang->task->common, zget($this->app->lang->task->typeList, $task->type));
                 $r->pri            = $task->pri;
-                $r->assignedTo     = $this->getAssignedUsers('task', $task);
+                $r->assignedTo     = $this->getAssignees('task', $task);
                 $r->openedDate     = $task->openedDate;
                 $r->openedBy       = $this->getUser($task->openedBy);
                 $r->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
@@ -161,7 +161,7 @@ class projectIssuesEntry extends entry
                 $r->title          = $story->title;
                 $r->labels         = array($this->app->lang->story->common, zget($this->app->lang->story->categoryList, $story->category));
                 $r->pri            = $story->pri;
-                $r->assignedTo     = $this->getAssignedUsers('story', $story);
+                $r->assignedTo     = $this->getAssignees('story', $story);
                 $r->openedDate     = $story->openedDate;
                 $r->openedBy       = $this->getUser($story->openedBy);
                 $r->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
@@ -177,7 +177,7 @@ class projectIssuesEntry extends entry
                 $r->title          = $bug->title;
                 $r->labels         = array($this->app->lang->bug->common, zget($this->app->lang->bug->typeList, $bug->type));
                 $r->pri            = $bug->pri;
-                $r->assignedTo     = $this->getAssignedUsers('bug', $bug);
+                $r->assignedTo     = $this->getAssignees('bug', $bug);
                 $r->openedDate     = $bug->openedDate;
                 $r->openedBy       = $this->getUser($bug->openedBy);
                 $r->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
@@ -246,8 +246,12 @@ class projectIssuesEntry extends entry
         $detail->id       = $user->id;
         $detail->account  = $user->account;
         $detail->realname = $user->realname;
-        $detail->avatar   = $user->avatar != "" ? common::getSysURL() . $user->avatar : "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
         $detail->url      = $this->createLink('user', 'profile', "userID={$user->id}");
+
+        if($user->avatar != "")
+            $detail->avatar = common::getSysURL() . $user->avatar;
+        else
+            $detail->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
 
         return $detail;
     }
@@ -258,14 +262,15 @@ class projectIssuesEntry extends entry
      * @param  string    $objectType
      * @param  object    $object
      * @access public
-     * @return object|array
+     * @return array
      */
-    public function getAssignedUsers($objectType, $object)
+    public function getAssignees($objectType, $object)
     {
-        $users = $this->dao->select('account')->from(TABLE_TEAM)
-                                              ->where('type')->eq($objectType)
-                                              ->andWhere('root')->eq($object->id)
-                                              ->fetchAll();
+        $users = $this->dao
+                      ->select('account')->from(TABLE_TEAM)
+                      ->where('type')->eq($objectType)
+                      ->andWhere('root')->eq($object->id)
+                      ->fetchAll();
 
         if($users)
         {
@@ -278,10 +283,5 @@ class projectIssuesEntry extends entry
         }
 
         return ($object->assignedTo == "" or $object->assignedTo == "closed") ? array() : array($this->getUser($object->assignedTo));
-    }
-
-    public function getDefaultAvatar()
-    {
-        return "https://www.gravatar.com/avatar/" . md5(rand(10,113450)) . "?d=identicon&s=80";
     }
 }
