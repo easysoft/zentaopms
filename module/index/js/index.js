@@ -71,7 +71,7 @@
         if(code) return code;
 
         var link = $.parseLink(urlOrModuleName);
-        if(!link.moduleName || link.isOnlyBody) return '';
+        if(!link.moduleName || link.isOnlyBody || (link.moduleName === 'index' && link.methodName === 'index')) return '';
 
         if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(4);
 
