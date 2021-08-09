@@ -1832,6 +1832,8 @@ class block extends control
 
         /* Get projects. */
         $this->app->loadLang('task');
+        $this->app->loadLang('program');
+        $this->app->loadLang('execution');
         $this->view->projects = $this->loadModel('project')->getOverviewList('byStatus', $status, $orderBy, $count);
     }
 
