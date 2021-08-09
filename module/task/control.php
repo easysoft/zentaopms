@@ -1302,7 +1302,8 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            return print(js::locate($this->session->taskList, 'parent'));
+            $locateLink = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 

@@ -994,7 +994,9 @@ class story extends control
             $this->executeHooks($storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::locate($this->session->storyList, 'parent'));
+
+            $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 

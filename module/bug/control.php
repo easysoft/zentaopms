@@ -1569,7 +1569,9 @@ class bug extends control
             $this->executeHooks($bugID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::locate($this->session->bugList, 'parent'));
+
+            $locateLink = $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 

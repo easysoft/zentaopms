@@ -995,6 +995,7 @@ class testcase extends control
         }
         else
         {
+            $case = $this->testcase->getById($caseID);
             $this->testcase->delete(TABLE_CASE, $caseID);
 
             $this->executeHooks($caseID);
@@ -1014,7 +1015,9 @@ class testcase extends control
                 }
                 return $this->send($response);
             }
-            die(js::locate($this->session->caseList, 'parent'));
+
+            $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$case->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 

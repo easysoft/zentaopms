@@ -583,8 +583,11 @@ class testreport extends control
         }
         else
         {
+            $testreport = $this->testreport->getById($reportID);
+            $locateLink = $this->session->reportList ? $this->session->reportList : inlink('browse', "productID={$testreport->product}");
+
             $this->testreport->delete(TABLE_TESTREPORT, $reportID);
-            die(js::locate($this->session->reportList, 'parent'));
+            die(js::locate($locateLink, 'parent'));
         }
     }
 
