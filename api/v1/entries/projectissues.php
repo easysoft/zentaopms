@@ -11,6 +11,8 @@ class projectIssuesEntry extends entry
 {
     public function get($productID)
     {
+        if(!is_numeric($productID)) return $this->sendError(400, 'The project_id is not supported');
+
         $this->setParam('timeFormat', 'utc');
 
         $taskFields = 'id,status';
@@ -143,9 +145,9 @@ class projectIssuesEntry extends entry
                 $r->title          = $task->name;
                 $r->labels         = array($this->app->lang->task->common, zget($this->app->lang->task->typeList, $task->type));
                 $r->pri            = $task->pri;
-                $r->assignedTo     = $task->assignedTo;
+                $r->assignedTo     = $this->getAssignedUsers('task', $task);
                 $r->openedDate     = $task->openedDate;
-                $r->openedBy       = $task->openedBy;
+                $r->openedBy       = $this->getUser($task->openedBy);
                 $r->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
                 $r->lastEditedBy   = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedBy   : $task->lastEditedBy;
                 $r->status         = $issue['status'];
@@ -159,9 +161,9 @@ class projectIssuesEntry extends entry
                 $r->title          = $story->title;
                 $r->labels         = array($this->app->lang->story->common, zget($this->app->lang->story->categoryList, $story->category));
                 $r->pri            = $story->pri;
-                $r->assignedTo     = $story->assignedTo;
+                $r->assignedTo     = $this->getAssignedUsers('story', $story);
                 $r->openedDate     = $story->openedDate;
-                $r->openedBy       = $story->openedBy;
+                $r->openedBy       = $this->getUser($story->openedBy);
                 $r->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
                 $r->lastEditedBy   = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedBy   : $story->lastEditedBy;
                 $r->status         = $issue['status'];
@@ -175,9 +177,9 @@ class projectIssuesEntry extends entry
                 $r->title          = $bug->title;
                 $r->labels         = array($this->app->lang->bug->common, zget($this->app->lang->bug->typeList, $bug->type));
                 $r->pri            = $bug->pri;
-                $r->assignedTo     = $bug->assignedTo;
+                $r->assignedTo     = $this->getAssignedUsers('bug', $bug);
                 $r->openedDate     = $bug->openedDate;
-                $r->openedBy       = $bug->openedBy;
+                $r->openedBy       = $this->getUser($bug->openedBy);
                 $r->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
                 $r->lastEditedBy   = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedBy   : $bug->lastEditedBy;
                 $r->status         = $issue['status'];
@@ -226,5 +228,60 @@ class projectIssuesEntry extends entry
             $link = '/index' . substr($link, $pos);
         }
         return common::getSysURL() . $link;
+    }
+
+    /**
+     * Get the detail of the user.
+     *
+     * @param  string    $account
+     * @access public
+     * @return object
+     */
+    public function getUser($account)
+    {
+        $this->loadModel('user');
+        $user = $this->user->getById($account, $feild = 'account');
+
+        $detail = new stdclass;
+        $detail->id       = $user->id;
+        $detail->account  = $user->account;
+        $detail->realname = $user->realname;
+        $detail->avatar   = $user->avatar != "" ? common::getSysURL() . $user->avatar : "https://www.gravatar.com/avatar/" . md5(rand(10,113450)) . "?d=identicon&s=80";
+        $detail->url      = $this->createLink('user', 'profile', "userID={$user->id}");
+
+        return $detail;
+    }
+
+    /**
+     * Get the details of assigned users.
+     *
+     * @param  sting  $objectType
+     * @param  int    $object
+     * @access public
+     * @return object|array
+     */
+    public function getAssignedUsers($objectType, $object)
+    {
+        $users = $this->dao->select('account')->from(TABLE_TEAM)
+                                              ->where('type')->eq($objectType)
+                                              ->andWhere('root')->eq($object->id)
+                                              ->fetchAll();
+
+        if($users)
+        {
+            $details = array();
+            foreach($users as $user)
+            {
+                $details[] = $this->getUser($user->account);
+            }
+            return $details;
+        }
+
+        return ($object->assignedTo == "" or $object->assignedTo == "closed") ? array() : array($this->getUser($object->assignedTo));
+    }
+
+    public function getDefaultAvatar()
+    {
+        return "https://www.gravatar.com/avatar/" . md5(rand(10,113450)) . "?d=identicon&s=80";
     }
 }
