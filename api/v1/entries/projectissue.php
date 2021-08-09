@@ -142,7 +142,7 @@ class projectIssueEntry extends entry
         $detail->id       = $user->id;
         $detail->account  = $user->account;
         $detail->realname = $user->realname;
-        $detail->avatar   = $user->avatar != "" ? common::getSysURL() . $user->avatar : "https://www.gravatar.com/avatar/" . md5(rand(10,113450)) . "?d=identicon&s=80";
+        $detail->avatar   = $user->avatar != "" ? common::getSysURL() . $user->avatar : "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
         $detail->url      = $this->createLink('user', 'profile', "userID={$user->id}");
 
         return $detail;
