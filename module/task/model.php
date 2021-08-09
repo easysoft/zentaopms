@@ -192,7 +192,7 @@ class taskModel extends model
             }
 
             $teams = array();
-            if($this->post->multiple)
+            if($this->post->multiple and count(array_filter($this->post->team)) > 1)
             {
                 foreach($this->post->team as $row => $account)
                 {
@@ -897,7 +897,7 @@ class taskModel extends model
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
         $teams = array();
-        if($this->post->multiple)
+        if($this->post->multiple and count(array_unique(array_filter($this->post->team))) > 1)
         {
             if(strpos(',done,closed,cancel,', ",{$task->status},") === false && $this->post->assignedTo && !in_array($this->post->assignedTo, $this->post->team))
             {
