@@ -27,7 +27,7 @@ class projectIssueEntry extends entry
             $storyStatus = array('' => '', 'draft' => 'opened', 'active' => 'opened', 'changed' => 'opened', 'closed' => 'closed');
 
             $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($id)->fetch();
-            if(!$story) $this->send404($issueID);
+            if(!$story) $this->send404();
 
             $issue->id             = $issueID;
             $issue->title          = $story->title;
@@ -49,7 +49,7 @@ class projectIssueEntry extends entry
             $bugStatus = array('' => '', 'active' => 'opened', 'resolved' => 'opened', 'closed' => 'closed');
 
             $bug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq($id)->fetch();
-            if(!$bug) $this->send404($issueID);
+            if(!$bug) $this->send404();
 
             $issue->id             = $issueID;
             $issue->title          = $bug->title;
@@ -69,7 +69,7 @@ class projectIssueEntry extends entry
             $taskStatus = array('' => '', 'wait' => 'opened', 'doing' => 'opened', 'done' => 'opened', 'pause' => 'opened', 'cancel' => 'opened', 'closed' => 'closed');
 
             $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($id)->fetch();
-            if(!$task) $this->send404($issueID);
+            if(!$task) $this->send404();
 
             $issue->id             = $issueID;
             $issue->title          = $task->name;
@@ -86,24 +86,12 @@ class projectIssueEntry extends entry
 
             break;
         default:
-            $this->send404($issueID);
+            $this->send404();
         }
 
         $actions = $this->loadModel('action')->getList($type, $issueID);
 
         $this->send(200, array('issue' => $this->format($issue, 'openedDate:time,lastEditedDate:time')));
-    }
-
-    /**
-     * Send 404 response.
-     *
-     * @param  string $issueID
-     * @access private
-     * @return void
-     */
-    private function send404($issueID)
-    {
-        $this->sendError(404, 'The issue does not exist.');
     }
 
     /**
