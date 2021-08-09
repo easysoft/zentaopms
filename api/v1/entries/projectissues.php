@@ -11,7 +11,7 @@ class projectIssuesEntry extends entry
 {
     public function get($productID)
     {
-        if(!is_numeric($productID)) return $this->sendError(400, 'The project_id is not supported');
+        if(!is_numeric($productID)) $this->sendError(400, 'The project_id is not supported');
 
         $this->setParam('timeFormat', 'utc');
 
@@ -43,7 +43,7 @@ class projectIssuesEntry extends entry
         $sort        = (isset($orderParams[1]) and strtolower($orderParams[1]) == 'asc') ? 'asc' : 'desc';
 
         if($status == 'all') $status = '';
-        if(!in_array($status, array('opened', 'closed', ''))) return $this->sendError(400, 'The status is not supported');
+        if(!in_array($status, array('opened', 'closed', ''))) $this->sendError(400, 'The status is not supported');
 
         switch($order)
         {

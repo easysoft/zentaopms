@@ -99,7 +99,7 @@ class projectIssueEntry extends entry
      *
      * @param  string $issueID
      * @access private
-     * @return string
+     * @return void
      */
     private function send404($issueID)
     {
