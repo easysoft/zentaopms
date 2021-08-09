@@ -1216,7 +1216,7 @@ class taskModel extends model
         {
             if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
-            if($task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
+            if(!empty($task->deadline) and $task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
