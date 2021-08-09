@@ -1257,6 +1257,22 @@ class product extends control
                 $product->unResolvedBugs      = (int)$product->unResolved;
                 $product->assignToNullBugs    = (int)$product->assignToNull;
                 $product->program             = $product->programName;
+                
+                /* get rowspan data */
+                if($lastProgram == '' or $product->program != $lastProgram)
+                {
+                    $rowspan[$i]['rows']['program'] = 1;
+                    $programI = $i;
+                }
+                else $rowspan[$programI]['rows']['program']++;
+                if($lastLine == '' or $product->line != $lastLine)
+                {
+                    $rowspan[$i]['rows']['line'] = 1;
+                    $lineI = $i;
+                }
+                else $rowspan[$lineI]['rows']['line']++;
+                $lastProgram = $product->program;
+                $lastLine = $product->line;
 
                 if($this->post->exportType == 'selected')
                 {
@@ -1266,6 +1282,7 @@ class product extends control
             }
             if(isset($this->config->bizVersion)) list($fields, $productStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $productStats);
 
+            if(isset($rowspan)) $this->post->set('rowspan', $rowspan);
             $this->post->set('fields', $fields);
             $this->post->set('rows', $productStats);
             $this->post->set('kind', 'product');
