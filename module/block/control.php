@@ -1750,7 +1750,7 @@ class block extends control
             $today = helper::today();
             $now   = date('H:i:s', strtotime(helper::now()));
 
-            $meetings = $this->dao->select('*')->from(TABLE_MEETING)
+            $stmt = $this->dao->select('*')->from(TABLE_MEETING)
                 ->Where('deleted')->eq('0')
                 ->andWhere('(date')->gt($today)
                 ->orWhere('(begin')->gt($now)
@@ -1759,9 +1759,10 @@ class block extends control
                 ->andwhere('(host')->eq($this->app->user->account)
                 ->orWhere('participant')->in($this->app->user->account)
                 ->markRight(1)
-                ->orderBy('id_desc')
-                ->beginIF(isset($params->meetingNum))->limit($params->meetingNum)
-                ->fetchAll();
+                ->orderBy('id_desc');
+
+            if(isset($params->meetingNum)) $stmt->limit($params->meetingNum);
+            $meetings = $stmt->fetchAll();
 
             $count['meeting'] = count($meetings);
             $this->view->meetings = $meetings;
