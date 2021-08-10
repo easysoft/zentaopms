@@ -610,7 +610,8 @@ class baseRouter
         {
             $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
             $httpHost = $_SERVER['HTTP_HOST'];
-            if((!defined('RUN_MODE') or RUN_MODE != 'api') and strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
+            $isAPI    = (defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$this->config->sessionVar]);
+            if(!$isAPI && strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
         }
 
         $_FILES  = validater::filterFiles();
