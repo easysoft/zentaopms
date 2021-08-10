@@ -111,6 +111,12 @@ class projectIssueEntry extends entry
             $pos  = strpos($link, '.php');
             $link = '/index' . substr($link, $pos);
         }
+        else
+        {
+            $pos  = strpos($link, '.php');
+            $link = substr($link, $pos + 4);
+        }
+
         return common::getSysURL() . $link;
     }
 
