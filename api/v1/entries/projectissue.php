@@ -11,6 +11,7 @@ class projectIssueEntry extends entry
 {
     public function get($issueID)
     {
+        $this->loadModel('entry');
         $this->setParam('timeFormat', 'utc');
 
         $idParams = explode('-', $issueID);
@@ -33,13 +34,13 @@ class projectIssueEntry extends entry
             $issue->title          = $story->title;
             $issue->labels         = array($this->app->lang->story->common, zget($this->app->lang->story->categoryList, $story->category));
             $issue->pri            = $story->pri;
-            $issue->assignedTo     = $this->getAssignees('story', $story);
+            $issue->assignedTo     = $this->entry->getAssignees('story', $story);
             $issue->openedDate     = $story->openedDate;
-            $issue->openedBy       = $this->getUser($story->openedBy);
+            $issue->openedBy       = $this->entry->getUser($story->openedBy);
             $issue->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
             $issue->lastEditedBy   = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedBy   : $story->lastEditedBy;
             $issue->status         = $storyStatus[$story->status];
-            $issue->url            = $this->createLink('story', 'view', "storyID=$id");
+            $issue->url            = helper::createLink('story', 'view', "storyID=$id");
 
             $storySpec   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('story')->eq($id)->andWhere('version')->eq($story->version)->fetch();
             $issue->desc = $storySpec->spec;
@@ -55,13 +56,13 @@ class projectIssueEntry extends entry
             $issue->title          = $bug->title;
             $issue->labels         = array($this->app->lang->bug->common, zget($this->app->lang->bug->typeList, $bug->type));
             $issue->pri            = $bug->pri;
-            $issue->assignedTo     = $this->getAssignees('bug', $bug);
+            $issue->assignedTo     = $this->entry->getAssignees('bug', $bug);
             $issue->openedDate     = $bug->openedDate;
-            $issue->openedBy       = $this->getUser($bug->openedBy);
+            $issue->openedBy       = $this->entry->getUser($bug->openedBy);
             $issue->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
             $issue->lastEditedBy   = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedBy   : $bug->lastEditedBy;
             $issue->status         = $bugStatus[$bug->status];
-            $issue->url            = $this->createLink('bug', 'view', "bugID=$id");
+            $issue->url            = helper::createLink('bug', 'view', "bugID=$id");
             $issue->desc           = $bug->steps;
             break;
         case 'task':
@@ -75,13 +76,13 @@ class projectIssueEntry extends entry
             $issue->title          = $task->name;
             $issue->labels         = array($this->app->lang->task->common, zget($this->app->lang->task->typeList, $task->type));
             $issue->pri            = $task->pri;
-            $issue->assignedTo     = $this->getAssignees('task', $task);
+            $issue->assignedTo     = $this->entry->getAssignees('task', $task);
             $issue->openedDate     = $task->openedDate;
-            $issue->openedBy       = $this->getUser($task->openedBy);
+            $issue->openedBy       = $this->entry->getUser($task->openedBy);
             $issue->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
             $issue->lastEditedBy   = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedBy   : $task->lastEditedBy;
             $issue->status         = $taskStatus[$task->status];
-            $issue->url            = $this->createLink('task', 'view', "taskID=$id");
+            $issue->url            = helper::createLink('task', 'view', "taskID=$id");
             $issue->desc           = $task->desc;
 
             break;
@@ -92,87 +93,5 @@ class projectIssueEntry extends entry
         $actions = $this->loadModel('action')->getList($type, $issueID);
 
         $this->send(200, array('issue' => $this->format($issue, 'openedDate:time,lastEditedDate:time')));
-    }
-
-    /**
-     * Create url of issue.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @param  string $vars
-     * @access private
-     * @return string
-     */
-    private function createLink($module, $method, $vars)
-    {
-        $link = helper::createLink($module, $method, $vars, 'html');
-        $pos  = strpos($link, '.php');
-
-        /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
-        if($this->config->requestType == 'GET')
-        {
-            $link = '/index' . substr($link, $pos);
-        }
-        elseif($this->config->requestType == 'PATH_INFO2')
-        {
-            $link = substr($link, $pos + 4);
-        }
-        return common::getSysURL() . $link;
-    }
-
-    /**
-     * Get the detail of the user.
-     *
-     * @param  string    $account
-     * @access public
-     * @return object
-     */
-    public function getUser($account)
-    {
-        $this->loadModel('user');
-        $user = $this->user->getById($account, $feild = 'account');
-
-        $detail = new stdclass;
-        $detail->id       = $user->id;
-        $detail->account  = $user->account;
-        $detail->realname = $user->realname;
-        $detail->url      = $this->createLink('user', 'profile', "userID={$user->id}");
-
-        if($user->avatar != "")
-            $detail->avatar = common::getSysURL() . $user->avatar;
-        else
-            $detail->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
-
-
-        return $detail;
-    }
-
-    /**
-     * Get the details of assigned users.
-     *
-     * @param  string  $objectType
-     * @param  object  $object
-     * @access public
-     * @return array
-     */
-    public function getAssignees($objectType, $object)
-    {
-        $users = $this->dao
-                      ->select('account')->from(TABLE_TEAM)
-                      ->where('type')->eq($objectType)
-                      ->andWhere('root')->eq($object->id)
-                      ->fetchAll();
-
-        if($users)
-        {
-            $details = array();
-            foreach($users as $user)
-            {
-                $details[] = $this->getUser($user->account);
-            }
-            return $details;
-        }
-
-        return ($object->assignedTo == "" or $object->assignedTo == "closed") ? array() : array($this->getUser($object->assignedTo));
     }
 }
