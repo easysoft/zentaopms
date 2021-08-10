@@ -41,4 +41,6 @@ $routes['/programs/:id'] = 'program';
 $routes['/issues/:issueID']            = 'projectIssue';
 $routes['/projects/:projectID/issues'] = 'projectIssues';
 
+$routes['/my']     = 'my';
+
 $config->routes = $routes;
