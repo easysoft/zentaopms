@@ -87,7 +87,7 @@
               <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <span class="text"><?php echo $action->objectLabel;?></span>
               <span class="label label-id"><?php echo $action->objectID;?></span>
-              <?php echo html::a($action->objectLink, $action->objectName);?>
+              <?php if($action->objectName) echo html::a($action->objectLink, $action->objectName);?>
             </span>
           </div>
         </li>
