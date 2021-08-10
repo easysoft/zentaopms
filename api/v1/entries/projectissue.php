@@ -39,7 +39,7 @@ class projectIssueEntry extends entry
             $issue->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
             $issue->lastEditedBy   = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedBy   : $story->lastEditedBy;
             $issue->status         = $storyStatus[$story->status];
-            $issue->url            = $this->createLink('story', 'view', "storyID=$id");
+            $issue->url            = helper::createLink('story', 'view', "storyID=$id");
 
             $storySpec   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('story')->eq($id)->andWhere('version')->eq($story->version)->fetch();
             $issue->desc = $storySpec->spec;
@@ -61,7 +61,7 @@ class projectIssueEntry extends entry
             $issue->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
             $issue->lastEditedBy   = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedBy   : $bug->lastEditedBy;
             $issue->status         = $bugStatus[$bug->status];
-            $issue->url            = $this->createLink('bug', 'view', "bugID=$id");
+            $issue->url            = helper::createLink('bug', 'view', "bugID=$id");
             $issue->desc           = $bug->steps;
             break;
         case 'task':
@@ -81,7 +81,7 @@ class projectIssueEntry extends entry
             $issue->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
             $issue->lastEditedBy   = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedBy   : $task->lastEditedBy;
             $issue->status         = $taskStatus[$task->status];
-            $issue->url            = $this->createLink('task', 'view', "taskID=$id");
+            $issue->url            = helper::createLink('task', 'view', "taskID=$id");
             $issue->desc           = $task->desc;
 
             break;
@@ -92,32 +92,6 @@ class projectIssueEntry extends entry
         $actions = $this->loadModel('action')->getList($type, $issueID);
 
         $this->send(200, array('issue' => $this->format($issue, 'openedDate:time,lastEditedDate:time')));
-    }
-
-    /**
-     * Create url of issue.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @param  string $vars
-     * @access private
-     * @return string
-     */
-    private function createLink($module, $method, $vars)
-    {
-        $link = helper::createLink($module, $method, $vars, 'html');
-        $pos  = strpos($link, '.php');
-
-        /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
-        if($this->config->requestType == 'GET')
-        {
-            $link = '/index' . substr($link, $pos);
-        }
-        elseif($this->config->requestType == 'PATH_INFO2')
-        {
-            $link = substr($link, $pos + 4);
-        }
-        return common::getSysURL() . $link;
     }
 
     /**
@@ -136,7 +110,7 @@ class projectIssueEntry extends entry
         $detail->id       = $user->id;
         $detail->account  = $user->account;
         $detail->realname = $user->realname;
-        $detail->url      = $this->createLink('user', 'profile', "userID={$user->id}");
+        $detail->url      = helper::createLink('user', 'profile', "userID={$user->id}");
 
         if($user->avatar != "")
             $detail->avatar = common::getSysURL() . $user->avatar;

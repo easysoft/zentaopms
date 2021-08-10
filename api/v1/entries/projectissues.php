@@ -151,7 +151,7 @@ class projectIssuesEntry extends entry
                 $r->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
                 $r->lastEditedBy   = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedBy   : $task->lastEditedBy;
                 $r->status         = $issue['status'];
-                $r->url            = $this->createLink('task', 'view', "taskID=$task->id");
+                $r->url            = helper::createLink('task', 'view', "taskID=$task->id");
             }
             else if($issue['type'] == 'story')
             {
@@ -167,7 +167,7 @@ class projectIssuesEntry extends entry
                 $r->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
                 $r->lastEditedBy   = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedBy   : $story->lastEditedBy;
                 $r->status         = $issue['status'];
-                $r->url            = $this->createLink('story', 'view', "storyID=$story->id");
+                $r->url            = helper::createLink('story', 'view', "storyID=$story->id");
             }
             else if($issue['type'] == 'bug')
             {
@@ -183,7 +183,7 @@ class projectIssuesEntry extends entry
                 $r->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
                 $r->lastEditedBy   = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedBy   : $bug->lastEditedBy;
                 $r->status         = $issue['status'];
-                $r->url            = $this->createLink('bug', 'view', "bugID=$bug->id");
+                $r->url            = helper::createLink('bug', 'view', "bugID=$bug->id");
             }
 
             $result[] = $this->format($r, 'openedDate:time,lastEditedDate:time');
@@ -211,32 +211,6 @@ class projectIssuesEntry extends entry
     }
 
     /**
-     * Create url of issue.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @param  string $vars
-     * @access private
-     * @return string
-     */
-    private function createLink($module, $method, $vars)
-    {
-        $link = helper::createLink($module, $method, $vars, 'html');
-        $pos  = strpos($link, '.php');
-
-        /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
-        if($this->config->requestType == 'GET')
-        {
-            $link = '/index' . substr($link, $pos);
-        }
-        elseif($this->config->requestType == 'PATH_INFO2')
-        {
-            $link = substr($link, $pos + 4);
-        }
-        return common::getSysURL() . $link;
-    }
-
-    /**
      * Get the detail of the user.
      *
      * @param  string    $account
@@ -252,7 +226,7 @@ class projectIssuesEntry extends entry
         $detail->id       = $user->id;
         $detail->account  = $user->account;
         $detail->realname = $user->realname;
-        $detail->url      = $this->createLink('user', 'profile', "userID={$user->id}");
+        $detail->url      = helper::createLink('user', 'profile', "userID={$user->id}");
 
         if($user->avatar != "")
             $detail->avatar = common::getSysURL() . $user->avatar;
