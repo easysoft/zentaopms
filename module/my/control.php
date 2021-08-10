@@ -480,8 +480,13 @@ class my extends control
     public function doc($type = 'openedbyme', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        if($this->app->viewType != 'json') $this->session->set('docList', $this->app->getURI(true), 'doc');
+        $uri = $this->app->getURI(true);
+        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
         $this->loadModel('doc');
+
+        $this->session->set('productList',   $uri, 'product');
+        $this->session->set('executionList', $uri, 'execution');
+        $this->session->set('projectList',   $uri, 'project');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

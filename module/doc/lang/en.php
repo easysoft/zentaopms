@@ -17,6 +17,7 @@ $lang->doc->project      = 'Project';
 $lang->doc->execution    = $lang->executionCommon;
 $lang->doc->lib          = 'Library';
 $lang->doc->module       = 'Catalog';
+$lang->doc->object       = 'Object';
 $lang->doc->title        = 'Name';
 $lang->doc->digest       = 'Summary';
 $lang->doc->comment      = 'Comment';
