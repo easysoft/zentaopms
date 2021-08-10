@@ -173,11 +173,11 @@ class taskModel extends model
                         $childTaskID = $this->dao->lastInsertID();
                         $this->action->create('task', $childTaskID, 'Opened');
                     }
-                }
 
-                $this->computeWorkingHours($taskID);
-                $this->computeBeginAndEnd($taskID);
-                $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($taskID)->exec();
+                    $this->computeWorkingHours($taskID);
+                    $this->computeBeginAndEnd($taskID);
+                    $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($taskID)->exec();
+                }
             }
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             if(!empty($taskFiles))
