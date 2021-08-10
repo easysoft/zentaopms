@@ -14,7 +14,7 @@
 <?php js::import($jsRoot . 'md5.js');?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->user->delete;?></h2>
+    <h2><?php echo sprintf($lang->user->noticeDelete, $user->realname);?></h2>
   </div>
   <form method='post' id='dataform' target='hiddenwin' style='padding: 20px 5% 40px'>
     <table class='w-p100 table-form'>

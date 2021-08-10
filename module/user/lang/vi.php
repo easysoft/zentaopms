@@ -234,6 +234,7 @@ $lang->user->contacts->or            = ' or ';
 
 $lang->user->resetFail       = "Thất bại. Vui lòng kiểm tra tài khoản.";
 $lang->user->resetSuccess    = "Reset! Vui lòng sử dụng mật khẩu mới của bạn để đăng nhập.";
+$lang->user->noticeDelete    = 'Do you want to delete "%s" from ZenTao?';
 $lang->user->noticeResetFile = "<h5>Liên hệ quản trị viên để thiết lập lại mật khẩu của bạn.</h5>
  <h5>Nếu là bạn, vui lòng đăng nhập host ZenTao của bạn và tạo một tập tin tên  <span> '%s' </span>.</h5>
  <p>Chú ý:</p>
