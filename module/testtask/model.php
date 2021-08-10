@@ -801,6 +801,12 @@ class testtaskModel extends model
             ->remove('comment,uid')
             ->get();
 
+        if($testtask->realFinishedDate <= $oldTesttask->begin)
+        {
+            dao::$errors[] = sprintf($this->lang->testtask->finishedDateError, $oldTesttask->begin);
+            return false;
+        }
+
         $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()

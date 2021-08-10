@@ -1153,6 +1153,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `pri` tinyint(3) unsigned NOT NULL default '0',
   `begin` date NOT NULL,
   `end` date NOT NULL,
+  `realFinishedDate` datetime NOT NULL,
   `mailto` text,
   `desc` text NOT NULL,
   `report` text NOT NULL,

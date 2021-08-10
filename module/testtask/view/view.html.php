@@ -125,6 +125,10 @@
               <td><?php echo $task->end;?></td>
             </tr>
             <tr>
+              <th><?php echo $lang->testtask->realFinishedDate;?></th>
+              <td><?php if(!helper::isZeroDate($task->realFinishedDate)) echo $task->realFinishedDate;?></td>
+            </tr>
+            <tr>
               <th><?php echo $lang->testtask->status;?></th>
               <td class='task-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
             </tr>

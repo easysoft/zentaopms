@@ -696,6 +696,11 @@ class upgradeModel extends model
             $this->processProductDoc();
             $this->adjustPriv15_3();
             $this->appendExec('15_2');
+        case '15_3':
+            $this->saveLogs('Execute 15_3');
+            $this->execSQL($this->getUpgradeFile('15.3'));
+            $this->processTesttaskDate();
+            $this->appendExec('15_3');
         }
 
         $this->deletePatch();
@@ -5197,6 +5202,22 @@ class upgradeModel extends model
             $groupPriv->method = 'showFiles';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
+        return true;
+    }
+
+    /**
+     * Actual finished date of processing testtask.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processTesttaskDate()
+    {
+        $this->dao->update(TABLE_TESTTASK)->set("realFinishedDate = end")
+            ->where('status')->eq('done')
+            ->andWhere('realFinishedDate')->eq('0000-00-00 00:00:00')
+            ->exec();
+
         return true;
     }
 }
