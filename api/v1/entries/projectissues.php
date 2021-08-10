@@ -71,6 +71,7 @@ class projectIssuesEntry extends entry
         $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
         $tasks = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
                  ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
+                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
                  ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
                  ->andWhere('deleted')->eq(0)
                  ->fetchAll();
@@ -78,6 +79,7 @@ class projectIssuesEntry extends entry
 
         $stories = $this->dao->select($storyFields)->from(TABLE_STORY)->where('product')->eq($productID)
                  ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
+                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
                  ->beginIF($status)->andWhere('status')->in($storyStatus[$status])->fi()
                  ->andWhere('deleted')->eq(0)
                  ->fetchAll();
@@ -88,6 +90,7 @@ class projectIssuesEntry extends entry
 
         $bugs = $this->dao->select($bugFields)->from(TABLE_BUG)->where('product')->eq($productID)
                 ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
+                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
                 ->beginIF($status)->andWhere('status')->in($bugStatus[$status])->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll();
@@ -119,6 +122,8 @@ class projectIssuesEntry extends entry
         $this->app->loadLang('story');
         $this->app->loadLang('bug');
 
+        $this->loadModel('entry');
+
         $tasks   = array();
         $stories = array();
         $bugs    = array();
@@ -145,13 +150,13 @@ class projectIssuesEntry extends entry
                 $r->title          = $task->name;
                 $r->labels         = array($this->app->lang->task->common, zget($this->app->lang->task->typeList, $task->type));
                 $r->pri            = $task->pri;
-                $r->assignedTo     = $this->getAssignees('task', $task);
+                $r->assignedTo     = $this->entry->getAssignees('task', $task);
                 $r->openedDate     = $task->openedDate;
-                $r->openedBy       = $this->getUser($task->openedBy);
+                $r->openedBy       = $this->entry->getUser($task->openedBy);
                 $r->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
                 $r->lastEditedBy   = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedBy   : $task->lastEditedBy;
                 $r->status         = $issue['status'];
-                $r->url            = $this->createLink('task', 'view', "taskID=$task->id");
+                $r->url            = helper::createLink('task', 'view', "taskID=$task->id");
             }
             else if($issue['type'] == 'story')
             {
@@ -161,13 +166,13 @@ class projectIssuesEntry extends entry
                 $r->title          = $story->title;
                 $r->labels         = array($this->app->lang->story->common, zget($this->app->lang->story->categoryList, $story->category));
                 $r->pri            = $story->pri;
-                $r->assignedTo     = $this->getAssignees('story', $story);
+                $r->assignedTo     = $this->entry->getAssignees('story', $story);
                 $r->openedDate     = $story->openedDate;
-                $r->openedBy       = $this->getUser($story->openedBy);
+                $r->openedBy       = $this->entry->getUser($story->openedBy);
                 $r->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
                 $r->lastEditedBy   = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedBy   : $story->lastEditedBy;
                 $r->status         = $issue['status'];
-                $r->url            = $this->createLink('story', 'view', "storyID=$story->id");
+                $r->url            = helper::createLink('story', 'view', "storyID=$story->id");
             }
             else if($issue['type'] == 'bug')
             {
@@ -177,13 +182,13 @@ class projectIssuesEntry extends entry
                 $r->title          = $bug->title;
                 $r->labels         = array($this->app->lang->bug->common, zget($this->app->lang->bug->typeList, $bug->type));
                 $r->pri            = $bug->pri;
-                $r->assignedTo     = $this->getAssignees('bug', $bug);
+                $r->assignedTo     = $this->entry->getAssignees('bug', $bug);
                 $r->openedDate     = $bug->openedDate;
-                $r->openedBy       = $this->getUser($bug->openedBy);
+                $r->openedBy       = $this->entry->getUser($bug->openedBy);
                 $r->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
                 $r->lastEditedBy   = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedBy   : $bug->lastEditedBy;
                 $r->status         = $issue['status'];
-                $r->url            = $this->createLink('bug', 'view', "bugID=$bug->id");
+                $r->url            = helper::createLink('bug', 'view', "bugID=$bug->id");
             }
 
             $result[] = $this->format($r, 'openedDate:time,lastEditedDate:time');
@@ -208,80 +213,5 @@ class projectIssuesEntry extends entry
         }
 
         return '';
-    }
-
-    /**
-     * Create url of issue.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @param  string $vars
-     * @access private
-     * @return string
-     */
-    private function createLink($module, $method, $vars)
-    {
-        $link = helper::createLink($module, $method, $vars, 'html');
-        if($this->config->requestType == 'GET')
-        {
-            $pos  = strpos($link, '.php');
-            $link = '/index' . substr($link, $pos);
-        }
-        return common::getSysURL() . $link;
-    }
-
-    /**
-     * Get the detail of the user.
-     *
-     * @param  string    $account
-     * @access public
-     * @return object
-     */
-    public function getUser($account)
-    {
-        $this->loadModel('user');
-        $user = $this->user->getById($account, $feild = 'account');
-
-        $detail = new stdclass;
-        $detail->id       = $user->id;
-        $detail->account  = $user->account;
-        $detail->realname = $user->realname;
-        $detail->url      = $this->createLink('user', 'profile', "userID={$user->id}");
-
-        if($user->avatar != "")
-            $detail->avatar = common::getSysURL() . $user->avatar;
-        else
-            $detail->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
-
-        return $detail;
-    }
-
-    /**
-     * Get the details of assigned users.
-     *
-     * @param  string    $objectType
-     * @param  object    $object
-     * @access public
-     * @return array
-     */
-    public function getAssignees($objectType, $object)
-    {
-        $users = $this->dao
-                      ->select('account')->from(TABLE_TEAM)
-                      ->where('type')->eq($objectType)
-                      ->andWhere('root')->eq($object->id)
-                      ->fetchAll();
-
-        if($users)
-        {
-            $details = array();
-            foreach($users as $user)
-            {
-                $details[] = $this->getUser($user->account);
-            }
-            return $details;
-        }
-
-        return ($object->assignedTo == "" or $object->assignedTo == "closed") ? array() : array($this->getUser($object->assignedTo));
     }
 }

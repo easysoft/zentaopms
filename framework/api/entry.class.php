@@ -220,6 +220,17 @@ class baseEntry
     }
 
     /**
+     * Send 404 response.
+     *
+     * @access public
+     * @return void
+     */
+    public function send404()
+    {
+        $this->sendError(404, '404 Not found');
+    }
+
+    /**
      * 加载禅道的控制器类
      * Load controller of zentaopms
      *

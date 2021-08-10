@@ -20,9 +20,9 @@ ob_start();
 /* Load the framework. */
 include '../framework/api/router.class.php';
 include '../framework/api/entry.class.php';
+include '../framework/api/helper.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
-include '../framework/helper.class.php';
 
 /* Log the time and define the run mode. */
 $startTime = getTime();
