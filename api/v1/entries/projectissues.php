@@ -71,6 +71,7 @@ class projectIssuesEntry extends entry
         $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
         $tasks = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
                  ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
+                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
                  ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
                  ->andWhere('deleted')->eq(0)
                  ->fetchAll();
@@ -78,6 +79,7 @@ class projectIssuesEntry extends entry
 
         $stories = $this->dao->select($storyFields)->from(TABLE_STORY)->where('product')->eq($productID)
                  ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
+                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
                  ->beginIF($status)->andWhere('status')->in($storyStatus[$status])->fi()
                  ->andWhere('deleted')->eq(0)
                  ->fetchAll();
@@ -88,6 +90,7 @@ class projectIssuesEntry extends entry
 
         $bugs = $this->dao->select($bugFields)->from(TABLE_BUG)->where('product')->eq($productID)
                 ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
+                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
                 ->beginIF($status)->andWhere('status')->in($bugStatus[$status])->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll();
