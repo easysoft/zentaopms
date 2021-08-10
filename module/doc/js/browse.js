@@ -1,4 +1,7 @@
 $('.ajaxCollect').click(function()
 {
-    window.location.reload();
+    if(browseType == 'collectedbyme')
+    {
+        window.location.reload();
+    }
 })

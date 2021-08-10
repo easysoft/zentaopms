@@ -572,6 +572,9 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+                $this->story->recordReviewAction($story);
             }
 
             $this->executeHooks($storyID);
@@ -603,11 +606,11 @@ class story extends control
         /* Get users. */
         $users = $this->user->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
 
-        $isShowReviewer = true;
+        $isShowReviewer = false;
         $reviewerList   = $this->story->getReviewerPairs($story->id, $story->version);
         $reviewerList   = array_keys($reviewerList);
         $reviewedBy     = explode(',', trim($story->reviewedBy, ','));
-        if(!array_diff($reviewerList, $reviewedBy)) $isShowReviewer = false;
+        if(array_diff($reviewerList, $reviewedBy) and strpos('draft,changed', $story->status) !== false) $isShowReviewer = true;
 
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);

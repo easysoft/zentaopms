@@ -70,7 +70,12 @@ class doc extends control
      */
     public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->session->set('docList', $this->app->getURI(true), 'doc');
+        /* Save session, load module. */
+        $uri = $this->app->getURI(true);
+        $this->session->set('docList',       $uri, 'doc');
+        $this->session->set('productList',   $uri, 'product');
+        $this->session->set('executionList', $uri, 'execution');
+        $this->session->set('projectList',   $uri, 'project');
         $this->loadModel('search');
 
         /* Set browseType.*/

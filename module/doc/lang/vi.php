@@ -16,6 +16,7 @@ $lang->doc->product      = $lang->productCommon;
 $lang->doc->execution    = $lang->executionCommon;
 $lang->doc->lib          = 'Thư viện';
 $lang->doc->module       = 'Danh mục';
+$lang->doc->object       = 'Object';
 $lang->doc->title        = 'Tên';
 $lang->doc->digest       = 'Tóm tắt';
 $lang->doc->comment      = 'Nhận xét';
