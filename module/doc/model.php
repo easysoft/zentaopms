@@ -255,9 +255,38 @@ class docModel extends model
                 ->fetchAll('id');
         }
 
+        $projects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.project')
+            ->where('t2.id')->in(array_keys($docs))
+            ->andWhere('t2.execution')->eq(0)
+            ->fetchPairs();
+
+        $executions = $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.execution')
+            ->where('t2.id')->in(array_keys($docs))
+            ->fetchPairs();
+
+        $products = $this->dao->select('t1.id, t1.name')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.product')
+            ->where('t2.id')->in(array_keys($docs))
+            ->fetchPairs();
+
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
+
+        $objects = array('product' => 'products', 'execution' => 'executions', 'project' => 'projects');
         foreach($docs as $index => $doc)
         {
+            foreach($objects as $type => $object)
+            {
+                if(!empty($doc->{$type}))
+                {
+                    $doc->objectID   = $doc->{$type};
+                    $doc->objectName = ${$object}[$doc->{$type}];
+                    $doc->objectType = $type;
+                    break;
+                }
+            }
+
             $docs[$index]->fileSize = 0;
             if(isset($files[$index]))
             {

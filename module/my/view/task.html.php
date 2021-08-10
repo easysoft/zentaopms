@@ -91,7 +91,7 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color' data-group='execution'");?>
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
-          <td class='c-project' title="<?php echo zget($projects, $task->project);?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$task->project"), zget($projects, $task->project));?></td>
+          <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$task->project"), $task->projectName);?></td>
           <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '', "data-group='execution'");?></td>
           <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
@@ -156,7 +156,7 @@
               <?php if($child->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
               <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color' data-group='project'");?>
             </td>
-            <td class='c-project' title="<?php echo zget($projects, $child->project);?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$child->project"), zget($projects, $child->project));?></td>
+            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$child->project"), $child->projectName);?></td>
             <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '', "data-group='execution'");?></td>
             <?php if($type != 'openedBy'): ?>
             <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>

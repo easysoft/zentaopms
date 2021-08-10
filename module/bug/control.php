@@ -742,6 +742,11 @@ class bug extends control
                 $this->repo->setMenu($repos);
                 $this->lang->navGroup->bug = 'devops';
             }
+            if($this->app->openApp == 'product')
+            {
+                $this->loadModel('product')->setMenu($bug->product);
+                $this->lang->product->menu->plan['subModule'] .= ',bug';
+            }
         }
 
         /* Get product info. */
