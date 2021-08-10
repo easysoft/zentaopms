@@ -773,7 +773,7 @@ class programModel extends model
         $treeMenu = array();
         foreach($modules as $module)
         {
-            if(strpos($this->app->user->view->programs, $module->id) === false) continue;
+            if(strpos($this->app->user->view->programs, (string)$module->id) === false) continue;
 
             $moduleName    = '/';
             $parentModules = explode(',', $module->path);

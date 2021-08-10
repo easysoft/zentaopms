@@ -333,9 +333,8 @@ class baseEntry
      */
     public function getData()
     {
-        $output = ob_get_clean();
+        $output = helper::removeUTF8Bom(ob_get_clean());
         $output = json_decode($output);
-
         if(isset($output->data)) $output->data = json_decode($output->data);
 
         return $output;
