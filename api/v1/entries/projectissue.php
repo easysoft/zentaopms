@@ -106,17 +106,17 @@ class projectIssueEntry extends entry
     private function createLink($module, $method, $vars)
     {
         $link = helper::createLink($module, $method, $vars, 'html');
+        $pos  = strpos($link, '.php');
+
+        /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
         if($this->config->requestType == 'GET')
         {
-            $pos  = strpos($link, '.php');
             $link = '/index' . substr($link, $pos);
         }
-        else
+        elseif($this->config->requestType == 'PATH_INFO2')
         {
-            $pos  = strpos($link, '.php');
             $link = substr($link, $pos + 4);
         }
-
         return common::getSysURL() . $link;
     }
 
