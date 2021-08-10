@@ -173,6 +173,18 @@ class helper extends baseHelper
 }
 
 /**
+ * 检查是否是onlybody模式。
+ * Check exist onlybody param.
+ *
+ * @access public
+ * @return void
+ */
+function isonlybody()
+{
+    return helper::inOnlyBodyMode();
+}
+
+/**
  * Format time.
  *
  * @param  int    $time
