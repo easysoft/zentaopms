@@ -17,6 +17,7 @@ $lang->doc->project      = '所属项目';
 $lang->doc->execution    = '所属' . $lang->executionCommon;
 $lang->doc->lib          = '所属文档库';
 $lang->doc->module       = '所属目录';
+$lang->doc->object       = '所属对象';
 $lang->doc->title        = '文档标题';
 $lang->doc->digest       = '文档摘要';
 $lang->doc->comment      = '文档备注';

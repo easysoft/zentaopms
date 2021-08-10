@@ -153,10 +153,10 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    public static function createLink($module, $method, $vars)
+    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false)
     {
         global $config;
-        $link = parent::createLink($module, $method, $vars, 'html');
+        $link = parent::createLink($moduleName, $methodName, $vars, 'html');
         $pos  = strpos($link, '.php');
 
         /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
@@ -170,6 +170,18 @@ class helper extends baseHelper
         }
         return common::getSysURL() . $link;
     }
+}
+
+/**
+ * 检查是否是onlybody模式。
+ * Check exist onlybody param.
+ *
+ * @access public
+ * @return void
+ */
+function isonlybody()
+{
+    return helper::inOnlyBodyMode();
 }
 
 /**

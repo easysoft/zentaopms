@@ -4701,10 +4701,18 @@ class upgradeModel extends model
         $today = helper::today();
         foreach($projectTeams as $projectID => $projectMember)
         {
+            unset($projectMember['']);
             $project = zget($projects, $projectID, '');
+            $users   = implode(',', $projectMember);
+
+            $this->dao->update(TABLE_DOCLIB)
+                ->set('users')->eq($users)
+                ->where('project')->eq($projectID)
+                ->andWhere('main')->eq(1)
+                ->exec();
+
             foreach($projectMember as $account)
             {
-                if(empty($account)) continue;
                 if(!isset($users[$account])) continue;
 
                 $user = $users[$account];

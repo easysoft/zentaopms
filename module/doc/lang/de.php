@@ -16,6 +16,7 @@ $lang->doc->product        = $lang->productCommon;
 $lang->doc->execution      = $lang->executionCommon;
 $lang->doc->lib            = 'Bibliothek';
 $lang->doc->module         = 'Modul';
+$lang->doc->object         = 'Object';
 $lang->doc->title          = 'Titel';
 $lang->doc->digest         = 'Zusammenfassung';
 $lang->doc->comment        = 'Bemerkung';
