@@ -2142,7 +2142,7 @@ class taskModel extends model
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
 
-        $projectList = '';
+        $projectList = array();
         foreach($tasks as $task) $projectList[] = $task->project;
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectList)->fetchPairs('id');
         foreach($tasks as $task) $task->projectName = zget($projectPairs, $task->project);
