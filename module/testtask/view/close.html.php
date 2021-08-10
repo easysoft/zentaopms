@@ -29,6 +29,10 @@
         </tr>
         <?php $this->printExtendFields($testtask, 'table');?>
         <tr>
+          <th class='w-100px'><?php echo $lang->testtask->realFinishedDate;?></th>
+          <td><?php echo html::input('realFinishedDate', helper::isZeroDate($testtask->realFinishedDate) ? helper::now() : $testtask->realFinishedDate, "class='form-control form-datetime w-180px'");?></td>
+        </tr>
+        <tr>
           <th class='w-60px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
