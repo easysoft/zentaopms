@@ -278,6 +278,8 @@ class taskModel extends model
         $module     = 0;
         $type       = '';
         $assignedTo = '';
+        $estStarted = '0000-00-00';
+        $deadline   = '0000-00-00';
 
         /* Get task data. */
         $extendFields = $this->getFlowExtendFields();
@@ -285,10 +287,12 @@ class taskModel extends model
         $data         = array();
         foreach($tasks->name as $i => $name)
         {
-            $story      = !isset($tasks->story[$i]) || $tasks->story[$i]           == 'ditto' ? $story     : $tasks->story[$i];
-            $module     = !isset($tasks->module[$i]) || $tasks->module[$i]         == 'ditto' ? $module    : $tasks->module[$i];
-            $type       = !isset($tasks->type[$i]) || $tasks->type[$i]             == 'ditto' ? $type      : $tasks->type[$i];
-            $assignedTo = !isset($tasks->assignedTo[$i]) || $tasks->assignedTo[$i] == 'ditto' ? $assignedTo: $tasks->assignedTo[$i];
+            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
+            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
+            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
+            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
+            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
+            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
 
             if(empty($tasks->name[$i])) continue;
 
@@ -305,8 +309,8 @@ class taskModel extends model
             $data[$i]->left       = $tasks->estimate[$i];
             $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
             $data[$i]->execution  = $executionID;
-            $data[$i]->estStarted = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
-            $data[$i]->deadline   = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];
+            $data[$i]->estStarted = $estStarted;
+            $data[$i]->deadline   = $deadline;
             $data[$i]->status     = 'wait';
             $data[$i]->openedBy   = $this->app->user->account;
             $data[$i]->openedDate = $now;
