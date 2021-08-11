@@ -82,7 +82,7 @@ class baseEntry
      */
     public function param($key, $defaultValue = '')
     {
-        if(isset($_GET[$key])) return $_GET[$key];
+        if(isset($_GET[$key])) return trim($_GET[$key]);
         return $defaultValue;
     }
 
@@ -496,7 +496,7 @@ class baseEntry
         switch($type)
         {
         case 'time':
-            $timeFormat = $this->param('timeFormat', '');
+            $timeFormat = $this->param('timeFormat', 'utc');
             if($timeFormat == 'utc')
             {
                 if(!$value or $value == '0000-00-00 00:00:00') return null;

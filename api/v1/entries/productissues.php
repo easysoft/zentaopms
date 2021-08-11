@@ -1,19 +1,17 @@
 <?php
 /**
- * 禅道API的project issues资源类
+ * 禅道API的product issues资源类
  * 版本V1
  * 目前适用于Gitlab
  *
- * The project issues entry point of zentaopms
+ * The product issues entry point of zentaopms
  * Version 1
  */
-class projectIssuesEntry extends entry
+class productIssuesEntry extends entry
 {
     public function get($productID)
     {
-        if(!is_numeric($productID)) $this->sendError(400, 'The project_id is not supported');
-
-        $this->setParam('timeFormat', 'utc');
+        if(!is_numeric($productID)) $this->sendError(400, 'The productt_id is not supported');
 
         $taskFields = 'id,status';
         $taskStatus = array('' => '');
@@ -32,11 +30,13 @@ class projectIssuesEntry extends entry
 
         $productID = (int)$productID;
         $status    = $this->param('status', '');
-        $label     = $this->param('label', '');
         $search    = $this->param('search', '');
         $page      = intval($this->param('page', 1));
         $limit     = intval($this->param('limit', 20));
         $order     = $this->param('order', 'openedDate_desc');
+
+        $labels = $this->param('labels', '');
+        $labels = $labels ? explode(',', $labels) : array();
 
         $orderParams = explode('_', $order);
         $order       = $orderParams[0];
@@ -68,35 +68,75 @@ class projectIssuesEntry extends entry
 
         $issues = array();
 
-        $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
-        $tasks = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
-                 ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
-                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
-                 ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
-                 ->andWhere('deleted')->eq(0)
-                 ->fetchAll();
-        foreach($tasks as $task) $issues[] = array('id' => $task->id, 'type' => 'task', 'order' => $task->$order, 'status' => $this->getKey($task->status, $taskStatus));
+        $storyFilter = array();
+        $bugFilter   = array();
+        $taskFilter  = array();
 
-        $stories = $this->dao->select($storyFields)->from(TABLE_STORY)->where('product')->eq($productID)
-                 ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
-                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
-                 ->beginIF($status)->andWhere('status')->in($storyStatus[$status])->fi()
-                 ->andWhere('deleted')->eq(0)
-                 ->fetchAll();
-        foreach($stories as $story)
+        if(empty($labels))
         {
-            $issues[] = array('id' => $story->id, 'type' => 'story', 'order' => $story->$order, 'status' => $this->getKey($story->status, $storyStatus)); 
+            $storyFilter[] = 'all';
+            $bugFilter[]   = 'all';
+            $taskFilter[]  = 'all';
+        }
+        else
+        {
+            $this->app->loadLang('story');
+            $this->app->loadLang('task');
+            $this->app->loadLang('bug');
+
+            $storyTypeMap = array_flip($this->app->lang->story->categoryList);
+            $taskTypeMap  = array_flip($this->app->lang->task->typeList);
+            $bugTypeMap   = array_flip($this->app->lang->bug->typeList);
+            foreach($labels as $label)
+            {
+                if($label == $this->app->lang->story->common) $storyFilter = array('all');
+                if(isset($storyTypeMap[$label]) and $storyFilter != array('all')) $storyFilter[] = $storyTypeMap[$label];
+
+                if($label == $this->app->lang->task->common) $taskFilter = array('all');
+                if(isset($taskTypeMap[$label]) and $taskFilter != array('all')) $taskFilter[] = $taskTypeMap[$label];
+
+                if($label == $this->app->lang->bug->common) $bugFilter = array('all');
+                if(isset($bugTypeMap[$label]) and $bugFilter != array('all')) $bugFilter[] = $bugTypeMap[$label];
+            }
+        }
+        $storyFilter = implode(',', $storyFilter);
+        $taskFilter  = implode(',', $taskFilter);
+        $bugFilter   = implode(',', $bugFilter);
+
+        $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
+        if($taskFilter)
+        {
+            $tasks = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
+                          ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
+                          ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
+                          ->beginIF($taskFilter != 'all')->andWhere('type')->in($taskFilter)->fi()
+                          ->andWhere('deleted')->eq(0)
+                                                                                          ->fetchAll();
+            foreach($tasks as $task) $issues[] = array('id' => $task->id, 'type' => 'task', 'order' => $task->$order, 'status' => $this->getKey($task->status, $taskStatus));
         }
 
-        $bugs = $this->dao->select($bugFields)->from(TABLE_BUG)->where('product')->eq($productID)
-                ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
-                 ->beginIF($label)->andWhere('type')->eq($label)->fi()
-                ->beginIF($status)->andWhere('status')->in($bugStatus[$status])->fi()
-                ->andWhere('deleted')->eq(0)
-                ->fetchAll();
-        foreach($bugs as $bug)
+        if($storyFilter)
         {
-            $issues[] = array('id' => $bug->id, 'type' => 'bug', 'order' => $bug->$order, 'status' => $this->getKey($bug->status, $bugStatus)); 
+            $stories = $this->dao->select($storyFields)->from(TABLE_STORY)
+                            ->where('product')->eq($productID)
+                            ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
+                            ->beginIF($status)->andWhere('status')->in($storyStatus[$status])->fi()
+                            ->beginIF($storyFilter != 'all')->andWhere('category')->in($storyFilter)->fi()
+                            ->andWhere('deleted')->eq(0)
+                            ->fetchAll();
+            foreach($stories as $story) $issues[] = array('id' => $story->id, 'type' => 'story', 'order' => $story->$order, 'status' => $this->getKey($story->status, $storyStatus)); 
+        }
+
+        if($bugFilter)
+        {
+            $bugs = $this->dao->select($bugFields)->from(TABLE_BUG)
+                         ->where('product')->eq($productID)
+                         ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
+                         ->beginIF($status)->andWhere('status')->in($bugStatus[$status])->fi()
+                         ->beginIF($bugFilter != 'all')->andWhere('type')->in($bugFilter)->fi()
+                         ->andWhere('deleted')->eq(0)
+                         ->fetchAll();
+            foreach($bugs as $bug) $issues[] = array('id' => $bug->id, 'type' => 'bug', 'order' => $bug->$order, 'status' => $this->getKey($bug->status, $bugStatus)); 
         }
 
         array_multisort(array_column($issues, 'order'), $sort == 'asc' ? SORT_ASC : SORT_DESC, $issues);
@@ -118,8 +158,8 @@ class projectIssuesEntry extends entry
      */
     public function processIssues($issues)
     {
-        $this->app->loadLang('task');
         $this->app->loadLang('story');
+        $this->app->loadLang('task');
         $this->app->loadLang('bug');
 
         $this->loadModel('entry');
