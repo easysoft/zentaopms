@@ -114,7 +114,7 @@ class myModel extends model
             if(isset($stories[$product->id])) $product->stories = $stories[$product->id];
             if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
         }
-        $data['chargeProducts'] = $products;
+        $data['chargeProducts'] = array_values($products);
 
         /* All projects. */
         $projects = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'order_asc');
@@ -126,7 +126,7 @@ class myModel extends model
                 $projects[$key]->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
             }
         }
-        $data['projects'] = $projects;
+        $data['projects'] = array_values($projects);
 
         /* Todo list. */
         if(common::hasPriv('todo', 'view')) $hasViewPriv['todo'] = true;
