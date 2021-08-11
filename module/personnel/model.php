@@ -457,6 +457,58 @@ class personnelModel extends model
     }
 
     /**
+     * Get objects to copy whitelist.
+     *
+     * @param  int    $objectID
+     * @param  int    $objectType
+     * @access public
+     * @return array
+     */
+    public function getCopyObjects($objectID, $objectType)
+    {
+        $objects = array();
+
+        if($objectType == 'sprint')
+        {
+            $parentID = 0;
+            if($this->config->systemMode == 'new') $parentID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
+
+            $objects  = $this->dao->select('id,name')->from(TABLE_EXECUTION)
+                ->where('(project')->eq($parentID)
+                ->orWhere('id')->eq($parentID)
+                ->markRight(1)
+                ->andWhere('(id')->in($this->app->user->view->projects)
+                ->orWhere('id')->in($this->app->user->view->sprints)
+                ->markRight(1)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('type')
+                ->fetchPairs();
+            foreach($objects as $id => &$object)
+            {
+                if($id == $parentID) $object = $this->lang->projectCommon . '-' . $object;
+                if($id != $parentID) $object = $this->lang->execution->common . '-' . $object;
+            }
+        }
+        elseif($objectType == 'project')
+        {
+            $parentID = $this->dao->select('parent')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('parent');
+            $objects  = $this->loadModel('project')->getPairsByProgram($parentID);
+        }
+        elseif($objectType == 'product')
+        {
+            $parentID = $this->dao->select('program')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch('program');
+            $objects  = $this->loadModel('product')->getPairs('', $parentID);
+        }
+        elseif($objectType == 'program')
+        {
+            $objects = $this->loadModel('program')->getPairs();
+        }
+
+        unset($objects[$objectID]);
+        return $objects;
+    }
+
+    /**
      * Access to program set invest staff.
      *
      * @param  int       $objectID

@@ -57,16 +57,155 @@ class myModel extends model
         }
     }
     
-    public function myInfo()
+    /**
+     * Get my info.
+     *
+     * @access public
+     * @return object
+     */
+    public function getInfo()
     {
-        $data = array();
+        $info = new stdclass();
+        $info->profile = $this->loadModel('user')->getById($this->app->user->account);
 
-        /* My count. */
-        $data['tasks'] = (int) $this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
-        $data['stories'] = (int) $this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
-        $data['bugs'] = (int) $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+        /* My tasks. */
+        $info->task = new stdclass();
+        $info->task->total   = (int) $this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('status')->ne('closed')->andWhere('deleted')->eq(0)->fetch('count');
+        $info->task->dynamic = array();
 
-        /* Charge products. */
+        if(common::hasPriv('task', 'view'))
+        {
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)
+                    ->where('assignedTo')->eq($this->app->user->account)
+                    ->andWhere('deleted')->eq('0')
+                    ->andWhere('status')->ne('closed')
+                    ->orderBy('id_desc')
+                    ->limit(3)
+                    ->fetchAll();
+            $info->task->dynamic = $tasks;
+        }
+
+        /* My stories. */
+        $info->story = new stdclass();
+        $info->story->total   = (int) $this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('status')->ne('closed')->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
+        $info->story->dynamic = array();
+        if(common::hasPriv('story', 'view'))
+        {
+            $stories = $this->dao->select('*')->from(TABLE_STORY)
+                    ->where('assignedTo')->eq($this->app->user->account)
+                    ->andWhere('deleted')->eq('0')
+                    ->andWhere('status')->ne('closed')
+                    ->orderBy('id_desc')
+                    ->limit(3)
+                    ->fetchAll();
+            $info->story->dynamic = $stories;
+        }
+
+        /* My bugs. */
+        $info->bug = new stdclass();
+        $info->bug->total   = (int) $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('status')->ne('closed')->andWhere('deleted')->eq(0)->fetch('count');
+        $info->bug->dynamic = array();
+        if(common::hasPriv('bug', 'view'))
+        {
+            $this->app->loadLang('bug');
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)
+                    ->where('assignedTo')->eq($this->app->user->account)
+                    ->andWhere('deleted')->eq('0')
+                    ->andWhere('status')->ne('closed')
+                    ->orderBy('id_desc')
+                    ->limit(3)
+                    ->fetchAll();
+            $info->bug->dynamic = $bugs;
+        }
+
+        /* My todos. */
+        $info->todo = new stdclass();
+        $info->todo->total   = (int) $this->dao->select('count(*) AS count')->from(TABLE_TODO)->where('assignedTo')->eq($this->app->user->account)->andWhere('status')->ne('closed')->andWhere('deleted')->eq(0)->fetch('count');
+        $info->todo->dynamic = new stdclass();
+        if(common::hasPriv('todo', 'view'))
+        {
+            $todos = $this->dao->select('*')->from(TABLE_TODO)
+                    ->where('assignedTo')->eq($this->app->user->account)
+                    ->andWhere('cycle')->eq(0)
+                    ->andWhere('deleted')->eq(0)
+                    ->andWhere('status')->eq('wait')
+                    ->orderBy('`date` desc')
+                    ->limit(3)
+                    ->fetchAll();
+            foreach($todos as $key => $todo)
+            {
+                if($todo->status == 'done' and $todo->finishedBy == $this->app->user->account)
+                {
+                    unset($todos[$key]);
+                    continue;
+                }
+
+                $todo->begin = date::formatTime($todo->begin);
+                $todo->end = date::formatTime($todo->end);
+            }
+            $info->todo->dynamic = $todos;
+        }
+
+        /* My risks. */
+        $info->risk = new stdclass();
+        $info->risk->total   = 0;
+        $info->risk->dynamic = new stdclass();
+        if(common::hasPriv('risk', 'view') and isset($this->config->maxVersion))
+        {
+            $risks = $this->dao->select('*')->from(TABLE_RISK)
+                    ->where('assignedTo')->eq($this->app->user->account)
+                    ->andWhere('deleted')->eq('0')
+                    ->andWhere('status')->ne('closed')
+                    ->orderBy('id_desc')
+                    ->limit(3)
+                    ->fetchAll();
+            $info->risk->total   = (int) $this->dao->select('count(*) AS count')->from(TABLE_RISK)->where('assignedTo')->eq($this->app->user->account)->andWhere('status')->ne('closed')->andWhere('deleted')->eq(0)->fetch('count');
+            $info->risk->dynamic = $risks;
+        }
+
+        /* My meetings. */
+        $info->meeting = new stdclass();
+        $info->meeting->total   = 0;
+        $info->meeting->dynamic = new stdclass();
+        if(common::hasPriv('meeting', 'view') and isset($this->config->maxVersion))
+        {
+            $today = helper::today();
+            $now   = date('H:i:s', strtotime(helper::now()));
+
+            $meetings = $this->dao->select('*')->from(TABLE_MEETING)
+                    ->Where('deleted')->eq('0')
+                    ->andWhere('(date')->gt($today)
+                    ->orWhere('(begin')->gt($now)
+                    ->andWhere('date')->eq($today)
+                    ->markRight(2)
+                    ->andwhere('(host')->eq($this->app->user->account)
+                    ->orWhere('participant')->in($this->app->user->account)
+                    ->markRight(1)
+                    ->orderBy('id_desc')
+                    ->limit(3)
+                    ->fetchAll();
+            $info->meeting->total   = (int) $this->dao->select('count(*) AS count')->from(TABLE_MEETING)->where('assignedTo')->eq($this->app->user->account)->andWhere('status')->ne('closed')->andWhere('deleted')->eq(0)->fetch('count');
+            $info->meeting->dynamic = $meetings;
+        }
+
+        /* My issues. */
+        $info->issue = new stdclass();
+        $info->issue->total   = 0;
+        $info->issue->dynamic = new stdclass();
+        if(common::hasPriv('issue', 'view') and isset($this->config->maxVersion))
+        {
+            $issues = $this->dao->select('*')->from(TABLE_ISSUE)
+                    ->where('assignedTo')->eq($this->app->user->account)
+                    ->andWhere('deleted')->eq('0')
+                    ->andWhere('status')->ne('closed')
+                    ->orderBy('id_desc')
+                    ->limit(3)
+                    ->fetchAll();
+            $info->issue->total   = (int) $this->dao->select('count(*) AS count')->from(TABLE_ISSUE)->where('assignedTo')->eq($this->app->user->account)->andWhere('status')->ne('closed')->andWhere('deleted')->eq(0)->fetch('count');
+            $info->issue->dynamic = $issues;
+        }
+
+        /* My charged products. */
         $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
                 ->where('t1.deleted')->eq(0)
@@ -76,6 +215,7 @@ class myModel extends model
                 ->orderBy('t1.order_asc')
                 ->fetchAll('id');
         $productKeys = array_keys($products);
+
         $stories = $this->dao->select('product, status, count(status) AS count')
                 ->from(TABLE_STORY)
                 ->where('deleted')->eq(0)
@@ -107,6 +247,7 @@ class myModel extends model
             $execution = $this->loadModel('execution')->getById($execuData->id);
             $executions[$key]->progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
         }
+
         foreach($products as $key => $product)
         {
             $product->plans = isset($plans[$product->id]) ? $plans[$product->id] : 0;
@@ -114,7 +255,7 @@ class myModel extends model
             if(isset($stories[$product->id])) $product->stories = $stories[$product->id];
             if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
         }
-        $data['chargeProducts'] = $products;
+        $info->products = array_values($products);
 
         /* All projects. */
         $projects = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'order_asc');
@@ -126,119 +267,7 @@ class myModel extends model
                 $projects[$key]->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
             }
         }
-        $data['projects'] = $projects;
-
-        /* Todo list. */
-        if(common::hasPriv('todo', 'view')) $hasViewPriv['todo'] = true;
-        if(common::hasPriv('task', 'view')) $hasViewPriv['task'] = true;
-        if(common::hasPriv('bug', 'view')) $hasViewPriv['bug'] = true;
-        if(common::hasPriv('risk', 'view') and isset($this->config->maxVersion)) $hasViewPriv['risk'] = true;
-        if(common::hasPriv('issue', 'view') and isset($this->config->maxVersion)) $hasViewPriv['issue'] = true;
-        if(common::hasPriv('meeting', 'view') and isset($this->config->maxVersion)) $hasViewPriv['meeting'] = true;
-        if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
-        if(isset($hasViewPriv['todo']))
-        {
-            $this->app->loadClass('date');
-            $this->app->loadLang('todo');
-            $stmt = $this->dao->select('*')->from(TABLE_TODO)
-                    ->where('assignedTo')->eq($this->app->user->account)
-                    ->andWhere('cycle')->eq(0)
-                    ->andWhere('deleted')->eq(0)
-                    ->andWhere('status')->eq('wait')
-                    ->orderBy('`date` desc')
-                    ->limit(3);
-            $todos = $stmt->fetchAll();
-            foreach($todos as $key => $todo)
-            {
-                if($todo->status == 'done' and $todo->finishedBy == $this->app->user->account)
-                {
-                    unset($todos[$key]);
-                    continue;
-                }
-
-                $todo->begin = date::formatTime($todo->begin);
-                $todo->end = date::formatTime($todo->end);
-            }
-            $data['todos'] = $todos;
-        }
-        if(isset($hasViewPriv['task']))
-        {
-            $this->app->loadLang('task');
-            $this->app->loadLang('execution');
-            $stmt = $this->dao->select('*')->from(TABLE_TASK)
-                    ->where('assignedTo')->eq($this->app->user->account)
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('status')->ne('closed')
-                    ->orderBy('id_desc')
-                    ->limit(3);
-            $data['toTasks'] = $stmt->fetchAll();
-        }
-        if(isset($hasViewPriv['bug']))
-        {
-            $this->app->loadLang('bug');
-            $stmt = $this->dao->select('*')->from(TABLE_BUG)
-                    ->where('assignedTo')->eq($this->app->user->account)
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('status')->ne('closed')
-                    ->orderBy('id_desc')
-                    ->limit(3);
-            $data['toBugs'] = $stmt->fetchAll();
-        }
-        if(isset($hasViewPriv['risk']))
-        {
-            $this->app->loadLang('risk');
-            $stmt = $this->dao->select('*')->from(TABLE_RISK)
-                    ->where('assignedTo')->eq($this->app->user->account)
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('status')->ne('closed')
-                    ->orderBy('id_desc')
-                    ->limit(3);
-            $data['toRisks'] = $stmt->fetchAll();
-        }
-        if(isset($hasViewPriv['meeting']))
-        {
-            $this->app->loadLang('meeting');
-            $today = helper::today();
-            $now = date('H:i:s', strtotime(helper::now()));
-
-            $meetings = $this->dao->select('*')->from(TABLE_MEETING)
-                    ->Where('deleted')->eq('0')
-                    ->andWhere('(date')->gt($today)
-                    ->orWhere('(begin')->gt($now)
-                    ->andWhere('date')->eq($today)
-                    ->markRight(2)
-                    ->andwhere('(host')->eq($this->app->user->account)
-                    ->orWhere('participant')->in($this->app->user->account)
-                    ->markRight(1)
-                    ->orderBy('id_desc')
-                    ->limit(3)
-                    ->fetchAll();
-
-            $data['toMeetings'] = $meetings;
-        }
-        if(isset($hasViewPriv['issue']))
-        {
-            $this->app->loadLang('issue');
-            $stmt = $this->dao->select('*')->from(TABLE_ISSUE)
-                    ->where('assignedTo')->eq($this->app->user->account)
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('status')->ne('closed')
-                    ->orderBy('id_desc')
-                    ->limit(3);
-
-            $data['toIssues'] = $stmt->fetchAll();
-        }
-        if(isset($hasViewPriv['story']))
-        {
-            $this->app->loadLang('story');
-            $stmt = $this->dao->select('*')->from(TABLE_STORY)
-                    ->where('assignedTo')->eq($this->app->user->account)
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('status')->ne('closed')
-                    ->orderBy('id_desc')
-                    ->limit(3);
-            $data['toStories'] = $stmt->fetchAll();
-        }
+        $info->projects = array_values($projects);
 
         /* Dynamic. */
         $actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc');
@@ -247,19 +276,13 @@ class myModel extends model
         {
             $actions[$key]->actor = $users[$action->actor];
         }
-        $data['dynamic'] = $actions;
+        $info->dynamic = $actions;
 
         /* User info. */
-        global $lang, $app;
-        $data['user'] = new stdclass();
-        $data['user']->score = $app->user->score;
-        $data['user']->avatar = !empty($app->user->avatar) ? $app->user->avatar : strtoupper($app->user->account[0]);
-        $data['user']->role = isset($lang->user->roleList[$app->user->role]) ? $lang->user->roleList[$app->user->role] : $app->user->role;
-        $data['user']->email = $app->user->email;
-        $data['participateProjectCount'] = count($data['projects']);
-        $data['createdDocs'] = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
+        $info->participateProjectCount = count($info->projects);
+        $info->createdDocs = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
 
-        return $data;
+        return $info;
     }
 
 }

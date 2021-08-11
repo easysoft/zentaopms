@@ -1090,7 +1090,7 @@ class task extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                die(array('status' => 'success', 'data' => $taskID));
+                return $this->send(array('status' => 'success', 'data' => $taskID));
             }
             else
             {

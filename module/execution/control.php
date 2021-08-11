@@ -2270,7 +2270,7 @@ class execution extends control
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
-        $teams2Import   = $this->execution->getTeams2Import($this->app->user->account, $executionID);
+        $teams2Import   = $this->loadModel('personnel')->getCopyObjects($executionID, 'sprint');
         $teams2Import   = array('' => '') + $teams2Import;
 
         /* Append users for get users. */
@@ -2927,10 +2927,11 @@ class execution extends control
      *
      * @param  int     $executionID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @access public
      * @return void
      */
-    public function addWhitelist($executionID = 0, $deptID = 0)
+    public function addWhitelist($executionID = 0, $deptID = 0, $copyID = 0)
     {
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
@@ -2938,7 +2939,7 @@ class execution extends control
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
 
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&objectType=sprint&module=execution");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&copyID=$copyID&objectType=sprint&module=execution");
     }
 
     /*
