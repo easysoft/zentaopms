@@ -447,6 +447,7 @@ $lang->action->dynamicAction->doc['hidden']    = 'Hide Document';
 
 $lang->action->dynamicAction->user['created']       = 'Create User';
 $lang->action->dynamicAction->user['edited']        = 'Edit User';
+$lang->action->dynamicAction->user['deleted']       = 'Delete User';
 $lang->action->dynamicAction->user['login']         = 'Login';
 $lang->action->dynamicAction->user['logout']        = 'Logout';
 $lang->action->dynamicAction->user['undeleted']     = 'Restore User';

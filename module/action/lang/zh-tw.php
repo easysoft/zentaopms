@@ -447,6 +447,7 @@ $lang->action->dynamicAction->doc['hidden']    = '隱藏文檔';
 
 $lang->action->dynamicAction->user['created']       = '創建用戶';
 $lang->action->dynamicAction->user['edited']        = '編輯用戶';
+$lang->action->dynamicAction->user['deleted']       = '刪除用戶';
 $lang->action->dynamicAction->user['login']         = '用戶登錄';
 $lang->action->dynamicAction->user['logout']        = '用戶退出';
 $lang->action->dynamicAction->user['undeleted']     = '還原用戶';
