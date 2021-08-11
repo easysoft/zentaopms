@@ -10,12 +10,9 @@ class myEntry extends entry
 {
     public function get()
     {
-        $myModel = $this->loadModel('my');
+        $info = $this->loadModel('my')->getInfo();
 
-        $data = $myModel->myInfo();
-
-        if(!$data) return $this->sendError(400, $data->message);
-        $this->send(200, $data);
+        if(!$info) return $this->sendError(400, $info->message);
+        $this->send(200, $info);
     }
-
 }
