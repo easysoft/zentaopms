@@ -793,8 +793,9 @@ class storyModel extends model
 
         if(isset($_POST['reviewer']))
         {
-            $_POST['reviewer'] = array_filter($_POST['reviewer']);
-            $oldReviewer       = $this->getReviewerPairs($storyID, $oldStory->version);
+            $_POST['reviewer']   = array_filter($_POST['reviewer']);
+            $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
+            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
 
             /* Update story reviewer. */
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
@@ -810,8 +811,9 @@ class storyModel extends model
             }
 
             /* Update the story status by review rules. */
-            $reviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
-            $reviewedBy   = explode(',', trim($oldStory->reviewedBy, ','));
+            $reviewerList     = $this->getReviewerPairs($storyID, $oldStory->version);
+            $story->reviewers = implode(',', array_keys($reviewerList));
+            $reviewedBy       = explode(',', trim($oldStory->reviewedBy, ','));
             if(!array_diff(array_keys($reviewerList), $reviewedBy))
             {
                 $status        = $this->setStatusByReviewRules($reviewerList);
@@ -830,7 +832,7 @@ class storyModel extends model
         }
 
         $this->dao->update(TABLE_STORY)
-            ->data($story)
+            ->data($story, 'reviewers')
             ->autoCheck()
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
@@ -4482,7 +4484,7 @@ class storyModel extends model
      * @param  string $result
      * @param  string $reason
      * @access public
-     * @return int
+     * @return int|string
      */
     public function recordReviewAction($story, $result = '', $reason = '')
     {

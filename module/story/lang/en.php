@@ -389,7 +389,8 @@ $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choose ReviewedBy';
 
 $lang->story->notice = new stdClass();
-$lang->story->notice->closed = 'Story that you select is closed!';
+$lang->story->notice->closed           = 'Story that you select is closed!';
+$lang->story->notice->reviewerNotEmpty = 'This requirement needs to be reviewed, and the reviewedby is required.';
 
 $lang->story->convertToTask = new stdClass();
 $lang->story->convertToTask->fieldList = array();
