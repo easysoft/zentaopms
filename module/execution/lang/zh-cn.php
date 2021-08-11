@@ -99,6 +99,10 @@ $lang->execution->noLinkProduct   = "阶段没有关联{$lang->productCommon}";
 $lang->execution->recent          = '近期访问：';
 $lang->execution->copyNoExecution = '没有可用的' . $lang->executionCommon . '来复制';
 $lang->execution->noTeam          = '暂时没有团队成员';
+$lang->execution->or              = '或';
+
+if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
+if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以选择复制{$lang->executionCommon}团队的成员";
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";
@@ -293,7 +297,7 @@ $lang->execution->copyTeam            = '复制团队';
 $lang->execution->copyFromTeam        = "复制自{$lang->executionCommon}团队： <strong>%s</strong>";
 $lang->execution->noMatched           = "找不到包含'%s'的$lang->executionCommon";
 $lang->execution->copyTitle           = "请选择一个{$lang->executionCommon}来复制";
-$lang->execution->copyTeamTitle       = "选择一个{$lang->executionCommon}团队来复制";
+$lang->execution->copyTeamTitle       = "选择一个{$lang->projectCommon}或{$lang->executionCommon}团队来复制";
 $lang->execution->copyNoExecution     = "没有可用的{$lang->executionCommon}来复制";
 $lang->execution->copyFromExecution   = "复制自{$lang->executionCommon} <strong>%s</strong>";
 $lang->execution->cancelCopy          = '取消复制';

@@ -30,6 +30,7 @@ class projectsEntry extends entry
             return $this->sendError(400, $data->message);
         }
 
+        // TODO There is no handle for 401.
         return $this->sendError(400, 'error');
     }
 

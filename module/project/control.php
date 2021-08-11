@@ -1504,14 +1504,15 @@ class project extends control
      *
      * @param  int     $projectID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @param  int     $programID
      * @param  int     $from
      * @access public
      * @return void
      */
-    public function addWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = 'project')
+    public function addWhitelist($projectID = 0, $deptID = 0, $copyID = 0, $programID = 0, $from = 'project')
     {
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=project&programID=$programID&from=$from");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&copyID=$copyID&objectType=project&module=project&programID=$programID&from=$from");
     }
 
     /*

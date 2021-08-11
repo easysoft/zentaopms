@@ -145,6 +145,7 @@ class personnel extends control
      *
      * @param  int     $objectID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @param  string  $objectType  program|project|product|sprint
      * @param  string  $module
      * @param  int     $programID
@@ -152,7 +153,7 @@ class personnel extends control
      * @access public
      * @return void
      */
-    public function addWhitelist($objectID = 0, $deptID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
+    public function addWhitelist($objectID = 0, $deptID = 0, $copyID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
         if($this->app->openApp == 'program')
         {
@@ -180,20 +181,38 @@ class personnel extends control
         $this->loadModel('dept');
         $deptUsers = empty($deptID) ? array() : $this->dept->getDeptUserPairs($deptID);
 
+        $copyObjectType = $objectType;
+        if($copyObjectType == 'sprint')
+        {
+            $object = $this->loadModel('project')->getByID($copyID);
+            if(!empty($object)) $copyObjectType = 'project';
+        }
+        $copyUsers   = empty($copyID) ? array() : $this->personnel->getWhitelistAccount($copyID, $copyObjectType);
+        $appendUsers = array_unique($deptUsers + $copyUsers);
+
+        $objectName = $this->lang->projectCommon . $this->lang->execution->or . $this->lang->execution->common;
+        if($objectType == 'program') $objectName = $this->lang->program->common;
+        if($objectType == 'product') $objectName = $this->lang->productCommon;
+        if($objectType == 'project') $objectName = $this->lang->projectCommon;
+        $this->lang->personnel->selectObjectTips = sprintf($this->lang->personnel->selectObjectTips, $objectName);
+
         $this->view->title      = $this->lang->personnel->addWhitelist;
         $this->view->position[] = $this->lang->personnel->addWhitelist;
 
-        $this->view->objectID   = $objectID;
-        $this->view->objectType = $objectType;
-        $this->view->module     = $module;
-        $this->view->deptID     = $deptID;
-        $this->view->deptUsers  = $deptUsers;
-        $this->view->whitelist  = $this->personnel->getWhitelist($objectID, $objectType);
-        $this->view->depts      = $this->dept->getOptionMenu();
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $this->view->dept       = $this->dept->getByID($deptID);
-        $this->view->programID  = $programID;
-        $this->view->from       = $from;
+        $this->view->objectID    = $objectID;
+        $this->view->objectType  = $objectType;
+        $this->view->objectName  = $objectName;
+        $this->view->objects     = array('' => '') + $this->personnel->getCopyObjects($objectID, $objectType);
+        $this->view->module      = $module;
+        $this->view->deptID      = $deptID;
+        $this->view->appendUsers = $appendUsers;
+        $this->view->whitelist   = $this->personnel->getWhitelist($objectID, $objectType);
+        $this->view->depts       = $this->dept->getOptionMenu();
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->dept        = $this->dept->getByID($deptID);
+        $this->view->programID   = $programID;
+        $this->view->from        = $from;
+        $this->view->copyID      = $copyID;
 
         $this->display();
     }
