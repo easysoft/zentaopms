@@ -389,7 +389,8 @@ $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = '選擇評審人...';
 
 $lang->story->notice = new stdClass();
-$lang->story->notice->closed = "您選擇的{$lang->SRCommon}已經被關閉了！";
+$lang->story->notice->closed           = "您選擇的{$lang->SRCommon}已經被關閉了！";
+$lang->story->notice->reviewerNotEmpty = '該需求需要評審，評審人員不能為空。';
 
 $lang->story->convertToTask = new stdClass();
 $lang->story->convertToTask->fieldList = array();

@@ -17,6 +17,8 @@
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('reviewedReviewer', $reviewedReviewer);?>
 <?php js::set('storyModule', $lang->story->module);?>
+<?php js::set('reviewers', explode(',', $reviewers));?>
+<?php js::set('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -209,7 +211,7 @@
               <?php if($isShowReviewer):?>
               <tr>
                 <th><?php echo $lang->story->reviewers;?></th>
-                <td><?php echo html::select('reviewer[]', $users, $reviewers, 'class="form-control chosen" multiple')?></td>
+                <td><?php echo html::select('reviewer[]', array('' => '') + $users, $reviewers, 'class="form-control chosen" multiple')?></td>
               </tr>
               <?php endif;?>
               <?php if($story->status == 'closed'):?>

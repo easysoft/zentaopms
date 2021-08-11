@@ -1257,6 +1257,25 @@ class projectModel extends model
     }
 
     /**
+     * Unlink a member.
+     *
+     * @param  int    $projectID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function unlinkMember($projectID, $account)
+    {
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+
+        $this->loadModel('user');
+        $this->user->updateUserView($projectID, 'project', array($account));
+
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
+    }
+
+    /**
      * Manage team members.
      *
      * @param  int    $projectID

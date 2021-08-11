@@ -62,7 +62,7 @@
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td>
           <?php if(!empty($program->PM)):?>
-          <div class='avatar bg-secondary avatar-circle'>
+          <div class="avatar bg-secondary avatar-circle avatar-<?php echo $program->PM;?>">
             <?php echo !empty($usersAvatar[$program->PM]) ? html::image($usersAvatar[$program->PM]) : strtoupper($program->PM[0]);?>
           </div>
           <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
