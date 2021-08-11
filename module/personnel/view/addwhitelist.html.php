@@ -13,19 +13,19 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('objectID', $objectID);?>
 <?php js::set('objectType', $objectType);?>
-<style>.w-350px {width: 350px;}</style>
+<style>#object_chosen .chosen-single, #dept_chosen .chosen-single {width: 220px;}</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
       <?php echo html::a("javascript:viod(0)", "<span class='text'> {$lang->personnel->addWhitelist}</span>");?>
     </span>
     <div class='input-group space w-200px'>
-      <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
+      <span class='input-group-addon'><?php echo $lang->execution->selectDept;?></span>
       <?php echo html::select('dept', $depts, $deptID, "class='form-control chosen' onchange='setObjectUsers()' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
-    </div>
-    <div class='input-group space w-350px'>
-      <span class='input-group-addon'><?php echo $lang->personnel->copy?></span>
+      <?php if(count($objects) > 1):?>
+      <span class='input-group-addon'><?php echo $lang->personnel->copy;?></span>
       <?php echo html::select('object', $objects, $copyID, "class='form-control chosen' onchange='setObjectUsers()' data-placeholder='{$lang->personnel->selectObjectTips}'");?>
+      <?php endif;?>
     </div>
   </div>
 </div>
