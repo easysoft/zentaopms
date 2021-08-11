@@ -33,14 +33,12 @@ $routes['/tasks/:id/finish']            = 'taskFinish';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';
-$routes['/user']      = 'user';
+$routes['/my']        = 'my';
 
 $routes['/programs']     = 'programs';
 $routes['/programs/:id'] = 'program';
 
 $routes['/issues/:issueID']            = 'projectIssue';
 $routes['/projects/:projectID/issues'] = 'projectIssues';
-
-$routes['/my']     = 'my';
 
 $config->routes = $routes;

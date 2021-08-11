@@ -2269,7 +2269,7 @@ class execution extends control
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
-        $teams2Import   = $this->execution->getTeams2Import($this->app->user->account, $executionID);
+        $teams2Import   = $this->loadModel('personnel')->getCopyObjects($executionID, 'sprint');
         $teams2Import   = array('' => '') + $teams2Import;
 
         /* Append users for get users. */
