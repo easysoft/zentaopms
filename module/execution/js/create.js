@@ -42,6 +42,18 @@ $(function()
     };
     adjustMainCol();
     $(window).on('resize', adjustMainCol);
+
+    $('#teams').change(function()
+    {
+        var objectID = $(this).val();
+        $.get(createLink('execution', 'ajaxGetTeamMembers', 'objectID=' + objectID), function(data)
+        {
+            $('#teamMembers').parent().html(data);
+            $('#teamMembers').chosen();
+        });
+    })
+
+    $('#teams').change();
 });
 
 function showLifeTimeTips()

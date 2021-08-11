@@ -325,7 +325,7 @@ class executionModel extends model
             ->join('whitelist', ',')
             ->add('type', $type)
             ->stripTags($this->config->execution->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch, uid, plans')
+            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers')
             ->get();
 
         /* Check the workload format and total. */
@@ -368,6 +368,7 @@ class executionModel extends model
             $executionID   = $this->dao->lastInsertId();
             $today         = helper::today();
             $creatorExists = false;
+            $teamMembers   = array();
 
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
@@ -376,38 +377,41 @@ class executionModel extends model
             /* Update the path. */
             if($this->config->systemMode == 'new') $this->setTreePath($executionID);
 
-            /* Copy team of execution. */
-            if($copyExecutionID != '')
+            /* Set team of execution. */
+            $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
+            $roles   = $this->loadModel('user')->getUserRoles(array_keys($members));
+            foreach($members as $account)
             {
-                $members = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($copyExecutionID)->andWhere('type')->eq('execution')->fetchAll();
-                foreach($members as $member)
-                {
-                    unset($member->id);
-                    $member->root = $executionID;
-                    $member->join = $today;
-                    $member->days = $sprint->days;
-                    $member->type = 'execution';
-                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                    if($member->account == $this->app->user->account) $creatorExists = true;
-                }
-            }
+                if(empty($account)) continue;
 
-            /* Add the creator to team. */
-            if($copyExecutionID == '' or !$creatorExists)
-            {
-                $this->app->loadLang('user');
-                $member = new stdclass();
+                $member = new stdClass();
                 $member->root    = $executionID;
-                $member->account = $this->app->user->account;
-                $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
-                $member->join    = $today;
                 $member->type    = 'execution';
+                $member->account = $account;
+                $member->role    = zget($roles, $account, '');
+                $member->join    = $today;
                 $member->days    = $sprint->days;
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-
-                if($this->config->systemMode == 'new') $this->addProjectMembers($sprint->project, array($member));
+                if($member->account == $this->app->user->account) $creatorExists = true;
+                $teamMembers[$account] = $member;
             }
+
+            if(!$creatorExists)
+            {
+                $member = new stdClass();
+                $member->root    = $executionID;
+                $member->type    = 'execution';
+                $member->account = $this->app->user->account;
+                $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
+                $member->join    = $today;
+                $member->days    = $sprint->days;
+                $member->hours   = $this->config->execution->defaultWorkhours;
+                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                $teamMembers[$member->account] = $member;
+            }
+
+            if($this->config->systemMode == 'new') $this->addProjectMembers($sprint->project, $teamMembers);
 
             /* Create doc lib. */
             $this->app->loadLang('doc');
@@ -2437,6 +2441,35 @@ class executionModel extends model
             ->andWhere('type')->in('project,execution')
             ->andWhere('account')->notIN($currentMembers)
             ->fetchAll('account');
+    }
+
+    /**
+     * Get the project and execution the team through the projectID.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getTeamPairsByProject($projectID = 0)
+    {
+        $teams = $this->dao->select('id,team,type')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->eq($projectID)
+            ->orWhere('id')->eq($projectID)
+            ->fetchAll('id');
+
+        if(empty($teams)) return array();
+
+        $teamPairs = array();
+        foreach($teams as $id => $team)
+        {
+            if(empty($team->team)) continue;
+
+            $object = $team->type == 'project' ? $this->lang->project->common . '-' : $this->lang->execution->common . '-';
+            $teamPairs[$id] = $object . $team->team;
+        }
+
+        return $teamPairs;
     }
 
     /**

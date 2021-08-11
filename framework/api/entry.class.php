@@ -496,7 +496,7 @@ class baseEntry
         switch($type)
         {
         case 'time':
-            $timeFormat = $this->param('timeFormat', '');
+            $timeFormat = $this->param('timeFormat', 'utc');
             if($timeFormat == 'utc')
             {
                 if(!$value or $value == '0000-00-00 00:00:00') return null;

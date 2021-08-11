@@ -38,7 +38,7 @@ $routes['/my']        = 'my';
 $routes['/programs']     = 'programs';
 $routes['/programs/:id'] = 'program';
 
-$routes['/issues/:issueID']            = 'projectIssue';
-$routes['/projects/:projectID/issues'] = 'projectIssues';
+$routes['/issues/:issueID']            = 'productIssue';
+$routes['/products/:productID/issues'] = 'productIssues';
 
 $config->routes = $routes;

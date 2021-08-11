@@ -1107,6 +1107,66 @@ class project extends control
     }
 
     /**
+     * Browse team of a project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function team($projectID = 0)
+    {
+        $this->app->loadLang('execution');
+        $this->project->setMenu($projectID);
+
+        $project = $this->project->getById($projectID);
+
+        $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->team;
+        $this->view->projectID    = $projectID;
+        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
+        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $this->view->canBeChanged = common::canModify('project', $project);
+
+        $this->display();
+    }
+
+    /**
+     * Unlink a memeber.
+     *
+     * @param  int    $projectID
+     * @param  int    $userID
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
+    public function unlinkMember($projectID, $userID, $confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->project->confirmUnlinkMember, $this->inlink('unlinkMember', "projectID=$projectID&userID=$userID&confirm=yes")));
+
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+
+        $this->project->unlinkMember($projectID, $account);
+        if(!dao::isError()) $this->loadModel('action')->create('team', $projectID, 'managedTeam');
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+            }
+            return $this->send($response);
+        }
+        die(js::locate($this->inlink('team', "projectID=$projectID"), 'parent'));
+    }
+
+    /**
      * Manage project members.
      *
      * @param  int    $projectID
