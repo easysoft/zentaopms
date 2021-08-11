@@ -1340,6 +1340,7 @@ class execution extends control
         $this->view->name            = $name;
         $this->view->code            = $code;
         $this->view->team            = $team;
+        $this->view->teams           = array(0 => '') + $this->execution->getTeamPairsByProject((int)$projectID);
         $this->view->allProjects     = array(0 => '') + $this->project->getPairsByModel();
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
@@ -2269,7 +2270,7 @@ class execution extends control
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
-        $teams2Import   = $this->execution->getTeams2Import($this->app->user->account, $executionID);
+        $teams2Import   = $this->loadModel('personnel')->getCopyObjects($executionID, 'sprint');
         $teams2Import   = array('' => '') + $teams2Import;
 
         /* Append users for get users. */
@@ -2636,6 +2637,28 @@ class execution extends control
     }
 
     /**
+     * AJAX: get team members by projectID/executionID.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetTeamMembers($objectID)
+    {
+        $type = 'execution';
+        if($this->config->systemMode == 'new')
+        {
+            $type = $this->dao->findById($objectID)->from(TABLE_PROJECT)->fetch('type');
+            $type = $type == 'project' ? $type : 'execution';
+        }
+
+        $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $members = $this->user->getTeamMemberPairs($objectID, $type);
+
+        die(html::select('teamMembers[]', $users, array_keys($members), "class='form-control chosen' multiple"));
+    }
+
+    /**
      * When create a execution, help the user.
      *
      * @param  int    $executionID
@@ -2904,10 +2927,11 @@ class execution extends control
      *
      * @param  int     $executionID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @access public
      * @return void
      */
-    public function addWhitelist($executionID = 0, $deptID = 0)
+    public function addWhitelist($executionID = 0, $deptID = 0, $copyID = 0)
     {
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
@@ -2915,7 +2939,7 @@ class execution extends control
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
 
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&objectType=sprint&module=execution");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&copyID=$copyID&objectType=sprint&module=execution");
     }
 
     /*

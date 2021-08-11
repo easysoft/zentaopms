@@ -44,13 +44,11 @@ class projectreleaseModel extends model
      * Get list of releases.
      *
      * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $branch
      * @param  string $type
      * @access public
      * @return array
      */
-    public function getList($projectID, $productID, $branch = 0, $type = 'all')
+    public function getList($projectID, $type = 'all')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.execution, t4.name as executionName')
             ->from(TABLE_RELEASE)->alias('t1')

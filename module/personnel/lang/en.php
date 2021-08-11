@@ -30,9 +30,11 @@ $lang->personnel->resolved      = 'Resolved';
 $lang->personnel->UR            = $lang->URCommon;
 $lang->personnel->SR            = $lang->SRCommon;
 
-$lang->personnel->whitelist      = 'Whitelist';
-$lang->personnel->addWhitelist   = 'Add Whitelist';
+$lang->personnel->whitelist       = 'Whitelist';
+$lang->personnel->addWhitelist    = 'Add Whitelist';
 $lang->personnel->unbindWhitelist = 'Remove Whitelist';
-$lang->personnel->confirmDelete  = 'Confirm removal of the user from the whitelist?';
+$lang->personnel->confirmDelete   = 'Confirm removal of the user from the whitelist?';
+$lang->personnel->copy            = 'Copy Whitelist';
 
-$lang->personnel->openedPGMTip = 'The program is public and can be accessed by users with Program privileges.';
+$lang->personnel->openedPGMTip     = 'The program is public and can be accessed by users with Program privileges.';
+$lang->personnel->selectObjectTips = 'Select %s to copy its whitelist';
