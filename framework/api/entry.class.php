@@ -82,7 +82,7 @@ class baseEntry
      */
     public function param($key, $defaultValue = '')
     {
-        if(isset($_GET[$key])) return trim($_GET[$key]);
+        if(isset($_GET[$key])) return $_GET[$key];
         return $defaultValue;
     }
 
