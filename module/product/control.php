@@ -687,7 +687,12 @@ class product extends control
     {
         $productID = (int)$productID;
         $product   = $this->product->getStatByID($productID);
-        if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        if(!$product)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($productID);

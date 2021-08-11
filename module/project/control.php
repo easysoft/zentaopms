@@ -560,9 +560,13 @@ class project extends control
      */
     public function view($projectID = 0)
     {
-        $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
-        $project   = $this->project->getById($projectID);
-        if(empty($project) || strpos('scrum,waterfall', $project->model) === false) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
+        $project = $this->project->getById($projectID);
+        if(empty($project) || strpos('scrum,waterfall', $project->model) === false)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
 
         $this->project->setMenu($projectID);
 
