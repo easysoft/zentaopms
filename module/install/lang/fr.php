@@ -113,6 +113,7 @@ $lang->install->errorDBName         = 'Le nom de la base ne doit pas contenir de
 $lang->install->errorCreateDB       = 'Echec de création de la base.';
 $lang->install->errorTableExists    = "La base existe. Si ZenTao a été installé précédemment, revenez à l'étape précédente et supprimez les données. Ensuite continuez l'installation.";
 $lang->install->errorCreateTable    = 'Echec en création de la base.';
+$lang->install->errorEngineInnodb   = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->install->errorImportDemoData = "Echec de l'importation des données de démo.";
 
 $lang->install->setConfig          = 'Créer fichier de configuration';

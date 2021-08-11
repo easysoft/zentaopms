@@ -688,6 +688,19 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_0_3');
             $this->execSQL($this->getUpgradeFile('15.0.3'));
             $this->appendExec('15_0_3');
+        case '15_2':
+            $this->saveLogs('Execute 15_2');
+            $this->execSQL($this->getUpgradeFile('15.2'));
+            $this->processGitlabRepo();
+            $this->processStoryFileType();
+            $this->processProductDoc();
+            $this->adjustPriv15_3();
+            $this->appendExec('15_2');
+        case '15_3':
+            $this->saveLogs('Execute 15_3');
+            $this->execSQL($this->getUpgradeFile('15.3'));
+            $this->processTesttaskDate();
+            $this->appendExec('15_3');
         }
 
         $this->deletePatch();
@@ -879,6 +892,7 @@ class upgradeModel extends model
             case '15_0_1':
             case '15_0_2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.2'));
             case '15_0_3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.3'));
+            case '15_2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1555,6 +1569,13 @@ class upgradeModel extends model
             {
                 $sql = str_replace('DEFAULT CHARSET=utf8', '', $sql);
                 $sql = str_replace('CHARACTER SET utf8 COLLATE utf8_general_ci', '', $sql);
+            }
+
+            $sqlToLower = strtolower($sql);
+            if(strpos($sqlToLower, 'fulltext') !== false and strpos($sqlToLower, 'innodb') !== false and $mysqlVersion < 5.6)
+            {
+                self::$errors[] = $this->lang->install->errorEngineInnodb;
+                return false;
             }
 
             $sql = str_replace('zt_', $this->config->db->prefix, $sql);
@@ -4490,17 +4511,17 @@ class upgradeModel extends model
         if(!$projectID) die(js::alert($this->lang->upgrade->projectEmpty));
 
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_CASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'product' and product " . helper::dbIN($productIdList) . ')')->exec();
 
         /* Project linked objects. */
         $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
 
         /* Put sprint stories into project story mdoule. */
         $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
@@ -4514,6 +4535,15 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_PROJECTSTORY)->data($projectStory)->exec();
         }
 
+        /* Sync testcases of executions to projects when classic mode switched to new mode. */
+        $projectCases = $this->dao->select('`case`,product,project,count,version')->from(TABLE_PROJECTCASE)->where('project')->in($sprintIdList)->fetchAll();
+        foreach($projectCases as $projectCase)
+        {
+            $projectCase->project = $projectID;
+            $projectCase->order   = $projectCase->case * 5;
+            $this->dao->insert(TABLE_PROJECTCASE)->data($projectCase)->exec();
+        }
+
         /* Put sprint cases into project case table. */
         $sprintCases = $this->dao->select('t2.case,t2.version,t1.product,t1.execution as project')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -4521,11 +4551,11 @@ class upgradeModel extends model
             ->where('t1.execution')->in($sprintIdList)
             ->fetchAll();
 
-        foreach($sprintCases as $projectCase)
+        foreach($sprintCases as $sprintCase)
         {
-            $projectCase->order   = $projectCase * 5;
-            $projectCase->project = $projectID;
-            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
+            $sprintCase->order   = $sprintCase->case * 5;
+            $sprintCase->project = $projectID;
+            $this->dao->replace(TABLE_PROJECTCASE)->data($sprintCase)->exec();
         }
 
         /* Compute sprint path, grade and the minimum start date and end date of the project. */
@@ -4632,6 +4662,7 @@ class upgradeModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t2.id')->in($projectIdList)
             ->fetchGroup('project', 'product');
+
         $sprintGroups  = $this->dao->select('*')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->fetchGroup('project', 'id');
         $teamGroups    = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('execution')->fetchGroup('root', 'account');
         $users         = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
@@ -4670,10 +4701,18 @@ class upgradeModel extends model
         $today = helper::today();
         foreach($projectTeams as $projectID => $projectMember)
         {
+            unset($projectMember['']);
             $project = zget($projects, $projectID, '');
+            $users   = implode(',', $projectMember);
+
+            $this->dao->update(TABLE_DOCLIB)
+                ->set('users')->eq($users)
+                ->where('project')->eq($projectID)
+                ->andWhere('main')->eq(1)
+                ->exec();
+
             foreach($projectMember as $account)
             {
-                if(empty($account)) continue;
                 if(!isset($users[$account])) continue;
 
                 $user = $users[$account];
@@ -4707,7 +4746,7 @@ class upgradeModel extends model
 
             $whitelist += zget($whitelistACL, $productID, array());
 
-            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade', 'increase');
         }
 
         $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage')->fetchAll('id');
@@ -4722,7 +4761,7 @@ class upgradeModel extends model
                 foreach(zget($groupAccounts, $group, array()) as $account => $userGroup) $whitelist[$account] = $account;
             }
 
-            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade', 'increase');
         }
     }
 
@@ -4732,32 +4771,7 @@ class upgradeModel extends model
             ->join('products', ',')
             ->get();
 
-        foreach($data->repos as $repoID)
-        {
-            /* If have no products, add it. */
-            if(isset($data->name))
-            {
-                $product = new stdclass();
-                $product->program        = $data->program;
-                $product->name           = $data->name;
-                $product->acl            = 'open';
-                $product->PO             = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdBy      = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdDate    = helper::now();
-                $product->status         = 'normal';
-                $product->createdVersion = $this->config->version;
-
-                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
-                $productID = $this->dao->lastInsertID();
-                $this->loadModel('action')->create('product', $productID, 'openedbysystem');
-
-                $this->dao->update(TABLE_REPO)->set('product')->eq($productID)->where('id')->eq($repoID)->exec();
-            }
-            else
-            {
-                $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
-            }
-        }
+        foreach($data->repos as $repoID) $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
     }
 
     /**
@@ -5114,31 +5128,104 @@ class upgradeModel extends model
      * Process gitlab repo data.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function processGitlabRepo()
     {
         $repoList = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')->fetchAll();
         foreach($repoList as $repo)
         {
+            if(is_numeric($repo->path)) continue;
+
             /* Create gitlab from repo. */
             $gitlab = new stdclass;
             $gitlab->type    = 'gitlab';
             $gitlab->name    = $repo->client;
-            $gitlab->token   = base64_decode($repo->password);
+            $gitlab->url     = $repo->client;
+            $gitlab->token   = $repo->encrypt == 'base64' ? base64_decode($repo->password) : $repo->password;
             $gitlab->private = md5(uniqid());
             $this->dao->insert(TABLE_PIPELINE)->data($gitlab)->exec();
 
             $gitlabID = $this->dao->lastInsertID();
-
-            preg_match('/projects\/(\d+)\/repository/', $repo->path, $matches);
-            $gitlabProject = $matches[1];
-            $products      = explode(',', $repo->product);
-            $this->loadModel('gitlab')->saveProjectRelation($products, $gitlabID, $gitlabProject);
-
-            $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($gitlabProject)->where('id')->eq($repo->id)->exec();
-
-            $this->loadModel("gitlab")->initWebhooks($products, $gitlabID, $gitlabProject);
+            $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($repo->extra)->where('id')->eq($repo->id)->exec();
         }
+        $this->dao->update(TABLE_REPO)->set('prefix')->eq('')->where('SCM')->eq('Gitlab')->exec();
+        return true;
+    }
+
+    /**
+     * Process story file type to requirement.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processStoryFileType()
+    {
+        $requirementList = $this->dao->select('id')->from(TABLE_STORY)->where('type')->eq('requirement')->fetchPairs('id');
+
+        $this->dao->update(TABLE_FILE)->set('objectType')->eq('requirement')
+            ->where('objectID')->in($requirementList)
+            ->andWhere('objectType')->eq('story')
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Leave the project field of the product document blank.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processProductDoc()
+    {
+        $this->dao->update(TABLE_DOC)->set('project')->eq(0)
+            ->where('product')->ne(0)
+            ->andWhere('project')->ne(0)
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Adjust priv 15.3
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv15_3()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->in('view,objectLibs')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'doc';
+            $groupPriv->method = 'objectLibs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+
+            $groupPriv->method = 'tableContents';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+
+            $groupPriv->method = 'showFiles';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Actual finished date of processing testtask.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processTesttaskDate()
+    {
+        $this->dao->update(TABLE_TESTTASK)->set("realFinishedDate = end")
+            ->where('status')->eq('done')
+            ->andWhere('realFinishedDate')->eq('0000-00-00 00:00:00')
+            ->exec();
+
+        return true;
     }
 }

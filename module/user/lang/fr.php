@@ -234,6 +234,7 @@ $lang->user->contacts->or            = ' ou ';
 
 $lang->user->resetFail       = "ECHEC. Vérifiez votre compte.";
 $lang->user->resetSuccess    = "Reset ! Utilisez votre nouveau mot de passe pour vous connecter.";
+$lang->user->noticeDelete    = 'Do you want to delete "%s" from ZenTao?';
 $lang->user->noticeResetFile = "<h5>Contactez l'administrateur pour réinitialiser votre mot de passe.</h5>
     <h5>Si vous êtres l'administrateur, connectez-vous au serveur Zentao et créez un fichier vide nommé <span> '%s' </span>.</h5>
     <p>Note :</p>

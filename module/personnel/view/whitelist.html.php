@@ -19,8 +19,8 @@
     <?php echo html::a($this->createLink($module, 'whitelist', $vars), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', "class='btn btn-link btn-active-text' $openApp");?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php $vars = $module == 'program' ? "objectID=$objectID&deptID=0&programID=$programID&from=$from" : "objectID=$objectID";?>
-    <?php common::printLink($module, 'addWhitelist', $vars, "<i class='icon icon-plus'></i>" . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $openApp");?>
+    <?php $vars = $module == 'program' ? "objectID=$objectID&deptID=0&copyID=0&programID=$programID&from=$from" : "objectID=$objectID";?>
+    <?php common::printLink($module, 'addWhitelist', $vars, "<i class='icon icon-plus'></i> " . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $openApp");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
@@ -58,8 +58,7 @@
           <td title="<?php echo $user->email;?>"><?php echo $user->email;?></td>
           <td class='c-actions'>
             <?php
-            $deleteClass = common::hasPriv($module, 'unbindWhitelist') ? 'btn' : 'btn disabled';
-            echo html::a($this->createLink($module, 'unbindWhitelist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='{$deleteClass}' $openApp");
+            if(common::hasPriv($module, 'unbindWhitelist')) echo html::a($this->createLink($module, 'unbindWhitelist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='btn' $openApp");
             ?>
           </td>
         </tr>

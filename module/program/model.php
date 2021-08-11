@@ -153,10 +153,11 @@ class programModel extends model
      * @param  object    $pager
      * @param  int       $programTitle
      * @param  int       $involved
+     * @param  bool      $queryAll
      * @access public
      * @return object
      */
-    public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0)
+    public function getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
     {
         $path = '';
         if($programID)
@@ -170,8 +171,8 @@ class programModel extends model
             ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('openedBy', true)->eq($this->app->user->account)
             ->orWhere('PM')->eq($this->app->user->account)
@@ -234,6 +235,58 @@ class programModel extends model
             ->where('objectID')->in($programIdList)
             ->andWhere('objectType')->eq('program')
             ->fetchAll();
+    }
+
+    /**
+     * Get program and project progress list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProgressList()
+    {
+        $totalProgress = array();
+        $projectCount  = array();
+        $userPrjCount  = array();
+        $progressList  = array();
+        $programPairs  = $this->getPairs();
+        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
+
+        /* Add program progress. */
+        foreach(array_keys($programPairs) as $programID)
+        {
+            $totalProgress[$programID] = 0;
+            $projectCount[$programID]  = 0;
+            $userPrjCount[$programID]  = 0;
+            $progressList[$programID]  = 0;
+
+            foreach($projectStats as $project)
+            {
+                if(strpos($project->path, ',' . $programID . ',') === false) continue;
+
+                /* The number of projects under this program that the user can view. */
+                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPrjCount[$programID] ++;
+
+                $totalProgress[$programID] += $project->hours->progress;
+                $projectCount[$programID] ++;
+            }
+
+            if(empty($projectCount[$programID])) continue;
+
+            /* Program progress can't see when this user don't have all projects priv. */
+            if(!$this->app->user->admin and $userPrjCount[$programID] != $projectCount[$programID])
+            {
+                unset($progressList[$programID]);
+                continue;
+            }
+
+            $progressList[$programID] = round($totalProgress[$programID] / $projectCount[$programID]);
+        }
+
+        /* Add project progress. */
+        foreach($projectStats as $project) $progressList[$project->id] = $project->hours->progress;
+
+        return $progressList;
     }
 
     /**
@@ -339,7 +392,7 @@ class programModel extends model
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,delta,future')
+            ->remove('uid,delta,future,syncPRJUnit,exchangeRate')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
@@ -394,6 +447,17 @@ class programModel extends model
 
         if(!dao::isError())
         {
+            /* If the program changes, the budget unit will be updated to the project and sub-programs simultaneously. */
+            if($program->budgetUnit != $oldProgram->budgetUnit and $_POST['syncPRJUnit'] == 'true')
+            {
+                $this->dao->update(TABLE_PROJECT)
+                    ->set('budgetUnit')->eq($program->budgetUnit)
+                    ->beginIF(!empty($_POST['exchangeRate']))->set("budget = {$_POST['exchangeRate']} * `budget`")->fi()
+                    ->where('path')->like(",{$programID},%")
+                    ->andWhere('type')->in('program,project')
+                    ->exec();
+            }
+
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
             $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
@@ -709,7 +773,7 @@ class programModel extends model
         $treeMenu = array();
         foreach($modules as $module)
         {
-            if(strpos($this->app->user->view->programs, $module->id) === false) continue;
+            if(strpos($this->app->user->view->programs, (string)$module->id) === false and (!$this->app->user->admin)) continue;
 
             $moduleName    = '/';
             $parentModules = explode(',', $module->path);
@@ -823,22 +887,32 @@ class programModel extends model
      * @param  object $pager
      * @param  string $programTitle
      * @param  int    $involved
+     * @param  bool   $queryAll
      * @access public
      * @return array
      */
-    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0)
+    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
     {
         /* Init vars. */
-        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved);
+        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
+
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
         $stats       = array();
         $hours       = array();
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $leftTasks   = array();
+        $teamMembers = array();
+
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->in($projectKeys)
+            ->andWhere('type')->in('sprint,stage')
+            ->fetchAll('id');
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
             ->from(TABLE_TASK)
             ->where('project')->in($projectKeys)
             ->andWhere('parent')->lt(1)
@@ -851,9 +925,9 @@ class programModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                $hour->totalEstimate += $task->estimate;
                 $hour->totalConsumed += $task->consumed;
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+                if(isset($executions[$task->execution])) $hour->totalEstimate += $task->estimate;
+                if($task->status != 'cancel' and $task->status != 'closed' and isset($executions[$task->execution])) $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
         }
@@ -868,12 +942,32 @@ class programModel extends model
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
         }
 
+        /* Get the number of left tasks. */
+        if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
+        {
+            $leftTasks = $this->dao->select('project,count(*) as tasks')->from(TABLE_TASK)
+                ->where('project')->in($projectKeys)
+                ->andWhere('status')->notIn('cancel,closed')
+                ->andWhere('execution')->in(array_keys($executions))
+                ->groupBy('project')
+                ->fetchAll('project');
+        }
+
         /* Get the number of project teams. */
         $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
             ->where('root')->in($projectKeys)
             ->andWhere('type')->eq('project')
             ->groupBy('root')
             ->fetchAll('root');
+
+        /* Get the members of project teams. */
+        if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
+        {
+            $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
+                ->where('root')->in($projectKeys)
+                ->andWhere('type')->eq('project')
+                ->fetchGroup('root', 'account');
+        }
 
         /* Process projects. */
         foreach($projects as $key => $project)
@@ -890,8 +984,11 @@ class programModel extends model
             /* Process the hours. */
             $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
 
-            $project->teamCount = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
-            $stats[] = $project;
+            $project->teamCount   = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
+            $project->leftTasks   = isset($leftTasks[$project->id]) ? $leftTasks[$project->id]->tasks : '—';
+            $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
+
+            $stats[$key] = $project;
         }
         return $stats;
     }

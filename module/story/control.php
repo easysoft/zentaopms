@@ -295,12 +295,6 @@ class story extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->story->custom->createFields;
 
-        $this->loadModel('gitlab');
-        $allGitlabs     = $this->gitlab->getPairs();
-        $executionID    = $objectID;
-        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
-        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
-
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
@@ -330,8 +324,6 @@ class story extends control
         $this->view->URS              = $type == 'story' ? $this->story->getRequierements($productID) : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->view->type             = $type;
-        $this->view->gitlabList       = $allGitlabs;
-        $this->view->gitlabProjects   = $gitlabProjects;
 
         $this->display();
     }
@@ -580,6 +572,9 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+                $this->story->recordReviewAction($story);
             }
 
             $this->executeHooks($storyID);
@@ -611,11 +606,11 @@ class story extends control
         /* Get users. */
         $users = $this->user->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
 
-        $isShowReviewer = true;
+        $isShowReviewer = false;
         $reviewerList   = $this->story->getReviewerPairs($story->id, $story->version);
         $reviewerList   = array_keys($reviewerList);
         $reviewedBy     = explode(',', trim($story->reviewedBy, ','));
-        if(!array_diff($reviewerList, $reviewedBy)) $isShowReviewer = false;
+        if(array_diff($reviewerList, $reviewedBy) and strpos('draft,changed', $story->status) !== false) $isShowReviewer = true;
 
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
@@ -816,8 +811,9 @@ class story extends control
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
                 die(js::error(dao::getError()));
             }
+            $story   = $this->story->getByID($storyID);
             $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
-            $files   = $this->loadModel('file')->saveUpload('story', $storyID, $version);
+            $files   = $this->loadModel('file')->saveUpload($story->type, $storyID, $version);
 
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
@@ -910,7 +906,7 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $story->files = $this->loadModel('file')->getByObject('story', $storyID);
+        $story->files = $this->loadModel('file')->getByObject($story->type, $storyID);
         $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
@@ -991,11 +987,6 @@ class story extends control
         }
         else
         {
-            /* Delete related issue in gitlab. */
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('story', $storyID);
-            if(!empty($relation)) $this->gitlab->deleteIssue('story', $storyID, $relation->issueID);
-
             $this->story->delete(TABLE_STORY, $storyID);
             if($story->parent > 0)
             {
@@ -1006,7 +997,9 @@ class story extends control
             $this->executeHooks($storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::locate($this->session->storyList, 'parent'));
+
+            $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 
@@ -1500,7 +1493,7 @@ class story extends control
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $tracks = $this->story->getTracks($productID, $branch, $pager);
+        $tracks = $this->story->getTracks($productID, $branch, $projectID, $pager);
 
         if($projectID)
         {

@@ -1,1 +1,2 @@
 #whiteListBox .input-group:last-child {margin-top: 10px;}
+#mainContent .main-header h2 {width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

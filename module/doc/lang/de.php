@@ -16,6 +16,7 @@ $lang->doc->product        = $lang->productCommon;
 $lang->doc->execution      = $lang->executionCommon;
 $lang->doc->lib            = 'Bibliothek';
 $lang->doc->module         = 'Modul';
+$lang->doc->object         = 'Object';
 $lang->doc->title          = 'Titel';
 $lang->doc->digest         = 'Zusammenfassung';
 $lang->doc->comment        = 'Bemerkung';
@@ -39,6 +40,7 @@ $lang->doc->fileTitle      = 'Dateiname';
 $lang->doc->filePath       = 'Dateipfad';
 $lang->doc->extension      = 'Erweiterung';
 $lang->doc->size           = 'Größe der Anlage';
+$lang->doc->source         = 'Source';
 $lang->doc->download       = 'Download';
 $lang->doc->acl            = 'Rechte';
 $lang->doc->fileName       = 'Files';
@@ -64,6 +66,7 @@ $lang->doc->todayEdited    = 'Heute aktualisiert';
 $lang->doc->pastEdited     = 'Aktualisiert';
 $lang->doc->myDoc          = 'Meine Dokumente';
 $lang->doc->myCollection   = 'Meine Favoriten';
+$lang->doc->tableContents  = 'Catalog';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Home';
@@ -88,20 +91,21 @@ $lang->doc->cancelCollection = 'Favorit entfernen';
 $lang->doc->deleteFile       = 'Delete File';
 $lang->doc->menuTitle        = 'Menu';
 
-$lang->doc->libName      = 'Name';
-$lang->doc->libType      = 'Kategorie';
-$lang->doc->custom       = 'Eigene Dok Bibliothek';
-$lang->doc->customAB     = 'Eigene Bibliothek';
-$lang->doc->createlib    = 'Bibliothek erstellen';
-$lang->doc->allLibs      = 'Bibliothek';
-$lang->doc->objectLibs   = "{$lang->productCommon}/{$lang->executionCommon} Bibliothek Liste";
-$lang->doc->showFiles    = 'Dok Bibliothek';
-$lang->doc->editlib      = 'Bibliothek bearbeiten';
-$lang->doc->deleteLib    = 'Bibliothek löschen';
-$lang->doc->fixedMenu    = 'Im Menü fixieren';
-$lang->doc->removeMenu   = 'Vom Menü entfernen';
-$lang->doc->search       = 'Suche';
-$lang->doc->keywordsTips = 'Please use commas to separate multiple keywords.';
+$lang->doc->libName        = 'Name';
+$lang->doc->libType        = 'Kategorie';
+$lang->doc->custom         = 'Eigene Dok Bibliothek';
+$lang->doc->customAB       = 'Eigene Bibliothek';
+$lang->doc->createlib      = 'Bibliothek erstellen';
+$lang->doc->allLibs        = 'Bibliothek';
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Bibliothek Liste";
+$lang->doc->showFiles      = 'Dok Bibliothek';
+$lang->doc->editlib        = 'Bibliothek bearbeiten';
+$lang->doc->deleteLib      = 'Bibliothek löschen';
+$lang->doc->fixedMenu      = 'Im Menü fixieren';
+$lang->doc->removeMenu     = 'Vom Menü entfernen';
+$lang->doc->search         = 'Suche';
+$lang->doc->allCollections = 'All Collections';
+$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
 
 /* 查询条件列表 */
 $lang->doc->allProduct    = 'Alle' . $lang->productCommon;
@@ -166,6 +170,7 @@ $lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 
 $lang->doc->confirmDelete        = "Möchten Sie dieses Dokument löschen?";
 $lang->doc->confirmDeleteLib     = "Möchten Sie diese Bibliothek löschen?";
+$lang->doc->confirmDeleteBook    = "Do you want to delete this book?";
 $lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
 $lang->doc->errorEditSystemDoc   = "System Dokumentenbibliothek darf nicht geändert werden.";
 $lang->doc->errorEmptyProduct    = "Kein {$lang->productCommon}. Kann nicht erstellt werden.";
@@ -201,6 +206,10 @@ $lang->doc->noticeAcl['doc']['private'] = 'Only the one who created it can acces
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'Url';
+
+$lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>.";
+$lang->doc->ge      = ':';
+$lang->doc->point   = '.';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name      = 'Name';

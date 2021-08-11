@@ -362,6 +362,8 @@ class product extends control
         if($programID) $lines = array('') + $this->product->getLinePairs($programID);
         if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
 
+        if($this->app->openApp == 'doc') unset($this->lang->doc->menu->product['subMenu']);
+
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
@@ -512,7 +514,6 @@ class product extends control
             $program  = $this->program->getByID($product->program);
             $programs = array($product->program => $program->name);
         }
-
 
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
@@ -1121,7 +1122,7 @@ class product extends control
 
         /* Process product structure. */
         $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story');
-        $productStructure = $this->product->statisticProgam($productStats);
+        $productStructure = $this->product->statisticProgram($productStats);
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
@@ -1185,16 +1186,17 @@ class product extends control
      *
      * @param  int     $productID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @param  string  $branch
      * @access public
      * @return void
      */
-    public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
+    public function addWhitelist($productID = 0, $deptID = 0, $copyID = 0)
     {
-        $this->product->setMenu($productID, $branch);
+        $this->product->setMenu($productID);
         $this->lang->modulePageNav = '';
 
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&objectType=product&module=product");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&copyID=$copyID&objectType=product&module=product");
     }
 
     /*
@@ -1226,6 +1228,7 @@ class product extends control
             $productConfig = $this->config->product;
 
             /* Create field lists. */
+            if(!$this->config->URAndSR) $productConfig->list->exportFields = str_replace('activeRequirements,changedRequirements,draftRequirements,closedRequirements,requireCompleteRate,', '', $productConfig->list->exportFields);
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $productConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
@@ -1235,16 +1238,30 @@ class product extends control
             }
 
             $lines = $this->product->getLinePairs();
-            $productStats = $this->product->getStats($orderBy, null, $status);
+            $productStats = $this->product->getStats('program_desc,line_desc,' . $orderBy, null, $status);
             foreach($productStats as $i => $product)
             {
-                $product->line             = zget($lines, $product->line, '');
-                $product->activeStories    = (int)$product->stories['active'];
-                $product->changedStories   = (int)$product->stories['changed'];
-                $product->draftStories     = (int)$product->stories['draft'];
-                $product->closedStories    = (int)$product->stories['closed'];
-                $product->unResolvedBugs   = (int)$product->unResolved;
-                $product->assignToNullBugs = (int)$product->assignToNull;
+                $product->line                = zget($lines, $product->line, '');
+                if($this->config->URAndSR)
+                {
+                    $product->activeRequirements  = (int) $product->requirements['active'];
+                    $product->changedRequirements = (int) $product->requirements['changed'];
+                    $product->draftRequirements   = (int) $product->requirements['draft'];
+                    $product->closedRequirements  = (int) $product->requirements['closed'];
+                    $product->totalRequirements   = $product->activeRequirements + $product->changedRequirements + $product->draftRequirements + $product->closedRequirements;
+                    $product->requireCompleteRate = ($product->totalRequirements == 0 ? 0 : round($product->closedRequirements / $product->totalRequirements, 3) * 100) . '%';
+                }
+                $product->activeStories       = (int)$product->stories['active'];
+                $product->changedStories      = (int)$product->stories['changed'];
+                $product->draftStories        = (int)$product->stories['draft'];
+                $product->closedStories       = (int)$product->stories['closed'];
+                $product->totalStories        = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories;
+                $product->storyCompleteRate   = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
+                $product->unResolvedBugs      = (int)$product->unResolved;
+                $product->assignToNullBugs    = (int)$product->assignToNull;
+                $product->closedBugs          = (int)$product->closedBugs;
+                $product->bugFixedRate        = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
+                $product->program             = $product->programName;
 
                 if($this->post->exportType == 'selected')
                 {

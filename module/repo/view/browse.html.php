@@ -17,7 +17,8 @@
         <?php
         foreach($repos as $id => $repoName)
         {
-            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "title='{$repoName}' class='text-ellipsis' data-app='{$app->openApp}'") . "</li>";
+            $isSelected = $id == $repoID ? 'class="selected"' : '';
+            echo "<li $isSelected>" . html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "title='{$repoName}' class='text-ellipsis' data-app='{$app->openApp}'") . "</li>";
         }
         ?>
       </ul>
@@ -29,8 +30,9 @@
         <?php
         foreach($branches as $id => $branchName)
         {
+            $isSelected = $id == $branchID ? 'class="selected"' : '';
             $base64BranchID = base64_encode($id);
-            echo "<li>" . html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $branchName, '', "title='{$branchName}' class='text-ellipsis' data-app='{$app->openApp}'") . "</li>";
+            echo "<li $isSelected>" . html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $branchName, '', "title='{$branchName}' class='text-ellipsis' data-app='{$app->openApp}'") . "</li>";
         }
         ?>
       </ul>

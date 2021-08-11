@@ -59,22 +59,23 @@ class ci extends control
     }
 
     /**
-     * Send a request to jenkins to check build status.
+     * Send a request to jenkins or gitlab to check build status.
      *
+     * @param  int    $compileID
      * @access public
      * @return void
      */
-    public function checkCompileStatus()
+    public function checkCompileStatus($compileID = 0)
     {
-        $this->ci->checkCompileStatus();
+        $this->ci->checkCompileStatus($compileID);
+
         if(dao::isError())
         {
             echo json_encode(dao::getError());
+            return true;
         }
-        else
-        {
-            echo 'success';
-        }
+
+        echo 'success';
     }
 
     /**
@@ -122,6 +123,7 @@ class ci extends control
             $caseResult = $post->funcResult;
             $firstCase  = array_shift($caseResult);
             $productID  = $firstCase->productId;
+            if(empty($productID) and !empty($firstCase->id)) $productID = $this->dao->select('product')->from(TABLE_CASE)->where('id')->eq((int)$firstCase->id)->fetch('product');
         }
         if(empty($productID)) die(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
 

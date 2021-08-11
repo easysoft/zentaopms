@@ -16,7 +16,7 @@ include '../../common/view/header.html.php';
 <div id='mainContent' class='main-row fade'>
   <div class='main-col'>
     <div class="cell" id="queryBox" data-module='user'></div>
-    <form class='main-table table-user' data-ride='table' method='post' data-nested='true' data-checkable='false' id='userListForm'>
+    <form class='main-table table-user' data-ride='table' method='post' data-checkable='false' id='userListForm'>
       <table class='table has-sort-head' id='userList'>
         <thead>
         <tr>

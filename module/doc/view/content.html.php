@@ -1,6 +1,3 @@
-<style>
-.title {font-size: 20px !important;}
-</style>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
@@ -11,7 +8,7 @@ $sessionString .= session_name() . '=' . session_id();
     <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
-          <div class="title"><?php echo $doc->title;?></div>
+          <div class="title" title="<?php echo $doc->title;?>"><?php echo $doc->title;?></div>
           <div class="info">
             <div class="version">
               <div class='btn-group'>
@@ -19,13 +16,10 @@ $sessionString .= session_name() . '=' . session_id();
                 #<?php echo $version ? $version : $doc->version;?>
                 <span class="caret"></span>
               </a>
-                <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-                <?php
-                for($version = $doc->version; $version > 0; $version--)
-                {
-                    echo "<li>" . html::a($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"), '#' . $version, '', "data-app='{$this->app->openApp}'") . "</li>";
-                }
-                ?>
+                <ul class='dropdown-menu doc-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+                <?php for($version = $doc->version; $version > 0; $version--): ?>
+                  <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"); ?>'>#<?php echo $version; ?></a></li>
+                <?php endfor; ?>
                 </ul>
               </div>
             </div>
@@ -65,65 +59,79 @@ $sessionString .= session_name() . '=' . session_id();
             <?php endif;?>
           </div>
         </div>
-        <div class="detail-content article-content">
-          <?php if($doc->keywords):?>
-          <p class='keywords'>
-            <?php foreach($doc->keywords as $keywords):?>
-            <?php if($keywords) echo "<span class='label label-outline'>$keywords</span>";?>
+        <div class="table-row">
+          <div class="detail-content article-content table-col">
+            <?php if($doc->keywords):?>
+            <p class='keywords'>
+              <?php foreach($doc->keywords as $keywords):?>
+              <?php if($keywords) echo "<span class='label label-outline'>$keywords</span>";?>
+              <?php endforeach;?>
+            </p>
+            <?php endif;?>
+            <?php
+            if($doc->type == 'url')
+            {
+                $url = $doc->content;
+                if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
+                $urlIsHttps    = strpos($url, 'https://') === 0;
+                $serverIsHttps = ((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https'));
+
+                if(($urlIsHttps and $serverIsHttps) or (!$urlIsHttps and !$serverIsHttps))
+                {
+                    echo "<iframe width='100%' id='urlIframe' src='$url'></iframe>";
+                }
+                else
+                {
+                    $parsedUrl = parse_url($url);
+                    $urlDomain = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+
+                    $title    = '';
+                    $response = common::http($url);
+                    preg_match_all('/<title>(.*)<\/title>/Ui', $response, $out);
+                    if(isset($out[1][0])) $title = $out[1][0];
+
+                    echo "<div id='urlCard'>";
+                    echo "<div class='url-icon'><img src='{$urlDomain}/favicon.ico' width='45' height='45' /></div>";
+                    echo "<div class='url-content'>";
+                    echo "<div class='url-title'>{$title}</div>";
+                    echo "<div class='url-href'>" . html::a($url, $url, '_target') . "</div>";
+                    echo "</div></div>";
+                }
+            }
+            else
+            {
+                echo $doc->content;
+            }
+            ?>
+            <?php foreach($doc->files as $file):?>
+            <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
+            <div class='file-image'>
+              <a href="<?php echo $file->webPath?>" target="_blank">
+                <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>" title="<?php echo $file->title;?>">
+              </a>
+              <span class='right-icon'>
+                <?php if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', 'fileID=' . $file->id) . $sessionString, "<i class='icon icon-export'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");?>
+                <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
+              </span>
+            </div>
+            <?php unset($doc->files[$file->id]);?>
+            <?php endif;?>
             <?php endforeach;?>
-          </p>
-          <?php endif;?>
-          <?php
-          if($doc->type == 'url')
-          {
-              $url = $doc->content;
-              if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
-              $urlIsHttps = strpos($url, 'https://') === 0;
-              $serverIsHttps = ((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https'));
-              if(($urlIsHttps and $serverIsHttps) or (!$urlIsHttps and !$serverIsHttps))
-              {
-                  echo "<iframe width='100%' id='urlIframe' src='$url'></iframe>";
-              }
-              else
-              {
-                  $parsedUrl = parse_url($url);
-                  $urlDomain = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-
-                  $title    = '';
-                  $response = common::http($url);
-                  preg_match_all('/<title>(.*)<\/title>/Ui', $response, $out);
-                  if(isset($out[1][0])) $title = $out[1][0];
-
-                  echo "<div id='urlCard'>";
-                  echo "<div class='url-icon'><img src='{$urlDomain}/favicon.ico' width='45' height='45' /></div>";
-                  echo "<div class='url-content'>";
-                  echo "<div class='url-title'>{$title}</div>";
-                  echo "<div class='url-href'>" . html::a($url, $url, '_target') . "</div>";
-                  echo "</div></div>";
-              }
-          }
-          else
-          {
-              echo $doc->content;
-          }
-          ?>
-          <?php foreach($doc->files as $file):?>
-          <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
-          <div class='file-image'>
-            <a href="<?php echo $file->webPath?>" target="_blank">
-              <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>" title="<?php echo $file->title;?>">
-            </a>
-            <span class='right-icon'>
-              <?php if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', 'fileID=' . $file->id) . $sessionString, "<i class='icon icon-export'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");?>
-              <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
-            </span>
           </div>
-          <?php unset($doc->files[$file->id]);?>
+          <?php if(!empty($outline) and strip_tags($outline)):?>
+          <div class="outline table-col">
+            <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
+            <div class="outline-content">
+              <?php echo $outline;?>
+            </div>
+          </div>
           <?php endif;?>
-          <?php endforeach;?>
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true', 'object' => $doc));?>
+      <div id="mainActions" class='main-actions hidden'>
+        <?php common::printPreAndNext($preAndNext);?>
+      </div>
     </div>
     <div class='cell'>
       <?php
@@ -136,7 +144,7 @@ $sessionString .= session_name() . '=' . session_id();
   <div class="side-col col-4" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-right"></i></div>
     <?php if(!empty($doc->digest)):?>
-    <div class="cell">
+    <div class="cell" id='sidebarContent'>
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
         <div class="detail-content">

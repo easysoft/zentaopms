@@ -217,11 +217,6 @@ class task extends control
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($execution->type == 'ops') unset($customFields['story']);
 
-        $this->loadModel('gitlab');
-        $allGitlabs     = $this->gitlab->getPairs();
-        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
-        foreach($allGitlabs as $id => $name) if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
-
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->showAllModule = $showAllModule;
@@ -237,8 +232,6 @@ class task extends control
         $this->view->members          = $members;
         $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->gitlabList       = $allGitlabs;
-        $this->view->gitlabProjects   = $gitlabProjects;
 
         $this->display();
     }
@@ -357,7 +350,7 @@ class task extends control
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
 
         /* Set menu. */
-        $this->execution->setMenu($this->execution->getPairs(), $this->view->execution->id);
+        $this->execution->setMenu($this->view->execution->id);
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 
@@ -372,7 +365,6 @@ class task extends control
     public function edit($taskID, $comment = false)
     {
         $this->commonAction($taskID);
-        $this->execution->setMenu($this->view->task->execution);
 
         if(!empty($_POST))
         {
@@ -792,7 +784,7 @@ class task extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success'));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -951,7 +943,7 @@ class task extends control
                     }
                 }
             }
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('result' => 'success', 'data' => $taskID));
@@ -1095,10 +1087,10 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                die(array('status' => 'success', 'data' => $taskID));
+                return $this->send(array('status' => 'success', 'data' => $taskID));
             }
             else
             {
@@ -1299,11 +1291,6 @@ class task extends control
         }
         else
         {
-            /* Delete related issue in gitlab. */
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('task', $taskID);
-            if(!empty($relation)) $this->gitlab->deleteIssue('task', $taskID, $relation->issueID);
-
             $this->task->delete(TABLE_TASK, $taskID);
             if($task->parent > 0)
             {
@@ -1315,7 +1302,8 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            return print(js::locate($this->session->taskList, 'parent'));
+            $locateLink = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 

@@ -21,7 +21,7 @@
     <table id='repoList' class='table has-sort-head table-fixed'>
       <thead>
         <tr>
-          <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
+          <?php $vars = "objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->repo->id); ?></th>
           <th class='w-120px'><?php common::printOrderLink('SCM', $orderBy, $vars, $lang->repo->type); ?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
@@ -41,7 +41,11 @@
           $productList = explode(',', str_replace(' ', '', $repo->product));
           if(isset($productList) and $productList[0])
           {
-              foreach($productList as $productID) echo ' ' . html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID, $productID));
+              foreach($productList as $productID)
+              {
+                  if(!isset($products[$productID])) continue;
+                  echo ' ' . html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID, $productID));
+              }
           }
           ?>
           </td>
@@ -49,6 +53,7 @@
           <td class='text-left c-actions'>
             <?php
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
+            if(strtolower($repo->SCM) == "gitlab") common::printIcon('gitlab', 'importIssue', "repo={$repo->id}", '', 'list', 'link');
             if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
             ?>
           </td>

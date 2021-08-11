@@ -237,6 +237,7 @@ $lang->user->contacts->or            = ' or ';
 
 $lang->user->resetFail       = "Failed. Please check the account.";
 $lang->user->resetSuccess    = "Reset! Please use your new password to login.";
+$lang->user->noticeDelete    = 'Do you want to delete "%s" from ZenTao?';
 $lang->user->noticeResetFile = "<h5>Contact the Administrator to reset your password.</h5>
     <h5>If you are, please login your Zentao host and create a file named <span> '%s' </span>.</h5>
     <p>Note:</p>

@@ -166,7 +166,8 @@ class search extends control
             }
             else
             {
-                return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, zget($this->lang->searchObjects, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']), $result['count']),'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
+                $type = zget($this->lang->searchObjects, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']);
+                return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
             }
         }
 
@@ -234,10 +235,7 @@ class search extends control
         $this->session->set('searchIngWord',   $words);
         $this->session->set('searchIngType',   $type);
 
-        if(strpos($this->server->http_referer, 'search') === false)
-        {
-            $this->session->set('referer', $this->server->http_referer);
-        }
+        if(strpos($this->server->http_referer, 'search') === false) $this->session->set('referer', $this->server->http_referer);
 
         $this->view->results    = $result;
         $this->view->consumed   = time() - $begin;

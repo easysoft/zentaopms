@@ -29,11 +29,12 @@
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' id='projectForm' method='post' data-ride='table' data-nested='true' data-checkable='false'>
+  <form class='main-table' id='projectForm' method='post' data-ride='table' data-checkable='false'>
     <table class='table table-fixed' id='docList'>
       <thead>
         <tr>
           <th class="c-name"><?php echo $lang->doc->title;?></th>
+          <th class="w-200px c-name"><?php echo $lang->doc->object;?></th>
           <th class="c-num"><?php echo $lang->doc->size;?></th>
           <?php if($type != 'openedbyme'):?>
           <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
@@ -49,6 +50,14 @@
         <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
         <tr>
           <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0&from={$lang->navGroup->doc}", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title={$doc->title} class='iframe' data-width='90%'");?></td>
+          <td class='c-name'>
+            <?php if(!empty($doc->objectType)):?>
+            <?php echo $lang->{$doc->objectType}->common . ' : ';?>
+            <a title='<?php echo $doc->objectName;?>' href='<?php echo $this->createLink($doc->objectType, 'view', "objectID=$doc->objectID");?>' data-app="<?php echo $doc->objectType;?>">
+              <?php echo $doc->objectName;?>
+            </a>
+            <?php endif;?>
+          </td>
           <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
           <?php if($type != 'openedbyme'):?>
           <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>

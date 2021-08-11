@@ -36,7 +36,7 @@ class actionModel extends model
 
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
-        $actor      = $actionType == 'openedbysystem' ? '' : $actor;
+        $actor      = ($actionType == 'openedbysystem' or $actionType == 'closedbysystem') ? '' : $actor;
         if($actor == 'guest' and $actionType == 'logout') return false;
 
         $objectType = str_replace('`', '', $objectType);
@@ -49,8 +49,7 @@ class actionModel extends model
         $action->date       = helper::now();
         $action->extra      = $extra;
 
-        if($objectType == 'story' and $actionType !== 'reviewed' and strpos('reviewclosed,passreviewed,clarifyreviewed', $actionType) !== false) $action->actor = 'System';
-
+        if($objectType == 'story' and $actionType !== 'reviewed' and strpos(',reviewclosed,passreviewed,clarifyreviewed,', ",$actionType,") !== false) $action->actor = 'System';
 
         /* Use purifier to process comment. Fix bug #2683. */
         $action->comment = fixer::stripDataTags($comment);
@@ -570,12 +569,29 @@ class actionModel extends model
             $objectIds = array_unique($objectIds);
             $table     = $this->config->objectTables[$objectType];
             $field     = $this->config->action->objectNameFields[$objectType];
-
-            $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+            if($objectType == 'pipeline')
+            {
+                $objectNames['jenkins'] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->andWhere('type')->eq('jenkins')->fetchPairs();
+                $objectNames['gitlab']  = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->andWhere('type')->eq('gitlab')->fetchPairs();
+            }
+            else
+            {
+                $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+            }
         }
 
         /* Add name field to the trashes. */
-        foreach($trashes as $trash) $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
+        foreach($trashes as $trash)
+        {
+            $objectType = $trash->objectType;
+            if($objectType == 'pipeline')
+            {
+                if(isset($objectNames['gitlab'][$trash->objectID]))  $objectType = 'gitlab';
+                if(isset($objectNames['jenkins'][$trash->objectID])) $objectType = 'jenkins';
+                $trash->objectType = $objectType;
+            }
+            $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
+        }
         return $trashes;
     }
 
@@ -928,6 +944,7 @@ class actionModel extends model
     public function transformActions($actions)
     {
         $this->app->loadLang('todo');
+        $this->app->loadLang('stakeholder');
         $requirements = array();
 
         /* Get commiters. */
@@ -948,7 +965,7 @@ class actionModel extends model
                 $objectName    = array();
                 $objectProject = array();
 
-                if(strpos($this->config->action->needGetProjectType, $objectType) !== false)
+                if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
                     foreach($objectInfo as $object)
@@ -988,6 +1005,13 @@ class actionModel extends model
                         $objectName[$object->id] = $object->team;
                         if($object->type == 'project') $objectProject[$object->id] = $object->id;
                     }
+                }
+                elseif($objectType == 'stakeholder'){
+                    $objectName = $this->dao->select("t1.id, t2.realname")->from($table)->alias('t1')
+                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.{$field} = t2.account")
+                        ->where('t1.id')->in($objectIds)
+                        ->fetchPairs();
+                    $objectProject = array();
                 }
                 else
                 {
@@ -1029,7 +1053,7 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
-            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
+            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : (isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action);
             $action->objectLabel  = $objectType;
             if(isset($this->lang->action->label->$objectType))
             {
@@ -1086,7 +1110,18 @@ class actionModel extends model
                 }
                 else
                 {
-                    $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                    if($action->objectType == 'doclib')
+                    {
+                        $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
+                        $docLib->type       = $docLib->type == 'execution' ? 'project' : $docLib->type;
+                        $docLib->objectID   = strpos('product,project', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
+                        $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
+                        $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                    }
+                    else
+                    {
+                        $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                    }
                 }
                 $action->objectLabel = $objectLabel;
             }

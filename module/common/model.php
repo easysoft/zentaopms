@@ -185,6 +185,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
+            if($module == 'my' and $method == 'guidechangetheme') return true;
             if($module == 'misc' and $method == 'downloadclient') return true;
             if($module == 'misc' and $method == 'changelog')  return true;
             if($module == 'tutorial' and $method == 'start')  return true;
@@ -544,7 +545,8 @@ class commonModel extends model
 
         if($config->systemMode == 'classic' and $openApp == 'execution') $icon = zget($lang->navIcons, 'project', '');
         $link = helper::createLink($currentModule, $currentMethod);
-        $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='btn'") : "$icon {$lang->$openApp->common}";
+        $className = $openApp == 'devops' ? 'btn num' : 'btn';
+        $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='$className'") : "$icon {$lang->$openApp->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
     }
@@ -576,7 +578,24 @@ class commonModel extends model
             /* When last divider is not used in mainNav, use it next menu. */
             $divider = ($divider || ($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
 
-            if(!common::hasPriv($currentModule, $currentMethod)) continue;
+            if(!common::hasPriv($currentModule, $currentMethod))
+            {
+                $hidden = true;
+                if($currentModule == 'assetlib')
+                {
+                    $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
+                    foreach($methodList as $method)
+                    {
+                        if(common::hasPriv($currentModule, $method))
+                        {
+                            $hidden        = false;
+                            $currentMethod = $method;
+                            break;
+                        }
+                    }
+                }
+                if($hidden) continue;
+            }
 
             if($divider and !empty($items))
             {
@@ -1333,7 +1352,14 @@ EOD;
 
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}");
             $link .= '#app=' . $app->openApp;
-            echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}'");
+            if(isset($preAndNext->pre->objectType) and $preAndNext->pre->objectType == 'doc')
+            {
+                echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}' data-url='{$link}'");
+            }
+            else
+            {
+                echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}'");
+            }
         }
         if(isset($preAndNext->next) and $preAndNext->next)
         {
@@ -1342,7 +1368,14 @@ EOD;
             $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}");
             $link .= '#app=' . $app->openApp;
-            echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title'");
+            if(isset($preAndNext->next->objectType) and $preAndNext->next->objectType == 'doc')
+            {
+                echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title' data-url='{$link}'");
+            }
+            else
+            {
+                echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title'");
+            }
         }
         echo '</nav>';
     }
@@ -1350,13 +1383,14 @@ EOD;
     /**
      * Create changes of one object.
      *
-     * @param mixed $old    the old object
-     * @param mixed $new    the new object
+     * @param mixed  $old        the old object
+     * @param mixed  $new        the new object
+     * @param string $moduleName
      * @static
      * @access public
      * @return array
      */
-    public static function createChanges($old, $new)
+    public static function createChanges($old, $new, $moduleName = '')
     {
         global $app, $config;
 
@@ -1373,7 +1407,7 @@ EOD;
 
             if($oldID && $oldStatus && $newStatus && !$newSubStatus && $oldStatus != $newStatus)
             {
-                $moduleName = $app->getModuleName();
+                if(empty($moduleName)) $moduleName = $app->getModuleName();
 
                 $field = $app->dbh->query('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
                 if(!empty($field->options)) $field->options = json_decode($field->options, true);
@@ -1963,6 +1997,7 @@ EOD;
     {
         $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
         if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
+        if(isset($_SERVER['REQUEST_SCHEME']) and strtolower($_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
         $httpHost = $_SERVER['HTTP_HOST'];
         return "$httpType://$httpHost";
     }
@@ -2025,6 +2060,29 @@ EOD;
     }
 
     /**
+     * Check an entry of new API.
+     *
+     * @access public
+     * @return void
+     */
+    private function checkNewEntry()
+    {
+        $entry = $this->loadModel('entry')->getByKey(session_id());
+        if(!$entry or !$entry->account or !$this->checkIP($entry->ip)) return false;
+
+        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
+        if(!$user) return false;
+
+        $user->last   = time();
+        $user->rights = $this->loadModel('user')->authorize($user->account);
+        $user->groups = $this->user->getGroups($user->account);
+        $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
+        $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
+        $this->session->set('user', $user);
+        $this->app->user = $user;
+    }
+
+    /**
      * Check an entry.
      *
      * @access public
@@ -2032,20 +2090,18 @@ EOD;
      */
     public function checkEntry()
     {
-        if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;
+        /* if the API is new version, goto checkNewEntry. */
+        if($this->app->version) return $this->checkNewEntry();
 
-        $this->loadModel('entry');
-        if($this->session->valid_entry)
-        {
-            if(!$this->session->entry_code) $this->response('SESSION_CODE_MISSING');
-            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response('SESSION_VERIFY_FAILED');
-            return true;
-        }
+        /* Old version. */
+        if(!isset($_GET[$this->config->moduleVar]) or !isset($_GET[$this->config->methodVar])) $this->response('EMPTY_ENTRY');
+        if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;
 
         if(!$this->get->code)  $this->response('PARAM_CODE_MISSING');
         if(!$this->get->token) $this->response('PARAM_TOKEN_MISSING');
 
-        $entry = $this->entry->getByCode($this->get->code);
+        $entry = $this->loadModel('entry')->getByCode($this->get->code);
+
         if(!$entry)                         $this->response('EMPTY_ENTRY');
         if(!$entry->key)                    $this->response('EMPTY_KEY');
         if(!$this->checkIP($entry->ip))     $this->response('IP_DENIED');
@@ -2205,10 +2261,18 @@ EOD;
     public function response($code)
     {
         $response = new stdclass();
-        $response->errcode = $this->config->entry->errcode[$code];
-        $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
+        if(isset($this->config->entry->errcode))
+        {
+            $response->errcode = $this->config->entry->errcode[$code];
+            $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
 
-        die(urldecode(json_encode($response)));
+            die(urldecode(json_encode($response)));
+        }
+        else
+        {
+            $response->error = $code;
+            die(urldecode(json_encode($response)));
+        }
     }
 
     /**

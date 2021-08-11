@@ -164,8 +164,8 @@ if(!empty($config->URAndSR))
 {
     $lang->report->annualData->productFields['requirement'] = "Created requirements";
 }
-$lang->report->annualData->productFields['story']    = "Created stories";
-$lang->report->annualData->productFields['finished'] = "Finished stories";
+$lang->report->annualData->productFields['story']  = "Created stories";
+$lang->report->annualData->productFields['closed'] = "Closed stories";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = $lang->SRCommon;

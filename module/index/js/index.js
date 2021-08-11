@@ -34,7 +34,7 @@
 
             item.icon = ($link.find('.icon').attr('class') || '').replace('icon ', '');
             item.text = $link.text().trim();
-            $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>');
+            $link.html('<i class="icon ' + item.icon + '"></i><span class="text num">' + item.text + '</span>');
             appsMap[item.code] = item;
 
             $('<li></li>').attr('data-app', item.code)
@@ -71,7 +71,7 @@
         if(code) return code;
 
         var link = $.parseLink(urlOrModuleName);
-        if(!link.moduleName || link.isOnlyBody) return '';
+        if(!link.moduleName || link.isOnlyBody || (link.moduleName === 'index' && link.methodName === 'index')) return '';
 
         if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(4);
 
@@ -202,6 +202,7 @@
                 '<iframe',
                     'id="appIframe-' + appCode + '"',
                     'name="app-' + appCode + '"',
+                    'allowfullscreen="true"',
                     'frameborder="no"',
                     'allowtransparency="true"',
                     'scrolling="auto"',
@@ -462,7 +463,7 @@
         {
             var $item     = $(this);
             var isDivider = $item.hasClass('divider');
-            var height    = isDivider ? 17 : 40;
+            var height    = isDivider ? 17 : $item.outerHeight();
             currentHeight += height;
             if(currentHeight > maxHeight)
             {

@@ -202,6 +202,7 @@ class repoModel extends model
             ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
@@ -249,8 +250,9 @@ class repoModel extends model
             ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
-            ->setDefault('client', 'svn')
             ->setDefault('prefix', $repo->prefix)
+            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
+            ->setDefault('client', 'svn')
             ->setDefault('product', '')
             ->skipSpecial('path,client,account,password')
             ->join('product', ',')
@@ -285,6 +287,12 @@ class repoModel extends model
             ->where('id')->eq($id)->exec();
 
         $this->rmClientVersionFile();
+
+        if($data->SCM == 'Gitlab')
+        {
+            $newRepo = $this->getRepoByID($id);
+            $data->path = $newRepo->path;
+        }
 
         if($repo->path != $data->path)
         {
@@ -375,7 +383,7 @@ class repoModel extends model
         if(!$repo) return false;
 
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-        if($repo->SCM == 'Gitlab') $reps = $this->processGitlab($repo);
+        if(strtolower($repo->SCM) == 'gitlab') $repo = $this->processGitlab($repo);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
@@ -442,6 +450,7 @@ class repoModel extends model
             ->fetch('time');
 
         $historyIdList = array();
+
         if($entry != '/' and !empty($entry))
         {
             $historyIdList = $this->dao->select('DISTINCT t2.id')->from(TABLE_REPOFILES)->alias('t1')
@@ -591,6 +600,23 @@ class repoModel extends model
         if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
         if(!is_writable($cachePath)) return false;
         return $cachePath . '/' . $repoID . '-' . md5("{$this->cookie->repoBranch}-$path-$revision");
+    }
+
+    /**
+     * Get products by repoID.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return array
+     */
+    public function getProductsByRepo($repoID)
+    {
+        $repo = $this->getRepoByID($repoID);
+        if(empty($repo)) return array();
+        return $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('id')->in($repo->product)
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
     }
 
     /**
@@ -1754,19 +1780,19 @@ class repoModel extends model
     /**
      * Process gitlab repo.
      *
-     * @param  oobject    $repo
+     * @param  object    $repo
      * @access public
      * @return object
      */
     public function processGitlab($repo)
     {
-        $gitlab = $this->loadModel('gitlab')->getByID($repo->client); // $repo->client is gitlabID
+        $gitlab = $this->loadModel('gitlab')->getByID($repo->client); // The $repo->client is gitlabID
         if(!$gitlab) return $repo;
-        $repo->gitlab    = $gitlab->id;
-        $repo->project   = $repo->path; // projectID in gitlab
-        $repo->path      = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path);
-        $repo->client    = $gitlab->url;
-        $repo->password  = $gitlab->token;
+        $repo->gitlab   = $gitlab->id;
+        $repo->project  = $repo->path; // The projectID in gitlab
+        $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path);
+        $repo->client   = $gitlab->url;
+        $repo->password = $gitlab->token;
         return $repo;
     }
 }

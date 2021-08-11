@@ -1,20 +1,21 @@
 <?php
 /* Fields. */
-$lang->program->name      = 'Name';
-$lang->program->template  = 'Template';
-$lang->program->category  = 'Type';
-$lang->program->desc      = 'Description';
-$lang->program->copy      = 'Copy Program';
-$lang->program->status    = 'Status';
-$lang->program->PM        = 'Manager';
-$lang->program->budget    = 'Budget';
-$lang->program->progress  = 'Progress';
-$lang->program->children  = 'Child';
-$lang->program->parent    = 'Parent';
-$lang->program->allInput  = 'Input';
-$lang->program->teamCount = 'Team';
-$lang->program->longTime  = 'Long-Term';
-$lang->program->view      = 'Program Detail';
+$lang->program->name         = 'Name';
+$lang->program->template     = 'Template';
+$lang->program->category     = 'Type';
+$lang->program->desc         = 'Description';
+$lang->program->copy         = 'Copy Program';
+$lang->program->status       = 'Status';
+$lang->program->PM           = 'Manager';
+$lang->program->budget       = 'Budget';
+$lang->program->progress     = 'Progress';
+$lang->program->children     = 'Child';
+$lang->program->parent       = 'Parent';
+$lang->program->allInput     = 'Input';
+$lang->program->teamCount    = 'Team';
+$lang->program->longTime     = 'Long-Term';
+$lang->program->view         = 'Program Detail';
+$lang->program->exchangeRate = 'Exchange Rate';
 
 /* Actions. */
 $lang->program->common                  = 'Program';
@@ -52,6 +53,9 @@ $lang->program->beginGreateChild        = "Child earliest begin: %s, parent begi
 $lang->program->endLetterChild          = "Child latest end: %s, parent end date >                        = child latest end date.";
 $lang->program->closeErrorMessage       = 'There are subprograms or projects that are not closed';
 $lang->program->confirmDelete           = "Do you want to delete it?";
+$lang->program->confirmChangePRJUint    = 'Synchronize the budget unit of the subprograms and the projects of the program? If yes, please the current exchange rate.';
+$lang->program->exRateNotNegative       = 'The『exchange rate』should not be negative.';
+$lang->program->changePRJUnit           = 'Update the budget unit of the project';
 $lang->program->hasChildren             = 'It has child programs or projects. You cannot delete it.';
 $lang->program->readjustTime            = 'Change the program begin&end date.';
 

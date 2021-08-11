@@ -20,9 +20,9 @@ ob_start();
 /* Load the framework. */
 include '../framework/api/router.class.php';
 include '../framework/api/entry.class.php';
+include '../framework/api/helper.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
-include '../framework/helper.class.php';
 
 /* Log the time and define the run mode. */
 $startTime = getTime();
@@ -34,11 +34,11 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'api');
 $common = $app->loadCommon();
 
 /* Check entry. */
-if(!$app->version) $common->checkEntry();
+$common->checkEntry();
 $common->loadConfigFromDB();
 
 /* Set default params. */
-$config->requestType   = 'GET';
+if(!$app->version) $config->requestType = 'GET';
 $config->default->view = 'json';
 
 $app->parseRequest();

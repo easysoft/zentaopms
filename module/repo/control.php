@@ -167,10 +167,9 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        if($repo->SCM == 'Gitlab')
+        if(strtolower($repo->SCM) == 'gitlab')
         {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->gitlab, $repo->password);
-
+            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->gitlab);
             $options  = array();
             foreach($projects as $project) $options[$project->id] = $project->name_with_namespace;
 
@@ -204,16 +203,16 @@ class repo extends control
      */
     public function delete($repoID, $objectID = 0, $confirm = 'no')
     {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
-        }
+        if($confirm == 'no') die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
 
+        $error = '';
         $relationID = $this->dao->select('id')->from(TABLE_RELATION)->where('extra')->eq($repoID)->fetch();
-        if($relationID)
-        {
-            die(js::alert($this->lang->repo->error->deleted));
-        }
+        if($relationID) $error .= $this->lang->repo->error->deleted;
+
+        $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
+        if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
+
+        if($error) die(js::alert($error));
 
         $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
@@ -442,6 +441,7 @@ class repo extends control
         {
             $infos = unserialize(file_get_contents($cacheFile));
         }
+
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Set logType and revisions. */
@@ -1155,5 +1155,18 @@ class repo extends control
         $branchesHtml .= '</div></div></div>';
 
         die($branchesHtml);
+    }
+
+    /**
+     * Ajax load product by repoID.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxLoadProducts($repoID)
+    {
+        $productPairs = $this->repo->getProductsByRepo($repoID);
+        echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
     }
 }

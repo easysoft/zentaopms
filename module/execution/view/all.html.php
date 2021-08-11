@@ -33,7 +33,7 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
     <?php endforeach;?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
+    <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
     <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary' data-app='$from'");?>
   </div>
 </div>
@@ -104,8 +104,8 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
           <td class='hours' title='<?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalConsumed . $this->lang->execution->workHourUnit;?></td>
           <td class='hours' title='<?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalLeft     . $this->lang->execution->workHourUnit;?></td>
           <td class="c-progress">
-            <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-              <div class='progress-info'><?php echo $execution->hours->progress;?></div>
+            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+              <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
             </div>
           </td>
           <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
@@ -142,8 +142,8 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
              <td class='hours' title='<?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class="c-progress">
-               <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $child->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                 <div class='progress-info'><?php echo $child->hours->progress;?></div>
+               <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($child->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                 <div class='progress-info'><?php echo round($child->hours->progress);?></div>
                </div>
              </td>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>

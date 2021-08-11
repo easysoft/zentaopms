@@ -44,9 +44,9 @@ foreach($projects as $programID => $programProjects)
 
     foreach($programProjects as $project)
     {
-        if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account) $projectCounts[$programID]['myProject']++;
-        if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account)) $projectCounts[$programID]['others']++;
-        if($project->status == 'done' or $project->status == 'closed') $dones++;
+        if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account) $projectCounts[$programID]['myProject'] ++;
+        if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account)) $projectCounts[$programID]['others'] ++;
+        if($project->status == 'done' or $project->status == 'closed') $dones ++;
         $projectNames[] = $project->name;
     }
 }
@@ -83,7 +83,7 @@ foreach($projects as $programID => $programProjects)
 
             if($selected == 'selected') $tabActive = 'myProject';
 
-            $myProjects++;
+            $myProjects ++;
         }
         else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
         {
@@ -91,7 +91,7 @@ foreach($projects as $programID => $programProjects)
 
             if($selected == 'selected') $tabActive = 'other';
 
-            $others++;
+            $others ++;
         }
         else if($project->status == 'done' or $project->status == 'closed')
         {
@@ -155,5 +155,7 @@ $(function()
         if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
         $("#dropMenu .search-box").width('auto');
     })
+
+    if(config.clientLang == 'en') $('#tabContent .tab-pane>ul>li>label+a').css('padding-left', '65px');
 })
 </script>

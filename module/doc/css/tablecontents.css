@@ -1,0 +1,23 @@
+.main-content {padding-top: 0; padding-bottom: 0;}
+.main-content #createDropdown {display: inline-block;}
+.main-content #createDropdown ul {position: absolute;}
+#pageNav .dropdown-menu {max-height: inherit;}
+
+.no-content {width: 100px; height: 100px; margin: 0 auto;}
+.notice {text-align: center; padding-left: 15px; padding-top: 20px;}
+.no-content-button {text-align: center; padding-top: 20px;}
+.no-content-button a:nth-child(2) {margin-left: 20px;}
+
+.cell .detail .detail-title {padding-left: 5px; list-style: none;}
+.menu-actions {position: absolute; top: 7px; right: 45px; padding: 7px 8px;}
+.catalog>a {color: #838a9d !important;}
+.detail ul {position: relative;}
+.tail-info {position: absolute; right: 0; padding-left: 10px; padding-top: 1px;}
+.tail-info, .doc-title, span.item {background: #fff;}
+span.item>a {padding-left: 6px;}
+span.dotted-line+a {display: block;}
+#modules li.doc:before, .chapterNode:before, .independent:before {content: " "; width: 100%; border-bottom: 1px dashed #b5b9c5; position: absolute; top: 13px; right: 0; left: 30px;}
+.doc-title {display: inline-block !important; position: relative; padding-right: 10px;}
+.tree li.has-list.open:before {content: unset;}
+#modules i.icon-file-text {color: #D0D2D6; font-size: 14px;}
+.tree li>a {max-width: 80%;}

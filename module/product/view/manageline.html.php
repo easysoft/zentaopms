@@ -10,16 +10,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-right">
-    <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary"');?>
-  </div>
-</div>
 <div id="mainContent" class="main-row fade">
   <div class='side-col col-4'>
     <div class='panel'>
       <div class='panel-heading'>
-        <div class="panel-title"></div>
+        <div class="panel-title"><?php echo $lang->product->line;?></div>
       </div>
       <div class='panel-body'>
         <ul id='modulesTree' data-name='tree-line'></ul>
@@ -113,7 +108,7 @@ $(function()
         itemCreator: function($li, item)
         {
             var name = item.name;
-            var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + name + '</span>');
+            var $toggle = $('<span class="module-name" data-id="' + item.id + '" title="' + name + '">' + name + '</span>');
             $li.append($toggle);
             if(item.nodeType || item.type) $li.addClass('tree-item-' + (item.nodeType || item.type));
             return true;

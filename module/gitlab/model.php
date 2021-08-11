@@ -253,6 +253,38 @@ class gitlabModel extends model
     }
 
     /**
+     * Get gitlab project name of one gitlab project.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return string|false
+     */
+    public function getObjectNameForJob($gitlabID, $projectID)
+    {
+        $project = $this->apiGetSingleProject($gitlabID, $projectID);
+        if(isset($project->name)) return $project->name;
+        return false;
+    }
+
+    /**
+     * Get ref option menus.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getRefOptions($gitlabID, $projectID)
+    {
+        $refList  = array();
+        $branches = $this->loadModel('gitlab')->apiGetBranches($gitlabID, $projectID);
+        $tags     = $this->loadModel('gitlab')->apiGetTags($gitlabID, $projectID);
+        foreach($branches as $branch) $refList[] = "Branch::" . $branch->name;
+        foreach($tags as $tag) $refList[] = "Tag::" . $tag->name;
+        return $refList;
+    }
+
+    /**
      * Create a gitlab.
      *
      * @access public
@@ -380,6 +412,20 @@ class gitlabModel extends model
         }
 
         return $allResults;
+    }
+
+    /**
+     * Get single project by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleProject($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID");
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -605,7 +651,7 @@ class gitlabModel extends model
     {
         if(!isset($object->id)) $object->id = $objectID;
 
-        $issue = $this->loadModel('gitlab')->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
+        $issue = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);
         if(isset($label->name)) $issue->labels = $label->name;
 
@@ -668,6 +714,111 @@ class gitlabModel extends model
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issueID}");
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
+
+    /**
+     * Create a new pipeline by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param string  $reference
+     * @access public
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
+     */
+    public function apiCreatePipeline($gitlabID, $projectID, $reference)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
+        return json_decode(commonModel::http($url, $reference, null, array("Content-Type: application/json")));
+    }
+
+    /**
+     * Get single pipline by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param integer $pipelineID
+     * @access public
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/pipelines.html#get-a-single-pipeline
+     */
+    public function apiGetSinglePipeline($gitlabID, $projectID, $pipelineID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * List pipeline jobs by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param integer $pipelineID
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs
+     */
+    public function apiGetJobs($gitlabID, $projectID, $pipelineID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipelines/{$pipelineID}/jobs");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get a single job by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param integer $jobID
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
+     */
+    public function apiGetSingleJob($gitlabID, $projectID, $jobID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get a log file by api.
+     *
+     * @param integer $gitlabID
+     * @param integer $projectID
+     * @param integer $jobID
+     * @return string
+     * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-log-file
+     */
+    public function apiGetJobLog($gitlabID, $projectID, $jobID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/jobs/{$jobID}/trace");
+        return commonModel::http($url);
+    }
+
+    /**
+     * Get project repository branches by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetBranches($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/branches");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get project repository tags by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+     public function apiGetTags($gitlabID, $projectID)
+     {
+         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/tags");
+         return json_decode(commonModel::http($url));
+     }
 
     /**
      * Check webhook token by HTTP_X_GITLAB_TOKEN.
@@ -1216,15 +1367,16 @@ class gitlabModel extends model
             $value = '';
             list($gitlabField, $optionType, $options) = explode('|', $config);
             if(!isset($changes->$gitlabField) and $object->id != 0) continue;
-            if($optionType == 'field')  $value = $issue->$gitlabField;
-            if($optionType == 'fields') $value = $issue->$gitlabField;  // TODO(dingguodong) not implemented.
+            if($optionType == 'field' or $optionType == 'fields') $value = $issue->$gitlabField;
             if($options == 'date')      $value = $value ? date('Y-m-d', strtotime($value)) : '0000-00-00';
             if($options == 'datetime')  $value = $value ? date('Y-m-d H:i:s', strtotime($value)) : '0000-00-00 00:00:00';
             if($optionType == 'userPairs' and isset($issue->$gitlabField))   $value = zget($gitlabUsers, $issue->$gitlabField);
             if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
-            if($value) $object->$zentaoField = $value;
 
-            if($gitlabField == "description") $object->$zentaoField .= "<br>" . $issue->web_url;
+            /* Execute this line even `$value == ""`, such as `$issue->description == ""`. */
+            if($value or $value == "") $object->$zentaoField = $value;
+
+            if($gitlabField == "description") $object->$zentaoField .= "<br><br><a href=\"{$issue->web_url}\" target=\"_blank\">{$issue->web_url}</a>";
         }
         return $object;
     }

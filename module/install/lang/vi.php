@@ -113,6 +113,7 @@ $lang->install->errorDBName         = 'Database name should exclude “.” ';
 $lang->install->errorCreateDB       = 'Tạo thất bại the database.';
 $lang->install->errorTableExists    = 'The data table has existed. If ZenTao has been installed before, please return to the previous step and clear data, then continue the installation.';
 $lang->install->errorCreateTable    = 'Tạo thất bại the table.';
+$lang->install->errorEngineInnodb   = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->install->errorImportDemoData = 'Thất bại nhập dữ liệu demo.';
 
 $lang->install->setConfig          = 'Tạo tập tin cấu hình';

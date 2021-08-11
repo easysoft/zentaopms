@@ -38,7 +38,6 @@ class bug extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $products = array();
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
@@ -48,25 +47,32 @@ class bug extends control
         $this->loadModel('qa');
 
         /* Get product data. */
+        $products = array();
         $objectID = 0;
-        if($this->app->openApp == 'project')
+        $openApp  = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        if(!isonlybody())
         {
-            $objectID = $this->session->project;
-            $products  = $this->loadModel('project')->getProducts($objectID, false);
-        }
-        elseif($this->app->openApp == 'execution')
-        {
-            $objectID = $this->session->execution;
-            $products = $this->loadModel('execution')->getProducts($objectID, false);
+            if($this->app->openApp == 'project')
+            {
+                $objectID = $this->session->project;
+                $products  = $this->loadModel('project')->getProducts($objectID, false);
+            }
+            elseif($this->app->openApp == 'execution')
+            {
+                $objectID = $this->session->execution;
+                $products = $this->loadModel('execution')->getProducts($objectID, false);
+            }
+            else
+            {
+                $products = $this->product->getPairs('', 0, 'program_asc');
+            }
+            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=bug&objectID=$objectID")));
         }
         else
         {
             $products = $this->product->getPairs('', 0, 'program_asc');
         }
-
         $this->view->products = $this->products = $products;
-        $openApp = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
-        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=bug&objectID=$objectID")));
     }
 
     /**
@@ -98,15 +104,13 @@ class bug extends control
     {
         $this->loadModel('datatable');
 
-        $products  = $this->loadModel('product')->getPairs('noclosed');
-        $productID = $this->product->saveState($productID, $products);
-        $this->qa->setMenu($products, $productID, $branch);
+        $productID = $this->product->saveState($productID, $this->products);
+        $this->qa->setMenu($this->products, $productID, $branch);
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
 
         /* Set productID, moduleID, queryID and branch. */
-        if(!$this->projectID) $productID = $this->product->saveState($productID, $this->products);
         $branch = ($branch == '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
@@ -521,7 +525,7 @@ class bug extends control
         $projects = array(0 => '');
         if($executionID)
         {
-            $products    = array();
+            $products       = array();
             $linkedProducts = $this->loadModel('execution')->getProducts($executionID);
             foreach($linkedProducts as $product) $products[$product->id] = $product->name;
 
@@ -568,17 +572,6 @@ class bug extends control
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
-
-        /* Set gitlabProjects. */
-        $this->loadModel('gitlab');
-        $allGitlabs     = $this->gitlab->getPairs();
-        $gitlabProjects = $this->gitlab->getProjectsByExecution($executionID);
-        foreach($allGitlabs as $id => $name)
-        {
-            if($id and !isset($gitlabProjects[$id])) unset($allGitlabs[$id]);
-        }
-        $this->view->gitlabList     = $allGitlabs;
-        $this->view->gitlabProjects = $gitlabProjects;
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -748,6 +741,11 @@ class bug extends control
                 $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
                 $this->repo->setMenu($repos);
                 $this->lang->navGroup->bug = 'devops';
+            }
+            if($this->app->openApp == 'product')
+            {
+                $this->loadModel('product')->setMenu($bug->product);
+                $this->lang->product->menu->plan['subModule'] .= ',bug';
             }
         }
 
@@ -1298,9 +1296,6 @@ class bug extends control
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->bug->resolve;
-
         $this->view->bug        = $bug;
         $this->view->users      = $users;
         $this->view->assignedTo = $assignedTo;
@@ -1478,16 +1473,8 @@ class bug extends control
             $_POST = array();
 
             $bugs = $this->bug->getByList($bugIDList);
-            $this->loadModel('gitlab');
             foreach($bugs as $bugID => $bug)
             {
-                $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-                if(!empty($relation))
-                {
-                    $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-                    if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $bug);
-                }
-
                 if($bug->status != 'resolved')
                 {
                     if($bug->status != 'closed') $skipBugs[$bugID] = $bugID;
@@ -1571,11 +1558,6 @@ class bug extends control
         }
         else
         {
-            /* Delete related issue in gitlab. */
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('bug', $bugID);
-            if(!empty($relation)) $this->gitlab->deleteIssue('bug', $bugID, $relation->issueID);
-
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0)
             {
@@ -1592,7 +1574,9 @@ class bug extends control
             $this->executeHooks($bugID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::locate($this->session->bugList, 'parent'));
+
+            $locateLink = $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 

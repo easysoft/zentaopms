@@ -359,16 +359,25 @@ class projectModel extends model
         $executions = $this->loadModel('execution')->getPairs($projectID);
 
         $total = $this->dao->select('
-            ROUND(SUM(estimate), 2) AS totalEstimate,
-            ROUND(SUM(consumed), 2) AS totalConsumed,
+            ROUND(SUM(estimate), 1) AS totalEstimate,
             ROUND(SUM(`left`), 2) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
+            ->andWhere('project')->eq($projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
+
+        $totalConsumed = $this->dao->select('ROUND(SUM(consumed), 1) AS totalConsumed')
+            ->from(TABLE_TASK)
+            ->where('project')->eq($projectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->fetch('totalConsumed');
+
         $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
-            ->where('project')->in(array_keys($executions))
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('project')->eq($projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->andWhere('status')->in('closed,cancel')
@@ -376,8 +385,8 @@ class projectModel extends model
 
         $workhour = new stdclass();
         $workhour->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('project')->fetch('totalHours');
-        $workhour->totalEstimate = round($total->totalEstimate, 1);
-        $workhour->totalConsumed = round($total->totalConsumed, 1);
+        $workhour->totalEstimate = $total->totalEstimate;
+        $workhour->totalConsumed = $totalConsumed;
         $workhour->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
 
         return $workhour;
@@ -771,16 +780,20 @@ class projectModel extends model
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
             /* Create doc lib. */
             $this->app->loadLang('doc');
+
+            $authorizedUsers = $project->whitelist . ',' . $project->PM . ',' . $project->openedBy . ',';
+            $authorizedUsers = array_unique(explode(',', trim($authorizedUsers, ',')));
+
             $lib = new stdclass();
             $lib->project = $projectID;
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
+            if($project->acl == 'private') $lib->users = ',' . implode(',', $authorizedUsers) . ',';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -948,7 +961,13 @@ class projectModel extends model
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open')
+            {
+                $this->loadModel('user')->updateUserView($projectID, 'project');
+
+                $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
+                if($executions) $this->user->updateUserView($executions, 'sprint');
+            }
 
             if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
 
@@ -1322,9 +1341,16 @@ class projectModel extends model
                 $title  = "title='{$project->name}'";
             }
 
+            if($id == 'end')
+            {
+                $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+                $class .= ' c-name';
+                $title  = "title='{$project->end}'";
+            }
+
             if($id == 'budget')
             {
-                $projectBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
+                $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
@@ -1335,6 +1361,7 @@ class projectModel extends model
             if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
 
             echo "<td class='$class' $title>";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('project', $project, $id);
             switch($id)
             {
                 case 'id':
@@ -1365,7 +1392,7 @@ class projectModel extends model
                     echo $project->begin;
                     break;
                 case 'end':
-                    echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+                    echo $project->end;
                     break;
                 case 'status':
                     echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
@@ -1386,7 +1413,7 @@ class projectModel extends model
                     echo $project->hours->totalLeft     . $this->lang->execution->workHourUnit;
                     break;
                 case 'progress':
-                    echo "<div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}</div></div>";
+                    echo "<div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}</div></div>";
                     break;
                 case 'actions':
                     if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('project', 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);
@@ -1483,6 +1510,23 @@ class projectModel extends model
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
+    }
+
+    /**
+     * Update userview for involved product and execution.
+     *
+     * @param  int    $projectID
+     * @param  array  $users
+     * @access public
+     * @return void
+     */
+    public function updateInvolvedUserView($projectID, $users = array())
+    {
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product', 'product');
+        $this->loadModel('user')->updateUserView($products, 'product', $users);
+
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id', 'id');
+        if($executions) $this->user->updateUserView($executions, 'sprint', $users);
     }
 
     /**

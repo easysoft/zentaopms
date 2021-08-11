@@ -1,7 +1,7 @@
 <?php
-$lang->personnel->common     = '项目集人员';
+$lang->personnel->common     = '可访问人员';
 $lang->personnel->accessible = '可访问人员列表';
-$lang->personnel->invest    = '投入人员列表';
+$lang->personnel->invest     = '投入人员列表';
 $lang->personnel->department = '部门';
 $lang->personnel->realName   = '真实姓名';
 $lang->personnel->userName   = '用户名';
@@ -30,9 +30,11 @@ $lang->personnel->resolved      = '解决';
 $lang->personnel->UR            = $lang->URCommon;
 $lang->personnel->SR            = $lang->SRCommon;
 
-$lang->personnel->whitelist      = '白名单列表';
-$lang->personnel->addWhitelist   = '添加白名单';
+$lang->personnel->whitelist       = '白名单列表';
+$lang->personnel->addWhitelist    = '添加白名单';
 $lang->personnel->unbindWhitelist = '删除白名单';
-$lang->personnel->confirmDelete  = '确认将该用户移除白名单？';
+$lang->personnel->confirmDelete   = '确认将该用户移除白名单？';
+$lang->personnel->copy            = '复制白名单';
 
-$lang->personnel->openedPGMTip = '该项目集是公开状态，有项目集视图权限的人员即可访问。';
+$lang->personnel->openedPGMTip     = '该项目集是公开状态，有项目集视图权限的人员即可访问。';
+$lang->personnel->selectObjectTips = '请选择一个%s白名单来复制';

@@ -13,18 +13,23 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('objectID', $objectID);?>
 <?php js::set('objectType', $objectType);?>
+<style>#object_chosen .chosen-single, #dept_chosen .chosen-single {width: 220px;}</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <span class='btn btn-link btn-active-text'>
+      <?php echo html::a("javascript:viod(0)", "<span class='text'> {$lang->personnel->addWhitelist}</span>");?>
+    </span>
     <div class='input-group space w-200px'>
-      <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
-      <?php echo html::select('dept', $depts, $deptID, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
+      <span class='input-group-addon'><?php echo $lang->execution->selectDept;?></span>
+      <?php echo html::select('dept', $depts, $deptID, "class='form-control chosen' onchange='setObjectUsers()' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
+      <?php if(count($objects) > 1):?>
+      <span class='input-group-addon'><?php echo $lang->personnel->copy;?></span>
+      <?php echo html::select('object', $objects, $copyID, "class='form-control chosen' onchange='setObjectUsers()' data-placeholder='{$lang->personnel->selectObjectTips}'");?>
+      <?php endif;?>
     </div>
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <div class="main-header">
-    <h2><?php echo $lang->personnel->addWhitelist;?></h2>
-  </div>
   <form class='main-form form-ajax' method='post' target='hiddenwin' id="whitelistForm">
     <table class='table table-form'>
       <thead>
@@ -53,7 +58,7 @@
         ?>
         <?php endforeach;?>
 
-        <?php foreach($deptUsers as $account => $realname):?>
+        <?php foreach($appendUsers as $account => $realname):?>
         <?php if(isset($whitelistUsers[$account])) continue;?>
         <tr id="whitelist<?php echo $i;?>" data-id="<?php echo $i;?>">
           <td>

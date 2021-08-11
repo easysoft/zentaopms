@@ -2,7 +2,6 @@
 <style>
 tbody.sortable > tr.drag-shadow {display: none}
 tbody.sortable > tr > td.sort-handler {cursor: move; color: #999;}
-tbody.sortable > tr > td.sort-handler > i {position: relative; top: 2px}
 tbody.sortable-sorting > tr {transition: all .2s; position: relative; z-index: 5; opacity: .3;}
 tbody.sortable-sorting {cursor: move;}
 tbody.sortable-sorting > tr.drag-row {opacity: 1; z-index: 10; box-shadow: 0 2px 4px red}

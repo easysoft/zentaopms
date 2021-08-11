@@ -36,6 +36,18 @@ class entryModel extends model
     }
 
     /**
+     * Get an entry by key.
+     *
+     * @param  string $key
+     * @access public
+     * @return object
+     */
+    public function getByKey($key)
+    {
+        return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('`key`')->eq($key)->fetch();
+    }
+
+    /**
      * Get entry list. 
      * 
      * @param  string $orderBy
@@ -163,4 +175,60 @@ class entryModel extends model
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();
     }
+
+    /**
+     * Get the detail of the user.
+     *
+     * @param  string    $account
+     * @access public
+     * @return object
+     */
+    public function getUser($account)
+    {
+        $this->loadModel('user');
+        $user = $this->user->getById($account, $feild = 'account');
+
+        $detail = new stdclass;
+        $detail->id       = $user->id;
+        $detail->account  = $user->account;
+        $detail->realname = $user->realname;
+        $detail->url      = helper::createLink('user', 'profile', "userID={$user->id}");
+
+        if($user->avatar != "")
+            $detail->avatar = common::getSysURL() . $user->avatar;
+        else
+            $detail->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
+
+        return $detail;
+    }
+
+    /**
+     * Get the details of assigned users.
+     *
+     * @param  string    $objectType
+     * @param  object    $object
+     * @access public
+     * @return array
+     */
+    public function getAssignees($objectType, $object)
+    {
+        $users = $this->dao
+                      ->select('account')->from(TABLE_TEAM)
+                      ->where('type')->eq($objectType)
+                      ->andWhere('root')->eq($object->id)
+                      ->fetchAll();
+
+        if($users)
+        {
+            $details = array();
+            foreach($users as $user)
+            {
+                $details[] = $this->getUser($user->account);
+            }
+            return $details;
+        }
+
+        return ($object->assignedTo == "" or $object->assignedTo == "closed") ? array() : array($this->getUser($object->assignedTo));
+    }
+
 }

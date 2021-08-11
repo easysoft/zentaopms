@@ -181,7 +181,8 @@
         </div>
       </div>
       <div class="row form-group form-actions">
-        <div class="col-sm-offset-2 col-sm-10">
+        <?php $class = isonlybody() ? 'col-sm-offset-5 col-sm-7' : 'col-sm-offset-4 col-sm-8';?>
+        <div class="<?php echo $class;?>">
           <?php echo html::submitButton();?>
           <?php echo html::backButton();?>
         </div>

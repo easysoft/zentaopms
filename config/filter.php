@@ -36,6 +36,7 @@ $filter->branch       = new stdclass();
 $filter->qa           = new stdclass();
 $filter->story        = new stdclass();
 $filter->task         = new stdclass();
+$filter->execution    = new stdclass();
 $filter->testcase     = new stdclass();
 $filter->program      = new stdclass();
 $filter->project      = new stdclass();
@@ -57,6 +58,7 @@ $filter->git          = new stdclass();
 $filter->svn          = new stdclass();
 $filter->search       = new stdclass();
 $filter->gitlab       = new stdclass();
+$filter->ci           = new stdclass();
 
 $filter->block->default              = new stdclass();
 $filter->block->main                 = new stdclass();
@@ -112,6 +114,7 @@ $filter->svn->cat                    = new stdclass();
 $filter->svn->diff                   = new stdclass();
 $filter->task->create                = new stdclass();
 $filter->task->export                = new stdclass();
+$filter->execution->story            = new stdclass();
 $filter->testcase->default           = new stdclass();
 $filter->testcase->create            = new stdclass();
 $filter->testcase->browse            = new stdclass();
@@ -133,6 +136,7 @@ $filter->repo->ajaxsynccommit        = new stdclass();
 $filter->search->index               = new stdclass();
 $filter->gitlab->webhook             = new stdclass();
 $filter->gitlab->importissue         = new stdclass();
+$filter->ci->checkCompileStatus      = new stdclass();
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
 $filter->bug->browse->cookie['bugModule']      = 'int';
@@ -187,6 +191,7 @@ $filter->project->default->cookie['lastProject']      = 'int';
 $filter->project->default->cookie['lastPRJ']          = 'int';
 $filter->project->default->cookie['projectMode']      = 'code';
 $filter->project->browse->cookie['involved']          = 'code';
+$filter->project->browse->cookie['projectType']       = 'code';
 $filter->project->story->cookie['storyModuleParam']   = 'int';
 $filter->project->story->cookie['storyPreProjectID']  = 'int';
 $filter->project->story->cookie['storyProductParam']  = 'int';
@@ -211,6 +216,12 @@ $filter->story->export->cookie['checkedItem']       = 'reg::checked';
 
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';
+
+$filter->execution->story->cookie['storyPreExecutionID'] = 'int';
+$filter->execution->story->cookie['storyModuleParam']    = 'int';
+$filter->execution->story->cookie['storyProductParam']   = 'int';
+$filter->execution->story->cookie['storyBranchParam']    = 'int';
+$filter->execution->story->cookie['executionStoryOrder'] = 'code';
 
 $filter->testcase->browse->cookie['caseModule']     = 'int';
 $filter->testcase->browse->cookie['caseSuite']      = 'int';
@@ -323,3 +334,4 @@ $filter->gitlab->importissue->get['product'] = 'string';
 $filter->gitlab->importissue->get['project'] = 'int';
 $filter->gitlab->importissue->get['repo']    = 'int';
 
+$filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';

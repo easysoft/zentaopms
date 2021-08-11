@@ -84,7 +84,7 @@
   </ul>
   <div class='actions'>
     <div class='btn-group'>
-      <?php 
+      <?php
       if(!isset($browseType)) $browseType = '';
       if(!isset($orderBy))    $orderBy = '';
       common::printIcon('task', 'report', "execution=$executionID&browseType=$browseType");
@@ -96,7 +96,7 @@
             <span class='caret'></span>
         </button>
         <ul class='dropdown-menu' id='exportActionMenu'>
-        <?php 
+        <?php
         $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
         $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
@@ -110,7 +110,7 @@
             <span class='caret'></span>
         </button>
         <ul class='dropdown-menu' id='importActionMenu'>
-        <?php 
+        <?php
         $misc = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
         $link = common::hasPriv('execution', 'importTask') ?  $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
         echo "<li>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
@@ -124,12 +124,12 @@
     </div>
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>
-        <?php 
+        <?php
         $checkObject = new stdclass();
         $checkObject->execution = $executionID;
         $misc = common::hasPriv('task', 'create', $checkObject) ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
         $link = common::hasPriv('task', 'create', $checkObject) ?  $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
-        echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
+        echo html::a($link, "<i class='icon icon-plus'></i> " . $lang->task->create, '', $misc);
 
         $misc = common::hasPriv('task', 'batchCreate', $checkObject) ? '' : "disabled";
         $link = common::hasPriv('task', 'batchCreate', $checkObject) ?  $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';

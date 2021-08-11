@@ -24,7 +24,6 @@ $lang->bug->storyVersion     = "{$lang->SRCommon}版本";
 $lang->bug->color            = '标题颜色';
 $lang->bug->task             = '相关任务';
 $lang->bug->title            = 'Bug标题';
-$lang->bug->sync2gitlab      = '同步gitlab';
 $lang->bug->severity         = '严重程度';
 $lang->bug->severityAB       = '级别';
 $lang->bug->pri              = '优先级';
@@ -80,7 +79,7 @@ $lang->bug->lastEditedDate   = '修改日期';
 $lang->bug->fromCase         = '来源用例';
 $lang->bug->toCase           = '生成用例';
 $lang->bug->colorTag         = '颜色标签';
-$lang->bug->repairRate       = '修复率';
+$lang->bug->fixedRate        = '修复率';
 
 /* 方法列表。*/
 $lang->bug->index              = '首页';

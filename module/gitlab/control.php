@@ -23,6 +23,9 @@ class gitlab extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* This is essential when changing tab(menu) from gitlab to repo. */
+        common::setMenuVars('devops', $this->session->repoID);
+
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -342,28 +345,8 @@ class gitlab extends control
         $options    = "<option value=''></option>";
         foreach($executions as $index =>$execution)
         {
-            $options .= "<option value='{$index}' data-name='{$execution}'>{$execution}</option>";
+            $options .= "<option title='{$execution}' value='{$index}' data-name='{$execution}'>{$execution}</option>";
         }
-        die($options);
-    }
-
-    /**
-     * AJAX: Get gitlab project pipeline.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPipeline($repoID)
-    {
-        if(empty($repoID)) die(json_encode(array('' => '')));
-        $this->loadModel('repo');
-        $repo = $this->repo->getRepoByID($repoID);
-        if(empty($repo)) die(json_encode(array('' => '')));
-
-        $gitlabID  = $repo->gitlab;
-        $projectID = $repo->projectID;
-        $pipeline  = $this->gitlab->getPipeline($gitlabID, $projectID);
-        die(json_encode($pipeline));
+        return $this->send($options);
     }
 }

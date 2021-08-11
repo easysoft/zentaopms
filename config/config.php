@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '15.2';           // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '15.3';           // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
@@ -109,7 +109,7 @@ $config->framework->purifier        = true;  // 是否对数据做purifier处理
 $config->framework->logDays         = 14;    // 日志文件保存的天数。              The days to save log files.
 $config->framework->autoRepairTable = true;
 $config->framework->autoLang        = false;
-$config->framework->filterCSRF      = false;
+$config->framework->filterCSRF      = true;
 $config->framework->setCookieSecure = true;
 $config->framework->sendXCTO        = true;   // Send X-Content-Type-Options header.
 $config->framework->sendXXP         = true;   // Send X-XSS-Protection header.

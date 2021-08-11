@@ -103,7 +103,9 @@ $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = 'Team';
 $lang->action->objectTypes['whitelist']   = 'Whitelist';
-$lang->action->objectTypes['pipeline']    = 'GitLib';
+$lang->action->objectTypes['pipeline']    = 'GitLab';
+$lang->action->objectTypes['gitlab']      = 'GitLab';
+$lang->action->objectTypes['jenkins']     = 'Jenkins';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -445,6 +447,7 @@ $lang->action->dynamicAction->doc['hidden']    = 'Hide Document';
 
 $lang->action->dynamicAction->user['created']       = 'Create User';
 $lang->action->dynamicAction->user['edited']        = 'Edit User';
+$lang->action->dynamicAction->user['deleted']       = 'Delete User';
 $lang->action->dynamicAction->user['login']         = 'Login';
 $lang->action->dynamicAction->user['logout']        = 'Logout';
 $lang->action->dynamicAction->user['undeleted']     = 'Restore User';
@@ -477,7 +480,7 @@ $lang->action->label->testtask    = 'Request|testtask|view|caseID=%s';
 $lang->action->label->testsuite   = 'Test Suite|testsuite|view|suiteID=%s';
 $lang->action->label->caselib     = 'Case Library|caselib|view|libID=%s';
 $lang->action->label->todo        = 'Todo|todo|view|todoID=%s';
-$lang->action->label->doclib      = 'Doc Library|doc|browse|libID=%s';
+$lang->action->label->doclib      = 'Doc Library|doc|objectLibs|type=%s&objectID=%s&libID=%s&docID=&version=&appendLib=%s';
 $lang->action->label->doc         = 'Doc|doc|view|docID=%s';
 $lang->action->label->user        = 'User|user|view|account=%s';
 $lang->action->label->testreport  = 'Report|testreport|view|report=%s';

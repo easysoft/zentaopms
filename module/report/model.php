@@ -642,7 +642,7 @@ class reportModel extends model
     }
 
     /**
-     * Get count of created story,plan and finished story by accounts every product in this year.
+     * Get count of created story,plan and closed story by accounts every product in this year.
      *
      * @param  array  $accounts
      * @param  int    $year
@@ -709,7 +709,7 @@ class reportModel extends model
             ->groupBy('product')
             ->fetchAll('product');
 
-        $closedStoryStats = $this->dao->select("product,sum(if((status = 'closed'), 1, 0)) as finished")->from(TABLE_STORY)
+        $closedStoryStats = $this->dao->select("product,sum(if((status = 'closed'), 1, 0)) as closed")->from(TABLE_STORY)
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
             ->andWhere('LEFT(closedDate, 4)')->eq($year)
@@ -717,13 +717,13 @@ class reportModel extends model
             ->groupBy('product')
             ->fetchAll('product');
 
-        /* Merge created plan, created story and finished story in every product. */
+        /* Merge created plan, created story and closed story in every product. */
         foreach($products as $productID => $product)
         {
             $product->plan        = 0;
             $product->requirement = 0;
             $product->story       = 0;
-            $product->finished    = 0;
+            $product->closed      = 0;
 
             $plans = zget($planGroups, $productID, array());
             if($plans) $product->plan = count($plans);
@@ -736,7 +736,7 @@ class reportModel extends model
             }
 
             $closedStoryStat = zget($closedStoryStats, $productID, '');
-            if($closedStoryStat) $product->finished = $closedStoryStat->finished;
+            if($closedStoryStat) $product->closed = $closedStoryStat->closed;
         }
 
         return $products;

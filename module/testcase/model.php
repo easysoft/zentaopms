@@ -47,7 +47,7 @@ class testcaseModel extends model
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->config->systemMode == 'new' && $this->app->openApp == 'project', 'project', $this->session->project)
+            ->setIF($this->config->systemMode == 'new' and $this->app->openApp == 'project', 'project', $this->session->project)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -518,10 +518,8 @@ class testcaseModel extends model
         $cases = $sql
             ->where($caseQuery)
             ->beginIF($this->app->openApp == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
-            ->beginIF(!empty($productID) and $queryProductID != 'all')
-            ->beginIF($this->app->openApp == 'project' and !empty($productID))->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($this->app->openApp != 'project')->andWhere('t1.product')->eq($productID)->fi()
-            ->fi()
+            ->beginIF($this->app->openApp == 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($this->app->openApp != 'project' and !empty($productID) and $queryProductID != 'all')->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->andWhere('t1.deleted')->eq(0)
@@ -1478,7 +1476,7 @@ class testcaseModel extends model
                 break;
             case 'title':
                 if($case->branch) echo "<span class='label label-info label-outline'>{$branches[$case->branch]}</span> ";
-                if($modulePairs and $case->module) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
+                if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                 echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->openApp}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]", '', "data-app='{$this->app->openApp}'") : html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->openApp}'")) : "<span style='color: $case->color'>$case->title</span>";
                 break;
             case 'branch':

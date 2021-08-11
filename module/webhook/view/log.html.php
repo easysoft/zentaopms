@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     log 
+ * @package     log
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -21,7 +21,7 @@
     <div class='btn-toolbar pull-right'>
       <div class='btn-group'>
         <div class='btn-group' id='createActionMenu'>
-          <?php common::printLink('admin', 'log', '', "<i class='icon icon-cog'> </i>" . $lang->webhook->setting, '', "class='btn btn-primary iframe'", '', true);?>
+          <?php common::printLink('admin', 'log', '', "<i class='icon icon-cog'> </i> " . $lang->webhook->setting, '', "class='btn btn-primary iframe'", '', true);?>
         </div>
       </div>
     </div>

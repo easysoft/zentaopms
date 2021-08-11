@@ -28,6 +28,15 @@ $config->doc->editor->view   = array('id' => 'comment,lastComment', 'tools' => '
 $config->doc->markdown = new stdclass();
 $config->doc->markdown->create = array('id' => 'contentMarkdown', 'tools' => 'withchange');
 
+$config->doc->collectionLimit = 10;
+
+$config->doc->iconList['html']     = 'rich-text';
+$config->doc->iconList['markdown'] = 'markdown';
+$config->doc->iconList['url']      = 'text-link';
+$config->doc->iconList['word']     = 'word';
+$config->doc->iconList['ppt']      = 'ppt';
+$config->doc->iconList['excel']    = 'excel';
+
 $config->doc->search['module']                   = 'doc';
 $config->doc->search['fields']['title']          = $lang->doc->title;
 $config->doc->search['fields']['id']             = $lang->doc->id;

@@ -46,9 +46,9 @@ foreach($products as $programID => $programProducts)
 
     foreach($programProducts as $product)
     {
-        if($product->status == 'normal' and $product->PO == $this->app->user->account) $productCounts[$programID]['myProduct']++;
-        if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $productCounts[$programID]['others']++;
-        if($product->status == 'closed') $closeds++;
+        if($product->status == 'normal' and $product->PO == $this->app->user->account) $productCounts[$programID]['myProduct'] ++;
+        if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $productCounts[$programID]['others'] ++;
+        if($product->status == 'closed') $closeds ++;
         $productNames[] = $product->name;
     }
 }
@@ -82,7 +82,7 @@ foreach($products as $programID => $programProducts)
 
             if($selected == 'selected') $tabActive = 'myProduct';
 
-            $myProducts++;
+            $myProducts ++;
         }
         else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
         {
@@ -90,7 +90,7 @@ foreach($products as $programID => $programProducts)
 
             if($selected == 'selected') $tabActive = 'other';
 
-            $others++;
+            $others ++;
         }
         else if($product->status == 'closed')
         {
@@ -154,5 +154,7 @@ $(function()
         if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
         $("#dropMenu .search-box").width('auto');
     })
+
+    if(config.clientLang == 'en') $('#tabContent .tab-pane>ul>li>label+a').css('padding-left', '65px');
 })
 </script>

@@ -1,6 +1,6 @@
 $(function()
 {
-    scmChanged(scm);
+    scmChanged('Gitlab');
     $('#submit').mousedown(function()
     {
         $form = $(this).closest('form');

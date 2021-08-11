@@ -140,6 +140,20 @@ $lang->resource->todo->activate     = 'activate';
 $lang->resource->todo->close        = 'close';
 $lang->resource->todo->batchClose   = 'batchClose';
 
+/* Personnel . */
+$lang->resource->personnel = new stdclass();
+$lang->resource->personnel->accessible      = 'accessible';
+$lang->resource->personnel->invest          = 'invest';
+$lang->resource->personnel->whitelist       = 'whitelist';
+$lang->resource->personnel->addWhitelist    = 'addWhitelist';
+$lang->resource->personnel->unbindWhitelist = 'unbindWhitelist';
+
+$lang->personnel->methodOrder[5]  = 'accessible';
+$lang->personnel->methodOrder[10] = 'invest';
+$lang->personnel->methodOrder[15] = 'whitelist';
+$lang->personnel->methodOrder[20] = 'addWhitelist';
+$lang->personnel->methodOrder[25] = 'unbindWhitelist';
+
 global $config;
 if($config->systemMode == 'new')
 {
@@ -164,6 +178,7 @@ if($config->systemMode == 'new')
     $lang->resource->program->batchUnlinkStakeholders = 'batchUnlinkStakeholders';
     $lang->resource->program->unbindWhitelist         = 'unbindWhitelist';
     $lang->resource->program->export                  = 'export';
+    $lang->resource->program->updateOrder             = 'updateOrder';
 
     $lang->program->methodOrder[5]  = 'browse';
     $lang->program->methodOrder[10] = 'view';
@@ -183,6 +198,7 @@ if($config->systemMode == 'new')
     $lang->program->methodOrder[80] = 'batchUnlinkStakeholders';
     $lang->program->methodOrder[85] = 'unbindWhitelist';
     $lang->program->methodOrder[90] = 'export';
+    $lang->program->methodOrder[95] = 'updateOrder';
 
     /* Project. */
     $lang->resource->project = new stdclass();
@@ -220,6 +236,7 @@ if($config->systemMode == 'new')
     $lang->resource->project->execution           = 'execution';
     $lang->resource->project->export              = 'export';
     $lang->resource->project->createGuide         = 'createGuide';
+    $lang->resource->project->updateOrder         = 'updateOrder';
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
@@ -257,25 +274,12 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[165] = 'execution';
     $lang->project->methodOrder[170] = 'export';
     $lang->project->methodOrder[175] = 'createGuide';
+    $lang->project->methodOrder[180] = 'updateOrder';
 
     $lang->resource->projectbuild = new stdclass();
     $lang->resource->projectbuild->browse = 'browse';
 
     $lang->projectbuild->methodOrder[5] = 'browse';
-
-    /* Personnel . */
-    $lang->resource->personnel = new stdclass();
-    $lang->resource->personnel->accessible      = 'accessible';
-    $lang->resource->personnel->invest          = 'invest';
-    $lang->resource->personnel->whitelist       = 'whitelist';
-    $lang->resource->personnel->addWhitelist    = 'addWhitelist';
-    $lang->resource->personnel->unbindWhitelist = 'unbindWhitelist';
-
-    $lang->personnel->methodOrder[5]  = 'accessible';
-    $lang->personnel->methodOrder[10] = 'invest';
-    $lang->personnel->methodOrder[15] = 'whitelist';
-    $lang->personnel->methodOrder[20] = 'addWhitelist';
-    $lang->personnel->methodOrder[25] = 'unbindWhitelist';
 
     /* Project Story. */
     $lang->resource->projectstory = new stdclass();
@@ -570,7 +574,7 @@ $lang->resource->execution->unlinkMember      = 'unlinkMember';
 $lang->resource->execution->linkStory         = 'linkStory';
 $lang->resource->execution->unlinkStory       = 'unlinkStory';
 $lang->resource->execution->batchUnlinkStory  = 'batchUnlinkStory';
-//$lang->resource->execution->updateOrder       = 'updateOrder';
+$lang->resource->execution->updateOrder       = 'updateOrder';
 $lang->resource->execution->kanban            = 'kanban';
 $lang->resource->execution->printKanban       = 'printKanbanAction';
 $lang->resource->execution->tree              = 'treeAction';
@@ -973,9 +977,11 @@ $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
 
 $lang->resource->ci = new stdclass();
-$lang->resource->ci->commitResult = 'commitResult';
+$lang->resource->ci->commitResult       = 'commitResult';
+$lang->resource->ci->checkCompileStatus = 'checkCompileStatus';
 
-$lang->ci->methodOrder[5] = 'commitResult';
+$lang->ci->methodOrder[5]  = 'commitResult';
+$lang->ci->methodOrder[10] = 'checkCompileStatus';
 
 $lang->resource->compile = new stdclass();
 $lang->resource->compile->browse = 'browse';
@@ -1011,19 +1017,21 @@ $lang->job->methodOrder[25] = 'exec';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
-$lang->resource->doc->index      = 'index';
-$lang->resource->doc->browse     = 'browse';
-$lang->resource->doc->createLib  = 'createLib';
-$lang->resource->doc->editLib    = 'editLib';
-$lang->resource->doc->deleteLib  = 'deleteLib';
-$lang->resource->doc->create     = 'create';
-$lang->resource->doc->view       = 'view';
-$lang->resource->doc->edit       = 'edit';
-$lang->resource->doc->delete     = 'delete';
-$lang->resource->doc->deleteFile = 'deleteFile';
-$lang->resource->doc->allLibs    = 'allLibs';
-$lang->resource->doc->objectLibs = 'objectLibs';
-$lang->resource->doc->collect    = 'collectAction';
+$lang->resource->doc->index         = 'index';
+$lang->resource->doc->browse        = 'browse';
+$lang->resource->doc->createLib     = 'createLib';
+$lang->resource->doc->editLib       = 'editLib';
+$lang->resource->doc->deleteLib     = 'deleteLib';
+$lang->resource->doc->create        = 'create';
+$lang->resource->doc->view          = 'view';
+$lang->resource->doc->edit          = 'edit';
+$lang->resource->doc->delete        = 'delete';
+$lang->resource->doc->deleteFile    = 'deleteFile';
+$lang->resource->doc->allLibs       = 'allLibs';
+$lang->resource->doc->objectLibs    = 'objectLibs';
+$lang->resource->doc->collect       = 'collectAction';
+$lang->resource->doc->tableContents = 'tableContents';
+$lang->resource->doc->showFiles     = 'showFiles';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';
@@ -1038,6 +1046,8 @@ $lang->doc->methodOrder[45] = 'deleteFile';
 $lang->doc->methodOrder[50] = 'allLibs';
 $lang->doc->methodOrder[55] = 'objectLibs';
 $lang->doc->methodOrder[60] = 'collect';
+$lang->doc->methodOrder[65] = 'tableContents';
+$lang->doc->methodOrder[70] = 'showFiles';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1125,6 +1135,7 @@ $lang->resource->gitlab->importIssue = 'importIssue';
 $lang->resource->gitlab->delete      = 'delete';
 $lang->resource->gitlab->bindUser    = 'bindUser';
 $lang->resource->gitlab->bindProduct = 'bindProduct';
+//$lang->resource->gitlab->webhook     = 'webhook';
 
 $lang->gitlab->methodOrder[5]  = 'browse';
 $lang->gitlab->methodOrder[10] = 'create';
@@ -1133,6 +1144,7 @@ $lang->gitlab->methodOrder[20] = 'importIssue';
 $lang->gitlab->methodOrder[30] = 'delete';
 $lang->gitlab->methodOrder[35] = 'bindUser';
 $lang->gitlab->methodOrder[40] = 'bindProduct';
+//$lang->gitlab->methodOrder[45] = 'webhook';
 
 /* Git. */
 $lang->resource->git = new stdclass();

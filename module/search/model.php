@@ -31,6 +31,8 @@ class searchModel extends model
             if($module == 'projectBug')   $flowModule = 'bug';
 
             $fields = $this->loadModel('workflowfield')->getList($flowModule);
+            $maxCount = $this->config->maxCount;
+            $this->config->maxCount = 0;
 
             foreach($fields as $field)
             {
@@ -60,6 +62,7 @@ class searchModel extends model
                 $searchConfig['fields'][$field->field] = $field->name;
                 $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options, 'class' => $class);
             }
+            $this->config->maxCount = $maxCount;
         }
 
         $searchParams['module']       = $searchConfig['module'];
@@ -263,7 +266,7 @@ class searchModel extends model
 
         if($hasUser)
         {
-            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers);
             $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->project);
@@ -694,10 +697,15 @@ class searchModel extends model
      */
     public function saveDict($dict)
     {
+        static $savedDict;
+        if(empty($savedDict)) $savedDict = $this->dao->select("`key`")->from(TABLE_SEARCHDICT)->fetchPairs('key', 'key');
         foreach($dict as $key => $value)
         {
-            if(!is_numeric($key) or empty($value) or strlen($key) != 5) continue;
-            $this->dao->replace(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+            if(!is_numeric($key) or empty($value) or strlen($key) != 5 or $key < 0) continue;
+            if(isset($savedDict[$key])) continue;
+
+            $this->dao->insert(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+            $savedDict[$key] = $key;
         }
     }
 
@@ -782,7 +790,7 @@ class searchModel extends model
         $executions = $this->app->user->view->sprints;
 
         $objectPairs = array();
-        $noPrivNum   = 0;
+        $total       = count($results);
         foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
 
         foreach($objectPairs as $objectType => $objectIdList)
@@ -813,44 +821,28 @@ class searchModel extends model
             {
                 foreach($objectIdList as $productID => $recordID)
                 {
-                    if(strpos(",$products,", ",$productID,") === false)
-                    {
-                        unset($results[$recordID]);
-                        $noPrivNum++;
-                    }
+                    if(strpos(",$products,", ",$productID,") === false) unset($results[$recordID]);
                 }
             }
             elseif($objectType == 'program')
             {
                 foreach($objectIdList as $programID => $recordID)
                 {
-                    if(strpos(",$programs,", ",$programID,") === false)
-                    {
-                        unset($results[$recordID]);
-                        $noPrivNum++;
-                    }
+                    if(strpos(",$programs,", ",$programID,") === false) unset($results[$recordID]);
                 }
             }
             elseif($objectType == 'project')
             {
                 foreach($objectIdList as $projectID => $recordID)
                 {
-                    if(strpos(",$projects,", ",$projectID,") === false)
-                    {
-                        unset($results[$recordID]);
-                        $noPrivNum++;
-                    }
+                    if(strpos(",$projects,", ",$projectID,") === false) unset($results[$recordID]);
                 }
             }
             elseif($objectType == 'execution')
             {
                 foreach($objectIdList as $executionID => $recordID)
                 {
-                    if(strpos(",$executions,", ",$executionID,") === false)
-                    {
-                        unset($results[$recordID]);
-                        $noPrivNum++;
-                    }
+                    if(strpos(",$executions,", ",$executionID,") === false) unset($results[$recordID]);
                 }
             }
             elseif($objectType == 'doc')
@@ -864,9 +856,9 @@ class searchModel extends model
                     if(!isset($objectDocs[$docID]) or !$this->doc->checkPrivDoc($objectDocs[$docID]))
                     {
                         unset($results[$recordID]);
-                        $noPrivNum++;
                         continue;
                     }
+
                     $objectDoc = $objectDocs[$docID];
                     $privLibs[$objectDoc->lib] = $objectDoc->lib;
                 }
@@ -883,7 +875,6 @@ class searchModel extends model
                     {
                         $recordID = $objectIdList[$docID];
                         unset($results[$recordID]);
-                        $noPrivNum++;
                     }
                 }
             }
@@ -896,7 +887,6 @@ class searchModel extends model
                     {
                         $recordID = $objectIdList[$todoID];
                         unset($results[$recordID]);
-                        $noPrivNum++;
                     }
                 }
             }
@@ -912,7 +902,6 @@ class searchModel extends model
                     {
                         $recordID = $objectIdList[$suiteID];
                         unset($results[$recordID]);
-                        $noPrivNum++;
                     }
                 }
             }
@@ -926,7 +915,6 @@ class searchModel extends model
                     {
                         $recordID = $objectIdList[$object->id];
                         unset($results[$recordID]);
-                        $noPrivNum++;
                     }
                 }
             }
@@ -939,12 +927,11 @@ class searchModel extends model
                     {
                         $recordID = $objectIdList[$object->id];
                         unset($results[$recordID]);
-                        $noPrivNum++;
                     }
                 }
             }
         }
-        if($noPrivNum > 0) $pager->recTotal = $pager->recTotal - $noPrivNum;
+        if($total != count($results)) $pager->recTotal = $pager->recTotal - ($total - count($results));
         return $results;
     }
 

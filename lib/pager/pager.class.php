@@ -5,7 +5,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -15,7 +15,7 @@ helper::import(dirname(dirname(__FILE__)) . '/base/pager/pager.class.php');
 /**
  * pager类.
  * Pager class.
- * 
+ *
  * @package framework
  */
 class pager extends basePager
@@ -23,7 +23,7 @@ class pager extends basePager
     /**
      * 设置模块名。
      * Set the $moduleName property.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -44,7 +44,7 @@ class pager extends basePager
     /**
      * 设置方法名。
      * Set the $methodName property.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -65,7 +65,7 @@ class pager extends basePager
     /**
      * 如果设置了请求的原始模块名和方法名，则去掉module参数，以便分页功能生成原始请求的URL而不是转换后的工作流URL。
      * If the original module name and method name of the request are set, the module parameter is removed so that
-     * the paging function generates the URL of the original request instead of the converted workflow URL. 
+     * the paging function generates the URL of the original request instead of the converted workflow URL.
      *
      * @access public
      * @return void
@@ -87,9 +87,9 @@ class pager extends basePager
 
     /**
      * Show pager.
-     * 
-     * @param  string $align 
-     * @param  string $type 
+     *
+     * @param  string $align
+     * @param  string $type
      * @access public
      * @return void
      */

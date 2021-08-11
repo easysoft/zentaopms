@@ -11,7 +11,7 @@ class executionsEntry extends entry
     public function get($projectID = 0)
     {
         $control = $this->loadController('execution', 'all');
-        $control->all($this->param('status', 'all'), $this->param('project', $projectID));
+        $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')

@@ -32,7 +32,12 @@ class my extends control
      */
     public function index()
     {
-        $this->view->title = $this->lang->my->common;
+        $skipThemeGuide = true;
+        $accounts       = zget($this->config->global, 'skipThemeGuide', '');
+        if(strpos(",$accounts,", $this->app->user->account) === false) $skipThemeGuide = false;
+
+        $this->view->title          = $this->lang->my->common;
+        $this->view->skipThemeGuide = $skipThemeGuide;
         $this->display();
     }
 
@@ -191,10 +196,13 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
+        $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
@@ -232,10 +240,13 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+        $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
@@ -348,7 +359,7 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
-        $bugs = $this->bug->checkDelayBugs($bugs);
+        $bugs = $this->bug->checkDelayedBugs($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
 
         /* assign. */
@@ -469,8 +480,13 @@ class my extends control
     public function doc($type = 'openedbyme', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        if($this->app->viewType != 'json') $this->session->set('docList', $this->app->getURI(true), 'doc');
+        $uri = $this->app->getURI(true);
+        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
         $this->loadModel('doc');
+
+        $this->session->set('productList',   $uri, 'product');
+        $this->session->set('executionList', $uri, 'execution');
+        $this->session->set('projectList',   $uri, 'project');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -823,6 +839,27 @@ class my extends control
         $this->view->rand       = $this->user->updateSessionRandom();
 
         $this->display();
+    }
+
+    /**
+     * Guide the user to change the theme.
+     *
+     * @param  string $saveSkipUser
+     * @access public
+     * @return void
+     */
+    public function guideChangeTheme($saveSkipUser = false)
+    {
+        if($saveSkipUser)
+        {
+            $accounts = zget($this->config->global, 'skipThemeGuide', '');
+            if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
+            $this->loadModel('setting')->setItem('system.common.global.skipThemeGuide', $accounts);
+        }
+        else
+        {
+            $this->display();
+        }
     }
 
     /**

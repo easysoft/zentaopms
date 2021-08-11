@@ -38,7 +38,7 @@
         <th class='text-right'></th>
         <td class='form-actions'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'");?>
-          <?php echo html::backButton();?>
+          <?php echo html::a($this->inlink('browse'), $lang->goback, '', "class='btn btn-back btn-wide'");?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
         </td>
       </tr>
@@ -130,7 +130,7 @@
         </th>
         <td class='form-actions' colspan='2'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
-          <?php echo html::backButton();?>
+          <?php echo html::a($this->inlink('browse'), $lang->goback, '', "class='btn btn-back btn-wide'");?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
         </td>
       </tr>

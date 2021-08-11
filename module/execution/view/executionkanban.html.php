@@ -63,8 +63,8 @@
                       <?php if($colStatus == 'doing'):?>
                       <div class='table-col'>
                         <div class="c-progress">
-                          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='<?php echo $execution->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                            <div class='progress-info'><?php echo $execution->hours->progress;?></div>
+                          <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                            <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
                           </div>
                         </div>
                       </div>

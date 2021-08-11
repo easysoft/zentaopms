@@ -20,7 +20,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");?>
+    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");?>
     <div class="divider"></div>
     <div class="page-title">
       <strong>

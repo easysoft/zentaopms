@@ -442,7 +442,7 @@ class executionModel extends model
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         /* Judgment of required items. */
-        if($this->post->code == '')
+        if($oldExecution->type != 'stage' and $this->post->code == '')
         {
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             return false;
@@ -486,7 +486,7 @@ class executionModel extends model
         if(isset($this->config->maxVersion))
         {
             $execution->planDuration = $this->loadModel('programplan')->getDuration($execution->begin, $execution->end);
-            if(!empty($execution->realBegan) and !empty($execution->realEnd)) $execution->realDuration = $this->loadModel('programplan')->getDuration($execution->realBegan, $execution->realEnd);
+            if(!empty($execution->realBegan) and !empty($execution->realEnd)) $execution->realDuration = $this->programplan->getDuration($execution->realBegan, $execution->realEnd);
         }
 
         /* Redefines the language entries for the fields in the project table. */
@@ -502,7 +502,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-            ->check('code', 'unique', "id!=$executionID and deleted='0'")
+            ->check('code', 'unique', "id!=$executionID and code!='' and deleted='0'")
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
@@ -609,11 +609,11 @@ class executionModel extends model
             $nameList[$executionName] = $executionName;
 
             /* Check unique code for edited executions. */
-            if(empty($executionCode))
+            if($projectModel == 'scrum' and empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
             }
-            else
+            elseif(!empty($executionCode))
             {
                 /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
@@ -929,11 +929,24 @@ class executionModel extends model
     {
         if($currentModule == 'execution' and in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return;
 
+        $projectNameSpan      = '';
+        $projectNameTitle     = '';
         $currentExecutionName = $this->lang->execution->common;
         if($executionID)
         {
             $currentExecution     = $this->getById($executionID);
             $currentExecutionName = $currentExecution->name;
+
+            if($this->config->systemMode == 'new')
+            {
+                $project = $this->loadModel('project')->getByID($currentExecution->project);
+
+                if($project)
+                {
+                    $projectNameTitle = $project->name . '/';
+                    $projectNameSpan  = "<span class='text'>{$project->name}</span>/";
+                }
+            }
         }
 
         if($this->app->viewType == 'mhtml' and $executionID)
@@ -944,7 +957,7 @@ class executionModel extends model
         }
 
         $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "executionID=$executionID&module=$currentModule&method=$currentMethod&extra=");
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'>{$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$projectNameTitle}{$currentExecutionName}'>{$projectNameSpan}<span class='text'>{$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
@@ -1287,7 +1300,10 @@ class executionModel extends model
             $link = helper::createLink($module, $method, "executionID=%s");
         }
 
-        if($module == 'doc') $link = helper::createLink('doc', 'objectLibs', "type=execution&objectID=%s&from=execution");
+        if($module == 'doc')
+        {
+            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
+        }
         return $link;
     }
 
@@ -2177,7 +2193,7 @@ class executionModel extends model
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
             $data->order   = ++$lastOrder;
-            $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
+            $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
             $this->linkCases($executionID, (int)$products[$storyID], $storyID);
@@ -2418,7 +2434,7 @@ class executionModel extends model
         return $this->dao->select('account, role, hours')
             ->from(TABLE_TEAM)
             ->where('root')->eq($execution)
-            ->andWhere('type')->eq('execution')
+            ->andWhere('type')->in('project,execution')
             ->andWhere('account')->notIN($currentMembers)
             ->fetchAll('account');
     }
@@ -3342,7 +3358,7 @@ class executionModel extends model
         $days         = count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (int)$rate, 1) . ',';
+        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * $rate, 1) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);
@@ -3630,6 +3646,7 @@ class executionModel extends model
     public function updateUserView($executionID, $objectType = 'sprint', $users = array())
     {
         $this->loadModel('user')->updateUserView($executionID, $objectType, $users);
+
         $products = $this->getProducts($executionID, $withBranch = false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);
     }

@@ -39,4 +39,38 @@ $(function()
     })
 
     $('#isCat').change();
+
+    $('#budgetUnit').change(function()
+    {
+        if($(this).val() != oldBudgetUnit)
+        {
+            $('#currentUnit').text(budgetUnitList[$(this).val()]);
+            $('#changeUnitTip').modal({show: true});
+        }
+    })
+
+    $('#cancelBtn').click(function()
+    {
+        $('#syncPRJUnit').val('false');
+        $('#exchangeRate').val('');
+    })
+
+    $('#confirmBtn').click(function()
+    {
+        var exchangeRate = $('#rate').val();
+        if(!exchangeRate)
+        {
+            alert(exRateNotEmpty);
+            return false;
+        }
+        else if(exchangeRate < 0)
+        {
+            alert(exRateNotNegative);
+            return false;
+        }
+
+        $('#syncPRJUnit').val('true');
+        $('#exchangeRate').val(exchangeRate);
+        $('#changeUnitTip').modal('hide');
+    })
 });

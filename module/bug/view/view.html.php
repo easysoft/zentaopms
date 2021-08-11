@@ -32,7 +32,7 @@
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('product', $product)):?>
     <?php $openApp = strpos('|execution|project|qa|', $this->app->openApp) !== false ? $this->app->openApp : 'qa';?>
-    <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module},projectID={$bug->project},executionID={$bug->execution}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary' data-app='$openApp'"); ?>
+    <?php if($this->app->openApp != 'product') common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module},projectID={$bug->project},executionID={$bug->execution}", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary' data-app='$openApp'"); ?>
     <?php endif;?>
   </div>
   <?php endif;?>
@@ -86,14 +86,20 @@
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
-        common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='" . ($this->app->openApp == 'project' ? 'project' : 'product') . "'", $lang->bug->toStory);
-        common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
+        if($this->app->openApp != 'product')
+        {
+            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='" . ($this->app->openApp == 'project' ? 'project' : 'product') . "'", $lang->bug->toStory);
+            common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
+        }
 
         echo $this->buildOperateMenu($bug, 'view');
 
         echo "<div class='divider'></div>";
         common::printIcon('bug', 'edit', $params, $bug);
-        common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy', '', '', false, "data-app='qa'");
+        if($this->app->openApp != 'product')
+        {
+            common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy', '', '', false, "data-app='qa'");
+        }
         common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>

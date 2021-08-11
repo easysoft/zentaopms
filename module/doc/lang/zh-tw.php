@@ -11,7 +11,7 @@
  */
 /* 欄位列表。*/
 $lang->doc->common       = '文檔';
-$lang->doc->id           = '文檔編號';
+$lang->doc->id           = '編號';
 $lang->doc->product      = '所屬' . $lang->productCommon;
 $lang->doc->project      = '所屬項目';
 $lang->doc->execution    = '所屬' . $lang->executionCommon;
@@ -36,10 +36,11 @@ $lang->doc->fileObject   = '所屬對象';
 $lang->doc->whiteList    = '白名單';
 $lang->doc->contentType  = '文檔格式';
 $lang->doc->separator    = "<i class='icon-angle-right'></i>";
-$lang->doc->fileTitle    = '附件名';
+$lang->doc->fileTitle    = '附件名稱';
 $lang->doc->filePath     = '地址';
 $lang->doc->extension    = '類型';
 $lang->doc->size         = '附件大小';
+$lang->doc->source       = '來源';
 $lang->doc->download     = '下載';
 $lang->doc->acl          = '權限';
 $lang->doc->fileName     = '附件';
@@ -52,22 +53,24 @@ $lang->doc->mailto       = '抄送給';
 $lang->doc->noModule     = '文檔庫下沒有目錄和文檔，請維護目錄或者創建文檔';
 $lang->doc->noChapter    = '手冊下沒有章節和文章，請維護手冊';
 
-$lang->doc->moduleDoc    = '按模組瀏覽';
-$lang->doc->searchDoc    = '搜索';
-$lang->doc->fast         = '快速訪問';
-$lang->doc->allDoc       = '所有文檔';
-$lang->doc->openedByMe   = '由我創建';
-$lang->doc->editedByMe   = '由我編輯';
-$lang->doc->orderByOpen  = '最近添加';
-$lang->doc->orderByEdit  = '最近更新';
-$lang->doc->orderByVisit = '最近訪問';
-$lang->doc->todayEdited  = '今日更新';
-$lang->doc->pastEdited   = '往日更新';
-$lang->doc->myDoc        = '我的文檔';
-$lang->doc->myCollection = '我的收藏';
+$lang->doc->moduleDoc     = '按模組瀏覽';
+$lang->doc->searchDoc     = '搜索';
+$lang->doc->fast          = '快速訪問';
+$lang->doc->allDoc        = '所有文檔';
+$lang->doc->openedByMe    = '由我創建';
+$lang->doc->editedByMe    = '由我編輯';
+$lang->doc->orderByOpen   = '最近添加';
+$lang->doc->orderByEdit   = '最近更新';
+$lang->doc->orderByVisit  = '最近訪問';
+$lang->doc->todayEdited   = '今日更新';
+$lang->doc->pastEdited    = '往日更新';
+$lang->doc->myDoc         = '我的文檔';
+$lang->doc->myCollection  = '我的收藏';
+$lang->doc->tableContents = '目錄';
 
 /* 方法列表。*/
 $lang->doc->index            = '文檔主頁';
+$lang->doc->createAB         = '創建';
 $lang->doc->create           = '創建文檔';
 $lang->doc->edit             = '編輯文檔';
 $lang->doc->delete           = '刪除文檔';
@@ -86,6 +89,7 @@ $lang->doc->catalogName      = '目錄名稱';
 $lang->doc->collect          = '收藏';
 $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '刪除附件';
+$lang->doc->menuTitle        = '目錄';
 
 $lang->doc->collectAction = '收藏文檔';
 
@@ -102,6 +106,8 @@ $lang->doc->deleteLib      = '刪除文檔庫';
 $lang->doc->fixedMenu      = '固定到菜單欄';
 $lang->doc->removeMenu     = '從菜單欄移除';
 $lang->doc->search         = '搜索';
+$lang->doc->allCollections = '查看全部收藏文檔';
+$lang->doc->keywordsTips   = '多個關鍵字請用逗號分隔。';
 
 global $config;
 /* 查詢條件列表 */
@@ -168,6 +174,7 @@ $lang->doc->mail->edit->title   = "%s編輯了文檔 #%s:%s";
 
 $lang->doc->confirmDelete        = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib     = "您確定刪除該文檔庫嗎？";
+$lang->doc->confirmDeleteBook    = "您確定刪除該手冊嗎？";
 $lang->doc->confirmDeleteChapter = "您確定刪除該章節嗎？";
 $lang->doc->errorEditSystemDoc   = "系統文檔庫無需修改。";
 $lang->doc->errorEmptyProduct    = "沒有{$lang->productCommon}，無法創建文檔";
@@ -203,6 +210,10 @@ $lang->doc->noticeAcl['doc']['private'] = '只有創建者自己可以訪問。'
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相應的連結地址';
+
+$lang->doc->summary = "本頁共 <strong>%s</strong> 個附件，共計 <strong>%s</strong>，其中<strong>%s</strong>。";
+$lang->doc->ge      = '個';
+$lang->doc->point   = '、';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name      = '文檔庫名稱';

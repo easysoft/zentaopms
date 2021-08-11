@@ -1,10 +1,10 @@
 /**
  * Draw status pie chart.
- * 
- * @param  string   $id 
- * @param  string   $title 
- * @param  array    $data 
- * @param  function $callback 
+ *
+ * @param  string   $id
+ * @param  string   $title
+ * @param  array    $data
+ * @param  function $callback
  * @access public
  * @return object
  */
@@ -66,18 +66,18 @@ function drawStatusPieChart(id, title, data, callback)
     }
     chart.setOption(option);
     if(typeof(callback) == 'function') chart.on('finished', callback);
-    
+
     return chart;
 }
 
 /**
  * Draw months bar chart.
- * 
- * @param  string $id 
- * @param  string $title 
- * @param  array  $legends 
- * @param  array  $xAxis 
- * @param  array  $data 
+ *
+ * @param  string $id
+ * @param  string $title
+ * @param  array  $legends
+ * @param  array  $xAxis
+ * @param  array  $data
  * @access public
  * @return object
  */
@@ -141,7 +141,7 @@ function drawMonthsBarChart(id, title, legends, xAxis, data)
         series: data
     }
     chart.setOption(option);
-    
+
     return chart;
 }
 

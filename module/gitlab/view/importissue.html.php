@@ -11,9 +11,17 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+.chosen-container .chosen-drop.chosen-auto-max-width {max-width: 100%;}
+</style>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->gitlab->importIssue;?></h2>
+    <?php if(!isonlybody() and empty($importable)):?>
+    <div class='pull-right'>
+      <?php echo html::linkButton($lang->goback, $this->createLink('repo', 'maintain'), 'self', '', 'btn btn-primary');?>
+    </div>
+    <?php endif;?>
   </div>
   <?php if($importable):?>
   <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data'>
@@ -31,9 +39,9 @@
         <?php foreach($gitlabIssues as $issue):?>
           <tr>
             <td><?php echo "<a href='{$issue->web_url}' target='_blank'>$issue->title</a>";?></td>
-            <td><?php echo html::select("objectTypeList[{$issue->iid}]", $objectTypes, '', "class='form-control'" );?></td>
-            <td><?php echo html::select("productList[{$issue->iid}]", $products, '', "class='form-control'" );?></td>
-            <td><?php echo html::select("executionList[{$issue->iid}]", '', '', "class='form-control'" );?></td>
+            <td><?php echo html::select("objectTypeList[{$issue->iid}]", $objectTypes, '', "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("productList[{$issue->iid}]", $products, '', "class='form-control select chosen'" );?></td>
+            <td><?php echo html::select("executionList[{$issue->iid}]", '', '', "class='form-control select chosen'" );?></td>
             <input type='hidden' name='gitlabID'   value='<?php echo $gitlabID;?>' />
             <input type='hidden' name='gitlabProjectID' value='<?php echo $gitlabProjectID;?>'/>
          </tr>

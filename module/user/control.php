@@ -719,6 +719,7 @@ class user extends control
         }
 
         $this->view->rand = $this->user->updateSessionRandom();
+        $this->view->user = $user;
         $this->display();
     }
 

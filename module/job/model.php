@@ -109,7 +109,7 @@ class jobModel extends model
      * Create a job.
      *
      * @access public
-     * @return bool
+     * @return int|bool
      */
     public function create()
     {
@@ -122,19 +122,21 @@ class jobModel extends model
 
         if($job->engine == 'jenkins')
         {
-            $job->server   = $job->jkServer;
-            $job->pipeline = $job->jkTask;
+            $job->server   = (int)zget($job, 'jkServer', 0);
+            $job->pipeline = zget($job, 'jkTask', '');
         }
 
         if(strtolower($job->engine) == 'gitlab')
         {
+            $job->repo     = $job->gitlabRepo;
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
-            $job->server   = $repo->gitlab;
-            $job->pipeline = $repo->project;
+            $job->server   = (int)zget($repo, 'gitlab', 0);
+            $job->pipeline = zget($repo, 'project', '');
         }
 
         unset($job->jkServer);
         unset($job->jkTask);
+        unset($job->gitlabRepo);
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
@@ -177,12 +179,9 @@ class jobModel extends model
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
             ->autoCheck()
             ->exec();
-
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return false;
 
         $id = $this->dao->lastInsertId();
-        if($id == 0) return false;
-
         if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job, $this->post->repoType);
         return $id;
     }
@@ -206,6 +205,25 @@ class jobModel extends model
             ->add('editedDate', helper::now())
             ->remove('repoType')
             ->get();
+
+        if($job->engine == 'jenkins')
+        {
+            $job->server   = (int)zget($job, 'jkServer', 0);
+            $job->pipeline = zget($job, 'jkTask', '');
+        }
+
+        if(strtolower($job->engine) == 'gitlab')
+        {
+            $job->repo     = $job->gitlabRepo;
+            $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
+            $job->server   = (int)zget($repo, 'gitlab', 0);
+            $job->pipeline = zget($repo, 'project', '');
+        }
+
+        unset($job->jkServer);
+        unset($job->jkTask);
+        unset($job->gitlabRepo);
+
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
         $job->svnDir = '';
@@ -249,6 +267,7 @@ class jobModel extends model
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
+        if(dao::isError()) return false;
 
         $this->initJob($id, $job, $this->post->repoType);
         return true;
@@ -303,12 +322,13 @@ class jobModel extends model
      * Exec job.
      *
      * @param  int    $id
+     * @param  object $reference
      * @access public
-     * @return bool
+     * @return string|bool
      */
-    public function exec($id)
+    public function exec($id, $reference = null)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
@@ -319,7 +339,6 @@ class jobModel extends model
         $build->job  = $job->id;
         $build->name = $job->name;
 
-        $url  = $this->loadModel('compile')->getBuildUrl($job);
         $now  = helper::now();
         $data = new stdclass();
         $repo = $this->loadModel('repo')->getRepoById($job->repo);
@@ -378,12 +397,31 @@ class jobModel extends model
         }
 
         $compile = new stdclass();
-        $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
-        $compile->status = $compile->queue ? 'created' : 'create_fail';
-        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
+        $compile->id = $compileID;
 
+        if($job->engine == 'jenkins')
+        {
+            $url = $this->loadModel('compile')->getBuildUrl($job);
+            $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
+            $compile->status = $compile->queue ? 'created' : 'create_fail';
+        }
+        elseif($job->engine == 'gitlab' and $reference)
+        {
+            $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $job->pipeline, $reference);
+            if(empty($pipeline->id))
+            {
+                $compile->status = 'create_fail';
+            }
+            else
+            {
+                $compile->queue  = $pipeline->id;
+                $compile->status = zget($pipeline, 'status', 'create_fail');
+            }
+        }
+
+        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($compile->status)->where('id')->eq($job->id)->exec();
 
-        return $compile->status;
+        return $compile;
     }
 }

@@ -51,16 +51,16 @@ js::set('flow',          $config->global->flow);
     if(common::hasPriv('caselib', 'view'))
     {
         $link = helper::createLink('caselib', 'view', "libID=$libID");
-        echo html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->caselib->view, '', "class='btn btn-link'");
+        echo html::a($link, "<i class='icon icon-list-alt muted'> </i> " . $this->lang->caselib->view, '', "class='btn btn-link'");
     }
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
-     <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='40%'");?>
-     <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>
+     <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i> " . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='40%'");?>
+     <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i> " . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>
     </div>
-    <?php echo html::a($this->createLink('caselib', 'create'), "<i class='icon icon-plus'> </i>" . $lang->caselib->create, '', 'class="btn btn-secondary"');?>
+    <?php echo html::a($this->createLink('caselib', 'create'), "<i class='icon icon-plus'> </i> " . $lang->caselib->create, '', 'class="btn btn-secondary"');?>
     <div class='btn-group dropdown'>
       <?php
       $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);

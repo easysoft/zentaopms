@@ -42,25 +42,32 @@ class testcase extends control
         $this->loadModel('qa');
 
         /* Get product data. */
+        $products = array();
         $objectID = 0;
-        if($this->app->openApp == 'project')
+        $openApp  = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        if(!isonlybody())
         {
-            $objectID = $this->session->project;
-            $products  = $this->loadModel('project')->getProducts($objectID, false);
-        }
-        elseif($this->app->openApp == 'execution')
-        {
-            $objectID = $this->session->execution;
-            $products = $this->loadModel('execution')->getProducts($objectID, false);
+            if($this->app->openApp == 'project')
+            {
+                $objectID = $this->session->project;
+                $products  = $this->loadModel('project')->getProducts($objectID, false);
+            }
+            elseif($this->app->openApp == 'execution')
+            {
+                $objectID = $this->session->execution;
+                $products = $this->loadModel('execution')->getProducts($objectID, false);
+            }
+            else
+            {
+                $products = $this->product->getPairs();
+            }
+            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testcase&objectID=$objectID")));
         }
         else
         {
             $products = $this->product->getPairs();
         }
-
         $this->view->products = $this->products = $products;
-        $openApp = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
-        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testcase&objectID=$objectID")));
     }
 
     /**
@@ -117,7 +124,7 @@ class testcase extends control
         /* Set menu, save session. */
         if($this->app->openApp == 'project')
         {
-            $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($this->session->project, false);
+            $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($projectID, false);
             $this->loadModel('project')->setMenu($projectID);
         }
         else
@@ -148,7 +155,7 @@ class testcase extends control
         }
 
         /* save session .*/
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType != 'bysearch' ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
@@ -642,11 +649,10 @@ class testcase extends control
             if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
-            $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             $this->view->product     = $product;
             $this->view->branches    = $branches;
-            $this->view->productName = $this->products[$productID];
+            $this->view->productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
@@ -989,6 +995,7 @@ class testcase extends control
         }
         else
         {
+            $case = $this->testcase->getById($caseID);
             $this->testcase->delete(TABLE_CASE, $caseID);
 
             $this->executeHooks($caseID);
@@ -1008,7 +1015,9 @@ class testcase extends control
                 }
                 return $this->send($response);
             }
-            die(js::locate($this->session->caseList, 'parent'));
+
+            $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$case->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 
@@ -1505,7 +1514,7 @@ class testcase extends control
             $this->post->set('kind', 'testcase');
             $this->post->set('rows', $rows);
             $this->post->set('extraNum', $num);
-            $this->post->set('fileName', 'template');
+            $this->post->set('fileName', 'Template');
             $this->fetch('file', 'export2csv', $_POST);
         }
 

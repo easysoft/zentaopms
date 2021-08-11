@@ -37,6 +37,7 @@ $lang->tree->dragAndSort        = "Ziehen und Sotieren";
 $lang->tree->sort               = "Sortieren";
 $lang->tree->addChild           = "Hinzufügen";
 $lang->tree->confirmDelete      = 'Do you want to delete this module and its child modules?';
+$lang->tree->confirmDeleteMenu  = 'Do you want to delete this menu and its child menus?';
 $lang->tree->confirmDelCategory = 'Möchten Sie diese Kategorie und ihre Kinderkategorien löschen?';
 $lang->tree->confirmDeleteLine  = "Do you want to delete this {$lang->productCommon} line?";
 $lang->tree->confirmRoot        = "Any changes to the {$lang->productCommon} will change the stories, bugs, cases of {$lang->productCommon} it belongs to, as well as the linkage of {$lang->executionCommon} and {$lang->productCommon}, which is dangerous. Do you want to change it?";

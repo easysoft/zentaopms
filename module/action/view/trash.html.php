@@ -62,7 +62,7 @@
                 $flow   = $config->action->customFlows[$action->objectType];
                 $module = $flow->module;
             }
-            if(strpos(',doclib,module,webhook,', ",{$module},") !== false)
+            if(strpos($this->config->action->noLinkModules, ",{$module},") !== false)
             {
                 echo $action->objectName;
             }

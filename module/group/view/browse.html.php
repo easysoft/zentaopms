@@ -56,7 +56,7 @@
           <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
           <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
           <?php
-          if(common::hasPriv('group', 'deProjecte'))
+          if(common::hasPriv('group', 'delete'))
           {
               if($isProjectAdmin)
               {

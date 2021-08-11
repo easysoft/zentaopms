@@ -38,7 +38,11 @@
       <div id='info' class='tab-pane <?php echo ($hasResult || $hasLog) ? '' : 'active';?>'>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th class='w-100px strong'><?php echo $lang->job->repo;?></th>
+            <th class='w-100px'><?php echo $lang->job->engine;?></th>
+            <td><?php echo zget($lang->job->engineList, $job->engine);?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->job->repo;?></th>
             <td><?php echo $repo->name;?></td>
           </tr>
           <tr>
@@ -51,6 +55,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->server;?></th>
+            <?php if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->loadModel('gitlab')->getObjectNameForJob($job->server, $job->pipeline);?>
             <td><?php echo urldecode($job->pipeline) . '@' . $jenkins->name;?></td>
           </tr>
           <tr>

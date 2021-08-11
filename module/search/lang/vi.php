@@ -68,7 +68,7 @@ $lang->search->preview = 'Preview';
 $lang->search->result   = 'Kết quả tìm kiếm';
 $lang->search->buildSuccessfully = 'Tìm kiếm khởi tạo chỉ mục.';
 $lang->search->executeInfo    = '%s kết quả tìm kiếm trong %s giây';
-$lang->search->buildResult    = 'Chỉ mục được tao %s và được thêm %s mục';
+$lang->search->buildResult       = "Create index %s and created <strong class='%scount'>%s</strong> records.";
 
 $lang->search->modules['all']         = 'Tất cả';
 $lang->search->modules['task']        = 'Nhiệm vụ';

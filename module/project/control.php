@@ -68,7 +68,7 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projects = $this->project->getList($status, $orderBy, null);
+            $projects = $this->project->getInfoList($status, 30, $orderBy, null);
             $users    = $this->loadModel('user')->getPairs('noletter');
             foreach($projects as $i => $project)
             {
@@ -77,6 +77,10 @@ class project extends control
                 $project->model    = zget($projectLang->modelList, $project->model);
                 $project->product  = zget($projectLang->productList, $project->product);
                 $project->budget   = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
+                $project->parent   = $project->parentName;
+
+                $linkedProducts = $this->project->getProducts($project->id, false);
+                $project->linkedProducts = implode('，', $linkedProducts);
 
                 if($this->post->exportType == 'selected')
                 {
@@ -216,6 +220,8 @@ class project extends control
         $this->loadModel('execution');
         $this->session->set('projectList', $this->app->getURI(true), 'project');
 
+        $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
+
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -232,10 +238,16 @@ class project extends control
         $this->view->programID    = $programID;
         $this->view->program      = $this->program->getByID($programID);
         $this->view->programTree  = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
+        $this->view->programs     = array('0' => '') + $this->program->getParentPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->usersAvatar  = $this->user->getAvatarPairs();
         $this->view->browseType   = $browseType;
+        $this->view->projectType  = $projectType;
         $this->view->param        = $param;
         $this->view->orderBy      = $orderBy;
+        $this->view->recTotal     = $recTotal;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
 
         $this->display();
     }
@@ -324,7 +336,8 @@ class project extends control
                     return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
 
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=0&browseType=all", '', '', $projectID)));
+                $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=$parent&browseType=all", '', '', $projectID)));
             }
         }
 
@@ -359,6 +372,8 @@ class project extends control
                 $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
             }
         }
+
+        if($this->app->openApp == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
         $this->view->title      = $this->lang->project->create;
         $this->view->position[] = $this->lang->project->create;
@@ -410,12 +425,7 @@ class project extends control
 
         if($_POST)
         {
-            $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('plan');
-            $oldPlanStories = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
-                ->where('t1.project')->eq($projectID)
-                ->andWhere('t2.plan')->in(array_keys($oldPlans))
-                ->fetchAll('story');
+            $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('plan')->ne(0)->fetchPairs('plan');
 
             $changes = $this->project->update($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -430,7 +440,7 @@ class project extends control
             $diffResult = array_diff($oldPlans, $_POST['plans']);
             if(!empty($_POST['plans']) and !empty($diffResult))
             {
-                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans'], $oldPlanStories);
+                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans']);
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -550,7 +560,7 @@ class project extends control
      */
     public function view($projectID = 0)
     {
-        $projectID = (int)$projectID;
+        $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
         $project   = $this->project->getById($projectID);
         if(empty($project) || strpos('scrum,waterfall', $project->model) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -1494,14 +1504,15 @@ class project extends control
      *
      * @param  int     $projectID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @param  int     $programID
      * @param  int     $from
      * @access public
      * @return void
      */
-    public function addWhitelist($projectID = 0, $deptID = 0, $programID = 0, $from = 'project')
+    public function addWhitelist($projectID = 0, $deptID = 0, $copyID = 0, $programID = 0, $from = 'project')
     {
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&objectType=project&module=project&programID=$programID&from=$from");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&copyID=$copyID&objectType=project&module=project&programID=$programID&from=$from");
     }
 
     /*
@@ -1614,7 +1625,7 @@ class project extends control
         $response  = array();
         $response['result']  = true;
         $response['message'] = $this->lang->project->changeProgramTip;
-        
+
         /* Get new program products. */
         $newProducts = $this->program->getProductPairs($programID, 'assign', 'noclosed');
         $response['newProducts'] = html::select("newProducts", array('0' => '') + $newProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");

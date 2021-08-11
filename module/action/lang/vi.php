@@ -441,6 +441,7 @@ $lang->action->dynamicAction->doc['hidden']    = 'Ẩn tài liệu';
 
 $lang->action->dynamicAction->user['created']       = 'Tạo người dùng';
 $lang->action->dynamicAction->user['edited']        = 'Sửa người dùng';
+$lang->action->dynamicAction->user['deleted']       = 'Delete User';
 $lang->action->dynamicAction->user['login']         = 'Đăng nhập';
 $lang->action->dynamicAction->user['logout']        = 'Thoát';
 $lang->action->dynamicAction->user['undeleted']     = 'Khôi phục người dùng';

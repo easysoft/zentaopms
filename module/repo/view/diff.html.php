@@ -18,11 +18,11 @@
     $backURI = $this->session->repoView ? $this->session->repoView : $this->session->repoList;
     if($backURI)
     {
-        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");
+        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");
     }
     else
     {
-        echo html::backButton("<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', "btn btn-link");
+        echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "btn btn-link");
     }
     ?>
     <div class="divider"></div>

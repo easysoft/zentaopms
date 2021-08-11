@@ -30,14 +30,6 @@
             <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
             <td colspan="2" ></td>
           </tr>
-         <tr>
-            <th><?php echo $lang->job->repo; ?></th>
-            <td><?php echo html::select('repo', $repoPairs, '', "class='form-control chosen'"); ?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->job->product; ?></th>
-            <td><?php echo html::select('product', $products, '', "class='form-control chosen'"); ?></td>
-          </tr>
           <tr>
             <th><?php echo $lang->job->engine; ?></th>
             <td class='required'>
@@ -46,35 +38,29 @@
                 </div>
               </div>
             </td>
-          </tr>
-          <tr id="jenkinsServerTR">
-            <th><?php echo $lang->job->server; ?></th>
             <td colspan='2'>
-              <div class='table-row'>
-                <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, '', "class='form-control chosen'"); ?></div>
-                <div class='table-col'>
-                  <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
-                    <?php echo html::select('jkTask', array('' => ''), '', "class='form-control chosen'"); ?>
-                  </div>
-                </div>
-              </div>
+              <span id="gitlabServerTR"><?php echo $lang->job->engineTips->success;?></span>
             </td>
           </tr>
-          <tr id="gitlabServerTR">
-            <th></th>
-            <td>
-                <?php echo $lang->job->engineTips->success; ?>
-            </td>
+          <tr class='commonRepo'>
+            <th><?php echo $lang->job->repo; ?></th>
+            <td><?php echo html::select('repo', $repoPairs, '', "class='form-control'"); ?></td>
           </tr>
-
+          <tr class='gitlabRepo hide'>
+            <th><?php echo $lang->job->repo; ?></th>
+            <td><?php echo html::select('gitlabRepo', $gitlabRepos, '', "class='form-control'"); ?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->job->product; ?></th>
+            <td><?php echo html::select('product', '', '', "class='form-control chosen'"); ?></td>
+          </tr>
           <tr>
             <th><?php echo $lang->job->frame; ?></th>
             <td><?php echo html::select('frame', $lang->job->frameList, '', "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->triggerType; ?></th>
-            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, '', "class='form-control chosen'");?></td>
+            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, '', "class='form-control'");?></td>
             <td colspan="2"></td>
           </tr>
           <tr id='svnDirBox' class='svn-fields'>
@@ -102,6 +88,20 @@
               </div>
             </td>
           </tr>
+          <tr id="jenkinsServerTR">
+            <th><?php echo $lang->job->jkHost; ?></th>
+            <td colspan='2' class='required'>
+              <div class='table-row'>
+                <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, '', "class='form-control chosen'"); ?></div>
+                <div class='table-col'>
+                  <div class='input-group'>
+                    <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
+                    <?php echo html::select('jkTask', array('' => ''), '', "class='form-control chosen'"); ?>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
           <tr>
             <th><?php echo $lang->job->customParam;?></th>
             <td colspan='2' id='paramDiv'>
@@ -126,7 +126,7 @@
             <th></th>
             <td class='text-center form-actions'>
               <?php echo html::submitButton(); ?>
-              <?php echo html::backButton(); ?>
+              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
               <?php echo html::hidden('repoType');?>
             </td>
           </tr>

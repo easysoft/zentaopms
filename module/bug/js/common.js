@@ -525,7 +525,11 @@ function loadAssignedTo(executionID, selectedUser)
         $('#assignedTo').next('.picker').remove();
         $('#assignedTo').replaceWith(data);
         var defaultAssignedTo = $('#assignedTo').val();
-        if(defaultAssignedTo !== oldAssignedTo && selectedUser == '') $('#assignedTo').append(defaultOption);
+        if(defaultAssignedTo !== oldAssignedTo && selectedUser == '')
+        {
+            if($('#assignedTo option[value="' + oldAssignedTo + '"]').length > 0) $('#assignedTo option[value="' + oldAssignedTo + '"]').remove();
+            $('#assignedTo').append(defaultOption);
+        }
         $('#assignedTo').chosen();
     });
 }

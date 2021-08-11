@@ -4,11 +4,13 @@ $lang->job->browse        = '瀏覽構建任務';
 $lang->job->create        = '創建構建任務';
 $lang->job->edit          = '編輯構建任務';
 $lang->job->exec          = '執行構建';
+$lang->job->runPipeline   = '運行流水綫';
 $lang->job->view          = '執行詳情';
 $lang->job->delete        = '刪除構建任務';
 $lang->job->confirmDelete = '確認刪除該構建任務';
 $lang->job->dirChange     = '目錄改動';
 $lang->job->buildTag      = '打標籤';
+$lang->job->execSuccess   = '執行成功';
 
 $lang->job->browseAction = '構建任務列表';
 
@@ -20,8 +22,10 @@ $lang->job->svnDir      = 'SVN監控路徑';
 $lang->job->jenkins     = 'Jenkins';
 $lang->job->jkHost      = 'Jenkins伺服器';
 $lang->job->jkJob       = 'Jenkins任務';
+$lang->job->buildSpec   = '構建對象'; // 'pipeline@server'
+$lang->job->engine      = '構建引擎';
 $lang->job->server      = '伺服器';
-$lang->job->pipeline    = '流水線';
+$lang->job->pipeline    = '流水綫';
 $lang->job->buildType   = '構建類型';
 $lang->job->frame       = '工具/框架';
 $lang->job->triggerType = '觸發方式';
@@ -67,3 +71,18 @@ $lang->job->paramValueList['$zentao_version']  = '當前版本號';
 $lang->job->paramValueList['$zentao_account']  = '當前用戶名';
 $lang->job->paramValueList['$zentao_product']  = '當前產品ID';
 $lang->job->paramValueList['$zentao_repopath'] = '當前版本庫路徑';
+
+$lang->job->engineList = array();
+$lang->job->engineList['']        = '';
+$lang->job->engineList['gitlab']  = 'GitLab';
+$lang->job->engineList['jenkins'] = 'Jenkins';
+
+$lang->job->engineTips = new stdclass;
+$lang->job->engineTips->success = '構建引擎將使用GitLab項目內置的流水綫。';
+$lang->job->engineTips->error   = '當前GitLab項目內沒有可用的流水綫，請先前往GitLab配置。';
+
+$lang->job->pipelineTips                      = "選擇要運行流水綫的分支名或標籤名";
+$lang->job->pipelineVariables                 = "變數";
+$lang->job->pipelineVariablesKeyPlaceHolder   = "輸入變數的名稱";
+$lang->job->pipelineVariablesValuePlaceHolder = "輸入變數的值";
+$lang->job->pipelineVariablesTips             = "指定要在此次運行中使用的變數值。CI/CD設置中指定的值將用作預設值。";

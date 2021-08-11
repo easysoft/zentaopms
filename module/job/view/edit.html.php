@@ -10,44 +10,53 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php';?>
 
 <?php js::set('repoTypes', $repoTypes)?>
 <?php js::set('triggerType', $job->triggerType);?>
 <?php js::set('pipeline', $job->pipeline);?>
 <?php js::set('dirChange', $lang->job->dirChange);?>
 <?php js::set('buildTag', $lang->job->buildTag);?>
+<?php js::set('jkTask', $job->pipeline);?>
 
 <div id='mainContent' class='main-row'>
   <div class='main-content'>
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->job->edit; ?></h2>
+        <h2><?php echo $lang->job->edit;?></h2>
       </div>
       <form id='jobForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th class='w-120px'><?php echo $lang->job->name; ?></th>
-            <td class='required'><?php echo html::input('name', $job->name, "class='form-control'"); ?></td>
+            <th class='w-120px'><?php echo $lang->job->name;?></th>
+            <td class='required'><?php echo html::input('name', $job->name, "class='form-control'");?></td>
             <td colspan="2" ></td>
           </tr>
           <tr>
-            <th><?php echo $lang->job->repo; ?></th>
-            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control chosen'");?>
+            <th><?php echo $lang->job->engine;?></th>
+            <td><?php echo zget($lang->job->engineList, $job->engine, '') . html::hidden('engine', $job->engine);?>
             </td>
           </tr>
-          <tr>
-            <th><?php echo $lang->job->product; ?></th>
-            <td><?php echo html::select('product', $products, $job->product, "class='form-control chosen'"); ?></td>
+          <tr class='commonRepo'>
+            <th><?php echo $lang->job->repo; ?></th>
+            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control'"); ?></td>
+          </tr>
+          <tr class='gitlabRepo hide'>
+            <th><?php echo $lang->job->repo; ?></th>
+            <td><?php echo html::select('gitlabRepo', $gitlabRepos, $job->repo, "class='form-control'"); ?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->job->frame; ?></th>
-            <td><?php echo html::select('frame', $lang->job->frameList, $job->frame, "class='form-control chosen'"); ?></td>
+            <th><?php echo $lang->job->product;?></th>
+            <td><?php echo html::select('product', $products, $job->product, "class='form-control chosen'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->job->triggerType; ?></th>
+            <th><?php echo $lang->job->frame;?></th>
+            <td><?php echo html::select('frame', $lang->job->frameList, $job->frame, "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->job->triggerType;?></th>
             <?php if($repoType == 'Subversion') $lang->job->triggerTypeList['tag'] = $lang->job->dirChange;?>
-            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, $job->triggerType, "class='form-control chosen'");?></td>
+            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, $job->triggerType, "class='form-control'");?></td>
             <td colspan="2"></td>
           </tr>
           <tr id='svnDirBox' class='svn-fields'>
@@ -95,35 +104,37 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <th><?php echo $lang->job->server; ?></th>
-            <td colspan='2'>
+          <?php if($job->engine == 'jenkins'):?>
+          <tr id="jenkinsServerTR">
+            <th><?php echo $lang->job->server;?></th>
+            <td colspan='2' class='required'>
               <div class='table-row'>
-                <div class='table-col'><?php echo html::select('server', $serverList, $job->server, "class='form-control chosen'");?></div>
-                <div id='pipelineBox' class='table-col'>
+                <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, $job->server, "class='form-control chosen'");?></div>
+                <div class='table-col'>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
-                    <?php echo html::select('pipeline', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
+                    <span class='input-group-addon'><?php echo $lang->job->pipeline;?></span>
+                    <?php echo html::select('jkTask', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
                   </div>
                 </div>
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->job->customParam;?></th>
             <td colspan='2' id='paramDiv'>
               <?php if($job->customParam):?>
               <?php foreach(json_decode($job->customParam) as $paramName => $paramValue):?>
               <div class='table-row input-group'>
-                <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
-                <?php echo html::input('paramName[]', $paramName, "class='form-control'"); ?>
-                <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue; ?></span>
-                <?php $isCustom = zget($lang->job->paramValueList, $paramValue, '') ? false : true; ?>
+                <span class='input-group-addon w-50px'><?php echo $lang->job->paramName;?></span>
+                <?php echo html::input('paramName[]', $paramName, "class='form-control'");?>
+                <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue;?></span>
+                <?php $isCustom = zget($lang->job->paramValueList, $paramValue, '') ? false : true;?>
                 <?php if($isCustom):?>
-                <?php echo html::input('paramValue[]', $paramValue, "class='form-control'"); ?>
+                <?php echo html::input('paramValue[]', $paramValue, "class='form-control'");?>
                 <?php echo html::select('paramValue[]', $lang->job->paramValueList, '', "class='form-control hidden' onchange='setParamName(this)' disabled");?>
                 <?php else:?>
-                <?php echo html::input('paramValue[]', '', "class='form-control hidden' id='paramValue' disabled"); ?>
+                <?php echo html::input('paramValue[]', '', "class='form-control hidden' id='paramValue' disabled");?>
                 <?php echo html::select('paramValue[]', $lang->job->paramValueList, $paramValue, "class='form-control' onchange='setParamName(this)'");?>
                 <?php endif;?>
                 <span class='input-group-addon w-90px'>
@@ -138,14 +149,14 @@
               <?php endforeach;?>
               <?php endif;?>
               <div class='table-row input-group'>
-                <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
-                <?php echo html::input('paramName[]', '', "class='form-control' id='paramName'"); ?>
-                <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue; ?></span>
+                <span class='input-group-addon w-50px'><?php echo $lang->job->paramName;?></span>
+                <?php echo html::input('paramName[]', '', "class='form-control' id='paramName'");?>
+                <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue;?></span>
                 <?php echo html::select('paramValue[]', $lang->job->paramValueList, '', "class='form-control' onchange='setParamName(this)'");?>
-                <?php echo html::input('paramValue[]', '', "class='form-control hidden' id='paramValue' disabled"); ?>
+                <?php echo html::input('paramValue[]', '', "class='form-control hidden' id='paramValue' disabled");?>
                 <span class='input-group-addon w-90px'>
                   <div class='checkbox-primary'>
-                    <input type='checkbox' name='custom' id='custom' value='1' onclick='setValueInput(this);' />
+                    <input type='checkbox' name='custom' id='custom' value='1' onclick='setValueInput(this);'/>
                     <label for='custom'><?php echo $lang->job->custom;?></label>
                   </div>
                 </span>
@@ -157,8 +168,8 @@
           <tr>
             <th></th>
             <td colspan="2" class='text-center form-actions'>
-              <?php echo html::submitButton(); ?>
-              <?php echo html::backButton(); ?>
+              <?php echo html::submitButton();?>
+              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
               <?php echo html::hidden('repoType', zget($repoTypes, $job->repo, 'Git'));?>
             </td>
           </tr>

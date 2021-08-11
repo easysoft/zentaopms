@@ -250,7 +250,9 @@ class release extends control
                 }
                 return $this->send($response);
             }
-            die(js::locate($this->session->releaseList, 'parent'));
+
+            $locateLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID={$release->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 

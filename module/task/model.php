@@ -121,10 +121,6 @@ class taskModel extends model
 
             $taskID = $this->dao->lastInsertID();
 
-            /* Sync this task to gitlab issue. */
-            $object = $this->getByID($taskID);
-            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, 'task', $taskID, $object);
-
             /* Mark design version.*/
             if(isset($task->design) && !empty($task->design))
             {
@@ -196,7 +192,7 @@ class taskModel extends model
             }
 
             $teams = array();
-            if($this->post->multiple)
+            if($this->post->multiple and count(array_filter($this->post->team)) > 1)
             {
                 foreach($this->post->team as $row => $account)
                 {
@@ -282,6 +278,8 @@ class taskModel extends model
         $module     = 0;
         $type       = '';
         $assignedTo = '';
+        $estStarted = '0000-00-00';
+        $deadline   = '0000-00-00';
 
         /* Get task data. */
         $extendFields = $this->getFlowExtendFields();
@@ -289,10 +287,12 @@ class taskModel extends model
         $data         = array();
         foreach($tasks->name as $i => $name)
         {
-            $story      = !isset($tasks->story[$i]) || $tasks->story[$i]           == 'ditto' ? $story     : $tasks->story[$i];
-            $module     = !isset($tasks->module[$i]) || $tasks->module[$i]         == 'ditto' ? $module    : $tasks->module[$i];
-            $type       = !isset($tasks->type[$i]) || $tasks->type[$i]             == 'ditto' ? $type      : $tasks->type[$i];
-            $assignedTo = !isset($tasks->assignedTo[$i]) || $tasks->assignedTo[$i] == 'ditto' ? $assignedTo: $tasks->assignedTo[$i];
+            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
+            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
+            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
+            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
+            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
+            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
 
             if(empty($tasks->name[$i])) continue;
 
@@ -309,8 +309,8 @@ class taskModel extends model
             $data[$i]->left       = $tasks->estimate[$i];
             $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
             $data[$i]->execution  = $executionID;
-            $data[$i]->estStarted = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
-            $data[$i]->deadline   = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];
+            $data[$i]->estStarted = $estStarted;
+            $data[$i]->deadline   = $deadline;
             $data[$i]->status     = 'wait';
             $data[$i]->openedBy   = $this->app->user->account;
             $data[$i]->openedDate = $now;
@@ -384,10 +384,6 @@ class taskModel extends model
             if(dao::isError()) return false;
 
             $taskID   = $this->dao->lastInsertID();
-
-            /* Sync this task to gitlab issue. */
-            $object = $this->getByID($taskID);
-            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject,'task', $taskID, $object);
 
             $taskSpec = new stdClass();
             $taskSpec->task       = $taskID;
@@ -475,6 +471,7 @@ class taskModel extends model
         $task->estimate     = 0;
         $task->estStarted   = '0000-00-00';
         $task->left         = 1;
+        $task->pri          = 3;
         $task->type         = 'devel';
 
         $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id,product')
@@ -670,6 +667,9 @@ class taskModel extends model
 
                 if($parentTask->story) $this->loadModel('story')->setStage($parentTask->story);
                 $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+
+                unset($oldParentTask->subStatus);
+                unset($newParentTask->subStatus);
                 $changes = common::createChanges($oldParentTask, $newParentTask);
                 $action  = '';
                 if($status == 'done' and $parentTask->status != 'done')     $action = 'Finished';
@@ -901,7 +901,7 @@ class taskModel extends model
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
         $teams = array();
-        if($this->post->multiple)
+        if($this->post->multiple and count(array_unique(array_filter($this->post->team))) > 1)
         {
             if(strpos(',done,closed,cancel,', ",{$task->status},") === false && $this->post->assignedTo && !in_array($this->post->assignedTo, $this->post->team))
             {
@@ -980,11 +980,6 @@ class taskModel extends model
 
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
-
-        /* update task to gitlab issue. */
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('task', $taskID);
-        if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
 
         if(!dao::isError())
         {
@@ -1220,21 +1215,12 @@ class taskModel extends model
             $tasks[$taskID] = $task;
         }
 
-        $this->loadModel('gitlab');
-        $issues = $this->gitlab->getIssueListByObjects('task', $taskID);
-        foreach($tasks as $taskID => $task)
-        {
-            $issue = zget($issues, $taskID, 0);
-            if(!$issue) continue;
-            $this->gitlab->apiUpdateIssue($issue->gitlabID, $issue->projectID, $issue->issueID, $task);
-        }
-
         /* Check field not empty. */
         foreach($tasks as $taskID => $task)
         {
             if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
-            if($task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
+            if(!empty($task->deadline) and $task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -1298,11 +1284,6 @@ class taskModel extends model
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
-
-                /* Update task to gitlab issue. */
-                $this->loadModel('gitlab');
-                $relation = $this->gitlab->getRelationByObject('task', $taskID);
-                if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
             }
             else
             {
@@ -1387,11 +1368,8 @@ class taskModel extends model
             ->data($task)
             ->autoCheck()
             ->check('left', 'float')
-            ->where('id')->eq($taskID)->exec();
-
-        $task     = $this->getById($taskID);
-        $relation = $this->loadModel('gitlab')->getRelationByObject('task', $taskID);
-        if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
+            ->where('id')->eq($taskID)
+            ->exec();
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1634,7 +1612,7 @@ class taskModel extends model
 
         $task = fixer::input('post')
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF(helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
+            ->setIF(!$this->post->realStarted and helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
             ->setDefault('assignedDate', $now)
@@ -1728,14 +1706,6 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('task', $taskID);
-        if(!empty($relation))
-        {
-            $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-            if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
-        }
-
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
@@ -1792,14 +1762,6 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('task', $taskID);
-        if(!empty($relation))
-        {
-            $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-            if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'bug', $task, $taskID);
-        }
-
         if(!dao::isError())
         {
             if($oldTask->parent > 0) $this->updateParentStatus($taskID);
@@ -1843,14 +1805,6 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
-
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('task', $taskID);
-        if(!empty($relation))
-        {
-            $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-            if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
-        }
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1916,10 +1870,6 @@ class taskModel extends model
             $this->computeWorkingHours($taskID);
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
-
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('task', $taskID);
-        if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'task', $task, $taskID);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -2191,6 +2141,11 @@ class taskModel extends model
         {
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
+
+        $projectList = array();
+        foreach($tasks as $task) $projectList[] = $task->project;
+        $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectList)->fetchPairs('id');
+        foreach($tasks as $task) $task->projectName = zget($projectPairs, $task->project);
 
         if($tasks) return $this->processTasks($tasks);
         return array();
@@ -3070,7 +3025,7 @@ class taskModel extends model
                 echo $this->lang->task->typeList[$task->type];
                 break;
             case 'status':
-                $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");
+                $storyChanged ? print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}' title='{$this->processStatus('task', $task)}'> " . $this->processStatus('task', $task) . "</span>");
                 break;
             case 'estimate':
                 echo round($task->estimate, 1) . $this->lang->execution->workHourUnit;

@@ -11,18 +11,18 @@ class projectsEntry extends entry
     public function get()
     {
         $control = $this->loadController('project', 'browse');
-        $control->browse();
+        $control->browse(0, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
         {
-            $pager = $data->data->pager;
+            $pager  = $data->data->pager;
             $result = array();
             foreach($data->data->projectStats as $project)
             {
                 $result[] = $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
             }
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'projects' => $result));
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => (int)$pager->recPerPage, 'projects' => $result));
         }
 
         if(isset($data->status) and $data->status == 'fail')

@@ -578,17 +578,19 @@ class upgrade extends control
             die(js::locate($this->createLink('upgrade', 'mergeRepo'), 'parent'));
         }
 
-        $repos = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
-
-        if(empty($repos))
+        $repos    = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
+        $products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
+        if(empty($repos) or empty($products))
         {
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
 
+        $this->view->title    = $this->lang->upgrade->mergeRepo;
         $this->view->repos    = $repos;
-        $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
+        $this->view->products = $products;
         $this->view->programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs();
+
         $this->display();
     }
 
@@ -738,6 +740,7 @@ class upgrade extends control
     public function ajaxUpdateFile($type = '', $lastID = 0)
     {
         set_time_limit(0);
+        $this->app->loadLang('search');
         $result = $this->upgrade->updateFileObjectID($type, $lastID);
         $response = array();
         if($result['type'] == 'finish')
@@ -745,7 +748,7 @@ class upgrade extends control
             $response['result']  = 'finished';
             $response['type']    = $type;
             $response['count']   = $result['count'];
-            $response['message'] = 'Finished';
+            $response['message'] = $this->lang->search->buildSuccessfully;
         }
         else
         {
@@ -754,7 +757,7 @@ class upgrade extends control
             $response['count']    = $result['count'];
             $response['type']     = $type;
             $response['nextType'] = $result['type'];
-            $response['message']  = strtoupper($result['type']) . " <span class='{$result['type']}-num'>0</span>";
+            $response['message']  = zget($this->lang->searchObjects, $result['type']) . " <span class='{$result['type']}-num'>0</span>";
         }
         die(json_encode($response));
     }

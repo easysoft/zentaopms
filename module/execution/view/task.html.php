@@ -171,7 +171,7 @@ body {margin-bottom: 25px;}
       <li <?php echo $disabled?>>
       <?php
         $batchLink = $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->task->batchCreate) . "</li>";
+        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->task->batchCreate) . "</li>";
       ?>
       </li>
     </ul>

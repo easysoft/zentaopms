@@ -43,7 +43,7 @@ $lang->repo->line     = '行';
 $lang->repo->expand   = '點擊展開';
 $lang->repo->collapse = '點擊摺疊';
 
-$lang->repo->id        = '編號';
+$lang->repo->id        = 'ID';
 $lang->repo->SCM       = '類型';
 $lang->repo->name      = '名稱';
 $lang->repo->path      = '地址';
@@ -123,8 +123,8 @@ $lang->repo->logStyles['D'] = '刪除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->gitlabHost    = 'GitLab Server';
@@ -172,6 +172,7 @@ $lang->repo->error->output        = "執行命令：%s\n錯誤結果(%s)： %s\n
 $lang->repo->error->clientVersion = "客戶端版本過低，請升級或更換SVN客戶端";
 $lang->repo->error->encoding      = "編碼可能錯誤，請更換編碼重試。";
 $lang->repo->error->deleted       = "刪除版本庫失敗，當前版本庫有提交記錄與設計關聯";
+$lang->repo->error->linkedJob     = "刪除版本庫失敗，當前版本庫與構建有關聯，請取消關聯或刪除構建。";
 $lang->repo->error->clientPath    = "客戶端安裝目錄不能有空格！";
 
 $lang->repo->syncTips          = '請參照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">這裡</a>，設置版本庫定時同步。';

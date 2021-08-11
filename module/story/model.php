@@ -44,6 +44,7 @@ class storyModel extends model
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq($storyID)
+            ->andWhere('t2.type')->in('sprint,stage')
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
         $story->tasks  = $this->dao->select('id, name, assignedTo, execution, status, consumed, `left`')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id DESC')->fetchGroup('execution');
@@ -198,13 +199,11 @@ class storyModel extends model
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
             ->callFunc('title', 'trim')
-            ->add('assignedDate', 0)
             ->add('version', 1)
             ->add('status', 'draft')
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview or $executionID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
@@ -234,12 +233,12 @@ class storyModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,gitlab,gitlabProject')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
-            $this->file->saveUpload('story', $storyID, $extra = 1);
+            $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
+            $this->file->saveUpload($story->type, $storyID, $extra = 1);
 
             if(!empty($story->plan)) $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
 
@@ -254,14 +253,20 @@ class storyModel extends model
             /* Save the story reviewer to storyreview table. */
             if(isset($_POST['reviewer']))
             {
+                $assignedTo = '';
                 foreach($this->post->reviewer as $reviewer)
                 {
+                    if(empty($reviewer)) continue;
+
                     $reviewData = new stdclass();
                     $reviewData->story    = $storyID;
                     $reviewData->version  = 1;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    if(empty($assignedTo)) $assignedTo = $reviewer;
                 }
+                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             }
 
             /* Project or execution linked story. */
@@ -340,10 +345,6 @@ class storyModel extends model
             /* Callback the callable method to process the related data for object that is transfered to story. */
             if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
 
-            /* push this story to gitlab issue */
-            $object = $this->getByID($storyID);
-            $this->loadModel('gitlab')->apiCreateIssue($this->post->gitlab, $this->post->gitlabProject, 'story', $storyID, $object);
-            
             return array('status' => 'created', 'id' => $storyID);
         }
         return false;
@@ -351,9 +352,9 @@ class storyModel extends model
 
     /**
      * Create story from gitlab issue.
-     * 
+     *
      * @param  object    $story
-     * @param  int       $executionID 
+     * @param  int       $executionID
      * @access public
      * @return int
      */
@@ -363,6 +364,7 @@ class storyModel extends model
         $story->stage        = 'projected';
         $story->openedBy     = $this->app->user->account;
         $story->version      = 1;
+        $story->pri          = 3;
         $story->assignedDate = isset($story->assignedTo) ? helper::now() : 0;
 
         if(isset($story->execution)) unset($story->execution);
@@ -380,7 +382,7 @@ class storyModel extends model
             $data->spec    = $story->spec;
             $data->verify  = $story->spec;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
-            
+
             /* Link story to execution. */
             $this->linkStory($executionID, $story->product, $storyID);
 
@@ -551,14 +553,20 @@ class storyModel extends model
             /* Save the story reviewer to storyreview table. */
             if(isset($_POST['reviewer'][$i]))
             {
+                $assignedTo = '';
                 foreach($_POST['reviewer'][$i] as $reviewer)
                 {
+                    if(empty($reviewer)) continue;
+
                     $reviewData = new stdclass();
                     $reviewData->story    = $storyID;
                     $reviewData->version  = 1;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    if(empty($assignedTo)) $assignedTo = $reviewer;
                 }
+                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
             }
 
             $this->executeHooks($storyID);
@@ -686,6 +694,7 @@ class storyModel extends model
 
             /* Update the reviewer. */
             $oldReviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
+            $assignedTo      = '';
             foreach($_POST['reviewer'] as $reviewer)
             {
                 if(!$specChanged and in_array($reviewer, array_keys($oldReviewerList))) continue;
@@ -695,14 +704,12 @@ class storyModel extends model
                 $reviewData->version  = $specChanged ? $story->version : $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
+            if($assignedTo and $assignedTo != $oldStory->assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
-
-            /* update story to gitlab issue. */
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('story', $storyID);
-            if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
 
             return common::createChanges($oldStory, $story);
         }
@@ -713,7 +720,7 @@ class storyModel extends model
      *
      * @param  int    $storyID
      * @access public
-     * @return array the changes of the story.
+     * @return array  the changes of the story.
      */
     public function update($storyID)
     {
@@ -783,6 +790,44 @@ class storyModel extends model
         }
 
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
+
+        if(isset($_POST['reviewer']))
+        {
+            $_POST['reviewer'] = array_filter($_POST['reviewer']);
+            $oldReviewer       = $this->getReviewerPairs($storyID, $oldStory->version);
+
+            /* Update story reviewer. */
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
+            foreach($_POST['reviewer'] as $reviewer)
+            {
+                if(in_array($reviewer, array_keys($oldReviewer))) continue;
+
+                $reviewData = new stdclass();
+                $reviewData->story    = $storyID;
+                $reviewData->version  = $oldStory->version;
+                $reviewData->reviewer = $reviewer;
+                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+            }
+
+            /* Update the story status by review rules. */
+            $reviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
+            $reviewedBy   = explode(',', trim($oldStory->reviewedBy, ','));
+            if(!array_diff(array_keys($reviewerList), $reviewedBy))
+            {
+                $status        = $this->setStatusByReviewRules($reviewerList);
+                $story->status = $status ? $status : $oldStory->status;
+                if($story->status == 'closed')
+                {
+                    $story->closedBy     = $this->app->user->account;
+                    $story->closedDate   = $now;
+                    $story->assignedTo   = 'closed';
+                    $story->assignedDate = $now;
+                    $story->stage        = 'closed';
+                    if($this->post->closedReason == 'done') $story->stage = 'released';
+                }
+
+            }
+        }
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -861,32 +906,6 @@ class storyModel extends model
 
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
-
-            if(isset($_POST['reviewer']))
-            {
-                $_POST['reviewer']   = array_filter($_POST['reviewer']);
-                $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
-                $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-                $story->reviewers    = implode(',', $_POST['reviewer']);
-
-                /* Update story reviewer. */
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
-                foreach($_POST['reviewer'] as $reviewer)
-                {
-                    if(in_array($reviewer, array_keys($oldReviewer))) continue;
-
-                    $reviewData = new stdclass();
-                    $reviewData->story    = $storyID;
-                    $reviewData->version  = $oldStory->version;
-                    $reviewData->reviewer = $reviewer;
-                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-                }
-            }
-
-            /* update story to gitlab issue. */
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('story', $storyID);
-            if($relation) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
 
             unset($oldStory->parent);
             unset($story->parent);
@@ -1218,11 +1237,6 @@ class storyModel extends model
                     /* Update story sort of plan when story plan has changed. */
                     if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan);
 
-                    /* update story to gitlab issue. */
-                    $this->loadModel('gitlab');
-                    $relation = $this->gitlab->getRelationByObject('story', $storyID);
-                    if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
-
                     $this->executeHooks($storyID);
                     if($story->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
@@ -1488,15 +1502,6 @@ class storyModel extends model
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
 
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('story', $storyID);
-
-        if(!empty($relation))
-        {
-            $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-            if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
-        }
-
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
         $this->setStage($storyID);
@@ -1563,14 +1568,6 @@ class storyModel extends model
                 if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
                 $this->setStage($storyID);
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
-
-                $this->loadModel('gitlab');
-                $relation = $this->gitlab->getRelationByObject('story', $storyID);
-                if(!empty($relation))
-                {
-                    $currentIssue = $this->gitlab->apiGetSingleIssue($relation->gitlabID, $relation->projectID, $relation->issueID);
-                    if($currentIssue->state != 'closed') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
-                }
             }
             else
             {
@@ -1847,14 +1844,7 @@ class storyModel extends model
         $story->assignedDate   = $now;
 
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-        if(!dao::isError())
-        {
-            $this->loadModel('gitlab');
-            $relation = $this->gitlab->getRelationByObject('story', $storyID);
-            $story->assignee_id = $this->gitlab->getGitlabUserID($relation->gitlabID, $story->assignedTo);
-            if($story->assignee_id != '') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
-            return common::createChanges($oldStory, $story);
-        }
+        if(!dao::isError()) return common::createChanges($oldStory, $story);
         return false;
     }
 
@@ -1883,18 +1873,6 @@ class storyModel extends model
             $story->assignedDate   = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-            if(!dao::isError()) 
-            {
-                $this->loadModel('gitlab');
-                $relation = $this->gitlab->getRelationByObject('story', $storyID);
-                $story->assignee_id = $this->gitlab->getGitlabUserID($relation->gitlabID, $story->assignedTo);
-                if($story->assignee_id != '') $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
-                
-                /* Push this story to gitlab issue. */
-                $this->loadModel('gitlab');
-                $relation = $this->gitlab->getRelationByObject('story', $storyID);
-                if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
-            }
         }
         return $allChanges;
     }
@@ -1928,11 +1906,6 @@ class storyModel extends model
 
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-
-        /* Push this story to gitlab issue. */
-        $this->loadModel('gitlab');
-        $relation = $this->gitlab->getRelationByObject('story', $storyID);
-        if(!empty($relation)) $this->gitlab->apiUpdateIssue($relation->gitlabID, $relation->projectID, $relation->issueID, 'story', $story, $storyID);
 
         return common::createChanges($oldStory, $story);
     }
@@ -2723,6 +2696,8 @@ class storyModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('parent')->le(0)
             ->andWhere('type')->eq('story')
+            ->andWhere('stage')->eq('wait')
+            ->andWhere('plan')->in('0,')
             ->andWhere('status')->notin('closed,draft')
             ->andWhere('product')->eq($productID)
             ->beginIF($append)->orWhere('id')->in($append)->fi()
@@ -2752,7 +2727,7 @@ class storyModel extends model
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
-            ->beginIF($type == 'reviewBy')->andWhere('t3.reviewer')->eq($account)->andWhere('t3.result')->eq('')->fi()
+            ->beginIF($type == 'reviewBy')->andWhere('t3.reviewer')->eq($account)->andWhere('t3.result')->eq('')->andWhere('t1.status')->in('draft,changed')->fi()
             ->beginIF($type == 'openedBy')->andWhere('openedBy')->eq($account)->fi()
             ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
             ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
@@ -3349,6 +3324,14 @@ class storyModel extends model
             }
         }
 
+        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'opened')
+        {
+            $reviewerList = $this->getReviewerPairs($story->id, $story->version);
+            unset($reviewerList[$story->assignedTo]);
+
+            $ccList .= ',' . join(',', array_keys($reviewerList));
+        }
+
         if(empty($toList))
         {
             if(empty($ccList)) return false;
@@ -3399,7 +3382,7 @@ class storyModel extends model
         if($action == 'createcase') return $story->type != 'requirement';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return $story->status != 'draft';
-        if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait')) return false;
+        if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait' or !empty($story->plan))) return false;
 
         return true;
     }
@@ -3504,7 +3487,7 @@ class storyModel extends model
         $storyIdList = array();
         if(isset($stories['id']))
         {
-            $storyIdList = array($stories['id'] => $stories['id']); 
+            $storyIdList = array($stories['id'] => $stories['id']);
         }
         else
         {
@@ -3938,11 +3921,12 @@ class storyModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  int    $projectID
      * @param  object $pager
      * @access public
      * @return bool|array
      */
-    public function getTracks($productID = 0, $branch = 0, $pager = null)
+    public function getTracks($productID = 0, $branch = 0, $projectID = 0, $pager = null)
     {
         $tracks         = array();
         $sourcePageID   = $pager->pageID;
@@ -3950,7 +3934,24 @@ class storyModel extends model
 
         if($this->config->URAndSR)
         {
-            $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+            $projectStories = array();
+            if($projectID)
+            {
+                $requirements = $this->dao->select('t3.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_RELATION)->alias('t2')->on("t1.story=t2.AID && t2.AType='story'")
+                    ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.BID=t3.id && t2.BType='requirement'")
+                    ->where('t1.project')->eq($projectID)
+                    ->andWhere('t1.product')->eq($productID)
+                    ->andWhere('t3.id')->ne('')
+                    ->page($pager, 't3.id')
+                    ->fetchAll('id');
+                $projectStories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story');
+            }
+            else
+            {
+                $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
+            }
+
             if($pager->pageID != $sourcePageID)
             {
                 $requirements  = array();
@@ -3963,6 +3964,12 @@ class storyModel extends model
                 $stories = empty($stories) ? array() : $stories;
                 foreach($stories as $id => $title)
                 {
+                    if($projectStories and !isset($projectStories[$id]))
+                    {
+                        unset($stories[$id]);
+                        continue;
+                    }
+
                     $stories[$id] = new stdclass();
                     $stories[$id]->title = $title;
                     $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
@@ -3991,12 +3998,26 @@ class storyModel extends model
                 ->andWhere('relation')->eq('subdivideinto')
                 ->andWhere('product')->eq($productID)
                 ->fetchPairs('BID', 'BID');
-            $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
-            if($stories) $pager->recTotal += 1;
+            if($projectID)
+            {
+                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories);
+            }
+            else
+            {
+                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
+            }
+            if($stories) $pager->recTotal += count($stories);
         }
         else
         {
-            $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
+            if($projectID)
+            {
+                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, $pager);
+            }
+            else
+            {
+                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
+            }
         }
 
         if(count($tracks) < $pager->recPerPage)
@@ -4463,14 +4484,14 @@ class storyModel extends model
      * @access public
      * @return int
      */
-    public function recordReviewAction($story, $result, $reason)
+    public function recordReviewAction($story, $result = '', $reason = '')
     {
         $reasonParam = $result == 'reject' ? ',' . $reason : '';
         $reviewers   = $this->getReviewerPairs($story->id, $story->version);
         $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
 
         $comment  = isset($_POST['comment']) ? $this->post->comment : '';
-        $actionID = $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam);
+        $actionID = !empty($result) ? $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam) : '';
 
         if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewClosed');
         if($story->status == 'active') $this->action->create('story', $story->id, 'PassReviewed');

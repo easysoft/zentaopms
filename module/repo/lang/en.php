@@ -123,8 +123,8 @@ $lang->repo->logStyles['D'] = 'Delete';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
 
 $lang->repo->gitlabHost    = 'Gitlab Host';
@@ -172,6 +172,7 @@ $lang->repo->error->output        = "The command is: %s\nThe error is(%s): %s\n"
 $lang->repo->error->clientVersion = "Client version is too low, please upgrade or change SVN client";
 $lang->repo->error->encoding      = "The encoding might be wrong. Please change the encoding and try again.";
 $lang->repo->error->deleted       = "Deletion of the repository failed. The current repository has a commit record associated with the design.";
+$lang->repo->error->linkedJob     = "Deletion of the repository failed. The current repository has associated with the Compile.";
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
 
 $lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';

@@ -874,7 +874,7 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
         $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
-        $bugs  = $this->bug->checkDelayBugs($bugs);
+        $bugs  = $this->bug->checkDelayedBugs($bugs);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -1220,6 +1220,10 @@ class execution extends control
             if($this->config->systemMode == 'new') $selectedExecutionID = key($this->executions);
             $this->execution->setMenu($selectedExecutionID);
         }
+        elseif($this->app->openApp == 'doc')
+        {
+            unset($this->lang->doc->menu->execution['subMenu']);
+        }
 
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
@@ -1371,13 +1375,7 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $oldPlans       = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
-            $oldPlanStories = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
-                ->where('t1.project')->eq($executionID)
-                ->andWhere('t2.plan')->in(array_keys($oldPlans))
-                ->fetchAll('story');
-
+            $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
             $oldProducts = $this->execution->getProducts($executionID);
             $changes     = $this->execution->update($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1411,7 +1409,7 @@ class execution extends control
             if(!empty($newPlans) and !empty($diffResult))
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-                $this->loadModel('productplan')->linkProject($executionID, $_POST['plans'], $oldPlanStories);
+                $this->loadModel('productplan')->linkProject($executionID, $_POST['plans']);
                 $this->productplan->linkProject($projectID, $_POST['plans']);
             }
 
@@ -1764,7 +1762,7 @@ class execution extends control
      */
     public function view($executionID)
     {
-        $executionID = (int)$executionID;
+        $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
         if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -2271,7 +2269,7 @@ class execution extends control
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
-        $teams2Import   = $this->execution->getTeams2Import($this->app->user->account, $executionID);
+        $teams2Import   = $this->loadModel('personnel')->getCopyObjects($executionID, 'sprint');
         $teams2Import   = array('' => '') + $teams2Import;
 
         /* Append users for get users. */
@@ -2502,7 +2500,7 @@ class execution extends control
     }
 
     /**
-     * batch unlink story.
+     * Batch unlink story.
      *
      * @param  int    $executionID
      * @access public
@@ -2514,10 +2512,11 @@ class execution extends control
         {
             $storyIdList = $this->post->storyIdList;
             $_POST       = array();
+
+            $this->loadModel('gitlab');
             foreach($storyIdList as $storyID)
             {
                 /* Delete related issue in gitlab. */
-                $this->loadModel('gitlab');
                 $relation = $this->gitlab->getRelationByObject('story', $storyID);
                 if(!empty($relation)) $this->gitlab->deleteIssue('story', $storyID, $relation->issueID);
 
@@ -2905,10 +2904,11 @@ class execution extends control
      *
      * @param  int     $executionID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @access public
      * @return void
      */
-    public function addWhitelist($executionID = 0, $deptID = 0)
+    public function addWhitelist($executionID = 0, $deptID = 0, $copyID = 0)
     {
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
@@ -2916,7 +2916,7 @@ class execution extends control
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
 
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&objectType=sprint&module=execution");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&copyID=$copyID&objectType=sprint&module=execution");
     }
 
     /*

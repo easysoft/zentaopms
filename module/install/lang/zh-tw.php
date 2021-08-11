@@ -113,6 +113,7 @@ $lang->install->errorDBName         = '資料庫名不能含有 “.” ';
 $lang->install->errorCreateDB       = '資料庫創建失敗';
 $lang->install->errorTableExists    = '數據表已經存在，您之前應該有安裝過禪道，繼續安裝請返回前頁並選擇清空數據';
 $lang->install->errorCreateTable    = '創建表失敗';
+$lang->install->errorEngineInnodb   = '您當前的資料庫不支持使用InnoDB數據表引擎，請修改為MyISAM後重試。';
 $lang->install->errorImportDemoData = '導入demo數據失敗';
 
 $lang->install->setConfig          = '生成配置檔案';

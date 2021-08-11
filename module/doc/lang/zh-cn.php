@@ -11,12 +11,13 @@
  */
 /* 字段列表。*/
 $lang->doc->common       = '文档';
-$lang->doc->id           = '文档编号';
+$lang->doc->id           = '编号';
 $lang->doc->product      = '所属' . $lang->productCommon;
 $lang->doc->project      = '所属项目';
 $lang->doc->execution    = '所属' . $lang->executionCommon;
 $lang->doc->lib          = '所属文档库';
 $lang->doc->module       = '所属目录';
+$lang->doc->object       = '所属对象';
 $lang->doc->title        = '文档标题';
 $lang->doc->digest       = '文档摘要';
 $lang->doc->comment      = '文档备注';
@@ -36,10 +37,11 @@ $lang->doc->fileObject   = '所属对象';
 $lang->doc->whiteList    = '白名单';
 $lang->doc->contentType  = '文档格式';
 $lang->doc->separator    = "<i class='icon-angle-right'></i>";
-$lang->doc->fileTitle    = '附件名';
+$lang->doc->fileTitle    = '附件名称';
 $lang->doc->filePath     = '地址';
 $lang->doc->extension    = '类型';
 $lang->doc->size         = '附件大小';
+$lang->doc->source       = '来源';
 $lang->doc->download     = '下载';
 $lang->doc->acl          = '权限';
 $lang->doc->fileName     = '附件';
@@ -52,19 +54,20 @@ $lang->doc->mailto       = '抄送给';
 $lang->doc->noModule     = '文档库下没有目录和文档，请维护目录或者创建文档';
 $lang->doc->noChapter    = '手册下没有章节和文章，请维护手册';
 
-$lang->doc->moduleDoc    = '按模块浏览';
-$lang->doc->searchDoc    = '搜索';
-$lang->doc->fast         = '快速访问';
-$lang->doc->allDoc       = '所有文档';
-$lang->doc->openedByMe   = '由我创建';
-$lang->doc->editedByMe   = '由我编辑';
-$lang->doc->orderByOpen  = '最近添加';
-$lang->doc->orderByEdit  = '最近更新';
-$lang->doc->orderByVisit = '最近访问';
-$lang->doc->todayEdited  = '今日更新';
-$lang->doc->pastEdited   = '往日更新';
-$lang->doc->myDoc        = '我的文档';
-$lang->doc->myCollection = '我的收藏';
+$lang->doc->moduleDoc     = '按模块浏览';
+$lang->doc->searchDoc     = '搜索';
+$lang->doc->fast          = '快速访问';
+$lang->doc->allDoc        = '所有文档';
+$lang->doc->openedByMe    = '由我创建';
+$lang->doc->editedByMe    = '由我编辑';
+$lang->doc->orderByOpen   = '最近添加';
+$lang->doc->orderByEdit   = '最近更新';
+$lang->doc->orderByVisit  = '最近访问';
+$lang->doc->todayEdited   = '今日更新';
+$lang->doc->pastEdited    = '往日更新';
+$lang->doc->myDoc         = '我的文档';
+$lang->doc->myCollection  = '我的收藏';
+$lang->doc->tableContents = '目录';
 
 /* 方法列表。*/
 $lang->doc->index            = '文档主页';
@@ -104,6 +107,7 @@ $lang->doc->deleteLib      = '删除文档库';
 $lang->doc->fixedMenu      = '固定到菜单栏';
 $lang->doc->removeMenu     = '从菜单栏移除';
 $lang->doc->search         = '搜索';
+$lang->doc->allCollections = '查看全部收藏文档';
 $lang->doc->keywordsTips   = '多个关键字请用逗号分隔。';
 
 global $config;
@@ -171,6 +175,7 @@ $lang->doc->mail->edit->title   = "%s编辑了文档 #%s:%s";
 
 $lang->doc->confirmDelete        = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib     = "您确定删除该文档库吗？";
+$lang->doc->confirmDeleteBook    = "您确定删除该手册吗？";
 $lang->doc->confirmDeleteChapter = "您确定删除该章节吗？";
 $lang->doc->errorEditSystemDoc   = "系统文档库无需修改。";
 $lang->doc->errorEmptyProduct    = "没有{$lang->productCommon}，无法创建文档";
@@ -206,6 +211,10 @@ $lang->doc->noticeAcl['doc']['private'] = '只有创建者自己可以访问。'
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';
+
+$lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
+$lang->doc->ge      = '个';
+$lang->doc->point   = '、';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name      = '文档库名称';

@@ -105,11 +105,7 @@ class stakeholderModel extends model
             /* Update linked products view. */
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
-                $products = $this->loadModel('product')->getProductPairsByProject($stakeholder->objectID);
-                if(!empty($products))
-                {
-                    foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $stakeholder->user);
-                }
+                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
             }
 
             if($stakeholder->objectType == 'program' and $stakeholder->objectID)
@@ -133,6 +129,7 @@ class stakeholderModel extends model
     /**
      * Batch create stakeholders for a project.
      *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -155,7 +152,7 @@ class stakeholderModel extends model
             $stakeholder->objectID    = $projectID;
             $stakeholder->objectType  = 'project';
             $stakeholder->user        = $account;
-            $stakeholder->type		  = in_array($account, array_keys($members)) ? 'inside' : 'outside';
+            $stakeholder->type        = in_array($account, array_keys($members)) ? 'inside' : 'outside';
             $stakeholder->createdBy   = $this->app->user->account;
             $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
 
@@ -174,12 +171,7 @@ class stakeholderModel extends model
 
         $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
 
-        /* Update linked products view. */
-        $products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        if(!empty($products))
-        {
-            foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product', $changedAccounts);
-        }
+        $this->loadModel('project')->updateInvolvedUserView($projectID, $changedAccounts);
 
         if($stakeholder->objectType == 'program' and $stakeholder->objectID)
         {
@@ -284,7 +276,7 @@ class stakeholderModel extends model
     {
         $stakeholders = $this->dao->select('id, user')->from(TABLE_STAKEHOLDER)
             ->where('deleted')->eq('0')
-            ->andWhere('objectID')->eq($this->session->project)
+            ->andWhere('objectID')->eq($projectID)
             ->orderBy('id_desc')
             ->fetchPairs();
 
@@ -438,7 +430,7 @@ class stakeholderModel extends model
      */
     public function getIssues()
     {
-        $stakeholders = $this->getStakeHolderPairs();
+        $stakeholders = $this->getStakeHolderPairs($this->session->project);
         return $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq(0)
             ->andWhere('project')->eq($this->session->project)

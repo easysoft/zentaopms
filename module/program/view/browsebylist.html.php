@@ -13,7 +13,7 @@
         <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->project->end);?></th>
-        <th class='w-60px'><?php echo $lang->project->progress;?></th>
+        <th class='w-70px'><?php echo $lang->project->progress;?></th>
         <th class='text-center w-180px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -63,21 +63,23 @@
         <td>
           <?php if(!empty($program->PM)):?>
           <div class='avatar bg-secondary avatar-circle'>
-            <?php echo !empty(zget($usersAvatar, $program->PM, '')) ? html::image(zget($usersAvatar, $program->PM)) : strtoupper($program->PM[0]);?>
+            <?php echo !empty($usersAvatar[$program->PM]) ? html::image($usersAvatar[$program->PM]) : strtoupper($program->PM[0]);?>
           </div>
           <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
           <?php $userName = zget($users, $program->PM);?>
           <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
           <?php endif;?>
         </td>
-        <?php $programBudget = in_array($this->app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$program->budget / 10000, 2) . $lang->project->tenThousand : round((float)$program->budget, 2);?>
+        <?php $programBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$program->budget / 10000, 2) . $lang->project->tenThousand : round((float)$program->budget, 2);?>
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>
-          <div class='progress-pie' data-doughnut-size='90' data-color='#00da88' data-value='48' data-width='24' data-height='24' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo '48'; ?></div>
+          <?php if(isset($progressList[$program->id])):?>
+          <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo $progressList[$program->id]?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo $progressList[$program->id];?></div>
           </div>
+          <?php endif;?>
         </td>
         <td class='c-actions'>
           <?php if($program->type == 'program'):?>
@@ -192,7 +194,7 @@ $(function()
 
     $('#programForm').on('tableNestStateChanged', function()
     {
-        /* Ensure visible progress pie inited after toggle nest states */
+        /* Ensure visible progress pie inited after toggle nest states. */
         $('.progress-pie:visible').progressPie();
     });
 });

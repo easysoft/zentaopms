@@ -50,6 +50,9 @@
           </th>
           <th class='c-pri w-40px'>        <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-name'>              <?php common::printOrderLink('name',       $orderBy, $vars, $lang->task->name);?></th>
+          <?php if($config->systemMode == 'new'):?>
+          <th class='c-project w-120px'>   <?php common::printOrderLink('project',    $orderBy, $vars, $lang->my->projects);?></th>
+          <?php endif;?>
           <th class='c-project w-120px'>   <?php common::printOrderLink('execution',  $orderBy, $vars, $lang->my->executions);?></th>
           <?php if($type != 'openedBy'): ?>
           <th class='c-user w-90px'>       <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
@@ -90,7 +93,10 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color' data-group='execution'");?>
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
-          <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution", '', '', $task->project), $task->executionName, '', "data-group='execution'");?></td>
+          <?php if($config->systemMode == 'new'):?>
+          <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$task->project"), $task->projectName);?></td>
+          <?php endif;?>
+          <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '', "data-group='execution'");?></td>
           <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
           <?php endif;?>
@@ -154,7 +160,10 @@
               <?php if($child->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
               <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color' data-group='project'");?>
             </td>
-            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project", '', '', $child->project), $child->executionName, '', "data-group='execution'");?></td>
+            <?php if($config->systemMode == 'new'):?>
+            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$child->project"), $child->projectName);?></td>
+            <?php endif;?>
+            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '', "data-group='execution'");?></td>
             <?php if($type != 'openedBy'): ?>
             <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
             <?php endif;?>

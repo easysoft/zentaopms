@@ -14,7 +14,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $browseLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=$browseType&moduleID=$moduleID&storyType=$storyType")?>
-    <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'> </i>" . $lang->goback, '', "class='btn btn-link'");?>
+    <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'> </i> " . $lang->goback, '', "class='btn btn-link'");?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='text'><?php echo $lang->story->report->common;?></span>
@@ -46,7 +46,7 @@
       <div class='btn-toolbar'>
         <?php unset($lang->report->typeList['default']);?>
         <?php foreach($lang->report->typeList as $type => $typeName):?>
-        <?php echo html::a("javascript:changeChartType(\"$type\")", "<i class='icon icon-chart-{$type} muted'> </i>" . $typeName, '', "class='btn btn-link " . ($type == $chartType ? 'btn-active-line' : '') . "'")?>
+        <?php echo html::a("javascript:changeChartType(\"$type\")", "<i class='icon icon-chart-{$type} muted'> </i> " . $typeName, '', "class='btn btn-link " . ($type == $chartType ? 'btn-active-line' : '') . "'")?>
         <?php endforeach;?>
       </div>
       <div class='text-muted' style='padding-top:5px'><?php echo str_replace('%tab%', $lang->product->unclosed . $lang->story->common, $lang->report->notice->help);?></div>

@@ -103,7 +103,9 @@ $lang->action->objectTypes['entry']       = '應用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = '團隊';
 $lang->action->objectTypes['whitelist']   = '白名單';
-$lang->action->objectTypes['pipeline']    = 'GitLib';
+$lang->action->objectTypes['pipeline']    = 'GitLab';
+$lang->action->objectTypes['gitlab']      = 'GitLab';
+$lang->action->objectTypes['jenkins']     = 'Jenkins';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -445,6 +447,7 @@ $lang->action->dynamicAction->doc['hidden']    = '隱藏文檔';
 
 $lang->action->dynamicAction->user['created']       = '創建用戶';
 $lang->action->dynamicAction->user['edited']        = '編輯用戶';
+$lang->action->dynamicAction->user['deleted']       = '刪除用戶';
 $lang->action->dynamicAction->user['login']         = '用戶登錄';
 $lang->action->dynamicAction->user['logout']        = '用戶退出';
 $lang->action->dynamicAction->user['undeleted']     = '還原用戶';
@@ -477,7 +480,7 @@ $lang->action->label->testtask    = '測試單|testtask|view|caseID=%s';
 $lang->action->label->testsuite   = '測試套件|testsuite|view|suiteID=%s';
 $lang->action->label->caselib     = '用例庫|caselib|view|libID=%s';
 $lang->action->label->todo        = '待辦|todo|view|todoID=%s';
-$lang->action->label->doclib      = '文檔庫|doc|objectLibs|type=&objectID=&libID=%s';
+$lang->action->label->doclib      = '文檔庫|doc|objectLibs|type=%s&objectID=%s&libID=%s&docID=&version=&appendLib=%s';
 $lang->action->label->doc         = '文檔|doc|view|docID=%s';
 $lang->action->label->user        = '用戶|user|view|account=%s';
 $lang->action->label->testreport  = '報告|testreport|view|report=%s';

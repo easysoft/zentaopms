@@ -111,6 +111,7 @@ class gitlab
         if(!empty($commits))
         {
             $commit = $commits[0];
+            $file->revision  = $commit->id;
             $file->committer = $commit->committer_name;
             $file->comment   = $commit->message;
             $file->date      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
@@ -168,10 +169,15 @@ class gitlab
             $list = $this->fetch($api, $params);
             if(empty($list)) break;
 
-            foreach($list as $branch) $branches[$branch->name] = $branch->name;
+            foreach($list as $branch)
+            {
+                if(!isset($branch->name)) continue;
+                $branches[$branch->name] = $branch->name;
+            }
             if(count($list) < $params['per_page']) break;
         }
 
+        if(empty($branches)) $branches['master'] = 'master';
         asort($branches);
         return $branches;
     }
@@ -517,7 +523,8 @@ class gitlab
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
 
-        if(empty($count)) $count = 100;
+        /* TODO Put getCommits into cron job. And check best size of $count. */
+        if(empty($count)) $count = 10;
 
         $params = array();
         $params['ref_name'] = $branch;
@@ -617,7 +624,6 @@ class gitlab
         $params->per_page = 100;
 
         $allResults = array();
-        $files = array();
         while(true)
         {
             $results = $this->fetch($api, $params);

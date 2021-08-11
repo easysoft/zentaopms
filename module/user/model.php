@@ -1053,7 +1053,7 @@ class userModel extends model
     public function getExecutions($account, $type = 'execution', $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         $projectType    = $type == 'execution' ? 'sprint,stage' : $type;
-        $myProjectsList = $this->dao->select('t1. *,t2. *')->from(TABLE_TEAM)->alias('t1')
+        $myProjectsList = $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.type')->eq($type)
             ->andWhere('t2.type')->in($projectType)
@@ -1061,6 +1061,8 @@ class userModel extends model
             ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
             ->beginIF($status == 'openedbyme')->andWhere('openedBy')->eq($account)->fi()
+            ->beginIF($type == 'execution' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($type == 'project' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy("t2.$orderBy")
@@ -1130,7 +1132,7 @@ class userModel extends model
                 if($project->project)
                 {
                     $parentProject = zget($projectList, $project->project, '');
-                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->exec();
+                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
                     $project->projectName = $parentProject ? $parentProject->name : '';
                 }
                 $myProjects[$project->id] = $project;
@@ -1581,7 +1583,7 @@ class userModel extends model
             static $allProducts, $allPrograms, $allProjects, $allSprints, $teams, $stakeholders, $productWhiteList, $whiteList;
             if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
             if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
-            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
+            if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
             if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage')->fi()->fetchAll('id');
 
             /* Get teams. */
@@ -2205,6 +2207,14 @@ class userModel extends model
 
         if($program->PM == $account || $program->openedBy == $account) return true;
 
+        /* Parent program managers. */
+        if($program->parent != 0 && $program->acl == 'program')
+        {
+            $path    = str_replace(",{$program->id},", ',', "{$program->path}");
+            $parents = $this->dao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
+            foreach($parents as $parent) if($parent->PM == $account) return true;
+        }
+
         if($program->acl == 'open') return true;
 
         if(isset($stakeholders[$account])) return true;
@@ -2238,10 +2248,7 @@ class userModel extends model
         {
             $path     = str_replace(",{$project->id},", ',', "{$project->path}");
             $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
-            foreach($programs as $program)
-            {
-                if($program->PM == $account || $program->openedBy == $account) return true;
-            }
+            foreach($programs as $program) if($program->PM == $account) return true;
         }
 
         /* Judge sprint auth. */

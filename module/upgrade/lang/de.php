@@ -121,6 +121,8 @@ $lang->upgrade->mergeByProject     = "Independent {$lang->projectCommon}: You ca
 $lang->upgrade->mergeByMoreLink    = "{$lang->projectCommon} that relates multiple {$lang->productCommon}: select which project the {$lang->projectCommon} belongs to.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
 $lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrad. Please create an index.';
+$lang->upgrade->errorEngineInnodb  = 'Your MySQL version is too low to support InnoDB data table engine. Please modify it to MyISAM and try again.';
+$lang->upgrade->errorEngineInnodb  = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 
 $lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
 $lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";

@@ -36,7 +36,7 @@
         <?php echo $lang->backup->history?>
       </h2>
       <div class='pull-right'>
-        <?php common::printLink('backup', 'setting', '', "<i class='icon icon-cog'></i>" . $lang->backup->setting, '', "data-width='500' class='iframe btn btn-primary'");?>
+        <?php common::printLink('backup', 'setting', '', "<i class='icon icon-cog'></i> " . $lang->backup->setting, '', "data-width='500' class='iframe btn btn-primary'");?>
         <?php common::printLink('backup', 'backup', 'reload=yes', "<i class='icon icon-copy'></i> " . $lang->backup->backup, 'hiddenwin', "class='btn btn-primary backup'");?>
       </div>
     </div>

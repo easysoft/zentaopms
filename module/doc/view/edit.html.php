@@ -45,7 +45,13 @@
         </tr>
         <tr>
           <th><?php echo $lang->doc->type;?></th>
-          <td><?php echo html::radio('type', $lang->doc->types, $doc->type);?></td>
+          <td>
+            <?php
+            $typeList = $lang->doc->types;
+            if(!isset($lang->doc->types[$doc->type])) $typeList = $lang->doc->typeList;
+            echo html::radio('type', array($doc->type => zget($typeList, $doc->type)), $doc->type);
+            ?>
+          </td>
         </tr>
         <tr id='contentBox' <?php if($doc->type == 'url') echo "class='hidden'"?>>
           <th><?php echo $lang->doc->content;?></th>

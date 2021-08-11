@@ -10,6 +10,8 @@ class entry extends baseEntry
         parent::__construct();
 
         if(!isset($this->app->user)) $this->sendError(401, 'Unauthorized');
+
+        $this->dao = $this->loadModel('common')->dao;
     }
 }
 
@@ -47,8 +49,9 @@ class baseEntry
      */
     public function __construct()
     {
-        global $app;
-        $this->app = $app;
+        global $app, $config;
+        $this->app    = $app;
+        $this->config = $config;
 
         $this->parseRequestBody();
     }
@@ -81,6 +84,20 @@ class baseEntry
     {
         if(isset($_GET[$key])) return $_GET[$key];
         return $defaultValue;
+    }
+
+    /**
+     * 设置请求参数
+     * Set request param.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @access public
+     * @return mixed
+     */
+    public function setParam($key, $value)
+    {
+        $_GET[$key] = $value;
     }
 
     /**
@@ -203,6 +220,17 @@ class baseEntry
     }
 
     /**
+     * Send 404 response.
+     *
+     * @access public
+     * @return void
+     */
+    public function send404()
+    {
+        $this->sendError(404, '404 Not found');
+    }
+
+    /**
      * 加载禅道的控制器类
      * Load controller of zentaopms
      *
@@ -305,9 +333,8 @@ class baseEntry
      */
     public function getData()
     {
-        $output = ob_get_clean();
+        $output = helper::removeUTF8Bom(ob_get_clean());
         $output = json_decode($output);
-
         if(isset($output->data)) $output->data = json_decode($output->data);
 
         return $output;
@@ -476,9 +503,8 @@ class baseEntry
                 return gmdate("Y-m-d\TH:i:s\Z", strtotime($value));
             }
             return $value;
-        case 'int':
         case 'bool':
-            return $value;
+            return boolval($value) ? true : false;
         default:
             return $value;
         }

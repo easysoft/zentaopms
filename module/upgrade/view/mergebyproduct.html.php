@@ -20,7 +20,6 @@
         </div>
       </div>
       <div class='line-groups'>
-        <?php $isChecked = true;?>
         <?php foreach($noMergedProducts as $productID => $product):?>
         <div class='lineGroup'>
           <div class='productList'>
@@ -37,7 +36,6 @@
             </div>
           </div>
         </div>
-        <?php $isChecked = false;?>
         <?php endforeach;?>
       </div>
     </div>

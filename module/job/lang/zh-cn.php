@@ -4,11 +4,13 @@ $lang->job->browse        = '浏览构建任务';
 $lang->job->create        = '创建构建任务';
 $lang->job->edit          = '编辑构建任务';
 $lang->job->exec          = '执行构建';
+$lang->job->runPipeline   = '运行流水线';
 $lang->job->view          = '执行详情';
 $lang->job->delete        = '删除构建任务';
 $lang->job->confirmDelete = '确认删除该构建任务';
 $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
+$lang->job->execSuccess   = '执行成功';
 
 $lang->job->browseAction = '构建任务列表';
 
@@ -20,6 +22,7 @@ $lang->job->svnDir      = 'SVN监控路径';
 $lang->job->jenkins     = 'Jenkins';
 $lang->job->jkHost      = 'Jenkins服务器';
 $lang->job->jkJob       = 'Jenkins任务';
+$lang->job->buildSpec   = '构建对象'; // 'pipeline@server'
 $lang->job->engine      = '构建引擎';
 $lang->job->server      = '服务器';
 $lang->job->pipeline    = '流水线';
@@ -69,13 +72,17 @@ $lang->job->paramValueList['$zentao_account']  = '当前用户名';
 $lang->job->paramValueList['$zentao_product']  = '当前产品ID';
 $lang->job->paramValueList['$zentao_repopath'] = '当前版本库路径';
 
-
 $lang->job->engineList = array();
 $lang->job->engineList['']        = '';
 $lang->job->engineList['gitlab']  = 'GitLab';
 $lang->job->engineList['jenkins'] = 'Jenkins';
 
 $lang->job->engineTips = new stdclass;
-$lang->job->engineTips->success = '构建引擎将使用GitLab项目内置的流水线.';
-$lang->job->engineTips->error   = '当前GitLab项目内没有可用的流水线，请先前往GitLab配置.';
+$lang->job->engineTips->success = '构建引擎将使用GitLab项目内置的流水线。';
+$lang->job->engineTips->error   = '当前GitLab项目内没有可用的流水线，请先前往GitLab配置。';
 
+$lang->job->pipelineTips                      = "选择要运行流水线的分支名或标签名";
+$lang->job->pipelineVariables                 = "变量";
+$lang->job->pipelineVariablesKeyPlaceHolder   = "输入变量的名称";
+$lang->job->pipelineVariablesValuePlaceHolder = "输入变量的值";
+$lang->job->pipelineVariablesTips             = "指定要在此次运行中使用的变量值。CI/CD设置中指定的值将用作默认值。";

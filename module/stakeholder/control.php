@@ -310,14 +310,11 @@ class stakeholder extends control
             $stakeholder = $this->stakeholder->getByID($userID);
             $this->stakeholder->delete(TABLE_STAKEHOLDER, $userID);
             $this->loadModel('user')->updateUserView($this->session->project, 'project');
+
             /* Update linked products view. */
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
-                $products = $this->loadModel('product')->getProductPairsByProject($stakeholder->objectID);
-                if(!empty($products))
-                {
-                    foreach($products as $productID => $productName) $this->user->updateUserView($productID, 'product',$stakeholder->user);
-                }
+                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
             }
             die(js::reload('parent'));
         }

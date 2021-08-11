@@ -17,6 +17,7 @@ $lang->doc->project      = 'Project';
 $lang->doc->execution    = $lang->executionCommon;
 $lang->doc->lib          = 'Library';
 $lang->doc->module       = 'Catalog';
+$lang->doc->object       = 'Object';
 $lang->doc->title        = 'Name';
 $lang->doc->digest       = 'Summary';
 $lang->doc->comment      = 'Comment';
@@ -40,6 +41,7 @@ $lang->doc->fileTitle    = 'File Name';
 $lang->doc->filePath     = 'File Path';
 $lang->doc->extension    = 'Extension';
 $lang->doc->size         = 'Files Size';
+$lang->doc->source       = 'Source';
 $lang->doc->download     = 'Download';
 $lang->doc->acl          = 'Right';
 $lang->doc->fileName     = 'Files';
@@ -52,19 +54,20 @@ $lang->doc->mailto       = 'Mailto';
 $lang->doc->noModule     = 'No document in this lib, please create it';
 $lang->doc->noChapter    = 'No chapters or articles in this book. Please add chapters and articles.';
 
-$lang->doc->moduleDoc    = 'By Module';
-$lang->doc->searchDoc    = 'Search';
-$lang->doc->fast         = 'Quick Entry';
-$lang->doc->allDoc       = 'All Documents';
-$lang->doc->openedByMe   = 'My';
-$lang->doc->editedByMe   = 'Edited By Me';
-$lang->doc->orderByOpen  = 'Recent Added';
-$lang->doc->orderByEdit  = 'Recent Updated';
-$lang->doc->orderByVisit = 'Last Visited';
-$lang->doc->todayEdited  = 'Updated Today';
-$lang->doc->pastEdited   = 'Total Updated';
-$lang->doc->myDoc        = 'My Documents';
-$lang->doc->myCollection = 'My Favorites';
+$lang->doc->moduleDoc     = 'By Module';
+$lang->doc->searchDoc     = 'Search';
+$lang->doc->fast          = 'Quick Entry';
+$lang->doc->allDoc        = 'All Documents';
+$lang->doc->openedByMe    = 'My';
+$lang->doc->editedByMe    = 'Edited By Me';
+$lang->doc->orderByOpen   = 'Recent Added';
+$lang->doc->orderByEdit   = 'Recent Updated';
+$lang->doc->orderByVisit  = 'Last Visited';
+$lang->doc->todayEdited   = 'Updated Today';
+$lang->doc->pastEdited    = 'Total Updated';
+$lang->doc->myDoc         = 'My Documents';
+$lang->doc->myCollection  = 'My Favorites';
+$lang->doc->tableContents = 'Catalog';
 
 /* Methods list */
 $lang->doc->index            = 'Document Home';
@@ -91,20 +94,21 @@ $lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->collectAction = 'Add Favorite';
 
-$lang->doc->libName      = 'Document Library';
-$lang->doc->libType      = 'Category';
-$lang->doc->custom       = 'Custom Document Library';
-$lang->doc->customAB     = 'Custom Doc Lib';
-$lang->doc->createLib    = 'Create Document Library';
-$lang->doc->allLibs      = 'Library List';
-$lang->doc->objectLibs   = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
-$lang->doc->showFiles    = 'Attachments';
-$lang->doc->editLib      = 'Edit Document Library';
-$lang->doc->deleteLib    = 'Delete Document Library';
-$lang->doc->fixedMenu    = 'Fix to Menu';
-$lang->doc->removeMenu   = 'Remove from Menu';
-$lang->doc->search       = 'Search';
-$lang->doc->keywordsTips = 'Please use commas to separate multiple keywords.';
+$lang->doc->libName        = 'Document Library';
+$lang->doc->libType        = 'Category';
+$lang->doc->custom         = 'Custom Document Library';
+$lang->doc->customAB       = 'Custom Doc Lib';
+$lang->doc->createLib      = 'Create Document Library';
+$lang->doc->allLibs        = 'Library List';
+$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
+$lang->doc->showFiles      = 'Attachments';
+$lang->doc->editLib        = 'Edit Document Library';
+$lang->doc->deleteLib      = 'Delete Document Library';
+$lang->doc->fixedMenu      = 'Fix to Menu';
+$lang->doc->removeMenu     = 'Remove from Menu';
+$lang->doc->search         = 'Search';
+$lang->doc->allCollections = 'All Collections';
+$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
 
 global $config;
 /* Query condition list. */
@@ -171,6 +175,7 @@ $lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 
 $lang->doc->confirmDelete        = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib     = "Do you want to delete this document library?";
+$lang->doc->confirmDeleteBook    = "Do you want to delete this book?";
 $lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
 $lang->doc->errorEditSystemDoc   = "You don't have to change system document library.";
 $lang->doc->errorEmptyProduct    = "No {$lang->productCommon}. It cannot be created.";
@@ -206,6 +211,10 @@ $lang->doc->noticeAcl['doc']['private'] = 'Only the one who created it can acces
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'URL';
+
+$lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>.";
+$lang->doc->ge      = ':';
+$lang->doc->point   = '.';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name      = 'Name';

@@ -50,7 +50,7 @@
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
     <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
-    <?php if(common::canBeChanged('testcase', $case)) common::printLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}", "<i class='icon icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'"); ?>
+    <?php if(common::canBeChanged('testcase', $case)) common::printLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}", "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'"); ?>
   </div>
   <?php endif;?>
 </div>
@@ -151,7 +151,7 @@
             <?php else:?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
-              <td><?php echo common::hasPriv('product', 'browse') ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
+              <td><?php echo (common::hasPriv('product', 'browse') and $productName) ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
             </tr>
             <?php if($product->type != 'normal'):?>
             <tr>

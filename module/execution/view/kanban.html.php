@@ -41,7 +41,7 @@
     $checkObject->execution = $executionID;
     $misc = common::hasPriv('task', 'create', $checkObject) ? "class='btn btn-primary iframe' data-width='1200px'" : "class='btn btn-primary disabled'";
     $link = common::hasPriv('task', 'create', $checkObject) ?  $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''), '', true) : '#';
-    echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
+    echo html::a($link, "<i class='icon icon-plus'></i> " . $lang->task->create, '', $misc);
     ?>
     <?php endif;?>
   </div>

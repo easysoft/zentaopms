@@ -609,8 +609,12 @@ class baseRouter
         if($this->config->framework->filterCSRF)
         {
             $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
+            if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
+            if(isset($_SERVER['REQUEST_SCHEME']) and strtolower($_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
+
             $httpHost = $_SERVER['HTTP_HOST'];
-            if((!defined('RUN_MODE') or RUN_MODE != 'api') and strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
+            $isAPI    = (defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$this->config->sessionVar]);
+            if(!$isAPI && strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
         }
 
         $_FILES  = validater::filterFiles();
@@ -849,23 +853,22 @@ class baseRouter
      */
     public function startSession()
     {
-        if(!defined('SESSION_STARTED'))
-        {
-            /* If request header has token, use it as session for authentication. */
-            if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
+        if(defined('SESSION_STARTED')) return;
 
-            $sessionName = $this->config->sessionVar;
-            session_name($sessionName);
-            session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
-            session_start();
+        /* If request header has token, use it as session for authentication. */
+        if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
 
-            $this->sessionID = session_id();
+        $sessionName = $this->config->sessionVar;
+        session_name($sessionName);
+        session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
+        session_start();
 
-            if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
+        $this->sessionID = session_id();
 
-            define('SESSION_STARTED', true);
-        }
+        if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
+
+        define('SESSION_STARTED', true);
     }
 
     /**

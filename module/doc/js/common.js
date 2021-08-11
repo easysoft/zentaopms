@@ -46,7 +46,7 @@ function setBrowseType(type)
 
 $(document).ready(function()
 {
-    // hide #module chosen dropdown on #lib dropdown show
+    /* hide #module chosen dropdown on #lib dropdown show */
     $('#lib').on('chosen:showing_dropdown', function()
     {
         $('#module').trigger('chosen:close');
@@ -85,8 +85,7 @@ $(document).ready(function()
 
     var NAME = 'zui.splitRow'; // model name
 
-    // File input list
-    // The SplitRow model class
+    /* The SplitRow model class */
     var SplitRow = function(element, options)
     {
         var that = this;
@@ -166,7 +165,8 @@ $(document).ready(function()
             if (options.middleSize) $col.toggleClass('col-md-size', $col.width() < options.middleSize);
         };
 
-        var resizeCols = function() {
+        var resizeCols = function()
+        {
             var cellHeight = $(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - 42;
             $cols.children('.panel').height(cellHeight).css('maxHeight', cellHeight).find('.panel-body').css('position', 'absolute');
             var sideHeight = cellHeight - $cols.find('.nav-tabs').height() - $cols.find('.side-footer').height() - 35;
@@ -181,7 +181,7 @@ $(document).ready(function()
         resizeCols();
     };
 
-    // default options
+    /* default options */
     SplitRow.DEFAULTS =
     {
         spliter: '<div class="col-spliter"></div>',
@@ -189,7 +189,7 @@ $(document).ready(function()
         middleSize: 850
     };
 
-    // Extense jquery element
+    /* Extense jquery element */
     $.fn.splitRow = function(option)
     {
         return this.each(function()
@@ -205,7 +205,7 @@ $(document).ready(function()
 
     $.fn.splitRow.Constructor = SplitRow;
 
-    // Auto call splitRow after document load complete
+    /* Auto call splitRow after document load complete */
     $(function()
     {
         $('.split-row').splitRow();
@@ -225,17 +225,17 @@ $(document).ready(function()
         var url = obj.data('url');
         $.get(url, function(response)
         {
-          if(response.status == 'yes')
-          {
-            obj.children('i').removeClass().addClass('icon icon-star text-yellow');
-            obj.parent().prev().children('.file-name').children('i').remove('.icon');
-            obj.parent().prev().children('.file-name').prepend('<i class="icon icon-star text-yellow"></i> ');
-          }
-          else
-          {
-            obj.children('i').removeClass().addClass('icon icon-star-empty');
-            obj.parent().prev().children('.file-name').children('i').remove(".icon");
-          }
+            if(response.status == 'yes')
+            {
+                obj.children('i').removeClass().addClass('icon icon-star text-yellow');
+                obj.parent().prev().children('.file-name').children('i').remove('.icon');
+                obj.parent().prev().children('.file-name').prepend('<i class="icon icon-star text-yellow"></i> ');
+            }
+            else
+            {
+                obj.children('i').removeClass().addClass('icon icon-star-empty');
+                obj.parent().prev().children('.file-name').children('i').remove(".icon");
+            }
         }, 'json');
         return false;
     });
