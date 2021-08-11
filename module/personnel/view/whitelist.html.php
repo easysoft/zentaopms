@@ -19,7 +19,7 @@
     <?php echo html::a($this->createLink($module, 'whitelist', $vars), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', "class='btn btn-link btn-active-text' $openApp");?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php $vars = $module == 'program' ? "objectID=$objectID&deptID=0&programID=$programID&from=$from" : "objectID=$objectID";?>
+    <?php $vars = $module == 'program' ? "objectID=$objectID&deptID=0&copyID=0&programID=$programID&from=$from" : "objectID=$objectID";?>
     <?php common::printLink($module, 'addWhitelist', $vars, "<i class='icon icon-plus'></i> " . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $openApp");?>
   </div>
 </div>
