@@ -124,6 +124,7 @@ class myModel extends model
         $info->todo->dynamic = new stdclass();
         if(common::hasPriv('todo', 'view'))
         {
+            $this->app->loadClass('date');
             $todos = $this->dao->select('*')->from(TABLE_TODO)
                     ->where('assignedTo')->eq($this->app->user->account)
                     ->andWhere('cycle')->eq(0)
@@ -134,12 +135,6 @@ class myModel extends model
                     ->fetchAll();
             foreach($todos as $key => $todo)
             {
-                if($todo->status == 'done' and $todo->finishedBy == $this->app->user->account)
-                {
-                    unset($todos[$key]);
-                    continue;
-                }
-
                 $todo->begin = date::formatTime($todo->begin);
                 $todo->end = date::formatTime($todo->end);
             }
@@ -182,10 +177,9 @@ class myModel extends model
                     ->orWhere('participant')->in($this->app->user->account)
                     ->markRight(1)
                     ->orderBy('id_desc')
-                    ->limit(3)
                     ->fetchAll();
-            $info->meeting->total   = (int) $this->dao->select('count(*) AS count')->from(TABLE_MEETING)->where('assignedTo')->eq($this->app->user->account)->andWhere('status')->ne('closed')->andWhere('deleted')->eq(0)->fetch('count');
-            $info->meeting->dynamic = $meetings;
+            $info->meeting->total   = count($meetings);
+            $info->meeting->dynamic = array_slice($meetings, 0, 3);
         }
 
         /* My issues. */
@@ -278,8 +272,8 @@ class myModel extends model
         }
         $info->dynamic = $actions;
 
-        /* User info. */
-        $info->participateProjectCount = count($info->projects);
+        /* Some count. */
+        $info->joinProjectCount = count($info->projects);
         $info->createdDocs = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
 
         return $info;
