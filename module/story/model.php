@@ -4008,7 +4008,6 @@ class storyModel extends model
             {
                 $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
             }
-            if($stories) $pager->recTotal += count($stories);
         }
         else
         {
@@ -4043,6 +4042,7 @@ class storyModel extends model
             }
 
             $tracks['noRequirement'] = $stories;
+            $pager->recTotal += 1;
         }
 
         return $tracks;
@@ -4153,6 +4153,7 @@ class storyModel extends model
             $data = new stdclass();
             $data->AType    = 'requirement';
             $data->BType    = 'story';
+            $data->product  = $story->product;
             $data->relation = 'subdivideinto';
             $data->AID      = $isStory ? $id : $storyID;
             $data->BID      = $isStory ? $storyID : $id;
@@ -4164,6 +4165,7 @@ class storyModel extends model
             $data->AType    = 'story';
             $data->BType    = 'requirement';
             $data->relation = 'subdividedfrom';
+            $data->product  = $story->product;
             $data->AID      = $isStory ? $storyID : $id;
             $data->BID      = $isStory ? $id : $storyID;
             $data->AVersion = $isStory ? $story->version : $requirement->version;
