@@ -2434,7 +2434,7 @@ class executionModel extends model
         return $this->dao->select('account, role, hours')
             ->from(TABLE_TEAM)
             ->where('root')->eq($execution)
-            ->andWhere('type')->eq('execution')
+            ->andWhere('type')->in('project,execution')
             ->andWhere('account')->notIN($currentMembers)
             ->fetchAll('account');
     }
