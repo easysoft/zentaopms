@@ -1,15 +1,16 @@
 /**
- * Users by department.
+ * Users by dept,execution,project,product or program.
  *
- * @param  object  dept
+ * @param  object $object
+ * @access public
  * @return void
  */
-function setDeptUsers(dept)
+function setObjectUsers()
 {
-    var deptID = $(dept).val();
-    var link   = createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&objectType=' + objectType + '&module=' + module);
-
-    if(module == 'program') link = createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&programID=' + programID + '&from=' + from);
+    var copyID = $('#object').val();
+    var deptID   = $('#dept').val();
+    var link     = createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&copyID=' + copyID + '&objectType=' + objectType + '&module=' + module);
+    if(module == 'program') link = createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&copyID=' + copyID + '&programID=' + programID + '&from=' + from);
 
     location.href = link;
 }

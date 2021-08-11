@@ -98,6 +98,7 @@ $lang->execution->noLinkProduct   = "Stage not linked {$lang->productCommon}";
 $lang->execution->recent          = 'Recent visits: ';
 $lang->execution->copyNoExecution = 'There are no ' . $lang->executionCommon . 'available to copy.';
 $lang->execution->noTeam          = 'No team members at the moment';
+$lang->execution->or              = ' or ';
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Aktivieren';

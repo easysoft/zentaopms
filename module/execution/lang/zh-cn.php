@@ -99,6 +99,7 @@ $lang->execution->noLinkProduct   = "阶段没有关联{$lang->productCommon}";
 $lang->execution->recent          = '近期访问：';
 $lang->execution->copyNoExecution = '没有可用的' . $lang->executionCommon . '来复制';
 $lang->execution->noTeam          = '暂时没有团队成员';
+$lang->execution->or              = '或';
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";

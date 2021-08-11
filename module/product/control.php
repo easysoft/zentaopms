@@ -1186,16 +1186,17 @@ class product extends control
      *
      * @param  int     $productID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @param  string  $branch
      * @access public
      * @return void
      */
-    public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
+    public function addWhitelist($productID = 0, $deptID = 0, $copyID = 0)
     {
-        $this->product->setMenu($productID, $branch);
+        $this->product->setMenu($productID);
         $this->lang->modulePageNav = '';
 
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&objectType=product&module=product");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&copyID=$copyID&objectType=product&module=product");
     }
 
     /*

@@ -104,13 +104,16 @@ if(empty($type)) $type = 'product';
         echo $html;
         ?>
         <?php
-        if($type == 'book')
+        if(!empty($libs))
         {
-            common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide'");
-        }
-        elseif(!empty($libs))
-        {
-            common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
+            if($type == 'book')
+            {
+                common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide'");
+            }
+            else
+            {
+                common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
+            }
         }
         ?>
       </div>

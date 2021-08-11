@@ -463,7 +463,7 @@
         {
             var $item     = $(this);
             var isDivider = $item.hasClass('divider');
-            var height    = isDivider ? 17 : 40;
+            var height    = isDivider ? 17 : $item.outerHeight();
             currentHeight += height;
             if(currentHeight > maxHeight)
             {
