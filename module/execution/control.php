@@ -1340,6 +1340,7 @@ class execution extends control
         $this->view->name            = $name;
         $this->view->code            = $code;
         $this->view->team            = $team;
+        $this->view->teams           = array(0 => '') + $this->execution->getTeamPairsByProject((int)$projectID);
         $this->view->allProjects     = array(0 => '') + $this->project->getPairsByModel();
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
@@ -2633,6 +2634,28 @@ class execution extends control
             $assignedTo = isset($users[$assignedTo]) ? $assignedTo : '';
             die(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
         }
+    }
+
+    /**
+     * AJAX: get team members by projectID/executionID.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetTeamMembers($objectID)
+    {
+        $type = 'execution';
+        if($this->config->systemMode == 'new')
+        {
+            $type = $this->dao->findById($objectID)->from(TABLE_PROJECT)->fetch('type');
+            $type = $type == 'project' ? $type : 'execution';
+        }
+
+        $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $members = $this->user->getTeamMemberPairs($objectID, $type);
+
+        die(html::select('teamMembers[]', $users, array_keys($members), "class='form-control chosen' multiple"));
     }
 
     /**

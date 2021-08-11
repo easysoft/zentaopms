@@ -100,6 +100,9 @@ $lang->execution->recent          = '近期访问：';
 $lang->execution->copyNoExecution = '没有可用的' . $lang->executionCommon . '来复制';
 $lang->execution->noTeam          = '暂时没有团队成员';
 
+if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
+if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以选择复制{$lang->executionCommon}团队的成员";
+
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";
 $lang->execution->putoff   = "延期";
