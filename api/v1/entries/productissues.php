@@ -11,7 +11,7 @@ class productIssuesEntry extends entry
 {
     public function get($productID)
     {
-        if(!is_numeric($productID)) $this->sendError(400, 'The productt_id is not supported');
+        if(!is_numeric($productID)) $this->sendError(400, 'The product_id is not supported');
 
         $taskFields = 'id,status';
         $taskStatus = array('' => '');
@@ -111,7 +111,7 @@ class productIssuesEntry extends entry
                           ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
                           ->beginIF($taskFilter != 'all')->andWhere('type')->in($taskFilter)->fi()
                           ->andWhere('deleted')->eq(0)
-                                                                                          ->fetchAll();
+                          ->fetchAll();
             foreach($tasks as $task) $issues[] = array('id' => $task->id, 'type' => 'task', 'order' => $task->$order, 'status' => $this->getKey($task->status, $taskStatus));
         }
 
