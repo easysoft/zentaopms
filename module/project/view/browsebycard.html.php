@@ -146,13 +146,13 @@
               <?php foreach($project->teamMembers as $key => $member):?>
               <?php if($key > 2) continue;?>
                 <div class='avatar bg-secondary avatar-circle'>
-                  <?php echo !empty(zget($usersAvatar, $member, '')) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
+                  <?php echo !empty($usersAvatar[$member]) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
                 </div>
               <?php endforeach;?>
               <?php if($project->teamCount > 3):?>
                 <?php echo '...';?>
                 <div class='avatar bg-secondary avatar-circle'>
-                  <?php echo !empty(zget($usersAvatar, end($project->teamMembers), '')) ? html::image(zget($usersAvatar, end($project->teamMembers))) : strtoupper($member[0]);?>
+                  <?php echo !empty($usersAvatar[end($project->teamMembers)]) ? html::image(zget($usersAvatar, end($project->teamMembers))) : strtoupper($member[0]);?>
                 </div>
               <?php endif;?>
               </a>
