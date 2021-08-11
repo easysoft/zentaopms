@@ -1175,10 +1175,11 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $dept
+     * @param  int    $copyProjectID
      * @access public
      * @return void
      */
-    public function manageMembers($projectID, $dept = '')
+    public function manageMembers($projectID, $dept = '', $copyProjectID = 0)
     {
         /* Load model. */
         $this->loadModel('user');
@@ -1200,6 +1201,9 @@ class project extends control
         $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
 
+        $currentMembers = $this->project->getTeamMembers($projectID);
+        $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
+
         $this->view->title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
         $this->view->position[] = $this->lang->project->manageMembers;
 
@@ -1209,7 +1213,10 @@ class project extends control
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->currentMembers = $this->project->getTeamMembers($projectID);
+        $this->view->currentMembers = $currentMembers;
+        $this->view->members2Import = $members2Import;
+        $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopyObjects($projectID, 'project');
+        $this->view->copyProjectID  = $copyProjectID;
         $this->display();
     }
 

@@ -34,3 +34,17 @@ function setDeptUsers(obj)
     link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept); // Create manageMembers link.
     location.href=link;
 }
+
+/**
+ * Chose team to copy.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function choseTeam2Copy(obj)
+{
+    team = $(obj).val();
+    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=&team2Import=' + team);
+    location.href=link;
+}
