@@ -48,8 +48,10 @@ $imgCutter.imgCutter(
     ready: function() {$.zui.ajustModalPosition(); $imgCutter.css('width', $imgCutter.closest('#mainContent').width());},
     done: function(response)
     {
+        var account = "<?php echo $this->app->user->account;?>";
         window.parent.$('#main-avatar, #menu-avatar').html('<img src="<?php echo $user->avatar?>"/>');
-        window.parent.$('#mainContent .avatar').html('<img src="<?php echo $user->avatar?>"/>');
+        window.parent.$('#mainContent>.cell>.main-header>.avatar').html('<img src="<?php echo $user->avatar?>"/>');
+        window.parent.$('#mainContent .avatar-' + account).html('<img src="<?php echo $user->avatar?>"/>');
         if(window.parent.$('#main-avatar, #menu-avatar').hasClass('with-text')) window.parent.$('#main-avatar, #menu-avatar').toggleClass('with-text').css('background', 'none');
         location.href = createLink('my', 'profile');
     },
