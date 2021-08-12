@@ -1,4 +1,9 @@
 <?php include '../../common/view/header.html.php';?>
+<div id="mainMenu" class="clearfix">
+  <div class='pull-right'>
+    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $lang->mr->add, '', "class='btn btn-primary'");?>
+  </div>
+</div>
 <div id='mainContent'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='gitlabProjectList' class='table has-sort-head table-fixed'>
@@ -33,8 +38,8 @@
           </td>
           <td class='text-left c-actions'>
             <?php
+            common::printIcon('mr', 'create', "repo={$repo->id}", $lang->mr->common, 'list', 'review');
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
-            common::printIcon('mr', 'create', "repo={$repo->id}", $lang->mr->create, 'list', 'review');
             if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
             ?>
           </td>
