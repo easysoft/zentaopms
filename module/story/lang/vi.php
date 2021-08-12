@@ -27,6 +27,7 @@ $lang->story->changed           = "Đã đổi";
 $lang->story->assignTo          = 'Giao cho';
 $lang->story->assignAction      = 'Bàn giao câu chuyện';
 $lang->story->review            = 'Xét duyệt';
+$lang->story->recall            = 'Revoke';
 $lang->story->reviewAction      = 'Duyệt câu chuyện';
 $lang->story->needReview        = 'Duyệt nhu cầu';
 $lang->story->batchReview       = 'Duyệt hàng loạt';
@@ -286,6 +287,7 @@ $lang->story->action->reviewed              = array('main' => '$date, ghi nhận
 $lang->story->action->passreviewed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
 $lang->story->action->clarifyreviewed       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Review Failed</strong>. Please re-initiate the review after changing.');
 $lang->story->action->rejectreviewed        = array('main' => '$date, ghi nhận bởi <strong>$actor</strong>. Kết quả là <strong>$extra</strong>. Lý do là <strong>$reason</strong>', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->recalled              = array('main' => '$date, recalled by <strong>$actor</strong>.');
 $lang->story->action->closed                = array('main' => '$date, được đóng bởi <strong>$actor</strong>. Lý do là <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
 $lang->story->action->reviewclosed          = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Review Failed</strong>.');
 $lang->story->action->linked2plan           = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới kế hoạch <strong>$extra</strong>');

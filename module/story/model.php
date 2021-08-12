@@ -1399,6 +1399,20 @@ class storyModel extends model
     }
 
     /**
+     * Recall the story review.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function recall($storyID)
+    {
+        $story = $this->getById($storyID);
+        $this->dao->update(TABLE_STORY)->set('status')->eq('draft')->where('id')->eq($storyID)->exec();
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
+    }
+
+    /**
      * Subdivide story
      *
      * @param  int    $storyID
@@ -3377,6 +3391,7 @@ class storyModel extends model
 
         if($action == 'change')     return (count($story->reviewer) == 0 || count($story->notReview) == 0) and $story->status != 'closed';
         if($action == 'review')     return in_array($app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changed');
+        if($action == 'recall')     return empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer);
         if($action == 'close')      return $story->status != 'closed';
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
@@ -3782,6 +3797,7 @@ class storyModel extends model
 
                     common::printIcon('story', 'change',     $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'review',     $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
+                    if($this->app->openApp != 'project') common::printIcon('story', 'recall',     $vars . "&from=$story->from", $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
                     common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit',       $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");

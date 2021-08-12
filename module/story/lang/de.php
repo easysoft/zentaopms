@@ -27,6 +27,7 @@ $lang->story->changed           = 'Geändert';
 $lang->story->assignTo          = 'Assign';
 $lang->story->assignAction      = 'Assign Story';
 $lang->story->review            = 'Prüfen';
+$lang->story->recall            = 'Revoke';
 $lang->story->reviewAction      = 'Review Story';
 $lang->story->needReview        = 'Need Review';
 $lang->story->batchReview       = 'Mehere prüfen';
@@ -286,6 +287,7 @@ $lang->story->action->reviewed              = array('main' => '$date, geprüft v
 $lang->story->action->passreviewed          = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Pass</strong>.');
 $lang->story->action->clarifyreviewed       = array('main' => '$date, determined by the <strong>System</strong>. The result is <strong>Review Failed</strong>. Please re-initiate the review after changing.');
 $lang->story->action->rejectreviewed        = array('main' => '$date, geprüft von <strong>$actor</strong>. Das Ergebnis ist <strong>$extra</strong>, Der Grund ist <strong>$reason</strong>.', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->recalled              = array('main' => '$date, recalled by <strong>$actor</strong>.');
 $lang->story->action->closed                = array('main' => '$date, geschlossen von <strong>$actor</strong>. Der Grund ist <strong>$extra</strong> $appendLink.', 'extra' => 'reasonList');
 $lang->story->action->reviewclosed          = array('main' => '$date, closed by <strong>System</strong>. The reasion is <strong>Review Failed</strong>.');
 $lang->story->action->linked2plan           = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Plan <strong>$extra</strong>');

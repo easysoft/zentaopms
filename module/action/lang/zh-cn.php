@@ -316,6 +316,7 @@ $lang->action->dynamicAction->story['opened']                = "创建{$lang->SR
 $lang->action->dynamicAction->story['edited']                = "编辑{$lang->SRCommon}";
 $lang->action->dynamicAction->story['activated']             = "激活{$lang->SRCommon}";
 $lang->action->dynamicAction->story['reviewed']              = "评审{$lang->SRCommon}";
+$lang->action->dynamicAction->story['recalled']              = "撤销评审";
 $lang->action->dynamicAction->story['closed']                = "关闭{$lang->SRCommon}";
 $lang->action->dynamicAction->story['assigned']              = "指派{$lang->SRCommon}";
 $lang->action->dynamicAction->story['changed']               = "变更{$lang->SRCommon}";

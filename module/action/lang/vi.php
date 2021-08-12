@@ -310,6 +310,7 @@ $lang->action->dynamicAction->story['opened']                = 'Tạo câu chuy�
 $lang->action->dynamicAction->story['edited']                = 'Sửa câu chuyện';
 $lang->action->dynamicAction->story['activated']             = 'Kích hoạt câu chuyện';
 $lang->action->dynamicAction->story['reviewed']              = 'Duyệt câu chuyện';
+$lang->action->dynamicAction->story['recalled']              = 'Revoke';
 $lang->action->dynamicAction->story['closed']                = 'Đóng câu chuyện';
 $lang->action->dynamicAction->story['assigned']              = 'Bàn giao câu chuyện';
 $lang->action->dynamicAction->story['changed']               = 'Thay đổi câu chuyện';
