@@ -1280,7 +1280,6 @@ class storyModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
-            ->setIF($this->post->result == 'revert', 'status',  'active')
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
@@ -1299,7 +1298,7 @@ class storyModel extends model
         $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
-            $status        = $this->setStatusByReviewRules($reviewerList);
+            $status        = $this->post->result == 'revert' ? 'active' : $this->setStatusByReviewRules($reviewerList);
             $story->status = $status ? $status : $oldStory->status;
             if($story->status == 'closed')
             {
@@ -4497,9 +4496,12 @@ class storyModel extends model
         $comment  = isset($_POST['comment']) ? $this->post->comment : '';
         $actionID = !empty($result) ? $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam) : '';
 
-        if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewClosed');
-        if($story->status == 'active') $this->action->create('story', $story->id, 'PassReviewed');
-        if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $this->action->create('story', $story->id, 'ClarifyReviewed');
+        if(ucfirst($result) != 'Revert')
+        {
+            if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewClosed');
+            if($story->status == 'active') $this->action->create('story', $story->id, 'PassReviewed');
+            if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $this->action->create('story', $story->id, 'ClarifyReviewed');
+        }
 
         return $actionID;
     }
