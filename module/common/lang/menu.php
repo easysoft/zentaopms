@@ -337,7 +337,7 @@ $lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|brows
 $lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|browseTyp=collectedbyme", 'alias' => 'collect');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|tableContents|type=product", 'alias' => 'showfiles,product');
 if($config->systemMode == 'new') $lang->doc->menu->project = array('link' => "{$lang->doc->project}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
-if($config->systemMode == 'classic') $lang->doc->menu->execution = array('link' => "{$lang->doc->execution}|doc|tableContents|type=execution", 'alias' => 'showfiles,execution');
+$lang->doc->menu->execution = array('link' => "{$lang->doc->execution}|doc|tableContents|type=execution", 'alias' => 'showfiles,execution');
 $lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|tableContents|type=custom", 'alias' => 'custom');
 
 $lang->doc->dividerMenu = ',product,';
@@ -349,12 +349,12 @@ $lang->doc->menuOrder[15] = 'my';
 $lang->doc->menuOrder[20] = 'collect';
 $lang->doc->menuOrder[25] = 'product';
 if($config->systemMode == 'new') $lang->doc->menuOrder[30] = 'project';
-if($config->systemMode == 'classic') $lang->doc->menuOrder[30] = 'execution';
-$lang->doc->menuOrder[35] = 'custom';
+$lang->doc->menuOrder[35] = 'execution';
+$lang->doc->menuOrder[40] = 'custom';
 
 $lang->doc->menu->product['subMenu'] = new stdclass();
 if($config->systemMode == 'new') $lang->doc->menu->project['subMenu'] = new stdclass();
-if($config->systemMode == 'classic') $lang->doc->menu->execution['subMenu'] = new stdclass();
+$lang->doc->menu->execution['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
 
 /* Report menu.*/
