@@ -9,6 +9,10 @@
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
+      <?php if(count($teams2Import) != 1):?>
+      <span class='input-group-addon'><?php echo $lang->execution->copyTeam?></span>
+      <?php echo html::select('execution', $teams2Import, $copyProjectID, "class='form-control chosen' onchange='choseTeam2Copy(this)' data-placeholder='{$lang->execution->copyTeamTitle}'");?>
+      <?php endif;?>
     </div>
   </div>
 </div>
@@ -39,6 +43,23 @@
             <input type='hidden' name='accounts[]' value='<?php echo $member->account;?>' />
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, $member->limited);?></td>
+          <td class='c-actions text-center'>
+            <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+          </td>
+        </tr>
+        <?php $i ++; $memberCount ++;?>
+        <?php endforeach;?>
+
+        <?php foreach($members2Import as $member2Import):?>
+        <tr class='addedItem'>
+          <td><?php echo html::select("accounts[]", $users, $member2Import->account, "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->role;?>' /></td>
+          <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
+          <td>
+            <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->hours;?>' />
+          </td>
+          <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
           <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>

@@ -491,8 +491,7 @@ class personnelModel extends model
         }
         elseif($objectType == 'project')
         {
-            $parentID = $this->dao->select('parent')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('parent');
-            $objects  = $this->loadModel('project')->getPairsByProgram($parentID);
+            $objects  = $this->loadModel('project')->getPairsByProgram();
         }
         elseif($objectType == 'product')
         {

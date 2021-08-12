@@ -9,7 +9,7 @@ class entry extends baseEntry
     {
         parent::__construct();
 
-        if(!isset($this->app->user)) $this->sendError(401, 'Unauthorized');
+        if(!isset($this->app->user) or $this->app->user->account == 'guest') $this->sendError(401, 'Unauthorized');
 
         $this->dao = $this->loadModel('common')->dao;
     }

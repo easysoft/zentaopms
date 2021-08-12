@@ -1595,6 +1595,26 @@ class projectModel extends model
     }
 
     /**
+     * Get members of a project who can be imported.
+     *
+     * @param  int    $projectID
+     * @param  array  $currentMembers
+     * @access public
+     * @return array
+     */
+    public function getMembers2Import($projectID, $currentMembers)
+    {
+        if($projectID == 0) return array();
+
+        return $this->dao->select('account, role, hours')
+            ->from(TABLE_TEAM)
+            ->where('root')->eq($projectID)
+            ->andWhere('type')->in('project')
+            ->andWhere('account')->notIN($currentMembers)
+            ->fetchAll('account');
+    }
+
+    /**
      * Get project stats.
      *
      * @param  int     $projectID

@@ -2292,7 +2292,7 @@ class execution extends control
 
         $this->view->title          = $title;
         $this->view->position       = $position;
-        $this->view->execution        = $execution;
+        $this->view->execution      = $execution;
         $this->view->users          = $users;
         $this->view->deptUsers      = $deptUsers;
         $this->view->roles          = $roles;
