@@ -1139,6 +1139,7 @@ class user extends control
             $this->file->cropImage($image->realPath, $image->realPath, $size->left, $size->top, $size->right - $size->left, $size->bottom - $size->top, $size->scaled ? $size->scaleWidth : 0, $size->scaled ? $size->scaleHeight : 0);
 
             $this->app->user->avatar = $image->webPath;
+            $this->session->set('user', $this->app->user);
             exit('success');
         }
 

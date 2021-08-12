@@ -463,7 +463,7 @@
         {
             var $item     = $(this);
             var isDivider = $item.hasClass('divider');
-            var height    = isDivider ? 17 : $item.outerHeight();
+            var height    = isDivider ? 17 : ($.cookie('hideMenu') ? 44 : 40);
             currentHeight += height;
             if(currentHeight > maxHeight)
             {
