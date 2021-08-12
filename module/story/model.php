@@ -627,7 +627,10 @@ class storyModel extends model
         }
 
         $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
-        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
+
+        $oldStroyReviewers = $this->getReviewerPairs($storyID, $oldStory->version);
+        $_POST['reviewer'] = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
+        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or array_diff(array_keys($oldStroyReviewers), $_POST['reviewer'])) $specChanged = true;
 
         $now   = helper::now();
         $story = fixer::input('post')
@@ -683,34 +686,26 @@ class storyModel extends model
 
                     foreach($relations as $relationID) $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->eq($relationID)->exec();
                 }
+
+                /* Update the reviewer. */
+                $assignedTo = '';
+                foreach($_POST['reviewer'] as $reviewer)
+                {
+                    $reviewData = new stdclass();
+                    $reviewData->story    = $storyID;
+                    $reviewData->version  = $story->version;
+                    $reviewData->reviewer = $reviewer;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    if(empty($assignedTo)) $assignedTo = $reviewer;
+                }
+                if($assignedTo and $assignedTo != $oldStory->assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             }
-            else
-            {
-                unset($story->spec);
-                unset($oldStory->spec);
-
-                if(isset($_POST['reviewer'])) $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
-            }
-
-            /* Update the reviewer. */
-            $oldReviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
-            $assignedTo      = '';
-            foreach($_POST['reviewer'] as $reviewer)
-            {
-                if(!$specChanged and in_array($reviewer, array_keys($oldReviewerList))) continue;
-
-                $reviewData = new stdclass();
-                $reviewData->story    = $storyID;
-                $reviewData->version  = $specChanged ? $story->version : $oldStory->version;
-                $reviewData->reviewer = $reviewer;
-                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                if(empty($assignedTo)) $assignedTo = $reviewer;
-            }
-            if($assignedTo and $assignedTo != $oldStory->assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
 
+            $oldStory->reviewers = implode(',', array_keys($oldStroyReviewers));
+            $story->reviewers    = implode(',', $_POST['reviewer']);
             return common::createChanges($oldStory, $story);
         }
     }
@@ -1325,7 +1320,11 @@ class storyModel extends model
             /* Delete versions that is after this version. */
             $deleteVersion = array();
             for($version = $oldStory->version; $version > $story->version; $version --) $deleteVersion[] = $version;
-            if($deleteVersion) $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->in($deleteVersion)->exec();
+            if($deleteVersion)
+            {
+                $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->in($deleteVersion)->exec();
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->in($deleteVersion)->exec();
+            }
 
             $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
         }
