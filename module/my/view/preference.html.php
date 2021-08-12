@@ -57,18 +57,16 @@ html,body {height: 100%;}
         <th><?php echo $lang->my->projectLink;?></th>
         <td><?php echo html::select('projectLink', $lang->my->projectLinkList, $projectLink, "class='form-control chosen'");?></td>
       </tr>
+      <tr>
+        <th><?php echo $lang->my->executionLink;?></th>
+        <td><?php echo html::select('executionLink', $lang->my->executionLinkList, $executionLink, "class='form-control chosen'");?></td>
+      </tr>
       <?php else:?>
       <tr>
         <th><?php echo $lang->my->executionLink;?></th>
         <td><?php echo html::select('executionLink', $lang->my->executionLinkList, 'execution-task', "class='form-control chosen'");?></td>
       </tr>
       <?php endif;?>
-<!--
-      <tr>
-        <th><?php echo $lang->my->executionLink;?></th>
-        <td><?php echo html::select('executionLink', $lang->my->executionLinkList, $executionLink, "class='form-control chosen'");?></td>
-      </tr>
--->
       <tr>
         <td colspan='2' class='text-center form-actions'><?php echo html::submitButton();?></td>
       </tr>
