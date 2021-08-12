@@ -753,6 +753,18 @@ class doc extends control
     }
 
     /**
+     * Ajax save temporary content of doc.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveContent($docID)
+    {
+        $this->doc->saveTempContent($docID);
+    }
+
+    /**
      * Show files.
      *
      * @param  string $type

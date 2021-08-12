@@ -421,7 +421,7 @@ class docModel extends model
         $doc->content     = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType = isset($docContent->type)    ? $docContent->type : '';
 
-        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content');
+        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content,tempContent');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
@@ -622,6 +622,7 @@ class docModel extends model
         }
         unset($doc->contentType);
 
+        $doc->tempContent = $doc->content;
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
@@ -629,9 +630,31 @@ class docModel extends model
             ->exec();
         if(!dao::isError())
         {
+            unset($doc->tempContent);
             $this->file->updateObjectID($this->post->uid, $docID, 'doc');
             return array('changes' => $changes, 'files' => $files);
         }
+    }
+
+    /**
+     * Save temporary doc content.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function saveTempContent($docID)
+    {
+        $data = fixer::input('post')
+            ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
+            ->get();
+        $doc  = new stdclass();
+        $doc->tempContent = $data->content;
+
+        $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq((int)$docID)->orderBy('version_desc')->fetch();
+        if($docType == 'markdown') $doc->tempContent = $this->post->content;
+
+        $this->dao->update(TABLE_DOC)->data($doc)->where('id')->eq($docID)->exec();
     }
 
     /**

@@ -310,6 +310,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `keywords` varchar(255) NOT NULL,
   `type` varchar(30) NOT NULL,
   `views` smallint(5) unsigned NOT NULL,
+  `tempContent` longtext NOT NULL,
   `collector` text NOT NULL,
   `addedBy` varchar(30) NOT NULL,
   `addedDate` datetime NOT NULL,
