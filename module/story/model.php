@@ -628,9 +628,10 @@ class storyModel extends model
 
         $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
 
-        $oldStroyReviewers = $this->getReviewerPairs($storyID, $oldStory->version);
-        $_POST['reviewer'] = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
-        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or array_diff(array_keys($oldStroyReviewers), $_POST['reviewer'])) $specChanged = true;
+        $oldStroyReviewers  = $this->getReviewerPairs($storyID, $oldStory->version);
+        $_POST['reviewer']  = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
+        $reviewerHasChanged = (array_diff(array_keys($oldStroyReviewers), $_POST['reviewer']) or array_diff($_POST['reviewer'], array_keys($oldStroyReviewers)));
+        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged) $specChanged = true;
 
         $now   = helper::now();
         $story = fixer::input('post')
