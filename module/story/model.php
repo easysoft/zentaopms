@@ -3514,7 +3514,10 @@ class storyModel extends model
             }
         }
 
-        $allReviewers = $this->dao->select('story,reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
+        $allReviewers = $this->dao->select('story,reviewer,result')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.version=t2.version and t1.id=t2.story')
+            ->where('story')->in($storyIdList)
+            ->fetchGroup('story', 'reviewer');
 
         foreach($allReviewers as $storyID => $reviewerList)
         {

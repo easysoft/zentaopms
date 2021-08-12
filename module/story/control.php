@@ -1115,7 +1115,7 @@ class story extends control
         $this->story->recall($storyID);
         $this->loadModel('action')->create('story', $storyID, 'Recalled');
 
-        die(js::reload('parent.parent'));
+        die(js::locate('parent.parent'));
     }
 
     /**
