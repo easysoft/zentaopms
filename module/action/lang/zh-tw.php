@@ -200,6 +200,7 @@ $lang->action->label->activated             = '激活了';
 $lang->action->label->blocked               = '阻塞了';
 $lang->action->label->resolved              = '解決了';
 $lang->action->label->reviewed              = '評審了';
+$lang->action->label->recalled              = '撤銷評審';
 $lang->action->label->moved                 = '移動了';
 $lang->action->label->confirmed             = "確認了{$lang->SRCommon}";
 $lang->action->label->bugconfirmed          = '確認了';
