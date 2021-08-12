@@ -2276,7 +2276,7 @@ EOT;
         /* Summary of each type. */
         foreach($extensionCount as $extension => $count)
         {
-            if(in_array($this->app->getClientLang(), ['zh-cn','zh-tw']))
+            if(in_array($this->app->getClientLang(), array('zh-cn','zh-tw')))
             {
                 $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge . $this->lang->doc->point;
             }

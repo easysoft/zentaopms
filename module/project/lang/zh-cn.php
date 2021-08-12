@@ -53,6 +53,7 @@ $lang->project->testreport        = '测试报告';
 $lang->project->selectProgram     = '项目集筛选';
 $lang->project->teamMember        = '团队成员';
 $lang->project->unlinkMember      = '移除成员';
+$lang->project->copyTeamTitle     = '选择一个项目团队来复制';
 
 /* Fields. */
 $lang->project->common             = '项目';
