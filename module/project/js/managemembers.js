@@ -1,8 +1,8 @@
 /**
  * Set role when select an account.
- * 
- * @param  string $account 
- * @param  int    $roleID 
+ *
+ * @param  string $account
+ * @param  int    $roleID
  * @access public
  * @return void
  */
@@ -13,6 +13,13 @@ function setRole(account, roleID)
     roleOBJ.val(role)               // set the role.
 }
 
+/**
+ * Add item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function addItem(obj)
 {
     var item = $('#addItem').html().replace(/%i%/g, i);
@@ -23,16 +30,30 @@ function addItem(obj)
     i ++;
 }
 
+/**
+ * Delete item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function deleteItem(obj)
 {
     $(obj).closest('tr').remove();
 }
 
+/**
+ * Set selected Department.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function setDeptUsers(obj)
 {
-    dept = $(obj).val(); // Get dept ID.
-    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept); // Create manageMembers link.
-    location.href=link;
+    dept = $(obj).val();
+    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept + '&copyProjectID=' + copyProjectID);
+    location.href = link;
 }
 
 /**
@@ -44,7 +65,7 @@ function setDeptUsers(obj)
  */
 function choseTeam2Copy(obj)
 {
-    team = $(obj).val();
-    link = createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=&team2Import=' + team);
-    location.href=link;
+    copyProjectID = $(obj).val();
+    locateLink    = createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + deptID + '&copyProjectID=' + copyProjectID);
+    location.href = locateLink;
 }
