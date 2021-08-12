@@ -56,6 +56,8 @@ $lang->release->createdBugs   = 'Bug %s chưa được giải quyết';
 $lang->release->export        = 'Xuất ra HTML';
 $lang->release->yesterday     = 'Phát hành hôm qua';
 $lang->release->all           = 'Tất cả';
+$lang->release->notify        = 'Notify';
+$lang->release->mailto        = 'Mailto';
 
 $lang->release->filePath = 'Tải về : ';
 $lang->release->scmPath  = 'SCM Path : ';
@@ -74,3 +76,9 @@ $lang->release->changeStatusList['terminate'] = 'Hoàn thành';
 
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date,  $extra bởi  <strong>$actor</strong>', 'extra' => 'changeStatusList');
+
+$lang->release->notifyList['PO'] = "{$lang->productCommon} Owner";
+$lang->release->notifyList['QD'] = 'QA Manager';
+$lang->release->notifyList['SC'] = 'Story Creator';
+$lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
+$lang->release->notifyList['PT'] = "Project Team Members";
