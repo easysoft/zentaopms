@@ -53,6 +53,7 @@ $lang->project->testreport        = 'Test Report';
 $lang->project->selectProgram     = 'Program filtering';
 $lang->project->teamMember        = 'Team Member';
 $lang->project->unlinkMember      = 'Remove Member';
+$lang->project->copyTeamTitle     = 'Select a project team to copy';
 
 /* Fields. */
 $lang->project->common             = 'Project';
