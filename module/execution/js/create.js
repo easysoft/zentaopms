@@ -53,7 +53,7 @@ $(function()
         });
     })
 
-    $('#teams').change();
+    if(copyExecutionID != 0) $('#teams').change();
 });
 
 function showLifeTimeTips()
