@@ -544,6 +544,24 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   KEY `type` (`type`),
   KEY `path` (`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_mr`;
+CREATE TABLE `zt_mr` (
+  `id` int NOT NULL,
+  `repoID` int NOT NULL,
+  `gitlabID` int NOT NULL,
+  `projectID` int NOT NULL,
+  `mrID` int NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `assignees` varchar(255) NOT NULL,
+  `reviewers` varchar(255) NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
