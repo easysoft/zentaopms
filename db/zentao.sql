@@ -769,6 +769,8 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `bugs` text NOT NULL,
   `leftBugs` text NOT NULL,
   `desc` text NOT NULL,
+  `mailto` text,
+  `notify` varchar(255),
   `status` varchar(20) NOT NULL default 'normal',
   `subStatus` varchar(30) NOT NULL default '',
   `deleted` enum('0','1') NOT NULL default '0',

@@ -25,6 +25,7 @@ $lang->story->change             = "變更";
 $lang->story->changed            = "{$lang->SRCommon}變更";
 $lang->story->assignTo           = '指派';
 $lang->story->review             = '評審';
+$lang->story->recall             = '撤銷評審';
 $lang->story->needReview         = '需要評審';
 $lang->story->batchReview        = '批量評審';
 $lang->story->edit               = "編輯";
@@ -287,6 +288,7 @@ $lang->story->action->reviewed              = array('main' => '$date, 由 <stron
 $lang->story->action->passreviewed          = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>確認通過</strong>。');
 $lang->story->action->clarifyreviewed       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>評審不通過</strong>，請變更後重新發起評審。');
 $lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>，原因為 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->recalled              = array('main' => '$date, 由 <strong>$actor</strong> 撤銷評審。');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewclosed          = array('main' => '$date, 由 <strong>系統</strong> 關閉，原因為 <strong>評審失敗</strong>。');
 $lang->story->action->linked2plan           = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。');

@@ -316,6 +316,7 @@ $lang->action->dynamicAction->story['opened']                = 'Create Story';
 $lang->action->dynamicAction->story['edited']                = 'Edit Story';
 $lang->action->dynamicAction->story['activated']             = 'Activate Story';
 $lang->action->dynamicAction->story['reviewed']              = 'Review Story';
+$lang->action->dynamicAction->story['recalled']              = 'Revoke';
 $lang->action->dynamicAction->story['closed']                = 'Close Story';
 $lang->action->dynamicAction->story['assigned']              = 'Assign Story';
 $lang->action->dynamicAction->story['changed']               = 'Change Story';

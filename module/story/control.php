@@ -1104,6 +1104,21 @@ class story extends control
     }
 
     /**
+     * Recall the story review.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function recall($storyID)
+    {
+        $this->story->recall($storyID);
+        $this->loadModel('action')->create('story', $storyID, 'Recalled');
+
+        die(js::locate('parent.parent'));
+    }
+
+    /**
      * Close a story.
      *
      * @param  int    $storyID
