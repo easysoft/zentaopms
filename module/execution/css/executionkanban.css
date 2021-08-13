@@ -1,5 +1,4 @@
 .main-table .table {cursor: default;}
-.main-table tbody > tr > td {border-bottom: 2px solid #fff;}
 
 .boards {display: table; table-layout: fixed; width: 100%; min-width: 140px;}
 .board {display: table-cell; width: 25%; padding: 10px;}
@@ -11,6 +10,7 @@
 
 #kanban {overflow-y: auto;}
 #kanban tbody > tr > td {line-height: 24px;}
+#kanban tbody > tr > td {border-bottom: 2px solid #fff !important;}
 #kanban thead > tr > th:not(:last-child) {border-right: 2px solid #efefef;}
 #kanban tbody > tr > td.color-my {background-color: #ECF4FD;}
 #kanban tbody > tr > td.color-project {background-color: #F5F5F5;}

@@ -32,7 +32,7 @@
       <tr>
         <td class="board-project <?php echo empty($projectID) ? 'color-my' : 'color-project';?>">
           <div data-id='<?php echo $projectID;?>'>
-            <div class='text-center'>
+            <div class='text-center text-ellipsis'>
               <?php $projectTitle = empty($projectID) ? $lang->execution->myExecutions : zget($projects, $projectID);?>
               <span class='group-title' title='<?php echo $projectTitle;?>'><?php echo $projectTitle;?></span>
             </div>
