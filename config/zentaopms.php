@@ -210,9 +210,10 @@ define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
-define('TABLE_PIPELINE',       '`' . $config->db->prefix . 'pipeline`');
+define('TABLE_PIPELINE',      '`' . $config->db->prefix . 'pipeline`');
 define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
+define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 
 define('TABLE_REPO',        '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',    '`' . $config->db->prefix . 'relation`');
@@ -255,6 +256,7 @@ $config->objectTables['stakeholder'] = TABLE_STAKEHOLDER;
 $config->objectTables['job']         = TABLE_JOB;
 $config->objectTables['team']        = TABLE_TEAM;
 $config->objectTables['pipeline']    = TABLE_PIPELINE;
+$config->objectTables['mr']          = TABLE_MR;
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
