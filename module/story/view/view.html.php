@@ -374,17 +374,12 @@
                   <th><?php echo $lang->story->reviewers;?></th>
                   <td>
                     <?php
-                    $reviewedBy = explode(',', trim($story->reviewedBy, ','));
                     if($reviewers)
                     {
-                        foreach($reviewers as $reviewer)
+                        foreach($reviewers as $reviewer => $result)
                         {
-                            echo in_array($reviewer, $reviewedBy) ? '<span style="color: #cbd0db" title="' . $lang->story->reviewed . '"> ' . zget($users, $reviewer) . '</span>' : '<span title="' . $lang->story->toBeReviewed .'"> ' . zget($users, $reviewer) . '</span>';
+                            echo !empty($result) ? '<span style="color: #cbd0db" title="' . $lang->story->reviewed . '"> ' . zget($users, $reviewer) . '</span>' : '<span title="' . $lang->story->toBeReviewed .'"> ' . zget($users, $reviewer) . '</span>';
                         }
-                    }
-                    elseif($reviewedBy)
-                    {
-                        foreach($reviewedBy as $reviewer) echo '<span style="color: #cbd0db" title="' . $lang->story->reviewed . '"> ' . zget($users, $reviewer) . '</span>';
                     }
                     ?>
                   </td>

@@ -60,6 +60,18 @@
             <td colspan='2'><?php echo html::textarea('desc', '', "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->release->notify;?></th>
+            <td colspan='2'><?php echo html::checkbox('notify', $lang->release->notifyList);?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->release->mailto;?></th>
+            <td colspan='2'>
+              <div class="input-group">
+                <?php echo html::select('mailto[]', $users, '', "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <th><?php echo $lang->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>

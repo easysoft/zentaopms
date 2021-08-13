@@ -235,9 +235,11 @@ $lang->user->contacts->noListYet     = '还没有创建任何列表，请先创�
 $lang->user->contacts->confirmDelete = '您确定要删除这个列表吗？';
 $lang->user->contacts->or            = ' 或者 ';
 
-$lang->user->resetFail       = "重置密码失败，检查用户名是否存在！";
-$lang->user->resetSuccess    = "重置密码成功，请用新密码登录。";
-$lang->user->noticeResetFile = "<h5>普通用户请联系管理员重置密码</h5>
+$lang->user->resetFail        = "重置密码失败，检查用户名是否存在！";
+$lang->user->resetSuccess     = "重置密码成功，请用新密码登录。";
+$lang->user->noticeDelete     = "你确认要把“%s”从系统中删除吗？";
+$lang->user->noticeHasDeleted = "该人员已经删除，如需查看，请到回收站还原后再查看。";
+$lang->user->noticeResetFile  = "<h5>普通用户请联系管理员重置密码</h5>
     <h5>管理员请登录禅道所在的服务器，创建<span> '%s' </span>文件。</h5>
     <p>注意：</p>
     <ol>

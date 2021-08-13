@@ -578,17 +578,19 @@ class upgrade extends control
             die(js::locate($this->createLink('upgrade', 'mergeRepo'), 'parent'));
         }
 
-        $repos = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
-
-        if(empty($repos))
+        $repos    = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
+        $products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
+        if(empty($repos) or empty($products))
         {
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
             die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
 
+        $this->view->title    = $this->lang->upgrade->mergeRepo;
         $this->view->repos    = $repos;
-        $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
+        $this->view->products = $products;
         $this->view->programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs();
+
         $this->display();
     }
 

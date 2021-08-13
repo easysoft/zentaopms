@@ -1090,7 +1090,7 @@ class task extends control
             if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                die(array('status' => 'success', 'data' => $taskID));
+                return $this->send(array('status' => 'success', 'data' => $taskID));
             }
             else
             {
@@ -1302,7 +1302,8 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            return print(js::locate($this->session->taskList, 'parent'));
+            $locateLink = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 

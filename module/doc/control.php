@@ -70,7 +70,12 @@ class doc extends control
      */
     public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->session->set('docList', $this->app->getURI(true), 'doc');
+        /* Save session, load module. */
+        $uri = $this->app->getURI(true);
+        $this->session->set('docList',       $uri, 'doc');
+        $this->session->set('productList',   $uri, 'product');
+        $this->session->set('executionList', $uri, 'execution');
+        $this->session->set('projectList',   $uri, 'project');
         $this->loadModel('search');
 
         /* Set browseType.*/
@@ -133,13 +138,6 @@ class doc extends control
                 if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($objectType == 'custom' or $objectType == 'book')      $objectID = 0;
 
-                if($objectType == 'execution' and $this->config->systemMode == 'new' and $this->app->openApp == 'doc')
-                {
-                    $execution  = $this->execution->getByID($this->post->execution);
-                    $objectType = 'project';
-                    $objectID   = $execution->project;
-                }
-
                 $this->action->create('docLib', $libID, 'Created');
 
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
@@ -163,9 +161,9 @@ class doc extends control
         }
 
         $libTypeList = $this->lang->doc->libTypeList;
-        if(empty($products)) unset($libTypeList['product']);
-        if(empty($projects)) unset($libTypeList['project']);
-        if(empty($executions) or ($this->config->systemMode == 'new' and $this->app->openApp == 'doc')) unset($libTypeList['execution']);
+        if(empty($products))   unset($libTypeList['product']);
+        if(empty($projects))   unset($libTypeList['project']);
+        if(empty($executions)) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('nocode');
@@ -293,8 +291,7 @@ class doc extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, '');
-            $libType  = ($lib->type == 'execution' and $this->app->openApp != 'execution') ? 'project' : $lib->type;
-            $params   = "type={$libType}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
+            $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = $this->createLink('doc', 'objectLibs', $params);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
@@ -748,6 +745,18 @@ class doc extends control
     }
 
     /**
+     * Ajax save temporary content of doc.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveContent($docID)
+    {
+        $this->doc->saveTempContent($docID);
+    }
+
+    /**
      * Show files.
      *
      * @param  string $type
@@ -886,6 +895,7 @@ class doc extends control
         $lib = $this->doc->getLibById($libID);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
 
+        if($this->config->systemMode == 'classic' and $type == 'project') $type = 'execution';
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID, $appendLib);
 
         /* Set Custom. */

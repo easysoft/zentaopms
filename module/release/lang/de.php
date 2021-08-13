@@ -56,6 +56,8 @@ $lang->release->createdBugs   = 'Erstellte %s Bugs';
 $lang->release->export        = 'Export as HTML';
 $lang->release->yesterday     = 'Gestern veröffentlicht';
 $lang->release->all           = 'All';
+$lang->release->notify        = 'Notify';
+$lang->release->mailto        = 'Mailto';
 
 $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Pfad : ';
@@ -74,3 +76,9 @@ $lang->release->changeStatusList['terminate'] = 'Terminiert';
 
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
+
+$lang->release->notifyList['PO'] = "{$lang->productCommon} Owner";
+$lang->release->notifyList['QD'] = 'QA Manager';
+$lang->release->notifyList['SC'] = 'Story Creator';
+$lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
+$lang->release->notifyList['PT'] = "Project Team Members";

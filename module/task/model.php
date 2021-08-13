@@ -192,7 +192,7 @@ class taskModel extends model
             }
 
             $teams = array();
-            if($this->post->multiple)
+            if($this->post->multiple and count(array_filter($this->post->team)) > 1)
             {
                 foreach($this->post->team as $row => $account)
                 {
@@ -237,14 +237,14 @@ class taskModel extends model
      */
     public function batchCreate($executionID)
     {
+        /* Load module and init vars. */
         $this->loadModel('action');
-        $now      = helper::now();
-        $mails    = array();
-        $tasks    = fixer::input('post')->get();
-
+        $now       = helper::now();
+        $mails     = array();
         $storyIDs  = array();
         $taskNames = array();
         $preStory  = 0;
+        $tasks     = fixer::input('post')->get();
 
         /* Judge whether the current task is a parent. */
         $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0;
@@ -278,6 +278,8 @@ class taskModel extends model
         $module     = 0;
         $type       = '';
         $assignedTo = '';
+        $estStarted = '0000-00-00';
+        $deadline   = '0000-00-00';
 
         /* Get task data. */
         $extendFields = $this->getFlowExtendFields();
@@ -285,10 +287,12 @@ class taskModel extends model
         $data         = array();
         foreach($tasks->name as $i => $name)
         {
-            $story      = !isset($tasks->story[$i]) || $tasks->story[$i]           == 'ditto' ? $story     : $tasks->story[$i];
-            $module     = !isset($tasks->module[$i]) || $tasks->module[$i]         == 'ditto' ? $module    : $tasks->module[$i];
-            $type       = !isset($tasks->type[$i]) || $tasks->type[$i]             == 'ditto' ? $type      : $tasks->type[$i];
-            $assignedTo = !isset($tasks->assignedTo[$i]) || $tasks->assignedTo[$i] == 'ditto' ? $assignedTo: $tasks->assignedTo[$i];
+            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
+            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
+            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
+            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
+            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
+            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
 
             if(empty($tasks->name[$i])) continue;
 
@@ -305,16 +309,16 @@ class taskModel extends model
             $data[$i]->left       = $tasks->estimate[$i];
             $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
             $data[$i]->execution  = $executionID;
-            $data[$i]->estStarted = empty($tasks->estStarted[$i]) ? '0000-00-00' : $tasks->estStarted[$i];
-            $data[$i]->deadline   = empty($tasks->deadline[$i]) ? '0000-00-00' : $tasks->deadline[$i];
+            $data[$i]->estStarted = $estStarted;
+            $data[$i]->deadline   = $deadline;
             $data[$i]->status     = 'wait';
             $data[$i]->openedBy   = $this->app->user->account;
             $data[$i]->openedDate = $now;
             $data[$i]->parent     = $tasks->parent[$i];
             if($story) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
             if($assignedTo) $data[$i]->assignedDate = $now;
-            if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($tasks->estStarted[$i])) $data[$i]->estStarted = '';
-            if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($tasks->deadline[$i]))     $data[$i]->deadline   = '';
+            if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $data[$i]->estStarted = '';
+            if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $data[$i]->deadline   = '';
 
             foreach($extendFields as $extendField)
             {
@@ -897,7 +901,7 @@ class taskModel extends model
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
         $teams = array();
-        if($this->post->multiple)
+        if($this->post->multiple and count(array_unique(array_filter($this->post->team))) > 1)
         {
             if(strpos(',done,closed,cancel,', ",{$task->status},") === false && $this->post->assignedTo && !in_array($this->post->assignedTo, $this->post->team))
             {
@@ -1216,7 +1220,7 @@ class taskModel extends model
         {
             if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
-            if($task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
+            if(!empty($task->deadline) and $task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -2138,6 +2142,11 @@ class taskModel extends model
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
 
+        $projectList = array();
+        foreach($tasks as $task) $projectList[] = $task->project;
+        $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectList)->fetchPairs('id');
+        foreach($tasks as $task) $task->projectName = zget($projectPairs, $task->project);
+
         if($tasks) return $this->processTasks($tasks);
         return array();
     }
@@ -3016,7 +3025,7 @@ class taskModel extends model
                 echo $this->lang->task->typeList[$task->type];
                 break;
             case 'status':
-                $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");
+                $storyChanged ? print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}' title='{$this->processStatus('task', $task)}'> " . $this->processStatus('task', $task) . "</span>");
                 break;
             case 'estimate':
                 echo round($task->estimate, 1) . $this->lang->execution->workHourUnit;

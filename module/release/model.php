@@ -110,6 +110,7 @@ class releaseModel extends model
      */
     public function create($productID, $branch = 0)
     {
+        /* Init vars. */
         $productID = (int)$productID;
         $branch    = (int)$branch;
         $buildID   = 0;
@@ -126,6 +127,8 @@ class releaseModel extends model
             ->setDefault('stories', '')
             ->join('stories', ',')
             ->join('bugs', ',')
+            ->join('mailto', ',')
+            ->join('notify', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
             ->remove('allchecker,files,labels,uid')
@@ -169,7 +172,7 @@ class releaseModel extends model
             }
         }
 
-        if($release->build) 
+        if($release->build)
         {
             $buildInfo = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
             $release->branch  = $buildInfo->branch;
@@ -216,26 +219,30 @@ class releaseModel extends model
      */
     public function update($releaseID)
     {
+        /* Init vars. */
         $releaseID  = (int)$releaseID;
         $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
         $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
+            ->join('mailto', ',')
+            ->join('notify', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
             ->get();
+
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);
-        
+
         /* update release project and branch */
-        if($release->build) 
+        if($release->build)
         {
             $buildInfo = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
             $release->branch  = $buildInfo->branch;
             $release->project = $buildInfo->project;
-        } 
-        
+        }
+
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
@@ -247,6 +254,67 @@ class releaseModel extends model
             $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
             return common::createChanges($oldRelease, $release);
         }
+    }
+
+    /**
+     * Get notify persons.
+     *
+     * @param  string $notfiyList
+     * @param  int    $productID
+     * @param  int    $buildID
+     * @access public
+     * @return array
+     */
+    public function getNotifyPersons($notifyList = '', $productID = 0, $buildID = 0)
+    {
+        if(empty($notifyList)) return array();
+
+        /* Init vars. */
+        $notifyPersons = array();
+        $managers      = '';
+        $notifyList    = explode($notifyList, ',');
+
+        foreach($notifyList as $notify)
+        {
+            if($notify == 'PO' or $notify == 'QD' or $notify == 'feedback')
+            {
+                $managers .= $notify . ',';
+            }
+            elseif($notify == 'SC' and !empty($buildID))
+            {
+                $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch('stories');
+                $stories = trim($stories, ',');
+
+                if(empty($stories)) continue;
+
+                $createUsers    = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
+                $notifyPersons += $createUsers;
+            }
+            elseif(($notify == 'ET' or $notify == 'PT') and !empty($buildID))
+            {
+                $type = $notify == 'ET' ? 'execution' : 'project';
+                $members = $this->dao->select('t2.account')->from(TABLE_BUILD)->alias('t1')
+                    ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.' . $type .'=t2.root')
+                    ->where('t2.type')->eq($type)
+                    ->fetchPairs();
+
+                if(empty($members)) continue;
+
+                $notifyPersons += $members;
+            }
+        }
+
+        if(!empty($managers))
+        {
+            $managers     = trim($managers, ',');
+            $managerUsers = $this->dao->select($managers)->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+            foreach($managerUsers as $account)
+            {
+                if(!isset($notifyPersons[$account])) $notifyPersons += array($account => $account);
+            }
+        }
+
+        return $notifyPersons;
     }
 
     /**
@@ -404,5 +472,95 @@ class releaseModel extends model
     {
         $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
         return dao::isError();
+    }
+
+    /**
+     * Send mail.
+     *
+     * @param  int    $releaseID
+     * @param  int    $actionID
+     * @access public
+     * @return void
+     */
+    public function sendmail($releaseID, $actionID)
+    {
+        $this->loadModel('mail');
+        $release = $this->getByID($releaseID);
+        $users   = $this->loadModel('user')->getPairs('noletter');
+
+        /* Get action info. */
+        $action             = $this->loadModel('action')->getById($actionID);
+        $history            = $this->action->getHistory($actionID);
+        $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
+        $action->appendLink = '';
+
+        /* Get mail content. */
+        $modulePath = $this->app->getModulePath($appName = '', 'release');
+        $oldcwd     = getcwd();
+        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        chdir($modulePath . 'view');
+        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        {
+            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            chdir($modulePath . 'ext/view');
+        }
+        ob_start();
+        include $viewFile;
+        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+        chdir($oldcwd);
+
+        $sendUsers = $this->getToAndCcList($release);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = 'RELEASE #' . $release->id . ' ' . $release->name;
+
+        /* Send it. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
+        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get toList and ccList.
+     *
+     * @param  object    $release
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($release)
+    {
+        /* Set toList and ccList. */
+        $toList = $this->app->user->account;
+        $ccList = $release->mailto . ',';
+
+        /* Get notifiy persons. */
+        $notifyPersons = array();
+        if(!empty($release->notify)) $notifyPersons = $this->getNotifyPersons($release->notify, $release->product, $release->build);
+
+        foreach($notifyPersons as $account)
+        {
+            if(strpos($ccList, ",{$account},") === false) $ccList .= $account . ',';
+        }
+
+        $ccList = trim($ccList, ',');
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+
+        return array($toList, $ccList);
     }
 }

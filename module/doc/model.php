@@ -255,9 +255,38 @@ class docModel extends model
                 ->fetchAll('id');
         }
 
+        $projects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.project')
+            ->where('t2.id')->in(array_keys($docs))
+            ->andWhere('t2.execution')->eq(0)
+            ->fetchPairs();
+
+        $executions = $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.execution')
+            ->where('t2.id')->in(array_keys($docs))
+            ->fetchPairs();
+
+        $products = $this->dao->select('t1.id, t1.name')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.product')
+            ->where('t2.id')->in(array_keys($docs))
+            ->fetchPairs();
+
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
+
+        $objects = array('product' => 'products', 'execution' => 'executions', 'project' => 'projects');
         foreach($docs as $index => $doc)
         {
+            foreach($objects as $type => $object)
+            {
+                if(!empty($doc->{$type}))
+                {
+                    $doc->objectID   = $doc->{$type};
+                    $doc->objectName = ${$object}[$doc->{$type}];
+                    $doc->objectType = $type;
+                    break;
+                }
+            }
+
             $docs[$index]->fileSize = 0;
             if(isset($files[$index]))
             {
@@ -392,7 +421,7 @@ class docModel extends model
         $doc->content     = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType = isset($docContent->type)    ? $docContent->type : '';
 
-        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content');
+        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content,tempContent');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
@@ -593,6 +622,7 @@ class docModel extends model
         }
         unset($doc->contentType);
 
+        $doc->tempContent = $doc->content;
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
@@ -600,9 +630,31 @@ class docModel extends model
             ->exec();
         if(!dao::isError())
         {
+            unset($doc->tempContent);
             $this->file->updateObjectID($this->post->uid, $docID, 'doc');
             return array('changes' => $changes, 'files' => $files);
         }
+    }
+
+    /**
+     * Save temporary doc content.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function saveTempContent($docID)
+    {
+        $data = fixer::input('post')
+            ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
+            ->get();
+        $doc  = new stdclass();
+        $doc->tempContent = $data->content;
+
+        $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq((int)$docID)->orderBy('version_desc')->fetch();
+        if($docType == 'markdown') $doc->tempContent = $this->post->content;
+
+        $this->dao->update(TABLE_DOC)->data($doc)->where('id')->eq($docID)->exec();
     }
 
     /**
@@ -1076,6 +1128,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
+                ->beginIF($type == 'project')->andWhere('execution')->eq(0)->fi()
                 ->orderBy('`order`, id')
                 ->fetchAll('id');
         }
@@ -1172,6 +1225,8 @@ class docModel extends model
         }
         elseif($objectType == 'execution')
         {
+            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id');
+
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage')
@@ -1182,6 +1237,8 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
+                $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
+
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
                 {
                     $myObjects[$id] = $execution->name;
@@ -1795,7 +1852,10 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='doc' title='{$doc->title}'") . '</li>';
+            $app = $this->app->openApp;
+            if($app != 'doc') $app = $objectID ? $doc->type : 'doc';
+
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='$app' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
@@ -1976,22 +2036,23 @@ class docModel extends model
     {
         if($type != 'custom' and $type != 'book' and empty($objects)) return '';
 
-        $output             = '';
-        $closedProjectsHtml = '';
-        $closedProjects     = array();
-        $maxHeight          = ($type == 'project' and $this->app->openApp == 'doc') ? '260px' : '290px';
-        $class              = ($type == 'project' and $this->app->openApp == 'doc') ? 'col-left' : '';
+        $output            = '';
+        $closedObjectsHtml = '';
+        $closedObjects     = array();
+        $maxHeight         = (in_array($type, array('project','execution')) and $this->app->openApp == 'doc') ? '260px' : '290px';
+        $class             = (in_array($type, array('project','execution')) and $this->app->openApp == 'doc') ? 'col-left' : '';
 
         $currentMethod = $this->app->getMethodName();
         $methodName    = in_array($currentMethod, array('tablecontents', 'showfiles')) ? 'tablecontents' : 'objectLibs';
+        $objectTitle   = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
 
         if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
             $output  = <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
-    <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'>
-      <span class='text'>{$objects[$objectID]}</span>
+    <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objectTitle}'>
+      <span class='text'>{$objectTitle}</span>
       <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
@@ -2005,25 +2066,25 @@ class docModel extends model
         <div class='table-col $class'>
           <div class='list-group' style='max-height: $maxHeight'>
 EOT;
-            if($type == 'project' and $this->app->openApp == 'doc')
+            if(in_array($type, array('project','execution')) and $this->app->openApp == 'doc')
             {
-                $closedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
+                $closedObjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
             }
 
             foreach($objects as $key => $object)
             {
                 $selected = $key == $objectID ? 'selected' : '';
-                if(isset($closedProjects[$key]))
+                if(isset($closedObjects[$key]))
                 {
-                    $closedProjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                    $closedObjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->openApp}'");
                     if($selected == 'selected') $tabActive = 'closed';
                 }
                 else
                 {
-                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->openApp}'");
                 }
             }
-            if($type == 'project' and $this->app->openApp == 'doc')
+            if(in_array($type, array('project','execution')) and $this->app->openApp == 'doc')
             {
                 $output .= <<<EOT
             </div>
@@ -2032,7 +2093,7 @@ EOT;
             </div>
           </div>
           <div class='table-col col-right'>
-            <div class='list-group'>$closedProjectsHtml</div>
+            <div class='list-group'>$closedObjectsHtml</div>
           </div>
         </div>
       </div>
@@ -2109,6 +2170,7 @@ EOT;
         $moduleDocs = array();
         foreach($docs as $doc)
         {
+            if(!$this->checkPrivDoc($doc)) continue;
             if(!isset($moduleDocs[$doc->module])) $moduleDocs[$doc->module] = array();
             $moduleDocs[$doc->module][] = $doc;
         }
@@ -2239,7 +2301,7 @@ EOT;
         /* Summary of each type. */
         foreach($extensionCount as $extension => $count)
         {
-            if(in_array($this->app->getClientLang(), ['zh-cn','zh-tw']))
+            if(in_array($this->app->getClientLang(), array('zh-cn','zh-tw')))
             {
                 $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge . $this->lang->doc->point;
             }

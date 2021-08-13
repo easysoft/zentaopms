@@ -44,13 +44,11 @@ class projectreleaseModel extends model
      * Get list of releases.
      *
      * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $branch
      * @param  string $type
      * @access public
      * @return array
      */
-    public function getList($projectID, $productID, $branch = 0, $type = 'all')
+    public function getList($projectID, $type = 'all')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.execution, t4.name as executionName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -104,6 +102,7 @@ class projectreleaseModel extends model
      */
     public function create()
     {
+        /* Init vars. */
         $productID = $this->post->product;
         $branch    = $this->post->branch;
         $buildID   = 0;
@@ -128,6 +127,8 @@ class projectreleaseModel extends model
             ->setDefault('stories', '')
             ->join('stories', ',')
             ->join('bugs', ',')
+            ->join('mailto', ',')
+            ->join('notify', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
             ->setIF($productID, 'product', $productID)
             ->setIF($branch, 'branch', $branch)
@@ -215,16 +216,20 @@ class projectreleaseModel extends model
      */
     public function update($releaseID)
     {
+        /* Init vars. */
         $releaseID  = (int)$releaseID;
         $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
         $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
+            ->join('mailto', ',')
+            ->join('notify', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
             ->get();
+
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
@@ -316,5 +321,18 @@ class projectreleaseModel extends model
 
         $this->loadModel('action');
         foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
+    }
+
+    /**
+     * Send mail.
+     *
+     * @param  int    $releaseID
+     * @param  int    $actionID
+     * @access public
+     * @return void
+     */
+    public function sendmail($releaseID, $actionID)
+    {
+        $this->loadModel('release')->sendmail($releaseID, $actionID);
     }
 }

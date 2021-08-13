@@ -356,7 +356,7 @@ class commonModel extends model
         echo "<ul class='dropdown-menu pull-left'>";
         //if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
 
-        $manualUrl = (!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home'];
+        $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         echo '<li>' . html::a($manualUrl, $lang->manual, '', "class='open-in-app' id='helpLink' data-app='help'") . '</li>';
 
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
@@ -2094,6 +2094,7 @@ EOD;
         if($this->app->version) return $this->checkNewEntry();
 
         /* Old version. */
+        if(!isset($_GET[$this->config->moduleVar]) or !isset($_GET[$this->config->methodVar])) $this->response('EMPTY_ENTRY');
         if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;
 
         if(!$this->get->code)  $this->response('PARAM_CODE_MISSING');
@@ -2260,10 +2261,18 @@ EOD;
     public function response($code)
     {
         $response = new stdclass();
-        $response->errcode = $this->config->entry->errcode[$code];
-        $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
+        if(isset($this->config->entry->errcode))
+        {
+            $response->errcode = $this->config->entry->errcode[$code];
+            $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
 
-        die(urldecode(json_encode($response)));
+            die(urldecode(json_encode($response)));
+        }
+        else
+        {
+            $response->error = $code;
+            die(urldecode(json_encode($response)));
+        }
     }
 
     /**

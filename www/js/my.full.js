@@ -866,4 +866,12 @@ $(document).ready(function()
     revertModuleCookie();
 
     $(document).on('click', '#helpMenuItem .close-help-tab', function(){$('#helpMenuItem').prev().remove();$('#helpMenuItem').remove();});
+
+    $(document).keydown(function(event)
+    {
+        if(event.ctrlKey) $('a').attr('target', '_blank');
+    }).keyup(function()
+    {
+        $('a').attr('target', '');
+    });
 });

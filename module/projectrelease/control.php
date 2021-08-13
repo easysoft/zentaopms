@@ -98,6 +98,8 @@ class projectrelease extends control
      */
     public function create($projectID)
     {
+        /* Load module and config. */
+        $this->loadModel('build');
         $this->app->loadConfig('release');
         $this->config->projectrelease->create = $this->config->release->create;
 
@@ -114,9 +116,7 @@ class projectrelease extends control
         }
 
         /* Get the builds that can select. */
-        $productPairs  = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $productIdList = array_keys($productPairs);
-        $builds        = $this->loadModel('build')->getProductBuildPairs($productIdList, 0, 0, 'notrunk');
+        $builds        = $this->build->getProjectBuildPairs($projectID, 0, 0, 'notrunk|withbranch');
         $releaseBuilds = $this->projectrelease->getReleaseBuilds($projectID);
         foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -128,6 +128,7 @@ class projectrelease extends control
         $this->view->position[]  = $this->lang->release->create;
         $this->view->builds      = $builds;
         $this->view->lastRelease = $this->projectrelease->getLast($projectID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display();
     }
 
@@ -140,6 +141,10 @@ class projectrelease extends control
      */
     public function edit($releaseID)
     {
+        /* Load module and config. */
+        $this->loadModel('story');
+        $this->loadModel('bug');
+        $this->loadModel('build');
         $this->app->loadConfig('release');
         $this->config->projectrelease->create = $this->config->release->create;
 
@@ -158,14 +163,20 @@ class projectrelease extends control
             $this->executeHooks($releaseID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
-        $this->loadModel('story');
-        $this->loadModel('bug');
-        $this->loadModel('build');
 
         /* Get release and build. */
         $release = $this->projectrelease->getById((int)$releaseID);
         $this->commonAction($release->project, $release->product, $release->branch);
         $build = $this->build->getById($release->build);
+
+        /* Get the builds that can select. */
+        $builds        = $this->build->getProjectBuildPairs($release->project, $release->product, $release->branch, 'notrunk|withbranch');
+        $releaseBuilds = $this->projectrelease->getReleaseBuilds($release->project);
+        foreach($releaseBuilds as $releaseBuild)
+        {
+            if($releaseBuild != $build->id) unset($builds[$releaseBuild]);
+        }
+        unset($builds['trunk']);
 
         /* Set project menu. */
         $this->project->setMenu($release->project);
@@ -174,7 +185,9 @@ class projectrelease extends control
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;
-        $this->view->builds     = $this->loadModel('build')->getProjectBuildPairs($release->project, $release->product, $release->branch, 'notrunk|withbranch');
+        $this->view->builds     = $builds;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+
         $this->display();
     }
 

@@ -103,7 +103,9 @@ $lang->action->objectTypes['entry']       = '應用';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 $lang->action->objectTypes['team']        = '團隊';
 $lang->action->objectTypes['whitelist']   = '白名單';
-$lang->action->objectTypes['pipeline']    = 'GitLib';
+$lang->action->objectTypes['pipeline']    = 'GitLab';
+$lang->action->objectTypes['gitlab']      = 'GitLab';
+$lang->action->objectTypes['jenkins']     = 'Jenkins';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -198,6 +200,7 @@ $lang->action->label->activated             = '激活了';
 $lang->action->label->blocked               = '阻塞了';
 $lang->action->label->resolved              = '解決了';
 $lang->action->label->reviewed              = '評審了';
+$lang->action->label->recalled              = '撤銷評審';
 $lang->action->label->moved                 = '移動了';
 $lang->action->label->confirmed             = "確認了{$lang->SRCommon}";
 $lang->action->label->bugconfirmed          = '確認了';
@@ -314,6 +317,7 @@ $lang->action->dynamicAction->story['opened']                = "創建{$lang->SR
 $lang->action->dynamicAction->story['edited']                = "編輯{$lang->SRCommon}";
 $lang->action->dynamicAction->story['activated']             = "激活{$lang->SRCommon}";
 $lang->action->dynamicAction->story['reviewed']              = "評審{$lang->SRCommon}";
+$lang->action->dynamicAction->story['recalled']              = '撤銷評審';
 $lang->action->dynamicAction->story['closed']                = "關閉{$lang->SRCommon}";
 $lang->action->dynamicAction->story['assigned']              = "指派{$lang->SRCommon}";
 $lang->action->dynamicAction->story['changed']               = "變更{$lang->SRCommon}";
@@ -445,6 +449,7 @@ $lang->action->dynamicAction->doc['hidden']    = '隱藏文檔';
 
 $lang->action->dynamicAction->user['created']       = '創建用戶';
 $lang->action->dynamicAction->user['edited']        = '編輯用戶';
+$lang->action->dynamicAction->user['deleted']       = '刪除用戶';
 $lang->action->dynamicAction->user['login']         = '用戶登錄';
 $lang->action->dynamicAction->user['logout']        = '用戶退出';
 $lang->action->dynamicAction->user['undeleted']     = '還原用戶';

@@ -85,7 +85,9 @@ class release extends control
         $this->view->position[]  = $this->lang->release->create;
         $this->view->productID   = $productID;
         $this->view->builds      = $builds;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->lastRelease = $this->release->getLast($productID, $branch);
+
         $this->display();
     }
 
@@ -122,11 +124,20 @@ class release extends control
         $this->commonAction($release->product, $release->branch);
         $build = $this->build->getById($release->build);
 
+        $builds = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk|withbranch', false);
+        $releaseBuilds = $this->release->getReleaseBuilds($release->product, $release->branch);
+        foreach($releaseBuilds as $releaseBuild)
+        {
+            if($releaseBuild != $build->id) unset($builds[$releaseBuild]);
+        }
+        unset($builds['trunk']);
+
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
         $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->build      = $build;
-        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk|withbranch', false);
+        $this->view->builds     = $builds;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
 
         $this->display();
     }
@@ -250,7 +261,9 @@ class release extends control
                 }
                 return $this->send($response);
             }
-            die(js::locate($this->session->releaseList, 'parent'));
+
+            $locateLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID={$release->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 

@@ -1257,6 +1257,25 @@ class projectModel extends model
     }
 
     /**
+     * Unlink a member.
+     *
+     * @param  int    $projectID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function unlinkMember($projectID, $account)
+    {
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+
+        $this->loadModel('user');
+        $this->user->updateUserView($projectID, 'project', array($account));
+
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
+    }
+
+    /**
      * Manage team members.
      *
      * @param  int    $projectID
@@ -1573,6 +1592,26 @@ class projectModel extends model
             ->fetchPairs('account', 'realname');
 
         return array('' => '') + $members;
+    }
+
+    /**
+     * Get members of a project who can be imported.
+     *
+     * @param  int    $projectID
+     * @param  array  $currentMembers
+     * @access public
+     * @return array
+     */
+    public function getMembers2Import($projectID, $currentMembers)
+    {
+        if($projectID == 0) return array();
+
+        return $this->dao->select('account, role, hours')
+            ->from(TABLE_TEAM)
+            ->where('root')->eq($projectID)
+            ->andWhere('type')->in('project')
+            ->andWhere('account')->notIN($currentMembers)
+            ->fetchAll('account');
     }
 
     /**

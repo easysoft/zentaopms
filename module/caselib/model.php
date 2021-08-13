@@ -475,7 +475,7 @@ class caselibModel extends model
             }
             else
             {
-                $caseData->project    = $this->session->project;
+                $caseData->project    = (int)$this->session->project;
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;

@@ -72,18 +72,22 @@ if(empty($type)) $type = 'product';
       <?php endif;?>
       <?php else:?>
       <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/></div>
-      <div class="notice text-muted"><?php echo $this->lang->doc->noDoc;?></div>
+      <div class="notice text-muted"><?php echo (empty($libs) and $type == 'custom') ? $lang->doc->noLib : $lang->doc->noDoc;?></div>
       <div class="no-content-button">
         <?php
         $html = '';
         if($type == 'book' and common::hasPriv('doc', 'createLib'))
         {
-            $html = html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createBook, '', 'class="btn btn-info btn-wide iframe"');
+            $html = html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createBook, '', 'class="btn btn-info btn-wide iframe"');
+        }
+        elseif(empty($libs) and $type == 'custom' and common::hasPriv('doc', 'createLib'))
+        {
+            $html = html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="btn btn-info btn-wide iframe"');
         }
         elseif($libID and common::hasPriv('doc', 'create'))
         {
             $html  = "<div class='dropdown' id='createDropdown'>";
-            $html .= "<button class='btn btn-info btn-wide' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->doc->createAB . " <span class='caret'></span></button>";
+            $html .= "<button class='btn btn-info btn-wide' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $lang->doc->createAB . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
@@ -100,13 +104,16 @@ if(empty($type)) $type = 'product';
         echo $html;
         ?>
         <?php
-        if($type == 'book')
+        if(!empty($libs))
         {
-            common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide'");
-        }
-        elseif(!empty($libs))
-        {
-            common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
+            if($type == 'book')
+            {
+                common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide'");
+            }
+            else
+            {
+                common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
+            }
         }
         ?>
       </div>

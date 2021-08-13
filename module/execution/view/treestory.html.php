@@ -10,9 +10,9 @@
     <div class="btn-toolbar">
       <?php
       $vars = "story={$story->id}";
-      common::printIcon('story', 'change', $vars, $story, 'list', 'fork', '', 'btn btn-info btn-icon');
+      common::printIcon('story', 'change', $vars, $story, 'list', 'alter', '', 'btn btn-info btn-icon');
       common::printIcon('story', 'delete', $vars, $story, 'list', 'trash', 'hiddenwin', 'btn btn-info btn-icon');
-      common::printIcon('story', 'review', $vars, $story, 'list', 'glasses', '', 'btn btn-info btn-icon');
+      common::printIcon('story', 'review', $vars, $story, 'list', 'search', '', 'btn btn-info btn-icon');
       common::printIcon('story', 'close',  $vars, $story, 'list', 'off', '', 'btn btn-info btn-icon iframe', true);
       common::printIcon('story', 'edit',   $vars, $story, 'list', '', '', 'btn btn-info btn-icon');
       common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'btn btn-info btn-icon');

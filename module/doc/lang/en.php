@@ -17,6 +17,7 @@ $lang->doc->project      = 'Project';
 $lang->doc->execution    = $lang->executionCommon;
 $lang->doc->lib          = 'Library';
 $lang->doc->module       = 'Catalog';
+$lang->doc->object       = 'Object';
 $lang->doc->title        = 'Name';
 $lang->doc->digest       = 'Summary';
 $lang->doc->comment      = 'Comment';
@@ -193,6 +194,7 @@ $lang->doc->noEditedDoc          = 'You have not edited any documents.';
 $lang->doc->noOpenedDoc          = 'You have not created any documents.';
 $lang->doc->noCollectedDoc       = 'You have not favorited any documents.';
 $lang->doc->errorEmptyLib        = 'No data in document library.';
+$lang->doc->confirmUpdateContent = 'You have a document that is not saved from last time. Do you want to continue editing it?';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = 'Users who can access the selected product can access it.';
 $lang->doc->noticeAcl['lib']['product']['custom']    = 'Users who can access the selected product or users in the whiltelist can access it.';

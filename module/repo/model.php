@@ -289,6 +289,12 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
+        if($data->SCM == 'Gitlab')
+        {
+            $newRepo = $this->getRepoByID($id);
+            $data->path = $newRepo->path;
+        }
+
         if($repo->path != $data->path)
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();

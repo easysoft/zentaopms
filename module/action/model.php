@@ -36,7 +36,7 @@ class actionModel extends model
 
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
-        $actor      = $actionType == 'openedbysystem' ? '' : $actor;
+        $actor      = ($actionType == 'openedbysystem' or $actionType == 'closedbysystem') ? '' : $actor;
         if($actor == 'guest' and $actionType == 'logout') return false;
 
         $objectType = str_replace('`', '', $objectType);
@@ -965,7 +965,7 @@ class actionModel extends model
                 $objectName    = array();
                 $objectProject = array();
 
-                if(strpos($this->config->action->needGetProjectType, $objectType) !== false)
+                if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
                     foreach($objectInfo as $object)
@@ -1128,7 +1128,7 @@ class actionModel extends model
             elseif($action->objectType == 'team')
             {
                 $action->objectLink = '';
-                if($action->project) $action->objectLink = helper::createLink('project', 'manageMembers', 'projectID=' . $action->project);
+                if($action->project) $action->objectLink = helper::createLink('project', 'team', 'projectID=' . $action->project);
                 if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
                 $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
             }

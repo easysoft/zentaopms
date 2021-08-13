@@ -71,7 +71,7 @@
         if(code) return code;
 
         var link = $.parseLink(urlOrModuleName);
-        if(!link.moduleName || link.isOnlyBody) return '';
+        if(!link.moduleName || link.isOnlyBody || (link.moduleName === 'index' && link.methodName === 'index')) return '';
 
         if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(4);
 
@@ -463,7 +463,7 @@
         {
             var $item     = $(this);
             var isDivider = $item.hasClass('divider');
-            var height    = isDivider ? 17 : 40;
+            var height    = isDivider ? 17 : ($.cookie('hideMenu') ? 44 : 40);
             currentHeight += height;
             if(currentHeight > maxHeight)
             {

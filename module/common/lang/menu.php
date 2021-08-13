@@ -190,7 +190,7 @@ $lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|brow
 $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
-$lang->scrum->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist');
+$lang->scrum->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
 $lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
@@ -218,7 +218,7 @@ $lang->scrum->menu->qa['subMenu']->testreport = array('link' => "{$lang->testrep
 $lang->scrum->menu->settings['subMenu'] = new stdclass();
 $lang->scrum->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
 $lang->scrum->menu->settings['subMenu']->products    = array('link' => "{$lang->product->common}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
-$lang->scrum->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|manageMembers|project=%s", 'alias' => 'managemembers');
+$lang->scrum->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
 $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
 $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
@@ -337,7 +337,7 @@ $lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|brows
 $lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|browseTyp=collectedbyme", 'alias' => 'collect');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->product}|doc|tableContents|type=product", 'alias' => 'showfiles,product');
 if($config->systemMode == 'new') $lang->doc->menu->project = array('link' => "{$lang->doc->project}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
-if($config->systemMode == 'classic') $lang->doc->menu->execution = array('link' => "{$lang->doc->execution}|doc|tableContents|type=execution", 'alias' => 'showfiles,execution');
+$lang->doc->menu->execution = array('link' => "{$lang->doc->execution}|doc|tableContents|type=execution", 'alias' => 'showfiles,execution');
 $lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|tableContents|type=custom", 'alias' => 'custom');
 
 $lang->doc->dividerMenu = ',product,';
@@ -349,12 +349,12 @@ $lang->doc->menuOrder[15] = 'my';
 $lang->doc->menuOrder[20] = 'collect';
 $lang->doc->menuOrder[25] = 'product';
 if($config->systemMode == 'new') $lang->doc->menuOrder[30] = 'project';
-if($config->systemMode == 'classic') $lang->doc->menuOrder[30] = 'execution';
-$lang->doc->menuOrder[35] = 'custom';
+$lang->doc->menuOrder[35] = 'execution';
+$lang->doc->menuOrder[40] = 'custom';
 
 $lang->doc->menu->product['subMenu'] = new stdclass();
 if($config->systemMode == 'new') $lang->doc->menu->project['subMenu'] = new stdclass();
-if($config->systemMode == 'classic') $lang->doc->menu->execution['subMenu'] = new stdclass();
+$lang->doc->menu->execution['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
 
 /* Report menu.*/

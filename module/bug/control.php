@@ -66,8 +66,11 @@ class bug extends control
             {
                 $products = $this->product->getPairs('', 0, 'program_asc');
             }
-
             if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=bug&objectID=$objectID")));
+        }
+        else
+        {
+            $products = $this->product->getPairs('', 0, 'program_asc');
         }
         $this->view->products = $this->products = $products;
     }
@@ -738,6 +741,11 @@ class bug extends control
                 $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
                 $this->repo->setMenu($repos);
                 $this->lang->navGroup->bug = 'devops';
+            }
+            if($this->app->openApp == 'product')
+            {
+                $this->loadModel('product')->setMenu($bug->product);
+                $this->lang->product->menu->plan['subModule'] .= ',bug';
             }
         }
 
@@ -1566,7 +1574,9 @@ class bug extends control
             $this->executeHooks($bugID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::locate($this->session->bugList, 'parent'));
+
+            $locateLink = $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 

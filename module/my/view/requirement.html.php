@@ -65,7 +65,7 @@
           <th class='c-hours'>     <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-status'>    <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-stage'>     <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='c-actions-5'> <?php echo $lang->actions;?></th>
+          <th class='c-actions-6'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -99,10 +99,11 @@
             if($canBeChanged)
             {
                 $vars = "story={$story->id}";
-                echo common::buildIconButton('story', 'change',     $vars, $story, 'list', 'alter', '', 'iframe', true);
-                echo common::buildIconButton('story', 'review',     $vars, $story, 'list', 'search', '', 'iframe', true);
-                echo common::buildIconButton('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                echo common::buildIconButton('story', 'edit',       $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
+                echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);
+                echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
+                echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $lang->story->recall);
+                echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
+                echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
             }
             ?>
           </td>

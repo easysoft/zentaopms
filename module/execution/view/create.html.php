@@ -36,6 +36,7 @@
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
 <?php js::set('isStage', false);?>
+<?php js::set('copyExecutionID', $copyExecutionID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -50,13 +51,13 @@
         <tr>
           <th class='w-120px'><?php echo $lang->execution->project;?></th>
           <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
-          <td></td><td></td>
+          <td colspan='2'></td>
         </tr>
         <?php endif;?>
         <tr>
           <th class='w-120px'><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
-          <td></td><td></td>
+          <td colspan='2'></td>
         </tr>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execCode : $lang->execution->code;?></th>
@@ -83,12 +84,8 @@
           </td><td></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->execution->teamname;?></th>
-          <td><?php echo html::input('team', $team, "class='form-control'");?></td><td></td><td></td>
-        </tr>
-        <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
-          <td><?php echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'"); ?></td>
+          <td><?php echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control chosen' onchange='showLifeTimeTips()'"); ?></td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
         <tr class='hide'>
@@ -143,6 +140,19 @@
               <?php endif;?>
             </div>
           </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->execution->teamname;?></th>
+          <td><?php echo html::input('team', $team, "class='form-control'");?></td>
+          <td colspan='2'></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->execution->copyTeam;?></th>
+          <td><?php echo html::select('teams', $teams, $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->execution->team;?></th>
+          <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control chosen' multiple"); ?></td>
         </tr>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execDesc : $lang->execution->desc;?></th>

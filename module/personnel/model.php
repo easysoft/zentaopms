@@ -457,6 +457,57 @@ class personnelModel extends model
     }
 
     /**
+     * Get objects to copy whitelist.
+     *
+     * @param  int    $objectID
+     * @param  int    $objectType
+     * @access public
+     * @return array
+     */
+    public function getCopyObjects($objectID, $objectType)
+    {
+        $objects = array();
+
+        if($objectType == 'sprint')
+        {
+            $parentID = 0;
+            if($this->config->systemMode == 'new') $parentID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
+
+            $objects  = $this->dao->select('id,name')->from(TABLE_EXECUTION)
+                ->where('(project')->eq($parentID)
+                ->orWhere('id')->eq($parentID)
+                ->markRight(1)
+                ->andWhere('(id')->in($this->app->user->view->projects)
+                ->orWhere('id')->in($this->app->user->view->sprints)
+                ->markRight(1)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('type')
+                ->fetchPairs();
+            foreach($objects as $id => &$object)
+            {
+                if($id == $parentID) $object = $this->lang->projectCommon . '-' . $object;
+                if($id != $parentID) $object = $this->lang->execution->common . '-' . $object;
+            }
+        }
+        elseif($objectType == 'project')
+        {
+            $objects  = $this->loadModel('project')->getPairsByProgram();
+        }
+        elseif($objectType == 'product')
+        {
+            $parentID = $this->dao->select('program')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch('program');
+            $objects  = $this->loadModel('product')->getPairs('', $parentID);
+        }
+        elseif($objectType == 'program')
+        {
+            $objects = $this->loadModel('program')->getPairs();
+        }
+
+        unset($objects[$objectID]);
+        return $objects;
+    }
+
+    /**
      * Access to program set invest staff.
      *
      * @param  int       $objectID
@@ -473,6 +524,7 @@ class personnelModel extends model
             ->where('t1.objectID')->eq($objectID)
             ->andWhere('t1.type')->eq('whitelist')
             ->andWhere('t1.objectType')->eq($objectType)
+            ->andWhere('t2.realname')->ne('')
             ->orderBy($orderBy)
             ->beginIF(!empty($pager))->page($pager)->fi()
             ->fetchAll();
@@ -488,7 +540,7 @@ class personnelModel extends model
      */
     public function getWhitelistAccount($objectID = 0, $objectType = '')
     {
-        return $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchPairs('account');
+        return $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchPairs('account', 'account');
     }
 
     /**
@@ -536,8 +588,18 @@ class personnelModel extends model
         if($updateType == 'increase')
         {
             $oldWhitelist = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($objectID)->fetch('whitelist');
-            $oldWhitelist = explode(',', $oldWhitelist);
-            $accounts     = array_unique(array_merge($accounts, $oldWhitelist));
+
+            $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('id')->in($oldWhitelist)->fetchPairs('id', 'id');
+            if($groups)
+            {
+                $oldWhitelist = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account', 'account');
+                if($oldWhitelist) $accounts = array_unique(array_merge($accounts, $oldWhitelist));
+            }
+            else
+            {
+                $oldWhitelist = $this->dao->select('account')->from(TABLE_USER)->where('account')->in($oldWhitelist)->fetchPairs('account', 'account');
+                if($oldWhitelist) $accounts = array_unique(array_merge($accounts, $oldWhitelist));
+            }
         }
         $whitelist = ',' . implode(',', $accounts);
         $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
@@ -575,7 +637,7 @@ class personnelModel extends model
             $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
             $newWhitelist     = array_merge($projectWhitelist, $accounts);
             $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source);
+            $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source, $updateType);
 
             /* Removal of whitelisted persons from projects. */
             if($updateType == 'replace')

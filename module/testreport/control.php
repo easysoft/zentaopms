@@ -64,8 +64,11 @@ class testreport extends control
             {
                 $products = $this->product->getPairs();
             }
-
             if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testreport&objectID=$objectID")));
+        }
+        else
+        {
+            $products = $this->product->getPairs();
         }
         $this->view->products = $this->products = $products;
     }
@@ -580,8 +583,11 @@ class testreport extends control
         }
         else
         {
+            $testreport = $this->testreport->getById($reportID);
+            $locateLink = $this->session->reportList ? $this->session->reportList : inlink('browse', "productID={$testreport->product}");
+
             $this->testreport->delete(TABLE_TESTREPORT, $reportID);
-            die(js::locate($this->session->reportList, 'parent'));
+            die(js::locate($locateLink, 'parent'));
         }
     }
 

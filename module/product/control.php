@@ -687,7 +687,12 @@ class product extends control
     {
         $productID = (int)$productID;
         $product   = $this->product->getStatByID($productID);
-        if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        if(!$product)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($productID);
@@ -1186,16 +1191,17 @@ class product extends control
      *
      * @param  int     $productID
      * @param  int     $deptID
+     * @param  int     $copyID
      * @param  string  $branch
      * @access public
      * @return void
      */
-    public function addWhitelist($productID = 0, $deptID = 0, $branch = '')
+    public function addWhitelist($productID = 0, $deptID = 0, $copyID = 0)
     {
-        $this->product->setMenu($productID, $branch);
+        $this->product->setMenu($productID);
         $this->lang->modulePageNav = '';
 
-        echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&objectType=product&module=product");
+        echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&copyID=$copyID&objectType=product&module=product");
     }
 
     /*

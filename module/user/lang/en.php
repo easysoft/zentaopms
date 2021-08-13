@@ -235,9 +235,11 @@ $lang->user->contacts->noListYet     = 'No contact list exists. Please create on
 $lang->user->contacts->confirmDelete = 'Do you want to delete this list?';
 $lang->user->contacts->or            = ' or ';
 
-$lang->user->resetFail       = "Failed. Please check the account.";
-$lang->user->resetSuccess    = "Reset! Please use your new password to login.";
-$lang->user->noticeResetFile = "<h5>Contact the Administrator to reset your password.</h5>
+$lang->user->resetFail        = "Failed. Please check the account.";
+$lang->user->resetSuccess     = "Reset! Please use your new password to login.";
+$lang->user->noticeDelete     = 'Do you want to delete "%s" from ZenTao?';
+$lang->user->noticeHasDeleted = "This user has been deleted. If you want to view it, please go to the Admin-System-Data-Recycle to restore it.";
+$lang->user->noticeResetFile  = "<h5>Contact the Administrator to reset your password.</h5>
     <h5>If you are, please login your Zentao host and create a file named <span> '%s' </span>.</h5>
     <p>Note:</p>
     <ol>

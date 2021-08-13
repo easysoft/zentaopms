@@ -140,6 +140,20 @@ $lang->resource->todo->activate     = 'activate';
 $lang->resource->todo->close        = 'close';
 $lang->resource->todo->batchClose   = 'batchClose';
 
+/* Personnel . */
+$lang->resource->personnel = new stdclass();
+$lang->resource->personnel->accessible      = 'accessible';
+$lang->resource->personnel->invest          = 'invest';
+$lang->resource->personnel->whitelist       = 'whitelist';
+$lang->resource->personnel->addWhitelist    = 'addWhitelist';
+$lang->resource->personnel->unbindWhitelist = 'unbindWhitelist';
+
+$lang->personnel->methodOrder[5]  = 'accessible';
+$lang->personnel->methodOrder[10] = 'invest';
+$lang->personnel->methodOrder[15] = 'whitelist';
+$lang->personnel->methodOrder[20] = 'addWhitelist';
+$lang->personnel->methodOrder[25] = 'unbindWhitelist';
+
 global $config;
 if($config->systemMode == 'new')
 {
@@ -223,6 +237,8 @@ if($config->systemMode == 'new')
     $lang->resource->project->export              = 'export';
     $lang->resource->project->createGuide         = 'createGuide';
     $lang->resource->project->updateOrder         = 'updateOrder';
+    $lang->resource->project->team                = 'teamAction';
+    $lang->resource->project->unlinkMember        = 'unlinkMember';
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
@@ -261,25 +277,13 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[170] = 'export';
     $lang->project->methodOrder[175] = 'createGuide';
     $lang->project->methodOrder[180] = 'updateOrder';
+    $lang->project->methodOrder[185] = 'team';
+    $lang->project->methodOrder[190] = 'unlinkMember';
 
     $lang->resource->projectbuild = new stdclass();
     $lang->resource->projectbuild->browse = 'browse';
 
     $lang->projectbuild->methodOrder[5] = 'browse';
-
-    /* Personnel . */
-    $lang->resource->personnel = new stdclass();
-    $lang->resource->personnel->accessible      = 'accessible';
-    $lang->resource->personnel->invest          = 'invest';
-    $lang->resource->personnel->whitelist       = 'whitelist';
-    $lang->resource->personnel->addWhitelist    = 'addWhitelist';
-    $lang->resource->personnel->unbindWhitelist = 'unbindWhitelist';
-
-    $lang->personnel->methodOrder[5]  = 'accessible';
-    $lang->personnel->methodOrder[10] = 'invest';
-    $lang->personnel->methodOrder[15] = 'whitelist';
-    $lang->personnel->methodOrder[20] = 'addWhitelist';
-    $lang->personnel->methodOrder[25] = 'unbindWhitelist';
 
     /* Project Story. */
     $lang->resource->projectstory = new stdclass();
@@ -420,26 +424,27 @@ $lang->branch->methodOrder[10] = 'delete';
 
 /* Story. */
 $lang->resource->story = new stdclass();
-$lang->resource->story->create      = 'create';
-$lang->resource->story->batchCreate = 'batchCreate';
-$lang->resource->story->edit        = 'editAction';
-$lang->resource->story->linkStory   = 'linkStory';
-$lang->resource->story->batchEdit   = 'batchEdit';
-$lang->resource->story->export      = 'exportAction';
-$lang->resource->story->delete      = 'deleteAction';
-$lang->resource->story->view        = 'view';
-$lang->resource->story->change      = 'changeAction';
-$lang->resource->story->review      = 'reviewAction';
-$lang->resource->story->batchReview = 'batchReview';
-$lang->resource->story->assignTo    = 'assignAction';
-$lang->resource->story->close       = 'closeAction';
-$lang->resource->story->batchClose  = 'batchClose';
-$lang->resource->story->activate    = 'activateAction';
-$lang->resource->story->tasks       = 'tasks';
-$lang->resource->story->bugs        = 'bugs';
-$lang->resource->story->cases       = 'cases';
-$lang->resource->story->zeroCase    = 'zeroCase';
-$lang->resource->story->report      = 'reportAction';
+$lang->resource->story->create             = 'create';
+$lang->resource->story->batchCreate        = 'batchCreate';
+$lang->resource->story->edit               = 'editAction';
+$lang->resource->story->linkStory          = 'linkStory';
+$lang->resource->story->batchEdit          = 'batchEdit';
+$lang->resource->story->export             = 'exportAction';
+$lang->resource->story->delete             = 'deleteAction';
+$lang->resource->story->view               = 'view';
+$lang->resource->story->change             = 'changeAction';
+$lang->resource->story->review             = 'reviewAction';
+$lang->resource->story->batchReview        = 'batchReview';
+$lang->resource->story->recall             = 'recall';
+$lang->resource->story->assignTo           = 'assignAction';
+$lang->resource->story->close              = 'closeAction';
+$lang->resource->story->batchClose         = 'batchClose';
+$lang->resource->story->activate           = 'activateAction';
+$lang->resource->story->tasks              = 'tasks';
+$lang->resource->story->bugs               = 'bugs';
+$lang->resource->story->cases              = 'cases';
+$lang->resource->story->zeroCase           = 'zeroCase';
+$lang->resource->story->report             = 'reportAction';
 $lang->resource->story->batchChangePlan    = 'batchChangePlan';
 $lang->resource->story->batchChangeBranch  = 'batchChangeBranch';
 $lang->resource->story->batchChangeStage   = 'batchChangeStage';
@@ -458,24 +463,25 @@ $lang->story->methodOrder[30]  = 'view';
 $lang->story->methodOrder[35]  = 'change';
 $lang->story->methodOrder[40]  = 'review';
 $lang->story->methodOrder[45]  = 'batchReview';
-$lang->story->methodOrder[50]  = 'close';
-$lang->story->methodOrder[55]  = 'batchClose';
-$lang->story->methodOrder[60]  = 'batchChangePlan';
-$lang->story->methodOrder[65]  = 'batchChangeStage';
-$lang->story->methodOrder[70]  = 'assignTo';
-$lang->story->methodOrder[75]  = 'batchAssignTo';
-$lang->story->methodOrder[80]  = 'activate';
-$lang->story->methodOrder[85]  = 'tasks';
-$lang->story->methodOrder[90]  = 'bugs';
-$lang->story->methodOrder[95]  = 'cases';
-$lang->story->methodOrder[100] = 'zeroCase';
-$lang->story->methodOrder[105] = 'report';
-$lang->story->methodOrder[110] = 'linkStory';
-$lang->story->methodOrder[115] = 'batchChangeBranch';
-$lang->story->methodOrder[120] = 'batchChangeModule';
-$lang->story->methodOrder[125] = 'batchToTask';
-$lang->story->methodOrder[130] = 'track';
-$lang->story->methodOrder[135] = 'processStoryChange';
+$lang->story->methodOrder[50]  = 'recall';
+$lang->story->methodOrder[55]  = 'close';
+$lang->story->methodOrder[60]  = 'batchClose';
+$lang->story->methodOrder[65]  = 'batchChangePlan';
+$lang->story->methodOrder[70]  = 'batchChangeStage';
+$lang->story->methodOrder[75]  = 'assignTo';
+$lang->story->methodOrder[80]  = 'batchAssignTo';
+$lang->story->methodOrder[85]  = 'activate';
+$lang->story->methodOrder[90]  = 'tasks';
+$lang->story->methodOrder[95]  = 'bugs';
+$lang->story->methodOrder[100] = 'cases';
+$lang->story->methodOrder[105] = 'zeroCase';
+$lang->story->methodOrder[110] = 'report';
+$lang->story->methodOrder[115] = 'linkStory';
+$lang->story->methodOrder[120] = 'batchChangeBranch';
+$lang->story->methodOrder[125] = 'batchChangeModule';
+$lang->story->methodOrder[130] = 'batchToTask';
+$lang->story->methodOrder[135] = 'track';
+$lang->story->methodOrder[140] = 'processStoryChange';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();

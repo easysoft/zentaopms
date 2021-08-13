@@ -572,6 +572,9 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+                $this->story->recordReviewAction($story);
             }
 
             $this->executeHooks($storyID);
@@ -603,11 +606,11 @@ class story extends control
         /* Get users. */
         $users = $this->user->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
 
-        $isShowReviewer = true;
+        $isShowReviewer = false;
         $reviewerList   = $this->story->getReviewerPairs($story->id, $story->version);
         $reviewerList   = array_keys($reviewerList);
         $reviewedBy     = explode(',', trim($story->reviewedBy, ','));
-        if(!array_diff($reviewerList, $reviewedBy)) $isShowReviewer = false;
+        if(array_diff($reviewerList, $reviewedBy) and strpos('draft,changed', $story->status) !== false) $isShowReviewer = true;
 
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
@@ -912,8 +915,6 @@ class story extends control
         $modulePath   = $this->tree->getParents($story->module);
         $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
 
-        $reviewers    = $this->story->getReviewerPairs($storyID, $story->version);
-
         /* Set the menu. */
         $from = $this->app->openApp;
         $this->product->setMenu($story->product, $story->branch);
@@ -950,7 +951,7 @@ class story extends control
         $this->view->story       = $story;
         $this->view->track       = $this->story->getTrackByID($story->id);
         $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->reviewers   = array_keys($reviewers);
+        $this->view->reviewers   = $this->story->getReviewerPairs($storyID, $story->version);
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions  = $this->execution->getPairs(0, 'all', 'nocode');
         $this->view->execution   = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
@@ -994,7 +995,9 @@ class story extends control
             $this->executeHooks($storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::locate($this->session->storyList, 'parent'));
+
+            $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+            die(js::locate($locateLink, 'parent'));
         }
     }
 
@@ -1098,6 +1101,21 @@ class story extends control
         if(dao::isError()) die(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
+    }
+
+    /**
+     * Recall the story review.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function recall($storyID)
+    {
+        $this->story->recall($storyID);
+        $this->loadModel('action')->create('story', $storyID, 'Recalled');
+
+        die(js::locate('parent.parent'));
     }
 
     /**

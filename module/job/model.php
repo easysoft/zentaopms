@@ -122,19 +122,21 @@ class jobModel extends model
 
         if($job->engine == 'jenkins')
         {
-            $job->server   = zget($job, 'jkServer', '');
+            $job->server   = (int)zget($job, 'jkServer', 0);
             $job->pipeline = zget($job, 'jkTask', '');
         }
 
         if(strtolower($job->engine) == 'gitlab')
         {
+            $job->repo     = $job->gitlabRepo;
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
-            $job->server   = zget($repo, 'gitlab', '');
+            $job->server   = (int)zget($repo, 'gitlab', 0);
             $job->pipeline = zget($repo, 'project', '');
         }
 
         unset($job->jkServer);
         unset($job->jkTask);
+        unset($job->gitlabRepo);
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
@@ -206,19 +208,21 @@ class jobModel extends model
 
         if($job->engine == 'jenkins')
         {
-            $job->server   = zget($job, 'jkServer', '');
+            $job->server   = (int)zget($job, 'jkServer', 0);
             $job->pipeline = zget($job, 'jkTask', '');
         }
 
         if(strtolower($job->engine) == 'gitlab')
         {
+            $job->repo     = $job->gitlabRepo;
             $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
-            $job->server   = zget($repo, 'gitlab', '');
+            $job->server   = (int)zget($repo, 'gitlab', 0);
             $job->pipeline = zget($repo, 'project', '');
         }
 
         unset($job->jkServer);
         unset($job->jkTask);
+        unset($job->gitlabRepo);
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 

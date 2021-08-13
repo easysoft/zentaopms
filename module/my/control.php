@@ -480,8 +480,13 @@ class my extends control
     public function doc($type = 'openedbyme', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        if($this->app->viewType != 'json') $this->session->set('docList', $this->app->getURI(true), 'doc');
+        $uri = $this->app->getURI(true);
+        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
         $this->loadModel('doc');
+
+        $this->session->set('productList',   $uri, 'product');
+        $this->session->set('executionList', $uri, 'execution');
+        $this->session->set('projectList',   $uri, 'project');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1011,10 +1016,10 @@ class my extends control
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
         $this->view->URSR             = $this->setting->getURSR();
-        $this->view->programLink      = isset($this->config->programLink) ? $this->config->programLink : 'program-browse';
-        $this->view->productLink      = isset($this->config->productLink) ? $this->config->productLink : 'product-all';
-        $this->view->projectLink      = isset($this->config->projectLink) ? $this->config->projectLink : 'project-browse';
-        //$this->view->executionLink  = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
+        $this->view->programLink      = isset($this->config->programLink)   ? $this->config->programLink   : 'program-browse';
+        $this->view->productLink      = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
+        $this->view->projectLink      = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
+        $this->view->executionLink    = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-executionkanban';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();
