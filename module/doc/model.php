@@ -2170,6 +2170,7 @@ EOT;
         $moduleDocs = array();
         foreach($docs as $doc)
         {
+            if(!$this->checkPrivDoc($doc)) continue;
             if(!isset($moduleDocs[$doc->module])) $moduleDocs[$doc->module] = array();
             $moduleDocs[$doc->module][] = $doc;
         }
