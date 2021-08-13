@@ -83,6 +83,7 @@
 
         <?php foreach($deptUsers as $deptAccount => $userName):?>
         <?php if(!isset($users[$deptAccount])) continue;?>
+        <?php if(isset($members2Import[$deptAccount])) continue;?>
         <tr class='addedItem'>
           <td><?php echo html::select("accounts[]", $users, $deptAccount, "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
           <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $roles[$deptAccount]?>'/></td>
