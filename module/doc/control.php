@@ -168,9 +168,9 @@ class doc extends control
         }
 
         $libTypeList = $this->lang->doc->libTypeList;
-        if(empty($products)) unset($libTypeList['product']);
-        if(empty($projects)) unset($libTypeList['project']);
-        if(empty($executions) or ($this->config->systemMode == 'new' and $this->app->openApp == 'doc')) unset($libTypeList['execution']);
+        if(empty($products))   unset($libTypeList['product']);
+        if(empty($projects))   unset($libTypeList['project']);
+        if(empty($executions)) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('nocode');
@@ -750,6 +750,18 @@ class doc extends control
         $childModules = $this->tree->getOptionMenu($libID, 'doc');
         $select = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
         die($select);
+    }
+
+    /**
+     * Ajax save temporary content of doc.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveContent($docID)
+    {
+        $this->doc->saveTempContent($docID);
     }
 
     /**
