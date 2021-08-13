@@ -144,7 +144,7 @@
             <div class='project-members table-col'>
               <?php foreach($project->teamMembers as $key => $member):?>
               <?php if($key > 2) continue;?>
-            <a href='<?php echo helper::createLink('project', 'manageMembers', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
+            <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
                 <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
                   <?php echo !empty($usersAvatar[$member]) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
                 </div>
@@ -152,7 +152,7 @@
               <?php endforeach;?>
               <?php if($project->teamCount > 3):?>
                 <?php echo '...';?>
-            <a href='<?php echo helper::createLink('project', 'manageMembers', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
+            <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
                 <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
                   <?php echo !empty($usersAvatar[end($project->teamMembers)]) ? html::image(zget($usersAvatar, end($project->teamMembers))) : strtoupper($member[0]);?>
                 </div>
@@ -160,7 +160,7 @@
               <?php endif;?>
             </div>
             <?php endif;?>
-            <span class='totalMembers'><?php echo html::a(helper::createLink('project', 'manageMembers', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></span>
+            <span class='totalMembers'><?php echo html::a(helper::createLink('project', 'team', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></span>
             <div class='project-actions table-col'>
               <div class='menu-actions'>
                 <?php if($canActions):?>
