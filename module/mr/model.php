@@ -12,7 +12,7 @@
 class mrModel extends model
 {
     /**
-     * The construc method, to do some auto things.
+     * The construct method, to do some auto things.
      *
      * @access public
      * @return void
@@ -21,6 +21,18 @@ class mrModel extends model
     {
         parent::__construct();
         $this->loadModel('gitlab');
+    }
+
+    public function getGitlabProjectByRepo($repoID)
+    {
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+
+        $gitlab = new stdclass;
+        $gitlab->product   = explode(',', $repo->product);
+        $gitlab->gitlabID  = $repo->gitlab;
+        $gitlab->projectID = $repo->project;
+
+        return $gitlab;
     }
 
     /**
@@ -32,7 +44,7 @@ class mrModel extends model
      */
     public function getByID($id)
     {
-        return $this->dao->select(*)->from(TABLE_MR)->where('id')->eq($id)->fetch();
+        return $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
     }
 
     /**
@@ -79,7 +91,7 @@ class mrModel extends model
      */
     public function getApiRoot($gitlabID)
     {
-        return $this->gitlab->getAppRoot($gitlabID);
+        return $this->gitlab->getApiRoot($gitlabID);
     }
 
     /**
