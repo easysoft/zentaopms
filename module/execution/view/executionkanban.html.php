@@ -30,15 +30,15 @@
       <?php $rowIndex = 0;?>
       <?php foreach($kanbanGroup as $projectID => $executionList):?>
       <tr>
-        <td class='board-project color-<?php echo $rowIndex;?>'>
+        <td class="board-project <?php echo empty($projectID) ? 'color-my' : 'color-project';?>">
           <div data-id='<?php echo $projectID;?>'>
-            <div class='text-center'>
+            <div class='text-center text-ellipsis'>
               <?php $projectTitle = empty($projectID) ? $lang->execution->myExecutions : zget($projects, $projectID);?>
               <span class='group-title' title='<?php echo $projectTitle;?>'><?php echo $projectTitle;?></span>
             </div>
           </div>
         </td>
-        <td class="c-boards no-padding text-left color-<?php echo $rowIndex;?>" colspan='4'>
+        <td class="c-boards no-padding text-left <?php echo empty($projectID) ? 'color-my' : 'color-project';?>" colspan='4'>
           <div class="boards-wrapper">
             <div class="boards">
               <?php foreach($lang->execution->kanbanColType as $colStatus => $colName):?>
@@ -88,15 +88,6 @@
 </div>
 <style>
 <?php
-$boardColorList = explode(',', $lang->execution->boardColorList);
-$colorCounts    = count($boardColorList);
-$colorIndex     = 0;
-for($i = 0; $i <= $rowIndex; $i++)
-{
-    $colorIndex = $i % $colorCounts == 0 ? 0 : ++$colorIndex;
-    echo "#kanban tbody > tr > td.color-$i {background-color: {$boardColorList[$colorIndex]};}";
-}
-
 foreach(array_keys($lang->execution->kanbanColType) as $status)
 {
     echo ".s-$status .board-item {border-left: 3px solid {$lang->execution->statusColorList[$status]};}";

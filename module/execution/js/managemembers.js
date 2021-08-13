@@ -1,8 +1,8 @@
 /**
  * Set role when select an account.
- * 
- * @param  string $account 
- * @param  int    $roleID 
+ *
+ * @param  string $account
+ * @param  int    $roleID
  * @access public
  * @return void
  */
@@ -47,6 +47,7 @@ function setDeptUsers(obj)
 function choseTeam2Copy(obj)
 {
     team = $(obj).val();
-    link = createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team);
+    dept = $('#dept').val();
+    link = createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team + '&dept=' + dept);
     location.href=link;
 }

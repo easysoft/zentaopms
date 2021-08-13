@@ -25,6 +25,8 @@ $config->execution->customBatchEditFields = 'days,type,teamname,status,desc,PO,Q
 $config->execution->custom = new stdclass();
 $config->execution->custom->batchEditFields = 'days,status,PM';
 
+$config->execution->skipCreate = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers');
+
 $config->execution->editor = new stdclass();
 $config->execution->editor->create   = array('id' => 'desc',    'tools' => 'simpleTools');
 $config->execution->editor->edit     = array('id' => 'desc',    'tools' => 'simpleTools');

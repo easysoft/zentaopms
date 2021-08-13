@@ -138,13 +138,6 @@ class doc extends control
                 if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
                 if($objectType == 'custom' or $objectType == 'book')      $objectID = 0;
 
-                if($objectType == 'execution' and $this->config->systemMode == 'new' and $this->app->openApp == 'doc')
-                {
-                    $execution  = $this->execution->getByID($this->post->execution);
-                    $objectType = 'project';
-                    $objectID   = $execution->project;
-                }
-
                 $this->action->create('docLib', $libID, 'Created');
 
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
@@ -298,8 +291,7 @@ class doc extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, '');
-            $libType  = ($lib->type == 'execution' and $this->app->openApp != 'execution') ? 'project' : $lib->type;
-            $params   = "type={$libType}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
+            $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = $this->createLink('doc', 'objectLibs', $params);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
