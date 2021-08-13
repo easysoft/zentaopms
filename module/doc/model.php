@@ -2044,11 +2044,12 @@ class docModel extends model
 
         $currentMethod = $this->app->getMethodName();
         $methodName    = in_array($currentMethod, array('tablecontents', 'showfiles')) ? 'tablecontents' : 'objectLibs';
-        $objectTitle   = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
 
         if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
-            $output  = <<<EOT
+            $objectTitle = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
+
+            $output = <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objectTitle}'>
