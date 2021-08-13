@@ -181,6 +181,7 @@ class repoModel extends model
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
             $repo->acl = json_decode($repo->acl);
             if($type == 'haspriv' and !$this->checkPriv($repo)) unset($repos[$i]);
+            if(strtolower($repo->SCM) == 'gitlab') $repo = $this->processGitlab($repo);
         }
 
         return $repos;
