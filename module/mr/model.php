@@ -95,7 +95,8 @@ class mrModel extends model
     public function apiCreateMR($gitlabID, $projectID, $params)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests");
-        return json_decode(commonModel::http($url));
+        $mr  = new stdclass;
+        return json_decode(commonModel::http($url, $mr));
     }
 
     /**
@@ -107,8 +108,10 @@ class mrModel extends model
      * @return object
      * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
      */
-    public function apiListMR($gitlabID, $projectID)
+    public function apiGetMRList($gitlabID, $projectID)
     {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests");
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -123,6 +126,8 @@ class mrModel extends model
      */
     public function apiGetSingleMR($gitlabID, $projectID, $mrID)
     {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -130,13 +135,17 @@ class mrModel extends model
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
+     * @param  int    $mrID
      * @param  object $params
      * @access public
      * @return object
      * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
      */
-    public function apiUpdateMR($gitlabID, $projectID, $params)
+    public function apiUpdateMR($gitlabID, $projectID, $mrID, $params)
     {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        $mr  = new stdclass;
+        return json_decode(commonModel::http($url, $mr, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -151,6 +160,8 @@ class mrModel extends model
      */
     public function apiDeleteMR($gitlabID, $projectID, $mrID)
     {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -165,6 +176,8 @@ class mrModel extends model
      */
     public function apiAcceptMR($gitlabID, $projectID, $mrID)
     {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        return json_decode(commonModel::http($url, $data, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -179,6 +192,8 @@ class mrModel extends model
      */
     public function apiGetDiffVersions($gitlabID, $projectID, $mrID)
     {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -194,6 +209,8 @@ class mrModel extends model
      */
     public function apiGetSingleDiffVersion($gitlabID, $projectID, $mrID, $versionID)
     {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID/versions/$versionID");
+        return json_decode(commonModel::http($url));
     }
 }
 
