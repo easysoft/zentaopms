@@ -30,6 +30,14 @@ class mr extends control
         $this->display();
     }
 
+    public function list($repoID)
+    {
+        $gitlab = $this->mr->getGitlabProjectByRepo($repoID);
+        $resp   = $this->mr->apiGetMRList($gitlab->gitlabID, $gitlab->projectID);
+        a($resp);
+        return $resp;
+    }
+
     public function create()
     {
     }
@@ -37,7 +45,6 @@ class mr extends control
     public function delete()
     {
     }
-
 
     public function update()
     {
