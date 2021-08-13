@@ -1128,11 +1128,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'project')
-                ->andWhere('(execution')->eq(0)
-                ->orWhere('main')->eq(0)
-                ->markRight(1)
-                ->fi()
+                ->beginIF($type == 'project')->andWhere('execution')->eq(0)->fi()
                 ->orderBy('`order`, id')
                 ->fetchAll('id');
         }
@@ -1229,6 +1225,8 @@ class docModel extends model
         }
         elseif($objectType == 'execution')
         {
+            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id');
+
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage')
@@ -1239,6 +1237,8 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
+                $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
+
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
                 {
                     $myObjects[$id] = $execution->name;
@@ -2036,22 +2036,23 @@ class docModel extends model
     {
         if($type != 'custom' and $type != 'book' and empty($objects)) return '';
 
-        $output             = '';
-        $closedProjectsHtml = '';
-        $closedProjects     = array();
-        $maxHeight          = ($type == 'project' and $this->app->openApp == 'doc') ? '260px' : '290px';
-        $class              = ($type == 'project' and $this->app->openApp == 'doc') ? 'col-left' : '';
+        $output            = '';
+        $closedObjectsHtml = '';
+        $closedObjects     = array();
+        $maxHeight         = (in_array($type, array('project','execution')) and $this->app->openApp == 'doc') ? '260px' : '290px';
+        $class             = (in_array($type, array('project','execution')) and $this->app->openApp == 'doc') ? 'col-left' : '';
 
         $currentMethod = $this->app->getMethodName();
         $methodName    = in_array($currentMethod, array('tablecontents', 'showfiles')) ? 'tablecontents' : 'objectLibs';
+        $objectTitle   = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
 
         if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
         {
             $output  = <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
-    <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objects[$objectID]}'>
-      <span class='text'>{$objects[$objectID]}</span>
+    <button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$objectTitle}'>
+      <span class='text'>{$objectTitle}</span>
       <span class='caret'></span>
     </button>
     <div id='dropMenu' class='dropdown-menu search-list load-indicator' data-ride='searchList'>
@@ -2065,25 +2066,25 @@ class docModel extends model
         <div class='table-col $class'>
           <div class='list-group' style='max-height: $maxHeight'>
 EOT;
-            if($type == 'project' and $this->app->openApp == 'doc')
+            if(in_array($type, array('project','execution')) and $this->app->openApp == 'doc')
             {
-                $closedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
+                $closedObjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
             }
 
             foreach($objects as $key => $object)
             {
                 $selected = $key == $objectID ? 'selected' : '';
-                if(isset($closedProjects[$key]))
+                if(isset($closedObjects[$key]))
                 {
-                    $closedProjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                    $closedObjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->openApp}'");
                     if($selected == 'selected') $tabActive = 'closed';
                 }
                 else
                 {
-                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' data-app='{$this->app->openApp}'");
+                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->openApp}'");
                 }
             }
-            if($type == 'project' and $this->app->openApp == 'doc')
+            if(in_array($type, array('project','execution')) and $this->app->openApp == 'doc')
             {
                 $output .= <<<EOT
             </div>
@@ -2092,7 +2093,7 @@ EOT;
             </div>
           </div>
           <div class='table-col col-right'>
-            <div class='list-group'>$closedProjectsHtml</div>
+            <div class='list-group'>$closedObjectsHtml</div>
           </div>
         </div>
       </div>

@@ -194,6 +194,7 @@ $lang->action->label->activated             = 'a activé ';
 $lang->action->label->blocked               = 'a bloqué ';
 $lang->action->label->resolved              = 'a résolu ';
 $lang->action->label->reviewed              = 'a revu ';
+$lang->action->label->recalled              = 'recalled';
 $lang->action->label->moved                 = 'a déplacé ';
 $lang->action->label->confirmed             = 'a confirmé Story ';
 $lang->action->label->bugconfirmed          = 'a confirmé le Bug ';
