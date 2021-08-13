@@ -240,7 +240,7 @@ class executionModel extends model
             return $this->session->execution;
         }
 
-        if($executionID > 0) $this->session->set('execution', (int)$executionID);
+        if($executionID > 0) $this->session->set('execution', (int)$executionID, $this->app->openApp);
         if($executionID == 0 and $this->cookie->lastExecution)
         {
             /* Execution link is execution-task. */
