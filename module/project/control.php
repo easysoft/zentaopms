@@ -173,6 +173,38 @@ class project extends control
     }
 
     /**
+     * Ajax get unlink tips when unlink team member.
+     *
+     * @param  int    $projectID
+     * @param  int    $account
+     * @access public
+     * @return void
+     */
+    public function ajaxGetUnlinkTips($projectID, $account)
+    {
+        $executions       = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
+        $executionMembers = $this->dao->select('t1.root,t2.name')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.root')->in(array_keys($executions))
+            ->andWhere('t1.type')->eq('execution')
+            ->andWhere('t1.account')->eq($account)
+            ->fetchPairs();
+
+        $executionNames = '';
+        $count          = 0;
+        foreach($executionMembers as $executionName)
+        {
+            if($count == 0) $executionNames  = $executionName;
+            if($count == 1) $executionNames .= ',' . $executionName;
+            if($count > 1) break;
+            $count++;
+        }
+        if(count($executionMembers) <= 2) $this->lang->project->etc = ' ';
+        $this->lang->project->unlinkExecutionMember = sprintf($this->lang->project->unlinkExecutionMember, $executionNames, $this->lang->project->etc, count($executionMembers));
+        die($this->lang->project->unlinkExecutionMember);
+    }
+
+    /**
      * Project index view.
      *
      * @param  int    $projectID
@@ -1139,17 +1171,18 @@ class project extends control
      * @param  int    $projectID
      * @param  int    $userID
      * @param  string $confirm  yes|no
+     * @param  string $removeExecution  yes|no
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $userID, $confirm = 'no')
+    public function unlinkMember($projectID, $userID, $confirm = 'no', $removeExecution = 'no')
     {
         if($confirm == 'no') die(js::confirm($this->lang->project->confirmUnlinkMember, $this->inlink('unlinkMember', "projectID=$projectID&userID=$userID&confirm=yes")));
 
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        $this->project->unlinkMember($projectID, $account);
+        $this->project->unlinkMember($projectID, $account, $removeExecution);
         if(!dao::isError()) $this->loadModel('action')->create('team', $projectID, 'managedTeam');
 
         /* if ajax request, send result. */
