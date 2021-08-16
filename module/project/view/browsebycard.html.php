@@ -13,6 +13,7 @@
 <style>
 #cards {margin: 0 0;}
 #cards > .col {width: 25%;}
+@media screen and (max-width: 1500px) {#cards > .col {width: 33.3333333%;}}
 #cards .panel {margin: 10px 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 190px;}
 #cards .pager .btn {padding-top: 4px;}
 #cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
