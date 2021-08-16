@@ -456,17 +456,19 @@
         var $list          = $('#menuMoreList');
         var $menuNav       = $('#menuNav');
         var $menuItems     = $mainNav.children('li');
+        var itemHeight     = $menuItems.first().outerHeight();
         var maxHeight      = $menuNav.height();
         var showMoreMenu   = false;
-        var currentHeight  = 40;
+        var currentHeight  = itemHeight;
         var moreMenuHeight = 12;
 
         $menuItems.each(function()
         {
             var $item     = $(this);
             var isDivider = $item.hasClass('divider');
-            var height    = isDivider ? 17 : ($.cookie('hideMenu') ? 44 : 40);
+            var height    = isDivider ? 17 : itemHeight;
             currentHeight += height;
+
             if(currentHeight > maxHeight)
             {
                 $item.addClass('hidden');
