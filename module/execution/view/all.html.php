@@ -95,8 +95,8 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
             <span class='project-type-label label label-outline <?php echo $execution->type == 'sprint' ? 'label-info' : 'label-warning';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
             <?php endif;?>
             <?php
-            if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
             echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name);
+            if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
             ?>
             <?php if(!empty($execution->children)):?>
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>

@@ -100,6 +100,7 @@ $lang->execution->copyNoExecution = 'There are no ' . $lang->executionCommon . '
 $lang->execution->noTeam          = 'No team members at the moment';
 $lang->execution->or              = ' or ';
 $lang->execution->selectProject   = 'Please select project';
+$lang->execution->showMore        = 'View closed executions';
 
 if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
 if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "select Project/{$lang->executionCommon} to copy its members";
