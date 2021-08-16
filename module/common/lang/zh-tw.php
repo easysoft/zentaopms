@@ -219,7 +219,7 @@ $lang->doc->my        = '我的文檔';
 $lang->doc->favorite  = '我的收藏';
 $lang->doc->product   = '產品庫';
 $lang->doc->project   = '項目庫';
-$lang->doc->execution = "{$lang->executionCommon}庫";
+$lang->doc->execution = isset($config->maxVersion) ? "{$lang->execution->common}庫" : "{$lang->executionCommon}庫";
 $lang->doc->custom    = '自定義庫';
 $lang->doc->wiki      = 'WIKI';
 
