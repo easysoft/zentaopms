@@ -5,8 +5,8 @@ body {padding-left: 96px;}
 #menuNav {position: absolute; top: 5px; bottom: 40px; width: 100%;}
 #menu .nav > li {float: none; padding: 2px 8px;}
 #menu .nav > li > a {color: #fff; line-height: 24px; padding: 6px; border-radius: 2px; white-space: nowrap; height: 36px;}
-#menu .nav > li > a > .icon {display: inline-block; font-size: 16px;}
-#menu .nav > li > a > .icon + .text {margin-left: 4px;}
+#menu .nav > li > a > .icon {display: inline-block; font-size: 16px; position: relative; top: -1px}
+#menu .nav > li > a > .icon + .text {margin-left: 4px; position: relative; top: -1px}
 #menu .nav > li.active > a, #menu .nav > li > a:hover, #menu .nav > li > a:focus {background-color: #0c64eb;}
 #menu .nav > li.divider {margin: 8px; background-color: #fff; opacity: 0.24; height: 1px; padding: 0 !important;}
 #menuFooter {position: absolute; bottom: 0; left: 0; right: 0;}
@@ -21,6 +21,7 @@ body.menu-hide {padding-left: 0;}
 .menu-hide #menuToggleItem {display: list-item;}
 .menu-hide #menu .nav > li {padding: 2px 4px;}
 .menu-hide #menu .nav > li > a {padding: 6px 4px; text-align: center;}
+.menu-hide #menu .nav > li > a > .icon {top: 1px}
 .menu-hide #menu .nav > li > a > .text {display: none;}
 .menu-hide #menu .nav > li.has-avatar > a {padding: 2px 0;}
 #menuMoreNav {display: none;}
