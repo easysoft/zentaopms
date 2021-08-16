@@ -54,7 +54,7 @@ js::set('defaultOpen', $open);
   <div id='menuFooter'>
     <ul id="flodNav" class="nav">
       <li id='menuToggleMenu'>
-        <a type='button' class='menu-toggle'>
+        <a type='button' class='menu-toggle' data-collapse-text='<?php echo $lang->collapseMenu; ?>' data-unfold-text='<?php echo $lang->unfoldMenu; ?>'>
           <i class='icon icon-sm icon-menu-collapse'></i>
         </a>
       </li>

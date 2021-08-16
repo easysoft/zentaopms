@@ -19,7 +19,7 @@ body.menu-hide {padding-left: 0;}
 .menu-hide .menu-toggle .is-unfold {display: inline;}
 #menuToggleItem,
 .menu-hide #menuToggleItem {display: list-item;}
-.menu-hide #menu .nav > li {padding: 4px;}
+.menu-hide #menu .nav > li {padding: 2px 4px;}
 .menu-hide #menu .nav > li > a {padding: 6px 4px; text-align: center;}
 .menu-hide #menu .nav > li > a > .text {display: none;}
 .menu-hide #menu .nav > li.has-avatar > a {padding: 2px 0;}

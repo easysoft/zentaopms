@@ -22,10 +22,8 @@
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->execution->selectDept;?></span>
       <?php echo html::select('dept', $depts, $deptID, "class='form-control chosen' onchange='setObjectUsers()' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
-      <?php if(count($objects) > 1):?>
       <span class='input-group-addon'><?php echo $lang->personnel->copy;?></span>
       <?php echo html::select('object', $objects, $copyID, "class='form-control chosen' onchange='setObjectUsers()' data-placeholder='{$lang->personnel->selectObjectTips}'");?>
-      <?php endif;?>
     </div>
   </div>
 </div>

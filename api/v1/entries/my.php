@@ -10,7 +10,11 @@ class myEntry extends entry
 {
     public function get()
     {
-        $info = $this->loadModel('my')->getInfo();
+        $info           = $this->loadModel('my')->getInfo();
+        $info->products = $this->loadModel('my')->getProducts();
+        $info->projects = $this->loadModel('my')->getProjects();
+        $info->joinProjectCount = count($info->projects);
+        $info->dynamic  = $this->loadModel('my')->getDynamic();
 
         if(!$info) return $this->sendError(400, $info->message);
         $this->send(200, $info);
