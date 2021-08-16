@@ -1261,12 +1261,19 @@ class projectModel extends model
      *
      * @param  int    $projectID
      * @param  string $account
+     * @param  string $removeExecution no|yes
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $account)
+    public function unlinkMember($projectID, $account, $removeExecution = 'no')
     {
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+
+        if($removeExecution == 'yes')
+        {
+            $executions = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
+            $this->dao->delete()->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('execution')->andWhere('account')->eq($account)->exec();
+        }
 
         $this->loadModel('user');
         $this->user->updateUserView($projectID, 'project', array($account));
@@ -1356,7 +1363,7 @@ class projectModel extends model
 
             if($id == 'name')
             {
-                $class .= ' text-left';
+                $class .= ' text-left flex';
                 $title  = "title='{$project->name}'";
             }
 
@@ -1399,7 +1406,7 @@ class projectModel extends model
                         if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
                         if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
                     }
-                    echo html::a($projectLink, $project->name);
+                    echo html::a($projectLink, $project->name, '', "class='text-ellipsis'");
                     if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     break;
                 case 'PM':
