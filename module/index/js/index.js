@@ -29,7 +29,7 @@
 
             var $link= $('<a data-pos="menu"></a>')
                 .attr('data-app', item.code)
-                .attr('data-toggle', 'tooltip')
+                // .attr('data-toggle', 'tooltip')
                 .attr('class', 'show-in-app')
                 .html(item.title);
 
@@ -42,7 +42,7 @@
                 .append($link)
                 .appendTo($menuMainNav);
 
-            $link.tooltip({title: item.text, container: 'body', placement: 'right'});
+            // $link.tooltip({title: item.text, container: 'body', placement: 'right'});
 
             if(!defaultApp) defaultApp = item.code;
         });
@@ -627,13 +627,13 @@
             setTimeout(function(){$menu.removeClass('hidden')}, 200);
         });
 
-        $('.menu-toggle').each(function()
-        {
-            $(this).attr('data-toggle', 'tooltip').tooltip({container: 'body', title: function(ele)
-            {
-                return $(ele).data($('body').hasClass('menu-hide') ? 'unfoldText' : 'collapseText');
-            }});
-        });
+        // $('.menu-toggle').each(function()
+        // {
+        //     $(this).attr('data-toggle', 'tooltip').tooltip({container: 'body', title: function(ele)
+        //     {
+        //         return $(ele).data($('body').hasClass('menu-hide') ? 'unfoldText' : 'collapseText');
+        //     }});
+        // });
     });
 }());
 
