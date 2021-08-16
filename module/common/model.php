@@ -1869,6 +1869,7 @@ EOD;
             ->where('t1.project')->eq($program->id)
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->fetchAll();
+        if(empty($programRights)) return;
 
         /* Group priv by module the same as rights. */
         $programRightGroup = array();
