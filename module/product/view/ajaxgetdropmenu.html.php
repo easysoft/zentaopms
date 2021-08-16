@@ -25,7 +25,7 @@
 #tabContent .tree li.has-list.open:before {content: unset;}
 
 #swapper li.hide-in-search>div>a:focus, #swapper li.hide-in-search>div>a:hover {color: #838a9d; cursor: default;}
-#swapper li ul li a:focus, #swapper li ul li a:hover, .noProgram li a:focus, .noProgram li a:hover {background: #0c64eb; color: #fff;}
+a.productName:focus, a.productName:hover {background: #0c64eb; color: #fff !important;}
 </style>
 <?php
 $productCounts      = array();
@@ -74,7 +74,7 @@ foreach($products as $programID => $programProducts)
 
         if($product->status == 'normal' and $product->PO == $this->app->user->account)
         {
-            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'") . '</li>';
+            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myProduct';
 
@@ -82,7 +82,7 @@ foreach($products as $programID => $programProducts)
         }
         else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
         {
-            $normalProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'") . '</li>';
+            $normalProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
