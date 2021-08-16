@@ -660,7 +660,6 @@ $.extend(
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
-                var lib          = '';
                 var assetType    = 'story,issue,risk,opportunity,doc';
                 if(assetType.indexOf(searchModule) > -1)
                 {

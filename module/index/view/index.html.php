@@ -72,7 +72,6 @@ js::set('defaultOpen', $open);
         <i class="icon icon-zentao" style="font-size: 24px;"></i>
         <span class='version'><?php echo $lang->zentaoPMS . $config->version;?></span>
       </a>
-      <!--<a href='javascript:void(0)' class="btn btn-sm btn-link" type="button"><i class="icon icon-message"></i></a>-->
       <div id="globalSearchDiv">
         <div class="input-group">
           <div id='searchbox'>
