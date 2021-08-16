@@ -10,3 +10,6 @@ td.c-actions {overflow: visible;}
 .icon-cards-view {padding-left: 7px; font-size: 16px;}
 .icon-list {padding-left: 7px;}
 .panel-actions {position: relative; padding: 0 0;}
+
+td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
+td.flex span.label-danger {margin-left: 5px; min-width: 50px;}
