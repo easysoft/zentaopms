@@ -2888,7 +2888,7 @@ class execution extends control
         $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
-        $this->view->projects       = $this->project->getPairsByModel();
+        $this->view->projects       = array('') + $this->project->getPairsByProgram();
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');

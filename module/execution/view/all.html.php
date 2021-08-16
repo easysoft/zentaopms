@@ -31,6 +31,11 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
+    <?php if($from == 'execution'):?>
+    <div class='input-control w-150px'>
+      <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' data-placeholder='{$lang->execution->selectProject}'");?>
+    </div>
+    <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
@@ -86,6 +91,9 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
             <?php printf('%03d', $execution->id);?>
           </td>
           <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?>' title='<?php echo $execution->name?>'>
+            <?php if(isset($this->config->maxVersion)):?>
+            <span class='project-type-label label label-outline <?php echo $execution->type == 'sprint' ? 'label-info' : 'label-warning';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
+            <?php endif;?>
             <?php
             if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
             echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name);
@@ -178,6 +186,13 @@ $(document).on('click', '.plan-toggle', function(e)
     e.stopPropagation();
     e.preventDefault();
 });
+
+$('#project').change(function()
+{
+    var projectID = $('#project').val();
+    location.href = createLink('execution', 'all', 'status=' + status + '&projectID=' + projectID);
+});
 </script>
 <?php js::set('orderBy', $orderBy)?>
+<?php js::set('status', $status)?>
 <?php include '../../common/view/footer.html.php';?>

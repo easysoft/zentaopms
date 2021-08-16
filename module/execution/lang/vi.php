@@ -11,7 +11,7 @@
  */
 /* Fields. */
 $lang->execution->allExecutions   = 'Tất cả ' . $lang->executionCommon;
-$lang->execution->allExecutionAB  = 'All Executions';
+$lang->execution->allExecutionAB  = 'Execution List';
 $lang->execution->id              = 'ID '.$lang->executionCommon;
 $lang->execution->type            = 'Loại';
 $lang->execution->name            = "Tên {$lang->executionCommon}";

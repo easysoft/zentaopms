@@ -11,7 +11,7 @@
  */
 /* 字段列表。*/
 $lang->execution->allExecutions   = '所有' . $lang->executionCommon;
-$lang->execution->allExecutionAB  = "所有{$lang->execution->common}";
+$lang->execution->allExecutionAB  = "{$lang->execution->common}列表";
 $lang->execution->id              = $lang->executionCommon . '编号';
 $lang->execution->type            = $lang->executionCommon . '类型';
 $lang->execution->name            = $lang->executionCommon . '名称';
@@ -100,6 +100,7 @@ $lang->execution->recent          = '近期访问：';
 $lang->execution->copyNoExecution = '没有可用的' . $lang->executionCommon . '来复制';
 $lang->execution->noTeam          = '暂时没有团队成员';
 $lang->execution->or              = '或';
+$lang->execution->selectProject   = '请选择项目';
 
 if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
 if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以选择复制{$lang->executionCommon}团队的成员";
