@@ -24,6 +24,8 @@ $lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
 $lang->action->extra      = '附加值';
 
+$lang->action->system = '系統';
+
 $lang->action->trash       = '資源回收筒';
 $lang->action->undelete    = '還原';
 $lang->action->hideOne     = '隱藏';
@@ -266,9 +268,9 @@ $lang->action->label->tracked               = '跟蹤了';
 $lang->action->label->hangup                = '掛起了';
 $lang->action->label->run                   = '執行了';
 $lang->action->label->estimated             = '估算了';
-$lang->action->label->reviewclosed          = '評審失敗';
-$lang->action->label->passreviewed          = '確認通過';
-$lang->action->label->clarifyreviewed       = '有待明確';
+$lang->action->label->reviewclosed          = '評審不通過';
+$lang->action->label->passreviewed          = '評審通過';
+$lang->action->label->clarifyreviewed       = '評審不通過';
 $lang->action->label->commitsummary         = '提交培訓總結';
 $lang->action->label->updatetrainee         = '更新培訓人員';
 
