@@ -29,4 +29,29 @@ class projectstoryModel extends model
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $this->lang->modulePageNav = $this->product->select($products, $productID, 'projectstory', $this->app->rawMethod, '', $branch);
     }
+
+    /**
+     * Get the stories for execution linked.
+     *
+     * @param  int    $projectID
+     * @param  string $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getExecutionStories($projectID, $storyIdList = '')
+    {
+        $stories = array();
+        if(empty($storyIdList)) return $stories;
+
+        $stories = $this->dao->select('t2.id as id, t2.title as title, t3.id as executionID, t3.name as execution')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.project=t3.id')
+            ->where('t1.story')->in($storyIdList)
+            ->andWhere('t3.type')->in('sprint,stage')
+            ->andWhere('t3.project')->eq($projectID)
+            ->andWhere('t3.deleted')->eq(0)
+            ->fetchAll('id');
+
+        return $stories;
+    }
 }
