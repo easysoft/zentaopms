@@ -534,7 +534,7 @@
         $(document).on('click', '.open-in-app,.show-in-app', function(e)
         {
             var $link = $(this);
-            if($link.is('[data-modal],[data-toggle!="tooltip"],.iframe,.not-in-app')) return;
+            if($link.is('[data-modal],[data-toggle][data-toggle!="tooltip"],.iframe,.not-in-app')) return;
             var url = $link.hasClass('show-in-app') ? '' : ($link.attr('href') || $link.data('url'));
             if(url && url.indexOf('onlybody=yes') > 0) return;
             if(openApp(url, $link.data('app')))
