@@ -1112,10 +1112,12 @@ class story extends control
      */
     public function recall($storyID)
     {
+        $story = $this->story->getById($storyID);
         $this->story->recall($storyID);
         $this->loadModel('action')->create('story', $storyID, 'Recalled');
 
-        die(js::locate('parent.parent'));
+        $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+        die(js::locate($locateLink, 'parent'));
     }
 
     /**
