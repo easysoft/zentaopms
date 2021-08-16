@@ -46,20 +46,27 @@
                 <div>
                   <?php if(!empty($executionList[$colStatus])):?>
                   <?php foreach($executionList[$colStatus] as $executionID => $execution):?>
-                  <div class='board-item' <?php if($colStatus == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid red';";?>>
+                  <?php if($executionID == 'more'):?>
+                  <div class='text-center'>
+                    <?php
+                    if(common::hasPriv('execution', 'all'))
+                    {
+                        echo html::a($this->createLink('execution', 'all', "status=closed&projectID=$projectID"), $execution, '', "title='$execution'");
+                    }
+                    else
+                    {
+                        echo "<span title='$execution'>$execution</span>";
+                    }
+                    ?>
+                  </div>
+                  <?php else:?>
+                  <div class='board-item' <?php if($execution->status == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid red';";?>>
                     <div class='table-row'>
                       <div class='table-col'>
                         <?php
                         if(common::hasPriv('execution', 'task'))
                         {
-                            if($executionID == 'more')
-                            {
-                                echo html::a($this->createLink('execution', 'all', "status=closed&projectID=$projectID"), $execution, '', "title='$execution'");
-                            }
-                            else
-                            {
-                                echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title='{$execution->name}'");
-                            }
+                            echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title='{$execution->name}'");
                         }
                         else
                         {
@@ -78,6 +85,7 @@
                       <?php endif?>
                     </div>
                   </div>
+                  <?php endif?>
                   <?php endforeach?>
                   <?php endif?>
                 </div>
