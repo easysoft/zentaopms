@@ -100,6 +100,7 @@ $lang->execution->recent          = '近期訪問：';
 $lang->execution->copyNoExecution = '沒有可用的' . $lang->executionCommon . '來複制';
 $lang->execution->noTeam          = '暫時沒有團隊成員';
 $lang->execution->selectProject   = '請選擇項目';
+$lang->execution->showMore        = '點擊查看所有已關閉的執行';
 
 $lang->execution->start    = "開始";
 $lang->execution->activate = "激活";

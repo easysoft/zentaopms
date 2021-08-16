@@ -45,14 +45,21 @@
               <div class="board s-<?php echo $colStatus?>">
                 <div>
                   <?php if(!empty($executionList[$colStatus])):?>
-                  <?php foreach($executionList[$colStatus] as $execution):?>
-                  <div class='board-item' <?php if($execution->status == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid red';";?>>
+                  <?php foreach($executionList[$colStatus] as $executionID => $execution):?>
+                  <div class='board-item' <?php if($colStatus == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid red';";?>>
                     <div class='table-row'>
                       <div class='table-col'>
                         <?php
                         if(common::hasPriv('execution', 'task'))
                         {
-                            echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title='{$execution->name}'");
+                            if($executionID == 'more')
+                            {
+                                echo html::a($this->createLink('execution', 'all', "status=closed&projectID=$projectID"), $execution, '', "title='$execution'");
+                            }
+                            else
+                            {
+                                echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title='{$execution->name}'");
+                            }
                         }
                         else
                         {
