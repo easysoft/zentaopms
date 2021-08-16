@@ -2702,7 +2702,7 @@ class execution extends control
     {
         $orderedExecutions = array();
 
-        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc');
+        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('type')->in('sprint,stage')

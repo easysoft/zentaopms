@@ -30,6 +30,7 @@ a.productName:focus, a.productName:hover {background: #0c64eb; color: #fff !impo
 <?php
 $productCounts      = array();
 $productNames       = array();
+$preFix             = '';
 $closedProductsHtml = '';
 $tabActive          = '';
 $myProducts         = 0;
@@ -61,6 +62,7 @@ foreach($products as $programID => $programProducts)
     if($programID and $config->systemMode == 'new')
     {
         $programName = zget($programs, $programID);
+        $preFix      = $programName . '/';
 
         if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
         if($productCounts[$programID]['others']) $normalProductsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
@@ -90,7 +92,7 @@ foreach($products as $programID => $programProducts)
         }
         else if($product->status == 'closed')
         {
-            $closedProductsHtml .= html::a($linkHtml, $productName, '', "class='$selected' title='{$productName}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
+            $closedProductsHtml .= html::a($linkHtml, $preFix . $productName, '', "class='$selected' title='" . $preFix . $productName . "' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
 
             if($selected == 'selected') $tabActive = 'closed';
         }

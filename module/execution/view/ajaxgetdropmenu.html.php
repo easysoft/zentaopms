@@ -29,6 +29,7 @@ a.executionName:focus, a.executionName:hover {background: #0c64eb; color: #fff !
 <?php
 $executionCounts      = array();
 $executionNames       = array();
+$preFix               = '';
 $closedExecutionsHtml = '';
 $tabActive            = '';
 $myExecutions         = 0;
@@ -59,6 +60,7 @@ foreach($executions as $projectID => $projectExecutions)
     if($projectID and $config->systemMode == 'new')
     {
         $projectName = zget($projects, $projectID);
+        $preFix      = $projectName . '/';
 
         if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
         if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
@@ -85,7 +87,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status == 'done' or $execution->status == 'closed')
         {
-            $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+            $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $preFix . $execution->name, '', "class='$selected' title='" . $preFix . $execution->name . "' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
 
             if($selected == 'selected') $tabActive = 'closed';
         }

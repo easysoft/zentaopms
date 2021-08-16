@@ -29,6 +29,7 @@ a.projectName:focus, a.projectName:hover {background: #0c64eb; color: #fff !impo
 <?php
 $projectCounts      = array();
 $projectNames       = array();
+$preFix             = '';
 $closedProjectsHtml = '';
 $tabActive          = '';
 $myProjects         = 0;
@@ -59,6 +60,7 @@ foreach($projects as $programID => $programProjects)
     if(isset($programs[$programID]) and $config->systemMode == 'new')
     {
         $programName = zget($programs, $programID);
+        $preFix      = $programName . '/';
 
         if($projectCounts[$programID]['myProject']) $myProjectsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
         if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
@@ -91,7 +93,7 @@ foreach($projects as $programID => $programProjects)
         }
         else if($project->status == 'done' or $project->status == 'closed')
         {
-            $closedProjectsHtml .= html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+            $closedProjectsHtml .= html::a(sprintf($link, $project->id), $preFix . $project->name, '', "class='$selected' title='" . $preFix . $project->name . "' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
 
             if($selected == 'selected') $tabActive = 'closed';
         }
