@@ -40,7 +40,7 @@ th.table-nest-title .nest-none-checkbox {margin-top: 8px; margin-left: 5px;}
 th.table-nest-title .header {margin-left: 5px;}
 th.table-nest-title .sort-up {padding-left: 5px;}
 th.table-nest-title .sort-down {padding-left: 5px;}
-th .check-all {left: -16px;}
+th.table-nest-title .table-nest-toggle {top: 11px;}
 
 #productTableList .icon-product:before {content: '\e98f'; width: 22px; height: 22px; background: none; color: rgb(166, 170, 184); top: 0; line-height: 22px; margin-right: 2px; font-size: 14px;}
 

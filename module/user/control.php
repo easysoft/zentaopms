@@ -1141,6 +1141,7 @@ class user extends control
 
             $this->app->user->avatar = $image->webPath;
             $this->session->set('user', $this->app->user);
+            $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
             exit('success');
         }
 

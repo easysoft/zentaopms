@@ -28,3 +28,10 @@ a.removeModule:hover {color: red;}
 .table td.c-estimate {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
+
+#batchUnlinkStoryTip .modal-body {padding-top: 10px; max-height: 400px; overflow: auto;}
+#batchUnlinkStoryTip .table thead {position: fixed;}
+#batchUnlinkStoryTip .table tbody {position: relative; top: 33px; display:block; overflow-y: scroll; max-height: 260px;}
+#batchUnlinkStoryTip .table tfoot {position: relative; bottom: -30px;}
+#batchUnlinkStoryTip .table td {border-bottom: 0px;}
+#batchUnlinkStoryTip .table th:first-child {width: 460px;}

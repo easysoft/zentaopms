@@ -24,6 +24,8 @@ $lang->action->actionID   = 'Action ID';
 $lang->action->date       = 'Date';
 $lang->action->extra      = 'Extra';
 
+$lang->action->system = 'System';
+
 $lang->action->trash       = 'Recycle';
 $lang->action->undelete    = 'Restore';
 $lang->action->hideOne     = 'Hide';
@@ -268,7 +270,7 @@ $lang->action->label->run                   = 'run';
 $lang->action->label->estimated             = 'estimated';
 $lang->action->label->reviewclosed          = 'Review Failed';
 $lang->action->label->passreviewed          = 'Pass';
-$lang->action->label->clarifyreviewed       = 'Clarify';
+$lang->action->label->clarifyreviewed       = 'Review Failed';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
 

@@ -71,8 +71,8 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 </head>
 <?php $singleClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';?>
-<?php if($this->moduleName == 'index' && $this->methodName == 'index' && $this->cookie->hideMenu): ?>
-<body class='menu-hide <?php echo $singleClass;?>'>
+<?php if($this->moduleName == 'index' && $this->methodName == 'index'): ?>
+<body class='menu-<?php echo $this->cookie->hideMenu ? 'hide' : 'show'; ?> <?php echo $singleClass;?>'>
 <?php else: ?>
 <body class='<?php echo $singleClass;?>'>
 <?php endif; ?>

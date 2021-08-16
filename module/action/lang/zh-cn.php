@@ -24,6 +24,8 @@ $lang->action->actionID   = '记录ID';
 $lang->action->date       = '日期';
 $lang->action->extra      = '附加值';
 
+$lang->action->system = '系统';
+
 $lang->action->trash       = '回收站';
 $lang->action->undelete    = '还原';
 $lang->action->hideOne     = '隐藏';
@@ -266,9 +268,9 @@ $lang->action->label->tracked               = '跟踪了';
 $lang->action->label->hangup                = '挂起了';
 $lang->action->label->run                   = '执行了';
 $lang->action->label->estimated             = '估算了';
-$lang->action->label->reviewclosed          = '评审失败';
-$lang->action->label->passreviewed          = '确认通过';
-$lang->action->label->clarifyreviewed       = '有待明确';
+$lang->action->label->reviewclosed          = '评审不通过';
+$lang->action->label->passreviewed          = '评审通过';
+$lang->action->label->clarifyreviewed       = '评审不通过';
 $lang->action->label->commitsummary         = '提交培训总结';
 $lang->action->label->updatetrainee         = '更新培训人员';
 

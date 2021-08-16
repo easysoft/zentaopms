@@ -281,9 +281,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $canBatchChangeModule = ($canBeChanged and common::hasPriv('story', 'batchChangeModule'));
       $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan'));
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv('story', 'batchAssignTo'));
+      $canBatchUnlink       = ($canBeChanged and $this->app->openApp == 'project' and common::hasPriv('projectstory', 'batchUnlinkStory'));
       $canBatchImportToLib  = ($canBeChanged and $this->app->openApp == 'project' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
 
-      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchImportToLib);
+      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -516,6 +517,13 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           </div>
           <?php endif;?>
 
+          <?php
+          if($canBatchUnlink)
+          {
+              echo html::commonButton($lang->projectstory->unlinkStory, "id='batchUnlinkStory'");
+          }
+          ?>
+
           <?php if($canBatchImportToLib):?>
           <?php echo html::a('#batchImportToLib', $lang->story->importToLib, '', 'class="btn" data-toggle="modal" id="importToLib"');?>
           <?php endif;?>
@@ -576,6 +584,36 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             </tr>
           </table>
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="batchUnlinkStoryTip">
+  <div class="modal-dialog mw-700px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><strong><?php echo $lang->projectstory->batchUnlinkTip;?></strong></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table'>
+          <thead>
+            <tr>
+              <th><?php echo $lang->story->title;?></th>
+              <th class='w-200px'><?php echo $lang->story->link . $lang->execution->common;?></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan='2' class='text-center'>
+                <?php echo html::commonButton($lang->projectstory->confirm, 'data-dismiss="modal" id="confirmBtn"', 'btn btn-primary');?>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
   </div>

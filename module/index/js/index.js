@@ -42,7 +42,7 @@
                 .append($link)
                 .appendTo($menuMainNav);
 
-            $link.tooltip({title: item.text, container: 'body', placement: 'right'});
+            $link.tooltip({title: item.text, container: 'body', placement: 'right', tipClass: 'menu-tip'});
 
             if(!defaultApp) defaultApp = item.code;
         });
@@ -456,17 +456,19 @@
         var $list          = $('#menuMoreList');
         var $menuNav       = $('#menuNav');
         var $menuItems     = $mainNav.children('li');
+        var itemHeight     = $menuItems.first().outerHeight();
         var maxHeight      = $menuNav.height();
         var showMoreMenu   = false;
-        var currentHeight  = 40;
+        var currentHeight  = itemHeight;
         var moreMenuHeight = 12;
 
         $menuItems.each(function()
         {
             var $item     = $(this);
             var isDivider = $item.hasClass('divider');
-            var height    = isDivider ? 17 : ($.cookie('hideMenu') ? 44 : 40);
+            var height    = isDivider ? 17 : itemHeight;
             currentHeight += height;
+
             if(currentHeight > maxHeight)
             {
                 $item.addClass('hidden');
@@ -532,7 +534,7 @@
         $(document).on('click', '.open-in-app,.show-in-app', function(e)
         {
             var $link = $(this);
-            if($link.is('[data-modal],[data-toggle],.iframe,.not-in-app')) return;
+            if($link.is('[data-modal],[data-toggle!="tooltip"],.iframe,.not-in-app')) return;
             var url = $link.hasClass('show-in-app') ? '' : ($link.attr('href') || $link.data('url'));
             if(url && url.indexOf('onlybody=yes') > 0) return;
             if(openApp(url, $link.data('app')))
@@ -613,7 +615,7 @@
     {
         var $body = $('body');
         if (toggle === undefined) toggle = $body.hasClass('menu-hide');
-        $body.toggleClass('menu-hide', !toggle);
+        $body.toggleClass('menu-hide', !toggle).toggleClass('menu-show', !!toggle);
         $.cookie('hideMenu', String(!toggle), {expires: config.cookieLife, path: config.webRoot});
     };
 
@@ -629,9 +631,9 @@
 
         $('.menu-toggle').each(function()
         {
-            $(this).attr('data-toggle', 'tooltip').tooltip({container: 'body', title: function(ele)
+            $(this).attr('data-toggle', 'tooltip').tooltip({container: 'body', placement: 'right', tipClass: 'menu-tip', title: function()
             {
-                return $(ele).data($('body').hasClass('menu-hide') ? 'unfoldText' : 'collapseText');
+                return $(this).data($('body').hasClass('menu-hide') ? 'unfoldText' : 'collapseText');
             }});
         });
     });
@@ -658,7 +660,6 @@ $.extend(
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
-                var lib          = '';
                 var assetType    = 'story,issue,risk,opportunity,doc';
                 if(assetType.indexOf(searchModule) > -1)
                 {
