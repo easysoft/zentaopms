@@ -22,8 +22,9 @@
 #tabContent li>a, #tabContent li>div>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
 #tabContent li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
 #tabContent .tree li>.list-toggle {line-height: 24px;}
+#tabContent .tree li.has-list.open:before {content: unset;}
 
-#swapper li.hide-in-search>a:focus, #swapper li.hide-in-search>a:hover {color: #838a9d; cursor: default;}
+#swapper li.hide-in-search>div>a:focus, #swapper li.hide-in-search>div>a:hover {color: #838a9d; cursor: default;}
 #swapper li ul li a:focus, #swapper li ul li a:hover, .noProgram li a:focus, .noProgram li a:hover {background: #0c64eb; color: #fff;}
 </style>
 <?php
