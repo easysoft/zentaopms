@@ -58,6 +58,104 @@ class myModel extends model
     }
     
     /**
+     * My charged products.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProducts()
+    {
+        $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+                ->where('t1.deleted')->eq(0)
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+                ->andWhere('t1.status')->ne('closed')
+                ->andWhere('t1.PO')->eq($this->app->user->account)
+                ->orderBy('t1.order_asc')
+                ->fetchAll('id');
+        $productKeys = array_keys($products);
+
+        $stories = $this->dao->select('product, status, count(status) AS count')
+                ->from(TABLE_STORY)
+                ->where('deleted')->eq(0)
+                ->andWhere('product')->in($productKeys)
+                ->groupBy('product, status')
+                ->fetchGroup('product', 'status');
+        $plans = $this->dao->select('product, count(*) AS count')
+                ->from(TABLE_PRODUCTPLAN)
+                ->where('deleted')->eq(0)
+                ->andWhere('product')->in($productKeys)
+                ->andWhere('end')->gt(helper::now())
+                ->groupBy('product')
+                ->fetchPairs();
+        $releases = $this->dao->select('product, count(*) AS count')
+                ->from(TABLE_RELEASE)
+                ->where('deleted')->eq(0)
+                ->andWhere('product')->in($productKeys)
+                ->groupBy('product')
+                ->fetchPairs();
+        $executions = $this->dao->select('t1.product,t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in($productKeys)
+                ->andWhere('t2.type')->in('stage,sprint')
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy('t1.project')
+                ->fetchAll('product');
+        foreach($executions as $key => $execuData)
+        {
+            $execution = $this->loadModel('execution')->getById($execuData->id);
+            $executions[$key]->progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
+        }
+
+        foreach($products as $key => $product)
+        {
+            $product->plans = isset($plans[$product->id]) ? $plans[$product->id] : 0;
+            $product->releases = isset($releases[$product->id]) ? $releases[$product->id] : 0;
+            if(isset($stories[$product->id])) $product->stories = $stories[$product->id];
+            if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
+        }
+        return array_values($products);
+    }
+    
+    /**
+     * All projects.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjects()
+    {       
+        $projects = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'order_asc');
+        foreach($projects as $key => $project)
+        {
+            if($project->status == 'doing')
+            {
+                $workhour = $this->loadModel('project')->getWorkhour($project->id);
+                $projects[$key]->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
+            }
+        }
+        return array_values($projects);
+        
+    }
+    
+    /**
+     * Dynamic.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDynamic()
+    {
+        $actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc');
+        $users = $this->loadModel('user')->getPairs('noletter');
+        foreach($actions as $key => $action)
+        {
+            $actions[$key]->actor = $users[$action->actor];
+        }
+        return $actions;
+    }
+    
+    /**
      * Get my info.
      *
      * @access public
@@ -199,81 +297,7 @@ class myModel extends model
             $info->issue->dynamic = $issues;
         }
 
-        /* My charged products. */
-        $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-                ->where('t1.deleted')->eq(0)
-                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-                ->andWhere('t1.status')->ne('closed')
-                ->andWhere('t1.PO')->eq($this->app->user->account)
-                ->orderBy('t1.order_asc')
-                ->fetchAll('id');
-        $productKeys = array_keys($products);
-
-        $stories = $this->dao->select('product, status, count(status) AS count')
-                ->from(TABLE_STORY)
-                ->where('deleted')->eq(0)
-                ->andWhere('product')->in($productKeys)
-                ->groupBy('product, status')
-                ->fetchGroup('product', 'status');
-        $plans = $this->dao->select('product, count(*) AS count')
-                ->from(TABLE_PRODUCTPLAN)
-                ->where('deleted')->eq(0)
-                ->andWhere('product')->in($productKeys)
-                ->andWhere('end')->gt(helper::now())
-                ->groupBy('product')
-                ->fetchPairs();
-        $releases = $this->dao->select('product, count(*) AS count')
-                ->from(TABLE_RELEASE)
-                ->where('deleted')->eq(0)
-                ->andWhere('product')->in($productKeys)
-                ->groupBy('product')
-                ->fetchPairs();
-        $executions = $this->dao->select('t1.product,t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->in($productKeys)
-                ->andWhere('t2.type')->in('stage,sprint')
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy('t1.project')
-                ->fetchAll('product');
-        foreach($executions as $key => $execuData)
-        {
-            $execution = $this->loadModel('execution')->getById($execuData->id);
-            $executions[$key]->progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
-        }
-
-        foreach($products as $key => $product)
-        {
-            $product->plans = isset($plans[$product->id]) ? $plans[$product->id] : 0;
-            $product->releases = isset($releases[$product->id]) ? $releases[$product->id] : 0;
-            if(isset($stories[$product->id])) $product->stories = $stories[$product->id];
-            if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
-        }
-        $info->products = array_values($products);
-
-        /* All projects. */
-        $projects = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'order_asc');
-        foreach($projects as $key => $project)
-        {
-            if($project->status == 'doing')
-            {
-                $workhour = $this->loadModel('project')->getWorkhour($project->id);
-                $projects[$key]->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
-            }
-        }
-        $info->projects = array_values($projects);
-
-        /* Dynamic. */
-        $actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc');
-        $users = $this->loadModel('user')->getPairs('noletter');
-        foreach($actions as $key => $action)
-        {
-            $actions[$key]->actor = $users[$action->actor];
-        }
-        $info->dynamic = $actions;
-
         /* Some count. */
-        $info->joinProjectCount = count($info->projects);
         $info->createdDocs = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
 
         return $info;

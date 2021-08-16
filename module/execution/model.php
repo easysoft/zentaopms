@@ -947,8 +947,8 @@ class executionModel extends model
 
                 if($project)
                 {
-                    $projectNameTitle = $project->name . '/';
-                    $projectNameSpan  = "<span class='text'>{$project->name}</span>/";
+                    $projectNameTitle = $project->name . ' / ';
+                    $projectNameSpan  = "<span class='text'>{$project->name}</span> / ";
                 }
             }
         }

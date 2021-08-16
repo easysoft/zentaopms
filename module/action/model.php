@@ -1042,6 +1042,8 @@ class actionModel extends model
         }
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
+        /* Get the same dept department. */
+        $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
         foreach($actions as $i => $action)
         {
             /* Add name field to the actions. */
@@ -1117,6 +1119,10 @@ class actionModel extends model
                         $docLib->objectID   = strpos('product,project', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
                         $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                         $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                    }
+                    elseif($action->objectType == 'user')
+                    {
+                        $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
                     }
                     else
                     {

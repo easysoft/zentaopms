@@ -33,7 +33,7 @@ class message extends control
 
     /**
      * Browser Setting
-     * 
+     *
      * @access public
      * @return void
      */
@@ -80,10 +80,10 @@ class message extends control
      */
     public function setting()
     {
-        if($_POST)
+        if(strtolower($this->server->request_method) == "post")
         {
             $data = fixer::input('post')->get();
-            $data->messageSetting = json_encode($data->messageSetting);
+            $data->messageSetting = !empty($data->messageSetting) ? json_encode($data->messageSetting) : '';
             $this->loadModel('setting')->setItem('system.message.setting', $data->messageSetting);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
