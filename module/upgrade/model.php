@@ -700,6 +700,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_3');
             $this->execSQL($this->getUpgradeFile('15.3'));
             $this->processTesttaskDate();
+            $this->processDocTempContent();
             $this->appendExec('15_3');
         }
 
@@ -5225,6 +5226,29 @@ class upgradeModel extends model
             ->where('status')->eq('done')
             ->andWhere('realFinishedDate')->eq('0000-00-00 00:00:00')
             ->exec();
+
+        return true;
+    }
+
+    /**
+     * Store the body of the document in a temporary field.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processDocTempContent()
+    {
+        $docContentList = $this->dao->select('doc,content')->from(TABLE_DOCCONTENT)->fetchAll('doc');
+
+        foreach($docContentList as $docID => $doc)
+        {
+            if(empty($doc->content)) continue;
+
+            $this->dao->update(TABLE_DOC)
+                ->set('tempContent')->eq($doc->content)
+                ->where('id')->eq($docID)
+                ->exec();
+        }
 
         return true;
     }
