@@ -29,7 +29,7 @@
 
             var $link= $('<a data-pos="menu"></a>')
                 .attr('data-app', item.code)
-                // .attr('data-toggle', 'tooltip')
+                .attr('data-toggle', 'tooltip')
                 .attr('class', 'show-in-app')
                 .html(item.title);
 
@@ -42,7 +42,7 @@
                 .append($link)
                 .appendTo($menuMainNav);
 
-            // $link.tooltip({title: item.text, container: 'body', placement: 'right'});
+            $link.tooltip({title: item.text, container: 'body', placement: 'right', tipClass: 'menu-tip'});
 
             if(!defaultApp) defaultApp = item.code;
         });
@@ -534,7 +534,7 @@
         $(document).on('click', '.open-in-app,.show-in-app', function(e)
         {
             var $link = $(this);
-            if($link.is('[data-modal],[data-toggle],.iframe,.not-in-app')) return;
+            if($link.is('[data-modal],[data-toggle!="tooltip"],.iframe,.not-in-app')) return;
             var url = $link.hasClass('show-in-app') ? '' : ($link.attr('href') || $link.data('url'));
             if(url && url.indexOf('onlybody=yes') > 0) return;
             if(openApp(url, $link.data('app')))
@@ -615,7 +615,7 @@
     {
         var $body = $('body');
         if (toggle === undefined) toggle = $body.hasClass('menu-hide');
-        $body.toggleClass('menu-hide', !toggle);
+        $body.toggleClass('menu-hide', !toggle).toggleClass('menu-show', !!toggle);
         $.cookie('hideMenu', String(!toggle), {expires: config.cookieLife, path: config.webRoot});
     };
 
@@ -629,13 +629,13 @@
             setTimeout(function(){$menu.removeClass('hidden')}, 200);
         });
 
-        // $('.menu-toggle').each(function()
-        // {
-        //     $(this).attr('data-toggle', 'tooltip').tooltip({container: 'body', title: function(ele)
-        //     {
-        //         return $(ele).data($('body').hasClass('menu-hide') ? 'unfoldText' : 'collapseText');
-        //     }});
-        // });
+        $('.menu-toggle').each(function()
+        {
+            $(this).attr('data-toggle', 'tooltip').tooltip({container: 'body', placement: 'right', tipClass: 'menu-tip', title: function()
+            {
+                return $(this).data($('body').hasClass('menu-hide') ? 'unfoldText' : 'collapseText');
+            }});
+        });
     });
 }());
 
