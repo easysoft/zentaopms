@@ -1400,6 +1400,7 @@ class projectModel extends model
                         if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
                     }
                     echo html::a($projectLink, $project->name);
+                    if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     break;
                 case 'PM':
                     $user   = $this->loadModel('user')->getByID($project->PM, 'account');
