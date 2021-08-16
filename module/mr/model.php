@@ -82,6 +82,19 @@ class mrModel extends model
         return array('' => '') + $mr;
     }
 
+    public function create()
+    {
+        $gitlabID  = $this->post->gitlabID;
+        $projectID = $this->post->projectID;
+
+        $sourceProject = $this->post->sourceProject;
+        $sourceBranch  = $this->post->sourceBranch;
+        $targetProject = $this->post->targetProject;
+        $targetBranch  = $this->post->targetBranch;
+
+
+    }
+
     /**
      * Get gitlab api base url by gitlab ID.
      *
@@ -92,6 +105,22 @@ class mrModel extends model
     public function getApiRoot($gitlabID)
     {
         return $this->gitlab->getApiRoot($gitlabID);
+    }
+
+    /**
+     * Get Forks of a project.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
+     */
+    public function apiGetForks($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/forks");
+        $mr  = new stdclass;
+        return json_decode(commonModel::http($url));
     }
 
     /**

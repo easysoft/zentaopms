@@ -40,6 +40,22 @@ class mr extends control
 
     public function create()
     {
+        $this->loadModel('repo');
+        if($_POST)
+        {
+            $mrID = $this->mr->create();
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            $link = helper::createLink('mr', 'browse', '', '', false);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+        }
+
+        $this->view->title       = $this->lang->mr->create;
+        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+
+        $this->display();
     }
 
     public function delete()
