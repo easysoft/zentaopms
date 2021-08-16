@@ -26,6 +26,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = '禅道';
+$lang->pmsName        = '开源版';
 $lang->proName        = '专业版';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";

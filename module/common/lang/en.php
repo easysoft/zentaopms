@@ -26,6 +26,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
+$lang->pmsName        = 'ALM';
 $lang->proName        = 'Pro';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s ALM";
