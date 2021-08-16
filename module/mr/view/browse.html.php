@@ -1,7 +1,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-right'>
-    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $lang->mr->add, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $lang->mr->addGitlab, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent'>

@@ -10,6 +10,8 @@ $(function()
         {
             $('#projectID').html('').append(response);
             $('#projectID').chosen().trigger("chosen:updated");;
+            $('#sourceProject').html('').append(response);
+            $('#sourceProject').chosen().trigger("chosen:updated");;
         });
     });
 

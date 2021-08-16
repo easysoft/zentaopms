@@ -30,12 +30,23 @@ class mr extends control
         $this->display();
     }
 
-    public function list($repoID)
+    public function list($repoID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('gitlab');
         $gitlab = $this->mr->getGitlabProjectByRepo($repoID);
-        $resp   = $this->mr->apiGetMRList($gitlab->gitlabID, $gitlab->projectID);
-        a($resp);
-        return $resp;
+        $mrList = $this->mr->apiGetMRList($gitlab->gitlabID, $gitlab->projectID);
+
+        $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($mrList);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $mrList     = array_chunk($mrList, $pager->recPerPage);
+
+        $this->view->title    = $this->lang->mr->browse;
+        $this->view->orderBy  = $orderBy;
+        $this->view->pager    = $pager;
+        $this->view->mrList = empty($mrList) ? $mrList: $mrList[$pageID - 1];;
+
+        $this->display();
     }
 
     public function create()

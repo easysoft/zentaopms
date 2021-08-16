@@ -92,6 +92,7 @@ class mrModel extends model
         $targetProject = $this->post->targetProject;
         $targetBranch  = $this->post->targetBranch;
 
+        if($projectID != $sourceProject) return false;
 
     }
 

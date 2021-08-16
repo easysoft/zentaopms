@@ -5,16 +5,19 @@ $lang->mr->browse = "浏览{$lang->mr->common}";
 $lang->mr->list   = $lang->mr->browse;
 $lang->mr->edit   = "编辑{$lang->mr->common}";
 $lang->mr->delete = "删除{$lang->mr->common}";
-$lang->mr->add    = "添加GitLab项目";
+$lang->mr->detail = "详情";
 
+$lang->mr->addGitlab = "添加GitLab项目";
 
 $lang->mr->id       = 'ID';
+$lang->mr->iid      = "{$lang->mr->common}ID";
 $lang->mr->name     = '名称';
-$lang->mr->source   = '源项目分支';
-$lang->mr->targer   = '目标分支';
-$lang->mr->pipeline = '流水线';
-$lang->mr->audit    = '审核状态';
-$lang->mr->execute  = '执行状态';
+$lang->mr->title    = $lang->mr->name;
+$lang->mr->status   = '状态';
+$lang->mr->author   = '创建人';
+$lang->mr->assignee = '指派给';
+$lang->mr->reviewer = '评审人';
+$lang->mr->link     = 'GitLab链接';
 
 $lang->mr->sourceProject = '源项目';
 $lang->mr->sourceBranch  = '源分支';
