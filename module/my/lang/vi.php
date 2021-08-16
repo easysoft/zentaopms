@@ -102,6 +102,7 @@ $lang->my->projectLinkList['project-index']     = 'By default, go to the most re
 $lang->my->executionLinkList = array();
 if($config->systemMode == 'new')
 {
+    $lang->my->executionLinkList['execution-all']             = 'Enter the execution list by default, you can view all executions';
     $lang->my->executionLinkList['execution-task']            = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
     $lang->my->executionLinkList['execution-executionkanban'] = 'By default, you can enter the execution Kanban to view the execution status of projects in progress';
 }
