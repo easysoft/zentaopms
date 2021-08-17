@@ -567,9 +567,10 @@ class commonModel extends model
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
 
-        $items = array();
+        $items    = array();
         $lastItem = end($menuOrder);
-        $divider = false;
+        $divider  = false;
+
         foreach($menuOrder as $key => $group)
         {
             $nav = $lang->mainNav->$group;
@@ -577,32 +578,39 @@ class commonModel extends model
 
             /* When last divider is not used in mainNav, use it next menu. */
             $divider = ($divider || ($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
-
-            if(!common::hasPriv($currentModule, $currentMethod))
-            {
-                $hidden = true;
-                if($currentModule == 'assetlib')
-                {
-                    $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
-                    foreach($methodList as $method)
-                    {
-                        if(common::hasPriv($currentModule, $method))
-                        {
-                            $hidden        = false;
-                            $currentMethod = $method;
-                            break;
-                        }
-                    }
-                }
-                if($hidden) continue;
-            }
-
             if($divider and !empty($items))
             {
                 $items[] = 'divider';
                 $divider = false;
             }
 
+            /**
+             * Judget the module display or not.
+             *
+             */
+            $display = false;
+
+            /* 1. The default rule. */
+            if(common::hasPriv($currentModule, $currentMethod)) $display = true;
+
+            /* 2. If the module is assetLib, need judge more methods. */
+            if($currentModule == 'assetlib' and $display == false)
+            {
+                $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
+                foreach($methodList as $method)
+                {
+                    if(common::hasPriv($currentModule, $method))
+                    {
+                        $display       = true;
+                        $currentMethod = $method;
+                        break;
+                    }
+                }
+            }
+
+            if(!$display) continue;
+
+            /* Assign vars. */
             $item = new stdClass();
             $item->group      = $group;
             $item->code       = $group;
