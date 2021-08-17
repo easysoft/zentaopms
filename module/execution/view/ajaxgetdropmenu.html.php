@@ -60,7 +60,7 @@ foreach($executions as $projectID => $projectExecutions)
     if($projectID and $config->systemMode == 'new')
     {
         $projectName = zget($projects, $projectID);
-        $preFix      = $projectName . '/';
+        $preFix      = $projectName . ' / ';
 
         if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
         if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';

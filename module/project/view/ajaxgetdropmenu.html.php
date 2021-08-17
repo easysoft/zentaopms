@@ -60,7 +60,7 @@ foreach($projects as $programID => $programProjects)
     if(isset($programs[$programID]) and $config->systemMode == 'new')
     {
         $programName = zget($programs, $programID);
-        $preFix      = $programName . '/';
+        $preFix      = $programName . ' / ';
 
         if($projectCounts[$programID]['myProject']) $myProjectsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
         if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';

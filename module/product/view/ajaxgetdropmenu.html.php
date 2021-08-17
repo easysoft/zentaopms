@@ -62,7 +62,7 @@ foreach($products as $programID => $programProducts)
     if($programID and $config->systemMode == 'new')
     {
         $programName = zget($programs, $programID);
-        $preFix      = $programName . '/';
+        $preFix      = $programName . ' / ';
 
         if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
         if($productCounts[$programID]['others']) $normalProductsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
@@ -71,7 +71,7 @@ foreach($products as $programID => $programProducts)
     foreach($programProducts as $index => $product)
     {
         $selected    = $product->id == $productID ? 'selected' : '';
-        $productName = $product->line ? zget($lines, $product->line, '') . '/' . $product->name : $product->name;
+        $productName = $product->line ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
 
         if($product->status == 'normal' and $product->PO == $this->app->user->account)
