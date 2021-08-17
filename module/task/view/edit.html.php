@@ -131,6 +131,7 @@
                     $teamAccounts = array_keys($task->team);
                     foreach($teamAccounts as $teamAccount)
                     {
+                        if(!isset($members[$teamAccount])) continue;
                         $taskMembers[$teamAccount] = $members[$teamAccount];
                     }
                 }

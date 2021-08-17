@@ -13,6 +13,7 @@
 <style>
 #cards {margin: 0 0;}
 #cards > .col {width: 25%;}
+@media screen and (max-width: 1500px) {#cards > .col {width: 33.3333333%;}}
 #cards .panel {margin: 10px 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 190px;}
 #cards .pager .btn {padding-top: 4px;}
 #cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
@@ -40,7 +41,7 @@
 #cards .project-detail .progress-pie {width: 24px; position: absolute; top: 18px;}
 #cards .project-detail  .leftTasks, .totalLeft {display:block; margin-top: 8px;}
 #cards .project-members {float: left;}
-#cards .project-members .avatar {display: inline-block; width: 25px; height: 25px; line-height: 25px; border: 1px solid #fff}
+#cards .project-members .avatar {display: inline-block; width: 25px; height: 25px; line-height: 25px; margin-right: 1px;}
 #cards .project-members a:not(:first-child) {margin-left: -5px;}
 #cards .totalMembers{display: inline-block; margin-left: 6px; position: absolute; bottom: 8px;}
 #cards .project-actions {float: right;}
@@ -139,20 +140,29 @@
           </div>
           <div class='project-footer table-row'>
             <?php $titleClass = ($project->teamCount == 0 and !$canActions) ? 'teamTitle' : '';?>
+            <?php $count      = 0;?>
             <div class="<?php echo $titleClass?>"><?php echo $lang->project->teamMember;?></div>
             <?php if(!empty($project->teamMembers)):?>
             <div class='project-members table-col'>
-              <?php foreach($project->teamMembers as $key => $member):?>
-              <?php if($key > 2) continue;?>
-            <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
+              <?php foreach($project->teamMembers as $member):?>
+              <?php
+              if($count > 2) continue;
+              if(!isset($users[$member]))
+              {
+                  $project->teamCount -= 1;
+                  continue;
+              }
+              ?>
+              <?php $count += 1;?>
+              <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
                 <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
                   <?php echo !empty($usersAvatar[$member]) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
                 </div>
               </a>
               <?php endforeach;?>
               <?php if($project->teamCount > 3):?>
-                <?php echo '...';?>
-            <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
+              <?php echo '...';?>
+              <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
                 <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
                   <?php echo !empty($usersAvatar[end($project->teamMembers)]) ? html::image(zget($usersAvatar, end($project->teamMembers))) : strtoupper($member[0]);?>
                 </div>

@@ -220,7 +220,7 @@ $lang->doc->my        = '我的文档';
 $lang->doc->favorite  = '我的收藏';
 $lang->doc->product   = '产品库';
 $lang->doc->project   = '项目库';
-$lang->doc->execution = "{$lang->executionCommon}库";
+$lang->doc->execution = isset($config->maxVersion) ? "{$lang->execution->common}库" : "{$lang->executionCommon}库";
 $lang->doc->custom    = '自定义库';
 $lang->doc->wiki      = 'WIKI';
 

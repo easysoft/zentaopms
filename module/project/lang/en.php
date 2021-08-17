@@ -129,6 +129,7 @@ $lang->project->longTime           = 'Long-Term Program';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = 'More Project';
 $lang->project->days               = 'Available Days';
+$lang->project->etc                = " , etc";
 
 $lang->project->productNotEmpty        = 'Please link products or create products.';
 $lang->project->existProductName       = 'Product name already exists.';
@@ -138,6 +139,7 @@ $lang->project->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
 $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
 $lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
+$lang->project->unlinkExecutionMember  = "The user participated in %s executions such as %s%s. Do you want to remove the user from those executions as well? (The data related to this user will not be deleted.)";
 
 $lang->project->tenThousand = '';
 

@@ -101,6 +101,7 @@ $lang->execution->copyNoExecution = '没有可用的' . $lang->executionCommon .
 $lang->execution->noTeam          = '暂时没有团队成员';
 $lang->execution->or              = '或';
 $lang->execution->selectProject   = '请选择项目';
+$lang->execution->showMore        = '点击查看所有已关闭的执行';
 
 if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
 if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以选择复制{$lang->executionCommon}团队的成员";

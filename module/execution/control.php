@@ -1901,6 +1901,22 @@ class execution extends control
                 }
 
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
+
+                /* Up to five closed executions are displayed. */
+                if($status == 'closed')
+                {
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5)
+                    {
+                        $myExecutions[$status]         = array_slice($myExecutions[$status], 0, 5, true);
+                        $myExecutions[$status]['more'] = $this->lang->execution->showMore;
+                    }
+
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5)
+                    {
+                        $kanbanGroup[$projectID][$status]         = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
+                        $kanbanGroup[$projectID][$status]['more'] = $this->lang->execution->showMore;
+                    }
+                }
             }
 
             if(empty($kanbanGroup[$projectID])) continue;
@@ -2686,7 +2702,7 @@ class execution extends control
     {
         $orderedExecutions = array();
 
-        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc');
+        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('type')->in('sprint,stage')

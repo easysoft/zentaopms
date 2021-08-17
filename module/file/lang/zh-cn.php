@@ -31,6 +31,7 @@ $lang->file->preview       = "预览";
 $lang->file->addFile       = '添加文件';
 $lang->file->beginUpload   = '开始上传';
 $lang->file->uploadSuccess = '上传成功';
+$lang->file->partExport    = '分批导出';
 
 $lang->file->pathname  = '路径';
 $lang->file->title     = '标题';
