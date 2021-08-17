@@ -11,8 +11,8 @@
  */
 $lang->user->common           = 'User';
 $lang->user->id               = 'ID';
-$lang->user->inside           = 'Internal Members';
-$lang->user->outside          = 'External Members';
+$lang->user->inside           = 'Internal';
+$lang->user->outside          = 'Outsiders';
 $lang->user->company          = 'Company';
 $lang->user->dept             = 'Department';
 $lang->user->account          = 'Account';
@@ -54,8 +54,8 @@ $lang->user->score            = 'Score';
 $lang->user->name             = 'Name';
 $lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
-$lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
-$lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
+$lang->user->cropAvatarTip    = 'Drag and drop the box to crop the image.';
+$lang->user->cropImageTip     = 'The image is too small. The recommended image size is at least 48x48. The current image size is %s';
 $lang->user->captcha          = 'Captcha';
 
 $lang->user->legendBasic        = 'Basic Information';
@@ -89,7 +89,7 @@ $lang->user->else          = 'Else';
 $lang->user->saveTemplate          = 'Save as Template';
 $lang->user->setPublic             = 'Set as Public Template';
 $lang->user->deleteTemplate        = 'Delete Template';
-$lang->user->setTemplateTitle      = 'Please enter the title of template.';
+$lang->user->setTemplateTitle      = 'Please enter the title of the template.';
 $lang->user->applyTemplate         = 'Templates';
 $lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
