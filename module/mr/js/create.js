@@ -8,14 +8,12 @@ $(function()
 
         $.get(url, function(response)
         {
-            $('#projectID').html('').append(response);
-            $('#projectID').chosen().trigger("chosen:updated");;
             $('#sourceProject').html('').append(response);
             $('#sourceProject').chosen().trigger("chosen:updated");;
         });
     });
 
-    $('#projectID').change(function()
+    $('#sourceProject').change(function()
     {
         $option = $(this).find('option:selected');
         $('#name').val($option.data('name'));

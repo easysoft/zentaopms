@@ -19,10 +19,6 @@
               <td class='required'><?php echo html::select('gitlabID', $gitlabHosts, '', "class='form-control' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
           </tr>
           <tr>
-            <th><?php echo $lang->repo->gitlabProject;?></th>
-            <td class='required'><?php echo html::select('projectID', array(''), '', "class='form-control chosen'");?>
-          </tr>
-          <tr>
              <th><?php echo $lang->mr->sourceProject;?></th>
              <td class='required'>
                <div class='input-group'>
