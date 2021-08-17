@@ -277,8 +277,8 @@ class gitlabModel extends model
     public function getRefOptions($gitlabID, $projectID)
     {
         $refList  = array();
-        $branches = $this->loadModel('gitlab')->apiGetBranches($gitlabID, $projectID);
-        $tags     = $this->loadModel('gitlab')->apiGetTags($gitlabID, $projectID);
+        $branches = $this->apiGetBranches($gitlabID, $projectID);
+        $tags     = $this->apiGetTags($gitlabID, $projectID);
         foreach($branches as $branch) $refList[] = "Branch::" . $branch->name;
         foreach($tags as $tag) $refList[] = "Tag::" . $tag->name;
         return $refList;
