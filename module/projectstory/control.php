@@ -127,7 +127,7 @@ class projectStory extends control
             foreach($executionStories as $story)
             {
                 $storyLink     = $this->createLink('story', 'view', "storyID={$story->id}");
-                $executionLink = $this->createLink('execution', 'view', "executionID={$story->executionID}");
+                $executionLink = $this->createLink('execution', 'story', "executionID={$story->executionID}");
                 $html         .=<<<ETO
 <tr>
   <td class='c-name w-500px'><a href="$storyLink" title={$story->title} style='color:#5988e2'>{$story->title}</a></td>
