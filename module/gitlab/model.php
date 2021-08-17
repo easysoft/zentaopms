@@ -34,12 +34,40 @@ class gitlabModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
+        $pipeline = $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
+
+        $lists = array();
+        foreach ($pipeline as $pipelineGitlab)
+        {
+            $token  = $this->apiGetCurrentUser($pipelineGitlab->url,$pipelineGitlab->token);
+
+            $list = new stdclass;
+
+            $list->id          = $pipelineGitlab->id;
+            $list->type        = $pipelineGitlab->type;
+            $list->name        = $pipelineGitlab->name;
+            $list->url         = $pipelineGitlab->url;
+            $list->account     = $pipelineGitlab->account;
+            $list->password    = $pipelineGitlab->password;
+            $list->token       = $pipelineGitlab->token;
+            $list->private     = $pipelineGitlab->private;
+            $list->createdBy   = $pipelineGitlab->createdBy;
+            $list->createdDate = $pipelineGitlab->createdDate;
+            $list->editedBy    = $pipelineGitlab->editedBy;
+            $list->editedDate  = $pipelineGitlab->editedDate;
+            $list->deleted     = $pipelineGitlab->deleted;
+            $list->is_admin    = $token->is_admin;
+
+            $lists[] = $list;
+        }
+
+        return $lists;
     }
 
     /**
      * Get gitlab pairs.
      *
+
      * @access public
      * @return array
      */
