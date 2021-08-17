@@ -101,8 +101,11 @@ $useGuest = $this->app->user->account == 'guest';
   </div>
 </div>
 <script>
-config.ordersSaved = '<?php echo $lang->block->ordersSaved; ?>';
+config.ordersSaved        = '<?php echo $lang->block->ordersSaved; ?>';
 config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
+config.cannotPlaceInLeft  = '<?php echo $lang->block->cannotPlaceInLeft; ?>';
+config.cannotPlaceInRight = '<?php echo $lang->block->cannotPlaceInRight; ?>';
+
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
 

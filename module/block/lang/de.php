@@ -93,6 +93,8 @@ $lang->block->refresh            = 'Aktualisieren';
 $lang->block->nbsp               = '';
 $lang->block->hidden             = 'Verstecken';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
+$lang->block->cannotPlaceInLeft  = 'Kann den Block nicht auf der linken Seite platzieren.';
+$lang->block->cannotPlaceInRight = 'Kann den Block nicht auf der rechten Seite platzieren.';
 
 $lang->block->productName  = $lang->productCommon . ' Name';
 $lang->block->totalStory   = 'The Total ' . $lang->SRCommon;

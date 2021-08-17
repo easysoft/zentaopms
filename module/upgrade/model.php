@@ -696,6 +696,11 @@ class upgradeModel extends model
             $this->processProductDoc();
             $this->adjustPriv15_3();
             $this->appendExec('15_2');
+        case '15_3':
+            $this->saveLogs('Execute 15_3');
+            $this->execSQL($this->getUpgradeFile('15.3'));
+            $this->adjustBugRequired();
+            $this->appendExec('15_3');
         }
 
         $this->deletePatch();
@@ -5198,5 +5203,25 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
         return true;
+    }
+
+    /**
+     * Required to adjust the bug.
+     *
+     * @access public
+     * @return void
+     */
+    public function adjustBugRequired()
+    {
+        $data = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('bug')
+            ->andWhere('section')->eq('create')
+            ->andWhere('`key`')->eq('requiredFields')
+            ->fetch();
+
+        $data->value = ',' . $data->value . ',';
+        $data->value = str_replace(',project,', ',', $data->value);
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
     }
 }

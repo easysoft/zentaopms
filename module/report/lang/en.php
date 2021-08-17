@@ -37,7 +37,7 @@ $lang->report->assign['assign']   = 'Assigned';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = 'Project Deviation';
+$lang->report->projectDeviation = "{$lang->execution->common} Deviation";
 $lang->report->productSummary   = $lang->productCommon . ' Summary';
 $lang->report->bugCreate        = 'Bug Reported Summary';
 $lang->report->bugAssign        = 'Bug Assigned Summary';
@@ -56,7 +56,7 @@ $lang->reportList->product = new stdclass();
 $lang->reportList->test    = new stdclass();
 $lang->reportList->staff   = new stdclass();
 
-$lang->reportList->project->lists[10] = 'Execution Deviation|report|projectdeviation';
+$lang->reportList->project->lists[10] = "{$lang->execution->common} Deviation|report|projectdeviation";
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug Reported Summary|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug Assigned Summary|report|bugassign';
