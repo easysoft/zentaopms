@@ -1273,20 +1273,24 @@ class testcase extends control
                     $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
                     $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->andWhere('id')->in($caseIDList)
                         ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                        ->orderBy($orderBy)->fetchAll('id');
+                        ->orderBy($orderBy)
+                        ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
+                        ->fetchAll('id');
                 }
                 else
                 {
                     $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
                         ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                        ->orderBy($orderBy)->fetchAll('id');
+                        ->orderBy($orderBy)
+                        ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
+                        ->fetchAll('id');
                 }
             }
             else
             {
                 $cases   = array();
                 $orderBy = " ORDER BY " . str_replace(array('|', '^A', '_'), ' ', $orderBy);
-                $stmt    = $this->dbh->query($this->session->testcaseQueryCondition . $orderBy);
+                $stmt    = $this->dbh->query($this->session->testcaseQueryCondition . $orderBy . ($this->post->limit ? ' LIMIT ' . $this->post->limit : ''));
                 while($row = $stmt->fetch())
                 {
                     $caseID = isset($row->case) ? $row->case : $row->id;
