@@ -33,7 +33,6 @@ $(function()
         var programID = $('#productProgram').val();
         var productID = $('#product').val();
         var link      = createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView, onlybody);
-      console.log(link);
 
         location.href = link;
     })
