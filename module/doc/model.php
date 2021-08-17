@@ -255,9 +255,38 @@ class docModel extends model
                 ->fetchAll('id');
         }
 
+        $projects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.project')
+            ->where('t2.id')->in(array_keys($docs))
+            ->andWhere('t2.execution')->eq(0)
+            ->fetchPairs();
+
+        $executions = $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.execution')
+            ->where('t2.id')->in(array_keys($docs))
+            ->fetchPairs();
+
+        $products = $this->dao->select('t1.id, t1.name')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.product')
+            ->where('t2.id')->in(array_keys($docs))
+            ->fetchPairs();
+
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
+
+        $objects = array('product' => 'products', 'execution' => 'executions', 'project' => 'projects');
         foreach($docs as $index => $doc)
         {
+            foreach($objects as $type => $object)
+            {
+                if(!empty($doc->{$type}))
+                {
+                    $doc->objectID   = $doc->{$type};
+                    $doc->objectName = ${$object}[$doc->{$type}];
+                    $doc->objectType = $type;
+                    break;
+                }
+            }
+
             $docs[$index]->fileSize = 0;
             if(isset($files[$index]))
             {
@@ -1076,6 +1105,11 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
+                ->beginIF($type == 'project')
+                ->andWhere('(execution')->eq(0)
+                ->orWhere('main')->eq(0)
+                ->markRight(1)
+                ->fi()
                 ->orderBy('`order`, id')
                 ->fetchAll('id');
         }
@@ -2242,7 +2276,7 @@ EOT;
         /* Summary of each type. */
         foreach($extensionCount as $extension => $count)
         {
-            if(in_array($this->app->getClientLang(), ['zh-cn','zh-tw']))
+            if(in_array($this->app->getClientLang(), array('zh-cn','zh-tw')))
             {
                 $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge . $this->lang->doc->point;
             }

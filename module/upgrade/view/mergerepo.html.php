@@ -38,21 +38,10 @@
           <div class='table-col pgmWidth' id='programBox'>
             <div class='cell'>
               <table class='table table-form'>
-                <?php if($products):?>
                 <tr>
                   <th class='w-70px'><?php echo $lang->upgrade->product;?></th>
                   <td><?php echo html::select("products[]", $products, '', "class='form-control chosen' multiple");?></td>
                 </tr>
-                <?php else:?>
-                <tr>
-                  <th class='w-100px'><?php echo $lang->upgrade->existProgram;?></th>
-                  <td><?php echo html::select("program", $programs, '', "class='form-control chosen'");?></td>
-                </tr>
-                <tr>
-                  <th><?php echo $lang->upgrade->product;?></th>
-                  <td><?php echo html::input("name", '', "class='form-control'");?></td>
-                </tr>
-                <?php endif;?>
                 <tr>
                   <td colspan='2' class='text-center form-actions'><?php echo html::submitButton();?></td>
                 </tr>

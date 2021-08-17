@@ -118,6 +118,15 @@ document.addEventListener('msfullscreenChange', function (e)
 
 $(function()
 {
+    $(document).keydown(function(event)
+    {
+        if($.cookie('isFullScreen') == 1)
+        {
+            if(event.keyCode == 37) $('#prevPage').click();
+            if(event.keyCode == 39) $('#nextPage').click();
+        }
+    });
+
     $('.outline').height($('.article-content').height());
 
     $('#content').on('click', '.outline .outline-toggle i.icon-angle-right', function()

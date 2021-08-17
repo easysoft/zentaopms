@@ -50,6 +50,7 @@
 #cards .project-actions .open>.dropdown-menu ul {display: flex;}
 #cards .menu-actions .btn.btn-action {margin-bottom: -3px !important; margin-right: 5px;}
 #cards .icon-ellipsis-v {font-size: 13px;}
+#cards .teamTitle {margin-bottom: 30px;}
 </style>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolBar pull-left">
@@ -113,6 +114,7 @@
             $budgetTitle   = $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->budget . $lang->project->future;
             $project->end  = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
             $project->date = str_replace('-', '.', $project->begin) . ' - ' . str_replace('-', '.', $project->end);
+            $canActions = (common::hasPriv('project','edit') or common::hasPriv('project','start') or common::hasPriv('project','activate') or common::hasPriv('project','suspend') or common::hasPriv('project','close'));
             ?>
             <span title="<?php echo $budgetTitle;?>" class='label label-outline budget'><?php echo $budgetTitle;?></span>
             <span title="<?php echo $project->date;?>" class="label label-outline <?php echo $status == 'delay' ? 'text-red' : '';?>"><?php echo $project->date;?></span>
@@ -136,20 +138,21 @@
             </div>
           </div>
           <div class='project-footer table-row'>
-            <div class='teamTitle'><?php echo $lang->project->teamMember;?></div>
+            <?php $titleClass = ($project->teamCount == 0 and !$canActions) ? 'teamTitle' : '';?>
+            <div class="<?php echo $titleClass?>"><?php echo $lang->project->teamMember;?></div>
             <?php if(!empty($project->teamMembers)):?>
             <div class='project-members table-col'>
               <a href='<?php echo helper::createLink('project', 'manageMembers', "projectID=$projectID");?>'>
               <?php foreach($project->teamMembers as $key => $member):?>
               <?php if($key > 2) continue;?>
-                <div class='avatar bg-secondary avatar-circle'>
-                  <?php echo !empty(zget($usersAvatar, $member, '')) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
+            <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
+                  <?php echo !empty($usersAvatar[$member]) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
                 </div>
               <?php endforeach;?>
               <?php if($project->teamCount > 3):?>
                 <?php echo '...';?>
-                <div class='avatar bg-secondary avatar-circle'>
-                  <?php echo !empty(zget($usersAvatar, end($project->teamMembers), '')) ? html::image(zget($usersAvatar, end($project->teamMembers))) : strtoupper($member[0]);?>
+                <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
+                  <?php echo !empty($usersAvatar[end($project->teamMembers)]) ? html::image(zget($usersAvatar, end($project->teamMembers))) : strtoupper($member[0]);?>
                 </div>
               <?php endif;?>
               </a>
@@ -158,7 +161,6 @@
             <span class='totalMembers'><?php echo html::a(helper::createLink('project', 'manageMembers', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></span>
             <div class='project-actions table-col'>
               <div class='menu-actions'>
-                <?php $canActions = (common::hasPriv('project','edit') or common::hasPriv('project','start') or common::hasPriv('project','activate') or common::hasPriv('project','suspend') or common::hasPriv('project','close'));?>
                 <?php if($canActions):?>
                 <?php echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");?>
                 <ul class='dropdown-menu pull-right'>

@@ -4530,6 +4530,15 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_PROJECTSTORY)->data($projectStory)->exec();
         }
 
+        /* Sync testcases of executions to projects when classic mode switched to new mode. */
+        $projectCases = $this->dao->select('`case`,product,project,count,version')->from(TABLE_PROJECTCASE)->where('project')->in($sprintIdList)->fetchAll();
+        foreach($projectCases as $projectCase)
+        {
+            $projectCase->project = $projectID;
+            $projectCase->order   = $projectCase->case * 5;
+            $this->dao->insert(TABLE_PROJECTCASE)->data($projectCase)->exec();
+        }
+
         /* Put sprint cases into project case table. */
         $sprintCases = $this->dao->select('t2.case,t2.version,t1.product,t1.execution as project')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -4537,20 +4546,11 @@ class upgradeModel extends model
             ->where('t1.execution')->in($sprintIdList)
             ->fetchAll();
 
-        $sprintCases += $this->dao->select('`case`,product,project,count,version')->from(TABLE_PROJECTCASE)->where('project')->in($sprintIdList)->fetchAll();
-
-        foreach($sprintCases as $projectCase)
+        foreach($sprintCases as $sprintCase)
         {
-            $caes = new stdClass();
-            $case->case    = $projectCase->case;
-            $case->order   = $projectCase->case * 5;
-            $case->project = $projectCase->project;
-            $case->product = $projectCase->product;
-            $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
-
-            $projectCase->order   = $projectCase->case * 5;
-            $projectCase->project = $projectID;
-            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
+            $sprintCase->order   = $sprintCase->case * 5;
+            $sprintCase->project = $projectID;
+            $this->dao->replace(TABLE_PROJECTCASE)->data($sprintCase)->exec();
         }
 
         /* Compute sprint path, grade and the minimum start date and end date of the project. */
@@ -4733,7 +4733,7 @@ class upgradeModel extends model
 
             $whitelist += zget($whitelistACL, $productID, array());
 
-            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade', 'increase');
         }
 
         $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage')->fetchAll('id');
@@ -4748,7 +4748,7 @@ class upgradeModel extends model
                 foreach(zget($groupAccounts, $group, array()) as $account => $userGroup) $whitelist[$account] = $account;
             }
 
-            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade');
+            $this->personnel->updateWhitelist($whitelist, 'sprint', $sprint->id, 'whitelist', 'upgrade', 'increase');
         }
     }
 
@@ -4758,32 +4758,7 @@ class upgradeModel extends model
             ->join('products', ',')
             ->get();
 
-        foreach($data->repos as $repoID)
-        {
-            /* If have no products, add it. */
-            if(isset($data->name))
-            {
-                $product = new stdclass();
-                $product->program        = $data->program;
-                $product->name           = $data->name;
-                $product->acl            = 'open';
-                $product->PO             = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdBy      = isset($this->app->user->account) ? $this->app->user->account : '';
-                $product->createdDate    = helper::now();
-                $product->status         = 'normal';
-                $product->createdVersion = $this->config->version;
-
-                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
-                $productID = $this->dao->lastInsertID();
-                $this->loadModel('action')->create('product', $productID, 'openedbysystem');
-
-                $this->dao->update(TABLE_REPO)->set('product')->eq($productID)->where('id')->eq($repoID)->exec();
-            }
-            else
-            {
-                $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
-            }
-        }
+        foreach($data->repos as $repoID) $this->dao->update(TABLE_REPO)->set('product')->eq($data->products)->where('id')->eq($repoID)->exec();
     }
 
     /**
@@ -5207,7 +5182,7 @@ class upgradeModel extends model
      */
     public function adjustPriv15_3()
     {
-        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('view')->fetchPairs('group', 'group');
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->in('view,objectLibs')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
             $groupPriv = new stdclass();
