@@ -9,7 +9,7 @@ class entry extends baseEntry
     {
         parent::__construct();
 
-        if(!isset($this->app->user)) $this->sendError(401, 'Unauthorized');
+        if(!isset($this->app->user) or $this->app->user->account == 'guest') $this->sendError(401, 'Unauthorized');
 
         $this->dao = $this->loadModel('common')->dao;
     }
@@ -496,7 +496,7 @@ class baseEntry
         switch($type)
         {
         case 'time':
-            $timeFormat = $this->param('timeFormat', '');
+            $timeFormat = $this->param('timeFormat', 'utc');
             if($timeFormat == 'utc')
             {
                 if(!$value or $value == '0000-00-00 00:00:00') return null;

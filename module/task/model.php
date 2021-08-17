@@ -237,14 +237,14 @@ class taskModel extends model
      */
     public function batchCreate($executionID)
     {
+        /* Load module and init vars. */
         $this->loadModel('action');
-        $now      = helper::now();
-        $mails    = array();
-        $tasks    = fixer::input('post')->get();
-
+        $now       = helper::now();
+        $mails     = array();
         $storyIDs  = array();
         $taskNames = array();
         $preStory  = 0;
+        $tasks     = fixer::input('post')->get();
 
         /* Judge whether the current task is a parent. */
         $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0;
@@ -317,8 +317,8 @@ class taskModel extends model
             $data[$i]->parent     = $tasks->parent[$i];
             if($story) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
             if($assignedTo) $data[$i]->assignedDate = $now;
-            if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($tasks->estStarted[$i])) $data[$i]->estStarted = '';
-            if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($tasks->deadline[$i]))     $data[$i]->deadline   = '';
+            if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $data[$i]->estStarted = '';
+            if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $data[$i]->deadline   = '';
 
             foreach($extendFields as $extendField)
             {

@@ -164,6 +164,17 @@ class messageModel extends model
         if(empty($toList) and $objectType == 'todo') $toList = $object->account;
         if(empty($toList) and $objectType == 'testtask') $toList = $object->owner;
         if(empty($toList) and $objectType == 'meeting') $toList = $object->host . $object->participant;
+        if(empty($toList) and $objectType == 'release')
+        {
+            /* Get notifiy persons. */
+            $notifyPersons = array();
+            if(!empty($toList->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object->notify, $object->product, $object->build);
+
+            foreach($notifyPersons as $account)
+            {
+                if(strpos($object->mailto . ',', ",{$account},") === false) $toList .= ',' . $account;
+            }
+        }
 
         if($toList == 'closed') $toList = '';
         return $toList;

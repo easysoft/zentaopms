@@ -13,8 +13,8 @@
 #importTeams .input-group {width: 250px; float: left;}
 #importTeams .input-group +.input-group {margin-left: 5px;}
 
-#dept_chosen    .chosen-single {width: 220px;}
-#project_chosen .chosen-single {width: 220px;}
+#dept_chosen .chosen-single {width: 220px;}
+#execution_chosen .chosen-single {width: 220px;}
 .radio-inline {line-height: normal;}
 
 #teamForm .table tr > td:first-child {padding-left: 10px;}

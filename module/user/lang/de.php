@@ -232,10 +232,11 @@ $lang->user->contacts->noListYet     = 'Es existiert keine Kontaktliste. Bitte e
 $lang->user->contacts->confirmDelete = 'Möchten Sie diese Liste löschen?';
 $lang->user->contacts->or            = ' oder ';
 
-$lang->user->resetFail       = "Fehlgeschlagen. Bitte prüfen Sie das Konto";
-$lang->user->resetSuccess    = "Zurückgesetzt! Bitte nutzen Sie Ihr neues Passwort, um sich anzumelden.";
-$lang->user->noticeDelete    = 'Do you want to delete "%s" from ZenTao?';
-$lang->user->noticeResetFile = "<h5>Kontaktieren Sie den Administrator um Ihr Passwort zurückzusetzen.</h5>
+$lang->user->resetFail        = "Fehlgeschlagen. Bitte prüfen Sie das Konto";
+$lang->user->resetSuccess     = "Zurückgesetzt! Bitte nutzen Sie Ihr neues Passwort, um sich anzumelden.";
+$lang->user->noticeDelete     = 'Do you want to delete "%s" from ZenTao?';
+$lang->user->noticeHasDeleted = "This user has been deleted. If you want to view it, please go to the Admin-System-Data-Recycle to restore it.";
+$lang->user->noticeResetFile  = "<h5>Kontaktieren Sie den Administrator um Ihr Passwort zurückzusetzen.</h5>
     <h5>Wenn Sie der Administrator sind, meleden Sie sich auf dem Server an und erstellen Sie die Datei <span> '%s' </span>.</h5>
     <p>Hinweis:</p>
     <ol>

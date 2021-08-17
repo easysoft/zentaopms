@@ -61,6 +61,7 @@ class user extends control
         $userID = (int)$userID;
         $user   = $this->user->getById($userID, 'id');
         if(empty($user)) die(js::error($this->lang->notFound) . js::locate('back'));
+        if($user->deleted == 1) die(js::error($this->lang->user->noticeHasDeleted) . js::locate('back'));
 
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
@@ -1139,6 +1140,7 @@ class user extends control
             $this->file->cropImage($image->realPath, $image->realPath, $size->left, $size->top, $size->right - $size->left, $size->bottom - $size->top, $size->scaled ? $size->scaleWidth : 0, $size->scaled ? $size->scaleHeight : 0);
 
             $this->app->user->avatar = $image->webPath;
+            $this->session->set('user', $this->app->user);
             exit('success');
         }
 

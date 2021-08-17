@@ -41,7 +41,7 @@
 #cards .project-detail  .leftTasks, .totalLeft {display:block; margin-top: 8px;}
 #cards .project-members {float: left;}
 #cards .project-members .avatar {display: inline-block; width: 25px; height: 25px; line-height: 25px; border: 1px solid #fff}
-#cards .project-members .avatar:not(:first-child) {margin-left: -5px;}
+#cards .project-members a:not(:first-child) {margin-left: -5px;}
 #cards .totalMembers{display: inline-block; margin-left: 6px; position: absolute; bottom: 8px;}
 #cards .project-actions {float: right;}
 #cards .project-actions .menu-actions {padding-right: 20px;}
@@ -54,7 +54,7 @@
 </style>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolBar pull-left">
-    <div class="input-control w-150px" id='programBox'><?php echo html::select('programID', $programs, $programID, "onchange=changeProgram(this.value) class='form-control chosen' data-placeholder='{$lang->project->selectProgram}'");?></div>
+    <div class="input-control w-150px" id='programBox'><?php echo html::select('programID', $programs, $programID, "onchange=changeProgram(this.value) class='form-control chosen' data-placeholder='{$lang->project->selectProgram}' data-drop_width='450' data-max_drop_width='0'");?></div>
     <?php foreach($lang->project->featureBar as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
@@ -142,23 +142,25 @@
             <div class="<?php echo $titleClass?>"><?php echo $lang->project->teamMember;?></div>
             <?php if(!empty($project->teamMembers)):?>
             <div class='project-members table-col'>
-              <a href='<?php echo helper::createLink('project', 'manageMembers', "projectID=$projectID");?>'>
               <?php foreach($project->teamMembers as $key => $member):?>
               <?php if($key > 2) continue;?>
-                <div class='avatar bg-secondary avatar-circle'>
+            <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
+                <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
                   <?php echo !empty($usersAvatar[$member]) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
                 </div>
+              </a>
               <?php endforeach;?>
               <?php if($project->teamCount > 3):?>
                 <?php echo '...';?>
-                <div class='avatar bg-secondary avatar-circle'>
+            <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
+                <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
                   <?php echo !empty($usersAvatar[end($project->teamMembers)]) ? html::image(zget($usersAvatar, end($project->teamMembers))) : strtoupper($member[0]);?>
                 </div>
-              <?php endif;?>
               </a>
+              <?php endif;?>
             </div>
             <?php endif;?>
-            <span class='totalMembers'><?php echo html::a(helper::createLink('project', 'manageMembers', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></span>
+            <span class='totalMembers'><?php echo html::a(helper::createLink('project', 'team', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></span>
             <div class='project-actions table-col'>
               <div class='menu-actions'>
                 <?php if($canActions):?>

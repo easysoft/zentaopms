@@ -25,6 +25,7 @@ $lang->story->change             = "变更";
 $lang->story->changed            = "{$lang->SRCommon}变更";
 $lang->story->assignTo           = '指派';
 $lang->story->review             = '评审';
+$lang->story->recall             = '撤销评审';
 $lang->story->needReview         = '需要评审';
 $lang->story->batchReview        = '批量评审';
 $lang->story->edit               = "编辑";
@@ -287,6 +288,7 @@ $lang->story->action->reviewed              = array('main' => '$date, 由 <stron
 $lang->story->action->passreviewed          = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>确认通过</strong>。');
 $lang->story->action->clarifyreviewed       = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>评审不通过</strong>，请变更后重新发起评审。');
 $lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>，原因为 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->recalled              = array('main' => '$date, 由 <strong>$actor</strong> 撤销评审。');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewclosed          = array('main' => '$date, 由 <strong>系统</strong> 关闭，原因为 <strong>评审失败</strong>。');
 $lang->story->action->linked2plan           = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
@@ -389,7 +391,8 @@ $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = '选择评审人...';
 
 $lang->story->notice = new stdClass();
-$lang->story->notice->closed = "您选择的{$lang->SRCommon}已经被关闭了！";
+$lang->story->notice->closed           = "您选择的{$lang->SRCommon}已经被关闭了！";
+$lang->story->notice->reviewerNotEmpty = '该需求需要评审，评审人员不能为空。';
 
 $lang->story->convertToTask = new stdClass();
 $lang->story->convertToTask->fieldList = array();

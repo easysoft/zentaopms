@@ -588,6 +588,7 @@ class webhookModel extends model
         $toList = $this->loadModel('message')->getToList($object, $action->objectType);
         if(!empty($object->mailto)) $toList .= ',' . $object->mailto;
         if(empty($toList)) return false;
+        $toList = str_replace(",{$this->app->user->account},", '', ",$toList,");
 
         $openIdList = $this->getBoundUsers($webhookID, $toList);
         $openIdList = join(',', $openIdList);

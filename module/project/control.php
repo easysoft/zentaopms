@@ -560,9 +560,13 @@ class project extends control
      */
     public function view($projectID = 0)
     {
-        $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
-        $project   = $this->project->getById($projectID);
-        if(empty($project) || strpos('scrum,waterfall', $project->model) === false) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
+        $project = $this->project->getById($projectID);
+        if(empty($project) || strpos('scrum,waterfall', $project->model) === false)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
 
         $this->project->setMenu($projectID);
 
@@ -1107,14 +1111,75 @@ class project extends control
     }
 
     /**
+     * Browse team of a project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function team($projectID = 0)
+    {
+        $this->app->loadLang('execution');
+        $this->project->setMenu($projectID);
+
+        $project = $this->project->getById($projectID);
+
+        $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->team;
+        $this->view->projectID    = $projectID;
+        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
+        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $this->view->canBeChanged = common::canModify('project', $project);
+
+        $this->display();
+    }
+
+    /**
+     * Unlink a memeber.
+     *
+     * @param  int    $projectID
+     * @param  int    $userID
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
+    public function unlinkMember($projectID, $userID, $confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->project->confirmUnlinkMember, $this->inlink('unlinkMember', "projectID=$projectID&userID=$userID&confirm=yes")));
+
+        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $account = $user->account;
+
+        $this->project->unlinkMember($projectID, $account);
+        if(!dao::isError()) $this->loadModel('action')->create('team', $projectID, 'managedTeam');
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+            }
+            return $this->send($response);
+        }
+        die(js::locate($this->inlink('team', "projectID=$projectID"), 'parent'));
+    }
+
+    /**
      * Manage project members.
      *
      * @param  int    $projectID
      * @param  int    $dept
+     * @param  int    $copyProjectID
      * @access public
      * @return void
      */
-    public function manageMembers($projectID, $dept = '')
+    public function manageMembers($projectID, $dept = '', $copyProjectID = 0)
     {
         /* Load model. */
         $this->loadModel('user');
@@ -1127,7 +1192,7 @@ class project extends control
             $this->project->manageMembers($projectID);
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
-            $link = $this->createLink('project', 'manageMembers', "projectID=$projectID");
+            $link = $this->createLink('project', 'team', "projectID=$projectID");
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 
@@ -1135,6 +1200,9 @@ class project extends control
         $users     = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
         $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+
+        $currentMembers = $this->project->getTeamMembers($projectID);
+        $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
         $this->view->title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
         $this->view->position[] = $this->lang->project->manageMembers;
@@ -1145,7 +1213,10 @@ class project extends control
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->currentMembers = $this->project->getTeamMembers($projectID);
+        $this->view->currentMembers = $currentMembers;
+        $this->view->members2Import = $members2Import;
+        $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopyObjects($projectID, 'project');
+        $this->view->copyProjectID  = $copyProjectID;
         $this->display();
     }
 

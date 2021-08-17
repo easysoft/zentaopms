@@ -915,8 +915,6 @@ class story extends control
         $modulePath   = $this->tree->getParents($story->module);
         $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
 
-        $reviewers    = $this->story->getReviewerPairs($storyID, $story->version);
-
         /* Set the menu. */
         $from = $this->app->openApp;
         $this->product->setMenu($story->product, $story->branch);
@@ -953,7 +951,7 @@ class story extends control
         $this->view->story       = $story;
         $this->view->track       = $this->story->getTrackByID($story->id);
         $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->reviewers   = array_keys($reviewers);
+        $this->view->reviewers   = $this->story->getReviewerPairs($storyID, $story->version);
         $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions  = $this->execution->getPairs(0, 'all', 'nocode');
         $this->view->execution   = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
@@ -1103,6 +1101,21 @@ class story extends control
         if(dao::isError()) die(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
+    }
+
+    /**
+     * Recall the story review.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function recall($storyID)
+    {
+        $this->story->recall($storyID);
+        $this->loadModel('action')->create('story', $storyID, 'Recalled');
+
+        die(js::locate('parent.parent'));
     }
 
     /**

@@ -101,6 +101,9 @@ $lang->execution->copyNoExecution = 'There are no ' . $lang->executionCommon . '
 $lang->execution->noTeam          = 'No team members at the moment';
 $lang->execution->or              = ' or ';
 
+if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
+if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "select Project/{$lang->executionCommon} to copy its members";
+
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Activate';
 $lang->execution->putoff   = 'Delay';

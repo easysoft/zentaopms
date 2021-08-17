@@ -189,6 +189,7 @@ $lang->doc->noEditedDoc          = 'Bạn có not edited any documents.';
 $lang->doc->noOpenedDoc          = 'Bạn chưa tạo any documents.';
 $lang->doc->noCollectedDoc       = 'Bạn có not favorited any documents.';
 $lang->doc->errorEmptyLib        = 'No data in document library.';
+$lang->doc->confirmUpdateContent = 'You have a document that is not saved from last time. Do you want to continue editing it?';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = 'Users who can access the selected product có thể truy cập nó.';
 $lang->doc->noticeAcl['lib']['product']['custom']    = 'Users who can access the selected product or users in the whiltelist có thể truy cập nó.';

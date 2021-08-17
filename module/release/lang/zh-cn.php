@@ -56,6 +56,8 @@ $lang->release->createdBugs   = '本次共遗留 %s 个Bug';
 $lang->release->export        = '导出HTML';
 $lang->release->yesterday     = '昨日发布';
 $lang->release->all           = '所有';
+$lang->release->notify        = '通知人员';
+$lang->release->mailto        = '抄送给';
 
 $lang->release->filePath = '下载地址：';
 $lang->release->scmPath  = '版本库地址：';
@@ -74,3 +76,9 @@ $lang->release->changeStatusList['terminate'] = '停止维护';
 
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
+
+$lang->release->notifyList['PO'] = "{$lang->productCommon}负责人";
+$lang->release->notifyList['QD'] = '测试负责人';
+$lang->release->notifyList['SC'] = '需求提交人';
+$lang->release->notifyList['ET'] = "所在{$lang->execution->common}团队成员";
+$lang->release->notifyList['PT'] = "所在项目团队成员";

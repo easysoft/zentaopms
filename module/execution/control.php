@@ -41,7 +41,7 @@ class execution extends control
         $this->loadModel('project');
 
         $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
-        if(!in_array($this->methodName, array('computeburn', 'ajaxgetdropmenu', 'executionkanban')) and $this->app->openApp == 'execution')
+        if(!in_array($this->methodName, $this->config->execution->skipCreate) and $this->app->openApp == 'execution')
         {
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
@@ -1340,6 +1340,7 @@ class execution extends control
         $this->view->name            = $name;
         $this->view->code            = $code;
         $this->view->team            = $team;
+        $this->view->teams           = array(0 => '') + $this->execution->getTeamPairsByProject((int)$projectID);
         $this->view->allProjects     = array(0 => '') + $this->project->getPairsByModel();
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
@@ -2291,7 +2292,7 @@ class execution extends control
 
         $this->view->title          = $title;
         $this->view->position       = $position;
-        $this->view->execution        = $execution;
+        $this->view->execution      = $execution;
         $this->view->users          = $users;
         $this->view->deptUsers      = $deptUsers;
         $this->view->roles          = $roles;
@@ -2633,6 +2634,28 @@ class execution extends control
             $assignedTo = isset($users[$assignedTo]) ? $assignedTo : '';
             die(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
         }
+    }
+
+    /**
+     * AJAX: get team members by projectID/executionID.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetTeamMembers($objectID)
+    {
+        $type = 'execution';
+        if($this->config->systemMode == 'new')
+        {
+            $type = $this->dao->findById($objectID)->from(TABLE_PROJECT)->fetch('type');
+            $type = $type == 'project' ? $type : 'execution';
+        }
+
+        $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $members = $this->user->getTeamMemberPairs($objectID, $type);
+
+        die(html::select('teamMembers[]', $users, array_keys($members), "class='form-control chosen' multiple"));
     }
 
     /**
