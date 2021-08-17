@@ -41,7 +41,7 @@
 #cards .project-detail .progress-pie {width: 24px; position: absolute; top: 18px;}
 #cards .project-detail  .leftTasks, .totalLeft {display:block; margin-top: 8px;}
 #cards .project-members {float: left;}
-#cards .project-members .avatar {display: inline-block; width: 25px; height: 25px; line-height: 25px; border: 1px solid #fff}
+#cards .project-members .avatar {display: inline-block; width: 25px; height: 25px; line-height: 25px;}
 #cards .project-members a:not(:first-child) {margin-left: -5px;}
 #cards .totalMembers{display: inline-block; margin-left: 6px; position: absolute; bottom: 8px;}
 #cards .project-actions {float: right;}
