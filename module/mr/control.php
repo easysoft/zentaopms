@@ -76,5 +76,29 @@ class mr extends control
     public function update()
     {
     }
+
+    /**
+     * AJAX: Get forked projects.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetForkedProjects($gitlabID, $projectID)
+    {
+        $projects = $this->mr->apiGetForks($gitlabID, $projectID);
+
+        if(!$projects) return $this->send(array('message' => array()));
+        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
+        $options = "<option value=''></option>";
+        foreach($projects as $project)
+        {
+            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
+            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
+        }
+
+        return $this->send($options);
+    }
 }
 

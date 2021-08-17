@@ -22,7 +22,6 @@
              <th><?php echo $lang->mr->sourceProject;?></th>
              <td class='required'>
                <div class='input-group'>
-                 <!-- sourceProject same as projectID -->
                  <?php echo html::select('sourceProject', array(''), '', "class='form-control chosen'");?>
                  <span class='input-group-addon fix-border'><?php echo $lang->mr->sourceBranch ?></span>
                  <?php echo html::select('sourceBranch', array(''), '', "class='form-control chosen'");?>

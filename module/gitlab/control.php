@@ -349,4 +349,25 @@ class gitlab extends control
         }
         return $this->send($options);
     }
+
+    /**
+     * AJAX: Get project branches.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function ajaxGetProjectBranches($gitlabID, $projectID)
+    {
+        if(!$gitlabID or !$projectID) return $this->send(array('message' => array()));
+
+        $branches = $this->gitlab->apiGetBranches($gitlabID, $projectID);
+        $options  = "<option value=''></option>";
+        foreach($branches as $index =>$branch)
+        {
+            $options .= "<option title='{$branch->name}' value='{$index}' data-name='{$branch->name}'>{$branch->name}</option>";
+        }
+        return $this->send($options);
+    }
 }
