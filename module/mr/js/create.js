@@ -3,8 +3,8 @@ $(function()
     $('#gitlabID').change(function()
     {
         host  = $('#gitlabID').val();
-        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
         if(host == '') return false;
+        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
 
         $.get(url, function(response)
         {
@@ -17,6 +17,15 @@ $(function()
     {
         $option = $(this).find('option:selected');
         $('#name').val($option.data('name'));
+        project = $('#sourceProject').val();
+        url   = createLink('gitlab', 'ajaxgetprojectbranches', "gitlabID=" + host + "&projectID=" + project);
+        $.get(url, function(response)
+        {
+            $('#sourceBranch').html('').append(response);
+            $('#sourceBranch').chosen().trigger("chosen:updated");;
+        });
+
+        $('#targetProject').chosen().trigger("chosen:updated");;
     });
 
 });
