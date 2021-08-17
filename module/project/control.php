@@ -189,6 +189,7 @@ class project extends control
             ->andWhere('t1.type')->eq('execution')
             ->andWhere('t1.account')->eq($account)
             ->fetchPairs();
+        if(empty($executionMembers)) die();
 
         $executionNames = '';
         $count          = 0;
@@ -200,7 +201,14 @@ class project extends control
             $count++;
         }
         if(count($executionMembers) <= 2) $this->lang->project->etc = ' ';
-        $this->lang->project->unlinkExecutionMember = sprintf($this->lang->project->unlinkExecutionMember, $executionNames, $this->lang->project->etc, count($executionMembers));
+        if(strpos($this->app->getClientLang(), 'zh') !== false)
+        {
+            $this->lang->project->unlinkExecutionMember = sprintf($this->lang->project->unlinkExecutionMember, $executionNames, $this->lang->project->etc, count($executionMembers));
+        }
+        else
+        {
+            $this->lang->project->unlinkExecutionMember = sprintf($this->lang->project->unlinkExecutionMember, count($executionMembers), $executionNames, $this->lang->project->etc);
+        }
         die($this->lang->project->unlinkExecutionMember);
     }
 

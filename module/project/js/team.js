@@ -20,13 +20,20 @@ function deleteMemeber(projectID, account, userID)
         var tipsLink      = createLink('project', 'ajaxGetUnlinkTips', 'projectID=' + projectID + '&account=' + account);
         $.get(tipsLink, function(tips)
         {
-            if(confirm(tips))
+            if(!tips)
             {
-                var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=yes');
+                var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=no');
             }
             else
             {
-                var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=no');
+                if(confirm(tips))
+                {
+                    var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=yes');
+                }
+                else
+                {
+                    var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=no');
+                }
             }
 
             $.get(unlinkURL, function(data)
