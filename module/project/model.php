@@ -1269,14 +1269,15 @@ class projectModel extends model
     {
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
 
+        $this->loadModel('user');
+        $this->user->updateUserView($projectID, 'project', array($account));
+
         if($removeExecution == 'yes')
         {
             $executions = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
             $this->dao->delete()->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('execution')->andWhere('account')->eq($account)->exec();
+            $this->user->updateUserView(array_keys($executions), 'sprint', array($account));
         }
-
-        $this->loadModel('user');
-        $this->user->updateUserView($projectID, 'project', array($account));
 
         $linkedProducts = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
