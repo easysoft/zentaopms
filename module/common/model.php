@@ -567,9 +567,9 @@ class commonModel extends model
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
 
-        $items    = array();
-        $lastItem = end($menuOrder);
-        $divider  = false;
+        $items        = array();
+        $lastItem     = end($menuOrder);
+        $printDivider = false;
 
         foreach($menuOrder as $key => $group)
         {
@@ -577,11 +577,11 @@ class commonModel extends model
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
 
             /* When last divider is not used in mainNav, use it next menu. */
-            $divider = ($divider || ($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
-            if($divider and !empty($items))
+            $printDivider = ($printDivider || ($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
+            if($printDivider and !empty($items))
             {
-                $items[] = 'divider';
-                $divider = false;
+                $items[]      = 'divider';
+                $printDivider = false;
             }
 
             /**

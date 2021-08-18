@@ -69,7 +69,7 @@
           <?php
           if(common::hasPriv('user', 'view'))
           {
-              $link = isset($deptUsers[$member->userID]) ? $this->createLink('user', 'view', "userID={$member->userID}") : "javascript:checkUserDept();";
+              $link = isset($deptUsers[$member->userID]) ? $this->createLink('user', 'view', "userID={$member->userID}") : "javascript: alert(noAccess);";
               echo html::a($link, $member->realname, '', 'data-app="system"');
           }
           else

@@ -285,7 +285,7 @@ class bugModel extends model
     public function createBugFromGitlabIssue($bug, $executionID)
     {
         $bug->openedBy     = $this->app->user->account;
-        $bug->openedDate   = helper::now(); // TODO(dingguodong) use from issue->created_at ?
+        $bug->openedDate   = helper::now();
         $bug->assignedDate = isset($bug->assignedTo) ? helper::now() : 0;
         $bug->openedBuild  = 'trunk';
         $bug->story        = 0;
@@ -1818,7 +1818,10 @@ class bugModel extends model
             $bugSteps .= $this->lang->bug->tplExpect;
         }
 
-        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version);
+        if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getById($run->task);
+        $executionID = isset($testtask->execution) ? $testtask->execution : 0;
+
+        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
     }
 
     /**

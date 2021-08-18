@@ -792,38 +792,39 @@ class storyModel extends model
             $_POST['reviewer']   = array_filter($_POST['reviewer']);
             $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-
-            /* Update story reviewer. */
-            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
-            foreach($_POST['reviewer'] as $reviewer)
+            if(array_diff($_POST['reviewer'], array_keys($oldReviewer)) or array_diff(array_keys($oldReviewer), $_POST['reviewer']))
             {
-                if(in_array($reviewer, array_keys($oldReviewer))) continue;
-
-                $reviewData = new stdclass();
-                $reviewData->story    = $storyID;
-                $reviewData->version  = $oldStory->version;
-                $reviewData->reviewer = $reviewer;
-                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-            }
-
-            /* Update the story status by review rules. */
-            $reviewerList     = $this->getReviewerPairs($storyID, $oldStory->version);
-            $story->reviewers = implode(',', array_keys($reviewerList));
-            $reviewedBy       = explode(',', trim($oldStory->reviewedBy, ','));
-            if(!array_diff(array_keys($reviewerList), $reviewedBy))
-            {
-                $status        = $this->setStatusByReviewRules($reviewerList);
-                $story->status = $status ? $status : $oldStory->status;
-                if($story->status == 'closed')
+                /* Update story reviewer. */
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
+                foreach($_POST['reviewer'] as $reviewer)
                 {
-                    $story->closedBy     = $this->app->user->account;
-                    $story->closedDate   = $now;
-                    $story->assignedTo   = 'closed';
-                    $story->assignedDate = $now;
-                    $story->stage        = 'closed';
-                    if($this->post->closedReason == 'done') $story->stage = 'released';
+                    if(in_array($reviewer, array_keys($oldReviewer))) continue;
+
+                    $reviewData = new stdclass();
+                    $reviewData->story    = $storyID;
+                    $reviewData->version  = $oldStory->version;
+                    $reviewData->reviewer = $reviewer;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                 }
 
+                /* Update the story status by review rules. */
+                $reviewerList     = $this->getReviewerPairs($storyID, $oldStory->version);
+                $story->reviewers = implode(',', array_keys($reviewerList));
+                $reviewedBy       = explode(',', trim($oldStory->reviewedBy, ','));
+                if(!array_diff(array_keys($reviewerList), $reviewedBy))
+                {
+                    $status        = $this->setStatusByReviewRules($reviewerList);
+                    $story->status = $status ? $status : $oldStory->status;
+                    if($story->status == 'closed')
+                    {
+                        $story->closedBy     = $this->app->user->account;
+                        $story->closedDate   = $now;
+                        $story->assignedTo   = 'closed';
+                        $story->assignedDate = $now;
+                        $story->stage        = 'closed';
+                        if($this->post->closedReason == 'done') $story->stage = 'released';
+                    }
+                }
             }
         }
 
@@ -3798,11 +3799,11 @@ class storyModel extends model
                         break;
                     }
 
-                    common::printIcon('story', 'change',     $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
-                    common::printIcon('story', 'review',     $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
+                    common::printIcon('story', 'change', $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
+                    common::printIcon('story', 'review', $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
                     if($this->app->openApp != 'project') common::printIcon('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
-                    common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                    common::printIcon('story', 'edit',       $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
+                    common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
+                    common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");
                     common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
                     if($this->app->rawModule == 'projectstory') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->project}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
@@ -4515,7 +4516,7 @@ class storyModel extends model
         $comment  = isset($_POST['comment']) ? $this->post->comment : '';
         $actionID = !empty($result) ? $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam) : '';
 
-        if(ucfirst($result) != 'Revert')
+        if(strtolower($result) != 'revert')
         {
             if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewClosed');
             if($story->status == 'active') $this->action->create('story', $story->id, 'PassReviewed');
@@ -4524,5 +4525,4 @@ class storyModel extends model
 
         return $actionID;
     }
-
 }

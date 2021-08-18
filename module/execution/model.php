@@ -1299,15 +1299,15 @@ class executionModel extends model
         {
             $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s");
         }
+        elseif($module == 'doc')
+        {
+            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
+        }
         else
         {
             $link = helper::createLink($module, $method, "executionID=%s");
         }
 
-        if($module == 'doc')
-        {
-            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
-        }
         return $link;
     }
 
@@ -2444,7 +2444,7 @@ class executionModel extends model
     }
 
     /**
-     * Get the project and execution the team through the projectID.
+     * Get team of the project and its executions by projectID.
      *
      * @param  int    $projectID
      * @access public
@@ -2454,8 +2454,9 @@ class executionModel extends model
     {
         $teams = $this->dao->select('id,team,type')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
-            ->andWhere('project')->eq($projectID)
+            ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
+            ->markRight(1)
             ->fetchAll('id');
 
         if(empty($teams)) return array();

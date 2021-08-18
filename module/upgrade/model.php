@@ -4766,6 +4766,12 @@ class upgradeModel extends model
         }
     }
 
+    /**
+     * Merge repo.
+     *
+     * @access public
+     * @return void
+     */
     public function mergeRepo()
     {
         $data = fixer::input('post')

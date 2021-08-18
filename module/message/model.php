@@ -168,7 +168,7 @@ class messageModel extends model
         {
             /* Get notifiy persons. */
             $notifyPersons = array();
-            if(!empty($toList->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object->notify, $object->product, $object->build);
+            if(!empty($object->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object->notify, $object->product, $object->build);
 
             foreach($notifyPersons as $account)
             {

@@ -23,8 +23,7 @@ $lang->action->action     = 'Action';
 $lang->action->actionID   = 'Action ID';
 $lang->action->date       = 'Date';
 $lang->action->extra      = 'Extra';
-
-$lang->action->system = 'System';
+$lang->action->system     = 'System';
 
 $lang->action->trash       = 'Recycle';
 $lang->action->undelete    = 'Restore';

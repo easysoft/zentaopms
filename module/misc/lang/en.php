@@ -19,7 +19,7 @@ $lang->misc->zentao->labels['about']   = 'About ZenTao';
 $lang->misc->zentao->labels['support'] = 'Tech Support';
 $lang->misc->zentao->labels['cowin']   = 'Help Us';
 $lang->misc->zentao->labels['service'] = 'Service';
-$lang->misc->zentao->labels['others']  = 'EasyCorp Products';
+$lang->misc->zentao->labels['others']  = 'From EasyCorp';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';
@@ -69,7 +69,7 @@ $lang->misc->tableName   = "Table Name";
 $lang->misc->tableStatus = "Status";
 $lang->misc->novice      = "New to ZenTao? Do you want to start ZenTao Tutorial?";
 $lang->misc->showAnnual  = 'Add Annual Summary';
-$lang->misc->annualDesc  = 'After version 12.0, the Annual Summary can be viewed on 『Report->Annual Summary』 page. <a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">See now</a>.';
+$lang->misc->annualDesc  = 'After version 12.0, Annual Summary can be viewed on 『Report->Annual Summary』 page. <a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">See now</a>.';
 $lang->misc->remind      = 'New feature reminders';
 
 $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenTao Administrator to repair tables.</h5>

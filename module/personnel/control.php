@@ -202,7 +202,7 @@ class personnel extends control
         $this->view->objectID    = $objectID;
         $this->view->objectType  = $objectType;
         $this->view->objectName  = $objectName;
-        $this->view->objects     = array('' => '') + $this->personnel->getCopyObjects($objectID, $objectType);
+        $this->view->objects     = array('' => '') + $this->personnel->getCopiedObjects($objectID, $objectType);
         $this->view->module      = $module;
         $this->view->deptID      = $deptID;
         $this->view->appendUsers = $appendUsers;
