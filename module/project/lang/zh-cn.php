@@ -129,6 +129,7 @@ $lang->project->longTime           = '长期';
 $lang->project->future             = '待定';
 $lang->project->moreProject        = '更多项目';
 $lang->project->days               = '可用工作日';
+$lang->project->etc                = "等";
 
 $lang->project->productNotEmpty        = '请关联产品或创建产品。';
 $lang->project->existProductName       = '产品名称已存在。';
@@ -138,6 +139,7 @@ $lang->project->linkedProjectsTip      = '关联的项目如下';
 $lang->project->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
 $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此项目中";
 $lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
+$lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
 
 $lang->project->tenThousand = '万';
 

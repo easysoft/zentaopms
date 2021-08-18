@@ -118,6 +118,76 @@ function setExportTPL()
     $('#customFields').toggleClass('hidden');
 }
 
+/**
+ * Set whether part download.
+ * 
+ * @access public
+ * @return void
+ */
+function setPart(t)
+{
+    if($(t).prop("checked"))
+    {
+        $("#submit").attr("onclick", 'setPartDownloading();');
+    }
+    else
+    {
+        $("#submit").attr("onclick", 'setDownloading();');
+    }
+}
+
+var partQueue = new Array();
+
+/**
+ * Set part down and begin the first part down.
+ * 
+ * @access public
+ * @return void
+ */
+function setPartDownloading()
+{
+    var partNum = 10000;
+    var total = $('.pager', window.parent.document).data('rec-total');
+    for(var i=0; i < total; i = i + partNum)
+    {
+        partQueue.push(i+','+partNum); 
+    }
+    $.cookie('downloading', 0);
+    $('#mainContent').addClass('loading');
+    $("#limit").val(partQueue.shift());
+    $("#submit").attr("onclick", 'startPartDownloading();');
+    time = setInterval(function()
+    {
+        startPartDownloading();
+    }, 1000);
+}
+
+/**
+ * Start follow-up part down.
+ * 
+ * @access public
+ * @return void
+ */
+function startPartDownloading()
+{
+    if($.cookie('downloading') == 1){
+        var limit = partQueue.shift();
+        if(limit)
+        {
+            $.cookie('downloading', 0);
+            $("#limit").val(limit);
+            $("#submit").attr("disabled", false).click();
+        }
+        else
+        {
+            $('#mainContent').removeClass('loading');
+            parent.$.closeModal();
+            $.cookie('downloading', null);
+            clearInterval(time);
+        }
+    } 
+}
+
 $(document).ready(function()
 {
     $(document).on('change', '#template', function()
@@ -205,6 +275,10 @@ if($isCustomExport)
               <td>
                 <?php if(isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'calendar') !== false) unset($lang->exportTypeList['selected']);?>
                 <?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?>
+              </td>
+              <td class='checkbox part hidden'>
+                <?php echo html::checkbox('part', array( 1 => $lang->file->partExport), '', "onclick='setPart(this);'");?>
+                <?php echo html::hidden('limit', '');?>
               </td>
             </tr>
             <?php if($isCustomExport):?>

@@ -13,24 +13,23 @@
 #tabContent {margin-top: 10px; z-index: 900;}
 #tabContent ul {list-style: none; margin: 0}
 #tabContent .tab-pane>ul {padding-left: 7px;}
-#tabContent .tab-pane>ul>li.hide-in-search {position: relative;}
-#tabContent .tab-pane>ul>li>label+a {padding-left: 45px;}
-#tabContent .tab-pane>ul>li label {background: rgba(131,138,157,0.5); position: absolute; top: 0; left: 5px;}
+#tabContent .tab-pane>ul>li.hide-in-search>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
+#tabContent .tab-pane>ul>li label {background: rgba(255,255,255,0.5); line-height: unset; color: #838a9d; border: 1px solid #d8d8d8; border-radius: 2px; padding: 1px 4px;}
 #tabContent li a i.icon {font-size: 15px !important;}
 #tabContent li a i.icon:before {min-width: 16px !important;}
-#tabContent li .label {margin-top: 2px; position: unset;}
-#tabContent li ul {padding-left: 15px;}
-#tabContent li>a {margin-top: 5px;display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
+#tabContent li .label {position: unset; margin-bottom: 0;}
+#tabContent li>a, #tabContent li>div>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
 #tabContent li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
+#tabContent .tree li>.list-toggle {line-height: 24px;}
+#tabContent .tree li.has-list.open:before {content: unset;}
 
-#swapper li.hide-in-search>a:focus, #swapper li.hide-in-search>a:hover {color: #838a9d; cursor: default;}
-#swapper li ul li a:focus, #swapper li ul li a:hover, .noProject li a:focus, .noProject li a:hover {background: #0c64eb; color: #fff;}
+#swapper li.hide-in-search>div>a:focus, #swapper li.hide-in-search>div>a:hover {color: #838a9d; cursor: default;}
+a.executionName:focus, a.executionName:hover {background: #0c64eb; color: #fff !important;}
 </style>
 <?php
 $executionCounts      = array();
 $executionNames       = array();
-$myExecutionsHtml     = '';
-$normalExecutionsHtml = '';
+$preFix               = '';
 $closedExecutionsHtml = '';
 $tabActive            = '';
 $myExecutions         = 0;
@@ -52,20 +51,19 @@ foreach($executions as $projectID => $projectExecutions)
 }
 $executionsPinYin = common::convert2Pinyin($executionNames);
 
+$myExecutionsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$normalExecutionsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+
 foreach($executions as $projectID => $projectExecutions)
 {
     /* Adapt to the old version. */
     if($projectID and $config->systemMode == 'new')
     {
         $projectName = zget($projects, $projectID);
+        $preFix      = $projectName . ' / ';
 
-        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->project->common . '</label><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a></li><li><ul>';
-        if($executionCounts[$projectID]['others']) $normalExecutionsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->project->common . '</label><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a></li><li><ul>';
-    }
-    else
-    {
-        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<ul class="noProject">';
-        if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<ul class="noProject">';
+        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
+        if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
     }
 
     foreach($projectExecutions as $index => $execution)
@@ -73,7 +71,7 @@ foreach($executions as $projectID => $projectExecutions)
         $selected = $execution->id == $executionID ? 'selected' : '';
         if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
         {
-            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
+            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected executionName' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myExecution';
 
@@ -81,7 +79,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
         {
-            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
+            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected executionName' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
@@ -89,7 +87,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status == 'done' or $execution->status == 'closed')
         {
-            $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
+            $closedExecutionsHtml .= html::a(sprintf($link, $execution->id), $preFix . $execution->name, '', "class='$selected' title='" . $preFix . $execution->name . "' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->openApp}'");
 
             if($selected == 'selected') $tabActive = 'closed';
         }
@@ -101,10 +99,9 @@ foreach($executions as $projectID => $projectExecutions)
             if($executionCounts[$projectID]['others'])      $normalExecutionsHtml .= '</ul></li>';
         }
     }
-
-    if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml     .= '</ul>';
-    if($executionCounts[$projectID]['others'])      $normalExecutionsHtml .= '</ul>';
 }
+$myExecutionsHtml     .= '</ul>';
+$normalExecutionsHtml .= '</ul>';
 ?>
 <div class="table-row">
   <div class="table-col col-left">
@@ -144,10 +141,8 @@ $(function()
     {
         $(this).siblings().show();
         $(this).parent().siblings('li').find('span').hide();
-        if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
-        $("#dropMenu .search-box").width('auto');
     })
 
-    if(config.clientLang == 'en') $('#tabContent .tab-pane>ul>li>label+a').css('padding-left', '55px');
+    $('#tabContent [data-ride="tree"]').tree('expand');
 })
 </script>

@@ -51,12 +51,13 @@
           <td class='w-50px text-center'><i class='collapse-handle icon-angle-down text-muted'></i></td>
         </tr>
         <?php $executionParam = ($this->app->openApp == 'execution' and isset($testtask)) ? "executionID=$testtask->execution" : "";?>
-        <?php $params = isset($testtask) ? ",testtask=$testtask->id,buildID=$testtask->build" : "";?>
+        <?php $params = isset($testtask) ? ",testtask=$testtask->id" : "";?>
+        <?php $params = $params . ",buildID=" . (isset($testtask->build) ? $testtask->build : $result->build);?>
         <?php if($executionParam) $params .= ',' . $executionParam;?>
         <tr class='result-detail hide' id='tr-detail_<?php echo $trCount++; ?>'>
           <td colspan='7' class='pd-0'>
             <?php $projectParam = $this->app->openApp == 'project' ? "projectID={$this->session->project}," : ''?>
-            <form data-params='<?php echo "product=$case->product&branch=$case->branch&extras={$projectParam}caseID=$case->id,version=$case->version,resultID=$result->id,runID=$runID" . $params?>' method='post'>
+            <form data-params='<?php echo "product=$case->product&branch=$case->branch&extras={$projectParam}caseID=$case->id,version=$case->version,resultID=$result->id,runID=$result->run" . $params?>' method='post'>
               <table class='table table-condensed resultSteps'>
                 <thead>
                   <tr>

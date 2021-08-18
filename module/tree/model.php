@@ -411,7 +411,7 @@ class treeModel extends model
                         $projectID  = zget($extra, 'projectID', 0);
                         $branchLink = helper::createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&productID=$rootID&branch=$branchID&browseType=bybranch" . $extraParams);
                     }
-                    $linkHtml   = html::a($branchLink, $branch, "", "id=branch" . $branchID);
+                    $linkHtml = html::a($branchLink, $branch, "", "id=branch" . $branchID);
                 }
                 if($firstBranch and $product->type != 'normal')
                 {

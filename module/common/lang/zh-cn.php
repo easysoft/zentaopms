@@ -26,6 +26,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = '禅道';
+$lang->pmsName        = '开源版';
 $lang->proName        = '专业版';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";
@@ -219,7 +220,7 @@ $lang->doc->my        = '我的文档';
 $lang->doc->favorite  = '我的收藏';
 $lang->doc->product   = '产品库';
 $lang->doc->project   = '项目库';
-$lang->doc->execution = "{$lang->executionCommon}库";
+$lang->doc->execution = isset($config->maxVersion) ? "{$lang->execution->common}库" : "{$lang->executionCommon}库";
 $lang->doc->custom    = '自定义库';
 $lang->doc->wiki      = 'WIKI';
 

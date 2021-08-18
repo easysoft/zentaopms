@@ -1,4 +1,5 @@
 <?php
+/* Field. */
 $lang->projectstory->common            = "Project {$lang->SRCommon}";
 $lang->projectstory->index             = "{$lang->SRCommon} Home";
 $lang->projectstory->view              = "{$lang->SRCommon} Detail";
@@ -6,7 +7,14 @@ $lang->projectstory->story             = "{$lang->SRCommon} List";
 $lang->projectstory->track             = 'Tracking Matrix';
 $lang->projectstory->linkStory         = 'Linked' . $lang->SRCommon;
 $lang->projectstory->unlinkStory       = 'Unlinked' . $lang->SRCommon;
+$lang->projectstory->batchUnlinkStory  = 'Batch Unlink ' . $lang->SRCommon;
 $lang->projectstory->importplanstories = 'Linked by plan' . $lang->SRCommon;
+$lang->projectstory->trackAction       = 'Matrix';
+$lang->projectstory->confirm           = 'Confirm';
+
+/* Notice. */
+$lang->projectstory->whyNoStories   = "No story can be linked. Please check whether there is any story in project which is linked to {$lang->productCommon} and make sure it has been reviewed.";
+$lang->projectstory->batchUnlinkTip = 'The following requirements are linked to Executions of this project, please remove them from the execution first.';
 
 global $app;
 $app->loadLang('product');

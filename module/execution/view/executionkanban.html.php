@@ -45,7 +45,21 @@
               <div class="board s-<?php echo $colStatus?>">
                 <div>
                   <?php if(!empty($executionList[$colStatus])):?>
-                  <?php foreach($executionList[$colStatus] as $execution):?>
+                  <?php foreach($executionList[$colStatus] as $executionID => $execution):?>
+                  <?php if($executionID == 'more'):?>
+                  <div class='text-center'>
+                    <?php
+                    if(common::hasPriv('execution', 'all'))
+                    {
+                        echo html::a($this->createLink('execution', 'all', "status=closed&projectID=$projectID"), $execution, '', "title='$execution'");
+                    }
+                    else
+                    {
+                        echo "<span title='$execution'>$execution</span>";
+                    }
+                    ?>
+                  </div>
+                  <?php else:?>
                   <div class='board-item' <?php if($execution->status == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid red';";?>>
                     <div class='table-row'>
                       <div class='table-col'>
@@ -71,6 +85,7 @@
                       <?php endif?>
                     </div>
                   </div>
+                  <?php endif?>
                   <?php endforeach?>
                   <?php endif?>
                 </div>

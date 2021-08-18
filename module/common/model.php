@@ -567,42 +567,50 @@ class commonModel extends model
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
 
-        $items = array();
-        $lastItem = end($menuOrder);
-        $divider = false;
+        $items        = array();
+        $lastItem     = end($menuOrder);
+        $printDivider = false;
+
         foreach($menuOrder as $key => $group)
         {
             $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
 
             /* When last divider is not used in mainNav, use it next menu. */
-            $divider = ($divider || ($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
-
-            if(!common::hasPriv($currentModule, $currentMethod))
+            $printDivider = ($printDivider || ($lastItem != $key) && strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
+            if($printDivider and !empty($items))
             {
-                $hidden = true;
-                if($currentModule == 'assetlib')
+                $items[]      = 'divider';
+                $printDivider = false;
+            }
+
+            /**
+             * Judget the module display or not.
+             *
+             */
+            $display = false;
+
+            /* 1. The default rule. */
+            if(common::hasPriv($currentModule, $currentMethod)) $display = true;
+
+            /* 2. If the module is assetLib, need judge more methods. */
+            if($currentModule == 'assetlib' and $display == false)
+            {
+                $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
+                foreach($methodList as $method)
                 {
-                    $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
-                    foreach($methodList as $method)
+                    if(common::hasPriv($currentModule, $method))
                     {
-                        if(common::hasPriv($currentModule, $method))
-                        {
-                            $hidden        = false;
-                            $currentMethod = $method;
-                            break;
-                        }
+                        $display       = true;
+                        $currentMethod = $method;
+                        break;
                     }
                 }
-                if($hidden) continue;
             }
 
-            if($divider and !empty($items))
-            {
-                $items[] = 'divider';
-                $divider = false;
-            }
+            if(!$display) continue;
 
+            /* Assign vars. */
             $item = new stdClass();
             $item->group      = $group;
             $item->code       = $group;
@@ -1869,6 +1877,7 @@ EOD;
             ->where('t1.project')->eq($program->id)
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->fetchAll();
+        if(empty($programRights)) return;
 
         /* Group priv by module the same as rights. */
         $programRightGroup = array();

@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('avatar', $this->app->user->avatar);?>
+<?php js::set('account', $this->app->user->account);?>
 <div id='mainContent'>
   <div class='cell'>
     <div class='main-header text-center'>

@@ -40,9 +40,13 @@
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
         <thead>
           <tr class="text-center">
+            <?php if($canBatchEdit):?>
+            <th class='text-left w-45px' rowspan="2">
+              <?php echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";?>
+            </th>
+            <?php endif;?>
             <th class='table-nest-title text-left' rowspan="2">
-              <?php if($canBatchEdit) echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";?>
-              <a class='table-nest-toggle table-nest-toggle-global <?php echo $canBatchEdit ? 'nest-has-checkbox' : 'nest-none-checkbox';?>' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
+              <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
             <?php if($this->config->URAndSR):?>
@@ -80,7 +84,10 @@
         ?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr <?php echo $trAttrs;?>>
-            <td class='text-left'>
+            <?php if($canBatchEdit):?>
+            <td></td>
+            <?php endif;?>
+            <td class='text-left table-nest-title'>
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $program['programName']?>
             </td>
@@ -121,7 +128,10 @@
           }
           ?>
           <tr <?php echo $trAttrs;?>>
-            <td class='text-left'>
+            <?php if($canBatchEdit):?>
+            <td></td>
+            <?php endif;?>
+            <td class='text-left table-nest-title'>
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>
@@ -174,11 +184,13 @@
           $trAttrs .= " class='$trClass'";
           ?>
           <tr class="text-center" <?php echo $trAttrs;?>>
-            <td class="c-name text-left" title='<?php echo $product->name?>'>
+            <?php if($canBatchEdit):?>
+            <td><?php echo $canBatchEdit ? html::checkbox('productIDList', array($product->id => '')) : '';?></td>
+            <?php endif;?>
+            <td class="c-name text-left table-nest-title" title='<?php echo $product->name?>'>
               <?php
               $productLink = html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);
-              $productName = "<span class='table-nest-icon icon icon-product'></span>" . $productLink;
-              echo $canBatchEdit ? html::checkbox('productIDList', array($product->id => '')) . $productName : $productName;
+              echo "<span class='table-nest-icon icon icon-product'></span>" . $productLink;
               ?>
             </td>
             <?php if($this->config->URAndSR):?>

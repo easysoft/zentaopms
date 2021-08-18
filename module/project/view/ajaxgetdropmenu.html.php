@@ -13,24 +13,23 @@
 #tabContent {margin-top: 10px; z-index: 900;}
 #tabContent ul {list-style: none; margin: 0}
 #tabContent .tab-pane>ul {padding-left: 7px;}
-#tabContent .tab-pane>ul>li.hide-in-search {position: relative;}
-#tabContent .tab-pane>ul>li>label+a {padding-left: 55px;}
-#tabContent .tab-pane>ul>li label {background: rgba(131,138,157,0.5); position: absolute; top: 0; left: 5px;}
+#tabContent .tab-pane>ul>li.hide-in-search>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
+#tabContent .tab-pane>ul>li label {background: rgba(255,255,255,0.5); line-height: unset; color: #838a9d; border: 1px solid #d8d8d8; border-radius: 2px; padding: 1px 4px;}
 #tabContent li a i.icon {font-size: 15px !important;}
 #tabContent li a i.icon:before {min-width: 16px !important;}
-#tabContent li .label {margin-top: 2px; position: unset;}
-#tabContent li ul {padding-left: 15px;}
-#tabContent li>a {margin-top: 5px;display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
+#tabContent li .label {position: unset; margin-bottom: 0;}
+#tabContent li>a, #tabContent li>div>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
 #tabContent li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
+#tabContent .tree li>.list-toggle {line-height: 24px;}
+#tabContent .tree li.has-list.open:before {content: unset;}
 
-#swapper li.hide-in-search>a:focus, #swapper li.hide-in-search>a:hover {color: #838a9d; cursor: default;}
-#swapper li ul li a:focus, #swapper li ul li a:hover, .noProgram li a:focus, .noProgram li a:hover {background: #0c64eb; color: #fff;}
+#swapper li.hide-in-search>div>a:focus, #swapper li.hide-in-search>div>a:hover {color: #838a9d; cursor: default;}
+a.projectName:focus, a.projectName:hover {background: #0c64eb; color: #fff !important;}
 </style>
 <?php
 $projectCounts      = array();
 $projectNames       = array();
-$myProjectsHtml     = '';
-$normalProjectsHtml = '';
+$preFix             = '';
 $closedProjectsHtml = '';
 $tabActive          = '';
 $myProjects         = 0;
@@ -52,20 +51,19 @@ foreach($projects as $programID => $programProjects)
 }
 $projectsPinYin = common::convert2Pinyin($projectNames);
 
+$myProjectsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$normalProjectsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+
 foreach($projects as $programID => $programProjects)
 {
     /* Add the program name before project. */
     if(isset($programs[$programID]) and $config->systemMode == 'new')
     {
         $programName = zget($programs, $programID);
+        $preFix      = $programName . ' / ';
 
-        if($projectCounts[$programID]['myProject']) $myProjectsHtml  .= '<ul><li class="hide-in-search"><label class="label">' . $lang->program->common . '</label> <a class="text-muted" title="' . $programName . '">' . $programName . '</a></li><li><ul>';
-        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<ul><li class="hide-in-search"><label class="label">' . $lang->program->common . '</label>  <a class="text-muted" title="' . $programName . '">' . $programName . '</a></li><li><ul>';
-    }
-    else
-    {
-        if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '<ul class="noProgram">';
-        if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '<ul class="noProgram">';
+        if($projectCounts[$programID]['myProject']) $myProjectsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
     }
 
     foreach($programProjects as $index => $project)
@@ -79,7 +77,7 @@ foreach($projects as $programID => $programProjects)
 
         if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
         {
-            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected projectName' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myProject';
 
@@ -87,7 +85,7 @@ foreach($projects as $programID => $programProjects)
         }
         else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
         {
-            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected projectName' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
@@ -95,7 +93,7 @@ foreach($projects as $programID => $programProjects)
         }
         else if($project->status == 'done' or $project->status == 'closed')
         {
-            $closedProjectsHtml .= html::a(sprintf($link, $project->id), $project->name, '', "class='$selected' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+            $closedProjectsHtml .= html::a(sprintf($link, $project->id), $preFix . $project->name, '', "class='$selected' title='" . $preFix . $project->name . "' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
 
             if($selected == 'selected') $tabActive = 'closed';
         }
@@ -107,10 +105,9 @@ foreach($projects as $programID => $programProjects)
             if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '</ul></li>';
         }
     }
-
-    if($projectCounts[$programID]['myProject']) $myProjectsHtml     .= '</ul>';
-    if($projectCounts[$programID]['others'])    $normalProjectsHtml .= '</ul>';
 }
+$myProjectsHtml     .= '</ul>';
+$normalProjectsHtml .= '</ul>';
 ?>
 
 <div class="table-row">
@@ -152,10 +149,8 @@ $(function()
     {
         $(this).siblings().show();
         $(this).parent().siblings('li').find('span').hide();
-        if($(this).attr('class') != 'active') $('#dropMenu').removeClass('show-right-col');
-        $("#dropMenu .search-box").width('auto');
     })
 
-    if(config.clientLang == 'en') $('#tabContent .tab-pane>ul>li>label+a').css('padding-left', '65px');
+    $('#tabContent [data-ride="tree"]').tree('expand');
 })
 </script>

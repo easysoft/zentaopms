@@ -11,7 +11,7 @@
  */
 /* 欄位列表。*/
 $lang->execution->allExecutions   = '所有' . $lang->executionCommon;
-$lang->execution->allExecutionAB  = "所有{$lang->execution->common}";
+$lang->execution->allExecutionAB  = "{$lang->execution->common}清單";
 $lang->execution->id              = $lang->executionCommon . '編號';
 $lang->execution->type            = $lang->executionCommon . '類型';
 $lang->execution->name            = $lang->executionCommon . '名稱';
@@ -99,6 +99,8 @@ $lang->execution->noLinkProduct   = "階段沒有關聯{$lang->productCommon}";
 $lang->execution->recent          = '近期訪問：';
 $lang->execution->copyNoExecution = '沒有可用的' . $lang->executionCommon . '來複制';
 $lang->execution->noTeam          = '暫時沒有團隊成員';
+$lang->execution->selectProject   = '請選擇項目';
+$lang->execution->showMore        = '點擊查看所有已關閉的執行';
 
 $lang->execution->start    = "開始";
 $lang->execution->activate = "激活";

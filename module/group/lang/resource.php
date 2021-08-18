@@ -292,6 +292,7 @@ if($config->systemMode == 'new')
     $lang->resource->projectstory->view              = 'view';
     $lang->resource->projectstory->linkStory         = 'linkStory';
     $lang->resource->projectstory->unlinkStory       = 'unlinkStory';
+    $lang->resource->projectstory->batchUnlinkStory  = 'batchUnlinkStory';
     $lang->resource->projectstory->importplanstories = 'importplanstories';
 
     $lang->projectstory->methodOrder[5]  = 'story';

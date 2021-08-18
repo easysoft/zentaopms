@@ -77,6 +77,33 @@ $(function()
             $('#storyIdList').val(storyIdList);
         });
     });
+
+    $('#batchUnlinkStory').click(function()
+    {
+        var storyIdList = '';
+        $("input[name^='storyIdList']:checked").each(function()
+        {
+            storyIdList += $(this).val() + ',';
+        });
+
+        $.get(createLink('projectstory', 'batchUnlinkStory', 'projectID=' + projectID + '&storyIdList=' + storyIdList), function(data)
+        {
+            if(data)
+            {
+                $('#batchUnlinkStoryTip tbody').html(data);
+                $('#batchUnlinkStoryTip').modal({show: true});
+            }
+            else
+            {
+                window.location.reload();
+            }
+        });
+    });
+
+    $('#batchUnlinkStoryTip .close, #confirmBtn').click(function()
+    {
+        window.location.reload();
+    })
 });
 
 /**

@@ -41,7 +41,8 @@ class execution extends control
         $this->loadModel('project');
 
         $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
-        if(!in_array($this->methodName, $this->config->execution->skipCreate) and $this->app->openApp == 'execution')
+        $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers');
+        if(!in_array($this->methodName, $skipCreateStep) and $this->app->openApp == 'execution')
         {
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
@@ -1901,6 +1902,22 @@ class execution extends control
                 }
 
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
+
+                /* Up to five closed executions are displayed. */
+                if($status == 'closed')
+                {
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5)
+                    {
+                        $myExecutions[$status]         = array_slice($myExecutions[$status], 0, 5, true);
+                        $myExecutions[$status]['more'] = $this->lang->execution->showMore;
+                    }
+
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5)
+                    {
+                        $kanbanGroup[$projectID][$status]         = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
+                        $kanbanGroup[$projectID][$status]['more'] = $this->lang->execution->showMore;
+                    }
+                }
             }
 
             if(empty($kanbanGroup[$projectID])) continue;
@@ -2649,7 +2666,7 @@ class execution extends control
         if($this->config->systemMode == 'new')
         {
             $type = $this->dao->findById($objectID)->from(TABLE_PROJECT)->fetch('type');
-            $type = $type == 'project' ? $type : 'execution';
+            if($type != 'project') $type = 'execution';
         }
 
         $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
@@ -2686,7 +2703,7 @@ class execution extends control
     {
         $orderedExecutions = array();
 
-        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc');
+        $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('type')->in('sprint,stage')
@@ -2888,7 +2905,7 @@ class execution extends control
         $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
-        $this->view->projects       = $this->project->getPairsByModel();
+        $this->view->projects       = array('') + $this->project->getPairsByProgram();
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');

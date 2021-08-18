@@ -26,6 +26,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
+$lang->pmsName        = 'ALM';
 $lang->proName        = 'Pro';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s ALM";
@@ -219,7 +220,7 @@ $lang->doc->my        = 'My';
 $lang->doc->favorite  = 'Favorite';
 $lang->doc->product   = 'Product';
 $lang->doc->project   = 'Project';
-$lang->doc->execution = $lang->executionCommon;
+$lang->doc->execution = isset($config->maxVersion) ? $lang->execution->common : $lang->executionCommon;
 $lang->doc->custom    = 'Custom';
 $lang->doc->wiki      = 'WIKI';
 
