@@ -614,6 +614,7 @@ class repoModel extends model
     {
         $repo = $this->getRepoByID($repoID);
         if(empty($repo)) return array();
+
         return $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('id')->in($repo->product)
             ->andWhere('deleted')->eq(0)

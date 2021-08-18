@@ -247,7 +247,7 @@ class programModel extends model
     {
         $totalProgress = array();
         $projectCount  = array();
-        $userPrjCount  = array();
+        $userPRJCount  = array();
         $progressList  = array();
         $programPairs  = $this->getPairs();
         $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
@@ -257,7 +257,7 @@ class programModel extends model
         {
             $totalProgress[$programID] = 0;
             $projectCount[$programID]  = 0;
-            $userPrjCount[$programID]  = 0;
+            $userPRJCount[$programID]  = 0;
             $progressList[$programID]  = 0;
 
             foreach($projectStats as $project)
@@ -265,7 +265,7 @@ class programModel extends model
                 if(strpos($project->path, ',' . $programID . ',') === false) continue;
 
                 /* The number of projects under this program that the user can view. */
-                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPrjCount[$programID] ++;
+                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPRJCount[$programID] ++;
 
                 $totalProgress[$programID] += $project->hours->progress;
                 $projectCount[$programID] ++;
@@ -274,7 +274,7 @@ class programModel extends model
             if(empty($projectCount[$programID])) continue;
 
             /* Program progress can't see when this user don't have all projects priv. */
-            if(!$this->app->user->admin and $userPrjCount[$programID] != $projectCount[$programID])
+            if(!$this->app->user->admin and $userPRJCount[$programID] != $projectCount[$programID])
             {
                 unset($progressList[$programID]);
                 continue;

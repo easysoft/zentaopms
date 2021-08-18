@@ -195,9 +195,13 @@ class entryModel extends model
         $detail->url      = helper::createLink('user', 'profile', "userID={$user->id}");
 
         if($user->avatar != "")
+        {
             $detail->avatar = common::getSysURL() . $user->avatar;
+        }
         else
+        {
             $detail->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
+        }
 
         return $detail;
     }
@@ -212,11 +216,10 @@ class entryModel extends model
      */
     public function getAssignees($objectType, $object)
     {
-        $users = $this->dao
-                      ->select('account')->from(TABLE_TEAM)
-                      ->where('type')->eq($objectType)
-                      ->andWhere('root')->eq($object->id)
-                      ->fetchAll();
+        $users = $this->dao->select('account')->from(TABLE_TEAM)
+            ->where('type')->eq($objectType)
+            ->andWhere('root')->eq($object->id)
+            ->fetchAll();
 
         if($users)
         {
@@ -230,5 +233,4 @@ class entryModel extends model
 
         return ($object->assignedTo == "" or $object->assignedTo == "closed") ? array() : array($this->getUser($object->assignedTo));
     }
-
 }

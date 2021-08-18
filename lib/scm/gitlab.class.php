@@ -523,7 +523,6 @@ class gitlab
         if(!scm::checkRevision($version)) return array();
         $api = "commits";
 
-        /* TODO Put getCommits into cron job. And check best size of $count. */
         if(empty($count)) $count = 10;
 
         $params = array();

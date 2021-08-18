@@ -14,7 +14,7 @@ $lang->projectstory->confirm           = '确定';
 
 /* Notice. */
 $lang->projectstory->whyNoStories   = "看起来没有{$lang->SRCommon}可以关联。请检查下项目关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
-$lang->projectstory->batchUnlinkTip = '如下需求已与该项目下执行相关联，请从执行中移除后再操作。';
+$lang->projectstory->batchUnlinkTip = '其他需求已经移除，如下需求已与该项目下执行相关联，请从执行中移除后再操作。';
 
 global $app;
 $app->loadLang('product');
