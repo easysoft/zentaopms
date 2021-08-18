@@ -735,13 +735,14 @@ class bug extends control
             if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($bug->project);
             if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
             if($this->app->openApp == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+
             if($this->app->openApp == 'devops')
             {
-                session_write_close();
                 $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
                 $this->repo->setMenu($repos);
                 $this->lang->navGroup->bug = 'devops';
             }
+
             if($this->app->openApp == 'product')
             {
                 $this->loadModel('product')->setMenu($bug->product);
