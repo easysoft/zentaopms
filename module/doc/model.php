@@ -1238,7 +1238,7 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
-                $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
+                $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
 
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
                 {
