@@ -55,7 +55,7 @@ class bug extends control
             if($this->app->openApp == 'project')
             {
                 $objectID = $this->session->project;
-                $products  = $this->loadModel('project')->getProducts($objectID, false);
+                $products = $this->loadModel('project')->getProducts($objectID, false);
             }
             elseif($this->app->openApp == 'execution')
             {
