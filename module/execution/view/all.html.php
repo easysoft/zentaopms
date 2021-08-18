@@ -90,12 +90,12 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
             <?php endif;?>
             <?php printf('%03d', $execution->id);?>
           </td>
-          <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?>' title='<?php echo $execution->name?>'>
+          <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $execution->name?>'>
             <?php if(isset($this->config->maxVersion)):?>
             <span class='project-type-label label label-outline <?php echo $execution->type == 'sprint' ? 'label-info' : 'label-warning';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
             <?php endif;?>
             <?php
-            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name);
+            echo !empty($execution->children) ? $execution->name : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "class='text-ellipsis'");
             if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
             ?>
             <?php if(!empty($execution->children)):?>
