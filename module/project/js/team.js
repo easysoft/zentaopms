@@ -1,8 +1,3 @@
-function checkUserDept(userID)
-{
-    alert(noAccess);
-}
-
 /**
  * Delete memeber of project team.
  *
