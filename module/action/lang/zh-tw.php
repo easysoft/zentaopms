@@ -23,8 +23,7 @@ $lang->action->action     = '動作';
 $lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
 $lang->action->extra      = '附加值';
-
-$lang->action->system = '系統';
+$lang->action->system     = '系統';
 
 $lang->action->trash       = '資源回收筒';
 $lang->action->undelete    = '還原';
