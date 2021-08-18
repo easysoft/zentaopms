@@ -135,7 +135,7 @@ $lang->task->lblTestStory      = 'Story Tested';
 $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Ditto';
-$lang->task->dittoNotice       = "This Task is not linked to the %s as the previous one is!";
+$lang->task->dittoNotice       = "This Task is not linked to %s like the last one!";
 $lang->task->selectTestStory   = 'Select Story Testd';
 $lang->task->selectAllUser     = 'All Users';
 $lang->task->noStory           = 'No Story Linked';
@@ -175,8 +175,8 @@ $lang->task->reasonList['done']   = 'Done';
 $lang->task->reasonList['cancel'] = 'Cancelled';
 
 $lang->task->afterChoices['continueAdding'] = ' Continue Adding Tasks';
-$lang->task->afterChoices['toTaskList']     = 'Go to Task List Page';
-$lang->task->afterChoices['toStoryList']    = 'Go to Story List Page';
+$lang->task->afterChoices['toTaskList']     = 'Go to Task List';
+$lang->task->afterChoices['toStoryList']    = 'Go to Story List';
 
 $lang->task->legendBasic  = 'Basic Info';
 $lang->task->legendEffort = 'Effort';
@@ -202,7 +202,7 @@ $lang->task->deniedNotice           = 'Only the %s can %s the task.';
 $lang->task->noTask                 = 'No tasks yet. ';
 $lang->task->createDenied           = 'Create Task is denied in this project';
 $lang->task->cannotDeleteParent     = 'Cannot delete parent task';
-$lang->task->addChildTask           = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
+$lang->task->addChildTask           = 'Because the task has cost hours, ZenTao will create a child task with the same name to record the cost housrs to ensure data consistency.';
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Total Cost" must be numbers.';

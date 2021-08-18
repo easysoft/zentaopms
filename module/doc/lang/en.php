@@ -98,7 +98,7 @@ $lang->doc->libName        = 'Document Library';
 $lang->doc->libType        = 'Category';
 $lang->doc->custom         = 'Custom Document Library';
 $lang->doc->customAB       = 'Custom Doc Lib';
-$lang->doc->createLib      = 'Create Document Library';
+$lang->doc->createLib      = 'Document Library';
 $lang->doc->allLibs        = 'Library List';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Libraries";
 $lang->doc->showFiles      = 'Attachments';
@@ -108,7 +108,7 @@ $lang->doc->fixedMenu      = 'Fix to Menu';
 $lang->doc->removeMenu     = 'Remove from Menu';
 $lang->doc->search         = 'Search';
 $lang->doc->allCollections = 'All Collections';
-$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
+$lang->doc->keywordsTips   = 'Please use commas to separate keywords.';
 
 global $config;
 /* Query condition list. */
