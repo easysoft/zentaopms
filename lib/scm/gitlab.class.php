@@ -151,30 +151,32 @@ class gitlab
     }
 
     /**
-     * Get branch
+     * Get branches.
      *
      * @access public
      * @return array
      */
     public function branch()
     {
-        $branches = array();
-        $api      = "branches";
-
+        /* Max size of per_page in gitlab API is 100. */
         $params = array();
         $params['per_page'] = '100';
+
+        $branches = array();
         for($page = 1; true; $page ++)
         {
             $params['page'] = $page;
-            $list = $this->fetch($api, $params);
-            if(empty($list)) break;
+            $branchList = $this->fetch("branches", $params);
+            if(empty($branchList)) break;
 
-            foreach($list as $branch)
+            foreach($branchList as $branch)
             {
                 if(!isset($branch->name)) continue;
                 $branches[$branch->name] = $branch->name;
             }
-            if(count($list) < $params['per_page']) break;
+
+            /* Last page. */
+            if(count($branchList) < $params['per_page']) break;
         }
 
         if(empty($branches)) $branches['master'] = 'master';
