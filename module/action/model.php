@@ -1108,25 +1108,24 @@ class actionModel extends model
                         $method = $this->config->action->assetViewMethod[$action->objectType];
                     }
 
-                    $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID), '', '', $projectID);
+                    $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
                 }
                 else
                 {
                     if($action->objectType == 'doclib')
                     {
                         $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
-                        $docLib->type       = $docLib->type == 'execution' ? 'project' : $docLib->type;
-                        $docLib->objectID   = strpos('product,project', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
+                        $docLib->objectID   = strpos('product,project,execution', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
                         $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                         $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
                     }
                     elseif($action->objectType == 'user')
                     {
-                        $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                        $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                     }
                     else
                     {
-                        $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                        $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                     }
                 }
                 $action->objectLabel = $objectLabel;
