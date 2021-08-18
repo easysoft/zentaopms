@@ -41,7 +41,8 @@ class execution extends control
         $this->loadModel('project');
 
         $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
-        if(!in_array($this->methodName, $this->config->execution->skipCreate) and $this->app->openApp == 'execution')
+        $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers');
+        if(!in_array($this->methodName, $skipCreateStep) and $this->app->openApp == 'execution')
         {
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
