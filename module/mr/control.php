@@ -3,9 +3,13 @@ class mr extends control
 {
     public function browse($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+<<<<<<< HEAD
         $this->loadModel('mr');
 
         $mrList = $this->mr->getList(0, $orderBy);
+=======
+        $mrList = $this->mr->getList($orderBy);
+>>>>>>> 14de596bc0f1fc905a6c0cea6ac0eefd839e61fd
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
@@ -21,6 +25,10 @@ class mr extends control
         $this->view->objectID = $objectID;
         $this->view->pager    = $pager;
         $this->view->mrList = empty($mrList) ? $mrList: $mrList[$pageID - 1];;
+<<<<<<< HEAD
+=======
+        $this->view->products = $this->loadModel('product')->getPairs();
+>>>>>>> 14de596bc0f1fc905a6c0cea6ac0eefd839e61fd
 
         $this->display();
     }

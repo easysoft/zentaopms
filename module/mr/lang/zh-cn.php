@@ -7,6 +7,7 @@ $lang->mr->edit   = "编辑{$lang->mr->common}";
 $lang->mr->delete = "删除{$lang->mr->common}";
 $lang->mr->detail = "详情";
 
+<<<<<<< HEAD
 $lang->mr->addGitlab = "添加GitLab项目";
 
 $lang->mr->id          = 'ID';
@@ -21,6 +22,18 @@ $lang->mr->link        = 'GitLab链接';
 $lang->mr->pipeline    = '流水线';
 $lang->mr->auditStatus = '审核状态';
 $lang->mr->lastExec    = '执行状态';
+=======
+$lang->mr->id       = 'ID';
+$lang->mr->iid      = "{$lang->mr->common}ID";
+$lang->mr->name     = "{$lang->mr->common}名称";
+$lang->mr->title    = $lang->mr->name;
+$lang->mr->status   = '状态';
+$lang->mr->author   = '创建人';
+$lang->mr->assignee = '指派给';
+$lang->mr->reviewer = '评审人';
+$lang->mr->link     = 'GitLab链接';
+$lang->mr->project  = 'GitLab项目';
+>>>>>>> 14de596bc0f1fc905a6c0cea6ac0eefd839e61fd
 
 $lang->mr->sourceProject = '源项目';
 $lang->mr->sourceBranch  = '源分支';

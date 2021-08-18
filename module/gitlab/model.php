@@ -283,11 +283,12 @@ class gitlabModel extends model
     /**
      * Get gitlab project name of one gitlab project.
      *
-     * @param  int    $jobID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return string|false
      */
-    public function getObjectNameForJob($gitlabID, $projectID)
+    public function getProjectName($gitlabID, $projectID)
     {
         $project = $this->apiGetSingleProject($gitlabID, $projectID);
         if(isset($project->name)) return $project->name;
