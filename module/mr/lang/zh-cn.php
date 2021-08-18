@@ -9,15 +9,18 @@ $lang->mr->detail = "详情";
 
 $lang->mr->addGitlab = "添加GitLab项目";
 
-$lang->mr->id       = 'ID';
-$lang->mr->iid      = "{$lang->mr->common}ID";
-$lang->mr->name     = '名称';
-$lang->mr->title    = $lang->mr->name;
-$lang->mr->status   = '状态';
-$lang->mr->author   = '创建人';
-$lang->mr->assignee = '指派给';
-$lang->mr->reviewer = '评审人';
-$lang->mr->link     = 'GitLab链接';
+$lang->mr->id          = 'ID';
+$lang->mr->iid         = "{$lang->mr->common}ID";
+$lang->mr->name        = '名称';
+$lang->mr->title       = $lang->mr->name;
+$lang->mr->status      = '状态';
+$lang->mr->author      = '创建人';
+$lang->mr->assignee    = '指派给';
+$lang->mr->reviewer    = '评审人';
+$lang->mr->link        = 'GitLab链接';
+$lang->mr->pipeline    = '流水线';
+$lang->mr->auditStatus = '审核状态';
+$lang->mr->lastExec    = '执行状态';
 
 $lang->mr->sourceProject = '源项目';
 $lang->mr->sourceBranch  = '源分支';

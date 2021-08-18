@@ -3,37 +3,32 @@ class mr extends control
 {
     public function browse($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('repo');
+        $this->loadModel('mr');
 
-        $repoList = $this->repo->getList(0, $orderBy);
-        foreach($repoList as $id => $repo)
-        {
-            if(strtolower($repo->SCM) != 'gitlab') unset($repoList[$id]);
-        }
+        $mrList = $this->mr->getList(0, $orderBy);
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($repoList);
+        $recTotal   = count($mrList);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $repoList   = array_chunk($repoList, $pager->recPerPage);
+        $mrList   = array_chunk($mrList, $pager->recPerPage);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
-        $this->view->position[] = $this->lang->repo->common;
-        $this->view->position[] = $this->lang->repo->browse;
+        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $this->view->position[] = $this->lang->mr->common;
+        $this->view->position[] = $this->lang->mr->browse;
 
         $this->view->orderBy  = $orderBy;
         $this->view->objectID = $objectID;
         $this->view->pager    = $pager;
-        $this->view->repoList = empty($repoList) ? $repoList: $repoList[$pageID - 1];;
-        $this->view->products = $this->loadModel('product')->getPairs();
+        $this->view->mrList = empty($mrList) ? $mrList: $mrList[$pageID - 1];;
 
         $this->display();
     }
 
-    public function list($repoID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function list($mrID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('gitlab');
-        $gitlab = $this->mr->getGitlabProjectByRepo($repoID);
+        $gitlab = $this->mr->getGitlabProjectByRepo($mrID);
         $mrList = $this->mr->apiGetMRList($gitlab->gitlabID, $gitlab->projectID);
 
         $this->app->loadClass('pager', $static = true);
@@ -51,14 +46,14 @@ class mr extends control
 
     public function create()
     {
-        $this->loadModel('repo');
+        $this->loadModel('mr');
         if($_POST)
         {
             $mrID = $this->mr->create();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $mrID));
             $link = helper::createLink('mr', 'browse', '', '', false);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }

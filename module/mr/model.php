@@ -55,15 +55,37 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getList($repoID, $orderBy = 'id_desc', $pager = null)
+    public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')
+        $mrList = $this->dao->select('*')
                          ->from(TABLE_MR)
                          ->where('deleted')->eq('0')
-                         ->AndWhere('repoID')->eq($repoID)
                          ->orderBy($orderBy)
                          ->page($pager)
                          ->fetchAll('id');
+
+        if(!empty($mrList))
+        {
+            $lists = array();
+            foreach($mrList as $mr)
+            {
+                foreach($this->apiGetMRList($mr->gitlabID, $mr->projectID) as $subMR)
+                {
+                    $list = new stdclass;
+
+                    $list->id            = $subMR->id;
+                    $list->name          = $subMR->title;
+                    $list->target_branch = $subMR->target_branch;
+                    $list->source_branch = $subMR->source_branch;
+                    $list->pipeline      = $subMR->merge_when_pipeline_succeeds;
+                    $list->auditStatus   = $subMR->state;
+                    $list->lastExec      = $subMR->merge_status;
+
+                    $lists[] = $list;
+                }
+            }
+            return $lists;
+        }
     }
 
     /**
