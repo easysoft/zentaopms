@@ -13,7 +13,7 @@ $(document).ready(function()
             }
             else
             {
-                className = response.type + 'count';
+                className  = response.type + 'count';
                 $typeCount = $('#resultBox .' + className)
                 if($typeCount.length == 0)
                 {
