@@ -97,7 +97,7 @@
     <div class='col' data-id='<?php echo $projectID?>'>
       <div class='panel'>
         <div class='projectStatus'>
-          <?php $status = ($project->status == 'doing' and isset($project->delay)) ? 'delay' : $project->status;?>
+          <?php $status = isset($project->delay) ? 'delay' : $project->status;?>
           <span class="label label-<?php echo $status;?>"><?php echo $lang->project->statusList[$status];?></span>
         </div>
         <div class='panel-heading'>
