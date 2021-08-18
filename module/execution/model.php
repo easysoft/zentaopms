@@ -2444,7 +2444,7 @@ class executionModel extends model
     }
 
     /**
-     * Get the project and execution the team through the projectID.
+     * Get team of the project and its executions by projectID.
      *
      * @param  int    $projectID
      * @access public
@@ -2454,8 +2454,9 @@ class executionModel extends model
     {
         $teams = $this->dao->select('id,team,type')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
-            ->andWhere('project')->eq($projectID)
+            ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
+            ->markRight(1)
             ->fetchAll('id');
 
         if(empty($teams)) return array();
