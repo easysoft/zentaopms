@@ -15,7 +15,7 @@ class messageModel extends model
     {
         return $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('message')
-            ->andWhere('toList')->eq($this->app->user->account)
+            ->andWhere('toList')->like("%,{$this->app->user->account},%")
             ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->fetchAll('id');
     }
@@ -175,6 +175,7 @@ class messageModel extends model
                 if(strpos($object->mailto . ',', ",{$account},") === false) $toList .= ',' . $account;
             }
         }
+        $toList = ',' . trim($toList) . ',';
 
         if($toList == 'closed') $toList = '';
         return $toList;
