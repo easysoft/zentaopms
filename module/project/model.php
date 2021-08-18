@@ -1324,8 +1324,8 @@ class projectModel extends model
 
         /* Only changed account update userview. */
         $oldAccounts     = array_keys($oldJoin);
-        $changedAccounts = array_diff($accounts, $oldAccounts);
-        $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
+        $removedAccounts = array_diff($oldAccounts, $accounts);
+        $changedAccounts = array_merge($removedAccounts, array_diff($accounts, $oldAccounts));
         $changedAccounts = array_unique($changedAccounts);
 
         $childSprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('type')->in('stage,sprint')->andWhere('deleted')->eq('0')->fetchPairs();
@@ -1334,6 +1334,16 @@ class projectModel extends model
         $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
         if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+
+        /* Remove execution members. */
+        if($removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
+        {
+            $this->dao->delete()->from(TABLE_TEAM)
+                ->where('root')->in($childSprints)
+                ->andWhere('type')->eq('execution')
+                ->andWhere('account')->in($removedAccounts)
+                ->exec();
+        }
     }
 
     /**

@@ -7,8 +7,8 @@ function checkUserDept(userID)
  * Delete memeber of project team.
  *
  * @param  projectID $projectID
- * @param  account $account
- * @param  userID $userID
+ * @param  account   $account
+ * @param  userID    $userID
  * @access public
  * @return void
  */
