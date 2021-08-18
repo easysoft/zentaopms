@@ -823,7 +823,6 @@ class storyModel extends model
                     $story->stage        = 'closed';
                     if($this->post->closedReason == 'done') $story->stage = 'released';
                 }
-
             }
         }
 
