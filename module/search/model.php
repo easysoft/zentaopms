@@ -30,7 +30,7 @@ class searchModel extends model
             if($module == 'projectStory') $flowModule = 'story';
             if($module == 'projectBug')   $flowModule = 'bug';
 
-            $fields = $this->loadModel('workflowfield')->getList($flowModule);
+            $fields   = $this->loadModel('workflowfield')->getList($flowModule);
             $maxCount = $this->config->maxCount;
             $this->config->maxCount = 0;
 
