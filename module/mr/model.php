@@ -55,12 +55,11 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getList($repoID, $orderBy = 'id_desc', $pager = null)
+    public function getList($orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')
                          ->from(TABLE_MR)
                          ->where('deleted')->eq('0')
-                         ->AndWhere('repoID')->eq($repoID)
                          ->orderBy($orderBy)
                          ->page($pager)
                          ->fetchAll('id');

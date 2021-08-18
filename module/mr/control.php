@@ -3,28 +3,22 @@ class mr extends control
 {
     public function browse($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('repo');
-
-        $repoList = $this->repo->getList(0, $orderBy);
-        foreach($repoList as $id => $repo)
-        {
-            if(strtolower($repo->SCM) != 'gitlab') unset($repoList[$id]);
-        }
+        $mrList = $this->mr->getList($orderBy);
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($repoList);
+        $recTotal   = count($mrList);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $repoList   = array_chunk($repoList, $pager->recPerPage);
+        $mrList   = array_chunk($mrList, $pager->recPerPage);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
-        $this->view->position[] = $this->lang->repo->common;
-        $this->view->position[] = $this->lang->repo->browse;
+        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $this->view->position[] = $this->lang->mr->common;
+        $this->view->position[] = $this->lang->mr->browse;
 
         $this->view->orderBy  = $orderBy;
         $this->view->objectID = $objectID;
         $this->view->pager    = $pager;
-        $this->view->repoList = empty($repoList) ? $repoList: $repoList[$pageID - 1];;
+        $this->view->mrList = empty($mrList) ? $mrList: $mrList[$pageID - 1];;
         $this->view->products = $this->loadModel('product')->getPairs();
 
         $this->display();
