@@ -272,7 +272,7 @@ class releaseModel extends model
         /* Init vars. */
         $notifyPersons = array();
         $managers      = '';
-        $notifyList    = explode($notifyList, ',');
+        $notifyList    = explode(',', $notifyList);
 
         foreach($notifyList as $notify)
         {
