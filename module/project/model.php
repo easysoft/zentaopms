@@ -1617,7 +1617,7 @@ class projectModel extends model
         return $this->dao->select('account, role, hours')
             ->from(TABLE_TEAM)
             ->where('root')->eq($projectID)
-            ->andWhere('type')->in('project')
+            ->andWhere('type')->eq('project')
             ->andWhere('account')->notIN($currentMembers)
             ->fetchAll('account');
     }
