@@ -2666,7 +2666,7 @@ class execution extends control
         if($this->config->systemMode == 'new')
         {
             $type = $this->dao->findById($objectID)->from(TABLE_PROJECT)->fetch('type');
-            $type = $type == 'project' ? $type : 'execution';
+            if($type != 'project') $type = 'execution';
         }
 
         $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
