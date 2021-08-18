@@ -1817,8 +1817,11 @@ class bugModel extends model
             $bugSteps .= $this->lang->bug->tplResult;
             $bugSteps .= $this->lang->bug->tplExpect;
         }
+        
+        if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getById($run->task);
+        $executionID = isset($testtask->execution) ? $testtask->execution : 0;
 
-        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version);
+        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
     }
 
     /**
