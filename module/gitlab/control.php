@@ -29,8 +29,15 @@ class gitlab extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $gitlabList = $this->gitlab->getList($orderBy, $pager);
+        foreach($gitlabList as $gitlab)
+        {
+            $token = $this->gitlab->apiGetCurrentUser($gitlab->url,$gitlab->token);
+            $gitlab->isAdminToken = $token->is_admin;
+        }
+
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
-        $this->view->gitlabList = $this->gitlab->getList($orderBy, $pager);
+        $this->view->gitlabList = $gitlabList;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
 

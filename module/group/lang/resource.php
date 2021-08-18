@@ -63,6 +63,7 @@ $lang->moduleOrder[205] = 'cron';
 $lang->moduleOrder[210] = 'dev';
 $lang->moduleOrder[215] = 'message';
 $lang->moduleOrder[220] = 'gitlab';
+$lang->moduleOrder[225] = 'mr';
 
 $lang->resource = new stdclass();
 
@@ -1132,13 +1133,13 @@ $lang->svn->methodOrder[15] = 'apiSync';
 
 /* GitLab. */
 $lang->resource->gitlab = new stdclass();
-$lang->resource->gitlab->browse      = 'browse';
 $lang->resource->gitlab->create      = 'create';
 $lang->resource->gitlab->edit        = 'edit';
 $lang->resource->gitlab->importIssue = 'importIssue';
 $lang->resource->gitlab->delete      = 'delete';
 $lang->resource->gitlab->bindUser    = 'bindUser';
 $lang->resource->gitlab->bindProduct = 'bindProduct';
+
 //$lang->resource->gitlab->webhook     = 'webhook';
 
 $lang->gitlab->methodOrder[5]  = 'browse';
@@ -1147,8 +1148,13 @@ $lang->gitlab->methodOrder[15] = 'edit';
 $lang->gitlab->methodOrder[20] = 'importIssue';
 $lang->gitlab->methodOrder[30] = 'delete';
 $lang->gitlab->methodOrder[35] = 'bindUser';
-$lang->gitlab->methodOrder[40] = 'bindProduct';
 //$lang->gitlab->methodOrder[45] = 'webhook';
+
+/* merge request. */
+$lang->resource->mr = new stdclass();
+$lang->resource->mr->common   = "common";
+
+$lang->mr->methodOrder[5] = 'common';
 
 /* Git. */
 $lang->resource->git = new stdclass();
