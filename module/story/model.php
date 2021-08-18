@@ -4514,7 +4514,7 @@ class storyModel extends model
         $comment  = isset($_POST['comment']) ? $this->post->comment : '';
         $actionID = !empty($result) ? $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam) : '';
 
-        if(ucfirst($result) != 'Revert')
+        if(strtolower($result) != 'revert')
         {
             if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewClosed');
             if($story->status == 'active') $this->action->create('story', $story->id, 'PassReviewed');
@@ -4523,5 +4523,4 @@ class storyModel extends model
 
         return $actionID;
     }
-
 }
