@@ -792,36 +792,38 @@ class storyModel extends model
             $_POST['reviewer']   = array_filter($_POST['reviewer']);
             $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-
-            /* Update story reviewer. */
-            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
-            foreach($_POST['reviewer'] as $reviewer)
+            if(array_diff($_POST['reviewer'], array_keys($oldReviewer)) or array_diff(array_keys($oldReviewer), $_POST['reviewer']))
             {
-                if(in_array($reviewer, array_keys($oldReviewer))) continue;
-
-                $reviewData = new stdclass();
-                $reviewData->story    = $storyID;
-                $reviewData->version  = $oldStory->version;
-                $reviewData->reviewer = $reviewer;
-                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-            }
-
-            /* Update the story status by review rules. */
-            $reviewerList     = $this->getReviewerPairs($storyID, $oldStory->version);
-            $story->reviewers = implode(',', array_keys($reviewerList));
-            $reviewedBy       = explode(',', trim($oldStory->reviewedBy, ','));
-            if(!array_diff(array_keys($reviewerList), $reviewedBy))
-            {
-                $status        = $this->setStatusByReviewRules($reviewerList);
-                $story->status = $status ? $status : $oldStory->status;
-                if($story->status == 'closed')
+                /* Update story reviewer. */
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
+                foreach($_POST['reviewer'] as $reviewer)
                 {
-                    $story->closedBy     = $this->app->user->account;
-                    $story->closedDate   = $now;
-                    $story->assignedTo   = 'closed';
-                    $story->assignedDate = $now;
-                    $story->stage        = 'closed';
-                    if($this->post->closedReason == 'done') $story->stage = 'released';
+                    if(in_array($reviewer, array_keys($oldReviewer))) continue;
+
+                    $reviewData = new stdclass();
+                    $reviewData->story    = $storyID;
+                    $reviewData->version  = $oldStory->version;
+                    $reviewData->reviewer = $reviewer;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                }
+
+                /* Update the story status by review rules. */
+                $reviewerList     = $this->getReviewerPairs($storyID, $oldStory->version);
+                $story->reviewers = implode(',', array_keys($reviewerList));
+                $reviewedBy       = explode(',', trim($oldStory->reviewedBy, ','));
+                if(!array_diff(array_keys($reviewerList), $reviewedBy))
+                {
+                    $status        = $this->setStatusByReviewRules($reviewerList);
+                    $story->status = $status ? $status : $oldStory->status;
+                    if($story->status == 'closed')
+                    {
+                        $story->closedBy     = $this->app->user->account;
+                        $story->closedDate   = $now;
+                        $story->assignedTo   = 'closed';
+                        $story->assignedDate = $now;
+                        $story->stage        = 'closed';
+                        if($this->post->closedReason == 'done') $story->stage = 'released';
+                    }
                 }
             }
         }
