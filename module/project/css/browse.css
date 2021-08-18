@@ -12,4 +12,5 @@ td.c-actions {overflow: visible;}
 .panel-actions {position: relative; padding: 0 0;}
 
 td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
-td.flex span.label-danger {margin-left: 5px; min-width: 50px;}
+td.flex span.label-badge {margin-left: 5px; min-width: 50px;}
+td.flex a.text-ellipsis {min-width: 30px;}
