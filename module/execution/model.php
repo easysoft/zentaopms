@@ -1299,15 +1299,15 @@ class executionModel extends model
         {
             $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s");
         }
+        elseif($module == 'doc')
+        {
+            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
+        }
         else
         {
             $link = helper::createLink($module, $method, "executionID=%s");
         }
 
-        if($module == 'doc')
-        {
-            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
-        }
         return $link;
     }
 
