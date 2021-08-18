@@ -457,14 +457,14 @@ class personnelModel extends model
     }
 
     /**
-     * Get objects to copy whitelist.
+     * Get objects to copy.
      *
      * @param  int    $objectID
      * @param  int    $objectType
      * @access public
      * @return array
      */
-    public function getCopyObjects($objectID, $objectType)
+    public function getCopiedObjects($objectID, $objectType)
     {
         $objects = array();
 
