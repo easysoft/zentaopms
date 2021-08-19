@@ -23,18 +23,6 @@ class mrModel extends model
         $this->loadModel('gitlab');
     }
 
-    public function getGitlabProjectByRepo($repoID)
-    {
-        $repo = $this->loadModel('repo')->getRepoByID($repoID);
-
-        $gitlab = new stdclass;
-        $gitlab->product   = explode(',', $repo->product);
-        $gitlab->gitlabID  = $repo->gitlab;
-        $gitlab->projectID = $repo->project;
-
-        return $gitlab;
-    }
-
     /**
      * Get a MR by id.
      *
@@ -50,63 +38,58 @@ class mrModel extends model
     /**
      * Get MR list of gitlab project.
      *
-     * @param  int    $orderBy
-     * @param  object $pager
+     * @param  string   $orderBy
+     * @param  object   $pager
      * @access public
      * @return array
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        $mrList = $this->dao->select('*')
-                         ->from(TABLE_MR)
-                         ->where('deleted')->eq('0')
-                         ->orderBy($orderBy)
-                         ->page($pager)
-                         ->fetchAll('id');
+        $MRList = $this->dao->select('*')
+            ->from(TABLE_MR)
+            ->where('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
 
-        if(!empty($mrList))
-        {
-            $lists = array();
-            foreach($mrList as $mr)
-            {
-                foreach($this->apiGetMRList($mr->gitlabID, $mr->projectID) as $subMR)
-                {
-                    $list = new stdclass;
+        foreach($MRList as $MR) $MR = $this->processMR($MR);
 
-                    $list->id            = $subMR->id;
-                    $list->projectID     = $subMR->project_id;
-                    $list->gitlabID      = $mr->gitlabID;
-                    $list->mrID          = $subMR->iid;
-                    $list->name          = $subMR->title;
-                    $list->target_branch = $subMR->target_branch;
-                    $list->source_branch = $subMR->source_branch;
-                    $list->status        = $subMR->state;
-                    $list->mrStatus      = $subMR->merge_status;
-
-                    $lists[] = $list;
-                }
-            }
-            return $lists;
-        }
+        return $MRList;
     }
 
     /**
-     * Delete MR.
+     * ProcessMR info by api.
+     *
+     * @param  object    $MR
+     * @access public
+     * @return object
+     */
+    public function processMR($MR)
+    {
+        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->id);
+
+        $MR->name          = $rawMR->title;
+        $MR->targetBranch  = $rawMR->target_branch;
+        $MR->sourceBranch  = $rawMR->source_branch;
+        $MR->targetProject = $rawMR->target_project_id;
+        $MR->canMerge      = $rawMR->merge_status;
+        $MR->status        = $rawMR->state;
+        return $MR;
+    }
+
+    /**
+     * Delete one MR.
      *
      * condition: when user deleting a repo.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $mrID
+     * @param  int    $MRID
      * @access public
      * @return void
      */
-    public function deleteMR($gitlabID, $projectID, $mrID )
+    public function deleteMR($MRID)
     {
         $this->dao->delete()->from(TABLE_MR)
-            ->where('gitlabID')->eq($gitlabID)
-            ->andWhere('projectID')->eq($projectID)
-            ->andWhere('mrID')->eq($mrID)
+            ->andWhere('mrID')->eq($MRID)
             ->exec();
     }
 
@@ -118,14 +101,20 @@ class mrModel extends model
      */
     public function getPairs($repoID)
     {
-        $mr = $this->dao->select('id,title')
-                        ->from(TABLE_MR)
-                        ->where('deleted')->eq('0')
-                        ->AndWhere('repoID')->eq($repoID)
-                        ->orderBy('id')->fetchPairs('id', 'title');
-        return array('' => '') + $mr;
+        $MR = $this->dao->select('id,title')
+            ->from(TABLE_MR)
+            ->where('deleted')->eq('0')
+            ->AndWhere('repoID')->eq($repoID)
+            ->orderBy('id')->fetchPairs('id', 'title');
+        return array('' => '') + $MR;
     }
 
+    /**
+     * Create MR function.
+     *
+     * @access public
+     * @return bool
+     */
     public function create()
     {
         $gitlabID  = $this->post->gitlabID;
@@ -137,62 +126,48 @@ class mrModel extends model
         $targetBranch  = $this->post->targetBranch;
 
         if($projectID != $sourceProject) return false;
-
-    }
-
-    /**
-     * Get gitlab api base url by gitlab ID.
-     *
-     * @param  int    $gitlabID
-     * @access public
-     * @return string
-     */
-    public function getApiRoot($gitlabID)
-    {
-        return $this->gitlab->getApiRoot($gitlabID);
     }
 
     /**
      * Get Forks of a project.
      *
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
      */
     public function apiGetForks($gitlabID, $projectID)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/forks");
-        $mr  = new stdclass;
         return json_decode(commonModel::http($url));
     }
 
     /**
      * Create MR by API.
      *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  object $params
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
      */
     public function apiCreateMR($gitlabID, $projectID, $params)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests");
-        $mr  = new stdclass;
-        return json_decode(commonModel::http($url, $mr));
+        $MR = new stdclass;
+        return json_decode(commonModel::http($url, $MR));
     }
 
     /**
      * Get MR list by API.
      *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
      */
     public function apiGetMRList($gitlabID, $projectID)
     {
@@ -203,99 +178,98 @@ class mrModel extends model
     /**
      * Get single MR by API.
      *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  int    $mrID
+     * @param  int    $MRID
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
      */
-    public function apiGetSingleMR($gitlabID, $projectID, $mrID)
+    public function apiGetSingleMR($gitlabID, $projectID, $MRID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
         return json_decode(commonModel::http($url));
     }
 
     /**
      * Update MR by API.
      *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  int    $mrID
+     * @param  int    $MRID
      * @param  object $params
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
      */
-    public function apiUpdateMR($gitlabID, $projectID, $mrID, $params)
+    public function apiUpdateMR($gitlabID, $projectID, $MRID, $params)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
-        $mr  = new stdclass;
-        return json_decode(commonModel::http($url, $mr, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
+        return json_decode(commonModel::http($url, $MR, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
      * Delete MR by API.
      *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#delete-a-merge-request
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  int    $mrID
+     * @param  int    $MRID
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#delete-a-merge-request
      */
-    public function apiDeleteMR($gitlabID, $projectID, $mrID)
+    public function apiDeleteMR($gitlabID, $projectID, $MRID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
      * Accept MR by API.
      *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  int    $mrID
+     * @param  int    $MRID
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
      */
-    public function apiAcceptMR($gitlabID, $projectID, $mrID)
+    public function apiAcceptMR($gitlabID, $projectID, $MRID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
         return json_decode(commonModel::http($url, $data, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
      * Get MR diff versions by API.
      *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-mr-diff-versions
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  int    $mrID
+     * @param  int    $MRID
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-mr-diff-versions
      */
-    public function apiGetDiffVersions($gitlabID, $projectID, $mrID)
+    public function apiGetDiffVersions($gitlabID, $projectID, $MRID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
         return json_decode(commonModel::http($url));
     }
 
     /**
      * Get single diff version by API.
      *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-a-single-mr-diff-version
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  int    $mrID
+     * @param  int    $MRID
      * @param  int    $versionID
      * @access public
      * @return object
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-a-single-mr-diff-version
      */
-    public function apiGetSingleDiffVersion($gitlabID, $projectID, $mrID, $versionID)
+    public function apiGetSingleDiffVersion($gitlabID, $projectID, $MRID, $versionID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$mrID/versions/$versionID");
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
         return json_decode(commonModel::http($url));
     }
 }

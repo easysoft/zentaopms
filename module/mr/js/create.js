@@ -27,6 +27,4 @@ $(function()
 
         $('#targetProject').chosen().trigger("chosen:updated");;
     });
-
 });
-

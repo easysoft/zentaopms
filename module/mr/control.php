@@ -14,56 +14,30 @@ class mr extends control
      */
     public function browse($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('mr');
-
-        $mrList = $this->mr->getList(0, $orderBy);
-
-        /* Pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($mrList);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $mrList   = array_chunk($mrList, $pager->recPerPage);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
-
+        $this->view->title    = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $this->view->MRList   = $this->mr->getList(0, $orderBy, $pager);
         $this->view->orderBy  = $orderBy;
         $this->view->objectID = $objectID;
         $this->view->pager    = $pager;
-        $this->view->mrList = empty($mrList) ? $mrList: $mrList[$pageID - 1];;
         $this->display();
     }
 
-    public function list($mrID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {
-        $this->loadModel('gitlab');
-        $gitlab = $this->mr->getGitlabProjectByRepo($mrID);
-        $mrList = $this->mr->apiGetMRList($gitlab->gitlabID, $gitlab->projectID);
-
-        $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($mrList);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $mrList     = array_chunk($mrList, $pager->recPerPage);
-
-        $this->view->title    = $this->lang->mr->browse;
-        $this->view->orderBy  = $orderBy;
-        $this->view->pager    = $pager;
-        $this->view->mrList = empty($mrList) ? $mrList: $mrList[$pageID - 1];;
-
-        $this->display();
-    }
-
+    /**
+     * Create MR function.
+     *
+     * @access public
+     * @return void
+     */
     public function create()
     {
-        $this->loadModel('mr');
         if($_POST)
         {
-            $mrID = $this->mr->create();
-
+            $this->mr->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $mrID));
-            $link = helper::createLink('mr', 'browse', '', '', false);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title       = $this->lang->mr->create;
@@ -73,26 +47,27 @@ class mr extends control
     }
 
     /**
-     * Delete a mr.
+     * update
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $mrID
      * @access public
      * @return void
      */
-    public function delete($gitlabID, $projectID, $mrID, $confim = 'no')
-    {
-        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "productID=$projectID&gitlabID=$gitlabID&mrID=$mrID&confirm=yes")));
-
-        $this->mr->apiDeleteMR($gitlabID, $projectID, $mrID);
-
-        $this->gitlab->delete(TABLE_PIPELINE, $id);
-        die(js::reload('parent'));
-    }
-
     public function update()
     {
+    }
+
+    /**
+     * Delete a mr.
+     *
+     * @param  int    $MR
+     * @access public
+     * @return void
+     */
+    public function delete($MR, $confim = 'no')
+    {
+        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "productID=$projectID&gitlabID=$gitlabID&MR=$MR&confirm=yes")));
+        $this->mr->apiDeleteMR($MR);
+        die(js::reload('parent'));
     }
 
     /**
@@ -109,6 +84,7 @@ class mr extends control
 
         if(!$projects) return $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
+
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
@@ -116,7 +92,6 @@ class mr extends control
             $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
         }
 
-        return $this->send($options);
+        $this->send($options);
     }
 }
-
