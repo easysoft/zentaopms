@@ -14,7 +14,7 @@
 #tabContent {margin-top: 10px; z-index: 900;}
 #tabContent ul {list-style: none; margin: 0}
 #tabContent .tab-pane>ul {padding-left: 7px;}
-#tabContent .tab-pane>ul>li.hide-in-search>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
+#tabContent .tab-pane>ul>li>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
 #tabContent .tab-pane>ul>li label {background: rgba(255,255,255,0.5); line-height: unset; color: #838a9d; border: 1px solid #d8d8d8; border-radius: 2px; padding: 1px 4px;}
 #tabContent li a i.icon {font-size: 15px !important;}
 #tabContent li a i.icon:before {min-width: 16px !important;}
@@ -24,8 +24,12 @@
 #tabContent .tree li>.list-toggle {line-height: 24px;}
 #tabContent .tree li.has-list.open:before {content: unset;}
 
-#swapper li.hide-in-search>div>a:focus, #swapper li.hide-in-search>div>a:hover {color: #838a9d; cursor: default;}
+#swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
 a.productName:focus, a.productName:hover {background: #0c64eb; color: #fff !important;}
+
+#swapper li > a {padding-top: 4px; padding-bottom: 4px;}
+#swapper li {padding-top: 0; padding-bottom: 0;}
+#swapper .tree li>.list-toggle {top: -1px;}
 </style>
 <?php
 $productCounts      = array();
@@ -64,8 +68,8 @@ foreach($products as $programID => $programProducts)
         $programName = zget($programs, $programID);
         $preFix      = $programName . ' / ';
 
-        if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
-        if($productCounts[$programID]['others']) $normalProductsHtml .= '<li class="hide-in-search"><div><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['others']) $normalProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
     }
 
     foreach($programProducts as $index => $product)
@@ -151,5 +155,18 @@ $(function()
     })
 
     $('#tabContent [data-ride="tree"]').tree('expand');
+
+    $('#swapper #dropMenu .search-box').on('onSearchChange', function(event, value)
+    {
+        if(value != '')
+        {
+            $('div.hide-in-search').siblings('i').addClass('hide-in-search');
+        }
+        else
+        {
+            $('div.hide-in-search').siblings('i').removeClass('hide-in-search');
+            $('li.has-list div.hide-in-search').removeClass('hidden');
+        }
+    })
 })
 </script>
