@@ -49,14 +49,15 @@
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <tr>
-              <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title={$doc->title} class='iframe' data-width='90%'");?></td>
+              <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?></td>
               <td class='c-name'>
-                <?php if(!empty($doc->objectType)):?>
-                <?php echo $lang->{$doc->objectType}->common . ' : ';?>
-                <a title='<?php echo $doc->objectName;?>' href='<?php echo $this->createLink($doc->objectType, 'view', "objectID=$doc->objectID");?>' data-app="<?php echo $doc->objectType;?>">
-                  <?php echo $doc->objectName;?>
-                </a>
-                <?php endif;?>
+                <?php
+                if(!empty($doc->objectType))
+                {
+                    echo $lang->{$doc->objectType}->common . ' : ';
+                    echo html::a($this->createLink($doc->objectType, 'view', "objectID={$doc->objectID}"), $doc->objectName, '', "data-app='{$doc->objectType}' title='{$doc->objectName}'");
+                }
+                ?>
               </td>
               <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>

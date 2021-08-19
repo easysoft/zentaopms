@@ -1006,7 +1006,8 @@ class actionModel extends model
                         if($object->type == 'project') $objectProject[$object->id] = $object->id;
                     }
                 }
-                elseif($objectType == 'stakeholder'){
+                elseif($objectType == 'stakeholder')
+                {
                     $objectName = $this->dao->select("t1.id, t2.realname")->from($table)->alias('t1')
                         ->leftJoin(TABLE_USER)->alias('t2')->on("t1.{$field} = t2.account")
                         ->where('t1.id')->in($objectIds)
@@ -1055,7 +1056,8 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
-            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : (isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action);
+            $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
+            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
             $action->objectLabel  = $objectType;
             if(isset($this->lang->action->label->$objectType))
             {
@@ -1108,25 +1110,24 @@ class actionModel extends model
                         $method = $this->config->action->assetViewMethod[$action->objectType];
                     }
 
-                    $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID), '', '', $projectID);
+                    $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
                 }
                 else
                 {
                     if($action->objectType == 'doclib')
                     {
                         $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
-                        $docLib->type       = $docLib->type == 'execution' ? 'project' : $docLib->type;
-                        $docLib->objectID   = strpos('product,project', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
+                        $docLib->objectID   = strpos('product,project,execution', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
                         $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                         $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
                     }
                     elseif($action->objectType == 'user')
                     {
-                        $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                        $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                     }
                     else
                     {
-                        $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID), '', '', $projectID);
+                        $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                     }
                 }
                 $action->objectLabel = $objectLabel;

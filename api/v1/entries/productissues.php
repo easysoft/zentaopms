@@ -124,7 +124,7 @@ class productIssuesEntry extends entry
                             ->beginIF($storyFilter != 'all')->andWhere('category')->in($storyFilter)->fi()
                             ->andWhere('deleted')->eq(0)
                             ->fetchAll();
-            foreach($stories as $story) $issues[] = array('id' => $story->id, 'type' => 'story', 'order' => $story->$order, 'status' => $this->getKey($story->status, $storyStatus)); 
+            foreach($stories as $story) $issues[] = array('id' => $story->id, 'type' => 'story', 'order' => $story->$order, 'status' => $this->getKey($story->status, $storyStatus));
         }
 
         if($bugFilter)
@@ -136,7 +136,7 @@ class productIssuesEntry extends entry
                          ->beginIF($bugFilter != 'all')->andWhere('type')->in($bugFilter)->fi()
                          ->andWhere('deleted')->eq(0)
                          ->fetchAll();
-            foreach($bugs as $bug) $issues[] = array('id' => $bug->id, 'type' => 'bug', 'order' => $bug->$order, 'status' => $this->getKey($bug->status, $bugStatus)); 
+            foreach($bugs as $bug) $issues[] = array('id' => $bug->id, 'type' => 'bug', 'order' => $bug->$order, 'status' => $this->getKey($bug->status, $bugStatus));
         }
 
         array_multisort(array_column($issues, 'order'), $sort == 'asc' ? SORT_ASC : SORT_DESC, $issues);
@@ -190,13 +190,38 @@ class productIssuesEntry extends entry
                 $r->title          = $task->name;
                 $r->labels         = array($this->app->lang->task->common, zget($this->app->lang->task->typeList, $task->type));
                 $r->pri            = $task->pri;
-                $r->assignedTo     = $this->entry->getAssignees('task', $task);
                 $r->openedDate     = $task->openedDate;
-                $r->openedBy       = $this->entry->getUser($task->openedBy);
+                $r->openedBy       = $task->openedBy;
                 $r->lastEditedDate = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedDate : $task->lastEditedDate;
                 $r->lastEditedBy   = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedBy   : $task->lastEditedBy;
                 $r->status         = $issue['status'];
                 $r->url            = helper::createLink('task', 'view', "taskID=$task->id");
+                $r->assignedTo = array();
+
+                /* Get assignees for task, the task object has the type of multiple assign only so far. */
+                $users = $this->dao->select('account')->from(TABLE_TEAM)
+                    ->where('type')->eq('task')
+                    ->andWhere('root')->eq($task->id)
+                    ->fetchAll();
+                if($users)
+                {
+                    foreach($users as $user)
+                    {
+                        $r->assignedTo[] = $user->account;
+                    }
+                }
+                else
+                {
+                    if($task->assignedTo == "")
+                    {
+                        $r->assignedTo = array();
+                    }
+                    else
+                    {
+                        $r->assignedTo = array($task->assignedTo);
+                    }
+                }
+
             }
             else if($issue['type'] == 'story')
             {
@@ -206,13 +231,21 @@ class productIssuesEntry extends entry
                 $r->title          = $story->title;
                 $r->labels         = array($this->app->lang->story->common, zget($this->app->lang->story->categoryList, $story->category));
                 $r->pri            = $story->pri;
-                $r->assignedTo     = $this->entry->getAssignees('story', $story);
                 $r->openedDate     = $story->openedDate;
-                $r->openedBy       = $this->entry->getUser($story->openedBy);
+                $r->openedBy       = $story->openedBy;
                 $r->lastEditedDate = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedDate : $story->lastEditedDate;
                 $r->lastEditedBy   = $story->lastEditedDate < '1970-01-01 01:01:01' ? $story->openedBy   : $story->lastEditedBy;
                 $r->status         = $issue['status'];
                 $r->url            = helper::createLink('story', 'view', "storyID=$story->id");
+
+                if($story->assignedTo == "")
+                {
+                    $r->assignedTo = array();
+                }
+                else
+                {
+                    $r->assignedTo = array($story->assignedTo);
+                }
             }
             else if($issue['type'] == 'bug')
             {
@@ -222,16 +255,53 @@ class productIssuesEntry extends entry
                 $r->title          = $bug->title;
                 $r->labels         = array($this->app->lang->bug->common, zget($this->app->lang->bug->typeList, $bug->type));
                 $r->pri            = $bug->pri;
-                $r->assignedTo     = $this->entry->getAssignees('bug', $bug);
                 $r->openedDate     = $bug->openedDate;
-                $r->openedBy       = $this->entry->getUser($bug->openedBy);
+                $r->openedBy       = $bug->openedBy;
                 $r->lastEditedDate = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedDate : $bug->lastEditedDate;
                 $r->lastEditedBy   = $bug->lastEditedDate < '1970-01-01 01:01:01' ? $bug->openedBy   : $bug->lastEditedBy;
                 $r->status         = $issue['status'];
                 $r->url            = helper::createLink('bug', 'view', "bugID=$bug->id");
+
+                if($bug->assignedTo == "")
+                {
+                    $r->assignedTo = array();
+                }
+                else
+                {
+                    $r->assignedTo = array($bug->assignedTo);
+                }
             }
 
             $result[] = $this->format($r, 'openedDate:time,lastEditedDate:time');
+        }
+
+        /**
+         * Get all users in issues so that we can bulk get user detail later.
+         *
+         */
+        $userList = array();
+        foreach($result as $issue)
+        {
+            foreach($issue->assignedTo as $user)
+            {
+                $userList[] = $user;
+            }
+            $userList[] = $issue->openedBy;
+        }
+        $userList    = array_unique($userList);
+        $userDetails = $this->loadModel('user')->getUserDetailsForAPI($userList);
+
+        /**
+         * Set the user detail to assignedTo and openedBy.
+         *
+         */
+        foreach($result as $issue)
+        {
+            foreach($issue->assignedTo as $index => $user)
+            {
+               $issue->assignedTo[$index] = $userDetails[$user];
+            }
+            $issue->openedBy = $userDetails[$issue->openedBy];
         }
 
         return $result;

@@ -255,21 +255,8 @@ class docModel extends model
                 ->fetchAll('id');
         }
 
-        $projects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.project')
-            ->where('t2.id')->in(array_keys($docs))
-            ->andWhere('t2.execution')->eq(0)
-            ->fetchPairs();
-
-        $executions = $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.execution')
-            ->where('t2.id')->in(array_keys($docs))
-            ->fetchPairs();
-
-        $products = $this->dao->select('t1.id, t1.name')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.product')
-            ->where('t2.id')->in(array_keys($docs))
-            ->fetchPairs();
+        /* Get projects, executions and products by docIdList. */
+        list($projects, $executions, $products) = $this->getObjectsByDoc(array_keys($docs));
 
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
 
@@ -320,6 +307,36 @@ class docModel extends model
         }
 
         return $docs;
+    }
+
+    /**
+     * Get projects, executions and products by docIdList.
+     *
+     * @param  array  $docIdList
+     * @access public
+     * @return array
+     */
+    public function getObjectsByDoc($docIdList = array())
+    {
+        if(empty($docIdList)) return array();
+
+        $projects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.project')
+            ->where('t2.id')->in($docIdList)
+            ->andWhere('t2.execution')->eq(0)
+            ->fetchPairs();
+
+        $executions = $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.execution')
+            ->where('t2.id')->in($docIdList)
+            ->fetchPairs();
+
+        $products = $this->dao->select('t1.id, t1.name')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.product')
+            ->where('t2.id')->in($docIdList)
+            ->fetchPairs();
+
+        return array($projects, $executions, $products);
     }
 
     /**
@@ -421,7 +438,7 @@ class docModel extends model
         $doc->content     = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType = isset($docContent->type)    ? $docContent->type : '';
 
-        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content,tempContent');
+        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
@@ -515,7 +532,7 @@ class docModel extends model
             if(empty($docContent->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        $doc->tempContent = $docContent->content;
+        $doc->draft = $docContent->content;
         $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->exec();
@@ -623,7 +640,7 @@ class docModel extends model
         }
         unset($doc->contentType);
 
-        $doc->tempContent = $doc->content;
+        $doc->draft = $doc->content;
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
@@ -631,29 +648,29 @@ class docModel extends model
             ->exec();
         if(!dao::isError())
         {
-            unset($doc->tempContent);
+            unset($doc->draft);
             $this->file->updateObjectID($this->post->uid, $docID, 'doc');
             return array('changes' => $changes, 'files' => $files);
         }
     }
 
     /**
-     * Save temporary doc content.
+     * Save draft.
      *
      * @param  int    $docID
      * @access public
      * @return void
      */
-    public function saveTempContent($docID)
+    public function saveDraft($docID)
     {
         $data = fixer::input('post')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->get();
         $doc  = new stdclass();
-        $doc->tempContent = $data->content;
+        $doc->draft = $data->content;
 
         $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq((int)$docID)->orderBy('version_desc')->fetch();
-        if($docType == 'markdown') $doc->tempContent = $this->post->content;
+        if($docType == 'markdown') $doc->draft = $this->post->content;
 
         $this->dao->update(TABLE_DOC)->data($doc)->where('id')->eq($docID)->exec();
     }
@@ -1238,7 +1255,7 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
-                $execution->name = zget($projectPairs, $execution->project) . '/' . $execution->name;
+                $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
 
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
                 {
@@ -1829,15 +1846,16 @@ class docModel extends model
      */
     public function buildCollectButton4Doc()
     {
-        $allLibs = array_keys($this->getLibs('all'));
-        $docs    = $this->dao->select('t1.id,t1.title,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
+        $favoritesLimit = 10;
+        $allLibs        = array_keys($this->getLibs('all'));
+        $docs           = $this->dao->select('t1.id,t1.title,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.lib')->in($allLibs)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->andWhere('t1.collector')->like("%,{$this->app->user->account},%")
             ->orderBy('t1.id_desc')
-            ->limit($this->config->doc->collectionLimit)
+            ->limit($favoritesLimit)
             ->fetchAll();
 
         $html  = "<div class='btn-group dropdown-hover'>";
@@ -1865,7 +1883,7 @@ class docModel extends model
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->andWhere('collector')->like("%,{$this->app->user->account},%")
             ->fetch('count');
-        if($collectionCount > $this->config->doc->collectionLimit) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
+        if($collectionCount > $favoritesLimit) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
 
         $html .= '</ul></div>';
         return $html;

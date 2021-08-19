@@ -1903,20 +1903,11 @@ class execution extends control
 
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
 
-                /* Up to five closed executions are displayed. */
+                /* Max 5 closed executions. */
                 if($status == 'closed')
                 {
-                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5)
-                    {
-                        $myExecutions[$status]         = array_slice($myExecutions[$status], 0, 5, true);
-                        $myExecutions[$status]['more'] = $this->lang->execution->showMore;
-                    }
-
-                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5)
-                    {
-                        $kanbanGroup[$projectID][$status]         = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
-                        $kanbanGroup[$projectID][$status]['more'] = $this->lang->execution->showMore;
-                    }
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5) $myExecutions[$status] = array_slice($myExecutions[$status], 0, 5, true);
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5) $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
                 }
             }
 
@@ -2287,7 +2278,7 @@ class execution extends control
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
-        $teams2Import   = $this->loadModel('personnel')->getCopyObjects($executionID, 'sprint');
+        $teams2Import   = $this->loadModel('personnel')->getCopiedObjects($executionID, 'sprint');
         $teams2Import   = array('' => '') + $teams2Import;
 
         /* Append users for get users. */

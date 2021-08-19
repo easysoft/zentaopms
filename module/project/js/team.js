@@ -2,40 +2,49 @@
  * Delete memeber of project team.
  *
  * @param  projectID $projectID
- * @param  account $account
- * @param  userID $userID
+ * @param  account   $account
+ * @param  userID    $userID
  * @access public
  * @return void
  */
 function deleteMemeber(projectID, account, userID)
 {
-    if(confirm(confirmUnlinkMember))
+    bootbox.confirm(confirmUnlinkMember, function(result)
     {
+        if(!result) return true;
+
         var removeConfirm = '';
         var tipsLink      = createLink('project', 'ajaxGetUnlinkTips', 'projectID=' + projectID + '&account=' + account);
         $.get(tipsLink, function(tips)
         {
-            if(!tips)
+            var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes');
+
+            if(!tips) unlinkMember(unlinkURL);
+            if(tips)
             {
-                var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=no');
-            }
-            else
-            {
-                if(confirm(tips))
+                bootbox.confirm(tips, function(result)
                 {
-                    var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=yes');
-                }
-                else
-                {
-                    var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=no');
-                }
+                    if(result) unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes&removeExecution=yes');
+                    unlinkMember(unlinkURL);
+                })
             }
 
-            $.get(unlinkURL, function(data)
-            {
-                data = JSON.parse(data);
-                if(data.result == 'success') window.location.reload();
-            });
         })
-    }
+    })
+}
+
+/**
+ * Unlink member from project.
+ *
+ * @param  unlinkURL $unlinkURL
+ * @access public
+ * @return void
+ */
+function unlinkMember(unlinkURL)
+{
+    $.get(unlinkURL, function(data)
+    {
+        data = JSON.parse(data);
+        if(data.result == 'success') window.location.reload();
+    });
 }

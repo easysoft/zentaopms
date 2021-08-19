@@ -15,7 +15,7 @@ class messageModel extends model
     {
         return $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('message')
-            ->andWhere('toList')->eq($this->app->user->account)
+            ->andWhere('toList')->like("%,{$this->app->user->account},%")
             ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->fetchAll('id');
     }
@@ -140,7 +140,7 @@ class messageModel extends model
         $notify = new stdclass();
         $notify->objectType  = 'message';
         $notify->action      = $actionID;
-        $notify->toList      = $toList;
+        $notify->toList      = str_replace(",{$actor},", '', ",$toList,");
         $notify->data        = $data;
         $notify->status      = 'wait';
         $notify->createdBy   = $actor;
@@ -168,12 +168,9 @@ class messageModel extends model
         {
             /* Get notifiy persons. */
             $notifyPersons = array();
-            if(!empty($toList->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object->notify, $object->product, $object->build);
+            if(!empty($object->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object->notify, $object->product, $object->build);
 
-            foreach($notifyPersons as $account)
-            {
-                if(strpos($object->mailto . ',', ",{$account},") === false) $toList .= ',' . $account;
-            }
+            if(!empty($notifyPersons)) $toList = implode(',', $notifyPersons);
         }
 
         if($toList == 'closed') $toList = '';

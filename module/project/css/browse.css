@@ -2,7 +2,7 @@
 .side-col {padding-right: 20px; width: 18%;}
 #sidebar>.cell {width: 100%;}
 
-th.c-budget {text-align:right;}
+th.c-budget {text-align: right;}
 td.c-actions {overflow: visible;}
 .c-actions .btn {overflow: visible;}
 #programBox {float: left; margin-right: 10px; width: 170px !important;}

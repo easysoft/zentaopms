@@ -345,6 +345,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', '', '#productStoryForm')\"" : '';
               echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
+              $class = $canBatchUnlink ? '' : "class='disabled'";
+              echo "<li $class>" . html::a('#', $lang->story->unlink, '', "id='batchUnlinkStory'") . "</li>";
+
               if($canBatchReview)
               {
                   echo "<li class='dropdown-submenu'>";
@@ -516,13 +519,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             </div>
           </div>
           <?php endif;?>
-
-          <?php
-          if($canBatchUnlink)
-          {
-              echo html::commonButton($lang->projectstory->unlinkStory, "id='batchUnlinkStory'");
-          }
-          ?>
 
           <?php if($canBatchImportToLib):?>
           <?php echo html::a('#batchImportToLib', $lang->story->importToLib, '', 'class="btn" data-toggle="modal" id="importToLib"');?>

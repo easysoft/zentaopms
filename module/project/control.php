@@ -447,10 +447,11 @@ class project extends control
      * Edit a project.
      *
      * @param  int    $projectID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function edit($projectID = 0)
+    public function edit($projectID = 0, $from = '')
     {
         $this->loadModel('action');
         $this->loadModel('custom');
@@ -485,7 +486,7 @@ class project extends control
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
-            $locateLink = $this->session->projectList ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
@@ -609,7 +610,6 @@ class project extends control
         }
 
         $this->project->setMenu($projectID);
-        $this->session->set('projectList', $this->app->getURI(true), 'project');
 
         $products = $this->loadModel('product')->getProducts($projectID);
         $linkedBranches = array();
@@ -1257,7 +1257,7 @@ class project extends control
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
         $this->view->currentMembers = $currentMembers;
         $this->view->members2Import = $members2Import;
-        $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopyObjects($projectID, 'project');
+        $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopiedObjects($projectID, 'project');
         $this->view->copyProjectID  = $copyProjectID;
         $this->display();
     }

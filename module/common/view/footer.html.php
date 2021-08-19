@@ -5,8 +5,7 @@ $.initSidebar();
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
-
-<?php if($onlybody != 'yes'):?>
+<?php if($onlybody != 'yes' and $app->viewType != 'xhtml'):?>
 </main><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <div id="noticeBox"><?php echo $this->loadModel('score')->getNotice(); ?></div>
 <script>

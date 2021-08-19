@@ -506,7 +506,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-            ->check('code', 'unique', "id!=$executionID and code!='' and deleted='0'")
+            ->check('code', 'unique', "id != $executionID and code != '' and deleted = '0'")
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
@@ -1299,15 +1299,15 @@ class executionModel extends model
         {
             $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s");
         }
+        elseif($module == 'doc')
+        {
+            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
+        }
         else
         {
             $link = helper::createLink($module, $method, "executionID=%s");
         }
 
-        if($module == 'doc')
-        {
-            $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
-        }
         return $link;
     }
 

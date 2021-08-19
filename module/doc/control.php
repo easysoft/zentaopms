@@ -739,15 +739,15 @@ class doc extends control
     }
 
     /**
-     * Ajax save temporary content of doc.
+     * Ajax save draft.
      *
      * @param  int    $docID
      * @access public
      * @return void
      */
-    public function ajaxSaveContent($docID)
+    public function ajaxSaveDraft($docID)
     {
-        $this->doc->saveTempContent($docID);
+        $this->doc->saveDraft($docID);
     }
 
     /**
@@ -1020,7 +1020,7 @@ class doc extends control
     {
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
 
-        $libID = empty($libID) ? 0 : $libID;
+        $libID = (int)$libID;
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID);
 

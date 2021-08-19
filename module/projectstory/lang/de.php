@@ -14,7 +14,7 @@ $lang->projectstory->confirm           = 'Confirm';
 
 /* Notice. */
 $lang->projectstory->whyNoStories   = "No story can be linked. Please check whether there is any story in project which is linked to {$lang->productCommon} and make sure it has been reviewed.";
-$lang->projectstory->batchUnlinkTip = 'The following requirements are linked to Executions of this project, please remove them from the execution first.';
+$lang->projectstory->batchUnlinkTip = 'Other requirements are removed. The following requirements are linked to the execution of this project. Please remove them from the execution first.';
 
 global $app;
 $app->loadLang('product');

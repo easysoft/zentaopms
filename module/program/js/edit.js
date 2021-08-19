@@ -49,23 +49,28 @@ $(function()
         }
     })
 
-    $('#cancelBtn').click(function()
+    $('#cancelBTN').click(function()
     {
         $('#syncPRJUnit').val('false');
         $('#exchangeRate').val('');
     })
 
-    $('#confirmBtn').click(function()
+    $('#confirmBTN').click(function()
     {
         var exchangeRate = $('#rate').val();
         if(!exchangeRate)
         {
-            alert(exRateNotEmpty);
+            bootbox.alert(exRateNotEmpty);
+            return false;
+        }
+        else if(isNaN(exchangeRate))
+        {
+            bootbox.alert(exRateNum);
             return false;
         }
         else if(exchangeRate < 0)
         {
-            alert(exRateNotNegative);
+            bootbox.alert(exRateNotNegative);
             return false;
         }
 

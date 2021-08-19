@@ -1,4 +1,46 @@
 /**
+ * Save team members.
+ *
+ * @access public
+ * @return void
+ */
+function saveMemebers()
+{
+    var isDeleted   = false;
+    var accountList = [];
+    $("[name^='accounts']").each(function()
+    {
+        if($(this).val()) accountList.push($(this).val());
+    })
+
+    oldAccountList.forEach(function(account)
+    {
+        if(accountList.indexOf(account) < 0)
+        {
+            isDeleted = true;
+            return false;
+        }
+    })
+
+    if(!isDeleted)
+    {
+        $('#saveBtn').addClass('hidden');
+        $('#submit').removeClass('hidden');
+        $('#submit').click();
+    }
+    else
+    {
+        bootbox.confirm(unlinkExecutionMembers, function(result)
+        {
+            $('#saveBtn').addClass('hidden');
+            $('#submit').removeClass('hidden');
+            if(result) $('#removeExecution').val('yes');
+            $('#submit').click();
+        })
+    }
+}
+
+/**
  * Set role when select an account.
  *
  * @param  string $account

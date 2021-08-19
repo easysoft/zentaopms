@@ -3,6 +3,8 @@
 <?php js::set('roles', $roles);?>
 <?php js::set('deptID', $dept);?>
 <?php js::set('copyProjectID', $copyProjectID);?>
+<?php js::set('oldAccountList', array_keys($currentMembers));?>
+<?php js::set('unlinkExecutionMembers', $lang->project->unlinkExecutionMembers);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>
@@ -105,7 +107,9 @@
       <tfoot>
         <tr>
           <td colspan='6' class='text-center form-actions'>
-            <?php echo html::submitButton() . html::backButton();?>
+            <?php echo html::hidden('removeExecution', 'no');?>
+            <?php echo html::submitButton('', '', 'hidden btn btn-wide btn-primary');?>
+            <?php echo html::commonButton($lang->save, 'onclick="saveMemebers()" id="saveBtn"', 'btn btn-wide btn-primary') . html::backButton();?>
           </td>
         </tr>
       </tfoot>

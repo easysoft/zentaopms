@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `keywords` varchar(255) NOT NULL,
   `type` varchar(30) NOT NULL,
   `views` smallint(5) unsigned NOT NULL,
-  `tempContent` longtext NOT NULL,
+  `draft` longtext NOT NULL,
   `collector` text NOT NULL,
   `addedBy` varchar(30) NOT NULL,
   `addedDate` datetime NOT NULL,
@@ -1345,7 +1345,7 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (10, 'OTHERS', 'others', 'for others.'),
 (11, 'guest', 'guest', 'For guest'),
 (12, 'LIMITED', 'limited', 'For limited user'),
-(13, '项目管理员', 'projectAdmin', '项目管理员可以维护项目的权限');
+(13, 'Project Admin', 'projectAdmin', 'Project Admins manage project privileges');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'action','editComment'),

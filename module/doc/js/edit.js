@@ -1,13 +1,10 @@
 $(function()
 {
-    if(needUpdateContent)
+    if(needUpdateContent && confirm(confirmUpdateContent))
     {
-        if(confirm(confirmUpdateContent))
-        {
-            $('#content').html(tempContent);
-            editor = KindEditor.instances[0];
-            editor.html(tempContent);
-        }
+        $('#content').html(draft);
+        editor = KindEditor.instances[0];
+        editor.html(draft);
     }
 
     $('#top-submit').click(function()
@@ -91,6 +88,6 @@ $(function()
 function saveTempContent()
 {
     var content = $('#content').val();
-    var link    = createLink('doc', 'ajaxSaveContent', 'docID=' + docID);
+    var link    = createLink('doc', 'ajaxSaveDraft', 'docID=' + docID);
     $.post(link, {content: content});
 }

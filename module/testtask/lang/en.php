@@ -48,12 +48,12 @@ $lang->testtask->allTasks         = 'All Requests';
 $lang->testtask->collapseAll      = 'Collapse';
 $lang->testtask->expandAll        = 'Expand';
 
-$lang->testtask->viewAction     = "View Testtask";
+$lang->testtask->viewAction     = "View Request";
 $lang->testtask->casesAction    = 'View Case';
-$lang->testtask->activateAction = "Activate Testtask";
-$lang->testtask->blockAction    = "Block Testtask";
-$lang->testtask->closeAction    = "Close Testtask";
-$lang->testtask->startAction    = "Start Testtask";
+$lang->testtask->activateAction = "Activate Request";
+$lang->testtask->blockAction    = "Block Request";
+$lang->testtask->closeAction    = "Close Request";
+$lang->testtask->startAction    = "Start Request";
 $lang->testtask->resultsAction  = "Case Result";
 $lang->testtask->reportAction   = 'Report';
 
@@ -203,7 +203,7 @@ $lang->testtask->unitTag['lastWeek']  = 'Last week';
 $lang->testtask->unitTag['thisMonth'] = 'This month';
 $lang->testtask->unitTag['lastMonth'] = 'Last month';
 
-$lang->testtask->typeList['integrate']   = 'Integrate';
+$lang->testtask->typeList['integrate']   = 'Integration';
 $lang->testtask->typeList['system']      = 'System';
 $lang->testtask->typeList['acceptance']  = 'Acceptance';
 $lang->testtask->typeList['performance'] = 'Performance';

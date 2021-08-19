@@ -457,14 +457,14 @@ class personnelModel extends model
     }
 
     /**
-     * Get objects to copy whitelist.
+     * Get objects to copy.
      *
      * @param  int    $objectID
      * @param  int    $objectType
      * @access public
      * @return array
      */
-    public function getCopyObjects($objectID, $objectType)
+    public function getCopiedObjects($objectID, $objectType)
     {
         $objects = array();
 
@@ -485,8 +485,7 @@ class personnelModel extends model
                 ->fetchPairs();
             foreach($objects as $id => &$object)
             {
-                if($id == $parentID) $object = $this->lang->projectCommon . '-' . $object;
-                if($id != $parentID) $object = $this->lang->execution->common . '-' . $object;
+                if($id != $parentID) $object = '&nbsp;&nbsp;&nbsp;' . $object;
             }
         }
         elseif($objectType == 'project')
