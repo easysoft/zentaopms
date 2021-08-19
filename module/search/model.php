@@ -947,6 +947,8 @@ class searchModel extends model
     {
         $words = explode(' ', trim($keywords, ' '));
         $markedWords = array();
+        $leftMark = '|0000';
+        $rightMark = '0000|';
 
         foreach($words as $key => $word)
         {
@@ -962,10 +964,11 @@ class searchModel extends model
             {
                 $words[$key] = strlen($word) == 5 ? str_replace('_', '', $word) : $word;
             }
-            $markedWords[] = "<span class='text-danger'>" . $this->decode($word) . "</span > ";
+            $markedWords[] = $leftMark . $this->decode($word) . $rightMark;
         }
 
         $content = str_replace($words, $markedWords, $content . ' ');
+        $content = str_replace(array($leftMark, $rightMark), array("<span class='text-danger'>", "</span > "), $content);
         $content = str_replace("</span > <span class='text-danger'>", '', $content);
         $content = str_replace("</span >", '</span>', $content);
 
