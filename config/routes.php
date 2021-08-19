@@ -33,7 +33,7 @@ $routes['/tasks/:id/finish']            = 'taskFinish';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';
-$routes['/my']        = 'my';
+$routes['/user']      = 'user';
 
 $routes['/programs']     = 'programs';
 $routes['/programs/:id'] = 'program';
