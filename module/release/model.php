@@ -288,8 +288,8 @@ class releaseModel extends model
 
                 if(empty($stories)) continue;
 
-                $createUsers    = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
-                $notifyPersons += $createUsers;
+                $openedByList   = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
+                $notifyPersons += $openedByList;
             }
             elseif(($notify == 'ET' or $notify == 'PT') and !empty($buildID))
             {
