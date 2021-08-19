@@ -4,9 +4,9 @@ $(function()
     {
         if(confirm(confirmUpdateContent))
         {
-            $('#content').html(tempContent);
+            $('#content').html(draft);
             editor = KindEditor.instances[0];
-            editor.html(tempContent);
+            editor.html(draft);
         }
     }
 
@@ -34,7 +34,7 @@ $(function()
     $('#subNavbar li[data-id="doc"]').addClass('active');
 
     /* Automatically save document contents. */
-    setInterval("saveTempContent()", 60 * 1000);
+    setInterval("saveTempContent()", 5 * 1000);
 
     $(document).on("mousedown", 'span[data-name="fullscreen"]', function()
     {
@@ -91,6 +91,6 @@ $(function()
 function saveTempContent()
 {
     var content = $('#content').val();
-    var link    = createLink('doc', 'ajaxSaveContent', 'docID=' + docID);
+    var link    = createLink('doc', 'ajaxSaveDraft', 'docID=' + docID);
     $.post(link, {content: content});
 }

@@ -421,7 +421,7 @@ class docModel extends model
         $doc->content     = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType = isset($docContent->type)    ? $docContent->type : '';
 
-        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content,tempContent');
+        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
@@ -515,7 +515,7 @@ class docModel extends model
             if(empty($docContent->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        $doc->tempContent = $docContent->content;
+        $doc->draft = $docContent->content;
         $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->exec();
@@ -623,7 +623,7 @@ class docModel extends model
         }
         unset($doc->contentType);
 
-        $doc->tempContent = $doc->content;
+        $doc->draft = $doc->content;
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
@@ -631,29 +631,29 @@ class docModel extends model
             ->exec();
         if(!dao::isError())
         {
-            unset($doc->tempContent);
+            unset($doc->draft);
             $this->file->updateObjectID($this->post->uid, $docID, 'doc');
             return array('changes' => $changes, 'files' => $files);
         }
     }
 
     /**
-     * Save temporary doc content.
+     * Save draft.
      *
      * @param  int    $docID
      * @access public
      * @return void
      */
-    public function saveTempContent($docID)
+    public function saveDraft($docID)
     {
         $data = fixer::input('post')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->get();
         $doc  = new stdclass();
-        $doc->tempContent = $data->content;
+        $doc->draft = $data->content;
 
         $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq((int)$docID)->orderBy('version_desc')->fetch();
-        if($docType == 'markdown') $doc->tempContent = $this->post->content;
+        if($docType == 'markdown') $doc->draft = $this->post->content;
 
         $this->dao->update(TABLE_DOC)->data($doc)->where('id')->eq($docID)->exec();
     }

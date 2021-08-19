@@ -5251,7 +5251,7 @@ class upgradeModel extends model
             if(empty($doc->content)) continue;
 
             $this->dao->update(TABLE_DOC)
-                ->set('tempContent')->eq($doc->content)
+                ->set('draft')->eq($doc->content)
                 ->where('id')->eq($docID)
                 ->exec();
         }
