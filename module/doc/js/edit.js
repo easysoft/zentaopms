@@ -1,13 +1,10 @@
 $(function()
 {
-    if(needUpdateContent)
+    if(needUpdateContent && confirm(confirmUpdateContent))
     {
-        if(confirm(confirmUpdateContent))
-        {
-            $('#content').html(draft);
-            editor = KindEditor.instances[0];
-            editor.html(draft);
-        }
+        $('#content').html(draft);
+        editor = KindEditor.instances[0];
+        editor.html(draft);
     }
 
     $('#top-submit').click(function()
@@ -34,7 +31,7 @@ $(function()
     $('#subNavbar li[data-id="doc"]').addClass('active');
 
     /* Automatically save document contents. */
-    setInterval("saveTempContent()", 5 * 1000);
+    setInterval("saveTempContent()", 60 * 1000);
 
     $(document).on("mousedown", 'span[data-name="fullscreen"]', function()
     {
