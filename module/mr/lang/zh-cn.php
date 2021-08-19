@@ -18,9 +18,7 @@ $lang->mr->author      = '创建人';
 $lang->mr->assignee    = '指派给';
 $lang->mr->reviewer    = '评审人';
 $lang->mr->link        = 'GitLab链接';
-$lang->mr->pipeline    = '流水线';
-$lang->mr->auditStatus = '审核状态';
-$lang->mr->lastExec    = '执行状态';
+$lang->mr->mrStatus    = '合并状态';
 
 $lang->mr->sourceProject = '源项目';
 $lang->mr->sourceBranch  = '源分支';

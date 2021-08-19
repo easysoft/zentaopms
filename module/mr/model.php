@@ -77,9 +77,8 @@ class mrModel extends model
                     $list->name          = $subMR->title;
                     $list->target_branch = $subMR->target_branch;
                     $list->source_branch = $subMR->source_branch;
-                    $list->pipeline      = $subMR->merge_when_pipeline_succeeds;
-                    $list->auditStatus   = $subMR->state;
-                    $list->lastExec      = $subMR->merge_status;
+                    $list->status        = $subMR->state;
+                    $list->mrStatus      = $subMR->merge_status;
 
                     $lists[] = $list;
                 }

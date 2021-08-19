@@ -24,9 +24,8 @@
           <th class='w-100px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->mr->name); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('pipeline', $orderBy, $vars, $lang->mr->pipeline); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('auditStatus', $orderBy, $vars, $lang->mr->auditStatus); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('lastExec', $orderBy, $vars, $lang->mr->lastExec); ?></th>
+          <th class='w-100px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->mr->status); ?></th>
+          <th class='w-100px text-left'><?php common::printOrderLink('mrStatus', $orderBy, $vars, $lang->mr->mrStatus); ?></th>
           <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
@@ -37,9 +36,8 @@
           <td class='text'><?php echo $mr->name; ?></td>
           <td class='text'><?php echo $mr->target_branch; ?></td>
           <td class='text'><?php echo $mr->source_branch; ?></td>
-          <td class='text'><?php echo $mr->pipeline; ?></td>
-          <td class='text'><?php echo $mr->auditStatus; ?></td>
-          <td class='text'><?php echo $mr->lastExec; ?></td>
+          <td class='text'><?php echo $mr->status; ?></td>
+          <td class='text'><?php echo $mr->mrStatus; ?></td>
           <td class='text-left c-actions'>
             <?php
             common::printLink('mr', 'list', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->list}' class='btn btn-info'");

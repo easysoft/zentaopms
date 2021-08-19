@@ -1,6 +1,17 @@
 <?php
 class mr extends control
 {
+    /**
+     * Browse mr.
+     *
+     * @param  int    $objectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function browse($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('mr');
@@ -14,8 +25,6 @@ class mr extends control
         $mrList   = array_chunk($mrList, $pager->recPerPage);
 
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
-        $this->view->position[] = $this->lang->mr->common;
-        $this->view->position[] = $this->lang->mr->browse;
 
         $this->view->orderBy  = $orderBy;
         $this->view->objectID = $objectID;
