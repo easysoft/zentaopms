@@ -49,13 +49,13 @@ $(function()
         }
     })
 
-    $('#cancelBtn').click(function()
+    $('#cancelBTN').click(function()
     {
         $('#syncPRJUnit').val('false');
         $('#exchangeRate').val('');
     })
 
-    $('#confirmBtn').click(function()
+    $('#confirmBTN').click(function()
     {
         var exchangeRate = $('#rate').val();
         if(!exchangeRate)
