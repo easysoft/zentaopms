@@ -3581,7 +3581,7 @@ class storyModel extends model
         $canBatchChangeModule = common::hasPriv('story',        'batchChangeModule');
         $canBatchChangePlan   = common::hasPriv('story',        'batchChangePlan');
         $canBatchAssignTo     = common::hasPriv('story',        'batchAssignTo');
-        $canBatchUnlinkStory  = common::hasPriv('projectstory', 'unlinkStory');
+        $canBatchUnlinkStory  = common::hasPriv('projectstory', 'batchUnlinkStory');
 
         $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlinkStory);
 
