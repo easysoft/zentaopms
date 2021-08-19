@@ -120,27 +120,16 @@ class mrModel extends model
         $gitlabID  = $this->post->gitlabID;
         $projectID = $this->post->projectID;
 
-        $sourceProject = $this->post->sourceProject;
-        $sourceBranch  = $this->post->sourceBranch;
-        $targetProject = $this->post->targetProject;
-        $targetBranch  = $this->post->targetBranch;
+        $MR = new stdclass;
+        $MR->target_project_id = $this->post->targetProject;
+        $MR->source_branch     = $this->post->sourceBranch;
+        $MR->target_branch     = $this->post->targetBranch;
+        $MR->title             = $this->post->title;
+        $MR->description       = $this->post->description;
+        $MR->assignee_ids      = $this->post->assignee;
+        $MR->reviewer_ids      = $this->post->reviewer;
 
-        if($projectID != $sourceProject) return false;
-    }
-
-    /**
-     * Get Forks of a project.
-     *
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @access public
-     * @return object
-     */
-    public function apiGetForks($gitlabID, $projectID)
-    {
-        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/forks");
-        return json_decode(commonModel::http($url));
+        $rawMR = $this->apiCreateMR($gitlabID, $projectID, $MR);
     }
 
     /**
@@ -156,8 +145,7 @@ class mrModel extends model
     public function apiCreateMR($gitlabID, $projectID, $params)
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests");
-        $MR = new stdclass;
-        return json_decode(commonModel::http($url, $MR));
+        return json_decode(commonModel::http($url, $data=$params, $options = array()));
     }
 
     /**

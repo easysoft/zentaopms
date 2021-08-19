@@ -42,7 +42,7 @@ class mr extends control
 
         $this->view->title       = $this->lang->mr->create;
         $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
-
+        $this->view->users       = $this->gitlab->getUserIdRealnamePairs(14);
         $this->display();
     }
 
@@ -71,24 +71,37 @@ class mr extends control
     }
 
     /**
-     * AJAX: Get forked projects.
+     * AJAX: Get MR target projects.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetForkedProjects($gitlabID, $projectID)
+    public function ajaxGetMRTragetProjects($gitlabID, $projectID)
     {
-        $projects = $this->mr->apiGetForks($gitlabID, $projectID);
+        $this->loadModel('gitlab');
+        /* First step: get forks. */
+        $projects = $this->gitlab->apiGetForks($gitlabID, $projectID);
+        /* Second step: get project itself. */
+        $projects[] = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        /* Last step: find its upstream recursively. */
+        $project = $this->gitlab->apiGetUpstream($gitlabID, $projectID);
+        if(!empty($project)) $projects[] = $project;
+
+        while(!empty($project) and isset($project->id))
+        {
+            $project = $this->gitlab->apiGetUpstream($gitlabID, $project->id);
+            if(empty($project)) break;
+            $projects[] = $project;
+        }
 
         if(!$projects) return $this->send(array('message' => array()));
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
 
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
         }
 
