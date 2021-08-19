@@ -101,6 +101,10 @@ class gitlab extends control
     {
         $userPairs = $this->loadModel('user')->getPairs();
 
+        $gitlab = $this->gitlab->getByID($gitlabID);
+        $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+        if(!isset($user->is_admin) or !$user->is_admin) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+
         if($_POST)
         {
             $users       = $this->post->zentaoUsers;
@@ -140,7 +144,6 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
-        $gitlab      = $this->gitlab->getByID($gitlabID);
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
 
         $this->view->title         = $this->lang->gitlab->bindUser;
