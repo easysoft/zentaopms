@@ -255,21 +255,8 @@ class docModel extends model
                 ->fetchAll('id');
         }
 
-        $projects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.project')
-            ->where('t2.id')->in(array_keys($docs))
-            ->andWhere('t2.execution')->eq(0)
-            ->fetchPairs();
-
-        $executions = $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.execution')
-            ->where('t2.id')->in(array_keys($docs))
-            ->fetchPairs();
-
-        $products = $this->dao->select('t1.id, t1.name')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.product')
-            ->where('t2.id')->in(array_keys($docs))
-            ->fetchPairs();
+        /* Get projects, executions and products by docIdList. */
+        list($projects, $executions, $products) = $this->getObjectsByDoc(array_keys($docs));
 
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
 
@@ -320,6 +307,36 @@ class docModel extends model
         }
 
         return $docs;
+    }
+
+    /**
+     * Get projects, executions and products by docIdList.
+     *
+     * @param  array  $docIdList
+     * @access public
+     * @return array
+     */
+    public function getObjectsByDoc($docIdList = array())
+    {
+        if(empty($docIdList)) return array();
+
+        $projects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.project')
+            ->where('t2.id')->in($docIdList)
+            ->andWhere('t2.execution')->eq(0)
+            ->fetchPairs();
+
+        $executions = $this->dao->select('t1.id, t1.name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.execution')
+            ->where('t2.id')->in($docIdList)
+            ->fetchPairs();
+
+        $products = $this->dao->select('t1.id, t1.name')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.id=t2.product')
+            ->where('t2.id')->in($docIdList)
+            ->fetchPairs();
+
+        return array($projects, $executions, $products);
     }
 
     /**
