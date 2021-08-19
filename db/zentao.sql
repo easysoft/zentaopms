@@ -546,11 +546,11 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_mr`;
 CREATE TABLE `zt_mr` (
-  `id` int NOT NULL,
-  `repoID` int NOT NULL,
-  `gitlabID` int NOT NULL,
-  `projectID` int NOT NULL,
-  `mrID` int NOT NULL,
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `repoID` mediumint(8) unsigned NOT NULL,
+  `gitlabID` mediumint(8) unsigned NOT NULL,
+  `projectID` mediumint(8) unsigned NOT NULL,
+  `mrID` mediumint(8) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `assignees` varchar(255) NOT NULL,
