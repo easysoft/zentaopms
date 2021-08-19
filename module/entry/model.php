@@ -5,18 +5,18 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     entry 
+ * @package     entry
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 class entryModel extends model
 {
     /**
-     * Get an entry by id. 
-     * 
-     * @param  int    $entryID 
+     * Get an entry by id.
+     *
+     * @param  int    $entryID
      * @access public
-     * @return object 
+     * @return object
      */
     public function getById($entryID)
     {
@@ -24,11 +24,11 @@ class entryModel extends model
     }
 
     /**
-     * Get an entry by code. 
-     * 
-     * @param  string $code 
+     * Get an entry by code.
+     *
+     * @param  string $code
      * @access public
-     * @return object 
+     * @return object
      */
     public function getByCode($code)
     {
@@ -48,8 +48,8 @@ class entryModel extends model
     }
 
     /**
-     * Get entry list. 
-     * 
+     * Get entry list.
+     *
      * @param  string $orderBy
      * @param  object $pager
      * @access public
@@ -61,13 +61,13 @@ class entryModel extends model
     }
 
     /**
-     * Get log list of an entry . 
-     * 
+     * Get log list of an entry .
+     *
      * @param  int    $id
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return array 
+     * @return array
      */
     public function getLogList($id, $orderBy = 'date_desc', $pager = null)
     {
@@ -80,8 +80,8 @@ class entryModel extends model
     }
 
     /**
-     * Create an entry. 
-     * 
+     * Create an entry.
+     *
      * @access public
      * @return bool | int
      */
@@ -109,9 +109,9 @@ class entryModel extends model
     }
 
     /**
-     * Update an entry. 
-     * 
-     * @param  int    $entryID 
+     * Update an entry.
+     *
+     * @param  int    $entryID
      * @access public
      * @return bool | array
      */
@@ -143,9 +143,9 @@ class entryModel extends model
 
     /**
      * Update called time.
-     * 
-     * @param  string $code 
-     * @param  int    $time 
+     *
+     * @param  string $code
+     * @param  int    $time
      * @access public
      * @return bool
      */
@@ -174,63 +174,5 @@ class entryModel extends model
 
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();
-    }
-
-    /**
-     * Get the detail of the user.
-     *
-     * @param  string    $account
-     * @access public
-     * @return object
-     */
-    public function getUser($account)
-    {
-        $this->loadModel('user');
-        $user = $this->user->getById($account, $feild = 'account');
-
-        $detail = new stdclass;
-        $detail->id       = $user->id;
-        $detail->account  = $user->account;
-        $detail->realname = $user->realname;
-        $detail->url      = helper::createLink('user', 'profile', "userID={$user->id}");
-
-        if($user->avatar != "")
-        {
-            $detail->avatar = common::getSysURL() . $user->avatar;
-        }
-        else
-        {
-            $detail->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
-        }
-
-        return $detail;
-    }
-
-    /**
-     * Get the details of assigned users.
-     *
-     * @param  string    $objectType
-     * @param  object    $object
-     * @access public
-     * @return array
-     */
-    public function getAssignees($objectType, $object)
-    {
-        $users = $this->dao->select('account')->from(TABLE_TEAM)
-            ->where('type')->eq($objectType)
-            ->andWhere('root')->eq($object->id)
-            ->fetchAll();
-
-        if($users)
-        {
-            $details = array();
-            foreach($users as $user)
-            {
-                $details[] = $this->getUser($user->account);
-            }
-            return $details;
-        }
-
-        return ($object->assignedTo == "" or $object->assignedTo == "closed") ? array() : array($this->getUser($object->assignedTo));
     }
 }
