@@ -17,6 +17,7 @@ $lang->mr->reviewer = '评审人';
 $lang->mr->link     = 'GitLab链接';
 $lang->mr->canMerge = '是否可合并';
 
+$lang->mr->description   = '描述';
 $lang->mr->confirmDelete = '确认删除该merge request吗？';
 $lang->mr->sourceProject = '源项目';
 $lang->mr->sourceBranch  = '源分支';

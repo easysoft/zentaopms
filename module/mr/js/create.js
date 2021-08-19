@@ -2,10 +2,10 @@ $(function()
 {
     $('#gitlabID').change(function()
     {
-        host  = $('#gitlabID').val();
+        host = $('#gitlabID').val();
         if(host == '') return false;
-        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
 
+        url = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
         $.get(url, function(response)
         {
             $('#sourceProject').html('').append(response);
@@ -13,18 +13,27 @@ $(function()
         });
     });
 
-    $('#sourceProject').change(function()
+    $('#sourceProject,#targetProject').change(function()
     {
-        $option = $(this).find('option:selected');
-        $('#name').val($option.data('name'));
-        project = $('#sourceProject').val();
-        url   = createLink('gitlab', 'ajaxgetprojectbranches', "gitlabID=" + host + "&projectID=" + project);
-        $.get(url, function(response)
+        sourceProject = $(this).val();
+        var branchSelect = $(this).parents('td').find('select[name*=Branch]');
+        branchUrl = createLink('gitlab', 'ajaxgetprojectbranches', "gitlabID=" + host + "&projectID=" + sourceProject);
+        $.get(branchUrl, function(response)
         {
-            $('#sourceBranch').html('').append(response);
-            $('#sourceBranch').chosen().trigger("chosen:updated");;
+            branchSelect.html('').append(response);
+            branchSelect.chosen().trigger("chosen:updated");;
         });
 
-        $('#targetProject').chosen().trigger("chosen:updated");;
+    });
+
+    $('#sourceProject').change(function()
+    {
+        sourceProject = $(this).val();
+        projectUrl = createLink('mr', 'ajaxGetMRTragetProjects', "gitlabID=" + host + "&projectID=" + sourceProject);
+        $.get(projectUrl, function(response)
+        {
+            $('#targetProject').html('').append(response);
+            $('#targetProject').chosen().trigger("chosen:updated");;
+        });
     });
 });
