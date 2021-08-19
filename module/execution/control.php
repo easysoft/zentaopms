@@ -1903,7 +1903,7 @@ class execution extends control
 
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
 
-                /* Up to five closed executions are displayed. */
+                /* Max 5 closed executions. */
                 if($status == 'closed')
                 {
                     if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5) $myExecutions[$status] = array_slice($myExecutions[$status], 0, 5, true);
