@@ -1790,6 +1790,7 @@ class repoModel extends model
     {
         $gitlab = $this->loadModel('gitlab')->getByID($repo->client); // The $repo->client is gitlabID.
         if(!$gitlab) return $repo;
+
         $repo->gitlab   = $gitlab->id;
         $repo->project  = $repo->path; // The projectID in gitlab.
         $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path);

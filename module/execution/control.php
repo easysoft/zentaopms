@@ -1906,17 +1906,8 @@ class execution extends control
                 /* Up to five closed executions are displayed. */
                 if($status == 'closed')
                 {
-                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5)
-                    {
-                        $myExecutions[$status]         = array_slice($myExecutions[$status], 0, 5, true);
-                        $myExecutions[$status]['more'] = $this->lang->execution->showMore;
-                    }
-
-                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5)
-                    {
-                        $kanbanGroup[$projectID][$status]         = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
-                        $kanbanGroup[$projectID][$status]['more'] = $this->lang->execution->showMore;
-                    }
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5) $myExecutions[$status] = array_slice($myExecutions[$status], 0, 5, true);
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5) $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
                 }
             }
 

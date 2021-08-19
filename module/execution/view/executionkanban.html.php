@@ -22,7 +22,7 @@
       <tr>
         <th><?php echo $lang->execution->doingProject . ' (' . $projectCount . ')';?></th>
         <?php foreach($lang->execution->kanbanColType as $status => $colName):?>
-        <th><?php echo $colName . ' (' . $statusCount[$status] . ')';?></th>
+        <th><?php echo $colName . ($status != 'closed' ? ' (' . $statusCount[$status] . ')' : '');?></th>
         <?php endforeach;?>
       </tr>
     </thead>
@@ -45,21 +45,7 @@
               <div class="board s-<?php echo $colStatus?>">
                 <div>
                   <?php if(!empty($executionList[$colStatus])):?>
-                  <?php foreach($executionList[$colStatus] as $executionID => $execution):?>
-                  <?php if($executionID == 'more'):?>
-                  <div class='text-center'>
-                    <?php
-                    if(common::hasPriv('execution', 'all'))
-                    {
-                        echo html::a($this->createLink('execution', 'all', "status=closed&projectID=$projectID"), $execution, '', "title='$execution'");
-                    }
-                    else
-                    {
-                        echo "<span title='$execution'>$execution</span>";
-                    }
-                    ?>
-                  </div>
-                  <?php else:?>
+                  <?php foreach($executionList[$colStatus] as $execution):?>
                   <div class='board-item' <?php if($execution->status == 'doing' and isset($execution->delay)) echo "style='border-left: 3px solid red';";?>>
                     <div class='table-row'>
                       <div class='table-col'>
@@ -85,7 +71,6 @@
                       <?php endif?>
                     </div>
                   </div>
-                  <?php endif?>
                   <?php endforeach?>
                   <?php endif?>
                 </div>
