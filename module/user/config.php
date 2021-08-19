@@ -17,3 +17,6 @@ $config->user->contactField = 'mobile,phone,qq,dingding,weixin,skype,whatsapp,sl
 $config->user->failTimes    = 6;
 $config->user->lockMinutes  = 10;
 $config->user->batchCreate  = 10;
+
+/* user detail fields for API against JIHU GitLab. */
+$config->user->detailFields = 'id,account,realname,avatar';

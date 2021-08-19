@@ -14,7 +14,8 @@
 #importTeams .input-group +.input-group {margin-left: 5px;}
 
 #dept_chosen .chosen-single {width: 220px;}
-#execution_chosen .chosen-single {width: 220px;}
+#execution_chosen .chosen-single {width: 230px;}
+#execution_chosen .chosen-drop ul li .label {margin-top: 2px; background: #fff; color: #838a9d; border: 1px solid #d8d8d8;}
 .radio-inline {line-height: normal;}
 
 #teamForm .table tr > td:first-child {padding-left: 10px;}

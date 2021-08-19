@@ -1,3 +1,11 @@
+$(function()
+{
+    $('#execution_chosen').click(function()
+    {
+        if(systemMode == 'new') $('#execution_chosen ul li:first').append(' <label class="label">' + projectCommon + '</label>')
+    })
+})
+
 /**
  * Set role when select an account.
  *

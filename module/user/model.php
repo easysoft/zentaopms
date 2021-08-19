@@ -2552,4 +2552,34 @@ class userModel extends model
 
         return $personalData;
     }
+
+    /**
+     * Get users details for API.
+     *
+     * @param  array  $userList
+     * @access public
+     * @return array
+     */
+    public function getUserDetailsForAPI($userList)
+    {
+        $users = $this->dao->select($this->config->user->detailFields)->from(TABLE_USER)->where("account")->in($userList)->fetchAll();
+
+        $userDetails = array();
+        foreach($users as $index => $user)
+        {
+            $user->url = helper::createLink('user', 'profile', "userID={$user->id}");
+
+            if($user->avatar != "")
+            {
+                $user->avatar = common::getSysURL() . $user->avatar;
+            }
+            else
+            {
+                $user->avatar = "https://www.gravatar.com/avatar/" . md5($user->account) . "?d=identicon&s=80";
+            }
+
+            $userDetails[$user->account] = $user;
+        }
+        return $userDetails;
+    }
 }

@@ -21,6 +21,7 @@
 <?php js::set('budgetUnitList', $budgetUnitList);?>
 <?php js::set('oldBudgetUnit', $program->budgetUnit);?>
 <?php js::set('exRateNotEmpty', sprintf($lang->error->notempty, $lang->program->exchangeRate));?>
+<?php js::set('exRateNum', sprintf($lang->error->float, $lang->program->exchangeRate));?>
 <?php js::set('exRateNotNegative', $lang->program->exRateNotNegative);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>
@@ -135,13 +136,13 @@
             </tr>
             <tr>
               <th><?php echo '1' . zget($budgetUnitList, $program->budgetUnit);?></th>
-              <td><div class='input-group'><span class='input-group-addon'><?php echo "=";?></span><?php echo html::number('rate', '', "class='form-control' required");?> <span class='input-group-addon' id='currentUnit'></span></div></td>
+              <td><div class='input-group'><span class='input-group-addon'><?php echo "=";?></span><?php echo html::input('rate', '', "class='form-control' required");?> <span class='input-group-addon' id='currentUnit'></span></div></td>
               <td></td>
             </tr>
             <tr>
               <td colspan='3' class='text-center'>
-                <?php echo html::commonButton($lang->confirm, "id='confirmBtn'", 'btn btn-primary btn-wide');?>
-                <?php echo html::commonButton($lang->cancel, "data-dismiss='modal' id='cancelBtn'", 'btn btn-default btn-wide');?>
+                <?php echo html::commonButton($lang->confirm, "id='confirmBTN'", 'btn btn-primary btn-wide');?>
+                <?php echo html::commonButton($lang->cancel, "data-dismiss='modal' id='cancelBTN'", 'btn btn-default btn-wide');?>
               </td>
             </tr>
           </table>
