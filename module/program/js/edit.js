@@ -60,17 +60,17 @@ $(function()
         var exchangeRate = $('#rate').val();
         if(!exchangeRate)
         {
-            alert(exRateNotEmpty);
+            bootbox.alert(exRateNotEmpty);
             return false;
         }
         else if(isNaN(exchangeRate))
         {
-            alert(exRateNum);
+            bootbox.alert(exRateNum);
             return false;
         }
         else if(exchangeRate < 0)
         {
-            alert(exRateNotNegative);
+            bootbox.alert(exRateNotNegative);
             return false;
         }
 
