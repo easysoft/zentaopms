@@ -13,7 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('objectID', $objectID);?>
 <?php js::set('objectType', $objectType);?>
-<style>#object_chosen .chosen-single, #dept_chosen .chosen-single {width: 220px;}</style>
+<?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('projectCommon', $lang->projectCommon);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'>

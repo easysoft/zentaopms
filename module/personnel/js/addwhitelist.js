@@ -136,4 +136,9 @@ $(function()
             showItem(val);
         });
     });
+
+    $('#object_chosen').click(function()
+    {
+        if(systemMode == 'new' && objectType == 'sprint') $('#object_chosen ul li:first').append(' <label class="label">' + projectCommon + '</label>')
+    })
 })
