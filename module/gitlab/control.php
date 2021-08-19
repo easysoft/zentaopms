@@ -105,7 +105,6 @@ class gitlab extends control
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
         if(!isset($user->is_admin) or !$user->is_admin) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
-
         if($_POST)
         {
             $users       = $this->post->zentaoUsers;
