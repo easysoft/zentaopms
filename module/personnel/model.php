@@ -485,8 +485,7 @@ class personnelModel extends model
                 ->fetchPairs();
             foreach($objects as $id => &$object)
             {
-                if($id == $parentID) $object = $this->lang->projectCommon . '-' . $object;
-                if($id != $parentID) $object = $this->lang->execution->common . '-' . $object;
+                if($id != $parentID) $object = '&nbsp;&nbsp;&nbsp;' . $object;
             }
         }
         elseif($objectType == 'project')
