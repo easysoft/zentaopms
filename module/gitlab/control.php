@@ -363,7 +363,7 @@ class gitlab extends control
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxGetProjectBranches($gitlabID, $projectID)
     {
@@ -373,8 +373,8 @@ class gitlab extends control
         $options  = "<option value=''></option>";
         foreach($branches as $index =>$branch)
         {
-            $options .= "<option title='{$branch->name}' value='{$index}' data-name='{$branch->name}'>{$branch->name}</option>";
+            $options .= "<option title='{$branch->name}' value='{$branch->name}' data-name='{$branch->name}'>{$branch->name}</option>";
         }
-        return $this->send($options);
+        $this->send($options);
     }
 }
