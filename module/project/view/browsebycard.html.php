@@ -149,11 +149,11 @@
               if($count > 2) continue;
               if(!isset($users[$member]))
               {
-                  $project->teamCount -= 1;
+                  $project->teamCount --;
                   continue;
               }
+              $count ++;
               ?>
-              <?php $count += 1;?>
               <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
                 <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
                   <?php echo !empty($usersAvatar[$member]) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
