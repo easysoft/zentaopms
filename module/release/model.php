@@ -272,14 +272,14 @@ class releaseModel extends model
 
         /* Init vars. */
         $notifyPersons = array();
-        $managers      = '';
+        $managerFields = '';
         $notifyList    = explode(',', $notifyList);
 
         foreach($notifyList as $notify)
         {
             if($notify == 'PO' or $notify == 'QD' or $notify == 'feedback')
             {
-                $managers .= $notify . ',';
+                $managerFields .= $notify . ',';
             }
             elseif($notify == 'SC' and !empty($buildID))
             {
@@ -305,13 +305,13 @@ class releaseModel extends model
             }
         }
 
-        if(!empty($managers))
+        if(!empty($managerFields))
         {
-            $managers     = trim($managers, ',');
-            $managerUsers = $this->dao->select($managers)->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+            $managerFields = trim($managerFields, ',');
+            $managerUsers  = $this->dao->select($managerFields)->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
             foreach($managerUsers as $account)
             {
-                if(!isset($notifyPersons[$account])) $notifyPersons += array($account => $account);
+                if(!isset($notifyPersons[$account])) $notifyPersons[$account] = $account;
             }
         }
 
