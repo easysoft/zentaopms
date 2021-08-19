@@ -2177,7 +2177,7 @@ EOD;
             if($result)
             {
                 if($timestamp <= $entry->calledTime) $this->response('CALLED_TIME');
-                $this->loadModel('entry')->updateTime($entry->code, $timestamp);
+                $this->loadModel('entry')->updateCalledTime($entry->code, $timestamp);
                 unset($_GET['time']);
                 return $result;
             }

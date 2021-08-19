@@ -5,18 +5,18 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     entry 
+ * @package     entry
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 class entryModel extends model
 {
     /**
-     * Get an entry by id. 
-     * 
-     * @param  int    $entryID 
+     * Get an entry by id.
+     *
+     * @param  int    $entryID
      * @access public
-     * @return object 
+     * @return object
      */
     public function getById($entryID)
     {
@@ -24,11 +24,11 @@ class entryModel extends model
     }
 
     /**
-     * Get an entry by code. 
-     * 
-     * @param  string $code 
+     * Get an entry by code.
+     *
+     * @param  string $code
      * @access public
-     * @return object 
+     * @return object
      */
     public function getByCode($code)
     {
@@ -48,8 +48,8 @@ class entryModel extends model
     }
 
     /**
-     * Get entry list. 
-     * 
+     * Get entry list.
+     *
      * @param  string $orderBy
      * @param  object $pager
      * @access public
@@ -61,15 +61,15 @@ class entryModel extends model
     }
 
     /**
-     * Get log list of an entry . 
-     * 
+     * Get log list of an entry .
+     *
      * @param  int    $id
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return array 
+     * @return array
      */
-    public function getLogList($id, $orderBy = 'date_desc', $pager = null)
+    public function getLogs($id, $orderBy = 'date_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_LOG)
             ->where('objectType')->eq('entry')
@@ -80,8 +80,8 @@ class entryModel extends model
     }
 
     /**
-     * Create an entry. 
-     * 
+     * Create an entry.
+     *
      * @access public
      * @return bool | int
      */
@@ -109,9 +109,9 @@ class entryModel extends model
     }
 
     /**
-     * Update an entry. 
-     * 
-     * @param  int    $entryID 
+     * Update an entry.
+     *
+     * @param  int    $entryID
      * @access public
      * @return bool | array
      */
@@ -143,13 +143,13 @@ class entryModel extends model
 
     /**
      * Update called time.
-     * 
-     * @param  string $code 
-     * @param  int    $time 
+     *
+     * @param  string $code
+     * @param  int    $time
      * @access public
      * @return bool
      */
-    public function updateTime($code, $time)
+    public function updateCalledTime($code, $time)
     {
         $this->dao->update(TABLE_ENTRY)->set('calledTime')->eq($time)->where('code')->eq($code)->exec();
         return !dao::isError();
