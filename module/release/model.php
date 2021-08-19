@@ -229,6 +229,7 @@ class releaseModel extends model
             ->join('mailto', ',')
             ->join('notify', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
+            ->setIF(!$this->post->notify, 'notify', '')
             ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
             ->get();
@@ -292,7 +293,7 @@ class releaseModel extends model
             }
             elseif(($notify == 'ET' or $notify == 'PT') and !empty($buildID))
             {
-                $type = $notify == 'ET' ? 'execution' : 'project';
+                $type    = $notify == 'ET' ? 'execution' : 'project';
                 $members = $this->dao->select('t2.account')->from(TABLE_BUILD)->alias('t1')
                     ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.' . $type .'=t2.root')
                     ->where('t2.type')->eq($type)
