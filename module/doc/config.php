@@ -28,8 +28,6 @@ $config->doc->editor->view   = array('id' => 'comment,lastComment', 'tools' => '
 $config->doc->markdown = new stdclass();
 $config->doc->markdown->create = array('id' => 'contentMarkdown', 'tools' => 'withchange');
 
-$config->doc->collectionLimit = 10;
-
 $config->doc->iconList['html']     = 'rich-text';
 $config->doc->iconList['markdown'] = 'markdown';
 $config->doc->iconList['url']      = 'text-link';

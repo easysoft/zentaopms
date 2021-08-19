@@ -1829,15 +1829,16 @@ class docModel extends model
      */
     public function buildCollectButton4Doc()
     {
-        $allLibs = array_keys($this->getLibs('all'));
-        $docs    = $this->dao->select('t1.id,t1.title,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
+        $favoritesLimit = 10;
+        $allLibs        = array_keys($this->getLibs('all'));
+        $docs           = $this->dao->select('t1.id,t1.title,t1.lib,t2.type,t2.product,t2.project,t2.execution')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t1.lib=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.lib')->in($allLibs)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->andWhere('t1.collector')->like("%,{$this->app->user->account},%")
             ->orderBy('t1.id_desc')
-            ->limit($this->config->doc->collectionLimit)
+            ->limit($favoritesLimit)
             ->fetchAll();
 
         $html  = "<div class='btn-group dropdown-hover'>";
@@ -1865,7 +1866,7 @@ class docModel extends model
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->andWhere('collector')->like("%,{$this->app->user->account},%")
             ->fetch('count');
-        if($collectionCount > $this->config->doc->collectionLimit) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
+        if($collectionCount > $favoritesLimit) $html .= '<li>' . html::a(inlink('browse', "type=collectedByMe"), $this->lang->doc->allCollections) . '</li>';
 
         $html .= '</ul></div>';
         return $html;
