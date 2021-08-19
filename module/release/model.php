@@ -295,7 +295,7 @@ class releaseModel extends model
             {
                 $type    = $notify == 'ET' ? 'execution' : 'project';
                 $members = $this->dao->select('t2.account')->from(TABLE_BUILD)->alias('t1')
-                    ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.' . $type .'=t2.root')
+                    ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.' . $type . '=t2.root')
                     ->where('t2.type')->eq($type)
                     ->fetchPairs();
 
