@@ -14,7 +14,7 @@ class productEntry extends Entry
         $control->view($productID);
 
         $data = $this->getData();
-        if(!$data or (isset($data->status) and $data->message == '404 Not found')) return $this->send404();
+        if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
         if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->product, 'createdDate:time'));
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 

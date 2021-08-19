@@ -222,7 +222,6 @@ class productIssuesEntry extends entry
                     }
                 }
 
-
             }
             else if($issue['type'] == 'story')
             {
