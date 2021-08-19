@@ -447,7 +447,7 @@ CREATE TABLE `zt_history` (
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_pipeline` (
+CREATE TABLE `zt_jenkins` (
   `id` smallint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
