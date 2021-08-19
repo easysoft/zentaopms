@@ -43,7 +43,7 @@
             common::printLink('mr', 'list', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->list}' class='btn btn-info'");
             common::printLink('mr', 'create', "mr={$mr->id}", '<i class="icon icon-plus"></i>', '', "title='{$lang->mr->create}' class='btn btn-info'");
             common::printLink('mr', 'edit', "mrID=$mr->id&objectID=$objectID", '<i class="icon icon-edit"></i>', '', "title='{$lang->mr->edit}' class='btn btn-info'");
-            if(common::hasPriv('mr', 'delete')) echo html::a($this->createLink('mr', 'delete', "mrID=$mr->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn'");
+            if(common::hasPriv('mr', 'delete')) echo html::a($this->createLink('mr', 'delete', "productID=$mr->projectID&gitlabID=$mr->gitlabID&mrID=$mr->mrID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn'");
             ?>
           </td>
         </tr>

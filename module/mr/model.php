@@ -74,6 +74,9 @@ class mrModel extends model
                     $list = new stdclass;
 
                     $list->id            = $subMR->id;
+                    $list->projectID     = $subMR->project_id;
+                    $list->gitlabID      = $mr->gitlabID;
+                    $list->mrID          = $subMR->iid;
                     $list->name          = $subMR->title;
                     $list->target_branch = $subMR->target_branch;
                     $list->source_branch = $subMR->source_branch;
@@ -85,6 +88,26 @@ class mrModel extends model
             }
             return $lists;
         }
+    }
+
+    /**
+     * Delete MR.
+     *
+     * condition: when user deleting a repo.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $mrID
+     * @access public
+     * @return void
+     */
+    public function deleteMR($gitlabID, $projectID, $mrID )
+    {
+        $this->dao->delete()->from(TABLE_MR)
+            ->where('gitlabID')->eq($gitlabID)
+            ->andWhere('projectID')->eq($projectID)
+            ->andWhere('mrID')->eq($mrID)
+            ->exec();
     }
 
     /**

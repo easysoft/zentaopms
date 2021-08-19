@@ -72,8 +72,23 @@ class mr extends control
         $this->display();
     }
 
-    public function delete()
+    /**
+     * Delete a mr.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $mrID
+     * @access public
+     * @return void
+     */
+    public function delete($gitlabID, $projectID, $mrID, $confim = 'no')
     {
+        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "productID=$projectID&gitlabID=$gitlabID&mrID=$mrID&confirm=yes")));
+
+        $this->mr->apiDeleteMR($gitlabID, $projectID, $mrID);
+
+        $this->gitlab->delete(TABLE_PIPELINE, $id);
+        die(js::reload('parent'));
     }
 
     public function update()
