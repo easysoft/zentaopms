@@ -32,7 +32,8 @@ class mrModel extends model
      */
     public function getByID($id)
     {
-        return $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
+        $MR =  $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
+        return $this->processMR($MR);
     }
 
     /**
@@ -58,7 +59,7 @@ class mrModel extends model
     }
 
     /**
-     * ProcessMR info by api.
+     * Process MR info by api.
      *
      * @param  object    $MR
      * @access public
@@ -66,7 +67,7 @@ class mrModel extends model
      */
     public function processMR($MR)
     {
-        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->id);
+        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
 
         $MR->name          = $rawMR->title;
         $MR->targetBranch  = $rawMR->target_branch;
@@ -118,7 +119,7 @@ class mrModel extends model
     public function create()
     {
         $gitlabID  = $this->post->gitlabID;
-        $projectID = $this->post->projectID;
+        $projectID = $this->post->sourceProject;
 
         $MR = new stdclass;
         $MR->target_project_id = $this->post->targetProject;
@@ -130,6 +131,42 @@ class mrModel extends model
         $MR->reviewer_ids      = $this->post->reviewer;
 
         $rawMR = $this->apiCreateMR($gitlabID, $projectID, $MR);
+
+        /* Another open merge request already exists for this source branch. */
+        if(isset($rawMR->message) and !isset($rawMR->iid)) return $rawMR;
+
+        /* Create MR failed. */
+        if(!isset($rawMR->iid)) return false;
+
+        $MR = fixer::input('post')
+            ->add('repoID', 0)
+            ->add('gitlabID', $gitlabID)
+            ->add('projectID', $projectID)
+            ->add('mrID', $rawMR->iid)
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
+            ->get();
+
+        /* Remove extra fields before inserting db table. */
+        foreach(explode(',', $this->config->MR->create->skippedFields) as $field) unset($MR->$field);
+
+        $this->dao->insert(TABLE_MR)->data($MR)
+            ->batchCheck($this->config->MR->create->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertId();
+    }
+
+    /**
+     * Update MR function.
+     *
+     * @access public
+     * @return void
+     */
+    public function update()
+    {
     }
 
     /**
