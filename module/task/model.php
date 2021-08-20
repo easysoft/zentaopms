@@ -895,7 +895,9 @@ class taskModel extends model
         /* Fix bug#1388, Check children task executionID and moduleID. */
         if(isset($task->execution) and $task->execution != $oldTask->execution)
         {
-            $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->where('parent')->eq($taskID)->exec();
+            $newExecution  = $this->loadModel('execution')->getByID($task->execution);
+            $task->project = $newExecution->project;
+            $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($taskID)->exec();
         }
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
