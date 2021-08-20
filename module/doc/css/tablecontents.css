@@ -1,3 +1,4 @@
+#main {padding-top: 0;}
 .main-content {padding-top: 0; padding-bottom: 0;}
 .main-content #createDropdown {display: inline-block;}
 .main-content #createDropdown ul {position: absolute;}
