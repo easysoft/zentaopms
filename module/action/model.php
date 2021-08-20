@@ -1044,7 +1044,7 @@ class actionModel extends model
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
         /* Get the same dept department. */
-        $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
         foreach($actions as $i => $action)
         {
             /* Add name field to the actions. */

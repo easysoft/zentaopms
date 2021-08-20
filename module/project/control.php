@@ -1168,7 +1168,7 @@ class project extends control
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->team;
         $this->view->projectID    = $projectID;
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
-        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
         $this->view->canBeChanged = common::canModify('project', $project);
 
         $this->display();
