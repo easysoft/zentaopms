@@ -41,4 +41,7 @@ $routes['/programs/:id'] = 'program';
 $routes['/issues/:issueID']            = 'productIssue';
 $routes['/products/:productID/issues'] = 'productIssues';
 
+$routes['/todos']     = 'todos';
+$routes['/todos/:id'] = 'todo';
+
 $config->routes = $routes;

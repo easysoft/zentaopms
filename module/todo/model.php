@@ -214,6 +214,7 @@ class todoModel extends model
     {
         $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
 
+        $idvalue    = 0;
         $objectType = $this->post->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
         if($hasObject && $objectType) $idvalue = $this->post->uid ? $this->post->$objectType : $this->post->idvalue;
