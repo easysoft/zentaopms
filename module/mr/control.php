@@ -74,10 +74,14 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function delete($MR, $confim = 'no')
+    public function delete($id, $confim = 'no')
     {
-        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "productID=$projectID&gitlabID=$gitlabID&MR=$MR&confirm=yes")));
-        $this->mr->apiDeleteMR($MR);
+        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+
+        $MRList = $this->mr->getByID($id);
+
+        $this->mr->apiDeleteMR($MRList->gitlabID, $MRList->projectID, $MRList->mrID);
+        $this->mr->deleteMR($id);
         die(js::reload('parent'));
     }
 
