@@ -25,32 +25,32 @@
           <th class='w-100px text-left'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->mr->status); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('mrStatus', $orderBy, $vars, $lang->mr->mrStatus); ?></th>
+          <th class='w-100px text-left'><?php common::printOrderLink('canMerge', $orderBy, $vars, $lang->mr->canMerge); ?></th>
           <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach($mrList as $mr):?>
+        <?php foreach($MRList as $mr):?>
         <tr>
           <td class='text'><?php echo $mr->id; ?></td>
           <td class='text'><?php echo $mr->name; ?></td>
-          <td class='text'><?php echo $mr->target_branch; ?></td>
-          <td class='text'><?php echo $mr->source_branch; ?></td>
+          <td class='text'><?php echo $mr->targetBranch; ?></td>
+          <td class='text'><?php echo $mr->sourceBranch; ?></td>
           <td class='text'><?php echo $mr->status; ?></td>
-          <td class='text'><?php echo $mr->mrStatus; ?></td>
+          <td class='text'><?php echo $mr->canMerge; ?></td>
           <td class='text-left c-actions'>
             <?php
             common::printLink('mr', 'list', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->list}' class='btn btn-info'");
             common::printLink('mr', 'create', "mr={$mr->id}", '<i class="icon icon-plus"></i>', '', "title='{$lang->mr->create}' class='btn btn-info'");
             common::printLink('mr', 'edit', "mrID=$mr->id&objectID=$objectID", '<i class="icon icon-edit"></i>', '', "title='{$lang->mr->edit}' class='btn btn-info'");
-            if(common::hasPriv('mr', 'delete')) echo html::a($this->createLink('mr', 'delete', "productID=$mr->projectID&gitlabID=$mr->gitlabID&mrID=$mr->mrID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn'");
+            if(common::hasPriv('mr', 'delete')) echo html::a($this->createLink('mr', 'delete', "id=$mr->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn'");
             ?>
           </td>
         </tr>
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($mrList):?>
+    <?php if($MRList):?>
     <div class='table-footer'><?php $pager->show('rignt', 'pagerjs');?></div>
     <?php endif;?>
   </form>

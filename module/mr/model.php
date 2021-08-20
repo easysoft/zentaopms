@@ -82,14 +82,14 @@ class mrModel extends model
      *
      * condition: when user deleting a repo.
      *
-     * @param  int    $MRID
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function deleteMR($MRID)
+    public function deleteMR($id)
     {
         $this->dao->delete()->from(TABLE_MR)
-            ->andWhere('mrID')->eq($MRID)
+            ->andWhere('id')->eq($id)
             ->exec();
     }
 

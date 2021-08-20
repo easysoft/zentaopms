@@ -16,7 +16,7 @@
     <?php if(common::hasPriv('gitlab', 'create')) common::printLink('gitlab', 'create', "", "<i class='icon icon-plus'></i> " . $lang->gitlab->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<?php if(empty($gitlabList)):?>
+<?php if(!empty($gitlabList)):?>
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
