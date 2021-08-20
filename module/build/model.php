@@ -113,14 +113,6 @@ class buildModel extends model
         }
         if(!$builds) return $sysBuilds + $selectedBuilds;
 
-        /* if the build has been released, replace build name with release name. */
-        $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
-            ->where('build')->in(array_keys($builds))
-            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
-        foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
-
         return $sysBuilds + $builds + $selectedBuilds;
     }
 
