@@ -2,22 +2,34 @@ $(function()
 {
     $('#gitlabID').change(function()
     {
-        host = $('#gitlabID').val();
-        if(host == '') return false;
+        gitlabID = $('#gitlabID').val();
+        if(gitlabID == '') return false;
 
-        url = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
+        url = createLink('repo', 'ajaxgetgitlabprojects', "gitlabID=" + gitlabID);
         $.get(url, function(response)
         {
             $('#sourceProject').html('').append(response);
             $('#sourceProject').chosen().trigger("chosen:updated");;
         });
+
+        var assignee = $("#assignee").parents('td').find('select[name*=assignee]');
+        var reviewer = $("#reviewer").parents('td').find('select[name*=reviewer]');
+        usersUrl = createLink('gitlab', 'ajaxgetmruserpairs', "gitlabID=" + gitlabID);
+        $.get(usersUrl, function(response)
+        {
+            assignee.html('').append(response);
+            assignee.chosen().trigger("chosen:updated");;
+            reviewer.html('').append(response);
+            reviewer.chosen().trigger("chosen:updated");;
+        });
+
     });
 
     $('#sourceProject,#targetProject').change(function()
     {
         sourceProject = $(this).val();
         var branchSelect = $(this).parents('td').find('select[name*=Branch]');
-        branchUrl = createLink('gitlab', 'ajaxgetprojectbranches', "gitlabID=" + host + "&projectID=" + sourceProject);
+        branchUrl = createLink('gitlab', 'ajaxgetprojectbranches', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
         $.get(branchUrl, function(response)
         {
             branchSelect.html('').append(response);
@@ -29,7 +41,7 @@ $(function()
     $('#sourceProject').change(function()
     {
         sourceProject = $(this).val();
-        projectUrl = createLink('mr', 'ajaxGetMRTragetProjects', "gitlabID=" + host + "&projectID=" + sourceProject);
+        projectUrl = createLink('mr', 'ajaxGetMRTragetProjects', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
         $.get(projectUrl, function(response)
         {
             $('#targetProject').html('').append(response);
