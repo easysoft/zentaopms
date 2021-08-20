@@ -506,7 +506,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-            ->check('code', 'unique', "id!=$executionID and code!='' and deleted='0'")
+            ->check('code', 'unique', "id != $executionID and code != '' and deleted = '0'")
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();

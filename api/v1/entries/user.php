@@ -10,6 +10,10 @@ class userEntry extends Entry
 {
     public function get($userID = 0)
     {
+        /* Get my info defaultly. */
+        if(!$userID) return $this->getInfo();
+
+        /* Get user by id. */
         $control = $this->loadController('user', 'profile');
         $control->profile($userID);
 
@@ -18,6 +22,25 @@ class userEntry extends Entry
         unset($user->password);
 
         $this->send(200, $this->format($user, 'last:time,locked:time'));
+    }
+
+    private function getInfo()
+    {
+        $info = $this->loadModel('my')->getInfo();
+
+        $products = $this->my->getProducts();
+        $info->product = new stdclass();
+        $info->product->total    = count($products);
+        $info->product->products = $products;
+
+        $projects = $this->my->getProjects();
+        $info->project = new stdclass();
+        $info->project->total    = count($projects);
+        $info->project->projects = $projects;
+
+        $info->actions = $this->my->getActions();
+
+        $this->send(200, $info);
     }
 
     public function put($userID)

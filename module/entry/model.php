@@ -69,7 +69,7 @@ class entryModel extends model
      * @access public
      * @return array
      */
-    public function getLogList($id, $orderBy = 'date_desc', $pager = null)
+    public function getLogs($id, $orderBy = 'date_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_LOG)
             ->where('objectType')->eq('entry')
@@ -149,7 +149,7 @@ class entryModel extends model
      * @access public
      * @return bool
      */
-    public function updateTime($code, $time)
+    public function updateCalledTime($code, $time)
     {
         $this->dao->update(TABLE_ENTRY)->set('calledTime')->eq($time)->where('code')->eq($code)->exec();
         return !dao::isError();

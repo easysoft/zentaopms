@@ -79,13 +79,13 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Get release builds from project.
+     * Get released builds from project.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getReleaseBuilds($projectID)
+    public function getReleasedBuilds($projectID)
     {
         $releases = $this->dao->select('build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)

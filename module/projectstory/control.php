@@ -36,9 +36,6 @@ class projectStory extends control
      */
     public function story($projectID = 0, $productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->session->set('storyList', $this->app->getURI(true), 'product');
-        $this->session->set('executionList', $this->app->getURI(true), 'execution');
-
         $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID)));
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
@@ -117,30 +114,27 @@ class projectStory extends control
      */
     public function batchUnlinkStory($projectID, $storyIdList = '')
     {
-        $storyIdList      = trim($storyIdList, ',');
-        $stories          = explode(',', $storyIdList);
+        $storyIdList      = array_filter(explode(',', $storyIdList));
         $executionStories = $this->projectstory->getExecutionStories($projectID, $storyIdList);
         $html             = '';
 
-        if(!empty($executionStories))
+        foreach($executionStories as $story)
         {
-            foreach($executionStories as $story)
-            {
-                $storyLink     = $this->createLink('story', 'view', "storyID={$story->id}");
-                $executionLink = $this->createLink('execution', 'story', "executionID={$story->executionID}");
-                $html         .=<<<ETO
+            $storyLink     = $this->createLink('story', 'view', "storyID={$story->id}");
+            $executionLink = $this->createLink('execution', 'story', "executionID={$story->executionID}");
+            $html         .=<<<ETO
 <tr>
   <td class='c-name w-500px'><a href="$storyLink" title={$story->title} style='color:#5988e2'>{$story->title}</a></td>
   <td class='c-name w-200px'><a href="$executionLink" title={$story->execution} style='color:#32579c'>{$story->execution}</a></td>
 </tr>
 ETO;
-            }
         }
 
-        foreach($stories as $storyID)
+        $this->loadModel('execution');
+        foreach($storyIdList as $storyID)
         {
             if(isset($executionStories[$storyID])) continue;
-            $this->loadModel('execution')->unlinkStory($projectID, $storyID);
+            $this->execution->unlinkStory($projectID, $storyID);
         }
 
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');

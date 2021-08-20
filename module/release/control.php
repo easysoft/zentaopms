@@ -75,9 +75,9 @@ class release extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
-        $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'notrunk|withbranch', false);
-        $releaseBuilds = $this->release->getReleaseBuilds($productID, $branch);
-        foreach($releaseBuilds as $build) unset($builds[$build]);
+        $builds         = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'notrunk|withbranch', false);
+        $releasedBuilds = $this->release->getReleasedBuilds($productID, $branch);
+        foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
         $this->commonAction($productID, $branch);
@@ -124,11 +124,11 @@ class release extends control
         $this->commonAction($release->product, $release->branch);
         $build = $this->build->getById($release->build);
 
-        $builds = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk|withbranch', false);
-        $releaseBuilds = $this->release->getReleaseBuilds($release->product, $release->branch);
-        foreach($releaseBuilds as $releaseBuild)
+        $builds         = $this->loadModel('build')->getProductBuildPairs($release->product, $release->branch, 'notrunk|withbranch', false);
+        $releasedBuilds = $this->release->getReleasedBuilds($release->product, $release->branch);
+        foreach($releasedBuilds as $releasedBuild)
         {
-            if($releaseBuild != $build->id) unset($builds[$releaseBuild]);
+            if($releasedBuild != $build->id) unset($builds[$releasedBuild]);
         }
         unset($builds['trunk']);
 

@@ -36,7 +36,7 @@
               <tbody>
                 <?php foreach($latestEditedDocs as $doc):?>
                 <tr>
-                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'")?></a></td>
+                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%' title='{$doc->title}'")?></a></td>
                   <td class="c-num text-right"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
                   <td class="c-datetime"><?php echo helper::isZeroDate($doc->editedDate) ? formatTime($doc->addedDate, 'Y-m-d') : formatTime($doc->editedDate, 'Y-m-d');?></td>
@@ -142,7 +142,7 @@
               <tbody>
                 <?php foreach($myDocs as $doc):?>
                 <tr>
-                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'")?></a></td>
+                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%' title='{$doc->title}'")?></a></td>
                   <td class="c-num text-right"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
                   <td class="c-datetime"><?php echo formatTime($doc->editedDate) ? formatTime($doc->editedDate, 'Y-m-d') : formatTime($doc->addedDate, 'y-m-d');?></td>

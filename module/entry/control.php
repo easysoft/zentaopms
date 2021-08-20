@@ -126,7 +126,7 @@ class entry extends control
 
         $entry = $this->entry->getByID($id);
         $this->view->title      = $this->lang->entry->log . $this->lang->colon . $entry->name;
-        $this->view->logs       = $this->entry->getLogList($id, $orderBy, $pager);
+        $this->view->logs       = $this->entry->getLogs($id, $orderBy, $pager);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->api);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->common);
         $this->view->position[] = $this->lang->entry->log;
