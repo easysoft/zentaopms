@@ -33,7 +33,7 @@ class gitlab extends control
         foreach($gitlabList as $gitlab)
         {
             $token = $this->gitlab->apiGetCurrentUser($gitlab->url,$gitlab->token);
-            $gitlab->isAdminToken = $token->is_admin;
+            $gitlab->isAdminToken = !isset($token->is_admin) ? $token->is_admin : 0;
         }
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
