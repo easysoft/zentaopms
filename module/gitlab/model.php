@@ -307,6 +307,26 @@ class gitlabModel extends model
     }
 
     /**
+     * Get branches.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getBranches($gitlabID, $projectID)
+    {
+        $rawBranches = $this->apiGetBranches($gitlabID, $projectID);
+
+        $branches = array();
+        foreach($rawBranches as $branch)
+        {
+            $branches[] = $branch->name;
+        }
+        return $branches;
+    }
+
+    /**
      * Create a gitlab.
      *
      * @access public
