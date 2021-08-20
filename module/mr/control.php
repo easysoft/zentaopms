@@ -18,7 +18,7 @@ class mr extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title    = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
-        $this->view->MRList   = $this->mr->getList(0, $orderBy, $pager);
+        $this->view->MRList   = $this->mr->getList($orderBy, $pager);
         $this->view->orderBy  = $orderBy;
         $this->view->objectID = $objectID;
         $this->view->pager    = $pager;
