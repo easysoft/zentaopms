@@ -64,7 +64,7 @@
               <?php $openApp = '';?>
               <?php if($action->objectType == 'meeting') $openApp = $action->project ? "data-app='project'" : "data-app='my'";?>
               <?php
-              if((isset($config->maxVersion) and strpos($config->action->assetType, $action->objectType) !== false) or empty($action->objectName))
+              if((isset($config->maxVersion) and strpos(",{$config->action->assetType},", ",{$action->objectType},") !== false) or empty($action->objectName))
               {
                   echo '#' . $action->objectID;
               }
