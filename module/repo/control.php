@@ -205,8 +205,12 @@ class repo extends control
     {
         if($confirm == 'no') die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
 
-        $error = '';
-        $relationID = $this->dao->select('id')->from(TABLE_RELATION)->where('extra')->eq($repoID)->fetch();
+        $error      = '';
+        $relationID = $this->dao->select('id')->from(TABLE_RELATION)
+            ->where('extra')->eq($repoID)
+            ->andWhere('AType')->eq('design')
+            ->fetch();
+
         if($relationID) $error .= $this->lang->repo->error->deleted;
 
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
