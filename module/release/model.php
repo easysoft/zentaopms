@@ -263,10 +263,11 @@ class releaseModel extends model
      * @param  string $notfiyList
      * @param  int    $productID
      * @param  int    $buildID
+     * @param  int    $releaseID
      * @access public
      * @return array
      */
-    public function getNotifyPersons($notifyList = '', $productID = 0, $buildID = 0)
+    public function getNotifyPersons($notifyList = '', $productID = 0, $buildID = 0, $releaseID = 0)
     {
         if(empty($notifyList)) return array();
 
@@ -283,8 +284,9 @@ class releaseModel extends model
             }
             elseif($notify == 'SC' and !empty($buildID))
             {
-                $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch('stories');
-                $stories = trim($stories, ',');
+                $stories  = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch('stories');
+                $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch('stories');
+                $stories  = trim($stories, ',');
 
                 if(empty($stories)) continue;
 
@@ -537,7 +539,7 @@ class releaseModel extends model
 
         /* Get notifiy persons. */
         $notifyPersons = array();
-        if(!empty($release->notify)) $notifyPersons = $this->getNotifyPersons($release->notify, $release->product, $release->build);
+        if(!empty($release->notify)) $notifyPersons = $this->getNotifyPersons($release->notify, $release->product, $release->build, $release->id);
 
         foreach($notifyPersons as $account)
         {
