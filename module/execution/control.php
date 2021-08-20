@@ -1186,7 +1186,7 @@ class execution extends control
 
         $this->view->title        = $title;
         $this->view->position     = $position;
-        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();

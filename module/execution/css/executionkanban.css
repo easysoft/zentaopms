@@ -12,7 +12,7 @@
 #kanban tbody > tr > td {line-height: 24px;}
 #kanban tbody > tr > td {border-bottom: 2px solid #fff !important;}
 #kanban thead > tr > th:not(:last-child) {border-right: 2px solid #efefef;}
-#kanban tbody > tr > td.color-my {background-color: #ECF4FD;}
+#kanban tbody > tr > td.color-my {background-color: #FFEDED; border-bottom: 5px solid #fff !important;}
 #kanban tbody > tr > td.color-project {background-color: #F5F5F5;}
 
 .s-doing .table-row .table-col:last-child, .c-progress {width: 30px;}

@@ -210,7 +210,6 @@ if($config->systemMode == 'new')
     $lang->resource->project->batchEdit           = 'batchEdit';
     $lang->resource->project->group               = 'group';
     $lang->resource->project->createGroup         = 'createGroup';
-    $lang->resource->project->manageView          = 'manageView';
     $lang->resource->project->managePriv          = 'managePriv';
     $lang->resource->project->manageMembers       = 'manageMembers';
     $lang->resource->project->manageGroupMember   = 'manageGroupMember';
@@ -248,7 +247,6 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[25]  = 'batchEdit';
     $lang->project->methodOrder[30]  = 'group';
     $lang->project->methodOrder[35]  = 'createGroup';
-    $lang->project->methodOrder[40]  = 'manageView';
     $lang->project->methodOrder[45]  = 'managePriv';
     $lang->project->methodOrder[50]  = 'manageMembers';
     $lang->project->methodOrder[55]  = 'manageGroupMember';

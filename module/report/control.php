@@ -324,7 +324,7 @@ class report extends control
 
         if($dept)
         {
-            $users = $this->loadModel('dept')->getDeptUserPairs($dept, 'useid');
+            $users = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
             $users = array('' => $this->lang->report->annualData->allUser) + $users;
         }
 

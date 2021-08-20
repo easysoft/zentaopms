@@ -392,15 +392,17 @@ class deptModel extends model
      * Get user pairs of a department.
      *
      * @param  int    $deptID
-     * @param  string $params  userid|outside|all
+     * @param  string $key     id|account
+     * @param  string $type    inside|outside
+     * @param  string $params  all
      * @access public
      * @return array
      */
-    public function getDeptUserPairs($deptID = 0, $params = '')
+    public function getDeptUserPairs($deptID = 0, $key = 'account', $type = 'inside', $params = '')
     {
         $childDepts = $this->getAllChildID($deptID);
-        $keyField   = strpos($params, 'useid') !== false ? 'id' : 'account';
-        $type       = (strpos($params, 'outside') !== false) ? 'outside' : 'inside';
+        $keyField   = $key == 'id' ? 'id' : 'account';
+        $type       = $type == 'outside' ? 'outside' : 'inside';
 
         return $this->dao->select("$keyField, realname")->from(TABLE_USER)
             ->where('deleted')->eq(0)

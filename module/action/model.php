@@ -562,21 +562,21 @@ class actionModel extends model
             $typeTrashes[$object->objectType][] = $object->objectID;
         }
 
-        foreach($typeTrashes as $objectType => $objectIds)
+        foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
 
-            $objectIds = array_unique($objectIds);
-            $table     = $this->config->objectTables[$objectType];
-            $field     = $this->config->action->objectNameFields[$objectType];
+            $objectIdList = array_unique($objectIdList);
+            $table        = $this->config->objectTables[$objectType];
+            $field        = $this->config->action->objectNameFields[$objectType];
             if($objectType == 'pipeline')
             {
-                $objectNames['jenkins'] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->andWhere('type')->eq('jenkins')->fetchPairs();
-                $objectNames['gitlab']  = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->andWhere('type')->eq('gitlab')->fetchPairs();
+                $objectNames['jenkins'] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
+                $objectNames['gitlab']  = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
             }
             else
             {
-                $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+                $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
             }
         }
 
@@ -952,13 +952,13 @@ class actionModel extends model
 
         /* Group actions by objectType, and get there name field. */
         foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
-        foreach($objectTypes as $objectType => $objectIds)
+        foreach($objectTypes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType]) and $objectType != 'makeup') continue;    // If no defination for this type, omit it.
 
-            $objectIds = array_unique($objectIds);
-            $table     = $objectType == 'makeup' ? '`zt_overtime`' : $this->config->objectTables[$objectType];
-            $field     = zget($this->config->action->objectNameFields, $objectType, '');
+            $objectIdList = array_unique($objectIdList);
+            $table        = $objectType == 'makeup' ? '`zt_overtime`' : $this->config->objectTables[$objectType];
+            $field        = zget($this->config->action->objectNameFields, $objectType, '');
             if(empty($field)) continue;
             if($table != TABLE_TODO)
             {
@@ -967,7 +967,7 @@ class actionModel extends model
 
                 if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
-                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
+                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id]    = $object->name;
@@ -976,7 +976,7 @@ class actionModel extends model
                 }
                 elseif($objectType == 'project' or $objectType == 'execution')
                 {
-                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
+                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id]    = $object->name;
@@ -985,7 +985,7 @@ class actionModel extends model
                 }
                 elseif($objectType == 'story')
                 {
-                    $objectInfo = $this->dao->select('id,title,type')->from($table)->where('id')->in($objectIds)->fetchAll();
+                    $objectInfo = $this->dao->select('id,title,type')->from($table)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id] = $object->title;
@@ -996,7 +996,7 @@ class actionModel extends model
                 elseif($objectType == 'team')
                 {
                     $objectInfo = $this->dao->select('id,team,type')->from(TABLE_PROJECT)
-                        ->where('id')->in($objectIds)
+                        ->where('id')->in($objectIdList)
                         ->fetchAll();
 
                     $objectProject = array();
@@ -1010,13 +1010,13 @@ class actionModel extends model
                 {
                     $objectName = $this->dao->select("t1.id, t2.realname")->from($table)->alias('t1')
                         ->leftJoin(TABLE_USER)->alias('t2')->on("t1.{$field} = t2.account")
-                        ->where('t1.id')->in($objectIds)
+                        ->where('t1.id')->in($objectIdList)
                         ->fetchPairs();
                     $objectProject = array();
                 }
                 else
                 {
-                    $objectName    = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+                    $objectName    = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
                     $objectProject = array();
                 }
 
@@ -1025,7 +1025,7 @@ class actionModel extends model
             }
             else
             {
-                $todos = $this->dao->select("id, $field AS name, account, private, type, idvalue")->from($table)->where('id')->in($objectIds)->fetchAll('id');
+                $todos = $this->dao->select("id, $field AS name, account, private, type, idvalue")->from($table)->where('id')->in($objectIdList)->fetchAll('id');
                 foreach($todos as $id => $todo)
                 {
                     if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
@@ -1044,7 +1044,7 @@ class actionModel extends model
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
         /* Get the same dept department. */
-        $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
         foreach($actions as $i => $action)
         {
             /* Add name field to the actions. */

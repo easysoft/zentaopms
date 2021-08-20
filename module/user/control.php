@@ -80,7 +80,7 @@ class user extends control
         $account = $user->account;
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
         if(!isset($users[$userID])) die(js::error($this->lang->user->error->noAccess) . js::locate('back'));
 
         /* set menus. */
@@ -123,7 +123,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Modify story title. */
         $this->loadModel('story');
@@ -166,7 +166,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Set the menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -207,7 +207,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Set menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -247,7 +247,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Set menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -298,7 +298,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -349,7 +349,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -389,7 +389,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -429,7 +429,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -462,7 +462,7 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->position[]   = $this->lang->user->common;
@@ -1080,7 +1080,7 @@ class user extends control
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'useid');
+        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* set menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);
