@@ -42,19 +42,3 @@ a.showMoreImage:hover {opacity: 1;}
 .table-actions .btn {background: #78bdf5; color: #fff; border-color: #78bdf5}
 .table-actions > .btn-group:first-child > .btn:first-child {border-right: 1px solid rgba(255,255,255,0.2);}
 .table-footer .checked+div .btn, .table-actions .btn:hover {background: #16a8f8; border-color: #16a8f8}
-
-#header #toolbar a {color: #3c4353; font-size: 13px; position: relative;}
-#header #toolbar a:hover, .selected a {color: #fff!important;}
-#header #toolbar i {font-size: 16px; top: 0;}
-#header .header-btn i {font-size: 16px;}
-
-#toolbar {top: 0px; height: 50px;}
-#userNav {float: none; margin: 0;}
-#userNav>li {text-align: center;}
-#userNav>li>a {padding: 10px 5px; color: #000; opacity: .9; margin-left: 0px}
-#userNav>li>a:hover {height: 50px;}
-#userNav>li>.dropdown-menu {margin: 0; text-align: left;}
-#userNav>li>.dropdown-menu a {color: #fff;}
-#userNav>li .pull-right {right: -1px;}
-#userNav>li .lang .dropdown-menu, #userNav>li .theme .dropdown-menu {top: -60px;}
-#userNav .dropdown-menu>li>a>.icon { position: initial; display: inline;}
