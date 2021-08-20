@@ -114,30 +114,27 @@ class projectStory extends control
      */
     public function batchUnlinkStory($projectID, $storyIdList = '')
     {
-        $storyIdList      = trim($storyIdList, ',');
-        $stories          = explode(',', $storyIdList);
+        $storyIdList      = array_filter(explode(',', $storyIdList));
         $executionStories = $this->projectstory->getExecutionStories($projectID, $storyIdList);
         $html             = '';
 
-        if(!empty($executionStories))
+        foreach($executionStories as $story)
         {
-            foreach($executionStories as $story)
-            {
-                $storyLink     = $this->createLink('story', 'view', "storyID={$story->id}");
-                $executionLink = $this->createLink('execution', 'story', "executionID={$story->executionID}");
-                $html         .=<<<ETO
+            $storyLink     = $this->createLink('story', 'view', "storyID={$story->id}");
+            $executionLink = $this->createLink('execution', 'story', "executionID={$story->executionID}");
+            $html         .=<<<ETO
 <tr>
   <td class='c-name w-500px'><a href="$storyLink" title={$story->title} style='color:#5988e2'>{$story->title}</a></td>
   <td class='c-name w-200px'><a href="$executionLink" title={$story->execution} style='color:#32579c'>{$story->execution}</a></td>
 </tr>
 ETO;
-            }
         }
 
-        foreach($stories as $storyID)
+        $this->loadModel('execution');
+        foreach($storyIdList as $storyID)
         {
             if(isset($executionStories[$storyID])) continue;
-            $this->loadModel('execution')->unlinkStory($projectID, $storyID);
+            $this->execution->unlinkStory($projectID, $storyID);
         }
 
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
