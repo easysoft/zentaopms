@@ -70,9 +70,10 @@ class mrModel extends model
         $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
 
         $MR->name          = $rawMR->title;
-        $MR->targetBranch  = $rawMR->target_branch;
+        $MR->sourceProject = $rawMR->source_project_id;
         $MR->sourceBranch  = $rawMR->source_branch;
         $MR->targetProject = $rawMR->target_project_id;
+        $MR->targetBranch  = $rawMR->target_branch;
         $MR->canMerge      = $rawMR->merge_status;
         $MR->status        = $rawMR->state;
         return $MR;
@@ -141,7 +142,7 @@ class mrModel extends model
         $MR = fixer::input('post')
             ->add('repoID', 0)
             ->add('gitlabID', $gitlabID)
-            ->add('projectID', $projectID)
+            ->add('projectID', $rawMR->project_id) /* sourceProject can be not project of the created MR. */
             ->add('mrID', $rawMR->iid)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
