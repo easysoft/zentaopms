@@ -37,6 +37,8 @@
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
 <?php js::set('isStage', false);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
+<?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('projectCommon', $lang->projectCommon);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

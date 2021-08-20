@@ -44,6 +44,11 @@ $(function()
     adjustMainCol();
     $(window).on('resize', adjustMainCol);
 
+    $('#teams_chosen').click(function()
+    {
+        if(systemMode == 'new') $('#teams_chosen ul li:first').append(' <label class="label">' + projectCommon + '</label>');
+    })
+
     $('#teams').change(function()
     {
         var objectID = $(this).val();

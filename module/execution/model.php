@@ -2466,8 +2466,8 @@ class executionModel extends model
         {
             if(empty($team->team)) continue;
 
-            $object = $team->type == 'project' ? $this->lang->project->common . '-' : $this->lang->execution->common . '-';
-            $teamPairs[$id] = $object . $team->team;
+            $prefix = ($team->type != 'project' and $this->config->systemMode == 'new') ? '&nbsp;&nbsp;&nbsp;' : '';
+            $teamPairs[$id] = $prefix . $team->team;
         }
 
         return $teamPairs;

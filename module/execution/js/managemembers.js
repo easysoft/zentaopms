@@ -2,7 +2,7 @@ $(function()
 {
     $('#execution_chosen').click(function()
     {
-        if(systemMode == 'new') $('#execution_chosen ul li:first').append(' <label class="label">' + projectCommon + '</label>')
+        if(systemMode == 'new') $('#execution_chosen ul li:first').append(' <label class="label">' + projectCommon + '</label>');
     })
 })
 
