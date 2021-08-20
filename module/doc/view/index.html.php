@@ -173,7 +173,7 @@
               <tbody>
                 <?php foreach($collectedDocs as $doc):?>
                 <tr>
-                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'")?></a></td>
+                  <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID={$doc->id}", '', true), $doc->title, '', "data-toggle='modal' data-type='iframe' data-width='90%' title='{$doc->title}'")?></a></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
                   <td class="c-datetime"><?php echo formatTime($doc->editedDate) ? formatTime($doc->editedDate, 'Y-m-d') : formatTime($doc->addedDate, 'y-m-d');?></td>
                 </tr>
