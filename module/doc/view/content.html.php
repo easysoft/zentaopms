@@ -73,10 +73,10 @@ $sessionString .= session_name() . '=' . session_id();
             {
                 $url = $doc->content;
                 if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
-                $urlIsHttps    = strpos($url, 'https://') === 0;
-                $serverIsHttps = ((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https'));
+                $urlIsHttps = strpos($url, 'https://') === 0;
+                $ztIsHttps  = ((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https'));
 
-                if(($urlIsHttps and $serverIsHttps) or (!$urlIsHttps and !$serverIsHttps))
+                if(($urlIsHttps and $ztIsHttps) or (!$urlIsHttps and !$ztIsHttps))
                 {
                     echo "<iframe width='100%' id='urlIframe' src='$url'></iframe>";
                 }
