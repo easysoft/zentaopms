@@ -83,14 +83,14 @@ class releaseModel extends model
     }
 
     /**
-     * Get release builds from product.
+     * Get released builds from product.
      *
      * @param  int    $productID
      * @param  int    $branch
      * @access public
      * @return void
      */
-    public function getReleaseBuilds($productID, $branch = 0)
+    public function getReleasedBuilds($productID, $branch = 0)
     {
         $releases = $this->dao->select('build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)

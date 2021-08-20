@@ -116,9 +116,9 @@ class projectrelease extends control
         }
 
         /* Get the builds that can select. */
-        $builds        = $this->build->getProjectBuildPairs($projectID, 0, 0, 'notrunk|withbranch');
-        $releaseBuilds = $this->projectrelease->getReleaseBuilds($projectID);
-        foreach($releaseBuilds as $build) unset($builds[$build]);
+        $builds         = $this->build->getProjectBuildPairs($projectID, 0, 0, 'notrunk|withbranch');
+        $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
+        foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
         $this->project->setMenu($projectID);
@@ -170,11 +170,11 @@ class projectrelease extends control
         $build = $this->build->getById($release->build);
 
         /* Get the builds that can select. */
-        $builds        = $this->build->getProjectBuildPairs($release->project, $release->product, $release->branch, 'notrunk|withbranch');
-        $releaseBuilds = $this->projectrelease->getReleaseBuilds($release->project);
-        foreach($releaseBuilds as $releaseBuild)
+        $builds         = $this->build->getProjectBuildPairs($release->project, $release->product, $release->branch, 'notrunk|withbranch');
+        $releasedBuilds = $this->projectrelease->getReleasedBuilds($release->project);
+        foreach($releasedBuilds as $releasedBuild)
         {
-            if($releaseBuild != $build->id) unset($builds[$releaseBuild]);
+            if($releasedBuild != $build->id) unset($builds[$releasedBuild]);
         }
         unset($builds['trunk']);
 
