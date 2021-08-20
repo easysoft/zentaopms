@@ -374,9 +374,29 @@ class gitlab extends control
 
         $branches = $this->gitlab->apiGetBranches($gitlabID, $projectID);
         $options  = "<option value=''></option>";
-        foreach($branches as $index =>$branch)
+        foreach($branches as $branch)
         {
-            $options .= "<option title='{$branch->name}' value='{$branch->name}' data-name='{$branch->name}'>{$branch->name}</option>";
+            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+        }
+        $this->send($options);
+    }
+
+    /**
+     * AJAX: Get MR user pairs to select assignee_ids and reviewer_ids.
+     *
+     * @param  int    $gitlabID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMRUserPairs($gitlabID)
+    {
+        if(!$gitlabID) return $this->send(array('message' => array()));
+
+        $users    = $this->gitlab->getUserIdRealnamePairs($gitlabID);
+        $options  = "<option value=''></option>";
+        foreach($users as $index => $user)
+        {
+            $options .= "<option value='{$index}'>{$user}</option>";
         }
         $this->send($options);
     }
