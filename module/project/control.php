@@ -1045,41 +1045,6 @@ class project extends control
     }
 
     /**
-     * Project manage view.
-     *
-     * @param  int    $groupID
-     * @param  int    $projectID
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function manageView($groupID, $projectID, $programID)
-    {
-        $this->loadModel('group');
-        if($_POST)
-        {
-            $this->group->updateView($groupID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$projectID&programID=$programID")));
-        }
-
-        $this->project->setMenu($projectID);
-
-        $group = $this->group->getById($groupID);
-
-        $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->manageView;
-        $this->view->position[] = $group->name;
-        $this->view->position[] = $this->lang->group->manageView;
-
-        $this->view->group    = $group;
-        $this->view->products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('id')->eq($group->project)->orderBy('order_desc')->fetchPairs('id', 'name');
-
-        $this->display();
-    }
-
-    /**
      * Manage privleges of a group.
      *
      * @param  int       $projectID
