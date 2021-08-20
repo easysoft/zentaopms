@@ -67,6 +67,7 @@ $lang->task->storyVersion      = 'Story Version';
 $lang->task->color             = 'Color';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Typ';
+$lang->task->typeAB            = 'Typ';
 $lang->task->pri               = 'Priorität';
 $lang->task->mailto            = 'Mail an';
 $lang->task->estimate          = 'Geplant(h)';

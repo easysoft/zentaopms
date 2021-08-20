@@ -67,6 +67,7 @@ $lang->task->storyVersion      = 'Story Version';
 $lang->task->color             = 'Color';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Type';
+$lang->task->typeAB            = 'Type';
 $lang->task->sync2Gitlab       = 'Sync to Gitlab';
 $lang->task->pri               = 'Priority';
 $lang->task->mailto            = 'Mailto';

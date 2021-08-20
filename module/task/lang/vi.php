@@ -67,6 +67,7 @@ $lang->task->storyVersion     = 'Phiên bản câu chuyện';
 $lang->task->color            = 'Màu';
 $lang->task->name             = 'Tên';
 $lang->task->type             = 'Loại';
+$lang->task->typeAB           = 'Loại';
 $lang->task->pri              = 'Ưu tiên';
 $lang->task->mailto           = 'Mail tới';
 $lang->task->estimate         = 'Dự tính';

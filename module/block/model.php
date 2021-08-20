@@ -719,36 +719,36 @@ class blockModel extends model
      */
     public function getAssignToMeParams()
     {
-        $params->todoNum['name']    = $this->lang->block->todoNum;
-        $params->todoNum['default'] = 20;
-        $params->todoNum['control'] = 'input';
+        $params->todoCount['name']    = $this->lang->block->todoCount;
+        $params->todoCount['default'] = 20;
+        $params->todoCount['control'] = 'input';
 
-        $params->taskNum['name']    = $this->lang->block->taskNum;
-        $params->taskNum['default'] = 20;
-        $params->taskNum['control'] = 'input';
+        $params->taskCount['name']    = $this->lang->block->taskCount;
+        $params->taskCount['default'] = 20;
+        $params->taskCount['control'] = 'input';
 
-        $params->bugNum['name']    = $this->lang->block->bugNum;
-        $params->bugNum['default'] = 20;
-        $params->bugNum['control'] = 'input';
+        $params->bugCount['name']    = $this->lang->block->bugCount;
+        $params->bugCount['default'] = 20;
+        $params->bugCount['control'] = 'input';
 
         if(isset($this->config->maxVersion))
         {
-            $params->riskNum['name']    = $this->lang->block->riskNum;
-            $params->riskNum['default'] = 20;
-            $params->riskNum['control'] = 'input';
+            $params->riskCount['name']    = $this->lang->block->riskCount;
+            $params->riskCount['default'] = 20;
+            $params->riskCount['control'] = 'input';
 
-            $params->issueNum['name']    = $this->lang->block->issueNum;
-            $params->issueNum['default'] = 20;
-            $params->issueNum['control'] = 'input';
+            $params->issueCount['name']    = $this->lang->block->issueCount;
+            $params->issueCount['default'] = 20;
+            $params->issueCount['control'] = 'input';
 
-            $params->meetingNum['name']    = $this->lang->block->meetingNum;
-            $params->meetingNum['default'] = 20;
-            $params->meetingNum['control'] = 'input';
+            $params->meetingCount['name']    = $this->lang->block->meetingCount;
+            $params->meetingCount['default'] = 20;
+            $params->meetingCount['control'] = 'input';
         }
 
-        $params->storyNum['name']    = $this->lang->block->storyNum;
-        $params->storyNum['default'] = 20;
-        $params->storyNum['control'] = 'input';
+        $params->storyCount['name']    = $this->lang->block->storyCount;
+        $params->storyCount['default'] = 20;
+        $params->storyCount['control'] = 'input';
 
         return json_encode($params);
     }

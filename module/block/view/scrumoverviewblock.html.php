@@ -16,13 +16,13 @@
 <table class="table table-data">
   <thead>
     <tr>
-      <th><?php echo $lang->block->storyNum;?></th>
+      <th><?php echo $lang->block->storyCount;?></th>
       <th></th>
       <th><?php echo $lang->personnel->invest;?></th>
       <th></th>
       <th><?php echo $lang->workingHour;?></th>
       <th></th>
-      <th><?php echo $lang->block->bugNum;?></th>
+      <th><?php echo $lang->block->bugCount;?></th>
       <th></th>
     </tr>
   </thead>

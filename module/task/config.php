@@ -66,7 +66,7 @@ $config->task->datatable->fieldList['name']['fixed']    = 'left';
 $config->task->datatable->fieldList['name']['width']    = 'auto';
 $config->task->datatable->fieldList['name']['required'] = 'yes';
 
-$config->task->datatable->fieldList['type']['title']    = 'type';
+$config->task->datatable->fieldList['type']['title']    = 'typeAB';
 $config->task->datatable->fieldList['type']['fixed']    = 'no';
 $config->task->datatable->fieldList['type']['width']    = '80';
 $config->task->datatable->fieldList['type']['required'] = 'no';

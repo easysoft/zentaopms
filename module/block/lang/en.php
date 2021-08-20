@@ -315,13 +315,13 @@ $lang->block->default['full']['my']['8']['block']  = 'assigntome';
 $lang->block->default['full']['my']['8']['source'] = '';
 $lang->block->default['full']['my']['8']['grid']   = 8;
 
-$lang->block->default['full']['my']['8']['params']['todoNum']    = '20';
-$lang->block->default['full']['my']['8']['params']['taskNum']    = '20';
-$lang->block->default['full']['my']['8']['params']['bugNum']     = '20';
-$lang->block->default['full']['my']['8']['params']['riskNum']    = '20';
-$lang->block->default['full']['my']['8']['params']['issueNum']   = '20';
-$lang->block->default['full']['my']['8']['params']['storyNum']   = '20';
-$lang->block->default['full']['my']['8']['params']['meetingNum'] = '20';
+$lang->block->default['full']['my']['8']['params']['todoCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['taskCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['bugCount']     = '20';
+$lang->block->default['full']['my']['8']['params']['riskCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['issueCount']   = '20';
+$lang->block->default['full']['my']['8']['params']['storyCount']   = '20';
+$lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
 
 if($config->systemMode == 'new')
 {
@@ -480,13 +480,13 @@ $lang->block->orderByList->story['status_desc'] = 'Story Status DESC';
 $lang->block->orderByList->story['stage_asc']   = 'Story Phase ASC';
 $lang->block->orderByList->story['stage_desc']  = 'Story Phase DESC';
 
-$lang->block->todoNum    = 'Todo';
-$lang->block->taskNum    = 'Task';
-$lang->block->bugNum     = 'Bug';
-$lang->block->riskNum    = 'Risk';
-$lang->block->issueNum   = 'Issues';
-$lang->block->storyNum   = 'Stories';
-$lang->block->meetingNum = 'Meetings';
+$lang->block->todoCount    = 'Todo';
+$lang->block->taskCount    = 'Task';
+$lang->block->bugCount     = 'Bug';
+$lang->block->riskCount    = 'Risk';
+$lang->block->issueCount   = 'Issues';
+$lang->block->storyCount   = 'Stories';
+$lang->block->meetingCount = 'Meetings';
 
 $lang->block->typeList = new stdclass();
 
