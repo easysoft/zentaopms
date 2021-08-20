@@ -46,10 +46,11 @@
           <td class='text' title='<?php if(!empty($gitlab->isAdminToken)) {echo $gitlab->url;} else {echo $lang->gitlab->tokenLimit;}?>'><?php echo $gitlab->url;?></td>
           <td class='c-actions text-left'>
             <?php
-            $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';
-            common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title={$lang->gitlab->edit} class='btn btn-primary {$disabled}', 'disabled'");
-            common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-group'></i> ", '', "title={$lang->gitlab->bindUser}  class='btn btn-primary {$disabled}'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn {$disabled}'");
+            $disabled     = !empty($gitlab->isAdminToken) ? '' : 'disabled';
+            $bindUserLang = !empty($gitlab->isAdminToken) ? $lang->gitlab->bindUser : $lang->gitlab->tokenError;
+            common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title={$lang->gitlab->edit} class='btn btn-primary'");
+            common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-group'></i> ", '', "title={$bindUserLang}  class='btn btn-primary {$disabled}' ,'disabled'");
+            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn'");
             ?>
           </td>
         </tr>
