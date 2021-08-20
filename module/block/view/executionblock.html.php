@@ -10,7 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<style>.table .c-progress {width: 60px;}</style>
+<style>
+.table .c-progress {width: 60px;}
+.c-hours {text-align: right !important;}
+</style>
 <?php if(empty($executionStats)): ?>
 <div class='empty-tip'><?php common::printLink('execution', 'create', '', "<i class='icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
@@ -18,7 +21,7 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>
     <thead>
       <tr class='text-center'>
-        <th class='c-name text-left'><?php echo $lang->execution->name;?></th>
+        <th class='c-name text-left'><?php echo $lang->execution->execName;?></th>
         <th class="c-date"><?php echo $lang->execution->end;?></th>
         <?php if($longBlock):?>
         <?php $thClass = common::checkNotCN() ? 'w-85px' : 'c-hours';?>
@@ -39,6 +42,7 @@
       <?php
       $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
       $viewLink = $this->createLink('execution', 'task', 'executionID=' . $execution->id);
+      if($config->systemMode == 'new') $execution->name = zget($projectPairs, $execution->project, '') . ' / ' . $execution->name;
       ?>
       <tr <?php echo $appid?>>
         <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($viewLink, $execution->name, '', "title='$execution->name'");?></nobr></td>

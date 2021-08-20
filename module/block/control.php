@@ -1650,8 +1650,12 @@ class block extends control
         $status = isset($this->params->type)  ? $this->params->type : 'all';
         $pager  = pager::init(0, $count, 1);
 
+        $projectPairs = array();
+        if($this->config->systemMode == 'new') $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
+
         $projectID = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
         $this->view->executionStats = $this->loadModel('project')->getStats($projectID, $status, 0, 0, 30, 'id_asc', $pager);
+        $this->view->projectPairs   = $projectPairs;
     }
 
     /**
