@@ -1674,87 +1674,72 @@ class block extends control
         if(common::hasPriv('meeting', 'view') and isset($this->config->maxVersion)) $hasViewPriv['meeting'] = true;
         if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
 
-        $params = $this->get->param;
-        $params = json_decode(base64_decode($params));
-        $count  = array();
-
-        if(isset($hasViewPriv['todo']))
+        $params          = $this->get->param;
+        $params          = json_decode(base64_decode($params));
+        $count           = array();
+        $objectList      = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bus', 'story' => 'stories');
+        $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount');
+        if(isset($this->config->maxVersion))
         {
-            $this->app->loadClass('date');
-            $this->app->loadLang('todo');
-            $stmt = $this->dao->select('*')->from(TABLE_TODO)
-                ->where('assignedTo')->eq($this->app->user->account)
-                ->andWhere('cycle')->eq(0)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('status')->eq('wait')
-                ->orderBy('`date` desc');
-            if(isset($params->todoNum)) $stmt->limit($params->todoNum);
-            $todos = $stmt->fetchAll();
+            $objectList      += array('risk' => 'risks', 'issue' => 'issues');
+            $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount');
+        }
 
-            foreach($todos as $key => $todo)
+        foreach($objectCountList as $objectType => $objectCount)
+        {
+            if(!isset($hasViewPriv[$objectType])) continue;
+
+            $table      = $this->config->objectTables[$objectType];
+            $orderBy    = $objectType == 'todo' ? "`date` desc" : 'id_desc';
+            $limitCount = isset($params->{$objectCount}) ? $params->{$objectCount} : 0;
+            $objects    = $this->dao->select('*')->from($table)
+                ->where('deleted')->eq(0)
+                ->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+                ->beginIF($objectType == 'todo')->andWhere('cycle')->eq(0)->fi()
+                ->beginIF($objectType == 'todo')->andWhere('status')->eq('wait')->fi()
+                ->beginIF($objectType != 'todo')->andWhere('status')->ne('closed')->fi()
+                ->orderBy($orderBy)
+                ->beginIF($limitCount)->limit($limitCount)->fi()
+                ->fetchAll();
+
+            if($objectType == 'todo')
             {
-                if($todo->status == 'done' and $todo->finishedBy == $this->app->user->account)
+                $this->app->loadClass('date');
+                $this->app->loadLang('todo');
+                foreach($objects as $key => $todo)
                 {
-                    unset($todos[$key]);
-                    continue;
+                    if($todo->status == 'done' and $todo->finishedBy == $this->app->user->account)
+                    {
+                        unset($objects[$key]);
+                        continue;
+                    }
+
+                    $todo->begin = date::formatTime($todo->begin);
+                    $todo->end   = date::formatTime($todo->end);
                 }
-
-                $todo->begin = date::formatTime($todo->begin);
-                $todo->end   = date::formatTime($todo->end);
             }
-            $count['todo'] = count($todos);
-            $this->view->todos = $todos;
-        }
-        if(isset($hasViewPriv['task']))
-        {
-            $this->app->loadLang('task');
-            $this->app->loadLang('execution');
-            $stmt = $this->dao->select('*')->from(TABLE_TASK)
-                ->where('assignedTo')->eq($this->app->user->account)
-                ->andWhere('deleted')->eq('0')
-                ->andWhere('status')->ne('closed')
-                ->orderBy('id_desc');
-            if(isset($params->taskNum)) $stmt->limit($params->taskNum);
-            $tasks = $stmt->fetchAll();
 
-            $count['task'] = count($tasks);
-            $this->view->tasks = $tasks;
-        }
-        if(isset($hasViewPriv['bug']))
-        {
-            $this->app->loadLang('bug');
-            $stmt = $this->dao->select('*')->from(TABLE_BUG)
-                ->where('assignedTo')->eq($this->app->user->account)
-                ->andWhere('deleted')->eq('0')
-                ->andWhere('status')->ne('closed')
-                ->orderBy('id_desc');
-            if(isset($params->bugNum)) $stmt->limit($params->bugNum);
-            $bugs = $stmt->fetchAll();
+            if($objectType == 'task')
+            {
+                $this->app->loadLang('task');
+                $this->app->loadLang('execution');
+            }
 
-            $count['bug'] = count($bugs);
-            $this->view->bugs = $bugs;
-        }
-        if(isset($hasViewPriv['risk']))
-        {
-            $this->app->loadLang('risk');
-            $stmt = $this->dao->select('*')->from(TABLE_RISK)
-                ->where('assignedTo')->eq($this->app->user->account)
-                ->andWhere('deleted')->eq('0')
-                ->andWhere('status')->ne('closed')
-                ->orderBy('id_desc');
-            if(isset($params->riskNum)) $stmt->limit($params->riskNum);
-            $risks = $stmt->fetchAll();
+            if($objectType == 'risk') $this->app->loadLang('risk');
+            if($objectType == 'issue') $this->app->loadLang('issue');
 
-            $count['risk'] = count($risks);
-            $this->view->risks = $risks;
+            $count[$objectType] = count($objects);
+            $this->view->{$objectList[$objectType]} = $objects;
         }
+
         if(isset($hasViewPriv['meeting']))
         {
             $this->app->loadLang('meeting');
-            $today = helper::today();
-            $now   = date('H:i:s', strtotime(helper::now()));
+            $today        = helper::today();
+            $now          = date('H:i:s', strtotime(helper::now()));
+            $meetingCount = isset($params->meetingCount) ? isset($params->meetingCount) : 0;
 
-            $stmt = $this->dao->select('*')->from(TABLE_MEETING)
+            $meetings = $this->dao->select('*')->from(TABLE_MEETING)
                 ->Where('deleted')->eq('0')
                 ->andWhere('(date')->gt($today)
                 ->orWhere('(begin')->gt($now)
@@ -1763,43 +1748,14 @@ class block extends control
                 ->andwhere('(host')->eq($this->app->user->account)
                 ->orWhere('participant')->in($this->app->user->account)
                 ->markRight(1)
-                ->orderBy('id_desc');
-
-            if(isset($params->meetingNum)) $stmt->limit($params->meetingNum);
-            $meetings = $stmt->fetchAll();
+                ->orderBy('id_desc')
+                ->beginIF($meetingCount)->limit($meetingCount)->fi()
+                ->fetchAll();
 
             $count['meeting'] = count($meetings);
             $this->view->meetings = $meetings;
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
             $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
-        }
-        if(isset($hasViewPriv['issue']))
-        {
-            $this->app->loadLang('issue');
-            $stmt = $this->dao->select('*')->from(TABLE_ISSUE)
-                ->where('assignedTo')->eq($this->app->user->account)
-                ->andWhere('deleted')->eq('0')
-                ->andWhere('status')->ne('closed')
-                ->orderBy('id_desc');
-            if(isset($params->issueNum)) $stmt->limit($params->issueNum);
-            $issues = $stmt->fetchAll();
-
-            $count['issue'] = count($issues);
-            $this->view->issues = $issues;
-        }
-        if(isset($hasViewPriv['story']))
-        {
-            $this->app->loadLang('story');
-            $stmt = $this->dao->select('*')->from(TABLE_STORY)
-                ->where('assignedTo')->eq($this->app->user->account)
-                ->andWhere('deleted')->eq('0')
-                ->andWhere('status')->ne('closed')
-                ->orderBy('id_desc');
-            if(isset($params->storyNum)) $stmt->limit($params->storyNum);
-            $stories = $stmt->fetchAll();
-
-            $count['story'] = count($stories);
-            $this->view->stories = $stories;
         }
 
         $this->view->selfCall    = $this->selfCall;

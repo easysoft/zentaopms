@@ -315,13 +315,13 @@ $lang->block->default['full']['my']['8']['block']  = 'assigntome';
 $lang->block->default['full']['my']['8']['source'] = '';
 $lang->block->default['full']['my']['8']['grid']   = 8;
 
-$lang->block->default['full']['my']['8']['params']['todoNum']    = '20';
-$lang->block->default['full']['my']['8']['params']['taskNum']    = '20';
-$lang->block->default['full']['my']['8']['params']['bugNum']     = '20';
-$lang->block->default['full']['my']['8']['params']['riskNum']    = '20';
-$lang->block->default['full']['my']['8']['params']['issueNum']   = '20';
-$lang->block->default['full']['my']['8']['params']['storyNum']   = '20';
-$lang->block->default['full']['my']['8']['params']['meetingNum'] = '20';
+$lang->block->default['full']['my']['8']['params']['todoCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['taskCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['bugCount']     = '20';
+$lang->block->default['full']['my']['8']['params']['riskCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['issueCount']   = '20';
+$lang->block->default['full']['my']['8']['params']['storyCount']   = '20';
+$lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
 
 if($config->systemMode == 'new')
 {
@@ -480,13 +480,13 @@ $lang->block->orderByList->story['status_desc'] = '状态倒序';
 $lang->block->orderByList->story['stage_asc']   = '阶段正序';
 $lang->block->orderByList->story['stage_desc']  = '阶段倒序';
 
-$lang->block->todoNum    = '待办数';
-$lang->block->taskNum    = '任务数';
-$lang->block->bugNum     = 'Bug数';
-$lang->block->riskNum    = '风险数';
-$lang->block->issueNum   = '问题数';
-$lang->block->storyNum   = '需求数';
-$lang->block->meetingNum = '会议数';
+$lang->block->todoCount    = '待办数';
+$lang->block->taskCount    = '任务数';
+$lang->block->bugCount     = 'Bug数';
+$lang->block->riskCount    = '风险数';
+$lang->block->issueCount   = '问题数';
+$lang->block->storyCount   = '需求数';
+$lang->block->meetingCount = '会议数';
 
 $lang->block->typeList = new stdclass();
 

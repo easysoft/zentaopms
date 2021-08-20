@@ -310,13 +310,13 @@ $lang->block->default['full']['my']['7']['block']  = 'assigntome';
 $lang->block->default['full']['my']['7']['source'] = '';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
-$lang->block->default['full']['my']['7']['params']['todoNum']    = '20';
-$lang->block->default['full']['my']['7']['params']['taskNum']    = '20';
-$lang->block->default['full']['my']['7']['params']['bugNum']     = '20';
-$lang->block->default['full']['my']['7']['params']['riskNum']    = '20';
-$lang->block->default['full']['my']['7']['params']['issueNum']   = '20';
-$lang->block->default['full']['my']['7']['params']['storyNum']   = '20';
-$lang->block->default['full']['my']['7']['params']['meetingNum'] = '20';
+$lang->block->default['full']['my']['7']['params']['todoCount']    = '20';
+$lang->block->default['full']['my']['7']['params']['taskCount']    = '20';
+$lang->block->default['full']['my']['7']['params']['bugCount']     = '20';
+$lang->block->default['full']['my']['7']['params']['riskCount']    = '20';
+$lang->block->default['full']['my']['7']['params']['issueCount']   = '20';
+$lang->block->default['full']['my']['7']['params']['storyCount']   = '20';
+$lang->block->default['full']['my']['7']['params']['meetingCount'] = '20';
 
 if($config->systemMode == 'new')
 {
@@ -470,13 +470,13 @@ $lang->block->orderByList->story['status_desc'] = 'Tình trạng câu chuyện g
 $lang->block->orderByList->story['stage_asc']   = 'Giai đoạn câu chuyện tăng dần';
 $lang->block->orderByList->story['stage_desc']  = 'Giai đoạn câu chuyện giảm dần';
 
-$lang->block->todoNum    = 'Việc làm';
-$lang->block->taskNum    = 'Nhiệm vụ';
-$lang->block->bugNum     = 'Bug';
-$lang->block->riskNum    = 'Risk';
-$lang->block->issueNum   = 'Issues';
-$lang->block->storyNum   = 'Stories';
-$lang->block->meetingNum = 'Meetings';
+$lang->block->todoCount    = 'Việc làm';
+$lang->block->taskCount    = 'Nhiệm vụ';
+$lang->block->bugCount     = 'Bug';
+$lang->block->riskCount    = 'Risk';
+$lang->block->issueCount   = 'Issues';
+$lang->block->storyCount   = 'Stories';
+$lang->block->meetingCount = 'Meetings';
 
 $lang->block->typeList = new stdclass();
 
