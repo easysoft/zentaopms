@@ -48,7 +48,7 @@ $lang->report->beginAndEnd      = '起止时间';
 $lang->report->begin            = '起始日期';
 $lang->report->end              = '结束日期';
 $lang->report->dept             = '部门';
-$lang->report->deviationChart   = '项目偏差曲线';
+$lang->report->deviationChart   = "{$lang->execution->common}偏差曲线";
 
 $lang->reportList = new stdclass();
 $lang->reportList->project = new stdclass();
