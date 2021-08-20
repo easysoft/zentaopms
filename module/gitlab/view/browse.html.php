@@ -40,7 +40,6 @@
       </thead>
       <tbody>
         <?php foreach ($gitlabList as $id => $gitlab): ?>
-
         <tr>
           <td class='text-center'><?php echo $id;?></td>
           <td class='text c-name' title='<?php echo $gitlab->name;?>'><?php echo $gitlab->name;?></td>
