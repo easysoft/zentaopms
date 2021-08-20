@@ -34,13 +34,15 @@ class projectstoryModel extends model
      * Get the stories for execution linked.
      *
      * @param  int    $projectID
-     * @param  string $storyIdList
+     * @param  array  $storyIdList
      * @access public
      * @return array
      */
-    public function getExecutionStories($projectID, $storyIdList = '')
+    public function getExecutionStories($projectID, $storyIdList = array())
     {
-        $stories = array();
+        $stories     = array();
+        $storyIdList = (array)$storyIdList;
+
         if(empty($storyIdList)) return $stories;
 
         $stories = $this->dao->select('t2.id as id, t2.title as title, t3.id as executionID, t3.name as execution')->from(TABLE_PROJECTSTORY)->alias('t1')
