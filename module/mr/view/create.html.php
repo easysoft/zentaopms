@@ -12,6 +12,9 @@
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
+      <div class='main-header'>
+        <h2><?php echo $lang->mr->create;?></h2>
+      </div>
       <form id='mrForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
@@ -48,11 +51,15 @@
           </tr>
           <tr>
             <th><?php echo $lang->mr->assignee;?></th>
-            <td><?php echo html::select('assignee', $users, '', "class='form-control chosen'")?></td>
+            <td><?php echo html::select('assignee', array(''), '', "class='form-control chosen'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->mr->reviewer;?></th>
-            <td><?php echo html::select('reviewer', $users, '', "class='form-control chosen'")?></td>
+            <td><?php echo html::select('reviewer', array(''), '', "class='form-control chosen'")?></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td><?php echo $lang->mr->usersTips;?></td>
           </tr>
           <tr>
             <th></th>

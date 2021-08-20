@@ -42,7 +42,6 @@ class mr extends control
 
         $this->view->title       = $this->lang->mr->create;
         $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
-        $this->view->users       = $this->gitlab->getUserIdRealnamePairs(14);
         $this->display();
     }
 

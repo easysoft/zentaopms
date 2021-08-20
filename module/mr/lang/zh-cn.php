@@ -23,3 +23,5 @@ $lang->mr->sourceProject = '源项目';
 $lang->mr->sourceBranch  = '源分支';
 $lang->mr->targetProject = '目标项目';
 $lang->mr->targetBranch  = '目标分支';
+
+$lang->mr->usersTips = '提示：如果无法选择指派人和评审人，请先前往GitLab页面绑定用户。';
