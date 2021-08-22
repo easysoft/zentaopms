@@ -12,11 +12,14 @@
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
+      <div class='main-header'>
+        <h2><?php echo $lang->mr->create;?></h2>
+      </div>
       <form id='mrForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->repo->gitlabHost;?></th>
-              <td class='required'><?php echo html::select('gitlabID', $gitlabHosts, '', "class='form-control' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
+            <th><?php echo $lang->gitlab->common;?></th>
+            <td class='required'><?php echo html::select('gitlabID', $gitlabHosts, '', "class='form-control'");?></td>
           </tr>
           <tr>
              <th><?php echo $lang->mr->sourceProject;?></th>
@@ -39,9 +42,29 @@
              </td>
           </tr>
           <tr>
+            <th><?php echo $lang->mr->name;?></th>
+            <td class='required'><?php echo html::input('title', '', "class='form-control'"); ?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->mr->description; ?></th>
+            <td colspan='1'><?php echo html::textarea('description', '', "rows='3' class='form-control'"); ?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->mr->assignee;?></th>
+            <td><?php echo html::select('assignee', array(''), '', "class='form-control chosen'")?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->mr->reviewer;?></th>
+            <td><?php echo html::select('reviewer', array(''), '', "class='form-control chosen'")?></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td><?php echo $lang->mr->usersTips;?></td>
+          </tr>
+          <tr>
             <th></th>
             <td colspan='2' class='text-center form-actions'>
-              <?php echo html::submitButton($lang->mr->cmpAndContinue); ?>
+              <?php echo html::submitButton(); ?>
               <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
           </tr>

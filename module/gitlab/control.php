@@ -33,7 +33,7 @@ class gitlab extends control
         foreach($gitlabList as $gitlab)
         {
             $token = $this->gitlab->apiGetCurrentUser($gitlab->url,$gitlab->token);
-            $gitlab->isAdminToken = $token->is_admin;
+            $gitlab->isAdminToken = isset($token->is_admin) ? $token->is_admin : 0;
         }
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
@@ -366,7 +366,7 @@ class gitlab extends control
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxGetProjectBranches($gitlabID, $projectID)
     {
@@ -374,10 +374,30 @@ class gitlab extends control
 
         $branches = $this->gitlab->apiGetBranches($gitlabID, $projectID);
         $options  = "<option value=''></option>";
-        foreach($branches as $index =>$branch)
+        foreach($branches as $branch)
         {
-            $options .= "<option title='{$branch->name}' value='{$index}' data-name='{$branch->name}'>{$branch->name}</option>";
+            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
         }
-        return $this->send($options);
+        $this->send($options);
+    }
+
+    /**
+     * AJAX: Get MR user pairs to select assignee_ids and reviewer_ids.
+     *
+     * @param  int    $gitlabID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMRUserPairs($gitlabID)
+    {
+        if(!$gitlabID) return $this->send(array('message' => array()));
+
+        $users    = $this->gitlab->getUserIdRealnamePairs($gitlabID);
+        $options  = "<option value=''></option>";
+        foreach($users as $index => $user)
+        {
+            $options .= "<option value='{$index}'>{$user}</option>";
+        }
+        $this->send($options);
     }
 }

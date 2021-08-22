@@ -32,7 +32,8 @@ class mrModel extends model
      */
     public function getByID($id)
     {
-        return $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
+        $MR =  $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
+        return $this->processMR($MR);
     }
 
     /**
@@ -58,7 +59,7 @@ class mrModel extends model
     }
 
     /**
-     * ProcessMR info by api.
+     * Process MR info by api.
      *
      * @param  object    $MR
      * @access public
@@ -66,12 +67,13 @@ class mrModel extends model
      */
     public function processMR($MR)
     {
-        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->id);
+        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
 
         $MR->name          = $rawMR->title;
-        $MR->targetBranch  = $rawMR->target_branch;
+        $MR->sourceProject = $rawMR->source_project_id;
         $MR->sourceBranch  = $rawMR->source_branch;
         $MR->targetProject = $rawMR->target_project_id;
+        $MR->targetBranch  = $rawMR->target_branch;
         $MR->canMerge      = $rawMR->merge_status;
         $MR->status        = $rawMR->state;
         return $MR;
@@ -82,14 +84,14 @@ class mrModel extends model
      *
      * condition: when user deleting a repo.
      *
-     * @param  int    $MRID
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function deleteMR($MRID)
+    public function deleteMR($id)
     {
         $this->dao->delete()->from(TABLE_MR)
-            ->andWhere('mrID')->eq($MRID)
+            ->andWhere('id')->eq($id)
             ->exec();
     }
 
@@ -118,29 +120,54 @@ class mrModel extends model
     public function create()
     {
         $gitlabID  = $this->post->gitlabID;
-        $projectID = $this->post->projectID;
+        $projectID = $this->post->sourceProject;
 
-        $sourceProject = $this->post->sourceProject;
-        $sourceBranch  = $this->post->sourceBranch;
-        $targetProject = $this->post->targetProject;
-        $targetBranch  = $this->post->targetBranch;
+        $MR = new stdclass;
+        $MR->target_project_id = $this->post->targetProject;
+        $MR->source_branch     = $this->post->sourceBranch;
+        $MR->target_branch     = $this->post->targetBranch;
+        $MR->title             = $this->post->title;
+        $MR->description       = $this->post->description;
+        $MR->assignee_ids      = $this->post->assignee;
+        $MR->reviewer_ids      = $this->post->reviewer;
 
-        if($projectID != $sourceProject) return false;
+        $rawMR = $this->apiCreateMR($gitlabID, $projectID, $MR);
+
+        /* Another open merge request already exists for this source branch. */
+        if(isset($rawMR->message) and !isset($rawMR->iid)) return $rawMR;
+
+        /* Create MR failed. */
+        if(!isset($rawMR->iid)) return false;
+
+        $MR = fixer::input('post')
+            ->add('repoID', 0)
+            ->add('gitlabID', $gitlabID)
+            ->add('projectID', $rawMR->project_id) /* sourceProject can be not project of the created MR. */
+            ->add('mrID', $rawMR->iid)
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
+            ->get();
+
+        /* Remove extra fields before inserting db table. */
+        foreach(explode(',', $this->config->MR->create->skippedFields) as $field) unset($MR->$field);
+
+        $this->dao->insert(TABLE_MR)->data($MR)
+            ->batchCheck($this->config->MR->create->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertId();
     }
 
     /**
-     * Get Forks of a project.
+     * Update MR function.
      *
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
-     * @param  int    $gitlabID
-     * @param  int    $projectID
      * @access public
-     * @return object
+     * @return void
      */
-    public function apiGetForks($gitlabID, $projectID)
+    public function update()
     {
-        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/forks");
-        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -156,8 +183,7 @@ class mrModel extends model
     public function apiCreateMR($gitlabID, $projectID, $params)
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests");
-        $MR = new stdclass;
-        return json_decode(commonModel::http($url, $MR));
+        return json_decode(commonModel::http($url, $data=$params, $options = array()));
     }
 
     /**

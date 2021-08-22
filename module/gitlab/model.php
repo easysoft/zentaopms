@@ -66,7 +66,25 @@ class gitlabModel extends model
     }
 
     /**
-     * Get gitlab user id zentao account pairs of one gitlab.
+     * Get gitlab user id and realname pairs of one gitlab.
+     *
+     * @param  int    $gitlabID
+     * @access public
+     * @return void
+     */
+    public function getUserIdRealnamePairs($gitlabID)
+    {
+        return $this->dao->select('oauth.openID as openID,user.realname as realname')
+            ->from(TABLE_OAUTH)->alias('oauth')
+            ->leftJoin(TABLE_USER)->alias('user')
+            ->on("oauth.account = user.account")
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('providerID')->eq($gitlabID)
+            ->fetchPairs();
+    }
+
+    /**
+     * Get gitlab user id and zentao account pairs of one gitlab.
      *
      * @param  int    $gitlab
      * @access public
@@ -289,6 +307,26 @@ class gitlabModel extends model
     }
 
     /**
+     * Get branches.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getBranches($gitlabID, $projectID)
+    {
+        $rawBranches = $this->apiGetBranches($gitlabID, $projectID);
+
+        $branches = array();
+        foreach($rawBranches as $branch)
+        {
+            $branches[] = $branch->name;
+        }
+        return $branches;
+    }
+
+    /**
      * Create a gitlab.
      *
      * @access public
@@ -430,6 +468,36 @@ class gitlabModel extends model
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID");
         return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get Forks of a project by API.
+     *
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetForks($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/forks");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get upstream project by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function apiGetUpstream($gitlabID,$projectID)
+    {
+        $currentProject = $this->apiGetSingleProject($gitlabID, $projectID);
+        if(isset($currentProject->forked_from_project)) return $currentProject->forked_from_project;
+        return array();
     }
 
     /**

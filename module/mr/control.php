@@ -18,7 +18,7 @@ class mr extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title    = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
-        $this->view->MRList   = $this->mr->getList(0, $orderBy, $pager);
+        $this->view->MRList   = $this->mr->getList($orderBy, $pager);
         $this->view->orderBy  = $orderBy;
         $this->view->objectID = $objectID;
         $this->view->pager    = $pager;
@@ -35,25 +35,36 @@ class mr extends control
     {
         if($_POST)
         {
-            $this->mr->create();
+            $rawMR = $this->mr->create();
+            if(isset($rawMR->message)) return $this->send(array('result' => 'fail', 'message' => $rawMR->message));
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title       = $this->lang->mr->create;
         $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
-
         $this->display();
     }
 
     /**
-     * update
+     * Update/Edit MR function.
      *
      * @access public
      * @return void
      */
-    public function update()
+    public function update($MRID)
     {
+        if($_POST)
+        {
+            $this->mr->update();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+
+        $this->view->MR    = $this->mr->getByID($MRID);
+        $this->view->title = $this->lang->mr->update;
+        $this->display();
     }
 
     /**
@@ -63,32 +74,49 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function delete($MR, $confim = 'no')
+    public function delete($id, $confim = 'no')
     {
-        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "productID=$projectID&gitlabID=$gitlabID&MR=$MR&confirm=yes")));
-        $this->mr->apiDeleteMR($MR);
+        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+
+        $MRList = $this->mr->getByID($id);
+
+        $this->mr->apiDeleteMR($MRList->gitlabID, $MRList->projectID, $MRList->mrID);
+        $this->mr->deleteMR($id);
         die(js::reload('parent'));
     }
 
     /**
-     * AJAX: Get forked projects.
+     * AJAX: Get MR target projects.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetForkedProjects($gitlabID, $projectID)
+    public function ajaxGetMRTragetProjects($gitlabID, $projectID)
     {
-        $projects = $this->mr->apiGetForks($gitlabID, $projectID);
+        $this->loadModel('gitlab');
+        /* First step: get forks. */
+        $projects = $this->gitlab->apiGetForks($gitlabID, $projectID);
+        /* Second step: get project itself. */
+        $projects[] = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        /* Last step: find its upstream recursively. */
+        $project = $this->gitlab->apiGetUpstream($gitlabID, $projectID);
+        if(!empty($project)) $projects[] = $project;
+
+        while(!empty($project) and isset($project->id))
+        {
+            $project = $this->gitlab->apiGetUpstream($gitlabID, $project->id);
+            if(empty($project)) break;
+            $projects[] = $project;
+        }
 
         if(!$projects) return $this->send(array('message' => array()));
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
 
         $options = "<option value=''></option>";
         foreach($projects as $project)
         {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
         }
 
