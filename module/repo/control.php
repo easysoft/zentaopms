@@ -87,9 +87,9 @@ class repo extends control
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($repoList);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $repoList   = array_chunk($repoList, $pager->recPerPage);
+        $recTotal = count($repoList);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $repoList = array_chunk($repoList, $pager->recPerPage);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->repo->common;
