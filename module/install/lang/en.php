@@ -63,8 +63,8 @@ $lang->install->introductionContent = <<<EOT
     </div>
   </div>
   <div class='text-center introduction-link'>
-    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'>Document of introduction</a>
-    <a href='https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4' target='_blank' class='btn btn-wide btn-info'>Video of introduction</a>
+    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Document</a>
+    <a href='https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Video</a>
   </div>
 </div>
 EOT;

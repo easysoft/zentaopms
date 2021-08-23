@@ -26,7 +26,8 @@
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
       <?php if(count($teams2Import) != 1):?>
       <span class='input-group-addon'><?php echo $lang->execution->copyTeam?></span>
-      <?php echo html::select('execution', $teams2Import, $team2Import, "class='form-control chosen' onchange='choseTeam2Copy(this)' data-placeholder='{$lang->execution->copyTeamTitle}'");?>
+      <?php $copyTitle = $config->systemMode == 'new' ? $lang->execution->copyTeamTitle : $lang->execution->copyTitle;?>
+      <?php echo html::select('execution', $teams2Import, $team2Import, "class='form-control chosen' onchange='choseTeam2Copy(this)' data-placeholder='{$copyTitle}'");?>
       <?php endif;?>
     </div>
   </div>
