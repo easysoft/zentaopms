@@ -27,13 +27,16 @@ class mrModel extends model
      * Get a MR by id.
      *
      * @param  int    $id
+     * @param  bool   $process
      * @access public
      * @return object
      */
-    public function getByID($id)
+    public function getByID($id, $process = true)
     {
         $MR =  $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
-        return $this->processMR($MR);
+
+        if($process) return $this->processMR($MR);
+        return $MR;
     }
 
     /**
@@ -59,7 +62,7 @@ class mrModel extends model
     }
 
     /**
-     * Process MR info by api.
+     * Process MR info by api. Append extra attributes in GitLab.
      *
      * @param  object    $MR
      * @access public
@@ -115,7 +118,7 @@ class mrModel extends model
      * Create MR function.
      *
      * @access public
-     * @return bool
+     * @return int|bool|object
      */
     public function create()
     {
@@ -166,9 +169,32 @@ class mrModel extends model
      * @access public
      * @return void
      */
-    public function update()
+    public function update($MRID)
     {
-    }
+        /* Get MR in zentao database and do not append extra attributes in GitLab. */
+        $MR = $this->getByID($MRID, $process = false);
+        $MR->title         = $this->post->title;
+        $MR->description  = $this->post->description;
+        $MR->assignee     = $this->post->assignee;
+        $MR->reviewer     = $this->post->reviewer;
+
+        /* Update MR in GitLab. */
+        $newMR = new stdclass;
+        $newMR->title        = $MR->title;
+        $newMR->description  = $MR->description;
+        $newMR->assignee     = $MR->assignee;
+        $newMR->reviewer     = $MR->reviewer;
+        $newMR->targetBranch = $this->post->targetBranch;
+        $this->apiUpdateMR($MR->gitlabID, $MR->projectID, $MR->mrID, $newMR);
+
+        /* Update MR in Zentao database. */
+        $this->dao->update(TABLE_MR)->data($MR)
+            ->batchCheck($this->config->MR->update->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+   }
 
     /**
      * Create MR by API.
@@ -224,11 +250,11 @@ class mrModel extends model
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
-     * @param  object $params
+     * @param  object $MR
      * @access public
      * @return object
      */
-    public function apiUpdateMR($gitlabID, $projectID, $MRID, $params)
+    public function apiUpdateMR($gitlabID, $projectID, $MRID, $MR)
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
         return json_decode(commonModel::http($url, $MR, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));

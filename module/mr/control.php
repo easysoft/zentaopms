@@ -57,13 +57,13 @@ class mr extends control
     {
         if($_POST)
         {
-            $this->mr->update();
+            $this->mr->update($MRID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->MR    = $this->mr->getByID($MRID);
-        $this->view->title = $this->lang->mr->update;
+        $this->view->title = $this->lang->mr->edit;
         $this->display();
     }
 
