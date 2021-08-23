@@ -33,8 +33,10 @@ class todosEntry extends entry
 
         $this->setPost('date', $this->request('date', date("Y-m-d")));
         $this->setPost('type', $this->request('date', 'custom'));
-        $this->setPost('pri', $this->request('pri', '3'));
         $this->setPost('status', $this->request('status', 'wait'));
+        $this->setPost('begin', str_replace(':', '', $this->request('begin')));
+        $this->setPost('end', str_replace(':', '', $this->request('end')));
+        $this->setPost('pri', $this->request('pri', '3'));
 
         $control = $this->loadController('todo', 'create');
         $this->requireFields('name');
