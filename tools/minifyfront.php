@@ -12,11 +12,11 @@ $jsRoot     = $baseDir . '/www/js/';
 $jqueryRoot = $jsRoot . 'jquery/';
 
 /* Set js files to combined. */
-$jsFiles[] = $jqueryRoot . 'lib.js'; 
+$jsFiles[] = $jqueryRoot . 'lib.js';
 $jsFiles[] = $jqueryRoot . 'tablesorter/min.js';
 $jsFiles[] = $jqueryRoot . 'tablesorter/metadata.js';
-$jsFiles[] = $jsRoot     . 'zui/min.js'; 
-$jsFiles[] = $jsRoot     . 'zui/picker/zui.picker.min.js'; 
+$jsFiles[] = $jsRoot     . 'zui/min.js';
+$jsFiles[] = $jsRoot     . 'zui/picker/zui.picker.min.js';
 $jsFiles[] = $jsRoot     . 'my.full.js';
 
 /* Combine these js files. */
@@ -39,6 +39,9 @@ $config->programLink   = '-';
 $config->productLink   = '-';
 $config->projectLink   = '-';
 $config->executionLink = '-';
+$config->systemMode    = '';
+$config->URAndSR       = '';
+$config->systemScore   = '';
 include $baseDir . '/config/config.php';
 
 $lang = new stdclass();
