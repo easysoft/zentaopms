@@ -3123,9 +3123,12 @@ class execution extends control
                 }
                 $planProducts[$story->id] = $story->product;
             }
+
+            $projectID   = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch('project');
             $planStories = array_keys($planStory);
+
             $this->execution->linkStory($executionID, $planStories, $planProducts);
-            if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $planStories, $planProducts);
+            if($this->config->systemMode == 'new' and $executionID != $projectID) $this->execution->linkStory($projectID, $planStories, $planProducts);
         }
 
         $moduleName = 'execution';
