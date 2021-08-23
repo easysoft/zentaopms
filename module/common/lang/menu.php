@@ -524,6 +524,7 @@ $lang->navGroup->devops  = 'devops';
 $lang->navGroup->repo    = 'devops';
 $lang->navGroup->job     = 'devops';
 $lang->navGroup->jenkins = 'devops';
+$lang->navGroup->mr      = 'devops';
 $lang->navGroup->gitlab  = 'devops';
 $lang->navGroup->compile = 'devops';
 $lang->navGroup->ci      = 'devops';
