@@ -226,7 +226,8 @@ $lang->doc->execution = isset($config->maxVersion) ? $lang->execution->common : 
 $lang->doc->custom    = 'Custom';
 $lang->doc->wiki      = 'WIKI';
 
-$lang->product->list = $lang->productCommon . ' List';
+$lang->product->list   = $lang->productCommon . ' List';
+$lang->product->kanban = $lang->productCommon . ' Kanban';
 
 $lang->project->report = 'Report';
 

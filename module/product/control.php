@@ -1142,6 +1142,17 @@ class product extends control
     }
 
     /**
+     * Product kanban.
+     *
+     * @access public
+     * @return void
+     */
+    public function kanban()
+    {
+        $this->display();
+    }
+
+    /**
      * Manage product line.
      *
      * @access public
