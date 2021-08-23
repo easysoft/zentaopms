@@ -22,6 +22,9 @@ $(function()
     }
 
     $('[data-toggle="popover"]').popover();
+
+    var acl = $("[name^='acl']:checked").val();
+    setWhite(acl);
 });
 
 /**
