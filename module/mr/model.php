@@ -32,8 +32,7 @@ class mrModel extends model
      */
     public function getByID($id)
     {
-        $MR = $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
-        return $MR;
+        return $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
     }
 
     /**
@@ -195,14 +194,14 @@ class mrModel extends model
      * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  object $params
+     * @param  object $MR
      * @access public
      * @return object
      */
-    public function apiCreateMR($gitlabID, $projectID, $params)
+    public function apiCreateMR($gitlabID, $projectID, $MR)
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests");
-        return json_decode(commonModel::http($url, $data=$params, $options = array()));
+        return json_decode(commonModel::http($url, $MR));
     }
 
     /**
@@ -295,7 +294,7 @@ class mrModel extends model
      */
     public function apiGetDiffVersions($MR)
     {
-        $url = sprintf($this->gitlab->getApiRoot($MR->gitlabID), "/projects/{$MR->targetProject}/merge_requests/$MR->mriid/versions");
+        $url = sprintf($this->gitlab->getApiRoot($MR->gitlabID), "/projects/{$MR->sourceProject}/merge_requests/$MR->mriid/versions");
         return json_decode(commonModel::http($url));
     }
 
@@ -303,17 +302,14 @@ class mrModel extends model
      * Get single diff version by API.
      *
      * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-a-single-mr-diff-version
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $MRID
-     * @param  int    $versionID
+     * @param  object    $MR
+     * @param  int       $versionID
      * @access public
      * @return object
      */
-    public function apiGetSingleDiffVersion($MRID, $versionID)
+    public function apiGetSingleDiffVersion($MR, $versionID)
     {
-        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
+        $url = sprintf($this->gitlab->getApiRoot($MR->gitlabID), "/projects/{$MR->sourceProject}/merge_requests/{$MR->mriid}/versions/$versionID");
         return json_decode(commonModel::http($url));
     }
 }
-
