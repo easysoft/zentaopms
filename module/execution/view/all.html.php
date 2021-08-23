@@ -31,7 +31,7 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
-    <?php if($from == 'execution'):?>
+    <?php if($from == 'execution' and $this->config->systemMode == 'new'):?>
     <div class='input-control w-150px'>
       <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' data-placeholder='{$lang->execution->selectProject}'");?>
     </div>
