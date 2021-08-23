@@ -161,7 +161,7 @@ class mrModel extends model
      * @access public
      * @return void
      */
-    public function edit($MRID)
+    public function update($MRID)
     {
         $MR = fixer::input('post')
             ->setDefault('editedBy', $this->app->user->account)
