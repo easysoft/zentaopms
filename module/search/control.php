@@ -202,9 +202,11 @@ class search extends control
         $type = (empty($type) or $type[0] == 'all') ? 'all' : $type;
 
         $this->app->loadClass('pager', $static = true);
-        $pager  = new pager($recTotal, $this->config->search->recPerPage, $pageID);
-        $begin  = time();
-        $result = $this->search->getList($words, $pager, $type);
+        $begin    = time();
+        $results  = $this->search->getList($words, $type);
+        $recTotal = count($results);
+        $pager    = new pager($recTotal, $this->config->search->recPerPage, $pageID);
+        $results  = array_chunk($results, $pager->recPerPage);
 
         /* Set session. */
         $uri  = inlink('index', "recTotal=$pager->recTotal&pageID=$pager->pageID");
@@ -237,7 +239,7 @@ class search extends control
 
         if(strpos($this->server->http_referer, 'search') === false) $this->session->set('referer', $this->server->http_referer);
 
-        $this->view->results    = $result;
+        $this->view->results    = empty($results) ? $results : $results[$pageID - 1];
         $this->view->consumed   = time() - $begin;
         $this->view->title      = $this->lang->search->index;
         $this->view->type       = $type;

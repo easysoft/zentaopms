@@ -499,12 +499,11 @@ class searchModel extends model
      * get search results of keywords.
      *
      * @param  string    $keywords
-     * @param  object    $pager
      * @param  string    $type
      * @access public
      * @return array
      */
-    public function getList($keywords, $pager, $type)
+    public function getList($keywords, $type)
     {
         $spliter = $this->app->loadClass('spliter');
         $words   = explode(' ', self::unify($keywords, ' '));
@@ -557,7 +556,6 @@ class searchModel extends model
             ->andWhere('objectType')->in($allowedObject)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy('score_desc, editedDate_desc')
-            ->page($pager)
             ->fetchAll('id');
 
         foreach($results as $record)
@@ -643,7 +641,7 @@ class searchModel extends model
             }
         }
 
-        return $this->checkPriv($results, $pager);
+        return $this->checkPriv($results);
     }
 
     /**
@@ -775,11 +773,10 @@ class searchModel extends model
      * Check product and project priv.
      *
      * @param  array    $results
-     * @param  object   $pager
      * @access public
      * @return array
      */
-    public function checkPriv($results, $pager = null)
+    public function checkPriv($results)
     {
         if($this->app->user->admin) return $results;
 
@@ -931,7 +928,6 @@ class searchModel extends model
                 }
             }
         }
-        if($total != count($results)) $pager->recTotal = $pager->recTotal - ($total - count($results));
         return $results;
     }
 
