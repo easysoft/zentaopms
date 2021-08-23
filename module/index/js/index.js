@@ -17,9 +17,9 @@
         {
             code:     'help',
             icon:     'icon-help',
-            url:      $helpLink.attr('href'),
+            url:      manualUrl || $helpLink.attr('href'),
             external: true,
-            text:     $helpLink.text(),
+            text:     manualText || $helpLink.text(),
             appUrl:  config.webRoot + '#app=help'
         };
         var $menuMainNav = $('#menuMainNav').empty();
@@ -400,7 +400,7 @@
         }
         catch(_)
         {
-            iframe.src = url || app.url;
+            iframe.src = url || app.url || iframe.src;
         }
     }
 

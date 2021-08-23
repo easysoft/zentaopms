@@ -14,10 +14,12 @@ include '../../common/view/header.lite.html.php';
 $this->app->loadConfig('sso');
 if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);
 
-js::set('navGroup', $lang->navGroup);
-js::set('appsLang', $lang->index->app);
+js::set('navGroup',      $lang->navGroup);
+js::set('appsLang',      $lang->index->app);
 js::set('appsMenuItems', commonModel::getMainNavList($app->rawModule));
-js::set('defaultOpen', $open);
+js::set('defaultOpen',   $open);
+js::set('manualText',    $lang->manual);
+js::set('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
 ?>
 <style>
 #versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
