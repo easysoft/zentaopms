@@ -11,7 +11,7 @@
  */
 /* 欄位列表。*/
 $lang->execution->allExecutions   = '所有' . $lang->executionCommon;
-$lang->execution->allExecutionAB  = "{$lang->execution->common}清單";
+$lang->execution->allExecutionAB  = "{$lang->execution->common}列表";
 $lang->execution->id              = $lang->executionCommon . '編號';
 $lang->execution->type            = $lang->executionCommon . '類型';
 $lang->execution->name            = $lang->executionCommon . '名稱';
@@ -99,7 +99,11 @@ $lang->execution->noLinkProduct   = "階段沒有關聯{$lang->productCommon}";
 $lang->execution->recent          = '近期訪問：';
 $lang->execution->copyNoExecution = '沒有可用的' . $lang->executionCommon . '來複制';
 $lang->execution->noTeam          = '暫時沒有團隊成員';
+$lang->execution->or              = '或';
 $lang->execution->selectProject   = '請選擇項目';
+
+if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以選擇複製項目或{$lang->execution->common}團隊的成員";
+if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以選擇複製{$lang->executionCommon}團隊的成員";
 
 $lang->execution->start    = "開始";
 $lang->execution->activate = "激活";
@@ -294,7 +298,7 @@ $lang->execution->copyTeam            = '複製團隊';
 $lang->execution->copyFromTeam        = "複製自{$lang->executionCommon}團隊： <strong>%s</strong>";
 $lang->execution->noMatched           = "找不到包含'%s'的$lang->executionCommon";
 $lang->execution->copyTitle           = "請選擇一個{$lang->executionCommon}來複制";
-$lang->execution->copyTeamTitle       = "選擇一個{$lang->executionCommon}團隊來複制";
+$lang->execution->copyTeamTitle       = "選擇一個{$lang->projectCommon}或{$lang->executionCommon}團隊來複制";
 $lang->execution->copyNoExecution     = "沒有可用的{$lang->executionCommon}來複制";
 $lang->execution->copyFromExecution   = "複製自{$lang->executionCommon} <strong>%s</strong>";
 $lang->execution->cancelCopy          = '取消複製';

@@ -240,6 +240,19 @@ $lang->install->zdoo->desc = <<<EOD
 </ul>
 EOD;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 $lang->install->ydisk = new stdclass();
 $lang->install->ydisk->name = 'YDisk';
 $lang->install->ydisk->logo = 'images/main/ydisk.ico';

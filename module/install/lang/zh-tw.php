@@ -40,6 +40,35 @@ $lang->install->links = <<<EOT
 您現在正在安裝的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
+global $config;
+$lang->install->introduction        = "禪道{$this->config->version}版本功能介紹";
+$lang->install->howToUse            = "請問您計劃如何使用禪道的新版本呢";
+$lang->install->introductionContent = <<<EOT
+<div>
+  <h4>尊敬的用戶您好，歡迎您使用禪道%s。</h4>
+  <p>禪道%s提供了兩種使用模式， 一種是精典管理模式，功能較為精簡，提供了產品和項目兩個核心功能；另一種是全新項目集管理模式，具備所有核心功能。如下是相關功能介紹，您可以根據需要選擇使用的模式。</p>
+  <div class='block-content'>
+    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>項目集</strong></p><p>項目集是一組相互關聯，且被協調管理的項目集合，可以進行多層級管理，屬於戰略層面的管理。</p></div>
+    <div class='block-details block-right'>
+      <p class='block-title'><i class='icon icon-product'></i><strong>產品</strong></p>
+      <p>產品是定義做什麼，主要是管理需求，通過產品可以管理用戶需求、研發需求、計劃以及發佈。<p>
+    </div>
+    <div class='block-details'>
+      <p class='block-title'><i class='icon icon-project'></i><strong>項目</strong></p>
+      <p>項目是定義如何做，主要是在規定的時間、預算和質量目標範圍內完成項目的各種工作，屬於戰役層面的管理。</p>
+    </div>
+    <div class='block-details block-right'>
+      <p class='block-title'><i class='icon icon-product'></i><strong>執行</strong></p>
+      <p>我們把一個項目下的多個迭代/衝刺或階段統稱為執行，通過執行去完成項目的任務，屬於戰鬥層面的管理。<p>
+    </div>
+  </div>
+  <div class='text-center introduction-link'>
+    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'>文檔介紹</a>
+    <a href='https://dl.cnezsoft.com/vedio/program0716.mp4' target='_blank' class='btn btn-wide btn-info'>視頻介紹</a>
+  </div>
+</div>
+EOT;
+
 $lang->install->newReleased = "<strong class='text-danger'>提示</strong>：官網網站已有最新版本<strong class='text-danger'>%s</strong>, 發佈日期于 %s。";
 $lang->install->or          = '或者';
 $lang->install->checking    = '系統檢查';
@@ -179,6 +208,9 @@ $lang->install->joinZentao = <<<EOT
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
+
+$lang->install->modeList['classic'] = '經典管理模式';
+$lang->install->modeList['new']     = '全新項目集管理模式';
 
 $lang->install->promotion = "為您推薦易軟天創旗下其他產品：";
 

@@ -53,7 +53,7 @@ $lang->project->testreport        = '測試報告';
 $lang->project->selectProgram     = '項目集篩選';
 $lang->project->teamMember        = '團隊成員';
 $lang->project->unlinkMember      = '移除成員';
-$lang->project->copyTeamTitle     = '選擇一個項目團隊來複製';
+$lang->project->copyTeamTitle     = '選擇一個項目團隊來複制';
 
 /* Fields. */
 $lang->project->common             = '項目';
@@ -79,7 +79,7 @@ $lang->project->closedDate         = '關閉日期';
 $lang->project->canceledBy         = '由誰取消';
 $lang->project->canceledDate       = '取消日期';
 $lang->project->team               = '團隊';
-$lang->project->teamAction         = '團隊清單';
+$lang->project->teamAction         = '團隊列表';
 $lang->project->order              = '排序';
 $lang->project->budget             = '預算';
 $lang->project->budgetUnit         = '預算單位';
@@ -129,6 +129,7 @@ $lang->project->longTime           = '長期';
 $lang->project->future             = '待定';
 $lang->project->moreProject        = '更多項目';
 $lang->project->days               = '可用工作日';
+$lang->project->etc                = "等";
 
 $lang->project->productNotEmpty        = '請關聯產品或創建產品。';
 $lang->project->existProductName       = '產品名稱已存在。';
@@ -138,6 +139,8 @@ $lang->project->linkedProjectsTip      = '關聯的項目如下';
 $lang->project->multiLinkedProductsTip = '該項目關聯的如下產品還關聯了其他項目，請取消關聯後再操作';
 $lang->project->linkStoryByPlanTips    = "此操作會將所選計划下面的{$lang->SRCommon}全部關聯到此項目中";
 $lang->project->createExecution        = "該項目下沒有{$lang->executionCommon}，請先創建{$lang->executionCommon}";
+$lang->project->unlinkExecutionMember  = "該用戶參與了%s%s%s個{$lang->execution->common}，是否同時將其移除？（該用戶所產生的數據不會受影響。）";
+$lang->project->unlinkExecutionMembers = "移除的團隊成員還參與了項目下的執行，是否同步從執行團隊中移除？";
 
 $lang->project->tenThousand = '萬';
 

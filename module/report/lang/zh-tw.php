@@ -48,7 +48,7 @@ $lang->report->beginAndEnd      = '起止時間';
 $lang->report->begin            = '起始日期';
 $lang->report->end              = '結束日期';
 $lang->report->dept             = '部門';
-$lang->report->deviationChart   = '項目偏差曲綫';
+$lang->report->deviationChart   = "{$lang->execution->common}偏差曲綫";
 
 $lang->reportList = new stdclass();
 $lang->reportList->project = new stdclass();
@@ -63,7 +63,7 @@ $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '員工負載表|report|workload';
 
 $lang->report->id            = '編號';
-$lang->report->execution     = '執行';
+$lang->report->execution     = $lang->execution->common;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = '姓名';
 $lang->report->bugTotal      = 'Bug';

@@ -109,9 +109,9 @@ $lang->my->projectLinkList['project-index']     = '預設進入最近一個項�
 $lang->my->executionLinkList = array();
 if($config->systemMode == 'new')
 {
-    $lang->my->executionLinkList['execution-all']             = '默認進入執行清單，可以查看所有的執行';
+    $lang->my->executionLinkList['execution-all']             = '預設進入執行列表，可以查看所有的執行';
     $lang->my->executionLinkList['execution-task']            = '預設進入最近一個執行的任務列表，可以查看當前迭代下的任務信息';
-    $lang->my->executionLinkList['execution-executionkanban'] = '默認進入執行看板，可以查看進行中項目的執行情况';
+    $lang->my->executionLinkList['execution-executionkanban'] = '預設進入執行看板，可以查看進行中項目的執行情況';
 }
 if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "預設進入最近一個{$lang->executionCommon}的任務列表，可以查看當前{$lang->executionCommon}下的任務信息";
 

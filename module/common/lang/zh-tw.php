@@ -26,6 +26,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = '禪道';
+$lang->pmsName        = '開源版';
 $lang->proName        = '專業版';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s項目管理系統";
@@ -156,6 +157,7 @@ $lang->company->common    = '公司';
 $lang->dept->common       = '部門';
 $lang->upgrade->common    = '升級';
 $lang->program->list      = '項目集列表';
+$lang->program->kanban    = '項目集看板';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 
 $lang->personnel->common     = '人員';

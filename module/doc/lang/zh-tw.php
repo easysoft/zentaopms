@@ -17,6 +17,7 @@ $lang->doc->project      = '所屬項目';
 $lang->doc->execution    = '所屬' . $lang->executionCommon;
 $lang->doc->lib          = '所屬文檔庫';
 $lang->doc->module       = '所屬目錄';
+$lang->doc->object       = '所屬對象';
 $lang->doc->title        = '文檔標題';
 $lang->doc->digest       = '文檔摘要';
 $lang->doc->comment      = '文檔備註';
@@ -193,6 +194,7 @@ $lang->doc->noEditedDoc          = '您還沒有編輯任何文檔。';
 $lang->doc->noOpenedDoc          = '您還沒有創建任何文檔。';
 $lang->doc->noCollectedDoc       = '您還沒有收藏任何文檔。';
 $lang->doc->errorEmptyLib        = '文檔庫暫無數據。';
+$lang->doc->confirmUpdateContent = '檢查到您有未保存的文檔內容，是否繼續編輯？';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = '有所選產品訪問權限的用戶可以訪問。';
 $lang->doc->noticeAcl['lib']['product']['custom']    = '有所選產品訪問權限或白名單裡的用戶可以訪問。';

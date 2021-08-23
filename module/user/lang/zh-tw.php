@@ -238,7 +238,7 @@ $lang->user->contacts->or            = ' 或者 ';
 $lang->user->resetFail        = "重置密碼失敗，檢查用戶名是否存在！";
 $lang->user->resetSuccess     = "重置密碼成功，請用新密碼登錄。";
 $lang->user->noticeDelete     = "你確認要把“%s”從系統中刪除嗎？";
-$lang->user->noticeHasDeleted = "該人員已經刪除，如需查看，請到回收站還原後再查看。";
+$lang->user->noticeHasDeleted = "該人員已經刪除，如需查看，請到資源回收筒還原後再查看。";
 $lang->user->noticeResetFile  = "<h5>普通用戶請聯繫管理員重置密碼</h5>
     <h5>管理員請登錄禪道所在的伺服器，創建<span> '%s' </span>檔案。</h5>
     <p>注意：</p>

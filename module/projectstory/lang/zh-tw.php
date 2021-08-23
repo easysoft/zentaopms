@@ -1,4 +1,5 @@
 <?php
+/* Field. */
 $lang->projectstory->common            = "項目{$lang->SRCommon}";
 $lang->projectstory->index             = "{$lang->SRCommon}主頁";
 $lang->projectstory->view              = "{$lang->SRCommon}詳情";
@@ -6,10 +7,14 @@ $lang->projectstory->story             = "{$lang->SRCommon}列表";
 $lang->projectstory->track             = '矩陣';
 $lang->projectstory->linkStory         = '關聯' . $lang->SRCommon;
 $lang->projectstory->unlinkStory       = '移除' . $lang->SRCommon;
+$lang->projectstory->batchUnlinkStory  = '批量移除' . $lang->SRCommon;
 $lang->projectstory->importplanstories = '按計劃關聯' . $lang->SRCommon;
-$lang->projectstory->whyNoStories      = "看起來沒有{$lang->SRCommon}可以關聯。請檢查下項目關聯的{$lang->productCommon}中有沒有{$lang->SRCommon}，而且要確保它們已經審核通過。";
+$lang->projectstory->trackAction       = '跟蹤矩陣';
+$lang->projectstory->confirm           = '確定';
 
-$lang->projectstory->trackAction = '跟蹤矩陣';
+/* Notice. */
+$lang->projectstory->whyNoStories   = "看起來沒有{$lang->SRCommon}可以關聯。請檢查下項目關聯的{$lang->productCommon}中有沒有{$lang->SRCommon}，而且要確保它們已經審核通過。";
+$lang->projectstory->batchUnlinkTip = '其他需求已經移除，如下需求已與該項目下執行相關聯，請從執行中移除後再操作。';
 
 global $app;
 $app->loadLang('product');
