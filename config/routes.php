@@ -26,6 +26,7 @@ $routes['/executions']                   = 'executions';
 $routes['/executions/:id']               = 'execution';
 
 $routes['/executions/:execution/tasks'] = 'tasks';
+$routes['/tasks']                       = 'tasks';
 $routes['/tasks/:id']                   = 'task';
 $routes['/tasks/:id/assignto']          = 'taskAssignTo';
 $routes['/tasks/:id/start']             = 'taskStart';

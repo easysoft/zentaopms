@@ -32,3 +32,5 @@ div.divider {vertical-align: middle;}
 #lineList .checkbox-primary {display: inline-block;}
 .main-row .side-col .check-allLine > label {font-weight: 700}
 .sprintGroup {margin-left: 6px;}
+.programParams td > label:first-child {margin-right: 10px;}
+.programParams td > label:last-child {margin-left: 0px;}
