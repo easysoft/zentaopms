@@ -37,7 +37,7 @@ $lang->report->assign['assign']   = '已指派';
 
 $lang->report->singleColor[] = 'F6BD0F';
 
-$lang->report->projectDeviation = '项目偏差报表';
+$lang->report->projectDeviation = "{$lang->execution->common}偏差报表";
 $lang->report->productSummary   = $lang->productCommon . '汇总表';
 $lang->report->bugCreate        = 'Bug创建表';
 $lang->report->bugAssign        = 'Bug指派表';
@@ -48,7 +48,7 @@ $lang->report->beginAndEnd      = '起止时间';
 $lang->report->begin            = '起始日期';
 $lang->report->end              = '结束日期';
 $lang->report->dept             = '部门';
-$lang->report->deviationChart   = '项目偏差曲线';
+$lang->report->deviationChart   = "{$lang->execution->common}偏差曲线";
 
 $lang->reportList = new stdclass();
 $lang->reportList->project = new stdclass();
@@ -56,7 +56,7 @@ $lang->reportList->product = new stdclass();
 $lang->reportList->test    = new stdclass();
 $lang->reportList->staff   = new stdclass();
 
-$lang->reportList->project->lists[10] = '项目偏差报表|report|projectdeviation';
+$lang->reportList->project->lists[10] = "{$lang->execution->common}偏差报表|report|projectdeviation";
 $lang->reportList->product->lists[10] = $lang->productCommon . '汇总表|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug创建表|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';

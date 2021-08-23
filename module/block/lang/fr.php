@@ -93,6 +93,8 @@ $lang->block->refresh            = 'Rafraichir';
 $lang->block->nbsp               = ' ';
 $lang->block->hidden             = 'Masquer';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
+$lang->block->cannotPlaceInLeft  = 'Impossible de placer le bloc à gauche.';
+$lang->block->cannotPlaceInRight = 'Impossible de placer le bloc à droite.';
 
 $lang->block->productName  = $lang->productCommon . ' Name';
 $lang->block->totalStory   = 'The Total ' . $lang->SRCommon;

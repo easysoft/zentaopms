@@ -21,6 +21,7 @@ $config->block->moduleIndex['project'] = 'execution';
 $config->block->longBlock = array();
 $config->block->longBlock['']['flowchart']              = 'flowchart';
 $config->block->longBlock['']['welcome']                = 'welcome';
+$config->block->longBlock['']['assigntome']             = 'assigntome';
 $config->block->longBlock['product']['statistic']       = 'statistic';
 $config->block->longBlock['execution']['statistic']     = 'statistic';
 $config->block->longBlock['qa']['statistic']            = 'statistic';

@@ -69,7 +69,10 @@
             <?php $i = 1;?>
             <?php foreach($track as $storyID => $story):?>
             <?php if($i != 1) echo '<tr>';?>
-              <td style='padding-left: 10px;'><?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-app='$openApp'");?></td>
+              <td style='padding-left: 10px;'>
+                <?php if(isset($story->parent) and $story->parent > 0):?><span class="label label-badge label-light" title="<?php echo $this->lang->story->children;?>"><?php echo $this->lang->story->childrenAB;?></span><?php endif;?>
+                <?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-app='$openApp'");?>
+              </td>
               <td>
                 <?php foreach($story->tasks as $taskID => $task):?>
                 <?php echo html::a($this->createLink('task', 'view', "taskID=$taskID"), $task->name, '', "title='$task->name'") . '<br/>';?>

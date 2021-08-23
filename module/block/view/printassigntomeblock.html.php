@@ -46,4 +46,5 @@ function changeLabel(type)
   $('.label-assignto').addClass('hidden');
   $('.' + type + '-count').removeClass('hidden');
 }
+$('#assigntomeBlock').closest('.panel').attr('data-fixed', 'main');
 </script>
