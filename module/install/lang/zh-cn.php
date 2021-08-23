@@ -46,7 +46,7 @@ $lang->install->howToUse            = "请问您计划如何使用禅道的新�
 $lang->install->introductionContent = <<<EOT
 <div>
   <h4>尊敬的用户您好，欢迎您使用禅道%s。</h4>
-  <p>禅道%s提供了两种使用模式， 一种是精典管理模式，功能较为精简，提供了产品和项目两个核心功能；另一种是全新项目集管理模式，具备所有核心功能。如下是相关功能介绍，您可以根据需要选择使用的模式。</p>
+  <p>禅道%s提供了两种使用模式， 一种是经典管理模式，功能较为精简，提供了产品和项目两个核心功能；另一种是全新项目集管理模式，具备所有核心功能。如下是相关功能介绍，您可以根据需要选择使用的模式。</p>
   <div class='block-content'>
     <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>项目集</strong></p><p>项目集是一组相互关联，且被协调管理的项目集合，可以进行多层级管理，属于战略层面的管理。</p></div>
     <div class='block-details block-right'>
@@ -63,8 +63,8 @@ $lang->install->introductionContent = <<<EOT
     </div>
   </div>
   <div class='text-center introduction-link'>
-    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'>文档介绍</a>
-    <a href='https://dl.cnezsoft.com/vedio/program0716.mp4' target='_blank' class='btn btn-wide btn-info'>视频介绍</a>
+    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> 文档介绍</a>
+    <a href='https://dl.cnezsoft.com/vedio/program0716.mp4' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> 视频介绍</a>
   </div>
 </div>
 EOT;
