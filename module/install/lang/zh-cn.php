@@ -183,7 +183,7 @@ $lang->install->groupList['TOP']['desc']          = '高层管理';
 $lang->install->groupList['OTHERS']['name']       = '其他';
 $lang->install->groupList['OTHERS']['desc']       = '其他';
 $lang->install->groupList['LIMITED']['name']      = '受限用户';
-$lang->install->groupList['LIMITED']['desc']      = '用户只能编辑与自己相关的内容。';
+$lang->install->groupList['LIMITED']['desc']      = '受限用户分组(只能编辑与自己相关的内容)';
 $lang->install->groupList['PROJECTADMIN']['name'] = '项目管理员';
 $lang->install->groupList['PROJECTADMIN']['desc'] = '项目管理员可以维护项目的权限';
 
