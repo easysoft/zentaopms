@@ -1,7 +1,7 @@
 <?php
-$lang->personnel->common     = '項目集人員';
+$lang->personnel->common     = '可訪問人員';
 $lang->personnel->accessible = '可訪問人員列表';
-$lang->personnel->invest    = '投入人員列表';
+$lang->personnel->invest     = '投入人員列表';
 $lang->personnel->department = '部門';
 $lang->personnel->realName   = '真實姓名';
 $lang->personnel->userName   = '用戶名';
