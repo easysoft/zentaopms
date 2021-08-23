@@ -157,6 +157,7 @@ $lang->company->common    = 'Company';
 $lang->dept->common       = 'Dept';
 $lang->upgrade->common    = 'Update';
 $lang->program->list      = 'Program List';
+$lang->program->kanban    = 'Program Kanban';
 $lang->execution->list    = "{$lang->executionCommon} List";
 
 $lang->personnel->common     = 'Member';
