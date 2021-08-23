@@ -34,7 +34,11 @@ $lang->group->dynamic            = 'Truy cập Dynamics';
 $lang->group->noticeVisit        = 'Blank means no access limit.';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "Không có {$lang->productCommon}";
-$lang->group->noneProject        = "Không có {$lang->executionCommon}";
+$lang->group->noneProject        = "No Project";
+
+global $config;
+if($config->systemMode == 'new') $lang->group->noneProject = 'No Project';
+if($config->systemMode == 'classic') $lang->group->noneProject = "No {$lang->executionCommon}";
 
 $lang->group->id      = 'ID';
 $lang->group->name    = 'Nhóm';
