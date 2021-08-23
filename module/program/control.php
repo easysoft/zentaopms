@@ -174,7 +174,10 @@ class program extends control
         $program       = $this->program->getByID($programID);
         $parentProgram = $program->parent ? $this->program->getByID($program->parent) : '';
         $parents       = $this->program->getParentPairs();
-        unset($parents[$programID]);
+
+        /* Remove children program from parents. */
+        $children = $this->dao->select('*')->from(TABLE_PROGRAM)->where('path')->like("%,$programID,%")->fetchPairs('id', 'id');
+        foreach($children as $childID) unset($parents[$childID]);
 
         $this->view->title      = $this->lang->program->edit;
         $this->view->position[] = $this->lang->program->edit;
