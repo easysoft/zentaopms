@@ -54,7 +54,7 @@ class mr extends control
     {
         if($_POST)
         {
-            $result = $this->mr->edit($MRID);
+            $result = $this->mr->update($MRID);
             return $result;
         }
 
