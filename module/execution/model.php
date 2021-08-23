@@ -379,7 +379,7 @@ class executionModel extends model
 
             /* Set team of execution. */
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
-            $roles   = $this->loadModel('user')->getUserRoles(array_keys($members));
+            $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
             foreach($members as $account)
             {
                 if(empty($account)) continue;
