@@ -51,11 +51,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->mr->assignee;?></th>
-            <td><?php echo html::select('assignee', array(''), $MR->assignee, "class='form-control chosen'")?></td>
+            <td><?php echo html::select('assignee', $users, $MR->assignee, "class='form-control chosen'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->mr->reviewer;?></th>
-            <td><?php echo html::select('reviewer', array(''), $MR->reviewer, "class='form-control chosen'")?></td>
+            <td><?php echo html::select('reviewer', $users, $MR->reviewer, "class='form-control chosen'")?></td>
           </tr>
           <tr>
             <th></th>

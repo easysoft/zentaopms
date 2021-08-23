@@ -164,12 +164,12 @@ class mrModel extends model
     }
 
     /**
-     * Update MR function.
+     * Edit MR function.
      *
      * @access public
      * @return void
      */
-    public function update($MRID)
+    public function edit($MRID)
     {
         /* Get MR in zentao database and do not append extra attributes in GitLab. */
         $MR = $this->getByID($MRID, $process = false);
@@ -189,11 +189,10 @@ class mrModel extends model
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR)
-            ->batchCheck($this->config->MR->update->requiredFields, 'notempty')
+            ->batchCheck($this->config->MR->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
-
    }
 
     /**
