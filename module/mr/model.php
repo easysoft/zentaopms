@@ -83,22 +83,6 @@ class mrModel extends model
     }
 
     /**
-     * Delete one MR.
-     *
-     * condition: when user deleting a repo.
-     *
-     * @param  int    $id
-     * @access public
-     * @return void
-     */
-    public function deleteMR($id)
-    {
-        $this->dao->delete()->from(TABLE_MR)
-            ->andWhere('id')->eq($id)
-            ->exec();
-    }
-
-    /**
      * Get gitlab pairs.
      *
      * @access public
@@ -295,15 +279,13 @@ class mrModel extends model
      * Get MR diff versions by API.
      *
      * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-mr-diff-versions
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $MRID
+     * @param  object    $MR
      * @access public
      * @return object
      */
-    public function apiGetDiffVersions($gitlabID, $projectID, $MRID)
+    public function apiGetDiffVersions($MR)
     {
-        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
+        $url = sprintf($this->gitlab->getApiRoot($MR->gitlabID), "/projects/{$MR->targetProject}/merge_requests/$MR->mriid/versions");
         return json_decode(commonModel::http($url));
     }
 
@@ -318,7 +300,7 @@ class mrModel extends model
      * @access public
      * @return object
      */
-    public function apiGetSingleDiffVersion($gitlabID, $projectID, $MRID, $versionID)
+    public function apiGetSingleDiffVersion($MRID, $versionID)
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
         return json_decode(commonModel::http($url));
