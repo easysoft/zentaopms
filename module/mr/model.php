@@ -35,7 +35,7 @@ class mrModel extends model
     {
         $MR =  $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
 
-        if($process) return $this->processMR($MR);
+        if($MR and $process) return $this->processMR($MR);
         return $MR;
     }
 
@@ -70,6 +70,8 @@ class mrModel extends model
      */
     public function processMR($MR)
     {
+        if(!isset($MR->gitlabID)) return $MR;
+
         $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
 
         $MR->name          = $rawMR->title;
