@@ -34,7 +34,10 @@ $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Leer bedeutet Zugriff verweigert.';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
-$lang->group->noneProject        = "No {$lang->executionCommon}";
+
+global $config;
+if($config->systemMode == 'new') $lang->group->noneProject = 'No Project';
+if($config->systemMode == 'classic') $lang->group->noneProject = "No {$lang->executionCommon}";
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Name';

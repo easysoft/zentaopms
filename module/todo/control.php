@@ -149,6 +149,8 @@ class todo extends control
                 $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::locate($this->session->todoList, 'parent.parent'));
         }
 
@@ -434,7 +436,9 @@ class todo extends control
                 }
                 return $this->send($response);
             }
-            if(isonlybody())die(js::reload('parent.parent'));
+
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+            if(isonlybody()) die(js::reload('parent.parent'));
 
             $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
             die(js::locate($browseLink, 'parent'));

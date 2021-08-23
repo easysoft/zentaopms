@@ -82,7 +82,7 @@
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
           <?php else:?>
-          <?php echo $lang->group->noneProgram;?>
+          <?php echo $lang->group->noneProject;?>
           <?php endif;?>
         </td>
       </tr>
