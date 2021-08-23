@@ -29,8 +29,15 @@ class gitlab extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $gitlabList = $this->gitlab->getList($orderBy, $pager);
+        foreach($gitlabList as $gitlab)
+        {
+            $token = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+            $gitlab->isAdminToken = (isset($token->is_admin) and $token->is_admin);
+        }
+
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
-        $this->view->gitlabList = $this->gitlab->getList($orderBy, $pager);
+        $this->view->gitlabList = $gitlabList;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
 
@@ -94,6 +101,10 @@ class gitlab extends control
     {
         $userPairs = $this->loadModel('user')->getPairs();
 
+        $gitlab = $this->gitlab->getByID($gitlabID);
+        $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+        if(!isset($user->is_admin) or !$user->is_admin) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+
         if($_POST)
         {
             $users       = $this->post->zentaoUsers;
@@ -133,7 +144,6 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 
-        $gitlab      = $this->gitlab->getByID($gitlabID);
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
 
         $this->view->title         = $this->lang->gitlab->bindUser;
