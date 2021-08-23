@@ -54,9 +54,8 @@ class mr extends control
     {
         if($_POST)
         {
-            $this->mr->edit($MRID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $result = $this->mr->edit($MRID);
+            return $result;
         }
 
         $MR = $this->mr->getByID($MRID);

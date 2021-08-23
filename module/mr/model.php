@@ -179,12 +179,10 @@ class mrModel extends model
      */
     public function edit($MRID)
     {
-        /* Get MR in zentao database and do not append extra attributes in GitLab. */
-        $MR = $this->getByID($MRID, $process = false);
-        $MR->title         = $this->post->title;
-        $MR->description  = $this->post->description;
-        $MR->assignee     = $this->post->assignee;
-        $MR->reviewer     = $this->post->reviewer;
+        $MR = fixer::input('post')
+            ->setDefault('editedBy', $this->app->user->account)
+            ->setDefault('editedDate', helper::now())
+            ->get();
 
         /* Update MR in GitLab. */
         $newMR = new stdclass;
@@ -192,15 +190,19 @@ class mrModel extends model
         $newMR->description  = $MR->description;
         $newMR->assignee     = $MR->assignee;
         $newMR->reviewer     = $MR->reviewer;
-        $newMR->targetBranch = $this->post->targetBranch;
-        $this->apiUpdateMR($MR->gitlabID, $MR->projectID, $MR->mrID, $newMR);
+        $newMR->targetBranch = $MR->targetBranch;
+
+        $oldMR = $this->getByID($MRID);
+        $this->apiUpdateMR($oldMR->gitlabID, $oldMR->sourceProject, $oldMR->mriid, $newMR);
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR)
-            ->batchCheck($this->config->MR->edit->requiredFields, 'notempty')
+            ->where('id')->eq($MRID)
             ->autoCheck()
             ->exec();
-        if(dao::isError()) return false;
+
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
    }
 
     /**
