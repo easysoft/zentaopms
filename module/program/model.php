@@ -463,7 +463,15 @@ class programModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
-            if($oldProgram->parent != $program->parent) $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
+            if($oldProgram->parent != $program->parent)
+            {
+                $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
+
+                /* Move product to new top program. */
+                $oldTopProgram = $this->getTopByPath($oldProgram->path);
+                $newTopProgram = $this->getTopByID($programID);
+                if($oldTopProgram != $newTopProgram) $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
+            }
 
             return common::createChanges($oldProgram, $program);
         }
@@ -603,8 +611,20 @@ class programModel extends model
         $program = $this->getByID($programID);
         if(empty($program)) return 0;
 
-        $path = explode(',', trim($program->path, ','));
-        return $path[0];
+        return $this->getTopByPath($program->path);
+    }
+
+    /**
+     * get top program by path.
+     *
+     * @param  string  $path
+     * @access public
+     * @return string
+     */
+    public function getTopByPath($path)
+    {
+        $paths = explode(',', trim($path, ','));
+        return $paths[0];
     }
 
     /**
