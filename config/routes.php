@@ -6,6 +6,9 @@ $routes = array();
 
 $routes['/tokens'] = 'tokens';
 
+$routes['/configurations']       = 'configs';
+$routes['/configurations/:name'] = 'config';
+
 $routes['/products']         = 'products';
 $routes['/products/:id']     = 'product';
 $routes['/productlines']     = 'productLines';
