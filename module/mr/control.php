@@ -48,22 +48,25 @@ class mr extends control
     }
 
     /**
-     * Update/Edit MR function.
+     * Edit MR function.
      *
      * @access public
      * @return void
      */
-    public function update($MRID)
+    public function edit($MRID)
     {
         if($_POST)
         {
-            $this->mr->update();
+            $this->mr->edit($MRID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->MR    = $this->mr->getByID($MRID);
-        $this->view->title = $this->lang->mr->update;
+        $MR = $this->mr->getByID($MRID);
+        $this->view->MR    = $MR;
+        $this->view->title = $this->lang->mr->edit;
+        $this->view->users = array("" => "") + $this->loadModel('gitlab')->getUserIdRealnamePairs($MR->gitlabID); /* Get user list for assignee and reviewer. */
+
         $this->display();
     }
 
