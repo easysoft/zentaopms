@@ -35,11 +35,8 @@ class mr extends control
     {
         if($_POST)
         {
-            $rawMR = $this->mr->create();
-            if(isset($rawMR->message)) return $this->send(array('result' => 'fail', 'message' => $rawMR->message));
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $result = $this->mr->create();
+            return $this->send($result);
         }
 
         $this->view->title       = $this->lang->mr->create;
