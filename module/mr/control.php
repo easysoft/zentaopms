@@ -89,6 +89,24 @@ class mr extends control
     }
 
     /**
+     * View a MR.
+     *
+     * @access public
+     * @return void
+     */
+    public function view($id)
+    {
+        $MR = $this->mr->getByID($id);
+        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
+
+        $this->view->title = $this->lang->mr->view;
+        $this->view->MR    = $MR;
+        $this->view->rawMR = isset($rawMR) ? $rawMR : false;
+
+        $this->display();
+    }
+
+    /**
      * AJAX: Get MR target projects.
      *
      * @param  int    $gitlabID
