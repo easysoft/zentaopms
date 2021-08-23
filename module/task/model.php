@@ -1650,6 +1650,12 @@ class taskModel extends model
             return false;
         }
 
+        if($this->post->realStarted > $this->post->finishedDate)
+        {
+            dao::$errors[] = $this->lang->task->error->finishedDateSmall;
+            return false;
+        }
+
         /* Record consumed and left. */
         if(empty($oldTask->team))
         {
