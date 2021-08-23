@@ -122,3 +122,5 @@ $lang->my->guideChangeTheme = <<<EOT
   <p>Click <span style='color: #0c60e1'>Avatar-Theme-Young Blue</span>. It is done!</p>
 </div>
 EOT;
+
+$lang->my->confirmCloseTutorial = 'Do you want to close the tutorial? You can check it by hovering your avatar once you close it.';

@@ -122,3 +122,5 @@ $lang->my->guideChangeTheme = <<<EOT
   <p>滑鼠經過<span style='color: #0c60e1'>【頭像-主題-青春藍】</span>，點擊青春藍，設置成功！</p>
 </div>
 EOT;
+
+$lang->my->confirmCloseTutorial = '您確認要關閉該區塊的新手引導功能嗎？關閉後您還可以在個人中心中點擊查看。';

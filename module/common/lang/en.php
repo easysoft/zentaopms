@@ -38,6 +38,7 @@ $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';
 $lang->unfoldMenu     = 'Unfold';
 $lang->collapseMenu   = 'Collapse';
+$lang->tutorialAB     = 'Tutorial';
 $lang->preference     = 'Preference';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
 $lang->agreement      = "I have read and agreed to the terms and conditions of <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";

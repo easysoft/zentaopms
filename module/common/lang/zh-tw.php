@@ -38,6 +38,7 @@ $lang->profile        = '個人檔案';
 $lang->changePassword = '修改密碼';
 $lang->unfoldMenu     = '展開導航';
 $lang->collapseMenu   = '收起導航';
+$lang->tutorialAB     = '新手引導';
 $lang->preference     = '個性化設置';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
 $lang->agreement      = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.2》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
@@ -225,7 +226,8 @@ $lang->doc->execution = isset($config->maxVersion) ? "{$lang->execution->common}
 $lang->doc->custom    = '自定義庫';
 $lang->doc->wiki      = 'WIKI';
 
-$lang->product->list = $lang->productCommon . '列表';
+$lang->product->list   = $lang->productCommon . '列表';
+$lang->product->kanban = $lang->productCommon . '看板';
 
 $lang->project->report = '報告';
 

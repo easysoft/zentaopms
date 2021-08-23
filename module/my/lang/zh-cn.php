@@ -122,3 +122,5 @@ $lang->my->guideChangeTheme = <<<EOT
   <p>鼠标经过<span style='color: #0c60e1'>【头像-主题-青春蓝】</span>，点击青春蓝，设置成功！</p>
 </div>
 EOT;
+
+$lang->my->confirmCloseTutorial = '您确认要关闭该区块的新手引导功能吗？关闭后您还可以在个人中心中点击查看。';
