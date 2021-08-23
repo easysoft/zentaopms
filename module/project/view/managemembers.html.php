@@ -13,7 +13,7 @@
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
-      <?php if(!empty(array_filter($teams2Import))):?>
+      <?php if(count($teams2Import) > 1):?>
       <span class='input-group-addon'><?php echo $lang->execution->copyTeam;?></span>
       <?php echo html::select('project', $teams2Import, $copyProjectID, "class='form-control chosen' onchange='choseTeam2Copy(this)' data-placeholder='{$lang->project->copyTeamTitle}'");?>
       <?php endif;?>
