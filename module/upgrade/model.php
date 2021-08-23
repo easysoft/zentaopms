@@ -4285,6 +4285,9 @@ class upgradeModel extends model
         {
             if(!$this->post->longTime and !$this->post->end and isset($data->begin)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
 
+            if(isset($data->projectName) and $data->projectType == 'execution' and empty($data->projectName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName)));
+
+
             /* Insert program. */
             $program = new stdclass();
             $program->name          = $data->programName;
