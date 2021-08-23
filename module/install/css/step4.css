@@ -1,0 +1,8 @@
+.block-content {width: 100%;}
+.block-content .block-details {width: 45%; display: inline-table; margin-top: 20px;}
+.block-content .block-right {margin-left: 5%;}
+.block-content .block-details .block-title {font-size: 14px;}
+.block-content .block-details i {color: rgb(22, 169, 248); font-size: 20px;}
+.introduction-link a {margin: 30px;}
+#selectedModeTips, .select-mode {margin-top: 20px;}
+.select-mode .radio-inline {margin-right: 30px;}

@@ -40,6 +40,35 @@ Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
+global $config;
+$lang->install->introduction        = "Zentao {$this->config->version} Introduction";
+$lang->install->howToUse            = "How do you like to use ZenTao?";
+$lang->install->introductionContent = <<<EOT
+<div>
+  <h4>Welcome to %s</h4>
+  <p>ZenTao %s provides two management modes, the classic mode and the program mode. The former is relatively simplified with only two core features, the product and the project, and the latter is a brand-new mode with all the core features. You can choose a mode according to your needs.</p>
+  <div class='block-content'>
+    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>Program</strong></p><p>Program is a set of interrelated and coordinated projects. It is at the top and strategic level with multi-level projects.</p></div>
+    <div class='block-details block-right'>
+      <p class='block-title'><i class='icon icon-product'></i><strong>Product</strong></p>
+      <p>Product defines "what" and focuses on requirements. You can manage user requirements, software requirements, plans and releases.<p>
+    </div>
+    <div class='block-details'>
+      <p class='block-title'><i class='icon icon-project'></i><strong>Project</strong></p>
+      <p>Project defines "how" and focuses on tasks of the project within the specified time, budget and quality. It is at a campaign level.</p>
+    </div>
+    <div class='block-details block-right'>
+      <p class='block-title'><i class='icon icon-product'></i><strong>Execution</strong></p>
+      <p>Execution are iterations/sprints or stages of a project. The task are done in executions. It is the combat-level management.<p>
+    </div>
+  </div>
+  <div class='text-center introduction-link'>
+    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'>Document of introduction</a>
+    <a href='https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4' target='_blank' class='btn btn-wide btn-info'>Video of introduction</a>
+  </div>
+</div>
+EOT;
+
 $lang->install->newReleased = "<strong class='text-danger'>Notice</strong>: Official Website has the latest version<strong class='text-danger'>%s</strong>, released on %s.";
 $lang->install->or          = 'Or';
 $lang->install->checking    = 'System Checkup';
@@ -180,6 +209,9 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
 
+$lang->install->modeList['classic'] = 'Classic mode';
+$lang->install->modeList['new']     = 'Program mode';
+
 $lang->install->promotion = "Products also from EasyCorp:";
 
 $lang->install->chanzhi       = new stdclass();
@@ -207,19 +239,6 @@ $lang->install->zdoo->desc = <<<EOD
   <li>Cash: Income, Expense, Transfer, Invest and Debt</li>
 </ul>
 EOD;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 $lang->install->ydisk = new stdclass();
 $lang->install->ydisk->name = 'YDisk';

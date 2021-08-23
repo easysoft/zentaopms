@@ -167,12 +167,45 @@ class install extends control
     }
 
     /**
-     * Create company, admin.
+     * Set system mode.
      *
      * @access public
      * @return void
      */
     public function step4()
+    {
+        if(!empty($_POST))
+        {
+            $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
+            die(js::locate(inlink('step5'), 'parent'));
+        }
+
+        $this->app->loadLang('upgrade');
+
+        if(isset($this->config->bizVersion))
+        {
+            $this->lang->install->introductionContent = sprintf($this->lang->install->introductionContent, $this->lang->bizName, $this->lang->bizName);
+        }
+        elseif(isset($this->config->proVersion))
+        {
+            $this->lang->install->introductionContent = sprintf($this->lang->install->introductionContent, $this->lang->proName, $this->lang->proName);
+        }
+        else
+        {
+            $this->lang->install->introductionContent = sprintf($this->lang->install->introductionContent, $this->lang->pmsName, $this->lang->pmsName);
+        }
+
+        $this->view->title = $this->lang->install->introduction;
+        $this->display();
+    }
+
+    /**
+     * Create company, admin.
+     *
+     * @access public
+     * @return void
+     */
+    public function step5()
     {
         if(!empty($_POST))
         {
@@ -183,14 +216,13 @@ class install extends control
             if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
 
             $this->loadModel('setting')->updateVersion($this->config->version);
-            $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // update mode
             $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
             $this->loadModel('setting')->setItem('system.common.safe.mode', '1');
             $this->loadModel('setting')->setItem('system.common.safe.changeWeak', '1');
             $this->loadModel('setting')->setItem('system.common.global.cron', 1);
-            die(js::locate(inlink('step5'), 'parent'));
+            die(js::locate(inlink('step6'), 'parent'));
         }
-        
+
         $this->app->loadLang('upgrade');
 
         $this->view->title = $this->lang->install->getPriv;
@@ -211,7 +243,7 @@ class install extends control
      * @access public
      * @return void
      */
-    public function step5()
+    public function step6()
     {
         $this->view->title = $this->lang->install->success;
         $this->display();

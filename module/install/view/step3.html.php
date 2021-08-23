@@ -77,7 +77,7 @@ EOT;
         ?>
       </div>
     </div>
-    <div class='modal-footer'><?php echo html::a($this->createLink('install', 'step4'), $lang->install->next, '', "class='btn btn-wide btn-primary'");?></div>
+    <div class='modal-footer'><?php echo html::a($this->createLink('install', isset($this->config->maxVersion) ? 'step5' : 'step4'), $lang->install->next, '', "class='btn btn-wide btn-primary'");?></div>
   <?php endif;?>
   </div>
 </div>

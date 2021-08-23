@@ -40,6 +40,36 @@ $lang->install->links = <<<EOT
 您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
+global $config;
+$lang->install->introduction        = "禅道{$this->config->version}版本功能介绍";
+$lang->install->howToUse            = "请问您计划如何使用禅道的新版本呢";
+$lang->install->introductionContent = <<<EOT
+<div>
+  <h4>尊敬的用户您好，欢迎您使用禅道%s。</h4>
+  <p>禅道%s提供了两种使用模式， 一种是精典管理模式，功能较为精简，提供了产品和项目两个核心功能；另一种是全新项目集管理模式，具备所有核心功能。如下是相关功能介绍，您可以根据需要选择使用的模式。</p>
+  <div class='block-content'>
+    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>项目集</strong></p><p>项目集是一组相互关联，且被协调管理的项目集合，可以进行多层级管理，属于战略层面的管理。</p></div>
+    <div class='block-details block-right'>
+      <p class='block-title'><i class='icon icon-product'></i><strong>产品</strong></p>
+      <p>产品是定义做什么，主要是管理需求，通过产品可以管理用户需求、研发需求、计划以及发布。<p>
+    </div>
+    <div class='block-details'>
+      <p class='block-title'><i class='icon icon-project'></i><strong>项目</strong></p>
+      <p>项目是定义如何做，主要是在规定的时间、预算和质量目标范围内完成项目的各种工作，属于战役层面的管理。</p>
+    </div>
+    <div class='block-details block-right'>
+      <p class='block-title'><i class='icon icon-product'></i><strong>执行</strong></p>
+      <p>我们把一个项目下的多个迭代/冲刺或阶段统称为执行，通过执行去完成项目的任务，属于战斗层面的管理。<p>
+    </div>
+  </div>
+  <div class='text-center introduction-link'>
+    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'>文档介绍</a>
+    <a href='https://dl.cnezsoft.com/vedio/program0716.mp4' target='_blank' class='btn btn-wide btn-info'>视频介绍</a>
+  </div>
+</div>
+EOT;
+
+
 $lang->install->newReleased = "<strong class='text-danger'>提示</strong>：官网网站已有最新版本<strong class='text-danger'>%s</strong>, 发布日期于 %s。";
 $lang->install->or          = '或者';
 $lang->install->checking    = '系统检查';
@@ -179,6 +209,9 @@ $lang->install->joinZentao = <<<EOT
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
+
+$lang->install->modeList['classic'] = '经典管理模式';
+$lang->install->modeList['new']     = '全新项目集管理模式';
 
 $lang->install->promotion = "为您推荐易软天创旗下其他产品：";
 
