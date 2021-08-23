@@ -140,4 +140,10 @@ class mr extends control
 
         $this->send($options);
     }
+
+    public function diff($MRID)
+    {
+        $MR = $this->mr->getByID($MRID);
+        $versions = $this->mr->apiGetDiffVersions($MR);
+    }
 }
