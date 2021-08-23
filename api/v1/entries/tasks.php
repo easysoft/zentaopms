@@ -8,11 +8,22 @@
  */
 class tasksEntry extends entry 
 {
-    public function get($executionID)
+    public function get($executionID = 0)
     {
-        $control = $this->loadController('execution', 'task');
-        $control->task($executionID, $this->param('status', 'all'), 0, $this->param('order', ''), $this->param('total', 0), $this->param('limit', 100), $this->param('page', 1));
-        $data = $this->getData();
+        if(!$executionID)
+        {
+            /* Get my tasks defaultly. */
+            $control = $this->loadController('my', 'task');
+            $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+            $data = $this->getData();
+        }
+        else
+        {
+            /* Get tasks by execution. */
+            $control = $this->loadController('execution', 'task');
+            $control->task($executionID, $this->param('status', 'all'), 0, $this->param('order', ''), $this->param('total', 0), $this->param('limit', 100), $this->param('page', 1));
+            $data = $this->getData();
+        }
 
         if(isset($data->status) and $data->status == 'success')
         {
