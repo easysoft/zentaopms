@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 
-<?php js::set('repoTypes', $repoTypes)?>
+<?php js::set('repoTypes', $repoTypes);?>
 <?php js::set('triggerType', $job->triggerType);?>
 <?php js::set('pipeline', $job->pipeline);?>
 <?php js::set('dirChange', $lang->job->dirChange);?>
