@@ -157,6 +157,7 @@ $lang->company->common    = '公司';
 $lang->dept->common       = '部门';
 $lang->upgrade->common    = '升级';
 $lang->program->list      = '项目集列表';
+$lang->program->kanban    = '项目集看板';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 
 $lang->personnel->common     = '人员';
