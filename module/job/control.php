@@ -97,12 +97,19 @@ class job extends control
         $repoPairs   = array(0 => '');
         $gitlabRepos = array(0 => '');
         $repoTypes   = array();
+
         foreach($repoList as $repo)
         {
             if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = $repo->name;
+            if(strtolower($repo->SCM) == 'gitlab')
+            {
+                $gitlab    = $this->loadModel('gitlab')->getByID($repo->gitlab);
+                $tokenUser = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+                if(!isset($tokenUser->is_admin) or !$tokenUser->is_admin) continue;
+                $gitlabRepos[$repo->id] = $repo->name;
+            }
         }
 
         $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
