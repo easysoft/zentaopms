@@ -37,11 +37,11 @@
           <td class='text'><?php echo $mr->id; ?></td>
           <td class='text'><?php echo $mr->name; ?></td>
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($mr->gitlabID, $mr->sourceProject)->name_with_namespace; ?></td>
-          <td class='text'><?php echo $mr->sourceBranch; ?></td>
+          <td class='text'><?php echo $mr->sourceBranch;?></td>
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($mr->gitlabID, $mr->targetProject)->name_with_namespace; ?></td>
-          <td class='text'><?php echo $mr->targetBranch; ?></td>
-          <td class='text'><?php echo $mr->status; ?></td>
-          <td class='text'><?php echo $mr->canMerge; ?></td>
+          <td class='text'><?php echo $mr->targetBranch;?></td>
+          <td class='text'><?php echo zget($lang->mr->statusList, $mr->status);?></td>
+          <td class='text'><?php echo zget($lang->mr->canMergeStatusList, $mr->canMerge);?></td>
           <td class='text-left c-actions'>
             <?php
             common::printLink('mr', 'list', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->list}' class='btn btn-info'");
