@@ -63,7 +63,7 @@ $lang->reportList->test->lists[13]    = 'Bug Assigned Summary|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Team Workload Summary|report|workload';
 
 $lang->report->id            = 'ID';
-$lang->report->execution     = $lang->executionCommon;
+$lang->report->execution     = $lang->execution->common;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'User';
 $lang->report->bugTotal      = 'Bug';
