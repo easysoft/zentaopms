@@ -30,6 +30,7 @@ ALTER TABLE `zt_burn` CHANGE `project` `execution` mediumint(8) unsigned NOT NUL
 ALTER TABLE `zt_doc` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_relation` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_relation` CHANGE `program` `project` mediumint(8) unsigned NOT NULL;
+ALTER TABLE `zt_case` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_doclib` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_task` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_testreport` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
