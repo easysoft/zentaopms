@@ -91,3 +91,4 @@ ol, ul {margin-bottom: 0}
 .tree li > a {white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .side-col .menu-actions {position: absolute; top: 0; right: 0; padding: 7px 8px;}
 .menu-actions i {font-size: 15px; color: #8c8c8c;}
+#whiteListBox .chosen-container .chosen-results {max-height: 180px;}

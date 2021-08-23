@@ -1125,6 +1125,10 @@ class actionModel extends model
                     {
                         $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                     }
+                    elseif($action->objectType == 'stakeholder' and empty($action->project))
+                    {
+                        $action->objectLink = '';
+                    }
                     else
                     {
                         $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));

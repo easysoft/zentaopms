@@ -60,6 +60,9 @@ $(function()
     })
 
     if(copyExecutionID != 0) $('#teams').change();
+
+    var acl = $("[name^='acl']:checked").val();
+    setWhite(acl);
 });
 
 function showLifeTimeTips()

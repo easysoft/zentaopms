@@ -14,19 +14,16 @@ class todosEntry extends entry
         $control->todo($this->param('date', 'all'), $this->param('user', ''), $this->param('status', 'all'), $this->param('order', 'date_desc'), 0, $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
-        if(isset($data->status) and $data->status == 'success')
-        {
-            $pager  = $data->data->pager;
-            $result = array();
-            foreach($data->data->todos as $todo)
-            {
-                $result[] = $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time');
-            }
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'todos' => $result));
-        }
+        if(!isset($data->status)) return $this->sendError(400, 'error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-        return $this->sendError(400, 'error');
+        $pager  = $data->data->pager;
+        $result = array();
+        foreach($data->data->todos as $todo)
+        {
+            $result[] = $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time');
+        }
+        return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'todos' => $result));
     }
 
     public function post()
@@ -36,8 +33,10 @@ class todosEntry extends entry
 
         $this->setPost('date', $this->request('date', date("Y-m-d")));
         $this->setPost('type', $this->request('date', 'custom'));
-        $this->setPost('pri', $this->request('pri', '3'));
         $this->setPost('status', $this->request('status', 'wait'));
+        $this->setPost('begin', str_replace(':', '', $this->request('begin')));
+        $this->setPost('end', str_replace(':', '', $this->request('end')));
+        $this->setPost('pri', $this->request('pri', '3'));
 
         $control = $this->loadController('todo', 'create');
         $this->requireFields('name');

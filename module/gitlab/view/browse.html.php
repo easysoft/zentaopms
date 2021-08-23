@@ -44,10 +44,11 @@
           <td class='text-center'><?php echo $id;?></td>
           <td class='text c-name' title='<?php echo $gitlab->name;?>'><?php echo $gitlab->name;?></td>
           <td class='text' title='<?php echo $gitlab->url;?>'><?php echo $gitlab->url;?></td>
-          <td class='c-actions text-left'>
+          <td class='c-actions text-left' title='<?php if(!$gitlab->isAdminToken) echo $lang->gitlab->tokenLimit;?>'>
             <?php
-            common::printIcon('gitlab', 'edit', "gitlabID=$id", '', 'list',  'edit');
-            common::printIcon('gitlab', 'bindUser', "id=$id", '', 'list',  'group');
+            $disabled = !$gitlab->isAdminToken ? 'disabled' : '';
+            common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title={$lang->gitlab->edit} class='btn btn-primary'");
+            common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-group'></i> ", '', "title={$lang->gitlab->bindUser}  class='btn btn-primary {$disabled}' ,'disabled'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn'");
             ?>
           </td>

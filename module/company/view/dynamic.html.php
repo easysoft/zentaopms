@@ -68,6 +68,10 @@
               {
                   echo '#' . $action->objectID;
               }
+              elseif(empty($action->objectLink))
+              {
+                  echo $action->objectName;
+              }
               else
               {
                   echo html::a($action->objectLink, $action->objectName, '', $openApp);

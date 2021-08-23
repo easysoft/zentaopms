@@ -141,7 +141,8 @@ class group extends control
 
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
-            ->beginIF($this->config->systemMode != 'classic')->andWhere('type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'classic')->andWhere('type')->in('sprint,stage')->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
             ->orderBy('order_desc')
             ->fetchPairs('id', 'name');
 
