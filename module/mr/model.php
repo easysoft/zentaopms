@@ -53,6 +53,8 @@ class mrModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        foreach($MRList as $MR) $this->apiSyncMR($MR);
+
         return $MRList;
     }
 
@@ -67,7 +69,7 @@ class mrModel extends model
     {
         if(!isset($MR->gitlabID)) return $MR;
 
-        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
+        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
 
         $MR->name          = $rawMR->title;
         $MR->sourceProject = $rawMR->source_project_id;
@@ -206,6 +208,29 @@ class mrModel extends model
    }
 
     /**
+     * sync MR from GitLab API to Zentao database.
+     *
+     * @param  object  $MR
+     * @access public
+     * @return void
+     */
+    public function apiSyncMR($MR)
+    {
+        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        if(isset($rawMR->iid))
+        {
+            $newMR = new stdclass;
+            $newMR->status      = $rawMR->state;
+            $newMR->mergeStatus = $rawMR->merge_status;
+
+            /* Update MR in Zentao database. */
+            $this->dao->update(TABLE_MR)->data($newMR)
+                ->where('id')->eq($MR->id)
+                ->exec();
+        }
+    }
+
+    /**
      * Create MR by API.
      *
      * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
@@ -241,7 +266,7 @@ class mrModel extends model
      *
      * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
      * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int    $projectID  targetProject
      * @param  int    $MRID
      * @access public
      * @return object

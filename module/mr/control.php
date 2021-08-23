@@ -54,7 +54,7 @@ class mr extends control
     {
         if($_POST)
         {
-            $result = $this->mr->edit($MRID);
+            $result = $this->mr->update($MRID);
             return $result;
         }
 
@@ -67,9 +67,9 @@ class mr extends control
     }
 
     /**
-     * Delete a mr.
+     * Delete a MR.
      *
-     * @param  int    $MR
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -77,11 +77,12 @@ class mr extends control
     {
         if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $MRList = $this->mr->getByID($id);
+        $MR = $this->mr->getByID($id);
 
-        $this->mr->apiDeleteMR($MRList->gitlabID, $MRList->projectID, $MRList->mrID);
-        $this->mr->deleteMR($id);
-        die(js::reload('parent'));
+        $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
+        $this->mr->apiDeleteMR($MR->gitlabID, $MR->sourceProject, $MR->mriid);
+
+        die(js::locate(inlink('browse'), 'parent'));
     }
 
     /**
@@ -93,7 +94,7 @@ class mr extends control
     public function view($id)
     {
         $MR = $this->mr->getByID($id);
-        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
+        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
 
         $this->view->title = $this->lang->mr->view;
         $this->view->MR    = $MR;
