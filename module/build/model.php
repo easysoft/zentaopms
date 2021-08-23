@@ -327,6 +327,7 @@ class buildModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_BUILD)
             ->where('execution')->eq((int)$executionID)
+            ->andWhere('deleted')->eq(0)
             ->orderBy('date DESC,id DESC')
             ->limit(1)
             ->fetch();
