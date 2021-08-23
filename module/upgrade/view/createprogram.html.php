@@ -9,7 +9,7 @@
   <tr>
     <th>
       <span class="pgm-exist hidden"><?php echo $lang->upgrade->existProgram;?></span>
-      <span class="pgm-no-exist"><?php echo $lang->program->name;?></span>
+      <span class="pgm-no-exist"><?php echo $lang->upgrade->programName;?></span>
     </th>
     <td class='required'>
       <div class='input-group'>
@@ -32,7 +32,7 @@
   <tr class='projectName'>
     <th>
       <span class="prj-exist hidden"><?php echo $lang->upgrade->existProject;?></span>
-      <span class="prj-no-exist"><?php echo $lang->project->name;?></span>
+      <span class="prj-no-exist"><?php echo $lang->upgrade->projectName;?></span>
     </th>
     <td class='required'>
       <div class='input-group'>

@@ -111,6 +111,7 @@ $lang->upgrade->dataMethod    = '数据迁移方式';
 $lang->upgrade->begin         = '开始日期';
 $lang->upgrade->end           = '结束日期';
 $lang->upgrade->selectProject = '目标项目';
+$lang->upgrade->programName   = '项目集名称';
 $lang->upgrade->projectName   = '项目名称';
 
 $lang->upgrade->newProgram         = '新建';
