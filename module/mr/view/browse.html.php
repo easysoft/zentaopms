@@ -27,7 +27,7 @@
           <th class='w-100px text-left'><?php common::printOrderLink('targetProject', $orderBy, $vars, $lang->mr->targetProject); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->mr->status); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('canMerge', $orderBy, $vars, $lang->mr->canMerge); ?></th>
+          <th class='w-100px text-left'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus); ?></th>
           <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
@@ -35,16 +35,16 @@
         <?php foreach($MRList as $mr):?>
         <tr>
           <td class='text'><?php echo $mr->id; ?></td>
-          <td class='text'><?php echo $mr->name; ?></td>
+          <td class='text'><?php echo $mr->title; ?></td>
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($mr->gitlabID, $mr->sourceProject)->name_with_namespace; ?></td>
           <td class='text'><?php echo $mr->sourceBranch;?></td>
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($mr->gitlabID, $mr->targetProject)->name_with_namespace; ?></td>
           <td class='text'><?php echo $mr->targetBranch;?></td>
           <td class='text'><?php echo zget($lang->mr->statusList, $mr->status);?></td>
-          <td class='text'><?php echo zget($lang->mr->canMergeStatusList, $mr->canMerge);?></td>
+          <td class='text'><?php echo zget($lang->mr->mergeStatusList, $mr->mergeStatus);?></td>
           <td class='text-left c-actions'>
             <?php
-            common::printLink('mr', 'list', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->list}' class='btn btn-info'");
+            common::printLink('mr', 'view', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->list}' class='btn btn-info'");
             common::printLink('mr', 'edit', "mrID=$mr->id", '<i class="icon icon-edit"></i>', '', "title='{$lang->mr->edit}' class='btn btn-info'");
             if(common::hasPriv('mr', 'delete')) echo html::a($this->createLink('mr', 'delete', "id=$mr->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn'");
             ?>

@@ -43,7 +43,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->mr->name;?></th>
-            <td class='required'><?php echo html::input('title', $MR->name, "class='form-control'"); ?></td>
+            <td class='required'><?php echo html::input('title', $MR->title, "class='form-control'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->mr->description; ?></th>

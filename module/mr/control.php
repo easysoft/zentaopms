@@ -35,11 +35,8 @@ class mr extends control
     {
         if($_POST)
         {
-            $rawMR = $this->mr->create();
-            if(isset($rawMR->message)) return $this->send(array('result' => 'fail', 'message' => $rawMR->message));
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $result = $this->mr->create();
+            return $this->send($result);
         }
 
         $this->view->title       = $this->lang->mr->create;
@@ -57,9 +54,8 @@ class mr extends control
     {
         if($_POST)
         {
-            $this->mr->edit($MRID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $result = $this->mr->edit($MRID);
+            return $result;
         }
 
         $MR = $this->mr->getByID($MRID);
@@ -87,6 +83,24 @@ class mr extends control
         $this->mr->apiDeleteMR($MR->gitlabID, $MR->sourceProject, $MR->mriid);
 
         die(js::locate(inlink('browse'), 'parent'));
+    }
+
+    /**
+     * View a MR.
+     *
+     * @access public
+     * @return void
+     */
+    public function view($id)
+    {
+        $MR = $this->mr->getByID($id);
+        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
+
+        $this->view->title = $this->lang->mr->view;
+        $this->view->MR    = $MR;
+        $this->view->rawMR = isset($rawMR) ? $rawMR : false;
+
+        $this->display();
     }
 
     /**

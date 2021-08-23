@@ -27,15 +27,12 @@ class mrModel extends model
      * Get a MR by id.
      *
      * @param  int    $id
-     * @param  bool   $process
      * @access public
      * @return object
      */
-    public function getByID($id, $process = true)
+    public function getByID($id)
     {
-        $MR =  $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
-
-        if($process) return $this->processMR($MR);
+        $MR = $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
         return $MR;
     }
 
@@ -56,8 +53,6 @@ class mrModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        foreach($MRList as $MR) $MR = $this->processMR($MR);
-
         return $MRList;
     }
 
@@ -70,6 +65,8 @@ class mrModel extends model
      */
     public function processMR($MR)
     {
+        if(!isset($MR->gitlabID)) return $MR;
+
         $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->projectID, $MR->mrID);
 
         $MR->name          = $rawMR->title;
@@ -77,7 +74,7 @@ class mrModel extends model
         $MR->sourceBranch  = $rawMR->source_branch;
         $MR->targetProject = $rawMR->target_project_id;
         $MR->targetBranch  = $rawMR->target_branch;
-        $MR->canMerge      = $rawMR->merge_status;
+        $MR->mergeStatus   = $rawMR->merge_status;
         $MR->status        = $rawMR->state;
         return $MR;
     }
@@ -106,45 +103,56 @@ class mrModel extends model
      */
     public function create()
     {
-        $gitlabID  = $this->post->gitlabID;
-        $projectID = $this->post->sourceProject;
-
-        $MR = new stdclass;
-        $MR->target_project_id = $this->post->targetProject;
-        $MR->source_branch     = $this->post->sourceBranch;
-        $MR->target_branch     = $this->post->targetBranch;
-        $MR->title             = $this->post->title;
-        $MR->description       = $this->post->description;
-        $MR->assignee_ids      = $this->post->assignee;
-        $MR->reviewer_ids      = $this->post->reviewer;
-
-        $rawMR = $this->apiCreateMR($gitlabID, $projectID, $MR);
-
-        /* Another open merge request already exists for this source branch. */
-        if(isset($rawMR->message) and !isset($rawMR->iid)) return $rawMR;
-
-        /* Create MR failed. */
-        if(!isset($rawMR->iid)) return false;
-
         $MR = fixer::input('post')
-            ->add('repoID', 0)
-            ->add('gitlabID', $gitlabID)
-            ->add('projectID', $rawMR->project_id) /* sourceProject can be not project of the created MR. */
-            ->add('mrID', $rawMR->iid)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
 
-        /* Remove extra fields before inserting db table. */
-        foreach(explode(',', $this->config->MR->create->skippedFields) as $field) unset($MR->$field);
-
-        $this->dao->insert(TABLE_MR)->data($MR)
+        $this->dao->insert(TABLE_MR)->data($MR, $this->config->MR->create->skippedFields)
             ->batchCheck($this->config->MR->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
-        if(dao::isError()) return false;
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        return $this->dao->lastInsertId();
+        $MRID = $this->dao->lastInsertId();
+
+        $MRObject = new stdclass;
+        $MRObject->target_project_id = $MR->targetProject;
+        $MRObject->source_branch     = $MR->sourceBranch;
+        $MRObject->target_branch     = $MR->targetBranch;
+        $MRObject->title             = $MR->title;
+        $MRObject->description       = $MR->description;
+        $MRObject->assignee_ids      = $MR->assignee;
+        $MRObject->reviewer_ids      = $MR->reviewer;
+
+        $rawMR = $this->apiCreateMR($this->post->gitlabID, $this->post->sourceProject, $MRObject);
+
+        /* Another open merge request already exists for this source branch. */
+        if(isset($rawMR->message) and !isset($rawMR->iid))
+        {
+            $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
+            return array('result' => 'fail', 'message' => $rawMR->message);
+        }
+
+        /* Create MR failed. */
+        if(!isset($rawMR->iid))
+        {
+            $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
+            return array('result' => 'fail', 'message' => $this->lang->mr->createFailedFromAPI);
+        }
+
+        $MR = new stdclass;
+        $MR->mriid       = $rawMR->iid;
+        $MR->status      = $rawMR->state;
+        $MR->mergeStatus = $rawMR->merge_status;
+
+        /* Update MR in Zentao database. */
+        $this->dao->update(TABLE_MR)->data($MR)
+            ->where('id')->eq($MRID)
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
     }
 
     /**
@@ -155,12 +163,10 @@ class mrModel extends model
      */
     public function edit($MRID)
     {
-        /* Get MR in zentao database and do not append extra attributes in GitLab. */
-        $MR = $this->getByID($MRID, $process = false);
-        $MR->title         = $this->post->title;
-        $MR->description  = $this->post->description;
-        $MR->assignee     = $this->post->assignee;
-        $MR->reviewer     = $this->post->reviewer;
+        $MR = fixer::input('post')
+            ->setDefault('editedBy', $this->app->user->account)
+            ->setDefault('editedDate', helper::now())
+            ->get();
 
         /* Update MR in GitLab. */
         $newMR = new stdclass;
@@ -168,15 +174,19 @@ class mrModel extends model
         $newMR->description  = $MR->description;
         $newMR->assignee     = $MR->assignee;
         $newMR->reviewer     = $MR->reviewer;
-        $newMR->targetBranch = $this->post->targetBranch;
-        $this->apiUpdateMR($MR->gitlabID, $MR->projectID, $MR->mrID, $newMR);
+        $newMR->targetBranch = $MR->targetBranch;
+
+        $oldMR = $this->getByID($MRID);
+        $this->apiUpdateMR($oldMR->gitlabID, $oldMR->sourceProject, $oldMR->mriid, $newMR);
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR)
-            ->batchCheck($this->config->MR->edit->requiredFields, 'notempty')
+            ->where('id')->eq($MRID)
             ->autoCheck()
             ->exec();
-        if(dao::isError()) return false;
+
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
    }
 
     /**
