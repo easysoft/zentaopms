@@ -4709,10 +4709,10 @@ class upgradeModel extends model
         {
             $projectMember = array_filter($projectMember);
             $project       = zget($projects, $projectID, '');
-            $users         = implode(',', $projectMember);
+            $members       = implode(',', $projectMember);
 
             $this->dao->update(TABLE_DOCLIB)
-                ->set('users')->eq($users)
+                ->set('users')->eq($members)
                 ->where('project')->eq($projectID)
                 ->andWhere('main')->eq(1)
                 ->exec();
