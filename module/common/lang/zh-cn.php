@@ -289,6 +289,18 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
+$lang->createObjects['todo']      = '待办';
+$lang->createObjects['effort']    = '日志';
+$lang->createObjects['bug']       = 'Bug';
+$lang->createObjects['story']     = '需求';
+$lang->createObjects['task']      = '任务';
+$lang->createObjects['testcase']  = '用例';
+$lang->createObjects['execution'] = $lang->execution->common;
+$lang->createObjects['project']   = $lang->projectCommon;
+$lang->createObjects['product']   = '产品';
+$lang->createObjects['program']   = '项目集';
+$lang->createObjects['doc']       = '文档';
+
 /* 语言 */
 $lang->lang = 'Language';
 

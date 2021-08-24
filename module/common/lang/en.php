@@ -289,6 +289,18 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
+$lang->createObjects['todo']      = 'Todo';
+$lang->createObjects['effort']    = 'Effort';
+$lang->createObjects['bug']       = 'Bug';
+$lang->createObjects['story']     = 'Story';
+$lang->createObjects['task']      = 'Task';
+$lang->createObjects['testcase']  = 'Case';
+$lang->createObjects['execution'] = $lang->execution->common;
+$lang->createObjects['project']   = $lang->projectCommon;
+$lang->createObjects['product']   = 'Product';
+$lang->createObjects['program']   = 'Program';
+$lang->createObjects['doc']       = 'Doc';
+
 /* Language. */
 $lang->lang = 'Language';
 

@@ -343,6 +343,64 @@ class commonModel extends model
     }
 
     /**
+     * Print create button list.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printCreateList()
+    {
+        global $app, $config, $lang;
+
+        $html  = "<a class='dropdown-toggle' data-toggle='dropdown'>";
+        $html .= "<div id='createBtn'>";
+        $html .= "<div class='icon-plus-solid-circle'></div>";
+        $html .= "</div></a><ul class='dropdown-menu pull-right create-list'>";
+
+        $showCreateList = $lastIsDivider = $needPrintDivider = false;
+
+        /* Check whether the creation permission is available, and print create buttons. */
+        foreach($lang->createIcons as $objectType => $objectIcon)
+        {
+            if(!isset($config->proVersion) and $objectType == 'effort') continue;
+            if($config->systemMode == 'classic' and ($objectType == 'project' or $objectType == 'porgram')) continue;
+
+            $createMethod = $objectType == 'effort' ? 'batchCreate' : 'create';
+            if(strpos('bug|execution|doc', $objectType) !== false) $needPrintDivider = true;
+
+            if(common::hasPriv($objectType, $createMethod))
+            {
+                $showCreateList = true;
+                $isOnlyBody     = strpos('program|project|product', $objectType) === false;
+                $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
+
+                /* Determines whether to print a divider. */
+                if(!$lastIsDivider and $needPrintDivider)
+                {
+                    $html            .= '<li class="divider"></li>';
+                    $lastIsDivider    = true;
+                    $needPrintDivider = false;
+                }
+                else
+                {
+                    $lastIsDivider = false;
+                }
+
+                $params = '';
+                if($objectType == 'effort') $params = 'date=today';
+
+                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? "class='iframe'" : '') . '</li>';
+            }
+        }
+
+        if(!$showCreateList) return '';
+
+        $html .= "</ul>";
+        echo $html;
+    }
+
+    /**
      * Print about bar.
      *
      * @static
