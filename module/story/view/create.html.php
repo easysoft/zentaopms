@@ -99,6 +99,7 @@
           </tr>
           <?php endif;?>
           <tr>
+            <?php if($this->app->openApp == 'product'):?>
             <th><?php echo $lang->story->reviewedBy;?></th>
             <?php $colspan = $type == 'story' ? "colspan='4'" : "colspan='2'";?>
             <td <?php echo $colspan;?> id='reviewerBox'>
@@ -118,6 +119,9 @@
                 <?php endif;?>
               </div>
             </td>
+            <?php else:?>
+            <?php echo html::hidden('needNotReview', '1');?>
+            <?php endif;?>
             <?php if($type == 'requirement'):?>
               <?php if(strpos(",$showFields,", ',source,') !== false):?>
               <td colspan="2" class='sourceTd'>
