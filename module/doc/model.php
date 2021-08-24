@@ -2397,7 +2397,7 @@ EOT;
             if(empty($object)) die(js::locate(helper::createLink($type, 'create')));
         }
 
-        $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
+        $openApp = strpos(',doc,product,project,execution,', ",{$this->app->openApp},") !== false ? $this->app->openApp : 'doc';
         if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
 
         $this->lang->TRActions  = $this->buildCollectButton4Doc();
