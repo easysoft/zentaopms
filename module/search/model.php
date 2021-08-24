@@ -597,7 +597,7 @@ class searchModel extends model
             {
                 $execution         = $this->dao->select('id,type,project')->from(TABLE_EXECUTION)->where('id')->eq($record->objectID)->fetch();
                 $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
-                $record->extraType = $execution->type;
+                $record->extraType = empty($execution->type) ? '' : $execution->type;
             }
             elseif($module == 'story')
             {
