@@ -81,12 +81,8 @@
             common::printIcon('testtask', 'create', "product=$build->product&execution=$execution->id&build=$build->id", $build, 'list', 'bullhorn');
             $lang->execution->bug = $lang->execution->viewBug;
             common::printIcon('execution', 'bug',  "execution=$execution->id&productID=$productID&orderBy=status&build=$build->id", $build, 'list');
-            common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
-            if(common::hasPriv('build',  'delete', $build))
-            {
-                $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"buildList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->build->delete}'");
-            }
+            common::printIcon('build', 'edit', "buildID=$build->id", $build, 'list');
+            common::printIcon('build', 'delete', "buildID=$build->id", $build, 'list', 'trash', 'hiddenwin');
             ?>
           </td>
         </tr>
