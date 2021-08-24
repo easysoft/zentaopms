@@ -292,7 +292,7 @@ class doc extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, '');
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
-            $link     = $this->createLink('doc', 'objectLibs', $params);
+            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -320,14 +320,11 @@ class doc extends control
             if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
         }
 
-        $lib  = $this->doc->getLibByID($libID);
-        $type = $lib->type;
-
-        $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->create;
-        $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
-        $this->view->position[] = $this->lang->doc->create;
-
+        $lib      = $this->doc->getLibByID($libID);
+        $type     = !empty($lib) ? $lib->type : 'product';
         $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+
+        if(!isonlybody()) $this->view->title = $lib->name . $this->lang->colon . $this->lang->doc->create;
 
         $this->view->libID            = $libID;
         $this->view->libs             = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);

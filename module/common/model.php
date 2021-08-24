@@ -359,6 +359,8 @@ class commonModel extends model
         $html .= "</div></a><ul class='dropdown-menu pull-right create-list'>";
 
         $showCreateList = $lastIsDivider = $needPrintDivider = false;
+        $productID      = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
+        if(!$productID and $app->user->view->products) $productID = current(explode(',', $app->user->view->products));
 
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)
@@ -371,12 +373,8 @@ class commonModel extends model
 
             if(common::hasPriv($objectType, $createMethod))
             {
-                $showCreateList = true;
-                $isOnlyBody     = strpos('program|project|product', $objectType) === false;
-                $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
-
                 /* Determines whether to print a divider. */
-                if(!$lastIsDivider and $needPrintDivider)
+                if(!$lastIsDivider and $needPrintDivider and $showCreateList)
                 {
                     $html            .= '<li class="divider"></li>';
                     $lastIsDivider    = true;
@@ -387,8 +385,13 @@ class commonModel extends model
                     $lastIsDivider = false;
                 }
 
+                $showCreateList = true;
+                $isOnlyBody     = strpos('program|project|product', $objectType) === false;
+                $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
+
                 $params = '';
-                if($objectType == 'effort') $params = 'date=today';
+                if($objectType == 'bug' or $objectType == 'testcase') $params = "productID=$productID";
+                if($objectType == 'doc') $params = "objectType=&objectID=0&libID=0";
 
                 $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? "class='iframe'" : '') . '</li>';
             }
