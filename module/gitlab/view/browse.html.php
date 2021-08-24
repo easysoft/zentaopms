@@ -40,11 +40,11 @@
       </thead>
       <tbody>
         <?php foreach ($gitlabList as $id => $gitlab): ?>
-        <tr>
+        <tr class='text-center' title='<?php if(!$gitlab->isAdminToken) echo $lang->gitlab->tokenLimit;?>'>
           <td class='text-center'><?php echo $id;?></td>
           <td class='text c-name' title='<?php echo $gitlab->name;?>'><?php echo $gitlab->name;?></td>
           <td class='text' title='<?php echo $gitlab->url;?>'><?php echo $gitlab->url;?></td>
-          <td class='c-actions text-left' title='<?php if(empty($gitlab->isAdminToken)) echo $lang->gitlab->tokenLimit;?>'>
+          <td class='c-actions text-left'>
             <?php
             $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';
             common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title={$lang->gitlab->edit} class='btn btn-primary'");
