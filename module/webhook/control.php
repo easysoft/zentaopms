@@ -295,6 +295,14 @@ class webhook extends control
             die(js::locate($this->createLink('webhook', 'browse')));
         }
 
+        if($response['result'] == 'selected')
+        {
+            $locateLink  = $this->createLink('webhook', 'bind', "id={$id}");
+            $locateLink .= strpos($locateLink, '?') !== false ? '&' : '?';
+            $locateLink .= 'selectedDepts=' . join(',', $response['data']);
+            die(js::locate($locateLink));
+        }
+
         $this->view->title      = $this->lang->webhook->chooseDept;
         $this->view->position[] = $this->lang->webhook->chooseDept;
 

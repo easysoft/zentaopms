@@ -9,12 +9,12 @@ class dingapi
     private $errors = array();
 
     /**
-     * Construct 
-     * 
-     * @param  string $appKey 
-     * @param  string $appSecret 
-     * @param  string $agentId 
-     * @param  string $apiUrl 
+     * Construct
+     *
+     * @param  string $appKey
+     * @param  string $appSecret
+     * @param  string $agentId
+     * @param  string $apiUrl
      * @access public
      * @return void
      */
@@ -30,7 +30,7 @@ class dingapi
 
     /**
      * Get token.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -48,7 +48,7 @@ class dingapi
 
     /**
      * Get users.
-     * 
+     *
      * @param  string $selectedDepts
      * @access public
      * @return array
@@ -74,25 +74,57 @@ class dingapi
             foreach($response->userlist as $user) $users[$user->name] = $user->userid;
         }
 
+        $response = $this->queryAPI($this->apiUrl . "auth/scopes?access_token={$this->token}");
+        if(!empty($response->auth_org_scopes->authed_user))
+        {
+            foreach($response->auth_org_scopes->authed_user as $userid)
+            {
+                $user = $this->queryAPI($this->apiUrl . "user/get?access_token={$this->token}&userid={$userid}");
+                if($this->isError())
+                {
+                    $this->getErrors();
+                    continue;
+                }
+
+                $users[$user->name] = $user->userid;
+            }
+        }
+
         return array('result' => 'success', 'data' => $users);
     }
 
     /**
      * Get dept tree.
-     * 
+     *
      * @access public
      * @return array
      */
     public function getDeptTree()
     {
-        $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
-        if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
-
-        $parentDepts = array();
-        foreach($response->department as $dept)
+        $response = $this->queryAPI($this->apiUrl . "auth/scopes?access_token={$this->token}");
+        if(isset($response->auth_org_scopes->authed_dept) and $response->auth_org_scopes->authed_dept[0] != 1)
         {
-            $parentID = isset($dept->parentid) ? $dept->parentid : 0;
-            $parentDepts[$parentID][$dept->id] = $dept->name;
+            $selectedDepts = array();
+            foreach($response->auth_org_scopes->authed_dept as $deptID)
+            {
+                $selectedDepts[$deptID] = $deptID;
+
+                $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}&id=$deptID");
+                foreach($response->department as $dept) $selectedDepts[$dept->id] = $dept->id;
+            }
+            return array('result' => 'selected', 'data' => $selectedDepts);
+        }
+        else
+        {
+            $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
+            if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
+
+            $parentDepts = array();
+            foreach($response->department as $dept)
+            {
+                $parentID = isset($dept->parentid) ? $dept->parentid : 0;
+                $parentDepts[$parentID][$dept->id] = $dept->name;
+            }
         }
 
         $tree = array();
@@ -114,10 +146,10 @@ class dingapi
     }
 
     /**
-     * Send message 
-     * 
-     * @param  string $userList 
-     * @param  string $message 
+     * Send message
+     *
+     * @param  string $userList
+     * @param  string $message
      * @access public
      * @return array
      */
@@ -142,8 +174,8 @@ class dingapi
 
     /**
      * Query API.
-     * 
-     * @param  string $url 
+     *
+     * @param  string $url
      * @access public
      * @return string
      */
@@ -162,7 +194,7 @@ class dingapi
 
     /**
      * Check for errors.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -173,7 +205,7 @@ class dingapi
 
     /**
      * Get errors.
-     * 
+     *
      * @access public
      * @return array
      */
