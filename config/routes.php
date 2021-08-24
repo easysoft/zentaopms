@@ -51,4 +51,8 @@ $routes['/todos/:id'] = 'todo';
 $routes['/testtasks']     = 'testtasks';
 $routes['/testtasks/:id'] = 'testtask';
 
+$routes['/projects/:project/risks'] = 'risks';
+$routes['/risks']                   = 'risks';
+$routes['/risks/:id']               = 'risk';
+
 $config->routes = $routes;
