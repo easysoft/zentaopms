@@ -68,6 +68,7 @@ class bugModel extends model
             ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $this->post->execution)
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product,execution,module,severity')
+            ->trim('title')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
             ->remove('files, labels,uid,oldTaskID,contactListMenu')
@@ -135,19 +136,19 @@ class bugModel extends model
         $browser   = '';
         foreach($data->title as $i => $title)
         {
-            if($data->modules[$i]  != 'ditto') $module      = (int)$data->modules[$i];
+            if($data->modules[$i]    != 'ditto') $module    = (int)$data->modules[$i];
             if($data->executions[$i] != 'ditto') $execution = (int)$data->executions[$i];
-            if($data->types[$i]    != 'ditto') $type        = $data->types[$i];
-            if($data->pris[$i]     != 'ditto') $pri         = $data->pris[$i];
-            if($data->oses[$i]     != 'ditto') $os          = $data->oses[$i];
-            if($data->browsers[$i] != 'ditto') $browser     = $data->browsers[$i];
+            if($data->types[$i]      != 'ditto') $type      = $data->types[$i];
+            if($data->pris[$i]       != 'ditto') $pri       = $data->pris[$i];
+            if($data->oses[$i]       != 'ditto') $os        = $data->oses[$i];
+            if($data->browsers[$i]   != 'ditto') $browser   = $data->browsers[$i];
 
-            $data->modules[$i]  = (int)$module;
+            $data->modules[$i]    = (int)$module;
             $data->executions[$i] = (int)$execution;
-            $data->types[$i]    = $type;
-            $data->pris[$i]     = $pri;
-            $data->oses[$i]     = $os;
-            $data->browsers[$i] = $browser;
+            $data->types[$i]      = $type;
+            $data->pris[$i]       = $pri;
+            $data->oses[$i]       = $os;
+            $data->browsers[$i]   = $browser;
         }
 
         /* Get bug data. */
@@ -156,6 +157,7 @@ class bugModel extends model
         $bugs = array();
         foreach($data->title as $i => $title)
         {
+            $title = trim($title);
             if(empty($title)) continue;
 
             $bug = new stdClass();
@@ -167,7 +169,7 @@ class bugModel extends model
             $bug->execution   = (int)$data->executions[$i];
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->color       = $data->color[$i];
-            $bug->title       = $data->title[$i];
+            $bug->title       = $title;
             $bug->deadline    = $data->deadlines[$i];
             $bug->steps       = nl2br($data->stepses[$i]);
             $bug->type        = $data->types[$i];
