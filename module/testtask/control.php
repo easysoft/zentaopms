@@ -285,7 +285,11 @@ class testtask extends control
         /* Get test task, and set menu. */
         $taskID = (int)$taskID;
         $task   = $this->testtask->getById($taskID, true);
-        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$task)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
 
         /* When the session changes, you need to query the related products again. */
         if($this->session->project != $task->project) $this->view->products = $this->products = $this->product->getProductPairsByProject($task->project);
@@ -981,6 +985,7 @@ class testtask extends control
             $browseList = $this->createLink('testtask', 'browse', "productID=$task->product");
             if($this->app->openApp == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
             if($this->app->openApp == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::locate($browseList, 'parent'));
         }
     }
