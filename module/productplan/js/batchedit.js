@@ -20,5 +20,7 @@ function changeDate(planID)
         $("input[name='end["+planID+"]']").val('').removeClass('form-input-hidden').addClass('form-input-show');
         $("input[name='begin"+planID+"']").removeClass('form-input-show').addClass('form-input-hidden');
         $("input[name='end"+planID+"']").removeClass('form-input-show').addClass('form-input-hidden');
+
+        $('.form-date').datetimepicker('update');
     }
 };
