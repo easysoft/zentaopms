@@ -178,7 +178,8 @@ class mrModel extends model
         $newMR->targetBranch = $MR->targetBranch;
 
         $oldMR = $this->getByID($MRID);
-        $this->apiUpdateMR($oldMR->gitlabID, $oldMR->sourceProject, $oldMR->mriid, $newMR);
+
+        $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR)

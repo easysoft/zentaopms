@@ -55,13 +55,19 @@ class mr extends control
         if($_POST)
         {
             $result = $this->mr->update($MRID);
-            return $result;
+            return $this->send($result);
         }
 
         $MR = $this->mr->getByID($MRID);
-        $this->view->MR    = $MR;
-        $this->view->title = $this->lang->mr->edit;
-        $this->view->users = array("" => "") + $this->loadModel('gitlab')->getUserIdRealnamePairs($MR->gitlabID); /* Get user list for assignee and reviewer. */
+
+        $branchList       = $this->loadModel('gitlab')->getBranches($MR->gitlabID, $MR->targetProject);
+        $targetBranchList = array();
+        foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
+
+        $this->view->MR               = $MR;
+        $this->view->targetBranchList = $targetBranchList;
+        $this->view->title            = $this->lang->mr->edit;
+        $this->view->users            = array("" => "") + $this->loadModel('gitlab')->getUserIdRealnamePairs($MR->gitlabID); /* Get user list for assignee and reviewer. */
 
         $this->display();
     }

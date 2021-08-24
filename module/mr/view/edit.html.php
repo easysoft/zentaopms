@@ -37,7 +37,7 @@
                <div class='input-group'>
                  <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace;?>
                  <span class='input-group-addon fix-border'><?php echo $lang->mr->targetBranch ?></span>
-                 <?php echo html::select('targetBranch', $this->loadModel('gitlab')->getBranches($MR->gitlabID, $MR->targetProject), '', "class='form-control chosen'");?>
+                 <?php echo html::select('targetBranch', $targetBranchList, $MR->targetBranch, "class='form-control chosen'");?>
                </div>
              </td>
           </tr>
