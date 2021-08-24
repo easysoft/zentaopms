@@ -204,6 +204,7 @@ if($config->systemMode == 'new')
     $lang->resource->project = new stdclass();
     $lang->resource->project->index               = 'index';
     $lang->resource->project->browse              = 'browse';
+    $lang->resource->project->kanban              = 'kanban';
     $lang->resource->project->programTitle        = 'moduleOpen';
     $lang->resource->project->create              = 'create';
     $lang->resource->project->edit                = 'edit';
@@ -241,12 +242,13 @@ if($config->systemMode == 'new')
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
-    $lang->project->methodOrder[10]  = 'projectTitle';
-    $lang->project->methodOrder[15]  = 'create';
-    $lang->project->methodOrder[20]  = 'edit';
-    $lang->project->methodOrder[25]  = 'batchEdit';
-    $lang->project->methodOrder[30]  = 'group';
-    $lang->project->methodOrder[35]  = 'createGroup';
+    $lang->project->methodOrder[10]  = 'kanban';
+    $lang->project->methodOrder[15]  = 'projectTitle';
+    $lang->project->methodOrder[20]  = 'create';
+    $lang->project->methodOrder[25]  = 'edit';
+    $lang->project->methodOrder[30]  = 'batchEdit';
+    $lang->project->methodOrder[35]  = 'group';
+    $lang->project->methodOrder[40]  = 'createGroup';
     $lang->project->methodOrder[45]  = 'managePriv';
     $lang->project->methodOrder[50]  = 'manageMembers';
     $lang->project->methodOrder[55]  = 'manageGroupMember';
@@ -383,6 +385,7 @@ $lang->resource->product->dashboard      = 'dashboard';
 $lang->resource->product->close          = 'closeAction';
 $lang->resource->product->updateOrder    = 'orderAction';
 $lang->resource->product->all            = 'list';
+$lang->resource->product->kanban         = 'kanban';
 $lang->resource->product->manageLine     = 'manageLine';
 $lang->resource->product->build          = 'build';
 $lang->resource->product->export         = 'exportAction';
@@ -404,12 +407,13 @@ $lang->product->methodOrder[55]  = 'dashboard';
 $lang->product->methodOrder[60]  = 'close';
 $lang->product->methodOrder[65]  = 'updateOrder';
 $lang->product->methodOrder[70]  = 'all';
-$lang->product->methodOrder[75]  = 'manageLine';
-$lang->product->methodOrder[80]  = 'build';
-$lang->product->methodOrder[85]  = 'export';
-$lang->product->methodOrder[90]  = 'whitelist';
-$lang->product->methodOrder[95]  = 'addWhitelist';
-$lang->product->methodOrder[100] = 'unbindWhitelist';
+$lang->product->methodOrder[75]  = 'kanban';
+$lang->product->methodOrder[80]  = 'manageLine';
+$lang->product->methodOrder[85]  = 'build';
+$lang->product->methodOrder[90]  = 'export';
+$lang->product->methodOrder[95]  = 'whitelist';
+$lang->product->methodOrder[100] = 'addWhitelist';
+$lang->product->methodOrder[105] = 'unbindWhitelist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();

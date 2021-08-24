@@ -180,6 +180,7 @@ $lang->product->dividerMenu = $config->URAndSR ? ',story,requirement,settings,' 
 /* Project menu. */
 $lang->project->homeMenu = new stdclass();
 $lang->project->homeMenu->browse = array('link' => ($config->systemMode == 'new' ? $lang->project->list : $lang->executionCommon) . '|project|browse|', 'alias' => 'batchedit,create');
+if($config->systemMode == 'new') $lang->project->homeMenu->kanban = array('link' => "{$lang->project->kanban}|project|kanban|");
 
 /* Scrum menu. */
 $lang->scrum->menu = new stdclass();

@@ -293,6 +293,17 @@ class project extends control
     }
 
     /**
+     * Project kanban.
+     *
+     * @access public
+     * @return void
+     */
+    public function kanban()
+    {
+        $this->display();
+    }
+
+    /**
      * Set module display mode.
      *
      * @access public

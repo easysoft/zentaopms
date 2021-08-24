@@ -212,7 +212,8 @@ $lang->calendar   = '日程';
 
 $lang->my->work = '待處理';
 
-$lang->project->list = '項目列表';
+$lang->project->list   = '項目列表';
+$lang->project->kanban = '項目看板';
 
 $lang->execution->executionKanban = "{$lang->execution->common}看板";
 $lang->execution->all             = "{$lang->execution->common}列表";
