@@ -4655,7 +4655,7 @@ class upgradeModel extends model
      */
     public function computeObjectMembers()
     {
-        $this->loadLang('user');
+        $this->app->loadLang('user');
         $projects      = $this->dao->select('id,days')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
         $projectIdList = array_keys($projects);
 
