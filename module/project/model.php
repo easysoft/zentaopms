@@ -1600,8 +1600,9 @@ class projectModel extends model
     public function getTeamMemberPairs($projectID)
     {
         $project = $this->getByID($projectID);
-        $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
         if(empty($project)) return array();
+
+        $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
 
         $members =  $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
