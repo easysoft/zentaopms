@@ -201,11 +201,27 @@ class mrModel extends model
     public function apiSyncMR($MR)
     {
         $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+
         if(isset($rawMR->iid))
         {
+            $map         = $this->config->MR->maps->sync;
+            $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
+
             $newMR = new stdclass;
-            $newMR->status      = $rawMR->state;
-            $newMR->mergeStatus = $rawMR->merge_status;
+            foreach($map as $syncField => $config)
+            {
+                $value = '';
+                list($field, $optionType, $options) = explode('|', $config);
+
+                if($optionType == 'field')       $value = $rawMR->$field;
+                if($optionType == 'userPairs')
+                {
+                    $gitlabUserID = isset($rawMR->$field->$options) ? $rawMR->$field->$options : '';
+                    $value = zget($gitlabUsers, $gitlabUserID, '');
+                }
+
+                if($value) $newMR->$syncField = $value;
+            }
 
             /* Update MR in Zentao database. */
             $this->dao->update(TABLE_MR)->data($newMR)
