@@ -28,6 +28,7 @@ $filter->default->cookie['fingerprint'] = 'reg::word';
 $filter->default->cookie['hideMenu']    = 'equal::true';
 $filter->default->cookie['openApp']     = 'reg::word';
 
+$filter->my           = new stdclass();
 $filter->bug          = new stdclass();
 $filter->caselib      = new stdclass();
 $filter->doc          = new stdclass();
@@ -62,6 +63,8 @@ $filter->ci           = new stdclass();
 
 $filter->block->default              = new stdclass();
 $filter->block->main                 = new stdclass();
+$filter->my->work                    = new stdclass();
+$filter->my->contribute              = new stdclass();
 $filter->bug->batchcreate            = new stdclass();
 $filter->bug->browse                 = new stdclass();
 $filter->bug->default                = new stdclass();
@@ -137,6 +140,21 @@ $filter->search->index               = new stdclass();
 $filter->gitlab->webhook             = new stdclass();
 $filter->gitlab->importissue         = new stdclass();
 $filter->ci->checkCompileStatus      = new stdclass();
+
+$filter->my->work->cookie['pagerMyTask']        = 'int';
+$filter->my->work->cookie['pagerMyRequirement'] = 'int';
+$filter->my->work->cookie['pagerMyStory']       = 'int';
+$filter->my->work->cookie['pagerMyBug']         = 'int';
+$filter->my->work->cookie['pagerMyTestcase']    = 'int';
+$filter->my->work->cookie['pagerMyTesttask']    = 'int';
+
+$filter->my->contribute->cookie['pagerMyTask']        = 'int';
+$filter->my->contribute->cookie['pagerMyRequirement'] = 'int';
+$filter->my->contribute->cookie['pagerMyStory']       = 'int';
+$filter->my->contribute->cookie['pagerMyBug']         = 'int';
+$filter->my->contribute->cookie['pagerMyTestcase']    = 'int';
+$filter->my->contribute->cookie['pagerMyTesttask']    = 'int';
+$filter->my->contribute->cookie['pagerMyDoc']         = 'int';
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
 $filter->bug->browse->cookie['bugModule']      = 'int';
