@@ -289,11 +289,7 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
-        if($data->SCM == 'Gitlab')
-        {
-            $newRepo = $this->getRepoByID($id);
-            $data->path = $newRepo->path;
-        }
+        if($data->SCM == 'Gitlab') $data->path = $this->getRepoByID($id)->path;
 
         if($repo->path != $data->path)
         {
