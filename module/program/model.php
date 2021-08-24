@@ -544,9 +544,12 @@ class programModel extends model
             ->orderBy('grade desc, `order`')->get();
         $stmt = $this->dbh->query($query);
 
+        $vars = '';
+        if($moduleName == 'project' and $methodName == 'create') $vars = "model={$this->session->projectModel}&";
+
         while($program = $stmt->fetch())
         {
-            $link = $from == 'program' ? helper::createLink($moduleName, $methodName, "programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
+            $link = $from == 'program' ? helper::createLink($moduleName, $methodName, "{$vars}programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
             $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
