@@ -142,13 +142,18 @@ class mrModel extends model
             return array('result' => 'fail', 'message' => $this->lang->mr->createFailedFromAPI);
         }
 
-        $MR = new stdclass;
-        $MR->mriid       = $rawMR->iid;
-        $MR->status      = $rawMR->state;
-        $MR->mergeStatus = $rawMR->merge_status;
+        $newMR = new stdclass;
+        $newMR->mriid       = $rawMR->iid;
+        $newMR->status      = $rawMR->state;
+        $newMR->mergeStatus = $rawMR->merge_status;
+
+        /* Change gitlab user ID to zentao account. */
+        $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
+        $newMR->assignee = zget($gitlabUsers, $MR->assignee, '');
+        $newMR->reviewer = zget($gitlabUsers, $MR->reviewer, '');
 
         /* Update MR in Zentao database. */
-        $this->dao->update(TABLE_MR)->data($MR)
+        $this->dao->update(TABLE_MR)->data($newMR)
             ->where('id')->eq($MRID)
             ->autoCheck()
             ->exec();
@@ -216,7 +221,11 @@ class mrModel extends model
                 if($optionType == 'field')       $value = $rawMR->$field;
                 if($optionType == 'userPairs')
                 {
-                    $gitlabUserID = isset($rawMR->$field->$options) ? $rawMR->$field->$options : '';
+                    $gitlabUserID = '';
+                    if(isset($rawMR->$field[0]))
+                    {
+                        $gitlabUserID = $rawMR->$field[0]->$options;
+                    }
                     $value = zget($gitlabUsers, $gitlabUserID, '');
                 }
 
