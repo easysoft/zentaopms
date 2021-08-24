@@ -64,10 +64,14 @@ class mr extends control
         $targetBranchList = array();
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
+        $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->gitlabID);
+
         $this->view->MR               = $MR;
         $this->view->targetBranchList = $targetBranchList;
         $this->view->title            = $this->lang->mr->edit;
         $this->view->users            = array("" => "") + $this->loadModel('gitlab')->getUserIdRealnamePairs($MR->gitlabID); /* Get user list for assignee and reviewer. */
+        $this->view->assignee         = zget($gitlabUsers, $MR->assignee, '');
+        $this->view->reviewer         = zget($gitlabUsers, $MR->reviewer, '');
 
         $this->display();
     }

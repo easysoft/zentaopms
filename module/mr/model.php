@@ -186,6 +186,11 @@ class mrModel extends model
 
         $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
 
+        /* Change gitlab user ID to zentao account. */
+        $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($oldMR->gitlabID);
+        $MR->assignee = zget($gitlabUsers, $MR->assignee, '');
+        $MR->reviewer = zget($gitlabUsers, $MR->reviewer, '');
+
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR)
             ->where('id')->eq($MRID)
