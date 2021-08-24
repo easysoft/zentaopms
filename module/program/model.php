@@ -544,30 +544,21 @@ class programModel extends model
             ->orderBy('grade desc, `order`')->get();
         $stmt = $this->dbh->query($query);
 
-        $vars = '';
-        if($moduleName == 'project' and $methodName == 'create') $vars = "model={$this->session->projectModel}&";
-
         while($program = $stmt->fetch())
         {
-            $link = $from == 'program' ? helper::createLink($moduleName, $methodName, "{$vars}programID=$program->id") : helper::createLink('product', 'all', "programID=$program->id" . $vars);
+            $link     = $this->getLink($moduleName, $methodName, $program->id, $vars, $from);
             $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {
                 if(!isset($programMenu[$program->parent])) $programMenu[$program->parent] = '';
                 $programMenu[$program->parent] .= "<li>$linkHtml";
-                $programMenu[$program->parent] .= "<ul>".$programMenu[$program->id]."</ul>\n";
+                $programMenu[$program->parent] .= "<ul>" . $programMenu[$program->id] . "</ul>\n";
             }
             else
             {
-                if(isset($programMenu[$program->parent]) and !empty($programMenu[$program->parent]))
-                {
-                    $programMenu[$program->parent] .= "<li>$linkHtml\n";
-                }
-                else
-                {
-                    $programMenu[$program->parent] = "<li>$linkHtml\n";
-                }
+                if(empty($programMenu[$program->parent])) $programMenu[$program->parent] = '';
+                $programMenu[$program->parent] .= "<li>$linkHtml\n";
             }
             $programMenu[$program->parent] .= "</li>\n";
         }
@@ -577,6 +568,35 @@ class programModel extends model
         $lastMenu    = "<ul class='tree tree-simple' data-ride='tree' id='programTree' data-name='tree-program'>{$programMenu}</ul>\n";
 
         return $lastMenu;
+    }
+
+    /**
+     * Get link for drop tree menu.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  int    $programID
+     * @param  string $vars
+     * @param  string $from
+     * @access public
+     * @return string
+     */
+    public function getLink($moduleName, $methodName, $programID, $vars = '', $from = 'program')
+    {
+        if($from != 'program') return helper::createLink('product', 'all', "programID=$programID" . $vars);
+
+        if($moduleName == 'project')
+        {
+            $moduleName = 'program';
+            $methodName = 'project';
+        }
+        if($moduleName == 'product')
+        {
+            $moduleName = 'program';
+            $methodName = 'product';
+        }
+
+        return helper::createLink($moduleName, $methodName, "programID=$programID");
     }
 
     /**

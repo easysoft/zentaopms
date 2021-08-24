@@ -134,14 +134,17 @@ class personnelModel extends model
             $issueInvest = $this->getIssueInvest($accountPairs, $projects);
             $riskInvest  = $this->getRiskInvest($accountPairs, $projects);
         }
-        $userPairs = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
-        foreach($userPairs as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
+
+        $users = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
+        foreach($users as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
 
         foreach($accountPairs as $account => $projects)
         {
-            $personnelList[$account]['realname']   = $userPairs[$account]->realname;
+            $user = zget($users, $account, '');
+
+            $personnelList[$account]['realname']   = $user ? $user->realname : $account;
             $personnelList[$account]['account']    = $account;
-            $personnelList[$account]['role']       = $userPairs[$account]->role;
+            $personnelList[$account]['role']       = $user ? $user->role : '';
             $personnelList[$account]['projects']   = $projects;
             $personnelList[$account]['executions'] = zget($executionPairs, $account, 0);
 
