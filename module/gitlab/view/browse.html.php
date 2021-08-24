@@ -40,7 +40,7 @@
       </thead>
       <tbody>
         <?php foreach ($gitlabList as $id => $gitlab): ?>
-        <tr class='text-center' title='<?php if(!$gitlab->isAdminToken) echo $lang->gitlab->tokenLimit;?>'>
+        <tr class='text' title='<?php if(!$gitlab->isAdminToken) echo $lang->gitlab->tokenLimit;?>'>
           <td class='text-center'><?php echo $id;?></td>
           <td class='text c-name' title='<?php echo $gitlab->name;?>'><?php echo $gitlab->name;?></td>
           <td class='text' title='<?php echo $gitlab->url;?>'><?php echo $gitlab->url;?></td>
