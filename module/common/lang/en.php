@@ -212,7 +212,8 @@ $lang->calendar   = 'Calendar';
 
 $lang->my->work = 'Work';
 
-$lang->project->list = 'Project List';
+$lang->project->list   = 'Project List';
+$lang->project->kanban = 'Project Kanban';
 
 $lang->execution->executionKanban = "{$lang->execution->common} Kanban";
 $lang->execution->all             = "{$lang->execution->common} List";

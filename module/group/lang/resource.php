@@ -204,6 +204,7 @@ if($config->systemMode == 'new')
     $lang->resource->project = new stdclass();
     $lang->resource->project->index               = 'index';
     $lang->resource->project->browse              = 'browse';
+    $lang->resource->project->kanban              = 'kanban';
     $lang->resource->project->programTitle        = 'moduleOpen';
     $lang->resource->project->create              = 'create';
     $lang->resource->project->edit                = 'edit';
@@ -241,12 +242,13 @@ if($config->systemMode == 'new')
 
     $lang->project->methodOrder[0]   = 'index';
     $lang->project->methodOrder[5]   = 'browse';
-    $lang->project->methodOrder[10]  = 'projectTitle';
-    $lang->project->methodOrder[15]  = 'create';
-    $lang->project->methodOrder[20]  = 'edit';
-    $lang->project->methodOrder[25]  = 'batchEdit';
-    $lang->project->methodOrder[30]  = 'group';
-    $lang->project->methodOrder[35]  = 'createGroup';
+    $lang->project->methodOrder[10]  = 'kanban';
+    $lang->project->methodOrder[15]  = 'projectTitle';
+    $lang->project->methodOrder[20]  = 'create';
+    $lang->project->methodOrder[25]  = 'edit';
+    $lang->project->methodOrder[30]  = 'batchEdit';
+    $lang->project->methodOrder[35]  = 'group';
+    $lang->project->methodOrder[40]  = 'createGroup';
     $lang->project->methodOrder[45]  = 'managePriv';
     $lang->project->methodOrder[50]  = 'manageMembers';
     $lang->project->methodOrder[55]  = 'manageGroupMember';
