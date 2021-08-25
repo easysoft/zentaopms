@@ -67,6 +67,12 @@ class program extends control
         $this->display();
     }
 
+    public function kanban()
+    {
+        $this->view->kanbanGroup = $this->program->getKanbanGroup();
+        $this->display();
+    }
+
     /**
      * Program products list.
      *

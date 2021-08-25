@@ -96,7 +96,7 @@ class programModel extends model
      */
     public function getByID($programID = 0)
     {
-        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('`type`')->eq('program')->fetch();
+        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
         $program = $this->loadModel('file')->replaceImgURL($program, 'desc');
         return $program;
     }
@@ -143,7 +143,271 @@ class programModel extends model
             ->fetchAll('id');
     }
 
-	  /**
+    /**
+     * Get kanban group data.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getKanbanGroup()
+    {
+        $kanbanGroup           = array();
+        $kanbanGroup['my']     = array();
+        $kanbanGroup['others'] = array();
+
+        /* Get all prived programs. */
+        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
+            ->where('type')->eq('program')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('grade')->eq(1)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->andWhere('status')->ne('closed')
+            ->fetchAll('id');
+
+        $involvedPrograms = $this->getInvolvedPrograms($this->app->user->account);
+
+        /* Get all products under programs. */
+        $productGroup = $this->dao->select('id, program, name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->andWhere('program')->in(array_keys($programs))
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->andWhere('status')->ne('closed')
+            ->fetchGroup('program', 'id');
+
+        $productPairs = array();
+        foreach($productGroup as $programID => $products) 
+        {
+            foreach($products as $productID => $product) $productPairs[$productID] = $productID;
+        }
+
+        /* Get all plans under products. */
+        $plans = $this->dao->select('id, product, title')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productPairs)
+            ->andWhere('end')->gt(helper::today())
+            ->fetchGroup('product');
+
+        /* Get all products linked projects and executions. */
+        $projectGroup = $this->dao->select('t1.product, t2.id, t2.name, t2.status')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.product')->in($productPairs)
+            ->andWhere('t2.status')->ne('closed')
+            ->andWhere('t2.type')->eq('project')
+            ->fetchGroup('product');
+
+        $projectPairs = array();
+        foreach($projectGroup as $projects)
+        {
+            foreach($projects as $project) $projectPairs[$project->id] = $project->id;
+        }
+
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
+            ->from(TABLE_TASK)
+            ->where('project')->in($projectPairs)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+
+        $projectHours = $this->computeProgress($tasks);
+
+        $releases = $this->dao->select('product, id, name')->from(TABLE_RELEASE)
+            ->where('product')->in($productPairs)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('normal')
+            ->fetchGroup('product');
+
+        $doingExecutions = $this->dao->select('id, project, name')->from(TABLE_EXECUTION)
+            ->where('type')->in('sprint,stage')
+            ->andWhere('status')->eq('doing')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id_asc')
+            ->fetchAll('project');
+
+        $executionPairs = array();
+        foreach($doingExecutions as $execution) $executionPairs[$execution->id] = $execution->id;
+
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
+            ->from(TABLE_TASK)
+            ->where('execution')->in($executionPairs)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('execution', 'id');
+
+        $executionHours = $this->computeProgress($tasks);
+
+        foreach($productGroup as $programID => $products)
+        {
+            foreach($products as $productID => $product) 
+            {
+                $product->plans    = zget($plans, $productID, array());
+                $product->releases = zget($releases, $productID, array());
+                $projects          = zget($projectGroup, $productID, array());
+                foreach($projects as $project)
+                {
+                    $status    = $project->status == 'wait' ? 'wait' : 'doing'; 
+                    $execution = zget($doingExecutions, $project->id, array());
+                    if(!empty($execution)) $execution->hours = zget($executionHours, $execution->id, array());
+
+                    $project->execution = $execution;
+                    $project->hours     = zget($projectHours, $project->id, array());
+                    $product->projects[$status][] = $project;
+                }
+            }
+        }
+
+        //区分出其他项目集
+        foreach($programs as $programID => $program)
+        {
+            $program->products = zget($productGroup, $programID, array());
+
+            if(in_array($programID, $involvedPrograms))
+            {
+                $kanbanGroup['my'][$programID] = $program;
+            }
+            else
+            {
+                $kanbanGroup['others'][$programID] = $program;
+            }
+        }
+
+        return $kanbanGroup;
+    }
+
+    /**
+     * Get involved programs by user.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
+    public function getInvolvedPrograms($account)
+    {
+        $involvedPrograms  = array();
+
+        /* All involves in program table. */
+        $objects = $this->dao->select('id, type, project')->from(TABLE_PROGRAM)
+            ->where('deleted')->eq(0)
+            ->andWhere("(openedBy = '$account' or PM = '$account')")
+            ->fetchAll('id');
+
+        foreach($objects as $id => $object)
+        {
+            if($object->type == 'program') $involvedPrograms[$id] = $id;
+            if($object->type == 'project') 
+            {
+                $programID = $this->getTopByID($id);
+                $involvedPrograms[$programID] = $programID;
+            }
+            if($object->type == 'sprint' || $object->type == 'stage') 
+            {
+                $programID = $this->getTopByID($object->project);
+                $involvedPrograms[$programID] = $programID;
+            }
+        }
+
+        /* All involves in stakeholder table. */
+        $stakeholders = $this->dao->select('t1.objectID, t2.type')->from(TABLE_STAKEHOLDER)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.objectID = t2.id')
+            ->where('t1.objectType')->in("program,project")
+            ->andWhere('t1.user')->eq($account)
+            ->fetchAll('objectID');
+
+        foreach($stakeholders as $objectID => $object)
+        {
+            if($object->type == 'program') 
+            {
+                $involvedPrograms[$objectID] = $objectID;
+            }
+            if($object->type == 'project') 
+            {
+                $programID = $this->getTopByID($objectID);
+                $involvedPrograms[$programID] = $programID;
+            }
+        }
+
+        /* All involves in team table. */
+        $teams = $this->dao->select('t1.root, t2.project, t2.type')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.root = t2.id')
+            ->where('t1.account')->eq($account)
+            ->andWhere('t1.type')->in('project,execution')
+            ->fetchAll('root');
+
+        foreach($teams as $objectID => $object)
+        {
+            if($object->type == 'project') 
+            {
+                $programID = $this->getTopByID($objectID);
+                $involvedPrograms[$programID] = $programID;
+            }
+            if($object->type == 'execution') 
+            {
+                $programID = $this->getTopByID($object->project);
+                $involvedPrograms[$programID] = $programID;
+            }
+        }
+
+        /* All involves in products table. */
+        $products = $this->dao->select('id, program, createdBy, PO, QD, RD')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->andWhere("(createdBy = '$account' or PO = '$account' or QD = '$account' or RD = '$account')")
+            ->fetchAll('id');
+
+        foreach($products as $id => $product) $involvedPrograms[$product->program] = $product->program;
+
+        /* Check priv. */
+        $involvedPrograms = $this->dao->select('id')->from(TABLE_PROGRAM)
+            ->where('deleted')->eq(0) 
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->andWhere('id')->in($involvedPrograms)
+            ->andWhere('grade')->eq(1)
+            ->fetchPairs();
+
+        return $involvedPrograms;
+    }
+
+    /**
+     * Compute progress for project or execution.
+     * 
+     * @param  array $tasks 
+     * @access public
+     * @return void
+     */
+    public function computeProgress($tasks)
+    {
+        $hours = array();
+        foreach($tasks as $projectID => $projectTasks)
+        {    
+            $hour = new stdclass();
+            $hour->totalConsumed = 0;
+            $hour->totalEstimate = 0;
+            $hour->totalLeft     = 0;
+
+            foreach($projectTasks as $task)
+            {    
+                $hour->totalConsumed += $task->consumed;
+                $hour->totalEstimate += $task->estimate;
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }    
+            $hours[$projectID] = $hour;
+        } 
+
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
+        }
+
+        return $hours;
+    }
+
+    /**
      * Get project list data.
      *
      * @param  int       $programID
