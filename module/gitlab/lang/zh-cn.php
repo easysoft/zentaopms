@@ -40,6 +40,7 @@ $lang->gitlab->placeholder->token = "请填写具有admin权限账户的access t
 
 $lang->gitlab->noImportableIssues = "目前没有可供导入的issue。";
 $lang->gitlab->tokenError         = "当前token非管理员权限。";
+$lang->gitlab->tokenLimit         = "GitLab Token权限不足。请更换为有管理员权限的GitLab Token。";
 $lang->gitlab->hostError          = "无效的GitLab服务地址。";
 $lang->gitlab->bindUserError      = "不能重复绑定用户 %s";
 $lang->gitlab->importIssueError   = "未选择该issue所属的执行。";
