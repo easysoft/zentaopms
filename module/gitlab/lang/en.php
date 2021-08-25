@@ -40,6 +40,7 @@ $lang->gitlab->placeholder->token = "Please fill in the access token of an accou
 
 $lang->gitlab->noImportableIssues = "There are currently no issues available for import.";
 $lang->gitlab->tokenError         = "The current token is not admin rights.";
+$lang->gitlab->tokenLimit         = "The current token has no admin privilege. Please regenerate one with admin user in GitLab.";
 $lang->gitlab->hostError          = "Invalid GitLab service address.";
 $lang->gitlab->bindUserError      = "Can not bind users repeatedly %s";
 $lang->gitlab->importIssueError   = "The execution to which this issue belongs is not selected.";
