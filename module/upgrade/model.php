@@ -4442,6 +4442,7 @@ class upgradeModel extends model
 
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->batchcheck('name', 'notempty')
+            ->check('name', 'unique', "type='project'")
             ->exec();
         if(dao::isError()) return false;
 
