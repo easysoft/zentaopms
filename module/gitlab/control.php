@@ -32,10 +32,9 @@ class gitlab extends control
         $gitlabList = $this->gitlab->getList($orderBy, $pager);
         foreach($gitlabList as $gitlab)
         {
-            $token = $this->gitlab->apiGetCurrentUser($gitlab->url,$gitlab->token);
-            $gitlab->isAdminToken = isset($token->is_admin) ? $token->is_admin : 0;
+            $token = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+            $gitlab->isAdminToken = (isset($token->is_admin) and $token->is_admin);
         }
-
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
         $this->view->gitlabList = $gitlabList;
