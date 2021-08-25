@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 禅道API的risks资源类
  * 版本V1
@@ -18,18 +17,19 @@ class risksEntry extends entry
         if(!isset($data->status)) return $this->sendError(400, 'error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-        $pager = $data->data->pager;
+        $pager  = $data->data->pager;
         $result = array();
         foreach($data->data->risks as $risk)
         {
             $result[] = $this->format($risk, 'createdDate:time,editedDate:time');
         }
+
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'risks' => $result));
     }
 
     public function post($projectID = 0)
     {
-        if((int)$projectID <= 0) $this->sendError(400, 'The id of project is wrong.');
+        if((int)$projectID <= 0) return $this->sendError(400, 'The id of project is wrong.');
 
         $fields = 'source,name,category,strategy,status,impact,probability,rate,identifiedDate,plannedClosedDate,actualClosedDate,resolvedBy,assignedTo,prevention,remedy,resolution';
         $this->batchSetPost($fields);

@@ -42,8 +42,10 @@ $routes['/user']      = 'user';
 $routes['/programs']     = 'programs';
 $routes['/programs/:id'] = 'program';
 
-$routes['/issues/:issueID']            = 'productIssue';
 $routes['/products/:productID/issues'] = 'productIssues';
+$routes['/projects/:projectID/issues'] = 'issues';
+$routes['/issues']                     = 'issues';
+$routes['/issues/:issueID']            = 'issue';
 
 $routes['/todos']     = 'todos';
 $routes['/todos/:id'] = 'todo';
@@ -54,9 +56,5 @@ $routes['/testtasks/:id'] = 'testtask';
 $routes['/projects/:project/risks'] = 'risks';
 $routes['/risks']                   = 'risks';
 $routes['/risks/:id']               = 'risk';
-
-$routes['/projects/:project/questions'] = 'issues';
-$routes['/questions']                   = 'issues';
-$routes['/questions/:id']               = 'issue';
 
 $config->routes = $routes;

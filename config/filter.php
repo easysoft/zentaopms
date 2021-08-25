@@ -287,7 +287,7 @@ $filter->doc->showfiles->get['recPerPage'] = 'int';
 $filter->doc->showfiles->get['recTotal']   = 'int';
 $filter->doc->showfiles->get['title']      = 'reg::any';
 
-$filter->file->download->get['charset']         = 'reg::lang';
+$filter->file->download->get['charset'] = 'reg::lang';
 
 $filter->mail->batchdelete->get['idList'] = 'reg::idList';
 
@@ -330,10 +330,10 @@ $filter->repo->default->get['repoPath'] = 'reg::base64';
 $filter->repo->default->get['path']     = 'reg::base64';
 $filter->repo->default->get['entry']    = 'reg::base64';
 
-$filter->repo->default->cookie['repoBranch'] = 'reg::any';
-$filter->repo->diff->cookie['arrange']       = 'reg::word';
-$filter->repo->diff->cookie['repoPairs']     = 'array';
-$filter->repo->view->cookie['repoPairs']     = 'array';
+$filter->repo->default->cookie['repoBranch']        = 'reg::any';
+$filter->repo->diff->cookie['arrange']              = 'reg::word';
+$filter->repo->diff->cookie['repoPairs']            = 'array';
+$filter->repo->view->cookie['repoPairs']            = 'array';
 $filter->repo->ajaxsynccommit->cookie['syncBranch'] = 'reg::any';
 
 $filter->webhook->bind->get['selectedDepts']    = 'reg::checked';
