@@ -154,6 +154,7 @@ class mr extends control
     public function diff($MRID)
     {
         $MR = $this->mr->getByID($MRID);
-        $versions = $this->mr->apiGetDiffVersions($MR);
+        $this->view->diffs = $this->mr->getDiffs($MR);
+        $this->display();
     }
 }
