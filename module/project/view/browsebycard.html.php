@@ -51,7 +51,7 @@
 #cards .project-members > span:after {right: -4px;}
 #cards .project-members-total {display: inline-block; margin-left: 6px; position: relative; top: 3px}
 #cards .project-actions {position: absolute; right: -8px; bottom: -5px; white-space: nowrap;}
-#cards .project-actions ul {padding: 5px 6px;}
+#cards .project-actions .dropdown-menu {padding: 5px 6px; top: -5px; right: 30px;}
 #cards .icon-ellipsis-v {font-size: 13px;}
 #cards .teamTitle {margin-bottom: 30px;}
 </style>
