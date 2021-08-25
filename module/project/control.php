@@ -300,6 +300,13 @@ class project extends control
      */
     public function kanban()
     {
+        extract($this->project->getStats4Kanban());
+
+        $this->view->title            = $this->lang->project->kanban;
+        $this->view->kanbanGroup      = $kanbanGroup;
+        $this->view->latestExecutions = $latestExecutions;
+        $this->view->programPairs     = $this->loadModel('program')->getPairs(true);
+
         $this->display();
     }
 
