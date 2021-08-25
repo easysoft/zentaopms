@@ -2581,6 +2581,14 @@ class storyModel extends model
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
 
+            /* Get story id list of linked executions. */
+            $storyIdList = array();
+            if($type == 'linkedexecution' or $type == 'unlinkedexecution')
+            {
+                $executions  = $this->loadModel('execution')->getPairs($executionID);
+                $storyIdList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs();
+            }
+
             $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
@@ -2593,6 +2601,8 @@ class storyModel extends model
                 ->beginIF($type == 'bybranch' and strpos($branchID, ',') !== false)->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in(array_keys($storyIdList))->fi()
+                ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn(array_keys($storyIdList))->fi()
                 ->fi()
                 ->beginIF($execution->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()

@@ -18,7 +18,9 @@ $lang->projectstory->batchUnlinkTip = 'Other requirements are removed. The follo
 
 global $app;
 $app->loadLang('product');
-$lang->projectstory->featureBar['story']['allstory'] = $lang->product->allStory;
-$lang->projectstory->featureBar['story']['unclosed'] = $lang->product->unclosed;
-$lang->projectstory->featureBar['story']['changed']  = $lang->product->changedStory;
-$lang->projectstory->featureBar['story']['closed']   = $lang->product->closedStory;
+$lang->projectstory->featureBar['story']['allstory']          = $lang->product->allStory;
+$lang->projectstory->featureBar['story']['unclosed']          = $lang->product->unclosed;
+$lang->projectstory->featureBar['story']['changed']           = $lang->product->changedStory;
+$lang->projectstory->featureBar['story']['closed']            = $lang->product->closedStory;
+$lang->projectstory->featureBar['story']['linkedExecution']   = 'Linked ' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['unlinkedExecution'] = 'Unlinked ' . $lang->execution->common;
