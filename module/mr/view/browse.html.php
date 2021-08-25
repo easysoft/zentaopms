@@ -44,8 +44,9 @@
           <td class='text'><?php echo zget($lang->mr->mergeStatusList, $mr->mergeStatus);?></td>
           <td class='text-left c-actions'>
             <?php
-            common::printLink('mr', 'view', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->list}' class='btn btn-info'");
+            common::printLink('mr', 'view', "mr={$mr->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
             common::printLink('mr', 'edit', "mrID=$mr->id", '<i class="icon icon-edit"></i>', '', "title='{$lang->mr->edit}' class='btn btn-info'");
+            common::printLink('mr', 'diff', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->diff}' class='btn btn-info'");
             if(common::hasPriv('mr', 'delete')) echo html::a($this->createLink('mr', 'delete', "id=$mr->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn'");
             ?>
           </td>

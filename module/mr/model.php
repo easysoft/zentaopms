@@ -348,24 +348,26 @@ class mrModel extends model
      * @access public
      * @return object
      */
-    public function apiGetDiffVersions($MR)
+    public function getDiffs($MR)
     {
-        $url = sprintf($this->gitlab->getApiRoot($MR->gitlabID), "/projects/{$MR->sourceProject}/merge_requests/$MR->mriid/versions");
-        return json_decode(commonModel::http($url));
-    }
+        $gitlab = $this->gitlab->getByID($MR->gitlabID);
+        $fromProject = $MR->sourceProject;
+        $toProject   = $MR->targetProject;
 
-    /**
-     * Get single diff version by API.
-     *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-a-single-mr-diff-version
-     * @param  object    $MR
-     * @param  int       $versionID
-     * @access public
-     * @return object
-     */
-    public function apiGetSingleDiffVersion($MR, $versionID)
-    {
-        $url = sprintf($this->gitlab->getApiRoot($MR->gitlabID), "/projects/{$MR->sourceProject}/merge_requests/{$MR->mriid}/versions/$versionID");
-        return json_decode(commonModel::http($url));
+        $this->loadModel('repo');
+        $repo = new stdclass;
+        $repo->SCM      = 'GitLab';
+        $repo->gitlab   = $gitlab->id;
+        $repo->project  = $toProject;
+        $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $toProject);
+        $repo->client   = $gitlab->url;
+        $repo->password = $gitlab->token;
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding));
+        return $scm->diff('', $fromProject, $toProject, $parse = true, $fromProject);
     }
 }
