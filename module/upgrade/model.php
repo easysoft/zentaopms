@@ -1050,10 +1050,11 @@ class upgradeModel extends model
                 $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
                 if(file_exists($fullPath))
                 {
-                    if((is_dir($fullPath)  and !$zfile->removeDir($fullPath)) or
-                       (is_file($fullPath) and !$zfile->removeFile($fullPath)))
+                    $isDir = is_dir($fullPath);
+                    if(($isDir  and !$zfile->removeDir($fullPath)) or
+                       (!$isDir and !$zfile->removeFile($fullPath)))
                     {
-                        $result[] = $fullPath;
+                        $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $fullPath;
                     }
                 }
             }
