@@ -211,6 +211,115 @@ class html extends baseHTML
         $value = str_replace("'", '&#039;', $value);
         return "<input type='number' name='$name' {$id} value='$value' $attrib />\n";
     }
+
+    /**
+     * Convert a string to a uni code
+     *
+     * @param string $string
+     * @return int
+     */
+    static public function stringToCode($string)
+    {
+        $stringLength = strlen($string);
+        if($stringLength == 0) return 0;
+
+        $code = 0;
+        for($i = 0; $i < $stringLength; ++$i)
+        {
+            $code += ($i + 1) * ord($string[$i]);
+        }
+        return $code;
+    }
+
+    /**
+     * Create user avatar.
+     *
+     * @param  string|object|array  $user       User object or user avatar address or user account
+     * @param  string|int           $size       Avatar size, can be a number or preset sizes: "xs", "sm", "", "lg", "xl", default is ""
+     * @param  string               $className  Avatar element class name, default is "avatar-circle"
+     * @param  string               $attrib     Extra attributes on avatar element
+     * @param  string               $tag        Avatar element tag name, default is "div"
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function avatar($user, $size = '', $className = 'avatar-circle', $attrib = '', $tag = 'div')
+    {
+        if(is_string($user))
+        {
+            $userObj = new stdClass();
+            if(strlen($user) > 1) $userObj->avatar = $user;
+            else $userObj->account = $user;
+            $user = $userObj;
+        }
+        else if(is_array($user))
+        {
+            $userObj = new stdClass();
+            $userObj->avatar  = $user['avatar'];
+            $userObj->account = $user['account'];
+            $user = $userObj;
+        }
+
+        $hasImage = !empty($user->avatar);
+
+        $extraClassName = $hasImage ? ' has-img' : ' has-text';
+        $style = '';
+
+        if($size)
+        {
+            if(is_numeric($size)) $style .= "width: $size" . "px; height: $size" . "px; line-height: $size" . 'px;';
+            $extraClassName .= " avatar-$size";
+        }
+
+        if(!$hasImage)
+        {
+            $colorHue = (html::stringToCode($user->account) * 43) % 360;
+            $style .= "background: hsl($colorHue, 100%, 58%);";
+        }
+
+        if(!empty($style)) $style = "style='$style'";
+
+        $html = "<$tag class='avatar$extraClassName $className' $attrib $style>";
+
+        if($hasImage) $html .= html::image($user->avatar);
+        else $html .= '<span>' . strtoupper($user->account[0]) . '</span>';
+
+        $html .= "</$tag>";
+
+        return $html;
+    }
+
+    /**
+     * Create a small user avatar.
+     *
+     * @param  string|object $user      User object or user avatar address or user account
+     * @param  string        $className Avatar element class name, default is "avatar-circle"
+     * @param  string        $attrib    Extra attributes on avatar element
+     * @param  string        $tag       Avatar element tag name, default is "div"
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function smallAvatar($user, $className = 'avatar-circle', $attrib = '', $tag = 'div')
+    {
+        return html::avatar($user, 'sm', $className, $attrib, $tag);
+    }
+
+    /**
+     * Create a large user avatar.
+     *
+     * @param  string|object $user      User object or user avatar address or user account
+     * @param  string        $className Avatar element class name, default is "avatar-circle"
+     * @param  string        $attrib    Extra attributes on avatar element
+     * @param  string        $tag       Avatar element tag name, default is "div"
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function largeAvatar($user, $className = 'avatar-circle', $attrib = '', $tag = 'div')
+    {
+        return html::avatar($user, 'lg', $className, $attrib, $tag);
+    }
 }
 
 /**
