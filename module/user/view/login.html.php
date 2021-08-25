@@ -72,17 +72,23 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
           </form>
         </div>
       </div>
-      <?php if(isset($demoUsers)):?>
+      <?php if(!empty($this->config->global->showDemoUsers)):?>
+      <?php
+      $demoPassword = '123456';
+      $md5Password  = md5('123456');
+      $demoUsers    = 'productManager,projectManager,dev1,dev2,dev3,tester1,tester2,tester3,testManager';
+      if($this->app->getClientLang() == 'en') $demoUsers = 'thePO,pm1,pm2,pg1,pg2,pg3,thePM,qa1,theQS';
+      $demoUsers = $this->dao->select('account,password,realname')->from(TABLE_USER)->where('account')->in($demoUsers)->andWhere('deleted')->eq(0)->andWhere('password')->eq($md5Password)->fetchAll('account');
+      ?>
       <footer>
         <span><?php echo $lang->user->loginWithDemoUser;?></span>
         <?php
-        $password = md5('123456');
-        $link     = inlink('login');
-        $link    .= strpos($link, '?') !== false ? '&' : '?';
+        $link  = inlink('login');
+        $link .= strpos($link, '?') !== false ? '&' : '?';
         foreach($demoUsers as $demoAccount => $demoUser)
         {
-            if($demoUser->password != $password) continue;
-            echo html::a($link . "account={$demoAccount}&password=" . md5($password . $this->session->rand), $demoUser->realname);
+            if($demoUser->password != $md5Password) continue;
+            echo html::a($link . "account={$demoAccount}&password=" . md5($md5Password . $this->session->rand), $demoUser->realname);
         }
         ?>
       </footer>

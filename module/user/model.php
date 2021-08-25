@@ -1615,8 +1615,9 @@ class userModel extends model
             }
 
             /* Compute parent stakeholders. */
-            $programStakeholderGroup = $this->loadModel('stakeholder')->getParentStakeholderGroup(array_keys($allPrograms)); 
-            $projectStakeholderGroup = $this->loadModel('stakeholder')->getParentStakeholderGroup(array_keys($allProjects)); 
+            $this->loadModel('stakeholder');
+            $programStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
+            $projectStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
 
             list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
 
