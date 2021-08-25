@@ -1875,10 +1875,10 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $app = $this->app->openApp;
-            if($app != 'doc') $app = $objectID ? $doc->type : 'doc';
+            $tab = $this->app->openApp;
+            if($tab != 'doc') $tab = $objectID ? $doc->type : 'doc';
 
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='$app' title='{$doc->title}'") . '</li>';
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='$tab' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
