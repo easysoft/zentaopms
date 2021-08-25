@@ -49,7 +49,7 @@
 
         appsMap['search'] =
         {
-            active:     false,
+            opened:     false,
             code:       'search',
             group:      'search',
             icon:       'icon-search',
@@ -215,7 +215,7 @@
                 .append($iframe)
                 .appendTo('#apps');
 
-            app = $.extend({$iframe: $iframe, $app: $app, code: appCode}, appsMap[appCode]);
+            app = $.extend({$iframe: $iframe, $app: $app, code: appCode, opened: true}, appsMap[appCode]);
             openedApps[appCode] = app;
 
             /* If first show without url, then use the default url */
@@ -235,7 +235,7 @@
         }
 
         /* Show page app and update iframe source */
-        if(url) reloadApp(appCode, url);
+        if(url) reloadApp(appCode, url, true);
         app.zIndex = openedAppZIndex++;
         app.$app.show().css('z-index', app.zIndex);
 
@@ -264,13 +264,21 @@
         }
         app.$bar = $bar;
 
-        /* Update app state */
+        /* Update others app state */
+        for(var theCode in openedApps)
+        {
+            if(theCode !== appCode) openedApps[theCode].show = false;
+        }
+
+        /* Update current app state */
         app.show = true;
         if(lastOpenedApp !== appCode)
         {
             lastOpenedApp = appCode;
             updateAppUrl(appCode, null, null, true);
         }
+
+        app.$app.trigger('show.zentaoapp', app);
 
         return true;
     }
@@ -309,6 +317,8 @@
         app.$app.hide();
         app.show = false;
         lastOpenedApp = null;
+
+        app.$app.trigger('hide.zentaoapp', app);
 
         /* Active last app */
         var lastApp = getLastApp(true) || getLastApp();
@@ -377,15 +387,18 @@
 
         var firstClass = $("#bars li:first").attr('class');
         if(firstClass == 'divider') $("#bars li.divider:first").remove();
+
+        app.$app.trigger('close.zentaoapp', app);
     }
 
     /**
      * Reload app
-     * @param {string} appCode       The app code of target app to reload
-     * @param {string|boolean} [url] The new url to load, it's optional
+     * @param {string}         appCode           The app code of target app to reload
+     * @param {string|boolean} [url]             The new url to load, it's optional
+     * @param {boolean}        [notTriggerEvent] Skip trigger event
      * @return {void}
      */
-    function reloadApp(appCode, url)
+    function reloadApp(appCode, url, notTriggerEvent)
     {
         var app = openedApps[appCode];
         if(!app) return;
@@ -402,6 +415,8 @@
         {
             iframe.src = url || app.url || iframe.src;
         }
+
+        if(!notTriggerEvent) app.$app.trigger('reload.zentaoapp', app);
     }
 
     /**
@@ -414,6 +429,7 @@
      */
     function updateAppUrl(appCode, url, title, push)
     {
+        // if(window.TUTORIAL) return;
         var app = openedApps[appCode];
         if(!app || lastOpenedApp !== appCode) return;
 
