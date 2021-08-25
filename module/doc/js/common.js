@@ -75,7 +75,7 @@ function setBrowseType(type)
 
 $(document).ready(function()
 {
-    /* Hide #module chosen dropdown on #lib dropdown show */
+    /* Hide #module chosen dropdown on #lib dropdown show. */
     $('#lib').on('chosen:showing_dropdown', function()
     {
         $('#module').trigger('chosen:close');
@@ -112,7 +112,7 @@ $(document).ready(function()
 
     'use strict';
 
-    var NAME = 'zui.splitRow'; // model name
+    var NAME = 'zui.splitRow'; // model name.
 
     /* The SplitRow model class. */
     var SplitRow = function(element, options)
@@ -210,7 +210,7 @@ $(document).ready(function()
         resizeCols();
     };
 
-    /* default options */
+    /* default options. */
     SplitRow.DEFAULTS =
     {
         spliter: '<div class="col-spliter"></div>',
@@ -218,7 +218,7 @@ $(document).ready(function()
         middleSize: 850
     };
 
-    /* Extense jquery element */
+    /* Extense jquery element. */
     $.fn.splitRow = function(option)
     {
         return this.each(function()
@@ -234,7 +234,7 @@ $(document).ready(function()
 
     $.fn.splitRow.Constructor = SplitRow;
 
-    /* Auto call splitRow after document load complete */
+    /* Auto call splitRow after document load complete. */
     $(function()
     {
         $('.split-row').splitRow();
