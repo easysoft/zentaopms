@@ -131,6 +131,17 @@ $lang->project->moreProject        = '更多项目';
 $lang->project->days               = '可用工作日';
 $lang->project->etc                = "等";
 
+$lang->project->kanban = new stdclass();
+$lang->project->kanban->typeList['my']    = '我负责的项目';
+$lang->project->kanban->typeList['other'] = '其他项目';
+
+$lang->project->kanban->waitProjects      = '未开始的项目';
+$lang->project->kanban->doingProjects     = '进行中的项目';
+$lang->project->kanban->doingExecutions   = '进行中的执行';
+$lang->project->kanban->closedProjects    = '已关闭的项目';
+
+$lang->project->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
+
 $lang->project->productNotEmpty        = '请关联产品或创建产品。';
 $lang->project->existProductName       = '产品名称已存在。';
 $lang->project->changeProgram          = '%s > 修改项目集';

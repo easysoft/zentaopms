@@ -1795,6 +1795,50 @@ class projectModel extends model
     }
 
     /**
+     * Get stats for project kanban.
+     *
+     * @access public
+     * @return void
+     */
+    public function getStats4Kanban()
+    {
+        $this->loadModel('program');
+
+        $projects   = $this->program->getProjectStats(0, 'all');
+        $executions = $this->getStats(0, 'doing');
+
+        $doingExecutions  = array();
+        $latestExecutions = array();
+        foreach($executions as $execution) $doingExecutions[$execution->project][$execution->id] = $execution;
+        foreach($doingExecutions as $projectID => $executions)
+        {
+            krsort($doingExecutions[$projectID]);
+            $latestExecutions[$projectID] = current($doingExecutions[$projectID]);
+        }
+
+        $myProjects    = array();
+        $otherProjects = array();
+        foreach($projects as $project)
+        {
+            if(strpos('wait,doing,closed', $project->status) === false) continue;
+
+            $projectPath = explode(',', trim($project->path, ','));
+            $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
+
+            if($project->PM == $this->app->user->account)
+            {
+                $myProjects[$topProgram][$project->status][$project->id] = $project;
+            }
+            else
+            {
+                $otherProjects[$topProgram][$project->status][$project->id] = $project;
+            }
+        }
+
+        return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);
+    }
+
+    /**
      * Set menu of project module.
      *
      * @param  int    $objectID  projectID
