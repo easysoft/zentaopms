@@ -21,7 +21,7 @@ $(function()
         $('.ke-toolbar .ke-outline:last').after("<span data-name='unlink' class='ke-outline' title='Markdown' onclick='toggleEditor(\"markdown\")' style='font-size: unset; line-height: unset;'>Markdown</span>");
     }
 
-    $(document).on("mousedown", 'span[data-name="fullscreen"]', function()
+    $(document).on("mouseup", 'span[data-name="fullscreen"]', function()
     {
         if($(this).hasClass('ke-selected'))
         {
@@ -35,7 +35,7 @@ $(function()
         }
     });
 
-    $(document).on("mousedown", 'a[title="Fullscreen"],.icon-columns', function()
+    $(document).on("mouseup", 'a[title="Fullscreen"],.icon-columns', function()
     {
         setTimeout(function()
         {
