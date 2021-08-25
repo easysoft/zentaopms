@@ -942,14 +942,6 @@ class user extends control
         }
         else
         {
-            if(!empty($this->config->global->showDemoUsers))
-            {
-                $demoUsers = 'productManager,projectManager,dev1,dev2,dev3,tester1,tester2,tester3,testManager';
-                if($this->app->getClientLang() == 'en') $demoUsers = 'thePO,pm1,pm2,pg1,pg2,pg3,thePM,qa1,theQS';
-                $demoUsers = $this->dao->select('account,password,realname')->from(TABLE_USER)->where('account')->in($demoUsers)->andWhere('deleted')->eq(0)->fetchAll('account');
-                $this->view->demoUsers = $demoUsers;
-            }
-
             $this->loadModel('misc');
             $this->view->noGDLib     = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
             $this->view->title       = $this->lang->user->login;
