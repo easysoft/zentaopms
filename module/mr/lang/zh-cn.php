@@ -18,6 +18,8 @@ $lang->mr->assignee    = '指派给';
 $lang->mr->reviewer    = '评审人';
 $lang->mr->link        = 'GitLab链接';
 $lang->mr->mergeStatus = '是否可合并';
+$lang->mr->commits     = '提交数';
+$lang->mr->changes     = '更改数';
 
 $lang->mr->statusList = array();
 $lang->mr->statusList['opened'] = '开放中';
@@ -43,4 +45,55 @@ $lang->mr->createFailedFromAPI = "创建合并请求失败。";
 $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 
 $lang->mr->description = "描述";
+
+$lang->mr->from = "请求合并";
+$lang->mr->to   = "入";
+$lang->mr->at   = "于";
+$lang->mr->pipeline        = "流水线";
+$lang->mr->pipelineSuccess = "已通过";
+$lang->mr->pipelineFailed  = "未通过";
+$lang->mr->pipelineCancled = "已取消";
+$lang->mr->pipelineUnknown = "未知";
+
+$lang->mr->pipelineStatus = array();
+$lang->mr->pipelineStatus['success']  = "已通过";
+$lang->mr->pipelineStatus['failed']   = "未通过";
+$lang->mr->pipelineStatus['canceled'] = "已取消";
+
+$lang->mr->MRHasConflicts = "是否存在合并冲突";
+$lang->mr->hasConflicts   = "存在合并冲突";
+$lang->mr->hasNoConflict  = "可以合并请求";
+$lang->mr->mergeByManual  = "此合并请求可以手动合并，请使用以下";
+$lang->mr->commandLine    = "命令行";
+
+/**
+ * Merge Command Document.
+ *
+ * %s source_roject::http_url_to_repo
+ * %s mr::source_branch
+ * %s source_project::path_with_namespace . '-' . mr::source_branch
+ * %s mr::target_branch
+ * %s source_project::path_with_namespace . '-' . mr::source_branch
+ * %s mr::target_branch
+ */
+$lang->mr->commandDocument = <<< EOD
+<h4>在本地检出、审核和合并</h4>
+    <strong>第 1 步</strong>. 获取并查看此合并请求的分支
+    <pre>
+    git fetch "%s" %s
+    git checkout -b "%s" FETCH_HEAD
+    </pre>
+    <strong>第 2 步</strong>. 在本地查看更改
+    <br>
+    <strong>第 3 步</strong>. 合并分支并解决出现的任何冲突
+    <pre>
+    git fetch origin
+    git checkout "%s"
+    git merge --no-ff "%s"
+    </pre>
+    <strong>第 4 步</strong>. 将合并结果推送到GitLab
+    <pre>
+    git push origin "%s"
+    </pre>
+EOD;
 

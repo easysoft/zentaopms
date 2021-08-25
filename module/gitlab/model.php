@@ -471,6 +471,21 @@ class gitlabModel extends model
     }
 
     /**
+     * Get single branch by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranch($gitlabID, $projectID, $branch)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/branches/$branch");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
      * Get Forks of a project by API.
      *
      * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
