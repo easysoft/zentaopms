@@ -29,7 +29,7 @@
 #cards .project-infos > span + span {margin-left: 15px;}
 #cards .project-infos > .budget {max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #cards .project-detail {position: absolute; top: 75px; left: 16px; right: 16px; font-size: 12px;}
-#cards .project-footer {position: absolute; bottom: 5px;}
+#cards .project-footer {position: absolute; bottom: 10px; right: 10px; left: 15px;}
 #cards .pager {margin: 0; float: right;}
 #cards .pager .btn {border: none}
 #cards .panel .label-wait {background: #EFEFEF !important; color: #838A9D;}
@@ -40,16 +40,18 @@
 #cards .project-infos .text-red {color: #F85A40 !important;}
 #cards .project-detail .progress-pie {width: 24px; position: absolute; top: 18px;}
 #cards .project-detail  .leftTasks, .totalLeft {display:block; margin-top: 8px;}
-#cards .project-members {float: left;}
-#cards .project-members .avatar {display: inline-block; width: 25px; height: 25px; line-height: 25px; margin-right: 1px;}
-#cards .project-members a:not(:first-child) {margin-left: -5px;}
-#cards .totalMembers{display: inline-block; margin-left: 6px; position: absolute; bottom: 8px;}
-#cards .project-actions {float: right;}
-#cards .project-actions .menu-actions {padding-right: 20px;}
-#cards .project-actions ul {min-width: 35px; padding: 5px 6px;}
-#cards .project-actions .dropdown-hover:hover>.dropdown-menu ul,
-#cards .project-actions .open>.dropdown-menu ul {display: flex;}
-#cards .menu-actions .btn.btn-action {margin-bottom: -3px !important; margin-right: 5px;}
+#cards .project-members {float: left; height: 24px; line-height: 24px;}
+#cards .project-members > a {display: inline-block; height: 24px;}
+#cards .project-members > a + a {margin-left: -5px;}
+#cards .project-members > a > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 1px;}
+#cards .project-members > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: relative; border-radius: 50%; top: 3px; margin: 0 3px;}
+#cards .project-members > span:before,
+#cards .project-members > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
+#cards .project-members > span:before {left: -4px;}
+#cards .project-members > span:after {right: -4px;}
+#cards .project-members-total {display: inline-block; margin-left: 6px; position: relative; top: 3px}
+#cards .project-actions {position: absolute; right: -8px; bottom: -5px; white-space: nowrap;}
+#cards .project-actions ul {padding: 5px 6px;}
 #cards .icon-ellipsis-v {font-size: 13px;}
 #cards .teamTitle {margin-bottom: 30px;}
 </style>
@@ -138,41 +140,39 @@
               </div>
             </div>
           </div>
-          <div class='project-footer table-row'>
+          <div class='project-footer'>
             <?php $titleClass = ($project->teamCount == 0 and !$canActions) ? 'teamTitle' : '';?>
             <?php $count      = 0;?>
             <div class="<?php echo $titleClass?>"><?php echo $lang->project->teamMember;?></div>
-            <?php if(!empty($project->teamMembers)):?>
-            <div class='project-members table-col'>
-              <?php foreach($project->teamMembers as $member):?>
-              <?php
-              if($count > 2) continue;
-              if(!isset($users[$member]))
-              {
-                  $project->teamCount --;
-                  continue;
-              }
-              $count ++;
-              ?>
-              <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
-                <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
-                  <?php echo !empty($usersAvatar[$member]) ? html::image(zget($usersAvatar, $member)) : strtoupper($member[0]);?>
-                </div>
-              </a>
-              <?php endforeach;?>
-              <?php if($project->teamCount > 3):?>
-              <?php echo '...';?>
-              <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
-                <div class="avatar bg-secondary avatar-circle avatar-<?php echo $member;?>">
-                  <?php echo !empty($usersAvatar[end($project->teamMembers)]) ? html::image(zget($usersAvatar, end($project->teamMembers))) : strtoupper($member[0]);?>
-                </div>
-              </a>
+            <div class="clearfix">
+              <?php if(!empty($project->teamMembers)):?>
+              <div class='project-members pull-left'>
+                <?php foreach($project->teamMembers as $member):?>
+                <?php
+                if($count > 2) continue;
+                if(!isset($users[$member]))
+                {
+                    $project->teamCount --;
+                    continue;
+                }
+                $count ++;
+                ?>
+                <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
+                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member)); ?>
+                </a>
+                <?php endforeach;?>
+                <?php if($project->teamCount > 3):?>
+                <?php echo '<span>…</span>';?>
+                <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
+                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($project->teamMembers)], 'account' => $member)); ?>
+                </a>
+                <?php endif;?>
+              </div>
               <?php endif;?>
+              <div class='project-members-total  pull-left'><?php echo html::a(helper::createLink('project', 'team', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></div>
             </div>
-            <?php endif;?>
-            <span class='totalMembers'><?php echo html::a(helper::createLink('project', 'team', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></span>
-            <div class='project-actions table-col'>
-              <div class='menu-actions'>
+            <div class='project-actions'>
+              <div class='dropdown'>
                 <?php if($canActions):?>
                 <?php echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");?>
                 <ul class='dropdown-menu pull-right'>

@@ -62,9 +62,7 @@
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td>
           <?php if(!empty($program->PM)):?>
-          <div class="avatar bg-secondary avatar-circle avatar-<?php echo $program->PM;?>">
-            <?php echo !empty($usersAvatar[$program->PM]) ? html::image($usersAvatar[$program->PM]) : strtoupper($program->PM[0]);?>
-          </div>
+          <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM)); ?>
           <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
           <?php $userName = zget($users, $program->PM);?>
           <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
