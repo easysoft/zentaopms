@@ -1875,10 +1875,10 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $app = $this->app->openApp;
-            if($app != 'doc') $app = $objectID ? $doc->type : 'doc';
+            $tab = $this->app->openApp;
+            if($tab != 'doc') $tab = $objectID ? $doc->type : 'doc';
 
-            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='$app' title='{$doc->title}'") . '</li>';
+            $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='$tab' title='{$doc->title}'") . '</li>';
         }
 
         $collectionCount = $this->dao->select('count(id) as count')->from(TABLE_DOC)
@@ -1933,84 +1933,6 @@ class docModel extends model
         $actions .='</ul>';
 
         return $actions;
-    }
-
-    /**
-     * Send mail.
-     *
-     * @param  int    $docID
-     * @param  int    $actionID
-     * @access public
-     * @return void
-     */
-    public function sendmail($docID, $actionID)
-    {
-        /* Load module and get doc and users. */
-        $this->loadModel('mail');
-        $doc   = $this->getById($docID);
-        $users = $this->loadModel('user')->getPairs('noletter');
-
-        /* When the content type is markdown format, add attributes to the table. */
-        if($doc->contentType == 'markdown')
-        {
-            $doc->content = $this->app->loadClass('hyperdown')->makeHtml($doc->content);
-            $doc->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $doc->content);
-            $doc->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $doc->content);
-            $doc->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $doc->content);
-        }
-
-        /* Get action info. */
-        $action          = $this->loadModel('action')->getById($actionID);
-        $history         = $this->action->getHistory($actionID);
-        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
-
-        /* Get mail content. */
-        $modulePath = $this->app->getModulePath($appName = '', 'doc');
-        $oldcwd     = getcwd();
-        $viewFile   = $modulePath . 'view/sendmail.html.php';
-        chdir($modulePath . 'view');
-        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
-        {
-            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
-            chdir($modulePath . 'ext/view');
-        }
-        ob_start();
-        include $viewFile;
-        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
-        $mailContent = ob_get_contents();
-        ob_end_clean();
-        chdir($oldcwd);
-
-        /* Get sender and subject. */
-        $sendUsers = $this->getToAndCcList($doc);
-        if(!$sendUsers) return;
-        list($toList, $ccList) = $sendUsers;
-        $subject = $this->getSubject($doc, $action->action);
-
-        /* Send mail. */
-        $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
-    }
-
-    /**
-     * Get mail subject.
-     *
-     * @param  object $doc
-     * @param  string $actionType created|edited
-     * @access public
-     * @return string
-     */
-    public function getSubject($doc, $actionType)
-    {
-        /* Set email title. */
-        if($actionType == 'created')
-        {
-            return sprintf($this->lang->doc->mail->create->title, $this->app->user->realname, $doc->id, $doc->title);
-        }
-        else
-        {
-            return sprintf($this->lang->doc->mail->edit->title, $this->app->user->realname, $doc->id, $doc->title);
-        }
     }
 
     /**

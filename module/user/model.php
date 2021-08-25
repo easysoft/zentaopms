@@ -1234,8 +1234,7 @@ class userModel extends model
         if(!$uploadResult) return array('result' => 'fail', 'message' => $this->lang->fail);
 
         $fileIdList = array_keys($uploadResult);
-        $file = $this->file->getByID($fileIdList[0]);
-        $this->dao->update(TABLE_USER)->set('avatar')->eq($file->webPath)->where('account')->eq($this->app->user->account)->exec();
+        $file       = $this->file->getByID($fileIdList[0]);
 
         return array('result' => 'success', 'message' => '', 'locate' => helper::createLink('user', 'cropavatar', "image={$file->id}"));
     }
@@ -1615,8 +1614,9 @@ class userModel extends model
             }
 
             /* Compute parent stakeholders. */
-            $programStakeholderGroup = $this->loadModel('stakeholder')->getParentStakeholderGroup(array_keys($allPrograms)); 
-            $projectStakeholderGroup = $this->loadModel('stakeholder')->getParentStakeholderGroup(array_keys($allProjects)); 
+            $this->loadModel('stakeholder');
+            $programStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
+            $projectStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
 
             list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
 

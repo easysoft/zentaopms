@@ -76,8 +76,7 @@ class messageModel extends model
             if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
             {
                 $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-                $this->loadModel($moduleName);
-                if(method_exists($this->$moduleName, 'sendmail')) $this->$moduleName->sendmail($objectID, $actionID);
+                $this->loadModel('mail')->sendmail($objectID, $actionID);
             }
         }
 

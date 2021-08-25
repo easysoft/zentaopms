@@ -760,7 +760,7 @@ class projectModel extends model
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->check('name', 'unique', "type='project'")
+            ->check('name', 'unique', "type='project' AND deleted='0'")
             ->exec();
 
         /* Add the creater to the team. */
@@ -951,7 +951,7 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->check('name', 'unique', "id != $projectID AND type='project'")
+            ->check('name', 'unique', "id != $projectID AND type='project' AND deleted='0'")
             ->where('id')->eq($projectID)
             ->exec();
 

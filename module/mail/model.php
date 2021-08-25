@@ -661,4 +661,134 @@ class mailModel extends model
 
         return $result;
     }
+
+    /**
+     * Send mail.
+     *
+     * @param  int $objectID
+     * @param  int $actionID
+     * @access public
+     * @return void
+     */
+    public function sendmail($objectID, $actionID)
+    {
+        /* Load module and get vars. */
+        $this->loadModel('action');
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        $action     = $this->action->getById($actionID);
+        $history    = $this->action->getHistory($actionID);
+        $objectType = $action->objectType;
+        $object     = $this->loadModel($objectType)->getByID($objectID);
+        $nameFields = $this->config->action->objectNameFields[$objectType];
+        $title      = zget($object, $nameFields, '');
+        $subject    = $this->getSubject($objectType, $object, $title, $action->action);
+
+        if($objectType == 'review' and empty($object->auditedBy)) return;
+
+        if($objectType == 'doc')
+        {
+            if($object->contentType == 'markdown')
+            {
+                $object->content = $this->app->loadClass('hyperdown')->makeHtml($object->content);
+                $object->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $object->content);
+                $object->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $object->content);
+                $object->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $object->content);
+            }
+        }
+
+        $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
+        $action->appendLink = '';
+        if(strpos($action->extra, ':') !== false)
+        {
+            list($extra, $id) = explode(':', $action->extra);
+            $action->extra    = $extra;
+            if($title)
+            {
+                $action->appendLink = html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($action->objectType, 'view', "id=$id", 'html'), "#$id " . $title);
+            }
+        }
+
+        if($objectType == 'meeting') $rooms = $this->loadmodel('meetingroom')->getpairs();
+        if($objectType == 'review') $this->app->loadLang('baseline');
+
+        /* Get mail content. */
+        $modulePath = $this->app->getModulePath($appName = '', $objectType);
+        $oldcwd     = getcwd();
+        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        chdir($modulePath . 'view');
+        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        {
+            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            chdir($modulePath . 'ext/view');
+        }
+        ob_start();
+        include $viewFile;
+        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+        chdir($oldcwd);
+
+        /* Get the sender. */
+        if($objectType == 'story' or $objectType == 'meeting')
+        {
+            $sendUsers = $this->{$objectType}->getToAndCcList($object, $action->action);
+        }
+        elseif($objectType == 'review')
+        {
+            $sendUsers = array($object->auditedBy, '');
+        }
+        else
+        {
+            $sendUsers  = $this->{$objectType}->getToAndCcList($object);
+        }
+
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+
+        /* Send it. */
+        $this->send($toList, $subject, $mailContent, $ccList);
+        if($this->isError()) error_log(join("\n", $this->getError()));
+    }
+
+    /**
+     * Get subject.
+     *
+     * @param  string $objectType
+     * @param  object $object
+     * @param  string $title
+     * @param  string $actionType
+     * @access public
+     * @return string
+     */
+    public function getSubject($objectType, $object, $title, $actionType)
+    {
+        $suffix    = '';
+        $subject   = '';
+        $titleType = 'edit';
+
+        if($objectType == 'testtask')
+        {
+            $this->app->loadLang('testtask');
+
+            if($actionType == 'opened') $titleType = 'create';
+            if($actionType == 'closed') $titleType = 'close';
+
+            $subject = sprintf($this->lang->testtask->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->name);
+        }
+        elseif($objectType == 'doc')
+        {
+            $this->app->loadLang('doc');
+
+            if($actionType == 'created') $titleType = 'create';
+            $subject = sprintf($this->lang->doc->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->title);
+        }
+        else
+        {
+            if($objectType == 'story' or $objectType == 'bug') $suffix = empty($object->product) ? '' : ' - ' . $this->loadModel('product')->getById($object->product)->name;
+            if($objectType == 'task') $suffix = empty($object->execution) ? '' : ' - ' . $this->loadModel('execution')->getById($object->execution)->name;
+
+            $subject = strtoupper($objectType) . ' #' . $object->id . ' ' . $title . $suffix;
+        }
+        return $subject;
+    }
 }

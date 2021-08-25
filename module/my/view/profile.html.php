@@ -16,13 +16,13 @@
 <div id='mainContent'>
   <div class='cell'>
     <div class='main-header text-center'>
-      <span class="avatar avatar bg-secondary avatar-circle">
+      <div id="avatarUpload">
+        <?php echo html::avatar($user, 50); ?>
         <form method='post' class='form-ajax' action=<?php echo inlink('uploadAvatar');?> id='avatarForm' enctype='multipart/form-data'>
           <input type="file" name="files" id="files" class="form-control hidden">
-          <?php $avatar = $user->avatar ? html::image($user->avatar) : strtoupper($user->account[0]);?>
-          <?php echo html::a('javascript:void(0);', $avatar, '', "class='btn-avatar' id='avatarUploadBtn' data-placement='right'");?>
+          <?php echo html::a('javascript:void(0);', '<i class="icon icon-pencil icon-2x"></i>', '', "class='btn-avatar' id='avatarUploadBtn' data-toggle='tooltip' data-container='body' data-placement='bottom' title='{$lang->my->uploadAvatar}'");?>
         </form>
-      </span>
+      </div>
       <span class='user-name'><?php echo $user->realname;?></span>
       <span class='user-role'><?php echo zget($lang->user->roleList, $user->role, '');?></span>
     </div>

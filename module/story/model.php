@@ -2581,6 +2581,14 @@ class storyModel extends model
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
 
+            /* Get story id list of linked executions. */
+            $storyIdList = array();
+            if($type == 'linkedexecution' or $type == 'unlinkedexecution')
+            {
+                $executions  = $this->loadModel('execution')->getPairs($executionID);
+                $storyIdList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs();
+            }
+
             $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
@@ -2593,6 +2601,8 @@ class storyModel extends model
                 ->beginIF($type == 'bybranch' and strpos($branchID, ',') !== false)->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in(array_keys($storyIdList))->fi()
+                ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn(array_keys($storyIdList))->fi()
                 ->fi()
                 ->beginIF($execution->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
@@ -3303,19 +3313,6 @@ class storyModel extends model
     }
 
     /**
-     * Get mail subject.
-     *
-     * @param  object    $story
-     * @access public
-     * @return string
-     */
-    public function getSubject($story)
-    {
-        $productName = empty($story->product) ? '' : ' - ' . $this->loadModel('product')->getById($story->product)->name;
-        return 'STORY #' . $story->id . ' ' . $story->title . $productName;
-    }
-
-    /**
      * Get toList and ccList.
      *
      * @param  object    $story
@@ -3878,63 +3875,6 @@ class storyModel extends model
         if(!empty($this->config->story->forceReview)) $forceReview = strpos(",{$this->config->story->forceReview},", ",{$this->app->user->account},") !== false;
 
         return $forceReview;
-    }
-
-    /**
-     * Send mail
-     *
-     * @param  int    $storyID
-     * @param  int    $actionID
-     * @access public
-     * @return void
-     */
-    public function sendmail($storyID, $actionID)
-    {
-        $this->loadModel('mail');
-        $story = $this->getById($storyID);
-        $users = $this->loadModel('user')->getPairs('noletter');
-
-        /* Get actions. */
-        $action  = $this->loadModel('action')->getById($actionID);
-        $history = $this->action->getHistory($actionID);
-        $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
-        $action->appendLink = '';
-        if(strpos($action->extra, ':') !== false)
-        {
-            list($extra, $id) = explode(':', $action->extra);
-            $action->extra    = $extra;
-            if($id)
-            {
-                $name = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($id)->fetch('title');
-                if($name) $action->appendLink = html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($action->objectType, 'view', "id=$id", 'html'), "#$id " . $name);
-            }
-        }
-
-        /* Get mail content. */
-        $modulePath = $this->app->getModulePath($appName = '', 'story');
-        $oldcwd     = getcwd();
-        $viewFile   = $modulePath . 'view/sendmail.html.php';
-        chdir($modulePath . 'view');
-        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
-        {
-            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
-            chdir($modulePath . 'ext/view');
-        }
-        ob_start();
-        include $viewFile;
-        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
-        $mailContent = ob_get_contents();
-        ob_end_clean();
-        chdir($oldcwd);
-
-        $sendUsers = $this->getToAndCcList($story, $action->action);
-        if(!$sendUsers) return;
-        list($toList, $ccList) = $sendUsers;
-        $subject = $this->getSubject($story);
-
-        /* Send it. */
-        $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
     }
 
     /**

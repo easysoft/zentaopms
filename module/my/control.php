@@ -529,7 +529,7 @@ class my extends control
         $this->app->loadLang('project');
 
         $this->app->session->set('programList', $this->app->getURI(true), 'program');
-        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
+        $this->app->session->set('projectList', $this->app->getURI(true), 'my');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

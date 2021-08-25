@@ -76,6 +76,7 @@ class pipelineModel extends model
             ->add('private',md5(rand(10,113450)))
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
+            ->trim('token')
             ->skipSpecial('url,token,account,password')
             ->get();
         if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
@@ -104,6 +105,7 @@ class pipelineModel extends model
         $pipeline = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
+            ->trim('token')
             ->skipSpecial('url,token,account,password')
             ->get();
 

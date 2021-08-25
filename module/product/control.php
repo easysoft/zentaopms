@@ -1278,7 +1278,7 @@ class product extends control
                 $product->closedBugs          = (int)$product->closedBugs;
                 $product->bugFixedRate        = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
                 $product->program             = $product->programName;
-                
+
                 /* get rowspan data */
                 if($lastProgram == '' or $product->program != $lastProgram)
                 {

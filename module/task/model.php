@@ -3167,68 +3167,6 @@ class taskModel extends model
     }
 
     /**
-     * Send mail.
-     *
-     * @param  int    $taskID
-     * @param  int    $actionID
-     * @access public
-     * @return void
-     */
-    public function sendmail($taskID, $actionID)
-    {
-        $this->loadModel('mail');
-        $task  = $this->getById($taskID);
-        $users = $this->loadModel('user')->getPairs('noletter');
-
-        /* Get action info. */
-        $action          = $this->loadModel('action')->getById($actionID);
-        $history         = $this->action->getHistory($actionID);
-        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
-
-        /* Get mail content. */
-        $oldcwd     = getcwd();
-        $modulePath = $this->app->getModulePath($appName = '', 'task');
-        $viewFile   = $modulePath . 'view/sendmail.html.php';
-        chdir($modulePath . 'view');
-
-        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
-        {
-            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
-            chdir($modulePath . 'ext/view');
-        }
-
-        ob_start();
-        include $viewFile;
-        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
-        $mailContent = ob_get_contents();
-        ob_end_clean();
-
-        chdir($oldcwd);
-
-        $sendUsers = $this->getToAndCcList($task);
-        if(!$sendUsers) return;
-        list($toList, $ccList) = $sendUsers;
-        $subject = $this->getSubject($task);
-
-        /* Send emails. */
-        $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
-    }
-
-    /**
-     * Get mail subject.
-     *
-     * @param  object    $task
-     * @access public
-     * @return string
-     */
-    public function getSubject($task)
-    {
-        $executionName = $this->loadModel('execution')->getById($task->execution)->name;
-        return 'TASK#' . $task->id . ' ' . $task->name . ' - ' . $executionName;
-    }
-
-    /**
      * Get toList and ccList.
      *
      * @param  object    $task
