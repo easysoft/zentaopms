@@ -579,6 +579,8 @@ class project extends control
             die(js::locate($this->session->projectList, 'parent'));
         }
 
+        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu(0);
+
         $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->projectList, 'parent'));
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
