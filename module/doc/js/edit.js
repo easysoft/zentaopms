@@ -33,7 +33,7 @@ $(function()
     /* Automatically save document contents. */
     setInterval("saveTempContent()", 60 * 1000);
 
-    $(document).on("mousedown", 'span[data-name="fullscreen"]', function()
+    $(document).on("mouseup", 'span[data-name="fullscreen"]', function()
     {
         if(config.onlybody == 'no')
         {
@@ -50,7 +50,7 @@ $(function()
         }
     });
 
-    $(document).on("mousedown", 'a[title="Fullscreen"],.icon-columns', function()
+    $(document).on("mouseup", 'a[title="Fullscreen"],.icon-columns', function()
     {
         if(config.onlybody == 'no')
         {

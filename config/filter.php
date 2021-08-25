@@ -222,7 +222,8 @@ $filter->project->task->cookie['projectTaskOrder']    = 'reg::orderBy';
 $filter->project->task->cookie['windowWidth']         = 'int';
 $filter->project->export->cookie['checkedItem']       = 'reg::checked';
 
-$filter->projectstory->story->cookie['storyModuleParam'] = 'int';
+$filter->projectstory->story->cookie['storyModuleParam']   = 'int';
+$filter->projectstory->story->cookie['pagerProductBrowse'] = 'int';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';
 $filter->qa->default->cookie['preBranch']    = 'int';

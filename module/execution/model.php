@@ -358,7 +358,7 @@ class executionModel extends model
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
-            ->checkIF($sprint->end != '', 'end', 'gt', $sprint->begin)
+            ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
             ->checkIF(!empty($sprint->code), 'code', 'unique')
             ->exec();
 

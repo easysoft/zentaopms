@@ -281,9 +281,7 @@ class commonModel extends model
             $isGuest = $app->user->account == 'guest';
 
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo "<div id='main-avatar' class='avatar avatar bg-secondary avatar-circle'>";
-            echo !empty($app->user->avatar) ? html::image($app->user->avatar) : strtoupper($app->user->account[0]);
-            echo "</div>\n";
+            echo html::avatar($app->user);
             echo '</a>';
             echo "<ul class='dropdown-menu pull-right'>";
             if(!$isGuest)
@@ -291,9 +289,7 @@ class commonModel extends model
                 $noRole = (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
                 echo '<li class="user-profile-item">';
                 echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='600' class='iframe $noRole'" . '>';
-                echo "<div id='menu-avatar' class='avatar avatar bg-secondary avatar-circle'>";
-                echo $app->user->avatar ? html::image($app->user->avatar) : strtoupper($app->user->account[0]);
-                echo "</div>\n";
+                echo html::avatar($app->user, '', 'avatar-circle', 'id="menu-avatar"');
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';

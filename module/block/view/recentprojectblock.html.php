@@ -23,7 +23,7 @@
 #cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
 #cards .panel-heading {cursor: pointer;}
 #cards .project-stages-container {margin: 0 0 -16px 0; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
-#cards .project-stages:after {content: ' '; width: 30px; display: block; right: -16px; top: 16px; bottom: -6px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
+#cards .project-stages:after {content: ' '; width: 30px; display: block; right: -5px; top: 16px; bottom: -5px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
 #cards .project-stages-row {position: relative; height: 30px; z-index: 0;}
 #cards .project-stage-item {white-space: nowrap; position: absolute; top: 0; min-width: 48px; padding-top: 13px; color: #838A9D;}
 #cards .project-stage-item > div {white-space: nowrap; overflow: visible; text-align: center; text-overflow: ellipsis;}
@@ -73,7 +73,7 @@
             <span><i class='icon icon-clock'></i> <?php printf($lang->project->hoursUnit, $project->estimate); ?></span>
           </div>
           <?php if($config->systemMode == 'new'):?>
-          <?php if($project->model === 'waterfall'): ?>
+          <?php if($project->model !== 'waterfall'): ?>
           <div class='project-detail project-stages'>
             <?php
             $projectProjects = array();
