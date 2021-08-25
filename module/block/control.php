@@ -42,11 +42,24 @@ class block extends control
         if($module == 'my')
         {
             $modules = $this->lang->block->moduleList;
+
+            list($programModule, $programMethod)     = explode('-', $this->config->programLink);
+            list($productModule, $productMethod)     = explode('-', $this->config->productLink);
+            list($projectModule, $projectMethod)     = explode('-', $this->config->projectLink);
+            list($executionModule, $executionMethod) = explode('-', $this->config->executionLink);
+
             foreach($modules as $moduleKey => $moduleName)
             {
                 if($moduleKey == 'todo') continue;
                 if(in_array($moduleKey, $this->app->user->rights['acls'])) unset($modules[$moduleKey]);
-                if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
+
+                $method = 'index';
+                if($moduleKey == 'program')   $method = $programMethod;
+                if($moduleKey == 'product')   $method = $productMethod;
+                if($moduleKey == 'project')   $method = $projectMethod;
+                if($moduleKey == 'execution') $method = $executionMethod;
+
+                if(!common::hasPriv($moduleKey, $method)) unset($modules[$moduleKey]);
             }
 
             $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
