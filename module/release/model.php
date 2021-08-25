@@ -478,53 +478,6 @@ class releaseModel extends model
     }
 
     /**
-     * Send mail.
-     *
-     * @param  int    $releaseID
-     * @param  int    $actionID
-     * @access public
-     * @return void
-     */
-    public function sendmail($releaseID, $actionID)
-    {
-        $this->loadModel('mail');
-        $release = $this->getByID($releaseID);
-        $users   = $this->loadModel('user')->getPairs('noletter');
-
-        /* Get action info. */
-        $action             = $this->loadModel('action')->getById($actionID);
-        $history            = $this->action->getHistory($actionID);
-        $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
-        $action->appendLink = '';
-
-        /* Get mail content. */
-        $modulePath = $this->app->getModulePath($appName = '', 'release');
-        $oldcwd     = getcwd();
-        $viewFile   = $modulePath . 'view/sendmail.html.php';
-        chdir($modulePath . 'view');
-        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
-        {
-            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
-            chdir($modulePath . 'ext/view');
-        }
-        ob_start();
-        include $viewFile;
-        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
-        $mailContent = ob_get_contents();
-        ob_end_clean();
-        chdir($oldcwd);
-
-        $sendUsers = $this->getToAndCcList($release);
-        if(!$sendUsers) return;
-        list($toList, $ccList) = $sendUsers;
-        $subject = 'RELEASE #' . $release->id . ' ' . $release->name;
-
-        /* Send it. */
-        $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
-    }
-
-    /**
      * Get toList and ccList.
      *
      * @param  object    $release
@@ -543,7 +496,7 @@ class releaseModel extends model
 
         foreach($notifyPersons as $account)
         {
-            if(strpos($ccList, ",{$account},") === false) $ccList .= $account . ',';
+            if(strpos($ccList, ",{$account},") === false) $ccList .= ",$account,";
         }
 
         $ccList = trim($ccList, ',');

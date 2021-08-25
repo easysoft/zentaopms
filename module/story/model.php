@@ -3303,19 +3303,6 @@ class storyModel extends model
     }
 
     /**
-     * Get mail subject.
-     *
-     * @param  object    $story
-     * @access public
-     * @return string
-     */
-    public function getSubject($story)
-    {
-        $productName = empty($story->product) ? '' : ' - ' . $this->loadModel('product')->getById($story->product)->name;
-        return 'STORY #' . $story->id . ' ' . $story->title . $productName;
-    }
-
-    /**
      * Get toList and ccList.
      *
      * @param  object    $story
@@ -3878,63 +3865,6 @@ class storyModel extends model
         if(!empty($this->config->story->forceReview)) $forceReview = strpos(",{$this->config->story->forceReview},", ",{$this->app->user->account},") !== false;
 
         return $forceReview;
-    }
-
-    /**
-     * Send mail
-     *
-     * @param  int    $storyID
-     * @param  int    $actionID
-     * @access public
-     * @return void
-     */
-    public function sendmail($storyID, $actionID)
-    {
-        $this->loadModel('mail');
-        $story = $this->getById($storyID);
-        $users = $this->loadModel('user')->getPairs('noletter');
-
-        /* Get actions. */
-        $action  = $this->loadModel('action')->getById($actionID);
-        $history = $this->action->getHistory($actionID);
-        $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
-        $action->appendLink = '';
-        if(strpos($action->extra, ':') !== false)
-        {
-            list($extra, $id) = explode(':', $action->extra);
-            $action->extra    = $extra;
-            if($id)
-            {
-                $name = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($id)->fetch('title');
-                if($name) $action->appendLink = html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($action->objectType, 'view', "id=$id", 'html'), "#$id " . $name);
-            }
-        }
-
-        /* Get mail content. */
-        $modulePath = $this->app->getModulePath($appName = '', 'story');
-        $oldcwd     = getcwd();
-        $viewFile   = $modulePath . 'view/sendmail.html.php';
-        chdir($modulePath . 'view');
-        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
-        {
-            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
-            chdir($modulePath . 'ext/view');
-        }
-        ob_start();
-        include $viewFile;
-        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
-        $mailContent = ob_get_contents();
-        ob_end_clean();
-        chdir($oldcwd);
-
-        $sendUsers = $this->getToAndCcList($story, $action->action);
-        if(!$sendUsers) return;
-        list($toList, $ccList) = $sendUsers;
-        $subject = $this->getSubject($story);
-
-        /* Send it. */
-        $this->mail->send($toList, $subject, $mailContent, $ccList);
-        if($this->mail->isError()) error_log(join("\n", $this->mail->getError()));
     }
 
     /**

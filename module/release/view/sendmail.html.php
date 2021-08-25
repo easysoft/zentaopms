@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $mailTitle = 'RELEASE #' . $release->id . ' ' . $release->name;?>
+<?php $mailTitle = 'RELEASE #' . $object->id . ' ' . $object->name;?>
 <?php $module    = $this->app->openApp == 'product' ? 'release' : 'projectrelease';?>
 <?php include $this->app->getModuleRoot() . 'common/view/mail.header.html.php';?>
 <tr>
@@ -18,7 +18,7 @@
     <table cellpadding='0' cellspacing='0' width='600' style='border: none; border-collapse: collapse;'>
       <tr>
         <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'>
-          <?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($module, 'view', "releaseID=$release->id", 'html'), $mailTitle, '', "text-decoration: underline;'");?>
+          <?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($module, 'view', "releaseID=$object->id", 'html'), $mailTitle, '', "text-decoration: underline;'");?>
         </td>
       </tr>
     </table>
@@ -28,7 +28,7 @@
   <td style='padding: 10px; border: none;'>
     <fieldset style='border: 1px solid #e5e5e5'>
       <legend style='color: #114f8e'><?php echo $this->lang->release->desc;?></legend>
-      <div style='padding:5px;'><?php echo $release->desc;?></div>
+      <div style='padding:5px;'><?php echo $object->desc;?></div>
     </fieldset>
   </td>
 </tr>

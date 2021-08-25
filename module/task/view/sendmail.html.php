@@ -10,15 +10,15 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $mailTitle = 'TASK #' . $task->id . ' ' . $task->name;?>
+<?php $mailTitle = 'TASK #' . $object->id . ' ' . $object->name;?>
 <?php include $this->app->getModuleRoot() . 'common/view/mail.header.html.php';?>
 <tr>
   <td>
     <table cellpadding='0' cellspacing='0' width='600' style='border: none; border-collapse: collapse;'>
       <tr>
         <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'>
-          <?php $color = empty($task->color) ? '#333' : $task->color;?>
-          <?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink('task', 'view', "taskID=$task->id", 'html'), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
+          <?php $color = empty($object->color) ? '#333' : $object->color;?>
+          <?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink('task', 'view', "taskID=$object->id", 'html'), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
         </td>
       </tr>
     </table>
@@ -28,7 +28,7 @@
   <td style='padding: 10px; border: none;'>
     <fieldset style='border: 1px solid #e5e5e5'>
       <legend style='color: #114f8e'><?php echo $this->lang->task->legendDesc;?></legend>
-      <div style='padding:5px;'><?php echo $task->desc;?></div>
+      <div style='padding:5px;'><?php echo $object->desc;?></div>
     </fieldset>
   </td>
 </tr>
