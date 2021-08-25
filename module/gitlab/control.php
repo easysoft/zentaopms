@@ -191,10 +191,13 @@ class gitlab extends control
      */
     public function checkToken()
     {
-        if(strpos($this->post->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
-        if(!$this->post->token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+        $gitlabURL = trim($this->post->url);
+        $token     = trim($this->post->token);
 
-        $user = $this->gitlab->apiGetCurrentUser($this->post->url, $this->post->token);
+        if(strpos($gitlabURL, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+        if(!$token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+
+        $user = $this->gitlab->apiGetCurrentUser($gitlabURL, $token);
 
         if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
         if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
