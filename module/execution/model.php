@@ -2454,7 +2454,7 @@ class executionModel extends model
     {
         if(empty($projectID)) return array();
 
-        $teams = $this->dao->select('id,team,type')->from(TABLE_PROJECT)
+        $teams = $this->dao->select('id,name,type')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
             ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
@@ -2466,10 +2466,10 @@ class executionModel extends model
         $teamPairs = array();
         foreach($teams as $id => $team)
         {
-            if(empty($team->team)) continue;
+            if(empty($team->name)) continue;
 
             $prefix = ($team->type != 'project' and $this->config->systemMode == 'new') ? '&nbsp;&nbsp;&nbsp;' : '';
-            $teamPairs[$id] = $prefix . $team->team;
+            $teamPairs[$id] = $prefix . $team->name;
         }
 
         return $teamPairs;
