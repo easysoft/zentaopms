@@ -69,10 +69,10 @@ class mr extends control
 
         $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->gitlabID);
 
+        $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
         $this->view->targetBranchList = $targetBranchList;
-        $this->view->title            = $this->lang->mr->edit;
-        $this->view->users            = array("" => "") + $this->loadModel('gitlab')->getUserIdRealnamePairs($MR->gitlabID); /* Get user list for assignee and reviewer. */
+        $this->view->users            = array("" => "") + $this->loadModel('gitlab')->getUserIdRealnamePairs($MR->gitlabID);
         $this->view->assignee         = zget($gitlabUsers, $MR->assignee, '');
         $this->view->reviewer         = zget($gitlabUsers, $MR->reviewer, '');
 
@@ -124,7 +124,6 @@ class mr extends control
         $this->view->sourceProjectURL  = $sourceBranch ->web_url;
         $this->view->targetProjectURL  = $targetBranch ->web_url;
 
-
         /* Those variables are used to render $lang->mr->commandDocument. */
         $this->view->httpRepoURL = $sourceProject->http_url_to_repo;
         $this->view->branchPath  = $sourceProject->path_with_namespace . '-' . $rawMR->source_branch;
@@ -140,11 +139,13 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function ajaxGetMRTragetProjects($gitlabID, $projectID)
+    public function ajaxGetMRTargetProjects($gitlabID, $projectID)
     {
         $this->loadModel('gitlab');
+
         /* First step: get forks. */
         $projects = $this->gitlab->apiGetForks($gitlabID, $projectID);
+
         /* Second step: get project itself. */
         $projects[] = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
 
@@ -195,7 +196,6 @@ class mr extends control
 
         if($arrange == 'appose')
         {
-
             foreach($diffs as $diffFile)
             {
                 if(empty($diffFile->contents)) continue;
@@ -214,7 +214,7 @@ class mr extends control
             }
         }
 
-        $this->view->title   = $this->lang->mr->showDiif;
+        $this->view->title   = $this->lang->mr->viewDiif;
         $this->view->diffs   = $diffs;
         $this->view->arrange = $arrange;
         $this->display();
