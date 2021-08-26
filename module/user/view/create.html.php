@@ -94,8 +94,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->user->verifyPassword;?></th>
-          <td>
-            <div class="required required-wrapper"></div>
+          <td class="required">
             <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' placeholder='{$lang->user->placeholder->verify}'");?>
           </td>
         </tr>
