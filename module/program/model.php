@@ -837,16 +837,17 @@ class programModel extends model
      *
      * @param  string $model
      * @param  string $mode
+     * @param  bool   $isQueryAll
      * @access public
      * @return array
      */
-    public function getTopPairs($model = '', $mode = '')
+    public function getTopPairs($model = '', $mode = '', $isQueryAll = false)
     {
         return $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('grade')->eq(1)
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->andWhere('id')->in($this->app->user->view->programs)
+            ->beginIF(!$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->orderBy('`order`')

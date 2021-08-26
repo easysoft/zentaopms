@@ -1688,39 +1688,8 @@ class projectModel extends model
                 ->fetchAll('id');
         }
 
-        $hours     = array();
+        $hours     = $this->computerProgress($executions);
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-
-        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, execution, estimate, consumed, `left`, status, closedReason')
-            ->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('execution', 'id');
-
-        /* Compute totalEstimate, totalConsumed, totalLeft. */
-        foreach($tasks as $executionID => $executionTasks)
-        {
-            $hour = (object)$emptyHour;
-            foreach($executionTasks as $task)
-            {
-                $hour->totalEstimate += $task->estimate;
-                $hour->totalConsumed += $task->consumed;
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
-            }
-            $hours[$executionID] = $hour;
-        }
-
-        /* Compute totalReal and progress. */
-        foreach($hours as $hour)
-        {
-            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
-            $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = round($hour->totalLeft, 1);
-            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
-        }
 
         /* Get burndown charts datas. */
         $burns = $this->dao->select('execution, date AS name, `left` AS value')
@@ -1836,6 +1805,52 @@ class projectModel extends model
         }
 
         return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);
+    }
+
+    /**
+     * Computer execution progress.
+     *
+     * @param  array    $executions
+     * @access public
+     * @return array
+     */
+    public function computerProgress($executions)
+    {
+        $hours     = array();
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, execution, estimate, consumed, `left`, status, closedReason')
+            ->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('execution', 'id');
+
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $executionID => $executionTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($executionTasks as $task)
+            {
+                $hour->totalEstimate += $task->estimate;
+                $hour->totalConsumed += $task->consumed;
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
+            }
+            $hours[$executionID] = $hour;
+        }
+
+        /* Compute totalReal and progress. */
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+        }
+
+        return $hours;
     }
 
     /**
