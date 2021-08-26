@@ -16,12 +16,28 @@
     <div class="divider"></div>
     <div class="page-title">
       <span class="label label-id"><?php echo $MR->id?></span>
-      <span class="text" title='<?php echo $MR->title;?>' style='color: blue'><?php echo html::a($rawMR->web_url, $MR->title, "_blank", "class='btn btn-link btn-active-text' style='color: blue'");?></span>
+      <span class="text" title='<?php echo $MR->title;?>'><?php echo  $MR->title;?></span>
+      <span class="text" title='<?php echo $MR->title;?>' style='color: blue'><?php echo html::a($rawMR->web_url, $lang->mr->viewInGitlab, "_blank", "class='btn btn-link btn-active-text' style='color: blue'");?></span>
     </div>
   </div>
 
   <div id="mainContent" class="main-row">
     <div class="main-col">
+      <div class="cell">
+        <div class="detail">
+          <div class="detail-title">
+            <div><?php echo $lang->mr->from . html::a($sourceProjectURL, $sourceProjectName . ":" . $MR->sourceBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'") . $lang->mr->to . html::a($targetProjectURL, $targetProjectName . ":" . $MR->targetBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'");?></div>
+            <div><?php if(isset($rawMR->head_pipeline->status)) echo $lang->mr->pipeline . $lang->mr->status . ": " . zget($lang->mr->pipelineStatus, $rawMR->head_pipeline->status, $lang->mr->pipelineUnknown);?></div>
+          </div>
+          <div class="detail-content article-content">
+            <strong><?php echo $lang->mr->mergeStatus;?> </strong>
+            <?php echo zget($lang->mr->mergeStatusList, $rawMR->merge_status);?>
+            <br>
+            <strong><?php echo $lang->mr->MRHasConflicts. $lang->colon;?></strong>
+            <?php echo ($rawMR->has_conflicts ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?>
+          </div>
+        </div>
+      </div>
       <div class="cell">
         <div class="detail">
           <div class="detail-title"><?php echo $lang->mr->description;?></div>
@@ -30,17 +46,8 @@
           </div>
         </div>
       </div>
-
-      <div class="cell">
-       <div><?php echo $lang->mr->from . html::a($sourceProjectURL, $sourceProjectName . ":" . $MR->sourceBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'") . $lang->mr->to . html::a($targetProjectURL, $targetProjectName . ":" . $MR->targetBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'");?></div>
-       <div><?php if(isset($rawMR->head_pipeline->status)) echo $lang->mr->pipeline . $lang->mr->status . ": " . zget($lang->mr->pipelineStatus, $rawMR->head_pipeline->status, $lang->mr->pipelineUnknown);?></div>
-       <div><?php echo $lang->mr->mergeStatus . ": " . zget($lang->mr->mergeStatusList, $rawMR->merge_status);?></div>
-       <div><?php echo $lang->mr->MRHasConflicts . ": " . ($rawMR->has_conflicts ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></div>
-      </div>
-
-    <div class="cell"><?php echo sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch);?></div>
+      <div class="cell"><?php echo sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch);?></div>
     </div>
- </div>
-
+  </div>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
