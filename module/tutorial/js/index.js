@@ -288,15 +288,14 @@ $(function()
                                 }, 2000);
                             });
                         }
-
-                        e.preventDefault();
-                        e.stopPropagation();
-                        return false;
                     }
                     else
                     {
                         finishTask();
                     }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
                 }
                 if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
                 else $form.submit(onSubmit);

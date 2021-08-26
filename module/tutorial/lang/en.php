@@ -38,7 +38,7 @@ $lang->tutorial->tasks = array();
 
 $lang->tutorial->tasks['createAccount']         = array('title' => 'Create a User');
 $lang->tutorial->tasks['createAccount']['nav']  = array('app' => 'admin', 'module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#createForm', 'requiredFields' => 'account,realname,verifyPassword,password1,password2', 'submit' => '#submit', 'target' => '.create-user-btn', 'targetPageName' => 'Add User');
-$lang->tutorial->tasks['createAccount']['desc'] = "<p>Create a User: </p><ul><li data-target='nav'>Open <span class='task-nav'>Admin <i class='icon icon-angle-right'></i> Users<i class='icon icon-angle-right'></i> New;</span></li><li data-target='form'>Fill the form with user information;</li><li data-target='submit'>Save</li></ul>";
+$lang->tutorial->tasks['createAccount']['desc'] = "<p>Create a User: </p><ul><li data-target='nav'>Open <span class='task-nav'>Admin <i class='icon icon-angle-right'></i> Company <i class='icon icon-angle-right'></i> Users<i class='icon icon-angle-right'></i> New;</span></li><li data-target='form'>Fill the form with user information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks['createProgram']         = array('title' => 'Create a program');
 $lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'module' => 'program', 'method' => 'create', 'menuModule' => 'program', 'menu' => 'browse', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-program-btn', 'targetPageName' => 'Create program');
@@ -55,7 +55,7 @@ if($config->global->flow == 'full' or $config->global->flow != 'onlyTask')
 if($config->global->flow == 'full' or $config->global->flow == 'onlyStory')
 {
     $lang->tutorial->tasks['createStory']         = array('title' => "Create a {$lang->SRCommon}");
-    $lang->tutorial->tasks['createStory']['nav']  = array('app' => 'product', 'module' => 'story', 'method' => 'create', 'menuModule' => 'story', 'menu' => '#productTableList>tr:not(.has-nest-child)>.c-name>a', 'target' => '.create-story-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => "Create {$lang->SRCommon}");
+    $lang->tutorial->tasks['createStory']['nav']  = array('app' => 'product', 'module' => 'story', 'method' => 'create', 'menuModule' => 'story', 'menu' => '#productTableList>tr:not(.has-nest-child):first>.c-name>a,#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],.create-story-btn', 'target' => '.create-story-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => "Create {$lang->SRCommon}");
     $lang->tutorial->tasks['createStory']['desc'] = "<p>Create a story: </p><ul><li data-target='nav'>Open <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i>Story <i class='icon icon-angle-right'></i>Create;</span></li><li data-target='form'>Fill the form with story information;</li><li data-target='submit'>Save</li></ul>";
 }
 

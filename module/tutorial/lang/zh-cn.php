@@ -37,7 +37,7 @@ $lang->tutorial->tasks = array();
 
 $lang->tutorial->tasks['createAccount']         = array('title' => '创建帐号');
 $lang->tutorial->tasks['createAccount']['nav']  = array('app' => 'admin', 'module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#createForm', 'requiredFields' => 'account,realname,verifyPassword,password1,password2', 'submit' => '#submit', 'target' => '.create-user-btn', 'targetPageName' => '添加用户');
-$lang->tutorial->tasks['createAccount']['desc'] = "<p>在系统创建一个新的用户帐号：</p><ul><li data-target='nav'>打开 <span class='task-nav'>后台 <i class='icon icon-angle-right'></i> 用户 <i class='icon icon-angle-right'></i> 添加用户</span> 页面；</li><li data-target='form'>在添加用户表单中填写新用户信息；</li><li data-target='submit'>保存用户信息。</li></ul>";
+$lang->tutorial->tasks['createAccount']['desc'] = "<p>在系统创建一个新的用户帐号：</p><ul><li data-target='nav'>打开 <span class='task-nav'>后台 <i class='icon icon-angle-right'></i> 人员 <i class='icon icon-angle-right'></i> 用户 <i class='icon icon-angle-right'></i> 添加用户</span> 页面；</li><li data-target='form'>在添加用户表单中填写新用户信息；</li><li data-target='submit'>保存用户信息。</li></ul>";
 
 $lang->tutorial->tasks['createProgram']         = array('title' => '创建项目集');
 $lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'module' => 'program', 'method' => 'create', 'menuModule' => 'program', 'menu' => 'browse', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-program-btn', 'targetPageName' => '添加项目集');
@@ -54,7 +54,7 @@ if($config->global->flow == 'full' or $config->global->flow != 'onlyTask')
 if($config->global->flow == 'full' or $config->global->flow == 'onlyStory')
 {
     $lang->tutorial->tasks['createStory']         = array('title' => "创建{$lang->SRCommon}");
-    $lang->tutorial->tasks['createStory']['nav']  = array('app' => 'product', 'module' => 'story', 'method' => 'create', 'menuModule' => 'story', 'menu' => '#productTableList>tr:not(.has-nest-child)>.c-name>a', 'target' => '.create-story-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => "提{$lang->SRCommon}");
+    $lang->tutorial->tasks['createStory']['nav']  = array('app' => 'product', 'module' => 'story', 'method' => 'create', 'menuModule' => 'story', 'menu' => '#productTableList>tr:not(.has-nest-child):first>.c-name>a,#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],.create-story-btn', 'target' => '.create-story-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => "提{$lang->SRCommon}");
     $lang->tutorial->tasks['createStory']['desc'] = "<p>在系统创建一个新的{$lang->SRCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 添加{$lang->SRCommon}</span> 页面；</li><li data-target='form'>在表单中填写要创建的{$lang->SRCommon}信息；</li><li data-target='submit'>保存{$lang->SRCommon}信息。</li></ul>";
 }
 
