@@ -57,20 +57,9 @@ class gitlab extends control
             $this->checkToken();
             $gitlabID = $this->gitlab->create();
 
-            if(dao::isError())
-            {
-                /* Save log. */
-                $now = new datetime('now');
-                $log    = '';
-                $time   = $now->format('G:i:s');
-                $output = "\n" . dao::isError();
-
-                $log = "$time Create Error output : $output\n";
-                $this->logGitLab($log);
-                unset($log);
-
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('action');
+            $actionID = $this->action->create('gitlab', $gitlabID, 'create');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -88,30 +77,24 @@ class gitlab extends control
      */
     public function edit($id)
     {
-        $gitlab = $this->gitlab->getByID($id);
+        $oldGitLab = $this->gitlab->getByID($id);
+
         if($_POST)
         {
             $this->checkToken();
             $this->gitlab->update($id);
-            if(dao::isError())
-            {
-                /* Save log. */
-                $now = new datetime('now');
-                $log    = '';
-                $time   = $now->format('G:i:s');
-                $output = "\n" . dao::isError();
+            $gitLab = $this->gitlab->getByID($id);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                $log = "$time Edit output : $output\n";
-                $this->gitlab->logGitLab($log);
-                unset($log);
-
-                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
+            $this->loadModel('action');
+            $actionID = $this->action->create('gitlab', $id, 'edit');
+            $changes  = common::createChanges($oldGitLab, $gitLab);
+            $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
-        $this->view->gitlab = $gitlab;
+        $this->view->gitlab = $oldGitLab;
 
         $this->display();
     }
@@ -204,20 +187,14 @@ class gitlab extends control
     {
         if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
+        $oldGitLab = $this->gitlab->getByID($id);
+        $this->loadModel('action');
         $this->gitlab->delete(TABLE_PIPELINE, $id);
 
-        if(dao::isError())
-        {
-            /* Save log. */
-            $now = new datetime('now');
-            $log    = '';
-            $time   = $now->format('G:i:s');
-            $output = "\n" . dao::isError();
-
-            $log = "$time Delete output : $output\n";
-            $this->gitlab->logGitLab($log);
-            unset($log);
-        }
+        $gitLab   = $this->gitlab->getByID($id);
+        $actionID = $this->action->create('gitlab', $id, 'delete');
+        $changes  = common::createChanges($oldGitLab, $gitLab);
+        $this->action->logHistory($actionID, $changes);
         die(js::reload('parent'));
     }
 
@@ -419,25 +396,6 @@ class gitlab extends control
         }
         $this->send($options);
     }
-
-    /**
-     * Log GitLab.
-     *
-     * @param  string    $log
-     * @access public
-     * @return void
-     */
-    public function logGitLab($log)
-    {
-        if(!is_writable($this->app->getLogRoot())) return false;
-
-        $file = $this->app->getLogRoot() . 'GitLab.' . date('Ymd') . '.log.php';
-        if(!is_file($file)) $log = "<?php\n die();\n" . $log;
-
-        $fp = fopen($file, "a");
-        fwrite($fp, $log);
-        fclose($fp);
-     }
 
     /**
      * AJAX: Get MR user pairs to select assignee_ids and reviewer_ids.
