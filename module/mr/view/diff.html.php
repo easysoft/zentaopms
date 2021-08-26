@@ -14,7 +14,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
-    $backURI = $this->session->repoView ? $this->session->repoView : $this->session->repoList;
+    $backURI = $this->session->mrView ? $this->session->mrView : $this->session->mrList;
     if($backURI)
     {
         echo html::a($backURI, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");

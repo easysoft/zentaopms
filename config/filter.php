@@ -58,6 +58,7 @@ $filter->git          = new stdclass();
 $filter->svn          = new stdclass();
 $filter->search       = new stdclass();
 $filter->gitlab       = new stdclass();
+$filter->mr           = new stdclass();
 $filter->ci           = new stdclass();
 
 $filter->block->default              = new stdclass();
@@ -136,6 +137,7 @@ $filter->repo->ajaxsynccommit        = new stdclass();
 $filter->search->index               = new stdclass();
 $filter->gitlab->webhook             = new stdclass();
 $filter->gitlab->importissue         = new stdclass();
+$filter->mr->diff                    = new stdclass();
 $filter->ci->checkCompileStatus      = new stdclass();
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
@@ -333,5 +335,7 @@ $filter->gitlab->importissue->get['product'] = 'int';
 $filter->gitlab->importissue->get['product'] = 'string';
 $filter->gitlab->importissue->get['project'] = 'int';
 $filter->gitlab->importissue->get['repo']    = 'int';
+
+$filter->mr->diff->cookie['arrange'] = 'reg::word';
 
 $filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';

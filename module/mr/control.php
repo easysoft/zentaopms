@@ -17,6 +17,9 @@ class mr extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Save current URI to session. */
+        $this->session->set('mrList', $this->app->getURI(true), 'repo');
+
         $this->view->title    = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList   = $this->mr->getList($orderBy, $pager);
         $this->view->orderBy  = $orderBy;
@@ -167,10 +170,53 @@ class mr extends control
         $this->send($options);
     }
 
+    /**
+     * View diff between MR source and target branches.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return void
+     */
     public function diff($MRID)
     {
-        $MR = $this->mr->getByID($MRID);
-        $this->view->diffs = $this->mr->getDiffs($MR);
+        $MR      = $this->mr->getByID($MRID);
+        $diffs   = $this->mr->getDiffs($MR);
+        $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
+
+        if($this->server->request_method == 'POST')
+        {
+            if($this->post->arrange)
+            {
+                $arrange = $this->post->arrange;
+                setcookie('arrange', $arrange);
+            }
+            if($this->post->encoding) $encoding = $this->post->encoding;
+        }
+
+        if($arrange == 'appose')
+        {
+
+            foreach($diffs as $diffFile)
+            {
+                if(empty($diffFile->contents)) continue;
+                foreach($diffFile->contents as $content)
+                {
+                    $old = array();
+                    $new = array();
+                    foreach($content->lines as $line)
+                    {
+                        if($line->type != 'new') $old[$line->oldlc] = $line->line;
+                        if($line->type != 'old') $new[$line->newlc] = $line->line;
+                    }
+                    $content->old = $old;
+                    $content->new = $new;
+                }
+            }
+        }
+
+        $this->view->title   = $this->lang->mr->showDiif;
+        $this->view->diffs   = $diffs;
+        $this->view->arrange = $arrange;
         $this->display();
     }
 }
