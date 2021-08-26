@@ -36,8 +36,8 @@ $lang->tutorial->dataNotSave      = "教程任务中，数据不会保存。";
 $lang->tutorial->tasks = array();
 
 $lang->tutorial->tasks['createAccount']         = array('title' => '创建帐号');
-$lang->tutorial->tasks['createAccount']['nav']  = array('app' => 'admin', 'module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-user-btn', 'targetPageName' => '添加用户');
-$lang->tutorial->tasks['createAccount']['desc'] = "<p>在系统创建一个新的用户帐号：</p><ul><li data-target='nav'>打开 <span class='task-nav'>组织 <i class='icon icon-angle-right'></i> 用户 <i class='icon icon-angle-right'></i> 添加用户</span> 页面；</li><li data-target='form'>在添加用户表单中填写新用户信息；</li><li data-target='submit'>保存用户信息。</li></ul>";
+$lang->tutorial->tasks['createAccount']['nav']  = array('app' => 'admin', 'module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#createForm', 'requiredFields' => 'account,realname,verifyPassword,password1,password2', 'submit' => '#submit', 'target' => '.create-user-btn', 'targetPageName' => '添加用户');
+$lang->tutorial->tasks['createAccount']['desc'] = "<p>在系统创建一个新的用户帐号：</p><ul><li data-target='nav'>打开 <span class='task-nav'>后台 <i class='icon icon-angle-right'></i> 用户 <i class='icon icon-angle-right'></i> 添加用户</span> 页面；</li><li data-target='form'>在添加用户表单中填写新用户信息；</li><li data-target='submit'>保存用户信息。</li></ul>";
 
 $lang->tutorial->tasks['createProgram']         = array('title' => '创建项目集');
 $lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'module' => 'program', 'method' => 'create', 'menuModule' => 'program', 'menu' => 'browse', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-program-btn', 'targetPageName' => '添加项目集');
@@ -69,7 +69,7 @@ if($config->global->flow == 'full' or $config->global->flow == 'onlyTask')
     $lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理{$lang->executionCommon}团队成员：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> 设置 <i class='icon icon-angle-right'></i> 团队 <i class='icon icon-angle-right'></i> 团队管理</span> 页面；</li><li data-target='form'>选择要加入团队的成员；</li><li data-target='submit'>保存团队成员信息。</li></ul>";
 
     $lang->tutorial->tasks['createExecution']         = array('title' => '创建' . $lang->executionCommon);
-    $lang->tutorial->tasks['createExecution']['nav']  = array('app' => 'execution', 'module' => 'project', 'method' => 'create', 'menuModule' => 'browse', 'menu' => '#heading>.header-btn,#navbar>.nav>li[data-id="all"]', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-execution-btn', 'targetPageName' => '添加' . $lang->executionCommon);
+    $lang->tutorial->tasks['createExecution']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'create', 'menuModule' => 'browse', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],.create-execution-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-execution-btn', 'targetPageName' => '添加' . $lang->executionCommon);
     $lang->tutorial->tasks['createExecution']['desc'] = "<p>在系统创建一个新的{$lang->executionCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> {$lang->executionCommon}列表 <i class='icon icon-angle-right'></i> 添加{$lang->executionCommon}</span> 页面；</li><li data-target='form'>在表单中填写要创建的{$lang->executionCommon}信息；</li><li data-target='submit'>保存{$lang->executionCommon}信息。</li></ul>";
 
     if($config->global->flow == 'full')

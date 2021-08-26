@@ -48,7 +48,7 @@
         <div class='panel-body'>
           <div class='task-desc'></div>
           <a href='javascript:;' id='openTaskPage' class='btn-open-target-page hl-primary'>
-            <div class='normal'><i class="icon icon-flag-alt"></i> <?php echo $lang->tutorial->openTargetPage;?></div>
+            <div class='normal'><i class="icon icon-magic"></i> <?php echo $lang->tutorial->openTargetPage;?></div>
             <div class='opened'><i class="icon icon-flag"></i> <?php echo $lang->tutorial->atTargetPage;?></div>
             <div class='reload'><i class="icon icon-restart"></i> <?php echo $lang->tutorial->reloadTargetPage;?></div>
           </a>

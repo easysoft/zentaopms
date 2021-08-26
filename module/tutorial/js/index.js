@@ -116,7 +116,7 @@ $(function()
             {
                 if(e.result === 'success')
                 {
-                    $task.addClass('finish').find('[data-target]').removeClass('active').addClass('finish');
+                    $task.addClass('finish').find('[data-target]').removeClass('active').removeClass('wait').addClass('finish');
                     updateUI();
                     showModal(finishCount >= totalCount);
                 }
@@ -403,6 +403,9 @@ $(function()
         $navTarget.toggleClass('finish', !!targetStatus.nav);
         $formTarget.toggleClass('finish', !!targetStatus.form);
         $submitTarget.toggleClass('finish', !!targetStatus.submit);
+        $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
+        $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
+        $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
         $openTaskPage.toggleClass('open', targetStatus.nav);
 
         targetStatus.submitOK = targetStatus.nav && targetStatus.form;
@@ -506,6 +509,9 @@ $(function()
         $(document).on('click', '.btn-task', function()
         {
             showTask($(this).data('name'));
+        }).on('click', '.btn-open-target-page', function()
+        {
+            appsWindow.$.apps.open(tasks[current].url);
         }).on('click', '.btn-reset-tasks', function()
         {
             hideModal();
