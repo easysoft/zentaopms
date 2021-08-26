@@ -146,7 +146,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       $hidden = empty($buttonLink) ? 'hidden' : '';
     ?>
     <div class='btn-group dropdown'>
-      <?php echo html::a($buttonLink, "<i class='icon-plus'></i> $buttonTitle", '', "class='btn btn-primary $hidden'");?>
+      <?php echo html::a($buttonLink, "<i class='icon-plus'></i> $buttonTitle", '', "class='btn btn-primary create-bug-btn $hidden'");?>
       <?php if(common::hasPriv('bug', 'batchCreate') and common::hasPriv('bug', 'create')):?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu'>

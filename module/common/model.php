@@ -705,8 +705,12 @@ class commonModel extends model
         $activeMenu = '';
         $openApp = $app->openApp;
 
+        $isTutorialMode = commonModel::isTutorialMode();
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
+
+        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
+        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
 
         /* Print all main menus. */
         $menu     = customModel::getMainMenu();
@@ -715,7 +719,7 @@ class commonModel extends model
         echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
-            if(isset($menuItem->hidden) && $menuItem->hidden) continue;
+            if(isset($menuItem->hidden) && $menuItem->hidden && (!isset($menuItem->tutorial) || !$menuItem->tutorial)) continue;
             if(empty($menuItem->link)) continue;
             if($menuItem->divider) echo "<li class='divider'></li>";
 
@@ -764,7 +768,6 @@ class commonModel extends model
                     foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
                     {
                         if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
-
 
                         /* Parse drop menu link. */
                         $dropMenuLink = $dropMenuItem;

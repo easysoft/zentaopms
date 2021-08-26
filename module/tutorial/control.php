@@ -105,11 +105,16 @@ class tutorial extends control
 
         /* Check priv for tutorial. */
         $hasPriv = false;
-        foreach($this->lang->tutorial->tasks as $taskName)
+        $moduleLower = strtolower($module);
+        foreach($this->lang->tutorial->tasks as $task)
         {
-            $taskModule = strtolower($taskName['nav']['module']);
-            if($taskModule == strtolower($module)) $hasPriv = true;
-            if($hasPriv) break;
+            $taskModule = strtolower($task['nav']['module']);
+            $taskMenuModule = strtolower($task['nav']['menuModule']);
+            if($taskModule == $moduleLower or $taskMenuModule == $moduleLower)
+            {
+                $hasPriv = true;
+                break;
+            }
         }
         if(!$hasPriv and $module == 'my' and $method == 'index') $hasPriv = true;
         if(!$hasPriv) die(js::locate('back'));

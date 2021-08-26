@@ -80,7 +80,7 @@
 
             $hidden = empty($buttonLink) ? 'hidden' : '';
             echo "<div class='btn-group dropdown'>";
-            echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn btn-secondary $hidden' data-app='execution'");
+            echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn btn-secondary link-story-btn $hidden' data-app='execution'");
 
             if($common::hasPriv('story', 'create') and common::hasPriv('story', 'batchCreate'))
             {
