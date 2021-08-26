@@ -30,12 +30,12 @@
     <thead>
       <tr>
         <?php $vars = "id={$webhook->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-        <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->webhook->id);?></th>
-        <th class='w-160px'><?php common::printOrderLink('date', $orderBy, $vars, $lang->webhook->date);?></th>
+        <th class='c-id text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->webhook->id);?></th>
+        <th class='c-full-date'><?php common::printOrderLink('date', $orderBy, $vars, $lang->webhook->date);?></th>
         <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->webhook->url);?></th>
-        <th class='w-300px'><?php common::printOrderLink('action', $orderBy, $vars, $lang->webhook->action);?></th>
-        <th class='w-200px'><?php common::printOrderLink('contentType', $orderBy, $vars, $lang->webhook->contentType);?></th>
-        <th class='w-200px'><?php  common::printOrderLink('result', $orderBy, $vars, $lang->webhook->result);?></th>
+        <th class='c-webhook-action'><?php common::printOrderLink('action', $orderBy, $vars, $lang->webhook->action);?></th>
+        <th class='c-type'><?php common::printOrderLink('contentType', $orderBy, $vars, $lang->webhook->contentType);?></th>
+        <th class='c-result'><?php common::printOrderLink('result', $orderBy, $vars, $lang->webhook->result);?></th>
       </tr>
     </thead>
     <tbody>
