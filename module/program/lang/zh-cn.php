@@ -64,7 +64,7 @@ $lang->program->changePRJUnit           = '更新项目预算单位';
 
 $lang->program->progress         = '项目进度';
 $lang->program->children         = '子项目集';
-$lang->program->allInput         = '项目集总投入';
+$lang->program->allInvest        = '项目集总投入';
 $lang->program->teamCount        = '总人数';
 $lang->program->longTime         = '长期';
 $lang->program->moreProgram      = '更多项目集';

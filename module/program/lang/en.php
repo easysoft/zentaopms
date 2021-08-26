@@ -64,7 +64,7 @@ $lang->program->changePRJUnit           = 'Update the budget unit of the project
 
 $lang->program->progress         = 'Progress';
 $lang->program->children         = 'Child';
-$lang->program->allInput         = 'Input';
+$lang->program->allInvest        = 'Input';
 $lang->program->teamCount        = 'Team';
 $lang->program->longTime         = 'Long-Term';
 $lang->program->moreProgram      = 'More program';
