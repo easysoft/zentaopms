@@ -81,7 +81,7 @@ function addItem(obj)
  */
 function deleteItem(obj)
 {
-    if($('.table').find('.addedItem').length <= 1) return;
+    if($('#teamForm .table tbody').children().length < 2) return false;
     $(obj).closest('tr').remove();
 }
 
