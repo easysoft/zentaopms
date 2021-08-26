@@ -12,7 +12,6 @@ $filter->rules->browseType = '/^by\w+$/i';
 $filter->rules->word       = '/^\w+$/';
 $filter->rules->paramName  = '/^[a-zA-Z0-9_\.]+$/';
 $filter->rules->paramValue = '/^[a-zA-Z0-9=_,`#+\^\/\.%\|\x7f-\xff\-]+$/';
-$filter->rules->url        = '/((http|https):\/\/)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(\/[a-zA-Z0-9\&%_\.\/-~-]*)?/';
 
 $filter->default = new stdclass();
 $filter->default->moduleName = 'code';
@@ -23,22 +22,12 @@ $filter->default->paramValue = 'reg::paramValue';
 $filter->default->get['onlybody'] = 'equal::yes';
 $filter->default->get['HTTP_X_REQUESTED_WITH'] = 'equal::XMLHttpRequest';
 
-$filter->default->cookie['lang']            = 'reg::lang';
-$filter->default->cookie['theme']           = 'reg::word';
-$filter->default->cookie['fingerprint']     = 'reg::word';
-$filter->default->cookie['hideMenu']        = 'equal::true';
-$filter->default->cookie['openApp']         = 'reg::word';
-$filter->default->cookie['myGoback']        = 'reg::url';
-$filter->default->cookie['programGoback']   = 'reg::url';
-$filter->default->cookie['productGoback']   = 'reg::url';
-$filter->default->cookie['projectGoback']   = 'reg::url';
-$filter->default->cookie['executionGoback'] = 'reg::url';
-$filter->default->cookie['qaGoback']        = 'reg::url';
-$filter->default->cookie['devopsGoback']    = 'reg::url';
-$filter->default->cookie['docGoback']       = 'reg::url';
-$filter->default->cookie['reportGoback']    = 'reg::url';
-$filter->default->cookie['systemGoback']    = 'reg::url';
-$filter->default->cookie['adminGoback']     = 'reg::url';
+$filter->default->cookie['lang']        = 'reg::lang';
+$filter->default->cookie['theme']       = 'reg::word';
+$filter->default->cookie['fingerprint'] = 'reg::word';
+$filter->default->cookie['hideMenu']    = 'equal::true';
+$filter->default->cookie['openApp']     = 'reg::word';
+$filter->default->cookie['goback']      = 'reg::any';
 
 $filter->my           = new stdclass();
 $filter->bug          = new stdclass();
