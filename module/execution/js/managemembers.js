@@ -42,6 +42,7 @@ function addItem(obj)
 
 function deleteItem(obj)
 {
+    if($('.table').find('.addedItem').length <= 1) return;
     $(obj).closest('tr').remove();
 }
 
