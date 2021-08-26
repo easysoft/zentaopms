@@ -88,6 +88,7 @@ class dept extends control
         if(!empty($_POST))
         {
             $this->dept->update($deptID);
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::alert($this->lang->dept->successSave) . js::reload('parent'));
         }
 
@@ -120,8 +121,16 @@ class dept extends control
         /* Check this dept when delete. */
         $sons  = $this->dept->getSons($deptID);
         $users = $this->dept->getUsers('all', $deptID);
-        if($sons)  die(js::alert($this->lang->dept->error->hasSons));
-        if($users) die(js::alert($this->lang->dept->error->hasUsers));
+        if($sons)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasSons));
+            die(js::alert($this->lang->dept->error->hasSons));
+        }
+        if($users)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
+            die(js::alert($this->lang->dept->error->hasUsers));
+        }
 
         if($confirm == 'no')
         {
@@ -130,6 +139,7 @@ class dept extends control
         else
         {
             $this->dept->delete($deptID);
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::reload('parent'));
         }
     }

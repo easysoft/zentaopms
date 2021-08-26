@@ -58,4 +58,7 @@ $routes['/projects/:projectID/risks'] = 'risks';
 $routes['/risks']                     = 'risks';
 $routes['/risks/:id']                 = 'risk';
 
+$routes['/departments']     = 'departments';
+$routes['/departments/:id'] = 'department';
+
 $config->routes = $routes;
