@@ -160,7 +160,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       }
 
       $hidden = empty($buttonLink) ? 'hidden' : '';
-      echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn $buttonType $hidden' data-app='$openApp'");
+      echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn $buttonType $hidden create-story-btn' data-app='$openApp'");
       ?>
       <?php if(!empty($productID) and common::hasPriv('story', 'batchCreate') and common::hasPriv('story', 'create')): ?>
       <button type='button' class="btn <?php echo $buttonType?> dropdown-toggle" data-toggle='dropdown'><span class='caret'></span></button>

@@ -18,6 +18,7 @@ class testtaskEntry extends entry
         if(!isset($data->data->task)) $this->sendError(400, 'error');
 
         $testtask = $data->data->task;
+
         $this->send(200, $this->format($testtask, 'realFinishedDate:time'));
     }
 
@@ -27,6 +28,7 @@ class testtaskEntry extends entry
         $control->delete($testtaskID, 'yes');
 
         $this->getData();
+
         $this->sendSuccess(200, 'success');
     }
 }

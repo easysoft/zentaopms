@@ -567,7 +567,11 @@ class product extends control
             die(js::locate($locate, 'parent'));
         }
 
-        $productIDList = $this->post->productIDList ? $this->post->productIDList : die(js::locate($this->session->productList, 'parent'));
+        $productIDList = $this->post->productIDList;
+        if(empty($productIDList)) die(js::locate($this->session->productList, 'parent'));
+
+        /* Set menu when page come from program. */
+        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu(0);
 
         /* Set custom. */
         foreach(explode(',', $this->config->product->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;

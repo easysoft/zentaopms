@@ -1,0 +1,17 @@
+.main-table .table {cursor: default;}
+.main-table .table td {background: #efefef;}
+
+.board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: default; border-radius: 2px; background-color: #fff;}
+.board-item:hover {border-color: #ccc;}
+.board-item + .board-item {margin-top: 10px;}
+
+.board-project {padding: 5px;}
+.board-doing-project, .board-doing-execution {padding: 5px;}
+
+.board-doing-project .table-row .table-col:last-child, .c-progress {width: 30px;}
+.board-doing-execution .table-row .table-col:last-child, .c-progress {width: 30px;}
+.table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+table th, td {border: 2px solid #fff !important;}
+
+#kanban {padding-bottom: 10px}

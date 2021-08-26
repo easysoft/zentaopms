@@ -300,6 +300,13 @@ class project extends control
      */
     public function kanban()
     {
+        extract($this->project->getStats4Kanban());
+
+        $this->view->title            = $this->lang->project->kanban;
+        $this->view->kanbanGroup      = $kanbanGroup;
+        $this->view->latestExecutions = $latestExecutions;
+        $this->view->programPairs     = $this->loadModel('program')->getPairs(true);
+
         $this->display();
     }
 
@@ -578,6 +585,8 @@ class project extends control
             }
             die(js::locate($this->session->projectList, 'parent'));
         }
+
+        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu(0);
 
         $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->projectList, 'parent'));
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');

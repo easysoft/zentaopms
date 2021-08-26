@@ -15,7 +15,7 @@ class riskEntry extends Entry
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
-        if(isset($data->status) and $data->status == 'success') $this->send(200, $this->format($data->data->risk, 'createdDate:time,editedDate:time'));
+        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->risk, 'createdDate:time,editedDate:time'));
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         $this->sendError(400, 'error');
@@ -42,7 +42,6 @@ class riskEntry extends Entry
         $control = $this->loadController('risk', 'delete');
         $control->delete($riskID, 'true');
 
-        $this->getData();
         $this->sendSuccess(200, 'success');
     }
 }

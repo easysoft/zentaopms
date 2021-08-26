@@ -35,13 +35,13 @@
     <?php $vars = "objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <thead>
       <tr class='text-center'>
-        <th class='w-id'>   <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
+        <th class='c-id'><?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
         <th class='text-left'><?php common::printOrderLink('title',     $orderBy, $vars, $lang->testreport->title);?></th>
-        <th class='w-90px'> <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-        <th class='w-150px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
-        <th class='w-250px text-left'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testreport->execution);?></th>
-        <th class='w-250px text-left'><?php echo $lang->testreport->testtask;?></th>
-        <th class='c-actions-2'> <?php echo $lang->actions;?></th>
+        <th class='c-user'><?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+        <th class='c-full-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
+        <th class='c-object text-left'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testreport->execution);?></th>
+        <th class='c-object text-left'><?php echo $lang->testreport->testtask;?></th>
+        <th class='c-actions-2'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody class='text-center'>

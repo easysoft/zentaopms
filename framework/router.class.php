@@ -159,12 +159,11 @@ class router extends baseRouter
         if(!defined('STORYPOINT_KEY'))    define('STORYPOINT_KEY', 1);
         if(!defined('FUNCTIONPOINT_KEY')) define('FUNCTIONPOINT_KEY', 2);
 
-        global $lang, $app;
+        global $lang, $app, $config;
         $sprintConcept = $hourPoint = false;
         /* Get config from DB. */
         if($this->dbh and !empty($this->config->db->name))
         {
-            global $config;
             if(!isset($config->global)) $config->global = new stdclass();
             $config->global->flow = 'full';
 

@@ -401,6 +401,9 @@ class caselibModel extends model
                 $oldStep     = isset($oldSteps[$caseID]) ? $oldSteps[$caseID] : array();
                 $oldCase     = $oldCases[$caseID];
 
+                /* Ignore updating cases for different libs. */
+                if($oldCase->lib != $caseData->lib) continue;
+
                 /* Remove the empty setps in post. */
                 $steps = array();
                 if(isset($_POST['desc'][$key]))

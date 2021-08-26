@@ -4,7 +4,7 @@
 #sidebar > header {color: #fff; padding: 10px; position: fixed; top: 0; right: 0; z-index: 10; width: 300px; border-bottom: 1px solid #ddd;}
 #sidebar > header > h2 {margin: 0 0 0 40px; font-size: 18px; padding: 0; line-height: 36px; color: #fff;}
 #sidebar > header .start-icon {position: absolute; left: 10px; top: 10px; width: 36px; height: 36px;  text-align: center; margin-right: 5px;}
-#sidebar > header .start-icon > .icon-front {position: absolute; width: 36px; height: 36px; line-height: 36px; top: 0; left: 0; font-size: 12px;}
+#sidebar > header .start-icon > .icon-front {position: absolute; width: 36px; height: 36px; line-height: 36px; top: 0; left: 1px; font-size: 12px;}
 #sidebar > header .start-icon > .icon-back {font-size: 22px; color: #fff; line-height: 36px;}
 #sidebar > header .start-icon > .icon-back:before {content: '\f0a3';}
 #sidebar > header > .actions {position: absolute; right: 15px; top: 15px;}
@@ -29,6 +29,7 @@
 #task .task-desc > ul > li[data-target].active {background: #FFF0D5;}
 #task .task-desc > ul > li[data-target].active:after {top: 0%;}
 #task .task-desc > ul > li[data-target].active:before {font-family: ZentaoIcon; color: #EA644A; content: '\e92c';}
+#task .task-desc > ul > li[data-target].wait:before {content: ' '; display: block; width: 12px; height: 12px; border: 1px solid #333; border-radius: 50%; left: 8px; top: 6px}
 #openTaskPage {display: block; overflow: hidden; position: relative; height: 36px;}
 #openTaskPage > div {padding: 8px 10px; line-height: 20px; transition: top .4s cubic-bezier(.175,.885,.32,1); position: absolute; left: 0; top: 0; right: 0;}
 #openTaskPage > div > .icon {display: inline-block; width: 30px; text-align: center;}

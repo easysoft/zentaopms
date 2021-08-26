@@ -509,4 +509,23 @@ class baseEntry
             return $value;
         }
     }
+
+    /**
+     * 获取其他方法的执行结果。
+     * Fetch result of other method.
+     *
+     * @param  string $entry
+     * @param  string $method
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function fetch($entry, $method, $params = array())
+    {
+        include($this->app->appRoot . "api/{$this->app->version}/entries/" . strtolower($entry) . ".php");
+
+        $entryName = $entry . 'Entry';
+        $entry     = new $entryName();
+        return call_user_func_array(array($entry, $method), $params);
+    }
 }

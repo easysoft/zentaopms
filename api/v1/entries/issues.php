@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 禅道API的issues资源类
  * 版本V1
@@ -18,12 +17,13 @@ class issuesEntry extends entry
         if(!isset($data->status)) return $this->sendError(400, 'error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-        $pager = $data->data->pager;
+        $pager  = $data->data->pager;
         $result = array();
         foreach($data->data->issues as $issue)
         {
             $result[] = $this->format($issue, 'createdDate:time,editedDate:time,assignedDate:time');
         }
+
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'issues' => $result));
     }
 

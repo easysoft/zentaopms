@@ -294,7 +294,12 @@ class commonModel extends model
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
-                echo '<li>' . html::a(helper::createLink('my', 'tutorial'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB) . '</li>';
+
+                if($app->config->global->flow == 'full' && !commonModel::isTutorialMode())
+                {
+                    echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                }
+
                 echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='650'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
 
@@ -412,7 +417,6 @@ class commonModel extends model
         echo "<li class='dropdown-submenu'>";
         echo "<a data-toggle='dropdown'>" . "<i class='icon icon-help'></i> " . $lang->help . "</a>";
         echo "<ul class='dropdown-menu pull-left'>";
-        //if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
 
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         echo '<li>' . html::a($manualUrl, $lang->manual, '', "class='open-in-app' id='helpLink' data-app='help'") . '</li>';
@@ -701,8 +705,12 @@ class commonModel extends model
         $activeMenu = '';
         $openApp = $app->openApp;
 
+        $isTutorialMode = commonModel::isTutorialMode();
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
+
+        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
+        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
 
         /* Print all main menus. */
         $menu     = customModel::getMainMenu();
@@ -711,7 +719,7 @@ class commonModel extends model
         echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
-            if(isset($menuItem->hidden) && $menuItem->hidden) continue;
+            if(isset($menuItem->hidden) && $menuItem->hidden && (!isset($menuItem->tutorial) || !$menuItem->tutorial)) continue;
             if(empty($menuItem->link)) continue;
             if($menuItem->divider) echo "<li class='divider'></li>";
 
@@ -760,7 +768,6 @@ class commonModel extends model
                     foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
                     {
                         if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
-
 
                         /* Parse drop menu link. */
                         $dropMenuLink = $dropMenuItem;
