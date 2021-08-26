@@ -22,71 +22,73 @@
 <div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
   <div class="cell">
     <div class='detail'>
-      <div class='detail-title'><?php echo $lang->project->kanban->typeList[$type];?></div>
+      <div class='detail-title'><?php echo $lang->project->typeList[$type];?></div>
       <div class='detail-content'>
         <table class='table no-margin' style='background-color: #efefef;'>
           <thead class='text-center'>
             <tr>
-              <th rowspan='2' class='w-20px'></th>
-              <th rowspan='2'><?php echo $lang->project->kanban->waitProjects;?></th>
+              <th rowspan='2' style="background: #32C5FF; border-bottom: unset !important" class='w-20px'></th>
+              <th rowspan='2' style="border-left: unset !important"><?php echo $lang->project->waitProjects;?></th>
               <th colspan='2'><?php echo $lang->project->statusList['doing'];?></th>
-              <th rowspan='2'><?php echo $lang->project->kanban->closedProjects;?></th>
+              <th rowspan='2'><?php echo $lang->project->closedProjects;?></th>
             </tr>
             <tr>
-              <th><?php echo $lang->project->kanban->doingProjects;?></th>
-              <th><?php echo $lang->project->kanban->doingExecutions;?></th>
+              <th><?php echo $lang->project->doingProjects;?></th>
+              <th><?php echo $lang->project->doingExecutions;?></th>
             </tr>
           </thead>
           <tbody>
             <?php foreach($projectGroup as $programID => $statusList):?>
             <tr>
-              <td style='background: <?php echo $lang->project->kanban->laneColorList[$colorIndex];?>; color: #fff; padding-left: 2px;'><?php echo zget($programPairs, $programID);?></td>
+              <td class='text-center' style='background: <?php echo $lang->project->laneColorList[$colorIndex];?>; color: #fff; padding-left: 2px; writing-mode: vertical-lr;'><?php echo zget($programPairs, $programID);?></td>
               <?php foreach(array('wait','doing','closed') as $status):?>
               <?php if($status == 'doing'):?>
-              <td colspan='2'>
-                <div class='board-doing'>
-                  <?php if(isset($statusList[$status])):?>
-                  <?php foreach($statusList[$status] as $project):?>
-                  <div class='table-row'>
-                    <div class='table-col board-doing-project'>
-                      <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->delay) ? 'red' : "#0BD986") . "'";?>>
-                        <div class='table-row'>
-                          <div class='table-col'>
-                            <span><?php echo $project->name;?></span>
-                          </div>
-                          <div class='table-col'>
-                            <div class="c-progress">
-                              <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($project->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                                <div class='progress-info'><?php echo round($project->hours->progress);?></div>
-                              </div>
-                            </div>
+              <td class='doing'>
+                <?php if(isset($statusList[$status])):?>
+                <?php foreach($statusList[$status] as $project):?>
+                <div class='doing-project'>
+                  <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->delay) ? 'red' : "#0BD986") . "'";?>>
+                    <div class='table-row'>
+                      <div class='table-col'>
+                        <span><?php echo $project->name;?></span>
+                      </div>
+                      <div class='table-col'>
+                        <div class="c-progress">
+                          <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($project->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                            <div class='progress-info'><?php echo round($project->hours->progress);?></div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class='table-col board-doing-execution'>
-                      <?php if(isset($latestExecutions[$project->id])):?>
-                      <?php $execution = $latestExecutions[$project->id];?>
-                      <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($execution->delay) ? 'red' : "#0BD986") . "'";?>>
-                        <div class='table-row'>
-                          <div class='table-col'>
-                            <span><?php echo $execution->name;?></span>
-                          </div>
-                          <div class='table-col'>
-                            <div class="c-progress">
-                              <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                                <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <?php endif;?>
                     </div>
                   </div>
-                  <?php endforeach;?>
-                  <?php endif;?>
                 </div>
+                <?php endforeach;?>
+                <?php endif;?>
+              </td>
+              <td class='doing'>
+                <?php if(isset($statusList[$status])):?>
+                <?php foreach($statusList[$status] as $project):?>
+                <?php if(isset($latestExecutions[$project->id])):?>
+                <?php $execution = $latestExecutions[$project->id];?>
+                <div class='doing-execution'>
+                  <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($execution->delay) ? 'red' : "#0BD986") . "'";?>>
+                    <div class='table-row'>
+                      <div class='table-col'>
+                        <span><?php echo empty($execution) ? '' : $execution->name;?></span>
+                      </div>
+                      <div class='table-col'>
+                        <div class="c-progress">
+                          <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                            <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <?php endif;?>
+                <?php endforeach;?>
+                <?php endif;?>
               </td>
               <?php else:?>
               <td>
