@@ -48,3 +48,11 @@ a.showMoreImage:hover {opacity: 1;}
 .create-list {min-width: 120px !important;}
 .create-list>li>a {padding-left: 35px !important;}
 .create-list>li>a>.icon {left: 5px !important;}
+
+.c-icon {width: 20px;}
+.c-id {width: 70px;}
+.c-status {width: 100px;}
+.c-user {width: 100px;}
+.c-date {width: 100px;}
+.c-full-date {width: 150px;}
+.c-object {width: 250px;}

@@ -24,8 +24,8 @@
                 <thead>
                   <tr>
                     <th class='chart-label' colspan='2'><?php echo $lang->report->item;?></th>
-                    <th class='w-50px'><?php echo $lang->report->value;?></th>
-                    <th class='w-50px'><?php echo $lang->report->percent;?></th>
+                    <th class='c-id'><?php echo $lang->report->value;?></th>
+                    <th class='c-id'><?php echo $lang->report->percent;?></th>
                   </tr>
                 </thead>
                 <?php foreach($datas[$chartType] as $key => $data):?>
@@ -75,15 +75,15 @@
               <table class='table table-condensed table-hover table-striped table-bordered' data-chart='bar' data-target='#chart-<?php echo $infoKey?>' data-animation='false'>
                 <thead>
                   <tr>
-                    <th class='w-60px'><?php echo $lang->bug->pri;?></th>
-                    <th class='w-80px'><?php echo $lang->testreport->bugStageList['generated'];?></th>
-                    <th class='w-80px'><?php echo $lang->testreport->bugStageList['legacy'];?></th>
-                    <th class='w-80px'><?php echo $lang->testreport->bugStageList['resolved'];?></th>
+                    <th class='c-status'><?php echo $lang->bug->pri;?></th>
+                    <th class='c-id'><?php echo $lang->testreport->bugStageList['generated'];?></th>
+                    <th class='c-id'><?php echo $lang->testreport->bugStageList['legacy'];?></th>
+                    <th class='c-id'><?php echo $lang->testreport->bugStageList['resolved'];?></th>
                   </tr>
                 </thead>
                 <?php foreach($lang->bug->priList as $key => $value):?>
                 <tr class='text-center'>
-                <td class='chart-color w-20px'><i class="chart-color-dot pri-<?php echo $key;?>"></i> <?php echo $key == 0 ? $lang->null : $value;?></td>
+                <td class='chart-color c-icon'><i class="chart-color-dot pri-<?php echo $key;?>"></i> <?php echo $key == 0 ? $lang->null : $value;?></td>
                   <td class='chart-value'><?php echo $infoValue[$key]['generated'];?></td>
                   <td class='chart-value'><?php echo $infoValue[$key]['legacy'];?></td>
                   <td class='chart-value'><?php echo $infoValue[$key]['resolved'];?></td>
@@ -112,10 +112,10 @@
               <table class='table table-condensed table-hover table-striped table-bordered' data-chart='line' data-target='#chart-<?php echo $infoKey?>' data-animation='false'>
                 <thead>
                   <tr>
-                    <th class='w-40px'><?php echo $lang->testreport->date;?></th>
-                    <th class='w-80px'><i class='chart-color-dot generated'></i> <?php echo $lang->testreport->bugStageList['generated'];?></th>
-                    <th class='w-80px'><i class='chart-color-dot legacy'></i> <?php echo $lang->testreport->bugStageList['legacy'];?></th>
-                    <th class='w-80px'><i class='chart-color-dot resolved'></i> <?php echo $lang->testreport->bugStageList['resolved'];?></th>
+                    <th class='c-date'><?php echo $lang->testreport->date;?></th>
+                    <th class='c-id'><i class='chart-color-dot generated'></i> <?php echo $lang->testreport->bugStageList['generated'];?></th>
+                    <th class='c-id'><i class='chart-color-dot legacy'></i> <?php echo $lang->testreport->bugStageList['legacy'];?></th>
+                    <th class='c-id'><i class='chart-color-dot resolved'></i> <?php echo $lang->testreport->bugStageList['resolved'];?></th>
                   </tr>
                 </thead>
                 <?php
@@ -156,8 +156,8 @@
                 <thead>
                   <tr>
                     <th class='chart-label' colspan='2'><?php echo $lang->report->item;?></th>
-                    <th class='w-50px'><?php echo $lang->report->value;?></th>
-                    <th class='w-50px'><?php echo $lang->report->percent;?></th>
+                    <th class='c-id'><?php echo $lang->report->value;?></th>
+                    <th class='c-id'><?php echo $lang->report->percent;?></th>
                   </tr>
                 </thead>
                 <?php
@@ -178,7 +178,7 @@
                 if(empty($label) and empty($data)) continue;
                 ?>
                 <tr class='text-center'>
-                  <td class='chart-color w-20px'><i class='chart-color-dot'></i></td>
+                  <td class='chart-color c-icon'><i class='chart-color-dot'></i></td>
                   <td class='chart-label'><?php echo $label;?></td>
                   <td class='chart-value'><?php echo $data;?></td>
                   <td><?php echo round($data / $sum * 100, 2) . '%';?></td>

@@ -2,13 +2,13 @@
 <table class='table main-table' id='bugs'>
   <thead>
     <tr>
-      <th class='w-id'>   <?php echo $lang->idAB;?></th>
-      <th class='w-pri'>  <?php echo $lang->priAB;?></th>
-      <th class='text-left'><?php echo $lang->testreport->bugTitle;?></th>
-      <th class='w-user'> <?php echo $lang->openedByAB;?></th>
-      <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
-      <th class='w-140px'><?php echo $lang->bug->resolvedDate;?></th>
-      <th class='w-80px'> <?php echo $lang->statusAB;?></th>
+      <th class='c-id'>       <?php echo $lang->idAB;?></th>
+      <th class='c-status'>   <?php echo $lang->priAB;?></th>
+      <th class='text-left'>  <?php echo $lang->testreport->bugTitle;?></th>
+      <th class='c-user'>     <?php echo $lang->openedByAB;?></th>
+      <th class='c-user'>     <?php echo $lang->bug->resolvedBy;?></th>
+      <th class='c-full-date'><?php echo $lang->bug->resolvedDate;?></th>
+      <th class='c-status'>   <?php echo $lang->statusAB;?></th>
     </tr>
   </thead>
 <?php if($bugs):?>

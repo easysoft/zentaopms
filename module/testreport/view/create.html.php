@@ -34,7 +34,7 @@
         <div class="detail-content">
           <table class='table table-form'>
             <tr>
-              <th class='w-100px'><?php echo $lang->testreport->startEnd?></th>
+              <th class='c-date'><?php echo $lang->testreport->startEnd?></th>
               <td class='w-p50'>
                 <div class='input-group'>
                   <?php echo html::input('begin', $begin, "class='form-control form-date' onchange=changeDate()")?>

@@ -48,7 +48,7 @@
         <div class='panel-body'>
           <div class='task-desc'></div>
           <a href='javascript:;' id='openTaskPage' class='btn-open-target-page hl-primary'>
-            <div class='normal'><i class="icon icon-flag-alt"></i> <?php echo $lang->tutorial->openTargetPage;?></div>
+            <div class='normal'><i class="icon icon-magic"></i> <?php echo $lang->tutorial->openTargetPage;?></div>
             <div class='opened'><i class="icon icon-flag"></i> <?php echo $lang->tutorial->atTargetPage;?></div>
             <div class='reload'><i class="icon icon-restart"></i> <?php echo $lang->tutorial->reloadTargetPage;?></div>
           </a>
@@ -69,18 +69,18 @@
       </div>
       <ul id='tasks' class='nav nav-primary nav-stacked'>
         <?php
-        $idx = 1;
+        $idx = 0;
         $tasks = array();
         ?>
         <?php foreach ($lang->tutorial->tasks as $name => $task):?>
         <?php
         $nav = $task['nav'];
         $task['name'] = $name;
-        $task['id']   = $idx++;
+        $task['id']   = ++$idx;
         $task['url']  = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
         $tasks[$name] = $task;
         ?>
-        <li data-name='<?php echo $name;?>'><a class='btn-task' href='javascript:;' data-name='<?php echo $name;?>'><span><?php echo $idx++;?></span>. <span class='task-name'><?php echo $task['title'];?></span><i class='icon icon-check pull-right'></i></a></li>
+        <li data-name='<?php echo $name;?>'><a class='btn-task' href='javascript:;' data-name='<?php echo $name;?>'><span><?php echo $idx;?></span>. <span class='task-name'><?php echo $task['title'];?></span><i class='icon icon-check pull-right'></i></a></li>
         <?php endforeach;?>
       </ul>
     </section>

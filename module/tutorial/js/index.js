@@ -116,7 +116,7 @@ $(function()
             {
                 if(e.result === 'success')
                 {
-                    $task.addClass('finish').find('[data-target]').removeClass('active').addClass('finish');
+                    $task.addClass('finish').find('[data-target]').removeClass('active').removeClass('wait').addClass('finish');
                     updateUI();
                     showModal(finishCount >= totalCount);
                 }
@@ -288,15 +288,14 @@ $(function()
                                 }, 2000);
                             });
                         }
-
-                        e.preventDefault();
-                        e.stopPropagation();
-                        return false;
                     }
                     else
                     {
                         finishTask();
                     }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
                 }
                 if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
                 else $form.submit(onSubmit);
@@ -403,6 +402,9 @@ $(function()
         $navTarget.toggleClass('finish', !!targetStatus.nav);
         $formTarget.toggleClass('finish', !!targetStatus.form);
         $submitTarget.toggleClass('finish', !!targetStatus.submit);
+        $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
+        $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
+        $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
         $openTaskPage.toggleClass('open', targetStatus.nav);
 
         targetStatus.submitOK = targetStatus.nav && targetStatus.form;
@@ -455,7 +457,6 @@ $(function()
             var name     = $li.data('name');
             var task     = tasks[name];
             var finish   = !!setting[name];
-            task.id      = idx + 1;
             task.finish  = finish;
             finishCount += finish ? 1 : 0;
             totalCount++;
@@ -506,6 +507,9 @@ $(function()
         $(document).on('click', '.btn-task', function()
         {
             showTask($(this).data('name'));
+        }).on('click', '.btn-open-target-page', function()
+        {
+            appsWindow.$.apps.open(tasks[current].url);
         }).on('click', '.btn-reset-tasks', function()
         {
             hideModal();

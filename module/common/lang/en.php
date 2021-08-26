@@ -223,7 +223,7 @@ $lang->doc->my        = 'My';
 $lang->doc->favorite  = 'Favorite';
 $lang->doc->product   = 'Product';
 $lang->doc->project   = 'Project';
-$lang->doc->execution = isset($config->maxVersion) ? $lang->execution->common : $lang->executionCommon;
+$lang->doc->execution = $lang->execution->common;
 $lang->doc->custom    = 'Custom';
 $lang->doc->wiki      = 'WIKI';
 
