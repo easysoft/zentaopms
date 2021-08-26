@@ -34,7 +34,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th><?php echo $lang->user->realname;?></th>
-          <th class="w-120px"><?php echo $lang->user->dept;?></th>
+          <th class="c-dept"><?php echo $lang->user->dept;?></th>
           <th class="w-120px"><?php echo $lang->user->role;?></th>
           <th class="w-120px"><?php echo $lang->user->phone;?></th>
           <th class="w-120px"><?php echo $lang->user->qq;?></th>
@@ -50,7 +50,7 @@
             <?php printf('%03d', $user->id);?>
           </td>
           <td><?php echo $user->realname;?></td>
-          <td><?php echo zget($depts, $user->dept);?></td>
+          <td class='c-dept' title="<?php echo zget($depts, $user->dept);?>"><?php echo zget($depts, $user->dept);?></td>
           <td><?php echo zget($lang->user->roleList, $user->role);?></td>
           <td title="<?php echo $user->phone;?>"><?php echo $user->phone;?></td>
           <td title="<?php echo $user->qq;?>"><?php echo $user->qq;?></td>
