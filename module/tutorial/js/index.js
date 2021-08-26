@@ -458,7 +458,6 @@ $(function()
             var name     = $li.data('name');
             var task     = tasks[name];
             var finish   = !!setting[name];
-            task.id      = idx + 1;
             task.finish  = finish;
             finishCount += finish ? 1 : 0;
             totalCount++;
