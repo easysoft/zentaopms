@@ -1,0 +1,20 @@
+#kanban {padding: 10px;}
+.main-table tbody>tr>td {padding: 10px;}
+.table caption {background: #fff; border-top-left-radius: 2px; border-top-right-radius: 2px; margin-bottom: 0; font-weight: 500;}
+.table .program {writing-mode: vertical-lr; padding-left: 4px !important; color: #fff;}
+
+.table th, .table td {border-top: 2px solid #fff; border-bottom: 2px solid #fff; border-left: 3px solid #fff; border-bottom: 3px solid #fff;}
+.table tbody tr:last-child td {border-bottom: unset;}
+td.project, td.execution {padding: 10px 0 !important;}
+
+.board-item {border: 1px solid #ebebeb; padding: 3px 10px; cursor: default; border-radius: 2px; background-color: #fff; text-align: left;}
+.board-item:hover {border-color: #ccc;}
+.board {padding: 0 10px;}
+.board + .board {margin-top: 5px;}
+.board-item + .board-item {margin-top: 10px;}
+.project .board, .execution .board {padding-top: 5px; border-top: 2px solid #fff;}
+.project .board:first-child, .execution .board:first-child {padding-top: 0; border-top: unset;}
+.release .board-item {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
+.emptyBoard {padding: 3px 10px; cursor: default;}
+
+.project .table-row > .table-col:last-child, .execution .table-row > .table-col:last-child {width: 24px; padding-top: 2px;}

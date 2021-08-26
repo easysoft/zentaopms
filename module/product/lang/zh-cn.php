@@ -131,6 +131,19 @@ $lang->product->unclosed     = '未关闭';
 $lang->product->unplan       = "未计划";
 $lang->product->viewByUser   = '按用户查看';
 
+/* Product Kanban. */
+$lang->product->myProduct       = '我负责的产品';
+$lang->product->otherProduct    = '其他产品';
+$lang->product->unclosedProduct = '未关闭的产品';
+$lang->product->unexpiredPlan   = '未过期的计划';
+$lang->product->doing           = '进行中';
+$lang->product->doingProject    = '进行中的项目';
+$lang->product->doingExecution  = '进行中的执行';
+$lang->product->normalRelease   = '正常的发布';
+$lang->product->emptyProgram    = '无项目集归属产品';
+
+$lang->product->kanbanColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
+
 $lang->product->allStory             = '所有';
 $lang->product->allProduct           = '全部' . $lang->productCommon;
 $lang->product->allProductsOfProject = '全部关联' . $lang->productCommon;

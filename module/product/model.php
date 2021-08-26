@@ -1521,6 +1521,62 @@ class productModel extends model
     }
 
     /**
+     * Get stats for product kanban.
+     *
+     * @access public
+     * @return void
+     */
+    public function getStats4Kanban()
+    {
+        $date = date('Y-m-d');
+        $this->loadModel('program');
+
+        $productList = $this->getList();
+        $programList = $this->program->getTopPairs('', '', true);
+        $projectList = $this->program->getProjectStats(0, 'doing');
+
+        $projectProduct = $this->dao->select('t1.product,t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in(array_keys($productList))
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.status')->eq('doing')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchGroup('product', 'project');
+
+        $planList = $this->dao->select('id,product,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in(array_keys($productList))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('end')->ge($date)
+            ->andWhere('parent')->ne(-1)
+            ->orderBy('begin desc')
+            ->fetchGroup('product', 'id');
+
+        $executionList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+            ->where('type')->in('stage,sprint')
+            ->andWhere('t2.project')->in(array_keys($projectList))
+            ->andWhere('t1.product')->in(array_keys($productList))
+            ->andWhere('status')->eq('doing')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchGroup('project', 'id');
+
+        $projectLatestExecutions = array();
+        $latestExecutionList     = array();
+        foreach($executionList as $projectID => $executions)
+        {
+            $latestExecutionList[key($executions)] = current($executions);
+            $projectLatestExecutions[$projectID]   = current($executions);
+        }
+
+        $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);
+
+        $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)->where('product')->in(array_keys($productList))->fetchGroup('product', 'id');
+
+        return array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
+    }
+
+    /**
      * Get product line pairs.
      *
      * @param  int    $programID
