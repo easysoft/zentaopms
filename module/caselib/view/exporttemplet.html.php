@@ -34,10 +34,10 @@ function closeWindow()
                 <?php echo html::input('num', '10', "class='form-control'");?>
               </div>
             </td>
-            <td class='w-100px'>
+            <td class='c-encode'>
               <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
             </td>
-            <td class="w-100px">
+            <td class="c-encode">
               <?php echo html::submitButton('', '', 'btn btn-primary btn-block');?>
             </td>
           </tr>

@@ -28,15 +28,15 @@ $(function()
     <table class='table table-form' id='showData'>
       <thead>
         <tr>
-          <th class='w-70px'><?php echo $lang->testcase->id?></th>
+          <th class='c-number'><?php echo $lang->testcase->id?></th>
           <th><?php echo $lang->testcase->title?></th>
-          <th class='w-150px'><?php echo $lang->testcase->module?></th>
-          <th class='w-80px'><?php echo $lang->testcase->pri?></th>
-          <th class='w-130px'><?php echo $lang->testcase->type?></th>
+          <th class='c-module'><?php echo $lang->testcase->module?></th>
+          <th class='c-status'><?php echo $lang->testcase->pri?></th>
+          <th class='c-status'><?php echo $lang->testcase->type?></th>
           <th><?php echo $lang->testcase->stage?></th>
-          <th class='w-80px'><?php echo $lang->testcase->keywords?></th>
+          <th class='c-text'><?php echo $lang->testcase->keywords?></th>
           <th><?php echo $lang->testcase->precondition?></th>
-          <th class='w-300px col-content'>
+          <th class='c-case-step col-content'>
             <table class='w-p100 table-borderless'>
               <tr>
                 <th><?php echo $lang->testcase->stepDesc?></th>

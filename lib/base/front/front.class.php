@@ -497,18 +497,20 @@ class baseHTML
         }
 
         $referer       = $_SERVER['HTTP_REFERER'];
-        $refererArray  = parse_url($referer);
-        $refererLink   = $config->requestType == 'PATH_INFO' ? $refererArray['path'] : $refererArray['query'];
+        $refererParts  = parse_url($referer);
+        $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
-        $gobackCookie  = $_COOKIE['openApp'] . 'Goback';
-        $gobackLink    = isset($_COOKIE[$gobackCookie]) ? $_COOKIE[$gobackCookie] : '';
+        $tab           = $_COOKIE['openApp'];
+        $gobackList    = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
+        $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
 
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
         if(!preg_match("/(m=|\/)(index|$currentModule)(&f=|-)(index|$currentMethod)(&|-|\.)?/", $refererLink))
         {
-            setcookie($gobackCookie, $referer, $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
-            $gobackLink = $referer;
+            $gobackList[$tab] = $referer;
+            $gobackLink       = $referer;
+            setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
         }
 
         return  "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";

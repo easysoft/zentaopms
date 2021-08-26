@@ -24,14 +24,14 @@
     <table align='center' class='table table-form' id="tableBody">
       <thead>
         <tr class='text-center'>
-          <th class='w-50px'> <?php echo $lang->idAB;?></th>
-          <th class='w-180px'><?php echo $lang->testcase->module;?></th>
+          <th class='c-id'><?php echo $lang->idAB;?></th>
+          <th class='c-module'><?php echo $lang->testcase->module;?></th>
           <th class='required'><?php echo $lang->testcase->title;?></th>
-          <th class='w-100px required'><?php echo $lang->testcase->type;?></th>
-          <th class='w-80px'> <?php echo $lang->testcase->pri;?></th>
-          <th class='w-150px'><?php echo $lang->testcase->precondition;?></th>
-          <th class='w-100px'><?php echo $lang->testcase->keywords;?></th>
-          <th class='w-200px'><?php echo $lang->testcase->stage;?></th>
+          <th class='c-status required'><?php echo $lang->testcase->type;?></th>
+          <th class='c-status'><?php echo $lang->testcase->pri;?></th>
+          <th class='c-text'><?php echo $lang->testcase->precondition;?></th>
+          <th class='c-text'><?php echo $lang->testcase->keywords;?></th>
+          <th class='c-text'><?php echo $lang->testcase->stage;?></th>
         </tr>
       </thead>
       <tbody>

@@ -289,7 +289,7 @@ $(function()
     $('#toggle-queries').click(function()
     {
         $('#userQueries').toggleClass('hidden');
-        if(!$('#userQueries').hasClass('hidden')) 
+        if(!$('#userQueries').hasClass('hidden'))
         {
             $('#toggle-queries .icon').removeClass('icon-angle-left');
             $('#toggle-queries .icon').addClass('icon-angle-right');
