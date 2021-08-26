@@ -497,16 +497,15 @@ class baseHTML
         }
 
         $referer       = $_SERVER['HTTP_REFERER'];
+        $refererArray  = parse_url($referer);
+        $refererLink   = $config->requestType == 'PATH_INFO' ? $refererArray['path'] : $refererArray['query'];
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
         $gobackCookie  = $_COOKIE['openApp'] . 'Goback';
         $gobackLink    = isset($_COOKIE[$gobackCookie]) ? $_COOKIE[$gobackCookie] : '';
 
-        /* Get the module name and method name of the referer. */
-        preg_match('/((http|https):\/\/)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(\/[a-zA-Z0-9\&%_\.\/-~-]*)?/', $referer, $refererLink);
-
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
-        if(!preg_match("/(\/index\.php\?m=|\/)(index|$currentModule)(&f=|-)(index|$currentMethod)(&|-|\.)?/", $refererLink[7]))
+        if(!preg_match("/(m=|\/)(index|$currentModule)(&f=|-)(index|$currentMethod)(&|-|\.)?/", $refererLink))
         {
             setcookie($gobackCookie, $referer, $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
             $gobackLink = $referer;
