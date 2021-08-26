@@ -3,7 +3,7 @@
  * The diff view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong
+ * @author      Xiying Guan
  * @package     repo
  * @version     $Id: browse.html.php $
  */
