@@ -27,13 +27,18 @@
         <div class="detail">
           <div class="detail-title">
             <div><?php echo $lang->mr->from . html::a($sourceProjectURL, $sourceProjectName . ":" . $MR->sourceBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'") . $lang->mr->to . html::a($targetProjectURL, $targetProjectName . ":" . $MR->targetBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'");?></div>
-            <div><?php if(isset($rawMR->head_pipeline->status)) echo $lang->mr->pipeline . $lang->mr->status . ": " . zget($lang->mr->pipelineStatus, $rawMR->head_pipeline->status, $lang->mr->pipelineUnknown);?></div>
           </div>
           <div class="detail-content article-content">
+            <?php if(isset($rawMR->head_pipeline->status)):?>
+              <div>
+                <strong><?php echo "{$lang->mr->pipeline}{$lang->mr->status}";?></strong>
+                <?php echo zget($lang->mr->pipelineStatus, $rawMR->head_pipeline->status, $lang->mr->pipelineUnknown);?>
+              </div>
+            <?php endif;?>
             <strong><?php echo $lang->mr->mergeStatus;?> </strong>
             <?php echo zget($lang->mr->mergeStatusList, $rawMR->merge_status);?>
             <br>
-            <strong><?php echo $lang->mr->MRHasConflicts. $lang->colon;?></strong>
+            <strong><?php echo $lang->mr->MRHasConflicts;?></strong>
             <?php echo ($rawMR->has_conflicts ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?>
           </div>
         </div>
