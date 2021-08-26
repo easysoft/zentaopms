@@ -58,29 +58,6 @@ class mrModel extends model
     }
 
     /**
-     * Process MR info by api. Append extra attributes in GitLab.
-     *
-     * @param  object    $MR
-     * @access public
-     * @return object
-     */
-    public function processMR($MR)
-    {
-        if(!isset($MR->gitlabID)) return $MR;
-
-        $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
-
-        $MR->name          = $rawMR->title;
-        $MR->sourceProject = $rawMR->source_project_id;
-        $MR->sourceBranch  = $rawMR->source_branch;
-        $MR->targetProject = $rawMR->target_project_id;
-        $MR->targetBranch  = $rawMR->target_branch;
-        $MR->mergeStatus   = $rawMR->merge_status;
-        $MR->status        = $rawMR->state;
-        return $MR;
-    }
-
-    /**
      * Get gitlab pairs.
      *
      * @access public
@@ -132,7 +109,7 @@ class mrModel extends model
         if(isset($rawMR->message) and !isset($rawMR->iid))
         {
             $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
-            return array('result' => 'fail', 'message' => $rawMR->message);
+            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $rawMR->message));
         }
 
         /* Create MR failed. */
@@ -242,6 +219,7 @@ class mrModel extends model
                 ->where('id')->eq($MR->id)
                 ->exec();
         }
+        return $this->dao->findByID($MR->id)->from(TABLE_MR)->fetch();
     }
 
     /**
