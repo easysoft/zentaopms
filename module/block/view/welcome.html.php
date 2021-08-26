@@ -49,7 +49,12 @@
       </div>
       <?php if(!isset($config->tutorialHidden) or $config->tutorialHidden == '0'):?>
       <div class="tutorial">
-        <?php echo html::a(helper::createLink('my', 'tutorial'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='text-muted'");?>
+        <?php
+        if($this->app->config->global->flow == 'full' && !commonModel::isTutorialMode())
+        {
+            echo html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe text-muted' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'");
+        }
+        ?>
         <label class="label label-light label-badge hidden"><i class="icon icon-close"></i></label>
       </div>
       <?php endif;?>
