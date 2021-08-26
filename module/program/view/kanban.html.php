@@ -21,9 +21,9 @@
           <thead>
             <tr>
               <th rowspan='2' class='w-20px' style='background: #32C5FF; border-bottom: none'></th>
-              <th rowspan='2'><?php echo $lang->program->kanban->activeProducts;?></th>
-              <th rowspan='2'><?php echo $lang->program->kanban->activePlans;?></th>
-              <th rowspan='2'><?php echo $lang->program->kanban->waitProjects;?></th>
+              <th rowspan='2'><?php echo $lang->program->kanban->openProducts;?></th>
+              <th rowspan='2'><?php echo $lang->program->kanban->unexpiredPlans;?></th>
+              <th rowspan='2'><?php echo $lang->program->kanban->waitingProjects;?></th>
               <th colspan='2'><?php echo $lang->program->statusList['doing'];?></th>
               <th rowspan='2'><?php echo $lang->program->kanban->normalReleases;?></th>
             </tr>
@@ -35,13 +35,13 @@
           <tbody>
             <?php foreach($programGroup as $programID => $program):?>
             <tr>
-              <td style='background: <?php echo $lang->program->kanban->laneColorList[$colorIndex];?>; color: #fff; border-right: none;' rowspan='<?php echo count($program->products);?>'><?php echo $program->name;?></td>
+              <td class='lane-name' style='background: <?php echo $lang->program->kanban->laneColorList[$colorIndex];?>; color: #fff; border-right: none;' rowspan='<?php echo count($program->products);?>' title=<?php echo $program->name;?>><?php echo $program->name;?></td>
               <?php $i = 0;?>
               <?php if(!empty($program->products)):?>
               <?php foreach($program->products as $productID => $product):?>
               <?php if($i != 0) echo '<tr>';?>
-              <td><?php echo $product->name;?></td>
-              <td>
+              <td title=<?php echo $product->name;?>><?php echo $product->name;?></td>
+              <td class='normal-plan'>
                 <?php foreach($product->plans as $planID => $plan):?>
                 <div class='board-item'>
                   <div class='table-row'>
@@ -52,53 +52,72 @@
                 </div>
                 <?php endforeach;?>
               </td>
-              <td>
+              <td class='wait-project'>
                 <?php if(isset($product->projects['wait'])):?>
                 <?php foreach($product->projects['wait'] as $projectID => $project):?>
-                <div class='board-item'>
+                <div class='board-item' style='border-left: 3px solid #ccc'>
                   <div class='table-row'>
                     <div class='table-col'>
-                      <?php echo html::a($this->createLink('project', 'view', "projectID=$projectID"), $project->name);?>
+                      <?php echo html::a($this->createLink('project', 'view', "projectID=$project->id"), $project->name);?>
                     </div>
                   </div>
                 </div>
                 <?php endforeach;?>
                 <?php endif;?>
               </td>
-              <td class='doing-project'>
-                <?php if(isset($product->projects['doing'])):?>
-                <?php foreach($product->projects['doing'] as $projectID => $project):?>
-                <div class='board-item'>
+              <td colspan='2' class='doing-td'>
+                <div class='board-doing'>
+                  <?php if(isset($product->projects['doing'])):?>
+                  <?php foreach($product->projects['doing'] as $projectID => $project):?>
                   <div class='table-row'>
-                    <div class='table-col'>
-                      <?php echo html::a($this->createLink('project', 'view', "projectID=$projectID"), $project->name);?>
+                    <div class='table-col board-doing-project'>
+                      <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->delay) ? 'red' : "#0BD986") . "'";?>>
+                        <div class='table-row'>
+                          <div class='table-col'>
+                            <?php echo html::a($this->createLink('project', 'view', "projectID=$project->id"), $project->name);?>
+                          </div>
+                          <div class='table-col'>
+                            <div class="c-progress">
+                              <?php $projectProgress = isset($project->hours->progress) ? $project->hours->progress : 0;?>
+                              <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($projectProgress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                                <div class='progress-info'><?php echo round($projectProgress);?></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <?php endforeach;?>
-                <?php endif;?>
-              </td>
-              <td class='doing-execution'>
-                <?php if(isset($product->projects['doing'])):?>
-                <?php foreach($product->projects['doing'] as $projectID => $project):?>
-                <div class='board-item'>
-                  <div class='table-row'>
-                    <div class='table-col'>
+                    <div class='table-col board-doing-execution'>
                       <?php if(!empty($project->execution)):?>
-                      <?php echo html::a($this->createLink('execution', 'view', "executionID={$project->execution->id}"), $project->execution->name);?>
+                      <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->execution->delay) ? 'red' : "#0BD986") . "'";?>>
+                        <div class='table-row'>
+                          <div class='table-col'>
+                            <?php echo html::a($this->createLink('execution', 'view', "executionID={$project->execution->id}"), $project->execution->name);?>
+                          </div>
+                          <div class='table-col'>
+                            <div class="c-progress">
+                              <?php $executionProgress = isset($project->execution->hours->progress) ? $project->execution->hours->progress : 0;?>
+                              <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($executionProgress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                                <div class='progress-info'><?php echo round($executionProgress);?></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       <?php endif;?>
                     </div>
                   </div>
+                  <?php endforeach;?>
+                  <?php endif;?>
                 </div>
-                <?php endforeach;?>
-                <?php endif;?>
               </td>
-              <td>
+              <td class='normal-release'>
                 <?php foreach($product->releases as $releaseID => $release):?>
                 <div class='board-item'>
                   <div class='table-row'>
                     <div class='table-col'>
-                      <?php echo html::a($this->createLink('release', 'view', "releaseID=$release->id"), $release->name);?>
+                      <?php $flag = $release->marker ? " <icon class='icon icon-flag red' title='{$lang->release->marker}'></icon> " : '';?>
+                      <?php echo html::a($this->createLink('release', 'view', "releaseID=$release->id"), $release->name . $flag);?>
                     </div>
                   </div>
                 </div>

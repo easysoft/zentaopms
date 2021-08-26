@@ -1,6 +1,8 @@
 .main-table .table {cursor: default;}
 .main-table .table td {background: #f5f5f5;}
 
+.lane-name {overflow: hidden; text-overflow: ellipsis}
+
 .board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: default; border-radius: 2px; background-color: #fff;}
 .board-item:hover {border-color: #ccc;}
 .board-item + .board-item {margin-top: 10px;}
@@ -10,5 +12,15 @@
 #kanban tbody > tr > td{border-right: 3px solid #fff; border-bottom: 3px solid #fff;}
 #kanban thead > tr:first-child > th:not(:first-child) {border-right: 3px solid #fff; border-bottom: 3px solid #fff;}
 #kanban thead > tr:last-child > th {border: 3px solid #fff;}
+
+.doing-td, .wait-project, .normal-plan, .normal-release {vertical-align: top !important;}
+
+.doing-td > .board-doing > .table-row+.table-row {margin-top: 10px;}
+
+.board-doing-project {padding-right: 6px}
+.board-doing-execution{padding-left: 6px}
+.board-doing-project .table-row .table-col:last-child, .c-progress {width: 30px;}
+.board-doing-execution .table-row .table-col:last-child, .c-progress {width: 30px;}
+.table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 .table-grouped tbody > tr > td:first-child, .table-grouped thead > tr > th:first-child {padding-left: 3px;}

@@ -36,6 +36,7 @@ $lang->program->create                  = '添加项目集';
 $lang->program->createGuide             = '选择项目模板';
 $lang->program->edit                    = '编辑项目集';
 $lang->program->browse                  = '项目集列表';
+$lang->program->kanbanAction            = '项目集看板';
 $lang->program->view                    = '项目集详情';
 $lang->program->copy                    = '复制项目集';
 $lang->program->product                 = '产品列表';
@@ -117,12 +118,13 @@ $lang->program->statusList['closed']    = '已关闭';
 $lang->program->featureBar['all'] = '所有';
 
 $lang->program->kanban = new stdclass();
+$lang->program->kanban->common             = '项目集看板';
 $lang->program->kanban->typeList['my']     = '我参与的项目集';
 $lang->program->kanban->typeList['others'] = '其他项目集';
 
-$lang->program->kanban->activeProducts  = '未关闭的产品';
-$lang->program->kanban->activePlans     = '未过期的计划';
-$lang->program->kanban->waitProjects    = '未开始的项目';
+$lang->program->kanban->openProducts    = '未关闭的产品';
+$lang->program->kanban->unexpiredPlans  = '未过期的计划';
+$lang->program->kanban->waitingProjects = '未开始的项目';
 $lang->program->kanban->doingProjects   = '进行中的项目';
 $lang->program->kanban->doingExecutions = '进行中的执行';
 $lang->program->kanban->normalReleases  = '正常的发布';

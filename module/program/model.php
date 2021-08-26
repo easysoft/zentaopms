@@ -188,7 +188,7 @@ class programModel extends model
             ->fetchGroup('product');
 
         /* Get all products linked projects and executions. */
-        $projectGroup = $this->dao->select('t1.product, t2.id, t2.name, t2.status')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projectGroup = $this->dao->select('t1.product, t2.id, t2.name, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
@@ -203,22 +203,15 @@ class programModel extends model
             foreach($projects as $project) $projectPairs[$project->id] = $project->id;
         }
 
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectPairs)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-
-        $projectHours = $this->computeProgress($tasks);
-
-        $releases = $this->dao->select('product, id, name')->from(TABLE_RELEASE)
+        /* Get all releases under products. */
+        $releases = $this->dao->select('product, id, name, marker')->from(TABLE_RELEASE)
             ->where('product')->in($productPairs)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->eq('normal')
             ->fetchGroup('product');
 
-        $doingExecutions = $this->dao->select('id, project, name')->from(TABLE_EXECUTION)
+        /* Get doing executions. */
+        $doingExecutions = $this->dao->select('id, project, name, end')->from(TABLE_EXECUTION)
             ->where('type')->in('sprint,stage')
             ->andWhere('status')->eq('doing')
             ->andWhere('deleted')->eq(0)
@@ -228,15 +221,19 @@ class programModel extends model
         $executionPairs = array();
         foreach($doingExecutions as $execution) $executionPairs[$execution->id] = $execution->id;
 
+        /* Compute executions and projects progress. */
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
             ->from(TABLE_TASK)
-            ->where('execution')->in($executionPairs)
+            ->where('(execution')->in($executionPairs)
+            ->orWhere('project')->in($projectPairs)
+            ->markRight(1)
             ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('execution', 'id');
 
-        $executionHours = $this->computeProgress($tasks);
+        $hours = $this->computeProgress($tasks);
 
+        /* Group data. */
         foreach($productGroup as $programID => $products)
         {
             foreach($products as $productID => $product) 
@@ -246,18 +243,25 @@ class programModel extends model
                 $projects          = zget($projectGroup, $productID, array());
                 foreach($projects as $project)
                 {
+                    if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
+
                     $status    = $project->status == 'wait' ? 'wait' : 'doing'; 
                     $execution = zget($doingExecutions, $project->id, array());
-                    if(!empty($execution)) $execution->hours = zget($executionHours, $execution->id, array());
+
+                    if(!empty($execution)) 
+                    {
+                        $execution->hours = zget($hours, $execution->id, array());
+                        if(helper::diffDate(helper::today(), $execution->end) > 0) $execution->delay = 1;
+                    }
 
                     $project->execution = $execution;
-                    $project->hours     = zget($projectHours, $project->id, array());
+                    $project->hours     = zget($hours, $project->id, array());
                     $product->projects[$status][] = $project;
                 }
             }
         }
 
-        //区分出其他项目集
+        /* Group data. */
         foreach($programs as $programID => $program)
         {
             $program->products = zget($productGroup, $programID, array());

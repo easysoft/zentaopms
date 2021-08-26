@@ -162,6 +162,7 @@ if($config->systemMode == 'new')
     /* Program. */
     $lang->resource->program = new stdclass();
     $lang->resource->program->browse                  = 'browse';
+    $lang->resource->program->kanban                  = 'kanbanAction';
     $lang->resource->program->view                    = 'view';
     $lang->resource->program->product                 = 'product';
     $lang->resource->program->create                  = 'create';
@@ -180,25 +181,26 @@ if($config->systemMode == 'new')
     $lang->resource->program->export                  = 'export';
     $lang->resource->program->updateOrder             = 'updateOrder';
 
-    $lang->program->methodOrder[5]  = 'browse';
-    $lang->program->methodOrder[10] = 'view';
-    $lang->program->methodOrder[15] = 'product';
-    $lang->program->methodOrder[20] = 'create';
-    $lang->program->methodOrder[25] = 'edit';
-    $lang->program->methodOrder[30] = 'view';
-    $lang->program->methodOrder[35] = 'start';
-    $lang->program->methodOrder[40] = 'suspend';
-    $lang->program->methodOrder[45] = 'activate';
-    $lang->program->methodOrder[50] = 'close';
-    $lang->program->methodOrder[55] = 'delete';
-    $lang->program->methodOrder[60] = 'project';
-    $lang->program->methodOrder[65] = 'stakeholder';
-    $lang->program->methodOrder[70] = 'createStakeholder';
-    $lang->program->methodOrder[75] = 'unlinkStakeholder';
-    $lang->program->methodOrder[80] = 'batchUnlinkStakeholders';
-    $lang->program->methodOrder[85] = 'unbindWhitelist';
-    $lang->program->methodOrder[90] = 'export';
-    $lang->program->methodOrder[95] = 'updateOrder';
+    $lang->program->methodOrder[5]   = 'browse';
+    $lang->program->methodOrder[10]  = 'kanban';
+    $lang->program->methodOrder[15]  = 'view';
+    $lang->program->methodOrder[20]  = 'product';
+    $lang->program->methodOrder[25]  = 'create';
+    $lang->program->methodOrder[30]  = 'edit';
+    $lang->program->methodOrder[35]  = 'view';
+    $lang->program->methodOrder[40]  = 'start';
+    $lang->program->methodOrder[45]  = 'suspend';
+    $lang->program->methodOrder[50]  = 'activate';
+    $lang->program->methodOrder[55]  = 'close';
+    $lang->program->methodOrder[60]  = 'delete';
+    $lang->program->methodOrder[65]  = 'project';
+    $lang->program->methodOrder[70]  = 'stakeholder';
+    $lang->program->methodOrder[75]  = 'createStakeholder';
+    $lang->program->methodOrder[80]  = 'unlinkStakeholder';
+    $lang->program->methodOrder[85]  = 'batchUnlinkStakeholders';
+    $lang->program->methodOrder[90]  = 'unbindWhitelist';
+    $lang->program->methodOrder[95]  = 'export';
+    $lang->program->methodOrder[100] = 'updateOrder';
 
     /* Project. */
     $lang->resource->project = new stdclass();

@@ -24,6 +24,7 @@ $lang->program->create                  = 'Create Program';
 $lang->program->createGuide             = 'Select Template';
 $lang->program->edit                    = 'Edit Program';
 $lang->program->browse                  = 'Programs';
+$lang->program->kanbanAction            = 'Kanban';
 $lang->program->product                 = 'Products';
 $lang->program->project                 = 'Program Project List';
 $lang->program->all                     = 'All Programs';
@@ -95,3 +96,17 @@ $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
 $lang->program->featureBar['all'] = 'All';
+
+$lang->program->kanban = new stdclass();
+$lang->program->kanban->common             = 'Program Kanban';
+$lang->program->kanban->typeList['my']     = 'My Programs';
+$lang->program->kanban->typeList['others'] = 'Others';
+
+$lang->program->kanban->openProducts    = 'Open Products';
+$lang->program->kanban->unexpiredPlans  = 'Unexpired Plans';
+$lang->program->kanban->waitingProjects = 'Waiting Projects';
+$lang->program->kanban->doingProjects   = 'Ongoing Projects';
+$lang->program->kanban->doingExecutions = 'Ongoing Executions';
+$lang->program->kanban->normalReleases  = 'Normal Releases';
+
+$lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
