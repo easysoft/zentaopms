@@ -41,7 +41,7 @@ $(function()
     $('#sourceProject').change(function()
     {
         sourceProject = $(this).val();
-        projectUrl = createLink('mr', 'ajaxGetMRTragetProjects', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+        projectUrl = createLink('mr', 'ajaxGetMRTargetProjects', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
         $.get(projectUrl, function(response)
         {
             $('#targetProject').html('').append(response);
