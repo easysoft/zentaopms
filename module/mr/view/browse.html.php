@@ -1,3 +1,13 @@
+<?php
+/**
+ * The view file for browse page of mr module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @author      Wang Yidong, Zhu Jinyong
+ * @package     mr
+ * @version     $Id: create.html.php $
+ */
+?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-right'>
@@ -61,3 +71,9 @@
 <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php'; ?>
+/**
+ *
+ */
+/**
+ *
+ */
