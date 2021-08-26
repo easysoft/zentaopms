@@ -80,6 +80,7 @@ class report extends control
         $this->app->loadLang('story');
         $this->app->loadLang('product');
         $this->app->loadLang('productplan');
+        $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->lang->report->productSummary;
         $this->view->position[] = $this->lang->report->productSummary;
@@ -128,6 +129,8 @@ class report extends control
      */
     public function bugAssign()
     {
+        $this->session->set('productList', $this->app->getURI(true), 'product');
+
         $this->view->title      = $this->lang->report->bugAssign;
         $this->view->position[] = $this->lang->report->bugAssign;
         $this->view->submenu    = 'test';
@@ -163,6 +166,8 @@ class report extends control
         }
 
         $this->app->loadConfig('execution');
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
         $begin  = $begin ? strtotime($begin) : time();
         $end    = $end   ? strtotime($end)   : time() + (7 * 24 * 3600);
         $end   += 24 * 3600;
