@@ -100,7 +100,7 @@ $config->testcase->datatable->fieldList['branch']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['type']['title']    = 'type';
 $config->testcase->datatable->fieldList['type']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['type']['width']    = '90';
+$config->testcase->datatable->fieldList['type']['width']    = '80';
 $config->testcase->datatable->fieldList['type']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['stage']['title']    = 'stage';
@@ -125,7 +125,7 @@ $config->testcase->datatable->fieldList['assignedTo']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->testcase->datatable->fieldList['openedBy']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['openedBy']['width']    = '90';
+$config->testcase->datatable->fieldList['openedBy']['width']    = '80';
 $config->testcase->datatable->fieldList['openedBy']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['openedDate']['title']    = 'openedDate';
@@ -145,7 +145,7 @@ $config->testcase->datatable->fieldList['reviewedDate']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunner']['title']    = 'lastRunner';
 $config->testcase->datatable->fieldList['lastRunner']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['lastRunner']['width']    = '80';
+$config->testcase->datatable->fieldList['lastRunner']['width']    = '70';
 $config->testcase->datatable->fieldList['lastRunner']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunDate']['title']    = 'lastRunDate';
