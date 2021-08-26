@@ -3,7 +3,7 @@
  * The view file for browse page of mr module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong
+ * @author      Guodong Ding
  * @package     mr
  * @version     $Id: create.html.php $
  */
@@ -11,7 +11,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-right'>
-    <?php if(common::hasPriv('mr', 'create')) echo html::a(helper::createLink('mr', 'create'), "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('mr', 'create',   "mr={$MR->id}", "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent'>
@@ -42,38 +42,30 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($MRList as $mr):?>
+        <?php foreach($MRList as $MR):?>
         <tr>
-          <td class='text'><?php echo $mr->id; ?></td>
-          <td class='text'><?php echo $mr->title; ?></td>
-          <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($mr->gitlabID, $mr->sourceProject)->name_with_namespace; ?></td>
-          <td class='text'><?php echo $mr->sourceBranch;?></td>
-          <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($mr->gitlabID, $mr->targetProject)->name_with_namespace; ?></td>
-          <td class='text'><?php echo $mr->targetBranch;?></td>
-          <td class='text'><?php echo zget($lang->mr->statusList, $mr->status);?></td>
-          <td class='text'><?php echo zget($lang->mr->mergeStatusList, $mr->mergeStatus);?></td>
+          <td class='text'><?php echo $MR->id; ?></td>
+          <td class='text'><?php echo $MR->title; ?></td>
+          <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->sourceProject)->name_with_namespace; ?></td>
+          <td class='text'><?php echo $MR->sourceBranch;?></td>
+          <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace; ?></td>
+          <td class='text'><?php echo $MR->targetBranch;?></td>
+          <td class='text'><?php echo zget($lang->mr->statusList, $MR->status);?></td>
+          <td class='text'><?php echo zget($lang->mr->mergeStatusList, $MR->mergeStatus);?></td>
           <td class='text-left c-actions'>
             <?php
-            common::printLink('mr', 'view', "mr={$mr->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
-            common::printLink('mr', 'edit', "mrID=$mr->id", '<i class="icon icon-edit"></i>', '', "title='{$lang->mr->edit}' class='btn btn-info'");
-            common::printLink('mr', 'diff', "mr={$mr->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->diff}' class='btn btn-info'");
-            if(common::hasPriv('mr', 'delete')) echo html::a($this->createLink('mr', 'delete', "id=$mr->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn'");
+            common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
+            common::printLink('mr', 'edit',   "mr={$MR->id}", '<i class="icon icon-edit"></i>', '', "title='{$lang->mr->edit}' class='btn btn-info'");
+            common::printLink('mr', 'diff',   "mr={$MR->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->diff}' class='btn btn-info'");
+            common::printLink('mr', 'delete', "mr={$MR->id}", '<i class="icon icon-trash"></i>', '', "title='{$lang->mr->delete}' class='btn btn-info'");
             ?>
           </td>
         </tr>
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($MRList):?>
-    <div class='table-footer'><?php $pager->show('rignt', 'pagerjs');?></div>
-    <?php endif;?>
+    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
   </form>
 <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php'; ?>
-/**
- *
- */
-/**
- *
- */
