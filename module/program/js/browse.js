@@ -13,7 +13,7 @@ $(function()
         $.cookie('editProject', editProject, {expires:config.cookieLife, path:config.webRoot});
         showEditCheckbox(editProject);
     });
-    if($.cookie('editProject') != 0) $('input#editProject1').prop('checked', 'true');
+    if($.cookie('editProject') == 1) $('input#editProject1').prop('checked', 'true');
     if($('input#editProject1').prop('checked')) showEditCheckbox(true);
 
     $(document).on('click', ":checkbox[name^='projectIdList']", function()
