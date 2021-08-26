@@ -1088,7 +1088,7 @@ class product extends control
             $this->loadModel('qa')->setMenu(array(), 0);
             $this->app->rawModule = $activeMenu;
 
-            if($activeMenu == 'testcase')   $this->lang->qa->menu->testcase['subMenu']->case['subModule']      = 'product';
+            if($activeMenu == 'testcase')   unset($this->lang->qa->menu->testcase['subMenu']);
             if($activeMenu == 'testsuite')  $this->lang->qa->menu->testcase['subMenu']->testsuite['subModule'] = 'product';
             if($activeMenu == 'testtask')   $this->lang->qa->menu->testtask['subMenu']->testtask['subModule']  = 'product';
             if($activeMenu == 'testreport') $this->lang->qa->menu->testtask['subMenu']->report['subModule']    = 'product';
