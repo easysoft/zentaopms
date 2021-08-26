@@ -27,11 +27,11 @@
             <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-100px'>  <?php echo $lang->priAB;?></th>
+          <th class='c-status'> <?php echo $lang->priAB;?></th>
           <th class='text-left'><?php echo $lang->bug->title;?></th>
-          <th class='w-user'> <?php echo $lang->openedByAB;?></th>
-          <th class='w-150px'><?php echo $lang->bug->resolvedBy;?></th>
-          <th class='w-80px'> <?php echo $lang->statusAB;?></th>
+          <th class='c-user'>   <?php echo $lang->openedByAB;?></th>
+          <th class='c-user'>   <?php echo $lang->bug->resolvedBy;?></th>
+          <th class='c-status'> <?php echo $lang->statusAB;?></th>
         </tr>
       </thead>
       <tbody class='text-center'>

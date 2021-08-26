@@ -2,15 +2,15 @@
 <table class='table main-table' id='cases'>
   <thead>
     <tr>
-      <th class='w-id'>    <?php echo $lang->idAB;?></th>
-      <th class='w-pri'>   <?php echo $lang->priAB;?></th>
+      <th class='c-id'>     <?php echo $lang->idAB;?></th>
+      <th class='c-status'> <?php echo $lang->priAB;?></th>
       <th class='text-left'><?php echo $lang->testcase->title;?></th>
-      <th class='w-type'>  <?php echo $lang->testcase->type;?></th>
-      <th class='w-user'>  <?php echo $lang->testtask->assignedTo;?></th>
-      <th class='w-user'>  <?php echo $lang->testtask->lastRunAccount;?></th>
-      <th class='w-150px'> <?php echo $lang->testtask->lastRunTime;?></th>
-      <th class='w-80px'>  <?php echo $lang->testtask->lastRunResult;?></th>
-      <th class='w-100px'><?php echo $lang->statusAB;?></th>
+      <th class='c-status'> <?php echo $lang->testcase->type;?></th>
+      <th class='c-user'>   <?php echo $lang->testtask->assignedTo;?></th>
+      <th class='c-user'>   <?php echo $lang->testtask->lastRunAccount;?></th>
+      <th class='c-date'>   <?php echo $lang->testtask->lastRunTime;?></th>
+      <th class='c-status'> <?php echo $lang->testtask->lastRunResult;?></th>
+      <th class='c-status'> <?php echo $lang->statusAB;?></th>
     </tr>
   </thead>
   <?php if($cases):?>

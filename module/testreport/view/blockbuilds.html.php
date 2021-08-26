@@ -2,10 +2,10 @@
 <table class='table main-table' id='builds'>
   <thead>
     <tr>
-      <th class='w-id'>  <?php echo $lang->build->id;?></th>
+      <th class='c-id'>     <?php echo $lang->build->id;?></th>
       <th class='text-left'><?php echo $lang->build->name;?></th>
-      <th class='w-user'><?php echo $lang->build->builder;?></th>
-      <th class='w-100px'><?php echo $lang->build->date;?></th>
+      <th class='c-user'>   <?php echo $lang->build->builder;?></th>
+      <th class='c-date'>   <?php echo $lang->build->date;?></th>
     </tr>
   </thead>
   <?php if($builds):?>
