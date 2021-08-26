@@ -992,17 +992,6 @@ class my extends control
     }
 
     /**
-     * Tutorial.
-     *
-     * @access public
-     * @return void
-     */
-    public function tutorial()
-    {
-        $this->display();
-    }
-
-    /**
      * Set the tutorial hidden in the welcome block.
      *
      * @access public
