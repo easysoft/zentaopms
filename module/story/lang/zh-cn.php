@@ -278,19 +278,19 @@ $lang->story->estimateMustBeNumber  = '估算值必须是数字';
 $lang->story->estimateMustBePlus    = '估算值不能是负数';
 
 $lang->story->form = new stdclass();
-$lang->story->form->area      = "该{$lang->SRCommon}所属范围";
-$lang->story->form->desc      = "描述及标准，什么{$lang->SRCommon}？如何验收？";
-$lang->story->form->resource  = '资源分配，有谁完成？需要多少时间？';
-$lang->story->form->file      = "附件，如果该{$lang->SRCommon}有相关文件，请点此上传。";
+$lang->story->form->area     = "该{$lang->SRCommon}所属范围";
+$lang->story->form->desc     = "描述及标准，什么{$lang->SRCommon}？如何验收？";
+$lang->story->form->resource = '资源分配，有谁完成？需要多少时间？';
+$lang->story->form->file     = "附件，如果该{$lang->SRCommon}有相关文件，请点此上传。";
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
-$lang->story->action->passreviewed          = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>评审通过</strong>。');
-$lang->story->action->clarifyreviewed       = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>评审不通过</strong>，请变更后重新发起评审。');
 $lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>，原因为 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->recalled              = array('main' => '$date, 由 <strong>$actor</strong> 撤销评审。');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
-$lang->story->action->reviewclosed          = array('main' => '$date, 由 <strong>系统</strong> 关闭，原因为 <strong>评审不通过</strong>。');
+$lang->story->action->reviewpassed          = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>确认通过</strong>。');
+$lang->story->action->reviewrejected        = array('main' => '$date, 由 <strong>系统</strong> 关闭，原因为 <strong>拒绝</strong>。');
+$lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>有待明确</strong>，请变更后重新发起评审。');
 $lang->story->action->linked2plan           = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');

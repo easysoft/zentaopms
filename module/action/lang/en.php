@@ -267,9 +267,9 @@ $lang->action->label->tracked               = 'tracked';
 $lang->action->label->hangup                = 'hangup';
 $lang->action->label->run                   = 'run';
 $lang->action->label->estimated             = 'estimated';
-$lang->action->label->reviewclosed          = 'Review Failed';
-$lang->action->label->passreviewed          = 'Pass';
-$lang->action->label->clarifyreviewed       = 'Review Failed';
+$lang->action->label->reviewpassed          = 'Pass';
+$lang->action->label->reviewrejected        = 'Reject';
+$lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
 

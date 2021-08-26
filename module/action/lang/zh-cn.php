@@ -267,9 +267,9 @@ $lang->action->label->tracked               = '跟踪了';
 $lang->action->label->hangup                = '挂起了';
 $lang->action->label->run                   = '执行了';
 $lang->action->label->estimated             = '估算了';
-$lang->action->label->reviewclosed          = '评审不通过';
-$lang->action->label->passreviewed          = '评审通过';
-$lang->action->label->clarifyreviewed       = '评审不通过';
+$lang->action->label->reviewpassed          = '确认通过';
+$lang->action->label->reviewrejected        = '拒绝';
+$lang->action->label->reviewclarified       = '有待明确';
 $lang->action->label->commitsummary         = '提交培训总结';
 $lang->action->label->updatetrainee         = '更新培训人员';
 
