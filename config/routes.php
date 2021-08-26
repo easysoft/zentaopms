@@ -50,11 +50,12 @@ $routes['/issues/:issueID']            = 'issue';
 $routes['/todos']     = 'todos';
 $routes['/todos/:id'] = 'todo';
 
-$routes['/testtasks']     = 'testtasks';
-$routes['/testtasks/:id'] = 'testtask';
+$routes['/projects/:projectID/testtasks'] = 'testtasks';
+$routes['/testtasks']                     = 'testtasks';
+$routes['/testtasks/:id']                 = 'testtask';
 
-$routes['/projects/:project/risks'] = 'risks';
-$routes['/risks']                   = 'risks';
-$routes['/risks/:id']               = 'risk';
+$routes['/projects/:projectID/risks'] = 'risks';
+$routes['/risks']                     = 'risks';
+$routes['/risks/:id']                 = 'risk';
 
 $config->routes = $routes;

@@ -8,8 +8,11 @@
  */
 class issuesEntry extends entry
 {
-    public function get()
+    public function get($projectID = 0)
     {
+        if($projectID) return $this->getProjectIssues($projectID);
+
+        /* Get my issues defaultly. */
         $control = $this->loadController('my', 'issue');
         $control->issue($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
@@ -20,6 +23,28 @@ class issuesEntry extends entry
         $pager  = $data->data->pager;
         $result = array();
         foreach($data->data->issues as $issue)
+        {
+            $result[] = $this->format($issue, 'createdDate:time,editedDate:time,assignedDate:time');
+        }
+
+        return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'issues' => $result));
+    }
+
+    private function getProjectIssues($projectID)
+    {
+        $project = $this->loadModel('project')->getByID($projectID);
+        if(!$project) return $this->send404();
+
+        $control = $this->loadController('issue', 'browse');
+        $control->browse($projectID, $this->param('type', 'all'), 0, $this->param('order', ''), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+        $data = $this->getData();
+
+        if(!isset($data->status)) return $this->sendError(400, 'error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+
+        $pager  = $data->data->pager;
+        $result = array();
+        foreach($data->data->issueList as $issue)
         {
             $result[] = $this->format($issue, 'createdDate:time,editedDate:time,assignedDate:time');
         }
