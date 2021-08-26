@@ -42,6 +42,9 @@ $lang->mr->targetBranch  = '目标分支';
 $lang->mr->usersTips = '提示：如果无法选择指派人和评审人，请先前往GitLab页面绑定用户。';
 $lang->mr->notFound  = "此{$lang->mr->common}不存在。";
 
+$lang->mr->apiError = new stdclass;
+$lang->mr->apiError->createMR = "通过API创建合并请求失败，失败原因：%s";
+
 $lang->mr->createFailedFromAPI = "创建合并请求失败。";
 $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 
