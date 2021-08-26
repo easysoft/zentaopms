@@ -57,10 +57,12 @@ function fullScreen()
             $('#content .detail').eq(1).addClass('hidden');
             $.cookie('isFullScreen', 1);
         };
+
         var whenFailEnterFullscreen = function(error)
         {
             $.cookie('isFullScreen', 0);
         };
+
         try
         {
             var result = requestMethod.call(element);
