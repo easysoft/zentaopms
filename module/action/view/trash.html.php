@@ -34,12 +34,12 @@
       <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='w-130px'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
-          <th class='w-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
+          <th class='c-object-type'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
+          <th class='c-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php echo $lang->action->objectName;?></th>
-          <th class='w-100px'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th>
-          <th class='w-150px'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th>
-          <th class='w-100px'><?php echo $lang->actions;?></th>
+          <th class='c-user'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th>
+          <th class='c-full-date'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th>
+          <th class='c-actions'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

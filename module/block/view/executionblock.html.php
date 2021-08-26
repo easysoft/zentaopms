@@ -12,6 +12,7 @@
 ?>
 <style>
 .table .c-progress {width: 60px;}
+.table .c-estimate {width: 85px;}
 .c-hours {text-align: right !important;}
 </style>
 <?php if(empty($executionStats)): ?>
@@ -24,7 +25,7 @@
         <th class='c-name text-left'><?php echo $lang->execution->execName;?></th>
         <th class="c-date"><?php echo $lang->execution->end;?></th>
         <?php if($longBlock):?>
-        <?php $thClass = common::checkNotCN() ? 'w-85px' : 'c-hours';?>
+        <?php $thClass = common::checkNotCN() ? 'c-estimate' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
         <th class='<?php echo $thClass?>'><?php echo $lang->execution->totalEstimate;?></th>
         <th class="c-hours"><?php echo $lang->execution->totalConsumed;?></th>

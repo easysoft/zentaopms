@@ -10,7 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<style>.table .c-progress {width: 60px;}</style>
+<style>
+.table .c-progress {width: 60px;}
+.table .c-estimate {width: 85px;}
+</style>
 <?php if(empty($executionStats)): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
@@ -21,7 +24,7 @@
         <th class='c-name text-left'><?php echo $lang->execution->name;?></th>
         <th class="c-date"><?php echo $lang->execution->end;?></th>
         <?php if($longBlock):?>
-        <?php $thClass = common::checkNotCN() ? 'w-85px' : 'c-hours';?>
+        <?php $thClass = common::checkNotCN() ? 'c-estimate' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
         <th class='<?php echo $thClass?>'><?php echo $lang->execution->totalEstimate;?></th>
         <th class="c-hours"><?php echo $lang->execution->totalConsumed;?></th>

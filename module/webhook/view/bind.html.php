@@ -16,8 +16,8 @@
             if($webhook->type == 'feishuuser') echo $lang->webhook->feishuUserid;
             ?>
           </th>
-          <th class='w-100px'><?php echo $lang->actions;?></th>
-          <th class='w-100px'>
+          <th class='c-action'><?php echo $lang->actions;?></th>
+          <th class='c-action'>
             <?php
             if($webhook->type == 'dinguser')   echo $lang->webhook->dingBindStatus;
             if($webhook->type == 'wechatuser') echo $lang->webhook->wechatBindStatus;

@@ -3,9 +3,6 @@
 <?php else:?>
 <style>
 .block-issues .c-id {width: 55px;}
-.block-issues .c-pri {width: 45px; text-align: center;}
-.block-issues .c-estimate {width: 60px; text-align: right;}
-.block-issues .c-deadline {width: 95px;}
 .block-issues .c-status {width: 80px;}
 .block-issues.block-sm .c-status {text-align: center;}
 </style>
@@ -14,15 +11,15 @@
     <thead>
       <tr>
         <th class='c-id'><?php echo $lang->idAB;?></th>
-        <th class='w-100px'><?php echo $lang->issue->type;?></th>
+        <th class='c-status'><?php echo $lang->issue->type;?></th>
         <th class='c-name'> <?php echo $lang->issue->title;?></th>
         <?php if($longBlock):?>
-        <th class='w-80px'><?php echo $lang->issue->severity;?></th>
-        <th class='w-80px'><?php echo $lang->issue->pri;?></th>
-        <th class='w-80px'><?php echo $lang->issue->owner;?></th>
-        <th class='w-80px'><?php echo $lang->issue->assignedTo;?></th>
+        <th class='c-status'><?php echo $lang->issue->severity;?></th>
+        <th class='c-number'><?php echo $lang->issue->pri;?></th>
+        <th class='c-user'><?php echo $lang->issue->owner;?></th>
+        <th class='c-user'><?php echo $lang->issue->assignedTo;?></th>
         <?php endif;?>
-        <th class='w-80px'><?php echo $lang->issue->status;?></th>
+        <th class='c-status'><?php echo $lang->issue->status;?></th>
       </tr>
     </thead>
     <tbody>

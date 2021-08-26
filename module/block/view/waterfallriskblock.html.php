@@ -2,8 +2,10 @@
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
-.block-risks .c-pri {width: 45px;text-align: center;}
-.block-risks .c-status {width: 80px;}
+.block-risks .c-id {width: 40px;}
+.block-risks .c-pri {width: 70px; text-align: center;}
+.block-risks .c-strategy, .block-risks .c-status {width: 60px;}
+.block-risks .c-user, .block-risks .c-rate, .block-risks .c-category {width: 80px;}
 .pri-low {color: #000000;}
 .pri-middle {color: #FF9900;}
 .pri-high {color: #E53333;}
@@ -12,17 +14,17 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-risks <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr>
-        <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
+        <th class='c-id'><?php echo $lang->idAB;?></th>
         <th class='c-name'><?php echo $lang->risk->name;?></th>
         <?php if($longBlock):?>
-        <th class='w-60px'> <?php echo $lang->risk->strategy;?></th>
+        <th class='c-strategy'> <?php echo $lang->risk->strategy;?></th>
         <?php endif;?>
-        <th class='w-60px'><?php echo $lang->risk->status;?></th>
+        <th class='c-status'><?php echo $lang->risk->status;?></th>
         <?php if($longBlock):?>
-        <th class='w-80px'><?php echo $lang->risk->rate;?></th>
-        <th class='w-80px'><?php echo $lang->risk->pri;?></th>
-        <th class='w-80px'><?php echo $lang->risk->assignedTo;?></th>
-        <th class='w-80px'><?php echo $lang->risk->category;?></th>
+        <th class='c-rate'><?php echo $lang->risk->rate;?></th>
+        <th class='c-pri'><?php echo $lang->risk->pri;?></th>
+        <th class='c-user'><?php echo $lang->risk->assignedTo;?></th>
+        <th class='c-category'><?php echo $lang->risk->category;?></th>
         <?php endif;?>
       </tr>
     </thead>

@@ -19,7 +19,7 @@
       <table class='table table-form'>
         <?php foreach($method->parameters as $param):?>
         <tr>
-          <th class='w-80px'><?php echo $param->name?></th>
+          <th class='c-name'><?php echo $param->name?></th>
           <td><?php echo html::input("$param->name", $param->isOptional() ? $param->getDefaultValue() : '', "class='form-control'")?></td>
         </tr>
         <?php endforeach;?>

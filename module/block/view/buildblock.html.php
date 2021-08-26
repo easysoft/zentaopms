@@ -17,12 +17,12 @@
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-builds'>
     <thead>
       <tr>
-        <th class='w-id text-center'><?php echo $lang->idAB?></th>
+        <th class='c-id text-center'><?php echo $lang->idAB?></th>
         <?php if($longBlock):?>
         <th><?php echo $lang->build->product;?></th>
         <?php endif;?>
         <th><?php echo $lang->build->name;?></th>
-        <th class='w-date'><?php echo $lang->build->date;?></th>
+        <th class='c-date'><?php echo $lang->build->date;?></th>
       </tr>
     </thead>
     <tbody>

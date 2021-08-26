@@ -1162,7 +1162,7 @@ class repo extends control
     }
 
     /**
-     * Ajax load product by repoID.
+     * Ajax:: Load product by repoID.
      *
      * @param  int    $repoID
      * @access public

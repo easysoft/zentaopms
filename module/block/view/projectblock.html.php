@@ -3,22 +3,22 @@
 <?php else:?>
 <style>
 .block-programs .c-pri {width: 45px;text-align: center;}
-.block-programs .c-status {width: 80px;}
+.block-programs .c-status, .block-programs .c-user {width: 80px;}
 </style>
 <div class='panel-body has-table scrollbar-hover'>
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-programs <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr>
-        <th class='c-name w-100px'><?php echo $lang->project->name;?></th>
-        <th class='w-80px'><?php echo $lang->project->PM;?></th>
-        <th class='w-60px'><?php echo $lang->project->status;?></th>
+        <th class='c-name'><?php echo $lang->project->name;?></th>
+        <th class='c-user'><?php echo $lang->project->PM;?></th>
+        <th class='c-status'><?php echo $lang->project->status;?></th>
         <?php if($longBlock):?>
-        <th class='w-60px'><?php echo $lang->project->teamCount;?></th>
-        <th class='w-90px text-right'><?php echo $lang->task->consumed;?></th>
-        <th class='w-80px text-right'><?php echo $lang->project->budget;?></th>
-        <th class='w-80px'><?php echo $lang->project->leftStories;?></th>
-        <th class='w-80px'><?php echo $lang->project->leftTasks;?></th>
-        <th class='w-80px'><?php echo $lang->project->leftBugs;?></th>
+        <th class='c-number'><?php echo $lang->project->teamCount;?></th>
+        <th class='c-number text-right'><?php echo $lang->task->consumed;?></th>
+        <th class='c-budget text-right'><?php echo $lang->project->budget;?></th>
+        <th class='c-number'><?php echo $lang->project->leftStories;?></th>
+        <th class='c-number'><?php echo $lang->project->leftTasks;?></th>
+        <th class='c-number'><?php echo $lang->project->leftBugs;?></th>
         <?php endif;?>
       </tr>
     </thead>

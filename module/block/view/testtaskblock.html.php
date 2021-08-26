@@ -18,15 +18,15 @@
     <thead>
       <tr class='text-center'>
         <?php if($longBlock):?>
-        <th class='w-id'><?php echo $lang->idAB?></th>
+        <th class='c-id'><?php echo $lang->idAB?></th>
         <th class='text-left'><?php echo $lang->testtask->product;?></th>
         <?php endif;?>
         <th class='text-left'><?php echo $lang->testtask->name;?></th>
         <?php if($longBlock):?>
         <th class='text-left'><?php echo $lang->testtask->execution . '/' . $lang->testtask->build;?></th>
         <?php endif;?>
-        <th class='w-date'><?php echo $lang->testtask->begin;?></th>
-        <th class='w-date'><?php echo $lang->testtask->end;?></th>
+        <th class='c-date'><?php echo $lang->testtask->begin;?></th>
+        <th class='c-date'><?php echo $lang->testtask->end;?></th>
       </tr>
     </thead>
     <tbody>

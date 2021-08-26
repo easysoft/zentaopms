@@ -27,11 +27,11 @@
       <table class='table table-condensed table-hover table-striped table-fixed'>
         <thead>
           <th class='c-id-sm text-center'><?php echo $lang->idAB;?></th>
-          <th class='w-150px'><?php echo $lang->user->realname;?></th>
+          <th class='c-user'><?php echo $lang->user->realname;?></th>
           <th><?php echo $lang->user->account;?></th>
-          <th class='w-150px'><?php echo $lang->user->phone;?></th>
-          <th class='w-150px'><?php echo $lang->user->mobile;?></th>
-          <th class='w-200px'><?php echo $lang->admin->safe->reason;?></th>
+          <th class='c-mobile'><?php echo $lang->user->phone;?></th>
+          <th class='c-mobile'><?php echo $lang->user->mobile;?></th>
+          <th class='c-text'><?php echo $lang->admin->safe->reason;?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </thead>
         <tbody>

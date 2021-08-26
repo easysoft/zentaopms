@@ -32,7 +32,7 @@
         <tr>
           <th><?php echo $lang->user->password;?></th>
           <td><?php echo html::password('password', '', "class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <td colspan='2' class="text-center">
             <?php
