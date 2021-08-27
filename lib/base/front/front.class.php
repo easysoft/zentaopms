@@ -489,7 +489,7 @@ class baseHTML
     {
         if(helper::inOnlyBodyMode()) return false;
 
-        global $lang, $app;
+        global $lang, $app, $config;
         if(empty($label))
         {
             global $lang, $config;
