@@ -270,7 +270,7 @@ $lang->lang = 'Sprache';
 /* Theme style. */
 $lang->theme                = 'Theme';
 $lang->themes['default']    = 'ZenTao Blau (Standard)';
-$lang->themes['blue']       = 'Blau';
+$lang->themes['blue']       = 'Young Blue';
 $lang->themes['green']      = 'Grün';
 $lang->themes['red']        = 'Rot';
 $lang->themes['purple']     = 'Lila';
