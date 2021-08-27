@@ -185,6 +185,7 @@ class task extends control
         else
         {
             $task->module = $task->module ? $task->module : (int)$this->cookie->lastTaskModule;
+            if(!isset($moduleOptionMenu[$task->module])) $task->module = 0;
         }
 
         /* Fix bug #2737. When moduleID is not story module. */
