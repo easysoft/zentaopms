@@ -274,13 +274,7 @@ class my extends control
     public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json')
-        {
-            $uri = $this->app->getURI(true);
-            $this->session->set('taskList',      $uri, 'execution');
-            $this->session->set('projectList',   $uri, 'project');
-            $this->session->set('executionList', $uri, 'execution');
-        }
+        if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -581,8 +575,6 @@ class my extends control
     {
         $this->app->loadLang('project');
         $this->app->loadLang('execution');
-
-        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
