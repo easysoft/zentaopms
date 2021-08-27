@@ -14,9 +14,10 @@ $routes['/products/:id']     = 'product';
 $routes['/productlines']     = 'productLines';
 $routes['/productlines/:id'] = 'productLine';
 
-$routes['/products/:id/stories'] = 'stories';
-$routes['/stories/:id']          = 'story';
-$routes['/stories/:id/change']   = 'storyChange';
+$routes['/products/:id/stories']   = 'stories';
+$routes['/executions/:id/stories'] = 'executionStories';
+$routes['/stories/:id']            = 'story';
+$routes['/stories/:id/change']     = 'storyChange';
 
 $routes['/products/:id/bugs'] = 'bugs';
 $routes['/bugs/:id']          = 'bug';
