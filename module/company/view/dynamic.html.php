@@ -25,12 +25,12 @@
     echo html::a(inlink('dynamic', "browseType=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
-    <div class="input-control space w-150px"><?php echo html::select('account', $userIdPairs, $user ? $user->id : '', 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
-    <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
+    <div class="input-control space c-user"><?php echo html::select('account', $userIdPairs, $user ? $user->id : '', 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
+    <div class="input-control space c-product"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
     <?php if($config->systemMode == 'new'):?>
-    <div class="input-control space w-150px"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen"');?></div>
+    <div class="input-control space c-project"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen"');?></div>
     <?php endif;?>
-    <div class="input-control space w-150px"><?php echo html::select('execution', $executions, $execution, 'onchange=changeExecution(this.value) class="form-control chosen"'); ?></div>
+    <div class="input-control space c-execution"><?php echo html::select('execution', $executions, $execution, 'onchange=changeExecution(this.value) class="form-control chosen"'); ?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>
   </div>
 </div>
@@ -42,7 +42,7 @@
     <?php foreach($dateGroups as $date => $actions):?>
     <?php $isToday = date(DT_DATE4) == $date;?>
     <div class="dynamic <?php if($isToday) echo 'active';?>">
-      <div class="dynamic-date <?php if($browseType == 'all') echo 'w-200px';?>">
+      <div class="dynamic-date <?php if($browseType == 'all') echo 'c-date';?>">
         <?php if($isToday):?>
         <span class="date-label"><?php echo $lang->action->dynamic->today;?></span>
         <?php endif;?>

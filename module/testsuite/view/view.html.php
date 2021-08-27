@@ -33,7 +33,7 @@
     {
         echo $this->buildOperateMenu($suite, 'view');
 
-        common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id&param=0&recTotal=0&recPerPage=20&pageID=1&from=view", $suite, 'button', 'link');
+        common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'button', 'link');
         common::printIcon('testsuite', 'edit',     "suiteID=$suite->id");
         common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", '', 'button', 'trash', 'hiddenwin');
     }

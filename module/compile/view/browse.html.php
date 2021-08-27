@@ -30,14 +30,14 @@
       <thead>
         <tr class='text-center'>
           <?php $vars = "jobID={$jobID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->compile->id);?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->compile->id);?></th>
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
-          <th class='w-150px text-left'><?php echo $lang->compile->buildType;?></th>
-          <th class='w-150px text-left'><?php echo $lang->job->repo;?></th>
+          <th class='c-build-type text-left'><?php echo $lang->compile->buildType;?></th>
+          <th class='c-repo text-left'><?php echo $lang->job->repo;?></th>
           <th class='text-left'><?php echo $lang->job->triggerType;?></th>
-          <th class='w-80px text-center'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
-          <th class='w-130px text-center'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
-          <th class='w-120px'><?php echo $lang->actions;?></th>
+          <th class='c-status text-center'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
+          <th class='c-date text-center'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
+          <th class='c-actions'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody class='text-left'>

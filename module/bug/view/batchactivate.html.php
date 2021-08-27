@@ -19,10 +19,10 @@
     <table class='table table-form table-fixed'>
       <thead>
         <tr>
-          <th class='w-40px'><?php echo $lang->idAB;?></th>
-          <th class='w-160px'><?php echo $lang->bug->title;?></th>
-          <th class='w-120px'><?php echo $lang->bug->assignedTo;?></th>
-          <th class='w-200px'><?php echo $lang->bug->openedBuild;?></th>
+          <th class='c-id'><?php echo $lang->idAB;?></th>
+          <th class='c-title'><?php echo $lang->bug->title;?></th>
+          <th class='c-assigned'><?php echo $lang->bug->assignedTo;?></th>
+          <th class='c-build'><?php echo $lang->bug->openedBuild;?></th>
           <th><?php echo $lang->bug->legendComment;?></th>
         </tr>
       </thead>

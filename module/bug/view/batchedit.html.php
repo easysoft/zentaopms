@@ -47,26 +47,26 @@
       <table class='table table-form'>
         <thead>
           <tr>
-            <th class='w-50px'><?php echo $lang->idAB;?></th>
-            <th class='w-110px<?php echo zget($visibleFields, 'type', ' hidden') . zget($requiredFields, 'type', '', ' required');?>'><?php echo $lang->bug->type;?></th>
-            <th class='w-80px<?php echo zget($visibleFields, 'severity', ' hidden') . zget($requiredFields, 'severity', '', ' required');?>'><?php echo $lang->bug->severity;?></th>
-            <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->bug->pri;?></th>
-            <th class="required <?php if(count($visibleFields) >= 10) echo ' w-150px';?>"><?php echo $lang->bug->title;?></th>
+            <th class='c-id'><?php echo $lang->idAB;?></th>
+            <th class='c-type<?php echo zget($visibleFields, 'type', ' hidden') . zget($requiredFields, 'type', '', ' required');?>'><?php echo $lang->bug->type;?></th>
+            <th class='c-severity<?php echo zget($visibleFields, 'severity', ' hidden') . zget($requiredFields, 'severity', '', ' required');?>'><?php echo $lang->bug->severity;?></th>
+            <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->bug->pri;?></th>
+            <th class="required <?php if(count($visibleFields) >= 10) echo ' c-title';?>"><?php echo $lang->bug->title;?></th>
             <?php if($branchProduct):?>
-            <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->bug->branch;?></th>
+            <th class='c-branch<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->bug->branch;?></th>
             <?php endif;?>
-            <th class='w-150px<?php echo zget($visibleFields, 'productplan', ' hidden') . zget($requiredFields, 'productplan', '', ' required');?>'><?php echo $lang->bug->productplan;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->bug->assignedTo;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'deadline', ' hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->bug->deadline;?></th>
-            <th class='w-90px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->bug->status;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'os', ' hidden') . zget($requiredFields, 'os', '', ' required');?>'><?php echo $lang->bug->os;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'browser', ' hidden') . zget($requiredFields, 'browser', '', ' required');?>'><?php echo $lang->bug->browser;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->bug->keywords;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
+            <th class='c-plan<?php echo zget($visibleFields, 'productplan', ' hidden') . zget($requiredFields, 'productplan', '', ' required');?>'><?php echo $lang->bug->productplan;?></th>
+            <th class='c-assigned<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->bug->assignedTo;?></th>
+            <th class='c-date<?php echo zget($visibleFields, 'deadline', ' hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->bug->deadline;?></th>
+            <th class='c-status<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->bug->status;?></th>
+            <th class='c-os<?php echo zget($visibleFields, 'os', ' hidden') . zget($requiredFields, 'os', '', ' required');?>'><?php echo $lang->bug->os;?></th>
+            <th class='c-browser<?php echo zget($visibleFields, 'browser', ' hidden') . zget($requiredFields, 'browser', '', ' required');?>'><?php echo $lang->bug->browser;?></th>
+            <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->bug->keywords;?></th>
+            <th class='c-user<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
+            <th class='c-resolution<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
             <?php
             $extendFields = $this->bug->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) echo "<th class='c-other'>{$extendField->name}</th>";
             ?>
           </tr>
         </thead>
@@ -77,10 +77,10 @@
           if(!$productID)
           {
               $product = $this->product->getByID($bug->product);
-    
+
               $plans = $this->loadModel('productplan')->getPairs($bug->product, $branch);
               $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
-    
+
               $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
               if($product->type != 'normal')
               {

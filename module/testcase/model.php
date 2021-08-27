@@ -1008,13 +1008,17 @@ class testcaseModel extends model
 
         foreach($caseIdList as $caseID)
         {
+            $oldCase = $this->getById($caseID);
+
             $case = new stdClass();
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
             $case->type           = $result;
 
             $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
-            $this->action->create('case', $caseID, 'Edited', '', ucfirst($result));
+            $actionID = $this->action->create('case', $caseID, 'Edited', '', ucfirst($result));
+            $changes  = common::createChanges($oldCase, $case);
+            $this->action->logHistory($actionID, $changes);
         }
     }
 

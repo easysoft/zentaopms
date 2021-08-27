@@ -27,16 +27,16 @@
   <table class='table table-condensed table-bordered table-fixed main-table'>
     <thead>
       <tr>
-        <th class='w-70px text-center'><?php echo $lang->cron->m?></th>
-        <th class='w-50px text-center'><?php echo $lang->cron->h?></th>
-        <th class='w-50px text-center'><?php echo $lang->cron->dom?></th>
-        <th class='w-60px text-center'><?php echo $lang->cron->mon?></th>
-        <th class='w-60px text-center'><?php echo $lang->cron->dow?></th>
+        <th class='c-minute text-center'><?php echo $lang->cron->m?></th>
+        <th class='c-hour text-center'><?php echo $lang->cron->h?></th>
+        <th class='c-dom text-center'><?php echo $lang->cron->dom?></th>
+        <th class='c-mon text-center'><?php echo $lang->cron->mon?></th>
+        <th class='c-dow text-center'><?php echo $lang->cron->dow?></th>
         <th><?php echo $lang->cron->command?></th>
-        <th class='w-200px'><?php echo $lang->cron->remark?></th>
-        <th class='w-130px'><?php echo $lang->cron->lastTime?></th>
-        <th class='w-60px'><?php echo $lang->cron->status?></th>
-        <th class='w-100px'><?php echo $lang->actions;?></th>
+        <th class='c-remark'><?php echo $lang->cron->remark?></th>
+        <th class='c-full-date text-center'><?php echo $lang->cron->lastTime?></th>
+        <th class='c-status text-center'><?php echo $lang->cron->status?></th>
+        <th class='c-actions text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody class='text-center'>
