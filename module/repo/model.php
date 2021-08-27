@@ -225,7 +225,7 @@ class repoModel extends model
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->insert(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
-            ->checkIF($data->SCM == 'GitLab', 'gitlabProject', 'notempty')
+            ->checkIF($data->SCM == 'Gitlab', 'gitlabProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
@@ -283,7 +283,7 @@ class repoModel extends model
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->checkIF($data->SCM == 'GitLab', 'extra', 'notempty')
+            ->checkIF($data->SCM == 'Gitlab', 'extra', 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 
