@@ -521,10 +521,12 @@ function loadAssignedTo(executionID, selectedUser)
     $.get(link, function(data)
     {
         var defaultOption = '<option title="' + oldAssignedToTitle + '" value="' + oldAssignedTo + '" selected="selected">' + oldAssignedToTitle + '</option>';
+        var defaultAssignedTo = $('#assignedTo').val();
+
         $('#assignedTo_chosen').remove();
         $('#assignedTo').next('.picker').remove();
         $('#assignedTo').replaceWith(data);
-        var defaultAssignedTo = $('#assignedTo').val();
+
         if(defaultAssignedTo !== oldAssignedTo && selectedUser == '')
         {
             if($('#assignedTo option[value="' + oldAssignedTo + '"]').length > 0) $('#assignedTo option[value="' + oldAssignedTo + '"]').remove();
