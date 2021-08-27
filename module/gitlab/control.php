@@ -69,6 +69,24 @@ class gitlab extends control
     }
 
     /**
+     * view a gitlab.
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function view($id)
+    {
+        $gitlab = $this->gitlab->getByID($id);
+
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->view;
+        $this->view->gitlab     = $gitlab;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->actions    = $this->loadModel('action')->getList('gitlab', $id);
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('pipeline', $id);
+        $this->display();
+    }
+
+    /**
      * Edit a gitlab.
      *
      * @param  int    $id

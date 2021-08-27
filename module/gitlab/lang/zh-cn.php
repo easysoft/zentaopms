@@ -4,6 +4,7 @@ $lang->gitlab->common        = 'GitLab';
 $lang->gitlab->browse        = '浏览GitLab';
 $lang->gitlab->create        = '添加GitLab';
 $lang->gitlab->edit          = '编辑GitLab';
+$lang->gitlab->view          = '查看GitLab';
 $lang->gitlab->bindUser      = '绑定用户';
 $lang->gitlab->webhook       = 'webhook';
 $lang->gitlab->bindProduct   = '关联产品';
