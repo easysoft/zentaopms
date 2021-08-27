@@ -926,7 +926,9 @@ class execution extends control
         $this->loadModel('testcase');
         $this->loadModel('testtask');
         $this->commonAction($executionID);
-        $this->session->set('caseList', $this->app->getURI(true), 'execution');
+        $uri = $this->app->getURI(true);
+        $this->session->set('caseList', $uri, 'execution');
+        $this->session->set('bugList',  $uri, 'execution');
 
         $products  = $this->execution->getProducts($executionID);
         $productID = key($products);    // Get the first product for creating testcase.

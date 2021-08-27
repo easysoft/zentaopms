@@ -57,7 +57,14 @@ function createBug(obj)
 
     var link = createLink('bug', 'create', params + ',stepIdList=' + stepIdList);
     if(onlybody = 'yes') link += '#app=qa';
-    window.parent.$.apps.open(link);
+    if(openApp == 'my')
+    {
+        window.parent.$.apps.open(link, 'qa');
+    }
+    else
+    {
+        window.open(link, '_parent');
+    }
 
     config.onlybody = onlybody;
 }
@@ -81,7 +88,7 @@ function loadExecutionRelated(executionID)
  * @access public
  * @return void
  */
-function loadExecutionBuilds(executionID)
+function loadExecutionBuilds(executionID, selected)
 {
     selectedBuild = $('#build').val();
     if(!selectedBuild) selectedBuild = 0;
@@ -90,6 +97,7 @@ function loadExecutionBuilds(executionID)
     $('#buildBox').load(link, function()
     {
         $('#resolvedBuild').attr('id', 'build').attr('name', 'build').find('option[value=trunk]').remove();
+        if(selected) $('#build').val(selected);
         $('#build').chosen();
     });
 }

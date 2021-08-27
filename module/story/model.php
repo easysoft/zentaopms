@@ -2626,7 +2626,7 @@ class storyModel extends model
             ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy('t1.`order` desc')
             ->fetchAll();
-        if(!$stories) return array();
+        if(empty($stories)) return array();
         return $this->formatStories($stories, $type);
     }
 
