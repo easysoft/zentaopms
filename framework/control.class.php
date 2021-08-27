@@ -35,7 +35,7 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')) $this->setPreference();
+        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE != 'api')) $this->setPreference();
 
         if(!isset($this->config->bizVersion)) return false;
 
