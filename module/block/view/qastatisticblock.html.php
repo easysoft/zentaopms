@@ -81,6 +81,8 @@ $(function()
         $tab.find('.progress-pie').progressPie();
         $(this).parents('.tab-pane').find('.table-row').not($tab).addClass('hidden');
     });
+
+    $('.progress-pie').progressPie();
 });
 </script>
 <div class="panel-body block-qa">
