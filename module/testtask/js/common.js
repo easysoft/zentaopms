@@ -57,7 +57,14 @@ function createBug(obj)
 
     var link = createLink('bug', 'create', params + ',stepIdList=' + stepIdList);
     if(onlybody = 'yes') link += '#app=qa';
-    window.parent.$.apps.open(link);
+    if(openApp == 'my')
+    {
+        window.parent.$.apps.open(link, 'qa');
+    }
+    else
+    {
+        window.open(link, '_parent');
+    }
 
     config.onlybody = onlybody;
 }
