@@ -572,6 +572,39 @@ class testcaseModel extends model
     }
 
     /**
+     * Get cases by type
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type    all|needconfirm
+     * @param  string $status  all|normal|blocked|investigate
+     * @param  int    $moduleID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $auto    no|unit|skip
+     * @access public
+     * @return array
+     */
+    public function getByStatus($productID = 0, $branch, $type = 'all', $status = 'all', $moduleID, $orderBy = 'id_desc', $pager, $auto = 'no')
+    {
+        $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+
+        $cases = $this->dao->select('t1.*, t2.title as storyTitlen')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->beginIF($productID)->where('t1.product')->eq((int) $productID)->fi()
+            ->beginIF($productID == 0)->where('t1.product')->in($this->app->user->view->products)->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+            ->beginIF($type == 'needconfirm')->andWhere("t2.status = 'active'")->andWhere('t2.version > t1.storyVersion')->fi()
+            ->beginIF($status != 'all')->andWhere('t1.status')->eq($status)->fi()
+            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        return $this->appendData($cases);
+    }
+
+    /**
      * Get cases of a story.
      *
      * @param  int    $storyID
