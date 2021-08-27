@@ -6,6 +6,7 @@
 .table th, .table td {border-top: 2px solid #fff; border-bottom: 2px solid #fff; border-left: 3px solid #fff; border-bottom: 3px solid #fff;}
 .table tbody tr:last-child td {border-bottom: unset;}
 td.project, td.execution {padding: 10px 0 !important;}
+td.plan, td.release {vertical-align: top !important;}
 
 .board-item {border: 1px solid #ebebeb; padding: 3px 10px; cursor: default; border-radius: 2px; background-color: #fff; text-align: left;}
 .board-item:hover {border-color: #ccc;}
