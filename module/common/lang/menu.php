@@ -240,7 +240,7 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 
 /* Execution menu. */
 $lang->execution->homeMenu = new stdclass();
-$lang->execution->homeMenu->all = array('link' => "{$lang->execution->all}|execution|all|");
+$lang->execution->homeMenu->all = array('link' => "{$lang->execution->all}|execution|all|", 'alias' => 'batchedit');
 if($config->systemMode == 'new') $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
 
 $lang->execution->menu = new stdclass();
