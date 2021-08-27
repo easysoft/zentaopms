@@ -54,7 +54,7 @@
               <td><?php echo number_format($file->size / 1024, 1) . 'K';?></td>
               <td><?php echo isset($file->addedBy) ? zget($users, $file->addedBy) : '';?></td>
               <td><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
-              <td class="c-actions"><?php common::printLink('file', 'download', "fileID=$file->id", '<i class="icon-import"></i>', "data-toggle='modal'", "class='btn' title={$lang->doc->download}", true, false, $file);?></td>
+              <td class="c-actions"><?php common::printLink('file', 'download', "fileID=$file->id", '<i class="icon-import"></i>', "", "class='btn' title={$lang->doc->download}", true, false, $file);?></td>
             </tr>
           <?php endforeach;?>
         </tbody>
