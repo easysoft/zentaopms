@@ -741,77 +741,85 @@ class commonModel extends model
                 $active = 'active';
             }
 
-            if($menuItem->link)
+            if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
             {
-                $target = '';
-                $module = '';
-                $method = '';
-                $link   = commonModel::createMenuLink($menuItem, $openApp);
-                if(is_array($menuItem->link))
-                {
-                    if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
-                    if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
-                    if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
-                }
-                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false)
-                {
-                    $activeMenu = $menuItem->name;
-                    $active = 'active';
-                }
-
-                $label    = $menuItem->text;
-                $dropMenu = '';
-
-                /* Print drop menus. */
-                if(isset($menuItem->dropMenu))
-                {
-                    foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
-                    {
-                        if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
-
-                        /* Parse drop menu link. */
-                        $dropMenuLink = $dropMenuItem;
-                        if(is_array($dropMenuItem) and isset($dropMenuItem['link'])) $dropMenuLink = $dropMenuLink['link'];
-
-                        list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
-                        $subLink = helper::createLink($subModule, $subMethod, $subParams);
-
-                        $subActive = '';
-                        $activeMainMenu = false;
-                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
-                        {
-                            $activeMainMenu = true;
-                        }
-                        else
-                        {
-                            $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
-                            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
-                        }
-
-                        if($activeMainMenu)
-                        {
-                            $activeMenu = $dropMenuName;
-                            $active     = 'active';
-                            $subActive  = 'active';
-                            $label      = $subLabel;
-                        }
-                        $dropMenu .= "<li class='$subActive' data-id='$subLabel'>" . html::a($subLink, $subLabel, '', "data-app='$openApp'") . '</li>';
-                    }
-
-                    if(empty($dropMenu)) continue;
-
-                    $label   .= "<span class='caret'></span>";
-                    $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
-                }
-
-                $misc = (isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module) ? "data-app='$openApp'" : '';
-                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
-
-                echo $menuItemHtml;
+                $executionID = $menuItem->link['vars'];
+                commonModel::buildMoreButton($executionID);
             }
             else
             {
-                echo "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
+                if($menuItem->link)
+                {
+                    $target = '';
+                    $module = '';
+                    $method = '';
+                    $link   = commonModel::createMenuLink($menuItem, $openApp);
+                    if(is_array($menuItem->link))
+                    {
+                        if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
+                        if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
+                        if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
+                    }
+                    if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false)
+                    {
+                        $activeMenu = $menuItem->name;
+                        $active = 'active';
+                    }
+
+                    $label    = $menuItem->text;
+                    $dropMenu = '';
+
+                    /* Print drop menus. */
+                    if(isset($menuItem->dropMenu))
+                    {
+                        foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
+                        {
+                            if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
+
+                            /* Parse drop menu link. */
+                            $dropMenuLink = $dropMenuItem;
+                            if(is_array($dropMenuItem) and isset($dropMenuItem['link'])) $dropMenuLink = $dropMenuLink['link'];
+
+                            list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
+                            $subLink = helper::createLink($subModule, $subMethod, $subParams);
+
+                            $subActive = '';
+                            $activeMainMenu = false;
+                            if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
+                            {
+                                $activeMainMenu = true;
+                            }
+                            else
+                            {
+                                $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                                if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                            }
+
+                            if($activeMainMenu)
+                            {
+                                $activeMenu = $dropMenuName;
+                                $active     = 'active';
+                                $subActive  = 'active';
+                                $label      = $subLabel;
+                            }
+                            $dropMenu .= "<li class='$subActive' data-id='$subLabel'>" . html::a($subLink, $subLabel, '', "data-app='$openApp'") . '</li>';
+                        }
+
+                        if(empty($dropMenu)) continue;
+
+                        $label   .= "<span class='caret'></span>";
+                        $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
+                    }
+
+                    $misc = (isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module) ? "data-app='$openApp'" : '';
+                    $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
+
+                    echo $menuItemHtml;
+                }
+                else
+                {
+                    echo "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
+                }
             }
         }
         echo "</ul>\n";
@@ -1322,6 +1330,48 @@ EOD;
                 return "<button type='button' class='disabled btn $extraClass'><i class='$class' title='$title' $misc></i></button>\n";
             }
         }
+    }
+
+    /**
+     * Build more executions button.
+     *
+     * @param  int    $executionID
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function buildMoreButton($executionID)
+    {
+        global $lang, $app;
+
+        $executionPairs = array();
+        $object         = $app->dbh->query('SELECT project FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' ORDER BY `id` DESC")->fetchAll();
+        foreach($executionList as $execution)
+        {
+            if($execution->id == $executionID) continue;
+            $executionPairs[$execution->id] = $execution->name;
+        }
+
+        if(empty($executionPairs)) return;
+
+        $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->more}</a>";
+        $html .= "<ul class='dropdown-menu'>";
+
+        $showCount = 0;
+        foreach($executionPairs as $executionID => $executionName)
+        {
+            $html .= "<li style='max-width: 300px;'>" . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $executionName, '', "title='{$executionName}' class='text-ellipsis'") . '</li>';
+
+            $showCount ++;
+            if($showCount == 10) break;
+        }
+
+        if(count($executionPairs) > 10) $html .= '<li>' . html::a(helper::createLink('project', 'execution', "status=all&projectID={$object->project}"), $lang->preview . $lang->more, '', "data-app='project'") . '</li>';
+
+        $html .= "</ul></li>\n";
+
+        echo $html;
     }
 
     /**

@@ -255,6 +255,7 @@ $lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|tab
 $lang->execution->menu->build    = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->action   = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
 $lang->execution->menu->settings = array('link' => "$lang->settings|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
+if($config->systemMode == 'new') $lang->execution->menu->more = array('link' => "$lang->more|execution|more|%s");
 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
