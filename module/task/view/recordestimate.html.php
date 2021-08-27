@@ -24,6 +24,7 @@
 <?php $team = array_keys($task->team);?>
 <?php js::set('confirmRecord',    (!empty($team) && $task->assignedTo != end($team)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
+<?php js::set('today', helper::today());?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

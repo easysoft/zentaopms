@@ -791,7 +791,6 @@ class storyModel extends model
         {
             $_POST['reviewer']   = array_filter($_POST['reviewer']);
             $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
-            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
             if(array_diff($_POST['reviewer'], array_keys($oldReviewer)) or array_diff(array_keys($oldReviewer), $_POST['reviewer']))
             {
                 /* Update story reviewer. */
@@ -807,29 +806,12 @@ class storyModel extends model
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                 }
 
-                /* Update the story status by review rules. */
-                $reviewerList     = $this->getReviewerPairs($storyID, $oldStory->version);
-                $story->reviewers = implode(',', array_keys($reviewerList));
-                $reviewedBy       = explode(',', trim($oldStory->reviewedBy, ','));
-                if(!array_diff(array_keys($reviewerList), $reviewedBy))
-                {
-                    $status        = $this->setStatusByReviewRules($reviewerList);
-                    $story->status = $status ? $status : $oldStory->status;
-                    if($story->status == 'closed')
-                    {
-                        $story->closedBy     = $this->app->user->account;
-                        $story->closedDate   = $now;
-                        $story->assignedTo   = 'closed';
-                        $story->assignedDate = $now;
-                        $story->stage        = 'closed';
-                        if($this->post->closedReason == 'done') $story->stage = 'released';
-                    }
-                }
+                $story = $this->updateStoryByReview($storyID, $oldStory, $story);
             }
         }
 
         $this->dao->update(TABLE_STORY)
-            ->data($story, 'reviewers')
+            ->data($story)
             ->autoCheck()
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
@@ -906,6 +888,8 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
+            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
+            $story->reviewers    = implode(',', array_keys($reviewerList));
             unset($oldStory->parent);
             unset($story->parent);
             return common::createChanges($oldStory, $story);
@@ -1290,23 +1274,7 @@ class storyModel extends model
 
         $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($this->post->result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
 
-        /* Update the story status by review rules. */
-        $reviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
-        $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
-        if(!array_diff(array_keys($reviewerList), $reviewedBy))
-        {
-            $status        = $this->post->result == 'revert' ? 'active' : $this->setStatusByReviewRules($reviewerList);
-            $story->status = $status ? $status : $oldStory->status;
-            if($story->status == 'closed')
-            {
-                $story->closedBy     = $this->app->user->account;
-                $story->closedDate   = $now;
-                $story->assignedTo   = 'closed';
-                $story->assignedDate = $now;
-                $story->stage        = 'closed';
-                if($this->post->closedReason == 'done') $story->stage = 'released';
-            }
-        }
+        $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
         $this->dao->update(TABLE_STORY)->data($story, 'closedReason')
             ->autoCheck()
@@ -4474,11 +4442,42 @@ class storyModel extends model
 
         if(strtolower($result) != 'revert')
         {
-            if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewClosed');
-            if($story->status == 'active') $this->action->create('story', $story->id, 'PassReviewed');
-            if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $this->action->create('story', $story->id, 'ClarifyReviewed');
+            if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewRejected');
+            if($story->status == 'active') $this->action->create('story', $story->id, 'ReviewPassed');
+            if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $this->action->create('story', $story->id, 'ReviewClarified');
         }
 
         return $actionID;
+    }
+
+    /**
+     * Update the story fields value by review.
+     *
+     * @param  int    $storyID
+     * @param  object $oldStory
+     * @param  object $story
+     * @access public
+     * @return object
+     */
+    public function updateStoryByReview($storyID, $oldStory, $story)
+    {
+        $reviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
+        $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
+        if(!array_diff(array_keys($reviewerList), $reviewedBy))
+        {
+            $status        = $this->post->result == 'revert' ? 'active' : $this->setStatusByReviewRules($reviewerList);
+            $story->status = $status ? $status : $oldStory->status;
+            if($story->status == 'closed')
+            {
+                $story->closedBy     = $this->app->user->account;
+                $story->closedDate   = $now;
+                $story->assignedTo   = 'closed';
+                $story->assignedDate = $now;
+                $story->stage        = 'closed';
+                if($this->post->closedReason == 'done') $story->stage = 'released';
+            }
+        }
+
+        return $story;
     }
 }
