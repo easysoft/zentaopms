@@ -274,7 +274,13 @@ class my extends control
     public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
+        if($this->app->viewType != 'json')
+        {
+            $uri = $this->app->getURI(true);
+            $this->session->set('taskList',      $uri, 'execution');
+            $this->session->set('projectList',   $uri, 'project');
+            $this->session->set('executionList', $uri, 'execution');
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -398,7 +404,12 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        if($this->app->viewType != 'json')
+        {
+            $uri = $this->app->getURI(true);
+            $this->session->set('testtaskList', $uri, 'qa');
+            $this->session->set('buildList',    $uri, 'execution');
+        }
 
         $this->app->loadLang('testcase');
 
@@ -528,8 +539,9 @@ class my extends control
         $this->loadModel('program');
         $this->app->loadLang('project');
 
-        $this->app->session->set('programList', $this->app->getURI(true), 'program');
-        $this->app->session->set('projectList', $this->app->getURI(true), 'my');
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('programList', $uri, 'program');
+        $this->app->session->set('projectList', $uri, 'my');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -569,6 +581,8 @@ class my extends control
     {
         $this->app->loadLang('project');
         $this->app->loadLang('execution');
+
+        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

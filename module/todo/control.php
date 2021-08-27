@@ -368,11 +368,14 @@ class todo extends control
         if(!$todo) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Save the session. */
-        $uri = $this->app->getURI(true);
-        $this->session->set('bugList',      $uri, 'qa');
-        $this->session->set('taskList',     $uri, 'execution');
-        $this->session->set('storyList',    $uri, 'product');
-        $this->session->set('testtaskList', $uri, 'qa');
+        if(!isonlybody())
+        {
+            $uri = $this->app->getURI(true);
+            $this->session->set('bugList',      $uri, 'qa');
+            $this->session->set('taskList',     $uri, 'execution');
+            $this->session->set('storyList',    $uri, 'product');
+            $this->session->set('testtaskList', $uri, 'qa');
+        }
 
         /* Fix bug #936. */
         if($this->app->user->account != $todo->account and !common::hasPriv('company', 'index'))
