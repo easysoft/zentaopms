@@ -89,7 +89,6 @@ class testreport extends control
     public function browse($objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(strpos('product|execution|project', $objectType) === false) die('Type Error!');
-        $this->session->set('reportList', $this->app->getURI(true), $this->app->openApp);
 
         $objectID = $this->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
@@ -126,6 +125,8 @@ class testreport extends control
             }
             if($param) $this->locate($this->createLink('testreport', 'create', $param));
         }
+
+        $this->session->set('reportList', $this->app->getURI(true), $this->app->openApp);
 
         $executions = array();
         $tasks      = array();

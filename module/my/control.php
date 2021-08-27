@@ -402,6 +402,7 @@ class my extends control
         {
             $uri = $this->app->getURI(true);
             $this->session->set('testtaskList', $uri, 'qa');
+            $this->session->set('reportList',   $uri, 'qa');
             $this->session->set('buildList',    $uri, 'execution');
         }
 
