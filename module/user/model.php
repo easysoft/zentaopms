@@ -1589,13 +1589,15 @@ class userModel extends model
             /* Get teams. */
             if($teams === null)
             {
-                $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->query();
+                $teams = array();
+                $stmt  = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->query();
                 while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
             }
 
             /* Get product white list. */
             if($productWhiteList === null)
             {
+                $productWhiteList = array();
                 $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('product')->query();
                 while($acl = $stmt->fetch()) $productWhiteList[$acl->objectID][$acl->account] = $acl->account;
             }
@@ -1603,20 +1605,23 @@ class userModel extends model
             /* Get white list. */
             if($whiteList === null)
             {
-                $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->in('program,project,sprint')->query();
+                $whiteList = array();
+                $stmt      = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->in('program,project,sprint')->query();
                 while($acl = $stmt->fetch()) $whiteList[$acl->objectID][$acl->account] = $acl->account;
             }
 
             /* Get stakeholders. */
             if($stakeholders === null)
             {
-                $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)->query();
+                $stakeholders = array();
+                $stmt         = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)->query();
                 while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectID][$stakeholder->user] = $stakeholder->user;
             }
 
             /* Compute parent stakeholders. */
-            $programStakeholderGroup = $this->loadModel('stakeholder')->getParentStakeholderGroup(array_keys($allPrograms)); 
-            $projectStakeholderGroup = $this->loadModel('stakeholder')->getParentStakeholderGroup(array_keys($allProjects)); 
+            $this->loadModel('stakeholder');
+            $programStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allPrograms));
+            $projectStakeholderGroup = $this->stakeholder->getParentStakeholderGroup(array_keys($allProjects));
 
             list($productTeams, $productStakeholders) = $this->getProductMembers($allProducts);
 
