@@ -17,7 +17,7 @@
     <div class='detail'>
       <div class='detail-title'><?php echo $lang->program->kanban->typeList[$type];?></div>
       <div class='detail-content'>
-        <table class="table no-margin table-grouped text-center" style='background: #f5f5f5;'>
+        <table class="table no-margin table-grouped text-center" style='background: #efefef;'>
           <thead>
             <tr>
               <th rowspan='2' class='w-20px' style='background: #32C5FF; border-bottom: none'></th>

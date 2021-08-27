@@ -2433,8 +2433,8 @@ EOD;
         /* If homeMenu is not exists or unset, display menu. */
         if(!isset($lang->$openApp->homeMenu))
         {
-            $lang->menu      = $lang->$openApp->menu;
-            $lang->menuOrder = $lang->$openApp->menuOrder;
+            $lang->menu      = isset($lang->$openApp->menu) ? $lang->$openApp->menu : array();
+            $lang->menuOrder = isset($lang->$openApp->menuOrder) ? $lang->$openApp->menuOrder : array();
             return;
         }
 
@@ -2465,8 +2465,8 @@ EOD;
         }
 
         /* Default, display menu. */
-        $lang->menu      = $lang->$openApp->menu;
-        $lang->menuOrder = $lang->$openApp->menuOrder;
+        $lang->menu      = isset($lang->$openApp->menu) ? $lang->$openApp->menu : array();
+        $lang->menuOrder = isset($lang->$openApp->menuOrder) ? $lang->$openApp->menuOrder : array();
     }
 
     /**
