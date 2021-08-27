@@ -50,6 +50,9 @@ $routes['/issues/:issueID']            = 'issue';
 $routes['/todos']     = 'todos';
 $routes['/todos/:id'] = 'todo';
 
+$routes['/testcases']     = 'testcases';
+$routes['/testcases/:id'] = 'testcase';
+
 $routes['/projects/:projectID/testtasks'] = 'testtasks';
 $routes['/testtasks']                     = 'testtasks';
 $routes['/testtasks/:id']                 = 'testtask';
