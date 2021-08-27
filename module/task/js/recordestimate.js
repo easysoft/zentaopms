@@ -1,5 +1,7 @@
 $(function()
 {
+    $('.form-date').datetimepicker('setEndDate', today);
+
     $("#recordForm").submit(function()
     {
         $('#recordForm .left').each(function()
