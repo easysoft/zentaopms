@@ -70,6 +70,7 @@ class program extends control
     public function kanban()
     {
         $this->app->loadLang('release');
+        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
 
         $this->view->title       = $this->lang->program->kanban->common;
         $this->view->kanbanGroup = $this->program->getKanbanGroup();
