@@ -578,9 +578,9 @@ class upgrade extends control
             die(js::locate($this->createLink('upgrade', 'mergeRepo'), 'parent'));
         }
 
-        $repos    = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
+        $repoes   = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
         $products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
-        if(empty($repos) or empty($products))
+        if(empty($repoes) or empty($products))
         {
             $this->dao->delete()->from(TABLE_BLOCK)->exec();
             $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('blockInited')->exec();
@@ -589,7 +589,7 @@ class upgrade extends control
         }
 
         $this->view->title    = $this->lang->upgrade->mergeRepo;
-        $this->view->repos    = $repos;
+        $this->view->repoes   = $repoes;
         $this->view->products = $products;
         $this->view->programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->andWhere('type')->eq('program')->fetchPairs();
 

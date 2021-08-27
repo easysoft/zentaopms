@@ -30,7 +30,7 @@
                </div>
               </div>
               <div class='lineGroup-body'>
-              <?php echo html::checkBox("repos", $repos, "class='form-control'");?>
+              <?php echo html::checkBox("repoes", $repoes, "class='form-control'");?>
               </div>
             </div>
           </div>

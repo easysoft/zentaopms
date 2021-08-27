@@ -9,8 +9,8 @@ $(function()
             $('[data-id=' + e.id + ']').prop('checked', true);
 
             var checked        = true;
-            var repoNum        = $("[id^='repos'").length;
-            var checkedRepoNum = $("[id^='repos']:checked").length;
+            var repoNum        = $("[id^='repoes'").length;
+            var checkedRepoNum = $("[id^='repoes']:checked").length;
 
             if(repoNum > checkedRepoNum) checked = false;
             $('#checkAllRepos').prop('checked', checked);
@@ -25,21 +25,21 @@ $(function()
     {
         if($(this).is(':checked'))
         {
-            $('[name^=repos]').prop('checked', true);
+            $('[name^=repoes]').prop('checked', true);
         }
         else
         {
-            $('[name^=repos]').prop('checked', false);
+            $('[name^=repoes]').prop('checked', false);
         }
     })
 
     /* Select a repo event. */
-    $('[name^=repos]').change(function()
+    $('[name^=repoes]').change(function()
     {
         /* Determine whether all repo buttons are selected. */
         var checked        = true;
-        var repoNum        = $("[id^='repos'").length;
-        var checkedRepoNum = $("[id^='repos']:checked").length;
+        var repoNum        = $("[id^='repoes'").length;
+        var checkedRepoNum = $("[id^='repoes']:checked").length;
 
         if(repoNum > checkedRepoNum) checked = false;
         $('#checkAllRepos').prop('checked', checked);
