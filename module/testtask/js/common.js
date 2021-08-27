@@ -81,7 +81,7 @@ function loadExecutionRelated(executionID)
  * @access public
  * @return void
  */
-function loadExecutionBuilds(executionID)
+function loadExecutionBuilds(executionID, selected)
 {
     selectedBuild = $('#build').val();
     if(!selectedBuild) selectedBuild = 0;
@@ -90,6 +90,7 @@ function loadExecutionBuilds(executionID)
     $('#buildBox').load(link, function()
     {
         $('#resolvedBuild').attr('id', 'build').attr('name', 'build').find('option[value=trunk]').remove();
+        if(selected) $('#build').val(selected);
         $('#build').chosen();
     });
 }
