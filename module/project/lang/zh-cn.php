@@ -134,6 +134,7 @@ $lang->project->moreProject        = '更多项目';
 $lang->project->days               = '可用工作日';
 $lang->project->etc                = "等";
 
+/* Project Kanban. */
 $lang->project->typeList = array();
 $lang->project->typeList['my']    = '我负责的项目';
 $lang->project->typeList['other'] = '其他项目';
