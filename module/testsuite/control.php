@@ -294,10 +294,11 @@ class testsuite extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function linkCase($suiteID, $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkCase($suiteID, $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $from = 'browse')
     {
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
@@ -341,6 +342,7 @@ class testsuite extends control
         $this->view->suiteID = $suiteID;
         $this->view->pager   = $pager;
         $this->view->suite   = $suite;
+        $this->view->from    = $from;
 
         $this->display();
     }
