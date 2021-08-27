@@ -186,6 +186,8 @@ class productModel extends model
      */
     public function accessDenied()
     {
+        if(defined('TUTORIAL')) return true;
+
         echo(js::alert($this->lang->product->accessDenied));
 
         if(!$this->server->http_referer) die(js::locate(helper::createLink('product', 'index')));
@@ -1661,6 +1663,8 @@ class productModel extends model
      */
     public function statisticProgram($productStats)
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductStats();
+
         $productStructure = array();
 
         foreach($productStats as $product)

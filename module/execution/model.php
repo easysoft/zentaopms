@@ -40,6 +40,8 @@ class executionModel extends model
      */
     public function accessDenied()
     {
+        if(defined('TUTORIAL')) return true;
+
         echo(js::alert($this->lang->execution->accessDenied));
 
         if(!$this->server->http_referer) die(js::locate(helper::createLink('execution', 'index')));

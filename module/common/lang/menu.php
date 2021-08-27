@@ -18,6 +18,18 @@ list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
+if(defined('TUTORIAL'))
+{
+    $programModule   = 'program';
+    $programMethod   = 'browse';
+    $productModule   = 'product';
+    $productMethod   = 'all';
+    $projectModule   = 'project';
+    $projectMethod   = 'browse';
+    $executionModule = 'execution';
+    $executionMethod = 'task';
+}
+
 /* Main Navigation. */
 $lang->mainNav = new stdclass();
 $lang->mainNav->my = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";

@@ -32,6 +32,8 @@ class projectModel extends model
      */
     public function accessDenied()
     {
+        if(defined('TUTORIAL')) return true;
+
         echo(js::alert($this->lang->project->accessDenied));
         $this->session->set('project', '');
 
@@ -172,6 +174,8 @@ class projectModel extends model
      */
     public function getByID($projectID, $type = 'project')
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProject();
+
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('`type`')->in($type)->fetch();
         if(!$project) return false;
 
@@ -501,6 +505,12 @@ class projectModel extends model
      */
     public function getProducts($projectID, $withBranch = true, $status = 'all')
     {
+        if(defined('TUTORIAL'))
+        {
+            if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
+            return $this->loadModel('tutorial')->getExecutionProducts();
+        }
+
         $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$projectID)
