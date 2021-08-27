@@ -35,9 +35,9 @@
           <th class='c-pri'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->product;?></th>
           <th><?php echo $lang->bug->title;?></th>
-          <th class='w-status'><?php echo $lang->bug->statusAB;?></th>
-          <th class='w-100px'><?php echo $lang->openedByAB;?></th>
-          <th class='w-100px'><?php echo $lang->assignedToAB;?></th>
+          <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
+          <th class='c-user'><?php echo $lang->openedByAB;?></th>
+          <th class='c-user'><?php echo $lang->assignedToAB;?></th>
         </tr>
       </thead>
       <tbody>
@@ -47,7 +47,7 @@
         <tr>
           <td class='c-id'>
             <div class="checkbox-primary">
-              <input type='checkbox' name='bugs[]'  value='<?php echo $bug2Link->id;?>'/> 
+              <input type='checkbox' name='bugs[]'  value='<?php echo $bug2Link->id;?>'/>
               <label></label>
             </div>
             <?php printf('%03d', $bug2Link->id);?>

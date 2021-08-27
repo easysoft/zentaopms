@@ -1,0 +1,6 @@
+.c-id {width: 50px !important;}
+.c-branch, .c-module, .c-os {width: 120px;}
+.c-execution {width: 130px;}
+.c-build, .c-browser, .c-keywords, .c-other {width: 100px;}
+.c-steps {width: 150px;}
+.c-pri, .c-severity {width: 80px;}

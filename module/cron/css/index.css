@@ -1,0 +1,5 @@
+.c-minute {width: 60px;}
+.c-hour, .c-dom {width: 50px;}
+.c-mon, .c-dow, .c-status {width: 60px;}
+.c-remark {width: 200px;}
+.c-actions {width: 100px;}

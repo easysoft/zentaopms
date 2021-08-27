@@ -52,7 +52,7 @@ a.showMoreImage:hover {opacity: 1;}
 .c-icon {width: 20px;}
 .c-number {width: 80px;}
 .c-company, .c-budget {width: 80px;}
-.c-status, .c-user, .c-date, .c-encode {width: 100px;}
+.c-status, .c-type, .c-user, .c-date, .c-encode {width: 100px;}
 .c-object-type {width: 130px;}
 .c-full-date, .c-mobile, .c-text {width: 150px;}
 .c-module {width: 180px;}
