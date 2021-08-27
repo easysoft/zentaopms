@@ -600,7 +600,11 @@ class testcase extends control
     {
         $caseID = (int)$caseID;
         $case   = $this->testcase->getById($caseID, $version);
-        if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$case)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
         if($case->auto == 'unit')
         {
             $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
@@ -681,6 +685,7 @@ class testcase extends control
         $this->view->isLibCase  = $isLibCase;
         $this->view->caseFails  = $caseFails;
 
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'case' => $case));
         $this->display();
     }
 
@@ -1017,6 +1022,7 @@ class testcase extends control
             }
 
             $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$case->product}");
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::locate($locateLink, 'parent'));
         }
     }

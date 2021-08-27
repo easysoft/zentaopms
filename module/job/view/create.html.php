@@ -32,7 +32,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->engine; ?></th>
-            <td class='required'>
+            <td>
               <div class='table-row'>
                 <div class='table-col'><?php echo html::select('engine', $lang->job->engineList, '', "class='form-control chosen'"); ?></div>
                 </div>
