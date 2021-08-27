@@ -307,7 +307,7 @@ $lang->lang = 'Language';
 /* Theme style. */
 $lang->theme                = 'Theme';
 $lang->themes['default']    = 'Default';
-$lang->themes['blue']       = 'Blue';
+$lang->themes['blue']       = 'Young Blue';
 $lang->themes['green']      = 'Green';
 $lang->themes['red']        = 'Red';
 $lang->themes['purple']     = 'Purple';

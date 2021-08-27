@@ -555,7 +555,7 @@ class fileModel extends model
         }
         else
         {
-            $data = fixer::stripDataTags(urldecode($data));
+            $data = fixer::stripDataTags(rawurldecode($data));
         }
 
         return $data;

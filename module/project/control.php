@@ -921,6 +921,7 @@ class project extends control
     public function testcase($projectID = 0, $productID = 0, $branch = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product');
+        $this->session->set('bugList', $this->app->getURI(true), 'project');
         $products = array('0' => $this->lang->product->all) + $this->project->getProducts($projectID, false);
         $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', '', $branch, 0, '', false);
 

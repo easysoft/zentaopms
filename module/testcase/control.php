@@ -132,7 +132,9 @@ class testcase extends control
             $this->qa->setMenu($this->products, $productID, $branch);
         }
 
-        $this->session->set('caseList', $this->app->getURI(true), $this->app->openApp);
+        $uri = $this->app->getURI(true);
+        $this->session->set('caseList', $uri, $this->app->openApp);
+        $this->session->set('bugList',  $uri, $this->app->openApp);
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
@@ -598,6 +600,8 @@ class testcase extends control
      */
     public function view($caseID, $version = 0, $from = 'testcase', $taskID = 0)
     {
+        $this->session->set('bugList', $this->app->getURI(true), $this->app->openApp);
+
         $caseID = (int)$caseID;
         $case   = $this->testcase->getById($caseID, $version);
         if(!$case)
