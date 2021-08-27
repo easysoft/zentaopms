@@ -1527,10 +1527,6 @@ class execution extends control
             $this->project->setMenu($this->session->project);
             $this->view->project = $this->project->getById($this->session->project);
         }
-        else
-        {
-            $this->execution->setMenu($executionID);
-        }
 
         $executionIDList = $this->post->executionIDList ? $this->post->executionIDList : die(js::locate($this->session->executionList, 'parent'));
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
