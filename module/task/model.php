@@ -465,12 +465,13 @@ class taskModel extends model
     {
         $task->version      = 1;
         $task->openedBy     = $this->app->user->account;
+        $task->lastEditedBy = $this->app->user->account;
         $task->assignedDate = isset($task->assignedTo) ? helper::now() : 0;
         $task->story        = 0;
         $task->module       = 0;
         $task->estimate     = 0;
         $task->estStarted   = '0000-00-00';
-        $task->left         = 1;
+        $task->left         = 0;
         $task->pri          = 3;
         $task->type         = 'devel';
 
