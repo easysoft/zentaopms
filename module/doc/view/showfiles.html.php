@@ -132,7 +132,7 @@ $sessionString .= session_name() . '=' . session_id();
 function downloadFile(fileID, extension, imageWidth)
 {
     if(!fileID) return;
-    var fileTypes     = 'txt,jpg,jpeg,gif,png,bmp';
+    var fileTypes     = 'jpg,jpeg,gif,png,bmp';
     var sessionString = '<?php echo $sessionString;?>';
     var windowWidth   = $(window).width();
     var url           = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
@@ -143,7 +143,7 @@ function downloadFile(fileID, extension, imageWidth)
     }
     else
     {
-        window.open(url, '_blank');
+        window.open(url, '_self');
     }
     return false;
 }

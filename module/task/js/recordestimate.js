@@ -1,6 +1,6 @@
 $(function()
 {
-    $('.form-date').datetimepicker('setEndDate', '2021-08-27');
+    $('.form-date').datetimepicker('setEndDate', today);
 
     $("#recordForm").submit(function()
     {
