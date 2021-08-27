@@ -99,7 +99,7 @@ class tutorial extends control
      */
     public function wizard($module, $method, $params = '')
     {
-        define('TUTORIAL',      true);
+        if(!defined('TUTORIAL')) define('TUTORIAL', true);
         define('WIZARD_MODULE', $module);
         define('WIZARD_METHOD', $method);
 

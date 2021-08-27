@@ -22,7 +22,7 @@
       <caption><?php echo $type == 'myProducts' ? $lang->product->myProduct : $lang->product->otherProduct;?></caption>
       <thead>
         <tr>
-          <th rowspan="2" class="w-20px" style="border-left: unset; border-right: unset; background: #32C5FF;"></th>
+          <th rowspan="2" class="w-20px" style="border: unset; background: #32C5FF;"></th>
           <th rowspan="2" style="border-left: 0px;"><?php echo $lang->product->unclosedProduct;?></th>
           <th rowspan="2"><?php echo $lang->product->unexpiredPlan;?></th>
           <th colspan="2"><?php echo $lang->product->doing;?></th>
@@ -42,11 +42,23 @@
           <?php if($i == 0):?>
           <td rowspan="<?php echo count($programs[$programID])?>" class="program text-ellipsis" style="background: <?php echo $this->lang->product->kanbanColorList[$colorIndex];?>"><?php echo zget($programList, $programID);?></td>
           <?php endif;?>
-          <td title="<?php echo $productList[$productID]->name;?>"><?php echo html::a($this->createLink('product', 'browse', "productID=$productID"), $productList[$productID]->name, '', "title={$productList[$productID]->name}");?></td>
+          <td title="<?php echo $productList[$productID]->name;?>">
+            <?php if(common::hasPriv('product', 'browse')):?>
+            <?php echo html::a($this->createLink('product', 'browse', "productID=$productID"), $productList[$productID]->name, '', "title={$productList[$productID]->name}");?>
+            <?php else:?>
+            <?php echo "<span title={$productList[$productID]->name}>{$productList[$productID]->name}</span>";?>
+            <?php endif;?>
+          </td>
           <td class="plan">
             <?php if(isset($planList[$productID])):?>
             <?php foreach($planList[$productID] as $planID => $plan):?>
-            <div class="board-item text-ellipsis"><?php echo html::a($this->createLink('productplan', 'view', "planID=$planID"), $plan->title, '', "title={$plan->title}");?></div>
+            <div class="board-item text-ellipsis">
+              <?php if(common::hasPriv('productplan', 'view')):?>
+              <?php echo html::a($this->createLink('productplan', 'view', "planID=$planID"), $plan->title, '', "title={$plan->title}");?>
+              <?php else:?>
+              <?php echo "<span title={$plan->title}>{$plan->title}</span>"?>
+              <?php endif;?>
+            </div>
             <?php endforeach;?>
             <?php endif;?>
           </td>
@@ -58,7 +70,11 @@
               <div class="board-item" style="<?php echo $borderStyle;?>">
                 <div class="table-row">
                   <div class="table-col text-ellipsis">
+                    <?php if(common::hasPriv('project', 'index')):?>
                     <?php echo html::a($this->createLink('project', 'index', "projectID=$projectID"), $projectList[$projectID]->name, '', "title={$projectList[$projectID]->name}");?>
+                    <?php else:?>
+                    <?php echo "<span title={$projectList[$projectID]->name}>{$projectList[$projectID]->name}</span>"?>
+                    <?php endif;?>
                   </div>
                   <div class="table-col">
                     <div class="c-progress">
@@ -92,7 +108,11 @@
                 <div class="table-row">
                   <div class="table-col text-ellipsis">
                     <?php if(isset($latestExecutions[$projectID])):?>
+                    <?php if(common::hasPriv('execution', 'task')):?>
                     <?php echo html::a($this->createLink('execution', 'task', "executionID=$executionID"), $executionName, '', "title={$executionName}");?>
+                    <?php else:?>
+                    <?php echo "<span title=$executionName>$executionName</span>";?>
+                    <?php endif;?>
                     <?php endif;?>
                   </div>
                   <div class="table-col">
@@ -115,7 +135,11 @@
             <?php if(isset($releaseList[$productID])):?>
             <?php foreach($releaseList[$productID] as $releaseID => $release):?>
             <div class="board-item">
+              <?php if(common::hasPriv('release', 'view')):?>
               <?php echo html::a($this->createLink('release', 'view', "releaseID=$releaseID"), $release->name, '', "title={$release->name} class='text-ellipsis'");?>
+              <?php else:?>
+              <?php echo "<span title={$release->name}>{$release->name}</span>"?>
+              <?php endif;?>
               <?php if($release->marker) echo "&nbsp;<span><i class='icon icon-flag red'></i></span>";?>
             </div>
             <?php endforeach;?>

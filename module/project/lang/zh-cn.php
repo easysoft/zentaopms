@@ -61,6 +61,9 @@ $lang->project->id                 = '项目编号';
 $lang->project->stage              = '阶段';
 $lang->project->model              = '项目管理方式';
 $lang->project->PM                 = '负责人';
+$lang->project->PO                 = '项目负责人';
+$lang->project->QD                 = '测试负责人';
+$lang->project->RD                 = '发布负责人';
 $lang->project->name               = '项目名称';
 $lang->project->category           = '项目类型';
 $lang->project->desc               = '项目描述';
@@ -131,6 +134,7 @@ $lang->project->moreProject        = '更多项目';
 $lang->project->days               = '可用工作日';
 $lang->project->etc                = "等";
 
+/* Project Kanban. */
 $lang->project->typeList = array();
 $lang->project->typeList['my']    = '我负责的项目';
 $lang->project->typeList['other'] = '其他项目';

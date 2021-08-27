@@ -398,7 +398,12 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
+        if($this->app->viewType != 'json')
+        {
+            $uri = $this->app->getURI(true);
+            $this->session->set('testtaskList', $uri, 'qa');
+            $this->session->set('buildList',    $uri, 'execution');
+        }
 
         $this->app->loadLang('testcase');
 
@@ -528,8 +533,9 @@ class my extends control
         $this->loadModel('program');
         $this->app->loadLang('project');
 
-        $this->app->session->set('programList', $this->app->getURI(true), 'program');
-        $this->app->session->set('projectList', $this->app->getURI(true), 'my');
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('programList', $uri, 'program');
+        $this->app->session->set('projectList', $uri, 'my');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
