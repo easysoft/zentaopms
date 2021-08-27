@@ -145,7 +145,7 @@ class programModel extends model
 
     /**
      * Get kanban group data.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -175,7 +175,7 @@ class programModel extends model
             ->fetchGroup('program', 'id');
 
         $productPairs = array();
-        foreach($productGroup as $programID => $products) 
+        foreach($productGroup as $programID => $products)
         {
             foreach($products as $productID => $product) $productPairs[$productID] = $productID;
         }
@@ -236,7 +236,7 @@ class programModel extends model
         /* Group data. */
         foreach($productGroup as $programID => $products)
         {
-            foreach($products as $productID => $product) 
+            foreach($products as $productID => $product)
             {
                 $product->plans    = zget($plans, $productID, array());
                 $product->releases = zget($releases, $productID, array());
@@ -245,10 +245,10 @@ class programModel extends model
                 {
                     if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
 
-                    $status    = $project->status == 'wait' ? 'wait' : 'doing'; 
+                    $status    = $project->status == 'wait' ? 'wait' : 'doing';
                     $execution = zget($doingExecutions, $project->id, array());
 
-                    if(!empty($execution)) 
+                    if(!empty($execution))
                     {
                         $execution->hours = zget($hours, $execution->id, array());
                         if(helper::diffDate(helper::today(), $execution->end) > 0) $execution->delay = 1;
@@ -281,8 +281,8 @@ class programModel extends model
 
     /**
      * Get involved programs by user.
-     * 
-     * @param  string $account 
+     *
+     * @param  string $account
      * @access public
      * @return void
      */
@@ -299,12 +299,12 @@ class programModel extends model
         foreach($objects as $id => $object)
         {
             if($object->type == 'program') $involvedPrograms[$id] = $id;
-            if($object->type == 'project') 
+            if($object->type == 'project')
             {
                 $programID = $this->getTopByID($id);
                 $involvedPrograms[$programID] = $programID;
             }
-            if($object->type == 'sprint' || $object->type == 'stage') 
+            if($object->type == 'sprint' || $object->type == 'stage')
             {
                 $programID = $this->getTopByID($object->project);
                 $involvedPrograms[$programID] = $programID;
@@ -321,11 +321,11 @@ class programModel extends model
 
         foreach($stakeholders as $objectID => $object)
         {
-            if($object->type == 'program') 
+            if($object->type == 'program')
             {
                 $involvedPrograms[$objectID] = $objectID;
             }
-            if($object->type == 'project') 
+            if($object->type == 'project')
             {
                 $programID = $this->getTopByID($objectID);
                 $involvedPrograms[$programID] = $programID;
@@ -342,12 +342,12 @@ class programModel extends model
 
         foreach($teams as $objectID => $object)
         {
-            if($object->type == 'project') 
+            if($object->type == 'project')
             {
                 $programID = $this->getTopByID($objectID);
                 $involvedPrograms[$programID] = $programID;
             }
-            if($object->type == 'execution') 
+            if($object->type == 'execution')
             {
                 $programID = $this->getTopByID($object->project);
                 $involvedPrograms[$programID] = $programID;
@@ -364,7 +364,7 @@ class programModel extends model
 
         /* Check priv. */
         $involvedPrograms = $this->dao->select('id')->from(TABLE_PROGRAM)
-            ->where('deleted')->eq(0) 
+            ->where('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->andWhere('id')->in($involvedPrograms)
             ->andWhere('grade')->eq(1)
@@ -375,8 +375,8 @@ class programModel extends model
 
     /**
      * Compute progress for project or execution.
-     * 
-     * @param  array $tasks 
+     *
+     * @param  array $tasks
      * @access public
      * @return void
      */
@@ -384,20 +384,20 @@ class programModel extends model
     {
         $hours = array();
         foreach($tasks as $projectID => $projectTasks)
-        {    
+        {
             $hour = new stdclass();
             $hour->totalConsumed = 0;
             $hour->totalEstimate = 0;
             $hour->totalLeft     = 0;
 
             foreach($projectTasks as $task)
-            {    
+            {
                 $hour->totalConsumed += $task->consumed;
                 $hour->totalEstimate += $task->estimate;
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
-            }    
+            }
             $hours[$projectID] = $hour;
-        } 
+        }
 
         foreach($hours as $hour)
         {
@@ -1162,6 +1162,8 @@ class programModel extends model
      */
     public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats();
+
         /* Init vars. */
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
 

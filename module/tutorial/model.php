@@ -43,6 +43,17 @@ class tutorialModel extends model
     }
 
     /**
+     * Get module pairs for tutorial.
+     *
+     * @access public
+     * @return array
+     */
+    public function getModulePairs()
+    {
+        return array(1 => 'Test module');
+    }
+
+    /**
      * Get tutorial product.
      *
      * @access public
@@ -52,6 +63,8 @@ class tutorialModel extends model
     {
         $product = new stdclass();
         $product->id             = 1;
+        $product->program        = 0;
+        $product->line           = 0;
         $product->name           = 'Test product';
         $product->code           = 'test';
         $product->type           = 'normal';
@@ -71,6 +84,96 @@ class tutorialModel extends model
     }
 
     /**
+     * Get product stats for tutorial.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProductStats()
+    {
+        $product = $this->getProduct();
+        $product->stories = array();
+        $product->stories[0]         = '';
+        $product->stories[1]         = 'draft';
+        $product->stories[2]         = 'active';
+        $product->stories[3]         = 'closed';
+        $product->stories[4]         = 'changed';
+        $product->stories['']        = 0;
+        $product->stories['draft']   = 0;
+        $product->stories['active']  = 0;
+        $product->stories['closed']  = 0;
+        $product->stories['changed'] = 0;
+        $product->requirements       = $product->stories;
+        $product->plans              = 0;
+        $product->releases           = 0;
+        $product->bugs               = 0;
+        $product->unResolved         = 0;
+        $product->closedBugs         = 0;
+        $product->fixedBugs          = 0;
+        $product->assignToNull       = 0;
+
+        $productStat[$product->program][$product->line]['products'][$product->id] = $product;
+        return $productStat;
+    }
+
+    /**
+     * Get project for tutorial;
+     *
+     * @access public
+     * @return object
+     */
+    public function getProject()
+    {
+        $project = new stdclass();
+        $project->id       = 2;
+        $project->project  = 0;
+        $project->model    = 'scrum';
+        $project->type     = 'project';
+        $project->name     = 'Test Project';
+        $project->code     = '';
+        $project->lifetime = '';
+        $project->begin    = date('Y-m-d', strtotime('-7 days'));
+        $project->end      = date('Y-m-d', strtotime('+7 days'));
+        $project->days     = 10;
+        $project->status   = 'wait';
+        $project->pri      = '1';
+        $project->desc     = '';
+        $project->goal     = '';
+        $project->acl      = 'open';
+        $project->parent   = 0;
+        $project->path     = ',2,';
+        $project->grade    = 1;
+        $project->PM       = $this->app->user->account;
+        $project->PO       = $this->app->user->account;
+        $project->QD       = $this->app->user->account;
+        $project->RD       = $this->app->user->account;
+        $project->budget   = 0;
+        $project->deleted  = '0';
+
+        return $project;
+    }
+
+    /**
+     * Get project stats for tutorial
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectStats()
+    {
+        $project   = $this->getProject();
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+
+        $project->hours       = (object)$emptyHour;
+        $project->leftTasks   = '—';
+        $project->teamMembers = $this->getTeamMembers();
+        $project->teamCount   = count($project->teamMembers);
+
+        $projectStat[$project->id] = $project;
+        return $projectStat;
+    }
+
+    /**
      * Get tutorial stories.
      *
      * @access public
@@ -82,6 +185,8 @@ class tutorialModel extends model
         $story->id             = 1;
         $story->product        = 1;
         $story->branch         = 0;
+        $story->parent         = 0;
+        $story->category       = 0;
         $story->module         = 0;
         $story->plan           = '';
         $story->planTitle      = '';
@@ -111,6 +216,7 @@ class tutorialModel extends model
         $story->version        = 1;
         $story->deleted        = '0';
         $story->order          = '0';
+        $story->URChanged      = false;
 
         $stories = array();
         $stories[] = $story;
@@ -129,7 +235,7 @@ class tutorialModel extends model
      */
     public function getExecutionPairs()
     {
-        return array(1 => 'Test execution');
+        return array(3 => 'Test execution');
     }
 
     /**
@@ -141,18 +247,28 @@ class tutorialModel extends model
     public function getExecution()
     {
         $execution = new stdclass();
-        $execution->id = 1;
-        $execution->type = 'sprint';
-        $execution->name = 'Test execution';
-        $execution->code = 'test';
-        $execution->begin = date('Y-m-d', strtotime('-7 days'));
-        $execution->end   = date('Y-m-d', strtotime('+7 days'));
-        $execution->days  = 10;
-        $execution->status  = 'wait';
-        $execution->pri   = '1';
-        $execution->desc   = '';
-        $execution->goal   = '';
-        $execution->acl   = 'open';
+        $execution->id       = 3;
+        $execution->project  = 2;
+        $execution->type     = 'sprint';
+        $execution->name     = 'Test execution';
+        $execution->code     = 'test';
+        $execution->lifetime = '';
+        $execution->begin    = date('Y-m-d', strtotime('-7 days'));
+        $execution->end      = date('Y-m-d', strtotime('+7 days'));
+        $execution->days     = 10;
+        $execution->status   = 'wait';
+        $execution->pri      = '1';
+        $execution->desc     = '';
+        $execution->goal     = '';
+        $execution->acl      = 'open';
+        $execution->parent   = 2;
+        $execution->path     = ',2,3,';
+        $execution->grade    = 1;
+        $execution->PM       = $this->app->user->account;
+        $execution->PO       = $this->app->user->account;
+        $execution->QD       = $this->app->user->account;
+        $execution->RD       = $this->app->user->account;
+        $execution->deleted  = '0';
         return $execution;
     }
 
@@ -212,6 +328,7 @@ class tutorialModel extends model
         $member->totalHours  = 70.0;
         $member->realname    = $this->app->user->realname;
         $member->limited     = 'no';
+        $member->userID      = $this->app->user->id;
         return array($member->account => $member);
     }
 
