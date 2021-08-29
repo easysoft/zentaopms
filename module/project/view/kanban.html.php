@@ -110,7 +110,16 @@
                   <?php if(isset($statusList[$status])):?>
                   <?php foreach($statusList[$status] as $project):?>
                   <div class='board-item' <?php echo "style='border-left: 3px solid " . $lang->execution->statusColorList[$status] . "'";?>>
-                    <span><?php echo $project->name;?></span>
+                  <?php
+                  if(common::hasPriv('project', 'index'))
+                  {
+                      echo html::a($this->createLink('project', 'index', "projectID=$project->id"), $project->name, '', "title='{$project->name}'");
+                  }
+                  else
+                  {
+                      echo "<span title='{$project->name}'>{$project->name}</span>";
+                  }
+                  ?>
                   </div>
                   <?php endforeach;?>
                   <?php endif;?>

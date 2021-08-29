@@ -242,6 +242,7 @@ $filter->execution->story->cookie['storyModuleParam']    = 'int';
 $filter->execution->story->cookie['storyProductParam']   = 'int';
 $filter->execution->story->cookie['storyBranchParam']    = 'int';
 $filter->execution->story->cookie['executionStoryOrder'] = 'code';
+$filter->execution->export->cookie['checkedItem']        = 'reg::checked';
 
 $filter->testcase->browse->cookie['caseModule']     = 'int';
 $filter->testcase->browse->cookie['caseSuite']      = 'int';
