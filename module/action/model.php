@@ -951,17 +951,17 @@ class actionModel extends model
         $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Get object names, object projects and requirements by actions. */
-        $relatedData    = $this->getRelatedDataByActions($actions);
-        $objectNames    = $relatedData['objectNames'];
-        $objectProjects = $relatedData['objectProjects'];
-        $requirements   = $relatedData['requirements'];
+        $relatedData     = $this->getRelatedDataByActions($actions);
+        $objectNames     = $relatedData['objectNames'];
+        $relatedProjects = $relatedData['relatedProjects'];
+        $requirements    = $relatedData['requirements'];
 
         foreach($actions as $i => $action)
         {
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
-            $projectID = isset($objectProjects[$action->objectType][$action->objectID]) ? $objectProjects[$action->objectType][$action->objectID] : 0;
+            $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
@@ -996,9 +996,9 @@ class actionModel extends model
      */
     public function getRelatedDataByActions($actions)
     {
-        $objectNames    = array();
-        $objectProjects = array();
-        $requirements   = array();
+        $objectNames     = array();
+        $relatedProjects = array();
+        $requirements    = array();
 
         foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIdList)
@@ -1011,16 +1011,16 @@ class actionModel extends model
 
             if($table != TABLE_TODO)
             {
-                $objectName    = array();
-                $objectProject = array();
+                $objectName     = array();
+                $relatedProject = array();
 
                 if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
                     {
-                        $objectName[$object->id]    = $object->name;
-                        $objectProject[$object->id] = $object->project;
+                        $objectName[$object->id]     = $object->name;
+                        $relatedProject[$object->id] = $object->project;
                     }
                 }
                 elseif($objectType == 'project' or $objectType == 'execution')
@@ -1028,8 +1028,8 @@ class actionModel extends model
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
                     {
-                        $objectName[$object->id]    = $object->name;
-                        $objectProject[$object->id] = $object->project > 0 ? $object->project : $object->id;
+                        $objectName[$object->id]     = $object->name;
+                        $relatedProject[$object->id] = $object->project > 0 ? $object->project : $object->id;
                     }
                 }
                 elseif($objectType == 'story')
@@ -1047,7 +1047,7 @@ class actionModel extends model
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id] = $object->team;
-                        if($object->type == 'project') $objectProject[$object->id] = $object->id;
+                        if($object->type == 'project') $relatedProject[$object->id] = $object->id;
                     }
                 }
                 elseif($objectType == 'stakeholder')
@@ -1062,8 +1062,8 @@ class actionModel extends model
                     $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
                 }
 
-                $objectNames[$objectType]    = $objectName;
-                $objectProjects[$objectType] = $objectProject;
+                $objectNames[$objectType]     = $objectName;
+                $relatedProjects[$objectType] = $relatedProject;
             }
             else
             {
@@ -1080,9 +1080,9 @@ class actionModel extends model
         }
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
-        $relatedData['objectNames']    = $objectNames;
-        $relatedData['objectProjects'] = $objectProjects;
-        $relatedData['requirements']   = $requirements;
+        $relatedData['objectNames']     = $objectNames;
+        $relatedData['relatedProjects'] = $relatedProjects;
+        $relatedData['requirements']    = $requirements;
         return $relatedData;
     }
 
