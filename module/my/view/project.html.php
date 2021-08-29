@@ -21,7 +21,7 @@
     <?php endforeach;?>
   </div>
 </div>
-<div id="mainContent" class='main-table'>
+<div id="mainContent">
   <?php if(empty($projects)):?>
   <div class="table-empty-tip">
     <p>
