@@ -11,21 +11,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
-<style>
-.table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
-.table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
-.table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
-.table td.has-child > a:not(.plan-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.table td.has-child > .plan-toggle {color: #838a9d; position: relative; top: 1px;}
-.table td.has-child > .plan-toggle:hover {color: #006af1; cursor: pointer;}
-.table td.has-child > .plan-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); -o-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); transform: rotate(-90deg);}
-.table td.has-child > .plan-toggle > .icon:before {text-align: left;}
-.table td.has-child > .plan-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
-.table th.hours {padding-right: 8px !important;}
-.main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
-td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
-</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
@@ -69,13 +54,13 @@ td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-sp
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
-          <th class='w-80px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
-          <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
-          <th class='w-70px text-right hours'><?php echo $lang->execution->totalEstimate;?></th>
-          <th class='w-70px text-right hours'><?php echo $lang->execution->totalConsumed;?></th>
-          <th class='w-70px text-right hours'><?php echo $lang->execution->totalLeft;?></th>
-          <th class='w-60px'><?php echo $lang->execution->progress;?></th>
-          <th class='w-100px'><?php echo $lang->execution->burn;?></th>
+          <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
+          <th class='c-estimate text-right hours'><?php echo $lang->execution->totalEstimate;?></th>
+          <th class='c-consumed text-right hours'><?php echo $lang->execution->totalConsumed;?></th>
+          <th class='c-left text-right hours'><?php echo $lang->execution->totalLeft;?></th>
+          <th class='c-progress'><?php echo $lang->execution->progress;?></th>
+          <th class='c-burn'><?php echo $lang->execution->burn;?></th>
         </tr>
       </thead>
       <tbody class='sortable' id='executionTableList'>

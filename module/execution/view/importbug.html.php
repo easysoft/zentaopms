@@ -36,14 +36,14 @@ var browseType = '<?php echo $browseType;?>';
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-severity'> <?php echo $lang->bug->severityAB;?></th>
-          <th class='w-pri'>      <?php echo $lang->priAB;?></th>
+          <th class='c-severity'> <?php echo $lang->bug->severityAB;?></th>
+          <th class='c-pri'>      <?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
-          <th class='w-80px'><?php echo $lang->bug->statusAB;?></th>
-          <th class='w-100px <?php echo in_array('pri',        $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
-          <th class='w-150px <?php echo in_array('assignedTo', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->assignedTo;?></th>
-          <th class='w-80px  <?php echo in_array('estimate',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>
-          <th class='w-180px <?php echo in_array('deadline',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
+          <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
+          <th class='c-pri-box <?php echo in_array('pri',        $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
+          <th class='c-assigned-box <?php echo in_array('assignedTo', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->assignedTo;?></th>
+          <th class='c-estimate-box  <?php echo in_array('estimate',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>
+          <th class='c-date-box <?php echo in_array('deadline',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
         </tr>
       </thead>
       <tbody>

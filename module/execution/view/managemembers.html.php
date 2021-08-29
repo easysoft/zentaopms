@@ -38,10 +38,10 @@
         <tr class='text-center'>
           <th><?php echo $lang->team->account;?></th>
           <th><?php echo $lang->team->role;?></th>
-          <th class='w-100px'><?php echo $lang->team->days;?></th>
-          <th class='w-100px'><?php echo $lang->team->hours;?></th>
-          <th class='w-110px'><?php echo $lang->team->limited;?></th>
-          <th class="w-90px"> <?php echo $lang->actions;?></th>
+          <th class='c-days'><?php echo $lang->team->days;?></th>
+          <th class='c-hours'><?php echo $lang->team->hours;?></th>
+          <th class='c-limited'><?php echo $lang->team->limited;?></th>
+          <th class="c-actions"> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

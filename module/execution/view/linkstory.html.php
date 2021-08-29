@@ -39,17 +39,17 @@
             <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->story->title;?></th>
-          <th class='w-150px'><?php echo $lang->story->product;?></th>
-          <th class='w-150px'><?php echo $lang->story->module;?></th>
-          <th class='w-120px'><?php echo $lang->story->plan;?></th>
-          <th class='w-80px'><?php echo $lang->story->stage;?></th>
+          <th class='c-object'><?php echo $lang->story->product;?></th>
+          <th class='c-module'><?php echo $lang->story->module;?></th>
+          <th class='c-plan'><?php echo $lang->story->plan;?></th>
+          <th class='c-stage'><?php echo $lang->story->stage;?></th>
           <?php if($productType != 'normal'):?>
-          <th class='w-80px'><?php echo $lang->product->branchName[$productType];?></th>
+          <th class='c-branch'><?php echo $lang->product->branchName[$productType];?></th>
           <?php endif;?>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
-          <th class='w-80px text-right'><?php echo $lang->story->estimateAB;?></th>
+          <th class='c-estimate text-right'><?php echo $lang->story->estimateAB;?></th>
         </tr>
       </thead>
       <tbody>

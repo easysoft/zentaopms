@@ -1,3 +1,5 @@
 #projectTableList > tr.drop-not-allowed {opacity: 0.1 !important;}
 #projectList .c-actions {overflow: visible;}
 #projectTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
+
+.c-budget {width: 100px;}

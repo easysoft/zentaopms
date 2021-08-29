@@ -61,10 +61,10 @@
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->testtask->name);?></th>
           <th><?php common::printOrderLink('build', $orderBy, $vars, $lang->testtask->build);?></th>
-          <th class='w-user'><?php common::printOrderLink('owner', $orderBy, $vars, $lang->testtask->owner);?></th>
-          <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
-          <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
-          <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-user'><?php common::printOrderLink('owner', $orderBy, $vars, $lang->testtask->owner);?></th>
+          <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
+          <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>

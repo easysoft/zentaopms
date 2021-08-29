@@ -36,16 +36,16 @@
       <thead>
         <tr class='text-left'>
           <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='w-60px text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id);?></th>
+          <th class='c-id text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name);?></th>
-          <th class='w-150px'><?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo);?></th>
-          <th class='w-100px'><?php common::printOrderLink('engine', $orderBy, $vars, $lang->job->engine);?></th>
-          <th class='w-80px'><?php common::printOrderLink('frame', $orderBy, $vars, $lang->job->frame);?></th>
-          <th class='w-250px'><?php common::printOrderLink('server', $orderBy, $vars, $lang->job->buildSpec);?></th>
+          <th class='c-repo'><?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo);?></th>
+          <th class='c-engine'><?php common::printOrderLink('engine', $orderBy, $vars, $lang->job->engine);?></th>
+          <th class='c-frame'><?php common::printOrderLink('frame', $orderBy, $vars, $lang->job->frame);?></th>
+          <th class='c-server'><?php common::printOrderLink('server', $orderBy, $vars, $lang->job->buildSpec);?></th>
           <th class='text-left'><?php echo $lang->job->triggerType;?></th>
-          <th class='w-100px text-center'><?php common::printOrderLink('lastStatus', $orderBy, $vars, $lang->job->lastStatus);?></th>
-          <th class='w-130px'><?php common::printOrderLink('lastExec', $orderBy, $vars, $lang->job->lastExec);?></th>
-          <th class='w-120px c-actions-3'><?php echo $lang->actions;?></th>
+          <th class='c-status text-center'><?php common::printOrderLink('lastStatus', $orderBy, $vars, $lang->job->lastStatus);?></th>
+          <th class='c-exec'><?php common::printOrderLink('lastExec', $orderBy, $vars, $lang->job->lastExec);?></th>
+          <th class='c-actions-4'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

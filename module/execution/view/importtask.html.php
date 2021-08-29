@@ -32,13 +32,13 @@
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-150px'><?php echo $lang->execution->name ?></th>
-          <th class='w-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-name'><?php echo $lang->execution->name ?></th>
+          <th class='c-pri'><?php echo $lang->priAB;?></th>
           <th class='w-p30'><?php echo $lang->task->name;?></th>
-          <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
-          <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
-          <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
-          <th class='w-70px'><?php echo $lang->statusAB;?></th>
+          <th class='c-user'><?php echo $lang->task->assignedTo;?></th>
+          <th class='c-hour'><?php echo $lang->task->leftAB;?></th>
+          <th class='c-date'><?php echo $lang->task->deadlineAB;?></th>
+          <th class='c-status'><?php echo $lang->statusAB;?></th>
           <th><?php echo $lang->task->story;?></th>
         </tr>
       </thead>

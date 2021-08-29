@@ -33,16 +33,16 @@
     <table class='table table-fixed' id='projectList'>
       <thead>
         <tr>
-          <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
+          <th class='c-id'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->project->name;?></th>
           <?php if($status == 'openedbyme'):?>
-          <th class='w-80px'> <?php echo $lang->project->status;?></th>
+          <th class='c-status'> <?php echo $lang->project->status;?></th>
           <?php endif;?>
-          <th class='w-100px'><?php echo $lang->project->begin;?></th>
-          <th class='w-100px'><?php echo $lang->project->end;?></th>
-          <th class='text-right w-100px'><?php echo $lang->project->budget;?></th>
-          <th class='w-100px'><?php echo $lang->project->PM;?></th>
-          <th class='text-center w-180px'><?php echo $lang->actions;?></th>
+          <th class='c-date'><?php echo $lang->project->begin;?></th>
+          <th class='c-date'><?php echo $lang->project->end;?></th>
+          <th class='text-right c-budget'><?php echo $lang->project->budget;?></th>
+          <th class='c-user'><?php echo $lang->project->PM;?></th>
+          <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id='projectTableList'>

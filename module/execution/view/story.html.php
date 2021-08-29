@@ -183,19 +183,19 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <?php if($canOrder):?>
-            <th class='w-60px c-sort {sorter:false}'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->execution->orderAB);?></th>
+            <th class='c-sort {sorter:false}'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
             <?php endif;?>
-            <th class='c-pri {sorter:false}'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-            <th class='c-name {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->execution->storyTitle);?></th>
-            <th class='w-70px {sorter:false}'><?php common::printOrderLink('category',    $orderBy, $vars, $lang->story->category);?></th>
-            <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-pri {sorter:false}'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+            <th class='c-name {sorter:false}'><?php common::printOrderLink('title', $orderBy, $vars, $lang->execution->storyTitle);?></th>
+            <th class='c-category {sorter:false}'><?php common::printOrderLink('category', $orderBy, $vars, $lang->story->category);?></th>
+            <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-            <th class='c-estimate w-80px {sorter:false} text-right'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
-            <th class='c-status {sorter:false}'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='c-stage w-70px {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-            <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
-            <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
-            <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
+            <th class='c-estimate {sorter:false} text-right'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+            <th class='c-status {sorter:false}'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+            <th class='c-stage {sorter:false}'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
+            <th title='<?php echo $lang->story->taskCount?>' class='c-count'><?php echo $lang->story->taskCountAB;?></th>
+            <th title='<?php echo $lang->story->bugCount?>'  class='c-count'><?php echo $lang->story->bugCountAB;?></th>
+            <th title='<?php echo $lang->story->caseCount?>' class='c-count'><?php echo $lang->story->caseCountAB;?></th>
             <th class='c-actions-5 text-center {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>

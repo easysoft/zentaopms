@@ -26,9 +26,9 @@
   <table class='table tablesorter' id='groupList'>
     <thead>
       <tr>
-        <th class='w-id text-center'><?php echo $lang->group->id;?></th>
-        <th class='w-130px'><?php echo $lang->group->name;?></th>
-        <th class='w-300px'><?php echo $lang->group->desc;?></th>
+        <th class='c-id text-center'><?php echo $lang->group->id;?></th>
+        <th class='c-name'><?php echo $lang->group->name;?></th>
+        <th class='c-desc'><?php echo $lang->group->desc;?></th>
         <th><?php echo $lang->group->users;?></th>
         <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
       </tr>

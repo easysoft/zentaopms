@@ -14,9 +14,6 @@
 <?php js::set('mode', $mode);?>
 <?php js::set('total', $pager->recTotal);?>
 <?php js::set('rawMethod', $app->rawMethod);?>
-<style>
-.w-230px {width: 230px;}
-</style>
 <?php js::set('confirmDelete', $lang->testcase->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -51,17 +48,17 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-50px'>  <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
-          <th>                 <?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
+          <th class='c-pri'>      <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
+          <th>                    <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
           <?php if($type == 'assigntome'):?>
-          <th class='w-100px'> <?php common::printOrderLink('task',     $orderBy, $vars, $lang->testtask->common);?></th>
+          <th class='c-task'>     <?php common::printOrderLink('task',          $orderBy, $vars, $lang->testtask->common);?></th>
           <?php endif;?>
-          <th class='w-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
-          <th class='c-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-80px'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-          <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
-          <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-          <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-type'>     <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
+          <th class='c-user'>     <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-user'>     <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
+          <th class='c-full-date'><?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+          <th class='c-result'>   <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
+          <th class='c-status'>   <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-actions-5 text-center'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>

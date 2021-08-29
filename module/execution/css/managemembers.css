@@ -20,3 +20,6 @@
 
 #teamForm .table tr > td:first-child {padding-left: 10px;}
 #teamForm .table tr > td:last-child {padding-right: 10px;}
+
+.c-limited {width: 110px;}
+.c-actions {width: 90px;}

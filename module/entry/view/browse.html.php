@@ -20,9 +20,9 @@
           <?php $vars = "orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
           <th class='c-id'><?php  common::printOrderLink('id',   $orderBy, $vars, $lang->entry->id);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->entry->name);?></th>
-          <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->entry->code);?></th>
-          <th class='w-280px'><?php common::printOrderLink('key',  $orderBy, $vars, $lang->entry->key);?></th>
-          <th class='w-200px'><?php common::printOrderLink('ip',   $orderBy, $vars, $lang->entry->ip);?></th>
+          <th class='c-code'><?php common::printOrderLink('code', $orderBy, $vars, $lang->entry->code);?></th>
+          <th class='c-key'><?php common::printOrderLink('key',  $orderBy, $vars, $lang->entry->key);?></th>
+          <th class='c-ip'><?php common::printOrderLink('ip',   $orderBy, $vars, $lang->entry->ip);?></th>
           <th><?php echo common::printOrderLink('desc', $orderBy, $vars, $lang->entry->desc);?></th>
           <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>

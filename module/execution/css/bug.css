@@ -7,3 +7,5 @@
 .dropdown-list > li > a:hover,
 .dropdown-list > li > a:focus {color: #1a4f85; text-decoration: none; background-color: #ddd;}
 td.delayed {color: #fff; background: #e84e0f !important;}
+
+.c-severity {width: 80px;}

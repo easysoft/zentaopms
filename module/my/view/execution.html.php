@@ -32,7 +32,7 @@
   <table class="table has-sort-head table-fixed" id='executionList'>
     <thead>
       <tr class='text-left'>
-        <th class='w-id'><?php echo $lang->idAB;?></th>
+        <th class='c-id'><?php echo $lang->idAB;?></th>
         <th class='c-name text-left'><?php echo $lang->my->name;?></th>
         <?php if($config->systemMode == 'new'):?>
         <th class='c-name text-left'><?php echo $lang->my->projects;?></th>
@@ -42,9 +42,9 @@
         <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
-        <th class='w-70px'><?php echo $lang->my->hours;?></th>
-        <th class='w-90px'><?php echo $lang->execution->assignedToMe;?></th>
-        <th class='w-60px'><?php echo $lang->execution->progress;?></th>
+        <th class='c-hours'><?php echo $lang->my->hours;?></th>
+        <th class='c-user'><?php echo $lang->execution->assignedToMe;?></th>
+        <th class='c-progress'><?php echo $lang->execution->progress;?></th>
       </tr>
     </thead>
     <tbody>

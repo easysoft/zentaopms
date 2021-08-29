@@ -45,7 +45,7 @@
       <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
-          <th class="w-100px">
+          <th class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
@@ -53,25 +53,25 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-50px' title='<?php echo $lang->bug->severity;?>'> <?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-          <th class='w-50px' title='<?php echo $lang->bug->pri;?>'>      <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
-          <th>                <?php common::printOrderLink('title',       $orderBy, $vars, $lang->bug->title);?></th>
-          <th class='w-150px'><?php common::printOrderLink('productName', $orderBy, $vars, $lang->bug->product);?></th>
-          <th class='w-type'> <?php common::printOrderLink('type',        $orderBy, $vars, $lang->typeAB);?></th>
+          <th class='c-severity' title='<?php echo $lang->bug->severity;?>'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='c-pri' title='<?php echo $lang->bug->pri;?>'><?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+          <th class='c-product'><?php common::printOrderLink('productName', $orderBy, $vars, $lang->bug->product);?></th>
+          <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
           <?php if($type != 'openedBy'): ?>
-          <th class='w-90px'> <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
           <?php endif;?>
           <?php if($app->rawMethod == 'work'):?>
-          <th class='w-70px text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->bug->deadlineAB);?></th>
+          <th class='c-date text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->bug->deadlineAB);?></th>
           <?php endif;?>
           <?php if($type != 'assignedTo'): ?>
-          <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
+          <th class='c-user c-assignedTo'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <?php endif;?>
           <?php if($type != 'resolvedBy'): ?>
-          <th class='w-100px'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+          <th class='c-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <?php endif;?>
-          <th class='w-100px'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='c-actions-5'> <?php echo $lang->actions;?></th>
+          <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
+          <th class='c-actions-5'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <?php

@@ -161,18 +161,18 @@ $sessionString .= session_name() . '=' . session_id();
             <tbody>
               <?php if($doc->productName):?>
               <tr>
-                <th class='w-90px'><?php echo $lang->doc->product;?></th>
+                <th class='c-product'><?php echo $lang->doc->product;?></th>
                 <td><?php echo $doc->productName;?></td>
               </tr>
               <?php endif;?>
               <?php if($doc->executionName):?>
               <tr>
-                <th class='w-80px'><?php echo $lang->doc->execution;?></th>
+                <th class='c-execution'><?php echo $lang->doc->execution;?></th>
                 <td><?php echo $doc->executionName;?></td>
               </tr>
               <?php endif;?>
               <tr>
-                <th class='w-80px'><?php echo $lang->doc->lib;?></th>
+                <th class='c-lib'><?php echo $lang->doc->lib;?></th>
                 <td><?php echo $lib->name;?></td>
               </tr>
               <tr>

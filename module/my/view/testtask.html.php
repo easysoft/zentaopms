@@ -33,13 +33,13 @@
     <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
       <tr>
-        <th class='w-id'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
-        <th>                <?php common::printOrderLink('name',      $orderBy, $vars, $lang->testtask->name);?></th>
-        <th class='w-120px'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
-        <th class='w-120px'><?php common::printOrderLink('build',     $orderBy, $vars, $lang->testtask->build);?></th>
-        <th class='w-90px'> <?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->begin);?></th>
-        <th class='w-90px'> <?php common::printOrderLink('end',       $orderBy, $vars, $lang->testtask->end);?></th>
-        <th class='w-80px'> <?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
+        <th class='c-id'>       <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
+        <th>                    <?php common::printOrderLink('name',      $orderBy, $vars, $lang->testtask->name);?></th>
+        <th class='c-execution'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
+        <th class='c-build'>    <?php common::printOrderLink('build',     $orderBy, $vars, $lang->testtask->build);?></th>
+        <th class='c-date'>     <?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->begin);?></th>
+        <th class='c-date'>     <?php common::printOrderLink('end',       $orderBy, $vars, $lang->testtask->end);?></th>
+        <th class='c-status'>   <?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
         <th class='c-actions-6'><?php echo $lang->actions;?></th>
       </tr>
     </thead>

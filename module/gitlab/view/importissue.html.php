@@ -29,10 +29,10 @@
       <table class="table table-form with-border">
         <thead>
           <tr>
-            <th class='w-60px'><?php echo $lang->gitlab->gitlabIssue;?></th>
-            <th class='w-30px'><?php echo $lang->gitlab->objectType;?></th>
-            <th class='w-30px'><?php echo $lang->product->common;?></th>
-            <th class='w-30px'><?php echo $lang->execution->common;?></th>
+            <th class='c-issue'><?php echo $lang->gitlab->gitlabIssue;?></th>
+            <th class='c-type'><?php echo $lang->gitlab->objectType;?></th>
+            <th class='c-product'><?php echo $lang->product->common;?></th>
+            <th class='c-execution'><?php echo $lang->execution->common;?></th>
           </tr>
         </thead>
         <tbody>
