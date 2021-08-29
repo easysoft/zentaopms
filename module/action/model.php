@@ -945,21 +945,70 @@ class actionModel extends model
     {
         $this->app->loadLang('todo');
         $this->app->loadLang('stakeholder');
-        $requirements = array();
 
-        /* Get commiters. */
+        /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
+        $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
-        /* Group actions by objectType, and get there name field. */
-        foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
+        /* Get object names, object projects and requirements by actions. */
+        $relatedData    = $this->getRelatedDataByActions($actions);
+        $objectNames    = $relatedData['objectNames'];
+        $objectProjects = $relatedData['objectProjects'];
+        $requirements   = $relatedData['requirements'];
+
+        foreach($actions as $i => $action)
+        {
+            /* Add name field to the actions. */
+            $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
+
+            $projectID = isset($objectProjects[$action->objectType][$action->objectID]) ? $objectProjects[$action->objectType][$action->objectID] : 0;
+
+            $actionType = strtolower($action->action);
+            $objectType = strtolower($action->objectType);
+
+            $action->originalDate = $action->date;
+            $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
+            $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
+            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
+            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $requirements);
+
+            /* If action type is login or logout, needn't link. */
+            if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
+
+            /* Other actions, create a link. */
+            if(!$this->setObjectLink($action, $deptUsers))
+            {
+                unset($actions[$i]);
+                continue;
+            }
+
+            $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
+        }
+        return $actions;
+    }
+
+    /**
+     * Get related data by actions.
+     *
+     * @param  array    $actions
+     * @access public
+     * @return array
+     */
+    public function getRelatedDataByActions($actions)
+    {
+        $objectNames    = array();
+        $objectProjects = array();
+        $requirements   = array();
+
+        foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType]) and $objectType != 'makeup') continue;    // If no defination for this type, omit it.
 
-            $objectIdList = array_unique($objectIdList);
-            $table        = $objectType == 'makeup' ? '`zt_overtime`' : $this->config->objectTables[$objectType];
-            $field        = zget($this->config->action->objectNameFields, $objectType, '');
+            $table = $objectType == 'makeup' ? '`' . $this->config->db->prefix . 'overtime`' : $this->config->objectTables[$objectType];
+            $field = zget($this->config->action->objectNameFields, $objectType, '');
             if(empty($field)) continue;
+
             if($table != TABLE_TODO)
             {
                 $objectName    = array();
@@ -991,15 +1040,10 @@ class actionModel extends model
                         $objectName[$object->id] = $object->title;
                         if($object->type == 'requirement') $requirements[$object->id] = $object->id;
                     }
-                    $objectProject = array();
                 }
                 elseif($objectType == 'team')
                 {
-                    $objectInfo = $this->dao->select('id,team,type')->from(TABLE_PROJECT)
-                        ->where('id')->in($objectIdList)
-                        ->fetchAll();
-
-                    $objectProject = array();
+                    $objectInfo = $this->dao->select('id,team,type')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id] = $object->team;
@@ -1012,12 +1056,10 @@ class actionModel extends model
                         ->leftJoin(TABLE_USER)->alias('t2')->on("t1.{$field} = t2.account")
                         ->where('t1.id')->in($objectIdList)
                         ->fetchPairs();
-                    $objectProject = array();
                 }
                 else
                 {
-                    $objectName    = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
-                    $objectProject = array();
+                    $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
                 }
 
                 $objectNames[$objectType]    = $objectName;
@@ -1030,128 +1072,112 @@ class actionModel extends model
                 {
                     if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
                     if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-                    if($todo->private == 1 and $todo->account != $this->app->user->account)
-                    {
-                        $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
-                    }
-                    else
-                    {
-                        $objectNames[$objectType][$id] = $todo->name;
-                    }
+
+                    $objectNames[$objectType][$id] = $todo->name;
+                    if($todo->private == 1 and $todo->account != $this->app->user->account) $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
                 }
             }
         }
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
-        /* Get the same dept department. */
-        $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
-        foreach($actions as $i => $action)
+        $relatedData['objectNames']    = $objectNames;
+        $relatedData['objectProjects'] = $objectProjects;
+        $relatedData['requirements']   = $requirements;
+        return $relatedData;
+    }
+
+    /**
+     * Get object label.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  array  $requirements
+     * @access public
+     * @return string
+     */
+    public function getObjectLabel($objectType, $objectID, $requirements)
+    {
+        $actionObjectLabel = $objectType;
+        if(isset($this->lang->action->label->$objectType))
         {
-            /* Add name field to the actions. */
-            $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
+            $objectLabel = $this->lang->action->label->$objectType;
 
-            $projectID = isset($objectProjects[$action->objectType][$action->objectID]) ? $objectProjects[$action->objectType][$action->objectID] : 0;
+            /* Replace story to requirement. */
+            if(isset($requirements[$objectID]) and is_string($objectLabel)) $objectLabel = str_replace($this->lang->SRCommon, $this->lang->URCommon, $objectLabel);
 
-            $actionType = strtolower($action->action);
-            $objectType = strtolower($action->objectType);
-            $action->originalDate = $action->date;
-            $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
-            $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
-            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
-            $action->objectLabel  = $objectType;
-            if(isset($this->lang->action->label->$objectType))
+            if(!is_array($objectLabel)) $actionObjectLabel = $objectLabel;
+            if(is_array($objectLabel) and isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
+        }
+
+        if(isset($this->config->maxVersion) and $objectType == 'assetlib')
+        {
+            $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
+            if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};
+        }
+
+        return $actionObjectLabel;
+    }
+
+    /**
+     * Set objectLink
+     *
+     * @param  object   $action
+     * @param  array    $deptUsers
+     * @access public
+     * @return object|bool
+     */
+    public function setObjectLink($action, $deptUsers)
+    {
+        $action->objectLink  = '';
+        $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
+
+        if(strpos($action->objectLabel, '|') !== false)
+        {
+            list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
+
+            /* Fix bug #2961. */
+            $isLoginOrLogout = $action->objectType == 'user' and ($action->action == 'login' or $action->action == 'logout');
+            if(!common::hasPriv($moduleName, $methodName) and !$isLoginOrLogout) return false;
+
+            $action->objectLabel = $objectLabel;
+
+            if(isset($this->config->maxVersion)
+               and strpos($this->config->action->assetType, $action->objectType) !== false
+               and empty($action->project) and empty($action->product) and empty($action->execution))
             {
-                $objectLabel = $this->lang->action->label->$objectType;
-
-                /* Replace story to requirement. */
-                if(in_array($action->objectID, $requirements)) $objectLabel = str_replace($this->lang->SRCommon, $this->lang->URCommon, $objectLabel);
-
-                if(!is_array($objectLabel)) $action->objectLabel = $objectLabel;
-                if(is_array($objectLabel) and isset($objectLabel[$actionType])) $action->objectLabel = $objectLabel[$actionType];
-            }
-            if(isset($this->config->maxVersion) and $action->objectType == 'assetlib')
-            {
-                $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($action->objectID)->fetch('type');
-                if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $action->objectLabel = $this->lang->action->label->{$libType . 'assetlib'};
-            }
-
-            /* If action type is login or logout, needn't link. */
-            if($actionType == 'svncommited' or $actionType == 'gitcommited')
-            {
-                $action->actor = isset($commiters[$action->actor]) ? $commiters[$action->actor] : $action->actor;
-            }
-
-            /* Other actions, create a link. */
-            if(strpos($action->objectLabel, '|') !== false)
-            {
-                list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
-                $action->objectLink = '';
-
-                /* Fix bug #2961. */
-                $isLoginOrLogout = $action->objectType == 'user' and ($action->action == 'login' or $action->action == 'logout');
-
-                if(!common::hasPriv($moduleName, $methodName) and !$isLoginOrLogout)
+                $method = $this->config->action->assetViewMethod[$action->objectType];
+                if($action->objectType == 'doc')
                 {
-                    unset($actions[$i]);
-                    continue;
+                    $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
+                    $method       = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
                 }
 
-                if(isset($this->config->maxVersion)
-                   and strpos($this->config->action->assetType, $action->objectType) !== false
-                   and empty($action->project) and empty($action->product) and empty($action->execution))
-                {
-                    if($action->objectType == 'doc')
-                    {
-                        $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
-                        $method = $assetLibType == 'practice'  ? 'practiceView' : 'componentView';
-                    }
-                    else
-                    {
-                        $method = $this->config->action->assetViewMethod[$action->objectType];
-                    }
-
-                    $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
-                }
-                else
-                {
-                    if($action->objectType == 'doclib')
-                    {
-                        $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
-                        $docLib->objectID   = strpos('product,project,execution', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
-                        $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
-                        $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
-                    }
-                    elseif($action->objectType == 'user')
-                    {
-                        $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-                    }
-                    elseif($action->objectType == 'stakeholder' and empty($action->project))
-                    {
-                        $action->objectLink = '';
-                    }
-                    else
-                    {
-                        $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-                    }
-                }
-                $action->objectLabel = $objectLabel;
-            }
-            elseif($action->objectType == 'team')
-            {
-                $action->objectLink = '';
-                if($action->project) $action->objectLink = helper::createLink('project', 'team', 'projectID=' . $action->project);
-                if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
-                $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
+                $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
             }
             else
             {
-                $action->objectLink = '';
-                $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
-            }
+                $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
 
-            $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
+                if($action->objectType == 'doclib')
+                {
+                    $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
+                    $docLib->objectID   = strpos('product,project,execution', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
+                    $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
+                    $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                }
+                elseif($action->objectType == 'user')
+                {
+                    $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                }
+            }
         }
-        return $actions;
+        elseif($action->objectType == 'team')
+        {
+            if($action->project)   $action->objectLink = helper::createLink('project',   'team', 'projectID=' . $action->project);
+            if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
+        }
+
+        return $action;
     }
 
     /**
