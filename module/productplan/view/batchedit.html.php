@@ -20,12 +20,12 @@
     <table class="table table-form">
       <thead>
         <tr class='text-center'>
-          <th class='w-60px'><?php echo $lang->productplan->id?></th>
+          <th class='c-id'><?php echo $lang->productplan->id?></th>
           <th><?php echo $lang->productplan->title?></th>
           <th><?php echo $lang->productplan->desc?></th>
-          <th class='w-150px'><?php echo $lang->productplan->begin?></th>
-          <th class='w-150px'><?php echo $lang->productplan->end?></th>
-          <th class='w-100px'><?php echo $lang->productplan->future?></th>
+          <th class='c-full-date'><?php echo $lang->productplan->begin?></th>
+          <th class='c-full-date'><?php echo $lang->productplan->end?></th>
+          <th class='c-future'><?php echo $lang->productplan->future?></th>
         </tr>
       </thead>
       <tbody>

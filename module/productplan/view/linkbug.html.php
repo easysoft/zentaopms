@@ -31,7 +31,7 @@
           <th class='text-left'><?php echo $lang->bug->title;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
           <th class='c-user'><?php echo $lang->bug->assignedToAB;?></th>
-          <th class='w-80px'><?php echo $lang->bug->status;?></th>
+          <th class='c-status'><?php echo $lang->bug->status;?></th>
         </tr>
       </thead>
       <tbody class='text-center'>

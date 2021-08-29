@@ -28,14 +28,14 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-pri'><?php echo $lang->priAB;?></th>
-          <th class='w-150px'><?php echo $lang->story->plan;?></th>
-          <th class='w-150px'><?php echo $lang->story->module;?></th>
+          <th class='c-plan'><?php echo $lang->story->plan;?></th>
+          <th class='c-module'><?php echo $lang->story->module;?></th>
           <th class='text-left'><?php echo $lang->story->title;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
           <th class='c-user'><?php echo $lang->assignedToAB;?></th>
-          <th class='w-80px text-right'><?php echo $lang->story->estimateAB;?></th>
-          <th class='w-80px'><?php echo $lang->statusAB;?></th>
-          <th class='w-80px'><?php echo $lang->story->stageAB;?></th>
+          <th class='c-number text-right'><?php echo $lang->story->estimateAB;?></th>
+          <th class='c-status'><?php echo $lang->statusAB;?></th>
+          <th class='c-stage'><?php echo $lang->story->stageAB;?></th>
         </tr>
       </thead>
       <tbody>

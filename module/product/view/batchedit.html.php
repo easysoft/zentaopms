@@ -42,7 +42,7 @@
       <table class="table table-form">
         <thead>
           <tr>
-            <th class='w-60px'><?php echo $lang->idAB;?></th>
+            <th class='c-id'><?php echo $lang->idAB;?></th>
             <?php
             $width = '';
             $full  = 'width: 100%';
@@ -53,17 +53,17 @@
             }
             ?>
             <?php if($this->config->systemMode == 'new'):?>
-            <th class='w-150px<?php echo zget($visibleFields, 'program', ' hidden') . zget($requiredFields, 'program', '', ' required');?>'><?php echo $lang->product->program;?></th>
+            <th class='c-program<?php echo zget($visibleFields, 'program', ' hidden') . zget($requiredFields, 'program', '', ' required');?>'><?php echo $lang->product->program;?></th>
             <?php endif;?>
             <th class='required <?php echo $width;?>' style="<?php echo $full;?>"><?php echo $lang->product->name;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'line',   ' hidden') . zget($requiredFields, 'line',   '', ' required');?>'><?php echo $lang->product->line;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->product->PO;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->product->QD;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->product->RD;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'type',   ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->product->type;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->product->status;?></th>
-            <th class='w-200px<?php echo zget($visibleFields, 'desc',   ' hidden') . zget($requiredFields, 'desc',   '', ' required');?>'><?php echo $lang->product->desc;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'acl',    ' hidden');?>'><?php echo $lang->product->acl;?></th>
+            <th class='c-line<?php echo zget($visibleFields, 'line',     ' hidden') . zget($requiredFields, 'line',   '', ' required');?>'><?php echo $lang->product->line;?></th>
+            <th class='c-user-box<?php echo zget($visibleFields, 'PO',   ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->product->PO;?></th>
+            <th class='c-user-box<?php echo zget($visibleFields, 'QD',   ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->product->QD;?></th>
+            <th class='c-user-box<?php echo zget($visibleFields, 'RD',   ' hidden') . zget($requiredFields, 'RD',     '', ' required');?>'><?php echo $lang->product->RD;?></th>
+            <th class='c-type<?php echo zget($visibleFields, 'type',     ' hidden') . zget($requiredFields, 'type',   '', ' required');?>'><?php echo $lang->product->type;?></th>
+            <th class='c-status<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->product->status;?></th>
+            <th class='c-desc<?php echo zget($visibleFields, 'desc',     ' hidden') . zget($requiredFields, 'desc',   '', ' required');?>'><?php echo $lang->product->desc;?></th>
+            <th class='c-acl<?php echo zget($visibleFields, 'acl',       ' hidden');?>'><?php echo $lang->product->acl;?></th>
           </tr>
         </thead>
         <tbody>

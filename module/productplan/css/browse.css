@@ -14,3 +14,9 @@ td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellip
 .table td.has-child > .task-toggle.collapsed > .icon {-ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
+
+.c-title {width: 160px;}
+.c-branch {width: 100px;}
+.c-story {width: 80px;}
+.c-execution {width: 70px;}
+.c-bug, .c-hour {width: 60px;}

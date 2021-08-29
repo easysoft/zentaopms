@@ -54,16 +54,16 @@
           <?php endif;?>
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
-        <th class='w-160px'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+        <th class='c-title'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
         <?php if($this->session->currentProductType != 'normal'):?>
-        <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
+        <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
         <?php endif;?>
-        <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
-        <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-        <th class='w-80px'><?php echo $lang->productplan->stories;?></th>
-        <th class='w-60px'><?php echo $lang->productplan->bugs;?></th>
-        <th class='w-60px'><?php echo $lang->productplan->hour;?></th>
-        <th class='w-70px'><?php echo $lang->productplan->execution;?></th>
+        <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
+        <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
+        <th class='c-story'><?php echo $lang->productplan->stories;?></th>
+        <th class='c-bug'><?php echo $lang->productplan->bugs;?></th>
+        <th class='c-hour'><?php echo $lang->productplan->hour;?></th>
+        <th class='c-execution'><?php echo $lang->productplan->execution;?></th>
         <th><?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();

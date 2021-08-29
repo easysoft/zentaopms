@@ -31,19 +31,19 @@
     <table class="table table-fixed">
       <thead>
         <tr>
-          <th class='c-id w-50px'><?php echo $lang->idAB;?></th>
+          <th class='c-id'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->project->name;?></th>
           <?php if($config->systemMode == 'new'):?>
-          <th class='w-150px'><?php echo $lang->program->common;?></th>
+          <th class='c-program'><?php echo $lang->program->common;?></th>
           <?php endif;?>
-          <th class='w-80px text-left'><?php echo $lang->project->PM;?></th>
-          <th class='w-80px'><?php echo $lang->project->begin;?></th>
-          <th class='w-80px'><?php echo $lang->project->end;?></th>
-          <th class='w-70px'><?php echo $lang->project->status;?></th>
-          <th class="w-80px text-center"><?php echo $lang->project->budget;?></th>
-          <th class="w-60px text-center"><?php echo $lang->project->estimate;?></th>
-          <th class="w-60px text-center"><?php echo $lang->project->consume;?></th>
-          <th class='w-50px'><?php echo $lang->project->progress;?></th>
+          <th class='c-user text-left'><?php echo $lang->project->PM;?></th>
+          <th class='c-date'><?php echo $lang->project->begin;?></th>
+          <th class='c-date'><?php echo $lang->project->end;?></th>
+          <th class='c-status'><?php echo $lang->project->status;?></th>
+          <th class="c-budget text-center"><?php echo $lang->project->budget;?></th>
+          <th class="c-number text-center"><?php echo $lang->project->estimate;?></th>
+          <th class="c-number text-center"><?php echo $lang->project->consume;?></th>
+          <th class='c-progress'><?php echo $lang->project->progress;?></th>
         </tr>
       </thead>
       <tbody>

@@ -58,7 +58,7 @@ a.showMoreImage:hover {opacity: 1;}
 .c-company, .c-budget {width: 80px;}
 .c-status, .c-type, .c-user, .c-date, .c-encode, .c-resolution, .c-pri-box {width: 100px;}
 .c-object-type {width: 130px;}
-.c-full-date, .c-mobile, .c-email, .c-text, .c-subject, .c-assigned-box {width: 150px;}
+.c-full-date, .c-mobile, .c-email, .c-text, .c-subject, .c-assigned-box, .c-user-box {width: 150px;}
 .c-module, .c-date-box {width: 180px;}
 .c-ip {width: 200px;}
 .c-object {width: 250px;}
