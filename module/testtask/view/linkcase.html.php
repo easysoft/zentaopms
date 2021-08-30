@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php common::printBack($this->session->testtaskList, 'btn btn-link');?>
+    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
     <div class='divider'></div>
     <?php
     $lang->testtask->linkCase = $lang->testtask->linkByStory;

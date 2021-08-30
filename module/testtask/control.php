@@ -94,8 +94,10 @@ class testtask extends control
     public function browse($productID = 0, $branch = '', $type = 'local,totalStatus', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $beginTime = 0, $endTime = 0)
     {
         /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
+        $uri = $this->app->getURI(true);
+        $this->session->set('testtaskList', $uri, 'qa');
+        $this->session->set('reportList',   $uri, 'qa');
+        $this->session->set('buildList',    $uri, 'execution');
 
         $scopeAndStatus = explode(',', $type);
         $this->session->set('testTaskVersionScope', $scopeAndStatus[0]);
