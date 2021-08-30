@@ -898,7 +898,7 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0)
     {
-        $this->session->set('productList', $this->app->getURI(true), 'product');
+        $this->session->set('productList', $this->app->getURI(true) . "#app={$this->app->openApp}", 'product');
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);

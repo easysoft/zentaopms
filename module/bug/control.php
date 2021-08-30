@@ -724,6 +724,7 @@ class bug extends control
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->session->set('storyList', '', 'product');
+        $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->openApp}", 'project');
         $this->bug->checkBugExecutionPriv($bug);
 
         /* Update action. */
