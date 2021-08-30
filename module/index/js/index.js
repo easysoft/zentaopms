@@ -668,7 +668,7 @@ $.extend(
             if(reg.test(objectValue) || objectType == 'all')
             {
                 var searchLink = createLink('search', 'index');
-                searchLink += (searchLink.indexOf('?') ? '&' : '?') + 'words=' + objectValue;
+                searchLink += (searchLink.indexOf('?') >= 0 ? '&' : '?') + 'words=' + objectValue;
                 $.apps.open(searchLink);
             }
             else
