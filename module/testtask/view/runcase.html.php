@@ -130,10 +130,6 @@ $(function()
         $('#casesResults table caption .result-tip').html($('#resultTip').html());
     });
 });
-<?php
-$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
-$sessionString .= session_name() . '=' . session_id();
-?>
-var sessionString = '<?php echo $sessionString;?>';
+var sessionString = '<?php echo session_name() . '=' . session_id();?>';
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>

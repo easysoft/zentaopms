@@ -53,8 +53,9 @@
 <script>
 function setCharset(charset)
 {
-    var param = (config.requestType == 'PATH_INFO' ? '?' : '&') + 'charset=' + charset;
-    var link  = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + param;
+    var link  = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left');
+    link     += link.indexOf('?') >= 0 ? '&' : '?';
+    link     += 'charset=' + charset;
     location.href = link;
 }
 </script>

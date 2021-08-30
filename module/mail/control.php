@@ -436,7 +436,11 @@ class mail extends control
         {
             if(empty($_POST)) die(js::reload('parent'));
             $idList = join('|', $this->post->mailIDList);
-            die(js::confirm($this->lang->mail->confirmDelete, inlink('batchDelete', "confirm=yes") . ($this->config->requestType == 'GET' ? '&' : '?') . "idList=$idList"));
+
+            $confirmLink  = inlink('batchDelete', "confirm=yes");
+            $confirmLink .= substr($confirmLink, '?') === false ? '?' : '&';
+            $confirmLink .= "idList=$idList";
+            die(js::confirm($this->lang->mail->confirmDelete, $confirmLink));
         }
         $idList = array();
         if(isset($_GET['idList'])) $idList = explode('|', $_GET['idList']);
