@@ -327,7 +327,8 @@ js::set('moduleID', $moduleID);
             <td colspan="3" class="text-center form-actions">
               <?php $browseLink = $this->session->bugList ? $this->session->bugList : $this->inlink('browse', "productID=$productID");?>
               <?php echo html::submitButton();?>
-              <?php echo html::linkButton($lang->goback, $browseLink, 'self', '', 'btn btn-wide');?>
+              <?php if($caseID) echo html::linkButton($lang->goback, $browseLink, 'self', '', 'btn btn-wide');?>
+              <?php if(!$caseID) echo html::backButton();?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
               <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', empty($testtask) ? 0 : $testtask->id);?>
             </td>
