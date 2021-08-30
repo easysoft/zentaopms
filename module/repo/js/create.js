@@ -26,6 +26,7 @@ $(function()
         $('#name').val($option.data('name'));
     });
 
+    $('#gitlabHost').change();
 });
 
 function scmChanged(scm)

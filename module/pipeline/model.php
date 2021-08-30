@@ -59,7 +59,7 @@ class pipelineModel extends model
             ->where('deleted')->eq('0')
             ->AndWhere('type')->eq($type)
             ->orderBy('id')->fetchPairs('id', 'name');
-        $pipeline = array('' => '') + $pipeline;
+        $pipeline = $pipeline;
         return $pipeline;
     }
 
