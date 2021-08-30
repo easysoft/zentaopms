@@ -367,7 +367,7 @@ class commonModel extends model
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
             if(!isset($config->proVersion) and $objectType == 'effort') continue;
-            if($config->systemMode == 'classic' and ($objectType == 'project' or $objectType == 'porgram')) continue;
+            if($config->systemMode == 'classic' and ($objectType == 'project' or $objectType == 'program')) continue;
 
             /* Change icon when object type is execution and mode is classic. */
             if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
