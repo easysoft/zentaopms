@@ -132,6 +132,25 @@ class mr extends control
     }
 
     /**
+     * Crontab sync MR from GitLab API to Zentao database, default time 5 minutes to execute once.
+     *
+     * @access public
+     * @return void
+     */
+    public function syncMR()
+    {
+        $this->mr->getList();
+
+        if(dao::isError())
+        {
+            echo json_encode(dao::getError());
+            return true;
+        }
+
+        echo 'success';
+    }
+
+    /**
      * AJAX: Get MR target projects.
      *
      * @param  int    $gitlabID
