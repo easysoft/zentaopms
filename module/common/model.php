@@ -390,7 +390,7 @@ class commonModel extends model
                 }
 
                 $showCreateList = true;
-                $isOnlyBody     = strpos('program|project|product', $objectType) === false;
+                $isOnlyBody     = strpos('effort|doc', $objectType) !== false;
                 $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
 
                 $params = '';
