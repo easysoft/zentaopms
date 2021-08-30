@@ -80,7 +80,7 @@ foreach($products as $programID => $programProducts)
 
         if($product->status == 'normal' and $product->PO == $this->app->user->account)
         {
-            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'") . '</li>';
+            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myProduct';
 
@@ -88,7 +88,7 @@ foreach($products as $programID => $programProducts)
         }
         else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
         {
-            $normalProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'") . '</li>';
+            $normalProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
@@ -96,7 +96,7 @@ foreach($products as $programID => $programProducts)
         }
         else if($product->status == 'closed')
         {
-            $closedProductsHtml .= html::a($linkHtml, $preFix . $productName, '', "class='$selected' title='" . $preFix . $productName . "' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$openApp'");
+            $closedProductsHtml .= html::a($linkHtml, $preFix . $productName, '', "class='$selected' title='" . $preFix . $productName . "' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'");
 
             if($selected == 'selected') $tabActive = 'closed';
         }

@@ -42,7 +42,7 @@ class execution extends control
 
         $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers');
-        if(!in_array($this->methodName, $skipCreateStep) and $this->app->openApp == 'execution')
+        if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
         {
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
@@ -970,7 +970,7 @@ class execution extends control
      */
     public function testreport($executionID = 0, $objectType = 'execution', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($this->session->project);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
         echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
@@ -1210,20 +1210,20 @@ class execution extends control
     public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0)
     {
         /* Set menu. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             if(!empty($copyExecutionID)) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch('project');
 
             $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
             $this->project->setMenu($projectID);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $selectedExecutionID = $executionID;
             if($this->config->systemMode == 'new') $selectedExecutionID = key($this->executions);
             $this->execution->setMenu($selectedExecutionID);
         }
-        elseif($this->app->openApp == 'doc')
+        elseif($this->app->tab == 'doc')
         {
             unset($this->lang->doc->menu->execution['subMenu']);
         }
@@ -1304,7 +1304,7 @@ class execution extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $executionID));
 
-            if($this->app->openApp == 'doc')
+            if($this->app->tab == 'doc')
             {
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=execution")));
             }
@@ -1333,7 +1333,7 @@ class execution extends control
             $this->lang->execution->type = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->type);
         }
 
-        $this->view->title           = (($this->app->openApp == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
+        $this->view->title           = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
         $this->view->executions      = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups          = $this->loadModel('group')->getPairs();
@@ -1355,7 +1355,7 @@ class execution extends control
         $this->view->copyExecutionID = $copyExecutionID;
         $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->from            = $this->app->openApp;
+        $this->view->from            = $this->app->tab;
         $this->display();
     }
 
@@ -1522,7 +1522,7 @@ class execution extends control
             die(js::locate($this->session->executionList, 'parent'));
         }
 
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->project->setMenu($this->session->project);
             $this->view->project = $this->project->getById($this->session->project);
@@ -1567,7 +1567,7 @@ class execution extends control
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
         $this->view->rdUsers         = $rdUsers;
-        $this->view->from            = $this->app->openApp;
+        $this->view->from            = $this->app->tab;
         $this->display();
     }
 
@@ -2366,11 +2366,11 @@ class execution extends control
         $this->loadModel('product');
 
         /* Get projects, executions and products. */
-        $object     = $this->project->getByID($objectID, $this->app->openApp == 'project' ? 'project' : 'sprint,stage');
+        $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage');
         $products   = $this->project->getProducts($objectID);
-        $browseLink = $this->createLink($this->app->openApp == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
+        $browseLink = $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
 
-        $this->session->set('storyList', $this->app->getURI(true), $this->app->openApp); // Save session.
+        $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
 
         /* Only execution can have no products. */
         if(empty($products))
@@ -2860,7 +2860,7 @@ class execution extends control
         $this->app->loadLang('product');
         $this->app->loadLang('programplan');
 
-        $from = $this->app->openApp;
+        $from = $this->app->tab;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
         if($from == 'project')
         {

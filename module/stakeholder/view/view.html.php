@@ -31,7 +31,7 @@ $createLink = $this->createLink('stakeholder', 'create', "projectID=$user->objec
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('stakeholder', 'create')) echo html::a($createLink, "<i class='icon icon-plus'></i> {$lang->stakeholder->create}", '', "class='btn btn-primary' data-app=$app->openApp");?>
+    <?php if(common::hasPriv('stakeholder', 'create')) echo html::a($createLink, "<i class='icon icon-plus'></i> {$lang->stakeholder->create}", '', "class='btn btn-primary' data-app=$app->tab");?>
   </div>
 </div>
 <div class="main-row" id="mainContent">

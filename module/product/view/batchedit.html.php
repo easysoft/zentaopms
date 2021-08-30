@@ -104,7 +104,7 @@
           <tr>
             <td colspan="<?php echo count($visibleFields) + 4?>" class="text-center form-actions">
               <?php echo html::submitButton();?>
-              <?php $browseLink = $this->app->openApp == 'product' ? $this->createLink('product', 'all') : $this->createLink('program', 'product', "programID=$programID");?>
+              <?php $browseLink = $this->app->tab == 'product' ? $this->createLink('product', 'all') : $this->createLink('program', 'product', "programID=$programID");?>
               <?php echo html::a($browseLink, $lang->goback, '', 'class="btn btn-back btn-wide"');?>
             </td>
           </tr>

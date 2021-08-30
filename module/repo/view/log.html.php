@@ -19,14 +19,14 @@
     <div class="page-title">
       <strong>
       <?php
-      echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
+      echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'");
       $paths= explode('/', $entry);
       $fileName = array_pop($paths);
       $postPath = '';
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';
-          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID&ojbectID=$objectID&entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
+          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID&ojbectID=$objectID&entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->tab}'");
       }
       echo '/' . ' ' . $fileName;
       ?>
@@ -40,9 +40,9 @@
     <ul class="nav nav-default">
       <?php $encodeEntry = $this->repo->encodePath($entry);?>
       <li><a><?php echo $lang->repo->log;?></a></li>
-      <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodeEntry&revision=$revision"), $lang->repo->view, '', "data-app='{$app->openApp}'");?></li>
+      <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodeEntry&revision=$revision"), $lang->repo->view, '', "data-app='{$app->tab}'");?></li>
       <?php if($info->kind == 'file'):?>
-      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID*&entry=$encodeEntry&revision=$revision"), $lang->repo->blame, '', "data-app='{$app->openApp}'");?></li>
+      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID*&entry=$encodeEntry&revision=$revision"), $lang->repo->blame, '', "data-app='{$app->tab}'");?></li>
       <li><?php echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodeEntry&fromRevision=$revision"), $lang->repo->download, 'hiddenwin');?></li>
       <?php endif;?>
     </ul>
@@ -70,7 +70,7 @@
               <label></label>
             </div>
           </td>
-          <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=" . $log->revision), substr($log->revision, 0, 10), '', "data-app='{$app->openApp}'");?></td>
+          <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=" . $log->revision), substr($log->revision, 0, 10), '', "data-app='{$app->tab}'");?></td>
           <?php if($repo->SCM != 'Subversion'):?>
           <td><?php echo $log->commit?></td>
           <?php endif;?>

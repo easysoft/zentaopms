@@ -496,7 +496,7 @@ class baseHTML
             $label = $lang->goback;
         }
 
-        $tab           = $_COOKIE['openApp'];
+        $tab           = $_COOKIE['tab'];
         $referer       = strtolower($_SERVER['HTTP_REFERER']);
         $refererParts  = parse_url($referer);
         $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];

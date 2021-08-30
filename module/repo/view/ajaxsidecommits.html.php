@@ -37,7 +37,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
             <label></label>
           </div>
         </td>
-        <td class='versions'><span class="revision"><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$log->revision}" . $pathInfo), $repo->SCM != 'Subversion' ? substr($log->revision, 0, 10) : $log->revision, '', "data-app='{$this->app->openApp}'");?></span></td>
+        <td class='versions'><span class="revision"><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$log->revision}" . $pathInfo), $repo->SCM != 'Subversion' ? substr($log->revision, 0, 10) : $log->revision, '', "data-app='{$this->app->tab}'");?></span></td>
         <?php if($repo->SCM != 'Subversion'):?>
         <td><?php echo $log->commit?></td>
         <?php endif;?>
@@ -51,7 +51,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
   </table>
   <div class='table-footer'>
     <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($revisions) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
-    <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&revision=HEAD&type=$logType"), $lang->repo->allLog, '', "class='allLogs' data-app='{$this->app->openApp}'");?>
+    <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&revision=HEAD&type=$logType"), $lang->repo->allLog, '', "class='allLogs' data-app='{$this->app->tab}'");?>
     <div class='pull-right'>
       <div class='btn-group'>
         <?php

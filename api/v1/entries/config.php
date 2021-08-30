@@ -6,7 +6,7 @@
  * The config entry point of zentaopms
  * Version 1
  */
-class configEntry extends entry 
+class configEntry extends baseEntry
 {
     public function get($name)
     {

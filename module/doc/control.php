@@ -247,7 +247,7 @@ class doc extends control
             }
 
             $browseLink = $this->createLink('doc', 'index');
-            if(in_array($this->app->openApp, array('product', 'project', 'execution')))
+            if(in_array($this->app->tab, array('product', 'project', 'execution')))
             {
                 $objectType = $lib->type;
                 $objectID   = $lib->{$objectType};
@@ -296,17 +296,17 @@ class doc extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        if($this->app->openApp == 'product')
+        if($this->app->tab == 'product')
         {
             $this->product->setMenu($objectID);
             unset($this->lang->product->menu->doc['subMenu']);
         }
-        else if($this->app->openApp == 'project')
+        else if($this->app->tab == 'project')
         {
             $this->project->setMenu($objectID);
             unset($this->lang->project->menu->doc['subMenu']);
         }
-        else if($this->app->openApp == 'execution')
+        else if($this->app->tab == 'execution')
         {
             $this->execution->setMenu($objectID);
             unset($this->lang->execution->menu->doc['subMenu']);
@@ -390,22 +390,22 @@ class doc extends control
         $type = $lib->type;
 
         /* Set menus. */
-        if($this->app->openApp == 'product')
+        if($this->app->tab == 'product')
         {
             $this->product->setMenu($objectID);
             unset($this->lang->product->menu->doc['subMenu']);
         }
-        else if($this->app->openApp == 'project')
+        else if($this->app->tab == 'project')
         {
             $this->project->setMenu($objectID);
             unset($this->lang->project->menu->doc['subMenu']);
         }
-        else if($this->app->openApp == 'execution')
+        else if($this->app->tab == 'execution')
         {
             $this->execution->setMenu($objectID);
             unset($this->lang->execution->menu->doc['subMenu']);
         }
-        else if($this->app->openApp == 'my')
+        else if($this->app->tab == 'my')
         {
             $this->lang->doc->menu     = $this->lang->my->menu->contribute;
             $this->lang->modulePageNav = '';
@@ -770,8 +770,8 @@ class doc extends control
         $libs     = $this->doc->getLibsByObject($type, $objectID);
         $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
 
-        $openApp = strpos('doc,product,project,execution', $this->app->openApp) !== false ? $this->app->openApp : 'doc';
-        if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
+        $tab = strpos('doc,product,project,execution', $this->app->tab) !== false ? $this->app->tab : 'doc';
+        if($tab != 'doc') $this->loadModel($tab)->setMenu($objectID);
 
         $table  = $this->config->objectTables[$type];
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();

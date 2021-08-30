@@ -197,6 +197,7 @@ class api extends router
 
         $entryName = $this->entry . 'Entry';
         $entry = new $entryName();
+
         call_user_func_array(array($entry, $this->action), $this->params);
     }
 

@@ -27,7 +27,7 @@ class story extends control
         $this->loadModel('user');
         $this->loadModel('action');
 
-        if($this->app->openApp == 'project') $this->app->rawModule = 'projectstory';
+        if($this->app->tab == 'project') $this->app->rawModule = 'projectstory';
     }
 
     /**
@@ -49,16 +49,16 @@ class story extends control
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
         $this->story->replaceURLang($type);
-        if($this->app->openApp == 'product')
+        if($this->app->tab == 'product')
         {
             $this->product->setMenu($productID);
         }
-        else if($this->app->openApp == 'project')
+        else if($this->app->tab == 'project')
         {
             $objectID = empty($objectID) ? $this->session->project : $objectID;
             $this->project->setMenu($objectID);
         }
-        else if($this->app->openApp == 'execution')
+        else if($this->app->tab == 'execution')
         {
             $objectID = empty($objectID) ? $this->session->execution : $objectID;
             $this->execution->setMenu($objectID);
@@ -164,7 +164,7 @@ class story extends control
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
                 $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&type=$type&orderBy=id_desc");
-                if($this->session->storyList and $this->app->openApp != 'product') $response['locate'] = $this->session->storyList;
+                if($this->session->storyList and $this->app->tab != 'product') $response['locate'] = $this->session->storyList;
             }
             else
             {
@@ -528,15 +528,15 @@ class story extends control
 
         /* Set menu. */
         $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
         }
-        elseif($this->app->openApp == 'product')
+        elseif($this->app->tab == 'product')
         {
             $this->product->setMenu($product->id, $story->branch);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($this->session->execution);
         }
@@ -647,23 +647,23 @@ class story extends control
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
         $this->story->replaceURLang($storyType);
 
-        if($this->app->openApp == 'product')
+        if($this->app->tab == 'product')
         {
             $this->product->setMenu($productID);
         }
-        else if($this->app->openApp == 'project')
+        else if($this->app->tab == 'project')
         {
             $this->project->setMenu($executionID);
         }
-        else if($this->app->openApp == 'execution')
+        else if($this->app->tab == 'execution')
         {
             $this->execution->setMenu($executionID);
         }
-        else if($this->app->openApp == 'qa')
+        else if($this->app->tab == 'qa')
         {
             $this->loadModel('qa')->setMenu('', $productID);
         }
-        else if($this->app->openApp == 'my')
+        else if($this->app->tab == 'my')
         {
             $this->loadModel('my')->setMenu();
             if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
@@ -826,7 +826,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            $module = $this->app->openApp == 'project' ? 'projectstory' : 'story';
+            $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
@@ -898,7 +898,7 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0)
     {
-        $this->session->set('productList', $this->app->getURI(true) . "#app={$this->app->openApp}", 'product');
+        $this->session->set('productList', $this->app->getURI(true) . "#app={$this->app->tab}", 'product');
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
@@ -918,7 +918,7 @@ class story extends control
         $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
 
         /* Set the menu. */
-        $from = $this->app->openApp;
+        $from = $this->app->tab;
         $this->product->setMenu($story->product, $story->branch);
 
         if($from == 'execution')
@@ -1042,16 +1042,16 @@ class story extends control
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->app->rawModule = 'projectstory';
             $this->loadModel('project')->setMenu($this->session->project);
         }
-        elseif($this->app->openApp == 'product')
+        elseif($this->app->tab == 'product')
         {
             $this->product->setMenu($product->id, $story->branch);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($this->session->execution);
         }
@@ -1236,7 +1236,7 @@ class story extends control
         if(isset($skipStory) || isset($closedStory)) echo js::alert($errorTips);
 
         /* The stories of a product. */
-        if($this->app->openApp == 'product')
+        if($this->app->tab == 'product')
         {
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
@@ -1255,7 +1255,7 @@ class story extends control
         }
         else
         {
-            if($this->app->openApp == 'project')
+            if($this->app->tab == 'project')
             {
                 $this->project->setMenu($this->session->project);
                 $this->view->title = $this->lang->story->batchEdit;
@@ -1589,11 +1589,11 @@ class story extends control
      */
     public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc')
     {
-        $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->openApp, 'product');
-        $this->session->set('caseList', $this->app->getURI(true), $this->app->openApp);
+        $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
 
         $this->loadModel('testcase');
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
             $this->app->rawModule = 'qa';

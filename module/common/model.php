@@ -578,24 +578,24 @@ class commonModel extends model
     /**
      * Print upper left corner home button.
      *
-     * @param  string $openApp
+     * @param  string $tab
      * @static
      * @access public
      * @return void
      */
-    public static function printHomeButton($openApp)
+    public static function printHomeButton($tab)
     {
         global $lang;
         global $config;
 
-        if(!$openApp) return;
-        $icon = zget($lang->navIcons, $openApp, '');
+        if(!$tab) return;
+        $icon = zget($lang->navIcons, $tab, '');
 
-        if(!in_array($openApp, array('program', 'product', 'project')))
+        if(!in_array($tab, array('program', 'product', 'project')))
         {
-            $nav = $lang->mainNav->$openApp;
+            $nav = $lang->mainNav->$tab;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($openApp == 'execution')
+            if($tab == 'execution')
             {
                 if($config->systemMode == 'new')     $currentMethod = 'executionKanban';
                 if($config->systemMode == 'classic') $currentMethod = 'all';
@@ -603,15 +603,15 @@ class commonModel extends model
         }
         else
         {
-            $currentModule = $openApp;
-            if($openApp == 'program' or $openApp == 'project') $currentMethod = 'browse';
-            if($openApp == 'product') $currentMethod = 'all';
+            $currentModule = $tab;
+            if($tab == 'program' or $tab == 'project') $currentMethod = 'browse';
+            if($tab == 'product') $currentMethod = 'all';
         }
 
-        if($config->systemMode == 'classic' and $openApp == 'execution') $icon = zget($lang->navIcons, 'project', '');
+        if($config->systemMode == 'classic' and $tab == 'execution') $icon = zget($lang->navIcons, 'project', '');
         $link = helper::createLink($currentModule, $currentMethod);
-        $className = $openApp == 'devops' ? 'btn num' : 'btn';
-        $html = $link ? html::a($link, "$icon {$lang->$openApp->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$openApp->common}";
+        $className = $tab == 'devops' ? 'btn num' : 'btn';
+        $html = $link ? html::a($link, "$icon {$lang->$tab->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$tab->common}";
 
         echo "<div class='btn-group header-btn'>" . $html . '</div>';
     }
@@ -702,11 +702,11 @@ class commonModel extends model
     {
         global $app, $lang, $config;
 
-        /* Set main menu by openApp and module. */
+        /* Set main menu by app tab and module. */
         self::setMainMenu();
 
         $activeMenu = '';
-        $openApp = $app->openApp;
+        $tab = $app->tab;
 
         $isTutorialMode = commonModel::isTutorialMode();
         $currentModule = $app->rawModule;
@@ -756,7 +756,7 @@ class commonModel extends model
                     $target = '';
                     $module = '';
                     $method = '';
-                    $link   = commonModel::createMenuLink($menuItem, $openApp);
+                    $link   = commonModel::createMenuLink($menuItem, $tab);
                     if(is_array($menuItem->link))
                     {
                         if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -805,7 +805,7 @@ class commonModel extends model
                                 $subActive  = 'active';
                                 $label      = $subLabel;
                             }
-                            $dropMenu .= "<li class='$subActive' data-id='$subLabel'>" . html::a($subLink, $subLabel, '', "data-app='$openApp'") . '</li>';
+                            $dropMenu .= "<li class='$subActive' data-id='$subLabel'>" . html::a($subLink, $subLabel, '', "data-app='$tab'") . '</li>';
                         }
 
                         if(empty($dropMenu)) continue;
@@ -814,7 +814,7 @@ class commonModel extends model
                         $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
                     }
 
-                    $misc = (isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module) ? "data-app='$openApp'" : '';
+                    $misc = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? "data-app='$tab'" : '';
                     $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
 
                     echo $menuItemHtml;
@@ -876,9 +876,9 @@ class commonModel extends model
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
 
-        $openApp = $app->openApp;
+        $tab = $app->tab;
 
-        if(!isset($lang->$openApp->menu))
+        if(!isset($lang->$tab->menu))
         {
             echo "<ul></ul>";
             return;
@@ -937,7 +937,7 @@ class commonModel extends model
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = commonModel::createMenuLink($menuItem, $openApp);
+                $link   = commonModel::createMenuLink($menuItem, $tab);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -968,7 +968,7 @@ class commonModel extends model
 
                         if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
-                        $misc = (isset($lang->navGroup->$subModule) and $openApp != $lang->navGroup->$subModule) ? "data-app='$openApp'" : '';
+                        $misc = (isset($lang->navGroup->$subModule) and $tab != $lang->navGroup->$subModule) ? "data-app='$tab'" : '';
                         $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel, '', $misc) . '</li>';
                     }
 
@@ -978,7 +978,7 @@ class commonModel extends model
                     $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
                 }
 
-                $misc = (isset($lang->navGroup->$module) and $openApp != $lang->navGroup->$module) ? "data-app='$openApp'" : '';
+                $misc = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? "data-app='$tab'" : '';
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
 
                 if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, $misc . " class='$class $active'") . "\n";
@@ -1134,7 +1134,7 @@ class commonModel extends model
             $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
-        echo $isMobile ? html::a($link, $label, '', "class='$className' data-app={$app->openApp}") : html::a($link, $label, '', "class='$className' data-app={$app->openApp}");
+        echo $isMobile ? html::a($link, $label, '', "class='$className' data-app={$app->tab}") : html::a($link, $label, '', "class='$className' data-app={$app->tab}");
     }
 
     /**
@@ -1161,7 +1161,7 @@ class commonModel extends model
     {
         /* Add data-app attribute. */
         global $app;
-        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->openApp . '"';
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
@@ -1255,7 +1255,7 @@ EOD;
         global $app, $lang, $config;
 
         /* Add data-app attribute. */
-        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->openApp . '"';
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
@@ -1469,7 +1469,7 @@ EOD;
         global $lang, $app;
         if(isonlybody()) return false;
 
-        $moduleName = ($app->getModuleName() == 'story' and $app->openApp == 'project') ? 'projectstory' : $app->getModuleName();
+        $moduleName = ($app->getModuleName() == 'story' and $app->tab == 'project') ? 'projectstory' : $app->getModuleName();
         echo "<nav class='container'>";
         if(isset($preAndNext->pre) and $preAndNext->pre)
         {
@@ -1478,7 +1478,7 @@ EOD;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title . ' ' . $lang->preShortcutKey;
 
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}");
-            $link .= '#app=' . $app->openApp;
+            $link .= '#app=' . $app->tab;
             if(isset($preAndNext->pre->objectType) and $preAndNext->pre->objectType == 'doc')
             {
                 echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}' data-url='{$link}'");
@@ -1494,7 +1494,7 @@ EOD;
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}");
-            $link .= '#app=' . $app->openApp;
+            $link .= '#app=' . $app->tab;
             if(isset($preAndNext->next->objectType) and $preAndNext->next->objectType == 'doc')
             {
                 echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title' data-url='{$link}'");
@@ -1679,7 +1679,7 @@ EOD;
                 $objectList[$id] = $object;
             }
 
-            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList), $this->app->openApp);
+            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList), $this->app->tab);
             $existsObjectList = $this->session->$objectIdListKey;
         }
 
@@ -1741,8 +1741,8 @@ EOD;
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 
-        $this->session->set($objectType . 'QueryCondition', $queryCondition, $this->app->openApp);
-        $this->session->set($objectType . 'OnlyCondition', $onlyCondition, $this->app->openApp);
+        $this->session->set($objectType . 'QueryCondition', $queryCondition, $this->app->tab);
+        $this->session->set($objectType . 'OnlyCondition', $onlyCondition, $this->app->tab);
 
         /* Set the query condition session. */
         $orderBy = explode(' ORDER BY ', $sql);
@@ -1753,8 +1753,8 @@ EOD;
             $orderBy = $orderBy[0];
             if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }
-        $this->session->set($objectType . 'OrderBy', $orderBy, $this->app->openApp);
-        $this->session->set($objectType . 'BrowseList', array(), $this->app->openApp);
+        $this->session->set($objectType . 'OrderBy', $orderBy, $this->app->tab);
+        $this->session->set($objectType . 'BrowseList', array(), $this->app->tab);
     }
 
     /**
@@ -2482,24 +2482,24 @@ EOD;
     {
         global $app, $lang;
 
-        $openApp = $app->openApp;
+        $tab = $app->tab;
 
         /* If homeMenu is not exists or unset, display menu. */
-        if(!isset($lang->$openApp->homeMenu))
+        if(!isset($lang->$tab->homeMenu))
         {
-            $lang->menu      = isset($lang->$openApp->menu) ? $lang->$openApp->menu : array();
-            $lang->menuOrder = isset($lang->$openApp->menuOrder) ? $lang->$openApp->menuOrder : array();
+            $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
+            $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
             return;
         }
 
-        if($app->rawModule == $openApp && $app->rawMethod == 'create')
+        if($app->rawModule == $tab && $app->rawMethod == 'create')
         {
-            $lang->menu = $lang->$openApp->homeMenu;
+            $lang->menu = $lang->$tab->homeMenu;
             return;
         }
 
         /* If the method is in homeMenu, display homeMenu. */
-        foreach($lang->$openApp->homeMenu as $menu)
+        foreach($lang->$tab->homeMenu as $menu)
         {
             $link   = is_array($menu) ? $menu['link'] : $menu;
             $params = explode('|', $link);
@@ -2507,20 +2507,20 @@ EOD;
 
             if($method == $app->rawMethod)
             {
-                $lang->menu = $lang->$openApp->homeMenu;
+                $lang->menu = $lang->$tab->homeMenu;
                 return;
             }
 
             if(isset($menu['alias']) and in_array(strtolower($app->rawMethod), explode(',', strtolower($menu['alias']))))
             {
-                $lang->menu = $lang->$openApp->homeMenu;
+                $lang->menu = $lang->$tab->homeMenu;
                 return;
             }
         }
 
         /* Default, display menu. */
-        $lang->menu      = isset($lang->$openApp->menu) ? $lang->$openApp->menu : array();
-        $lang->menuOrder = isset($lang->$openApp->menuOrder) ? $lang->$openApp->menuOrder : array();
+        $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
+        $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
     }
 
     /**

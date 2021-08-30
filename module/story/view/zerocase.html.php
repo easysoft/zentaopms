@@ -49,8 +49,8 @@
       <?php foreach($stories as $key => $story):?>
       <?php
       $param = 0;
-      if($this->app->openApp == 'project')   $param = $this->session->project;
-      if($this->app->openApp == 'execution') $param = $this->session->execution;
+      if($this->app->tab == 'project')   $param = $this->session->project;
+      if($this->app->tab == 'execution') $param = $this->session->execution;
       $viewLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$param");
       $canView  = common::hasPriv('story', 'view');
       ?>
@@ -74,12 +74,12 @@
         <td class='c-actions'>
           <?php
           $vars = "storyID={$story->id}";
-          $this->app->openApp = 'product';
+          $this->app->tab = 'product';
           common::printIcon('story', 'change', $vars, $story, 'list', 'fork');
           common::printIcon('story', 'review', $vars, $story, 'list', 'glasses');
           common::printIcon('story', 'close',  $vars, $story, 'list', 'off', '', 'iframe', 'yes');
           common::printIcon('story', 'edit',   $vars, $story, 'list');
-          $this->app->openApp = 'qa';
+          $this->app->tab = 'qa';
           common::printIcon('story', 'createCase', "productID=$story->product&branch=0&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
           ?>
         </td>

@@ -75,7 +75,7 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '', $withBranch = true)
     {
-        $isBrowseBug = (strpos(',project,execution,', ",{$this->app->openApp},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
+        $isBrowseBug = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
 
         $this->app->loadLang('product');
         if(!$isBrowseBug and !$productID)
@@ -88,8 +88,8 @@ class productModel extends model
         setcookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($productID) $currentProduct = $this->getById($productID);
 
-        if($isBrowseBug and $this->app->openApp == 'project')   $extra = $this->session->project;
-        if($isBrowseBug and $this->app->openApp == 'execution') $extra = $this->session->execution;
+        if($isBrowseBug and $this->app->tab == 'project')   $extra = $this->session->project;
+        if($isBrowseBug and $this->app->tab == 'execution') $extra = $this->session->execution;
 
         if($isBrowseBug and !$productID)
         {
@@ -483,7 +483,7 @@ class productModel extends model
         }
 
         $fromModule   = $this->lang->navGroup->qa == 'qa' ? 'qa' : '';
-        $dropMenuLink = helper::createLink($this->app->openApp == 'qa' ? 'product' : $this->app->openApp, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra&from=$fromModule");
+        $dropMenuLink = helper::createLink($this->app->tab == 'qa' ? 'product' : $this->app->tab, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra&from=$fromModule");
 
         if($this->app->viewType == 'mhtml' and $productID) return $this->getModuleNav(array($productID => $currentProductName), $productID, $extra, $branch);
 
@@ -845,7 +845,7 @@ class productModel extends model
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
 
-        $product = ($this->app->openApp == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
+        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
         /* Get module of all products.*/
@@ -857,7 +857,7 @@ class productModel extends model
         }
         $this->config->product->search['params']['module']['values'] = $module;
 
-        if($this->session->currentProductType == 'normal' or $this->app->openApp == 'assetlib')
+        if($this->session->currentProductType == 'normal' or $this->app->tab == 'assetlib')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);

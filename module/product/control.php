@@ -122,10 +122,10 @@ class product extends control
      */
     public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
-        $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
+        $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
 
-        if($this->app->openApp == 'product') $this->product->setMenu($productID, $branch);
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'product') $this->product->setMenu($productID, $branch);
+        if($this->app->tab == 'project')
         {
             $this->session->set('storyList', $this->app->getURI(true), 'project');
             $this->loadModel('project')->setMenu($projectID);
@@ -152,19 +152,19 @@ class product extends control
         if($browseType == 'bymodule' or $browseType == '')
         {
             setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            if($this->app->openApp == 'project') setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($this->app->tab == 'project') setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $_COOKIE['storyBranch'] = 0;
             setcookie('storyBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
         if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-        $cookieModule = $this->app->openApp == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
+        $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($cookieModule ? $cookieModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu. The projectstory module does not execute. */
-        if($this->app->openApp == 'product')
+        if($this->app->tab == 'product')
         {
             /* Save session. */
             $this->session->set('storyList',   $this->app->getURI(true), 'product');
@@ -304,7 +304,7 @@ class product extends control
         $this->view->products        = $this->products;
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
-        $this->view->from            = $this->app->openApp;
+        $this->view->from            = $this->app->tab;
         $this->display();
     }
 
@@ -326,16 +326,16 @@ class product extends control
             $this->executeHooks($productID);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
 
-            $openApp    = $this->app->openApp;
-            $moduleName = $openApp == 'program'? 'program' : $this->moduleName;
-            $methodName = $openApp == 'program'? 'product' : 'browse';
-            $param      = $openApp == 'program' ? "programID=$programID" : "productID=$productID";
+            $tab = $this->app->tab;
+            $moduleName = $tab == 'program'? 'program' : $this->moduleName;
+            $methodName = $tab == 'program'? 'product' : 'browse';
+            $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
-            if($openApp == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
+            if($tab == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
+        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
         if($this->app->getViewType() == 'mhtml')
         {
             if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story')
@@ -362,7 +362,7 @@ class product extends control
         if($programID) $lines = array('') + $this->product->getLinePairs($programID);
         if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
 
-        if($this->app->openApp == 'doc') unset($this->lang->doc->menu->product['subMenu']);
+        if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
 
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
@@ -563,7 +563,7 @@ class product extends control
                 }
             }
 
-            $locate = $this->app->openApp == 'product' ? $this->createLink('product', 'all') : $this->createLink('program', 'product', "programID=$programID");
+            $locate = $this->app->tab == 'product' ? $this->createLink('product', 'all') : $this->createLink('program', 'product', "programID=$programID");
             die(js::locate($locate, 'parent'));
         }
 
@@ -571,7 +571,7 @@ class product extends control
         if(empty($productIDList)) die(js::locate($this->session->productList, 'parent'));
 
         /* Set menu when page come from program. */
-        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu(0);
+        if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
 
         /* Set custom. */
         foreach(explode(',', $this->config->product->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;
@@ -1016,7 +1016,7 @@ class product extends control
 
         $programProducts = array();
 
-        $products = $this->app->openApp == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
+        $products = $this->app->tab == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
 
         foreach($products as $product) $programProducts[$product->program][] = $product;
 
@@ -1026,10 +1026,9 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
         $this->view->products  = $programProducts;
-        $this->view->projectID = $this->app->openApp == 'project' ? $this->session->project : 0;
+        $this->view->projectID = $this->app->tab == 'project' ? $this->session->project : 0;
         $this->view->programs  = $this->loadModel('program')->getPairs(true);
         $this->view->lines     = $this->product->getLinePairs();
-        $this->view->openApp   = $this->app->openApp;
         $this->display();
     }
 

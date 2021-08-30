@@ -131,9 +131,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu" id='exportActionMenu'>
         <?php
-        $openApp = $isProjectStory ? 'project' : 'product';
+        $tab   = $isProjectStory ? 'project' : 'product';
         $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
-        $misc  = common::hasPriv('story', 'export') ? "data-toggle='modal' data-type='iframe' class='export' data-app='$openApp'" : "class=disabled";
+        $misc  = common::hasPriv('story', 'export') ? "data-toggle='modal' data-type='iframe' class='export' data-app='$tab'" : "class=disabled";
         $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType&type=$storyType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
@@ -160,7 +160,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       }
 
       $hidden = empty($buttonLink) ? 'hidden' : '';
-      echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn $buttonType $hidden create-story-btn' data-app='$openApp'");
+      echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn $buttonType $hidden create-story-btn' data-app='$tab'");
       ?>
       <?php if(!empty($productID) and common::hasPriv('story', 'batchCreate') and common::hasPriv('story', 'create')): ?>
       <button type='button' class="btn <?php echo $buttonType?> dropdown-toggle" data-toggle='dropdown'><span class='caret'></span></button>
@@ -172,15 +172,15 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
             if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID=$projectID");
             $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-            echo html::a($link, $lang->story->createCommon, '', "data-app='$openApp'");
+            echo html::a($link, $lang->story->createCommon, '', "data-app='$tab'");
         }
         else
         {
-            echo html::a($createStoryLink, $lang->story->create, '', "data-group='$openApp'");
+            echo html::a($createStoryLink, $lang->story->create, '', "data-group='$tab'");
         }
         ?>
         </li>
-        <li><?php echo html::a($batchCreateLink, $lang->story->batchCreate, '', "data-group='$openApp'");?></li>
+        <li><?php echo html::a($batchCreateLink, $lang->story->batchCreate, '', "data-group='$tab'");?></li>
       </ul>
       <?php endif;?>
     </div>
@@ -282,8 +282,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $canBatchChangeModule = ($canBeChanged and common::hasPriv('story', 'batchChangeModule'));
       $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan'));
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv('story', 'batchAssignTo'));
-      $canBatchUnlink       = ($canBeChanged and $this->app->openApp == 'project' and common::hasPriv('projectstory', 'batchUnlinkStory'));
-      $canBatchImportToLib  = ($canBeChanged and $this->app->openApp == 'project' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
+      $canBatchUnlink       = ($canBeChanged and $this->app->tab == 'project' and common::hasPriv('projectstory', 'batchUnlinkStory'));
+      $canBatchImportToLib  = ($canBeChanged and $this->app->tab == 'project' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib);
       ?>

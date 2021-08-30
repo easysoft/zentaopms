@@ -85,7 +85,7 @@
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
-            <td></td>
+            <td><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
             <td class='text-left table-nest-title'>
               <span class="table-nest-icon icon table-nest-toggle"></span>
@@ -118,7 +118,7 @@
           if($this->config->systemMode == 'new' and $programID)
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
-              $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,$lineID'" . "class='text-center'";
+              $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,line.$lineID'" . "class='text-center'";
           }
           else
           {
@@ -129,7 +129,7 @@
           ?>
           <tr <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
-            <td></td>
+            <td><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
             <td class='text-left table-nest-title'>
               <span class="table-nest-icon icon table-nest-toggle"></span>
@@ -164,11 +164,11 @@
           $trClass = '';
           if($product->line)
           {
-              $path = "$product->line,$product->id";
-              if($this->config->systemMode == 'new' and $product->program) $path = "$product->program,$path";
+              $path = "line.$product->line,$product->id";
+              if($this->config->systemMode == 'new' and $product->program) $path = "program.$product->program,$path";
               $trAttrs  = "data-id='$product->id' data-parent='line.$product->line'";
               $trClass .= ' is-nest-child  table-nest';
-              $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='line.{$path}'";
+              $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='$path'";
           }
           elseif($product->program and $this->config->systemMode == 'new')
           {

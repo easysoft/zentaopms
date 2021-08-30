@@ -12,15 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <?php $openApp = $module == 'program' ? ($from == 'project' || $from == 'my' ? "data-group='project'" : "data-group='program'") : '';?>
+  <?php $tab = $module == 'program' ? ($from == 'project' || $from == 'my' ? "data-group='project'" : "data-group='program'") : '';?>
   <div class="btn-toolbar pull-left">
     <?php if($module == 'program') echo html::a($goback, $lang->goback, '', 'class="btn btn-secondary"');?>
     <?php $vars = $module == 'program' ? "objectID=$objectID&programID=$programID&module=$module&from=$from" : "objectID=$objectID";?>
-    <?php echo html::a($this->createLink($module, 'whitelist', $vars), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', "class='btn btn-link btn-active-text' $openApp");?>
+    <?php echo html::a($this->createLink($module, 'whitelist', $vars), '<span class="text">' . $lang->personnel->whitelist . '</span>', '', "class='btn btn-link btn-active-text' $tab");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php $vars = $module == 'program' ? "objectID=$objectID&deptID=0&copyID=0&programID=$programID&from=$from" : "objectID=$objectID";?>
-    <?php common::printLink($module, 'addWhitelist', $vars, "<i class='icon icon-plus'></i> " . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $openApp");?>
+    <?php common::printLink($module, 'addWhitelist', $vars, "<i class='icon icon-plus'></i> " . $lang->personnel->addWhitelist, '', "class='btn btn-primary' $tab");?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
@@ -58,7 +58,7 @@
           <td title="<?php echo $user->email;?>"><?php echo $user->email;?></td>
           <td class='c-actions'>
             <?php
-            if(common::hasPriv($module, 'unbindWhitelist')) echo html::a($this->createLink($module, 'unbindWhitelist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='btn' $openApp");
+            if(common::hasPriv($module, 'unbindWhitelist')) echo html::a($this->createLink($module, 'unbindWhitelist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='btn' $tab");
             ?>
           </td>
         </tr>

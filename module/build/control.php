@@ -43,21 +43,21 @@ class build extends control
         }
 
         /* Set menu. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($projectID);
             $executions  = $this->execution->getPairs($projectID);
             $executionID = empty($executionID) ? key($executions) : $executionID;
             $this->session->set('project', $projectID);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $execution  = $this->execution->getByID($executionID);
             $executions = $this->execution->getPairs($execution->project);
             $this->execution->setMenu($executionID);
             $this->session->set('project', $execution->project);
         }
-        elseif($this->app->openApp == 'qa')
+        elseif($this->app->tab == 'qa')
         {
             $execution  = $this->execution->getByID($executionID);
             $executions = $this->execution->getPairs($execution->project);
@@ -77,7 +77,6 @@ class build extends control
         $this->view->products      = $products;
         $this->view->projectID     = $projectID;
         $this->view->executions    = $executions;
-        $this->view->openApp       = $this->app->openApp;
         $this->view->lastBuild     = $this->build->getLast($executionID);
         $this->view->productGroups = $productGroups;
         $this->view->users         = $this->user->getPairs('nodeleted|noclosed');
@@ -117,11 +116,11 @@ class build extends control
         $build = $this->build->getById((int)$buildID);
 
         /* Set menu. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($build->project);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $this->execution->setMenu($build->execution);
         }
@@ -217,11 +216,11 @@ class build extends control
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         /* Set menu. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($build->project);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($build->execution);
         }
@@ -301,7 +300,7 @@ class build extends control
                 return $this->send($response);
             }
 
-            $link = $this->app->openApp == 'project' ? $this->createLink('project', 'build', "projectID=$build->project") : $this->createLink('execution', 'build', "executionID=$build->execution");
+            $link = $this->app->tab == 'project' ? $this->createLink('project', 'build', "projectID=$build->project") : $this->createLink('execution', 'build', "executionID=$build->execution");
             die(js::locate($link, 'parent'));
         }
     }
@@ -436,7 +435,7 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID&type=story"), 'parent'));
         }
 
-        $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->openApp);
+        $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
 
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);

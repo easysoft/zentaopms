@@ -25,7 +25,7 @@ js::set('flow', $config->global->flow);
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browseUnits');?>
-    <?php echo html::a($browseLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "class='btn btn-secondary' data-app={$this->app->openApp}");?>
+    <?php echo html::a($browseLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "class='btn btn-secondary' data-app={$this->app->tab}");?>
     <?php if(isonlybody()) echo "<div class='page-title'>{$task->name}</div>";?>
   </div>
   <div class='btn-toolbar pull-right <?php if(isonlybody()) echo 'hidden';?>'>

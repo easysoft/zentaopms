@@ -29,7 +29,7 @@ $sessionString .= session_name() . '=' . session_id();
           <div class="actions">
             <?php
             echo html::a("javascript:fullScreen()", '<i class="icon-fullscreen"></i>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");
-            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link' data-app='{$this->app->openApp}'");
+            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
             if(common::hasPriv('doc', 'delete'))
             {
                 $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes&from=lib");
@@ -41,7 +41,7 @@ $sessionString .= session_name() . '=' . session_id();
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
             <?php endif;?>
 
-            <?php if(isset($this->config->maxVersion) and $this->app->openApp == 'project'):?>
+            <?php if(isset($this->config->maxVersion) and $this->app->tab == 'project'):?>
             <?php
             $canImportToPracticeLib  = common::hasPriv('doc', 'importToPracticeLib');
             $canImportToComponentLib = common::hasPriv('doc', 'importToComponentLib');

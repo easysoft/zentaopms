@@ -117,7 +117,7 @@
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>
-              <?php echo html::submitButton() . ' ' . html::backButton($lang->goback, "data-app='{$app->openApp}'");?>
+              <?php echo html::submitButton() . ' ' . html::backButton($lang->goback, "data-app='{$app->tab}'");?>
             </td>
           </tr>
         </tbody>

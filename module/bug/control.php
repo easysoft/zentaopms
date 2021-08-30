@@ -49,15 +49,15 @@ class bug extends control
         /* Get product data. */
         $products = array();
         $objectID = 0;
-        $openApp  = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
         if(!isonlybody())
         {
-            if($this->app->openApp == 'project')
+            if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
                 $products = $this->loadModel('project')->getProducts($objectID, false);
             }
-            elseif($this->app->openApp == 'execution')
+            elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
                 $products = $this->loadModel('execution')->getProducts($objectID, false);
@@ -66,7 +66,7 @@ class bug extends control
             {
                 $products = $this->product->getPairs('', 0, 'program_asc');
             }
-            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=bug&objectID=$objectID")));
+            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID")));
         }
         else
         {
@@ -301,11 +301,11 @@ class bug extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
-        if($this->app->openApp == 'execution')
+        if($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($output['executionID']);
         }
-        else if($this->app->openApp == 'project')
+        else if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($output['projectID']);
 
@@ -397,11 +397,11 @@ class bug extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
 
-            if($this->app->openApp == 'execution')
+            if($this->app->tab == 'execution')
             {
                 $location = $this->session->bugList ? $this->session->bugList : $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
-            elseif($this->app->openApp == 'project')
+            elseif($this->app->tab == 'project')
             {
                 $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
             }
@@ -545,7 +545,7 @@ class bug extends control
             $projects += array($projectID => $project->name);
 
             /* Set project menu. */
-            if($this->app->openApp == 'project') $this->project->setMenu($projectID);
+            if($this->app->tab == 'project') $this->project->setMenu($projectID);
         }
         else
         {
@@ -724,7 +724,7 @@ class bug extends control
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->session->set('storyList', '', 'product');
-        $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->openApp}", 'project');
+        $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
         $this->bug->checkBugExecutionPriv($bug);
 
         /* Update action. */
@@ -733,18 +733,18 @@ class bug extends control
         /* Set menu. */
         if(!isonlybody())
         {
-            if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($bug->project);
-            if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
-            if($this->app->openApp == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
+            if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
+            if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
 
-            if($this->app->openApp == 'devops')
+            if($this->app->tab == 'devops')
             {
                 $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
                 $this->repo->setMenu($repos);
                 $this->lang->navGroup->bug = 'devops';
             }
 
-            if($this->app->openApp == 'product')
+            if($this->app->tab == 'product')
             {
                 $this->loadModel('product')->setMenu($bug->product);
                 $this->lang->product->menu->plan['subModule'] .= ',bug';
@@ -845,10 +845,10 @@ class bug extends control
         $this->bug->checkBugExecutionPriv($bug);
 
         /* Set the menu. */
-        if($this->app->openApp == 'project') $this->loadModel('project')->setMenu($bug->project);
-        if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
-        if($this->app->openApp == 'qa') $this->qa->setMenu($this->products, $productID, $bug->branch);
-        if($this->app->openApp == 'devops')
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($bug->project);
+        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
+        if($this->app->tab == 'qa') $this->qa->setMenu($this->products, $productID, $bug->branch);
+        if($this->app->tab == 'devops')
         {
             session_write_close();
             $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
@@ -862,11 +862,11 @@ class bug extends control
             if($bug->type != $type) unset($this->lang->bug->typeList[$type]);
         }
 
-        if($this->app->openApp == 'qa')
+        if($this->app->tab == 'qa')
         {
             $this->view->products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed');
         }
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $products = array();
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $bug->project) : $this->product->getOrderedProducts('normal', 40, $bug->project);
@@ -1078,11 +1078,11 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $users = $this->user->getTeamMemberPairs($bug->project, 'project', 'nodeleted', $bug->assignedTo);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $users = $this->user->getTeamMemberPairs($bug->execution, 'execution', 'nodeleted', $bug->assignedTo);
         }

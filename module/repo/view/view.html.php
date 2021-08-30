@@ -20,20 +20,20 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");?>
+    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->tab}'");?>
     <div class="divider"></div>
     <div class="page-title">
       <strong>
         <?php
         $base64BranchID = base64_encode($branchID);
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'");
         $paths= explode('/', $entry);
         $fileName = array_pop($paths);
         $postPath = '';
         foreach($paths as $pathName)
         {
             $postPath .= $pathName . '/';
-            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
+            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->tab}'");
         }
         echo '/' . ' ' . $fileName;
         echo $version;
@@ -42,7 +42,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=$revision"), $lang->repo->allChanges, '', "class='btn btn-primary' data-app='{$app->openApp}'")?>
+    <?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=$revision"), $lang->repo->allChanges, '', "class='btn btn-primary' data-app='{$app->tab}'")?>
   </div>
 </div>
 <?php endif;?>
@@ -57,7 +57,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
         <div class='panel-actions'>
           <?php if($suffix != 'binary' and strpos($config->repo->images, "|$suffix|") === false):?>
           <?php
-          if(common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary' data-app='{$app->openApp}'");
+          if(common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary' data-app='{$app->tab}'");
           if(common::hasPriv('repo', 'download')) echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodePath&fromRevision=$revision"), html::icon('download-alt') . $lang->repo->download, 'hiddenwin', "class='btn btn-sm btn-primary'");
           ?>
           <?php endif;?>
@@ -65,7 +65,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
             <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn btn-sm btn-primary dropdown-toggle')?>
             <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>
               <?php foreach($lang->repo->encodingList as $key => $val):?>
-              <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&showBug=$showBug&encoding=$key", 'html', isonlybody()), $val, '', "data-app='{$app->openApp}'")?></li>
+              <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&showBug=$showBug&encoding=$key", 'html', isonlybody()), $val, '', "data-app='{$app->tab}'")?></li>
               <?php endforeach;?>
             </ul>
           </div>
@@ -92,8 +92,8 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
 <?php if(!isonlybody()):?>
 <div id="mainActions" class='main-actions'>
   <nav class="container">
-    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision={$preAndNext->pre}&showBug=$showBug", 'html', isonlybody()), "<i class='icon-pre icon-chevron-left'></i>", '', "id='prevPage' class='btn btn-info' data-app='{$app->openApp}' title='{$preAndNext->pre}'")?>
-    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision={$preAndNext->next}&showBug=$showBug", 'html', isonlybody()), "<i class='icon-pre icon-chevron-right'></i>", '', "id='nextPage' class='btn btn-info' data-app='{$app->openApp}' title='{$preAndNext->next}'")?>
+    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision={$preAndNext->pre}&showBug=$showBug", 'html', isonlybody()), "<i class='icon-pre icon-chevron-left'></i>", '', "id='prevPage' class='btn btn-info' data-app='{$app->tab}' title='{$preAndNext->pre}'")?>
+    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision={$preAndNext->next}&showBug=$showBug", 'html', isonlybody()), "<i class='icon-pre icon-chevron-right'></i>", '', "id='nextPage' class='btn btn-info' data-app='{$app->tab}' title='{$preAndNext->next}'")?>
   </nav>
 </div>
 <?php endif;?>

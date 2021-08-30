@@ -14,11 +14,11 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink  = $app->session->caseList ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
-<?php js::set('openApp', $app->openApp);?>
+<?php js::set('tab', $app->tab);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!isonlybody()):?>
-    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary' data-app={$this->app->openApp}");?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary' data-app={$this->app->tab}");?>
     <div class="divider"></div>
     <?php endif;?>
     <div class="page-title">
@@ -178,7 +178,7 @@
 
                     foreach($modulePath as $key => $module)
                     {
-                        if($this->app->openApp == 'qa' || $this->app->openApp == 'ops')
+                        if($this->app->tab == 'qa' || $this->app->tab == 'ops')
                         {
                             if($isLibCase)
                             {
@@ -189,8 +189,8 @@
                                 if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                             }
                         }
-                        if($this->app->openApp == 'project' and !common::printLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                        if($this->app->openApp == 'execution') echo $module->name;
+                        if($this->app->tab == 'project' and !common::printLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if($this->app->tab == 'execution') echo $module->name;
                         if(isset($modulePath[$key + 1])) echo $lang->arrow;
                     }
                 }
@@ -203,7 +203,7 @@
               <td>
                 <?php
                 $class = isonlybody() ? 'showinonlybody' : 'iframe';
-                $param = $this->app->openApp == 'project' ? "&version=0&projectID={$this->session->project}" : '';
+                $param = $this->app->tab == 'project' ? "&version=0&projectID={$this->session->project}" : '';
                 if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story" . $param, '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {

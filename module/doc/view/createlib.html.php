@@ -23,11 +23,11 @@
           <table class='table table-form'>
             <tr>
               <th class='w-110px'><?php echo $lang->doc->libType?></th>
-              <?php if($this->app->openApp != 'doc'):?>
+              <?php if($this->app->tab != 'doc'):?>
               <?php
               foreach($libTypeList as $key => $libType)
               {
-                  if($this->app->openApp != $key) unset($libTypeList[$key]);
+                  if($this->app->tab != $key) unset($libTypeList[$key]);
               }
               ?>
               <?php endif;?>

@@ -12,7 +12,7 @@ class stakeholderModel extends model
     {
         $stakeholder = new stdclass();
         $data = fixer::input('post')
-            ->setDefault('objectType', $this->app->openApp)
+            ->setDefault('objectType', $this->app->tab)
             ->setDefault('objectID', $objectID)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::today())

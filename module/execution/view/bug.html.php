@@ -87,7 +87,7 @@
       <tr>
         <td class='cell-id'>
           <?php if($canBatchAssignTo):?>
-          <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a($viewLink, sprintf('%03d', $bug->id), '', "data-app={$this->app->openApp}");?>
+          <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a($viewLink, sprintf('%03d', $bug->id), '', "data-app={$this->app->tab}");?>
           <?php else:?>
           <?php printf('%03d', $bug->id);?>
           <?php endif;?>
@@ -100,7 +100,7 @@
           <?php endif;?>
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->openApp}");?></td>
+        <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->tab}");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
         <td class="text-center <?php echo (isset($bug->delay) and $bug->status == 'active') ? 'delayed' : '';?>"><?php if(substr($bug->deadline, 0, 4) > 0) echo substr($bug->deadline, 5, 6);?></td>
         <td class='c-assignedTo has-btn text-left'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
@@ -110,7 +110,7 @@
           <?php
           if($canBeChanged)
           {
-              $params = "bugID=$bug->id,executionID={$execution->id}";
+              $params = "bugID=$bug->id";
               common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true);
               common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
               common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true);

@@ -58,11 +58,11 @@
                 <li><?php common::printIcon('project', 'group', "projectID=$project->id", $project, 'button', 'group', '', '', '', '', '', $project->id);?></li>
                 <li><?php common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'button', 'persons', '', '', '', '', '', $project->id);?></li>
                 <li><?php common::printicon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);?></li>
-                <li><?php if(common::hasPriv('project', 'edit')) echo html::a($this->createLink('project', 'edit', "projectID=$project->id"), "<i class='icon-edit'></i> " . $lang->project->edit, '', "data-app='{$app->openApp}'");?></li>
+                <li><?php if(common::hasPriv('project', 'edit')) echo html::a($this->createLink('project', 'edit', "projectID=$project->id"), "<i class='icon-edit'></i> " . $lang->project->edit, '', "data-app='{$app->tab}'");?></li>
                 <li><?php common::printIcon('project', 'start',   "projectID=$project->id", $project, 'button', ' icon-play', '', 'iframe', true);?></li>
                 <li><?php common::printIcon('project', 'suspend', "projectID=$project->id", $project, 'button', ' icon-pause', '', 'iframe', true);?></li>
                 <li><?php common::printIcon('project', 'close',   "projectID=$project->id", $project, 'button', ' icon-off', '', 'iframe', true);?></li>
-                <li><?php if(common::hasPriv('project', 'delete')) echo html::a($this->createLink('project', 'delete', "projectID=$project->id"), "<i class='icon-trash'></i> " . $lang->project->delete, 'hiddenwin', "data-app='{$app->openApp}'");?></li>
+                <li><?php if(common::hasPriv('project', 'delete')) echo html::a($this->createLink('project', 'delete', "projectID=$project->id"), "<i class='icon-trash'></i> " . $lang->project->delete, 'hiddenwin', "data-app='{$app->tab}'");?></li>
               </ul>
             </li>
           </nav>

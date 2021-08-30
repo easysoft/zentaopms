@@ -44,15 +44,15 @@ class testcase extends control
         /* Get product data. */
         $products = array();
         $objectID = 0;
-        $openApp  = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
         if(!isonlybody())
         {
-            if($this->app->openApp == 'project')
+            if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
                 $products  = $this->loadModel('project')->getProducts($objectID, false);
             }
-            elseif($this->app->openApp == 'execution')
+            elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
                 $products = $this->loadModel('execution')->getProducts($objectID, false);
@@ -61,7 +61,7 @@ class testcase extends control
             {
                 $products = $this->product->getPairs();
             }
-            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testcase&objectID=$objectID")));
+            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID")));
         }
         else
         {
@@ -103,7 +103,7 @@ class testcase extends control
         $browseType = strtolower($browseType);
 
         /* Set browseType, productID, moduleID and queryID. */
-        $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
+        $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
@@ -122,7 +122,7 @@ class testcase extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($projectID, false);
             $this->loadModel('project')->setMenu($projectID);
@@ -133,8 +133,8 @@ class testcase extends control
         }
 
         $uri = $this->app->getURI(true);
-        $this->session->set('caseList', $uri, $this->app->openApp);
-        $this->session->set('bugList',  $uri, $this->app->openApp);
+        $this->session->set('caseList', $uri, $this->app->tab);
+        $this->session->set('bugList',  $uri, $this->app->tab);
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
@@ -164,9 +164,9 @@ class testcase extends control
         $cases = $this->testcase->appendData($cases);
 
         /* Build the search form. */
-        $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
-        $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
-        $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';
+        $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
+        $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
+        $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
         $actionURL = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
@@ -230,14 +230,14 @@ class testcase extends control
 
         $this->app->loadLang('testtask');
 
-        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
-        if($this->app->openApp == 'project')
+        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->tab == 'project')
         {
             $products = array('0' => $this->lang->product->all) + $this->project->getProducts($this->session->project, false);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
         }
 
-        $this->session->set('caseList', $this->app->getURI(true), $this->app->openApp);
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
@@ -291,7 +291,7 @@ class testcase extends control
      */
     public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
-        if($this->app->openApp == 'execution')
+        if($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($this->session->execution);
         }
@@ -328,8 +328,8 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            if($this->app->openApp == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
-            if($this->app->openApp == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
+            if($this->app->tab == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
+            if($this->app->tab == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
 
             $this->executeHooks($caseID);
 
@@ -348,11 +348,11 @@ class testcase extends control
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
         /* Set menu. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
         }
-        elseif($this->app->openApp == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($this->session->execution);
         }
@@ -433,9 +433,9 @@ class testcase extends control
             $modules = $this->tree->getAllChildID($modules);
         }
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
-        if($this->app->openApp != 'qa')
+        if($this->app->tab != 'qa')
         {
-            $projectID = $this->app->openApp == 'project' ? $this->session->project : $this->session->execution;
+            $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch);
         }
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
@@ -490,9 +490,9 @@ class testcase extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
 
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
-            $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
-            $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';
+            $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
+            $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
+            $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
             die(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -508,7 +508,7 @@ class testcase extends control
         $currentModuleID = (int)$moduleID;
 
         /* Set menu. */
-        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Set story list. */
         $story     = $storyID ? $this->story->getByID($storyID) : '';
@@ -600,7 +600,7 @@ class testcase extends control
      */
     public function view($caseID, $version = 0, $from = 'testcase', $taskID = 0)
     {
-        $this->session->set('bugList', $this->app->getURI(true), $this->app->openApp);
+        $this->session->set('bugList', $this->app->getURI(true), $this->app->tab);
 
         $caseID = (int)$caseID;
         $case   = $this->testcase->getById($caseID, $version);
@@ -639,7 +639,7 @@ class testcase extends control
         if($isLibCase)
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
-            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
+            $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
@@ -652,9 +652,9 @@ class testcase extends control
             $product   = $this->product->getByID($productID);
             $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
 
-            if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
-            if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
-            if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
+            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+            if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+            if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
 
@@ -751,7 +751,7 @@ class testcase extends control
         if($isLibCase)
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
-            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
+            $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
@@ -768,9 +768,9 @@ class testcase extends control
             $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             /* Set menu. */
-            if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
-            if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
-            if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
+            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+            if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+            if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
             if($case->lib and $case->fromCaseID)
@@ -837,9 +837,9 @@ class testcase extends control
         $caseIDList = array_unique($caseIDList);
         $branchProduct = false;
 
-        if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
-        if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $branch);
-        if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+        if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
 
         /* The cases of a product. */
         if($productID)
@@ -882,8 +882,8 @@ class testcase extends control
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t1.deleted')->eq(0)
-                ->beginIF($this->app->openApp == 'my')->andWhere('t2.id')->in($caseIDList)->fi()
-                ->beginIF($this->app->openApp != 'my')->andWhere('t1.id')->in($caseIDList)->fi()
+                ->beginIF($this->app->tab == 'my')->andWhere('t2.id')->in($caseIDList)->fi()
+                ->beginIF($this->app->tab != 'my')->andWhere('t1.id')->in($caseIDList)->fi()
                 ->fetchAll('id');
             $caseIDList = array_keys($cases);
 
@@ -1625,7 +1625,7 @@ class testcase extends control
             die(js::reload('parent'));
         }
 
-        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         $libraries = $this->loadModel('caselib')->getLibraries();
         if(empty($libraries))
@@ -1696,7 +1696,7 @@ class testcase extends control
             {
                 unlink($tmpFile);
 
-                if($this->app->openApp == 'project')
+                if($this->app->tab == 'project')
                 {
                     die(js::locate($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$productID"), 'parent'));
                 }
@@ -1711,7 +1711,7 @@ class testcase extends control
             }
         }
 
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
         }

@@ -26,7 +26,7 @@ $filter->default->cookie['lang']        = 'reg::lang';
 $filter->default->cookie['theme']       = 'reg::word';
 $filter->default->cookie['fingerprint'] = 'reg::word';
 $filter->default->cookie['hideMenu']    = 'equal::true';
-$filter->default->cookie['openApp']     = 'reg::word';
+$filter->default->cookie['tab']         = 'reg::word';
 $filter->default->cookie['goback']      = 'reg::any';
 
 $filter->my           = new stdclass();
