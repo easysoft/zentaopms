@@ -1,11 +1,14 @@
 $(function()
 {
-    if(needUpdateContent && confirm(confirmUpdateContent))
+    setTimeout(function()
     {
-        $('#content').html(draft);
-        editor = KindEditor.instances[0];
-        editor.html(draft);
-    }
+        if(needUpdateContent && confirm(confirmUpdateContent))
+        {
+            $('#content').html(draft);
+            editor = KindEditor.instances[0];
+            editor.html(draft);
+        }
+    }, 100)
 
     $('#top-submit').click(function()
     {
