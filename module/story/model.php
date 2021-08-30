@@ -457,7 +457,7 @@ class storyModel extends model
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
-            $story->status     = ($this->app->openApp == 'project' or $this->app->openApp == 'execution' or ($stories->needReview[$i] == 0 and !$forceReview)) ? 'active' : 'draft';
+            $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
             $story->stage      = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
@@ -806,6 +806,7 @@ class storyModel extends model
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                 }
 
+                $story->reviewedBy = $oldStory->reviewedBy;
                 $story = $this->updateStoryByReview($storyID, $oldStory, $story);
             }
         }
@@ -889,7 +890,7 @@ class storyModel extends model
             }
 
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-            $story->reviewers    = implode(',', array_keys($reviewerList));
+            $story->reviewers    = implode(',', array_keys($this->getReviewerPairs($storyID, $oldStory->version)));
             unset($oldStory->parent);
             unset($story->parent);
             return common::createChanges($oldStory, $story);

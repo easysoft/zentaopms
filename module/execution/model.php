@@ -2189,7 +2189,8 @@ class executionModel extends model
         $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
         foreach($stories as $key => $storyID)
         {
-            if($statusPairs[$storyID] == 'draft' || $statusPairs[$storyID] == 'closed') continue;
+            $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,closed';
+            if(strpos($notAllowedStatus, $statusPairs[$storyID]) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $data = new stdclass();
