@@ -67,6 +67,7 @@ $(function()
                     $('.fullscreen').css('padding-top', '15px');
                     $('.CodeMirror-fullscreen').css('top', '50px');
                     $('.editor-preview-side').css('top', '50px');
+                    $('#submit').data('placement', 'bottom');
                 }
                 else
                 {
@@ -76,6 +77,7 @@ $(function()
                     $('.editor-toolbar').css('padding-top', '1px');
                     $('.CodeMirror').css('top', '0');
                     $('.editor-preview-side').css('top', '30px');
+                    $('#submit').data('placement', 'right');
                 }
             }, 200);
         }
