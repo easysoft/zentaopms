@@ -131,7 +131,7 @@ js::set('docID', $doc->id);
               if(common::hasPriv('file', 'download'))
               {
                   $downloadLink  = $this->createLink('file', 'download', 'fileID=' . $file->id);
-                  $downloadLink .= substr($downloadLink, '?') === false ? '?' : '&';
+                  $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
                   $downloadLink .= $sessionString;
                   echo html::a($downloadLink, "<i class='icon icon-export'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");
               }

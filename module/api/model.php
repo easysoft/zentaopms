@@ -69,7 +69,7 @@ class apiModel extends model
                 $param = ltrim($param, ',');
             }
             $url  = rtrim($host, '/') . inlink('getModel',  "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
-            $url .= substr($url, '?') === false ? '?' : '&';
+            $url .= strpos($url, '?') === false ? '?' : '&';
             $url .= $this->config->sessionVar . '=' . session_id();
         }
         else
@@ -80,7 +80,7 @@ class apiModel extends model
                 $param = ltrim($param, '&');
             }
             $url  = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
-            $url .= substr($url, '?') === false ? '?' : '&';
+            $url .= strpos($url, '?') === false ? '?' : '&';
             $url .= $this->config->sessionVar . '=' . session_id();
         }
 

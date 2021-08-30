@@ -2636,6 +2636,7 @@ class ztSessionHandler
 {
     public $sessSavePath;
     public $tagID;
+    public $sessionFile;
 
     /**
      * Construct.
@@ -2647,6 +2648,23 @@ class ztSessionHandler
     public function __construct($tagID = '')
     {
         $this->tagID = $tagID;
+    }
+
+    /**
+     * Get session file.
+     *
+     * @param  string    $id
+     * @access public
+     * @return string
+     */
+    public function getSessionFile($id)
+    {
+        if(!empty($this->sessionFile)) return $this->sessionFile;
+
+        $fileName = "sess_$id";
+        if($this->tagID) $fileName = "sess_" . md5($id . $this->tagID);
+        $this->sessionFile = $this->sessSavePath . '/' . $fileName;
+        return $this->sessionFile;
     }
 
     /**
@@ -2683,7 +2701,7 @@ class ztSessionHandler
      */
     public function read($id)
     {
-        $sessFile = "$this->sessSavePath/sess_$id" . $this->tagID;
+        $sessFile = $this->getSessionFile($id);
         if(!file_exists($sessFile))
         {
             ($this->tagID and file_exists("$this->sessSavePath/sess_$id")) ? copy("$this->sessSavePath/sess_$id", $sessFile) : touch($sessFile);
@@ -2701,7 +2719,7 @@ class ztSessionHandler
      */
     public function write($id, $sessData)
     {
-        $sessFile = "$this->sessSavePath/sess_$id" . $this->tagID;
+        $sessFile = $this->getSessionFile($id);
         if(file_put_contents($sessFile, $sessData)) return true;
         return false;
     }
@@ -2715,7 +2733,7 @@ class ztSessionHandler
      */
     public function destroy($id)
     {
-        $sessFile = "$this->sessSavePath/sess_$id" . $this->tagID;
+        $sessFile = $this->getSessionFile($id);
         @unlink($sessFile);
         touch($sessFile);
         return true;

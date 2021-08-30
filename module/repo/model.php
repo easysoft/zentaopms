@@ -922,7 +922,7 @@ class repoModel extends model
     {
         session_start();
         $uri = $this->app->getURI(true);
-        if(!empty($_GET) and $this->config->requestType == 'PATH_INFO') $uri .= (substr($uri, '?') === false ? '?' : '&') . http_build_query($_GET);
+        if(!empty($_GET) and $this->config->requestType == 'PATH_INFO') $uri .= (strpos($uri, '?') === false ? '?' : '&') . http_build_query($_GET);
 
         $backKey = 'repo' . ucfirst(strtolower($type));
         $this->session->set($backKey, $uri);

@@ -80,7 +80,7 @@
               }
 
               $downloadLink  = $this->createLink('file', 'download', "fileID=$file->id");
-              $downloadLink .= substr($downloadLink, '?') === false ? '?' : '&';
+              $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
               $downloadLink .= $sessionString;
               echo "<li title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 

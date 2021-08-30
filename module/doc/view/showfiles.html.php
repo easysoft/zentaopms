@@ -82,7 +82,7 @@
 
               $fileID = $file->id;
               $url    = helper::createLink('file', 'download', 'fileID=' . $fileID);
-              $url   .= substr($url, '?') === false ? '?' : '&';
+              $url   .= strpos($url, '?') === false ? '?' : '&';
               $url   .= session_name() . '=' . session_id();
               ?>
               <div class='file'>

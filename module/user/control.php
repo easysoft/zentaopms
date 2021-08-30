@@ -816,18 +816,19 @@ class user extends control
                 die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
             }
 
-            $response['result']  = 'success';
+            $response['result'] = 'success';
             if(strpos($this->referer, $loginLink) === false and
                strpos($this->referer, $denyLink)  === false and
                strpos($this->referer, 'block')  === false and $this->referer
             )
             {
-                $response['locate']  = $this->referer;
+                $response['locate'] = $this->referer;
+                if(helper::isWithTID() and strpos($response['locate'], 'tid=') === false) $response['locate'] .= (strpos($response['locate'], '?') === false ? '?' : '&') . "tid={$this->get->tid}";
                 return $this->send($response);
             }
             else
             {
-                $response['locate']  = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
+                $response['locate'] = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
                 return $this->send($response);
             }
         }
@@ -897,12 +898,13 @@ class user extends control
                     $response['result']  = 'success';
                     if(common::hasPriv($module, $method))
                     {
-                        $response['locate']  = $this->post->referer;
+                        $response['locate'] = $this->post->referer;
+                        if(helper::isWithTID() and strpos($response['locate'], 'tid=') === false) $response['locate'] .= (strpos($response['locate'], '?') === false ? '?' : '&') . "tid={$this->get->tid}";
                         return $this->send($response);
                     }
                     else
                     {
-                        $response['locate']  = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
+                        $response['locate'] = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
                         return $this->send($response);
                     }
                 }
@@ -1047,7 +1049,7 @@ class user extends control
 
         /* Remove the real path for security reason. */
         $pathPos       = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
-        $resetFileName = substr($resetFileName, $pathPos+1);
+        $resetFileName = substr($resetFileName, $pathPos + 1);
 
         $this->view->title          = $this->lang->user->resetPassword;
         $this->view->status         = 'reset';
