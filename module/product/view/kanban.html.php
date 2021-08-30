@@ -17,6 +17,7 @@
   </div>
   <?php else:?>
   <?php foreach($products as $type => $programs):?>
+  <?php if(empty($programs)) continue;?>
   <div class="cell">
     <table class="table text-center" style="border-radius: 0; background: #efefef;">
       <caption><?php echo $type == 'myProducts' ? $lang->product->myProduct : $lang->product->otherProduct;?></caption>
@@ -167,7 +168,7 @@ $(function()
         }
     })
 
-    $('.emptyBoard').parent().height($('.board-item').parent().height());
+    $('.emptyBoard').parent().height($('.project .board').height());
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>
