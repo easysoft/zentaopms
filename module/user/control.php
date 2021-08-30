@@ -827,7 +827,7 @@ class user extends control
             }
             else
             {
-                $response['locate']  = $this->config->webRoot . (helper::inTabIDMode() ? "?tid={$this->get->tid}" : '');
+                $response['locate']  = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
                 return $this->send($response);
             }
         }
@@ -902,7 +902,7 @@ class user extends control
                     }
                     else
                     {
-                        $response['locate']  = $this->config->webRoot . (helper::inTabIDMode() ? "?tid={$this->get->tid}" : '');
+                        $response['locate']  = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
                         return $this->send($response);
                     }
                 }
@@ -914,7 +914,7 @@ class user extends control
                         die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
                     }
 
-                    $response['locate']  = $this->config->webRoot . (helper::inTabIDMode() ? "?tid={$this->get->tid}" : '');
+                    $response['locate']  = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
                     $response['result']  = 'success';
                     return $this->send($response);
                 }

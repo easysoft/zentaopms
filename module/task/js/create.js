@@ -62,7 +62,7 @@ function loadExecutionStories(executionID)
         $('#story').next('.picker').remove();
         $('#story').replaceWith(data);
         $('#story').addClass('filled').chosen();
-        
+
         /* If there is no story option, select will be hidden and text will be displayed; otherwise, the opposite is true */
         if($('#story option').length > 1)
         {
@@ -70,7 +70,7 @@ function loadExecutionStories(executionID)
             $('#storyBox').addClass('hidden');
         }
         else
-        {           
+        {
             $('#storyBox').removeClass('hidden');
             $('#story').parent().addClass('hidden');
         }
@@ -199,7 +199,7 @@ function setPreview()
     else
     {
         storyLink  = createLink('story', 'view', "storyID=" + $('#story').val());
-        var concat = config.requestType != 'GET' ? '?'  : '&';
+        var concat = storyLink.indexOf('?') < 0 ? '?' : '&';
 
         if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
 

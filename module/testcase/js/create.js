@@ -7,8 +7,8 @@ function setPreview()
     }
     else
     {
-        storyLink = createLink('story', 'view', "storyID=" + $('#story').val());
-        var concat = config.requestType != 'GET' ? '?'  : '&';
+        storyLink  = createLink('story', 'view', "storyID=" + $('#story').val());
+        var concat = storyLink.indexOf('?') < 0 ? '?'  : '&';
         storyLink  = storyLink + concat + 'onlybody=yes';
         $('#preview').removeClass('hidden');
         $('#preview').attr('href', storyLink);

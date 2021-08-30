@@ -101,7 +101,7 @@ function setStoryRelated(num)
         });
 
         storyLink  = createLink('story', 'view', "storyID=" + storyID);
-        var concat = config.requestType != 'GET' ? '?'  : '&';
+        var concat = storyLink.indexOf('?') >= 0 ? '&' : '?';
         storyLink  = storyLink + concat + 'onlybody=yes';
         $('#preview' + num).removeAttr('disabled');
         $('#preview' + num).attr('href', storyLink);

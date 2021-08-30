@@ -34,7 +34,7 @@ $(function()
     adjustBoardsHeight();
 
     var boardID  = '';
-    var onlybody = config.requestType == 'GET' ? "&onlybody=yes" : "?onlybody=yes";
+    var onlybody = "onlybody=yes";
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
     var $kanban = $('#kanban');
 
@@ -124,7 +124,7 @@ $(function()
             {
                 kanbanModalTrigger.show(
                 {
-                    url: link + onlybody,
+                    url: link + (link.indexOf('?') >= 0 ? '&' : '?') + onlybody,
                     shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
                     width: 900,
                     hidden: refresh

@@ -834,8 +834,9 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->session->set('estimateList', $this->app->getURI(true), 'execution');
-        if(isonlybody() && $this->config->requestType != 'GET') $this->session->set('estimateList', $this->app->getURI(true) . '?onlybody=yes', 'execution');
+        $uri = $this->app->getURI(true);
+        $this->session->set('estimateList', $uri, 'execution');
+        if(isonlybody()) $this->session->set('estimateList', $uri . (substr($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
 
         $this->view->task      = $this->task->getById($taskID);
         $this->view->estimates = $this->task->getTaskEstimate($taskID);

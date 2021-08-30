@@ -189,6 +189,7 @@ class baseHelper
      */
     public static function isWithTID()
     {
+        global $config;
         return (!empty($config->tabSession) and isset($_GET['tid']));
     }
 
