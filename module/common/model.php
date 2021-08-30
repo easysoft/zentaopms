@@ -390,7 +390,7 @@ class commonModel extends model
                 }
 
                 $showCreateList = true;
-                $isOnlyBody     = strpos('program|project|product', $objectType) === false;
+                $isOnlyBody     = strpos('effort|doc', $objectType) !== false;
                 $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
 
                 $params = '';
@@ -1365,13 +1365,13 @@ EOD;
         $showCount = 0;
         foreach($executionPairs as $executionID => $executionName)
         {
-            $html .= "<li style='max-width: 300px;'>" . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $executionName, '', "title='{$executionName}' class='text-ellipsis'") . '</li>';
+            $html .= "<li style='max-width: 300px;'>" . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $executionName, '', "title='{$executionName}' class='text-ellipsis' style='padding: 2px 10px'") . '</li>';
 
             $showCount ++;
             if($showCount == 10) break;
         }
 
-        if(count($executionPairs) > 10) $html .= '<li>' . html::a(helper::createLink('project', 'execution', "status=all&projectID={$object->project}"), $lang->preview . $lang->more, '', "data-app='project'") . '</li>';
+        if(count($executionPairs) > 10) $html .= '<li>' . html::a(helper::createLink('project', 'execution', "status=all&projectID={$object->project}"), $lang->preview . $lang->more, '', "data-app='project' style='padding: 2px 10px'") . '</li>';
 
         $html .= "</ul></li>\n";
 
