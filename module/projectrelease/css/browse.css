@@ -1,2 +1,5 @@
 #releaseList {font-size: 13px;}
 td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+.c-build {width: 100px;}
+.c-product, .c-execution {width: 120px;}

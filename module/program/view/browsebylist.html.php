@@ -8,13 +8,13 @@
           <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
           <?php echo $lang->nameAB;?>
         </th>
-        <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
-        <th class='w-100px'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
-        <th class='text-right w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
-        <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
-        <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->project->end);?></th>
-        <th class='w-60px'><?php echo $lang->project->progress;?></th>
-        <th class='text-center w-180px'><?php echo $lang->actions;?></th>
+        <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
+        <th class='c-user'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
+        <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
+        <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
+        <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->project->end);?></th>
+        <th class='c-progress'><?php echo $lang->project->progress;?></th>
+        <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody id='programTableList'>

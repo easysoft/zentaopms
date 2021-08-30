@@ -13,15 +13,15 @@ include '../../common/view/chart.html.php';
     <table class='table table-fixed'>
       <thead>
         <tr class='text-center'>
-          <th class='w-40px'>    <?php echo $lang->idAB;?></th>
-          <th class='w-p30'>   <?php echo $lang->task->name;?></th>
-          <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-          <th class='w-status'><?php echo $lang->statusAB;?></th>
-          <th class='w-user'>  <?php echo $lang->task->assignedToAB;?></th>
-          <th class='w-40px'>  <?php echo $lang->task->estimateAB;?></th>
-          <th class='w-40px'>  <?php echo $lang->task->consumedAB;?></th>
-          <th class='w-40px'>  <?php echo $lang->task->leftAB;?></th>
-          <th class='w-40px'>  <?php echo $lang->task->progress;?></th>
+          <th class='c-id'>      <?php echo $lang->idAB;?></th>
+          <th class='w-p30'>     <?php echo $lang->task->name;?></th>
+          <th class='c-pri'>     <?php echo $lang->priAB;?></th>
+          <th class='c-status'>  <?php echo $lang->statusAB;?></th>
+          <th class='c-user'>    <?php echo $lang->task->assignedToAB;?></th>
+          <th class='c-estimate'><?php echo $lang->task->estimateAB;?></th>
+          <th class='c-consumed'><?php echo $lang->task->consumedAB;?></th>
+          <th class='c-left'>    <?php echo $lang->task->leftAB;?></th>
+          <th class='c-progress'><?php echo $lang->task->progress;?></th>
         </tr>
       </thead>
       <tbody>

@@ -17,10 +17,10 @@
               <tr class='text-center'>
                 <th class='c-id'><?php echo $lang->task->id;?></th>
                 <th class='text-left'><?php echo $lang->task->name;?></th>
-                <th class='w-100px'><?php echo $lang->task->assignedTo;?></th>
+                <th class='c-user'><?php echo $lang->task->assignedTo;?></th>
                 <th class='c-status'><?php echo $lang->task->status;?></th>
-                <th class='w-100px'><?php echo $lang->task->consumed;?></th>
-                <th class='w-90px'><?php echo $lang->task->left;?></th>
+                <th class='c-consumed'><?php echo $lang->task->consumed;?></th>
+                <th class='c-left'><?php echo $lang->task->left;?></th>
               </tr>
             </thead>
             <?php if(isset($story->tasks[$executionID])):?>
@@ -49,10 +49,10 @@
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <th class='text-left'><?php echo $lang->bug->title;?></th>
             <th class='c-status'><?php echo $lang->statusAB;?></th>
-            <th class='w-100px'><?php echo $lang->bug->openedBy;?></th>
-            <th class='w-100px'><?php echo $lang->bug->resolvedBy;?></th>
+            <th class='c-user'><?php echo $lang->bug->openedBy;?></th>
+            <th class='c-user'><?php echo $lang->bug->resolvedBy;?></th>
             <th class='text-left'><?php echo $lang->bug->resolution;?></th>
-            <th class='w-100px'><?php echo $lang->bug->lastEditedBy;?></th>
+            <th class='c-user'><?php echo $lang->bug->lastEditedBy;?></th>
           </tr>
         </thead>
         <tbody class= '<?php if(count($story->bugs) > $config->story->affectedFixedNum) echo "linkbox";?>'>
@@ -79,8 +79,8 @@
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <th class='text-left'><?php echo $lang->testcase->title;?></th>
             <th class='c-status'><?php echo $lang->statusAB;?></th>
-            <th class='w-100px'><?php echo $lang->testcase->openedBy;?></th>
-            <th class='w-100px'><?php echo $lang->testcase->lastEditedBy;?></th>
+            <th class='c-user'><?php echo $lang->testcase->openedBy;?></th>
+            <th class='c-user'><?php echo $lang->testcase->lastEditedBy;?></th>
           </tr>
         </thead>
         <tbody class='<?php if(count($story->cases) > $config->story->affectedFixedNum)  echo "linkbox";?>'>
