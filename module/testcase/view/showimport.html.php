@@ -30,21 +30,21 @@ $(function()
     <table class='table table-form' id='showData'>
       <thead>
         <tr>
-          <th class='w-50px'><?php echo $lang->lineNumber?></th>
-          <th class='w-40px'><?php echo $lang->idAB?></th>
+          <th class='c-line-number'><?php echo $lang->lineNumber?></th>
+          <th class='c-id'><?php echo $lang->idAB?></th>
           <th><?php echo $lang->testcase->title?></th>
-          <th class='w-180px'><?php echo $lang->testcase->module?></th>
-          <th class='w-120px'><?php echo $lang->testcase->story?></th>
-          <th class='w-80px'><?php echo $lang->testcase->pri?></th>
-          <th class='w-120px'><?php echo $lang->testcase->type?></th>
-          <th class='w-160px'><?php echo $lang->testcase->stage?></th>
+          <th class='c-module'><?php echo $lang->testcase->module?></th>
+          <th class='c-story'><?php echo $lang->testcase->story?></th>
+          <th class='c-pri-box'><?php echo $lang->testcase->pri?></th>
+          <th class='c-type'><?php echo $lang->testcase->type?></th>
+          <th class='c-stage'><?php echo $lang->testcase->stage?></th>
           <th><?php echo $lang->testcase->precondition?></th>
           <?php if(!empty($appendFields)):?>
           <?php foreach($appendFields as $appendField):?>
-          <th class='w-100px'><?php echo $lang->testcase->{$appendField->field}?></th>
+          <th class='c-other'><?php echo $lang->testcase->{$appendField->field}?></th>
           <?php endforeach;?>
           <?php endif;?>
-          <th class='w-300px'>
+          <th class='c-step'>
             <table class='w-p100 table-borderless'>
               <tr>
                 <th class="no-padding"><?php echo $lang->testcase->stepDesc?></th>

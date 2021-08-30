@@ -41,15 +41,15 @@
   <table class="table" id='releaseList'>
     <thead>
       <tr>
-        <th class='w-id'><?php echo $lang->release->id;?></th>
+        <th class='c-id'><?php echo $lang->release->id;?></th>
         <th class="c-name"><?php echo $lang->release->name;?></th>
-        <th class="w-200px"><?php echo $lang->release->project;?></th>
-        <th class="w-200px"><?php echo $lang->release->build;?></th>
+        <th class="c-project"><?php echo $lang->release->project;?></th>
+        <th class="c-build"><?php echo $lang->release->build;?></th>
         <?php if($product->type != 'normal'):?>
-        <th class='text-center w-100px'><?php echo $lang->product->branch;?></th>
+        <th class='text-center c-branch'><?php echo $lang->product->branch;?></th>
         <?php endif;?>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
-        <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
+        <th class='text-center c-status'><?php echo $lang->release->status;?></th>
         <?php
         $extendFields = $this->release->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";

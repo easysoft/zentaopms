@@ -37,12 +37,12 @@
         </th>
         <th class='c-pri'><?php echo $lang->priAB;?></th>
         <th><?php echo $lang->story->title;?></th>
-        <th class='w-80px'><?php echo $lang->story->status;?></th>
+        <th class='c-status'><?php echo $lang->story->status;?></th>
         <?php if($story->type == 'requirement'):?>
-        <th class='w-80px'><?php echo $lang->story->stage;?></th>
+        <th class='c-stage'><?php echo $lang->story->stage;?></th>
         <?php endif;?>
         <th class='w-user'><?php echo $lang->openedByAB;?></th>
-        <th class='w-80px text-right'><?php echo $lang->story->estimateAB;?></th>
+        <th class='c-estimate text-right'><?php echo $lang->story->estimateAB;?></th>
       </tr>
       </thead>
       <tbody>

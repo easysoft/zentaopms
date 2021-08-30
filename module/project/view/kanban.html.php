@@ -18,7 +18,7 @@
 <?php else:?>
 
 <?php foreach($kanbanGroup as $type => $projectGroup):?>
-<?php if(!empty($projectGroup)):?>
+<?php if(empty($projectGroup)) continue;?>
 <div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
   <div class="cell">
     <div class='detail'>
@@ -137,7 +137,6 @@
     </div>
   </div>
 </div>
-<?php endif;?>
 <?php endforeach;?>
 
 <?php endif;?>

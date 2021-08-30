@@ -39,13 +39,13 @@
   <table class="table" id='releaseList'>
     <thead>
       <tr>
-        <th class='w-id'><?php echo $lang->release->id;?></th>
+        <th class='c-id'><?php echo $lang->release->id;?></th>
         <th><?php echo $lang->release->name;?></th>
-        <th class='w-product'><?php echo $lang->release->product;?></th>
-        <th class='w-execution'><?php echo $lang->executionCommon;?></th>
-        <th class='w-100px'><?php echo $lang->release->build;?></th>
-        <th class='c-date text-center w-100px'><?php echo $lang->release->date;?></th>
-        <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
+        <th class='c-product'><?php echo $lang->release->product;?></th>
+        <th class='c-execution'><?php echo $lang->executionCommon;?></th>
+        <th class='c-build'><?php echo $lang->release->build;?></th>
+        <th class='c-date text-center'><?php echo $lang->release->date;?></th>
+        <th class='c-status text-center'><?php echo $lang->release->status;?></th>
         <?php
         $extendFields = $this->projectrelease->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";

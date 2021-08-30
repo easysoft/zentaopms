@@ -10,14 +10,14 @@
     <table class='table table-fixed'>
       <thead>
         <tr class='text-center'>
-          <th class='w-50px'>  <?php echo $lang->idAB;?></th>
+          <th class='c-id'>    <?php echo $lang->idAB;?></th>
           <th class='w-p30'>   <?php echo $lang->testcase->title;?></th>
-          <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-          <th class='w-type'>  <?php echo $lang->testcase->type;?></th>
-          <th class='w-status'><?php echo $lang->statusAB;?></th>
-          <th class='w-user'>  <?php echo $lang->testcase->lastRunner;?></th>
-          <th class='w-60px'>  <?php echo $lang->testcase->lastRunDate;?></th>
-          <th class='w-40px'>  <?php echo $lang->testcase->lastRunResult;?></th>
+          <th class='c-pri'>   <?php echo $lang->priAB;?></th>
+          <th class='c-type'>  <?php echo $lang->testcase->type;?></th>
+          <th class='c-status'><?php echo $lang->statusAB;?></th>
+          <th class='c-user'>  <?php echo $lang->testcase->lastRunner;?></th>
+          <th class='c-date'>  <?php echo $lang->testcase->lastRunDate;?></th>
+          <th class='c-result'><?php echo $lang->testcase->lastRunResult;?></th>
         </tr>
       </thead>
       <tbody>

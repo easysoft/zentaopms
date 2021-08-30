@@ -1,2 +1,6 @@
 #releaseList {font-size: 13px;}
 td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+.c-id {width: 60px}
+.c-branch {width: 100px}
+.c-project, c-build {width: 200px;}

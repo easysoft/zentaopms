@@ -7,14 +7,14 @@
     <table class='table table-fixed'>
       <thead>
         <tr class='text-center'>
-          <th class='w-50px'><?php echo $lang->idAB;?></th>
+          <th class='c-id'><?php echo $lang->idAB;?></th>
           <th class='w-p30'> <?php echo $lang->bug->title;?></th>
-          <th class='w-pri'> <?php echo $lang->priAB;?></th>
-          <th class='w-type'><?php echo $lang->bug->type;?></th>
-          <th class='w-40px'><?php echo $lang->statusAB;?></th>
-          <th class='w-user'><?php echo $lang->bug->assignedTo;?></th>
-          <th class='w-50px'><?php echo $lang->bug->resolvedBy;?></th>
-          <th class='w-50px'><?php echo $lang->bug->resolution;?></th>
+          <th class='c-pri'> <?php echo $lang->priAB;?></th>
+          <th class='c-type'><?php echo $lang->bug->type;?></th>
+          <th class='c-status'><?php echo $lang->statusAB;?></th>
+          <th class='c-user'><?php echo $lang->bug->assignedTo;?></th>
+          <th class='c-user'><?php echo $lang->bug->resolvedBy;?></th>
+          <th class='c-resolution'><?php echo $lang->bug->resolution;?></th>
         </tr>
       </thead>
       <tbody>

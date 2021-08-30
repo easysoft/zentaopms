@@ -35,7 +35,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
           <th class='text-left'><?php echo $lang->bug->title;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
           <th class='c-user'><?php echo $lang->bug->resolvedBy;?></th>
-          <th class='w-80px'><?php echo $lang->statusAB;?></th>
+          <th class='c-status'><?php echo $lang->statusAB;?></th>
         </tr>
       </thead>
       <tbody class='text-center'>

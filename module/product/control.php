@@ -855,6 +855,8 @@ class product extends control
      */
     public function dashboard($productID = 0)
     {
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+
         $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getStatByID($productID);
         if(!$product) die(js::locate('product', 'all'));

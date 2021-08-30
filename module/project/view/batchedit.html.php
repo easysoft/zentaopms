@@ -23,13 +23,13 @@
     <table class="table table-form">
       <thead>
         <tr>
-          <th class='w-40px'><?php echo $lang->idAB;?></th>
-          <th class='w-200px'><?php echo $lang->project->parent;?></th>
+          <th class='c-id'><?php echo $lang->idAB;?></th>
+          <th class='c-parent'><?php echo $lang->project->parent;?></th>
           <th class='c-name required'><?php echo $lang->project->name;?></th>
-          <th class="w-150px <?php echo strpos($requiredFields, 'PM') !== false ?  'required' : '';?>"> <?php echo $lang->project->PM;?></th>
-          <th class='w-120px required'><?php echo $lang->project->begin;?></th>
-          <th class='w-120px required'><?php echo $lang->project->end;?></th>
-          <th class='w-260px'><?php echo $lang->project->acl;?></th>
+          <th class="c-user-box <?php echo strpos($requiredFields, 'PM') !== false ?  'required' : '';?>"> <?php echo $lang->project->PM;?></th>
+          <th class='c-date required'><?php echo $lang->project->begin;?></th>
+          <th class='c-date required'><?php echo $lang->project->end;?></th>
+          <th class='c-acl'><?php echo $lang->project->acl;?></th>
         </tr>
       </thead>
       <tbody>

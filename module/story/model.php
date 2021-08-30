@@ -1636,6 +1636,9 @@ class storyModel extends model
             if(empty($oldPlanID)) $story->plan = $planID;
             if($oldStory->branch) $story->plan = $planID;
 
+            /* Append the plan id to plan field if product is multi and story is all branch. */
+            if($this->session->currentProductType != 'normal' and empty($story->branch)) $story->plan = $oldStory->plan ? $oldStory->plan . ",$planID" : ",$planID";
+
             /* Change stage. */
             if($planID and $oldStory->stage == 'wait') $story->stage = 'planned';
             if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)

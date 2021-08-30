@@ -5,20 +5,20 @@
     <?php if(!empty($issues)):?>
     <form class='main-table' method='post' id='issueForm'>
       <table class='table'>
-        <thead> 
+        <thead>
           <tr>
-            <th class='w-50px'><?php echo $lang->issue->id;?></th>
-            <th class='w-100px'><?php echo $lang->issue->type;?></th>
+            <th class='c-id'><?php echo $lang->issue->id;?></th>
+            <th class='c-type'><?php echo $lang->issue->type;?></th>
             <th><?php echo $lang->issue->title;?></th>
-            <th class='w-80px'><?php echo $lang->issue->severity;?></th>
-            <th class='w-80px'><?php echo $lang->issue->pri;?></th>
-            <th class='w-80px'><?php echo $lang->issue->owner;?></th>
-            <th class='w-120px'><?php echo $lang->issue->status;?></th>
-            <th class='w-120px'><?php echo $lang->issue->createdDate;?></th>
+            <th class='c-severity'><?php echo $lang->issue->severity;?></th>
+            <th class='c-pri'><?php echo $lang->issue->pri;?></th>
+            <th class='c-user'><?php echo $lang->issue->owner;?></th>
+            <th class='c-status'><?php echo $lang->issue->status;?></th>
+            <th class='c-date'><?php echo $lang->issue->createdDate;?></th>
             <th class='c-actions'><?php echo $lang->actions;?></th>
           </tr>
-        </thead> 
-        <tbody> 
+        </thead>
+        <tbody>
           <?php foreach($issues as $issue):?>
           <tr>
            <td><?php echo $issue->id;?></td>
@@ -35,7 +35,7 @@
            </td>
           </tr>
           <?php endforeach;?>
-        </tbody> 
+        </tbody>
       </table>
     </form>
     <?php else:?>

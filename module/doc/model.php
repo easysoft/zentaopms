@@ -255,6 +255,8 @@ class docModel extends model
                 ->fetchAll('id');
         }
 
+        if(empty($docs)) return array();
+
         /* Get projects, executions and products by docIdList. */
         list($projects, $executions, $products) = $this->getObjectsByDoc(array_keys($docs));
 

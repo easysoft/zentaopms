@@ -45,23 +45,23 @@
         <thead>
           <tr>
             <th class='col-id'><?php echo $lang->idAB;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
+            <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
             <th class='col-module<?php echo zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->story->module;?></th>
             <th class='col-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?>'><?php echo $lang->story->plan;?></th>
             <th class='col-name required has-btn'><?php echo $lang->story->title;?></th>
-            <th class='w-150px<?php      echo zget($visibleFields, 'spec',     ' hidden') . zget($requiredFields, 'spec',     '', ' required');?>'><?php echo $lang->story->spec;?></th>
-            <th class='w-130px<?php      echo zget($visibleFields, 'source',   ' hidden') . zget($requiredFields, 'source',   '', ' required');?>'><?php echo $lang->story->source;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'sourceNote', '', ' required');?>'><?php echo $lang->story->sourceNote;?></th>
-            <th class='w-150px<?php        echo zget($visibleFields, 'verify',   ' hidden') . zget($requiredFields, 'verify',   '', ' required');?>'><?php echo $lang->story->verify;?></th>
-            <th class='w-90px'><?php echo $lang->story->category;?></th>
-            <th class='col-pri<?php      echo zget($visibleFields, 'pri',      ' hidden') . zget($requiredFields, 'pri',      '', ' required');?>'><?php echo $lang->story->pri;?></th>
+            <th class='c-spec<?php echo zget($visibleFields, 'spec', ' hidden') . zget($requiredFields, 'spec', '', ' required');?>'><?php echo $lang->story->spec;?></th>
+            <th class='c-source<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'source', '', ' required');?>'><?php echo $lang->story->source;?></th>
+            <th class='c-note<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'sourceNote', '', ' required');?>'><?php echo $lang->story->sourceNote;?></th>
+            <th class='c-verify<?php echo zget($visibleFields, 'verify', ' hidden') . zget($requiredFields, 'verify', '', ' required');?>'><?php echo $lang->story->verify;?></th>
+            <th class='c-category'><?php echo $lang->story->category;?></th>
+            <th class='col-pri<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->story->pri;?></th>
             <th class='col-estimate<?php echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->story->estimate;?></th>
             <th class='col-review<?php   echo zget($visibleFields, 'review',   ' hidden') . zget($requiredFields, 'review',   '', ' required');?>'><?php echo $lang->story->needReview;?></th>
             <th class='<?php echo zget($visibleFields, 'review',   ' hidden');?>' style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
+            <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) echo "<th class='c-other'>{$extendField->name}</th>";
             ?>
           </tr>
         </thead>

@@ -58,7 +58,7 @@
                 <div class='board-item' style='border-left: 3px solid #ccc'>
                   <div class='table-row'>
                     <div class='table-col'>
-                      <?php echo html::a($this->createLink('project', 'view', "projectID=$project->id"), $project->name);?>
+                      <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id"), $project->name);?>
                     </div>
                   </div>
                 </div>
@@ -74,7 +74,7 @@
                       <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->delay) ? 'red' : "#0BD986") . "'";?>>
                         <div class='table-row'>
                           <div class='table-col'>
-                            <?php echo html::a($this->createLink('project', 'view', "projectID=$project->id"), $project->name);?>
+                            <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id"), $project->name);?>
                           </div>
                           <div class='table-col'>
                             <div class="c-progress">
@@ -92,7 +92,7 @@
                       <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->execution->delay) ? 'red' : "#0BD986") . "'";?>>
                         <div class='table-row'>
                           <div class='table-col'>
-                            <?php echo html::a($this->createLink('execution', 'view', "executionID={$project->execution->id}"), $project->execution->name);?>
+                            <?php echo html::a($this->createLink('execution', 'task', "executionID={$project->execution->id}"), $project->execution->name);?>
                           </div>
                           <div class='table-col'>
                             <div class="c-progress">

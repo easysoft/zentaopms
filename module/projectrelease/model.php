@@ -322,17 +322,4 @@ class projectreleaseModel extends model
         $this->loadModel('action');
         foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
     }
-
-    /**
-     * Send mail.
-     *
-     * @param  int    $releaseID
-     * @param  int    $actionID
-     * @access public
-     * @return void
-     */
-    public function sendmail($releaseID, $actionID)
-    {
-        $this->loadModel('release')->sendmail($releaseID, $actionID);
-    }
 }

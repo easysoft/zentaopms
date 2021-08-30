@@ -34,13 +34,13 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <?php if($branches):?>
-          <th class='w-110px'><?php echo $lang->testcase->branch ?></th>
+          <th class='c-branch'><?php echo $lang->testcase->branch ?></th>
           <?php endif;?>
-          <th class='w-pri'>  <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-pri'>  <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
           <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
-          <th class='w-200px'><?php echo $lang->testcase->fromModule ?></th>
-          <th class='w-200px'><?php echo $lang->testcase->module ?></th>
-          <th class='w-100px'><?php common::printOrderLink('type',  $orderBy, $vars, $lang->testcase->type)?></th>
+          <th class='c-module'><?php echo $lang->testcase->fromModule ?></th>
+          <th class='c-module'><?php echo $lang->testcase->module ?></th>
+          <th class='c-type'><?php common::printOrderLink('type',  $orderBy, $vars, $lang->testcase->type)?></th>
         </tr>
       </thead>
       <tbody>
