@@ -497,7 +497,6 @@ class baseHTML
         }
 
         $tab           = $_COOKIE['openApp'];
-        $misc         .= "data-app='{$tab}'";
         $referer       = strtolower($_SERVER['HTTP_REFERER']);
         $refererParts  = parse_url($referer);
         $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
@@ -505,6 +504,8 @@ class baseHTML
         $currentMethod = $app->getMethodName();
         $gobackList    = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
         $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
+
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $tab . '"';
 
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
         if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", $refererLink))

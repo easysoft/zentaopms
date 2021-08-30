@@ -88,7 +88,7 @@
 
         if($this->app->openApp != 'product')
         {
-            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='" . ($this->app->openApp == 'project' ? 'project' : 'product') . "'", $lang->bug->toStory);
+            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='" . $this->app->openApp . "'", $lang->bug->toStory);
             common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
         }
 

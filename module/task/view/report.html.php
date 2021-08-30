@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('execution', 'task', "executionID=$executionID&browseType=$browseType"), $lang->goback, '', "class='btn'");?>
+    <?php echo html::backButton($lang->goback, '', 'btn');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='text'><?php echo $lang->task->report->common;?></span>
