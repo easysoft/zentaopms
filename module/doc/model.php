@@ -59,6 +59,10 @@ class docModel extends model
         $libPairs = array();
         while($lib = $stmt->fetch())
         {
+            if($lib->product   != 0 and !isset($products[$lib->product])) continue;
+            if($lib->execution != 0 and !isset($executions[$lib->execution])) continue;
+            if($lib->project   != 0 and !isset($project[$lib->project]))  continue;
+
             if($this->checkPrivLib($lib, $extra))
             {
                 if(strpos($extra, 'withObject') !== false)
