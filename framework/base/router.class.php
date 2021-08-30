@@ -855,6 +855,16 @@ class baseRouter
     {
         if(defined('SESSION_STARTED')) return;
 
+        $ztSessionHandler = new ztSessionHandler(zget($_GET, 'tid', ''));
+        session_set_save_handler(
+            array($ztSessionHandler, "open"),
+            array($ztSessionHandler, "close"),
+            array($ztSessionHandler, "read"),
+            array($ztSessionHandler, "write"),
+            array($ztSessionHandler, "destroy"),
+            array($ztSessionHandler, "gc")
+        );
+
         /* If request header has token, use it as session for authentication. */
         if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
 
@@ -2614,5 +2624,117 @@ class super
         if($this->scope == 'session') a($_SESSION);
         if($this->scope == 'env')     a($_ENV);
         if($this->scope == 'global')  a($GLOBALS);
+    }
+}
+
+/**
+ * ZenTao session handler.
+ *
+ * @package framework
+ */
+class ztSessionHandler
+{
+    public $sessSavePath;
+    public $tagID;
+
+    /**
+     * Construct.
+     *
+     * @param  string $tagID
+     * @access public
+     * @return void
+     */
+    public function __construct($tagID = '')
+    {
+        $this->tagID = $tagID;
+    }
+
+    /**
+     * Open
+     *
+     * @param  string    $savePath
+     * @param  string    $sessionName
+     * @access public
+     * @return bool
+     */
+    public function open($savePath, $sessionName)
+    {
+        $this->sessSavePath = $savePath;
+        return true;
+    }
+
+    /**
+     * Close
+     *
+     * @access public
+     * @return bool
+     */
+    public function close()
+    {
+        return true;
+    }
+
+    /**
+     * Read
+     *
+     * @param  string    $id
+     * @access public
+     * @return bool
+     */
+    public function read($id)
+    {
+        $sessFile = "$this->sessSavePath/sess_$id" . $this->tagID;
+        if(!file_exists($sessFile))
+        {
+            ($this->tagID and file_exists("$this->sessSavePath/sess_$id")) ? copy("$this->sessSavePath/sess_$id", $sessFile) : touch($sessFile);
+        }
+        return (string) file_get_contents($sessFile);
+    }
+
+    /**
+     * Write
+     *
+     * @param  string    $id
+     * @param  string    $sessData
+     * @access public
+     * @return bool
+     */
+    public function write($id, $sessData)
+    {
+        $sessFile = "$this->sessSavePath/sess_$id" . $this->tagID;
+        if(file_put_contents($sessFile, $sessData)) return true;
+        return false;
+    }
+
+    /**
+     * Destroy
+     *
+     * @param  string    $id
+     * @access public
+     * @return bool
+     */
+    public function destroy($id)
+    {
+        $sessFile = "$this->sessSavePath/sess_$id" . $this->tagID;
+        @unlink($sessFile);
+        touch($sessFile);
+        return true;
+    }
+
+    /**
+     * GC
+     *
+     * @param  int    $maxlifeTime
+     * @access public
+     * @return bool
+     */
+    public function gc($maxlifeTime)
+    {
+        $time = time();
+        foreach(glob("$this->sessSavePath/sess_*") as $fileName)
+        {
+            if(filemtime($fileName) + $maxlifeTime < $time) @unlink($fileName);
+        }
+        return true;
     }
 }

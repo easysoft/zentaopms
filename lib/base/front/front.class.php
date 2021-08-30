@@ -1166,7 +1166,9 @@ EOT;
         $jsConfig->runMode        = $runMode;
         $jsConfig->timeout        = isset($config->timeout) ? $config->timeout : '';
         $jsConfig->pingInterval   = isset($config->pingInterval) ? $config->pingInterval : '';
+        $jsConfig->onlybody       = zget($_GET, 'onlybody', 'no');
         $jsConfig->tabSession     = $config->tabSession;
+        if($config->tabSession and helper::inTabIDMode()) $jsConfig->tid = zget($_GET, 'tid', '');
 
         $jsLang = new stdclass();
         $jsLang->submitting = isset($lang->loading) ? $lang->loading : '';
