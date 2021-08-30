@@ -72,7 +72,7 @@ class docModel extends model
                     if($lib->project   != 0) $lib->name = zget($projects, $lib->project, '') . '/' . $lib->name;
                 }
 
-                $libPairs[$lib->id] = '/' . $lib->name;
+                $libPairs[$lib->id] = $lib->name;
             }
         }
 
@@ -81,7 +81,7 @@ class docModel extends model
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy('`order`, id desc')->query();
             while($lib = $stmt->fetch())
             {
-                if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = '/' . $lib->name;
+                if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
             }
         }
 

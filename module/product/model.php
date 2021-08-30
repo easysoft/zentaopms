@@ -1540,6 +1540,7 @@ class productModel extends model
         $projectProduct = $this->dao->select('t1.product,t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in(array_keys($productList))
+            ->andWhere('t1.project')->in($this->app->user->view->projects)
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.status')->eq('doing')
             ->andWhere('t2.deleted')->eq('0')
