@@ -4,13 +4,13 @@ $(function()
     {
         var list = '';
         for(i = 0; i < data.list.length; i++) list += $(data.list[i].item).attr('data-id') + ',';
-        $.post(createLink('project', 'storySort', 'projectID=' + projectID), {'storys' : list, 'orderBy' : orderBy}, function()
+        $.post(createLink('execution', 'storySort', 'executionID=' + executionID), {'storys' : list, 'orderBy' : orderBy}, function()
         {
             var $target = $(data.element[0]);
             $target.hide();
             $target.fadeIn(1000);
             order = 'order_asc'
-            history.pushState({}, 0, createLink('project', 'story', "projectID=" + projectID + '&orderBy=' + order));
+            history.pushState({}, 0, createLink('project', 'story', "executionID=" + executionID + '&orderBy=' + order));
         });
     });
 
