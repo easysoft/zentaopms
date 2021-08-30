@@ -667,7 +667,8 @@ $.extend(
             var reg = /[^0-9]/;
             if(reg.test(objectValue) || objectType == 'all')
             {
-                var searchLink = createLink('search', 'index') + (config.requestType == 'PATH_INFO' ? '?' : '&') + 'words=' + objectValue;
+                var searchLink = createLink('search', 'index');
+                searchLink += (searchLink.indexOf('?') ? '&' : '?') + 'words=' + objectValue;
                 $.apps.open(searchLink);
             }
             else
