@@ -666,6 +666,8 @@ class task extends control
      */
     public function view($taskID)
     {
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));

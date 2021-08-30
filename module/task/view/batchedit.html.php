@@ -81,7 +81,7 @@ js::set('dittoNotice', $dittoNotice);
           if(!isset($execution))
           {
               $prjInfo = $this->execution->getById($tasks[$taskID]->execution);
-              $modules = $this->tree->getOptionMenu($tasks[$taskID]->execution, $viewType = 'task');
+              $modules = $this->tree->getTaskOptionMenu($tasks[$taskID]->execution, 0, 0, 'allModule');
               foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $prjInfo->name. $moduleName;
               $modules = array('ditto' => $this->lang->task->ditto) + $modules;
           }

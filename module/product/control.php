@@ -855,7 +855,9 @@ class product extends control
      */
     public function dashboard($productID = 0)
     {
-        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+        $uri = $this->app->getURI(true);
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
 
         $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getStatByID($productID);

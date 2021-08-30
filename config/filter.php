@@ -141,6 +141,7 @@ $filter->search->index               = new stdclass();
 $filter->gitlab->webhook             = new stdclass();
 $filter->gitlab->importissue         = new stdclass();
 $filter->ci->checkCompileStatus      = new stdclass();
+$filter->execution->export           = new stdclass();
 
 $filter->my->work->cookie['pagerMyTask']        = 'int';
 $filter->my->work->cookie['pagerMyRequirement'] = 'int';
