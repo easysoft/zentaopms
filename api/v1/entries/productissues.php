@@ -72,13 +72,7 @@ class productIssuesEntry extends entry
         $taskFilter  = array();
         $labelTypes  = array();
 
-        if(empty($labels))
-        {
-            $storyFilter[] = 'all';
-            $bugFilter[]   = 'all';
-            $taskFilter[]  = 'all';
-        }
-        else
+        if(!empty($labels))
         {
             $this->app->loadLang('story');
             $this->app->loadLang('task');
@@ -87,16 +81,17 @@ class productIssuesEntry extends entry
             $storyTypeMap = array_flip($this->app->lang->story->categoryList);
             $taskTypeMap  = array_flip($this->app->lang->task->typeList);
             $bugTypeMap   = array_flip($this->app->lang->bug->typeList);
+
             foreach($labels as $label)
             {
-                if($label == $this->app->lang->story->common) $storyFilter = array('all');
-                if(isset($storyTypeMap[$label]) and $storyFilter != array('all')) $storyFilter[] = $storyTypeMap[$label];
+                if($label == $this->app->lang->story->common) $storyFilter[] = 'all';
+                if(isset($storyTypeMap[$label])) $storyFilter[] = $storyTypeMap[$label];
 
-                if($label == $this->app->lang->task->common) $taskFilter = array('all');
-                if(isset($taskTypeMap[$label]) and $taskFilter != array('all')) $taskFilter[] = $taskTypeMap[$label];
+                if($label == $this->app->lang->task->common) $taskFilter[] = 'all';
+                if(isset($taskTypeMap[$label])) $taskFilter[] = $taskTypeMap[$label];
 
-                if($label == $this->app->lang->bug->common) $bugFilter = array('all');
-                if(isset($bugTypeMap[$label]) and $bugFilter != array('all')) $bugFilter[] = $bugTypeMap[$label];
+                if($label == $this->app->lang->bug->common) $bugFilter[] = 'all';
+                if(isset($bugTypeMap[$label])) $bugFilter[] = $bugTypeMap[$label];
             }
         }
 
@@ -107,24 +102,24 @@ class productIssuesEntry extends entry
         /* If posted labels are not conflictive. */
         if(count($labelTypes) < 2)
         {
-            $storyFilter = implode(',', $storyFilter);
-            $taskFilter  = implode(',', $taskFilter);
-            $bugFilter   = implode(',', $bugFilter);
+            $storyFilter = array_unique($storyFilter);
+            $taskFilter  = array_unique($taskFilter);
+            $bugFilter   = array_unique($bugFilter);
 
             $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
-            if($taskFilter)
+            if(!empty($taskFilter))
             {
                 $query = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
                     ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
                     ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
                     ->andWhere('deleted')->eq(0);
 
-                foreach($taskFilter as $filter) $query->andWhere('type')->eq($filter);
+                foreach($taskFilter as $filter) if($filter != 'all') $query->andWhere('type')->eq($filter);
                 $tasks = $query->fetchAll();
                 foreach($tasks as $task) $issues[] = array('id' => $task->id, 'type' => 'task', 'order' => $task->$order, 'status' => $this->getKey($task->status, $taskStatus));
             }
 
-            if($storyFilter)
+            if(!empty($storyFilter))
             {
                 $query = $this->dao->select($storyFields)->from(TABLE_STORY)
                     ->where('product')->eq($productID)
@@ -132,19 +127,19 @@ class productIssuesEntry extends entry
                     ->beginIF($status)->andWhere('status')->in($storyStatus[$status])->fi()
                     ->andWhere('deleted')->eq(0);
 
-                foreach($storyFilter as $filter) $query->andWhere('category')->eq($filter);
+                foreach($storyFilter as $filter) if($filter != 'all') $query->andWhere('category')->eq($filter);
                 $stories = $query->fetchAll();
                 foreach($stories as $story) $issues[] = array('id' => $story->id, 'type' => 'story', 'order' => $story->$order, 'status' => $this->getKey($story->status, $storyStatus));
             }
 
-            if($bugFilter)
+            if(!empty($bugFilter))
             {
-                $qurey = $this->dao->select($bugFields)->from(TABLE_BUG)
+                $query = $this->dao->select($bugFields)->from(TABLE_BUG)
                     ->where('product')->eq($productID)
                     ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
                     ->beginIF($status)->andWhere('status')->in($bugStatus[$status])->fi()
                     ->andWhere('deleted')->eq(0);
-                foreach($bugFilter as $filter) $query->andWhere('type')->eq($filter);
+                foreach($bugFilter as $filter) if($filter != 'all') $query->andWhere('type')->eq($filter);
                 $bugs = $query->fetchAll();
                 foreach($bugs as $bug) $issues[] = array('id' => $bug->id, 'type' => 'bug', 'order' => $bug->$order, 'status' => $this->getKey($bug->status, $bugStatus));
             }
