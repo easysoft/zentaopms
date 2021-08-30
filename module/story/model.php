@@ -204,7 +204,7 @@ class storyModel extends model
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->post->needNotReview or $executionID > 0, 'status', 'active')
+            ->setIF($this->post->needNotReview, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
             ->setIF($executionID > 0, 'stage', 'projected')
@@ -270,7 +270,7 @@ class storyModel extends model
             }
 
             /* Project or execution linked story. */
-            if($executionID != 0 and $story->status != 'draft')
+            if($executionID != 0)
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
@@ -1764,7 +1764,7 @@ class storyModel extends model
         $stories = $this->getByList($data->storyIdList);
         foreach($stories as $story)
         {
-            if($story->status == 'closed') continue;
+            if(strpos('draft,closed', $story->status) !== false) continue;
 
             $task = new stdclass();
             $task->execution  = $executionID;

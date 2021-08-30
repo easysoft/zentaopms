@@ -1716,7 +1716,6 @@ class executionModel extends model
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
         $this->config->product->search['params']['module']['values'] = $modules;
-        unset($this->lang->story->statusList['draft']);
         if($productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
