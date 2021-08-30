@@ -257,6 +257,7 @@
                   $param = "executionID={$execution->id}&story={$story->id}&moduleID={$story->module}";
 
                   $lang->task->create = $lang->execution->wbs;
+                  $toTaskDisabled = strpos('draft,closed', $story->status) !== false ? 'disabled' : '';
                   if(commonModel::isTutorialMode())
                   {
                       $wizardParams = helper::safe64Encode($param);
@@ -264,11 +265,11 @@
                   }
                   else
                   {
-                      if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create');
+                      if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create ' . $toTaskDisabled);
                   }
 
                   $lang->task->batchCreate = $lang->execution->batchWBS;
-                  if($hasDBPriv) common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses');
+                  if($hasDBPriv) common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
 
                   $lang->testcase->batchCreate = $lang->testcase->create;
                   if($productID and $hasDBPriv and common::hasPriv('testcase', 'create'))
