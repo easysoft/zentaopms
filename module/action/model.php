@@ -1156,7 +1156,25 @@ class actionModel extends model
             }
             else
             {
-                $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                if($action->objectType == 'doclib')
+                {
+                    $libID = $action->objectID;
+                    $type  = 'custom';
+                    if($action->execution != 0)   $type = 'execution';
+                    if($action->project   != 0)   $type = 'project';
+                    if($action->product != ',0,') $type = 'product';
+
+                    $libObjectID = $type != 'custom' ? $action->$type : '';
+                    $libObjectID = trim($libObjectID, ',');
+                    if(empty($libObjectID)) return false;
+
+                    $params = sprintf($vars, $type, $libObjectID, $libID);
+                }
+                else
+                {
+                    $params = sprintf($vars, $action->objectID);
+                }
+                $action->objectLink = helper::createLink($moduleName, $methodName, $params);
 
                 if($action->objectType == 'doclib')
                 {
