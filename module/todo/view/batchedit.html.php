@@ -36,14 +36,14 @@
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
-          <th class='w-40px'>   <?php echo $lang->idAB;?></th>
-          <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
-          <th class='w-110px'>  <?php echo $lang->todo->type;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
+          <th class='c-id'>   <?php echo $lang->idAB;?></th>
+          <th class='c-date'>  <?php echo $lang->todo->date;?></th>
+          <th class='c-type'>  <?php echo $lang->todo->type;?></th>
+          <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
           <th><?php echo $lang->todo->name;?></th>
           <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
-          <th class='w-300px<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-          <th class='w-120px<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>
+          <th class='c-date<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
+          <th class='c-status<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>
         </tr>
       </thead>
       <tbody>

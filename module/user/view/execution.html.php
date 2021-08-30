@@ -19,14 +19,14 @@
       <?php $vars = "userID={$user->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='w-id'>     <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th class='c-id'>     <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th class="text-left"><?php common::printOrderLink('name', $orderBy, $vars, $lang->user->name);?></th>
-          <th class='w-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-user'>   <?php echo $lang->team->role;?></th>
-          <th class='w-date'>   <?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
-          <th class='w-date'>   <?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
-          <th class='w-date'>   <?php echo $lang->team->join;?></th>
-          <th class='w-110px'>  <?php echo $lang->team->hours;?></th>
+          <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-user'>   <?php echo $lang->team->role;?></th>
+          <th class='c-date'>   <?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
+          <th class='c-date'>   <?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='c-date'>   <?php echo $lang->team->join;?></th>
+          <th class='c-hours'>  <?php echo $lang->team->hours;?></th>
         </tr>
       </thead>
       <tbody>

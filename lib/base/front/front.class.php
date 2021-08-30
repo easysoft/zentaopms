@@ -498,7 +498,7 @@ class baseHTML
 
         $tab           = $_COOKIE['openApp'];
         $misc         .= "data-app='{$tab}'";
-        $referer       = $_SERVER['HTTP_REFERER'];
+        $referer       = strtolower($_SERVER['HTTP_REFERER']);
         $refererParts  = parse_url($referer);
         $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
         $currentModule = $app->getModuleName();
@@ -507,7 +507,7 @@ class baseHTML
         $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
 
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
-        if(!preg_match("/(m=|\/)(index|$currentModule)(&f=|-)(index|$currentMethod)(&|-|\.)?/", $refererLink))
+        if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", $refererLink))
         {
             $gobackList[$tab] = $referer;
             $gobackLink       = $referer;

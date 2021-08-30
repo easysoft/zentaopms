@@ -66,11 +66,11 @@ class productIssuesEntry extends entry
             $this->sendError(400, 'The order is not supported');
         }
 
-        $issues = array();
-
+        $issues      = array();
         $storyFilter = array();
         $bugFilter   = array();
         $taskFilter  = array();
+        $labelTypes  = array();
 
         if(empty($labels))
         {
@@ -99,44 +99,55 @@ class productIssuesEntry extends entry
                 if(isset($bugTypeMap[$label]) and $bugFilter != array('all')) $bugFilter[] = $bugTypeMap[$label];
             }
         }
-        $storyFilter = implode(',', $storyFilter);
-        $taskFilter  = implode(',', $taskFilter);
-        $bugFilter   = implode(',', $bugFilter);
 
-        $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
-        if($taskFilter)
-        {
-            $tasks = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
-                          ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
-                          ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
-                          ->beginIF($taskFilter != 'all')->andWhere('type')->in($taskFilter)->fi()
-                          ->andWhere('deleted')->eq(0)
-                          ->fetchAll();
-            foreach($tasks as $task) $issues[] = array('id' => $task->id, 'type' => 'task', 'order' => $task->$order, 'status' => $this->getKey($task->status, $taskStatus));
-        }
+        if(!empty($storyFilter)) $labelTypes[] = 'story';
+        if(!empty($taskFilter))  $labelTypes[] = 'task';
+        if(!empty($bugFilter))   $labelTypes[] = 'bug';
 
-        if($storyFilter)
+        /* If posted labels are not conflictive. */
+        if(count($labelTypes) < 2)
         {
-            $stories = $this->dao->select($storyFields)->from(TABLE_STORY)
-                            ->where('product')->eq($productID)
-                            ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
-                            ->beginIF($status)->andWhere('status')->in($storyStatus[$status])->fi()
-                            ->beginIF($storyFilter != 'all')->andWhere('category')->in($storyFilter)->fi()
-                            ->andWhere('deleted')->eq(0)
-                            ->fetchAll();
-            foreach($stories as $story) $issues[] = array('id' => $story->id, 'type' => 'story', 'order' => $story->$order, 'status' => $this->getKey($story->status, $storyStatus));
-        }
+            $storyFilter = implode(',', $storyFilter);
+            $taskFilter  = implode(',', $taskFilter);
+            $bugFilter   = implode(',', $bugFilter);
 
-        if($bugFilter)
-        {
-            $bugs = $this->dao->select($bugFields)->from(TABLE_BUG)
-                         ->where('product')->eq($productID)
-                         ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
-                         ->beginIF($status)->andWhere('status')->in($bugStatus[$status])->fi()
-                         ->beginIF($bugFilter != 'all')->andWhere('type')->in($bugFilter)->fi()
-                         ->andWhere('deleted')->eq(0)
-                         ->fetchAll();
-            foreach($bugs as $bug) $issues[] = array('id' => $bug->id, 'type' => 'bug', 'order' => $bug->$order, 'status' => $this->getKey($bug->status, $bugStatus));
+            $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
+            if($taskFilter)
+            {
+                $query = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
+                    ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
+                    ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
+                    ->andWhere('deleted')->eq(0);
+
+                foreach($taskFilter as $filter) $query->andWhere('type')->eq($filter);
+                $tasks = $query->fetchAll();
+                foreach($tasks as $task) $issues[] = array('id' => $task->id, 'type' => 'task', 'order' => $task->$order, 'status' => $this->getKey($task->status, $taskStatus));
+            }
+
+            if($storyFilter)
+            {
+                $query = $this->dao->select($storyFields)->from(TABLE_STORY)
+                    ->where('product')->eq($productID)
+                    ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
+                    ->beginIF($status)->andWhere('status')->in($storyStatus[$status])->fi()
+                    ->andWhere('deleted')->eq(0);
+
+                foreach($storyFilter as $filter) $query->andWhere('category')->eq($filter);
+                $stories = $query->fetchAll();
+                foreach($stories as $story) $issues[] = array('id' => $story->id, 'type' => 'story', 'order' => $story->$order, 'status' => $this->getKey($story->status, $storyStatus));
+            }
+
+            if($bugFilter)
+            {
+                $qurey = $this->dao->select($bugFields)->from(TABLE_BUG)
+                    ->where('product')->eq($productID)
+                    ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
+                    ->beginIF($status)->andWhere('status')->in($bugStatus[$status])->fi()
+                    ->andWhere('deleted')->eq(0);
+                foreach($bugFilter as $filter) $query->andWhere('type')->eq($filter);
+                $bugs = $query->fetchAll();
+                foreach($bugs as $bug) $issues[] = array('id' => $bug->id, 'type' => 'bug', 'order' => $bug->$order, 'status' => $this->getKey($bug->status, $bugStatus));
+            }
         }
 
         array_multisort(array_column($issues, 'order'), $sort == 'asc' ? SORT_ASC : SORT_DESC, $issues);

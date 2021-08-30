@@ -45,27 +45,27 @@
       <table class="table table-form">
         <thead>
           <tr class='text-center'>
-            <th class='w-40px'><?php echo $lang->idAB;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'dept', ' hidden') . zget($requiredFields, 'dept', '', ' required');?>'>              <?php echo $lang->user->dept;?></th>
+            <th class='c-id'><?php echo $lang->idAB;?></th>
+            <th class='c-dept<?php echo zget($visibleFields, 'dept', ' hidden') . zget($requiredFields, 'dept', '', ' required');?>'>              <?php echo $lang->user->dept;?></th>
             <th class='accountThWidth required'><?php echo $lang->user->account;?></th>
-            <th class='w-130px required'><?php echo $lang->user->realname;?></th>
-            <th class='w-120px<?php echo zget($requiredFields, 'role', '', ' required')?>'><?php echo $lang->user->role;?></th>
-            <th class='w-120px'><?php echo $lang->user->group;?></th>
+            <th class='c-realname required'><?php echo $lang->user->realname;?></th>
+            <th class='c-role<?php echo zget($requiredFields, 'role', '', ' required')?>'><?php echo $lang->user->role;?></th>
+            <th class='c-group'><?php echo $lang->user->group;?></th>
             <th class='<?php echo zget($visibleFields, 'email', "$minWidth hidden", $minWidth) . zget($requiredFields, 'email', '', ' required')?>'><?php echo $lang->user->email;?></th>
             <th class='genderThWidth<?php echo zget($visibleFields, 'gender', ' hidden')?>'><?php echo $lang->user->gender;?></th>
             <th class="<?php echo $minWidth;?> required"><?php echo $lang->user->password;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'commiter', ' hidden') . zget($requiredFields, 'commiter', '', ' required')?>'>       <?php echo $lang->user->commiter;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'join', ' hidden')?>'>    <?php echo $lang->user->join;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'skype', ' hidden')?>'>   <?php echo $lang->user->skype;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'qq', ' hidden')?>'>      <?php echo $lang->user->qq;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'dingding', ' hidden')?>'><?php echo $lang->user->dingding;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'weixin', ' hidden')?>'>  <?php echo $lang->user->weixin;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'mobile', ' hidden')?>'>  <?php echo $lang->user->mobile;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'slack', ' hidden')?>'>   <?php echo $lang->user->slack;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'whatsapp', ' hidden')?>'><?php echo $lang->user->whatsapp;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'phone', ' hidden')?>'>   <?php echo $lang->user->phone;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'address', ' hidden')?>'> <?php echo $lang->user->address;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'zipcode', ' hidden')?>'> <?php echo $lang->user->zipcode;?></th>
+            <th class='c-commiter<?php echo zget($visibleFields, 'commiter', ' hidden') . zget($requiredFields, 'commiter', '', ' required')?>'>       <?php echo $lang->user->commiter;?></th>
+            <th class='c-join<?php echo zget($visibleFields, 'join', ' hidden')?>'>    <?php echo $lang->user->join;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'skype', ' hidden')?>'>   <?php echo $lang->user->skype;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'qq', ' hidden')?>'>      <?php echo $lang->user->qq;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'dingding', ' hidden')?>'><?php echo $lang->user->dingding;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'weixin', ' hidden')?>'>  <?php echo $lang->user->weixin;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'mobile', ' hidden')?>'>  <?php echo $lang->user->mobile;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'slack', ' hidden')?>'>   <?php echo $lang->user->slack;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'whatsapp', ' hidden')?>'><?php echo $lang->user->whatsapp;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'phone', ' hidden')?>'>   <?php echo $lang->user->phone;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'address', ' hidden')?>'> <?php echo $lang->user->address;?></th>
+            <th class='c-contact<?php echo zget($visibleFields, 'zipcode', ' hidden')?>'> <?php echo $lang->user->zipcode;?></th>
           </tr>
         </thead>
         <tbody>

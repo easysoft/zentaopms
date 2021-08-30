@@ -15,7 +15,7 @@
 <?php js::set('flow', $config->global->flow);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php common::printBack($this->session->testsuiteList, 'btn btn-link');?>
+    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $suite->id;?></span>

@@ -98,7 +98,7 @@
         common::printIcon('bug', 'edit', $params, $bug);
         if($this->app->openApp != 'product')
         {
-            common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy', '', '', false, "data-app='qa'");
+            common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
         }
         common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin');
         ?>
