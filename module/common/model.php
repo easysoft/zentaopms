@@ -369,6 +369,9 @@ class commonModel extends model
             if(!isset($config->proVersion) and $objectType == 'effort') continue;
             if($config->systemMode == 'classic' and ($objectType == 'project' or $objectType == 'porgram')) continue;
 
+            /* Change icon when object type is execution and mode is classic. */
+            if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
+
             $createMethod = $objectType == 'effort' ? 'batchCreate' : 'create';
             if(strpos('bug|execution|doc', $objectType) !== false) $needPrintDivider = true;
 
