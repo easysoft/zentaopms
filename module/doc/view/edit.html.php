@@ -105,7 +105,7 @@
             <?php
             echo html::hidden('editedDate', $doc->editedDate);
             echo html::submitButton();
-            echo html::backButton();
+            echo html::backButton($lang->goback, "data-app='{$app->openApp}'");
             ?>
           </td>
         </tr>
