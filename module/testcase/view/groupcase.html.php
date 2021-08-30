@@ -35,16 +35,16 @@
           </div>
         </th>
         <th class='c-id-sm'><?php echo $lang->idAB;?></th>
-        <th class='w-pri'>  <?php echo $lang->priAB;?></th>
+        <th class='c-pri'>  <?php echo $lang->priAB;?></th>
         <th><?php echo $lang->testcase->title;?></th>
-        <th class='w-80px'> <?php echo $lang->typeAB;?></th>
-        <th class='w-80px'> <?php echo $lang->testtask->lastRunAccount;?></th>
-        <th class='w-120px'><?php echo $lang->testtask->lastRunTime;?></th>
-        <th class='w-80px'> <?php echo $lang->testtask->lastRunResult;?></th>
-        <th class='w-80px'> <?php echo $lang->testcase->status;?></th>
-        <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
-        <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
-        <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
+        <th class='c-type'> <?php echo $lang->typeAB;?></th>
+        <th class='c-user'> <?php echo $lang->testtask->lastRunAccount;?></th>
+        <th class='c-date'><?php echo $lang->testtask->lastRunTime;?></th>
+        <th class='c-result'> <?php echo $lang->testtask->lastRunResult;?></th>
+        <th class='c-status'> <?php echo $lang->testcase->status;?></th>
+        <th class='c-bugs' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
+        <th class='c-results' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
+        <th class='c-steps' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
         <th class='c-actions-2'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>

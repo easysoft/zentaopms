@@ -53,25 +53,25 @@ js::set('dittoNotice', $dittoNotice);
       <table class='table table-form table-fixed with-border'>
         <thead>
           <tr>
-            <th class='w-50px'><?php echo $lang->idAB;?></th>
-            <th class='required <?php if(count($visibleFields) > 10) echo 'w-150px';?>'><?php echo $lang->task->name?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->task->module?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
-            <th class='w-80px required'><?php echo $lang->typeAB;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'status',       ' hidden') . zget($requiredFields, 'status',       '', ' required');?>'><?php echo $lang->task->status;?></th>
-            <th class='w-100px<?php  echo zget($visibleFields, 'estStarted',   ' hidden') . zget($requiredFields, 'estStarted',   '', ' required');?>'><?php echo $lang->task->estStarted?></th>
-            <th class='w-100px<?php  echo zget($visibleFields, 'deadline',     ' hidden') . zget($requiredFields, 'deadline',     '', ' required');?>'><?php echo $lang->task->deadline?></th>
-            <th class='w-70px<?php  echo zget($visibleFields, 'pri',          ' hidden') . zget($requiredFields, 'pri',          '', ' required');?>'><?php echo $lang->task->pri;?></th>
-            <th class='w-70px<?php  echo zget($visibleFields, 'estimate',     ' hidden') . zget($requiredFields, 'estimate',     '', ' required');?>'><?php echo $lang->task->estimateAB;?></th>
-            <th class='w-70px<?php  echo zget($visibleFields, 'record',       ' hidden') . zget($requiredFields, 'record',       '', ' required');?>'><?php echo $lang->task->consumedThisTime;?></th>
-            <th class='w-70px<?php  echo zget($visibleFields, 'left',         ' hidden') . zget($requiredFields, 'left',         '', ' required');?>'><?php echo $lang->task->leftAB?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'finishedBy',   ' hidden') . zget($requiredFields, 'finishedBy',   '', ' required');?>'><?php echo $lang->task->finishedBy;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'canceledBy',   ' hidden') . zget($requiredFields, 'canceledBy',   '', ' required');?>'><?php echo $lang->task->canceledBy;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'closedBy',     ' hidden') . zget($requiredFields, 'closedBy',     '', ' required');?>'><?php echo $lang->task->closedBy;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'closedReason', ' hidden') . zget($requiredFields, 'closedReason', '', ' required');?>'><?php echo $lang->task->closedReason;?></th>
+            <th class='c-id'><?php echo $lang->idAB;?></th>
+            <th class='required <?php if(count($visibleFields) > 10) echo 'c-name';?>'><?php echo $lang->task->name?></th>
+            <th class='c-module<?php echo zget($visibleFields,    'module',       ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->task->module?></th>
+            <th class='c-assigned<?php echo zget($visibleFields,  'assignedTo',   ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
+            <th class='c-type required'><?php echo $lang->typeAB; ?></th>
+            <th class='c-status<?php echo zget($visibleFields,    'status',       ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->task->status;?></th>
+            <th class='c-date<?php  echo zget($visibleFields,     'estStarted',   ' hidden') . zget($requiredFields, 'estStarted', '', ' required');?>'><?php echo $lang->task->estStarted?></th>
+            <th class='c-date<?php  echo zget($visibleFields,     'deadline',     ' hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->task->deadline?></th>
+            <th class='c-pri<?php  echo zget($visibleFields,      'pri',          ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->task->pri;?></th>
+            <th class='c-estimate<?php  echo zget($visibleFields, 'estimate',     ' hidden') . zget($requiredFields, 'estimate',     '', ' required');?>'><?php echo $lang->task->estimateAB;?></th>
+            <th class='c-record<?php  echo zget($visibleFields,   'record',       ' hidden') . zget($requiredFields, 'record',       '', ' required');?>'><?php echo $lang->task->consumedThisTime;?></th>
+            <th class='c-left<?php  echo zget($visibleFields,     'left',         ' hidden') . zget($requiredFields, 'left',         '', ' required');?>'><?php echo $lang->task->leftAB?></th>
+            <th class='c-user<?php echo zget($visibleFields,      'finishedBy',   ' hidden') . zget($requiredFields, 'finishedBy',   '', ' required');?>'><?php echo $lang->task->finishedBy;?></th>
+            <th class='c-user<?php echo zget($visibleFields,      'canceledBy',   ' hidden') . zget($requiredFields, 'canceledBy',   '', ' required');?>'><?php echo $lang->task->canceledBy;?></th>
+            <th class='c-user<?php echo zget($visibleFields,      'closedBy',     ' hidden') . zget($requiredFields, 'closedBy',     '', ' required');?>'><?php echo $lang->task->closedBy;?></th>
+            <th class='c-reason<?php echo zget($visibleFields,    'closedReason', ' hidden') . zget($requiredFields, 'closedReason', '', ' required');?>'><?php echo $lang->task->closedReason;?></th>
             <?php
             $extendFields = $this->task->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) echo "<th class='c-other'>{$extendField->name}</th>";
             ?>
           </tr>
         </thead>

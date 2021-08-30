@@ -1,2 +1,3 @@
 #taskList tbody>tr>td, #taskList thead>tr>th {white-space: nowrap;}
 td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.c-name {width: 200px;}

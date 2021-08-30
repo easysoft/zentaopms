@@ -83,14 +83,14 @@
             <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-80px text-center'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
+          <th class='c-version text-center'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
           <th class='c-pri'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->testcase->title;?></th>
           <th class='c-type'><?php echo $lang->testcase->type;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
-          <th class='w-80px'><?php echo $lang->testtask->lastRunAccount;?></th>
-          <th class='w-120px'><?php echo $lang->testtask->lastRunTime;?></th>
-          <th class='w-80px'><?php echo $lang->testtask->lastRunResult;?></th>
+          <th class='c-user'><?php echo $lang->testtask->lastRunAccount;?></th>
+          <th class='c-date'><?php echo $lang->testtask->lastRunTime;?></th>
+          <th class='c-result'><?php echo $lang->testtask->lastRunResult;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
         </tr>
       </thead>

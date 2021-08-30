@@ -32,12 +32,12 @@
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->testcase->product;?></th>
           <th><?php echo $lang->testcase->title;?></th>
-          <th class='w-type'><?php echo $lang->testcase->type;?></th>
-          <th class='w-user'><?php echo $lang->openedByAB;?></th>
-          <th class='w-status'><?php echo $lang->statusAB;?></th>
+          <th class='c-type'><?php echo $lang->testcase->type;?></th>
+          <th class='c-user'><?php echo $lang->openedByAB;?></th>
+          <th class='c-status'><?php echo $lang->statusAB;?></th>
         </tr>
       </thead>
       <tbody>
