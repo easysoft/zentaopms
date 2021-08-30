@@ -496,12 +496,13 @@ class baseHTML
             $label = $lang->goback;
         }
 
+        $tab           = $_COOKIE['openApp'];
+        $misc         .= "data-app='{$tab}'";
         $referer       = $_SERVER['HTTP_REFERER'];
         $refererParts  = parse_url($referer);
         $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
-        $tab           = $_COOKIE['openApp'];
         $gobackList    = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
         $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
 
