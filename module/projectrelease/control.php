@@ -85,7 +85,7 @@ class projectrelease extends control
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->type        = $type;
-        $this->view->from        = $this->app->openApp;
+        $this->view->from        = $this->app->tab;
         $this->display();
     }
 
@@ -208,7 +208,7 @@ class projectrelease extends control
     public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->session->set('buildList', $this->app->getURI(true), 'execution');
-        $this->session->set('storyList', $this->app->getURI(true), $this->app->openApp);
+        $this->session->set('storyList', $this->app->getURI(true), $this->app->tab);
 
         $this->loadModel('story');
         $this->loadModel('bug');
@@ -445,7 +445,7 @@ class projectrelease extends control
             $this->projectrelease->linkStory($releaseID);
             die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
-        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->openApp);
+        $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
 
         $release = $this->projectrelease->getByID($releaseID);
         $build   = $this->loadModel('build')->getByID($release->build);

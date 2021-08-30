@@ -147,7 +147,7 @@ class baseRouter
      * @var string
      * @access public
      */
-    public $openApp;
+    public $tab;
 
     /**
      * 用户使用的主题。
@@ -600,7 +600,7 @@ class baseRouter
         $this->get     = new super('get');
         $this->server  = new super('server');
         $this->cookie  = new super('cookie');
-        $this->session = new super('session', $this->openApp);
+        $this->session = new super('session', $this->tab);
 
         unset($GLOBALS);
         unset($_REQUEST);
@@ -880,14 +880,14 @@ class baseRouter
      */
     public function setOpenApp()
     {
-        if(isset($_COOKIE['openApp']) and $_COOKIE['openApp'])
+        if(isset($_COOKIE['tab']) and $_COOKIE['tab'])
         {
-            $this->openApp = $_COOKIE['openApp'];
+            $this->tab = $_COOKIE['tab'];
         }
         else
         {
-            $module = $this->rawModule;
-            $this->openApp = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : 'my';
+            $module    = $this->rawModule;
+            $this->tab = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : 'my';
         }
     }
 
@@ -2494,22 +2494,23 @@ class super
      * @access  public
      * @return  void
      */
-    public function __construct($scope, $openApp = '')
+    public function __construct($scope, $tab = '')
     {
-        $this->scope   = $scope;
-        $this->openApp = $openApp;
+        $this->scope = $scope;
+        $this->tab   = $tab;
     }
 
     /**
      * 设置超级变量的成员值。
      * Set one member value.
      *
-     * @param   string    the key
-     * @param   mixed $value  the value
+     * @param   string $key the key
+     * @param   mixed  $value  the value
+     * @param   string $tab
      * @access  public
      * @return  void
      */
-    public function set($key, $value, $openApp = '')
+    public function set($key, $value, $tab = '')
     {
         if($this->scope == 'post')
         {
@@ -2529,7 +2530,7 @@ class super
         }
         elseif($this->scope == 'session')
         {
-            if($openApp) $_SESSION["app-$openApp"][$key] = $value;
+            if($tab) $_SESSION["app-$tab"][$key] = $value;
             $_SESSION[$key] = $value;
         }
         elseif($this->scope == 'env')
@@ -2577,8 +2578,8 @@ class super
         }
         elseif($this->scope == 'session')
         {
-            $openApp = $this->openApp;
-            if($openApp and isset($_SESSION["app-$openApp"][$key])) return $_SESSION["app-$openApp"][$key];
+            $tab = $this->tab;
+            if($tab and isset($_SESSION["app-$tab"][$key])) return $_SESSION["app-$tab"][$key];
             if(isset($_SESSION[$key])) return $_SESSION[$key];
             return false;
         }

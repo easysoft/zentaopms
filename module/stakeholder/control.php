@@ -63,14 +63,14 @@ class stakeholder extends control
             $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
-            $moduleName = $this->app->openApp == 'program' ? 'program'              : $this->moduleName;
-            $methodName = $this->app->openApp == 'program' ? 'stakeholder'          : 'browse';
-            $param      = $this->app->openApp == 'program' ? "programID=$objectID" : "projectID=$objectID";
+            $moduleName = $this->app->tab == 'program' ? 'program'              : $this->moduleName;
+            $methodName = $this->app->tab == 'program' ? 'stakeholder'          : 'browse';
+            $param      = $this->app->tab == 'program' ? "programID=$objectID" : "projectID=$objectID";
             $locate     = $this->createLink($moduleName, $methodName, $param);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        if($this->app->openApp == 'program')
+        if($this->app->tab == 'program')
         {
             $this->loadModel('program')->setMenu($objectID);
             $this->view->members = $this->loadModel('program')->getTeamMemberPairs($objectID);
@@ -84,8 +84,8 @@ class stakeholder extends control
         $this->view->title      = $this->lang->stakeholder->create;
         $this->view->position[] = $this->lang->stakeholder->create;
         $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
-        $this->view->programID  = $this->app->openApp == 'program' ? $objectID : 0;
-        $this->view->projectID  = $this->app->openApp == 'project' ? $objectID : 0;
+        $this->view->programID  = $this->app->tab == 'program' ? $objectID : 0;
+        $this->view->projectID  = $this->app->tab == 'project' ? $objectID : 0;
 
         $this->display();
     }
@@ -108,7 +108,7 @@ class stakeholder extends control
             die(js::locate($this->createLink('stakeholder', 'browse', "projectID=$projectID"), 'parent'));
         }
 
-        if($this->app->openApp == 'program')
+        if($this->app->tab == 'program')
         {
             $this->loadModel('program')->setMenu($projectID);
         }

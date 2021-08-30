@@ -447,7 +447,7 @@ class webhookModel extends model
     public function getViewLink($objectType, $objectID)
     {
         $oldOnlyBody = '';
-        $openApp     = '';
+        $tab         = '';
         if(isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
         {
             $oldOnlyBody = 'yes';
@@ -457,10 +457,10 @@ class webhookModel extends model
         if($objectType == 'meeting')
         {
             $meeting = $this->dao->findById($objectID)->from(TABLE_MEETING)->fetch();
-            $openApp = $meeting->project ? '#app=project' : '#app=my';
+            $tab     = $meeting->project ? '#app=project' : '#app=my';
         }
 
-        $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html') . $openApp;
+        $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html') . $tab;
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
 
         return $viewLink;

@@ -458,7 +458,7 @@ class storyModel extends model
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
             $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
-            $story->stage      = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? 'projected' : 'wait';
+            $story->stage      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
@@ -2393,8 +2393,8 @@ class storyModel extends model
         /* Get the sql and form status from the query. */
         if($query)
         {
-            $this->session->set('storyQuery', $query->sql, $this->app->openApp);
-            $this->session->set('storyForm', $query->form, $this->app->openApp);
+            $this->session->set('storyQuery', $query->sql, $this->app->tab);
+            $this->session->set('storyForm', $query->form, $this->app->tab);
         }
         if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
 
@@ -3554,7 +3554,7 @@ class storyModel extends model
 
         $module    = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';
         $canView   = common::hasPriv($module, 'view');
-        $openApp   = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
+        $tab       = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
         $storyLink = helper::createLink($module, 'view', "storyID=$story->id");
         $account   = $this->app->user->account;
         $id        = $col->id;
@@ -3628,7 +3628,7 @@ class storyModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$openApp'");
+                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$tab'");
                 }
                 else
                 {
@@ -3646,7 +3646,7 @@ class storyModel extends model
                 if($story->branch and isset($branches[$story->branch])) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                 if($story->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-app='$openApp'") : "<span style='color: $story->color'>{$story->title}</span>";
+                echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";
                 if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 break;
             case 'plan':
@@ -3768,7 +3768,7 @@ class storyModel extends model
 
                     common::printIcon('story', 'change', $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'review', $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
-                    if($this->app->openApp != 'project') common::printIcon('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
+                    if($this->app->tab != 'project') common::printIcon('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
                     common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");

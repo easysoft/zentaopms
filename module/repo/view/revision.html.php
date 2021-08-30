@@ -34,7 +34,7 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
       <div class='detail'>
         <div class='detail-title'>
           <?php echo $lang->repo->changes;?>
-          <div class='pull-right'><?php if(common::hasPriv('repo', 'diff')) echo html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&fromRevision=$oldRevision&toRevision=$revision"), $lang->repo->diffAll, '', "data-app='{$app->openApp}'");?></div>
+          <div class='pull-right'><?php if(common::hasPriv('repo', 'diff')) echo html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&fromRevision=$oldRevision&toRevision=$revision"), $lang->repo->diffAll, '', "data-app='{$app->tab}'");?></div>
         </div>
         <div class='detail-content'>
           <table class='table no-margin'>
@@ -85,8 +85,8 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
 </div>
 <div id="mainActions" class='main-actions'>
   <nav class="container">
-    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->pre}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-left'></i>", '', "data-app='{$app->openApp}' id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'")?>
-    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->next}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-right'></i>", '', "data-app='{$app->openApp}' id='nextPage' class='btn btn-info' title='{$preAndNext->next}'")?>
+    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->pre}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-left'></i>", '', "data-app='{$app->tab}' id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'")?>
+    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->next}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-right'></i>", '', "data-app='{$app->tab}' id='nextPage' class='btn btn-info' title='{$preAndNext->next}'")?>
   </nav>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -94,7 +94,7 @@ if(empty($type)) $type = 'product';
                 $icon  = zget($this->config->doc->iconList, $typeKey);
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
                 $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
+                $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
                 $html .= "</li>";
                 if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }

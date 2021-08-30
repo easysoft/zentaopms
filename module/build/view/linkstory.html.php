@@ -38,7 +38,7 @@
       </thead>
       <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
-        <?php $objectID = $this->app->openApp == 'execution' ? $build->execution : $build->project;?>
+        <?php $objectID = $this->app->tab == 'execution' ? $build->execution : $build->project;?>
         <?php foreach($allStories as $story):?>
         <tr>
           <td class='c-id text-left'>

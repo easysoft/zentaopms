@@ -1828,7 +1828,7 @@ class docModel extends model
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
                 $icon  = zget($this->config->doc->iconList, $typeKey);
                 $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->openApp}'");
+                $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
                 $html .= "</li>";
                 if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }
@@ -1881,7 +1881,7 @@ class docModel extends model
             if($doc->type == 'project')   $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
-            $tab = $this->app->openApp;
+            $tab = $this->app->tab;
             if($tab != 'doc') $tab = $objectID ? $doc->type : 'doc';
 
             $html .= '<li>' . html::a(inlink('objectLibs', "type={$doc->type}&objectID=$objectID&libID={$doc->lib}&docID={$doc->id}"), "<i class='icon icon-file-text'></i> " . $doc->title, '', "data-app='$tab' title='{$doc->title}'") . '</li>';
@@ -1911,8 +1911,8 @@ class docModel extends model
     public function buildBrowseSwitch($type, $objectID, $viewType)
     {
         $html  = "<div class='btn-group'>";
-        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$this->lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "' data-app='{$this->app->openApp}'");
-        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$this->lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "' data-app='{$this->app->openApp}'");
+        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$this->lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");
+        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$this->lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");
         $html .= "</div>";
 
         return $html;
@@ -1990,13 +1990,13 @@ class docModel extends model
         $output            = '';
         $closedObjectsHtml = '';
         $closedObjects     = array();
-        $maxHeight         = (in_array($type, array('project','execution')) and $this->app->openApp == 'doc') ? '260px' : '290px';
-        $class             = (in_array($type, array('project','execution')) and $this->app->openApp == 'doc') ? 'col-left' : '';
+        $maxHeight         = (in_array($type, array('project','execution')) and $this->app->tab == 'doc') ? '260px' : '290px';
+        $class             = (in_array($type, array('project','execution')) and $this->app->tab == 'doc') ? 'col-left' : '';
 
         $currentMethod = $this->app->getMethodName();
         $methodName    = in_array($currentMethod, array('tablecontents', 'showfiles')) ? 'tablecontents' : 'objectLibs';
 
-        if($this->app->openApp == 'doc' and $type != 'custom' and $type != 'book')
+        if($this->app->tab == 'doc' and $type != 'custom' and $type != 'book')
         {
             $objectTitle = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
 
@@ -2018,7 +2018,7 @@ class docModel extends model
         <div class='table-col $class'>
           <div class='list-group' style='max-height: $maxHeight'>
 EOT;
-            if(in_array($type, array('project','execution')) and $this->app->openApp == 'doc')
+            if(in_array($type, array('project','execution')) and $this->app->tab == 'doc')
             {
                 $closedObjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
             }
@@ -2028,15 +2028,15 @@ EOT;
                 $selected = $key == $objectID ? 'selected' : '';
                 if(isset($closedObjects[$key]))
                 {
-                    $closedObjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->openApp}'");
+                    $closedObjectsHtml .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->tab}'");
                     if($selected == 'selected') $tabActive = 'closed';
                 }
                 else
                 {
-                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->openApp}'");
+                    $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->tab}'");
                 }
             }
-            if(in_array($type, array('project','execution')) and $this->app->openApp == 'doc')
+            if(in_array($type, array('project','execution')) and $this->app->tab == 'doc')
             {
                 $output .= <<<EOT
             </div>
@@ -2080,12 +2080,12 @@ EOT;
             foreach($libs as $key => $lib)
             {
                 $selected = $key == $libID ? 'selected' : '';
-                $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->openApp}'");
+                $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
             }
             if($type != 'custom' and $type != 'book')
             {
                 $selected = empty($libID) ? 'selected' : '';
-                $output  .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->openApp}'");
+                $output  .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->tab}'");
             }
             $output .= "</div></div></div></div></div>";
         }
@@ -2156,7 +2156,7 @@ EOT;
                     $treeMenu[0] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                 }
 
-                $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title' title='{$doc->title}'");
+                $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
 
                 $treeMenu[0] .= '</li>';
             }
@@ -2199,7 +2199,7 @@ EOT;
                 {
                     $treeMenu[$module->id] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                 }
-                $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->openApp}' class='doc-title' title='{$doc->title}'");
+                $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
 
                 $treeMenu[$module->id] .= '</li>';
             }
@@ -2286,7 +2286,7 @@ EOT;
             $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
         }
 
-        $this->session->set('docList', $this->app->getURI(true), $this->app->openApp);
+        $this->session->set('docList', $this->app->getURI(true), $this->app->tab);
 
         $objects = $this->getOrderedObjects($type);
 
@@ -2319,14 +2319,14 @@ EOT;
             if($libID == 0) $libID = key($libs);
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
-            if($this->app->openApp == 'doc') $this->app->rawMethod = $type;
+            if($this->app->tab == 'doc') $this->app->rawMethod = $type;
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
             if(empty($object)) die(js::locate(helper::createLink($type, 'create')));
         }
 
-        $openApp = strpos(',doc,product,project,execution,', ",{$this->app->openApp},") !== false ? $this->app->openApp : 'doc';
-        if($openApp != 'doc') $this->loadModel($openApp)->setMenu($objectID);
+        $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
+        if($tab != 'doc') $this->loadModel($tab)->setMenu($objectID);
 
         $this->lang->TRActions  = $this->buildCollectButton4Doc();
         $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->buildCreateButton4Doc($type, $objectID, $libID) : '';

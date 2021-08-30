@@ -17,7 +17,7 @@ foreach($products as $product)
 }
 $productsPinYin = common::convert2Pinyin($productNames);
 $linkHtml       = $this->product->setParamsForLink($module, $link, $projectID, 0);
-$productsHtml   = html::a($linkHtml, $this->lang->bug->allProduct, '', "class='text-important' title='{$this->lang->bug->allProduct}' data-key='" . zget($productsPinYin, $this->lang->bug->allProduct, '') . "' data-app='{$this->app->openApp}'");
+$productsHtml   = html::a($linkHtml, $this->lang->bug->allProduct, '', "class='text-important' title='{$this->lang->bug->allProduct}' data-key='" . zget($productsPinYin, $this->lang->bug->allProduct, '') . "' data-app='{$this->app->tab}'");
 
 foreach($products as $product)
 {
@@ -26,7 +26,7 @@ foreach($products as $product)
     $productName .= $product->line ? zget($lines, $product->line, '') . '/' . $product->name : $product->name;
     $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
     $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-    $productsHtml .= html::a($linkHtml, $productName, '', "class='text-important $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='{$this->app->openApp}'");
+    $productsHtml .= html::a($linkHtml, $productName, '', "class='text-important $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='{$this->app->tab}'");
 }
 ?>
 <div class="table-row">

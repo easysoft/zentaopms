@@ -31,8 +31,8 @@
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('product', $product)):?>
-    <?php $openApp = strpos('|execution|project|qa|', $this->app->openApp) !== false ? $this->app->openApp : 'qa';?>
-    <?php if($this->app->openApp != 'product') common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module},projectID={$bug->project},executionID={$bug->execution}", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary' data-app='$openApp'"); ?>
+    <?php $tab = strpos('|execution|project|qa|', $this->app->tab) !== false ? $this->app->tab : 'qa';?>
+    <?php if($this->app->tab != 'product') common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module},projectID={$bug->project},executionID={$bug->execution}", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary' data-app='$tab'"); ?>
     <?php endif;?>
   </div>
   <?php endif;?>
@@ -69,8 +69,8 @@
     <?php
     $params        = "bugID=$bug->id";
     $extraParams   = "extras=bugID=$bug->id";
-    if($this->app->openApp == 'project')   $extraParams .= ",projectID={$bug->project}";
-    if($this->app->openApp == 'execution') $extraParams .= ",executionID={$bug->execution}";
+    if($this->app->tab == 'project')   $extraParams .= ",projectID={$bug->project}";
+    if($this->app->tab == 'execution') $extraParams .= ",executionID={$bug->execution}";
     $copyParams    = "productID=$productID&branch=$bug->branch&$extraParams";
     $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
     ?>
@@ -86,9 +86,9 @@
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
-        if($this->app->openApp != 'product')
+        if($this->app->tab != 'product')
         {
-            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='" . $this->app->openApp . "'", $lang->bug->toStory);
+            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='" . $this->app->tab . "'", $lang->bug->toStory);
             common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
         }
 
@@ -96,7 +96,7 @@
 
         echo "<div class='divider'></div>";
         common::printIcon('bug', 'edit', $params, $bug);
-        if($this->app->openApp != 'product')
+        if($this->app->tab != 'product')
         {
             common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
         }

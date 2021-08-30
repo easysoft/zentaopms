@@ -11,11 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php if($this->app->openApp == 'project'):?>
+<?php if($this->app->tab == 'project'):?>
 <div class="table-empty-tip">
   <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('project', 'manageProducts', "projectID=$objectID", "<i class='icon icon-plus'></i> " . $lang->project->manageProducts, '', "class='btn btn-info'  data-app='project'");?></p>
 </div>
-<?php elseif($this->app->openApp == 'execution'):?>
+<?php elseif($this->app->tab == 'execution'):?>
 <div class="table-empty-tip">
   <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('execution', 'manageProducts', "executionID=$objectID", "<i class='icon icon-plus'></i> " . $lang->execution->manageProducts, '', "class='btn btn-info'  data-app='execution'");?></p>
 </div>

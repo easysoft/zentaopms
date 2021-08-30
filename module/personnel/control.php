@@ -103,18 +103,18 @@ class personnel extends control
      */
     public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0, $from = '')
     {
-        if($this->app->openApp == 'program')
+        if($this->app->tab == 'program')
         {
             $this->loadModel('program')->setMenu($objectID);
         }
-        else if($this->app->openApp == 'project')
+        else if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($objectID);
         }
 
         /* Load lang and set session. */
         $this->app->loadLang('user');
-        $this->app->session->set('whitelistList', $this->app->getURI(true), $this->app->openApp);
+        $this->app->session->set('whitelistList', $this->app->getURI(true), $this->app->tab);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -155,11 +155,11 @@ class personnel extends control
      */
     public function addWhitelist($objectID = 0, $deptID = 0, $copyID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
-        if($this->app->openApp == 'program')
+        if($this->app->tab == 'program')
         {
             $this->loadModel('program')->setMenu($objectID);
         }
-        else if($this->app->openApp == 'project')
+        else if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($objectID);
         }
@@ -174,8 +174,8 @@ class personnel extends control
             $this->loadModel('action')->create('whitelist', $objectID, 'managedWhitelist', '', $objectType);
 
             $locateLink = $this->session->whitelistList ? $this->session->whitelistList : $this->createLink($module, 'whitelist', "objectID=$objectID");
-            $openApp = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $openApp));
+            $tab = $module == 'program' ? ($from == 'project' || $from == 'my' ? '#open=project' : '#open=program') : '';
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink . $tab));
         }
 
         $this->loadModel('dept');

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php js::set('caseResultSave', $lang->save);?>
-<?php js::set('openApp', $app->openApp);?>
+<?php js::set('tab', $app->tab);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>

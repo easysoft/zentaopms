@@ -45,14 +45,14 @@ class repo extends control
      */
     public function commonAction($repoID = 0, $objectID = 0)
     {
-        $openApp     = $this->app->openApp;
-        $this->repos = $this->repo->getRepoPairs($openApp, $objectID);
+        $tab = $this->app->tab;
+        $this->repos = $this->repo->getRepoPairs($tab, $objectID);
 
-        if($openApp == 'project')
+        if($tab == 'project')
         {
             $this->loadModel('project')->setMenu($objectID);
         }
-        else if($openApp == 'execution')
+        else if($tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($objectID);
         }
@@ -593,13 +593,13 @@ class repo extends control
             $encodePath = $this->repo->encodePath($path);
             if($change['kind'] == '' or $change['kind'] == 'file')
             {
-                $change['view'] = $viewPriv ? html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision"), $this->lang->repo->viewA, '', "data-app='{$this->app->openApp}'") : '';
-                if($change['action'] == 'M') $change['diff'] = $diffPriv ? html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=$encodePath&oldRevision=$oldRevision&newRevision=$revision"), $this->lang->repo->diffAB, '', "data-app='{$this->app->openApp}'") : '';
+                $change['view'] = $viewPriv ? html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision"), $this->lang->repo->viewA, '', "data-app='{$this->app->tab}'") : '';
+                if($change['action'] == 'M') $change['diff'] = $diffPriv ? html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=$encodePath&oldRevision=$oldRevision&newRevision=$revision"), $this->lang->repo->diffAB, '', "data-app='{$this->app->tab}'") : '';
             }
             else
             {
-                $change['view'] = $viewPriv ? html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=$encodePath&revision=$revision"), $this->lang->repo->browse, '', "data-app='{$this->app->openApp}'") : '';
-                if($change['action'] == 'M') $change['diff'] = $diffPriv ? html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=$encodePath&oldRevision=$oldRevision&newRevision=$revision"), $this->lang->repo->diffAB, '', "data-app='{$this->app->openApp}'") : '';
+                $change['view'] = $viewPriv ? html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=$encodePath&revision=$revision"), $this->lang->repo->browse, '', "data-app='{$this->app->tab}'") : '';
+                if($change['action'] == 'M') $change['diff'] = $diffPriv ? html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=$encodePath&oldRevision=$oldRevision&newRevision=$revision"), $this->lang->repo->diffAB, '', "data-app='{$this->app->tab}'") : '';
             }
             $changes[$path] = $change;
         }
@@ -876,7 +876,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->openApp == 'devops' ? $repoID : '') . "&branchID=$branch&objectID=$objectID", '', false);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=$branch&objectID=$objectID", '', false);
         $this->display();
     }
 
@@ -1103,7 +1103,7 @@ class repo extends control
         foreach($repos as $id => $repoName)
         {
             $selected = $id == $repoID ? 'selected' : '';
-            $reposHtml .= html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "class='$selected' data-app='{$this->app->openApp}'");
+            $reposHtml .= html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "class='$selected' data-app='{$this->app->tab}'");
         }
         $reposHtml .= '</div></div></div>';
 
@@ -1153,7 +1153,7 @@ class repo extends control
         foreach($branches as $id => $branchName)
         {
             $selected = $id == $branchID ? 'selected' : '';
-            $branchesHtml .= html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $branchName, '', "class='$selected' data-app='{$this->app->openApp}'");
+            $branchesHtml .= html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $branchName, '', "class='$selected' data-app='{$this->app->tab}'");
         }
         $branchesHtml .= '</div></div></div>';
 

@@ -47,15 +47,15 @@ class testreport extends control
         /* Get product data. */
         $products = array();
         $objectID = 0;
-        $openApp  = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
         if(!isonlybody())
         {
-            if($this->app->openApp == 'project')
+            if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
                 $products  = $this->loadModel('project')->getProducts($objectID, false);
             }
-            elseif($this->app->openApp == 'execution')
+            elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
                 $products = $this->loadModel('execution')->getProducts($objectID, false);
@@ -64,7 +64,7 @@ class testreport extends control
             {
                 $products = $this->product->getPairs();
             }
-            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testreport&objectID=$objectID")));
+            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testreport&objectID=$objectID")));
         }
         else
         {
@@ -126,7 +126,7 @@ class testreport extends control
             if($param) $this->locate($this->createLink('testreport', 'create', $param));
         }
 
-        $this->session->set('reportList', $this->app->getURI(true), $this->app->openApp);
+        $this->session->set('reportList', $this->app->getURI(true), $this->app->tab);
 
         $executions = array();
         $tasks      = array();
@@ -205,8 +205,8 @@ class testreport extends control
             }
             $this->view->taskPairs = $taskPairs;
 
-            if($this->app->openApp == 'execution') $this->execution->setMenu($task->execution);
-            if($this->app->openApp == 'project') $this->project->setMenu($task->project);
+            if($this->app->tab == 'execution') $this->execution->setMenu($task->execution);
+            if($this->app->tab == 'project') $this->project->setMenu($task->project);
         }
 
         if(empty($objectID)) die(js::alert($this->lang->testreport->noObjectID) . js::locate('back'));
@@ -272,12 +272,12 @@ class testreport extends control
                 die(js::locate('back'));
             }
 
-            if($this->app->openApp == 'qa')
+            if($this->app->tab == 'qa')
             {
                 $productID = $this->product->saveState(key($productIdList), $this->products);
                 $this->loadModel('qa')->setMenu($this->products, $productID);
             }
-            elseif($this->app->openApp == 'project')
+            elseif($this->app->tab == 'project')
             {
                 $projects  = $this->project->getPairsByProgram();
                 $projectID = $this->project->saveState($execution->project, $projects);
@@ -367,7 +367,7 @@ class testreport extends control
         $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $report->begin;
         $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : $report->end;
 
-        if($this->app->openApp == 'qa' and !empty($report->product))
+        if($this->app->tab == 'qa' and !empty($report->product))
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
@@ -377,9 +377,9 @@ class testreport extends control
             $this->view->position[] = html::a($browseLink, $product->name);
             $this->view->position[] = $this->lang->testreport->edit;
         }
-        elseif($this->app->openApp == 'execution' or $this->app->openApp == 'project')
+        elseif($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
-            if($this->app->openApp == 'execution')
+            if($this->app->tab == 'execution')
             {
                 $objectID = $this->commonAction($report->execution, 'execution');
                 if($objectID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
@@ -484,7 +484,7 @@ class testreport extends control
 
         $browseLink = '';
         $execution  = $this->execution->getById($report->execution);
-        if($this->app->openApp == 'qa' and !empty($report->product))
+        if($this->app->tab == 'qa' and !empty($report->product))
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
@@ -493,9 +493,9 @@ class testreport extends control
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
             $this->view->position[] = html::a($browseLink, $product->name);
         }
-        elseif($this->app->openApp == 'execution' or $this->app->openApp == 'project')
+        elseif($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
-            if($this->app->openApp == 'execution')
+            if($this->app->tab == 'execution')
             {
                 $objectID = $this->commonAction($report->execution, 'execution');
                 if($objectID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));

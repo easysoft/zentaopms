@@ -159,12 +159,12 @@
     }
 
     /**
-     * Open app
+     * Open tab of app
      * @param {string} [url]   Url to open
      * @param {string} [appCode] The code of target app to open
      * @return {void}
      */
-    function openApp(url, appCode)
+    function openTab(url, appCode)
     {
         /* Check params */
         if(!appCode)
@@ -222,8 +222,8 @@
             if(!url) url = appsMap[appCode].url;
         }
 
-        /* Set openApp cookie */
-        $.cookie('openApp', appCode, {expires: config.cookieLife, path: config.webRoot});
+        /* Set tab cookie */
+        $.cookie('tab', appCode, {expires: config.cookieLife, path: config.webRoot});
 
         /* Highlight at main menu */
         var $menuMainNav   = $('#menuMainNav,#menuMoreNav');
@@ -309,7 +309,7 @@
      * @param {string} appCode The app code of target app to hide
      * @return {void}
      */
-    function hideApp(appCode)
+    function hideTab(appCode)
     {
         var app = openedApps[appCode];
         if(!app || !app.show) return;
@@ -322,17 +322,17 @@
 
         /* Active last app */
         var lastApp = getLastApp(true) || getLastApp();
-        showApp(lastApp ? lastApp.code : defaultApp);
+        showTab(lastApp ? lastApp.code : defaultApp);
     }
 
     /**
-     * Show app
+     * Show tab of app
      * @param {string} appCode The app code of target app to show
      * @return {void}
      */
-    function showApp(appCode)
+    function showTab(appCode)
     {
-        return openApp('', appCode);
+        return openTab('', appCode);
     }
 
     /**
@@ -343,8 +343,8 @@
     function toggleApp(appCode)
     {
         var app = openedApps[appCode];
-        if(!app || app.code !== lastOpenedApp) showApp(appCode);
-        else hideApp(appCode);
+        if(!app || app.code !== lastOpenedApp) showTab(appCode);
+        else hideTab(appCode);
     }
 
     /**
@@ -380,7 +380,7 @@
         }
 
         app.closed = true;
-        hideApp(appCode);
+        hideTab(appCode);
         app.$app.remove();
         app.$bar.remove();
         delete openedApps[appCode];
@@ -449,9 +449,9 @@
     /* Bind helper methods to global object "$.apps" */
     $.apps = window.apps =
     {
-        show:       showApp,
-        open:       openApp,
-        hide:       hideApp,
+        show:       showTab,
+        open:       openTab,
+        hide:       hideTab,
         toggle:     toggleApp,
         close:      closeApp,
         reload:     reloadApp,
@@ -553,7 +553,7 @@
             if($link.is('[data-modal],[data-toggle][data-toggle!="tooltip"],.iframe,.not-in-app')) return;
             var url = $link.hasClass('show-in-app') ? '' : ($link.attr('href') || $link.data('url'));
             if(url && url.indexOf('onlybody=yes') > 0) return;
-            if(openApp(url, $link.data('app')))
+            if(openTab(url, $link.data('app')))
             {
                 e.preventDefault();
                 if($link.closest('#userNav').length)
@@ -570,7 +570,7 @@
 
             var lang  = window.appsLang;
             var app   = openedApps[appCode];
-            var items = [{label: lang.open, disabled: app && lastOpenedApp === appCode, onClick: function(){showApp(appCode)}}];
+            var items = [{label: lang.open, disabled: app && lastOpenedApp === appCode, onClick: function(){showTab(appCode)}}];
             if(app)
             {
                 items.push({label: lang.reload, onClick: function(){reloadApp(appCode)}});
@@ -606,7 +606,7 @@
 
         window.addEventListener('popstate', function(event)
         {
-            if(event.state && lastOpenedApp !== event.state.app) openApp(event.state.app);
+            if(event.state && lastOpenedApp !== event.state.app) openTab(event.state.app);
         });
 
         /* Redirect or open default app after document load */
@@ -616,7 +616,7 @@
             defaultOpenUrl = decodeURIComponent(location.hash.substr(5));
         }
 
-        openApp(defaultOpenUrl ? defaultOpenUrl : defaultApp);
+        openTab(defaultOpenUrl ? defaultOpenUrl : defaultApp);
 
         /* Refresh more menu on window resize */
         $(window).on('resize', refreshMoreMenu);

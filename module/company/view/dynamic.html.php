@@ -61,8 +61,8 @@
               <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
-              <?php $openApp = '';?>
-              <?php if($action->objectType == 'meeting') $openApp = $action->project ? "data-app='project'" : "data-app='my'";?>
+              <?php $tab = '';?>
+              <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
               <?php
               if((isset($config->maxVersion) and strpos(",{$config->action->assetType},", ",{$action->objectType},") !== false) or empty($action->objectName))
               {
@@ -74,7 +74,7 @@
               }
               else
               {
-                  echo html::a($action->objectLink, $action->objectName, '', $openApp);
+                  echo html::a($action->objectLink, $action->objectName, '', $tab);
               }
               ?>
               <span class="label label-id"><?php echo $action->objectID;?></span>

@@ -265,7 +265,7 @@ class task extends control
             if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
         }
 
-        if($this->app->openApp == 'my')
+        if($this->app->tab == 'my')
         {
             $taskLink = $this->createLink('my', 'work', 'mode=task');
         }
@@ -699,7 +699,7 @@ class task extends control
 
         /* Set menu. */
         $execution = $this->execution->getById($task->execution);
-        if($this->app->openApp == 'execution') $this->execution->setMenu($execution->id);
+        if($this->app->tab == 'execution') $this->execution->setMenu($execution->id);
 
         $this->executeHooks($taskID);
 

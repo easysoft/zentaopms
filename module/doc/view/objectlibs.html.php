@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php if($app->openApp == 'execution'):;?>
+<?php if($app->tab == 'execution'):;?>
 <style>.panel-body{min-height: 180px}</style>
 <?php endif;?>
 <div class="fade main-row split-row" id="mainRow">

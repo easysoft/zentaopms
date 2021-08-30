@@ -155,7 +155,7 @@ class customModel extends model
         $menuModuleName = $module;
         $order          = 1;
         $customMenuMap  = array();
-        $openApp        = $app->openApp;
+        $tab            = $app->tab;
         $isTutorialMode = commonModel::isTutorialMode();
 
         if($customMenu)
@@ -316,14 +316,14 @@ class customModel extends model
         ksort($menu, SORT_NUMERIC);
 
         /* Set divider in main and module menu. */
-        if(!isset($lang->$openApp->menuOrder)) $lang->$openApp->menuOrder = array();
-        ksort($lang->$openApp->menuOrder, SORT_NUMERIC);
+        if(!isset($lang->$tab->menuOrder)) $lang->$tab->menuOrder = array();
+        ksort($lang->$tab->menuOrder, SORT_NUMERIC);
 
         $group = 0;
         $dividerOrders = array();
-        foreach($lang->$openApp->menuOrder as $name)
+        foreach($lang->$tab->menuOrder as $name)
         {
-            if(isset($lang->$openApp->dividerMenu) and strpos($lang->$openApp->dividerMenu, ",{$name},") !== false) $group++;
+            if(isset($lang->$tab->dividerMenu) and strpos($lang->$tab->dividerMenu, ",{$name},") !== false) $group++;
             $dividerOrders[$name] = $group;
         }
 

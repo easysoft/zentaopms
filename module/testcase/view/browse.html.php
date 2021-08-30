@@ -24,7 +24,7 @@ js::set('productID',      $productID);
 js::set('branch',         $branch);
 js::set('suiteID',        $suiteID);
 ?>
-<?php if($this->app->openApp == 'project'):?>
+<?php if($this->app->tab == 'project'):?>
 <style>
 #subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
 #subHeader #dropMenu .col-left {padding-bottom: 0px;}
@@ -56,11 +56,11 @@ js::set('suiteID',        $suiteID);
         <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
         <?php if((empty($productID) or common::canModify('product', $product)) and common::hasPriv('testcase', 'create') and $browseType != 'bysuite'):?>
         <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-        <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='{$this->app->openApp}'");?>
+        <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
         <?php endif;?>
 
         <?php if(common::hasPriv('testsuite', 'linkCase') and $browseType == 'bysuite'):?>
-        <?php echo html::a($this->createLink('testsuite', 'linkCase', "suiteID=$param"), "<i class='icon icon-plus'></i> " . $lang->testsuite->linkCase, '', "class='btn btn-info' data-app='{$this->app->openApp}'");?>
+        <?php echo html::a($this->createLink('testsuite', 'linkCase', "suiteID=$param"), "<i class='icon icon-plus'></i> " . $lang->testsuite->linkCase, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
         <?php endif;?>
       </p>
     </div>

@@ -312,7 +312,7 @@ class repoModel extends model
     {
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
-        $repos = $this->getRepoPairs($this->app->openApp, $objectID);
+        $repos = $this->getRepoPairs($this->app->tab, $objectID);
         if($repoID == 0 and $this->session->repoID == '')
         {
             $this->session->set('repoID', key($repos));

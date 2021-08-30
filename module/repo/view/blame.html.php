@@ -20,7 +20,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
     $backURI = $this->session->repoView ? $this->session->repoView : $this->session->repoList;
     if($backURI)
     {
-        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");
+        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->tab}'");
     }
     else
     {
@@ -32,14 +32,14 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
       <strong>
         <?php
         $base64BranchID = base64_encode($branchID);
-        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->openApp}'");
+        echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'");
         $paths = explode('/', $entry);
         $fileName = array_pop($paths);
         $postPath = '';
         foreach($paths as $pathName)
         {
             $postPath .= $pathName . '/';
-            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->openApp}'");
+            echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->tab}'");
         }
         echo '/' . ' ' . $fileName;
         echo " <span class='label label-info'>" . $revisionName . '</span>';
@@ -59,7 +59,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
         <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn dropdown-toggle')?>
         <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>
           <?php foreach($lang->repo->encodingList as $key => $val):?>
-          <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$key"), $val, '', "data-app='{$app->openApp}'")?></li>
+          <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$key"), $val, '', "data-app='{$app->tab}'")?></li>
           <?php endforeach;?>
         </ul>
       </div>

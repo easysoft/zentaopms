@@ -377,11 +377,11 @@ class project extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
 
-            if($this->app->openApp == 'program')
+            if($this->app->tab == 'program')
             {
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
             }
-            elseif($this->app->openApp == 'doc')
+            elseif($this->app->tab == 'doc')
             {
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=project&objectID=$projectID")));
             }
@@ -399,7 +399,7 @@ class project extends control
             }
         }
 
-        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu($programID);
+        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
 
         $name      = '';
         $code      = '';
@@ -431,7 +431,7 @@ class project extends control
             }
         }
 
-        if($this->app->openApp == 'doc') unset($this->lang->doc->menu->project['subMenu']);
+        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
         $this->view->title      = $this->lang->project->create;
         $this->view->position[] = $this->lang->project->create;
@@ -586,7 +586,7 @@ class project extends control
             die(js::locate($this->session->projectList, 'parent'));
         }
 
-        if($this->app->openApp == 'program') $this->loadModel('program')->setMenu(0);
+        if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
 
         $projectIdList = $this->post->projectIdList ? $this->post->projectIdList : die(js::locate($this->session->projectList, 'parent'));
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
@@ -1665,11 +1665,11 @@ class project extends control
         }
 
         $project = $this->project->getById($projectID);
-        if($this->app->openApp == 'program')
+        if($this->app->tab == 'program')
         {
             $this->program->setMenu($project->parent);
         }
-        else if($this->app->openApp == 'project')
+        else if($this->app->tab == 'project')
         {
             $this->project->setMenu($projectID);
         }

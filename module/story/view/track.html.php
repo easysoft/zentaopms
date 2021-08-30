@@ -17,9 +17,9 @@
       </p>
     </div>
     <?php else:?>
-    <?php $style   = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
-    <?php $openApp = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
-    <?php $module  = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
+    <?php $style  = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
+    <?php $tab    = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
+    <?php $module = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
     <div class='main-table' data-ride="table">
       <table class='table table-bordered' id="trackList">
         <thead>
@@ -62,7 +62,7 @@
               <?php if($key != 'noRequirement'):?>
               <span class="label label-primary label-outline"><?php echo zget($lang->story->statusList, $requirement->status);?></span>
               <?php endif;?>
-              <?php echo $key == 'noRequirement' ? $lang->story->noRequirement : html::a($this->createLink($module, 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-app='$openApp'");?>
+              <?php echo $key == 'noRequirement' ? $lang->story->noRequirement : html::a($this->createLink($module, 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-app='$tab'");?>
             </td>
             <?php endif;?>
             <?php if(count($track) != 0):?>
@@ -71,7 +71,7 @@
             <?php if($i != 1) echo '<tr>';?>
               <td style='padding-left: 10px;'>
                 <?php if(isset($story->parent) and $story->parent > 0):?><span class="label label-badge label-light" title="<?php echo $this->lang->story->children;?>"><?php echo $this->lang->story->childrenAB;?></span><?php endif;?>
-                <?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-app='$openApp'");?>
+                <?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-app='$tab'");?>
               </td>
               <td>
                 <?php foreach($story->tasks as $taskID => $task):?>

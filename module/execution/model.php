@@ -242,7 +242,7 @@ class executionModel extends model
             return $this->session->execution;
         }
 
-        if($executionID > 0) $this->session->set('execution', (int)$executionID, $this->app->openApp);
+        if($executionID > 0) $this->session->set('execution', (int)$executionID, $this->app->tab);
         if($executionID == 0 and $this->cookie->lastExecution)
         {
             /* Execution link is execution-task. */
@@ -349,7 +349,7 @@ class executionModel extends model
         }
 
         /* Replace required language. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $this->lang->project->name = $this->lang->execution->name;
             $this->lang->project->code = $this->lang->execution->code;
@@ -570,7 +570,7 @@ class executionModel extends model
         $codeList    = array();
 
         /* Replace required language. */
-        if($this->app->openApp == 'project')
+        if($this->app->tab == 'project')
         {
             $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($this->session->project)->fetch('model');
             if($projectModel == 'scrum')
@@ -1289,7 +1289,7 @@ class executionModel extends model
         {
             $link = helper::createLink($module, 'task', "executionID=%s");
         }
-        elseif($module == 'bug' and $method == 'create' and $this->app->openApp == 'execution')
+        elseif($module == 'bug' and $method == 'create' and $this->app->tab == 'execution')
         {
             $link = helper::createLink($module, $method, "productID=0&branch=0&extra=executionID=%s");
         }
@@ -1518,8 +1518,8 @@ class executionModel extends model
             if(strpos($taskQuery, "`execution` =") === false) $taskQuery = $taskQuery . " AND `execution` = $executionID";
             $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
             $taskQuery    = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
-            $this->session->set('taskQueryCondition', $taskQuery, $this->app->openApp);
-            $this->session->set('taskOnlyCondition', true, $this->app->openApp);
+            $this->session->set('taskQueryCondition', $taskQuery, $this->app->tab);
+            $this->session->set('taskOnlyCondition', true, $this->app->tab);
 
             $tasks = $this->getSearchTasks($taskQuery, $pager, $sort);
         }

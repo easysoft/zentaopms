@@ -123,7 +123,7 @@
   </div>
 </div>
 <?php js::set('type', $type);?>
-<?php js::set('openApp', $this->app->openApp);?>
+<?php js::set('tab', $this->app->tab);?>
 <script>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';

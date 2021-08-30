@@ -27,7 +27,7 @@
       <div class='panel-body'>
         <div class='list-group'>
         <?php foreach($lang->testtask->unitTag as $key => $label):?>
-        <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}UnitTab' class='btn btn-link' data-app='{$this->app->openApp}'");?>
+        <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}UnitTab' class='btn btn-link' data-app='{$this->app->tab}'");?>
         <?php endforeach;?>
         </div>
       </div>
@@ -62,7 +62,7 @@
       <?php foreach($tasks as $task):?>
       <tr class='text-left'>
         <td><?php printf('%03d', $task->id);?></td>
-        <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('unitCases', "taskID=$task->id"), $task->name, '', "data-app={$this->app->openApp}");?></td>
+        <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('unitCases', "taskID=$task->id"), $task->name, '', "data-app={$this->app->tab}");?></td>
         <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
         <td class='c-name' title="<?php echo $task->buildName;?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', 'data-app="execution"');?></td>
         <td><?php echo zget($users, $task->owner);?></td>

@@ -11,7 +11,7 @@
  */
 ?>
 <?php $mailTitle = 'RELEASE #' . $object->id . ' ' . $object->name;?>
-<?php $module    = $this->app->openApp == 'product' ? 'release' : 'projectrelease';?>
+<?php $module    = $this->app->tab == 'product' ? 'release' : 'projectrelease';?>
 <?php include $this->app->getModuleRoot() . 'common/view/mail.header.html.php';?>
 <tr>
   <td>
