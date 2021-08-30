@@ -55,6 +55,8 @@ class report extends control
      */
     public function projectDeviation($begin = 0, $end = 0)
     {
+        $this->session->set('projectList', $this->app->getURI(true), 'project');
+
         $begin = $begin ? date('Y-m-d', strtotime($begin)) : '';
         $end   = $end   ? date('Y-m-d', strtotime($end))   : '';
 
