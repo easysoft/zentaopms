@@ -408,7 +408,7 @@ class gitlabModel extends model
         {
             $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&membership=true&page={$page}&per_page=100"));
             if(empty($results) or $page > 10) break;
-            $allResults = $allResults + $results;
+            $allResults = array_merge($allResults, $results);
         }
 
         return $allResults;
