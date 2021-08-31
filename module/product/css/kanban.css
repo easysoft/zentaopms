@@ -1,6 +1,6 @@
 #kanban {padding: 10px;}
-.main-table tbody>tr>td {padding: 10px;}
-.table caption {background: #fff; border-top-left-radius: 2px; border-top-right-radius: 2px; margin-bottom: 0; font-weight: 500;}
+.main-table tbody>tr>td {padding: 0 10px 10px;}
+.table caption {background: #fff; border-top-left-radius: 2px; border-top-right-radius: 2px; margin-bottom: 0; font-weight: 500; padding-top: 0;}
 .table .program {writing-mode: vertical-lr; padding-left: 4px !important; color: #fff;}
 
 .table th, .table td {border-top: 2px solid #fff; border-bottom: 2px solid #fff; border-left: 3px solid #fff; border-bottom: 3px solid #fff;}
