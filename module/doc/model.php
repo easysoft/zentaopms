@@ -2310,7 +2310,7 @@ EOT;
         {
             $libs = $this->getLibsByObject('book', 0, '', $appendLib);
             $this->app->rawMethod = 'book';
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
+            if(!empty($libs) and ($libID == 0 or !isset($libs[$libID]))) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
             $object = new stdclass();
