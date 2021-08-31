@@ -96,9 +96,6 @@ class program extends control
 
         $this->program->setMenu($programID);
 
-        $program = $this->program->getByID($programID);
-        if(empty($program) || $program->type != 'program') die(js::error($this->lang->notFound) . js::locate('back'));
-
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -106,6 +103,7 @@ class program extends control
         /* Get the top programID. */
         if($programID)
         {
+            $program   = $this->program->getByID($programID);
             $path      = explode(',', $program->path);
             $path      = array_filter($path);
             $programID = current($path);
@@ -113,7 +111,7 @@ class program extends control
 
         $this->view->title       = $this->lang->program->product;
         $this->view->position[]  = $this->lang->program->product;
-        $this->view->program     = $program;
+        $this->view->programID   = $programID;
         $this->view->browseType  = $browseType;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
@@ -386,12 +384,12 @@ class program extends control
     {
         $programID = $this->program->saveState($programID, $this->program->getPairs());
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        if(!$programID) $this->locate($this->createLink('program', 'browse'));
 
         $this->program->setMenu($programID);
 
-        $this->app->session->set('programProject', $this->app->getURI(true), 'program');
-        $this->app->session->set('projectList', $this->app->getURI(true), 'project');
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('programProject', $uri, 'program');
+        $this->app->session->set('projectList', $uri, 'program');
 
         $this->loadModel('datatable');
 
@@ -410,7 +408,6 @@ class program extends control
         $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
         $this->view->programID    = $programID;
-        $this->view->program      = $this->program->getByID($programID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->browseType   = $browseType;
         $this->view->orderBy      = $orderBy;
