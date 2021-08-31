@@ -12,6 +12,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
   <?php foreach($kanbanGroup as $type => $programGroup):?>
+  <?php if(empty($programGroup)) continue;?>
   <?php $colorIndex = 0;?>
   <div class="cell">
     <div class='detail'>
@@ -35,7 +36,7 @@
           <tbody>
             <?php foreach($programGroup as $programID => $program):?>
             <tr>
-              <td class='lane-name' style='background: <?php echo $lang->program->kanban->laneColorList[$colorIndex];?>; color: #fff; border-right: none;' rowspan='<?php echo count($program->products);?>' title=<?php echo $program->name;?>><?php echo $program->name;?></td>
+              <td class='lane-name' style='background: <?php echo $lang->program->kanban->laneColorList[$colorIndex];?>; color: #fff; border-right: none;' rowspan='<?php echo count($program->products) == 0 ? 1 : count($program->products);?>' title=<?php echo $program->name;?>><?php echo $program->name;?></td>
               <?php $i = 0;?>
               <?php if(!empty($program->products)):?>
               <?php foreach($program->products as $productID => $product):?>
