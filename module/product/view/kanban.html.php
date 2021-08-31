@@ -45,7 +45,7 @@
           <?php endif;?>
           <td title="<?php echo $productList[$productID]->name;?>">
             <?php if(common::hasPriv('product', 'browse')):?>
-            <?php echo html::a($this->createLink('product', 'browse', "productID=$productID"), $productList[$productID]->name, '', "title={$productList[$productID]->name}");?>
+            <?php echo '<span>' . html::a($this->createLink('product', 'browse', "productID=$productID"), $productList[$productID]->name, '', "title={$productList[$productID]->name}") . '</span>';?>
             <?php else:?>
             <?php echo "<span title={$productList[$productID]->name}>{$productList[$productID]->name}</span>";?>
             <?php endif;?>
