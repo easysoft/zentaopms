@@ -1352,7 +1352,7 @@ EOD;
         $executionPairs = array();
         $object         = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
-        $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' $orderBy")->fetchAll();
+        $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $orderBy")->fetchAll();
         foreach($executionList as $execution)
         {
             if($execution->id == $executionID) continue;
