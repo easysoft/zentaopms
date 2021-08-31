@@ -247,7 +247,7 @@
         </div>
       </div>
     </div>
-    <div class="modal fade modal-team" id="modalTeam">
+    <div class="modal fade modal-team" id="modalTeam"  data-scroll-inside='false'>
       <div class="modal-dialog">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">

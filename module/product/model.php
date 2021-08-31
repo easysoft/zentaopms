@@ -346,15 +346,15 @@ class productModel extends model
      */
     public function getProducts($projectID = 0, $status = 'all', $orderBy = '')
     {
-        return $this->dao->select('t1.branch, t1.plan, t2.*')
-            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
-            ->where('t2.deleted')->eq(0)
-            ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+        return $this->dao->select('t1.*, t2.branch, t2.plan')
+            ->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
+            ->on('t1.id = t2.product')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF(!empty($projectID))->andWhere('t2.project')->eq($projectID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->orderBy($orderBy . 't2.order asc')
+            ->orderBy($orderBy . 't1.order asc')
             ->fetchAll('id');
     }
 
