@@ -10,13 +10,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php $colorIndex = 0;?>
-
 <?php if(empty($kanbanGroup)):?>
 <div class="table-empty-tip">
   <p><span class="text-muted"><?php echo $lang->project->empty;?></span></p>
 </div>
 <?php else:?>
-
 <?php foreach($kanbanGroup as $type => $projectGroup):?>
 <?php if(empty($projectGroup)) continue;?>
 <div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
@@ -39,7 +37,7 @@
           </thead>
           <tbody>
             <?php foreach($projectGroup as $programID => $statusList):?>
-            <tr>
+            <tr class='board-program'>
               <td class='text-center' style='background: <?php echo $lang->project->laneColorList[$colorIndex];?>; color: #fff; padding-left: 2px; writing-mode: vertical-lr;'><?php echo zget($programPairs, $programID);?></td>
               <?php foreach(array('wait','doing','closed') as $status):?>
               <?php if($status == 'doing'):?>
@@ -110,7 +108,7 @@
               </td>
               <?php else:?>
               <td class='board-<?php echo $status;?>'>
-                <div class='board-project' <?php if(isset($statusCount[$type][$programID][$status]) and isset($statusCount[$type][$programID]['doing']) and ($statusCount[$type][$programID][$status] > $statusCount[$type][$programID]['doing'])) echo "style='max-height: 273px; overflow: auto;'";?>>
+                <div class='board-project'>
                   <?php if(isset($statusList[$status])):?>
                   <?php foreach($statusList[$status] as $project):?>
                   <div class='board-item' <?php echo "style='border-left: 3px solid " . $lang->execution->statusColorList[$status] . "'";?>>
@@ -143,11 +141,4 @@
 </div>
 <?php endforeach;?>
 <?php endif;?>
-
-<script>
-$(function()
-{
-    $("div[class^='board-doing-']").height($('.board-doing-project').height());
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>
