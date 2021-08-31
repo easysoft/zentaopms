@@ -106,7 +106,7 @@
               </td>
               <?php else:?>
               <td class='board-<?php echo $status;?>'>
-                <div class='board-project'>
+                <div class='board-project' <?php if(isset($statusCount[$type][$programID][$status]) and isset($statusCount[$type][$programID]['doing']) and ($statusCount[$type][$programID][$status] > $statusCount[$type][$programID]['doing'])) echo "style='max-height: 273px; overflow: auto;'";?>>
                   <?php if(isset($statusList[$status])):?>
                   <?php foreach($statusList[$status] as $project):?>
                   <div class='board-item' <?php echo "style='border-left: 3px solid " . $lang->execution->statusColorList[$status] . "'";?>>

@@ -6,7 +6,7 @@
 .board-project .board-item + .board-item {margin-top: 10px;}
 
 .board-project {padding: 10px;}
-.board-doing, .board-closed {vertical-align: top !important;}
+.board-wait, .board-closed {vertical-align: top !important;}
 
 .board-doing {padding: 0px !important; vertical-align: top !important;}
 .board-doing div:not(:last-child) .board-doing-project,
@@ -14,6 +14,8 @@
 
 .board-doing div:last-child .board-doing-project,
 .board-doing div:last-child .board-doing-execution {padding: 10px;}
+
+.board-doing-project {border-right: 2px solid #fff}
 
 .board-doing-project .table-row .table-col:last-child, .c-progress {width: 30px;}
 .board-doing-execution .table-row .table-col:last-child, .c-progress {width: 30px;}
