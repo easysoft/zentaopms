@@ -61,7 +61,7 @@ class docModel extends model
         {
             if($lib->product   != 0 and !isset($products[$lib->product])) continue;
             if($lib->execution != 0 and !isset($executions[$lib->execution])) continue;
-            if($lib->project   != 0 and !isset($project[$lib->project]) and $lib->type == 'project') continue;
+            if($lib->project   != 0 and !isset($projects[$lib->project]) and $lib->type == 'project') continue;
 
             if($this->checkPrivLib($lib, $extra))
             {
