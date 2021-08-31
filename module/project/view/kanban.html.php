@@ -105,7 +105,7 @@
                 <?php endif;?>
               </td>
               <?php else:?>
-              <td>
+              <td class='board-<?php echo $status;?>'>
                 <div class='board-project'>
                   <?php if(isset($statusList[$status])):?>
                   <?php foreach($statusList[$status] as $project):?>

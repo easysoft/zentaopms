@@ -6,6 +6,7 @@
 .board-project .board-item + .board-item {margin-top: 10px;}
 
 .board-project {padding: 10px;}
+.board-doing, .board-closed {vertical-align: top !important;}
 
 .board-doing {padding: 0px !important; vertical-align: top !important;}
 .board-doing div:not(:last-child) .board-doing-project,
