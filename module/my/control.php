@@ -443,7 +443,9 @@ class my extends control
         $this->loadModel('testtask');
 
         /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        $uri = $this->app->getURI(true);
+        $this->session->set('caseList', $uri, 'qa');
+        $this->session->set('bugList',  $uri . "#app={$this->app->tab}", 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
