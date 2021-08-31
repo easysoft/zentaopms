@@ -9,13 +9,11 @@
 .board-wait, .board-closed {vertical-align: top !important;}
 
 .board-doing {padding: 0px !important; vertical-align: top !important;}
-.board-doing div:not(:last-child) .board-doing-project,
-.board-doing div:not(:last-child) .board-doing-execution {padding: 10px; border-bottom: 2px solid #fff;}
+.board-doing .board-doing-project:not(:last-child),
+.board-doing .board-doing-execution:not(:last-child) {padding: 10px; border-bottom: 2px solid #fff;}
 
-.board-doing div:last-child .board-doing-project,
-.board-doing div:last-child .board-doing-execution {padding: 10px;}
-
-.board-doing-project {border-right: 2px solid #fff}
+.board-doing .board-doing-project:last-child,
+.board-doing .board-doing-execution:last-child {padding: 10px;}
 
 .board-doing-project .table-row .table-col:last-child, .c-progress {width: 30px;}
 .board-doing-execution .table-row .table-col:last-child, .c-progress {width: 30px;}
