@@ -139,6 +139,7 @@ $config->openMethods[] = 'index.changelog';
 $config->openMethods[] = 'my.preference';
 $config->openMethods[] = 'my.changepassword';
 $config->openMethods[] = 'my.profile';
+$config->openMethods[] = 'my.settutorialconfig';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
