@@ -2461,6 +2461,7 @@ class executionModel extends model
             ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
             ->markRight(1)
+            ->orderBy('project_asc')
             ->fetchAll('id');
 
         if(empty($teams)) return array();
