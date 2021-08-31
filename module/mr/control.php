@@ -133,6 +133,7 @@ class mr extends control
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Crontab sync MR from GitLab API to Zentao database, default time 5 minutes to execute once.
      *
      * @access public
@@ -151,7 +152,8 @@ class mr extends control
         echo 'success';
     }
 
-    /** Accept a MR.
+    /**
+     * Accept a MR.
      *
      * @param  int    $MRID
      * @access public
