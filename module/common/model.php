@@ -395,7 +395,7 @@ class commonModel extends model
                 $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
 
                 $params = '';
-                if($objectType == 'bug' or $objectType == 'testcase') $params = "productID=$productID";
+                if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
                 if($objectType == 'doc') $params = "objectType=&objectID=0&libID=0";
 
                 $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? "class='iframe'" : '') . '</li>';

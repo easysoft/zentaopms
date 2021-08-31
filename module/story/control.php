@@ -48,6 +48,8 @@ class story extends control
      */
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
+        if($productID == 0) $this->locate($this->createLink('product', 'create'));
+
         $this->story->replaceURLang($type);
         if($this->app->tab == 'product')
         {
