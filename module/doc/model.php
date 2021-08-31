@@ -499,6 +499,12 @@ class docModel extends model
             ->remove('files,labels,uid,contactListMenu')
             ->get();
 
+        if(empty($doc->lib))
+        {
+            dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
+            return false;
+        }
+
         /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $doc->contentMarkdown = $this->post->contentMarkdown;
