@@ -1,3 +1,104 @@
+/* Tab session */
+(function($, undefined)
+{
+    if(!config.tabSession) return;
+
+    /** Store current tab id */
+    var _tid;
+
+    /** Store tab id for new window */
+    var _newTid;
+
+    /**
+     * Get current tab id
+     * @returns {string} Tab id
+     */
+    function getTid(){return _tid;}
+
+    /**
+     * Get tab id for new window
+     * @returns {string} Tab id
+     */
+    function getNewTid(){return _newTid;}
+
+    /**
+     * Convert url with tab id
+     * @param {string} url
+     * @returns {string} Tab id
+     */
+    function convertUrlWithNewTid(url)
+    {
+        var link    = $.parseLink(url);
+        var linkTid = link.tid || '';
+
+        if(linkTid === _newTid) return url;
+
+        link.tid = _newTid;
+        return $.createLink(link);
+    }
+
+    /** Init */
+    function init()
+    {
+        var link = $.parseLink(window.location.href);
+
+        _tid    = link.tid !== undefined ? link.tid : '';
+        _newTid = $.zui.uuid();
+        _newTid = _newTid.substr(_newTid.length - 8);
+
+        $.tabSession =
+        {
+            getTid:    getTid,
+            getNewTid: getNewTid,
+        };
+
+
+        /* Handle all links in page */
+        var origin = window.location.origin;
+        $('a').each(function()
+        {
+            var $a = $(this);
+            var href = $a.attr('href');
+            if(href.indexOf(origin) !== 0) return;
+            var link = $.parseLink(href);
+            var linkTid = link.tid || '';
+            if(_tid && _tid !== linkTid)
+            {
+                link.tid = _tid;
+                href = $.createLink(link);
+                $a.attr('href', href);
+            }
+        });
+
+        /* Init custom context menu for links */
+        $(document).contextmenu(
+        {
+            selector: 'a',
+            items: function(options)
+            {
+                var $a = $(options.event.target).closest('a');
+                if(!$a.length) return;
+                var href = $a.attr('href');
+                return [
+                    {
+                        label: '打开',
+                        url: href,
+                    }, {
+                        label: '在新标签页中打开',
+                        onClick: function()
+                        {
+                            console.log('convertUrlWithNewTid(href)', convertUrlWithNewTid(href));
+                            window.open(convertUrlWithNewTid(href), '_blank');
+                        }
+                    }
+                ];
+            }
+        });
+    }
+
+    init();
+}(jQuery, undefined));
+
 /**
  * Set the ping url.
  *
