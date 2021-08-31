@@ -181,7 +181,7 @@ class baseEntry
     {
         header("Content-type: application/json");
         header("HTTP/1.1 {$this->statusCode[$code]}");
-        echo json_encode($data);
+        echo json_encode($data, JSON_HEX_TAG);
         exit;
     }
 
