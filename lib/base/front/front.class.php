@@ -490,11 +490,7 @@ class baseHTML
         if(helper::inOnlyBodyMode()) return false;
 
         global $lang, $app, $config;
-        if(empty($label))
-        {
-            global $lang, $config;
-            $label = $lang->goback;
-        }
+        if(empty($label)) $label = $lang->goback;
 
         $tab           = $_COOKIE['tab'];
         $referer       = strtolower($_SERVER['HTTP_REFERER']);

@@ -743,6 +743,7 @@ class project extends control
         $this->session->set('bugList',         $uri, 'qa');
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
+        $this->session->set('reportList',      $uri, 'qa');
 
         if(isset($this->config->maxVersion))
         {

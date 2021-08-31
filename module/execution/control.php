@@ -2560,6 +2560,7 @@ class execution extends control
         $this->session->set('bugList',         $uri, 'qa');
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
+        $this->session->set('reportList',      $uri, 'qa');
 
         /* use first execution if executionID does not exist. */
         if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
