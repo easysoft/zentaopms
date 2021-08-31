@@ -1101,7 +1101,7 @@ class productModel extends model
         foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
 
         $executionPairs = array(0 => '');
-        $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList);
+        $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList, 'all');
         foreach($executions as $id => $execution)
         {
             if($execution->grade == 2 && isset($executions[$execution->parent]))
