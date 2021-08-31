@@ -305,7 +305,6 @@ class project extends control
         $this->view->title            = $this->lang->project->kanban;
         $this->view->kanbanGroup      = $kanbanGroup;
         $this->view->latestExecutions = $latestExecutions;
-        $this->view->statusCount      = $statusCount;
         $this->view->programPairs     = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true);
 
         $this->display();
