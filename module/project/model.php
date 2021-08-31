@@ -1798,7 +1798,6 @@ class projectModel extends model
 
         $myProjects    = array();
         $otherProjects = array();
-        $statusCount   = array();
         foreach($projects as $project)
         {
             if(strpos('wait,doing,closed', $project->status) === false) continue;
@@ -1809,17 +1808,15 @@ class projectModel extends model
             if($project->PM == $this->app->user->account)
             {
                 $myProjects[$topProgram][$project->status][$project->id] = $project;
-                $statusCount['my'][$topProgram][$project->status] = count($myProjects[$topProgram][$project->status]);
             }
             else
             {
                 $otherProjects[$topProgram][$project->status][$project->id] = $project;
-                $statusCount['other'][$topProgram][$project->status] = count($otherProjects[$topProgram][$project->status]);
             }
 
         }
 
-        return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions, 'statusCount' => $statusCount);
+        return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);
     }
 
     /**

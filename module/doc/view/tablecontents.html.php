@@ -52,7 +52,7 @@ if(empty($type)) $type = 'product';
           echo '</ul></div>';
       }
 
-      if($type == 'book' and ($canEditLib or $canManageBook))
+      if($type == 'book' and ($canEditLib or $canManageBook) and !empty($libs))
       {
           echo "<div class='menu-actions'>";
           echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");

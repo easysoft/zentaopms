@@ -1753,29 +1753,6 @@ class repoModel extends model
     }
 
     /**
-     * Get gitlab projects.
-     *
-     * @param  string   $host
-     * @param  string   $token
-     * @access public
-     * @return array
-     */
-    public function getGitlabProjects($host, $token)
-    {
-        $host  = rtrim($host, '/');
-        $host .= '/api/v4/projects';
-        $allResults = array();
-        for($page = 1; true; $page ++)
-        {
-            $results = json_decode(common::http($host . "?private_token=$token&simple=true&membership=true&page={$page}&per_page=100"));
-            if(empty($results) or $page > 10) break;
-            $allResults = $allResults + $results;
-        }
-
-        return $allResults;
-    }
-
-    /**
      * Process gitlab repo.
      *
      * @param  object    $repo
