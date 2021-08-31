@@ -159,4 +159,9 @@ class productIssueEntry extends entry
 
         $this->send(200, array('issue' => $this->format($issue, 'openedDate:time,lastEditedDate:time')));
     }
+
+    public function getHistory($type, $issue)
+    {
+
+    }
 }
