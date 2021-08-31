@@ -132,6 +132,7 @@ class mr extends control
     }
 
     /**
+<<<<<<< HEAD
      * Crontab sync MR from GitLab API to Zentao database, default time 5 minutes to execute once.
      *
      * @access public
@@ -148,6 +149,20 @@ class mr extends control
         }
 
         echo 'success';
+    }
+
+    /** Accept a MR.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return void
+     */
+    public function accept($MRID)
+    {
+        $MR = $this->mr->getByID($MRID);
+        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        if(isset($rawMR->state) and $rawMR->state == 'merged') return array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess);
+        return array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed);
     }
 
     /**
