@@ -1478,7 +1478,7 @@ class testcaseModel extends model
         $id = $col->id;
         if($col->show)
         {
-            $class = 'c-' . $id;
+            $class = $id == 'title' ? 'c-name' : 'c-' . $id;
             $title = '';
             if($id == 'title')
             {
