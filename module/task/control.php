@@ -39,7 +39,7 @@ class task extends control
      */
     public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
-        if($executionID == 0) $this->locate($this->createLink('execution', 'create'));
+        if(empty($this->app->user->view->sprints) and !$executionID) $this->locate($this->createLink('execution', 'create'));
 
         $executions  = $this->execution->getPairs();
         $executionID = $this->execution->saveState($executionID, $executions);

@@ -507,7 +507,7 @@ class executionModel extends model
             ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
-            ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
+            ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
             ->check('code', 'unique', "id != $executionID and code != '' and deleted = '0'")
             ->where('id')->eq($executionID)
             ->limit(1)
@@ -3391,7 +3391,7 @@ class executionModel extends model
         $days         = count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * $rate, 1) . ',';
+        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (int)$rate, 1) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);

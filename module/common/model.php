@@ -393,12 +393,13 @@ class commonModel extends model
                 $showCreateList = true;
                 $isOnlyBody     = strpos('effort|doc', $objectType) !== false;
                 $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
+                $attr           = $objectType == 'effort' ? "data-width='95%' class='iframe' data-toggle='modal'" : "class='iframe'";
 
                 $params = '';
                 if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
                 if($objectType == 'doc') $params = "objectType=&objectID=0&libID=0";
 
-                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? "class='iframe'" : '') . '</li>';
+                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
             }
         }
 
