@@ -132,6 +132,21 @@ class mr extends control
     }
 
     /**
+     * Accept a MR.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return void
+     */
+    public function accept($MRID)
+    {
+        $MR = $this->mr->getByID($MRID);
+        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        if(isset($rawMR->state) and $rawMR->state == 'merged') return array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess);
+        return array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed);
+    }
+
+    /**
      * AJAX: Get MR target projects.
      *
      * @param  int    $gitlabID
