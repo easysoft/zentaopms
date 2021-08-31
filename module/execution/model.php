@@ -507,7 +507,7 @@ class executionModel extends model
             ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
-            ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
+            ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
             ->check('code', 'unique', "id != $executionID and code != '' and deleted = '0'")
             ->where('id')->eq($executionID)
             ->limit(1)
