@@ -417,16 +417,25 @@ class gitlab extends control
 
     /**
      * AJAX: Get MR user pairs to select assignee_ids and reviewer_ids.
+     * Attention: The user must be a member of the GitLab project.
      *
      * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetMRUserPairs($gitlabID)
+    public function ajaxGetMRUserPairs($gitlabID, $projectID)
     {
         if(!$gitlabID) return $this->send(array('message' => array()));
 
-        $users    = $this->gitlab->getUserIdRealnamePairs($gitlabID);
+        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($gitlabID);
+        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($gitlabID, $projectID);
+        $users           = array();
+        foreach($rawProjectUsers as $rawProjectUser)
+        {
+            if(!empty($bindedUsers[$rawProjectUser->id])) $users[$rawProjectUser->id] = $bindedUsers[$rawProjectUser->id];
+        }
+
         $options  = "<option value=''></option>";
         foreach($users as $index => $user)
         {
