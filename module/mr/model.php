@@ -218,9 +218,80 @@ class mrModel extends model
             $this->dao->update(TABLE_MR)->data($newMR)
                 ->where('id')->eq($MR->id)
                 ->exec();
+
+            /*Sync GitLab Todo ZenTao Todo. */
+
+            $gitlabTodoList = $this->apiTodoList($MR->gitlabID, $MR->targetProject);
+            if($gitlabTodoList)
+            {
+                foreach($gitlabTodoList as $do)
+                {
+                    $todoDesc = $this->dao->select('*')
+                                          ->from(TABLE_TODO)
+                                          ->where('idvalue')
+                                          ->eq($do->id)
+                                          ->fetch();
+                    if(empty($todoDesc))
+                    {
+                        $todo = new stdClass;
+                        $todo->account       = $this->app->user->account;
+                        $todo->assignedTo    = $this->app->user->account;
+                        $todo->assignedBy    = $this->app->user->account;
+                        $todo->date          = $do->target->created_at;
+                        $todo->assignedDate  = $do->target->created_at;
+                        $todo->begin         = $do->target->created_at;
+                        $todo->end           = '';
+                        $todo->type          = 'mrapprove';
+                        $todo->idvalue       = $do->id;
+                        $todo->pri           = 1;
+                        $todo->name          = $do->target->title;
+                        $todo->desc          = $do->target->description . "<br>" . $this->todoDescriptionLink($MR->gitlabID, $MR->targetProject);
+                        $todo->private       = 0;
+                        $todo->config        = 0;
+                        $todo->finishedBy    = '';
+                        $todo->finishedDate  = '';
+                        $todo->closedBy      = '';
+                        $todo->closedDate    = '0000-00-00 00:00:00';
+                        $this->dao->insert(TABLE_TODO)->data($todo)->exec();
+                    }
+                }
+            }
         }
         return $this->dao->findByID($MR->id)->from(TABLE_MR)->fetch();
     }
+
+    /**
+     * Get a list of to-do items.
+     *
+     * @docs   https://docs.gitlab.com/ee/api/todos.html
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiTodoList($gitlabID, $projectID)
+    {
+        $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
+        if(!$gitlab) return '';
+        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&private_token={$gitlab->token}";
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get a list of to-do items.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function todoDescriptionLink($gitlabID, $projectID)
+    {
+        $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
+        if(!$gitlab) return '';
+        return rtrim($gitlab->url, '/')."/dashboard/todos?project_id=$projectID&type=MergeRequest";
+    }
+
 
     /**
      * Create MR by API.

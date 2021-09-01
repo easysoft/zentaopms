@@ -93,12 +93,13 @@ $lang->todo->priList[2] = 2;
 $lang->todo->priList[3] = 3;
 $lang->todo->priList[4] = 4;
 
-$lang->todo->typeList['custom']   = '自定义';
-$lang->todo->typeList['cycle']    = '周期';
-$lang->todo->typeList['bug']      = 'Bug';
-$lang->todo->typeList['task']     = '任务';
-$lang->todo->typeList['story']    = $lang->SRCommon;
-$lang->todo->typeList['testtask'] = '测试单';
+$lang->todo->typeList['custom']    = '自定义';
+$lang->todo->typeList['cycle']     = '周期';
+$lang->todo->typeList['bug']       = 'Bug';
+$lang->todo->typeList['task']      = '任务';
+$lang->todo->typeList['story']     = $lang->SRCommon;
+$lang->todo->typeList['testtask']  = '测试单';
+$lang->todo->typeList['mrapprove'] = '合并请求审批';
 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
