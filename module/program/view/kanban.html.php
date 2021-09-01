@@ -150,4 +150,7 @@
   </div>
   <?php endforeach;?>
 </div>
+<script>
+$(function(){ $('.board').height($('.project .board').height()); })
+</script>
 <?php include '../../common/view/footer.html.php';?>
