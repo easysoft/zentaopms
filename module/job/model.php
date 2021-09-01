@@ -20,7 +20,14 @@ class jobModel extends model
      */
     public function getByID($id)
     {
-        return $this->dao->select('*')->from(TABLE_JOB)->where('id')->eq($id)->fetch();
+        $job = $this->dao->select('*')->from(TABLE_JOB)->where('id')->eq($id)->fetch();
+        if(strtolower($job->engine) == 'gitlab')
+        {
+            $pipeline = json_decode($job->pipeline);
+            $job->project   = $pipeline->project;
+            $job->reference = $pipeline->reference;
+        }
+        return $job;
     }
 
     /**
@@ -117,7 +124,7 @@ class jobModel extends model
             ->setDefault('atDay', '')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->remove('repoType')
+            ->remove('repoType,reference')
             ->get();
 
         if($job->engine == 'jenkins')
@@ -128,10 +135,12 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
+            $repo    = $this->loadModel('repo')->getRepoByID($job->gitlabRepo);
+            $project = zget($repo, 'project');
+
             $job->repo     = $job->gitlabRepo;
-            $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
             $job->server   = (int)zget($repo, 'gitlab', 0);
-            $job->pipeline = zget($repo, 'project', '');
+            $job->pipeline = json_encode(array('project' => $project, 'reference' => $this->post->reference));
         }
 
         unset($job->jkServer);
@@ -203,7 +212,7 @@ class jobModel extends model
             ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
-            ->remove('repoType')
+            ->remove('repoType,reference')
             ->get();
 
         if($job->engine == 'jenkins')
@@ -214,10 +223,12 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
+            $repo    = $this->loadModel('repo')->getRepoByID($job->gitlabRepo);
+            $project = zget($repo, 'project');
+
             $job->repo     = $job->gitlabRepo;
-            $repo          = $this->loadModel('repo')->getRepoByID($job->repo);
             $job->server   = (int)zget($repo, 'gitlab', 0);
-            $job->pipeline = zget($repo, 'project', '');
+            $job->pipeline = json_encode(array('project' => $project, 'reference' => $this->post->reference));
         }
 
         unset($job->jkServer);
@@ -252,6 +263,7 @@ class jobModel extends model
 
             if(!empty($paramName)) $customParam[$paramName] = $paramValue;
         }
+
         unset($job->paramName);
         unset($job->paramValue);
         unset($job->custom);
@@ -407,7 +419,8 @@ class jobModel extends model
         }
         elseif($job->engine == 'gitlab' and $reference)
         {
-            $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $job->pipeline, $reference);
+            list($gitlabProject, $gitlabReference) = json_decode($job->pipeline);
+            $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $gitlabProject, $gitlabReference);
             if(empty($pipeline->id))
             {
                 $compile->status = 'create_fail';

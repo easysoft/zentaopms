@@ -67,12 +67,21 @@ class mr extends control
         $targetBranchList = array();
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
+        /* Fetch user list both in Zentao and current GitLab project. */
+        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($MR->gitlabID);
+        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($MR->gitlabID, $MR->targetProject);
+        $users           = array();
+        foreach($rawProjectUsers as $rawProjectUser)
+        {
+            if(!empty($bindedUsers[$rawProjectUser->id])) $users[$rawProjectUser->id] = $bindedUsers[$rawProjectUser->id];
+        }
+
         $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->gitlabID);
 
         $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
         $this->view->targetBranchList = $targetBranchList;
-        $this->view->users            = array("" => "") + $this->loadModel('gitlab')->getUserIdRealnamePairs($MR->gitlabID);
+        $this->view->users            = array("" => "") + $users;
         $this->view->assignee         = zget($gitlabUsers, $MR->assignee, '');
         $this->view->reviewer         = zget($gitlabUsers, $MR->reviewer, '');
 
@@ -148,6 +157,21 @@ class mr extends control
         }
 
         echo 'success';
+    }
+
+    /**
+     * Accept a MR.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return void
+     */
+    public function accept($MRID)
+    {
+        $MR = $this->mr->getByID($MRID);
+        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        if(isset($rawMR->state) and $rawMR->state == 'merged') return array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess);
+        return array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed);
     }
 
     /**

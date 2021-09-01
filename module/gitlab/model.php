@@ -471,6 +471,20 @@ class gitlabModel extends model
     }
 
     /**
+     * Get project users.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function apiGetProjectUsers($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/users");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
      * Get single branch by API.
      *
      * @param  int    $gitlabID

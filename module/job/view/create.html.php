@@ -48,7 +48,8 @@
           </tr>
           <tr class='gitlabRepo hide'>
             <th><?php echo $lang->job->repo; ?></th>
-            <td><?php echo html::select('gitlabRepo', $gitlabRepos, '', "class='form-control'"); ?></td>
+            <td> <?php echo html::select('gitlabRepo', $gitlabRepos, '', "class='chosen form-control'");?> </td>
+            <td> <?php echo html::select('reference', array(), '', "class='chosen form-control'");?> </td>
           </tr>
           <tr>
             <th><?php echo $lang->job->product; ?></th>
@@ -95,7 +96,7 @@
                 <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, '', "class='form-control chosen'"); ?></div>
                 <div class='table-col'>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->job->pipeline; ?></span>
+                    <span class='input-group-addon'><?php echo $lang->job->pipeline;?></span>
                     <?php echo html::select('jkTask', array('' => ''), '', "class='form-control chosen'"); ?>
                   </div>
                 </div>

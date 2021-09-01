@@ -30,7 +30,7 @@ $lang->mr->statusList['merged'] = '已合并';
 $lang->mr->mergeStatusList = array();
 $lang->mr->mergeStatusList['checking']         = '检查中';
 $lang->mr->mergeStatusList['can_be_merged']    = '可合并';
-$lang->mr->mergeStatusList['cannot_be_merged'] = '不可合并';
+$lang->mr->mergeStatusList['cannot_be_merged'] = '不可自动合并';
 
 $lang->mr->description   = '描述';
 $lang->mr->confirmDelete = '确认删除该合并请求吗？';
@@ -68,6 +68,10 @@ $lang->mr->hasConflicts   = "存在合并冲突";
 $lang->mr->hasNoConflict  = "可以合并请求";
 $lang->mr->mergeByManual  = "此合并请求可以手动合并，请使用以下";
 $lang->mr->commandLine    = "合并命令";
+$lang->mr->acceptMR       = "合并";
+$lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
+$lang->mr->mergeSuccess   = "已成功合并";
+
 
 /**
  * Merge Command Document.
@@ -80,7 +84,7 @@ $lang->mr->commandLine    = "合并命令";
  * %s mr::target_branch
  */
 $lang->mr->commandDocument = <<< EOD
-<div class='detail-title'>在本地检出、审核和合并</div>
+<div class='detail-title'>在本地检出、审核和手动合并</div>
 <div class='detail-content'>
   <p>
     第 1 步. 获取并查看此合并请求的分支

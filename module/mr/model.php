@@ -153,15 +153,16 @@ class mrModel extends model
 
         /* Update MR in GitLab. */
         $newMR = new stdclass;
-        $newMR->title        = $MR->title;
-        $newMR->description  = $MR->description;
-        $newMR->assignee     = $MR->assignee;
-        $newMR->reviewer     = $MR->reviewer;
-        $newMR->targetBranch = $MR->targetBranch;
+        $newMR->title         = $MR->title;
+        $newMR->description   = $MR->description;
+        $newMR->assignee_ids  = $MR->assignee;
+        $newMR->reviewer_ids  = $MR->reviewer;
+        $newMR->target_branch = $MR->targetBranch;
 
         $oldMR = $this->getByID($MRID);
 
-        $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
+        /* Known issue: `reviewer_ids` takes no effect. */
+        $rawMR = $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
 
         /* Change gitlab user ID to zentao account. */
         $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($oldMR->gitlabID);
@@ -173,6 +174,7 @@ class mrModel extends model
             ->where('id')->eq($MRID)
             ->autoCheck()
             ->exec();
+        $MR = $this->getByID($MRID);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
@@ -385,8 +387,8 @@ class mrModel extends model
      */
     public function apiAcceptMR($gitlabID, $projectID, $MRID)
     {
-        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
-        return json_decode(commonModel::http($url, $data, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/merge");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**

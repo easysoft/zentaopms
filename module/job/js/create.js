@@ -129,19 +129,37 @@ $(document).ready(function()
 
         if($(this).val() == 'gitlab')
         {
-            $('#triggerType').find('[value=schedule]').remove();
             $('tr.gitlabRepo').show();
             $('tr.commonRepo').hide();
         }
         else if($('#triggerType').find('[value=schedule]').size() == 0 )
         {
-            $('#triggerType').append(scheduleOption);
             $('tr.gitlabRepo').hide();
             $('tr.commonRepo').show();
         }
     });
 
     $('#engine').change();
+    $('#gitlabRepo').change(function()
+    {
+        $('#reference option').remove();
+
+        var repoID  = $(this).val();
+        if(repoID > 0)
+        {
+            $.getJSON(createLink('job', 'ajaxGetRefList', "repoID=" + repoID), function(response)
+            {
+                if(response.result == 'success')
+                {
+                    $.each(response.refList, function(reference, name)
+                    {
+                        $('#reference').append("<option value='" + reference + "'>" + name + "</option>");
+                    });
+                }
+                $('#reference').trigger('chosen:updated');
+            });
+        }
+    });
 
     $('#triggerType').change();
 });
