@@ -39,7 +39,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       }
       else
       {
-          common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");
+          common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary create-user-btn'");
       }
     ?>
   </div>

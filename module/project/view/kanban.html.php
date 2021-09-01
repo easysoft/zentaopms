@@ -38,7 +38,7 @@
           <tbody>
             <?php foreach($projectGroup as $programID => $statusList):?>
             <tr class='board-program'>
-              <td class='text-center' style='background: <?php echo $lang->project->laneColorList[$colorIndex];?>; color: #fff; padding-left: 2px; writing-mode: vertical-lr;'><?php echo zget($programPairs, $programID);?></td>
+              <td class='text-center' title='<?php echo zget($programPairs, $programID);?>' style='background: <?php echo $lang->project->laneColorList[$colorIndex];?>; color: #fff; padding-left: 2px; writing-mode: vertical-lr;'><?php echo zget($programPairs, $programID);?></td>
               <?php foreach(array('wait','doing','closed') as $status):?>
               <?php if($status == 'doing'):?>
               <td class='board-doing'>
@@ -111,7 +111,7 @@
                 <div class='board-project'>
                   <?php if(isset($statusList[$status])):?>
                   <?php foreach($statusList[$status] as $project):?>
-                  <div class='board-item' <?php echo "style='border-left: 3px solid " . $lang->execution->statusColorList[$status] . "'";?>>
+                  <div class='board-item text-ellipsis' <?php echo "style='border-left: 3px solid " . $lang->execution->statusColorList[$status] . "'";?>>
                   <?php
                   if(common::hasPriv('project', 'index'))
                   {

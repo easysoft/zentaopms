@@ -10,7 +10,6 @@
 
 .cell .detail .detail-title {padding-left: 5px; list-style: none;}
 .menu-actions {position: absolute; top: 7px; right: 45px; padding: 7px 8px;}
-.catalog>a {color: #838a9d !important;}
 .detail ul {position: relative;}
 .tail-info {position: absolute; right: 0; padding-left: 10px; padding-top: 1px;}
 .tail-info, .doc-title, span.item {background: #fff;}

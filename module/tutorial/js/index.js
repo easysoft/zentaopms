@@ -414,12 +414,18 @@ $(function()
 
     var checkTutorialState = function()
     {
-        var iWindow = getAppWindow();
-        iWindow = window.frames['iframePage'];
         tryCheckTask();
+        var iWindow = getAppWindow();
         var title = (iWindow.$ ? iWindow.$('head > title').text() : '') + $('head > title').text();
         var url = createLink('tutorial', 'index', 'referer=' + Base64.encode(iWindow.location.href) + '&task=' + current);
         try{window.history.replaceState({}, title, url);}catch(e){}
+    };
+
+    var checkTimer = 0;
+    var tryCheckTutorialState = function(delay)
+    {
+        clearTimeout(checkTimer);
+        checkTimer = setTimeout(checkTutorialState, delay || 200);
     };
 
     var showTask = function(taskName)
@@ -482,7 +488,10 @@ $(function()
         var appsIframe = $('#iframePage').get(0);
         appsIframe.onload = appsIframe.onreadystatechange = function()
         {
-            appsWindow.$(appsWindow.document).on('show.zentaoapp close.zentaoapp hide.zentaoapp', checkTutorialState);
+            appsWindow.$(appsWindow.document).on('reloadapp loadapp showapp closeapp hideapp', function()
+            {
+                tryCheckTutorialState(1000);
+            });
 
             /* Open referer page in app tab */
             if(tutorialReferer) appsWindow.$.apps.open(tutorialReferer);
