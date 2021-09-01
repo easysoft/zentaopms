@@ -1823,6 +1823,8 @@ class bugModel extends model
         if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getById($run->task);
         $executionID = isset($testtask->execution) ? $testtask->execution : 0;
 
+        if(!$executionID and $this->app->tab == 'execution') $executionID = $this->session->execution;
+
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
     }
 

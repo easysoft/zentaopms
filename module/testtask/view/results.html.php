@@ -51,7 +51,8 @@
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-angle-down text-muted'></i></td>
         </tr>
-        <?php $executionParam = ($this->app->tab == 'execution' and isset($testtask)) ? "executionID=$testtask->execution" : "";?>
+        <?php $executionParam = $this->app->tab == 'execution' ? "executionID={$this->session->execution}" : "";?>
+        <?php $executionParam = isset($testtask) ? "executionID=$testtask->execution" : $executionParam;?>
         <?php $params = isset($testtask) ? ",testtask=$testtask->id" : "";?>
         <?php $params = $params . ",buildID=" . (isset($testtask->build) ? $testtask->build : $result->build);?>
         <?php if($executionParam) $params .= ',' . $executionParam;?>
