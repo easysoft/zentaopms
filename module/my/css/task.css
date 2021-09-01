@@ -13,3 +13,7 @@ td.delayed {background: #e84e0f !important; color: white;}
 .table td.c-hours {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
+
+.c-hours {width: 50px;}
+.c-status, .c-date {width: 70px;}
+.c-project {width: 150px;}
