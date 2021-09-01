@@ -464,16 +464,17 @@ class projectModel extends model
      * Get project pairs by id list.
      *
      * @param  array  $projectIdList
+     * @param  string $mode
      * @access public
      * @return array
      */
-    public function getPairsByIdList($projectIdList = array())
+    public function getPairsByIdList($projectIdList = array(), $mode = '')
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectIdList)->andWhere('id')->in($projectIdList)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchPairs('id', 'name');
     }
 
@@ -1812,6 +1813,7 @@ class projectModel extends model
             {
                 $otherProjects[$topProgram][$project->status][$project->id] = $project;
             }
+
         }
 
         return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);

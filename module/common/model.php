@@ -367,7 +367,8 @@ class commonModel extends model
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
             if(!isset($config->proVersion) and $objectType == 'effort') continue;
-            if($config->systemMode == 'classic' and ($objectType == 'project' or $objectType == 'porgram')) continue;
+            if($config->systemMode == 'classic' and strpos('project|program', $objectType) !== false) continue;
+            if(!empty($_COOKIE['feedbackView']) and strpos('todo|effort', $objectType) === false) continue;
 
             /* Change icon when object type is execution and mode is classic. */
             if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
@@ -392,12 +393,13 @@ class commonModel extends model
                 $showCreateList = true;
                 $isOnlyBody     = strpos('effort|doc', $objectType) !== false;
                 $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
+                $attr           = $objectType == 'effort' ? "data-width='95%' class='iframe' data-toggle='modal'" : "class='iframe'";
 
                 $params = '';
-                if($objectType == 'bug' or $objectType == 'testcase') $params = "productID=$productID";
+                if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
                 if($objectType == 'doc') $params = "objectType=&objectID=0&libID=0";
 
-                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? "class='iframe'" : '') . '</li>';
+                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
             }
         }
 
@@ -1350,7 +1352,7 @@ EOD;
         $executionPairs = array();
         $object         = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
-        $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' $orderBy")->fetchAll();
+        $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $orderBy")->fetchAll();
         foreach($executionList as $execution)
         {
             if($execution->id == $executionID) continue;

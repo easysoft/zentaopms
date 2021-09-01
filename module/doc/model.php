@@ -61,7 +61,7 @@ class docModel extends model
         {
             if($lib->product   != 0 and !isset($products[$lib->product])) continue;
             if($lib->execution != 0 and !isset($executions[$lib->execution])) continue;
-            if($lib->project   != 0 and !isset($project[$lib->project]))  continue;
+            if($lib->project   != 0 and !isset($projects[$lib->project]) and $lib->type == 'project') continue;
 
             if($this->checkPrivLib($lib, $extra))
             {
@@ -498,6 +498,12 @@ class docModel extends model
             ->join('mailto', ',')
             ->remove('files,labels,uid,contactListMenu')
             ->get();
+
+        if(empty($doc->lib))
+        {
+            dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
+            return false;
+        }
 
         /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
@@ -2304,7 +2310,7 @@ EOT;
         {
             $libs = $this->getLibsByObject('book', 0, '', $appendLib);
             $this->app->rawMethod = 'book';
-            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
+            if(!empty($libs) and ($libID == 0 or !isset($libs[$libID]))) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
             $object = new stdclass();

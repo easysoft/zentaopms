@@ -107,32 +107,35 @@ class productIssuesEntry extends entry
             $bugFilter   = array_unique($bugFilter);
 
             $executions = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
-            if(!empty($taskFilter))
+
+            /* Get tasks. */
+            if(empty($labelTypes) or in_array('task', $labelTypes))
             {
                 $query = $this->dao->select($taskFields)->from(TABLE_TASK)->where('execution')->in(array_values($executions))
                     ->beginIF($search)->andWhere('name')->like("%$search%")->fi()
                     ->beginIF($status)->andWhere('status')->in($taskStatus[$status])->fi()
                     ->andWhere('deleted')->eq(0);
-
                 foreach($taskFilter as $filter) if($filter != 'all') $query->andWhere('type')->eq($filter);
                 $tasks = $query->fetchAll();
                 foreach($tasks as $task) $issues[] = array('id' => $task->id, 'type' => 'task', 'order' => $task->$order, 'status' => $this->getKey($task->status, $taskStatus));
             }
 
-            if(!empty($storyFilter))
+            /* Get stories. */
+            if(empty($labelTypes) or in_array('story', $labelTypes))
             {
                 $query = $this->dao->select($storyFields)->from(TABLE_STORY)
                     ->where('product')->eq($productID)
                     ->beginIF($search)->andWhere('title')->like("%$search%")->fi()
                     ->beginIF($status)->andWhere('status')->in($storyStatus[$status])->fi()
                     ->andWhere('deleted')->eq(0);
-
                 foreach($storyFilter as $filter) if($filter != 'all') $query->andWhere('category')->eq($filter);
                 $stories = $query->fetchAll();
                 foreach($stories as $story) $issues[] = array('id' => $story->id, 'type' => 'story', 'order' => $story->$order, 'status' => $this->getKey($story->status, $storyStatus));
             }
 
-            if(!empty($bugFilter))
+            /* Get bugs. */
+            /* Get stories. */
+            if(empty($labelTypes) or in_array('bug', $labelTypes))
             {
                 $query = $this->dao->select($bugFields)->from(TABLE_BUG)
                     ->where('product')->eq($productID)
@@ -305,7 +308,7 @@ class productIssuesEntry extends entry
         {
             foreach($issue->assignedTo as $index => $user)
             {
-               $issue->assignedTo[$index] = $userDetails[$user];
+                $issue->assignedTo[$index] = $userDetails[$user];
             }
             $issue->openedBy = $userDetails[$issue->openedBy];
         }

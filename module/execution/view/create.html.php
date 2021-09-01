@@ -38,7 +38,7 @@
 <?php js::set('isStage', false);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('systemMode', $config->systemMode);?>
-<?php js::set('projectCommon', $lang->projectCommon);?>
+<?php js::set('projectCommon', $lang->project->common);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

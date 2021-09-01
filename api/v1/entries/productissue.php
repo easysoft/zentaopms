@@ -53,6 +53,7 @@ class productIssueEntry extends entry
             }
 
             break;
+
         case 'bug':
             $this->app->loadLang('bug');
             $bugStatus = array('' => '', 'active' => 'opened', 'resolved' => 'opened', 'closed' => 'closed');
@@ -132,7 +133,9 @@ class productIssueEntry extends entry
             $this->send404();
         }
 
-        $actions = $this->loadModel('action')->getList($type, $issueID);
+        $actions = $this->loadModel('action')->getList($type, $id);
+
+        $issue->comments = array_values($this->processActions($type, $actions));
 
         /**
          * Get all users in issues so that we can bulk get user detail later.
@@ -158,5 +161,53 @@ class productIssueEntry extends entry
         $issue->openedBy = $userDetails[$issue->openedBy];
 
         $this->send(200, array('issue' => $this->format($issue, 'openedDate:time,lastEditedDate:time')));
+    }
+
+    /**
+     * Process actions of one issue.
+     *
+     * @param  string    $type
+     * @param  array     $actions
+     * @access public
+     * @return array
+     */
+    public function processActions($type, $actions)
+    {
+        $accountsList = array();
+        foreach($actions as $action)
+        {
+            $accountsList[] = $action->actor;
+            ob_start();
+            $this->action->printAction($action);
+            $action->title = ob_get_contents();
+            ob_clean();
+
+            $action->body_html = '';
+
+            if(!empty($action->history))
+            {
+                ob_start();
+                $this->action->printChanges($action->objectType, $action->history);
+                $action->body_html = ob_get_contents();
+                ob_clean();
+            }
+
+            if(!empty($action->comment))
+            {
+                $comment = strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;
+                $action->body_html = "<div class='comment-content'>{$comment}</div>";
+            }
+        }
+
+        /* Format user detail and date. */
+        $accountsList    = array_unique($accountsList);
+        $userDetails = $this->loadModel('user')->getUserDetailsForAPI($accountsList);
+        foreach($actions as $action)
+        {
+            $action->actor = $userDetails[$action->actor];
+            $action->date  = gmdate("Y-m-d\TH:i:s\Z", strtotime($action->date));
+        }
+
+        return $actions;
     }
 }

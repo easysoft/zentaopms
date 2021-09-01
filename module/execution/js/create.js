@@ -46,7 +46,11 @@ $(function()
 
     $('#teams_chosen').click(function()
     {
-        if(systemMode == 'new') $('#teams_chosen ul li:first').after(' <label class="label">' + projectCommon + '</label>');
+        if(systemMode == 'new')
+        {
+            $('#teams_chosen ul .label').remove();
+            $('#teams_chosen ul li:first').after(' <label class="label">' + projectCommon + '</label>');
+        }
     })
 
     $('#teams').change(function()

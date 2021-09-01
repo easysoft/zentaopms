@@ -39,29 +39,38 @@
         <?php foreach($programs as $programID => $programProduct):?>
         <?php $i = 0;?>
         <?php foreach($programProduct as $productID):?>
+        <?php
+        $scroll = '';
+        $doingCounts  = isset($projectProduct[$productID]) ? count($projectProduct[$productID]) : 0;
+        $planCounts   = isset($planList[$productID]) ? count($planList[$productID]) : 0;
+        $releaseCount = isset($releaseList[$productID]) ? count($releaseList[$productID]) : 0;
+        if(($doingCounts < $planCounts or $doingCounts < $releaseCount) and ($planCounts > 5 or $releaseCount > 5)) $scroll = 'scroll';
+        ?>
         <tr>
           <?php if($i == 0):?>
           <td rowspan="<?php echo count($programs[$programID])?>" class="program text-ellipsis" style="background: <?php echo $this->lang->product->kanbanColorList[$colorIndex];?>"><?php echo zget($programList, $programID);?></td>
           <?php endif;?>
-          <td title="<?php echo $productList[$productID]->name;?>">
+          <td class="product">
             <?php if(common::hasPriv('product', 'browse')):?>
-            <?php echo html::a($this->createLink('product', 'browse', "productID=$productID"), $productList[$productID]->name, '', "title={$productList[$productID]->name}");?>
+            <?php echo "<span>" . html::a($this->createLink('product', 'browse', "productID=$productID"), $productList[$productID]->name, '', "title={$productList[$productID]->name}") . '</span>';?>
             <?php else:?>
             <?php echo "<span title={$productList[$productID]->name}>{$productList[$productID]->name}</span>";?>
             <?php endif;?>
           </td>
           <td class="plan">
-            <?php if(isset($planList[$productID])):?>
-            <?php foreach($planList[$productID] as $planID => $plan):?>
-            <div class="board-item text-ellipsis">
-              <?php if(common::hasPriv('productplan', 'view')):?>
-              <?php echo html::a($this->createLink('productplan', 'view', "planID=$planID"), $plan->title, '', "title={$plan->title}");?>
-              <?php else:?>
-              <?php echo "<span title={$plan->title}>{$plan->title}</span>"?>
+            <div class="<?php echo $scroll;?>">
+              <?php if(isset($planList[$productID])):?>
+              <?php foreach($planList[$productID] as $planID => $plan):?>
+              <div class="board-item text-ellipsis">
+                <?php if(common::hasPriv('productplan', 'view')):?>
+                <?php echo html::a($this->createLink('productplan', 'view', "planID=$planID"), $plan->title, '', "title={$plan->title}");?>
+                <?php else:?>
+                <?php echo "<span title={$plan->title}>{$plan->title}</span>"?>
+                <?php endif;?>
+              </div>
+              <?php endforeach;?>
               <?php endif;?>
             </div>
-            <?php endforeach;?>
-            <?php endif;?>
           </td>
           <td class="project">
             <?php if(isset($projectProduct[$productID])):?>
@@ -133,18 +142,20 @@
             <?php endif;?>
           </td>
           <td class="release">
-            <?php if(isset($releaseList[$productID])):?>
-            <?php foreach($releaseList[$productID] as $releaseID => $release):?>
-            <div class="board-item">
-              <?php if(common::hasPriv('release', 'view')):?>
-              <?php echo html::a($this->createLink('release', 'view', "releaseID=$releaseID"), $release->name, '', "title={$release->name} class='text-ellipsis'");?>
-              <?php else:?>
-              <?php echo "<span title={$release->name}>{$release->name}</span>"?>
+            <div class="<?php echo $scroll;?>">
+              <?php if(isset($releaseList[$productID])):?>
+              <?php foreach($releaseList[$productID] as $releaseID => $release):?>
+              <div class="board-item">
+                <?php if(common::hasPriv('release', 'view')):?>
+                <?php echo html::a($this->createLink('release', 'view', "releaseID=$releaseID"), $release->name, '', "title={$release->name} class='text-ellipsis'");?>
+                <?php else:?>
+                <?php echo "<span title={$release->name}>{$release->name}</span>"?>
+                <?php endif;?>
+                <?php if($release->marker) echo "&nbsp;<span><i class='icon icon-flag red'></i></span>";?>
+              </div>
+              <?php endforeach;?>
               <?php endif;?>
-              <?php if($release->marker) echo "&nbsp;<span><i class='icon icon-flag red'></i></span>";?>
             </div>
-            <?php endforeach;?>
-            <?php endif;?>
           </td>
           <?php $i ++;?>
         </tr>
@@ -168,7 +179,14 @@ $(function()
         }
     })
 
-    $('.emptyBoard').parent().height($('.project .board').height());
+    $('.board').height($('.project .board').height());
+
+    $('.table div.scroll').each(function()
+    {
+        var count     = $(this).parent().siblings('td.project').children('.board').length >= 5 ? $(this).parent().siblings('td.project').children('.board').length : 5;
+        var preHeight = $(this).parent().siblings('td.project').children('.board').length >= 5 ? $('.board').outerHeight(true) : $(this).find('.board-item').outerHeight(true);
+        $(this).css('max-height', preHeight * count);
+    })
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

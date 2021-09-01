@@ -94,7 +94,7 @@ $lang->my->menu->work['subMenu']->task     = array('link' => "{$lang->task->comm
 if($config->URAndSR) $lang->my->menu->work['subMenu']->requirement = "$lang->URCommon|my|work|mode=requirement";
 $lang->my->menu->work['subMenu']->story    = "$lang->SRCommon|my|work|mode=story";
 $lang->my->menu->work['subMenu']->bug      = "{$lang->bug->common}|my|work|mode=bug";
-$lang->my->menu->work['subMenu']->testcase = "{$lang->testcase->common}|my|work|mode=testcase&type=assigntome";
+$lang->my->menu->work['subMenu']->testcase = array('link' => "{$lang->testcase->common}|my|work|mode=testcase&type=assigntome", 'subModule' => 'testtask');
 $lang->my->menu->work['subMenu']->testtask = "{$lang->testtask->common}|my|work|mode=testtask&type=wait";
 
 $lang->my->menu->work['menuOrder'][5]  = 'task';

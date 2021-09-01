@@ -320,14 +320,18 @@ class doc extends control
             if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
         }
 
-        $lib      = $this->doc->getLibByID($libID);
-        $type     = !empty($lib) ? $lib->type : 'product';
+        /* Get libs and the default lib id. */
         $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs     = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
+        if(!$libID and !empty($libs)) $libID = key($libs);
+
+        $lib  = $this->doc->getLibByID($libID);
+        $type = !empty($lib) ? $lib->type : 'product';
 
         if(!isonlybody()) $this->view->title = $lib->name . $this->lang->colon . $this->lang->doc->create;
 
         $this->view->libID            = $libID;
-        $this->view->libs             = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
+        $this->view->libs             = $libs;
         $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;

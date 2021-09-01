@@ -874,4 +874,16 @@ $(document).ready(function()
     {
         $('a').attr('target', '');
     });
+
+    /* Hide the global create drop-down when hovering over the avatar. */
+    $('.has-avatar').hover(function()
+    {
+        $(this).next().removeClass('open');
+    });
+
+    /* Hide the avatar drop-down when hovering over the global create button. */
+    $('#globalCreate').hover(function()
+    {
+        $(this).prev().removeClass('open');
+    });
 });

@@ -491,17 +491,17 @@ $(function()
         };
     }
 
+    /* Quit tutorial mode */
+    function quitTutorial()
+    {
+        var url = createLink('tutorial', 'quit');
+            if(typeof navigator.sendBeacon === 'function') navigator.sendBeacon(url);
+            else $.ajax({url: url, dataType: 'json', async: false});
+    }
+
     /** Init current tutorial page */
     function initTutorial()
     {
-        /* Quit tutorial mode on unload page */
-        window.onbeforeunload = function()
-        {
-            var url = createLink('tutorial', 'quit');
-            if(typeof navigator.sendBeacon === 'function') navigator.sendBeacon(url);
-            else $.ajax({url: url, dataType: 'json', async: false});
-        }
-
         if(finishCount >= totalCount) showModal(true);
 
         $(document).on('click', '.btn-task', function()

@@ -44,6 +44,7 @@ a.showMoreImage:hover {opacity: 1;}
 .table-footer .checked+div .btn, .table-actions .btn:hover {background: #16a8f8; border-color: #16a8f8}
 
 #userMenu>ul>li {margin-right: 10px;}
+#userNav .dropdown-menu>li>a>.icon-w {top: 2px;}
 .icon-plus-solid-circle:before {font-size: 30px; color: #3b92f7;}
 .create-list {min-width: 120px !important;}
 .create-list>li>a {padding-left: 35px !important;}

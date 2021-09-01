@@ -703,6 +703,17 @@ class upgradeModel extends model
             $this->processTesttaskDate();
             $this->processDocTempContent();
             $this->appendExec('15_3');
+        case '15_4':
+            $this->saveLogs('Execute 15_4');
+            if(empty($this->config->isINT))
+            {
+                if(!$executeXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+            }
+            $this->appendExec('15_4');
         }
 
         $this->deletePatch();
@@ -896,6 +907,12 @@ class upgradeModel extends model
             case '15_0_3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.0.3'));
             case '15_2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.2'));
             case '15_3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.3'));
+            case '15_4':
+                if(empty($this->config->isINT))
+                {
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                }
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

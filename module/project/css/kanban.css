@@ -5,14 +5,13 @@
 .board-item:hover {border-color: #ccc;}
 .board-project .board-item + .board-item {margin-top: 10px;}
 
-.board-project {padding: 10px;}
+.board-project {padding: 0 10px 10px 10px;}
+.board-project .board-item:first-child {margin-top: 10px;}
 
-.board-doing {padding: 0px !important; vertical-align: top !important;}
-.board-doing div:not(:last-child) .board-doing-project,
-.board-doing div:not(:last-child) .board-doing-execution {padding: 10px; border-bottom: 2px solid #fff;}
-
-.board-doing div:last-child .board-doing-project,
-.board-doing div:last-child .board-doing-execution {padding: 10px;}
+.board-doing, .board-wait, .board-closed {padding: 0px !important; vertical-align: top !important;}
+.board-doing .board-doing-project,.board-doing .board-doing-execution {padding: 10px;}
+.board-doing .board-doing-project:not(:last-child),
+.board-doing .board-doing-execution:not(:last-child) {border-bottom: 2px solid #fff;}
 
 .board-doing-project .table-row .table-col:last-child, .c-progress {width: 30px;}
 .board-doing-execution .table-row .table-col:last-child, .c-progress {width: 30px;}

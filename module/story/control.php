@@ -48,6 +48,8 @@ class story extends control
      */
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
+        if($productID == 0) $this->locate($this->createLink('product', 'create'));
+
         $this->story->replaceURLang($type);
         if($this->app->tab == 'product')
         {
@@ -898,7 +900,9 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0)
     {
-        $this->session->set('productList', $this->app->getURI(true) . "#app={$this->app->tab}", 'product');
+        $uri = $this->app->getURI(true);
+        $this->session->set('productList',     $uri . "#app={$this->app->tab}", 'product');
+        $this->session->set('productPlanList', $uri, 'product');
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);

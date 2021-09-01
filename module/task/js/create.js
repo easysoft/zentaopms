@@ -62,7 +62,7 @@ function loadExecutionStories(executionID)
         $('#story').next('.picker').remove();
         $('#story').replaceWith(data);
         $('#story').addClass('filled').chosen();
-        
+
         /* If there is no story option, select will be hidden and text will be displayed; otherwise, the opposite is true */
         if($('#story option').length > 1)
         {
@@ -70,7 +70,7 @@ function loadExecutionStories(executionID)
             $('#storyBox').addClass('hidden');
         }
         else
-        {           
+        {
             $('#storyBox').removeClass('hidden');
             $('#story').parent().addClass('hidden');
         }
@@ -281,6 +281,18 @@ function setStories(moduleID, executionID)
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
         $("#story").addClass('filled').chosen();
+
+        /* If there is no story option, select will be hidden and text will be displayed; otherwise, the opposite is true */
+        if($('#story option').length > 1)
+        {
+            $('#story').parent().removeClass('hidden');
+            $('#storyBox').addClass('hidden');
+        }
+        else
+        {
+            $('#storyBox').removeClass('hidden');
+            $('#story').parent().addClass('hidden');
+        }
     });
 }
 

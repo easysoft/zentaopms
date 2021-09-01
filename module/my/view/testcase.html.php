@@ -82,7 +82,7 @@
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <?php $params = "testcaseID=$caseID&version=$case->version";?>
           <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
-          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', $params), $case->title, null, "style='color: $case->color'");?></td>
+          <td class='c-name'><?php echo html::a($this->createLink('testcase', 'view', $params), $case->title, null, "style='color: $case->color' title='{$case->title}'");?></td>
           <?php if($type == 'assigntome'):?>
           <td class='c-name' title='<?php echo $case->taskName;?>'><?php echo $case->taskName;?></td>
           <?php endif;?>

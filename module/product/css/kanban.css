@@ -1,12 +1,15 @@
 #kanban {padding: 10px;}
-.main-table tbody>tr>td {padding: 10px;}
-.table caption {background: #fff; border-top-left-radius: 2px; border-top-right-radius: 2px; margin-bottom: 0; font-weight: 500;}
-.table .program {writing-mode: vertical-lr; padding-left: 4px !important; color: #fff;}
-
+.table caption {background: #fff; border-top-left-radius: 2px; border-top-right-radius: 2px; margin-bottom: 0; font-weight: 500; padding-top: 0;}
 .table th, .table td {border-top: 2px solid #fff; border-bottom: 2px solid #fff; border-left: 3px solid #fff; border-bottom: 3px solid #fff;}
 .table tbody tr:last-child td {border-bottom: unset;}
-td.project, td.execution {padding: 10px 0 !important;}
-td.plan, td.release {vertical-align: top !important;}
+td.plan, td.release, td.project, td.execution {vertical-align: top !important;}
+
+.main-table tbody>tr>td {padding: 0 10px 10px;}
+.table .program {writing-mode: vertical-lr; padding-left: 4px !important; color: #fff;}
+td.product {padding-top: 10px !important;}
+td.project, td.execution {padding: 0 0 10px 0 !important;}
+td > div:not(.board) > .board-item:first-child {margin-top: 10px;}
+td > div.board:first-child {margin-top: 5px;}
 
 .board-item {border: 1px solid #ebebeb; padding: 3px 10px; cursor: default; border-radius: 2px; background-color: #fff; text-align: left;}
 .board-item:hover {border-color: #ccc;}
@@ -14,8 +17,10 @@ td.plan, td.release {vertical-align: top !important;}
 .board + .board {margin-top: 5px;}
 .board-item + .board-item {margin-top: 10px;}
 .project .board, .execution .board {padding-top: 5px; border-top: 2px solid #fff;}
-.project .board:first-child, .execution .board:first-child {padding-top: 0; border-top: unset;}
+.project .board:first-child, .execution .board:first-child {padding-top: 5px; border-top: unset;}
 .release .board-item {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
 .emptyBoard {padding: 3px 10px; cursor: default;}
 
 .project .table-row > .table-col:last-child, .execution .table-row > .table-col:last-child {width: 24px; padding-top: 2px;}
+
+.scroll {overflow-x: hidden;; overflow-y: auto;}

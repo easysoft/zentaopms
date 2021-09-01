@@ -10,13 +10,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php $colorIndex = 0;?>
-
 <?php if(empty($kanbanGroup)):?>
 <div class="table-empty-tip">
   <p><span class="text-muted"><?php echo $lang->project->empty;?></span></p>
 </div>
 <?php else:?>
-
 <?php foreach($kanbanGroup as $type => $projectGroup):?>
 <?php if(empty($projectGroup)) continue;?>
 <div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
@@ -39,73 +37,77 @@
           </thead>
           <tbody>
             <?php foreach($projectGroup as $programID => $statusList):?>
-            <tr>
+            <tr class='board-program'>
               <td class='text-center' style='background: <?php echo $lang->project->laneColorList[$colorIndex];?>; color: #fff; padding-left: 2px; writing-mode: vertical-lr;'><?php echo zget($programPairs, $programID);?></td>
               <?php foreach(array('wait','doing','closed') as $status):?>
               <?php if($status == 'doing'):?>
-              <td colspan='2' class='board-doing'>
+              <td class='board-doing'>
                 <?php if(isset($statusList[$status])):?>
                 <?php foreach($statusList[$status] as $project):?>
-                <div class='table-row'>
-                  <div class='table-col board-doing-project'>
-                    <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->delay) ? 'red' : "#0BD986") . "'";?>>
-                      <div class='table-row'>
-                        <div class='table-col'>
-                        <?php
-                        if(common::hasPriv('project', 'index'))
-                        {
-                            echo html::a($this->createLink('project', 'index', "projectID=$project->id"), $project->name, '', "title='{$project->name}'");
-                        }
-                        else
-                        {
-                            echo "<span title='{$project->name}'>{$project->name}</span>";
-                        }
-                        ?>
-                        </div>
-                        <div class='table-col'>
-                          <div class="c-progress">
-                            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($project->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                              <div class='progress-info'><?php echo round($project->hours->progress);?></div>
-                            </div>
+                <div class='board-doing-project'>
+                  <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->delay) ? 'red' : "#0BD986") . "'";?>>
+                    <div class='table-row'>
+                      <div class='table-col'>
+                      <?php
+                      if(common::hasPriv('project', 'index'))
+                      {
+                          echo html::a($this->createLink('project', 'index', "projectID=$project->id"), $project->name, '', "title='{$project->name}'");
+                      }
+                      else
+                      {
+                          echo "<span title='{$project->name}'>{$project->name}</span>";
+                      }
+                      ?>
+                      </div>
+                      <div class='table-col'>
+                        <div class="c-progress">
+                          <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($project->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                            <div class='progress-info'><?php echo round($project->hours->progress);?></div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class='table-col board-doing-execution'>
-                    <?php if(isset($latestExecutions[$project->id])):?>
-                    <?php $execution = $latestExecutions[$project->id];?>
-                    <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($execution->delay) ? 'red' : "#0BD986") . "'";?>>
-                      <div class='table-row'>
-                        <div class='table-col'>
-                        <?php
-                        if(common::hasPriv('execution', 'task'))
-                        {
-                            echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title='{$execution->name}'");
-                        }
-                        else
-                        {
-                            echo "<span title='{$execution->name}'>{$execution->name}</span>";
-                        }
-                        ?>
-                        </div>
-                        <div class='table-col'>
-                          <div class="c-progress">
-                            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                              <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <?php endif;?>
                   </div>
                 </div>
                 <?php endforeach;?>
                 <?php endif;?>
               </td>
+              <td class='board-doing'>
+                <?php if(isset($statusList[$status])):?>
+                <?php foreach($statusList[$status] as $project):?>
+                <div class='board-doing-execution'>
+                  <?php if(isset($latestExecutions[$project->id])):?>
+                  <?php $execution = $latestExecutions[$project->id];?>
+                  <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($execution->delay) ? 'red' : "#0BD986") . "'";?>>
+                    <div class='table-row'>
+                      <div class='table-col'>
+                      <?php
+                      if(common::hasPriv('execution', 'task'))
+                      {
+                          echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title='{$execution->name}'");
+                      }
+                      else
+                      {
+                          echo "<span title='{$execution->name}'>{$execution->name}</span>";
+                      }
+                      ?>
+                      </div>
+                      <div class='table-col'>
+                        <div class="c-progress">
+                          <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                            <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <?php endif;?>
+                </div>
+                <?php endforeach;?>
+                <?php endif;?>
+              </td>
               <?php else:?>
-              <td>
+              <td class='board-<?php echo $status;?>'>
                 <div class='board-project'>
                   <?php if(isset($statusList[$status])):?>
                   <?php foreach($statusList[$status] as $project):?>
@@ -138,6 +140,5 @@
   </div>
 </div>
 <?php endforeach;?>
-
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
