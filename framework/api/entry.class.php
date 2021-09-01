@@ -174,14 +174,21 @@ class baseEntry
      * 发送请求的响应数据
      * Send response data
      *
+     * @param  int   $code
+     * @param  mixed $data
      * @access public
      * @return void
      */
-    public function send($code, $data)
+    public function send($code, $data = '')
     {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Allow-Headers: Origin,X-Requested-With,Content-Type,Accept,Authorization,Token,Referer,User-Agent");
+        header('Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS,PATCH');
         header("Content-type: application/json");
         header("HTTP/1.1 {$this->statusCode[$code]}");
-        echo json_encode($data, JSON_HEX_TAG);
+
+        if($data) echo json_encode($data, JSON_HEX_TAG);
         exit;
     }
 

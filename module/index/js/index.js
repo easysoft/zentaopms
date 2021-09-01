@@ -220,6 +220,12 @@
 
             /* If first show without url, then use the default url */
             if(!url) url = appsMap[appCode].url;
+
+            var iframe = $iframe.get(0);
+            iframe.onload = iframe.onreadystatechange = function(e)
+            {
+                $app.trigger('loadapp', app);
+            };
         }
 
         /* Set tab cookie */
@@ -278,7 +284,7 @@
             updateAppUrl(appCode, null, null, true);
         }
 
-        app.$app.trigger('show.zentaoapp', app);
+        app.$app.trigger('showapp', app);
 
         return true;
     }
@@ -318,7 +324,7 @@
         app.show = false;
         lastOpenedApp = null;
 
-        app.$app.trigger('hide.zentaoapp', app);
+        app.$app.trigger('hideapp', app);
 
         /* Active last app */
         var lastApp = getLastApp(true) || getLastApp();
@@ -388,7 +394,7 @@
         var firstClass = $("#bars li:first").attr('class');
         if(firstClass == 'divider') $("#bars li.divider:first").remove();
 
-        app.$app.trigger('close.zentaoapp', app);
+        app.$app.trigger('closeapp', app);
     }
 
     /**
@@ -416,7 +422,7 @@
             iframe.src = url || app.url || iframe.src;
         }
 
-        if(!notTriggerEvent) app.$app.trigger('reload.zentaoapp', app);
+        if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
     }
 
     /**

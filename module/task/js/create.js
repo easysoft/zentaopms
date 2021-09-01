@@ -72,6 +72,8 @@ function loadExecutionStories(executionID)
         else
         {
             $('#storyBox').removeClass('hidden');
+            $('#storyBox > a:first').attr('href', createLink('execution', 'linkStory', 'executionID=' + executionID));
+            $('#storyBox > a:nth-child(2)').attr('href', "javascript:loadStories(" + executionID + ")");
             $('#story').parent().addClass('hidden');
         }
 

@@ -414,12 +414,18 @@ $(function()
 
     var checkTutorialState = function()
     {
-        var iWindow = getAppWindow();
-        iWindow = window.frames['iframePage'];
         tryCheckTask();
+        var iWindow = getAppWindow();
         var title = (iWindow.$ ? iWindow.$('head > title').text() : '') + $('head > title').text();
         var url = createLink('tutorial', 'index', 'referer=' + Base64.encode(iWindow.location.href) + '&task=' + current);
         try{window.history.replaceState({}, title, url);}catch(e){}
+    };
+
+    var checkTimer = 0;
+    var tryCheckTutorialState = function(delay)
+    {
+        clearTimeout(checkTimer);
+        checkTimer = setTimeout(checkTutorialState, delay || 200);
     };
 
     var showTask = function(taskName)
@@ -472,7 +478,6 @@ $(function()
         var progress = Math.round(100*finishCount/totalCount);
         $progress.toggleClass('finish', isFinishAll).find('.progress-bar').css('width', (100*finishCount/totalCount) + '%');
         $progress.find('.progress-text').text(progress + '%');
-        if(progress == 100) $.getJSON(createLink('tutorial', 'ajaxFinish'));
         showTask(current);
     };
 
@@ -482,7 +487,10 @@ $(function()
         var appsIframe = $('#iframePage').get(0);
         appsIframe.onload = appsIframe.onreadystatechange = function()
         {
-            appsWindow.$(appsWindow.document).on('show.zentaoapp close.zentaoapp hide.zentaoapp', checkTutorialState);
+            appsWindow.$(appsWindow.document).on('reloadapp loadapp showapp closeapp hideapp', function()
+            {
+                tryCheckTutorialState(1000);
+            });
 
             /* Open referer page in app tab */
             if(tutorialReferer) appsWindow.$.apps.open(tutorialReferer);
@@ -491,17 +499,17 @@ $(function()
         };
     }
 
+    /* Quit tutorial mode */
+    function quitTutorial()
+    {
+        var url = createLink('tutorial', 'quit');
+            if(typeof navigator.sendBeacon === 'function') navigator.sendBeacon(url);
+            else $.ajax({url: url, dataType: 'json', async: false});
+    }
+
     /** Init current tutorial page */
     function initTutorial()
     {
-        /* Quit tutorial mode on unload page */
-        window.onbeforeunload = function()
-        {
-            var url = createLink('tutorial', 'quit');
-            if(typeof navigator.sendBeacon === 'function') navigator.sendBeacon(url);
-            else $.ajax({url: url, dataType: 'json', async: false});
-        }
-
         if(finishCount >= totalCount) showModal(true);
 
         $(document).on('click', '.btn-task', function()
