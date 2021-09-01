@@ -10,6 +10,7 @@ td.product {padding-top: 10px !important;}
 td.project, td.execution {padding: 0 0 10px 0 !important;}
 td > div:not(.board) > .board-item:first-child {margin-top: 10px;}
 td > div.board:first-child {margin-top: 5px;}
+.fix-table-copy-wrapper thead > tr > th:first-child {background: none!important;}
 
 .board-item {border: 1px solid #ebebeb; padding: 3px 10px; cursor: default; border-radius: 2px; background-color: #fff; text-align: left;}
 .board-item:hover {border-color: #ccc;}
@@ -23,4 +24,4 @@ td > div.board:first-child {margin-top: 5px;}
 
 .project .table-row > .table-col:last-child, .execution .table-row > .table-col:last-child {width: 24px; padding-top: 2px;}
 
-.scroll {overflow-x: hidden;; overflow-y: auto;}
+.scroll {overflow-x: hidden; overflow-y: auto;}
