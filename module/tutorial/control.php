@@ -154,7 +154,9 @@ class tutorial extends control
      */
     public function ajaxFinish()
     {
+        $tutorialMode = $this->session->tutorialMode;
         $this->session->set('tutorialMode', false);
         $this->loadModel('score')->create('tutorial', 'finish');
+        $this->session->set('tutorialMode', $tutorialMode);
     }
 }
