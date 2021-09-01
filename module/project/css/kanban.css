@@ -13,8 +13,8 @@
 .board-doing .board-doing-project:not(:last-child),
 .board-doing .board-doing-execution:not(:last-child) {border-bottom: 2px solid #fff;}
 
-.board-doing-project .table-row .table-col:last-child, .c-progress {width: 30px;}
-.board-doing-execution .table-row .table-col:last-child, .c-progress {width: 30px;}
+.board-doing-project .table-row .table-col:last-child,
+.board-doing-execution .table-row .table-col:last-child, .c-progress {width: 30px; padding-top: 2px}
 .table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 table th, td {border: 2px solid #fff !important;}
