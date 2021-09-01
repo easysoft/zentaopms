@@ -6,7 +6,7 @@ $(function()
     {
         var boardWaitCount   = $(this).find('.board-wait .board-item').length;
         var boardClosedCount = $(this).find('.board-closed .board-item').length;
-        var boardDoingCount  = $(this).find('.board-doing .board-item').length;
+        var boardDoingCount  = $(this).find('.board-doing-project .board-item').length;
 
         if((boardWaitCount > 5 || boardClosedCount > 5) && (boardWaitCount > boardDoingCount || boardClosedCount > boardDoingCount))
         {
