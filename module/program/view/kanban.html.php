@@ -36,7 +36,7 @@
           <tbody>
             <?php foreach($programGroup as $programID => $program):?>
             <tr>
-              <td class='lane-name' style='background: <?php echo $lang->program->kanban->laneColorList[$colorIndex];?>; color: #fff; border-right: none;' rowspan='<?php echo $program->rowspan;?>' title=<?php echo $program->name;?>><?php echo $program->name;?></td>
+              <td class='lane-name text-ellipsis' style='background: <?php echo $lang->program->kanban->laneColorList[$colorIndex];?>; color: #fff; border-right: none;' rowspan='<?php echo $program->rowspan;?>' title=<?php echo $program->name;?>><?php echo $program->name;?></td>
               <?php $i = 0;?>
               <?php if(!empty($program->products)):?>
               <?php foreach($program->products as $productID => $product):?>
