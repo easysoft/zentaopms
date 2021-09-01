@@ -11,7 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php js::set('openApp', $this->app->openApp);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $storyID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate;?></h2>
@@ -57,10 +56,8 @@
             <th class='w-90px'><?php echo $lang->story->category;?></th>
             <th class='col-pri<?php      echo zget($visibleFields, 'pri',      ' hidden') . zget($requiredFields, 'pri',      '', ' required');?>'><?php echo $lang->story->pri;?></th>
             <th class='col-estimate<?php echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->story->estimate;?></th>
-            <?php if($this->app->openApp == 'product'):?>
             <th class='col-review<?php   echo zget($visibleFields, 'review',   ' hidden') . zget($requiredFields, 'review',   '', ' required');?>'><?php echo $lang->story->needReview;?></th>
             <th class='<?php echo zget($visibleFields, 'review',   ' hidden');?>' style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
-            <?php endif;?>
             <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
@@ -98,13 +95,9 @@
             <td class='text-left' style='overflow:visible'><?php echo html::select('category[$id]', $lang->story->categoryList, 'feature', "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
-            <?php if($this->app->openApp == 'product'):?>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('needReview[$id]', $lang->story->reviewList, $needReview, "class='form-control'");?></td>
             <?php $isDisabled = $needReview ? '' : 'disabled';?>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('reviewer[$id][]', $users, '', "class='form-control chosen' multiple $isDisabled");?></td>
-            <?php else:?>
-            <?php echo html::hidden('needReview[$id]', 0);?>
-            <?php endif;?>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";?>
           </tr>
@@ -160,8 +153,6 @@ $(function()
         if($(this).val() == 0) $(select).attr('disabled', 'disabled');
         $(select).trigger("chosen:updated");
     })
-
-    if(openApp != 'product') $('#fieldsreview').parent().remove();
 });
 </script>
 <?php if(isset($execution)) js::set('execution', $execution);?>
