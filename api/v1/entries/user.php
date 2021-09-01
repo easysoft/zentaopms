@@ -28,16 +28,8 @@ class userEntry extends Entry
     {
         $info = $this->loadModel('my')->getInfo();
 
-        $products = $this->my->getProducts();
-        $info->product = new stdclass();
-        $info->product->total    = count($products);
-        $info->product->products = $products;
-
-        $projects = $this->my->getProjects();
-        $info->project = new stdclass();
-        $info->project->total    = count($projects);
-        $info->project->projects = $projects;
-
+        $info->product = $this->my->getProducts();
+        $info->project = $this->my->getProjects();
         $info->actions = $this->my->getActions();
 
         $this->send(200, $info);

@@ -397,6 +397,37 @@ class projectModel extends model
     }
 
     /**
+     * Get projects consumed info.
+     *
+     * @param  array    $projectID
+     * @param  string   $time
+     * @access public
+     * @return array
+     */
+    public function getProjectsConsumed($projectIdList, $time = '')
+    {
+        $projects = array();
+
+        $totalConsumeds = $this->dao->select('project,ROUND(SUM(consumed), 1) AS totalConsumed')
+            ->from(TABLE_TASK)
+            ->where('project')->in($projectIdList)
+            ->beginIF($time == 'this_year')->andWhere('realStarted')->ge(date("Y-01-01 00:00:00"))->fi()
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('project')
+            ->fetchAll('project');
+
+        foreach($projectIdList as $projectID)
+        {
+            $project = new stdClass();
+            $project->totalConsumed = isset($totalConsumeds[$projectID]->totalConsumed) ? $totalConsumeds[$projectID]->totalConsumed : 0;
+            $projects[$projectID] = $project;
+        }
+
+        return $projects;
+    }
+
+    /**
      * Get project stat data .
      *
      * @param  int    $projectID
