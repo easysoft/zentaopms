@@ -29,6 +29,9 @@
             <div><?php echo $lang->mr->from . html::a($sourceProjectURL, $sourceProjectName . ":" . $MR->sourceBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'") . $lang->mr->to . html::a($targetProjectURL, $targetProjectName . ":" . $MR->targetBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'");?></div>
           </div>
           <div class="detail-content article-content">
+            <strong><?php echo $lang->mr->status;?></strong>
+            <?php echo zget($lang->mr->statusList, $MR->status);?>
+            <br>
             <?php if(isset($rawMR->head_pipeline->status)):?>
               <div>
                 <strong><?php echo "{$lang->mr->pipeline}{$lang->mr->status}";?></strong>
@@ -51,8 +54,12 @@
           </div>
         </div>
       </div>
+      <?php if($rawMR->state == 'opened'):?>
       <div class="cell"><?php echo sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch);?></div>
+      <?php endif;?>
     </div>
   </div>
+  <br>
+  <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) echo html::linkButton('<i class="icon icon-checked"></i> ' . $lang->mr->acceptMR, inlink( 'accept', "mr=$MR->id"), 'self', '', 'btn btn-wide btn-primary');?>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
