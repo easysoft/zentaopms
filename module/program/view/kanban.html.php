@@ -41,8 +41,8 @@
               <?php if(!empty($program->products)):?>
               <?php foreach($program->products as $productID => $product):?>
               <?php if($i != 0) echo '<tr>';?>
-              <td title=<?php echo $product->name;?> rowspan='<?php echo $product->rowspan;?>'><?php echo $product->name;?></td>
-              <td class='normal-plan' rowspan='<?php echo $product->rowspan;?>'>
+              <td title=<?php echo $product->name;?>><?php echo $product->name;?></td>
+              <td class='normal-plan'>
                 <?php foreach($product->plans as $planID => $plan):?>
                 <div class='board-item'>
                   <div class='table-row'>
@@ -53,7 +53,7 @@
                 </div>
                 <?php endforeach;?>
               </td>
-              <td class='wait-project' rowspan='<?php echo $product->rowspan?>'>
+              <td class='wait-project'>
                 <?php if(isset($product->projects['wait'])):?>
                 <?php foreach($product->projects['wait'] as $projectID => $project):?>
                 <div class='board-item' style='border-left: 3px solid #ccc'>
@@ -66,11 +66,9 @@
                 <?php endforeach;?>
                 <?php endif;?>
               </td>
-              <?php if(isset($product->projects['doing'])):?>
-              <?php $index = 0;?>
-              <?php foreach($product->projects['doing'] as $projectID => $project):?>
-              <?php if($index != 0) echo "<tr>";?>
-              <td class='doing-td'>
+              <td class='doing-td project'>
+                <?php if(isset($product->projects['doing'])):?>
+                <?php foreach($product->projects['doing'] as $project):?>
                 <div class='board'>
                   <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->delay) ? 'red' : "#0BD986") . "'";?>>
                     <div class='table-row'>
@@ -88,8 +86,12 @@
                     </div>
                   </div>
                 </div>
+                <?php endforeach;?>
+                <?php endif;?>
               </td>
-              <td class='doing-td'>
+              <td class='doing-td execution'>
+                <?php if(isset($product->projects['doing'])):?>
+                <?php foreach($product->projects['doing'] as $project):?>
                 <?php if(!empty($project->execution)):?>
                 <div class='board'>
                   <div class='board-item' <?php echo "style='border-left: 3px solid " . (isset($project->execution->delay) ? 'red' : "#0BD986") . "'";?>>
@@ -108,10 +110,13 @@
                     </div>
                   </div>
                 </div>
+                <?php else:?>
+                <div class='board'></div>
+                <?php endif;?>
+                <?php endforeach;?>
                 <?php endif;?>
               </td>
-              <?php if($index == 0):?>
-              <td class='normal-release' rowspan=<?php echo $product->rowspan;?>>
+              <td class='normal-release'>
                 <?php foreach($product->releases as $releaseID => $release):?>
                 <div class='board-item'>
                   <div class='table-row'>
@@ -123,15 +128,6 @@
                 </div>
                 <?php endforeach;?>
               </td>
-              <?php endif;?>
-              <?php if($index != 0) echo "</tr>";?>
-              <?php $index ++;?>
-              <?php endforeach;?>
-              <?php else:?>
-              <td></td>
-              <td></td>
-              <td></td>
-              <?php endif;?>
               <?php if($i != 0) echo '</tr>';?>
               <?php $i ++;?>
               <?php endforeach;?>
