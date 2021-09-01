@@ -146,6 +146,27 @@ $(document).ready(function()
         }
     });
 
+    $('#gitlabRepo').change(function()
+    {
+        $('#reference option').remove();
+
+        var repoID  = $(this).val();
+        if(repoID > 0)
+        {
+            $.getJSON(createLink('job', 'ajaxGetRefList', "repoID=" + repoID), function(response)
+            {
+                if(response.result == 'success')
+                {
+                    $.each(response.refList, function(reference, name)
+                    {
+                        $('#reference').append("<option value='" + reference + "'>" + name + "</option>");
+                    });
+                }
+                $('#reference').trigger('chosen:updated');
+            });
+        }
+    });
+
     $('#engine').change();
     $('#jkServer').change();
 

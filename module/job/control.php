@@ -161,6 +161,8 @@ class job extends control
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
 
+        if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getRefOptions($repo->gitlab, $repo->project);
+
         $repoList             = $this->repo->getList($this->projectID);
         $repoPairs            = array(0 => '', $repo->id => $repo->name);
         $gitlabRepos          = array(0 => '');
@@ -374,5 +376,20 @@ class job extends control
 
         $productName = $this->loadModel('product')->getByID($repo->product)->name;
         die(json_encode(array($productName => $repo->product)));
+    }
+
+    /**
+     * Ajax get reference list function.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRefList($repoID)
+    {
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        if($repo->SCM != 'Gitlab') $this->send(array('result' => 'fail'));
+        $refList = $this->loadModel('gitlab')->getRefOptions($repo->gitlab, $repo->project);
+        $this->send(array('result' => 'success', 'refList' => $refList));
     }
 }
