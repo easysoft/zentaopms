@@ -11,7 +11,7 @@ $(function()
         if((boardWaitCount > 5 || boardClosedCount > 5) && (boardWaitCount > boardDoingCount || boardClosedCount > boardDoingCount))
         {
             var boardHeight = 0;
-            if(boardDoingCount > 5)
+            if(boardDoingCount >= 5)
             {
                 boardHeight = $('.board-doing-project').outerHeight(true) * boardDoingCount;
             }
