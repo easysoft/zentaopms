@@ -11,19 +11,7 @@ $(function()
             $('#sourceProject').html('').append(response);
             $('#sourceProject').chosen().trigger("chosen:updated");;
         });
-
-        var assignee = $("#assignee").parents('td').find('select[name*=assignee]');
-        var reviewer = $("#reviewer").parents('td').find('select[name*=reviewer]');
-        usersUrl = createLink('gitlab', 'ajaxgetmruserpairs', "gitlabID=" + gitlabID);
-        $.get(usersUrl, function(response)
-        {
-            assignee.html('').append(response);
-            assignee.chosen().trigger("chosen:updated");;
-            reviewer.html('').append(response);
-            reviewer.chosen().trigger("chosen:updated");;
-        });
-
-    });
+   });
 
     $('#sourceProject,#targetProject').change(function()
     {
@@ -48,4 +36,21 @@ $(function()
             $('#targetProject').chosen().trigger("chosen:updated");;
         });
     });
+
+    $('#targetProject').change(function()
+    {
+        targetProject = $(this).val();
+        var assignee = $("#assignee").parents('td').find('select[name*=assignee]');
+        var reviewer = $("#reviewer").parents('td').find('select[name*=reviewer]');
+        usersUrl = createLink('gitlab', 'ajaxgetmruserpairs', "gitlabID=" + gitlabID + "&projectID=" + targetProject);
+        $.get(usersUrl, function(response)
+        {
+            assignee.html('').append(response);
+            assignee.chosen().trigger("chosen:updated");;
+            reviewer.html('').append(response);
+            reviewer.chosen().trigger("chosen:updated");;
+        });
+    });
+
+
 });
