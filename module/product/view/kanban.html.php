@@ -23,7 +23,7 @@
       <caption><?php echo $type == 'myProducts' ? $lang->product->myProduct : $lang->product->otherProduct;?></caption>
       <thead>
         <tr>
-          <th rowspan="2" class="w-20px" style="border: unset; background: #32C5FF;"></th>
+          <th rowspan="2" class="w-20px" style="border-right: 0; border-left: 0; background: #32C5FF;"></th>
           <th rowspan="2" style="border-left: 0px;"><?php echo $lang->product->unclosedProduct;?></th>
           <th rowspan="2"><?php echo $lang->product->unexpiredPlan;?></th>
           <th colspan="2"><?php echo $lang->product->doing;?></th>
@@ -171,14 +171,6 @@
 <script>
 $(function()
 {
-    $(document).scroll(function()
-    {
-        if($('.fix-table-copy-wrapper').length > 0)
-        {
-            $('.fix-table-copy-wrapper table thead tr:first th:first').css('background', 'rgba(255,255,255,0)');
-        }
-    })
-
     $('.board').height($('.project .board').height());
 
     $('.table div.scroll').each(function()
