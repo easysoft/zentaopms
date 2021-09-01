@@ -1387,7 +1387,7 @@ class projectModel extends model
 
             if($id == 'name')
             {
-                $class .= ' text-left flex';
+                $class .= ' text-left';
                 $title  = "title='{$project->name}'";
             }
 
@@ -1425,6 +1425,7 @@ class projectModel extends model
                     }
                     break;
                 case 'name':
+                    echo '<div class="project-name">';
                     if(isset($this->config->maxVersion))
                     {
                         if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
@@ -1432,6 +1433,7 @@ class projectModel extends model
                     }
                     echo html::a($projectLink, $project->name, '', "class='text-ellipsis'");
                     if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
+                    echo '</div>';
                     break;
                 case 'PM':
                     $user   = $this->loadModel('user')->getByID($project->PM, 'account');
