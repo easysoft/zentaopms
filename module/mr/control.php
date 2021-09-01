@@ -67,12 +67,21 @@ class mr extends control
         $targetBranchList = array();
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
+        /* Fetch user list both in Zentao and current GitLab project. */
+        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($MR->gitlabID);
+        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($MR->gitlabID, $MR->targetProject);
+        $users           = array();
+        foreach($rawProjectUsers as $rawProjectUser)
+        {
+            if(!empty($bindedUsers[$rawProjectUser->id])) $users[$rawProjectUser->id] = $bindedUsers[$rawProjectUser->id];
+        }
+
         $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->gitlabID);
 
         $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
         $this->view->targetBranchList = $targetBranchList;
-        $this->view->users            = array("" => "") + $this->loadModel('gitlab')->getUserIdRealnamePairs($MR->gitlabID);
+        $this->view->users            = array("" => "") + $users;
         $this->view->assignee         = zget($gitlabUsers, $MR->assignee, '');
         $this->view->reviewer         = zget($gitlabUsers, $MR->reviewer, '');
 
