@@ -113,15 +113,15 @@ class myModel extends model
         {
             $product->plans      = isset($plans[$product->id]) ? $plans[$product->id] : 0;
             $product->releases   = isset($releases[$product->id]) ? $releases[$product->id] : 0;
-            $product->storyCount = isset($stories[$product->id]) ? $stories[$product->id] : 0;
             if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
+            $product->storyEstimateCount = isset($stories[$product->id]) ? $stories[$product->id] : 0;
             $countAll++;
             if($product->status != 'closed') $countUnclosed++;
             if($product->status == 'closed') unset($products[$key]);
         }
 
         /* Sort by storyCount,get five record */
-        array_multisort(array_column($products, 'storyCount'), SORT_DESC, $products);
+        array_multisort(array_column($products, 'storyEstimateCount'), SORT_DESC, $products);
         $products = array_slice($products, 0, 5);
 
         $data->count_all          = $countAll;
