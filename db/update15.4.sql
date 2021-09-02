@@ -1,3 +1,4 @@
-UPDATE `zt_action` SET `action` = 'reviewpassed' where `action` = 'passreviewed';
-UPDATE `zt_action` SET `action` = 'reviewrejected' where `action` = 'reviewclosed';
-UPDATE `zt_action` SET `action` = 'reviewclarified' where `action` = 'clarifyreviewed';
+UPDATE `zt_action` SET `action` = 'reviewpassed' WHERE `action` = 'passreviewed';
+UPDATE `zt_action` SET `action` = 'reviewrejected' WHERE `action` = 'reviewclosed';
+UPDATE `zt_action` SET `action` = 'reviewclarified' WHERE `action` = 'clarifyreviewed';
+DELETE FROM `zt_score` WHERE `module` = 'tutorial' AND `method` = 'finish';
