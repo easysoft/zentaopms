@@ -15,13 +15,17 @@ class mr extends control
     public function browse($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $MRList = $this->mr->getList($orderBy, $pager);
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
 
+        /* Sync GitLab MR to ZenTao Database. */
+        $this->mr->batchSyncMR($MRList);
+
         $this->view->title    = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
-        $this->view->MRList   = $this->mr->getList($orderBy, $pager);
+        $this->view->MRList   = $MRList;
         $this->view->orderBy  = $orderBy;
         $this->view->objectID = $objectID;
         $this->view->pager    = $pager;
@@ -148,7 +152,8 @@ class mr extends control
      */
     public function syncMR()
     {
-        $this->mr->getList();
+        $MRList = $this->mr->getList();
+        $this->mr->batchSyncMR($MRList);
 
         if(dao::isError())
         {
