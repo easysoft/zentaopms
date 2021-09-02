@@ -315,6 +315,7 @@ $lang->execution->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}
 $lang->execution->confirmDelete             = "您确定删除{$lang->executionCommon}[%s]吗？";
 $lang->execution->confirmUnlinkMember       = "您确定从该{$lang->executionCommon}中移除该用户吗？";
 $lang->execution->confirmUnlinkStory        = "您确定从该{$lang->executionCommon}中移除该{$lang->SRCommon}吗？";
+$lang->execution->confirmSyncStories        = "修改所属项目后，执行关联的{$lang->SRCommon}是否同步到新项目中？";
 $lang->execution->confirmUnlinkExecutionStory = "您确定从该项目中移除该{$lang->SRCommon}吗？";
 $lang->execution->notAllowedUnlinkStory     = "该{$lang->SRCommon}已经与项目下{$lang->executionCommon}相关联，请从{$lang->executionCommon}中移除后再操作。";
 $lang->execution->notAllowRemoveProducts    = "该{$lang->productCommon}中的{$lang->SRCommon}已与该{$lang->executionCommon}进行了关联，请取消关联后再操作。";

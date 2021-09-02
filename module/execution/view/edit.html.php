@@ -173,4 +173,5 @@
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
 <?php js::set('unmodifiableProducts',$unmodifiableProducts);?>
 <?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
+<?php js::set('confirmSyncStories', $lang->execution->confirmSyncStories);?>
 <?php include '../../common/view/footer.html.php';?>

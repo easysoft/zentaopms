@@ -473,7 +473,7 @@ class executionModel extends model
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans')
+            ->remove('products, branch, uid, plans, syncStories')
             ->get();
 
         if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
@@ -544,7 +544,7 @@ class executionModel extends model
             {
                 $execution->parent = $execution->project;
                 $execution->path   = ",{$execution->project},{$executionID},";
-                $this->changeProject($execution->project, $oldExecution->project, $executionID);
+                $this->changeProject($execution->project, $oldExecution->project, $executionID, $this->post->syncStories);
             }
 
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
@@ -649,7 +649,7 @@ class executionModel extends model
             {
                 $execution->parent = $execution->project;
                 $execution->path   = ",{$execution->project},{$executionID},";
-                $this->changeProject($execution->project, $oldExecution->project, $executionID);
+                $this->changeProject($execution->project, $oldExecution->project, $executionID, isset($_POST['syncStories'][$executionID]) ? $_POST['syncStories'][$executionID] : 'no');
             }
 
             $changedAccounts = array();
@@ -2104,10 +2104,11 @@ class executionModel extends model
      * @param  int    $newProject
      * @param  int    $oldProject
      * @param  int    $executionID
+     * @param  string $syncStories    yes|no
      * @access public
      * @return void
      */
-    public function changeProject($newProject, $oldProject, $executionID)
+    public function changeProject($newProject, $oldProject, $executionID, $syncStories = 'no')
     {
         if($newProject == $oldProject) return;
 
@@ -2155,6 +2156,22 @@ class executionModel extends model
             $this->dao->replace(TABLE_ACL)->data($whitelist)->exec();
 
             $addedAccounts[$account] = $account;
+        }
+
+        /* Sync stories to new project. */
+        if($syncStories == 'yes')
+        {
+            $this->loadModel('action');
+            $projectLinkedStories   = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($newProject)->fetchPairs('story', 'story');
+            $executionLinkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
+            foreach($executionLinkedStories as $linkedStory)
+            {
+                if(isset($projectLinkedStories[$linkedStory->story])) continue;
+
+                $linkedStory->project = $newProject;
+                $this->dao->insert(TABLE_PROJECTSTORY)->data($linkedStory)->exec();
+                $this->action->create('story', $linkedStory->story, 'linked2project', '', $newProject);
+            }
         }
 
         if($addedAccounts) $this->loadModel('user')->updateUserView($newProject, 'project', $addedAccounts);
@@ -2448,7 +2465,7 @@ class executionModel extends model
      */
     public function getTeamPairsByProject($projectID = 0)
     {
-        if(empty($projectID)) return array();
+        if(empty($projectID) and $this->config->systemMode == 'new') return array();
 
         $teams = $this->dao->select('id,name,type')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)

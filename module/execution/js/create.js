@@ -48,8 +48,11 @@ $(function()
     {
         if(systemMode == 'new')
         {
+            var maxWidth = $('.chosen-container .chosen-drop.chosen-auto-max-width.in').width() - 70;
+
             $('#teams_chosen ul .label').remove();
             $('#teams_chosen ul li:first').after(' <label class="label">' + projectCommon + '</label>');
+            $('#teams_chosen ul > li:first').attr('style', 'display: inline-block; vertical-align: middle; max-width: ' + maxWidth + 'px');
         }
     })
 

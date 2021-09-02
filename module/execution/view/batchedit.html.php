@@ -132,4 +132,5 @@
   </form>
 </div>
 <?php js::set('weekend', $config->execution->weekend);?>
+<?php js::set('confirmSyncStories', $lang->execution->confirmSyncStories);?>
 <?php include '../../common/view/footer.html.php';?>

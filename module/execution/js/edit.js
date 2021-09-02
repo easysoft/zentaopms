@@ -19,10 +19,14 @@ $(function()
             $(this).siblings('div').find('span').attr('title', tip);
         }
     });
-    
+
     oldProject = $("#project").val();
     $('#project').change(function()
     {
-        if(!confirm('修改所属项目后，执行关联的原项目需求如果要更改所属项目，需手动修改到新项目，是否继续修改？')) $("#project").val(oldProject).trigger("chosen:updated");
+        if($('#submit').closest('td').find('#syncStories').length == 0)
+        {
+            $('#submit').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
+        }
+        $("#syncStories").val(confirm(confirmSyncStories) ? 'yes' : 'no');
     });
 })

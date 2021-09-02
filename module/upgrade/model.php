@@ -705,6 +705,7 @@ class upgradeModel extends model
             $this->appendExec('15_3');
         case '15_4':
             $this->saveLogs('Execute 15_4');
+            $this->execSQL($this->getUpgradeFile('15.4'));
             if(empty($this->config->isINT))
             {
                 if(!$executeXuanxuan)
@@ -908,6 +909,7 @@ class upgradeModel extends model
             case '15_2': $confirmContent .= file_get_contents($this->getUpgradeFile('15.2'));
             case '15_3': $confirmContent .= file_get_contents($this->getUpgradeFile('15.3'));
             case '15_4':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('15.4'));
                 if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
