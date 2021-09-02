@@ -388,6 +388,23 @@ class gitlabModel extends model
     }
 
     /**
+     * Get a list of to-do items.
+     *
+     * @see   https://docs.gitlab.com/ee/api/todos.html
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiTodoList($gitlabID, $projectID)
+    {
+        $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
+        if(!$gitlab) return '';
+        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&private_token={$gitlab->token}";
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
      * Get current user.
      *
      * @param  string   $host

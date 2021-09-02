@@ -52,8 +52,6 @@ class mrModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        foreach($MRList as $MR) $this->apiSyncMR($MR);
-
         return $MRList;
     }
 
@@ -194,7 +192,7 @@ class mrModel extends model
     {
         $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
 
-        if(isset($rawMR->iid))
+        if(isset($rawMR->iid) and $rawMR->state != 'merged')
         {
             $map         = $this->config->MR->maps->sync;
             $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
@@ -223,63 +221,98 @@ class mrModel extends model
             $this->dao->update(TABLE_MR)->data($newMR)
                 ->where('id')->eq($MR->id)
                 ->exec();
-
-            /*Sync GitLab Todo ZenTao Todo. */
-
-            $gitlabTodoList = $this->apiTodoList($MR->gitlabID, $MR->targetProject);
-            if($gitlabTodoList)
-            {
-                foreach($gitlabTodoList as $do)
-                {
-                    $todoDesc = $this->dao->select('*')
-                                          ->from(TABLE_TODO)
-                                          ->where('idvalue')
-                                          ->eq($do->id)
-                                          ->fetch();
-                    if(empty($todoDesc))
-                    {
-                        $todo = new stdClass;
-                        $todo->account       = $this->app->user->account;
-                        $todo->assignedTo    = $this->app->user->account;
-                        $todo->assignedBy    = $this->app->user->account;
-                        $todo->date          = $do->target->created_at;
-                        $todo->assignedDate  = $do->target->created_at;
-                        $todo->begin         = $do->target->created_at;
-                        $todo->end           = '';
-                        $todo->type          = 'mrapprove';
-                        $todo->idvalue       = $do->id;
-                        $todo->pri           = 1;
-                        $todo->name          = $do->target->title;
-                        $todo->desc          = $do->target->description . "<br>" . $this->todoDescriptionLink($MR->gitlabID, $MR->targetProject);
-                        $todo->private       = 0;
-                        $todo->config        = 0;
-                        $todo->finishedBy    = '';
-                        $todo->finishedDate  = '';
-                        $todo->closedBy      = '';
-                        $todo->closedDate    = '0000-00-00 00:00:00';
-                        $this->dao->insert(TABLE_TODO)->data($todo)->exec();
-                    }
-                }
-            }
         }
         return $this->dao->findByID($MR->id)->from(TABLE_MR)->fetch();
     }
 
     /**
-     * Get a list of to-do items.
+     * Batch Sync GitLab MR Database.
      *
-     * @docs   https://docs.gitlab.com/ee/api/todos.html
+     * @param  object $MRList
+     * @access public
+     * @return void
+     */
+    public function batchSyncMR($MRList)
+    {
+        if(!empty($MRList)) foreach($MRList as $MR)
+        {
+
+            $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+
+            if(isset($rawMR->iid) and $rawMR->state != 'merged')
+            {
+                /* create gitlab mr todo to zentao todo */
+                $this->batchSyncTodo($MR->gitlabID, $MR->targetProject);
+
+                $map         = $this->config->MR->maps->sync;
+                $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
+
+                $newMR = new stdclass;
+                foreach($map as $syncField => $config)
+                {
+                    $value = '';
+                    list($field, $optionType, $options) = explode('|', $config);
+
+                    if($optionType == 'field')       $value = $rawMR->$field;
+                    if($optionType == 'userPairs')
+                    {
+                        $gitlabUserID = '';
+                        if(isset($rawMR->$field[0]))
+                        {
+                            $gitlabUserID = $rawMR->$field[0]->$options;
+                        }
+                        $value = zget($gitlabUsers, $gitlabUserID, '');
+                    }
+
+                    if($value) $newMR->$syncField = $value;
+                }
+                /* Update MR in Zentao database. */
+                $this->dao->update(TABLE_MR)->data($newMR)
+                                            ->where('id')->eq($MR->id)
+                                            ->exec();
+            }
+        }
+    }
+
+    /**
+     * Sync GitLab Todo to ZenTao Todo.
+     *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
-     * @return object
+     * @return void
      */
-    public function apiTodoList($gitlabID, $projectID)
+    public function batchSyncTodo($gitlabID, $projectID)
     {
-        $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
-        if(!$gitlab) return '';
-        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&private_token={$gitlab->token}";
-        return json_decode(commonModel::http($url));
+        $todoList = $this->loadModel('gitlab')->apiTodoList($gitlabID, $projectID);
+
+        if(!empty($todoList))
+        {
+            foreach($todoList as $do)
+            {
+                $todoDesc = $this->dao->select('*')
+                                      ->from(TABLE_TODO)
+                                      ->where('idvalue')->eq($do->id)
+                                      ->fetch();
+                if(empty($todoDesc))
+                {
+                    $todo = new stdClass;
+                    $todo->account      = $this->app->user->account;
+                    $todo->assignedTo   = $this->app->user->account;
+                    $todo->assignedBy   = $this->app->user->account;
+                    $todo->date         = $do->target->created_at;
+                    $todo->assignedDate = $do->target->created_at;
+                    $todo->begin        = $do->target->created_at;
+                    $todo->type         = 'mrapprove';
+                    $todo->idvalue      = $do->id;
+                    $todo->pri          = 1;
+                    $todo->name         = $do->target->title;
+                    $todo->desc         = $do->target->description . "<br>" . $this->todoDescriptionLink($gitlabID, $projectID);
+                    $todo->finishedBy   = $this->app->user->account;
+                    $this->dao->insert(TABLE_TODO)->data($todo)->exec();
+                }
+            }
+        }
     }
 
     /**
