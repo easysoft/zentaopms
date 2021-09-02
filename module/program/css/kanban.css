@@ -16,17 +16,17 @@
 #kanban thead > tr:last-child > th {border: 2px solid #fff;}
 #kanban a {line-height: 24px;}
 
-.doing-td, .wait-project, .normal-plan, .normal-release {vertical-align: top !important;}
-.doing-td {padding: 10px 0px !important;}
+.fix-table-copy-wrapper thead > tr > th:first-child {background: none!important;}
 
-.doing-td .board:first-child{padding-top: 0; border-top: unset;}
+.doing-td, .wait-project, .normal-plan, .normal-release {vertical-align: top !important;}
+.doing-td {padding: 0 0 10px 0px !important;}
+
 .doing-td .board{padding: 0px 10px; border-bottom: 2px solid #fff}
 .doing-td .board:last-child{border-bottom: unset}
-.doing-td .board {margin-top: 10px}
-
-.project-line {width: 100%; height: 2px; background: #fff}
 
 .doing-td .table-row .table-col:last-child, .c-progress {width: 30px;}
 .doing-td .table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 .table-grouped tbody > tr > td:first-child, .table-grouped thead > tr > th:first-child {padding-left: 3px;}
+
+.scroll {overflow-x: hidden; overflow-y: auto;}
