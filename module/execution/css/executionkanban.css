@@ -9,11 +9,10 @@
 .board-item + .board-item {margin-top: 10px;}
 
 #kanban {overflow-y: auto;}
-#kanban tbody > tr > td {line-height: 24px;}
-#kanban tbody > tr > td {border-bottom: 2px solid #fff !important;}
 #kanban thead > tr > th:not(:last-child) {border-right: 2px solid #efefef;}
-#kanban tbody > tr > td.color-my {background-color: #F5F5F5; border-bottom: 5px solid #fff !important;}
-#kanban tbody > tr > td.color-project {background-color: #F5F5F5;}
+#kanban tbody > tr > td {line-height: 24px;}
+#kanban tbody > tr > td {background-color: #F5F5F5;}
+#kanban tbody > tr:not(:last-child) {border-bottom: 5px solid #fff !important;}
 
 .s-doing .table-row .table-col:last-child, .c-progress {width: 30px;}
 .table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
