@@ -258,6 +258,8 @@ class programModel extends model
                     $project->hours     = zget($hours, $project->id, array());
                     $product->projects[$status][] = $project;
                 }
+
+                $product->rowspan = isset($product->projects['doing']) ? count($product->projects['doing']) > 0 ? count($product->projects['doing']) : 1 : 1;
             }
         }
 
@@ -266,6 +268,10 @@ class programModel extends model
         {
             $program->products = zget($productGroup, $programID, array());
             $program->rowspan  = count($program->products) > 0 ? count($program->products) : 1;
+            foreach($program->products as $product)
+            {
+                if(isset($product->projects['doing']) and count($product->projects['doing']) > 0) $program->rowspan += count($product->projects['doing']) - 1;
+            }
 
             if(in_array($programID, $involvedPrograms))
             {
