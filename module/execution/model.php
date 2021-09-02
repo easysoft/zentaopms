@@ -2448,7 +2448,7 @@ class executionModel extends model
      */
     public function getTeamPairsByProject($projectID = 0)
     {
-        if(empty($projectID)) return array();
+        if(empty($projectID) and $this->config->systemMode == 'new') return array();
 
         $teams = $this->dao->select('id,name,type')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
