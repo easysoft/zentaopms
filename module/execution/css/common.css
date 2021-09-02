@@ -27,4 +27,3 @@
 
 #whitelistBox .checkbox-inline, #whitelistBox .radio-inline {margin-left: 10px; display: inline-block; padding-left: 0px; padding-right: 10px;}
 .main-table > .table-responsive {padding: 0 1px; background: #fff;}
-#teams_chosen ul li:first-child {max-width:256px; display: inline-block; vertical-align: middle;}

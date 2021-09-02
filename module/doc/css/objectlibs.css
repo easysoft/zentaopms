@@ -16,6 +16,7 @@
 .main-col .doc-title .actions a + a {margin-left: 8px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 #content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#content .detail-content {padding-left: 10px;}
 #mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
 #sidebar {width: 275px;}
 #sidebar>.cell {width: 100%;}
