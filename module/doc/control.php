@@ -300,6 +300,8 @@ class doc extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        unset($_GET['onlybody']);
+
         if($this->app->tab == 'product')
         {
             $this->product->setMenu($objectID);
@@ -332,7 +334,7 @@ class doc extends control
         $lib  = $this->doc->getLibByID($libID);
         $type = !empty($lib) ? $lib->type : 'product';
 
-        if(!isonlybody()) $this->view->title = $lib->name . $this->lang->colon . $this->lang->doc->create;
+        $this->view->title = $lib->name . $this->lang->colon . $this->lang->doc->create;
 
         $this->view->libID            = $libID;
         $this->view->libs             = $libs;
@@ -1039,6 +1041,27 @@ class doc extends control
         $this->view->moduleTree = $moduleTree;
         $this->view->users      = $this->user->getPairs('noletter');
 
+        $this->display();
+    }
+
+    /**
+     * Select lib type.
+     *
+     * @access public
+     * @return void
+     */
+    public function selectLibType()
+    {
+        if($_POST)
+        {
+            $response['message']    = $this->lang->saveSuccess;
+            $response['result']     = 'success';
+            $response['closeModal'] = true;
+            $response['callback']   = "redirectParentWindow(\"{$this->post->objectType}\")";
+            return $this->send($response);
+        }
+
+        unset($this->lang->doc->libTypeList['book']);
         $this->display();
     }
 }

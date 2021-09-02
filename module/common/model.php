@@ -373,7 +373,9 @@ class commonModel extends model
             /* Change icon when object type is execution and mode is classic. */
             if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
 
-            $createMethod = $objectType == 'effort' ? 'batchCreate' : 'create';
+            $createMethod = 'create';
+            if($objectType == 'effort') $createMethod = 'batchCreate';
+            if($objectType == 'doc')    $createMethod = 'selectLibType';
             if(strpos('bug|execution|doc', $objectType) !== false) $needPrintDivider = true;
 
             if(common::hasPriv($objectType, $createMethod))
@@ -393,7 +395,7 @@ class commonModel extends model
                 $showCreateList = true;
                 $isOnlyBody     = strpos('effort|doc', $objectType) !== false;
                 $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
-                $attr           = $objectType == 'effort' ? "data-width='95%' class='iframe' data-toggle='modal'" : "class='iframe'";
+                $attr           = $objectType == 'effort' ? "data-width='95%' class='iframe' data-toggle='modal'" : "class='iframe' data-width='650px'";
 
                 $params = '';
                 if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
