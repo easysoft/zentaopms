@@ -44,6 +44,7 @@ $lang->mr->notFound  = "此{$lang->mr->common}不存在。";
 
 $lang->mr->apiError = new stdclass;
 $lang->mr->apiError->createMR = "通过API创建合并请求失败，失败原因：%s";
+$lang->mr->apiError->sudo     = "无法以当前用户绑定的GitLab账户进行操作，失败原因：%s";
 
 $lang->mr->createFailedFromAPI = "创建合并请求失败。";
 $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
@@ -71,7 +72,6 @@ $lang->mr->commandLine    = "合并命令";
 $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
 $lang->mr->mergeSuccess   = "已成功合并";
-
 
 /**
  * Merge Command Document.

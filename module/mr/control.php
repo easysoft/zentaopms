@@ -174,8 +174,19 @@ class mr extends control
     public function accept($MRID)
     {
         $MR = $this->mr->getByID($MRID);
-        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+
+        /* Accept MR by using the mapped user in GitLab. */
+        $sudoUser = $this->mr->getSudoUsername($MR->gitlabID, $MR->targetProject);
+
+        if(isset($MR->gitlabID))
+        {
+            if(!empty($sudoUser)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid, $sudo = $sudoUser);
+            if(empty($sudoUser))  $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        }
         if(isset($rawMR->state) and $rawMR->state == 'merged') return array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess);
+
+        /* The type of variable `$rawMR->message` is string. This is different with apiCreateMR. */
+        if(isset($rawMR->message)) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $rawMR->message));
         return array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed);
     }
 
