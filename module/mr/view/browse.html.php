@@ -11,7 +11,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-right'>
-    <?php common::printLink('mr', 'create',   "mr={$MR->id}", "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('mr', 'create', '', "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent'>
@@ -56,7 +56,7 @@
             <?php
             common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
             common::printLink('mr', 'edit',   "mr={$MR->id}", '<i class="icon icon-edit"></i>', '', "title='{$lang->mr->edit}' class='btn btn-info'");
-            common::printLink('mr', 'diff',   "mr={$MR->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->diff}' class='btn btn-info'");
+            common::printLink('mr', 'diff',   "mr={$MR->id}", '<i class="icon icon-review"></i>', '', "title='{$lang->mr->viewDiff}' class='btn btn-info'");
             common::printLink('mr', 'delete', "mr={$MR->id}", '<i class="icon icon-trash"></i>', '', "title='{$lang->mr->delete}' class='btn btn-info'");
             ?>
           </td>
