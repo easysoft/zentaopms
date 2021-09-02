@@ -41,7 +41,7 @@
               <?php if(!empty($program->products)):?>
               <?php foreach($program->products as $productID => $product):?>
               <?php
-              $scroll = ''; 
+              $scroll = '';
               $doingCounts  = isset($product->projects['doing']) ? count($product->projects['doing']) : 0;
               $planCounts   = isset($product->plans) ? count($product->plans) : 0;
               $releaseCount = isset($product->releases) ? count($product->releases) : 0;
@@ -120,7 +120,9 @@
                   </div>
                 </div>
                 <?php else:?>
-                <div class='board'></div>
+                <div class='board'>
+                  <div class='emptyBoard board-item'></div>
+                </div>
                 <?php endif;?>
                 <?php endforeach;?>
                 <?php endif;?>
@@ -163,8 +165,8 @@
 </div>
 <script>
 $(function()
-{ 
-    $('.board').height($('.project .board').height()); 
+{
+    $('.board').height($('.project .board').height());
     $('.table div.scroll').each(function()
     {
         var count     = $(this).parent().siblings('td.project').children('.board').length >= 5 ? $(this).parent().siblings('td.project').children('.board').length : 5;

@@ -6,8 +6,11 @@
 
 .board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: default; border-radius: 2px; background-color: #fff;}
 .board-item:hover {border-color: #ccc;}
-.board-item {margin-top: 10px;}
+.board-item:first-child {margin-top: 5px;}
+.board-item + .board-item {margin-top: 10px;}
 .board-item:last-child {margin-bottom: 10px;}
+.doing-td .board {margin-top: 5px;}
+.doing-td .board:last-child {margin-bottom: 5px;}
 
 #kanban {overflow-y: auto;}
 #kanban tbody > tr > td {line-height: 20px;}
@@ -26,6 +29,8 @@
 
 .doing-td .table-row .table-col:last-child, .c-progress {width: 30px;}
 .doing-td .table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+.doing-td .emptyBoard {background: none; border: unset}
 
 .table-grouped tbody > tr > td:first-child, .table-grouped thead > tr > th:first-child {padding-left: 3px;}
 
