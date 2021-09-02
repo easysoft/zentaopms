@@ -273,7 +273,7 @@ class storyModel extends model
             if($executionID != 0)
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
-                if($executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+                if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
             }
 
             if(is_array($this->post->URS))

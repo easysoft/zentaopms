@@ -315,8 +315,9 @@ class job extends control
 
             if($_POST)
             {
-                $reference = new stdclass;
-                $reference->ref = explode("::", $refList[$this->post->ref])[1];
+                $reference      = new stdclass;
+                $explodedRefs   = explode("::", $refList[$this->post->ref]);
+                $reference->ref = $explodedRefs[1];
 
                 $variables = array();
                 foreach($this->post->keys as $key => $field)

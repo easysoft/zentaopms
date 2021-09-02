@@ -4679,6 +4679,7 @@ class upgradeModel extends model
      */
     public function computeObjectMembers()
     {
+        $this->app->loadLang('user');
         $projects      = $this->dao->select('id,days')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
         $projectIdList = array_keys($projects);
 
@@ -4747,7 +4748,7 @@ class upgradeModel extends model
                 $team->root    = $projectID;
                 $team->type    = 'project';
                 $team->account = $account;
-                $team->role    = $user->role;
+                $team->role    = zget($this->lang->user->roleList, $user->role, $user->role);
                 $team->join    = $today;
                 $team->days    = $project->days;
                 $team->hours   = '7.0';

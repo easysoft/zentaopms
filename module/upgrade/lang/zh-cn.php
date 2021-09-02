@@ -90,7 +90,7 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>可以选择这些{$lang->projectCommon}归属于某个新项目下。</p>
 EOD;
 
-$lang->upgrade->to15Mode['classic'] = '保持老版本的习惯';
+$lang->upgrade->to15Mode['classic'] = '经典管理模式';
 $lang->upgrade->to15Mode['new']     = '全新项目集管理模式';
 
 $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';

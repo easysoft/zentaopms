@@ -80,22 +80,22 @@ class productplanModel extends model
     public function getList($product = 0, $branch = 0, $browseType = 'all', $pager = null, $orderBy = 'begin_desc')
     {
         $date  = date('Y-m-d');
-        $plans = $this->dao->select('t1.*,t2.project')->from(TABLE_PRODUCTPLAN)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on("t2.plan = t1.id and t2.product = '$product'")
-            ->where('t1.product')->eq($product)
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!empty($branch))->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($browseType == 'unexpired')->andWhere('t1.end')->ge($date)->fi()
-            ->beginIF($browseType == 'overdue')->andWhere('t1.end')->lt($date)->fi()
+        $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($browseType == 'unexpired')->andWhere('end')->ge($date)->fi()
+            ->beginIF($browseType == 'overdue')->andWhere('end')->lt($date)->fi()
             ->orderBy($orderBy)
-            ->page($pager, 't1.id')
+            ->page($pager)
             ->fetchAll('id');
 
         if(!empty($plans))
         {
+
             $plans      = $this->reorder4Children($plans);
             $planIdList = array_keys($plans);
 
+            $planProjects      = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product)->andWhere('plan')->in(array_keys($plans))->fetchPairs('plan', 'project');
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
             $product = $this->loadModel('product')->getById($product);
             if($product->type == 'normal')
@@ -126,6 +126,7 @@ class productplanModel extends model
                 $plan->stories   = count($storyPairs);
                 $plan->bugs      = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
                 $plan->hour      = array_sum($storyPairs);
+                $plan->project   = zget($planProjects, $plan->id, '');
                 $plan->projectID = $plan->project;
 
                 /* Sync linked stories. */

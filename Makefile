@@ -11,7 +11,6 @@ clean:
 	rm -fr zentaotest
 	rm -fr *.tar.gz
 	rm -fr *.zip
-	rm -fr api*
 	rm -fr build/linux/lampp
 	rm -fr lampp
 common:

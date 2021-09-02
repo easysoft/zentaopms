@@ -295,12 +295,11 @@ $lang->execution->doneExecutions      = '已结束';
 $lang->execution->selectDept          = '选择部门';
 $lang->execution->selectDeptTitle     = '选择一个部门的成员';
 $lang->execution->copyTeam            = '复制团队';
-$lang->execution->copyFromTeam        = "复制自{$lang->executionCommon}团队： <strong>%s</strong>";
-$lang->execution->noMatched           = "找不到包含'%s'的$lang->executionCommon";
-$lang->execution->copyTitle           = "请选择一个{$lang->executionCommon}来复制";
-$lang->execution->copyTeamTitle       = "选择一个{$lang->projectCommon}或{$lang->executionCommon}团队来复制";
-$lang->execution->copyNoExecution     = "没有可用的{$lang->executionCommon}来复制";
-$lang->execution->copyFromExecution   = "复制自{$lang->executionCommon} <strong>%s</strong>";
+$lang->execution->copyFromTeam        = "复制自{$lang->execution->common}团队： <strong>%s</strong>";
+$lang->execution->noMatched           = "找不到包含'%s'的{$lang->execution->common}";
+$lang->execution->copyTitle           = "请选择一个{$lang->execution->common}来复制";
+$lang->execution->copyNoExecution     = "没有可用的{$lang->execution->common}来复制";
+$lang->execution->copyFromExecution   = "复制自{$lang->execution->common} <strong>%s</strong>";
 $lang->execution->cancelCopy          = '取消复制';
 $lang->execution->byPeriod            = '按时间段';
 $lang->execution->byUser              = '按用户';
@@ -310,6 +309,8 @@ $lang->execution->noMembers           = '暂时没有团队成员。';
 $lang->execution->workloadTotal       = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联产品的{$lang->SRCommon})";
+if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择一个{$lang->execution->common}团队来复制";
+if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->projectCommon}或{$lang->execution->common}团队来复制";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete             = "您确定删除{$lang->executionCommon}[%s]吗？";

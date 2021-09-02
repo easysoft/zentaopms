@@ -46,7 +46,7 @@ $lang->install->howToUse            = "請問您計劃如何使用禪道的新�
 $lang->install->introductionContent = <<<EOT
 <div>
   <h4>尊敬的用戶您好，歡迎您使用禪道%s。</h4>
-  <p>禪道%s提供了兩種使用模式， 一種是精典管理模式，功能較為精簡，提供了產品和項目兩個核心功能；另一種是全新項目集管理模式，具備所有核心功能。如下是相關功能介紹，您可以根據需要選擇使用的模式。</p>
+  <p>禪道%s提供了兩種使用模式， 一種是經典管理模式，功能較為精簡，提供了產品和項目兩個核心功能；另一種是全新項目集管理模式，具備所有核心功能。如下是相關功能介紹，您可以根據需要選擇使用的模式。</p>
   <div class='block-content'>
     <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>項目集</strong></p><p>項目集是一組相互關聯，且被協調管理的項目集合，可以進行多層級管理，屬於戰略層面的管理。</p></div>
     <div class='block-details block-right'>
@@ -63,8 +63,8 @@ $lang->install->introductionContent = <<<EOT
     </div>
   </div>
   <div class='text-center introduction-link'>
-    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'>文檔介紹</a>
-    <a href='https://dl.cnezsoft.com/vedio/program0716.mp4' target='_blank' class='btn btn-wide btn-info'>視頻介紹</a>
+    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> 文檔介紹</a>
+    <a href='https://dl.cnezsoft.com/vedio/program0716.mp4' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> 視頻介紹</a>
   </div>
 </div>
 EOT;
@@ -162,28 +162,30 @@ $lang->install->errorEmptyPassword = '密碼不能為空';
 $lang->install->selectedMode     = '選擇模式';
 $lang->install->selectedModeTips = '後續您還可以去後台-自定義-模式中進行調整';
 
-$lang->install->groupList['ADMIN']['name']   = '管理員';
-$lang->install->groupList['ADMIN']['desc']   = '系統管理員';
-$lang->install->groupList['DEV']['name']     = '研發';
-$lang->install->groupList['DEV']['desc']     = '研發人員';
-$lang->install->groupList['QA']['name']      = '測試';
-$lang->install->groupList['QA']['desc']      = '測試人員';
-$lang->install->groupList['PM']['name']      = '項目經理';
-$lang->install->groupList['PM']['desc']      = '項目經理';
-$lang->install->groupList['PO']['name']      = '產品經理';
-$lang->install->groupList['PO']['desc']      = '產品經理';
-$lang->install->groupList['TD']['name']      = '研發主管';
-$lang->install->groupList['TD']['desc']      = '研發主管';
-$lang->install->groupList['PD']['name']      = '產品主管';
-$lang->install->groupList['PD']['desc']      = '產品主管';
-$lang->install->groupList['QD']['name']      = '測試主管';
-$lang->install->groupList['QD']['desc']      = '測試主管';
-$lang->install->groupList['TOP']['name']     = '高層管理';
-$lang->install->groupList['TOP']['desc']     = '高層管理';
-$lang->install->groupList['OTHERS']['name']  = '其他';
-$lang->install->groupList['OTHERS']['desc']  = '其他';
-$lang->install->groupList['LIMITED']['name'] = '受限用戶';
-$lang->install->groupList['LIMITED']['desc'] = '受限用戶分組(只能編輯與自己相關的內容)';
+$lang->install->groupList['ADMIN']['name']        = '管理員';
+$lang->install->groupList['ADMIN']['desc']        = '系統管理員';
+$lang->install->groupList['DEV']['name']          = '研發';
+$lang->install->groupList['DEV']['desc']          = '研發人員';
+$lang->install->groupList['QA']['name']           = '測試';
+$lang->install->groupList['QA']['desc']           = '測試人員';
+$lang->install->groupList['PM']['name']           = '項目經理';
+$lang->install->groupList['PM']['desc']           = '項目經理';
+$lang->install->groupList['PO']['name']           = '產品經理';
+$lang->install->groupList['PO']['desc']           = '產品經理';
+$lang->install->groupList['TD']['name']           = '研發主管';
+$lang->install->groupList['TD']['desc']           = '研發主管';
+$lang->install->groupList['PD']['name']           = '產品主管';
+$lang->install->groupList['PD']['desc']           = '產品主管';
+$lang->install->groupList['QD']['name']           = '測試主管';
+$lang->install->groupList['QD']['desc']           = '測試主管';
+$lang->install->groupList['TOP']['name']          = '高層管理';
+$lang->install->groupList['TOP']['desc']          = '高層管理';
+$lang->install->groupList['OTHERS']['name']       = '其他';
+$lang->install->groupList['OTHERS']['desc']       = '其他';
+$lang->install->groupList['LIMITED']['name']      = '受限用戶';
+$lang->install->groupList['LIMITED']['desc']      = '受限用戶分組(只能編輯與自己相關的內容)';
+$lang->install->groupList['PROJECTADMIN']['name'] = '項目管理員';
+$lang->install->groupList['PROJECTADMIN']['desc'] = '項目管理員可以維護項目的權限';
 
 $lang->install->cronList[''] = '監控定時任務';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃盡圖';

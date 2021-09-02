@@ -1345,7 +1345,7 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (10, 'OTHERS', 'others', 'for others.'),
 (11, 'guest', 'guest', 'For guest'),
 (12, 'LIMITED', 'limited', 'For limited user'),
-(13, 'Project Admin', 'projectAdmin', 'Project Admins manage project privileges');
+(13, 'PROJECTADMIN', 'projectAdmin', 'Project Admins manage project privileges');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'action','comment'),

@@ -113,7 +113,7 @@
         <div class='panel-body'>
           <div class='project-infos'>
             <?php
-            $projectBudget = in_array($app->getClientLang(), ['zh-cn','zh-tw']) ? round((float)$project->budget / 10000, 2) . $lang->project->tenThousand : round((float)$project->budget, 2);
+            $projectBudget = in_array($app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $lang->project->tenThousand : round((float)$project->budget, 2);
             $budgetTitle   = $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->budget . $lang->project->future;
             $project->end  = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
             $project->date = str_replace('-', '.', $project->begin) . ' - ' . str_replace('-', '.', $project->end);

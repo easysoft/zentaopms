@@ -322,8 +322,8 @@ class doc extends control
             $this->app->rawMethod = $objectType;
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
+            unset($this->lang->doc->menu->execution['subMenu']);
             if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
-            if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
         }
 
         /* Get libs and the default lib id. */

@@ -295,12 +295,11 @@ $lang->execution->doneExecutions      = 'Finished';
 $lang->execution->selectDept          = 'Select Department';
 $lang->execution->selectDeptTitle     = 'Select User';
 $lang->execution->copyTeam            = 'Copy Team';
-$lang->execution->copyFromTeam        = "Copy from {$lang->executionCommon} Team: <strong>%s</strong>";
-$lang->execution->noMatched           = "No $lang->executionCommon including '%s'can be found.";
-$lang->execution->copyTitle           = "Choose a {$lang->executionCommon} to copy.";
-$lang->execution->copyTeamTitle       = "Choose a {$lang->projectCommon} or {$lang->executionCommon} Team to copy.";
-$lang->execution->copyNoExecution     = "No {$lang->executionCommon} can be copied.";
-$lang->execution->copyFromExecution   = "Copy from {$lang->executionCommon} <strong>%s</strong>";
+$lang->execution->copyFromTeam        = "Copy from {$lang->execution->common} Team: <strong>%s</strong>";
+$lang->execution->noMatched           = "No {$lang->execution->common} including '%s'can be found.";
+$lang->execution->copyTitle           = "Choose a {$lang->execution->common} to copy.";
+$lang->execution->copyNoExecution     = "No {$lang->execution->common} can be copied.";
+$lang->execution->copyFromExecution   = "Copy from {$lang->execution->common} <strong>%s</strong>";
 $lang->execution->cancelCopy          = 'Cancel Copy';
 $lang->execution->byPeriod            = 'By Time';
 $lang->execution->byUser              = 'By User';
@@ -310,6 +309,8 @@ $lang->execution->noMembers           = 'No team members yet. ';
 $lang->execution->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linked under the execution, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
+if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "Choose a {$lang->execution->common} Team to copy.";
+if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choose a {$lang->projectCommon} or {$lang->execution->common} Team to copy.";
 
 /* Interactive prompts. */
 $lang->execution->confirmDelete             = "Do you want to delete the {$lang->executionCommon}[%s]?";
