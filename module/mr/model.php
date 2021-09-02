@@ -418,13 +418,15 @@ class mrModel extends model
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
+     * @param  string $sudo
      * @access public
      * @return object
      */
-    public function apiAcceptMR($gitlabID, $projectID, $MRID)
+    public function apiAcceptMR($gitlabID, $projectID, $MRID, $sudo = "")
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/merge");
-        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        if($sudo != "") return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers = array("sudo: 0")));
+        return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -456,5 +458,29 @@ class mrModel extends model
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
         return $scm->diff('', $fromProject, $toProject, $parse = true, $fromProject);
+    }
+
+    /**
+     * Get sudo user ID in GitLab.
+     * Note: sudo parameter in GitLab API can be user ID or username.
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function getSudoUsername($gitlabID, $projectID)
+    {
+        $zentaoUser = $this->app->user->account;
+
+        /* Fetch user list both in Zentao and current GitLab project. */
+        $bindedUsers     = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($gitlabID, $projectID);
+        $users           = array();
+        foreach($rawProjectUsers as $rawProjectUser)
+        {
+            if(!empty($bindedUsers[$rawProjectUser->username])) $users[$rawProjectUser->username] = $bindedUsers[$rawProjectUser->username];
+        }
+        if(!empty($users[$zentaoUser])) return $users[$zentaoUser];
+        return "";
     }
 }
