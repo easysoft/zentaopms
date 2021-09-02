@@ -53,7 +53,7 @@ EOT;
     </div>
     <div class='modal-body'>
       <div class='form-group'>
-        <?php echo html::textArea('config', $configContent, "rows='15' class='form-control'");?>
+        <?php echo html::textarea('config', $configContent, "rows='15' class='form-control'");?>
       </div>
       <div class='help-block text-center'>
         <?php

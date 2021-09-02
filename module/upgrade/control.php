@@ -124,8 +124,6 @@ class upgrade extends control
         $result = $this->upgrade->deleteFiles();
         if($result)
         {
-            $result[] = $this->lang->upgrade->afterDeleted;
-
             $this->view->result = 'fail';
             $this->view->errors  = $result;
 

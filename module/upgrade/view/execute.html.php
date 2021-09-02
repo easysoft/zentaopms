@@ -18,9 +18,12 @@
     <div class='modal-body'>
       <?php if($result == 'fail'):?>
       <div class='alert alert-danger mgb-10'><strong><?php echo $lang->upgrade->fail?></strong></div>
-      <pre><?php echo join('<br />', $errors);?></pre>
+      <?php echo html::textarea('errors', join("\n", $errors), "rows='10' class='form-control' readonly");?>
       <?php endif;?>
     </div>
+    <?php if($result == 'fail'):?>
+    <div class='modal-footer text-left'><?php echo $lang->upgrade->afterDeleted;?> <?php echo html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='location.reload()'");?></div>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
