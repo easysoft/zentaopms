@@ -279,9 +279,16 @@ class gitlabModel extends model
         $refList  = array();
         $branches = $this->loadModel('gitlab')->apiGetBranches($gitlabID, $projectID);
         $tags     = $this->loadModel('gitlab')->apiGetTags($gitlabID, $projectID);
+
+       /* fix bug 14612*/
+        if(isset($branches->message)) return array();
+
+        if(isset($branches->error)) return array();
+
         foreach($branches as $branch) $refList[] = "Branch::" . $branch->name;
         foreach($tags as $tag) $refList[] = "Tag::" . $tag->name;
         return $refList;
+
     }
 
     /**
