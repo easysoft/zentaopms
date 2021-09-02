@@ -73,17 +73,16 @@ class myModel extends model
                 ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-                ->andWhere('t1.PO')->eq($this->app->user->account)
                 ->orderBy('t1.order_asc')
                 ->fetchAll('id');
         $productKeys = array_keys($products);
 
-        $stories = $this->dao->select('product, status, count(status) AS count')
+        $stories = $this->dao->select('product, sum(estimate) AS estimateCount')
                 ->from(TABLE_STORY)
                 ->where('deleted')->eq(0)
                 ->andWhere('product')->in($productKeys)
-                ->groupBy('product, status')
-                ->fetchGroup('product', 'status');
+                ->groupBy('product')
+                ->fetchPairs();
         $plans = $this->dao->select('product, count(*) AS count')
                 ->from(TABLE_PRODUCTPLAN)
                 ->where('deleted')->eq(0)
@@ -112,14 +111,18 @@ class myModel extends model
 
         foreach($products as $key => $product)
         {
-            $product->plans = isset($plans[$product->id]) ? $plans[$product->id] : 0;
-            $product->releases = isset($releases[$product->id]) ? $releases[$product->id] : 0;
-            if(isset($stories[$product->id])) $product->stories = $stories[$product->id];
+            $product->plans      = isset($plans[$product->id]) ? $plans[$product->id] : 0;
+            $product->releases   = isset($releases[$product->id]) ? $releases[$product->id] : 0;
+            $product->storyCount = isset($stories[$product->id]) ? $stories[$product->id] : 0;
             if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
             $countAll++;
             if($product->status != 'closed') $countUnclosed++;
             if($product->status == 'closed') unset($products[$key]);
         }
+
+        /* Sort by storyCount,get five record */
+        array_multisort(array_column($products, 'storyCount'), SORT_DESC, $products);
+        $products = array_slice($products, 0, 5);
 
         $data->count_all          = $countAll;
         $data->count_unclosed     = $countUnclosed;
@@ -136,16 +139,18 @@ class myModel extends model
     public function getProjects()
     {       
         $data = new stdClass();
+        $countDoing       = 0;
         $consumedAll      = 0;
         $consumedThisYear = 0;
         $doingProjects    = array();
 
-        $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'order_asc');
+        $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
         $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'this_year');
         foreach($projects as $key => $project)
         {
             if($project->status == 'doing')
             {
+                $countDoing++;
                 $workhour = $this->project->getWorkhour($project->id);
                 $projects[$key]->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
                 $doingProjects[] = $projects[$key];
@@ -154,7 +159,12 @@ class myModel extends model
             $consumedThisYear += $projectsConsumed[$project->id]->totalConsumed;
         }
 
+        /* Sort by consumed,get five record */
+        array_multisort(array_column($doingProjects, 'consumed'), SORT_DESC, $doingProjects);
+        $doingProjects = array_slice($doingProjects, 0, 5);
+
         $data->count_all          = count($projects);
+        $data->count_doing        = $countDoing;
         $data->consumed_all       = $consumedAll;
         $data->consumed_this_year = $consumedThisYear;
         $data->projects           = $doingProjects;
