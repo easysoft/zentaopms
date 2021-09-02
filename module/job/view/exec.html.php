@@ -21,7 +21,7 @@
     <tr>
       <td>
         <?php
-        echo html::submitButton($lang->job->runPipeline);
+        echo html::submitButton($lang->job->runPipeline, '', empty($refList) ? 'disabled btn btn-primary' : 'btn btn-primary');
        ?>
       </td>
       <td></td>

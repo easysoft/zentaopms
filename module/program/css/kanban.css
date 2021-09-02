@@ -6,32 +6,23 @@
 
 .board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: default; border-radius: 2px; background-color: #fff;}
 .board-item:hover {border-color: #ccc;}
-.board-item:first-child {margin-top: 5px;}
-.board-item + .board-item {margin-top: 10px;}
+.board-item {margin-top: 10px;}
 .board-item:last-child {margin-bottom: 10px;}
-.doing-td .board {margin-top: 5px;}
-.doing-td .board:last-child {margin-bottom: 5px;}
 
 #kanban {overflow-y: auto;}
-#kanban tbody > tr > td {line-height: 20px;}
-#kanban tbody > tr > td {border-right: 3px solid #fff; border-bottom: 2px solid #fff;}
+#kanban tbody > tr > td {line-height: 24px;}
+#kanban tbody > tr > td{border-right: 3px solid #fff; border-bottom: 2px solid #fff;}
 #kanban thead > tr:first-child > th:not(:first-child) {border-right: 2px solid #fff; border-bottom: 2px solid #fff;}
 #kanban thead > tr:last-child > th {border: 2px solid #fff;}
-#kanban a {line-height: 24px;}
-
-.fix-table-copy-wrapper thead > tr > th:first-child {background: none!important;}
 
 .doing-td, .wait-project, .normal-plan, .normal-release {vertical-align: top !important;}
-.doing-td {padding: 0 0 10px 0px !important;}
 
-.doing-td .board{padding: 0px 10px; border-bottom: 2px solid #fff}
-.doing-td .board:last-child{border-bottom: unset}
+.doing-td .board:first-child{padding-top: 0; border-top: unset;}
+
+.project-line {width: 100%; height: 2px; background: #fff}
 
 .doing-td .table-row .table-col:last-child, .c-progress {width: 30px;}
 .doing-td .table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
-.doing-td .emptyBoard {background: none; border: unset}
-
-.table-grouped tbody > tr > td:first-child, .table-grouped thead > tr > th:first-child {padding-left: 3px;}
-
 .scroll {overflow-x: hidden; overflow-y: auto;}
+.fix-table-copy-wrapper thead > tr > th:first-child {background: none!important;}
