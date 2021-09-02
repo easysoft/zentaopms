@@ -53,6 +53,10 @@
             <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
           </tr>
           <tr>
+            <th><?php echo $lang->product->code;?></th>
+            <td><?php echo html::input('code', '', "class='form-control' required");?></td><td></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td><td></td>
           </tr>

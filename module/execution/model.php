@@ -354,6 +354,11 @@ class executionModel extends model
             $this->lang->project->name = $this->lang->execution->name;
             $this->lang->project->code = $this->lang->execution->code;
         }
+        else
+        {
+            $this->lang->project->name = $this->lang->execution->execName;
+            $this->lang->project->code = $this->lang->execution->execCode;
+        }
 
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
@@ -361,7 +366,7 @@ class executionModel extends model
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
-            ->checkIF(!empty($sprint->code), 'code', 'unique')
+            ->checkIF(!empty($sprint->code), 'code', 'unique', "type in ('sprint','stage')")
             ->exec();
 
         /* Add the creater to the team. */
@@ -499,6 +504,7 @@ class executionModel extends model
         foreach(explode(',', $this->config->execution->edit->requiredFields) as $field)
         {
             if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
+            if($oldExecution->type == 'stage' and $field == 'name') $this->lang->project->name = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->project->name);
         }
 
         /* Update data. */
@@ -508,7 +514,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->check('code', 'unique', "id != $executionID and code != '' and deleted = '0'")
+            ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
@@ -639,7 +645,7 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-                ->checkIF($execution->code != '', 'code', 'unique', "id NOT " . helper::dbIN($data->executionIDList) . " and deleted='0'")
+                ->checkIF(!empty($execution->code), 'code', 'unique', "id NOT " . helper::dbIN($data->executionIDList) . " and type in ('sprint','stage')")
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();

@@ -30,7 +30,7 @@
       <?php $rowIndex = 0;?>
       <?php foreach($kanbanGroup as $projectID => $executionList):?>
       <tr>
-        <td class="board-project <?php echo empty($projectID) ? 'color-my' : 'color-project';?>">
+        <td class='board-project'>
           <div data-id='<?php echo $projectID;?>'>
             <div class='text-center text-ellipsis'>
               <?php $projectTitle = empty($projectID) ? $lang->execution->myExecutions : zget($projects, $projectID);?>
@@ -38,7 +38,7 @@
             </div>
           </div>
         </td>
-        <td class="c-boards no-padding text-left <?php echo empty($projectID) ? 'color-my' : 'color-project';?>" colspan='4'>
+        <td class='c-boards no-padding text-left' colspan='4'>
           <div class="boards-wrapper">
             <div class="boards">
               <?php foreach($lang->execution->kanbanColType as $colStatus => $colName):?>

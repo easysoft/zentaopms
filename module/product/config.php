@@ -85,8 +85,8 @@ $config->product->search['params']['lastEditedDate'] = array('operator' => '=', 
 
 $config->product->create = new stdclass();
 $config->product->edit   = new stdclass();
-$config->product->create->requiredFields = 'name';
-$config->product->edit->requiredFields   = 'name';
+$config->product->create->requiredFields = 'name,code';
+$config->product->edit->requiredFields   = 'name,code';
 
 $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');

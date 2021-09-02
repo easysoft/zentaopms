@@ -41,7 +41,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->name;?></th>
-          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td><td></td><td></td>
+          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->project->code;?></th>
+          <td><?php echo html::input('code', '', "class='form-control' required");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
