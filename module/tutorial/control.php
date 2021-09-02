@@ -38,6 +38,7 @@ class tutorial extends control
         $this->view->current = $task;
         $this->view->setting = $setting;
         $this->view->referer = base64_decode($referer);
+        $this->view->mode    = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
         $this->display();
     }
 
