@@ -568,7 +568,7 @@ class testcaseModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /**
