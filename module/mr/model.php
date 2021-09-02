@@ -105,11 +105,14 @@ class mrModel extends model
 
         $rawMR = $this->apiCreateMR($this->post->gitlabID, $this->post->sourceProject, $MRObject);
 
-        /* Another open merge request already exists for this source branch. */
+        /**
+         * Another open merge request already exists for this source branch.
+         * The type of variable `$rawMR->message` is array.
+         */
         if(isset($rawMR->message) and !isset($rawMR->iid))
         {
             $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
-            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $rawMR->message));
+            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $rawMR->message[0]));
         }
 
         /* Create MR failed. */
