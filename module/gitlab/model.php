@@ -284,7 +284,7 @@ class gitlabModel extends model
     public function getProjectName($gitlabID, $projectID)
     {
         $project = $this->apiGetSingleProject($gitlabID, $projectID);
-        if(isset($project->name)) return $project->name;
+        if(is_object($project) and isset($project->name)) return $project->name;
         return false;
     }
 
