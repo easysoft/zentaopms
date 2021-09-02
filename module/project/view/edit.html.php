@@ -42,12 +42,15 @@
           }
           ?>
           <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' $attr");?></td>
-          <td></td>
-          <td></td>
+          <td colspan='2'></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->name;?></th>
-          <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td><td></td><td></td>
+          <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->project->code;?></th>
+          <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
