@@ -1195,6 +1195,8 @@ class actionModel extends model
             if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
         }
 
+        if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
+
         return $action;
     }
 

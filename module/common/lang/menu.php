@@ -296,7 +296,7 @@ $lang->execution->menu->settings['subMenu']->products  = array('link' => "$lang-
 $lang->execution->menu->settings['subMenu']->team      = array('link' => "{$lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
 $lang->execution->menu->settings['subMenu']->whitelist = array('link' => "$lang->whitelist|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
 
-$lang->execution->dividerMenu = ',story,build,settings,';
+$lang->execution->dividerMenu = ',story,build,';
 
 /* QA menu.*/
 $lang->qa->menu = new stdclass();

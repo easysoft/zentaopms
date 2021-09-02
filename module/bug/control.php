@@ -303,17 +303,20 @@ class bug extends control
 
         if($this->app->tab == 'execution')
         {
-            $this->loadModel('execution')->setMenu($output['executionID']);
+            if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
         }
         else if($this->app->tab == 'project')
         {
-            $this->loadModel('project')->setMenu($output['projectID']);
-
-            /* Replace language. */
-            $project = $this->project->getByID($output['projectID']);
-            if(!empty($project->model) and $project->model == 'waterfall')
+            if(isset($output['projectID']))
             {
-                $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
+                $this->loadModel('project')->setMenu($output['projectID']);
+
+                /* Replace language. */
+                $project = $this->project->getByID($output['projectID']);
+                if(!empty($project->model) and $project->model == 'waterfall')
+                {
+                    $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
+                }
             }
         }
         else

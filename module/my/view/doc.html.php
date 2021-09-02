@@ -34,14 +34,14 @@
       <thead>
         <tr>
           <th class="c-name"><?php echo $lang->doc->title;?></th>
-          <th class="w-200px c-name"><?php echo $lang->doc->object;?></th>
+          <th class="c-name c-object"><?php echo $lang->doc->object;?></th>
           <th class="c-num"><?php echo $lang->doc->size;?></th>
           <?php if($type != 'openedbyme'):?>
           <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
           <?php endif;?>
           <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
           <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-          <th class="w-90px text-center"><?php echo $lang->actions;?></th>
+          <th class="c-actions-3 text-center"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id='docTableList'>

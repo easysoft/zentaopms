@@ -74,6 +74,7 @@
         ?>
         <?php foreach ($lang->tutorial->tasks as $name => $task):?>
         <?php
+        if(isset($task['mode']) && $task['mode'] != $mode) continue;
         $nav = $task['nav'];
         $task['name'] = $name;
         $task['id']   = ++$idx;

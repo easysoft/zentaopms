@@ -65,11 +65,14 @@ class myModel extends model
      */
     public function getProducts()
     {
+        $data = new stdClass();
+        $countAll      = 0;
+        $countUnclosed = 0;
+
         $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-                ->andWhere('t1.status')->ne('closed')
                 ->andWhere('t1.PO')->eq($this->app->user->account)
                 ->orderBy('t1.order_asc')
                 ->fetchAll('id');
@@ -113,11 +116,17 @@ class myModel extends model
             $product->releases = isset($releases[$product->id]) ? $releases[$product->id] : 0;
             if(isset($stories[$product->id])) $product->stories = $stories[$product->id];
             if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
+            $countAll++;
+            if($product->status != 'closed') $countUnclosed++;
+            if($product->status == 'closed') unset($products[$key]);
         }
 
-        return array_values($products);
+        $data->count_all          = $countAll;
+        $data->count_unclosed     = $countUnclosed;
+        $data->products           = array_values($products);
+        return $data;
     }
-    
+
     /**
      * Get my projects.
      *
@@ -126,19 +135,32 @@ class myModel extends model
      */
     public function getProjects()
     {       
-        $projects = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'order_asc');
+        $data = new stdClass();
+        $consumedAll      = 0;
+        $consumedThisYear = 0;
+        $doingProjects    = array();
+
+        $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'order_asc');
+        $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'this_year');
         foreach($projects as $key => $project)
         {
             if($project->status == 'doing')
             {
                 $workhour = $this->project->getWorkhour($project->id);
                 $projects[$key]->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
+                $doingProjects[] = $projects[$key];
             }
+            $consumedAll      += $project->consumed;
+            $consumedThisYear += $projectsConsumed[$project->id]->totalConsumed;
         }
 
-        return array_values($projects);
+        $data->count_all          = count($projects);
+        $data->consumed_all       = $consumedAll;
+        $data->consumed_this_year = $consumedThisYear;
+        $data->projects           = $doingProjects;
+        return $data;
     }
-    
+
     /**
      * Get latest actions.
      *

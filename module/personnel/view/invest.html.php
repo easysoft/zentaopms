@@ -21,7 +21,7 @@
       <table class="table has-sort-head table-fixed table-bordered text-center">
         <thead>
           <tr>
-            <th rowspan='2' class="w-80px"> <?php echo $lang->personnel->name;?></th>
+            <th rowspan='2' class="c-user"> <?php echo $lang->personnel->name;?></th>
             <th rowspan='2'><?php echo $lang->personnel->role;?></th>
             <th rowspan='2'><?php echo $lang->personnel->projects;?></th>
             <th rowspan='2'><?php echo $lang->personnel->executions;?></th>

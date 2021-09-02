@@ -397,6 +397,37 @@ class projectModel extends model
     }
 
     /**
+     * Get projects consumed info.
+     *
+     * @param  array    $projectID
+     * @param  string   $time
+     * @access public
+     * @return array
+     */
+    public function getProjectsConsumed($projectIdList, $time = '')
+    {
+        $projects = array();
+
+        $totalConsumeds = $this->dao->select('project,ROUND(SUM(consumed), 1) AS totalConsumed')
+            ->from(TABLE_TASK)
+            ->where('project')->in($projectIdList)
+            ->beginIF($time == 'this_year')->andWhere('realStarted')->ge(date("Y-01-01 00:00:00"))->fi()
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('project')
+            ->fetchAll('project');
+
+        foreach($projectIdList as $projectID)
+        {
+            $project = new stdClass();
+            $project->totalConsumed = isset($totalConsumeds[$projectID]->totalConsumed) ? $totalConsumeds[$projectID]->totalConsumed : 0;
+            $projects[$projectID] = $project;
+        }
+
+        return $projects;
+    }
+
+    /**
      * Get project stat data .
      *
      * @param  int    $projectID
@@ -1387,7 +1418,7 @@ class projectModel extends model
 
             if($id == 'name')
             {
-                $class .= ' text-left flex';
+                $class .= ' text-left';
                 $title  = "title='{$project->name}'";
             }
 
@@ -1425,6 +1456,7 @@ class projectModel extends model
                     }
                     break;
                 case 'name':
+                    echo '<div class="project-name">';
                     if(isset($this->config->maxVersion))
                     {
                         if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
@@ -1432,6 +1464,7 @@ class projectModel extends model
                     }
                     echo html::a($projectLink, $project->name, '', "class='text-ellipsis'");
                     if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
+                    echo '</div>';
                     break;
                 case 'PM':
                     $user   = $this->loadModel('user')->getByID($project->PM, 'account');

@@ -75,7 +75,7 @@
             <?php endif;?>
             <?php printf('%03d', $execution->id);?>
           </td>
-          <td class='text-left <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $execution->name?>'>
+          <td class='text-left c-name <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $execution->name?>'>
             <?php if(isset($this->config->maxVersion)):?>
             <span class='project-type-label label label-outline <?php echo $execution->type == 'sprint' ? 'label-info' : 'label-warning';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
             <?php endif;?>

@@ -588,10 +588,12 @@ function selectAll(checker, scope, type)
     {
         if(type == 'button')
         {
+            var check = $(checker).data('check');
             $('#' + scope + ' input').each(function()
             {
-                $(this).prop("checked", true)
+                $(this).prop("checked", check)
             });
+            $(checker).data('check', check == true ? false :true);
         }
         else if(type == 'checkbox')
         {
@@ -605,10 +607,12 @@ function selectAll(checker, scope, type)
     {
         if(type == 'button')
         {
+            var check = $(checker).data('check');
             $('input:checkbox').each(function()
             {
-                $(this).prop("checked", true)
+                $(this).prop("checked", check)
             });
+            $(checker).data('check', check == true ? false :true);
         }
         else if(type == 'checkbox')
         {
@@ -628,7 +632,7 @@ EOT;
         }
         elseif($type == 'button')
         {
-            $string .= "<input type='button' name='allchecker' id='allchecker' class='btn btn-select-all $class' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
+            $string .= "<input type='button' name='allchecker' id='allchecker' data-check=true class='btn btn-select-all $class' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
         }
 
         return  $string;

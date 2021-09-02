@@ -63,7 +63,7 @@
       <?php $vars = "type=$type&userID={$user->id}&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
-          <th class="w-100px">
+          <th class="c-id">
             <?php if($canbatchAction):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
@@ -71,16 +71,16 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class="c-date">      <?php common::printOrderLink('date',       $orderBy, $vars, $lang->todo->date);?></th>
-          <th class="c-type">      <?php common::printOrderLink('type',       $orderBy, $vars, $lang->todo->type);?></th>
+          <th class="c-date">     <?php common::printOrderLink('date',       $orderBy, $vars, $lang->todo->date);?></th>
+          <th class="c-type">     <?php common::printOrderLink('type',       $orderBy, $vars, $lang->todo->type);?></th>
           <?php $style = $this->app->clientLang == 'en' ? "style='width:80px'" : '';?>
-          <th class="c-pri w-80px" <?php echo $style;?>> <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
-          <th class="c-name">      <?php common::printOrderLink('name',       $orderBy, $vars, $lang->todo->name);?></th>
-          <th class="w-80px">      <?php common::printOrderLink('assignedBy', $orderBy, $vars, $lang->todo->assignedBy);?></th>
-          <th class="c-begin">     <?php common::printOrderLink('begin',      $orderBy, $vars, $lang->todo->beginAB);?></th>
-          <th class="c-end">       <?php common::printOrderLink('end',        $orderBy, $vars, $lang->todo->endAB);?></th>
-          <th class="c-status">    <?php common::printOrderLink('status',     $orderBy, $vars, $lang->todo->status);?></th>
-          <th class="c-actions-5"> <?php echo $lang->actions;?></th>
+          <th class="c-pri" <?php echo $style;?>> <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
+          <th class="c-name">     <?php common::printOrderLink('name',       $orderBy, $vars, $lang->todo->name);?></th>
+          <th class="c-user">     <?php common::printOrderLink('assignedBy', $orderBy, $vars, $lang->todo->assignedBy);?></th>
+          <th class="c-begin">    <?php common::printOrderLink('begin',      $orderBy, $vars, $lang->todo->beginAB);?></th>
+          <th class="c-end">      <?php common::printOrderLink('end',        $orderBy, $vars, $lang->todo->endAB);?></th>
+          <th class="c-status">   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->todo->status);?></th>
+          <th class="c-actions-5"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
