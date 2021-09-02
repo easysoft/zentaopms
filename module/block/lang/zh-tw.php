@@ -523,7 +523,7 @@ $lang->block->typeList->project['involved'] = '我參與的';
 
 $lang->block->typeList->execution['undone']   = '未完成';
 $lang->block->typeList->execution['doing']    = '進行中';
-$lang->block->typeList->execution['all']      = '全部';
+$lang->block->typeList->execution['all']      = '所有';
 $lang->block->typeList->execution['involved'] = '我參與';
 
 $lang->block->typeList->scrum['undone']   = '未完成';

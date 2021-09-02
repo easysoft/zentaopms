@@ -13,7 +13,7 @@
 <style>
 .table .c-progress {width: 60px;}
 .table .c-estimate {width: 85px;}
-.c-hours {text-align: right !important;}
+.c-hours {text-align: right !important; padding-right: 24px !important;}
 </style>
 <?php if(empty($executionStats)): ?>
 <div class='empty-tip'><?php common::printLink('execution', 'create', '', "<i class='icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary'")?></div>
@@ -28,7 +28,6 @@
         <?php $thClass = common::checkNotCN() ? 'c-estimate' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
         <th class='<?php echo $thClass?>'><?php echo $lang->execution->totalEstimate;?></th>
-        <th class="c-hours"><?php echo $lang->execution->totalConsumed;?></th>
         <th class="c-hours"><?php echo $lang->execution->totalLeft;?></th>
         <?php endif;?>
         <th class="c-progress"><?php echo $lang->execution->progress;?></th>
@@ -58,7 +57,6 @@
           <?php endif;?>
         </td>
         <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
         <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalLeft     . $lang->execution->workHourUnit;?></td>
         <?php endif;?>
         <td class="c-progress">
