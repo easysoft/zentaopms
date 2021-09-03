@@ -6,11 +6,11 @@ js::import($jsRoot . 'jquery/tablesorter/metadata.js');
 <style>
 .tablesorter-header-inner {cursor: pointer;}
 .tablesorter-header-inner:hover {color: #000;font-weight:bold;}
-table.tablesorter tr.tablesorter-headerRow .header.tablesorter-headerUnSorted .tablesorter-header-inner:after {font-family: ZentaoIcon; font-weight: normal; content: "\f0dc"; font-size: 14px; color: #838a9c}
-table.tablesorter tr.tablesorter-headerRow .header.headerSortUp .tablesorter-header-inner{color: #000;font-weight:bold;}
-table.tablesorter tr.tablesorter-headerRow .header.headerSortUp .tablesorter-header-inner:after{font-family: ZentaoIcon; font-weight: normal; content: "\f0d8"; color: #000;}
-table.tablesorter tr.tablesorter-headerRow .header.headerSortDown .tablesorter-header-inner{color: #000;font-weight:bold;}
-table.tablesorter tr.tablesorter-headerRow .header.headerSortDown .tablesorter-header-inner:after{font-family: ZentaoIcon; font-weight: normal; content: "\f0d7"; color: #000;}
+table.tablesorter tr.tablesorter-headerRow .header .tablesorter-header-inner:after {font-family: ZentaoIcon; font-weight: normal; content: "\f0dc"; font-size: 14px; color: #838a9c}
+table.tablesorter tr.tablesorter-headerRow .header.tablesorter-headerAsc .tablesorter-header-inner{color: #000;font-weight:bold;}
+table.tablesorter tr.tablesorter-headerRow .header.tablesorter-headerAsc .tablesorter-header-inner:after{content: "\f0d8"; color: #000;}
+table.tablesorter tr.tablesorter-headerRow .header.tablesorter-headerDesc .tablesorter-header-inner{color: #000;font-weight:bold;}
+table.tablesorter tr.tablesorter-headerRow .header.tablesorter-headerDesc .tablesorter-header-inner:after{content: "\f0d7"; color: #000;}
 table.tablesorter tr.tablesorter-headerRow .header.sorter-false .tablesorter-header-inner:after{content:"";}
 table.tablesorter.table-borderless > thead > tr > th {border-bottom: 1px solid #e5e5e5;}
 </style>
@@ -22,7 +22,9 @@ function sortTable(selector, options)
     {
         saveSort: true,
         widgets: ['zebra', 'saveSort'],
-        widgetZebra: {css: ['odd', 'even'] }
+        widgetZebra: {css: ['odd', 'even'] },
+        ignoreChildRow: true,
+        cssHeader: 'header'
     }, $table.data(), options)).on('mouseenter', 'tbody tr', function()
     {
         $(this).addClass('hoover');
