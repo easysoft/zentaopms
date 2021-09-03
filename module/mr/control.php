@@ -183,11 +183,14 @@ class mr extends control
             if(!empty($sudoUser)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid, $sudo = $sudoUser);
             if(empty($sudoUser))  $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         }
-        if(isset($rawMR->state) and $rawMR->state == 'merged') return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess), 'locate' => helper::createLink('mr', 'browse'));
-
+        if(isset($rawMR->state) and $rawMR->state == 'merged')
+        {
+            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse')));
+        }
         /* The type of variable `$rawMR->message` is string. This is different with apiCreateMR. */
-        if(isset($rawMR->message)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $rawMR->message)));
-        return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed));
+
+        if(isset($rawMR->message)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $rawMR->message), 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
     }
 
     /**
