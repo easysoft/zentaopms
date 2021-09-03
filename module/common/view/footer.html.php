@@ -66,10 +66,10 @@ $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 <?php if($config->debug > 2 and $config->tabSession): ?>
-<div id="sessionID" style="position:fixed;right:0;bottom:0;z-index:10000">
+<div id="tid" style="position:fixed;right:0;bottom:0;z-index:10000">
 <code class="bg-red">tsid=<?php if(empty($_GET['tid'])) echo session_id(); else echo md5(session_id() . $_GET['tid']);?></code>
 <?php if(!empty($_GET['tid'])): ?>
-<code class="bg-yellow">tid=<?php echo $_GET['tid'];?></code>
+<code class="bg-yellow">servertid=<?php echo $_GET['tid'];?></code>
 <?php endif; ?>
 <code class="bg-green">sid=<?php echo session_id();?></code>
 </div>
