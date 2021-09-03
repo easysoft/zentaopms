@@ -84,7 +84,7 @@
               <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php
-                $end         = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
+                $end = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
                 echo html::input('end', $end, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->end . "' required");
               ?>
             </div>
