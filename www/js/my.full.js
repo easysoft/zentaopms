@@ -1,5 +1,5 @@
 /* Tab session */
-(function($, undefined)
+(function($)
 {
     if(!config.tabSession) return;
 
@@ -34,8 +34,12 @@
     /** Init */
     function init()
     {
-        /* Check tid when open index page */
-        if(config.currentModule === 'index' && config.currentMethod === 'index')
+        /* Check tid */
+        if(window.parent !== window)
+        {
+            if(window.parent.$.tabSession) _tid = window.parent.$.tabSession.getTid();
+        }
+        else
         {
             _tid = sessionStorage.getItem('TID');
             if(!_tid)
@@ -51,10 +55,6 @@
             }
             sessionStorage.setItem('TID', _tid);
         }
-        else if(window.parent !== window)
-        {
-            _tid = window.parent.$.tabSession.getTid();
-        }
 
         $.tabSession =
         {
@@ -64,18 +64,18 @@
 
 
         /* Handle all links in page */
-        var origin = window.location.origin;
         $('a').each(function()
         {
-            var $a = $(this);
-            var url = $a.attr('href');
+            var $a         = $(this);
+            var url        = $a.attr('href');
             var urlWithTid = convertUrlWithTid(url);
+
             if(urlWithTid !== url) $a.attr('href', urlWithTid);
         });
         $('[data-url]').each(function()
         {
-            var $e = $(this);
-            var url = $e.attr('data-url');
+            var $e         = $(this);
+            var url        = $e.attr('data-url');
             var urlWithTid = convertUrlWithTid(url);
             if(urlWithTid !== url) $e.attr('data-url', urlWithTid);
         });
@@ -92,7 +92,7 @@
     }
 
     init();
-}(jQuery, undefined));
+}(jQuery));
 
 /**
  * Set the ping url.
