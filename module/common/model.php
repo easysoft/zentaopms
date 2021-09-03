@@ -376,7 +376,7 @@ class commonModel extends model
             $createMethod = 'create';
             if($objectType == 'effort') $createMethod = 'batchCreate';
             if($objectType == 'doc')    $createMethod = 'selectLibType';
-            if(strpos('bug|execution|doc', $objectType) !== false) $needPrintDivider = true;
+            if(strpos('bug|execution', $objectType) !== false) $needPrintDivider = true;
 
             if(common::hasPriv($objectType, $createMethod))
             {
@@ -393,15 +393,14 @@ class commonModel extends model
                 }
 
                 $showCreateList = true;
-                $isOnlyBody     = strpos('effort|doc', $objectType) !== false;
-                $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
-                $attr           = $objectType == 'effort' ? "data-width='95%' class='iframe' data-toggle='modal'" : "class='iframe' data-width='650px'";
+                $isOnlyBody     = $objectType == 'doc';
+                $attr           = $objectType == 'doc' ? "class='iframe' data-width='650px'" : '';
 
                 $params = '';
                 if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
                 if($objectType == 'doc') $params = "objectType=&objectID=0&libID=0";
 
-                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
+                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
             }
         }
 
