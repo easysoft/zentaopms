@@ -1690,7 +1690,7 @@ class block extends control
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
         $count           = array();
-        $objectList      = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bus', 'story' => 'stories');
+        $objectList      = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories');
         $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount');
         if(isset($this->config->maxVersion))
         {
@@ -1738,7 +1738,8 @@ class block extends control
                 $this->app->loadLang('execution');
             }
 
-            if($objectType == 'risk') $this->app->loadLang('risk');
+            if($objectType == 'bug')   $this->app->loadLang('bug');
+            if($objectType == 'risk')  $this->app->loadLang('risk');
             if($objectType == 'issue') $this->app->loadLang('issue');
 
             $count[$objectType] = count($objects);

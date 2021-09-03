@@ -62,7 +62,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 
 .block-statistic .data {width: 40%; text-align: left; padding: 10px 0px; font-size: 14px; font-weight: 700;}
 .block-statistic .dataTitle {width: 60%; text-align: right; padding: 10px 0px; font-size: 14px;}
-.block-statistic .executionName {padding: 2px 10px; font-size: 14px; text-overflow: ellipsis; overflow: hidden;}
+.block-statistic .executionName {padding: 2px 10px; font-size: 14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .block-statistic .lastIteration {padding-top: 6px;}
 .block-statistic .progress-text-left {margin-right: 90px}
 .block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px; padding-right:5px; left: -45px;}
@@ -123,7 +123,7 @@ $(function()
         <?php $selected = key($projects);?>
         <?php foreach($projects as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
-          <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
+          <a href="###" title="<?php echo $project->name?>" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
           <?php echo html::a(helper::createLink('project', 'index', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->index}");?>
         </li>
         <?php endforeach;?>
@@ -186,7 +186,7 @@ $(function()
           <div class="table-row project-info">
             <div class="col-2 text-right"><h4><?php echo $lang->block->last;?></h4></div>
             <div class="table-row lastIteration">
-              <div class='col-5 text-center executionName'><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->executions[0]->id}"), $project->executions[0]->name);?></div>
+              <div class='col-5 text-center executionName'><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->executions[0]->id}"), $project->executions[0]->name, '', "title='{$project->executions[0]->name}'");?></div>
               <div class='col-7'>
                 <div class='progress progress-text-left'>
                   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->executions[0]->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->executions[0]->hours->progress;?>%">

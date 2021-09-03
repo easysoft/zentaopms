@@ -1469,10 +1469,11 @@ class projectModel extends model
                     echo '</div>';
                     break;
                 case 'PM':
-                    $user   = $this->loadModel('user')->getByID($project->PM, 'account');
-                    $userID = !empty($user) ? $user->id : '';
-                    $PMLink = helper::createLink('user', 'profile', "userID=$userID", '', true);
-                    echo empty($project->PM) ? '' : html::a($PMLink, zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");
+                    $user     = $this->loadModel('user')->getByID($project->PM, 'account');
+                    $userID   = !empty($user) ? $user->id : '';
+                    $PMLink   = helper::createLink('user', 'profile', "userID=$userID", '', true);
+                    $userName = zget($users, $project->PM);
+                    echo empty($project->PM) ? '' : html::a($PMLink, $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
                     break;
                 case 'begin':
                     echo $project->begin;

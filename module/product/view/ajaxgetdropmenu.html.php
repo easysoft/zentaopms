@@ -12,17 +12,17 @@
 #navTabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
 
 #tabContent {margin-top: 10px; z-index: 900;}
-#tabContent ul {list-style: none; margin: 0}
-#tabContent .tab-pane>ul {padding-left: 7px;}
-#tabContent .tab-pane>ul>li>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
-#tabContent .tab-pane>ul>li label {background: rgba(255,255,255,0.5); line-height: unset; color: #838a9d; border: 1px solid #d8d8d8; border-radius: 2px; padding: 1px 4px;}
-#tabContent li a i.icon {font-size: 15px !important;}
-#tabContent li a i.icon:before {min-width: 16px !important;}
-#tabContent li .label {position: unset; margin-bottom: 0;}
-#tabContent li>a, #tabContent li>div>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
-#tabContent li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
-#tabContent .tree li>.list-toggle {line-height: 24px;}
-#tabContent .tree li.has-list.open:before {content: unset;}
+.productTree ul {list-style: none; margin: 0}
+.productTree .products>ul {padding-left: 7px;}
+.productTree .products>ul>li>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
+.productTree .products>ul>li label {background: rgba(255,255,255,0.5); line-height: unset; color: #838a9d; border: 1px solid #d8d8d8; border-radius: 2px; padding: 1px 4px;}
+.productTree li a i.icon {font-size: 15px !important;}
+.productTree li a i.icon:before {min-width: 16px !important;}
+.productTree li .label {position: unset; margin-bottom: 0;}
+.productTree li>a, div.hide-in-search>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
+.productTree li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
+.productTree .tree li>.list-toggle {line-height: 24px;}
+.productTree .tree li.has-list.open:before {content: unset;}
 
 #swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
 a.productName:focus, a.productName:hover {background: #0c64eb; color: #fff !important;}
@@ -30,12 +30,12 @@ a.productName:focus, a.productName:hover {background: #0c64eb; color: #fff !impo
 #swapper li > a {padding-top: 4px; padding-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
+
+.col-right {padding-top: 30px;}
 </style>
 <?php
 $productCounts      = array();
 $productNames       = array();
-$preFix             = '';
-$closedProductsHtml = '';
 $tabActive          = '';
 $myProducts         = 0;
 $others             = 0;
@@ -43,15 +43,15 @@ $closeds            = 0;
 
 foreach($products as $programID => $programProducts)
 {
-
     $productCounts[$programID]['myProduct'] = 0;
     $productCounts[$programID]['others']    = 0;
+    $productCounts[$programID]['closed']    = 0;
 
     foreach($programProducts as $product)
     {
         if($product->status == 'normal' and $product->PO == $this->app->user->account) $productCounts[$programID]['myProduct'] ++;
         if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $productCounts[$programID]['others'] ++;
-        if($product->status == 'closed') $closeds ++;
+        if($product->status == 'closed') $productCounts[$programID]['closed'] ++;
         $productNames[] = $product->name;
     }
 }
@@ -59,6 +59,7 @@ $productsPinYin = common::convert2Pinyin($productNames);
 
 $myProductsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
 $normalProductsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
+$closedProductsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProgram">';
 
 foreach($products as $programID => $programProducts)
 {
@@ -66,10 +67,10 @@ foreach($products as $programID => $programProducts)
     if($programID and $config->systemMode == 'new')
     {
         $programName = zget($programs, $programID);
-        $preFix      = $programName . ' / ';
 
         if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
         if($productCounts[$programID]['others']) $normalProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['closed']) $closedProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
     }
 
     foreach($programProducts as $index => $product)
@@ -96,7 +97,7 @@ foreach($products as $programID => $programProducts)
         }
         else if($product->status == 'closed')
         {
-            $closedProductsHtml .= html::a($linkHtml, $preFix . $productName, '', "class='$selected' title='" . $preFix . $productName . "' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'");
+            $closedProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected' title='$productName' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'closed';
         }
@@ -106,11 +107,13 @@ foreach($products as $programID => $programProducts)
         {
             if($productCounts[$programID]['myProduct']) $myProductsHtml     .= '</ul></li>';
             if($productCounts[$programID]['others'])    $normalProductsHtml .= '</ul></li>';
+            if($productCounts[$programID]['closed'])    $closedProductsHtml .= '</ul></li>';
         }
     }
 }
 $myProductsHtml     .= '</ul>';
 $normalProductsHtml .= '</ul>';
+$closedProductsHtml .= '</ul>';
 ?>
 <div class="table-row">
   <div class="table-col col-left">
@@ -122,11 +125,11 @@ $normalProductsHtml .= '</ul>';
         <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->product->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="label label-light label-badge"><?php echo $others;?></span><li>
       </ul>
       <?php endif;?>
-      <div class="tab-content" id="tabContent">
-        <div class="tab-pane <?php if($tabActive == 'myProduct') echo 'active';?>" id="myProduct">
+      <div class="tab-content productTree" id="tabContent">
+        <div class="tab-pane products <?php if($tabActive == 'myProduct') echo 'active';?>" id="myProduct">
           <?php echo $myProductsHtml;?>
         </div>
-        <div class="tab-pane <?php if($tabActive == 'other') echo 'active';?>" id="other">
+        <div class="tab-pane products <?php if($tabActive == 'other') echo 'active';?>" id="other">
           <?php echo $normalProductsHtml;?>
         </div>
       </div>
@@ -137,8 +140,8 @@ $normalProductsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
-  <div class="table-col col-right">
-   <div class='list-group'><?php echo $closedProductsHtml;?></div>
+  <div class="table-col col-right productTree">
+   <div class='list-group products'><?php echo $closedProductsHtml;?></div>
   </div>
 </div>
 <script>scrollToSelected();</script>
@@ -154,7 +157,7 @@ $(function()
         $(this).parent().siblings('li').find('span').hide();
     })
 
-    $('#tabContent [data-ride="tree"]').tree('expand');
+    $('#swapper [data-ride="tree"]').tree('expand');
 
     $('#swapper #dropMenu .search-box').on('onSearchChange', function(event, value)
     {
