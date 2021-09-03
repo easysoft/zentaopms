@@ -14,8 +14,8 @@
 #kanban tbody > tr > td {background-color: #F5F5F5;}
 #kanban tbody > tr:not(:last-child) {border-bottom: 5px solid #fff !important;}
 
-.s-doing .table-row .table-col:last-child, .c-progress {width: 30px;}
-.table-row .table-col:first-child {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.s-doing .table-row .table-col:last-child, .c-progress {width: 30px; padding-left: 3px; padding-top: 1px;}
+.table-row .table-col:first-child, .board-project {overflow: hidden; white-space: nowrap;}
 
 .table-grouped > tbody > tr,
 .table-grouped > tbody > tr:hover {background: #fff !important;}
