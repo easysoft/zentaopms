@@ -69,6 +69,9 @@ $lang->todo->closedBy     = 'ClosedBy';
 $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Fällig';
 
+$lang->todo->cycleDayTxt   = 'Interval days';
+$lang->todo->beforeDaysTxt = 'Days in advance';
+
 $lang->todo->every        = 'Jeden';
 $lang->todo->specify      = 'ernennen';
 $lang->todo->everyYear    = 'jährlich';

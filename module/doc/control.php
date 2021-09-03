@@ -327,8 +327,9 @@ class doc extends control
         }
 
         /* Get libs and the default lib id. */
-        $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libs     = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
+        $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$objectType") : '';
+        $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
         if(!$libID and !empty($libs)) $libID = key($libs);
 
         $lib  = $this->doc->getLibByID($libID);
@@ -338,6 +339,7 @@ class doc extends control
 
         $this->view->libID            = $libID;
         $this->view->libs             = $libs;
+        $this->view->gobackLink       = $gobackLink;
         $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;

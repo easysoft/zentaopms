@@ -70,6 +70,9 @@ $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Expiration';
 $lang->todo->deleted      = 'Deleted';
 
+$lang->todo->cycleDayTxt   = 'Interval days';
+$lang->todo->beforeDaysTxt = 'Days in advance';
+
 $lang->todo->every        = 'Every';
 $lang->todo->specify      = 'Specify';
 $lang->todo->everyYear    = 'Annually';
