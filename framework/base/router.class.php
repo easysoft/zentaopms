@@ -2681,7 +2681,6 @@ class ztSessionHandler
      */
     public function open($savePath, $sessionName)
     {
-        ini_set('session.save_path', $savePath);
         $this->sessSavePath = $savePath;
         return true;
     }
