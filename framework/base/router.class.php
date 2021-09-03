@@ -2651,6 +2651,7 @@ class ztSessionHandler
     public function __construct($tagID = '')
     {
         $this->tagID = $tagID;
+        ini_set('session.save_handler', 'files');
     }
 
     /**
@@ -2680,6 +2681,7 @@ class ztSessionHandler
      */
     public function open($savePath, $sessionName)
     {
+        ini_set('session.save_path', $savePath);
         $this->sessSavePath = $savePath;
         return true;
     }
