@@ -69,6 +69,9 @@ $lang->todo->closedBy     = 'Người đóng';
 $lang->todo->closedDate   = 'Ngày đóng';
 $lang->todo->deadline     = 'Quá hạn';
 
+$lang->todo->cycleDayTxt   = 'Interval days';
+$lang->todo->beforeDaysTxt = 'Days in advance';
+
 $lang->todo->every        = 'Mọi';
 $lang->todo->specify      = 'bổ nhiệm';
 $lang->todo->everyYear    = 'mỗi năm';
