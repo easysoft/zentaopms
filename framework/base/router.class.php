@@ -855,15 +855,18 @@ class baseRouter
     {
         if(defined('SESSION_STARTED')) return;
 
-        $ztSessionHandler = new ztSessionHandler(zget($_GET, 'tid', ''));
-        session_set_save_handler(
-            array($ztSessionHandler, "open"),
-            array($ztSessionHandler, "close"),
-            array($ztSessionHandler, "read"),
-            array($ztSessionHandler, "write"),
-            array($ztSessionHandler, "destroy"),
-            array($ztSessionHandler, "gc")
-        );
+        if(ini_get('session.save_handler') == 'files')
+        {
+            $ztSessionHandler = new ztSessionHandler(zget($_GET, 'tid', ''));
+            session_set_save_handler(
+                array($ztSessionHandler, "open"),
+                array($ztSessionHandler, "close"),
+                array($ztSessionHandler, "read"),
+                array($ztSessionHandler, "write"),
+                array($ztSessionHandler, "destroy"),
+                array($ztSessionHandler, "gc")
+            );
+        }
 
         /* If request header has token, use it as session for authentication. */
         if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
