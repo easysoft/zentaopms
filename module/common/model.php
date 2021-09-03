@@ -295,7 +295,7 @@ class commonModel extends model
                 echo '</a></li><li class="divider"></li>';
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
-                if($app->config->global->flow == 'full' && !commonModel::isTutorialMode())
+                if(!commonModel::isTutorialMode())
                 {
                     echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
                 }
@@ -2489,6 +2489,11 @@ EOD;
 
         $tab = $app->tab;
 
+        $isTutorialMode = common::isTutorialMode();
+        $currentModule  = $isTutorialMode ? $app->moduleName : $app->rawModule;
+        $currentMethod  = $isTutorialMode ? $app->methodName : $app->rawMethod;
+        $currentMethod  = strtolower($currentMethod);
+
         /* If homeMenu is not exists or unset, display menu. */
         if(!isset($lang->$tab->homeMenu))
         {
@@ -2497,7 +2502,7 @@ EOD;
             return;
         }
 
-        if($app->rawModule == $tab && $app->rawMethod == 'create')
+        if($currentModule == $tab && $currentMethod== 'create')
         {
             $lang->menu = $lang->$tab->homeMenu;
             return;
@@ -2508,15 +2513,15 @@ EOD;
         {
             $link   = is_array($menu) ? $menu['link'] : $menu;
             $params = explode('|', $link);
-            $method = $params[2];
+            $method = strtolower($params[2]);
 
-            if($method == $app->rawMethod)
+            if($method == $currentMethod)
             {
                 $lang->menu = $lang->$tab->homeMenu;
                 return;
             }
 
-            if(isset($menu['alias']) and in_array(strtolower($app->rawMethod), explode(',', strtolower($menu['alias']))))
+            if(isset($menu['alias']) and in_array($currentMethod, explode(',', strtolower($menu['alias']))))
             {
                 $lang->menu = $lang->$tab->homeMenu;
                 return;
