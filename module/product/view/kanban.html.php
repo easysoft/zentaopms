@@ -75,6 +75,7 @@
           <td class="project">
             <?php if(isset($projectProduct[$productID])):?>
             <?php foreach($projectProduct[$productID] as $projectID => $project):?>
+            <?php if(!isset($projectList[$projectID])) continue;?>
             <div class="board">
               <?php $borderStyle = isset($project->delay) ? 'border-left: 3px solid red' : 'border-left: 3px solid #0bd986';?>
               <div class="board-item" style="<?php echo $borderStyle;?>">

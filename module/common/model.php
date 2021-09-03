@@ -1350,9 +1350,11 @@ EOD;
     {
         global $lang, $app;
 
+        $object = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        if(empty($object)) return;
+
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` IN ({$app->user->view->sprints}) " : '';
-        $object         = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
         $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         foreach($executionList as $execution)
