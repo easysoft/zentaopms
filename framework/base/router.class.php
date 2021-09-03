@@ -1857,6 +1857,7 @@ class baseRouter
 
         /* Remove these three params. */
         unset($passedParams['onlybody']);
+        unset($passedParams['tid']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 
         /* Check params from URL. */
