@@ -806,6 +806,11 @@ class testtaskModel extends model
             dao::$errors[] = sprintf($this->lang->testtask->finishedDateError, $oldTesttask->begin);
             return false;
         }
+        if($testtask->realFinishedDate > date("Y-m-d 00:00:00", strtotime("+1 day")))
+        {
+            dao::$errors[] = $this->lang->testtask->finishedDateError2;
+            return false;
+        }
 
         $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)

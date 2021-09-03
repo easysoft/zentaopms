@@ -124,16 +124,17 @@ $lang->testtask->fail          = 'Fehlgeschlagen';
 $lang->testtask->showResult    = 'Ausführungen <span class="text-info">%s</span>';
 $lang->testtask->showFail      = 'Fehlgeschlagen <span class="text-danger">%s</span>';
 
-$lang->testtask->confirmDelete     = 'Möchten Sie dieses Build löschen?';
-$lang->testtask->confirmUnlinkCase = 'Möchten Sie die Verknüpfung zu dem Fall aufheben?';
-$lang->testtask->noticeNoOther     = 'Es existieren keine weiteren Testaufgaben für dieses Produkt';
-$lang->testtask->noTesttask        = 'Keine Testaufgaben. ';
-$lang->testtask->checkLinked       = "Please check whether the product that the test request is linked to has been linked to a {$lang->executionCommon}.";
-$lang->testtask->noImportData      = 'The imported XML does not parse the data.';
-$lang->testtask->unitXMLFormat     = 'Please select a file in JUnit XML format.';
-$lang->testtask->titleOfAuto       = "%s automated testing";
-$lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
-$lang->testtask->finishedDateError = 'Actual Finished Date cannot be <= Begin Date %s';
+$lang->testtask->confirmDelete      = 'Möchten Sie dieses Build löschen?';
+$lang->testtask->confirmUnlinkCase  = 'Möchten Sie die Verknüpfung zu dem Fall aufheben?';
+$lang->testtask->noticeNoOther      = 'Es existieren keine weiteren Testaufgaben für dieses Produkt';
+$lang->testtask->noTesttask         = 'Keine Testaufgaben. ';
+$lang->testtask->checkLinked        = "Please check whether the product that the test request is linked to has been linked to a {$lang->executionCommon}.";
+$lang->testtask->noImportData       = 'The imported XML does not parse the data.';
+$lang->testtask->unitXMLFormat      = 'Please select a file in JUnit XML format.';
+$lang->testtask->titleOfAuto        = "%s automated testing";
+$lang->testtask->cannotBeParsed     = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
+$lang->testtask->finishedDateError  = 'Actual Finished Date cannot be <= Begin Date %s';
+$lang->testtask->finishedDateError2 = 'Actual Finished Date cannot be > Today';
 
 $lang->testtask->assignedToMe  = 'Meine';
 $lang->testtask->allCases      = 'Alle Fälle';
