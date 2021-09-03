@@ -355,9 +355,8 @@ class commonModel extends model
         global $app, $config, $lang;
 
         $html  = "<a class='dropdown-toggle' data-toggle='dropdown'>";
-        $html .= "<div id='createBtn'>";
-        $html .= "<div class='icon-plus-solid-circle'></div>";
-        $html .= "</div></a><ul class='dropdown-menu pull-right create-list'>";
+        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
+        $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
 
         $showCreateList = $lastIsDivider = $needPrintDivider = false;
         $productID      = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
