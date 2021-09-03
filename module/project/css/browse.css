@@ -4,6 +4,7 @@
 
 th.c-budget {text-align: right;}
 td.c-actions {overflow: visible;}
+td.c-PM{white-space: nowrap;overflow: hidden;}
 .c-actions .btn {overflow: visible;}
 #programBox {float: left; margin-right: 10px; width: 170px !important;}
 #switchButton {background: #fff !important;}
