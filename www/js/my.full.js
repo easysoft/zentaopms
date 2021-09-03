@@ -39,7 +39,7 @@
         {
             if(window.parent.$.tabSession) _tid = window.parent.$.tabSession.getTid();
         }
-        else
+        else if(config.currentModule === 'index' && config.currentMethod === 'index')
         {
             _tid = sessionStorage.getItem('TID');
             if(!_tid)
@@ -54,6 +54,11 @@
                 }
             }
             sessionStorage.setItem('TID', _tid);
+        }
+        else if(config.currentModule === 'user' && config.currentMethod === 'login')
+        {
+            /* Remove tid at login page */
+            sessionStorage.removeItem('TID');
         }
 
         $.tabSession =
