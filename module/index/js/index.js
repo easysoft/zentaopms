@@ -27,6 +27,12 @@
         {
             if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
 
+            /* Append tid param to app url */
+            if($.tabSession && item.url)
+            {
+                item.url = $.tabSession.convertUrlWithTid(item.url);
+            }
+
             var $link= $('<a data-pos="menu"></a>')
                 .attr('data-app', item.code)
                 .attr('data-toggle', 'tooltip')
@@ -404,8 +410,9 @@
         if(!app) return;
 
         if(url === true) url = app.url;
-        var iframe = app.$iframe[0];
+        else if($.tabSession) url = $.tabSession.convertUrlWithTid(url);
 
+        var iframe = app.$iframe[0];
         try
         {
             if(url) iframe.contentWindow.location.assign(url);

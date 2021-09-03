@@ -4,10 +4,7 @@
     if(!config.tabSession) return;
 
     /** Store current tab id */
-    var _tid;
-
-    /** Store tab id for new window */
-    var _newTid;
+    var _tid = '';
 
     /**
      * Get current tab id
@@ -16,40 +13,53 @@
     function getTid(){return _tid;}
 
     /**
-     * Get tab id for new window
-     * @returns {string} Tab id
-     */
-    function getNewTid(){return _newTid;}
-
-    /**
      * Convert url with tab id
-     * @param {string} url
+     * @param {string}  url
+     * @param {string}  [tid]
+     * @param {boolean} [force]
      * @returns {string} Tab id
      */
-    function convertUrlWithNewTid(url)
+    function convertUrlWithTid(url, tid, force)
     {
-        var link    = $.parseLink(url);
-        var linkTid = link.tid || '';
+        var link = $.parseLink(url);
+        if(!link.moduleName) return url;
 
-        if(linkTid === _newTid) return url;
+        tid = tid || _tid;
+        if(!force && link.tid === tid) return url;
 
-        link.tid = _newTid;
+        link.tid = tid;
         return $.createLink(link);
     }
 
     /** Init */
     function init()
     {
-        var link = $.parseLink(window.location.href);
+        /* Check tid when open index page */
+        if(config.currentModule === 'index' && config.currentMethod === 'index')
+        {
+            _tid = sessionStorage.getItem('TID');
+            if(!_tid)
+            {
+                var link = $.parseLink(window.location.href);
+                _tid = link.tid
 
-        _tid    = link.tid !== undefined ? link.tid : '';
-        _newTid = $.zui.uuid();
-        _newTid = _newTid.substr(_newTid.length - 8);
+                if(!_tid)
+                {
+                    _tid = $.zui.uuid();
+                    _tid = _tid.substr(_tid.length - 8);
+                }
+            }
+            sessionStorage.setItem('TID', _tid);
+        }
+        else if(window.parent !== window)
+        {
+            _tid = window.parent.$.tabSession.getTid();
+        }
 
         $.tabSession =
         {
-            getTid:    getTid,
-            getNewTid: getNewTid,
+            getTid:            getTid,
+            convertUrlWithTid: convertUrlWithTid,
         };
 
 
@@ -58,42 +68,27 @@
         $('a').each(function()
         {
             var $a = $(this);
-            var href = $a.attr('href');
-            if(href.indexOf(origin) !== 0) return;
-            var link = $.parseLink(href);
-            var linkTid = link.tid || '';
-            if(_tid && _tid !== linkTid)
-            {
-                link.tid = _tid;
-                href = $.createLink(link);
-                $a.attr('href', href);
-            }
+            var url = $a.attr('href');
+            var urlWithTid = convertUrlWithTid(url);
+            if(urlWithTid !== url) $a.attr('href', urlWithTid);
+        });
+        $('[data-url]').each(function()
+        {
+            var $e = $(this);
+            var url = $e.attr('data-url');
+            var urlWithTid = convertUrlWithTid(url);
+            if(urlWithTid !== url) $e.attr('data-url', urlWithTid);
         });
 
-        /* Init custom context menu for links */
-        $(document).contextmenu(
+        if(config.debug > 2)
         {
-            selector: 'a',
-            items: function(options)
+            console.log(document.title || location.href, 'tid', _tid);
+
+            $(function()
             {
-                var $a = $(options.event.target).closest('a');
-                if(!$a.length) return;
-                var href = $a.attr('href');
-                return [
-                    {
-                        label: '打开',
-                        url: href,
-                    }, {
-                        label: '在新标签页中打开',
-                        onClick: function()
-                        {
-                            console.log('convertUrlWithNewTid(href)', convertUrlWithNewTid(href));
-                            window.open(convertUrlWithNewTid(href), '_blank');
-                        }
-                    }
-                ];
-            }
-        });
+                $('#tid').prepend('<code class="bg-blue">localtid=' + _tid + '</code>');
+            });
+        }
     }
 
     init();
