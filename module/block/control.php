@@ -1738,7 +1738,8 @@ class block extends control
                 $this->app->loadLang('execution');
             }
 
-            if($objectType == 'risk') $this->app->loadLang('risk');
+            if($objectType == 'bug')   $this->app->loadLang('bug');
+            if($objectType == 'risk')  $this->app->loadLang('risk');
             if($objectType == 'issue') $this->app->loadLang('issue');
 
             $count[$objectType] = count($objects);
