@@ -178,7 +178,14 @@ class productIssueEntry extends entry
         {
             $accountsList[] = $action->actor;
             ob_start();
-            $this->action->printAction($action);
+            if(method_exists($this->action, "printActionAPI"))
+            {
+                $this->action->printActionAPI($action);
+            }
+            else
+            {
+                $this->action->printAction($action);
+            }
             $action->title = ob_get_contents();
             ob_clean();
 
@@ -195,7 +202,7 @@ class productIssueEntry extends entry
             if(!empty($action->comment))
             {
                 $comment = strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;
-                $action->body_html = "<div class='comment-content'>{$comment}</div>";
+                $action->body_html = "{$comment}";
             }
         }
 
