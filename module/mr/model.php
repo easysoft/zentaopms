@@ -461,12 +461,12 @@ class mrModel extends model
     }
 
     /**
-     * Get sudo user ID in GitLab.
+     * Get sudo user ID in both GitLab and Project.
      * Note: sudo parameter in GitLab API can be user ID or username.
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return int|string
      */
     public function getSudoUsername($gitlabID, $projectID)
     {
