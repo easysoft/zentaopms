@@ -65,5 +65,8 @@ $extHookRule  = $extPath . 'footer.*.hook.php';
 $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
+<?php if($config->debug): ?>
+<code id="sessionID" class="bg-red" style="position:fixed;right:0;bottom:0;z-index:10000"><?php echo session_name() . '=' . session_id(); ?></code>
+<?php endif; ?>
 </body>
 </html>
