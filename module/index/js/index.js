@@ -479,7 +479,7 @@
         var $menuNav       = $('#menuNav');
         var $menuItems     = $mainNav.children('li');
         var itemHeight     = $menuItems.first().outerHeight();
-        var maxHeight      = $menuNav.height();
+        var maxHeight      = $menuNav.height() - 10;
         var showMoreMenu   = false;
         var currentHeight  = itemHeight;
         var moreMenuHeight = 12;
@@ -504,7 +504,7 @@
 
                     if(isDivider) return;
                 }
-                moreMenuHeight += isDivider ? 13 : 30;
+                moreMenuHeight += isDivider ? 13 : 32;
                 $list.append($item.clone().removeClass('hidden'));
             }
             else
