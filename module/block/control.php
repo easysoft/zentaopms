@@ -1690,7 +1690,7 @@ class block extends control
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
         $count           = array();
-        $objectList      = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bus', 'story' => 'stories');
+        $objectList      = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories');
         $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount');
         if(isset($this->config->maxVersion))
         {
