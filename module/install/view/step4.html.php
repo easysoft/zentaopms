@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <div class='panel' style='padding:50px; margin:50px 300px;'>
+  <div class='panel' style='padding:50px 300px'>
     <form method='post'>
       <h1 class='text-center'><?php echo $title;?></h1>
       <div class='panel-body'>

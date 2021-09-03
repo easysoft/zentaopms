@@ -45,21 +45,21 @@ $lang->install->introduction        = "禅道{$this->config->version}版本功�
 $lang->install->howToUse            = "请问您计划如何使用禅道的新版本呢";
 $lang->install->introductionContent = <<<EOT
 <div>
-  <h4>尊敬的用户您好，欢迎您使用禅道%s。</h4>
-  <p>禅道%s提供了两种使用模式， 一种是经典管理模式，功能较为精简，提供了产品和项目两个核心功能；另一种是全新项目集管理模式，具备所有核心功能。如下是相关功能介绍，您可以根据需要选择使用的模式。</p>
+  <h4>尊敬的用户您好，欢迎您使用禅道项目管理系统。</h4>
+  <p> 禅道自15系列开始提供了两种使用模式，一种是经典管理模式，功能较为精简，主要提供了产品和项目两个核心功能；另一种是全新项目集管理模式，增加了项目集和执行的概念。下面是全新项目集管理模式的介绍：</p>
   <div class='block-content'>
-    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>项目集</strong></p><p>项目集是一组相互关联，且被协调管理的项目集合，可以进行多层级管理，属于战略层面的管理。</p></div>
+    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>项目集</strong></p><p>项目集用来管理一组相关的产品和项目，公司高层或者PMO可以用来做战略规划。</p></div>
     <div class='block-details block-right'>
       <p class='block-title'><i class='icon icon-product'></i><strong>产品</strong></p>
-      <p>产品是定义做什么，主要是管理需求，通过产品可以管理用户需求、研发需求、计划以及发布。<p>
+      <p>产品用来将公司的战略细分为可以进行研发的需求，产品经理可以用来做产品的发布计划。<p>
     </div>
     <div class='block-details'>
       <p class='block-title'><i class='icon icon-project'></i><strong>项目</strong></p>
-      <p>项目是定义如何做，主要是在规定的时间、预算和质量目标范围内完成项目的各种工作，属于战役层面的管理。</p>
+      <p>项目用来组织相应的人力进行研发，做好项目过程的跟踪管理，多快好省地完成项目。</p>
     </div>
     <div class='block-details block-right'>
       <p class='block-title'><i class='icon icon-product'></i><strong>执行</strong></p>
-      <p>我们把一个项目下的多个迭代/冲刺或阶段统称为执行，通过执行去完成项目的任务，属于战斗层面的管理。<p>
+      <p>执行用来做任务的分解、指派和跟踪，保证项目目标可以落实到人来执行。<p>
     </div>
   </div>
   <div class='text-center introduction-link'>
