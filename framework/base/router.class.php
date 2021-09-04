@@ -855,17 +855,29 @@ class baseRouter
     {
         if(defined('SESSION_STARTED')) return;
 
-        if(ini_get('session.save_handler') == 'files')
+        if(ini_get('session.save_handler') == 'files' and isset($_GET['tid']))
         {
-            $ztSessionHandler = new ztSessionHandler(zget($_GET, 'tid', ''));
-            session_set_save_handler(
-                array($ztSessionHandler, "open"),
-                array($ztSessionHandler, "close"),
-                array($ztSessionHandler, "read"),
-                array($ztSessionHandler, "write"),
-                array($ztSessionHandler, "destroy"),
-                array($ztSessionHandler, "gc")
-            );
+            $savePath = ini_get('session.save_path');
+            $writable = is_writable($savePath);
+            if(!$writable)
+            {
+                $savePath = $this->getTmpRoot() . 'session';
+                if(!file_exists($savePath) and !mkdir($savePath, 0777, true)) $writable = true;
+                if($writable) session_save_path($this->getTmpRoot() . 'session');
+            }
+
+            if($writable)
+            {
+                $ztSessionHandler = new ztSessionHandler($_GET['tid']);
+                session_set_save_handler(
+                    array($ztSessionHandler, "open"),
+                    array($ztSessionHandler, "close"),
+                    array($ztSessionHandler, "read"),
+                    array($ztSessionHandler, "write"),
+                    array($ztSessionHandler, "destroy"),
+                    array($ztSessionHandler, "gc")
+                );
+            }
         }
 
         /* If request header has token, use it as session for authentication. */
@@ -877,7 +889,7 @@ class baseRouter
         if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
         session_start();
 
-        $this->sessionID = session_id();
+        $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
         if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
 
@@ -2641,6 +2653,7 @@ class ztSessionHandler
     public $sessSavePath;
     public $tagID;
     public $sessionFile;
+    public $sessionID;
 
     /**
      * Construct.
@@ -2656,6 +2669,17 @@ class ztSessionHandler
     }
 
     /**
+     * Get sessionID
+     *
+     * @access public
+     * @return string
+     */
+    public function getSessionID()
+    {
+        return $this->sessionID;
+    }
+
+    /**
      * Get session file.
      *
      * @param  string    $id
@@ -2666,9 +2690,13 @@ class ztSessionHandler
     {
         if(!empty($this->sessionFile)) return $this->sessionFile;
 
-        $fileName = "sess_$id";
-        if($this->tagID) $fileName = "sess_" . md5($id . $this->tagID);
+        $sessionID = $id;
+        if($this->tagID) $sessionID = md5($id . $this->tagID);
+
+        $fileName = "sess_$sessionID";
+
         $this->sessionFile = $this->sessSavePath . '/' . $fileName;
+        $this->sessionID   = $sessionID;
         return $this->sessionFile;
     }
 
