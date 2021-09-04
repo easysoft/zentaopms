@@ -43,7 +43,8 @@ class risksEntry extends entry
 
     public function post($projectID = 0)
     {
-        if((int)$projectID <= 0) return $this->sendError(400, 'The id of project is wrong.');
+        $project = $this->loadModel('project')->getByID($projectID);
+        if(!$project) return $this->send404();
 
         $fields = 'source,name,category,strategy,status,impact,probability,rate,identifiedDate,plannedClosedDate,actualClosedDate,resolvedBy,assignedTo,prevention,remedy,resolution';
         $this->batchSetPost($fields);
