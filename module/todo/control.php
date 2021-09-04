@@ -143,7 +143,11 @@ class todo extends control
         if(!empty($_POST))
         {
             $changes = $this->todo->update($todoID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
+                die(js::error(dao::getError()));
+            }
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');

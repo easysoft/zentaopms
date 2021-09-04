@@ -32,7 +32,7 @@ class todosEntry extends entry
         $this->batchSetPost($fields);
 
         $this->setPost('date', $this->request('date', date("Y-m-d")));
-        $this->setPost('type', $this->request('date', 'custom'));
+        $this->setPost('type', $this->request('type', 'custom'));
         $this->setPost('status', $this->request('status', 'wait'));
         $this->setPost('begin', str_replace(':', '', $this->request('begin')));
         $this->setPost('end', str_replace(':', '', $this->request('end')));
