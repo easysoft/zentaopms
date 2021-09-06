@@ -182,19 +182,6 @@ class install extends control
 
         $this->app->loadLang('upgrade');
 
-        if(isset($this->config->bizVersion))
-        {
-            $this->lang->install->introductionContent = sprintf($this->lang->install->introductionContent, $this->lang->bizName, $this->lang->bizName);
-        }
-        elseif(isset($this->config->proVersion))
-        {
-            $this->lang->install->introductionContent = sprintf($this->lang->install->introductionContent, $this->lang->proName, $this->lang->proName);
-        }
-        else
-        {
-            $this->lang->install->introductionContent = sprintf($this->lang->install->introductionContent, $this->lang->pmsName, $this->lang->pmsName);
-        }
-
         $this->view->title = $this->lang->install->introduction;
         $this->display();
     }

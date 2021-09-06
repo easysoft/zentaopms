@@ -24,6 +24,7 @@ class riskEntry extends Entry
     public function put($riskID)
     {
         $oldRisk = $this->loadModel('risk')->getByID($riskID);
+        if(!$oldRisk) return $this->send404();
 
         /* Set $_POST variables. */
         $fields = 'source,name,category,strategy,status,impact,probability,rate,identifiedDate,plannedClosedDate,actualClosedDate,resolvedBy,assignedTo,prevention,remedy,resolution';
@@ -32,7 +33,9 @@ class riskEntry extends Entry
         $control = $this->loadController('risk', 'edit');
         $control->edit($riskID);
 
-        $this->getData();
+        $data = $this->getData();
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+
         $risk = $this->risk->getByID($riskID);
         $this->send(200, $this->format($risk, 'createdDate:time,editedDate:time'));
     }
@@ -42,6 +45,7 @@ class riskEntry extends Entry
         $control = $this->loadController('risk', 'delete');
         $control->delete($riskID, 'true');
 
+        $this->getData();
         $this->sendSuccess(200, 'success');
     }
 }

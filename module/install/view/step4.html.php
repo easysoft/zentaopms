@@ -12,11 +12,12 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <div class='panel' style='padding:50px; margin:50px 300px;'>
+  <div class='panel' style='padding:50px 300px'>
     <form method='post'>
       <h1 class='text-center'><?php echo $title;?></h1>
       <div class='panel-body'>
         <?php echo $lang->install->introductionContent;?>
+        <video class='hidden' src="<?php echo $lang->install->guideVideo;?>"  width="100%" controls ="controls"></video>
         <div class='text-center'>
           <h2><?php echo $lang->install->howToUse;?></h2>
           <?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new';?>

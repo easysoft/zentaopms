@@ -43,6 +43,7 @@ EOT;
 global $config;
 $lang->install->introduction        = "Zentao {$this->config->version} Introduction";
 $lang->install->howToUse            = "How do you like to use ZenTao?";
+$lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4';
 $lang->install->introductionContent = <<<EOT
 <div>
   <h4>Welcome to %s</h4>
@@ -64,7 +65,7 @@ $lang->install->introductionContent = <<<EOT
   </div>
   <div class='text-center introduction-link'>
     <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Document of introduction</a>
-    <a href='https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Video of introduction</a>
+    <a href='javascript:showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Video of introduction</a>
   </div>
 </div>
 EOT;

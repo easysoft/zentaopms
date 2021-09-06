@@ -295,7 +295,7 @@ class commonModel extends model
                 echo '</a></li><li class="divider"></li>';
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
-                if($app->config->global->flow == 'full' && !commonModel::isTutorialMode())
+                if(!commonModel::isTutorialMode())
                 {
                     echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
                 }
@@ -355,9 +355,8 @@ class commonModel extends model
         global $app, $config, $lang;
 
         $html  = "<a class='dropdown-toggle' data-toggle='dropdown'>";
-        $html .= "<div id='createBtn'>";
-        $html .= "<div class='icon-plus-solid-circle'></div>";
-        $html .= "</div></a><ul class='dropdown-menu pull-right create-list'>";
+        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
+        $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
 
         $showCreateList = $lastIsDivider = $needPrintDivider = false;
         $productID      = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
@@ -376,7 +375,7 @@ class commonModel extends model
             $createMethod = 'create';
             if($objectType == 'effort') $createMethod = 'batchCreate';
             if($objectType == 'doc')    $createMethod = 'selectLibType';
-            if(strpos('bug|execution|doc', $objectType) !== false) $needPrintDivider = true;
+            if(strpos('bug|execution', $objectType) !== false) $needPrintDivider = true;
 
             if(common::hasPriv($objectType, $createMethod))
             {
@@ -393,15 +392,14 @@ class commonModel extends model
                 }
 
                 $showCreateList = true;
-                $isOnlyBody     = strpos('effort|doc', $objectType) !== false;
-                $iconWord       = $objectType == 'doc' ? 'W' : ''; // No ducument icon, print word instead of icon.
-                $attr           = $objectType == 'effort' ? "data-width='95%' class='iframe' data-toggle='modal'" : "class='iframe' data-width='650px'";
+                $isOnlyBody     = $objectType == 'doc';
+                $attr           = $objectType == 'doc' ? "class='iframe' data-width='650px'" : '';
 
                 $params = '';
                 if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
                 if($objectType == 'doc') $params = "objectType=&objectID=0&libID=0";
 
-                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'>$iconWord</i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
+                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
             }
         }
 
@@ -1351,9 +1349,11 @@ EOD;
     {
         global $lang, $app;
 
+        $object = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        if(empty($object)) return;
+
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` IN ({$app->user->view->sprints}) " : '';
-        $object         = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
         $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         foreach($executionList as $execution)
@@ -1364,7 +1364,7 @@ EOD;
 
         if(empty($executionPairs)) return;
 
-        $html  = "<li class='divider'></li><li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->more}</a>";
+        $html  = "<li class='divider'></li><li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->more}<span class='caret'></span></a>";
         $html .= "<ul class='dropdown-menu'>";
 
         $showCount = 0;
@@ -2489,6 +2489,11 @@ EOD;
 
         $tab = $app->tab;
 
+        $isTutorialMode = common::isTutorialMode();
+        $currentModule  = $isTutorialMode ? $app->moduleName : $app->rawModule;
+        $currentMethod  = $isTutorialMode ? $app->methodName : $app->rawMethod;
+        $currentMethod  = strtolower($currentMethod);
+
         /* If homeMenu is not exists or unset, display menu. */
         if(!isset($lang->$tab->homeMenu))
         {
@@ -2497,7 +2502,7 @@ EOD;
             return;
         }
 
-        if($app->rawModule == $tab && $app->rawMethod == 'create')
+        if($currentModule == $tab && $currentMethod== 'create')
         {
             $lang->menu = $lang->$tab->homeMenu;
             return;
@@ -2508,15 +2513,15 @@ EOD;
         {
             $link   = is_array($menu) ? $menu['link'] : $menu;
             $params = explode('|', $link);
-            $method = $params[2];
+            $method = strtolower($params[2]);
 
-            if($method == $app->rawMethod)
+            if($method == $currentMethod)
             {
                 $lang->menu = $lang->$tab->homeMenu;
                 return;
             }
 
-            if(isset($menu['alias']) and in_array(strtolower($app->rawMethod), explode(',', strtolower($menu['alias']))))
+            if(isset($menu['alias']) and in_array($currentMethod, explode(',', strtolower($menu['alias']))))
             {
                 $lang->menu = $lang->$tab->homeMenu;
                 return;

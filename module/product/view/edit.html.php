@@ -35,7 +35,7 @@
           <?php if($this->config->systemMode == 'new'):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
-            <?php $attr = strpos(",{$this->app->user->view->programs},", ",{$product->program},") === false ? 'disabled' : '';?>
+            <?php $attr = ($product->program and strpos(",{$this->app->user->view->programs},", ",{$product->program},") === false) ? 'disabled' : '';?>
             <?php if($attr == 'disabled') echo html::hidden('program', $product->program);?>
             <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen' $attr");?></td>
           </tr>

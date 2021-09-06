@@ -1043,7 +1043,7 @@ class executionModel extends model
      */
     public function getByIdList($executionIdList = array())
     {
-        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
     }
 
     /**

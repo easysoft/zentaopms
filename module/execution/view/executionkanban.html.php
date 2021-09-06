@@ -20,6 +20,7 @@
   <table class="table no-margin table-grouped text-center">
     <thead>
       <tr>
+        <th style='width: 5px; padding: 0px; border-right: unset !important'></th>
         <th><?php echo $lang->execution->doingProject . ' (' . $projectCount . ')';?></th>
         <?php foreach($lang->execution->kanbanColType as $status => $colName):?>
         <th><?php echo $colName . ($status != 'closed' ? ' (' . $statusCount[$status] . ')' : '');?></th>
@@ -30,9 +31,10 @@
       <?php $rowIndex = 0;?>
       <?php foreach($kanbanGroup as $projectID => $executionList):?>
       <tr>
+        <td style="background: <?php echo $lang->execution->boardColorList[$rowIndex];?>;"></td>
         <td class='board-project'>
           <div data-id='<?php echo $projectID;?>'>
-            <div class='text-center text-ellipsis'>
+            <div class='text-center'>
               <?php $projectTitle = empty($projectID) ? $lang->execution->myExecutions : zget($projects, $projectID);?>
               <span class='group-title' title='<?php echo $projectTitle;?>'><?php echo $projectTitle;?></span>
             </div>
@@ -81,6 +83,7 @@
         </td>
       </tr>
       <?php $rowIndex++; ?>
+      <?php if($rowIndex == 9) $rowIndex = 0;?>
       <?php endforeach;?>
     </tbody>
   </table>
