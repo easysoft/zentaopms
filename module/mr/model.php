@@ -425,7 +425,7 @@ class mrModel extends model
     public function apiAcceptMR($gitlabID, $projectID, $MRID, $sudo = "")
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/merge");
-        if($sudo != "") return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers = array("sudo: 0")));
+        if($sudo != "") return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers = array("sudo: {$sudo}")));
         return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
@@ -461,12 +461,12 @@ class mrModel extends model
     }
 
     /**
-     * Get sudo user ID in GitLab.
+     * Get sudo user ID in both GitLab and Project.
      * Note: sudo parameter in GitLab API can be user ID or username.
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return int|string
      */
     public function getSudoUsername($gitlabID, $projectID)
     {

@@ -237,6 +237,7 @@ $lang->testcase->testsuite = 'Test Suite';
 $lang->testcase->caselib   = 'Case Library';
 
 $lang->devops->compile = 'Compile';
+$lang->devops->mr      = 'Merge Request';
 $lang->devops->repo    = 'Repo';
 $lang->devops->rules   = 'Rule';
 

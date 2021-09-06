@@ -493,11 +493,40 @@ class gitlabModel extends model
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return object
      */
     public function apiGetProjectUsers($gitlabID, $projectID)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/users");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get project all members(users and users in groups).
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetProjectMembers($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/members/all");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get the member detail in project.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $userID
+     * @access public
+     * @return object
+     */
+    public function apiGetProjectMember($gitlabID, $projectID, $userID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/members/all/$userID");
         return json_decode(commonModel::http($url));
     }
 
