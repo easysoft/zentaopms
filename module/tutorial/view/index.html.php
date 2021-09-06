@@ -21,12 +21,12 @@
       <div class='finish-all'>
         <div class='start-icon'><i class='icon icon-check-circle icon-front'></i></div>
         <h3><?php echo $lang->tutorial->congratulation;?></h3>
-        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-restart'></i>  <?php echo $lang->tutorial->restart;?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit');?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit;?></a>
+        <button type='button' class='btn btn-outline btn-reset-tasks'><i class='icon icon-restart'></i>  <?php echo $lang->tutorial->restart;?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit');?>' class='btn btn-outline'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit;?></a>
       </div>
       <div class='finish'>
         <div class='start-icon'><i class='icon icon-check-circle icon-front'></i></div>
         <h3><?php echo $lang->tutorial->congratulateTask;?></h3>
-        <button type='button' class='btn btn-success btn-next-task btn-task'><?php echo $lang->tutorial->nextTask;?> <i class='icon icon-angle-right'></i></button>
+        <button type='button' class='btn btn-outline btn-next-task btn-task'><?php echo $lang->tutorial->nextTask;?> <i class='icon icon-angle-right'></i></button>
       </div>
     </div>
   </div>
