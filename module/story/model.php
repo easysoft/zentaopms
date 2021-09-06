@@ -809,10 +809,13 @@ class storyModel extends model
                 $story->reviewedBy = $oldStory->reviewedBy;
                 $story = $this->updateStoryByReview($storyID, $oldStory, $story);
             }
+
+            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
+            $story->reviewers    = implode(',', array_keys($this->getReviewerPairs($storyID, $oldStory->version)));
         }
 
         $this->dao->update(TABLE_STORY)
-            ->data($story)
+            ->data($story, 'reviewers')
             ->autoCheck()
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
@@ -889,8 +892,6 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
-            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-            $story->reviewers    = implode(',', array_keys($this->getReviewerPairs($storyID, $oldStory->version)));
             unset($oldStory->parent);
             unset($story->parent);
             return common::createChanges($oldStory, $story);
