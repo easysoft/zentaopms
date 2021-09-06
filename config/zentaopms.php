@@ -140,6 +140,7 @@ $config->openMethods[] = 'my.preference';
 $config->openMethods[] = 'my.changepassword';
 $config->openMethods[] = 'my.profile';
 $config->openMethods[] = 'my.settutorialconfig';
+$config->openMethods[] = 'doc.selectlibtype';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
