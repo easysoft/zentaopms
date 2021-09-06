@@ -161,7 +161,7 @@ class job extends control
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
 
-        if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getRefOptions($repo->gitlab, $repo->project);
+        if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitlab, $repo->project);
 
         $repoList             = $this->repo->getList($this->projectID);
         $repoPairs            = array(0 => '', $repo->id => $repo->name);
@@ -301,40 +301,12 @@ class job extends control
      * @access public
      * @return void
      */
-    public function exec($id, $showForm = 'no')
+    public function exec($id)
     {
-        if($showForm == 'yes' or $_POST)
+        $job = $this->job->getByID($id);
+        if(strtolower($job->engine) == 'gitlab')
         {
-            $job     = $this->job->getByID($id);
-            $refList = $this->loadModel('gitlab')->getRefOptions($job->server, $job->pipeline);
-
-            if($_POST)
-            {
-                $reference = new stdclass;
-                $reference->ref = explode("::", $refList[$this->post->ref])[1];
-
-                $variables = array();
-                foreach($this->post->keys as $key => $field)
-                {
-                    $variable = array();
-                    if(!trim($this->post->values[$key])) continue;
-                    $variable['key']           = $field;
-                    $variable['value']         = $this->post->values[$key];
-                    $variable['variable_type'] = "env_var";
-
-                    $variables[] = $variable;
-                }
-
-                $reference->variables = $variables;
-                $compile = $this->job->exec($id, json_encode($reference));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->job->execSuccess, 'locate' => $this->createLink('compile', 'logs', "buildID={$compile->id}")));
-            }
-
-            $this->view->title        = $this->lang->job->runPipeline;
-            $this->view->refList      = $refList;
-            $this->view->job          = $job;
-            $this->view->pipelineTips = $this->lang->job->pipelineTips;
-            return $this->display();
+            if(!isset($job->reference) or !$job->reference) $this->locate(inlink('edit', "id=$id"));
         }
 
         $compile = $this->job->exec($id);
@@ -389,7 +361,7 @@ class job extends control
     {
         $repo = $this->loadModel('repo')->getRepoByID($repoID);
         if($repo->SCM != 'Gitlab') $this->send(array('result' => 'fail'));
-        $refList = $this->loadModel('gitlab')->getRefOptions($repo->gitlab, $repo->project);
+        $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitlab, $repo->project);
         $this->send(array('result' => 'success', 'refList' => $refList));
     }
 }
