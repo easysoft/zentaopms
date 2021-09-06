@@ -23,16 +23,24 @@
       <caption><?php echo $type == 'myProducts' ? $lang->product->myProduct : $lang->product->otherProduct;?></caption>
       <thead>
         <tr>
-          <th rowspan="2" class="w-20px" style="border-right: 0; border-left: 0; background: #32C5FF;"></th>
-          <th rowspan="2" style="border-left: 0px;"><?php echo $lang->product->unclosedProduct;?></th>
-          <th rowspan="2"><?php echo $lang->product->unexpiredPlan;?></th>
-          <th colspan="2"><?php echo $lang->product->doing;?></th>
-          <th rowspan="2"><?php echo $lang->product->normalRelease;?></th>
+          <?php
+          $rowspan = $config->systemMode == 'new' ? "rowspan='2'" : '';
+          $colspan = $config->systemMode == 'new' ? "colspan='2'" : '';
+          ?>
+          <?php if($config->systemMode == 'new'):?>
+          <th <?php echo $rowspan;?> class="w-20px" style="border-right: 0; border-left: 0; background: #32C5FF;"></th>
+          <?php endif;?>
+          <th <?php echo $rowspan;?> style="border-left: 0px;"><?php echo $lang->product->unclosedProduct;?></th>
+          <th <?php echo $rowspan;?>><?php echo $lang->product->unexpiredPlan;?></th>
+          <th <?php echo $colspan;?>><?php echo $lang->product->doing;?></th>
+          <th <?php echo $rowspan;?>><?php echo $lang->product->normalRelease;?></th>
         </tr>
+        <?php if($config->systemMode == 'new'):?>
         <tr>
           <th><?php echo $lang->product->doingProject;?></th>
-          <th><?php echo $lang->product->doingExecution;;?></th>
+          <th><?php echo $lang->product->doingExecution;?></th>
         </tr>
+        <?php endif;?>
       </thead>
       <tbody>
         <?php $colorIndex = 0;?>
@@ -47,7 +55,7 @@
         if(($doingCounts < $planCounts or $doingCounts < $releaseCount) and ($planCounts > 5 or $releaseCount > 5)) $scroll = 'scroll';
         ?>
         <tr>
-          <?php if($i == 0):?>
+          <?php if($i == 0 and $config->systemMode == 'new'):?>
           <td rowspan="<?php echo count($programs[$programID])?>" class="program text-ellipsis" style="background: <?php echo $this->lang->product->kanbanColorList[$colorIndex];?>"><?php echo zget($programList, $programID);?></td>
           <?php endif;?>
           <td class="product">
@@ -72,6 +80,7 @@
               <?php endif;?>
             </div>
           </td>
+          <?php if($config->systemMode == 'new'):?>
           <td class="project">
             <?php if(isset($projectProduct[$productID])):?>
             <?php foreach($projectProduct[$productID] as $projectID => $project):?>
@@ -141,6 +150,41 @@
             <?php endforeach;?>
             <?php endif;?>
           </td>
+          <?php endif;?>
+          <?php if($config->systemMode == 'classic'):?>
+          <td class="classicProject">
+            <div>
+              <?php if(isset($executionList[$productID])):?>
+              <?php foreach($executionList[$productID] as $executionID => $execution):?>
+              <?php
+              $borderStyle = '';
+              $delay = helper::diffDate(helper::today(), $execution->end);
+              $borderStyle = $delay > 0 ? 'border-left: 3px solid red' : 'border-left: 3px solid #0bd986';
+              ?>
+              <div class="board-item" style="<?php echo $borderStyle;?>">
+                <div class="table-row">
+                  <div class="table-col text-ellipsis">
+                    <?php if(common::hasPriv('execution', 'task')):?>
+                    <?php echo html::a($this->createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "title={$execution->name} class='text-ellipsis'");?>
+                    <?php else:?>
+                    <?php echo "<span title={$execution->name}>{$execution->name}</span>"?>
+                    <?php endif;?>
+                  </div>
+                  <div class="table-col">
+                    <div class="c-progress">
+                      <?php $hourList[$executionID] = isset($hourList[$executionID]) ? $hourList[$executionID] : $emptyHour; ?>
+                      <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($hourList[$executionID]->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+                        <div class='progress-info'><?php echo round($hourList[$executionID]->progress);?></div>
+                     </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <?php endforeach;?>
+              <?php endif;?>
+            </div>
+          </td>
+          <?php endif;?>
           <td class="release">
             <div class="<?php echo $scroll;?>">
               <?php if(isset($releaseList[$productID])):?>

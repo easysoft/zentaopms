@@ -1183,6 +1183,7 @@ class product extends control
         $this->view->productList      = $productList;
         $this->view->planList         = $planList;
         $this->view->projectList      = $projectList;
+        $this->view->executionList    = $executionList;
         $this->view->projectProduct   = $projectProduct;
         $this->view->latestExecutions = $projectLatestExecutions;
         $this->view->hourList         = $hourList;
