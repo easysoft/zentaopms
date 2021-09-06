@@ -104,12 +104,7 @@ function computeEndDate(delta)
     if(delta == 999)
     {
         $('#end').val(longTime);
-        $('#end').attr('disabled', 'disabled');
         return false;
-    }
-    else
-    {
-        $('#end').removeAttr('disabled');
     }
 
     beginDate = convertStringToDate(beginDate);
