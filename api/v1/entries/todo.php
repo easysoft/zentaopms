@@ -14,6 +14,9 @@ class todoEntry extends entry
         $control->view($todoID, $this->param('from', 'my'));
 
         $data = $this->getData();
+        if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+
         $todo = $data->data->todo;
         $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }

@@ -369,8 +369,11 @@ class todo extends control
     public function view($todoID, $from = 'company')
     {
         $todo = $this->todo->getById($todoID, true);
-        if(!$todo) die(js::error($this->lang->notFound) . js::locate('back'));
-
+        if(!$todo)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
         /* Save the session. */
         if(!isonlybody())
         {

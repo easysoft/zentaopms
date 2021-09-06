@@ -14,6 +14,9 @@ class taskEntry extends Entry
         $control->view($taskID);
 
         $data = $this->getData();
+        if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+
         $task = $data->data->task;
         $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
     }
@@ -23,7 +26,7 @@ class taskEntry extends Entry
         $oldTask = $this->loadModel('task')->getByID($taskID);
 
         /* Set $_POST variables. */
-        $fields = 'name,type,assignedTo,estimate,left,consumed,story,parent,execution,module,closedReason,status';
+        $fields = 'name,type,assignedTo,estimate,left,consumed,story,parent,execution,module,closedReason,status,estStarted,deadline';
         $this->batchSetPost($fields, $oldTask);
 
         $control = $this->loadController('task', 'edit');
