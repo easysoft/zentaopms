@@ -223,6 +223,7 @@ $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 
+
 /* Execution menu. */
 $lang->execution->homeMenu = new stdclass();
 if($config->systemMode == 'new') $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
@@ -331,6 +332,8 @@ $lang->devops->menuOrder[25] = 'jenkins';
 $lang->devops->menuOrder[30] = 'maintain';
 $lang->devops->menuOrder[35] = 'rules';
 
+$lang->devops->menu->mr['subMenu'] = new stdclass();
+$lang->devops->menu->mr['subMenu']->browse = array('link' => "{$lang->devops->settings}|mr|settings");
 /* Doc menu. */
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");

@@ -1152,9 +1152,17 @@ $lang->gitlab->methodOrder[35] = 'bindUser';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();
-$lang->resource->mr->common   = "common";
+$lang->resource->mr->create   = 'create';
+$lang->resource->mr->browse   = 'browse';
+$lang->resource->mr->edit     = 'edit';
+$lang->resource->mr->delete   = 'delete';
+$lang->resource->mr->settings = 'settings';
 
-$lang->mr->methodOrder[5] = 'common';
+$lang->mr->methodOrder[10] = 'create';
+$lang->mr->methodOrder[15] = 'browse';
+$lang->mr->methodOrder[20] = 'edit';
+$lang->mr->methodOrder[25] = 'delete';
+$lang->mr->methodOrder[35] = 'settings';
 
 /* Git. */
 $lang->resource->git = new stdclass();
