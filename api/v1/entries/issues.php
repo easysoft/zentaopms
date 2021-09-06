@@ -54,7 +54,8 @@ class issuesEntry extends entry
 
     public function post($projectID = 0)
     {
-        if((int) $projectID <= 0) $this->sendError(400, 'The id of project is wrong.');
+        $project = $this->loadModel('project')->getByID($projectID);
+        if(!$project) return $this->send404();
 
         $fields = 'type,title,severity,pri,assignedTo,deadline,desc';
         $this->batchSetPost($fields);

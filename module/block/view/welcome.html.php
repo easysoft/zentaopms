@@ -26,13 +26,6 @@
 .block-welcome.block-sm .tile-title {font-size: 12px; margin: 0 -10px;}
 .block-welcome .progress-group{margin-top: 20px;}
 .block-welcome .progress{margin-top: 10px; width: 85%}
-
-.block-welcome .tutorial {margin-top: 10px;}
-.block-welcome .tutorial a {font-size: 14px; font-weight: 500;}
-.block-welcome .tutorial a i.icon-guide {font-size: 20px; color: #16a8f8;}
-.block-welcome .tutorial label {margin-bottom: 3px; padding: 3px 3px; border-radius: 50%;}
-.block-welcome .tutorial label i {color: #fff;}
-.block-welcome .tutorial i.icon-close:before {min-width: 14px;}
 </style>
 <?php $progress = $tasks == 0 ? 0 : round($doneTasks / $tasks, 3) * 100;?>
 <div class='panel-move-handler'></div>
@@ -47,17 +40,6 @@
           </div>
         </div>
       </div>
-      <?php if(!isset($config->tutorialHidden) or $config->tutorialHidden == '0'):?>
-      <div class="tutorial">
-        <?php
-        if($this->app->config->global->flow == 'full' && !commonModel::isTutorialMode())
-        {
-            echo html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe text-muted' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'");
-        }
-        ?>
-        <label class="label label-light label-badge hidden"><i class="icon icon-close"></i></label>
-      </div>
-      <?php endif;?>
     </div>
     <div class="col col-right">
     <h4><small class="text-muted"><?php echo date(DT_DATE3)?></small> <?php echo $lang->block->leftToday?></h4>
@@ -88,18 +70,3 @@
     </div>
   </div>
 </div>
-<script>
-$('.tutorial').hover(function()
-{
-    $('.tutorial label').removeClass('hidden');
-}, function()
-{
-    $('.tutorial label').addClass('hidden');
-});
-
-$(document).on('click', '.tutorial label', function()
-{
-    hiddenwin.location.href = createLink('my', 'setTutorialConfig');
-})
-
-</script>

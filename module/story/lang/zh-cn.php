@@ -136,7 +136,7 @@ $lang->story->childrenAB     = "子";
 $lang->story->linkStories    = "相关{$lang->SRCommon}";
 $lang->story->childStories   = "细分{$lang->SRCommon}";
 $lang->story->duplicateStory = "重复{$lang->SRCommon}ID";
-$lang->story->reviewResult   = '评审结果';
+$lang->story->reviewResult   = '评审意见';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '关键词';
 $lang->story->newStory       = "继续添加{$lang->SRCommon}";
@@ -266,7 +266,7 @@ $lang->story->confirmDelete         = "您确认删除该{$lang->SRCommon}吗?";
 $lang->story->errorEmptyChildStory  = "『细分{$lang->SRCommon}』不能为空。";
 $lang->story->errorNotSubdivide     = "状态不是激活，或者阶段不是未开始的{$lang->SRCommon}，或者是子需求，则不能细分。";
 $lang->story->errorEmptyReviewedBy  = "『由谁评审』不能为空。";
-$lang->story->mustChooseResult      = '必须选择评审结果';
+$lang->story->mustChooseResult      = '必须选择评审意见';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->noStory               = "暂时没有{$lang->SRCommon}。";
 $lang->story->noRequirement         = "暂时没有{$lang->URCommon}。";
@@ -284,8 +284,8 @@ $lang->story->form->resource = '资源分配，有谁完成？需要多少时间
 $lang->story->form->file     = "附件，如果该{$lang->SRCommon}有相关文件，请点此上传。";
 
 $lang->story->action = new stdclass();
-$lang->story->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
-$lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>，原因为 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
+$lang->story->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 记录评审意见，评审意见为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
+$lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 记录评审意见，评审意见为 <strong>$extra</strong>，原因为 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->recalled              = array('main' => '$date, 由 <strong>$actor</strong> 撤销评审。');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewpassed          = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>确认通过</strong>。');
