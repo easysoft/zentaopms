@@ -1001,26 +1001,6 @@ class my extends control
     }
 
     /**
-     * Set the tutorial hidden in the welcome block.
-     *
-     * @access public
-     * @return void
-     */
-    public function setTutorialConfig($confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->my->confirmCloseTutorial, $this->createLink('my', 'setTutorialConfig', 'confirm=yes')));
-        }
-        else
-        {
-            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.tutorialHidden", 1);
-
-            die(js::locate($this->inLink('index'), 'parent'));
-        }
-    }
-
-    /**
      * User preference setting.
      *
      * @access public
