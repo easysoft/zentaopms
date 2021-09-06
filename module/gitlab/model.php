@@ -289,20 +289,23 @@ class gitlabModel extends model
     }
 
     /**
-     * Get ref option menus.
+     * Get reference option menus.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getRefOptions($gitlabID, $projectID)
+    public function getReferenceOptions($gitlabID, $projectID)
     {
-        $refList  = array();
+        $refList = array();
+
         $branches = $this->apiGetBranches($gitlabID, $projectID);
-        $tags     = $this->apiGetTags($gitlabID, $projectID);
-        foreach($branches as $branch) $refList[] = "Branch::" . $branch->name;
-        foreach($tags as $tag) $refList[] = "Tag::" . $tag->name;
+        foreach($branches as $branch) $refList[$branch->name] = "Branch::" . $branch->name;
+
+        $tags = $this->apiGetTags($gitlabID, $projectID);
+        foreach($tags as $tag) $refList[$tag->name] = "Tag::" . $tag->name;
+
         return $refList;
     }
 
@@ -865,14 +868,14 @@ class gitlabModel extends model
     /**
      * Create a new pipeline by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param string  $reference
+     * @param  int     $gitlabID
+     * @param  int     $projectID
+     * @param  object  $params
      * @access public
      * @return object
      * @docment https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
      */
-    public function apiCreatePipeline($gitlabID, $projectID, $reference)
+    public function apiCreatePipeline($gitlabID, $projectID, $params)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
         return json_decode(commonModel::http($url, $reference, null, array("Content-Type: application/json")));
@@ -881,9 +884,9 @@ class gitlabModel extends model
     /**
      * Get single pipline by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param integer $pipelineID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $pipelineID
      * @access public
      * @return object
      * @docment https://docs.gitlab.com/ee/api/pipelines.html#get-a-single-pipeline
@@ -897,9 +900,9 @@ class gitlabModel extends model
     /**
      * List pipeline jobs by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param integer $pipelineID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $pipelineID
      * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs
      */
@@ -912,9 +915,9 @@ class gitlabModel extends model
     /**
      * Get a single job by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param integer $jobID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $jobID
      * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
      */
@@ -927,9 +930,9 @@ class gitlabModel extends model
     /**
      * Get a log file by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param integer $jobID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $jobID
      * @return string
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-log-file
      */
