@@ -436,10 +436,10 @@ class jobModel extends model
      */
     public function execGitlabPipeline($job, $compileID)
     {
-        list($gitlabProject, $gitlabReference) = json_decode($job->pipeline);
+        $pipeline = json_decode($job->pipeline);
 
         $pipelineParams = new stdclass;
-        $pipelineParams->ref = $gitlabReference;
+        $pipelineParams->ref = $pipeline->reference;
 
         $customParams = json_decode($job->customParam);
         $variables    = array();
@@ -453,12 +453,12 @@ class jobModel extends model
             $variables[] = $variable;
         }
 
-        $pipelineParams->variables = $variables;
+        if(!empty($variables)) $pipelineParams->variables = $variables;
 
         $compile = new stdclass;
         $compile->id = $compileID;
 
-        $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $gitlabProject, $pipelineParams);
+        $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $pipeline->project, $pipelineParams);
         if(empty($pipeline->id)) $compile->status = 'create_fail';
 
         if(!empty($pipeline->id))

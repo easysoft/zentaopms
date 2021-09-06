@@ -306,15 +306,17 @@ class job extends control
         $job = $this->job->getByID($id);
         if(strtolower($job->engine) == 'gitlab')
         {
-            if(!isset($job->reference) or !$job->reference) $this->locate(inlink('edit', "id=$id"));
+            if(!isset($job->reference) or !$job->reference)
+            {
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$id")));
+            }
         }
 
         $compile = $this->job->exec($id);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->app->loadLang('compile');
-        echo js::alert(sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status)));
-        die(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status))));
     }
 
     /**
