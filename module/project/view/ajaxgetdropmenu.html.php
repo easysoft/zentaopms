@@ -29,8 +29,6 @@ a.projectName:focus, a.projectName:hover {background: #0c64eb; color: #fff !impo
 #swapper li > a {padding-top: 4px; padding-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
-
-.col-right {padding-top: 30px;}
 </style>
 <?php
 $projectCounts      = array();
@@ -155,8 +153,11 @@ $(function()
 
     $('.nav-tabs>li a').click(function()
     {
-        $(this).siblings().show();
-        $(this).parent().siblings('li').find('span').hide();
+        if($('#swapper input[type="search"]').val() == '')
+        {
+            $(this).siblings().show();
+            $(this).parent().siblings('li').find('span').hide();
+        }
     })
 
     $('#swapper [data-ride="tree"]').tree('expand');
@@ -166,11 +167,13 @@ $(function()
         if(value != '')
         {
             $('div.hide-in-search').siblings('i').addClass('hide-in-search');
+            $('.nav-tabs li span').hide();
         }
         else
         {
             $('div.hide-in-search').siblings('i').removeClass('hide-in-search');
             $('li.has-list div.hide-in-search').removeClass('hidden');
+            $('.nav-tabs li.active').find('span').show();
         }
     })
 })
