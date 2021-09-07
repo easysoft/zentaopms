@@ -166,7 +166,7 @@ class tutorialModel extends model
 
         $project->hours       = (object)$emptyHour;
         $project->leftTasks   = '—';
-        $project->teamMembers = $this->getTeamMembers();
+        $project->teamMembers = array_keys($this->getTeamMembers());
         $project->teamCount   = count($project->teamMembers);
 
         $projectStat[$project->id] = $project;
