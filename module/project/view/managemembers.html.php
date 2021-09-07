@@ -107,9 +107,19 @@
       <tfoot>
         <tr>
           <td colspan='6' class='text-center form-actions'>
-            <?php echo html::hidden('removeExecution', 'no');?>
-            <?php echo html::submitButton('', '', 'hidden btn btn-wide btn-primary');?>
-            <?php echo html::commonButton($lang->save, 'onclick="saveMemebers()" id="saveBtn"', 'btn btn-wide btn-primary') . html::backButton();?>
+            <?php
+              echo html::hidden('removeExecution', 'no');
+              if(commonModel::isTutorialMode())
+              {
+                  echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');
+              }
+              else
+              {
+                  echo html::submitButton('', '', 'hidden btn btn-wide btn-primary');
+                  echo html::commonButton($lang->save, 'onclick="saveMemebers()" id="saveBtn"', 'btn btn-wide btn-primary');
+              }
+              echo html::backButton();
+            ?>
           </td>
         </tr>
       </tfoot>
