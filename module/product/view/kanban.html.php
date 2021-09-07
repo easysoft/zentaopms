@@ -2,228 +2,64 @@
 /**
  * The html product kanban file of kanban method of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2021-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Fangzhou Hu <hufangzhou@easycorp.ltd>
+ * @author      Hao Sun <sunhao@easycorp.ltd>
  * @package     ZenTaoPMS
  * @version     $Id
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
-  <?php if(empty($productList)):?>
-  <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
-  </div>
-  <?php else:?>
-  <?php foreach($products as $type => $programs):?>
-  <?php if(empty($programs)) continue;?>
-  <div class="cell">
-    <table class="table text-center" style="border-radius: 0; background: #efefef;">
-      <caption><?php echo $type == 'myProducts' ? $lang->product->myProduct : $lang->product->otherProduct;?></caption>
-      <thead>
-        <tr>
-          <?php
-          $rowspan = $config->systemMode == 'new' ? "rowspan='2'" : '';
-          $colspan = $config->systemMode == 'new' ? "colspan='2'" : '';
-          ?>
-          <?php if($config->systemMode == 'new'):?>
-          <th <?php echo $rowspan;?> class="w-20px" style="border-right: 0; border-left: 0; background: #32C5FF;"></th>
-          <?php endif;?>
-          <th <?php echo $rowspan;?> style="border-left: 0px;"><?php echo $lang->product->unclosedProduct;?></th>
-          <th <?php echo $rowspan;?>><?php echo $lang->product->unexpiredPlan;?></th>
-          <th <?php echo $colspan;?>><?php echo $lang->product->doing;?></th>
-          <th <?php echo $rowspan;?>><?php echo $lang->product->normalRelease;?></th>
-        </tr>
-        <?php if($config->systemMode == 'new'):?>
-        <tr>
-          <th><?php echo $lang->product->doingProject;?></th>
-          <th><?php echo $lang->product->doingExecution;?></th>
-        </tr>
-        <?php endif;?>
-      </thead>
-      <tbody>
-        <?php $colorIndex = 0;?>
-        <?php foreach($programs as $programID => $programProduct):?>
-        <?php $i = 0;?>
-        <?php foreach($programProduct as $productID):?>
-        <?php
-        $scroll = '';
-        $doingCounts  = isset($projectProduct[$productID]) ? count($projectProduct[$productID]) : 0;
-        $planCounts   = isset($planList[$productID]) ? count($planList[$productID]) : 0;
-        $releaseCount = isset($releaseList[$productID]) ? count($releaseList[$productID]) : 0;
-        if(($doingCounts < $planCounts or $doingCounts < $releaseCount) and ($planCounts > 5 or $releaseCount > 5)) $scroll = 'scroll';
-        ?>
-        <tr>
-          <?php if($i == 0 and $config->systemMode == 'new'):?>
-          <td rowspan="<?php echo count($programs[$programID])?>" class="program text-ellipsis" style="background: <?php echo $this->lang->product->kanbanColorList[$colorIndex];?>"><?php echo zget($programList, $programID);?></td>
-          <?php endif;?>
-          <td class="product">
-            <?php if(common::hasPriv('product', 'browse')):?>
-            <?php echo "<span>" . html::a($this->createLink('product', 'browse', "productID=$productID"), $productList[$productID]->name, '', "title={$productList[$productID]->name}") . '</span>';?>
-            <?php else:?>
-            <?php echo "<span title={$productList[$productID]->name}>{$productList[$productID]->name}</span>";?>
-            <?php endif;?>
-          </td>
-          <td class="plan">
-            <div class="<?php echo $scroll;?>">
-              <?php if(isset($planList[$productID])):?>
-              <?php foreach($planList[$productID] as $planID => $plan):?>
-              <div class="board-item text-ellipsis">
-                <?php if(common::hasPriv('productplan', 'view')):?>
-                <?php echo html::a($this->createLink('productplan', 'view', "planID=$planID"), $plan->title, '', "title={$plan->title}");?>
-                <?php else:?>
-                <?php echo "<span title={$plan->title}>{$plan->title}</span>"?>
-                <?php endif;?>
-              </div>
-              <?php endforeach;?>
-              <?php endif;?>
-            </div>
-          </td>
-          <?php if($config->systemMode == 'new'):?>
-          <td class="project">
-            <?php if(isset($projectProduct[$productID])):?>
-            <?php foreach($projectProduct[$productID] as $projectID => $project):?>
-            <?php if(!isset($projectList[$projectID])) continue;?>
-            <div class="board">
-              <?php $borderStyle = isset($project->delay) ? 'border-left: 3px solid red' : 'border-left: 3px solid #0bd986';?>
-              <div class="board-item" style="<?php echo $borderStyle;?>">
-                <div class="table-row">
-                  <div class="table-col text-ellipsis">
-                    <?php if(common::hasPriv('project', 'index')):?>
-                    <?php echo html::a($this->createLink('project', 'index', "projectID=$projectID"), $projectList[$projectID]->name, '', "title={$projectList[$projectID]->name}");?>
-                    <?php else:?>
-                    <?php echo "<span title={$projectList[$projectID]->name}>{$projectList[$projectID]->name}</span>"?>
-                    <?php endif;?>
-                  </div>
-                  <div class="table-col">
-                    <div class="c-progress">
-                      <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($projectList[$projectID]->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                        <div class='progress-info'><?php echo round($projectList[$projectID]->hours->progress);?></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <?php endforeach;?>
-            <?php endif;?>
-          </td>
-          <td class="execution">
-            <?php if(isset($projectProduct[$productID])):?>
-            <?php foreach($projectProduct[$productID] as $projectID => $project):?>
-            <div class="board">
-              <?php
-              $borderStyle = '';
-              if(isset($latestExecutions[$projectID]))
-              {
-                  $delay = helper::diffDate(helper::today(), $latestExecutions[$projectID]->end);
-                  $borderStyle = $delay > 0 ? 'border-left: 3px solid red' : 'border-left: 3px solid #0bd986';
-              }
-              ?>
-              <?php $boardStyle    = isset($latestExecutions[$projectID]) ? 'board-item' : 'emptyBoard';?>
-              <?php $executionID   = isset($latestExecutions[$projectID]) ? $latestExecutions[$projectID]->id : 0;?>
-              <?php $executionName = isset($latestExecutions[$projectID]) ? $latestExecutions[$projectID]->name : ''?>
-              <div class="<?php echo $boardStyle;?> text-ellipsis" style="<?php echo $borderStyle;?>">
-                <div class="table-row">
-                  <div class="table-col text-ellipsis">
-                    <?php if(isset($latestExecutions[$projectID])):?>
-                    <?php if(common::hasPriv('execution', 'task')):?>
-                    <?php echo html::a($this->createLink('execution', 'task', "executionID=$executionID"), $executionName, '', "title={$executionName}");?>
-                    <?php else:?>
-                    <?php echo "<span title=$executionName>$executionName</span>";?>
-                    <?php endif;?>
-                    <?php endif;?>
-                  </div>
-                  <div class="table-col">
-                    <?php if(isset($latestExecutions[$projectID])):?>
-                    <div class="c-progress">
-                      <?php $hourList[$executionID] = isset($hourList[$executionID]) ? $hourList[$executionID] : $emptyHour; ?>
-                      <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($hourList[$executionID]->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                        <div class='progress-info'><?php echo round($hourList[$executionID]->progress);?></div>
-                     </div>
-                    </div>
-                    <?php endif;?>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <?php endforeach;?>
-            <?php endif;?>
-          </td>
-          <?php endif;?>
-          <?php if($config->systemMode == 'classic'):?>
-          <td class="classicProject">
-            <div>
-              <?php if(isset($executionList[$productID])):?>
-              <?php foreach($executionList[$productID] as $executionID => $execution):?>
-              <?php
-              $borderStyle = '';
-              $delay = helper::diffDate(helper::today(), $execution->end);
-              $borderStyle = $delay > 0 ? 'border-left: 3px solid red' : 'border-left: 3px solid #0bd986';
-              ?>
-              <div class="board-item" style="<?php echo $borderStyle;?>">
-                <div class="table-row">
-                  <div class="table-col text-ellipsis">
-                    <?php if(common::hasPriv('execution', 'task')):?>
-                    <?php echo html::a($this->createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "title={$execution->name} class='text-ellipsis'");?>
-                    <?php else:?>
-                    <?php echo "<span title={$execution->name}>{$execution->name}</span>"?>
-                    <?php endif;?>
-                  </div>
-                  <div class="table-col">
-                    <div class="c-progress">
-                      <?php $hourList[$executionID] = isset($hourList[$executionID]) ? $hourList[$executionID] : $emptyHour; ?>
-                      <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($hourList[$executionID]->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                        <div class='progress-info'><?php echo round($hourList[$executionID]->progress);?></div>
-                     </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <?php endforeach;?>
-              <?php endif;?>
-            </div>
-          </td>
-          <?php endif;?>
-          <td class="release">
-            <div class="<?php echo $scroll;?>">
-              <?php if(isset($releaseList[$productID])):?>
-              <?php foreach($releaseList[$productID] as $releaseID => $release):?>
-              <div class="board-item">
-                <?php if(common::hasPriv('release', 'view')):?>
-                <?php echo html::a($this->createLink('release', 'view', "releaseID=$releaseID"), $release->name, '', "title={$release->name} class='text-ellipsis'");?>
-                <?php else:?>
-                <?php echo "<span title={$release->name}>{$release->name}</span>"?>
-                <?php endif;?>
-                <?php if($release->marker) echo "&nbsp;<span><i class='icon icon-flag red'></i></span>";?>
-              </div>
-              <?php endforeach;?>
-              <?php endif;?>
-            </div>
-          </td>
-          <?php $i ++;?>
-        </tr>
-        <?php endforeach;?>
-        <?php $colorIndex = $colorIndex == 9 ? 0 : ++ $colorIndex;?>
-        <?php endforeach;?>
-      </tbody>
-    </table>
-  </div>
-  <?php endforeach;?>
-  <?php endif;?>
+<?php include '../../common/view/kanban.html.php';?>
+<?php if(empty($kanbanList)):?>
+<div class="table-empty-tip cell">
+  <p class="text-muted"><?php echo $lang->noData;?></p>
 </div>
-<script>
-$(function()
+<?php else:?>
+<div id='kanbanList'>
+  <?php foreach($kanbanList as $type => $programs):?>
+  <div class='panel kanban-panel'>
+    <div class='panel-heading'>
+      <strong><?php echo $type == 'my' ? $lang->product->myProduct : $lang->product->otherProduct;?></strong>
+    </div>
+    <div class='panel-body'>
+      <div id='kanban-<?php echo $type;?>' class='kanban'></div>
+    </div>
+  </div>
+  <?php endforeach; ?>
+</div>
+<?php
+$kanbanColumns = array();
+$kanbanColumns['unclosedProduct'] = array('name' => $lang->product->unclosedProduct, 'type' => 'unclosedProduct');
+$kanbanColumns['unexpiredPlan']   = array('name' => $lang->product->unexpiredPlan, 'type' => 'unexpiredPlan');
+if($config->systemMode == 'new')
 {
-    $('.board').height($('.project .board').height());
-
-    $('.table div.scroll').each(function()
-    {
-        var count     = $(this).parent().siblings('td.project').children('.board').length >= 5 ? $(this).parent().siblings('td.project').children('.board').length : 5;
-        var preHeight = $(this).parent().siblings('td.project').children('.board').length >= 5 ? $('.board').outerHeight(true) : $(this).find('.board-item').outerHeight(true);
-        $(this).css('max-height', preHeight * count);
-    })
-})
-</script>
+    $kanbanColumns['doingProject']    = array('name' => $lang->product->doingProject, 'type' => 'doingProject');
+    $kanbanColumns['doingExecution']  = array('name' => $lang->product->doingExecution, 'type' => 'doingExecution');
+}
+else
+{
+    $kanbanColumns['doingExecution']  = array('name' => $lang->product->doing, 'type' => 'doingExecution');
+}
+$kanbanColumns['normalRelease']   = array('name' => $lang->product->normalRelease, 'type' => 'normalRelease');
+$userPrivs = array();
+$userPrivs['product']     = common::hasPriv('product', 'browse');
+$userPrivs['productplan'] = common::hasPriv('productplan', 'view');
+$userPrivs['project']     = common::hasPriv('project', 'index');
+$userPrivs['execution']   = common::hasPriv('execution', 'task');
+$userPrivs['release']     = common::hasPriv('release', 'view');
+js::set('kanbanColumns',    $kanbanColumns);
+js::set('userPrivs',        $userPrivs);
+js::set('kanbanList',       $kanbanList);
+js::set('programList',      $programList);
+js::set('productList',      $productList);
+js::set('planList',         $planList);
+js::set('projectList',      $projectList);
+js::set('projectProduct',   $projectProduct);
+js::set('latestExecutions', $latestExecutions);
+js::set('releaseList',      $releaseList);
+js::set('hourList',         $hourList);
+js::set('doingText',        $lang->product->doing);
+?>
+<?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>

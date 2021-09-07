@@ -93,18 +93,21 @@ if($config->systemMode == 'new') $lang->my->executionLink = 'Execution Default P
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'By default, you go to the program list, where you can view all of the programs';
 $lang->my->programLinkList['program-project'] = 'By default, you go to the list of items in the most recent program, and you can view all items under the current program';
+if($config->systemMode == 'new') $lang->my->programLinkList['program-kanban'] = 'Enter the Program Kanban by default, and check the progress of all Programs';
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-index']     = 'The default access to the product home page, you can understand the company’s overall product status';
 $lang->my->productLinkList['product-all']       = 'By default, you go to the product list, where you can view all the products';
 $lang->my->productLinkList['product-dashboard'] = 'By default, go to the latest product dashboard to see the current product overview';
 $lang->my->productLinkList['product-browse']    = 'By default, go to the list of requirements for the most recent product and see the requirements under the current product';
+$lang->my->productLinkList['product-kanban']    = 'Enter the Product Kanban by default, and check the progress of all Products';
 
 global $config;
 $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = 'By default, you go to the project list, where you can view all the projects';
 $lang->my->projectLinkList['project-execution'] = 'Go to Project-Exection by default. You can check all information in Execution';
 $lang->my->projectLinkList['project-index']     = 'By default, go to the most recent project dashboard to see the current project overview';
+if($config->systemMode == 'new') $lang->my->projectLinkList['project-kanban'] = 'Enter the Project Kanban by default, and check the progress of all Projects';
 
 $lang->my->executionLinkList = array();
 if($config->systemMode == 'new')

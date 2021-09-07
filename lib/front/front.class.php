@@ -243,7 +243,7 @@ class html extends baseHTML
      * @access public
      * @return string
      */
-    static public function avatar($user, $size = '', $className = 'avatar-circle', $attrib = '', $tag = 'div')
+    static public function avatar($user, $size = '', $className = 'avatar-circle', $attrib = '', $tag = 'div', $hueDistance = 43, $saturation = '40%', $lightness = '60%')
     {
         $userObj = new stdClass();
 
@@ -273,8 +273,8 @@ class html extends baseHTML
 
         if(!$hasImage)
         {
-            $colorHue = (html::stringToCode($user->account) * 43) % 360;
-            $style   .= "background: hsl($colorHue, 100%, 58%);";
+            $colorHue = (html::stringToCode($user->account) * $hueDistance) % 360;
+            $style   .= "background: hsl($colorHue, $saturation, $lightness);";
         }
 
         if(!empty($style)) $style = "style='$style'";

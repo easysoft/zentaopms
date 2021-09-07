@@ -75,9 +75,8 @@
               <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php
-                $disabledEnd = $program->end == LONG_TIME ? 'disabled' : '';
-                $end         = $program->end == LONG_TIME ? $lang->program->longTime : $program->end;
-                echo html::input('end', $end, "class='form-control form-date' $disabledEnd placeholder='" . $lang->project->end . "' required");
+                $end = $program->end == LONG_TIME ? $lang->program->longTime : $program->end;
+                echo html::input('end', $end, "class='form-control form-date' placeholder='" . $lang->project->end . "' required");
               ?>
             </div>
           </td>

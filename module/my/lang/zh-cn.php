@@ -93,18 +93,21 @@ if($config->systemMode == 'new') $lang->my->executionLink = '执行默认着陆�
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '默认进入项目集列表，可以查看所有的项目集';
 $lang->my->programLinkList['program-project'] = '默认进入最近一个项目集的项目列表，可以查看当前项目集下所有项目';
+if($config->systemMode == 'new') $lang->my->programLinkList['program-kanban'] = '默认进入项目集看板，可以可视化的查看到所有项目集的进展情况';
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-index']     = '默认进入产品主页，可以了解公司整体的产品状况';
 $lang->my->productLinkList['product-all']       = '默认进入产品列表，可以查看所有的产品';
 $lang->my->productLinkList['product-dashboard'] = '默认进入最近一个产品仪表盘，可以查看当前产品概况';
 $lang->my->productLinkList['product-browse']    = '默认进入最近一个产品的需求列表，可以查看当前产品下的需求信息';
+$lang->my->productLinkList['product-kanban']    = '默认进入产品看板，可以可视化的查看到所有产品的进展情况';
 
 global $config;
 $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = '默认进入项目列表，可以查看所有的项目';
 $lang->my->projectLinkList['project-execution'] = '默认进入项目下所有执行列表，查看所有执行信息';
 $lang->my->projectLinkList['project-index']     = '默认进入最近一个项目仪表盘，可以查看当前项目概况';
+if($config->systemMode == 'new') $lang->my->projectLinkList['project-kanban'] = '默认进入项目看板，可以可视化的查看到所有项目的进展情况';
 
 $lang->my->executionLinkList = array();
 if($config->systemMode == 'new')
