@@ -306,7 +306,7 @@ class mrModel extends model
                     $todo->idvalue      = $do->id;
                     $todo->pri          = 1;
                     $todo->name         = $do->target->title;
-                    $todo->desc         = $do->target->description . "<br>" . $this->todoDescriptionLink($gitlabID, $projectID);
+                    $todo->desc         = $do->target->description . "<br>" . '<a href="' . $this->todoDescriptionLink($gitlabID, $projectID) . '"target="_blank">' . $this->todoDescriptionLink($gitlabID, $projectID) .'</a>';
                     $todo->finishedBy   = $this->app->user->account;
                     $this->dao->insert(TABLE_TODO)->data($todo)->exec();
                 }
