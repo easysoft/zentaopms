@@ -31,14 +31,13 @@
         <tr>
           <?php $vars = "objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
           <th class='w-60px  text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->name); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('sourceProject', $orderBy, $vars, $lang->mr->sourceProject); ?></th>
+          <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->name); ?></th>
+          <th class='text-left'><?php common::printOrderLink('sourceProject', $orderBy, $vars, $lang->mr->sourceProject); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('targetProject', $orderBy, $vars, $lang->mr->targetProject); ?></th>
+          <th class='text-left'><?php common::printOrderLink('targetProject', $orderBy, $vars, $lang->mr->targetProject); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->mr->status); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus); ?></th>
-          <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
+          <th class='w-120px c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
@@ -50,8 +49,7 @@
           <td class='text'><?php echo $MR->sourceBranch;?></td>
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace; ?></td>
           <td class='text'><?php echo $MR->targetBranch;?></td>
-          <td class='text'><?php echo zget($lang->mr->statusList, $MR->status);?></td>
-          <td class='text'><?php echo zget($lang->mr->mergeStatusList, $MR->mergeStatus);?></td>
+          <td class='text'><?php echo ($MR->status == 'merged') ? zget($lang->mr->statusList, $MR->status) : zget($lang->mr->mergeStatusList, $MR->mergeStatus); ?></td>
           <td class='text-left c-actions'>
             <?php
             common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");

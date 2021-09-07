@@ -24,10 +24,11 @@
           <tr>
              <th><?php echo $lang->mr->sourceProject;?></th>
              <td>
-               <div class='input-group'>
-                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->sourceProject)->name_with_namespace; ?>
-                 <span class='input-group-addon fix-border'><?php echo $lang->mr->sourceBranch ?></span>
+               <div>
+                 <span class='fix-border text-left'>
+                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->sourceProject)->name_with_namespace; ?>:
                  <?php echo $MR->sourceBranch;?>
+                 </span>
                </div>
              </td>
           </tr>
@@ -35,8 +36,9 @@
              <th><?php echo $lang->mr->targetProject;?></th>
              <td class='required'>
                <div class='input-group'>
+                 <span class='input-group-addon fix-border'>
                  <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace;?>
-                 <span class='input-group-addon fix-border'><?php echo $lang->mr->targetBranch ?></span>
+                 </span>
                  <?php echo html::select('targetBranch', $targetBranchList, $MR->targetBranch, "class='form-control chosen'");?>
                </div>
              </td>
@@ -63,7 +65,7 @@
           </tr>
           <tr>
             <th></th>
-            <td colspan='2' class='text-center form-actions'>
+            <td colspan='2' class='text-left form-actions'>
               <?php echo html::submitButton(); ?>
               <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
