@@ -61,7 +61,7 @@
       </div>
     </section>
     <section id='all'>
-      <h4><?php echo $lang->tutorial->allTasks;?> (<span class='task-num-finish'>2</span>/<span class='tasks-count'><?php echo count($lang->tutorial->tasks);?></span>)</h4>
+      <h4><?php echo $lang->tutorial->allTasks;?> (<span class='task-num-finish'></span>/<span class='tasks-count'></span>)</h4>
       <div class='progress' id='tasksProgress'>
         <div class='progress-text'></div>
         <div class='progress-bar' style='width: 0%'>
@@ -76,6 +76,7 @@
         <?php
         if(isset($task['mode']) && $task['mode'] != $mode) continue;
         $nav = $task['nav'];
+        if(!commonModel::hasPriv($nav['module'], $nav['method'])) continue;
         $task['name'] = $name;
         $task['id']   = ++$idx;
         $task['url']  = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
