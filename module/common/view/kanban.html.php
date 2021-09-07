@@ -363,7 +363,6 @@ $(function()
     var updateTimer;
     var updateCallback = function()
     {
-        console.log('i');
         updateKanbanAffixState();
         updateTimer = null;
     };
