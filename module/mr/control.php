@@ -206,7 +206,7 @@ class mr extends control
     {
         $this->loadModel('gitlab');
 
-        /* First step: get forks. */
+        /* First step: get forks. Only get first level forks(not recursively). */
         $projects = $this->gitlab->apiGetForks($gitlabID, $projectID);
 
         /* Second step: get project itself. */
