@@ -332,7 +332,7 @@ function updateKanbanAffixState()
 }
 
 /* Kanban color list for lane name */
-if(!window.kanbanColorList) window.kanbanColorList = ['#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761'];
+if(!window.kanbanColorList) window.kanbanColorList = ['#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761'];
 
 /* Set default options to kanban component */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
