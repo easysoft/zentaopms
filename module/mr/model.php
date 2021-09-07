@@ -192,7 +192,8 @@ class mrModel extends model
     {
         $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
 
-        if(isset($rawMR->iid) and $rawMR->state != 'merged')
+        /* Sync MR in ZenTao database whatever status of MR in GitLab. */
+        if(isset($rawMR->iid))
         {
             $map         = $this->config->MR->maps->sync;
             $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
@@ -238,7 +239,12 @@ class mrModel extends model
         {
 
             $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+<<<<<<< HEAD
             if(isset($rawMR->iid) and $rawMR->state != 'merged')
+=======
+
+            if(isset($rawMR->iid))
+>>>>>>> 2d1bc4fcc77df8662f24fda6afd586a5d49cb996
             {
                 /* create gitlab mr todo to zentao todo */
                 $this->batchSyncTodo($MR->gitlabID, $MR->targetProject);

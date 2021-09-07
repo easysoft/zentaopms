@@ -338,103 +338,165 @@ class jobModel extends model
      * @access public
      * @return string|bool
      */
-    public function exec($id, $reference = null)
+    public function exec($id)
     {
         $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
             ->fetch();
+
         if(!$job) return false;
 
-        $build = new stdclass();
-        $build->job  = $job->id;
-        $build->name = $job->name;
-
-        $now  = helper::now();
-        $data = new stdclass();
         $repo = $this->loadModel('repo')->getRepoById($job->repo);
-        $data->PARAM_TAG = '';
-        if($job->triggerType == 'tag')
-        {
-            $lastTag = '';
-            if($repo->SCM == 'Subversion')
-            {
-                $dirs = $this->loadModel('svn')->getRepoTags($repo, $job->svnDir);
-                if($dirs)
-                {
-                    end($dirs);
-                    $lastTag = current($dirs);
-                    $lastTag = rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
-                }
-            }
-            else
-            {
-                $tags = $this->loadModel('git')->getRepoTags($repo);
-                if($tags)
-                {
-                    end($tags);
-                    $lastTag = current($tags);
-                }
-            }
+        $now  = helper::now();
 
-            if($lastTag)
-            {
-                $build->tag = $lastTag;
-                $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
-                $data->PARAM_TAG = $lastTag;
-            }
-        }
-        elseif($job->triggerType == 'schedule')
-        {
-            $build->atTime = $job->atTime;
-        }
-
+        /* Save compile data. */
+        $build = new stdclass();
+        $build->job         = $job->id;
+        $build->name        = $job->name;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = $now;
         $build->updateDate  = $now;
+
+        if($job->triggerType == 'schedule') $build->atTime = $job->atTime;
+
+        if($job->triggerType == 'tag')
+        {
+            $lastTag = $this->getLastTagByRepo($repo);
+            if($lastTag)
+            {
+                $build->tag   = $lastTag;
+                $job->lastTag = $lastTag;
+                $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
+            }
+        }
+
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
         $compileID = $this->dao->lastInsertId();
 
-        $data->ZENTAO_DATA = "compile={$compileID}";
+        if($job->engine == 'jenkins') $compile = $this->execJenkinsPipeline($job, $repo, $compileID);
+        if($job->engine == 'gitlab')  $compile = $this->execGitlabPipeline($job);
+
+        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
+
+        $this->dao->update(TABLE_JOB)
+            ->set('lastExec')->eq($now)
+            ->set('lastStatus')->eq($compile->status)
+            ->where('id')->eq($job->id)
+            ->exec();
+
+        return $compile;
+    }
+
+    /**
+     * Exec jenkins  pipeline.
+     *
+     * @param  object    $job
+     * @param  object    $repo
+     * @param  int       $compileID
+     * @access public
+     * @return object
+     */
+    public function execJenkinsPipeline($job, $repo, $compileID)
+    {
+        $pipeline = new stdclass();
+        $pipeline->PARAM_TAG   = '';
+        $pipeline->ZENTAO_DATA = "compile={$compileID}";
+        if($job->triggerType == 'tag') $pipeline->PARAM_TAG = $job->lastTag;
 
         /* Add custom parameters to the data. */
         foreach(json_decode($job->customParam) as $paramName => $paramValue)
         {
-            $paramValue = str_replace('$zentao_version', $this->config->version, $paramValue);
-            $paramValue = str_replace('$zentao_account', $this->app->user->account, $paramValue);
-            $paramValue = str_replace('$zentao_product', $job->product, $paramValue);
+            $paramValue = str_replace('$zentao_version',  $this->config->version, $paramValue);
+            $paramValue = str_replace('$zentao_account',  $this->app->user->account, $paramValue);
+            $paramValue = str_replace('$zentao_product',  $job->product, $paramValue);
             $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
-            $data->$paramName = $paramValue;
+
+            $pipeline->$paramName = $paramValue;
         }
+
+        $url = $this->loadModel('compile')->getBuildUrl($job);
 
         $compile = new stdclass();
-        $compile->id = $compileID;
-
-        if($job->engine == 'jenkins')
-        {
-            $url = $this->loadModel('compile')->getBuildUrl($job);
-            $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
-            $compile->status = $compile->queue ? 'created' : 'create_fail';
-        }
-        elseif($job->engine == 'gitlab' and $reference)
-        {
-            list($gitlabProject, $gitlabReference) = json_decode($job->pipeline);
-            $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $gitlabProject, $gitlabReference);
-            if(empty($pipeline->id))
-            {
-                $compile->status = 'create_fail';
-            }
-            else
-            {
-                $compile->queue  = $pipeline->id;
-                $compile->status = zget($pipeline, 'status', 'create_fail');
-            }
-        }
-
-        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
-        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($compile->status)->where('id')->eq($job->id)->exec();
+        $compile->id     = $compileID;
+        $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $pipeline, $url->userPWD);
+        $compile->status = $compile->queue ? 'created' : 'create_fail';
 
         return $compile;
+    }
+
+    /**
+     * Exec gitlab pipeline.
+     *
+     * @param  int    $job
+     * @access public
+     * @return void
+     */
+    public function execGitlabPipeline($job)
+    {
+        $pipeline = json_decode($job->pipeline);
+
+        $pipelineParams = new stdclass;
+        $pipelineParams->ref = $pipeline->reference;
+
+        $customParams = json_decode($job->customParam);
+        $variables    = array();
+        foreach($customParams as $paramName => $paramValue)
+        {
+            $variable = array();
+            $variable['key']           = $paramName;
+            $variable['value']         = $paramValue;
+            $variable['variable_type'] = "env_var";
+
+            $variables[] = $variable;
+        }
+
+        if(!empty($variables)) $pipelineParams->variables = $variables;
+
+        $compile = new stdclass;
+
+        $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, $pipeline->project, $pipelineParams);
+        if(empty($pipeline->id)) $compile->status = 'create_fail';
+
+        if(!empty($pipeline->id))
+        {
+            $compile->queue  = $pipeline->id;
+            $compile->status = zget($pipeline, 'status', 'create_fail');
+        }
+
+        return $compile;
+    }
+
+    /**
+     * Get last tag of one repo.
+     *
+     * @param  object    $repo
+     * @access public
+     * @return void
+     */
+    public function getLastTagByRepo($repo)
+    {
+        if($repo->SCM == 'Subversion')
+        {
+            $dirs = $this->loadModel('svn')->getRepoTags($repo, $job->svnDir);
+            if($dirs)
+            {
+                end($dirs);
+                $lastTag = current($dirs);
+                return rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
+            }
+        }
+        else
+        {
+            $tags = $this->loadModel('git')->getRepoTags($repo);
+            if($tags)
+            {
+                end($tags);
+                return current($tags);
+            }
+        }
+
+        return '';
     }
 }
