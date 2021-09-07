@@ -277,7 +277,7 @@ class mr extends control
             }
         }
 
-        $this->view->title   = $this->lang->mr->viewDiif;
+        $this->view->title   = $this->lang->mr->viewDiff;
         $this->view->diffs   = $diffs;
         $this->view->arrange = $arrange;
         $this->display();
