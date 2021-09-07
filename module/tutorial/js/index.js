@@ -81,6 +81,7 @@ $(function()
 
     var clearTips = function()
     {
+        appsWindow.$('#menuMainNav > li.hl-tutorial').removeClass('hl-tutorial hl-in').tooltip('destroy');
         var $menuMainNav = appsWindow.$('#menuMainNav');
         $menuMainNav.find('.hl-tutorial').removeClass('hl-tutorial hl-in');
         $menuMainNav.find('.tooltip-tutorial').tooltip('destroy').removeClass('tooltip-tutorial');
@@ -205,6 +206,8 @@ $(function()
 
     var checkTask = function()
     {
+        clearTips();
+
         var iWindow = getAppWindow();
         if(!iWindow || !iWindow.$) return tryCheckTask();
         var task = tasks[current];
@@ -325,8 +328,6 @@ $(function()
             }
             else
             {
-                $appNav.removeClass('hl-tutorial hl-in').tooltip('destroy');
-
                 var menuModule = task.nav.menuModule || task.nav['module'];
                 var $navbar = $$('#navbar');
                 var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
