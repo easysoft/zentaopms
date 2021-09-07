@@ -142,8 +142,6 @@ $lang->product->doingExecution  = 'Ongoing Executions';
 $lang->product->normalRelease   = 'Normal Releases';
 $lang->product->emptyProgram    = 'Independent Products';
 
-$lang->product->kanbanColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
-
 $lang->product->allStory             = 'All ';
 $lang->product->allProduct           = 'All';
 $lang->product->allProductsOfProject = 'All Linked ' . $lang->productCommon;

@@ -10,8 +10,10 @@
 #kanbanList .kanban-item + .kanban-item {margin-top: 10px;}
 #kanbanList .kanban-lane-items {padding: 10px;}
 #kanbanList .kanban-header,
-#kanbanList .kanban-lane {border-bottom: 3px solid #fff;}
+#kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
+#kanbanList .kanban-lane {border-top: 3px solid #fff;}
+#kanbanList .kanban-lane + .kanban-lane {border-top: 10px solid #fff;}
 #kanbanList .kanban-sub-lane + .kanban-sub-lane {border-top: 3px solid #fff;}
 #kanbanList .kanban-col + .kanban-col {border-left: 3px solid #fff;}
 #kanbanList .kanban-header-col {height: 72px; padding: 20px 5px;}
@@ -19,8 +21,7 @@
 #kanbanList .kanban-header-col > .title > .text {font-weight: bold; max-width: 200px; max-width: calc(100% - 50px);}
 #kanbanList .kanban-header-col > .title > .icon, #kanbanList .kanban-header-col > .title > .count {top: -11px}
 #kanbanList .kanban-header + .kanban-lane > .kanban-lane-name {margin-top: 0;}
-#kanbanList .kanban-header {position: relative; border-bottom-width: 6px;}
-#kanbanList .kanban-header:before {position: absolute; content: ' '; left: 0; top: 0; bottom: 0; background-color: #3dc6fd; width: 20px;}
+#kanbanList .kanban-header {position: relative;}
 #kanbanList .kanban-item.link-block {padding: 0;}
 #kanbanList .kanban-item.link-block > a {padding: 10px; display: block;}
 #kanbanList .kanban-item > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
@@ -289,6 +290,9 @@ function renderKanbanItem(item, $item, col)
     return $item;
 }
 
+/* Kanban color list for lane name */
+if(!window.kanbanColorList) window.kanbanColorList = ['#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761'];
+
 /* Set default options to kanban component */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
@@ -300,6 +304,11 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     onRenderHeaderCol: function($col, col)
     {
         if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
+    },
+    onRenderLaneName: function($name, lane)
+    {
+        var color = kanbanColorList[$.zui.strCode(lane.kanban + '-' + lane.id) % kanbanColorList.length];
+        $name.css('background-color', color);
     }
 });
 </script>
