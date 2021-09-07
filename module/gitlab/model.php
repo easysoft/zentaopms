@@ -34,12 +34,15 @@ class gitlabModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
+        $gitlabList = $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
+
+        return $gitlabList;
     }
 
     /**
      * Get gitlab pairs.
      *
+
      * @access public
      * @return array
      */
@@ -63,7 +66,25 @@ class gitlabModel extends model
     }
 
     /**
-     * Get gitlab user id zentao account pairs of one gitlab.
+     * Get gitlab user id and realname pairs of one gitlab.
+     *
+     * @param  int    $gitlabID
+     * @access public
+     * @return void
+     */
+    public function getUserIdRealnamePairs($gitlabID)
+    {
+        return $this->dao->select('oauth.openID as openID,user.realname as realname')
+            ->from(TABLE_OAUTH)->alias('oauth')
+            ->leftJoin(TABLE_USER)->alias('user')
+            ->on("oauth.account = user.account")
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('providerID')->eq($gitlabID)
+            ->fetchPairs();
+    }
+
+    /**
+     * Get gitlab user id and zentao account pairs of one gitlab.
      *
      * @param  int    $gitlab
      * @access public
@@ -255,40 +276,58 @@ class gitlabModel extends model
     /**
      * Get gitlab project name of one gitlab project.
      *
-     * @param  int    $jobID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
      * @access public
      * @return string|false
      */
-    public function getObjectNameForJob($gitlabID, $projectID)
+    public function getProjectName($gitlabID, $projectID)
     {
         $project = $this->apiGetSingleProject($gitlabID, $projectID);
-        if(isset($project->name)) return $project->name;
+        if(is_object($project) and isset($project->name)) return $project->name;
         return false;
     }
 
     /**
-     * Get ref option menus.
+     * Get reference option menus.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getRefOptions($gitlabID, $projectID)
+    public function getReferenceOptions($gitlabID, $projectID)
     {
-        $refList  = array();
-        $branches = $this->loadModel('gitlab')->apiGetBranches($gitlabID, $projectID);
-        $tags     = $this->loadModel('gitlab')->apiGetTags($gitlabID, $projectID);
+        $refList = array();
 
-       /* fix bug 14612*/
-        if(isset($branches->message)) return array();
+        $branches = $this->apiGetBranches($gitlabID, $projectID);
+        foreach($branches as $branch) $refList[$branch->name] = "Branch::" . $branch->name;
 
-        if(isset($branches->error)) return array();
+        $tags = $this->apiGetTags($gitlabID, $projectID);
+        foreach($tags as $tag) $refList[$tag->name] = "Tag::" . $tag->name;
 
-        foreach($branches as $branch) $refList[] = "Branch::" . $branch->name;
-        foreach($tags as $tag) $refList[] = "Tag::" . $tag->name;
         return $refList;
 
+    }
+
+    /**
+     * Get branches.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getBranches($gitlabID, $projectID)
+    {
+        $rawBranches = $this->apiGetBranches($gitlabID, $projectID);
+
+        $branches = array();
+        foreach($rawBranches as $branch)
+        {
+            $branches[] = $branch->name;
+        }
+        return $branches;
     }
 
     /**
@@ -353,6 +392,23 @@ class gitlabModel extends model
     }
 
     /**
+     * Get a list of to-do items.
+     *
+     * @see   https://docs.gitlab.com/ee/api/todos.html
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiTodoList($gitlabID, $projectID)
+    {
+        $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
+        if(!$gitlab) return '';
+        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&private_token={$gitlab->token}";
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
      * Get current user.
      *
      * @param  string   $host
@@ -413,10 +469,8 @@ class gitlabModel extends model
         $allResults = array();
         for($page = 1; true; $page ++)
         {
-            $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&membership=true&page={$page}&per_page=100"));
-            if(isset($results->error)) break;
+            $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));
             if(empty($results) or $page > 10) break;
-
             $allResults = array_merge($allResults, $results);
         }
 
@@ -435,6 +489,94 @@ class gitlabModel extends model
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID");
         return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get project users.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetProjectUsers($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/users");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get project all members(users and users in groups).
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetProjectMembers($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/members/all");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get the member detail in project.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $userID
+     * @access public
+     * @return object
+     */
+    public function apiGetProjectMember($gitlabID, $projectID, $userID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/members/all/$userID");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get single branch by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranch($gitlabID, $projectID, $branch)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/branches/$branch");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get Forks of a project by API.
+     *
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetForks($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/forks");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get upstream project by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function apiGetUpstream($gitlabID,$projectID)
+    {
+        $currentProject = $this->apiGetSingleProject($gitlabID, $projectID);
+        if(isset($currentProject->forked_from_project)) return $currentProject->forked_from_project;
+        return array();
     }
 
     /**
@@ -726,25 +868,26 @@ class gitlabModel extends model
     /**
      * Create a new pipeline by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param string  $reference
+     * @param  int     $gitlabID
+     * @param  int     $projectID
+     * @param  object  $params
      * @access public
      * @return object
      * @docment https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
      */
-    public function apiCreatePipeline($gitlabID, $projectID, $reference)
+    public function apiCreatePipeline($gitlabID, $projectID, $params)
     {
+        if(!is_string($params)) $params = json_encode($params);
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/pipeline");
-        return json_decode(commonModel::http($url, $reference, null, array("Content-Type: application/json")));
+        return json_decode(commonModel::http($url, $params, null, array("Content-Type: application/json")));
     }
 
     /**
      * Get single pipline by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param integer $pipelineID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $pipelineID
      * @access public
      * @return object
      * @docment https://docs.gitlab.com/ee/api/pipelines.html#get-a-single-pipeline
@@ -758,9 +901,9 @@ class gitlabModel extends model
     /**
      * List pipeline jobs by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param integer $pipelineID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $pipelineID
      * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#list-pipeline-jobs
      */
@@ -773,9 +916,9 @@ class gitlabModel extends model
     /**
      * Get a single job by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param integer $jobID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $jobID
      * @return object
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-single-job
      */
@@ -788,9 +931,9 @@ class gitlabModel extends model
     /**
      * Get a log file by api.
      *
-     * @param integer $gitlabID
-     * @param integer $projectID
-     * @param integer $jobID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $jobID
      * @return string
      * @docment https://docs.gitlab.com/ee/api/jobs.html#get-a-log-file
      */

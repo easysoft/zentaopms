@@ -58,11 +58,31 @@ class gitlab extends control
             $gitlabID = $this->gitlab->create();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('action');
+            $actionID = $this->action->create('gitlab', $gitlabID, 'create');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->create;
 
+        $this->display();
+    }
+
+    /**
+     * view a gitlab.
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function view($id)
+    {
+        $gitlab = $this->gitlab->getByID($id);
+
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->view;
+        $this->view->gitlab     = $gitlab;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->actions    = $this->loadModel('action')->getList('gitlab', $id);
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('pipeline', $id);
         $this->display();
     }
 
@@ -75,17 +95,24 @@ class gitlab extends control
      */
     public function edit($id)
     {
-        $gitlab = $this->gitlab->getByID($id);
+        $oldGitLab = $this->gitlab->getByID($id);
+
         if($_POST)
         {
             $this->checkToken();
             $this->gitlab->update($id);
+            $gitLab = $this->gitlab->getByID($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action');
+            $actionID = $this->action->create('gitlab', $id, 'edit');
+            $changes  = common::createChanges($oldGitLab, $gitLab);
+            $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
-        $this->view->gitlab = $gitlab;
+        $this->view->gitlab = $oldGitLab;
 
         $this->display();
     }
@@ -178,7 +205,14 @@ class gitlab extends control
     {
         if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
+        $oldGitLab = $this->gitlab->getByID($id);
+        $this->loadModel('action');
         $this->gitlab->delete(TABLE_PIPELINE, $id);
+
+        $gitLab   = $this->gitlab->getByID($id);
+        $actionID = $this->action->create('gitlab', $id, 'delete');
+        $changes  = common::createChanges($oldGitLab, $gitLab);
+        $this->action->logHistory($actionID, $changes);
         die(js::reload('parent'));
     }
 
@@ -366,5 +400,55 @@ class gitlab extends control
             $options .= "<option title='{$execution}' value='{$index}' data-name='{$execution}'>{$execution}</option>";
         }
         return $this->send($options);
+    }
+
+    /**
+     * AJAX: Get project branches.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectBranches($gitlabID, $projectID)
+    {
+        if(!$gitlabID or !$projectID) return $this->send(array('message' => array()));
+
+        $branches = $this->gitlab->apiGetBranches($gitlabID, $projectID);
+        $options  = "<option value=''></option>";
+        foreach($branches as $branch)
+        {
+            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+        }
+        $this->send($options);
+    }
+
+    /**
+     * AJAX: Get MR user pairs to select assignee_ids and reviewer_ids.
+     * Attention: The user must be a member of the GitLab project.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMRUserPairs($gitlabID, $projectID)
+    {
+        if(!$gitlabID) return $this->send(array('message' => array()));
+
+        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($gitlabID);
+        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($gitlabID, $projectID);
+        $users           = array();
+        foreach($rawProjectUsers as $rawProjectUser)
+        {
+            if(!empty($bindedUsers[$rawProjectUser->id])) $users[$rawProjectUser->id] = $bindedUsers[$rawProjectUser->id];
+        }
+
+        $options  = "<option value=''></option>";
+        foreach($users as $index => $user)
+        {
+            $options .= "<option value='{$index}'>{$user}</option>";
+        }
+        $this->send($options);
     }
 }

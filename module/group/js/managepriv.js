@@ -5,8 +5,8 @@ function showPriv(value)
 
 /**
  * Control the actions select control for a module.
- * 
- * @param   string $module 
+ *
+ * @param   string $module
  * @access  public
  * @return  void
  */

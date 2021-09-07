@@ -238,6 +238,7 @@ $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 
+
 /* Execution menu. */
 $lang->execution->homeMenu = new stdclass();
 $lang->execution->homeMenu->all = array('link' => "{$lang->execution->all}|execution|all|", 'alias' => 'batchedit');
@@ -333,6 +334,7 @@ $lang->qa->dividerMenu = ',bug,testtask,caselib,';
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
+$lang->devops->menu->mr       = array('link' => "{$lang->devops->mr}|mr|browse");
 $lang->devops->menu->gitlab   = array('link' => "GitLab|gitlab|browse", 'alias' => 'create,edit');
 $lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
 $lang->devops->menu->maintain = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
@@ -340,11 +342,11 @@ $lang->devops->menu->rules    = array('link' => "{$lang->devops->rules}|repo|set
 
 $lang->devops->menuOrder[5]  = 'code';
 $lang->devops->menuOrder[10] = 'compile';
-$lang->devops->menuOrder[15] = 'gitlab';
-$lang->devops->menuOrder[20] = 'jenkins';
-$lang->devops->menuOrder[25] = 'maintain';
-$lang->devops->menuOrder[30] = 'rules';
-
+$lang->devops->menuOrder[15] = 'mr';
+$lang->devops->menuOrder[20] = 'gitlab';
+$lang->devops->menuOrder[25] = 'jenkins';
+$lang->devops->menuOrder[30] = 'maintain';
+$lang->devops->menuOrder[35] = 'rules';
 /* Doc menu. */
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
@@ -538,6 +540,7 @@ $lang->navGroup->devops  = 'devops';
 $lang->navGroup->repo    = 'devops';
 $lang->navGroup->job     = 'devops';
 $lang->navGroup->jenkins = 'devops';
+$lang->navGroup->mr      = 'devops';
 $lang->navGroup->gitlab  = 'devops';
 $lang->navGroup->compile = 'devops';
 $lang->navGroup->ci      = 'devops';

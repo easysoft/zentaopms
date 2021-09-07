@@ -278,13 +278,15 @@ class gitlab
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision, $toRevision)
+    public function diff($path, $fromRevision, $toRevision, $fromProject = '')
     {
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();
 
-        $api     = "compare";
-        $params  = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => 1);
+        $api    = "compare";
+        $params = array('from' => $fromRevision, 'to' => $toRevision);
+        if($fromProject) $params['from_project_id'] = $fromProject;
+
         if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
         $results = $this->fetch($api, $params);
         foreach($results->diffs as $key => $diff)
@@ -303,7 +305,6 @@ class gitlab
             foreach($diffLines as $diffLine) $lines[] = $diffLine;
         }
         return $lines;
-        //return $results->diffs;
     }
 
     /**

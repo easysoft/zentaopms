@@ -5,8 +5,8 @@ class scm
 
     /**
      * Set engine.
-     * 
-     * @param  object $repo 
+     *
+     * @param  object $repo
      * @access public
      * @return void
      */
@@ -19,10 +19,10 @@ class scm
     }
 
     /**
-     * List files. 
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     * List files.
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -34,10 +34,10 @@ class scm
 
     /**
      * Get tags.
-     * 
-     * @param  string $path 
-     * @param  string $revision 
-     * @param  bool   $onlyDir 
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  bool   $onlyDir
      * @access public
      * @return array
      */
@@ -49,7 +49,7 @@ class scm
 
     /**
      * Get branch.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -60,11 +60,11 @@ class scm
 
     /**
      * Get log.
-     * 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
-     * @param  int    $count 
+     *
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -78,9 +78,9 @@ class scm
 
     /**
      * Blame file.
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -92,9 +92,9 @@ class scm
 
     /**
      * Get last log.
-     * 
-     * @param  string $path 
-     * @param  int    $count 
+     *
+     * @param  string $path
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -105,20 +105,21 @@ class scm
 
     /**
      * Diff file.
-     * 
-     * @param  string $path 
-     * @param  string $fromRevision 
-     * @param  string $toRevision 
-     * @param  string $parse 
+     *
+     * @param  string $path
+     * @param  string $fromRevision
+     * @param  string $toRevision
+     * @param  string $parse
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision = 0, $toRevision = 'HEAD', $parse = 'yes')
+    public function diff($path, $fromRevision = 0, $toRevision = 'HEAD', $parse = 'yes', $extra = '')
     {
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();
 
-        $diffs = $this->engine->diff($path, $fromRevision, $toRevision);
+        if(!$extra) $diffs = $this->engine->diff($path, $fromRevision, $toRevision);
+        if($extra) $diffs = $this->engine->diff($path, $fromRevision, $toRevision, $extra);
 
         if($parse  != 'yes') return implode("\n", $diffs);
         return $this->engine->parseDiff($diffs);
@@ -126,23 +127,23 @@ class scm
 
     /**
      * Cat file.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return string
      */
     public function cat($entry, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return false;
-        return $this->engine->cat($entry, $revision); 
+        return $this->engine->cat($entry, $revision);
     }
 
     /**
      * Get info.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return object
      */
@@ -154,8 +155,8 @@ class scm
 
     /**
      * Exec scm cmd.
-     * 
-     * @param  string $cmd 
+     *
+     * @param  string $cmd
      * @access public
      * @return array
      */
@@ -165,47 +166,47 @@ class scm
     }
 
     /**
-     * Get commit count 
-     * 
-     * @param  int    $commits 
-     * @param  string $lastVersion 
+     * Get commit count
+     *
+     * @param  int    $commits
+     * @param  string $lastVersion
      * @access public
      * @return int
      */
     public function getCommitCount($commits = 0, $lastVersion = 0)
     {
         if(!scm::checkRevision($lastVersion)) return false;
-        return $this->engine->getCommitCount($commits, $lastVersion); 
+        return $this->engine->getCommitCount($commits, $lastVersion);
     }
 
     /**
      * Get latest revision.
-     * 
+     *
      * @access public
      * @return string
      */
     public function getLatestRevision()
     {
-        return $this->engine->getLatestRevision(); 
+        return $this->engine->getLatestRevision();
     }
 
     /**
      * Get first revision.
-     * 
+     *
      * @access public
      * @return string
      */
     public function getFirstRevision()
     {
-        return $this->engine->getFirstRevision(); 
+        return $this->engine->getFirstRevision();
     }
 
     /**
      * Get commits.
-     * 
-     * @param  string $version 
-     * @param  int    $count 
-     * @param  string $branch 
+     *
+     * @param  string $version
+     * @param  int    $count
+     * @param  string $branch
      * @access public
      * @return array
      */
@@ -216,9 +217,9 @@ class scm
     }
 
     /**
-     * Check revision 
-     * 
-     * @param  int|string $revision 
+     * Check revision
+     *
+     * @param  int|string $revision
      * @static
      * @access public
      * @return bool
@@ -231,9 +232,9 @@ class scm
 }
 
 /**
- * Escape command. 
- * 
- * @param  string $cmd 
+ * Escape command.
+ *
+ * @param  string $cmd
  * @access public
  * @return string
  */
@@ -246,12 +247,12 @@ function escapeCmd($cmd)
 }
 
 /**
- * Execute command. 
- * 
- * @param  string $cmd 
- * @param  string $return 
- * @param  int    $result 
- * @param  string $type 
+ * Execute command.
+ *
+ * @param  string $cmd
+ * @param  string $return
+ * @param  int    $result
+ * @param  string $type
  * @access public
  * @return array|string
  */

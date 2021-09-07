@@ -50,13 +50,20 @@
       </thead>
       <tbody>
         <?php foreach($jobList as $id => $job):?>
+I       <?php
+        if(strtolower($job->engine) == 'gitlab')
+        {
+            $pipeline = json_decode($job->pipeline);
+            if(is_numeric($job->pipeline)) $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $job->pipeline);
+            if(isset($pipeline->reference))  $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $pipeline->project);
+        }
+        ?>
         <tr class='text-left'>
           <td class='text-center'><?php echo $id;?></td>
           <td class='text-left c-name' title='<?php echo $job->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$job->id}", 'html', true), $job->name, '', "class='iframe' data-width='90%'") : $job->name;?></td>
           <td title='<?php echo $job->repoName;?>'><?php echo $job->repoName;?></td>
           <td><?php echo zget($lang->job->engineList, $job->engine);?></td>
           <td><?php echo zget($lang->job->frameList, $job->frame);?></td>
-          <?php if(strtolower($job->engine) == 'gitlab') $job->pipeline = $this->loadModel('gitlab')->getObjectNameForJob($job->server, $job->pipeline);?>
           <?php $jenkins = urldecode($job->pipeline) . '@' . $job->jenkinsName;?>
           <td class='c-name' title='<?php echo $jenkins;?>'><?php echo $jenkins;?></td>
           <?php $triggerConfig = $this->job->getTriggerConfig($job);?>
@@ -67,8 +74,7 @@
             <?php
             common::printIcon('compile', 'browse', "jobID=$id", '', 'list', 'history');
             common::printIcon('job', 'edit', "jobID=$id", '', 'list',  'edit');
-            if(strtolower($job->engine) == 'jenkins') common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play', 'hiddenwin');
-            if(strtolower($job->engine) == 'gitlab')  common::printIcon('job', 'exec', "jobID=$id&showForm=yes", '', 'list',  'play', '', '', false, "data-toggle='modal' data-type='ajax'");
+            common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play');
             if(common::hasPriv('job', 'delete')) echo html::a($this->createLink('job', 'delete', "jobID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->job->delete}' class='btn'");
             ?>
           </td>
