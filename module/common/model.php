@@ -355,7 +355,7 @@ class commonModel extends model
         global $app, $config, $lang;
 
         $html  = "<a class='dropdown-toggle' data-toggle='dropdown'>";
-        $html .= "<i class='icon icon-plus-solid-circle'></i>";
+        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
         $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
 
         $showCreateList = $lastIsDivider = $needPrintDivider = false;

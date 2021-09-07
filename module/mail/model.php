@@ -28,8 +28,8 @@ class mailModel extends model
 
     /**
      * Auto detect email config.
-     * 
-     * @param  string    $email 
+     *
+     * @param  string    $email
      * @access public
      * @return object
      */
@@ -40,7 +40,7 @@ class mailModel extends model
         $domain = strtolower($domain);
 
         /*
-         * 1. try to find config from the providers. 
+         * 1. try to find config from the providers.
          * 2. try to find the mx record to get the domain and then search it in providers.
          * 3. try smtp.$domain's 25 and 465 port, if can connect, use smtp.$domain.
          */
@@ -64,9 +64,9 @@ class mailModel extends model
 
     /**
      * Try get config from providers.
-     * 
-     * @param  int    $domain 
-     * @param  int    $username 
+     *
+     * @param  int    $domain
+     * @param  int    $username
      * @access public
      * @return bool|object
      */
@@ -87,9 +87,9 @@ class mailModel extends model
 
     /**
      * Get config by MXRR.
-     * 
-     * @param  string    $domain 
-     * @param  string    $username 
+     *
+     * @param  string    $domain
+     * @param  string    $username
      * @access public
      * @return bool|object
      */
@@ -130,10 +130,10 @@ class mailModel extends model
 
     /**
      * Try connect to smtp.$domain's 25 or 465 port and compute the config according to the connection result.
-     * 
+     *
      * @param  string $domain
      * @param  string $username
-     * @param  int    $port 
+     * @param  int    $port
      * @access public
      * @return bool|object
      */
@@ -143,7 +143,7 @@ class mailModel extends model
         ini_set('default_socket_timeout', 3);
         $connection = @fsockopen($host, $port);
         if(!$connection) return false;
-        fclose($connection); 
+        fclose($connection);
 
         $config = new stdclass();
         $config->username = $username;
@@ -157,7 +157,7 @@ class mailModel extends model
 
     /**
      * Set MTA.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -177,7 +177,7 @@ class mailModel extends model
 
     /**
      * Set smtp.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -195,8 +195,8 @@ class mailModel extends model
     }
 
     /**
-     * Set sendcloud 
-     * 
+     * Set sendcloud
+     *
      * @access public
      * @return void
      */
@@ -208,7 +208,7 @@ class mailModel extends model
 
     /**
      * Set Ztcloud.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -220,7 +220,7 @@ class mailModel extends model
 
     /**
      * PHPmail.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -231,7 +231,7 @@ class mailModel extends model
 
     /**
      * Sendmail.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -242,7 +242,7 @@ class mailModel extends model
 
     /**
      * Gmail.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -260,12 +260,12 @@ class mailModel extends model
 
     /**
      * Send email
-     * 
-     * @param  array   $toList 
-     * @param  string  $subject 
-     * @param  string  $body 
-     * @param  array   $ccList 
-     * @param  bool    $includeMe 
+     *
+     * @param  array   $toList
+     * @param  string  $subject
+     * @param  string  $body
+     * @param  array   $ccList
+     * @param  bool    $includeMe
      * @access public
      * @return void
      */
@@ -300,7 +300,7 @@ class mailModel extends model
         /* Get realname and email of users. */
         $this->loadModel('user');
         $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
-        
+
         $this->clear();
 
         /* Replace full webPath image for mail. */
@@ -312,7 +312,7 @@ class mailModel extends model
         $body = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $sysURL . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $body);
         $body = preg_replace('/<img (.*)src="\/?data\/upload/', '<img $1 src="' . $sysURL . $this->config->webRoot . 'data/upload', $body);
 
-        try 
+        try
         {
             /* Add for task #5301. */
             if(function_exists('putenv')) putenv('RES_OPTIONS=retrans:1 retry:1 timeout:1 attempts:1');
@@ -325,7 +325,7 @@ class mailModel extends model
             $this->setErrorLang();
             $this->mta->send();
         }
-        catch (phpmailerException $e) 
+        catch (phpmailerException $e)
         {
             $mailError = ob_get_contents();
             if(extension_loaded('mbstring'))
@@ -334,8 +334,8 @@ class mailModel extends model
                 if($encoding != 'UTF-8') $mailError = mb_convert_encoding($mailError, 'utf8', $encoding);
             }
             $this->errors[] = nl2br(trim(strip_tags($e->errorMessage()))) . '<br />' . $mailError;
-        } 
-        catch (Exception $e) 
+        }
+        catch (Exception $e)
         {
             $this->errors[] = trim(strip_tags($e->getMessage()));
         }
@@ -352,9 +352,9 @@ class mailModel extends model
 
     /**
      * Set to address
-     * 
-     * @param  array    $toList 
-     * @param  array    $emails 
+     *
+     * @param  array    $toList
+     * @param  array    $emails
      * @access public
      * @return void
      */
@@ -371,9 +371,9 @@ class mailModel extends model
 
     /**
      * Set cc.
-     * 
-     * @param  array    $ccList 
-     * @param  array    $emails 
+     *
+     * @param  array    $ccList
+     * @param  array    $emails
      * @access public
      * @return void
      */
@@ -391,9 +391,9 @@ class mailModel extends model
     }
 
     /**
-     * Set subject 
-     * 
-     * @param  string    $subject 
+     * Set subject
+     *
+     * @param  string    $subject
      * @access public
      * @return void
      */
@@ -404,8 +404,8 @@ class mailModel extends model
 
     /**
      * Set body.
-     * 
-     * @param  string    $body 
+     *
+     * @param  string    $body
      * @access public
      * @return void
      */
@@ -416,8 +416,8 @@ class mailModel extends model
 
     /**
      * Convert charset.
-     * 
-     * @param  string    $string 
+     *
+     * @param  string    $string
      * @access public
      * @return string
      */
@@ -428,8 +428,8 @@ class mailModel extends model
     }
 
     /**
-     * Set error lang. 
-     * 
+     * Set error lang.
+     *
      * @access public
      * @return void
      */
@@ -437,10 +437,10 @@ class mailModel extends model
     {
         $this->mta->SetLanguage($this->app->getClientLang());
     }
-   
+
     /**
      * Clear.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -452,9 +452,9 @@ class mailModel extends model
 
     /**
      * Check system if there is a mail at least.
-     * 
+     *
      * @access public
-     * @return bool | object 
+     * @return bool | object
      */
     public function mailExist()
     {
@@ -463,7 +463,7 @@ class mailModel extends model
 
     /**
      * Is error?
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -473,8 +473,8 @@ class mailModel extends model
     }
 
     /**
-     * Get errors. 
-     * 
+     * Get errors.
+     *
      * @access public
      * @return void
      */
@@ -487,12 +487,12 @@ class mailModel extends model
 
     /**
      * Add queue.
-     * 
-     * @param  string $toList 
-     * @param  string $subject 
-     * @param  string $body 
-     * @param  string $ccList 
-     * @param  bool   $includeMe 
+     *
+     * @param  string $toList
+     * @param  string $subject
+     * @param  string $body
+     * @param  string $ccList
+     * @param  bool   $includeMe
      * @access public
      * @return void
      */
@@ -515,7 +515,7 @@ class mailModel extends model
         $toList = join(',', $toList);
         $ccList = join(',', $ccList);
         if(empty($toList) or empty($subject)) return true;
-        
+
         $data = new stdclass();
         $data->objectType  = 'mail';
         $data->toList      = $toList;
@@ -529,8 +529,8 @@ class mailModel extends model
 
     /**
      * Get queue.
-     * 
-     * @param  string $status 
+     *
+     * @param  string $status
      * @access public
      * @return array
      */
@@ -634,11 +634,11 @@ class mailModel extends model
     }
 
     /**
-     * Sync to sendCloud 
-     * 
-     * @param  string $action 
-     * @param  string $email 
-     * @param  string $userName 
+     * Sync to sendCloud
+     *
+     * @param  string $action
+     * @param  string $email
+     * @param  string $userName
      * @access public
      * @return object
      */
