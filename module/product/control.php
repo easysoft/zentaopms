@@ -1159,31 +1159,25 @@ class product extends control
         $kanbanGroup = $this->product->getStats4Kanban();
         extract($kanbanGroup);
 
-        $products      = array();
         $myProducts    = array();
         $otherProducts = array();
         foreach($productList as $productID => $product)
         {
-            if($product->status == 'normal' and $product->PO == $this->app->user->account)
-            {
-                $myProducts[$product->program][$productID] = $productID;
-            }
-            elseif($product->status == 'normal' and !($product->PO == $this->app->user->account))
-            {
-                $otherProducts[$product->program][$productID] = $productID;
-            }
+            if($product->status != 'normal') continue;
+            if($product->PO == $this->app->user->account) $myProducts[$product->program][] = $productID;
+            else $otherProducts[$product->program][] = $productID;
         }
 
-        $products['myProducts']    = $myProducts;
-        $products['otherProducts'] = $otherProducts;
+        $kanbanList = array();
+        if(!empty($myProducts))    $kanbanList['my']    = $myProducts;
+        if(!empty($otherProducts)) $kanbanList['other'] = $otherProducts;
 
         $this->view->title            = $this->lang->product->kanban;
-        $this->view->products         = $products;
+        $this->view->kanbanList       = $kanbanList;
         $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programList;
         $this->view->productList      = $productList;
         $this->view->planList         = $planList;
         $this->view->projectList      = $projectList;
-        $this->view->executionList    = $executionList;
         $this->view->projectProduct   = $projectProduct;
         $this->view->latestExecutions = $projectLatestExecutions;
         $this->view->hourList         = $hourList;
