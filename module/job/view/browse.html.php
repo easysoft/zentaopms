@@ -50,7 +50,7 @@
       </thead>
       <tbody>
         <?php foreach($jobList as $id => $job):?>
-I       <?php
+        <?php
         if(strtolower($job->engine) == 'gitlab')
         {
             $pipeline = json_decode($job->pipeline);
