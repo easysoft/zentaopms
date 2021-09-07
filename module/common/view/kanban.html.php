@@ -33,6 +33,8 @@
 #kanbanList .kanban-item.has-left-border.border-left-red {border-left-color: #ff5d5d;}
 #kanbanList .kanban-item.has-left-border.border-left-blue {border-left-color: #0991ff;}
 
+.kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
+
 #kanbanList .kanban-header-col[data-type="doingProject"],
 #kanbanList .kanban-header-col[data-type="doingProject"] + .kanban-header-col[data-type="doingExecution"] {padding: 38px 10px 0;}
 #kanbanList .kanban-header-col[data-type="doingProject"]:after {content: attr(data-span-text); display: block; position: absolute; z-index: 10; left: 0; right:  -100%; right: calc(-100% - 3px); top: 0; line-height: 36px; text-align: center; font-weight: bold; border-bottom: 3px solid #fff; background-color: #ededed;}
@@ -41,6 +43,7 @@
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item:hover {box-shadow: none;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item > .title {white-space: normal;}
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-item {text-align: center;}
+#kanbanList .kanban-affixed .kanban-header-col[data-type="doingProject"]:after {background-color: #606060;}
 </style>
 <script>
 /**
@@ -290,6 +293,44 @@ function renderKanbanItem(item, $item, col)
     return $item;
 }
 
+/**
+ * Affix kanban board header
+ * @param {JQuery}  $kanbanBoard Kanban board element
+ * @param {boolean} affixed      Whether to affix the given board
+ */
+function affixKanbanHeader($kanbanBoard, affixed)
+{
+    $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
+    var $header = $kanbanBoard.children('.kanban-header');
+    $header.css('width', affixed ? $kanbanBoard.width() : '');
+    $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
+}
+
+/**
+ * Update kanban affix state for all boards in page
+ */
+function updateKanbanAffixState()
+{
+    var $boards = $('.kanban-board');
+    var $lastAffixedBoard = $boards.filter('.kanban-affixed');
+    var $currentAffixedBoard;
+    var currentOffsetTop = 0;
+    var scrollTop = $(window).scrollTop();
+    $('.kanban-board').each(function()
+    {
+        var $board = $(this);
+        var offsetTop = $board.offset().top;
+        if(scrollTop >= offsetTop && offsetTop > currentOffsetTop)
+        {
+            currentOffsetTop = offsetTop;
+            $currentAffixedBoard = $board;
+        }
+    });
+
+    if($lastAffixedBoard.length) affixKanbanHeader($lastAffixedBoard, false);
+    if($currentAffixedBoard) affixKanbanHeader($currentAffixedBoard, true);
+}
+
 /* Kanban color list for lane name */
 if(!window.kanbanColorList) window.kanbanColorList = ['#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761'];
 
@@ -312,6 +353,29 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
             var color = kanbanColorList[index % kanbanColorList.length];
             $(this).css('background-color', color);
         });
+        updateKanbanAffixState();
     }
+});
+
+$(function()
+{
+    /* Update kanban affix state on window resize or scroll */
+    var updateTimer;
+    var updateCallback = function()
+    {
+        console.log('i');
+        updateKanbanAffixState();
+        updateTimer = null;
+    };
+    $(window).on('scroll resize', function(e)
+    {
+        if(updateTimer)
+        {
+            if(window.requestAnimationFrame) cancelAnimationFrame(updateTimer);
+            else clearTimeout(updateTimer);
+        }
+        if(window.requestAnimationFrame) updateTimer = requestAnimationFrame(updateCallback);
+        else updateTimer = setTimeout(updateCallback, 50);
+    });
 });
 </script>
