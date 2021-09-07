@@ -22,7 +22,7 @@ class mr extends control
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
 
         /* Sync GitLab MR to ZenTao Database. */
-        $this->mr->batchSyncMR($MRList);
+        $MRList = $this->mr->batchSyncMR($MRList);
 
         $this->view->title    = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList   = $MRList;

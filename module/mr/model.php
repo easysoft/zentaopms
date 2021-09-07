@@ -32,7 +32,7 @@ class mrModel extends model
      */
     public function getByID($id)
     {
-        return $this->dao->select('*')->from(TABLE_MR)->where('id')->eq($id)->fetch();
+        return $this->dao->findByID($id)->from(TABLE_MR)->fetch();
     }
 
     /**
@@ -234,8 +234,9 @@ class mrModel extends model
      */
     public function batchSyncMR($MRList)
     {
-        if(!empty($MRList)) foreach($MRList as $MR)
+        if(!empty($MRList)) foreach($MRList as $key => $MR)
         {
+            if($MR->status != 'opened') continue;
             $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
             if(isset($rawMR->iid))
             {
@@ -267,10 +268,16 @@ class mrModel extends model
                 }
                 /* Update MR in Zentao database. */
                 $this->dao->update(TABLE_MR)->data($newMR)
-                                            ->where('id')->eq($MR->id)
-                                            ->exec();
+                    ->where('id')->eq($MR->id)
+                    ->exec();
+
+                /* Refetch MR in Zentao database. */
+                $MR = $this->dao->findByID($MR->id)->from(TABLE_MR)->fetch();
+                $MRList[$key] = $MR;
             }
         }
+
+        return $MRList;
     }
 
     /**
@@ -290,9 +297,9 @@ class mrModel extends model
             foreach($todoList as $do)
             {
                 $todoDesc = $this->dao->select('*')
-                                      ->from(TABLE_TODO)
-                                      ->where('idvalue')->eq($do->id)
-                                      ->fetch();
+                    ->from(TABLE_TODO)
+                    ->where('idvalue')->eq($do->id)
+                    ->fetch();
                 if(empty($todoDesc))
                 {
                     $todo = new stdClass;
