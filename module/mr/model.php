@@ -238,7 +238,6 @@ class mrModel extends model
         {
 
             $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
-
             if(isset($rawMR->iid) and $rawMR->state != 'merged')
             {
                 /* create gitlab mr todo to zentao todo */

@@ -28,9 +28,6 @@ $lang->mr->statusList['opened'] = '开放中';
 $lang->mr->statusList['closed'] = '已关闭';
 $lang->mr->statusList['merged'] = '已合并';
 
-$lang->mr->gitlabsever = 'GitLabSever';
-$lang->mr->projectname = '项目名称';
-
 $lang->mr->mergeStatusList = array();
 $lang->mr->mergeStatusList['checking']         = '检查中';
 $lang->mr->mergeStatusList['can_be_merged']    = '可合并';
@@ -77,8 +74,6 @@ $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
 $lang->mr->mergeSuccess   = "已成功合并";
 
-$lang->mr->settings = '合并代码设置';
-$lang->mr->sync     = '设置同步';
 /**
  * Merge Command Document.
  *

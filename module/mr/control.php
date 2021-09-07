@@ -33,17 +33,6 @@ class mr extends control
     }
 
     /**
-     * settings MR function.
-     *
-     * @access public
-     * @return void
-     */
-    public function settings()
-    {
-        $this->display();
-    }
-
-    /**
      * Create MR function.
      *
      * @access public

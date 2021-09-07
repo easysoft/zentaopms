@@ -331,9 +331,6 @@ $lang->devops->menuOrder[20] = 'gitlab';
 $lang->devops->menuOrder[25] = 'jenkins';
 $lang->devops->menuOrder[30] = 'maintain';
 $lang->devops->menuOrder[35] = 'rules';
-
-$lang->devops->menu->mr['subMenu'] = new stdclass();
-$lang->devops->menu->mr['subMenu']->browse = array('link' => "{$lang->devops->settings}|mr|settings");
 /* Doc menu. */
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
