@@ -80,7 +80,7 @@ function computeWorkDays(currentID)
         var end   = new Date(endDate.replace(/-/g,"/"));
         var time  = end.getTime() - begin.getTime();
         var days  = parseInt(time / (1000 * 60 * 60 * 24)) + 1;
-        if(days != $("input:radio[name='delta']:checked").val()) $("input:radio[name='delta']:checked").attr('checked',false);
+        if(days != $("input:radio[name='delta']:checked").val() && $("input:radio[name='delta']:checked").val() != 999) $("input:radio[name='delta']:checked").attr('checked',false);
     }
 
     if(beginDate && endDate)
