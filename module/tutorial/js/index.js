@@ -216,7 +216,7 @@ $(function()
         var pageConfig = iWindow.config;
         var currentModule  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['module'] : pageConfig ? pageConfig.currentModule : '').toLowerCase();
         var currentMethod  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['method'] : pageConfig ? pageConfig.currentMethod : '').toLowerCase();
-        var targetStatus = status || {},
+        var targetStatus = {},
             $navTarget = $task.find('[data-target="nav"]').removeClass('active'),
             $formTarget = $task.find('[data-target="form"]').removeClass('active'),
             $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
@@ -224,7 +224,6 @@ $(function()
 
         if(targetStatus.nav)
         {
-            // check form target
             var $form = $$(task.nav.form);
             var $formWrapper = $form.closest('.main-content');
             if(!$formWrapper.length) $formWrapper = $form;
