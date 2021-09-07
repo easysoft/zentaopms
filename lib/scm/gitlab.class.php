@@ -282,14 +282,8 @@ class gitlab
         if(!scm::checkRevision($toRevision))   return array();
 
         $api    = "compare";
-        $params = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => 1);
-        if($fromProject)
-        {
-            $params['from'] = 'dev';
-            $params['to']   = 'master';
-            $params['from_project_id'] = $fromProject;
-            $params['straight']        = 1;
-        }
+        $params = array('from' => $fromRevision, 'to' => $toRevision);
+        if($fromProject) $params['from_project_id'] = $fromProject;
 
         if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
         $results = $this->fetch($api, $params);
