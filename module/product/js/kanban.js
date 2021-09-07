@@ -55,7 +55,7 @@ function processKanbanData(key, programsData)
                     $.each(productProjects, function(projectID)
                     {
                         var project = projectList[projectID];
-                        if(!project) return;
+                        if(!project || !project.id) return;
                         var projectItem = $.extend({}, project, {id: 'project-' + projectID, _id: projectID});
                         items.doingProject.push(projectItem);
                     });
@@ -70,7 +70,7 @@ function processKanbanData(key, programsData)
                 $.each(productProjects, function(projectID)
                 {
                     var execution = latestExecutions[projectID];
-                    if(!execution) return;
+                    if(!execution || !execution.id) return;
                     var executionItem = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                     items.doingExecution.push(executionItem);
                 });
@@ -83,7 +83,7 @@ function processKanbanData(key, programsData)
             {
                 $.each(releases, function(releaseID, release)
                 {
-                    if(!release) return;
+                    if(!release || !release.id) return;
                     var releaseItem = $.extend({}, release, {id: 'release-' + releaseID, _id: releaseID});
                     items.normalRelease.push(releaseItem);
                 });

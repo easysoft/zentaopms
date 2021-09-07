@@ -39,7 +39,7 @@ function processKanbanData(key, programGroup)
                     if(status === 'doing')
                     {
                         var execution = latestExecutions[projectID];
-                        if(execution)
+                        if(execution && execution.id)
                         {
                             var executionItem = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                             items.doingExecution = [executionItem];

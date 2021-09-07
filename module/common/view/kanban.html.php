@@ -148,7 +148,7 @@ function renderProjectItem(item, $item)
 
     if(item.status === 'doing')
     {
-        var progress = item.hours ? Math.round(item.hours.progress || 0) : 0;
+        var progress = item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress || 0) : 0;
         var $progress = $item.find('.progress-pie');
         if(!$progress.length)
         {
@@ -191,7 +191,7 @@ function renderExecutionItem(item, $item)
     }
     $title.text(item.name).attr('title', item.name);
 
-    var progress = item.progress || (item.hours ? item.hours.progress : undefined);
+    var progress = item.progress || (item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress) : undefined);
     if(progress === undefined && window.hourList)
     {
         var hoursInfo = window.hourList[item._id];
@@ -320,14 +320,18 @@ function updateKanbanAffixState()
     {
         var $board = $(this);
         var offsetTop = $board.offset().top;
-        if(scrollTop >= offsetTop && offsetTop > currentOffsetTop)
+        if(scrollTop >= offsetTop && offsetTop > currentOffsetTop && scrollTop < (offsetTop + $board.outerHeight()))
         {
             currentOffsetTop = offsetTop;
             $currentAffixedBoard = $board;
         }
     });
 
-    if($lastAffixedBoard.length) affixKanbanHeader($lastAffixedBoard, false);
+    if($lastAffixedBoard.length && (!$currentAffixedBoard || $lastAffixedBoard[0] !== $currentAffixedBoard[0]))
+    {
+        affixKanbanHeader($lastAffixedBoard, false);
+    }
+
     if($currentAffixedBoard) affixKanbanHeader($currentAffixedBoard, true);
 }
 
