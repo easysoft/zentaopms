@@ -77,7 +77,7 @@ $lang->mr->mergeSuccess   = "已成功合并";
 /**
  * Merge Command Document.
  *
- * %s source_roject::http_url_to_repo
+ * %s source_project::http_url_to_repo
  * %s mr::source_branch
  * %s source_project::path_with_namespace . '-' . mr::source_branch
  * %s mr::target_branch
@@ -87,6 +87,7 @@ $lang->mr->mergeSuccess   = "已成功合并";
 $lang->mr->commandDocument = <<< EOD
 <div class='detail-title'>在本地检出、审核和手动合并</div>
 <div class='detail-content'>
+  <p><strong>注意：您在本地合并后此合并请求将变为不可合并状态，需要删除此合并请求或者提交新的代码。</strong></p>
   <p>
     第 1 步. 获取并查看此合并请求的分支
     <pre>

@@ -86,6 +86,7 @@ $lang->mr->mergeSuccess   = "Merge Request Successfully";
 $lang->mr->commandDocument = <<< EOD
 <div class='detail-title'>Check out, review and merge locally</div>
 <div class='detail-content'>
+  <p><strong>Note: This merge request status will be changed after you merge locally and you will need to delete this merge request or submit new code.</strong></p>
   <p>
     step 1. Fetch and check out the branch for this merge request
     <pre>
