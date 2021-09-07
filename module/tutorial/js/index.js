@@ -472,6 +472,7 @@ $(function()
         });
 
         $('.task-num-finish').text(finishCount);
+        $('.tasks-count').text(totalCount);
         var isFinishAll = finishCount >= totalCount;
         if(isFinishAll) current = $tasks.children('li').first().data('name');
 
