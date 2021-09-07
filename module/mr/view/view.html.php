@@ -60,6 +60,8 @@
     </div>
   </div>
   <br>
-  <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) echo html::linkButton('<i class="icon icon-checked"></i> ' . $lang->mr->acceptMR, inlink( 'accept', "mr=$MR->id"), 'self', '', 'btn btn-wide btn-primary');?>
+  <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts):?>
+  <?php echo html::a(inlink( 'accept', "mr=$MR->id"), '<i class="icon icon-checked"></i> ' . $lang->mr->acceptMR, '', "id='mergeButton' class='btn btn-wide btn-primary'");?>
+  <?php endif;?>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
