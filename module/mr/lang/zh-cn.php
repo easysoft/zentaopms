@@ -65,9 +65,9 @@ $lang->mr->pipelineStatus['success']  = "已通过";
 $lang->mr->pipelineStatus['failed']   = "未通过";
 $lang->mr->pipelineStatus['canceled'] = "已取消";
 
-$lang->mr->MRHasConflicts = "是否存在合并冲突";
-$lang->mr->hasConflicts   = "存在合并冲突";
-$lang->mr->hasNoConflict  = "可以合并请求";
+$lang->mr->MRHasConflicts = "是否存在冲突";
+$lang->mr->hasConflicts   = "存在冲突或等待提交";
+$lang->mr->hasNoConflict  = "可以合并";
 $lang->mr->mergeByManual  = "此合并请求可以手动合并，请使用以下";
 $lang->mr->commandLine    = "合并命令";
 $lang->mr->acceptMR       = "合并";

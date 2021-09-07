@@ -65,8 +65,8 @@ $lang->mr->pipelineStatus['failed']   = "failed";
 $lang->mr->pipelineStatus['canceled'] = "canceled";
 
 $lang->mr->MRHasConflicts = "Merge Request has a conflict";
-$lang->mr->hasConflicts   = "There are merge conflicts";
-$lang->mr->hasNoConflict  = "Can merge request";
+$lang->mr->hasConflicts   = "There are merge conflicts or wait for push";
+$lang->mr->hasNoConflict  = "Can merge";
 $lang->mr->mergeByManual  = "This merge request can be merged manually, please refer to";
 $lang->mr->commandLine    = "Merge Request command";
 $lang->mr->acceptMR       = "Accept Merge request ";
