@@ -191,7 +191,6 @@ class mrModel extends model
     public function apiSyncMR($MR)
     {
         $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
-
         /* Sync MR in ZenTao database whatever status of MR in GitLab. */
         if(isset($rawMR->iid))
         {
@@ -237,9 +236,8 @@ class mrModel extends model
     {
         if(!empty($MRList)) foreach($MRList as $MR)
         {
-
             $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
-            if(isset($rawMR->iid) and $rawMR->state != 'merged')
+            if(isset($rawMR->iid))
             {
                 /* create gitlab mr todo to zentao todo */
                 $this->batchSyncTodo($MR->gitlabID, $MR->targetProject);
@@ -248,6 +246,7 @@ class mrModel extends model
                 $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
 
                 $newMR = new stdclass;
+
                 foreach($map as $syncField => $config)
                 {
                     $value = '';
