@@ -23,7 +23,6 @@ function processKanbanData(key, programsData)
     var lanes = [];
     $.each(programsData, function(programId, programProducts)
     {
-        var programName = programList[programId];
         var subLanes = [];
         programProducts.forEach(function(productID)
         {
@@ -92,6 +91,8 @@ function processKanbanData(key, programsData)
             subLanes.push({id: kanbanId + '-' + programId + '-' + productID, items: items});
         });
 
+        var programName = programList[programId];
+        if(programName === undefined) programName = '(' + programId + ')';
         lanes.push({id: programId, kanban: kanbanId, name: programName, subLanes: subLanes});
     });
 
@@ -103,6 +104,7 @@ $(function()
     /* Init all kanbans */
     $.each(kanbanList, function(key, programsData)
     {
-        $('#kanban-' + key).kanban({data: processKanbanData(key, programsData)});
+        var data = processKanbanData(key, programsData);
+        $('#kanban-' + key).kanban({data: data});
     });
 });

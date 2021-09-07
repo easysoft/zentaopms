@@ -195,7 +195,7 @@ function renderExecutionItem(item, $item)
     if(progress === undefined && window.hourList)
     {
         var hoursInfo = window.hourList[item._id];
-        progress = Math.round(hoursInfo.progress);
+        progress = hoursInfo ? Math.round(hoursInfo.progress) : undefined;
     }
     if(progress !== undefined)
     {
