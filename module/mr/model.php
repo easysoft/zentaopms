@@ -439,15 +439,13 @@ class mrModel extends model
     public function getDiffs($MR)
     {
         $gitlab = $this->gitlab->getByID($MR->gitlabID);
-        $fromProject = $MR->sourceProject;
-        $toProject   = $MR->targetProject;
 
         $this->loadModel('repo');
         $repo = new stdclass;
         $repo->SCM      = 'GitLab';
         $repo->gitlab   = $gitlab->id;
-        $repo->project  = $toProject;
-        $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $toProject);
+        $repo->project  = $MR->targetProject;
+        $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $MR->targetProject);
         $repo->client   = $gitlab->url;
         $repo->password = $gitlab->token;
 
@@ -456,7 +454,7 @@ class mrModel extends model
 
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
-        return $scm->diff('', $fromProject, $toProject, $parse = true, $fromProject);
+        return $scm->diff('', $MR->sourceBranch, $MR->targetBranch, $parse = true, $MR->sourceProject);
     }
 
     /**
