@@ -174,7 +174,8 @@ $(function()
             title: text,
             placement: placement,
             container: 'body',
-            tipClass: 'tooltip-warning tooltip-max'
+            tipClass: 'tooltip-warning tooltip-max',
+            html: true
         }, options);
         $e = $e.first();
         if($e.css('display') == 'none')
