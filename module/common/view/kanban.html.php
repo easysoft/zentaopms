@@ -305,10 +305,13 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     {
         if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
     },
-    onRenderLaneName: function($name, lane)
+    onRenderKanban: function($kanban)
     {
-        var color = kanbanColorList[$.zui.strCode(lane.kanban + '-' + lane.id) % kanbanColorList.length];
-        $name.css('background-color', color);
+        $kanban.find('.kanban-lane-name').each(function(index)
+        {
+            var color = kanbanColorList[index % kanbanColorList.length];
+            $(this).css('background-color', color);
+        });
     }
 });
 </script>
