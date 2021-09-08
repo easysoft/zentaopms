@@ -185,7 +185,11 @@ class build extends control
     {
         $buildID = (int)$buildID;
         $build   = $this->build->getByID($buildID, true);
-        if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$build)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
         $this->session->project = $build->project;
 
         $this->loadModel('story');

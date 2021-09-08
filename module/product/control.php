@@ -694,7 +694,7 @@ class product extends control
 
         if(!$product)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             die(js::error($this->lang->notFound) . js::locate('back'));
         }
 
@@ -1159,26 +1159,21 @@ class product extends control
         $kanbanGroup = $this->product->getStats4Kanban();
         extract($kanbanGroup);
 
-        $products      = array();
         $myProducts    = array();
         $otherProducts = array();
         foreach($productList as $productID => $product)
         {
-            if($product->status == 'normal' and $product->PO == $this->app->user->account)
-            {
-                $myProducts[$product->program][$productID] = $productID;
-            }
-            elseif($product->status == 'normal' and !($product->PO == $this->app->user->account))
-            {
-                $otherProducts[$product->program][$productID] = $productID;
-            }
+            if($product->status != 'normal') continue;
+            if($product->PO == $this->app->user->account) $myProducts[$product->program][] = $productID;
+            else $otherProducts[$product->program][] = $productID;
         }
 
-        $products['myProducts']    = $myProducts;
-        $products['otherProducts'] = $otherProducts;
+        $kanbanList = array();
+        if(!empty($myProducts))    $kanbanList['my']    = $myProducts;
+        if(!empty($otherProducts)) $kanbanList['other'] = $otherProducts;
 
         $this->view->title            = $this->lang->product->kanban;
-        $this->view->products         = $products;
+        $this->view->kanbanList       = $kanbanList;
         $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programList;
         $this->view->productList      = $productList;
         $this->view->planList         = $planList;

@@ -44,11 +44,14 @@ class tasksEntry extends entry
 
     public function post($executionID)
     {
-        $fields = 'name,type,assignedTo,estimate,story,parent,execution,module,pri,desc';
+        $fields = 'name,type,assignedTo,estimate,story,parent,execution,module,pri,desc,estStarted,deadline,mailto';
         $this->batchSetPost($fields);
 
+        $assignedTo = $this->request('assignedTo');
+        if($assignedTo and !is_array($assignedTo)) $this->setPost('assignedTo', array($assignedTo));
+
         $control = $this->loadController('task', 'create');
-        $this->requireFields('name,assignedTo,type');
+        $this->requireFields('name,assignedTo,type,estStarted,deadline');
 
         $control->create($executionID, $this->request('storyID', 0), $this->request('moduleID', 0), $this->request('copyTaskID', 0), $this->request('copyTodoID', 0));
         

@@ -196,7 +196,7 @@
             <th title='<?php echo $lang->story->taskCount?>' class='c-count'><?php echo $lang->story->taskCountAB;?></th>
             <th title='<?php echo $lang->story->bugCount?>'  class='c-count'><?php echo $lang->story->bugCountAB;?></th>
             <th title='<?php echo $lang->story->caseCount?>' class='c-count'><?php echo $lang->story->caseCountAB;?></th>
-            <th class='c-actions-5 text-center {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='c-actions-7 text-center {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody id='storyTableList' class='sortable'>
@@ -255,6 +255,22 @@
               if($canBeChanged)
               {
                   $param = "executionID={$execution->id}&story={$story->id}&moduleID={$story->module}";
+
+                  $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
+                  $story->notReview = isset($story->notReview) ? $story->notReview : array();
+
+                  if(common::hasPriv('story', 'review'))
+                  {
+                      $reviewDisabled = in_array($app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changed') ? '' : 'disabled';
+                      $story->from = 'execution';
+                      common::printIcon('story', 'review', "story={$story->id}&from=story", $story, 'list', 'search', '', $reviewDisabled, false, "data-group=execution");
+                  }
+
+                  if(common::hasPriv('story', 'recall'))
+                  {
+                      $recallDisabled = empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) ? '' : 'disabled';
+                      common::printIcon('story', 'recall', "story={$story->id}", $story, 'list', 'back', 'hiddenwin', $recallDisabled, '', '', $lang->story->recall);
+                  }
 
                   $lang->task->create = $lang->execution->wbs;
                   $toTaskDisabled = strpos('draft,closed', $story->status) !== false ? 'disabled' : '';

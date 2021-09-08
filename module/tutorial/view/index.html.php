@@ -21,12 +21,12 @@
       <div class='finish-all'>
         <div class='start-icon'><i class='icon icon-check-circle icon-front'></i></div>
         <h3><?php echo $lang->tutorial->congratulation;?></h3>
-        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-restart'></i>  <?php echo $lang->tutorial->restart;?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit');?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit;?></a>
+        <button type='button' class='btn btn-outline btn-reset-tasks'><i class='icon icon-restart'></i>  <?php echo $lang->tutorial->restart;?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit');?>' class='btn btn-outline'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit;?></a>
       </div>
       <div class='finish'>
         <div class='start-icon'><i class='icon icon-check-circle icon-front'></i></div>
         <h3><?php echo $lang->tutorial->congratulateTask;?></h3>
-        <button type='button' class='btn btn-success btn-next-task btn-task'><?php echo $lang->tutorial->nextTask;?> <i class='icon icon-angle-right'></i></button>
+        <button type='button' class='btn btn-outline btn-next-task btn-task'><?php echo $lang->tutorial->nextTask;?> <i class='icon icon-angle-right'></i></button>
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@
       </div>
     </section>
     <section id='all'>
-      <h4><?php echo $lang->tutorial->allTasks;?> (<span class='task-num-finish'>2</span>/<span class='tasks-count'><?php echo count($lang->tutorial->tasks);?></span>)</h4>
+      <h4><?php echo $lang->tutorial->allTasks;?> (<span class='task-num-finish'></span>/<span class='tasks-count'></span>)</h4>
       <div class='progress' id='tasksProgress'>
         <div class='progress-text'></div>
         <div class='progress-bar' style='width: 0%'>
@@ -76,6 +76,7 @@
         <?php
         if(isset($task['mode']) && $task['mode'] != $mode) continue;
         $nav = $task['nav'];
+        if(!commonModel::hasPriv($nav['module'], $nav['method'])) continue;
         $task['name'] = $name;
         $task['id']   = ++$idx;
         $task['url']  = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');

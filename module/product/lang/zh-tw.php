@@ -142,8 +142,6 @@ $lang->product->doingExecution  = '進行中的執行';
 $lang->product->normalRelease   = '正常的發布';
 $lang->product->emptyProgram    = '無項目集歸屬產品';
 
-$lang->product->kanbanColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
-
 $lang->product->allStory             = '所有';
 $lang->product->allProduct           = '全部' . $lang->productCommon;
 $lang->product->allProductsOfProject = '全部關聯' . $lang->productCommon;

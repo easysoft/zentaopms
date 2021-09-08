@@ -21,24 +21,6 @@ include dirname(__FILE__) . '/base/router.class.php';
 class router extends baseRouter
 {
     /**
-     * 请求的原始模块名。
-     * The requestd module name parsed from a URL.
-     *
-     * @var string
-     * @access public
-     */
-    public $rawModule;
-
-    /**
-     * 请求的原始方法名。
-     * The requested method name parsed from a URL.
-     *
-     * @var string
-     * @access public
-     */
-    public $rawMethod;
-
-    /**
      * 请求的原始参数。
      * The requested params parsed from a URL.
      *

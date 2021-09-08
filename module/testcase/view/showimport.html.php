@@ -137,8 +137,8 @@ $(function()
             }
             echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
             echo html::hidden('pagerID', $pagerID);
-            echo ' &nbsp; ' . html::linkButton($lang->goback, $this->inlink('browse', "productID=$productID"), 'self', '', 'btn btn-wide');
-            echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
+            echo html::linkButton($lang->goback, $this->inlink('browse', "productID=$productID"), 'self', '', 'btn btn-wide');
+            echo sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>
           </td>
         </tr>

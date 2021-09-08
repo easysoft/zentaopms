@@ -10,15 +10,40 @@ class productEntry extends Entry
 {
     public function get($productID)
     {
+        $fields = $this->param('fields');
+
         $control = $this->loadController('product', 'view');
         $control->view($productID);
 
         $data = $this->getData();
-        if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->product, 'createdDate:time'));
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail')
+        {
+            return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
+        }
 
-        $this->sendError(400, 'error');
+        $product = $this->format($data->data->product, 'createdDate:time');
+        if(!$fields) return $this->send(200, $product);
+
+        /* Set other fields. */
+        $fields = explode(',', $fields);
+        foreach($fields as $field)
+        {
+            switch($field)
+            {
+                case 'modules':
+                    $control = $this->loadController('tree', 'browse');
+                    $control->browse($productID, 'story');
+                    $data = $this->getData();
+                    if(isset($data->status) and $data->status == 'success')
+                    {
+                        $product->modules = $data->data->tree;
+                    }
+                    break;
+            }
+        }
+
+        return $this->send(200, $product);
     }
 
     public function put($productID)

@@ -81,6 +81,7 @@ $(function()
 
     var clearTips = function()
     {
+        appsWindow.$('#menuMainNav > li.hl-tutorial').removeClass('hl-tutorial hl-in').tooltip('destroy');
         var $menuMainNav = appsWindow.$('#menuMainNav');
         $menuMainNav.find('.hl-tutorial').removeClass('hl-tutorial hl-in');
         $menuMainNav.find('.tooltip-tutorial').tooltip('destroy').removeClass('tooltip-tutorial');
@@ -173,7 +174,8 @@ $(function()
             title: text,
             placement: placement,
             container: 'body',
-            tipClass: 'tooltip-warning tooltip-max'
+            tipClass: 'tooltip-warning tooltip-max',
+            html: true
         }, options);
         $e = $e.first();
         if($e.css('display') == 'none')
@@ -205,6 +207,8 @@ $(function()
 
     var checkTask = function()
     {
+        clearTips();
+
         var iWindow = getAppWindow();
         if(!iWindow || !iWindow.$) return tryCheckTask();
         var task = tasks[current];
@@ -216,7 +220,7 @@ $(function()
         var pageConfig = iWindow.config;
         var currentModule  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['module'] : pageConfig ? pageConfig.currentModule : '').toLowerCase();
         var currentMethod  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['method'] : pageConfig ? pageConfig.currentMethod : '').toLowerCase();
-        var targetStatus = status || {},
+        var targetStatus = {},
             $navTarget = $task.find('[data-target="nav"]').removeClass('active'),
             $formTarget = $task.find('[data-target="form"]').removeClass('active'),
             $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
@@ -224,7 +228,6 @@ $(function()
 
         if(targetStatus.nav)
         {
-            // check form target
             var $form = $$(task.nav.form);
             var $formWrapper = $form.closest('.main-content');
             if(!$formWrapper.length) $formWrapper = $form;
@@ -326,8 +329,6 @@ $(function()
             }
             else
             {
-                $appNav.removeClass('hl-tutorial hl-in').tooltip('destroy');
-
                 var menuModule = task.nav.menuModule || task.nav['module'];
                 var $navbar = $$('#navbar');
                 var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
@@ -472,6 +473,7 @@ $(function()
         });
 
         $('.task-num-finish').text(finishCount);
+        $('.tasks-count').text(totalCount);
         var isFinishAll = finishCount >= totalCount;
         if(isFinishAll) current = $tasks.children('li').first().data('name');
 

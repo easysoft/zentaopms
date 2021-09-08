@@ -141,6 +141,24 @@ class baseRouter
     public $clientLang;
 
     /**
+     * 请求的原始模块名。
+     * The requestd module name parsed from a URL.
+     *
+     * @var string
+     * @access public
+     */
+    public $rawModule;
+
+    /**
+     * 请求的原始方法名。
+     * The requested method name parsed from a URL.
+     *
+     * @var string
+     * @access public
+     */
+    public $rawMethod;
+
+    /**
      * 当前页面所在的应用，用于左侧菜单栏判断。
      * The current app code(url: '#app=?'), highlight left menu.
      *

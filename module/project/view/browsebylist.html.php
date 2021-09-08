@@ -13,6 +13,13 @@
 <style>
 .project-type-label.label-outline {width: 50px; min-width: 50px;}
 .project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
+
+#projectTableList .project-name {position: relative; display: flex; align-items: center;}
+#projectTableList .project-name > span,
+#projectTableList .project-name > span {flex: none;}
+#projectTableList .project-name > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px); padding: 0 5px;}
+#projectTableList .project-name.has-prefix > a,
+#projectTableList .project-name.has-surfix > a {max-width: calc(100% - 100px);}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if($this->config->systemMode == 'new'):?>
@@ -95,6 +102,7 @@
             {
               if($value->id == 'status' and $browseType !== 'all') $value->show = false;
               if($value->id == 'teamCount' and $browseType == 'all') $value->show = false;
+              if(commonModel::isTutorialMode() && ($value->id == 'PM' || $value->id == 'budget' || $value->id == 'teamCount')) $value->show = false;
               if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
             }
             ?>

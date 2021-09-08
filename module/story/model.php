@@ -809,10 +809,13 @@ class storyModel extends model
                 $story->reviewedBy = $oldStory->reviewedBy;
                 $story = $this->updateStoryByReview($storyID, $oldStory, $story);
             }
+
+            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
+            $story->reviewers    = implode(',', array_keys($this->getReviewerPairs($storyID, $oldStory->version)));
         }
 
         $this->dao->update(TABLE_STORY)
-            ->data($story)
+            ->data($story, 'reviewers')
             ->autoCheck()
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
@@ -889,8 +892,6 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
-            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-            $story->reviewers    = implode(',', array_keys($this->getReviewerPairs($storyID, $oldStory->version)));
             unset($oldStory->parent);
             unset($story->parent);
             return common::createChanges($oldStory, $story);
@@ -3768,7 +3769,7 @@ class storyModel extends model
 
                     common::printIcon('story', 'change', $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'review', $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
-                    if($this->app->tab != 'project') common::printIcon('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
+                    common::printIcon('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
                     common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");

@@ -134,7 +134,6 @@ class productIssuesEntry extends entry
             }
 
             /* Get bugs. */
-            /* Get stories. */
             if(empty($labelTypes) or in_array('bug', $labelTypes))
             {
                 $query = $this->dao->select($bugFields)->from(TABLE_BUG)
@@ -205,7 +204,7 @@ class productIssuesEntry extends entry
                 $r->lastEditedBy   = $task->lastEditedDate < '1970-01-01 01:01:01' ? $task->openedBy   : $task->lastEditedBy;
                 $r->status         = $issue['status'];
                 $r->url            = helper::createLink('task', 'view', "taskID=$task->id");
-                $r->assignedTo = array();
+                $r->assignedTo     = array();
 
                 /* Get assignees for task, the task object has the type of multiple assign only so far. */
                 $users = $this->dao->select('account')->from(TABLE_TEAM)
@@ -232,7 +231,7 @@ class productIssuesEntry extends entry
                 }
 
             }
-            else if($issue['type'] == 'story')
+            elseif($issue['type'] == 'story')
             {
                 $story = $stories[$issue['id']];
 
@@ -256,7 +255,7 @@ class productIssuesEntry extends entry
                     $r->assignedTo = array($story->assignedTo);
                 }
             }
-            else if($issue['type'] == 'bug')
+            elseif($issue['type'] == 'bug')
             {
                 $bug = $bugs[$issue['id']];
 

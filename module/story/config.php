@@ -199,5 +199,5 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = '200';
+$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '220' : '200';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';

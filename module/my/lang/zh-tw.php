@@ -93,18 +93,21 @@ if($config->systemMode == 'new') $lang->my->executionLink = '執行預設着陸�
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '預設進入項目集列表，可以查看所有的項目集';
 $lang->my->programLinkList['program-project'] = '預設進入最近一個項目集的項目列表，可以查看當前項目集下所有項目';
+if($config->systemMode == 'new') $lang->my->programLinkList['program-kanban'] = '默認進入項目集看板，可以視覺化的查看到所有項目集的進展情况';
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-index']     = '預設進入產品主頁，可以瞭解公司整體的產品狀況';
 $lang->my->productLinkList['product-all']       = '預設進入產品列表，可以查看所有的產品';
 $lang->my->productLinkList['product-dashboard'] = '預設進入最近一個產品儀表盤，可以查看當前產品概況';
 $lang->my->productLinkList['product-browse']    = '預設進入最近一個產品的需求列表，可以查看當前產品下的需求信息';
+$lang->my->productLinkList['product-kanban']    = '默認進入產品看板，可以視覺化的查看到所有產品的進展情况';
 
 global $config;
 $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = '預設進入項目列表，可以查看所有的項目';
 $lang->my->projectLinkList['project-execution'] = '預設進入項目下所有執行列表，查看所有執行信息';
 $lang->my->projectLinkList['project-index']     = '預設進入最近一個項目儀表盤，可以查看當前項目概況';
+if($config->systemMode == 'new') $lang->my->projectLinkList['project-kanban'] = '默認進入項目看板，可以視覺化的查看到所有項目的進展情况';
 
 $lang->my->executionLinkList = array();
 if($config->systemMode == 'new')
@@ -122,5 +125,3 @@ $lang->my->guideChangeTheme = <<<EOT
   <p>滑鼠經過<span style='color: #0c60e1'>【頭像-主題-青春藍】</span>，點擊青春藍，設置成功！</p>
 </div>
 EOT;
-
-$lang->my->confirmCloseTutorial = '您確認要關閉該區塊的新手引導功能嗎？關閉後您還可以在個人中心中點擊查看。';

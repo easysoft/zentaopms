@@ -374,7 +374,6 @@ class commonModel extends model
 
             $createMethod = 'create';
             if($objectType == 'effort') $createMethod = 'batchCreate';
-            if($objectType == 'doc')    $createMethod = 'selectLibType';
             if(strpos('bug|execution', $objectType) !== false) $needPrintDivider = true;
 
             if(common::hasPriv($objectType, $createMethod))
@@ -397,7 +396,11 @@ class commonModel extends model
 
                 $params = '';
                 if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
-                if($objectType == 'doc') $params = "objectType=&objectID=0&libID=0";
+                if($objectType == 'doc')
+                {
+                    $params       = "objectType=&objectID=0&libID=0";
+                    $createMethod = 'selectLibType';
+                }
 
                 $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
             }

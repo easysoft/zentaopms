@@ -1554,29 +1554,33 @@ class productModel extends model
             ->orderBy('begin desc')
             ->fetchGroup('product', 'id');
 
-        $executionList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executionListKey = $this->config->systemMode == 'new' ? 'project' : 'productID';
+        $executionList = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('type')->in('stage,sprint')
-            ->andWhere('t2.project')->in(array_keys($projectList))
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.project')->in(array_keys($projectList))->fi()
             ->andWhere('t1.product')->in(array_keys($productList))
             ->andWhere('status')->eq('doing')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->fetchGroup('project', 'id');
+            ->fetchGroup($executionListKey, 'id');
 
         $projectLatestExecutions = array();
         $latestExecutionList     = array();
-        foreach($executionList as $projectID => $executions)
+        if($this->config->systemMode == 'new')
         {
-            $latestExecutionList[key($executions)] = current($executions);
-            $projectLatestExecutions[$projectID]   = current($executions);
+            foreach($executionList as $projectID => $executions)
+            {
+                $latestExecutionList[key($executions)] = current($executions);
+                $projectLatestExecutions[$projectID]   = current($executions);
+            }
         }
 
         $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);
 
         $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)->where('product')->in(array_keys($productList))->fetchGroup('product', 'id');
 
-        return array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
+        return array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'executionList' => $executionList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
     }
 
     /**

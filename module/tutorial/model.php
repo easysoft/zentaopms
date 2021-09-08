@@ -65,6 +65,7 @@ class tutorialModel extends model
         $product->id             = 1;
         $product->program        = 0;
         $product->line           = 0;
+        $product->plan           = 0;
         $product->name           = 'Test product';
         $product->code           = 'test';
         $product->type           = 'normal';
@@ -79,6 +80,7 @@ class tutorialModel extends model
         $product->createdVersion = '8.1.3';
         $product->order          = 10;
         $product->deleted        = '0';
+        $product->branch         = '';
 
         return $product;
     }
@@ -166,7 +168,7 @@ class tutorialModel extends model
 
         $project->hours       = (object)$emptyHour;
         $project->leftTasks   = '—';
-        $project->teamMembers = $this->getTeamMembers();
+        $project->teamMembers = array_keys($this->getTeamMembers());
         $project->teamCount   = count($project->teamMembers);
 
         $projectStat[$project->id] = $project;
@@ -247,28 +249,32 @@ class tutorialModel extends model
     public function getExecution()
     {
         $execution = new stdclass();
-        $execution->id       = 3;
-        $execution->project  = 2;
-        $execution->type     = 'sprint';
-        $execution->name     = 'Test execution';
-        $execution->code     = 'test';
-        $execution->lifetime = '';
-        $execution->begin    = date('Y-m-d', strtotime('-7 days'));
-        $execution->end      = date('Y-m-d', strtotime('+7 days'));
-        $execution->days     = 10;
-        $execution->status   = 'wait';
-        $execution->pri      = '1';
-        $execution->desc     = '';
-        $execution->goal     = '';
-        $execution->acl      = 'open';
-        $execution->parent   = 2;
-        $execution->path     = ',2,3,';
-        $execution->grade    = 1;
-        $execution->PM       = $this->app->user->account;
-        $execution->PO       = $this->app->user->account;
-        $execution->QD       = $this->app->user->account;
-        $execution->RD       = $this->app->user->account;
-        $execution->deleted  = '0';
+        $execution->id             = 3;
+        $execution->project        = 2;
+        $execution->type           = 'sprint';
+        $execution->name           = 'Test execution';
+        $execution->code           = 'test';
+        $execution->lifetime       = '';
+        $execution->begin          = date('Y-m-d', strtotime('-7 days'));
+        $execution->end            = date('Y-m-d', strtotime('+7 days'));
+        $execution->days           = 10;
+        $execution->status         = 'wait';
+        $execution->pri            = '1';
+        $execution->desc           = '';
+        $execution->goal           = '';
+        $execution->acl            = 'open';
+        $execution->parent         = 2;
+        $execution->path           = ',2,3,';
+        $execution->grade          = 1;
+        $execution->PM             = $this->app->user->account;
+        $execution->PO             = $this->app->user->account;
+        $execution->QD             = $this->app->user->account;
+        $execution->RD             = $this->app->user->account;
+        $execution->deleted        = '0';
+        $execution->totalConsumed  = 0;
+        $execution->totalLeft      = 0;
+        $execution->totalHours     = 0;
+        $execution->totalEstimate  = 0;
         return $execution;
     }
 

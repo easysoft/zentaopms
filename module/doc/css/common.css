@@ -94,3 +94,5 @@ ol, ul {margin-bottom: 0}
 #whiteListBox .chosen-container .chosen-results {max-height: 180px;}
 
 .c-product, .c-execution, .c-lib {width: 80px !important;}
+
+.header-btn .btn > .text {text-overflow: unset !important;}

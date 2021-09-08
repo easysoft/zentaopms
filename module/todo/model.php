@@ -242,12 +242,13 @@ class todoModel extends model
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
+            ->setIF($this->post->type  == false, 'type', $oldTodo->type)
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
-        if($todo->type != 'custom')
+        if($todo->type != 'custom' and $todo->type != 'cycle')
         {
             $type   = $todo->type;
             $object = $this->loadModel($type)->getByID($objectType);
@@ -552,6 +553,7 @@ class todoModel extends model
 
             $todos[] = $todo;
         }
+
         return $todos;
     }
 

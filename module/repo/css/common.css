@@ -181,3 +181,5 @@ h3 {font-size: 16px;}
 #logForm .fixed-footer a.allLogs {color: #fff !important;}
 
 #submitLabel {text-align: left;}
+
+.header-btn .btn > .text {text-overflow: unset !important;}

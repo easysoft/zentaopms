@@ -243,18 +243,18 @@ class html extends baseHTML
      * @access public
      * @return string
      */
-    static public function avatar($user, $size = '', $className = 'avatar-circle', $attrib = '', $tag = 'div')
+    static public function avatar($user, $size = '', $className = 'avatar-circle', $attrib = '', $tag = 'div', $hueDistance = 43, $saturation = '40%', $lightness = '60%')
     {
+        $userObj = new stdClass();
+
         if(is_string($user))
         {
-            $userObj = new stdClass();
+            $userObj->account = $user;
             if(strlen($user) > 1) $userObj->avatar = $user;
-            else $userObj->account = $user;
             $user = $userObj;
         }
-        else if(is_array($user))
+        elseif(is_array($user))
         {
-            $userObj = new stdClass();
             $userObj->avatar  = $user['avatar'];
             $userObj->account = $user['account'];
             $user = $userObj;
@@ -273,17 +273,14 @@ class html extends baseHTML
 
         if(!$hasImage)
         {
-            $colorHue = (html::stringToCode($user->account) * 43) % 360;
-            $style .= "background: hsl($colorHue, 100%, 58%);";
+            $colorHue = (html::stringToCode($user->account) * $hueDistance) % 360;
+            $style   .= "background: hsl($colorHue, $saturation, $lightness);";
         }
 
         if(!empty($style)) $style = "style='$style'";
 
-        $html = "<$tag class='avatar$extraClassName $className' $attrib $style>";
-
-        if($hasImage) $html .= html::image($user->avatar);
-        else $html .= '<span>' . strtoupper($user->account[0]) . '</span>';
-
+        $html  = "<$tag class='avatar$extraClassName $className' $attrib $style>";
+        $html .= $hasImage ? html::image($user->avatar) : '<span>' . strtoupper($user->account[0]) . '</span>';
         $html .= "</$tag>";
 
         return $html;

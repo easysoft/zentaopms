@@ -10,19 +10,40 @@ class productsEntry extends entry
 {
     public function get()
     {
-        $control = $this->loadController('product', 'all');
-        $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'));
-
-        /* Response */
-        $data = $this->getData();
-        if(isset($data->status) and $data->status == 'success')
+        $programID = $this->param('program', 0);
+        if($programID)
         {
-            $result   = array();
-            $products = $data->data->productStats;
-            foreach($products as $product) $result[] = $this->format($product, 'createdDate:time');
+            $control = $this->loadController('program', 'product');
+            $control->product($programID, $this->param('status', 'all'), $this->param('order', 'order_asc'), 0, 10000);
 
-            return $this->send(200, array('products' => $result));
+            /* Response */
+            $data = $this->getData();
+            if(isset($data->status) and $data->status == 'success')
+            {
+                $result   = array();
+                $products = $data->data->products;
+                foreach($products as $product) $result[] = $this->format($product, 'createdDate:time');
+
+                return $this->send(200, array('products' => $result));
+            }
         }
+        else
+        {
+            $control = $this->loadController('product', 'all');
+            $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'));
+
+            /* Response */
+            $data = $this->getData();
+            if(isset($data->status) and $data->status == 'success')
+            {
+                $result   = array();
+                $products = $data->data->productStats;
+                foreach($products as $product) $result[] = $this->format($product, 'createdDate:time');
+
+                return $this->send(200, array('products' => $result));
+            }
+        }
+
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         return $this->sendError(400, 'error');

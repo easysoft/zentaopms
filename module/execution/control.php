@@ -736,6 +736,9 @@ class execution extends control
         $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, 'story', '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
+
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
         $users = $this->user->getPairs('noletter');
 
         /* Build the search form. */

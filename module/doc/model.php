@@ -595,7 +595,6 @@ class docModel extends model
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
 
-        if($doc->contentType == 'markdown') $doc->content = $this->post->content;
         if(!empty($doc->acl) and $doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
@@ -609,6 +608,8 @@ class docModel extends model
 
         $lib = !empty($doc->lib) ? $this->getLibByID($doc->lib) : '';
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
+        if($doc->contentType == 'markdown') $doc->content = $this->post->content;
+
         if(!empty($lib))
         {
             $doc->product   = $lib->product;

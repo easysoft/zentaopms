@@ -21,9 +21,9 @@ $lang->tutorial->currentTask      = 'Current Task';
 $lang->tutorial->allTasks         = 'All Tasks';
 $lang->tutorial->previous         = 'Previous';
 $lang->tutorial->nextTask         = 'Next';
-$lang->tutorial->openTargetPage   = 'Open <strong class="task-page-name">target</strong>';
-$lang->tutorial->targetAppTip     = 'Open <strong class="task-page-name">target</strong>';
-$lang->tutorial->atTargetPage     = 'On <strong class="task-page-name">target</strong>';
+$lang->tutorial->openTargetPage   = 'Open <strong class="task-page-name">%s</strong>';
+$lang->tutorial->targetAppTip     = 'Open <strong class="task-page-name">%s</strong>';
+$lang->tutorial->atTargetPage     = 'On <strong class="task-page-name">%s</strong>';
 $lang->tutorial->reloadTargetPage = 'Reload';
 $lang->tutorial->target           = 'Target';
 $lang->tutorial->targetPageTip     = 'Open【%s】page by following this instruction.';
@@ -42,7 +42,7 @@ $lang->tutorial->tasks['createAccount']['desc'] = "<p>Create a User: </p><ul><li
 
 $lang->tutorial->tasks['createProgram']         = array('title' => 'Create a program');
 $lang->tutorial->tasks['createProgram']['mode'] = 'new';
-$lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'module' => 'program', 'method' => 'create', 'menuModule' => 'program', 'menu' => 'browse', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-program-btn', 'targetPageName' => 'Create program');
+$lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'module' => 'program', 'method' => 'create', 'menuModule' => 'program', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="browse"],.create-program-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-program-btn', 'targetPageName' => 'Create program');
 $lang->tutorial->tasks['createProgram']['desc'] = "<p>Create a new program：</p><ul><li data-target='nav'>Open <span class='task-nav'>Program <i class='icon icon-angle-right'></i> Program list <i class='icon icon-angle-right'></i> Create program</span>;</li><li data-target='form'>Fill the form with program information;</li><li data-target='submit'>Save</li></ul>";
 
 global $config;
@@ -69,7 +69,7 @@ if($config->global->flow == 'full' or $config->global->flow == 'onlyTask')
 
     $lang->tutorial->tasks['manageTeam']         = array('title' => "Manage {$lang->projectCommon} Team");
     $lang->tutorial->tasks['manageTeam']['mode'] = 'new';
-    $lang->tutorial->tasks['manageTeam']['nav']  = array('app' => 'project', 'module' => 'project', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectTableList>tr:first>.c-name>a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="members"],.manage-team-btn', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => 'Manage team members');
+    $lang->tutorial->tasks['manageTeam']['nav']  = array('app' => 'project', 'module' => 'project', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectTableList>tr:first>.c-name a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="members"],.manage-team-btn', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'accounts1', 'submit' => '#submit', 'targetPageName' => 'Manage team members');
     $lang->tutorial->tasks['manageTeam']['desc'] = "<p>Manage {$lang->projectCommon} team members: </p><ul><li data-target='nav'>Open <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> Team <i class='icon icon-angle-right'></i> Manage Team Members</span> Page；</li><li data-target='form'>Choose users for the team.</li><li data-target='submit'>Save</li></ul>";
 
     $lang->tutorial->tasks['createExecution']         = array('title' => 'Create a ' . $lang->executionCommon);
@@ -101,6 +101,6 @@ if($config->global->flow == 'full' or $config->global->flow == 'onlyTest')
     $lang->tutorial->tasks['createBug']['desc'] = "<p>Report a Bug: </p><ul><li data-target='nav'>Open <span class='task-nav'> Test <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> Report Bug</span>；</li><li data-target='form'>Fill the form with bug information:</li><li data-target='submit'>Save</li></ul>";
 
     $lang->tutorial->tasks['createBug']         = array('title' => 'Report Bug');
-    $lang->tutorial->tasks['createBug']['nav']  = array('module' => 'bug', 'method' => 'create', 'menuModule' => 'qa', 'menu' => 'bug', 'target' => '.btn-bug-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Report Bug');
+    $lang->tutorial->tasks['createBug']['nav']  = array('module' => 'bug', 'method' => 'create', 'menuModule' => 'qa', 'menu' => 'bug', 'target' => '.btn-bug-create', 'vars' => 'productID=0', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Report Bug');
     $lang->tutorial->tasks['createBug']['desc'] = "<p>Report a Bug: </p><ul><li data-target='nav'>Open <span class='task-nav'> QA <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> Report Bug</span>；</li><li data-target='form'>Fill the form with bug information:</li><li data-target='submit'>Save</li></ul>";
 }

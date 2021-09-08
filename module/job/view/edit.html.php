@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 
-<?php js::set('repoTypes', $repoTypes)?>
+<?php js::set('repoTypes', $repoTypes);?>
 <?php js::set('triggerType', $job->triggerType);?>
 <?php js::set('pipeline', $job->pipeline);?>
 <?php js::set('dirChange', $lang->job->dirChange);?>
@@ -43,7 +43,8 @@
           </tr>
           <tr class='gitlabRepo hide'>
             <th><?php echo $lang->job->repo; ?></th>
-            <td><?php echo html::select('gitlabRepo', $gitlabRepos, $job->repo, "class='form-control'"); ?></td>
+            <td> <?php echo html::select('gitlabRepo', $gitlabRepos, $job->repo, "class='chosen form-control'");?> </td>
+            <td> <?php echo html::select('reference', $refList, $job->reference, "class='chosen form-control'");?> </td>
           </tr>
           <tr>
             <th><?php echo $lang->job->product;?></th>

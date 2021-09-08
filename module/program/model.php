@@ -295,10 +295,10 @@ class programModel extends model
      */
     public function getInvolvedPrograms($account)
     {
-        $involvedPrograms  = array();
+        $involvedPrograms = array();
 
         /* All involves in program table. */
-        $objects = $this->dao->select('id, type, project')->from(TABLE_PROGRAM)
+        $objects = $this->dao->select('id,type,project,path')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->andWhere("(openedBy = '$account' or PM = '$account')")
             ->fetchAll('id');
@@ -311,7 +311,7 @@ class programModel extends model
                 $programID = $this->getTopByID($id);
                 $involvedPrograms[$programID] = $programID;
             }
-            if($object->type == 'sprint' || $object->type == 'stage')
+            if($object->type == 'sprint' or $object->type == 'stage')
             {
                 $programID = $this->getTopByID($object->project);
                 $involvedPrograms[$programID] = $programID;

@@ -1458,15 +1458,19 @@ class projectModel extends model
                     }
                     break;
                 case 'name':
-                    echo '<div class="project-name">';
+                    $prefix = '';
+                    $suffix = '';
                     if(isset($this->config->maxVersion))
                     {
-                        if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
-                        if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
+                        if($project->model === 'waterfall') $prefix = "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
+                        if($project->model === 'scrum')     $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
                     }
+                    if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
+                    if(!empty($suffix) || !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
+                    if(!empty($prefix)) echo $prefix;
                     echo html::a($projectLink, $project->name, '', "class='text-ellipsis'");
-                    if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
-                    echo '</div>';
+                    if(!empty($suffix)) echo $suffix;
+                    if(!empty($suffix) || !empty($prefix)) echo '</div>';
                     break;
                 case 'PM':
                     $user     = $this->loadModel('user')->getByID($project->PM, 'account');

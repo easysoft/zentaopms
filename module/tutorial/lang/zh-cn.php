@@ -41,7 +41,7 @@ $lang->tutorial->tasks['createAccount']['desc'] = "<p>在系统创建一个新�
 
 $lang->tutorial->tasks['createProgram']         = array('title' => '创建项目集');
 $lang->tutorial->tasks['createProgram']['mode'] = 'new';
-$lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'module' => 'program', 'method' => 'create', 'menuModule' => 'program', 'menu' => 'browse', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-program-btn', 'targetPageName' => '添加项目集');
+$lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'module' => 'program', 'method' => 'create', 'menuModule' => 'program', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="browse"],.create-program-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-program-btn', 'targetPageName' => '添加项目集');
 $lang->tutorial->tasks['createProgram']['desc'] = "<p>在系统创建一个新的项目集：</p><ul><li data-target='nav'>打开 <span class='task-nav'>项目集 <i class='icon icon-angle-right'></i> 项目集列表 <i class='icon icon-angle-right'></i> 添加项目集</span> 页面；</li><li data-target='form'>在添加项目集表单中填写项目集信息；</li><li data-target='submit'>保存项目集信息。</li></ul>";
 
 global $config;
@@ -68,7 +68,7 @@ if($config->global->flow == 'full' or $config->global->flow == 'onlyTask')
 
     $lang->tutorial->tasks['manageTeam']         = array('title' => "管理{$lang->projectCommon}团队");
     $lang->tutorial->tasks['manageTeam']['mode'] = 'new';
-    $lang->tutorial->tasks['manageTeam']['nav']  = array('app' => 'project', 'module' => 'project', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectTableList>tr:first>.c-name>a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="members"],.manage-team-btn', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => '团队管理');
+    $lang->tutorial->tasks['manageTeam']['nav']  = array('app' => 'project', 'module' => 'project', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectTableList>tr:first>.c-name a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="members"],.manage-team-btn', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'accounts1', 'submit' => '#submit', 'targetPageName' => '团队管理');
     $lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理{$lang->projectCommon}团队成员：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> 设置 <i class='icon icon-angle-right'></i> 团队 <i class='icon icon-angle-right'></i> 团队管理</span> 页面；</li><li data-target='form'>选择要加入团队的成员；</li><li data-target='submit'>保存团队成员信息。</li></ul>";
 
     $lang->tutorial->tasks['createExecution']         = array('title' => '创建' . $lang->executionCommon);
@@ -95,6 +95,6 @@ if($config->global->flow == 'full' or $config->global->flow == 'onlyTask')
 if($config->global->flow == 'full' or $config->global->flow == 'onlyTest')
 {
     $lang->tutorial->tasks['createBug']         = array('title' => '提Bug');
-    $lang->tutorial->tasks['createBug']['nav']  = array('app' => 'qa', 'module' => 'bug', 'method' => 'create', 'menuModule' => 'bug', 'menu' => 'bug', 'target' => '.create-bug-btn', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '提Bug');
+    $lang->tutorial->tasks['createBug']['nav']  = array('app' => 'qa', 'module' => 'bug', 'method' => 'create', 'menuModule' => 'bug', 'menu' => 'bug', 'target' => '.create-bug-btn', 'vars' => 'productID=0', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '提Bug');
     $lang->tutorial->tasks['createBug']['desc'] = "<p>在系统中提交一个Bug：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 测试 <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在表单中填写Bug信息；</li><li data-target='submit'>保存Bug信息。</li></ul>";
 }

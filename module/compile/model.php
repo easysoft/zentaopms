@@ -129,17 +129,30 @@ class compileModel extends model
 
         if(!$job) return false;
 
-        $data = new stdclass();
-        $data->PARAM_TAG   = $compile->tag;
-        $data->ZENTAO_DATA = "compile={$compile->id}";
+        $compileID = $compile->id;
+        $repo      = $this->loadModel('repo')->getRepoById($job->repo);
 
-        $url   = $this->getBuildUrl($job);
-        $build = new stdclass();
-        $build->queue      = $this->loadModel('ci')->sendRequest($url->url, $data, $url->userPWD);
-        $build->status     = $build->queue ? 'created' : 'create_fail';
-        $build->updateDate = helper::now();
-        $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
-        $this->dao->update(TABLE_JOB)->set('lastStatus')->eq($build->status)->set('lastExec')->eq($build->updateDate)->where('id')->eq($compile->job)->exec();
+        if($job->triggerType == 'tag')
+        {
+            $lastTag = $this->getLastTagByRepo($repo);
+            if($lastTag)
+            {
+                $job->lastTag = $lastTag;
+                $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
+            }
+
+            $this->dao->update(TABLE_COMPILE)->set('tag')->eq($lastTag)->where('id')->eq($compile->id)->exec();
+        }
+
+        if($job->engine == 'gitlab')  $compile = $this->loadModel('job')->execGitlabPipeline($job, $compileID);
+        if($job->engine == 'jenkins') $compile = $this->job->execJenkinsPipeline($job, $repo, $compile->id);
+
+        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
+        $this->dao->update(TABLE_JOB)
+            ->set('lastStatus')->eq($build->status)
+            ->set('lastExec')->eq($build->updateDate)
+            ->where('id')->eq($job->id)
+            ->exec();
 
         return !dao::isError();
     }

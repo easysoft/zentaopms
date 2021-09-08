@@ -332,10 +332,11 @@ class doc extends control
         $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
         if(!$libID and !empty($libs)) $libID = key($libs);
 
-        $lib  = $this->doc->getLibByID($libID);
-        $type = !empty($lib) ? $lib->type : 'product';
+        $lib     = $this->doc->getLibByID($libID);
+        $type    = isset($lib->type) ? $lib->type : 'product';
+        $libName = isset($lib->name) ? $lib->name : 'product';
 
-        $this->view->title = $lib->name . $this->lang->colon . $this->lang->doc->create;
+        $this->view->title = $libName . $this->lang->doc->create;
 
         $this->view->libID            = $libID;
         $this->view->libs             = $libs;

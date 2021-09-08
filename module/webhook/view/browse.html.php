@@ -50,7 +50,7 @@
       </tbody>
     </table>
     <?php if($webhooks):?>
-    <div class='table-footer'><?php $pager->show('rignt', 'pagerjs');?></div>
+    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     <?php endif;?>
   </form>
 </div>

@@ -264,7 +264,6 @@ class baseValidater
     {
         if(empty($date)) return true;
         if($date == '0000-00-00') return true;
-        $date = substr($date, 0, 10);
         if(preg_match ("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date, $parts)) return checkdate($parts[2], $parts[3], $parts[1]);
         return false;
     }
