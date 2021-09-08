@@ -4307,7 +4307,6 @@ class upgradeModel extends model
 
             if(isset($data->projectName) and $data->projectType == 'execution' and empty($data->projectName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName)));
 
-
             /* Insert program. */
             $program = new stdclass();
             $program->name          = $data->programName;
@@ -4729,6 +4728,8 @@ class upgradeModel extends model
         $today = helper::today();
         foreach($projectTeams as $projectID => $projectMember)
         {
+            if(empty($projectMember)) continue;
+
             $projectMember = array_filter($projectMember);
             $project       = zget($projects, $projectID, '');
             $members       = implode(',', $projectMember);
