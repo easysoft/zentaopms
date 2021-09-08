@@ -70,7 +70,7 @@ class gitlabModel extends model
      *
      * @param  int    $gitlabID
      * @access public
-     * @return void
+     * @return array
      */
     public function getUserIdRealnamePairs($gitlabID)
     {
