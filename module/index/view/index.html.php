@@ -30,6 +30,13 @@ js::set('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] :
 #upgradeContent {top: -272px; height: 262px;}
 #latestVersionList {height: 200px;}
 <?php endif;?>
+
+<?php if(commonModel::isTutorialMode()):?>
+#menuMoreNav > li.dropdown:hover + .tooltip {display: none!important;}
+#menuMoreList > li.active {position: relative;}
+#menuMoreList > li.active:before {content: ' '; display: block; position: absolute; left: 100%; border-width: 5px 5px 5px 0; border-style: solid; border-color: transparent; border-right-color: #ff9800; width: 0; height: 0; top: 12px}
+#menuMoreList > li.active:after {content: attr(data-tip); display: block; position: absolute; left: 100%; background-color: #f1a325; color: #fff; top: 3px; white-space: nowrap; line-height: 16px; padding: 8px 10px; margin-left: 5px; border-radius: 4px;}
+<?php endif;?>
 </style>
 <div id='menu'>
   <nav id='menuNav'>
