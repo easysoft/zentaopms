@@ -224,7 +224,9 @@ $lang->task->error->deadlineSmall     = '"截止日期"必須大於"預計開始
 $lang->task->error->alreadyStarted    = '此任務已被啟動，不能重複啟動！';
 $lang->task->error->realStartedEmpty  = '實際開始不能為空';
 $lang->task->error->finishedDateEmpty = '實際完成不能為空';
+$lang->task->error->finishedDateSmall = '實際完成不能小於實際開始';
 $lang->task->error->alreadyConsumed   = '當前選中的父任務已有消耗。';
+$lang->task->error->date              = '日期不能大於今天';
 
 /* Report. */
 $lang->task->report         = new stdclass();

@@ -121,12 +121,13 @@ function setExportTPL()
 /**
  * Set whether part download.
  * 
+ * @param  input target
  * @access public
  * @return void
  */
-function setPart(t)
+function setPart(target)
 {
-    if($(t).prop("checked"))
+    if($(target).prop("checked"))
     {
         $("#submit").attr("onclick", 'setPartDownloading();');
     }
@@ -147,10 +148,10 @@ var partQueue = new Array();
 function setPartDownloading()
 {
     var partNum = 10000;
-    var total = $('.pager', window.parent.document).data('rec-total');
-    for(var i=0; i < total; i = i + partNum)
+    var total   = $('.pager', window.parent.document).data('rec-total');
+    for(var i = 0; i < total; i = i + partNum)
     {
-        partQueue.push(i+','+partNum); 
+        partQueue.push(i + ',' + partNum);
     }
     $.cookie('downloading', 0);
     $('#mainContent').addClass('loading');
@@ -170,7 +171,8 @@ function setPartDownloading()
  */
 function startPartDownloading()
 {
-    if($.cookie('downloading') == 1){
+    if($.cookie('downloading') == 1)
+    {
         var limit = partQueue.shift();
         if(limit)
         {

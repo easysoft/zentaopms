@@ -4,6 +4,7 @@ $lang->gitlab->common        = 'GitLab';
 $lang->gitlab->browse        = 'GitLab Browse';
 $lang->gitlab->create        = 'Create GitLab';
 $lang->gitlab->edit          = 'Edit GitLab';
+$lang->gitlab->view          = 'View GitLab';
 $lang->gitlab->bindUser      = 'Bind User';
 $lang->gitlab->webhook       = 'webhook';
 $lang->gitlab->bindProduct   = 'Import Product';

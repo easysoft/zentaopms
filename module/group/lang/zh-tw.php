@@ -34,7 +34,10 @@ $lang->group->dynamic            = '可查看動態';
 $lang->group->noticeVisit        = '空代表沒有訪問限制';
 $lang->group->noneProgram        = "暫時沒有項目集";
 $lang->group->noneProduct        = "暫時沒有{$lang->productCommon}";
-$lang->group->noneProject        = "暫時沒有{$lang->executionCommon}";
+
+global $config;
+if($config->systemMode == 'new') $lang->group->noneProject = '暫時沒有項目';
+if($config->systemMode == 'classic') $lang->group->noneProject = "暫時沒有{$lang->executionCommon}";
 
 $lang->group->id       = '編號';
 $lang->group->name     = '分組名稱';

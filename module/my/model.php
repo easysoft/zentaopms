@@ -113,7 +113,7 @@ class myModel extends model
             $product->releases   = isset($releases[$product->id]) ? $releases[$product->id] : 0;
             if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
             $product->storyEstimateCount = isset($stories[$product->id]) ? $stories[$product->id] : 0;
-            if($product->status != 'closed') $unclosedCount++;
+            if($product->status != 'closed') $unclosedCount ++;
             if($product->status == 'closed') unset($products[$key]);
         }
 
@@ -125,7 +125,6 @@ class myModel extends model
         $data->allCount      = $allCount;
         $data->unclosedCount = $unclosedCount;
         $data->products      = array_values($products);
-
         return $data;
     }
 
@@ -143,7 +142,7 @@ class myModel extends model
         $doingProjects    = array();
 
         $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
-        $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'this_year');
+        $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');
         $doingCount       = 0;
         foreach($projects as $key => $project)
         {
@@ -167,7 +166,6 @@ class myModel extends model
         $data->allConsumed        = $allConsumed;
         $data->thisYearConsumed   = $thisYearConsumed;
         $data->projects           = $doingProjects;
-
         return $data;
     }
 

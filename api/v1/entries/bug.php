@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的bug资源类
- * 版本V1
+ * The bug entry point of ZenTaoPMS.
  *
- * The bug entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class bugEntry extends entry 
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
     public function get($bugID)
     {
         $control = $this->loadController('bug', 'view');
@@ -18,6 +28,13 @@ class bugEntry extends entry
         $this->send(200, $this->format($bug, 'deleted:bool,activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time'));
     }
 
+    /**
+     * PUT method.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
     public function put($bugID)
     {
         $oldBug = $this->loadModel('bug')->getByID($bugID);
@@ -38,6 +55,13 @@ class bugEntry extends entry
         $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time'));
     }
 
+    /**
+     * DELETE method.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
     public function delete($bugID)
     {
         $control = $this->loadController('bug', 'delete');

@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的department资源类
- * 版本V1
+ * The department entry point of ZenTaoPMS.
  *
- * The department entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class departmentEntry extends Entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $departmentID
+     * @access public
+     * @return void
+     */
     public function get($departmentID)
     {
         $dept = $this->loadModel('dept')->getByID($departmentID);
@@ -16,6 +26,13 @@ class departmentEntry extends Entry
         return $this->send(200, $dept);
     }
 
+    /**
+     * PUT method.
+     *
+     * @param  int    $departmentID
+     * @access public
+     * @return void
+     */
     public function put($departmentID)
     {
         $oldDept = $this->loadModel('dept')->getByID($departmentID);
@@ -33,6 +50,13 @@ class departmentEntry extends Entry
         $this->send(200, $department);
     }
 
+    /**
+     * DELETE method.
+     *
+     * @param  int    $departmentID
+     * @access public
+     * @return void
+     */
     public function delete($departmentID)
     {
         $control = $this->loadController('dept', 'delete');

@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的risk资源类
- * 版本V1
+ * The risk entry point of ZenTaoPMS.
  *
- * The risk entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class riskEntry extends Entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return void
+     */
     public function get($riskID)
     {
         $control = $this->loadController('risk', 'view');
@@ -21,6 +31,13 @@ class riskEntry extends Entry
         $this->sendError(400, 'error');
     }
 
+    /**
+     * PUT method.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return void
+     */
     public function put($riskID)
     {
         $oldRisk = $this->loadModel('risk')->getByID($riskID);
@@ -40,6 +57,13 @@ class riskEntry extends Entry
         $this->send(200, $this->format($risk, 'createdDate:time,editedDate:time'));
     }
 
+    /**
+     * DELETE method.
+     *
+     * @param  int    $riskID
+     * @access public
+     * @return void
+     */
     public function delete($riskID)
     {
         $control = $this->loadController('risk', 'delete');

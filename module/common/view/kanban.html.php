@@ -151,7 +151,7 @@ function renderProjectItem(item, $item)
         {
             $item.addClass('link-block');
             $title = $('<a class="title" />')
-                .attr('href', $.createLink('execution', 'task', 'executionID=' + item._id));
+                .attr('href', $.createLink('project', 'index', 'projectID=' + item._id));
         }
         else
         {
@@ -196,7 +196,7 @@ function renderExecutionItem(item, $item)
         {
             $item.addClass('link-block');
             $title = $('<a class="title" />')
-                .attr('href', $.createLink('execution', 'task', 'executionID=' + item._id));
+                .attr('href', $.createLink('execution', 'task', 'executionID=' + item.id));
         }
         else
         {
@@ -288,7 +288,7 @@ function renderDoingProjectItem(item, $item)
     if(item.execution)
     {
         var $executionItem = $('<div class="kanban-item execution-item"></div>').appendTo($executionCol);
-        renderExecutionItem(item, $executionItem);
+        renderExecutionItem(item.execution, $executionItem);
     }
 
     return $item;

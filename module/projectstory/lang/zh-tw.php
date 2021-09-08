@@ -18,7 +18,9 @@ $lang->projectstory->batchUnlinkTip = '其他需求已經移除，如下需求�
 
 global $app;
 $app->loadLang('product');
-$lang->projectstory->featureBar['story']['allstory'] = $lang->product->allStory;
-$lang->projectstory->featureBar['story']['unclosed'] = $lang->product->unclosed;
-$lang->projectstory->featureBar['story']['changed']  = $lang->product->changedStory;
-$lang->projectstory->featureBar['story']['closed']   = $lang->product->closedStory;
+$lang->projectstory->featureBar['story']['allstory']          = $lang->product->allStory;
+$lang->projectstory->featureBar['story']['unclosed']          = $lang->product->unclosed;
+$lang->projectstory->featureBar['story']['changed']           = $lang->product->changedStory;
+$lang->projectstory->featureBar['story']['closed']            = $lang->product->closedStory;
+$lang->projectstory->featureBar['story']['linkedExecution']   = '已關聯' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['unlinkedExecution'] = '未關聯' . $lang->execution->common;

@@ -61,6 +61,9 @@ $lang->project->id                 = '項目編號';
 $lang->project->stage              = '階段';
 $lang->project->model              = '項目管理方式';
 $lang->project->PM                 = '負責人';
+$lang->project->PO                 = '項目負責人';
+$lang->project->QD                 = '測試負責人';
+$lang->project->RD                 = '發佈負責人';
 $lang->project->name               = '項目名稱';
 $lang->project->category           = '項目類型';
 $lang->project->desc               = '項目描述';
@@ -130,6 +133,19 @@ $lang->project->future             = '待定';
 $lang->project->moreProject        = '更多項目';
 $lang->project->days               = '可用工作日';
 $lang->project->etc                = "等";
+
+/* Project Kanban. */
+$lang->project->typeList = array();
+$lang->project->typeList['my']    = '我負責的項目';
+$lang->project->typeList['other'] = '其他項目';
+
+$lang->project->waitProjects    = '未開始的項目';
+$lang->project->doingProjects   = '進行中的項目';
+$lang->project->doingExecutions = '進行中的執行';
+$lang->project->closedProjects  = '已關閉的項目';
+$lang->project->noProgram       = '無項目集歸屬項目';
+
+$lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
 $lang->project->productNotEmpty        = '請關聯產品或創建產品。';
 $lang->project->existProductName       = '產品名稱已存在。';

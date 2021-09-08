@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的executions资源类
- * 版本V1
+ * The executions entry point of ZenTaoPMS.
  *
- * The executions entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class executionsEntry extends entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     public function get($projectID = 0)
     {
         $control = $this->loadController('execution', 'all');
@@ -29,6 +39,13 @@ class executionsEntry extends entry
         return $this->sendError(400, 'error');
     }
 
+    /**
+     * POST method.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     public function post($projectID = 0)
     {
         $fields = 'project,code,name,begin,end,lifetime,desc,days';
