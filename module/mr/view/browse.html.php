@@ -31,12 +31,12 @@
         <tr>
           <?php $vars = "objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
           <th class='w-60px  text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id); ?></th>
-          <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title); ?></th>
+          <th class='w-200px text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title); ?></th>
           <th class='text-left'><?php common::printOrderLink('sourceProject', $orderBy, $vars, $lang->mr->sourceProject); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch); ?></th>
+          <th class='w-120px text-left'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch); ?></th>
           <th class='text-left'><?php common::printOrderLink('targetProject', $orderBy, $vars, $lang->mr->targetProject); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch); ?></th>
-          <th class='w-100px text-left'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus); ?></th>
+          <th class='w-120px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch); ?></th>
+          <th class='w-120px text-left'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus); ?></th>
           <th class='w-120px c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>

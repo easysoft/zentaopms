@@ -18,6 +18,7 @@
 <?php else:?>
 <div id='kanbanList'>
   <?php foreach($kanbanList as $type => $programs):?>
+  <?php if(empty($programs)) continue;?>
   <div class='panel kanban-panel'>
     <div class='panel-heading'>
       <strong><?php echo $type == 'my' ? $lang->product->myProduct : $lang->product->otherProduct;?></strong>
@@ -48,6 +49,7 @@ $userPrivs['productplan'] = common::hasPriv('productplan', 'view');
 $userPrivs['project']     = common::hasPriv('project', 'index');
 $userPrivs['execution']   = common::hasPriv('execution', 'task');
 $userPrivs['release']     = common::hasPriv('release', 'view');
+js::set('isClassicMode',    $config->systemMode != 'new');
 js::set('kanbanColumns',    $kanbanColumns);
 js::set('userPrivs',        $userPrivs);
 js::set('kanbanList',       $kanbanList);

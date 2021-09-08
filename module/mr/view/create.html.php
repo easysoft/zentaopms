@@ -19,11 +19,12 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->common;?></th>
-            <td class='required'><?php echo html::select('gitlabID', $gitlabHosts, '', "class='form-control'");?></td>
+            <!-- Use `array('') + $gitlabHosts` here because of this field must be changed when creating this MR. -->
+            <td class='required'><?php echo html::select('gitlabID', array('') + $gitlabHosts, '', "class='form-control'");?></td>
           </tr>
           <tr>
              <th><?php echo $lang->mr->sourceProject;?></th>
-             <td class='required'>
+             <td>
                <div class='input-group'>
                  <?php echo html::select('sourceProject', array(''), '', "class='form-control chosen'");?>
                  <span class='input-group-addon fix-border'><?php echo $lang->mr->sourceBranch ?></span>
@@ -33,7 +34,7 @@
           </tr>
           <tr>
              <th><?php echo $lang->mr->targetProject;?></th>
-             <td class='required'>
+             <td>
                <div class='input-group'>
                  <?php echo html::select('targetProject', array(''), '', "class='form-control chosen'");?>
                  <span class='input-group-addon fix-border'><?php echo $lang->mr->targetBranch ?></span>

@@ -61,7 +61,6 @@ function processKanbanData(key, programsData)
 
             /* doing projects and executions */
             items.doingProject = [];
-            items.doingExecution = [];
             var doingProjects = product.projects && product.projects.doing;
             if(doingProjects)
             {
@@ -73,8 +72,7 @@ function processKanbanData(key, programsData)
 
                     var execution = project.execution;
                     if(!execution || !execution.id) return;
-                    var executionItem = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
-                    items.doingExecution.push(executionItem);
+                    projectItem.execution = execution;
                 });
             }
 

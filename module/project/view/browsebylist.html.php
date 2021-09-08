@@ -17,9 +17,11 @@
 #projectTableList .project-name {position: relative; display: flex; align-items: center;}
 #projectTableList .project-name > span,
 #projectTableList .project-name > span {flex: none;}
-#projectTableList .project-name > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px); padding: 0 5px;}
+#projectTableList .project-name > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
 #projectTableList .project-name.has-prefix > a,
-#projectTableList .project-name.has-surfix > a {max-width: calc(100% - 100px);}
+#projectTableList .project-name.has-suffix > a {max-width: calc(100% - 100px);}
+#projectTableList .project-name.has-prefix > a {padding-left: 5px;}
+#projectTableList .project-name.has-suffix > a {padding-right: 5px;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if($this->config->systemMode == 'new'):?>

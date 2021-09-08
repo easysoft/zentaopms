@@ -358,7 +358,7 @@ class commonModel extends model
         $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
         $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
 
-        $showCreateList = $lastIsDivider = $needPrintDivider = false;
+        $showCreateList = $needPrintDivider = false;
         $productID      = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
         if(!$productID and $app->user->view->products) $productID = current(explode(',', $app->user->view->products));
 
@@ -379,15 +379,10 @@ class commonModel extends model
             if(common::hasPriv($objectType, $createMethod))
             {
                 /* Determines whether to print a divider. */
-                if(!$lastIsDivider and $needPrintDivider and $showCreateList)
+                if($needPrintDivider and $showCreateList)
                 {
                     $html            .= '<li class="divider"></li>';
-                    $lastIsDivider    = true;
                     $needPrintDivider = false;
-                }
-                else
-                {
-                    $lastIsDivider = false;
                 }
 
                 $showCreateList = true;

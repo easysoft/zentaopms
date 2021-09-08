@@ -42,8 +42,23 @@
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {background-color: transparent; border: none; padding: 0; text-align: center;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item:hover {box-shadow: none;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item > .title {white-space: normal;}
-#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item {text-align: center;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; height: 38px;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title.has-icon > .text {margin-right: 5px; max-width: calc(100% - 20px);}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: block; height: 38px;}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: inline-block;}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title > .icon {position: relative; top: -5px}
 #kanbanList .kanban-affixed .kanban-header-col[data-type="doingProject"]:after {background-color: #606060;}
+
+/* Show project and execution in one row */
+#kanbanList .kanban-lane-col[data-type="doingProject"] {box-shadow: 2px 0 0 #fff;}
+#kanbanList .kanban-lane-col[data-type="doingProject"] + .kanban-lane-col {border-left: none;}
+#kanbanList .kanban-lane-col[data-type="doingProject"] > .kanban-lane-items {padding: 0; overflow: visible; max-height: none!important;}
+#kanbanList .project-row {position: relative; width: 200%; width: calc(200% + 2px);}
+#kanbanList .project-row + .project-row {border-top: 2px solid #fff;}
+#kanbanList .project-row > .project-col {float: left; width: 50%; padding: 10px;}
+#kanbanList .project-row > .project-col + .project-col {padding: 10px 9px 10px 11px;}
+#kanbanList .project-row > .execution-item {position: absolute!important; left: 100%; top: 0}
 </style>
 <script>
 /**
@@ -237,17 +252,43 @@ function renderReleaseItem(item, $item)
         }
         $title.appendTo($item);
     }
-    $title.text(item.name).attr('title', item.name);
+    $title.html('<span class="text">' + item.name + '</span>')
+        .attr('title', item.name);
     if(item.marker === '1')
     {
         if(!$title.find('.icon').length)
         {
-            $title.append('&nbsp;<i class="icon icon-flag text-red"></i>');
+            $title.addClass('has-icon').append('<i class="icon icon-flag text-red"></i>');
         }
     }
     else
     {
         $title.find('.icon').remove();
+    }
+
+    return $item;
+}
+
+/**
+ * Render project item
+ * @param {Object} item  Project item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderDoingProjectItem(item, $item)
+{
+    $item.removeClass('kanban-item').addClass('project-row clearfix').empty();
+
+    var $projectCol = $('<div class="project-col"></div>').appendTo($item);
+    var $projectItem = $('<div class="kanban-item project-item"></div>').appendTo($projectCol);
+    renderProjectItem(item, $projectItem);
+
+    var $executionCol = $('<div class="project-col"></div>').appendTo($item);
+    if(item.execution)
+    {
+        var $executionItem = $('<div class="kanban-item execution-item"></div>').appendTo($executionCol);
+        renderExecutionItem(item, $executionItem);
     }
 
     return $item;
@@ -260,7 +301,7 @@ if(!window.columnRenderers) window.columnRenderers =
     unexpiredPlan: renderPlanItem,
     waitProject: renderProjectItem,
     closedProject: renderProjectItem,
-    doingProject: renderProjectItem,
+    doingProject: renderDoingProjectItem,
     doingExecution: renderExecutionItem,
     normalRelease: renderReleaseItem,
 };

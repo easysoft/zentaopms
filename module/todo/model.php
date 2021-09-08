@@ -77,12 +77,12 @@ class todoModel extends model
                 unset($todo->config['month']);
                 if(!$todo->config['day'])
                 {
-                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDayTxt);
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
                     return false;
                 }
                 if(!validater::checkInt($todo->config['day']))
                 {
-                    dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDayTxt);
+                    dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
                     return false;
                 }
             }
@@ -101,7 +101,7 @@ class todoModel extends model
 
             if($todo->config['beforeDays'] and !validater::checkInt($todo->config['beforeDays']))
             {
-                dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysTxt);
+                dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
                 return false;
             }
             $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];

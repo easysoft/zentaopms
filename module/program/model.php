@@ -176,7 +176,7 @@ class programModel extends model
             ->andWhere('end')->gt(helper::today())
             ->fetchGroup('product');
 
-        /* Get all products linked projects and executions. */
+        /* Get all products linked projects. */
         $projectGroup = $this->dao->select('t1.product, t2.id, t2.name, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
@@ -184,6 +184,7 @@ class programModel extends model
             ->andWhere('t1.product')->in($productPairs)
             ->andWhere('t2.status')->ne('closed')
             ->andWhere('t2.type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->fetchGroup('product');
 
         $projectPairs = array();
@@ -201,6 +202,7 @@ class programModel extends model
             ->where('type')->in('sprint,stage')
             ->andWhere('status')->eq('doing')
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy('id_asc')
             ->fetchAll('project');
 

@@ -568,7 +568,8 @@ class testcaseModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+            ->orderBy($orderBy)->page($pager)
+            ->fetchAll('id');
     }
 
     /**
@@ -589,7 +590,7 @@ class testcaseModel extends model
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
-        $cases = $this->dao->select('t1.*, t2.title as storyTitlen')->from(TABLE_CASE)->alias('t1')
+        $cases = $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->beginIF($productID)->where('t1.product')->eq((int) $productID)->fi()
             ->beginIF($productID == 0)->where('t1.product')->in($this->app->user->view->products)->fi()
@@ -600,7 +601,8 @@ class testcaseModel extends model
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+            ->orderBy($orderBy)->page($pager)
+            ->fetchAll('id');
         return $this->appendData($cases);
     }
 
@@ -1006,10 +1008,9 @@ class testcaseModel extends model
         $actions = array();
         $this->loadModel('action');
 
+        $oldCases = $this->getByList($caseIdList);
         foreach($caseIdList as $caseID)
         {
-            $oldCase = $this->getById($caseID);
-
             $case = new stdClass();
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
@@ -1017,7 +1018,7 @@ class testcaseModel extends model
 
             $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
             $actionID = $this->action->create('case', $caseID, 'Edited', '', ucfirst($result));
-            $changes  = common::createChanges($oldCase, $case);
+            $changes  = common::createChanges($oldCases[$caseID], $case);
             $this->action->logHistory($actionID, $changes);
         }
     }

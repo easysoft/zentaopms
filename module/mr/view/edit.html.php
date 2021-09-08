@@ -34,7 +34,7 @@
           </tr>
           <tr>
              <th><?php echo $lang->mr->targetProject;?></th>
-             <td class='required'>
+             <td>
                <div class='input-group'>
                  <span class='input-group-addon fix-border'>
                  <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace;?>

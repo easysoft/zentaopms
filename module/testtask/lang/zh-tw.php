@@ -136,7 +136,8 @@ $lang->testtask->noImportData      = '導入的XML沒有解析出數據。';
 $lang->testtask->unitXMLFormat     = '請選擇Junit XML 格式的檔案。';
 $lang->testtask->titleOfAuto       = "%s 自動化測試";
 $lang->testtask->cannotBeParsed    = '導入的XML檔案內容格式錯誤，無法解析。';
-$lang->testtask->finishedDateError = '實際完成日期不能小於開始日期%s';
+$lang->testtask->finishedDateLess  = '實際完成日期不能小於開始日期%s';
+$lang->testtask->finishedDateMore  = '實際完成日期不能大於今天';
 
 $lang->testtask->assignedToMe  = '指派給我';
 $lang->testtask->allCases      = '所有用例';

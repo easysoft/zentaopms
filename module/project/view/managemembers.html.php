@@ -40,8 +40,8 @@
         <?php unset($users[$member->account]);?>
         <tr>
           <td><?php echo html::input("realnames[$i]", $member->realname, "class='form-control' readonly");?></td>
-          <td><?php echo html::input("roles[$i]",    $member->role,     "class='form-control'");?></td>
-          <td><?php echo html::input("days[$i]",    $member->days,     "class='form-control'");?></td>
+          <td><?php echo html::input("roles[$i]", $member->role, "class='form-control'");?></td>
+          <td><?php echo html::input("days[$i]", $member->days, "class='form-control'");?></td>
           <td>
             <?php echo html::input("hours[$i]", $member->hours, "class='form-control'");?>
             <?php echo html::hidden("accounts[$i]", $member->account);?>

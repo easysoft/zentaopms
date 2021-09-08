@@ -1,4 +1,5 @@
 <?php
+$lang->mr = new stdclass;
 $lang->mr->common       = "合并请求";
 $lang->mr->create       = "创建{$lang->mr->common}";
 $lang->mr->browse       = "浏览{$lang->mr->common}";
@@ -6,6 +7,7 @@ $lang->mr->list         = $lang->mr->browse;
 $lang->mr->edit         = "编辑{$lang->mr->common}";
 $lang->mr->delete       = "删除{$lang->mr->common}";
 $lang->mr->view         = "{$lang->mr->common}详情";
+$lang->mr->accept       = "合并请求";
 $lang->mr->source       = '源项目分支';
 $lang->mr->target       = '目标项目分支';
 $lang->mr->viewDiff     = '比对代码';

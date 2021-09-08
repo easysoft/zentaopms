@@ -39,6 +39,7 @@ $lang->report      = new stdclass();
 $lang->repo        = new stdclass();
 $lang->jenkins     = new stdclass();
 $lang->gitlab      = new stdclass();
+$lang->mr          = new stdclass();
 $lang->compile     = new stdclass();
 $lang->job         = new stdclass();
 $lang->svn         = new stdclass();

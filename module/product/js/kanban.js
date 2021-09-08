@@ -71,10 +71,10 @@ function processKanbanData(key, programsData)
                 var productExecutions = classicExecution[productID];
                 if(productExecutions)
                 {
-                    console.log(productExecutions);
-                    $.each(productExecutions, function(executionID, execution)
+                    $.each(productExecutions, function(_, execution)
                     {
                         if(!execution || !execution.id) return;
+                        var executionID = execution.id;
                         var executionItem = $.extend({}, execution, {id: 'execution-' + executionID, _id: executionID});
                         items.doingExecution.push(executionItem);
                     });
@@ -106,41 +106,15 @@ function processKanbanData(key, programsData)
     return {id: kanbanId, columns: columns, lanes: lanes};
 }
 
-/**
- * Render project item
- * @param {Object} item  Project item object
- * @param {JQuery} $item Kanban item element
- * @param {Object} col   Column object
- * @returns {JQuery} $item Kanban item element
- */
-function renderDoingProjectItem(item, $item)
-{
-    $item.removeClass('kanban-item').addClass('project-row clearfix').empty();
-
-    var $projectCol = $('<div class="project-col"></div>').appendTo($item);
-    var $projectItem = $('<div class="kanban-item project-item"></div>').appendTo($projectCol);
-    renderProjectItem(item, $projectItem);
-
-    var $executionCol = $('<div class="project-col"></div>').appendTo($item);
-    if(item.execution)
-    {
-        var $executionItem = $('<div class="kanban-item execution-item"></div>').appendTo($executionCol);
-        renderExecutionItem(item, $executionItem);
-    }
-
-    return $item;
-}
-
 
 $(function()
 {
-    /* Add custom renderer for doing project */
-    addColumnRenderer('doingProject', renderDoingProjectItem);
-
     /* Init all kanbans */
     $.each(kanbanList, function(key, programsData)
     {
+        var $kanban = $('#kanban-' + key);
+        if(!$kanban.length) return;
         var data = processKanbanData(key, programsData);
-        $('#kanban-' + key).kanban({data: data});
+        $kanban.kanban({data: data, noLaneName: isClassicMode});
     });
 });

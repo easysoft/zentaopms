@@ -14,6 +14,7 @@
 .table .c-progress {width: 60px;}
 .table .c-estimate {width: 85px;}
 .c-hours {text-align: right !important; padding-right: 24px !important;}
+.table .c-burn {width: 150px;}
 </style>
 <?php if(empty($executionStats)): ?>
 <div class='empty-tip'><?php common::printLink('execution', 'create', '', "<i class='icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary'")?></div>
@@ -32,13 +33,13 @@
         <?php endif;?>
         <th class="c-progress"><?php echo $lang->execution->progress;?></th>
         <?php if($longBlock):?>
-        <th><?php echo $lang->execution->burn;?></th>
+        <th class="c-burn"><?php echo $lang->execution->burn;?></th>
         <?php endif;?>
       </tr>
     </thead>
     <tbody class="text-center">
-     <?php $id = 0; ?>
-     <?php foreach($executionStats as $execution):?>
+      <?php $id = 0; ?>
+      <?php foreach($executionStats as $execution):?>
       <?php
       $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
       $viewLink = $this->createLink('execution', 'task', 'executionID=' . $execution->id);
@@ -67,8 +68,8 @@
         <?php if($longBlock):?>
         <td id='spark-<?php echo $id++?>' class='no-padding text-left sparkline' values='<?php echo join(',', $execution->burns);?>'></td>
         <?php endif;?>
-     </tr>
-     <?php endforeach;?>
+      </tr>
+      <?php endforeach;?>
     </tbody>
   </table>
 </div>
