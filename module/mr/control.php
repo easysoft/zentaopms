@@ -20,6 +20,7 @@ class mr extends control
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
+        common::setMenuVars('devops', $this->session->repoID);
 
         /* Sync GitLab MR to ZenTao Database. */
         $MRList = $this->mr->batchSyncMR($MRList);
