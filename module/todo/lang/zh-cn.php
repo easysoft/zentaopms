@@ -70,8 +70,8 @@ $lang->todo->closedDate   = '关闭时间';
 $lang->todo->deadline     = '过期时间';
 $lang->todo->deleted      = '已删除';
 
-$lang->todo->cycleDayTxt   = '间隔天数';
-$lang->todo->beforeDaysTxt = '提前天数';
+$lang->todo->cycleDaysLabel  = '间隔天数';
+$lang->todo->beforeDaysLabel = '提前天数';
 
 $lang->todo->every        = '间隔';
 $lang->todo->specify      = '指定';

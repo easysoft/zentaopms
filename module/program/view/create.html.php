@@ -87,7 +87,7 @@
           <th><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
+              <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->project->end . "' required");?>
             </div>
