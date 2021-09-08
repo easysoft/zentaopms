@@ -12,10 +12,10 @@
 #kanbanList .kanban-header,
 #kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
-#kanbanList .kanban-lane {border-top: 3px solid #fff;}
+#kanbanList .kanban-lane {border-top: 2px solid #fff;}
 #kanbanList .kanban-lane + .kanban-lane {border-top: 10px solid #fff;}
-#kanbanList .kanban-sub-lane + .kanban-sub-lane {border-top: 3px solid #fff;}
-#kanbanList .kanban-col + .kanban-col {border-left: 3px solid #fff;}
+#kanbanList .kanban-sub-lane + .kanban-sub-lane {border-top: 2px solid #fff;}
+#kanbanList .kanban-col + .kanban-col {border-left: 2px solid #fff;}
 #kanbanList .kanban-header-col {height: 72px; padding: 20px 5px;}
 #kanbanList .kanban-header-col > .title {margin: 0; line-height: 32px; height: 32px}
 #kanbanList .kanban-header-col > .title > .text {font-weight: bold; max-width: 200px; max-width: calc(100% - 50px);}
@@ -28,7 +28,7 @@
 #kanbanList .kanban-item.link-block > a {padding: 10px; display: block;}
 #kanbanList .kanban-item.has-progress {padding-right: 40px; position: relative;}
 #kanbanList .kanban-item.has-progress > .progress-pie {position: absolute; right: 7px; top: 7px}
-#kanbanList .kanban-item.has-left-border {border-left: 3px solid #838a9d;}
+#kanbanList .kanban-item.has-left-border {border-left: 2px solid #838a9d;}
 #kanbanList .kanban-item.has-left-border.border-left-green {border-left-color: #0bd986;}
 #kanbanList .kanban-item.has-left-border.border-left-red {border-left-color: #ff5d5d;}
 #kanbanList .kanban-item.has-left-border.border-left-blue {border-left-color: #0991ff;}
@@ -37,7 +37,7 @@
 
 #kanbanList .kanban-header-col[data-type="doingProject"],
 #kanbanList .kanban-header-col[data-type="doingProject"] + .kanban-header-col[data-type="doingExecution"] {padding: 38px 10px 0;}
-#kanbanList .kanban-header-col[data-type="doingProject"]:after {content: attr(data-span-text); display: block; position: absolute; z-index: 10; left: 0; right:  -100%; right: calc(-100% - 3px); top: 0; line-height: 36px; text-align: center; font-weight: bold; border-bottom: 3px solid #fff; background-color: #ededed;}
+#kanbanList .kanban-header-col[data-type="doingProject"]:after {content: attr(data-span-text); display: block; position: absolute; z-index: 10; left: 0; right:  -100%; right: calc(-100% - 2px); top: 0; line-height: 36px; text-align: center; font-weight: bold; border-bottom: 2px solid #fff; background-color: #ededed;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {background-color: transparent; border: none; padding: 0; text-align: center;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item:hover {box-shadow: none;}
