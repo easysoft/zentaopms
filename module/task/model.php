@@ -1423,7 +1423,7 @@ class taskModel extends model
 
         /* Record consumed and left. */
         $estimate = new stdclass();
-        $estimate->date     = zget($task, 'realStarted', $now);
+        $estimate->date     = helper::isZeroDate($task->realStarted) ? helper::today() : substr($task->realStarted, 0, 10);
         $estimate->task     = $taskID;
         $estimate->consumed = zget($_POST, 'consumed', 0);
         $estimate->left     = zget($_POST, 'left', 0);
@@ -1681,7 +1681,7 @@ class taskModel extends model
         }
 
         $estimate = new stdclass();
-        $estimate->date     = zget($_POST, 'finishedDate', date(DT_DATE1));
+        $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
         $estimate->task     = $taskID;
         $estimate->left     = 0;
         $estimate->work     = zget($task, 'work', '');
