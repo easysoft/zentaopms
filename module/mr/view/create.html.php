@@ -62,11 +62,11 @@
             <td><?php echo $lang->mr->usersTips;?></td>
           </tr>
           <tr>
-            <th></th>
-            <td colspan='2' class='text-left form-actions'>
+            <td colspan='2' class='text-center form-actions'>
               <?php echo html::submitButton(); ?>
               <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
+            <td></td>
           </tr>
         </table>
       </form>
