@@ -71,7 +71,6 @@ function processKanbanData(key, programsData)
                 var productExecutions = classicExecution[productID];
                 if(productExecutions)
                 {
-                    console.log(productExecutions);
                     $.each(productExecutions, function(executionID, execution)
                     {
                         if(!execution || !execution.id) return;
