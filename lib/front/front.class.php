@@ -275,6 +275,7 @@ class html extends baseHTML
         {
             $colorHue = (html::stringToCode($user->account) * $hueDistance) % 360;
             $style   .= "background: hsl($colorHue, $saturation, $lightness);";
+            if($size) $style .= 'font-size: ' . round($size * 2 / 3) . 'px;';
         }
 
         if(!empty($style)) $style = "style='$style'";
