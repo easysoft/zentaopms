@@ -57,23 +57,30 @@ function processKanbanData(key, programsData)
                         if(!project || !project.id) return;
                         var projectItem = $.extend({}, project, {id: 'project-' + projectID, _id: projectID});
                         items.doingProject.push(projectItem);
+
+                        var execution = latestExecutions[projectID];
+                        if(!execution || !execution.id) return;
+                        projectItem.execution = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
+                    });
+                }
+            }
+            else
+            {
+                /* doing execution */
+                items.doingExecution = [];
+                var productProjects = projectProduct[productID];
+                if(productProjects)
+                {
+                    $.each(productProjects, function(projectID)
+                    {
+                        var execution = latestExecutions[projectID];
+                        if(!execution || !execution.id) return;
+                        var executionItem = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
+                        items.doingExecution.push(executionItem);
                     });
                 }
             }
 
-            /* doing execution */
-            items.doingExecution = [];
-            var productProjects = projectProduct[productID];
-            if(productProjects)
-            {
-                $.each(productProjects, function(projectID)
-                {
-                    var execution = latestExecutions[projectID];
-                    if(!execution || !execution.id) return;
-                    var executionItem = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
-                    items.doingExecution.push(executionItem);
-                });
-            }
 
             /* normal release */
             items.normalRelease = [];
@@ -99,8 +106,38 @@ function processKanbanData(key, programsData)
     return {id: kanbanId, columns: columns, lanes: lanes};
 }
 
+/**
+ * Render project item
+ * @param {Object} item  Project item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderDoingProjectItem(item, $item)
+{
+    console.log('renderDoingProjectItem', item);
+    $item.removeClass('kanban-item').addClass('project-row clearfix').empty();
+
+    var $projectCol = $('<div class="project-col"></div>').appendTo($item);
+    var $projectItem = $('<div class="kanban-item project-item"></div>').appendTo($projectCol);
+    renderProjectItem(item, $projectItem);
+
+    var $executionCol = $('<div class="project-col"></div>').appendTo($item);
+    if(item.execution)
+    {
+        var $executionItem = $('<div class="kanban-item execution-item"></div>').appendTo($executionCol);
+        renderExecutionItem(item, $executionItem);
+    }
+
+    return $item;
+}
+
+
 $(function()
 {
+    /* Add custom renderer for doing project */
+    addColumnRenderer('doingProject', renderDoingProjectItem);
+
     /* Init all kanbans */
     $.each(kanbanList, function(key, programsData)
     {

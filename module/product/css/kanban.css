@@ -1,0 +1,8 @@
+#kanbanList .kanban-lane-col[data-type="doingProject"] {overflow: visible; max-height: none!important; box-shadow: 2px 0 0 #fff;}
+#kanbanList .kanban-lane-col[data-type="doingProject"] + .kanban-lane-col {border-left: none;}
+#kanbanList .kanban-lane-col[data-type="doingProject"] > .kanban-lane-items {padding: 0;}
+#kanbanList .project-row {position: relative; width: 200%; width: calc(200% + 2px); box-shadow: 0 2px 0 #fff;}
+#kanbanList .project-row + .project-row {margin-top: 2px;}
+#kanbanList .project-row > .project-col {float: left; width: 50%; padding: 10px;}
+#kanbanList .project-row > .project-col + .project-col {padding: 10px 9px 10px 11px;}
+#kanbanList .project-row > .execution-item {position: absolute!important; left: 100%; top: 0}
