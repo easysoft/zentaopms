@@ -91,7 +91,6 @@ class productplanModel extends model
 
         if(!empty($plans))
         {
-
             $plans      = $this->reorder4Children($plans);
             $planIdList = array_keys($plans);
 

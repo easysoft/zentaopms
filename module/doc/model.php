@@ -1159,11 +1159,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'project')
-                ->andWhere('(execution')->eq(0)
-                ->orWhere('main')->eq(0)
-                ->markRight(1)
-                ->fi()
+                ->beginIF($type == 'project')->andWhere('execution')->eq(0)->fi()
                 ->orderBy('`order`, id')
                 ->fetchAll('id');
         }

@@ -181,7 +181,7 @@ function renderExecutionItem(item, $item)
         {
             $item.addClass('link-block');
             $title = $('<a class="title" />')
-                .attr('href', $.createLink('project', 'index', 'projectID=' + item._id));
+                .attr('href', $.createLink('execution', 'task', 'executionID=' + item._id));
         }
         else
         {
@@ -320,7 +320,7 @@ function updateKanbanAffixState()
     {
         var $board = $(this);
         var offsetTop = $board.offset().top;
-        if(scrollTop >= offsetTop && offsetTop > currentOffsetTop && scrollTop < (offsetTop + $board.outerHeight()))
+        if(scrollTop >= offsetTop && offsetTop > currentOffsetTop && scrollTop < (offsetTop + $board.outerHeight() - 72))
         {
             currentOffsetTop = offsetTop;
             $currentAffixedBoard = $board;

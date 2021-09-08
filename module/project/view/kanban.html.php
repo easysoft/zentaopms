@@ -30,13 +30,13 @@
 </div>
 <?php
 $kanbanColumns = array();
-$kanbanColumns['waitProject'] = array('name' => $lang->project->waitProjects, 'type' => 'waitProject');
-$kanbanColumns['doingProject']    = array('name' => $lang->project->doingProjects, 'type' => 'doingProject');
-$kanbanColumns['doingExecution']  = array('name' => $lang->project->doingExecutions, 'type' => 'doingExecution');
+$kanbanColumns['waitProject']    = array('name' => $lang->project->waitProjects, 'type' => 'waitProject');
+$kanbanColumns['doingProject']   = array('name' => $lang->project->doingProjects, 'type' => 'doingProject');
+$kanbanColumns['doingExecution'] = array('name' => $lang->project->doingExecutions, 'type' => 'doingExecution');
 $kanbanColumns['closedProject']  = array('name' => $lang->project->closedProjects, 'type' => 'closedProject');
 $userPrivs = array();
-$userPrivs['project']     = common::hasPriv('project', 'index');
-$userPrivs['execution']   = common::hasPriv('execution', 'task');
+$userPrivs['project']   = common::hasPriv('project', 'index');
+$userPrivs['execution'] = common::hasPriv('execution', 'task');
 js::set('kanbanColumns',    $kanbanColumns);
 js::set('userPrivs',        $userPrivs);
 js::set('kanbanGroup',      $kanbanGroup);

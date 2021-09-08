@@ -109,7 +109,7 @@ class tutorial extends control
         $moduleLower = strtolower($module);
         foreach($this->lang->tutorial->tasks as $task)
         {
-            $taskModule = strtolower($task['nav']['module']);
+            $taskModule     = strtolower($task['nav']['module']);
             $taskMenuModule = strtolower($task['nav']['menuModule']);
             if($taskModule == $moduleLower or $taskMenuModule == $moduleLower)
             {

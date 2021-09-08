@@ -25,12 +25,12 @@
     echo html::a(inlink('dynamic', "browseType=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
-    <div class="input-control space c-user"><?php echo html::select('account', $userIdPairs, $user ? $user->id : '', 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
-    <div class="input-control space c-product"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
+    <div class="input-control space c-user"><?php echo html::select('account', $userIdPairs, $user ? $user->id : '', 'onchange=changeUser(this.value) class="form-control chosen" data-max_drop_width="215"');?></div>
+    <div class="input-control space c-product"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen" data-max_drop_width="215"');?></div>
     <?php if($config->systemMode == 'new'):?>
-    <div class="input-control space c-project"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen"');?></div>
+    <div class="input-control space c-project"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen" data-max_drop_width="215"');?></div>
     <?php endif;?>
-    <div class="input-control space c-execution"><?php echo html::select('execution', $executions, $execution, 'onchange=changeExecution(this.value) class="form-control chosen"'); ?></div>
+    <div class="input-control space c-execution"><?php echo html::select('execution', $executions, $execution, 'onchange=changeExecution(this.value) class="form-control chosen" data-max_drop_width="215"'); ?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>
   </div>
 </div>

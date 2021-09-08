@@ -2572,8 +2572,8 @@ class storyModel extends model
                 ->beginIF($type == 'bybranch' and strpos($branchID, ',') !== false)->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
-                ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in(array_keys($storyIdList))->fi()
-                ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn(array_keys($storyIdList))->fi()
+                ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
+                ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($storyIdList)->fi()
                 ->fi()
                 ->beginIF($execution->type != 'project')
                 ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
@@ -2631,8 +2631,8 @@ class storyModel extends model
             ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy('t1.`order` desc')
             ->fetchAll();
-        if(empty($stories)) return array();
-        return $this->formatStories($stories, $type);
+
+        return empty($stories) ? array() : $this->formatStories($stories, $type);
     }
 
     /**

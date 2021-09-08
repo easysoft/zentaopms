@@ -897,6 +897,7 @@ class baseControl
             foreach($data as $key => $value)
             {
                 if(!is_string($value)) continue;
+
                 /* Retain ["] for json encode when value is jsoned string. */
                 $data[$key] = str_replace('%22', '"', urlencode($value));
             }

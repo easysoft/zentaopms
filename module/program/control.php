@@ -67,6 +67,12 @@ class program extends control
         $this->display();
     }
 
+    /**
+     * Program kanban list.
+     * 
+     * @access public
+     * @return void
+     */
     public function kanban()
     {
         $this->app->loadLang('release');
