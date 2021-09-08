@@ -21,7 +21,6 @@ $lang->mr->reviewer    = '评审人';
 $lang->mr->mergeStatus = '是否可合并';
 $lang->mr->commits     = '提交数';
 $lang->mr->changes     = '更改数';
-$lang->mr->settings    = '合并代码设置';
 
 $lang->mr->statusList = array();
 $lang->mr->statusList['opened'] = '开放中';
