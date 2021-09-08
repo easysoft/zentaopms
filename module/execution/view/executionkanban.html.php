@@ -20,7 +20,7 @@
   <table class="table no-margin table-grouped text-center">
     <thead>
       <tr>
-        <th style='width: 5px; padding: 0px; border-right: unset !important'></th>
+        <th class='projectColor'></th>
         <th><?php echo $lang->execution->doingProject . ' (' . $projectCount . ')';?></th>
         <?php foreach($lang->execution->kanbanColType as $status => $colName):?>
         <th><?php echo $colName . ($status != 'closed' ? ' (' . $statusCount[$status] . ')' : '');?></th>

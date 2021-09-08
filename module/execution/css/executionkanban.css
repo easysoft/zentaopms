@@ -19,3 +19,5 @@
 
 .table-grouped > tbody > tr,
 .table-grouped > tbody > tr:hover {background: #fff !important;}
+
+.projectColor {width: 5px; padding: 0px !important; border-right: unset !important}
