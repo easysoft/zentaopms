@@ -1511,4 +1511,43 @@ class actionModel extends model
 
         $this->search->saveIndex($objectType, $data);
     }
+
+    /**
+     * Print actions of an object for API(JIHU).
+     *
+     * @param  array    $action
+     * @access public
+     * @return void
+     */
+    public function printActionAPI($action)
+    {
+        if(!isset($action->objectType) or !isset($action->action)) return false;
+
+        $objectType = $action->objectType;
+        $actionType = strtolower($action->action);
+
+        if(isset($this->lang->action->apiTitle->$actionType) and isset($action->extra))
+        {
+            /* If extra column is a username, then assemble link to that. */
+            if($action->action == "assigned")
+            {
+                $userDetails = $this->loadModel('user')->getUserDetailsForAPI($action->extra);
+                if(isset($userDetails[$action->extra]))
+                {
+                    $userDetail    = $userDetails[$action->extra];
+                    $action->extra = "<a href='{$userDetail->url}' target='_blank'>{$action->extra}</a>";
+                }
+            }
+
+            echo sprintf($this->lang->action->apiTitle->$actionType, $action->extra);
+        }
+        elseif(isset($this->lang->action->apiTitle->$actionType) and !isset($action->extra))
+        {
+            echo $this->lang->action->apiTitle->$actionType;
+        }
+        else
+        {
+            echo $actionType;
+        }
+    }
 }
