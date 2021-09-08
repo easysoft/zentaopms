@@ -50,7 +50,7 @@ $lang->upgrade->sureExecute    = '確認執行';
 $lang->upgrade->forbiddenExt   = '以下插件與新版本不兼容，已經自動禁用：';
 $lang->upgrade->updateFile     = '需要更新附件信息。';
 $lang->upgrade->noticeSQL      = '檢查到你的資料庫跟標準不一致，嘗試修復失敗。請執行以下SQL語句，再刷新頁面檢查。';
-$lang->upgrade->afterDeleted   = '以上檔案未能刪除， 刪除後刷新！';
+$lang->upgrade->afterDeleted   = '請執行上面命令刪除檔案， 刪除後刷新！';
 $lang->upgrade->mergeProgram   = '數據遷移';
 $lang->upgrade->mergeTips      = '數據遷移提示';
 $lang->upgrade->toPMS15Guide   = '禪道開源版15版本升級';
@@ -111,6 +111,7 @@ $lang->upgrade->dataMethod    = '數據遷移方式';
 $lang->upgrade->begin         = '開始日期';
 $lang->upgrade->end           = '結束日期';
 $lang->upgrade->selectProject = '目標項目';
+$lang->upgrade->programName   = '項目集名稱';
 $lang->upgrade->projectName   = '項目名稱';
 
 $lang->upgrade->newProgram         = '新建';

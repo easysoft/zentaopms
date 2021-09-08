@@ -75,9 +75,6 @@ $lang->program->isStakeholderKey = 'Key stakeholder';
 $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';
 
-$lang->program->typeList['my']     = 'My Programs';
-$lang->program->typeList['others'] = 'Others';
-
 $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed programs.';
 $lang->program->tips               = 'If a parent item set is selected, products under that parent item set can be associated. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';

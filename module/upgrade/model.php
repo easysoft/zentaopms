@@ -712,6 +712,8 @@ class upgradeModel extends model
                 {
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
                     $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.4.sql';
+                    $this->execSQL($xuanxuanSql);
                 }
             }
             $this->appendExec('15_4');
@@ -913,6 +915,8 @@ class upgradeModel extends model
                 if(empty($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.4.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
         }

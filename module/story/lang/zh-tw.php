@@ -278,10 +278,10 @@ $lang->story->estimateMustBeNumber  = '估算值必須是數字';
 $lang->story->estimateMustBePlus    = '估算值不能是負數';
 
 $lang->story->form = new stdclass();
-$lang->story->form->area      = "該{$lang->SRCommon}所屬範圍";
-$lang->story->form->desc      = "描述及標準，什麼{$lang->SRCommon}？如何驗收？";
-$lang->story->form->resource  = '資源分配，有誰完成？需要多少時間？';
-$lang->story->form->file      = "附件，如果該{$lang->SRCommon}有相關檔案，請點此上傳。";
+$lang->story->form->area     = "該{$lang->SRCommon}所屬範圍";
+$lang->story->form->desc     = "描述及標準，什麼{$lang->SRCommon}？如何驗收？";
+$lang->story->form->resource = '資源分配，有誰完成？需要多少時間？';
+$lang->story->form->file     = "附件，如果該{$lang->SRCommon}有相關檔案，請點此上傳。";
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審意見，評審意見為 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
@@ -289,7 +289,7 @@ $lang->story->action->rejectreviewed        = array('main' => '$date, 由 <stron
 $lang->story->action->recalled              = array('main' => '$date, 由 <strong>$actor</strong> 撤銷評審。');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewpassed          = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>確認通過</strong>。');
-$lang->story->action->reviewrejected        = array('main' => '$date, 由 <strong>系統</strong> 關閉，原因為 <strong>拒絕</strong>。');
+$lang->story->action->reviewrejected        = array('main' => '$date, 由 <strong>系統</strong> 關閉，原因為 <strong>拒絶</strong>。');
 $lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>有待明確</strong>，請變更後重新發起評審。');
 $lang->story->action->linked2plan           = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。');

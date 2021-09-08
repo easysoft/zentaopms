@@ -87,7 +87,9 @@ class personnelModel extends model
         {
             foreach($userGroups[$account] as $groupID => $userGroup)
             {
-                $group = $groupInfo[$groupID];
+                $group = isset($groupInfo[$groupID]) ? $groupInfo[$groupID] : '';
+                if(!$group) continue;
+
                 if(!isset($group->programs))
                 {
                     $programRight = true;
