@@ -474,6 +474,7 @@ class taskModel extends model
         $task->left         = 0;
         $task->pri          = 3;
         $task->type         = 'devel';
+        $task->project      = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('project');
 
         $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id,product')
              ->autoCheck()
