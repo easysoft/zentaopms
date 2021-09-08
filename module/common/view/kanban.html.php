@@ -42,7 +42,12 @@
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {background-color: transparent; border: none; padding: 0; text-align: center;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item:hover {box-shadow: none;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item > .title {white-space: normal;}
-#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item {text-align: center;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; height: 38px;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title.has-icon > .text {margin-right: 5px; max-width: calc(100% - 20px);}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: block; height: 38px;}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: inline-block;}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title > .icon {position: relative; top: -5px}
 #kanbanList .kanban-affixed .kanban-header-col[data-type="doingProject"]:after {background-color: #606060;}
 
 /* Show project and execution in one row */
@@ -247,12 +252,13 @@ function renderReleaseItem(item, $item)
         }
         $title.appendTo($item);
     }
-    $title.text(item.name).attr('title', item.name);
+    $title.html('<span class="text">' + item.name + '</span>')
+        .attr('title', item.name);
     if(item.marker === '1')
     {
         if(!$title.find('.icon').length)
         {
-            $title.append('&nbsp;<i class="icon icon-flag text-red"></i>');
+            $title.addClass('has-icon').append('<i class="icon icon-flag text-red"></i>');
         }
     }
     else
