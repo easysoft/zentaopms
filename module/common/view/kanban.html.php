@@ -343,7 +343,7 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
     readonly: true,
     maxColHeight: 260,
-    laneColClass: 'scrollbar-hover',
+    /* laneItemsClass: 'scrollbar-hover', */ // only show scrollbar on mouse hover
     itemRender: renderKanbanItem,
     useFlex: false,
     onRenderHeaderCol: function($col, col)
