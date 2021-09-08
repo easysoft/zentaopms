@@ -12,6 +12,20 @@
 class gitlab extends control
 {
     /**
+     * The gitlab constructor.
+     * @param string $moduleName
+     * @param string $methodName
+     */
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        /* This is essential when changing tab(menu) from gitlab to repo. */
+        /* Optional: common::setMenuVars('devops', $this->session->repoID); */
+        $this->loadModel('ci')->setMenu();
+    }
+
+    /**
      * Browse gitlab.
      *
      * @param  string $orderBy
@@ -23,8 +37,6 @@ class gitlab extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* This is essential when changing tab(menu) from gitlab to repo. */
-        common::setMenuVars('devops', $this->session->repoID);
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

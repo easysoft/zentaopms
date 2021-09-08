@@ -23,6 +23,7 @@ $lang->mr->reviewer    = 'Reviewer';
 $lang->mr->mergeStatus = 'Merge status';
 $lang->mr->commits     = 'commits';
 $lang->mr->changes     = 'changes';
+$lang->mr->gitlabID    = 'GitLab';
 
 $lang->mr->statusList = array();
 $lang->mr->statusList['opened'] = 'opened';

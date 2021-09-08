@@ -4,6 +4,7 @@ $lang->gitlab->common        = 'GitLab';
 $lang->gitlab->browse        = '瀏覽GitLab';
 $lang->gitlab->create        = '添加GitLab';
 $lang->gitlab->edit          = '編輯GitLab';
+$lang->gitlab->view          = '查看GitLab';
 $lang->gitlab->bindUser      = '綁定用戶';
 $lang->gitlab->webhook       = 'webhook';
 $lang->gitlab->bindProduct   = '關聯產品';
@@ -40,6 +41,7 @@ $lang->gitlab->placeholder->token = "請填寫具有admin權限賬戶的access t
 
 $lang->gitlab->noImportableIssues = "目前沒有可供導入的issue。";
 $lang->gitlab->tokenError         = "當前token非管理員權限。";
+$lang->gitlab->tokenLimit         = "GitLab Token權限不足。請更換為有管理員權限的GitLab Token。";
 $lang->gitlab->hostError          = "無效的GitLab服務地址。";
 $lang->gitlab->bindUserError      = "不能重複綁定用戶 %s";
 $lang->gitlab->importIssueError   = "未選擇該issue所屬的執行。";

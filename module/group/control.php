@@ -159,6 +159,8 @@ class group extends control
         foreach($this->lang->navGroup as $moduleName => $groupName)
         {
             if($groupName == $moduleName) continue;
+            if($moduleName == 'testcase') $moduleName = 'case';
+
             $navGroup[$groupName][$moduleName] = $moduleName;
         }
         $this->view->navGroup = $navGroup;

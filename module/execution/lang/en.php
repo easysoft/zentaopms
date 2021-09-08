@@ -316,6 +316,7 @@ if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choose a
 $lang->execution->confirmDelete             = "Do you want to delete the {$lang->executionCommon}[%s]?";
 $lang->execution->confirmUnlinkMember       = "Do you want to unlink this User from {$lang->executionCommon}?";
 $lang->execution->confirmUnlinkStory        = "Do you want to unlink this Story from {$lang->executionCommon}?";
+$lang->execution->confirmSyncStories        = "After modifying the project, synchronize the execution related {$lang->SRCommon} to the new project?";
 $lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the execution?";
 $lang->execution->notAllowedUnlinkStory     = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the execution. Remove it from the {$lang->executionCommon}, then try again.";
 $lang->execution->notAllowRemoveProducts    = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";

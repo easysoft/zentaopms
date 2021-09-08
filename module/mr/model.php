@@ -255,7 +255,7 @@ class mrModel extends model
                     $value = '';
                     list($field, $optionType, $options) = explode('|', $config);
 
-                    if($optionType == 'field')       $value = $rawMR->$field;
+                    if($optionType == 'field') $value = $rawMR->$field;
                     if($optionType == 'userPairs')
                     {
                         $gitlabUserID = '';
@@ -269,7 +269,9 @@ class mrModel extends model
                     if($value) $newMR->$syncField = $value;
                 }
 
-                if(empty((array)$newMR)) continue;
+                /* For compatibility with PHP 5.4 . */
+                $condition = (array)$newMR;
+                if(empty($condition)) continue;
 
                 /* Update MR in Zentao database. */
                 $this->dao->update(TABLE_MR)->data($newMR)

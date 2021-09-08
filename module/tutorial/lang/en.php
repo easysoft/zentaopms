@@ -9,7 +9,6 @@
  * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z sunhao@cnezsoft.com $
  * @link        http://www.zentao.net
  */
-
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = 'Tutorial';
 $lang->tutorial->desc             = 'You can know how to use ZenTao by doing tasks. It takes about 10 minutes, and you can quit anytime.';
@@ -22,11 +21,11 @@ $lang->tutorial->allTasks         = 'All Tasks';
 $lang->tutorial->previous         = 'Previous';
 $lang->tutorial->nextTask         = 'Next';
 $lang->tutorial->openTargetPage   = 'Open <strong class="task-page-name">%s</strong>';
-$lang->tutorial->targetAppTip     = 'Open <strong class="task-page-name">%s</strong>';
 $lang->tutorial->atTargetPage     = 'On <strong class="task-page-name">%s</strong>';
 $lang->tutorial->reloadTargetPage = 'Reload';
 $lang->tutorial->target           = 'Target';
-$lang->tutorial->targetPageTip     = 'Open【%s】page by following this instruction.';
+$lang->tutorial->targetPageTip    = 'Open【%s】page by following this instruction.';
+$lang->tutorial->targetAppTip     = 'Open <strong class="task-page-name">%s</strong>';
 $lang->tutorial->requiredTip      = '【%s】is required.';
 $lang->tutorial->congratulateTask = 'Congratulations! You have finished【<span class="task-name-current"></span>】!';
 $lang->tutorial->serverErrorTip   = 'Error!';
