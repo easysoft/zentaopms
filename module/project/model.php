@@ -1853,7 +1853,6 @@ class projectModel extends model
             {
                 $otherProjects[$topProgram][$project->status][$project->id] = $project;
             }
-
         }
 
         return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);
