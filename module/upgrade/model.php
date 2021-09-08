@@ -5288,7 +5288,7 @@ class upgradeModel extends model
     }
 
     /**
-     * Required to adjust the bug.
+     * Adjust for bug required field.
      *
      * @access public
      * @return void
@@ -5304,6 +5304,6 @@ class upgradeModel extends model
 
         $data->value = ',' . $data->value . ',';
         $data->value = str_replace(',project,', ',', $data->value);
-        $this->dao->update(TABLE_CONFIG)->set('value')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
+        $this->dao->update(TABLE_CONFIG)->set('`value`')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
     }
 }
