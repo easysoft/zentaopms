@@ -226,6 +226,7 @@ $lang->task->error->realStartedEmpty  = '实际开始不能为空';
 $lang->task->error->finishedDateEmpty = '实际完成不能为空';
 $lang->task->error->finishedDateSmall = '实际完成不能小于实际开始';
 $lang->task->error->alreadyConsumed   = '当前选中的父任务已有消耗。';
+$lang->task->error->date              = '日期不能大于今天';
 
 /* Report. */
 $lang->task->report         = new stdclass();

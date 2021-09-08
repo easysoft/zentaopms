@@ -223,6 +223,7 @@ $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 $lang->task->error->finishedDateSmall = '"Finished Date" should be > "Real Started"';
 $lang->task->error->alreadyConsumed   = 'The currently selected parent task has been consumed.';
+$lang->task->error->date              = 'The date should be >= today.';
 
 /* Report. */
 $lang->task->report = new stdclass();

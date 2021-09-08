@@ -1474,12 +1474,14 @@ class taskModel extends model
     public function recordEstimate($taskID)
     {
         $record = fixer::input('post')->get();
+        $today  = helper::today();
 
         /* Fix bug#3036. */
         foreach($record->consumed as $id => $item) $record->consumed[$id] = trim($item);
         foreach($record->left     as $id => $item) $record->left[$id]     = trim($item);
         foreach($record->consumed as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
         foreach($record->left     as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
+        foreach($record->dates    as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         if(dao::isError()) return false;
 
         $estimates    = array();
@@ -2340,7 +2342,11 @@ class taskModel extends model
     {
         $oldEstimate = $this->getEstimateById($estimateID);
         $estimate    = fixer::input('post')->get();
-        $task        = $this->getById($oldEstimate->task);
+        $today       = helper::today();
+
+        if($estimate->date > $today) return dao::$errors[] = $this->lang->task->error->date;
+
+        $task = $this->getById($oldEstimate->task);
         $this->dao->update(TABLE_TASKESTIMATE)->data($estimate)
             ->autoCheck()
             ->check('consumed', 'notempty')
