@@ -25,11 +25,12 @@ function processKanbanData(key, programsData)
     {
         var subLanes = [];
 
-        $.each(program.products, function(productID, product)
+        $.each(program.products, function(_, product)
         {
             var items   = {};
 
             /* unclosed products */
+            var productID = product.id;
             var productItem = {id: 'product-' + productID, _id: productID, name: product.name};
             items.unclosedProduct = [productItem];
 
@@ -38,8 +39,9 @@ function processKanbanData(key, programsData)
             var plans = product.plans;
             if(plans)
             {
-                $.each(plans, function(planID, plan)
+                $.each(plans, function(_, plan)
                 {
+                    var planID = plan.id;
                     items.unexpiredPlan.push($.extend({}, plan, {id: 'plan-' + planID, _id: planID}));
                 });
             }
@@ -49,8 +51,9 @@ function processKanbanData(key, programsData)
             var waitProjects = product.projects && product.projects.wait;
             if(waitProjects)
             {
-                $.each(waitProjects, function(projectID, project)
+                $.each(waitProjects, function(_, project)
                 {
+                    var projectID = project.id;
                     var projectItem = $.extend({}, project, {id: 'project-' + projectID, _id: projectID});
                     items.waitProject.push(projectItem);
                 });
@@ -62,8 +65,9 @@ function processKanbanData(key, programsData)
             var doingProjects = product.projects && product.projects.doing;
             if(doingProjects)
             {
-                $.each(doingProjects, function(projectID, project)
+                $.each(doingProjects, function(_, project)
                 {
+                    var projectID = project.id;
                     var projectItem = $.extend({}, project, {id: 'project-' + projectID, _id: projectID});
                     items.doingProject.push(projectItem);
 
@@ -79,9 +83,10 @@ function processKanbanData(key, programsData)
             var releases = product.releases;
             if(releases)
             {
-                $.each(releases, function(releaseID, release)
+                $.each(releases, function(_, release)
                 {
                     if(!release || !release.id) return;
+                    var releaseID = release.id;
                     var releaseItem = $.extend({}, release, {id: 'release-' + releaseID, _id: releaseID});
                     items.normalRelease.push(releaseItem);
                 });

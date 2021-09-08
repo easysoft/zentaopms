@@ -32,8 +32,9 @@ function processKanbanData(key, programGroup)
             var statusProjects = statusMap[status];
             if(statusProjects)
             {
-                $.each(statusProjects, function(projectID, project)
+                $.each(statusProjects, function(_, project)
                 {
+                    var projectID = project.id;
                     itemsList.push($.extend({}, project, {id: 'project-' + projectID, _id: projectID}));
 
                     if(status === 'doing')
