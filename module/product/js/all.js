@@ -41,9 +41,9 @@ $(function()
         var $tbody = $('#productTableList');
         $tbody.find('.program-checkbox').each(function()
         {
-            var $checkbox = $(this);
-            var $tr = $checkbox.closest('tr');
-            var rowID = $tr.data('id');
+            var $checkbox       = $(this);
+            var $tr             = $checkbox.closest('tr');
+            var rowID           = $tr.data('id');
             var isAllRowChecked = !$tbody.find('tr[data-parent="' + rowID + '"] input:checkbox:not(:checked)').length;
             $checkbox.toggleClass('checked', isAllRowChecked);
         });
