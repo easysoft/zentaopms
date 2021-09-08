@@ -596,7 +596,7 @@ class webhookModel extends model
             $toList = implode(',', $toList);
         }
 
-        $toList = str_replace(",{$this->app->user->account},", ' ', ",$toList,");
+        $toList = str_replace(",{$this->app->user->account},", ',', ",$toList,");
 
         $openIdList = $this->getBoundUsers($webhookID, $toList);
         $openIdList = join(',', $openIdList);
