@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的issues资源类
- * 版本V1
+ * The issues entry point of ZenTaoPMS.
  *
- * The issues entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class issuesEntry extends entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     public function get($projectID = 0)
     {
         if($projectID) return $this->getProjectIssues($projectID);
@@ -30,6 +40,13 @@ class issuesEntry extends entry
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'issues' => $result));
     }
 
+    /**
+     * Get issues of project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     private function getProjectIssues($projectID)
     {
         $project = $this->loadModel('project')->getByID($projectID);
@@ -52,6 +69,13 @@ class issuesEntry extends entry
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'issues' => $result));
     }
 
+    /**
+     * POST method.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     public function post($projectID = 0)
     {
         $project = $this->loadModel('project')->getByID($projectID);

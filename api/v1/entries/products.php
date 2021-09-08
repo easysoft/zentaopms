@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的products资源类
- * 版本V1
+ * The products entry point of ZenTaoPMS.
  *
- * The products entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class productsEntry extends entry
 {
+    /**
+     * POST method.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     public function get()
     {
         $programID = $this->param('program', 0);
@@ -49,6 +59,12 @@ class productsEntry extends entry
         return $this->sendError(400, 'error');
     }
 
+    /**
+     * POST method.
+     *
+     * @access public
+     * @return void
+     */
     public function post()
     {
         $fields = 'program,line,name,PO,QD,RD,type,desc,whitelist';

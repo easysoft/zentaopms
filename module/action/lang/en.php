@@ -285,18 +285,18 @@ $lang->action->dynamicAction->todo['assigned']  = 'Assign Todo';
 $lang->action->dynamicAction->todo['undeleted'] = 'Restore Todo';
 $lang->action->dynamicAction->todo['hidden']    = 'Hide Todo';
 
-$lang->action->dynamicAction->program['create']   = 'Create Program';
-$lang->action->dynamicAction->program['edit']     = 'Edit Program';
-$lang->action->dynamicAction->program['activate'] = 'Activate Program';
-$lang->action->dynamicAction->program['delete']   = 'Delete Program';
-$lang->action->dynamicAction->program['close']    = 'Close Program';
+$lang->action->dynamicAction->program['opened']    = 'Create Program';
+$lang->action->dynamicAction->program['edited']    = 'Edit Program';
+$lang->action->dynamicAction->program['activated'] = 'Activate Program';
+$lang->action->dynamicAction->program['deleted']   = 'Delete Program';
+$lang->action->dynamicAction->program['closed']    = 'Close Program';
 
-$lang->action->dynamicAction->project['create']   = 'Create Project';
-$lang->action->dynamicAction->project['edit']     = 'Edit Project';
-$lang->action->dynamicAction->project['start']    = 'Start Project';
-$lang->action->dynamicAction->project['suspend']  = 'Suspend Project';
-$lang->action->dynamicAction->project['activate'] = 'Activate Project';
-$lang->action->dynamicAction->project['close']    = 'Close Project';
+$lang->action->dynamicAction->project['opened']    = 'Create Project';
+$lang->action->dynamicAction->project['edited']    = 'Edit Project';
+$lang->action->dynamicAction->project['started']   = 'Start Project';
+$lang->action->dynamicAction->project['suspended'] = 'Suspend Project';
+$lang->action->dynamicAction->project['activated'] = 'Activate Project';
+$lang->action->dynamicAction->project['closed']    = 'Close Project';
 
 $lang->action->dynamicAction->product['opened']    = 'Create ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = 'Edit ' . $lang->productCommon;

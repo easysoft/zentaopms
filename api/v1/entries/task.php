@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的task资源类
- * 版本V1
+ * The task entry point of ZenTaoPMS.
  *
- * The task entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class taskEntry extends Entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
     public function get($taskID)
     {
         $control = $this->loadController('task', 'view');
@@ -25,6 +35,13 @@ class taskEntry extends Entry
         $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
     }
 
+    /**
+     * PUT method.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
     public function put($taskID)
     {
         $oldTask = $this->loadModel('task')->getByID($taskID);
@@ -41,6 +58,13 @@ class taskEntry extends Entry
         $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
     }
 
+    /**
+     * DELETE method.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
     public function delete($taskID)
     {
         $control = $this->loadController('task', 'delete');

@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的product资源类
- * 版本V1
+ * The product entry point of ZenTaoPMS.
  *
- * The product entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class productEntry extends Entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
     public function get($productID)
     {
         $fields = $this->param('fields');
@@ -46,6 +56,13 @@ class productEntry extends Entry
         return $this->send(200, $product);
     }
 
+    /**
+     * PUT method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
     public function put($productID)
     {
         $oldProduct = $this->loadModel('product')->getByID($productID);
@@ -64,6 +81,13 @@ class productEntry extends Entry
         $this->sendSuccess(200, $this->format($product, 'createdDate:time'));
     }
 
+    /**
+     * DELETE method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
     public function delete($productID)
     {
         $control = $this->loadController('product', 'delete');

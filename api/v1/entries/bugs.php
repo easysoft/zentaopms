@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的bugs资源类
- * 版本V1
+ * The bugs entry point of ZenTaoPMS.
  *
- * The bugs entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class bugsEntry extends entry 
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
     public function get($productID)
     {
         $control = $this->loadController('bug', 'browse');
@@ -33,6 +43,13 @@ class bugsEntry extends entry
         return $this->sendError(400, 'error');
     }
 
+    /**
+     * POST method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
     public function post($productID)
     {
         $fields = 'title,project,execution,openedBuild,assignedTo,pri,severity,type,story';
