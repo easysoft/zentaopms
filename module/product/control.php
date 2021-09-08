@@ -1321,15 +1321,15 @@ class product extends control
                     $rowspan[$i]['rows']['program'] = 1;
                     $programI = $i;
                 }
-                else $rowspan[$programI]['rows']['program']++;
+                else $rowspan[$programI]['rows']['program'] ++;
                 if($lastLine == '' or $product->line != $lastLine)
                 {
                     $rowspan[$i]['rows']['line'] = 1;
                     $lineI = $i;
                 }
-                else $rowspan[$lineI]['rows']['line']++;
+                else $rowspan[$lineI]['rows']['line'] ++;
                 $lastProgram = $product->program;
-                $lastLine = $product->line;
+                $lastLine    = $product->line;
 
                 if($this->post->exportType == 'selected')
                 {

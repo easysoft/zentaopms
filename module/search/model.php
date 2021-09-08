@@ -943,7 +943,7 @@ class searchModel extends model
     {
         $words = explode(' ', trim($keywords, ' '));
         $markedWords = array();
-        $leftMark = '|0000';
+        $leftMark  = '|0000';
         $rightMark = '0000|';
 
         foreach($words as $key => $word)

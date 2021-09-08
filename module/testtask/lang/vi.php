@@ -124,17 +124,17 @@ $lang->testtask->fail          = 'Thất bại';
 $lang->testtask->showResult    = 'Chạy <span class="text-info">%s</span> lần';
 $lang->testtask->showFail      = 'Thất bại <span class="text-danger">%s</span> lần';
 
-$lang->testtask->confirmDelete      = 'Bạn có muốn xóa bản dựng này?';
-$lang->testtask->confirmUnlinkCase  = 'Bạn có muốn hủy liên kết tình huống này?';
-$lang->testtask->noticeNoOther      = 'Không có test builds cho sản phẩm này.';
-$lang->testtask->noTesttask         = 'Không có yêu cầu. ';
-$lang->testtask->checkLinked        = "Vui lòng kiểm tra sản phẩm đó mà yêu cầu test này là liên kết tới một dự án.";
-$lang->testtask->noImportData       = 'The imported XML does not parse the data.';
-$lang->testtask->unitXMLFormat      = 'Please select a file in JUnit XML format.';
-$lang->testtask->titleOfAuto        = "%s automated testing";
-$lang->testtask->cannotBeParsed     = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
-$lang->testtask->finishedDateError  = 'Actual Finished Date cannot be <= Begin Date %s';
-$lang->testtask->finishedDateError2 = 'Actual Finished Date cannot be > Today';
+$lang->testtask->confirmDelete     = 'Bạn có muốn xóa bản dựng này?';
+$lang->testtask->confirmUnlinkCase = 'Bạn có muốn hủy liên kết tình huống này?';
+$lang->testtask->noticeNoOther     = 'Không có test builds cho sản phẩm này.';
+$lang->testtask->noTesttask        = 'Không có yêu cầu. ';
+$lang->testtask->checkLinked       = "Vui lòng kiểm tra sản phẩm đó mà yêu cầu test này là liên kết tới một dự án.";
+$lang->testtask->noImportData      = 'The imported XML does not parse the data.';
+$lang->testtask->unitXMLFormat     = 'Please select a file in JUnit XML format.';
+$lang->testtask->titleOfAuto       = "%s automated testing";
+$lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
+$lang->testtask->finishedDateLess  = 'Actual Finished Date cannot be <= Begin Date %s';
+$lang->testtask->finishedDateMore  = 'Actual Finished Date cannot be > Today';
 
 $lang->testtask->assignedToMe = 'Giao cho bạn';
 $lang->testtask->allCases     = 'Tất cả tình huống';

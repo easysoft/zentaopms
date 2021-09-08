@@ -124,17 +124,17 @@ $lang->testtask->fail          = 'Echec';
 $lang->testtask->showResult    = 'Jouée <span class="text-info">%s</span> fois';
 $lang->testtask->showFail      = 'Echouée <span class="text-danger">%s</span> fois';
 
-$lang->testtask->confirmDelete      = 'Voulez-vous supprimer ce build ?';
-$lang->testtask->confirmUnlinkCase  = 'Voulez-vous détacher ce CasTest ?';
-$lang->testtask->noticeNoOther      = "Il n'y a pas de Campagnes de Recette pour ce product.";
-$lang->testtask->noTesttask         = 'Pas de campagne. ';
-$lang->testtask->checkLinked        = "Vérifiez si le product auquel la campagne de recette est associée est bien lié à un projet.";
-$lang->testtask->noImportData       = "Le XML importé ne parse pas les données.";
-$lang->testtask->unitXMLFormat      = 'Veuillez sélectionner un fichier au format XML JUnit.';
-$lang->testtask->titleOfAuto        = "%s tests automatisés";
-$lang->testtask->cannotBeParsed     = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
-$lang->testtask->finishedDateError  = 'Actual Finished Date cannot be <= Begin Date %s';
-$lang->testtask->finishedDateError2 = 'Actual Finished Date cannot be > Today';
+$lang->testtask->confirmDelete     = 'Voulez-vous supprimer ce build ?';
+$lang->testtask->confirmUnlinkCase = 'Voulez-vous détacher ce CasTest ?';
+$lang->testtask->noticeNoOther     = "Il n'y a pas de Campagnes de Recette pour ce product.";
+$lang->testtask->noTesttask        = 'Pas de campagne. ';
+$lang->testtask->checkLinked       = "Vérifiez si le product auquel la campagne de recette est associée est bien lié à un projet.";
+$lang->testtask->noImportData      = "Le XML importé ne parse pas les données.";
+$lang->testtask->unitXMLFormat     = 'Veuillez sélectionner un fichier au format XML JUnit.';
+$lang->testtask->titleOfAuto       = "%s tests automatisés";
+$lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in the wrong format and cannot be parsed.';
+$lang->testtask->finishedDateLess  = 'Actual Finished Date cannot be <= Begin Date %s';
+$lang->testtask->finishedDateMore  = 'Actual Finished Date cannot be > Today';
 
 $lang->testtask->assignedToMe  = 'Affecté à Moi';
 $lang->testtask->allCases      = 'Tous les CasTests';

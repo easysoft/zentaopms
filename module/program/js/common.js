@@ -75,7 +75,7 @@ function computeWorkDays(currentID)
     {
         beginDate = $('#begin').val();
         endDate   = $('#end').val();
-        
+
         var begin = new Date(beginDate.replace(/-/g,"/"));
         var end   = new Date(endDate.replace(/-/g,"/"));
         var time  = end.getTime() - begin.getTime();

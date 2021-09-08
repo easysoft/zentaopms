@@ -3953,17 +3953,16 @@ class storyModel extends model
 
         if(count($tracks) < $pager->recPerPage)
         {
-            /* Show of child story */
+            /* Show sub stories. */
             $storiesCopy = array();
             foreach($stories as $id => $story)
             {
                 $storiesCopy[$id] = $story;
-                if(isset($story->children) and count($story->children) > 0)
+
+                if(!isset($story->children) or count($story->children) == 0) continue;
+                foreach($story->children as $childID => $children)
                 {
-                    foreach($story->children as $childID => $children)
-                    {
-                        $storiesCopy[$childID] = $children;
-                    }
+                    $storiesCopy[$childID] = $children;
                 }
             }
             $stories = $storiesCopy;
@@ -3972,10 +3971,10 @@ class storyModel extends model
             {
                 $stories[$id] = new stdclass();
                 $stories[$id]->parent = $story->parent;
-                $stories[$id]->title = $story->title;
-                $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
-                $stories[$id]->bugs  = $this->loadModel('bug')->getStoryBugs($id);
-                $stories[$id]->tasks = $this->loadModel('task')->getStoryTasks($id);
+                $stories[$id]->title  = $story->title;
+                $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
+                $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
+                $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
                 if(isset($this->config->maxVersion))
                 {
                     $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');

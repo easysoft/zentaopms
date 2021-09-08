@@ -803,12 +803,12 @@ class testtaskModel extends model
 
         if($testtask->realFinishedDate <= $oldTesttask->begin)
         {
-            dao::$errors[] = sprintf($this->lang->testtask->finishedDateError, $oldTesttask->begin);
+            dao::$errors[] = sprintf($this->lang->testtask->finishedDateLess, $oldTesttask->begin);
             return false;
         }
         if($testtask->realFinishedDate > date("Y-m-d 00:00:00", strtotime("+1 day")))
         {
-            dao::$errors[] = $this->lang->testtask->finishedDateError2;
+            dao::$errors[] = $this->lang->testtask->finishedDateMore;
             return false;
         }
 
