@@ -8,7 +8,7 @@
 #kanbanList .kanban-item {margin-top: 0; border: 1px solid #ebebeb; border-radius: 2px;}
 #kanbanList .kanban-item:hover {border: 1px solid #ccc;}
 #kanbanList .kanban-item + .kanban-item {margin-top: 10px;}
-#kanbanList .kanban-lane-items {padding: 10px;}
+#kanbanList .kanban-lane-items {padding: 10px; min-height: 38px;}
 #kanbanList .kanban-header,
 #kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
