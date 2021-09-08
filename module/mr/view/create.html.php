@@ -23,7 +23,7 @@
           </tr>
           <tr>
              <th><?php echo $lang->mr->sourceProject;?></th>
-             <td class='required'>
+             <td>
                <div class='input-group'>
                  <?php echo html::select('sourceProject', array(''), '', "class='form-control chosen'");?>
                  <span class='input-group-addon fix-border'><?php echo $lang->mr->sourceBranch ?></span>
@@ -33,7 +33,7 @@
           </tr>
           <tr>
              <th><?php echo $lang->mr->targetProject;?></th>
-             <td class='required'>
+             <td>
                <div class='input-group'>
                  <?php echo html::select('targetProject', array(''), '', "class='form-control chosen'");?>
                  <span class='input-group-addon fix-border'><?php echo $lang->mr->targetBranch ?></span>
