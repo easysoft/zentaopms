@@ -40,27 +40,28 @@ Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
-global $config;
-$lang->install->introduction        = "Zentao {$this->config->version} Introduction";
+$lang->install->introduction        = "ZenTao 15.0+ Feature Introduction";
 $lang->install->howToUse            = "How do you like to use ZenTao?";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4';
 $lang->install->introductionContent = <<<EOT
 <div>
-  <h4>Welcome to %s</h4>
-  <p>ZenTao %s provides two management modes, the classic mode and the program mode. The former is relatively simplified with only two core features, the product and the project, and the latter is a brand-new mode with all the core features. You can choose a mode according to your needs.</p>
+  <h4>Dear users, welcome to ZenTao project management system.</h4>
+  <p>ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
   <div class='block-content'>
-    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>Program</strong></p><p>Program is a set of interrelated and coordinated projects. It is at the top and strategic level with multi-level projects.</p></div>
+    <div class='block-details'>
+      <p class='block-title'><i class='icon icon-program'></i><strong>Program</strong></p>
+      <p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p></div>
     <div class='block-details block-right'>
       <p class='block-title'><i class='icon icon-product'></i><strong>Product</strong></p>
-      <p>Product defines "what" and focuses on requirements. You can manage user requirements, software requirements, plans and releases.<p>
+      <p>Product is used to subdivide the company's strategy into requirements that can be developed, and the product manager can use it to make release plans.<p>
     </div>
     <div class='block-details'>
       <p class='block-title'><i class='icon icon-project'></i><strong>Project</strong></p>
-      <p>Project defines "how" and focuses on tasks of the project within the specified time, budget and quality. It is at a campaign level.</p>
+      <p>Project is used to organize the manpower for development, track and manage the project process, and complete the project in a faster, better, and less costly way.</p>
     </div>
     <div class='block-details block-right'>
       <p class='block-title'><i class='icon icon-product'></i><strong>Execution</strong></p>
-      <p>Execution are iterations/sprints or stages of a project. The task are done in executions. It is the combat-level management.<p>
+      <p>Execution is used to decompose, assign, and track tasks to ensure that project goals can be implemented by manpower.<p>
     </div>
   </div>
   <div class='text-center introduction-link'>
