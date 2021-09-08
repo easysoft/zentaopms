@@ -1,8 +1,8 @@
 <?php
 $config->mr = new stdclass();
-$config->mr->create->skippedFields  = 'projectID';
 
 $config->mr->create = new stdclass();
+$config->mr->create->skippedFields  = 'projectID';
 $config->mr->create->requiredFields = 'gitlabID,sourceProject,sourceBranch,targetProject,targetBranch,title';
 
 $config->mr->edit = new stdclass;
