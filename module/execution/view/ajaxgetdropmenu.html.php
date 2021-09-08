@@ -91,7 +91,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status == 'done' or $execution->status == 'closed')
         {
-            $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected' title='$execution->name' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected executionName' title='$execution->name' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'closed';
         }

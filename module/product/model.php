@@ -596,7 +596,6 @@ class productModel extends model
         if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
-            ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setDefault('line', 0)
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
@@ -1555,7 +1554,7 @@ class productModel extends model
             ->fetchGroup('product', 'id');
 
         $executionListKey = $this->config->systemMode == 'new' ? 'project' : 'productID';
-        $executionList = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executionList    = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('type')->in('stage,sprint')
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.project')->in(array_keys($projectList))->fi()

@@ -234,11 +234,14 @@ class html extends baseHTML
     /**
      * Create user avatar.
      *
-     * @param  string|object|array  $user       User object or user avatar address or user account
-     * @param  string|int           $size       Avatar size, can be a number or preset sizes: "xs", "sm", "", "lg", "xl", default is ""
-     * @param  string               $className  Avatar element class name, default is "avatar-circle"
-     * @param  string               $attrib     Extra attributes on avatar element
-     * @param  string               $tag        Avatar element tag name, default is "div"
+     * @param  string|object|array  $user        User object or user avatar url or user account
+     * @param  string|int           $size        Avatar size, can be a number or preset sizes: "xs", "sm", "", "lg", "xl", default is ""
+     * @param  string               $className   Avatar element class name, default is "avatar-circle"
+     * @param  string               $attrib      Extra attributes on avatar element
+     * @param  string               $tag         Avatar element tag name, default is "div"
+     * @param  string               $hueDistance Hue distance used as background color for default avatar
+     * @param  string               $saturation  Saturation used as background color for default avatar
+     * @param  string               $lightness   Lightness used as background color for default avatar
      * @static
      * @access public
      * @return string
@@ -290,7 +293,7 @@ class html extends baseHTML
     /**
      * Create a small user avatar.
      *
-     * @param  string|object $user      User object or user avatar address or user account
+     * @param  string|object $user      User object or user avatar url or user account
      * @param  string        $className Avatar element class name, default is "avatar-circle"
      * @param  string        $attrib    Extra attributes on avatar element
      * @param  string        $tag       Avatar element tag name, default is "div"
@@ -306,7 +309,7 @@ class html extends baseHTML
     /**
      * Create a large user avatar.
      *
-     * @param  string|object $user      User object or user avatar address or user account
+     * @param  string|object $user      User object or user avatar url or user account
      * @param  string        $className Avatar element class name, default is "avatar-circle"
      * @param  string        $attrib    Extra attributes on avatar element
      * @param  string        $tag       Avatar element tag name, default is "div"

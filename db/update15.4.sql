@@ -23,4 +23,3 @@ CREATE TABLE `zt_mr` (
   `mergeStatus` char(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-

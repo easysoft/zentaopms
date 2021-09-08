@@ -147,7 +147,7 @@ class programModel extends model
      * Get kanban group data.
      *
      * @access public
-     * @return array 
+     * @return array
      */
     public function getKanbanGroup()
     {
@@ -252,7 +252,7 @@ class programModel extends model
         /* Group data by program. */
         foreach($programs as $programID => $programName)
         {
-            $programGroup = new stdclass(); 
+            $programGroup = new stdclass();
             $programGroup->name     = $programName;
             $programGroup->products = zget($productGroup, $programID, array());
 
@@ -274,7 +274,7 @@ class programModel extends model
      *
      * @param  string $account
      * @access public
-     * @return array 
+     * @return array
      */
     public function getInvolvedPrograms($account)
     {
@@ -658,7 +658,6 @@ class programModel extends model
             ->setDefault('end', '')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
@@ -819,7 +818,7 @@ class programModel extends model
         while($program = $stmt->fetch())
         {
             $link     = $this->getLink($moduleName, $methodName, $program->id, $vars, $from);
-            $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
+            $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis programName' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {

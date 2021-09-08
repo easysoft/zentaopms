@@ -88,7 +88,6 @@ class personnelModel extends model
             foreach($userGroups[$account] as $groupID => $userGroup)
             {
                 $group = isset($groupInfo[$groupID]) ? $groupInfo[$groupID] : '';
-                if(!$group) continue;
 
                 if(!isset($group->programs))
                 {

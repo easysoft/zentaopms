@@ -54,6 +54,8 @@ $programsPinYin = common::convert2Pinyin($programNames);
 #programTree ul > li.has-list:after {width: 14px;}
 #programTree ul > li.item-meas a.selected{color: #0c64eb;}
 #showClosed1 + label{color: #3c4353}
+
+a.programName:focus, a.programName:hover {background: #0c64eb; color: #fff !important;}
 </style>
 <script>
 $('#programTree').tree();

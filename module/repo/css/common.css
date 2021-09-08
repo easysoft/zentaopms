@@ -1,5 +1,7 @@
 a {color: #169;}
 a:hover, a:active {text-decoration:underline; color: #C61A1A;}
+#swapper a {text-decoration: none;}
+#swapper .col-footer a:hover {color: #0c64eb;}
 h2,h3 {font-size: 20px; margin: 0; clear: both;}
 h3 {font-size: 16px;}
 .revision {font-size: 12px; line-height: 20px; text-align: right; padding-right: 8px;}
