@@ -116,7 +116,7 @@ class projectStory extends control
      */
     public function batchUnlinkStory($projectID, $storyIdList = '')
     {
-        $storyIdList      = empty($storyIdList ? array() : array_filter(explode(',', $storyIdList));
+        $storyIdList      = empty($storyIdList) ? array() : array_filter(explode(',', $storyIdList));
         $executionStories = $this->projectstory->getExecutionStories($projectID, $storyIdList);
         $html             = '';
 
