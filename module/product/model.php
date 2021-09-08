@@ -596,7 +596,6 @@ class productModel extends model
         if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
-            ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setDefault('line', 0)
             ->join('whitelist', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)

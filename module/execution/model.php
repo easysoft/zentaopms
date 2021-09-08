@@ -486,7 +486,6 @@ class executionModel extends model
 
         /* Child stage inherits parent stage permissions. */
         if(!isset($execution->acl)) $execution->acl = $oldExecution->acl;
-        if($execution->acl == 'open') $execution->whitelist = '';
 
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->edit['id'], $this->post->uid);
 
