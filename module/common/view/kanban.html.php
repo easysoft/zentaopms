@@ -288,7 +288,7 @@ function renderDoingProjectItem(item, $item)
     if(item.execution)
     {
         var $executionItem = $('<div class="kanban-item execution-item"></div>').appendTo($executionCol);
-        renderExecutionItem(item, $executionItem);
+        renderExecutionItem(item.execution, $executionItem);
     }
 
     return $item;
