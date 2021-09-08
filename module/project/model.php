@@ -1113,7 +1113,7 @@ class projectModel extends model
         $now        = helper::now();
 
         $project = fixer::input('post')
-            ->add('realBegan', $now)
+            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -1135,6 +1135,7 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
+
         $project = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -1185,6 +1186,7 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
+
         $project = fixer::input('post')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -1252,6 +1254,7 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
+
         $project = fixer::input('post')
             ->setDefault('status', 'closed')
             ->setDefault('closedBy', $this->app->user->account)
@@ -1853,7 +1856,6 @@ class projectModel extends model
             {
                 $otherProjects[$topProgram][$project->status][$project->id] = $project;
             }
-
         }
 
         return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);

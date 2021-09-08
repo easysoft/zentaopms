@@ -33,7 +33,7 @@
 $kanbanColumns = array();
 $kanbanColumns['unclosedProduct'] = array('name' => $lang->program->kanban->openProducts, 'type' => 'unclosedProduct');
 $kanbanColumns['unexpiredPlan']   = array('name' => $lang->program->kanban->unexpiredPlans, 'type' => 'unexpiredPlan');
-$kanbanColumns['waitProject']    = array('name' => $lang->program->kanban->waitingProjects, 'type' => 'waitProject');
+$kanbanColumns['waitProject']     = array('name' => $lang->program->kanban->waitingProjects, 'type' => 'waitProject');
 $kanbanColumns['doingProject']    = array('name' => $lang->program->kanban->doingProjects, 'type' => 'doingProject');
 $kanbanColumns['doingExecution']  = array('name' => $lang->program->kanban->doingExecutions, 'type' => 'doingExecution');
 $kanbanColumns['normalRelease']   = array('name' => $lang->program->kanban->normalReleases, 'type' => 'normalRelease');

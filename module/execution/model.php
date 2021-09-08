@@ -694,10 +694,10 @@ class executionModel extends model
     public function start($executionID)
     {
         $oldExecution = $this->getById($executionID);
-        $now        = helper::now();
+        $now          = helper::now();
 
         $execution = fixer::input('post')
-            ->add('realBegan', $now)
+            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -718,7 +718,8 @@ class executionModel extends model
     public function putoff($executionID)
     {
         $oldExecution = $this->getById($executionID);
-        $now        = helper::now();
+        $now          = helper::now();
+
         $execution = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -746,7 +747,8 @@ class executionModel extends model
     public function suspend($executionID)
     {
         $oldExecution = $this->getById($executionID);
-        $now        = helper::now();
+        $now          = helper::now();
+
         $execution = fixer::input('post')
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -771,7 +773,8 @@ class executionModel extends model
     public function activate($executionID)
     {
         $oldExecution = $this->getById($executionID);
-        $now        = helper::now();
+        $now          = helper::now();
+
         $execution = fixer::input('post')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -838,10 +841,11 @@ class executionModel extends model
     public function close($executionID)
     {
         $oldExecution = $this->getById($executionID);
-        $now        = helper::now();
+        $now          = helper::now();
+
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
-            ->setDefault('realEnd', $now)
+            ->setDefault('realEnd', helper::today())
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
