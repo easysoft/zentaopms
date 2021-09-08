@@ -677,6 +677,7 @@ class task extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             die(js::error($this->lang->notFound) . js::locate('back'));
         }
+
         $this->session->project = $task->project;
 
         if($task->fromBug != 0)

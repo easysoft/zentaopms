@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的build资源类
- * 版本V1
+ * The build entry point of ZenTaoPMS.
  *
- * The build entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class buildEntry extends Entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return void
+     */
     public function get($buildID)
     {
         $control = $this->loadController('build', 'view');
@@ -21,6 +31,13 @@ class buildEntry extends Entry
         $this->sendError(400, 'error');
     }
 
+    /**
+     * PUT method.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return void
+     */
     public function put($buildID)
     {
         $old = $this->loadModel('build')->getByID($buildID);
@@ -40,6 +57,13 @@ class buildEntry extends Entry
         $this->send(200, $this->format($build, 'createdDate:time,editedDate:time,assignedDate:time'));
     }
 
+    /**
+     * DELETE method.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return void
+     */
     public function delete($buildID)
     {
         $control = $this->loadController('build', 'delete');

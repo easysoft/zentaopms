@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的story资源类
- * 版本V1
+ * The bug change point of ZenTaoPMS.
  *
- * The story entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class storyChangeEntry extends Entry
 {
+    /**
+     * POST method.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
     public function post($storyID)
     {
         $oldStory = $this->loadModel('story')->getByID($storyID);

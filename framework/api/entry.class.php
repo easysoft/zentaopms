@@ -2,6 +2,15 @@
 /**
  * 禅道API的entry类。
  * The entry class file of ZenTao API.
+ *
+ * @package framework
+ *
+ * The author disclaims copyright to this source code.  In place of
+ * a legal notice, here is a blessing:
+ *
+ *  May you do good and not evil.
+ *  May you find forgiveness for yourself and forgive others.
+ *  May you share freely, never taking more than you give.
  */
 class entry extends baseEntry
 {
@@ -275,6 +284,7 @@ class baseEntry
 
         $controller = new $className();
         $controller->viewType = 'json';
+
         return $controller;
     }
 

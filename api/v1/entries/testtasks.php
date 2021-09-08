@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的testtasks资源类
- * 版本V1
+ * The testtasks entry point of ZenTaoPMS.
  *
- * The testtasks entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class testtasksEntry extends entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     public function get($projectID = 0)
     {
         if($projectID) return $this->getProjectTesttasks($projectID);
@@ -31,6 +41,13 @@ class testtasksEntry extends entry
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'testtasks' => $result));
     }
 
+    /**
+     * Get testtasks of project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     private function getProjectTesttasks($projectID)
     {
         $project = $this->loadModel('project')->getByID($projectID);

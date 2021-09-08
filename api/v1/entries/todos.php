@@ -1,13 +1,22 @@
 <?php
 /**
- * 禅道API的todos资源类
- * 版本V1
+ * The todos entry point of ZenTaoPMS.
  *
- * The todos entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class todosEntry extends entry
 {
+    /**
+     * GET method.
+     *
+     * @access public
+     * @return void
+     */
     public function get()
     {
         $control = $this->loadController('my', 'todo');
@@ -26,6 +35,12 @@ class todosEntry extends entry
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'todos' => $result));
     }
 
+    /**
+     * POST method.
+     *
+     * @access public
+     * @return void
+     */
     public function post()
     {
         $fields = 'name,desc,begin,end,private';
@@ -51,5 +66,4 @@ class todosEntry extends entry
         
         $this->send(201, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }
-
 }

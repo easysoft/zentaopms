@@ -1,13 +1,23 @@
 <?php
 /**
- * 禅道API的todo资源类
- * 版本V1
+ * The todo entry point of ZenTaoPMS.
  *
- * The todo entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class todoEntry extends entry 
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $todoID
+     * @access public
+     * @return void
+     */
     public function get($todoID)
     {
         $control = $this->loadController('todo', 'view');
@@ -21,6 +31,13 @@ class todoEntry extends entry
         $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }
 
+    /**
+     * PUT method.
+     *
+     * @param  int    $todoID
+     * @access public
+     * @return void
+     */
     public function put($todoID)
     {
         $oldTodo = $this->loadModel('todo')->getByID($todoID);
@@ -46,6 +63,13 @@ class todoEntry extends entry
         $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }
 
+    /**
+     * DELETE method.
+     *
+     * @param  int    $todoID
+     * @access public
+     * @return void
+     */
     public function delete($todoID)
     {
         $control = $this->loadController('todo', 'delete');

@@ -1,18 +1,29 @@
 <?php
 /**
- * 禅道API的issue资源类
- * 版本V1
+ * The issue entry point of ZenTaoPMS.
  *
- * The issue entry point of zentaopms
- * Version 1
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     entries
+ * @version     1
+ * @link        http://www.zentao.net
  */
 class issueEntry extends Entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int|string $issueID. Issues id for Gitlab has '-', such as task-1, bug-1.
+     * @access public
+     * @return void
+     */
     public function get($issueID)
     {
         /* If $issueID has '-', go to productIssue entry point for Gitlab. */
         if(strpos($issueID, '-') !== FALSE) return $this->fetch('productIssue', 'get', array('issueID' => $issueID));
 
+        /* Otherwise, get issue of project. */
         $control = $this->loadController('issue', 'view');
         $control->view($issueID);
 
@@ -24,6 +35,13 @@ class issueEntry extends Entry
         $this->sendError(400, 'error');
     }
 
+    /**
+     * PUT method.
+     *
+     * @param  int    $issueID
+     * @access public
+     * @return void
+     */
     public function put($issueID)
     {
         $oldIssue = $this->loadModel('issue')->getByID($issueID);
@@ -43,6 +61,13 @@ class issueEntry extends Entry
         $this->send(200, $this->format($issue, 'createdDate:time,editedDate:time,assignedDate:time'));
     }
 
+    /**
+     * DELETE method.
+     *
+     * @param  int    $issueID
+     * @access public
+     * @return void
+     */
     public function delete($issueID)
     {
         $control = $this->loadController('issue', 'delete');
