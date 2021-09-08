@@ -21,6 +21,8 @@ select[id^="story"] + .picker-single {width: 130px; max-width: 130px;}
 .chosen-results > li.has-new-task.highlighted {color: #fff;}
 
 .c-id {width: 30px;}
-.c-module {width: 150px;}
+.c-module, .c-desc {width: 150px;}
 .c-story {width: 200px;}
 .c-assigned {width: 130px;}
+.c-date {width: 120px;}
+.c-pri {width: 80px;}
