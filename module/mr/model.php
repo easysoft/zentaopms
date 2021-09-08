@@ -84,8 +84,8 @@ class mrModel extends model
             ->add('createdDate', helper::now())
             ->get();
 
-        $this->dao->insert(TABLE_MR)->data($MR, $this->config->MR->create->skippedFields)
-            ->batchCheck($this->config->MR->create->requiredFields, 'notempty')
+        $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
+            ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -173,6 +173,7 @@ class mrModel extends model
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR)
             ->where('id')->eq($MRID)
+            ->batchCheck($this->config->mr->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
         $MR = $this->getByID($MRID);
@@ -194,7 +195,7 @@ class mrModel extends model
         /* Sync MR in ZenTao database whatever status of MR in GitLab. */
         if(isset($rawMR->iid))
         {
-            $map         = $this->config->MR->maps->sync;
+            $map         = $this->config->mr->maps->sync;
             $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
 
             $newMR = new stdclass;
@@ -238,12 +239,13 @@ class mrModel extends model
         {
             if($MR->status != 'opened') continue;
             $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+
             if(isset($rawMR->iid))
             {
                 /* create gitlab mr todo to zentao todo */
                 $this->batchSyncTodo($MR->gitlabID, $MR->targetProject);
 
-                $map         = $this->config->MR->maps->sync;
+                $map         = $this->config->mr->maps->sync;
                 $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
 
                 $newMR = new stdclass;
@@ -266,6 +268,9 @@ class mrModel extends model
 
                     if($value) $newMR->$syncField = $value;
                 }
+
+                if(empty((array)$newMR)) continue;
+
                 /* Update MR in Zentao database. */
                 $this->dao->update(TABLE_MR)->data($newMR)
                     ->where('id')->eq($MR->id)

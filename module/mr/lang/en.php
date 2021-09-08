@@ -13,7 +13,7 @@ $lang->mr->viewInGitlab = 'view in GitLab';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";
-$lang->mr->name        = 'Name';
+$lang->mr->title        = 'Name';
 $lang->mr->status      = 'Status';
 $lang->mr->author      = 'Author';
 $lang->mr->assignee    = 'Assignee';

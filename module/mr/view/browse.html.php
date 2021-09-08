@@ -31,7 +31,7 @@
         <tr>
           <?php $vars = "objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
           <th class='w-60px  text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id); ?></th>
-          <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->name); ?></th>
+          <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title); ?></th>
           <th class='text-left'><?php common::printOrderLink('sourceProject', $orderBy, $vars, $lang->mr->sourceProject); ?></th>
           <th class='w-100px text-left'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch); ?></th>
           <th class='text-left'><?php common::printOrderLink('targetProject', $orderBy, $vars, $lang->mr->targetProject); ?></th>

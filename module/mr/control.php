@@ -74,7 +74,8 @@ class mr extends control
         /* Fetch user list both in Zentao and current GitLab project. */
         $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($MR->gitlabID);
         $rawProjectUsers = $this->gitlab->apiGetProjectUsers($MR->gitlabID, $MR->targetProject);
-        $users           = array();
+
+        $users = array();
         foreach($rawProjectUsers as $rawProjectUser)
         {
             if(!empty($bindedUsers[$rawProjectUser->id])) $users[$rawProjectUser->id] = $bindedUsers[$rawProjectUser->id];

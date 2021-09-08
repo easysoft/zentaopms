@@ -13,7 +13,7 @@ $lang->mr->viewInGitlab = '在GitLab查看';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "MR原始ID";
-$lang->mr->name        = '名称';
+$lang->mr->title       = '名称';
 $lang->mr->status      = '状态';
 $lang->mr->author      = '创建人';
 $lang->mr->assignee    = '指派给';
