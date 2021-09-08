@@ -71,9 +71,10 @@ function processKanbanData(key, programsData)
                 var productExecutions = classicExecution[productID];
                 if(productExecutions)
                 {
-                    $.each(productExecutions, function(executionID, execution)
+                    $.each(productExecutions, function(_, execution)
                     {
                         if(!execution || !execution.id) return;
+                        var executionID = execution.id;
                         var executionItem = $.extend({}, execution, {id: 'execution-' + executionID, _id: executionID});
                         items.doingExecution.push(executionItem);
                     });
