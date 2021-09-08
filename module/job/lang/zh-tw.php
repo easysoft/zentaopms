@@ -86,3 +86,4 @@ $lang->job->pipelineVariables                 = "變數";
 $lang->job->pipelineVariablesKeyPlaceHolder   = "輸入變數的名稱";
 $lang->job->pipelineVariablesValuePlaceHolder = "輸入變數的值";
 $lang->job->pipelineVariablesTips             = "指定要在此次運行中使用的變數值。CI/CD設置中指定的值將用作預設值。";
+$lang->job->setReferenceTips                  = "在執行構建前，請先設置代碼庫的分支信息。";

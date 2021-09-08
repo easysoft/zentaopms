@@ -70,6 +70,9 @@ $lang->todo->closedDate   = '關閉時間';
 $lang->todo->deadline     = '過期時間';
 $lang->todo->deleted      = '已刪除';
 
+$lang->todo->cycleDaysLabel  = '間隔天數';
+$lang->todo->beforeDaysLabel = '提前天數';
+
 $lang->todo->every        = '間隔';
 $lang->todo->specify      = '指定';
 $lang->todo->everyYear    = '每年';
@@ -93,12 +96,13 @@ $lang->todo->priList[2] = 2;
 $lang->todo->priList[3] = 3;
 $lang->todo->priList[4] = 4;
 
-$lang->todo->typeList['custom']   = '自定義';
-$lang->todo->typeList['cycle']    = '周期';
-$lang->todo->typeList['bug']      = 'Bug';
-$lang->todo->typeList['task']     = '任務';
-$lang->todo->typeList['story']    = $lang->SRCommon;
-$lang->todo->typeList['testtask'] = '測試單';
+$lang->todo->typeList['custom']    = '自定義';
+$lang->todo->typeList['cycle']     = '周期';
+$lang->todo->typeList['bug']       = 'Bug';
+$lang->todo->typeList['task']      = '任務';
+$lang->todo->typeList['story']     = $lang->SRCommon;
+$lang->todo->typeList['testtask']  = '測試單';
+$lang->todo->typeList['mrapprove'] = '合併請求審批';
 
 $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';

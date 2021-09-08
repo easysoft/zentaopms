@@ -127,16 +127,17 @@ $lang->testtask->fail          = '失敗';
 $lang->testtask->showResult    = '共執行<span class="text-info">%s</span>次';
 $lang->testtask->showFail      = '失敗<span class="text-danger">%s</span>次';
 
-$lang->testtask->confirmDelete     = '您確認要刪除該測試單嗎？';
-$lang->testtask->confirmUnlinkCase = '您確認要移除該用例嗎？';
-$lang->testtask->noticeNoOther     = '該產品還沒有其他測試單';
-$lang->testtask->noTesttask        = '暫時沒有測試單。';
-$lang->testtask->checkLinked       = "請檢查測試單的產品是否與{$lang->executionCommon}相關聯";
-$lang->testtask->noImportData      = '導入的XML沒有解析出數據。';
-$lang->testtask->unitXMLFormat     = '請選擇Junit XML 格式的檔案。';
-$lang->testtask->titleOfAuto       = "%s 自動化測試";
-$lang->testtask->cannotBeParsed    = '導入的XML檔案內容格式錯誤，無法解析。';
-$lang->testtask->finishedDateError = '實際完成日期不能小於開始日期%s';
+$lang->testtask->confirmDelete      = '您確認要刪除該測試單嗎？';
+$lang->testtask->confirmUnlinkCase  = '您確認要移除該用例嗎？';
+$lang->testtask->noticeNoOther      = '該產品還沒有其他測試單';
+$lang->testtask->noTesttask         = '暫時沒有測試單。';
+$lang->testtask->checkLinked        = "請檢查測試單的產品是否與{$lang->executionCommon}相關聯";
+$lang->testtask->noImportData       = '導入的XML沒有解析出數據。';
+$lang->testtask->unitXMLFormat      = '請選擇Junit XML 格式的檔案。';
+$lang->testtask->titleOfAuto        = "%s 自動化測試";
+$lang->testtask->cannotBeParsed     = '導入的XML檔案內容格式錯誤，無法解析。';
+$lang->testtask->finishedDateError  = '實際完成日期不能小於開始日期%s';
+$lang->testtask->finishedDateError2 = '實際完成日期不能大於今天';
 
 $lang->testtask->assignedToMe  = '指派給我';
 $lang->testtask->allCases      = '所有用例';

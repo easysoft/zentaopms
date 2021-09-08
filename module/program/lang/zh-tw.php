@@ -36,6 +36,7 @@ $lang->program->create                  = '添加項目集';
 $lang->program->createGuide             = '選擇項目模板';
 $lang->program->edit                    = '編輯項目集';
 $lang->program->browse                  = '項目集列表';
+$lang->program->kanbanAction            = '項目集看板';
 $lang->program->view                    = '項目集詳情';
 $lang->program->copy                    = '複製項目集';
 $lang->program->product                 = '產品列表';
@@ -63,7 +64,7 @@ $lang->program->changePRJUnit           = '更新項目預算單位';
 
 $lang->program->progress         = '項目進度';
 $lang->program->children         = '子項目集';
-$lang->program->allInput         = '項目集總投入';
+$lang->program->allInvest        = '項目集總投入';
 $lang->program->teamCount        = '總人數';
 $lang->program->longTime         = '長期';
 $lang->program->moreProgram      = '更多項目集';
@@ -115,3 +116,17 @@ $lang->program->statusList['suspended'] = '已掛起';
 $lang->program->statusList['closed']    = '已關閉';
 
 $lang->program->featureBar['all'] = '所有';
+
+$lang->program->kanban = new stdclass();
+$lang->program->kanban->common             = '項目集看板';
+$lang->program->kanban->typeList['my']     = '我參與的項目集';
+$lang->program->kanban->typeList['others'] = '其他項目集';
+
+$lang->program->kanban->openProducts    = '未關閉的產品';
+$lang->program->kanban->unexpiredPlans  = '未過期的計劃';
+$lang->program->kanban->waitingProjects = '未開始的項目';
+$lang->program->kanban->doingProjects   = '進行中的項目';
+$lang->program->kanban->doingExecutions = '進行中的執行';
+$lang->program->kanban->normalReleases  = '正常的發佈';
+
+$lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');

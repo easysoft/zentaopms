@@ -195,6 +195,7 @@ $lang->doc->noOpenedDoc          = '您還沒有創建任何文檔。';
 $lang->doc->noCollectedDoc       = '您還沒有收藏任何文檔。';
 $lang->doc->errorEmptyLib        = '文檔庫暫無數據。';
 $lang->doc->confirmUpdateContent = '檢查到您有未保存的文檔內容，是否繼續編輯？';
+$lang->doc->selectLibType        = '請選擇文檔庫類型';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = '有所選產品訪問權限的用戶可以訪問。';
 $lang->doc->noticeAcl['lib']['product']['custom']    = '有所選產品訪問權限或白名單裡的用戶可以訪問。';
