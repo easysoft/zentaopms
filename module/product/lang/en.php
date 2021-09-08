@@ -132,15 +132,16 @@ $lang->product->unplan       = 'Unplanned';
 $lang->product->viewByUser   = 'By User';
 
 /* Product Kanban. */
-$lang->product->myProduct       = 'Products Ownedbyme';
-$lang->product->otherProduct    = 'Other Products';
-$lang->product->unclosedProduct = 'Open Products';
-$lang->product->unexpiredPlan   = 'Unexpired Plans';
-$lang->product->doing           = 'Doing';
-$lang->product->doingProject    = 'Ongoing Projects';
-$lang->product->doingExecution  = 'Ongoing Executions';
-$lang->product->normalRelease   = 'Normal Releases';
-$lang->product->emptyProgram    = 'Independent Products';
+$lang->product->myProduct             = 'Products Ownedbyme';
+$lang->product->otherProduct          = 'Other Products';
+$lang->product->unclosedProduct       = 'Open Products';
+$lang->product->unexpiredPlan         = 'Unexpired Plans';
+$lang->product->doing                 = 'Doing';
+$lang->product->doingProject          = 'Ongoing Projects';
+$lang->product->doingExecution        = 'Ongoing Executions';
+$lang->product->doingClassicExecution = 'Ongoing ' . $lang->executionCommon;
+$lang->product->normalRelease         = 'Normal Releases';
+$lang->product->emptyProgram          = 'Independent Products';
 
 $lang->product->allStory             = 'All ';
 $lang->product->allProduct           = 'All';

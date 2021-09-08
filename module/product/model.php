@@ -1526,7 +1526,7 @@ class productModel extends model
      * Get stats for product kanban.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getStats4Kanban()
     {
@@ -1571,8 +1571,19 @@ class productModel extends model
         {
             foreach($executionList as $projectID => $executions)
             {
+                /* Used to computer execution progress. */
                 $latestExecutionList[key($executions)] = current($executions);
-                $projectLatestExecutions[$projectID]   = current($executions);
+
+                /* Used for display in page. */
+                $projectLatestExecutions[$projectID] = current($executions);
+            }
+        }
+
+        if($this->config->systemMode == 'classic')
+        {
+            foreach($executionList as $productID => $executions)
+            {
+                foreach($executions as $executionID => $execution) $latestExecutionList[$executionID] = $execution;
             }
         }
 

@@ -132,15 +132,16 @@ $lang->product->unplan       = "未计划";
 $lang->product->viewByUser   = '按用户查看';
 
 /* Product Kanban. */
-$lang->product->myProduct       = '我负责的产品';
-$lang->product->otherProduct    = '其他产品';
-$lang->product->unclosedProduct = '未关闭的产品';
-$lang->product->unexpiredPlan   = '未过期的计划';
-$lang->product->doing           = '进行中';
-$lang->product->doingProject    = '进行中的项目';
-$lang->product->doingExecution  = '进行中的执行';
-$lang->product->normalRelease   = '正常的发布';
-$lang->product->emptyProgram    = '无项目集归属产品';
+$lang->product->myProduct             = '我负责的' . $lang->productCommon;
+$lang->product->otherProduct          = '其他' . $lang->productCommon;
+$lang->product->unclosedProduct       = '未关闭的' . $lang->productCommon;
+$lang->product->unexpiredPlan         = '未过期的计划';
+$lang->product->doing                 = '进行中';
+$lang->product->doingProject          = '进行中的项目';
+$lang->product->doingExecution        = '进行中的执行';
+$lang->product->doingClassicExecution = '进行中的' . $lang->executionCommon;
+$lang->product->normalRelease         = '正常的发布';
+$lang->product->emptyProgram          = '无项目集归属产品';
 
 $lang->product->allStory             = '所有';
 $lang->product->allProduct           = '全部' . $lang->productCommon;

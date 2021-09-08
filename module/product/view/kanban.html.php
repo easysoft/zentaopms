@@ -39,7 +39,7 @@ if($config->systemMode == 'new')
 }
 else
 {
-    $kanbanColumns['doingExecution']  = array('name' => $lang->product->doing, 'type' => 'doingExecution');
+    $kanbanColumns['doingExecution']  = array('name' => $lang->product->doingClassicExecution, 'type' => 'doingExecution');
 }
 $kanbanColumns['normalRelease']   = array('name' => $lang->product->normalRelease, 'type' => 'normalRelease');
 $userPrivs = array();
@@ -57,6 +57,7 @@ js::set('planList',         $planList);
 js::set('projectList',      $projectList);
 js::set('projectProduct',   $projectProduct);
 js::set('latestExecutions', $latestExecutions);
+js::set('classicExecution', $executionList);
 js::set('releaseList',      $releaseList);
 js::set('hourList',         $hourList);
 js::set('doingText',        $lang->product->doing);

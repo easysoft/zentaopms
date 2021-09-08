@@ -1180,6 +1180,7 @@ class product extends control
         $this->view->projectList      = $projectList;
         $this->view->projectProduct   = $projectProduct;
         $this->view->latestExecutions = $projectLatestExecutions;
+        $this->view->executionList    = $executionList;
         $this->view->hourList         = $hourList;
         $this->view->emptyHour        = (object) array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
         $this->view->releaseList      = $releaseList;

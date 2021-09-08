@@ -68,14 +68,14 @@ function processKanbanData(key, programsData)
             {
                 /* doing execution */
                 items.doingExecution = [];
-                var productProjects = projectProduct[productID];
-                if(productProjects)
+                var productExecutions = classicExecution[productID];
+                if(productExecutions)
                 {
-                    $.each(productProjects, function(projectID)
+                    console.log(productExecutions);
+                    $.each(productExecutions, function(executionID, execution)
                     {
-                        var execution = latestExecutions[projectID];
                         if(!execution || !execution.id) return;
-                        var executionItem = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
+                        var executionItem = $.extend({}, execution, {id: 'execution-' + executionID, _id: executionID});
                         items.doingExecution.push(executionItem);
                     });
                 }
@@ -115,7 +115,6 @@ function processKanbanData(key, programsData)
  */
 function renderDoingProjectItem(item, $item)
 {
-    console.log('renderDoingProjectItem', item);
     $item.removeClass('kanban-item').addClass('project-row clearfix').empty();
 
     var $projectCol = $('<div class="project-col"></div>').appendTo($item);
