@@ -116,7 +116,7 @@ class mr extends control
      */
     public function delete($id, $confim = 'no')
     {
-        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confim != 'yes') die(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $MR = $this->mr->getByID($id);
 
