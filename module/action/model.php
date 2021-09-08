@@ -826,7 +826,8 @@ class actionModel extends model
         $actionCondition = '';
         if(isset($this->app->user->rights['acls']['actions']))
         {
-            if(empty($this->app->user->rights['acls']['actions'])) return '';
+            if(empty($this->app->user->rights['acls']['actions'])) return "`objectType` = 'user' and `action` in ('login','logout')";
+
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
                 $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";

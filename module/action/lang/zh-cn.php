@@ -285,18 +285,18 @@ $lang->action->dynamicAction->todo['assigned']  = '指派待办';
 $lang->action->dynamicAction->todo['undeleted'] = '还原待办';
 $lang->action->dynamicAction->todo['hidden']    = '隐藏待办';
 
-$lang->action->dynamicAction->program['create']   = '创建项目集';
-$lang->action->dynamicAction->program['edit']     = '编辑项目集';
-$lang->action->dynamicAction->program['activate'] = '激活项目集';
-$lang->action->dynamicAction->program['delete']   = '删除项目集';
-$lang->action->dynamicAction->program['close']    = '关闭项目集';
+$lang->action->dynamicAction->program['opened']    = '创建项目集';
+$lang->action->dynamicAction->program['edited']    = '编辑项目集';
+$lang->action->dynamicAction->program['activated'] = '激活项目集';
+$lang->action->dynamicAction->program['deleted']   = '删除项目集';
+$lang->action->dynamicAction->program['closed']    = '关闭项目集';
 
-$lang->action->dynamicAction->project['create']   = '创建项目';
-$lang->action->dynamicAction->project['edit']     = '编辑项目';
-$lang->action->dynamicAction->project['start']    = '开始项目';
-$lang->action->dynamicAction->project['suspend']  = '延期项目';
-$lang->action->dynamicAction->project['activate'] = '激活项目';
-$lang->action->dynamicAction->project['close']    = '关闭项目';
+$lang->action->dynamicAction->project['opened']    = '创建项目';
+$lang->action->dynamicAction->project['edited']    = '编辑项目';
+$lang->action->dynamicAction->project['started']   = '开始项目';
+$lang->action->dynamicAction->project['suspended'] = '延期项目';
+$lang->action->dynamicAction->project['activated'] = '激活项目';
+$lang->action->dynamicAction->project['closed']    = '关闭项目';
 
 $lang->action->dynamicAction->product['opened']    = '创建' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = '编辑' . $lang->productCommon;
