@@ -914,7 +914,7 @@ class programModel extends model
     }
 
     /**
-     * get top program by path.
+     * Get top program by path.
      *
      * @param  string  $path
      * @access public
