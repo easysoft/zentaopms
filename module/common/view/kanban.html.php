@@ -151,7 +151,7 @@ function renderProjectItem(item, $item)
         {
             $item.addClass('link-block');
             $title = $('<a class="title" />')
-                .attr('href', $.createLink('execution', 'task', 'executionID=' + item._id));
+                .attr('href', $.createLink('project', 'index', 'projectID=' + item._id));
         }
         else
         {
