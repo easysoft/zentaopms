@@ -141,6 +141,6 @@ $(function()
     $.each(kanbanList, function(key, programsData)
     {
         var data = processKanbanData(key, programsData);
-        $('#kanban-' + key).kanban({data: data});
+        $('#kanban-' + key).kanban({data: data, noLaneName: isClassicMode});
     });
 });
