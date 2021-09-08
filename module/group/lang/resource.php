@@ -1171,7 +1171,8 @@ $lang->mr->methodOrder[10] = 'create';
 $lang->mr->methodOrder[15] = 'browse';
 $lang->mr->methodOrder[20] = 'edit';
 $lang->mr->methodOrder[25] = 'delete';
-$lang->mr->methodOrder[35] = 'settings';
+$lang->mr->methodOrder[35] = 'view';
+$lang->mr->methodOrder[45] = 'accept';
 
 /* Git. */
 $lang->resource->git = new stdclass();

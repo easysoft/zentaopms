@@ -1,15 +1,17 @@
 <?php
+$lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
-$lang->mr->create       = "create";
-$lang->mr->browse       = "browse";
-$lang->mr->list         = "list";
-$lang->mr->edit         = "edit";
-$lang->mr->delete       = "delete";
-$lang->mr->view         = "view";
+$lang->mr->create       = "Create";
+$lang->mr->browse       = "Browse";
+$lang->mr->list         = "List";
+$lang->mr->edit         = "Edit";
+$lang->mr->delete       = "Delete";
+$lang->mr->view         = "View";
+$lang->mr->accept       = "Accept";
 $lang->mr->source       = 'source';
 $lang->mr->target       = 'target';
-$lang->mr->viewDiff     = 'view diff';
-$lang->mr->viewInGitlab = 'view in GitLab';
+$lang->mr->viewDiff     = 'View diff';
+$lang->mr->viewInGitlab = 'View in GitLab';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";
