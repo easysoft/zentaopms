@@ -80,4 +80,5 @@
   </form>
 </div>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['lib']);?>
+<?php js::set('libType', $lib->type);?>
 <?php include '../../common/view/footer.lite.html.php';?>

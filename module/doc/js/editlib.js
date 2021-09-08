@@ -13,6 +13,6 @@ $(function()
  */
 function redirectParentWindow(hasLibPriv, libID)
 {
-    var link = hasLibPriv ? createLink('doc', 'tableContents', 'type=book&objectID=0&libID=' + libID) : createLink('doc', 'tableContents', 'type=book');
+    var link = hasLibPriv ? createLink('doc', 'tableContents', 'type=' + libType + '&objectID=0&libID=' + libID) : createLink('doc', 'tableContents', 'type=' + libType);
     parent.location.href = link;
 }
