@@ -111,7 +111,9 @@ $(function()
     /* Init all kanbans */
     $.each(kanbanList, function(key, programsData)
     {
+        var $kanban = $('#kanban-' + key);
+        if(!$kanban.length) return;
         var data = processKanbanData(key, programsData);
-        $('#kanban-' + key).kanban({data: data, noLaneName: isClassicMode});
+        $kanban.kanban({data: data, noLaneName: isClassicMode});
     });
 });

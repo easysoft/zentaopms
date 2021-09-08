@@ -18,6 +18,7 @@
 <?php else:?>
 <div id='kanbanList'>
   <?php foreach($kanbanList as $type => $programs):?>
+  <?php if(empty($programs)) continue;?>
   <div class='panel kanban-panel'>
     <div class='panel-heading'>
       <strong><?php echo $type == 'my' ? $lang->product->myProduct : $lang->product->otherProduct;?></strong>

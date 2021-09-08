@@ -18,6 +18,7 @@
 <?php else:?>
 <div id='kanbanList'>
   <?php foreach($kanbanGroup as $type => $projectGroup):?>
+  <?php if(empty($projectGroup)) continue;?>
   <div class='panel kanban-panel'>
     <div class='panel-heading'>
       <strong><?php echo $lang->project->typeList[$type];?></strong>

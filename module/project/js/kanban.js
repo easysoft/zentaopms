@@ -62,6 +62,8 @@ $(function()
     /* Init all kanbans */
     $.each(kanbanGroup, function(key, programGroup)
     {
-        $('#kanban-' + key).kanban({data: processKanbanData(key, programGroup)});
+        var $kanban = $('#kanban-' + key);
+        if(!$kanban.length) return;
+        $kanban.kanban({data: processKanbanData(key, programGroup)});
     });
 });
