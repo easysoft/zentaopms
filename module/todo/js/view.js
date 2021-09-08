@@ -21,7 +21,6 @@ $(function()
             return false;
         }
         var onlybody  = config.onlybody == 'yes';
-        var projectID = $('#project').val();
         var link      = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView, onlybody);
 
         location.href = link;
@@ -30,7 +29,6 @@ $(function()
     $('#toStoryButton').click(function()
     {
         var onlybody  = config.onlybody == 'yes';
-        var programID = $('#productProgram').val();
         var productID = $('#product').val();
         var link      = createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView, onlybody);
 
@@ -40,7 +38,6 @@ $(function()
     $('#toBugButton').click(function()
     {
         var onlybody  = config.onlybody == 'yes';
-        var projectID = $('#bugProject').val();
         var productID = $('#bugProduct').val();
         var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, onlybody);
 
