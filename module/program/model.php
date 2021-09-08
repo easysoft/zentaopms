@@ -147,7 +147,7 @@ class programModel extends model
      * Get kanban group data.
      *
      * @access public
-     * @return void
+     * @return array 
      */
     public function getKanbanGroup()
     {
@@ -155,15 +155,7 @@ class programModel extends model
         $kanbanGroup['my']     = array();
         $kanbanGroup['others'] = array();
 
-        /* Get all prived programs. */
-        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
-            ->where('type')->eq('program')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('grade')->eq(1)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->andWhere('status')->ne('closed')
-            ->fetchAll('id');
-
+        $programs         = $this->getTopPairs('', 'noclosed');
         $involvedPrograms = $this->getInvolvedPrograms($this->app->user->account);
 
         /* Get all products under programs. */
@@ -175,10 +167,7 @@ class programModel extends model
             ->fetchGroup('program', 'id');
 
         $productPairs = array();
-        foreach($productGroup as $programID => $products)
-        {
-            foreach($products as $productID => $product) $productPairs[$productID] = $productID;
-        }
+        foreach($productGroup as $programID => $products) $productPairs = array_merge($productPairs, array_keys($products));
 
         /* Get all plans under products. */
         $plans = $this->dao->select('id, product, title')->from(TABLE_PRODUCTPLAN)
@@ -198,10 +187,7 @@ class programModel extends model
             ->fetchGroup('product');
 
         $projectPairs = array();
-        foreach($projectGroup as $projects)
-        {
-            foreach($projects as $project) $projectPairs[$project->id] = $project->id;
-        }
+        foreach($projectGroup as $projects) $projectPairs = array_merge($projectPairs, array_keys($projects));
 
         /* Get all releases under products. */
         $releases = $this->dao->select('product, id, name, marker')->from(TABLE_RELEASE)
@@ -233,7 +219,7 @@ class programModel extends model
 
         $hours = $this->computeProgress($tasks);
 
-        /* Group data. */
+        /* Group data by product. */
         foreach($productGroup as $programID => $products)
         {
             foreach($products as $productID => $product)
@@ -258,28 +244,23 @@ class programModel extends model
                     $project->hours     = zget($hours, $project->id, array());
                     $product->projects[$status][] = $project;
                 }
-
-                $product->rowspan = isset($product->projects['doing']) ? count($product->projects['doing']) > 0 ? count($product->projects['doing']) : 1 : 1;
             }
         }
 
-        /* Group data. */
-        foreach($programs as $programID => $program)
+        /* Group data by program. */
+        foreach($programs as $programID => $programName)
         {
-            $program->products = zget($productGroup, $programID, array());
-            $program->rowspan  = count($program->products) > 0 ? count($program->products) : 1;
-            foreach($program->products as $product)
-            {
-                if(isset($product->projects['doing']) and count($product->projects['doing']) > 0) $program->rowspan += count($product->projects['doing']) - 1;
-            }
+            $programGroup = new stdclass(); 
+            $programGroup->name     = $programName;
+            $programGroup->products = zget($productGroup, $programID, array());
 
             if(in_array($programID, $involvedPrograms))
             {
-                $kanbanGroup['my'][$programID] = $program;
+                $kanbanGroup['my'][$programID] = $programGroup;
             }
             else
             {
-                $kanbanGroup['others'][$programID] = $program;
+                $kanbanGroup['others'][$programID] = $programGroup;
             }
         }
 
@@ -291,29 +272,31 @@ class programModel extends model
      *
      * @param  string $account
      * @access public
-     * @return void
+     * @return array 
      */
     public function getInvolvedPrograms($account)
     {
         $involvedPrograms = array();
 
-        /* All involves in program table. */
-        $objects = $this->dao->select('id,type,project,path')->from(TABLE_PROGRAM)
-            ->where('deleted')->eq(0)
-            ->andWhere("(openedBy = '$account' or PM = '$account')")
-            ->fetchAll('id');
+        /* All objects in program table. */
+        $objects = $this->dao->select('id,type,project,parent,path,openedBy,PM')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->fetchAll('id');
 
         foreach($objects as $id => $object)
         {
+            if($object->openedBy != $account and $object->PM != $account) continue;
+
             if($object->type == 'program') $involvedPrograms[$id] = $id;
             if($object->type == 'project')
             {
-                $programID = $this->getTopByID($id);
+                $programID = $this->getTopByPath($object->path);
                 $involvedPrograms[$programID] = $programID;
             }
             if($object->type == 'sprint' or $object->type == 'stage')
             {
-                $programID = $this->getTopByID($object->project);
+                $parentProject = zget($objects, $object->parent, array());
+                if(!$parentProject) continue;
+
+                $programID = $this->getTopByPath($parentProject->path);
                 $involvedPrograms[$programID] = $programID;
             }
         }
@@ -334,7 +317,10 @@ class programModel extends model
             }
             if($object->type == 'project')
             {
-                $programID = $this->getTopByID($objectID);
+                $project = zget($objects, $objectID, array());
+                if(!$project) continue;
+
+                $programID = $this->getTopByPath($project->path);
                 $involvedPrograms[$programID] = $programID;
             }
         }
@@ -351,12 +337,21 @@ class programModel extends model
         {
             if($object->type == 'project')
             {
-                $programID = $this->getTopByID($objectID);
+                $project = zget($objects, $objectID, array());
+                if(!$project) continue;
+
+                $programID = $this->getTopByPath($project->path);
                 $involvedPrograms[$programID] = $programID;
             }
-            if($object->type == 'execution')
+            if($object->type == 'sprint' or $object->type == 'stage')
             {
-                $programID = $this->getTopByID($object->project);
+                $execution = zget($objects, $objectID, array());
+                if(!$execution) continue;
+
+                $project   = zget($objects, $execution->parent, array());
+                if(!$project) continue;
+
+                $programID = $this->getTopByPath($project->path);
                 $involvedPrograms[$programID] = $programID;
             }
         }
