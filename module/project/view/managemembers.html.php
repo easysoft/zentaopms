@@ -116,7 +116,7 @@
               else
               {
                   echo html::submitButton('', '', 'hidden btn btn-wide btn-primary');
-                  echo html::commonButton($lang->save, 'onclick="saveMemebers()" id="saveBtn"', 'btn btn-wide btn-primary');
+                  echo html::commonButton($lang->save, 'onclick="saveMembers()" id="saveBtn"', 'btn btn-wide btn-primary');
               }
               echo html::backButton();
             ?>
