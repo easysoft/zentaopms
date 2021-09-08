@@ -1318,8 +1318,7 @@ class projectModel extends model
     {
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
 
-        $this->loadModel('user');
-        $this->user->updateUserView($projectID, 'project', array($account));
+        $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
 
         if($removeExecution == 'yes')
         {
