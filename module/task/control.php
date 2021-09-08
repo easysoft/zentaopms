@@ -674,7 +674,7 @@ class task extends control
         $task   = $this->task->getById($taskID, true);
         if(!$task)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             die(js::error($this->lang->notFound) . js::locate('back'));
         }
         $this->session->project = $task->project;

@@ -11,7 +11,7 @@ class userEntry extends Entry
     public function get($userID = 0)
     {
         /* Get my info defaultly. */
-        if(!$userID) return $this->getInfo();
+        if(!$userID) return $this->getInfo($this->param('fields', ''));
 
         /* Get user by id. */
         $control = $this->loadController('user', 'profile');
@@ -24,13 +24,73 @@ class userEntry extends Entry
         $this->send(200, $this->format($user, 'last:time,locked:time'));
     }
 
-    private function getInfo()
+    /**
+     * Get my info.
+     *
+     * @param string $fields
+     *
+     * @access private
+     * @return void
+     */
+    private function getInfo($fields = '')
     {
-        $info = $this->loadModel('my')->getInfo();
+        $info = new stdclass();
 
-        $info->product = $this->my->getProducts();
-        $info->project = $this->my->getProjects();
-        $info->actions = $this->my->getActions();
+        $info->profile = $this->loadModel('user')->getById($this->app->user->account);
+        unset($info->profile->password);
+
+        if(!$fields) return $this->send(200, $info);
+
+        /* Set other fields. */
+        $fields = explode(',', $fields);
+
+        $this->loadModel('my');
+        foreach($fields as $field)
+        {
+            switch($field)
+            {
+                case 'product':
+                    $info->product = $this->my->getProducts();
+                    break;
+                case 'project':
+                    $info->project = $this->my->getProjects();
+                    break;
+                case 'doc':
+                    $info->doc = $this->my->getDocs();
+                    break;
+                case 'actions':
+                    $info->actions = $this->my->getActions();
+                    break;
+                case 'task':
+                    $info->task = array('count' => 0, 'recentTask' => array());
+
+                    $control = $this->loadController('my', 'task');
+                    $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $info->task['count']       = $data->data->pager->recTotal;
+                        $info->task['recentTasks'] = $data->data->tasks;
+                    }
+
+                    break;
+                case 'todo':
+                    $info->todo = array('count' => 0, 'recentTodos' => array());
+
+                    $control = $this->loadController('my', 'todo');
+                    $control->todo($this->param('date', 'all'), '', 'all', 'date_desc', 0, 0, $this->param('limit', 10), 1);
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $info->todo['count']       = $data->data->pager->recTotal;
+                        $info->todo['recentTodos'] = $data->data->todos;
+                    }
+
+                    break;
+            }
+        }
 
         $this->send(200, $info);
     }

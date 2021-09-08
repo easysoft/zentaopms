@@ -553,6 +553,7 @@ class todoModel extends model
 
             $todos[] = $todo;
         }
+
         return $todos;
     }
 

@@ -248,18 +248,23 @@ class baseEntry
      */
     public function loadController($moduleName, $methodName)
     {
-        global $app;
-        $app->setModuleName($moduleName);
-        $app->setMethodName($methodName);
-        $app->setControlFile();
+        ob_start();
 
-        /*
-         * 引入该模块的control文件。
-         * Include the control file of the module.
-         **/
-        $file2Included = $app->setActionExtFile() ? $app->extActionFile : $app->controlFile;
-        chdir(dirname($file2Included));
-        helper::import($file2Included);
+        if(!class_exists($moduleName) and !class_exists("my$moduleName"))
+        {
+            global $app;
+            $app->setModuleName($moduleName);
+            $app->setMethodName($methodName);
+            $app->setControlFile();
+
+            /*
+             * 引入该模块的control文件。
+             * Include the control file of the module.
+             **/
+            $file2Included = $app->setActionExtFile() ? $app->extActionFile : $app->controlFile;
+            chdir(dirname($file2Included));
+            helper::import($file2Included);
+        }
 
         /*
          * 设置control的类名。

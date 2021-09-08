@@ -14,8 +14,12 @@ class taskEntry extends Entry
         $control->view($taskID);
 
         $data = $this->getData();
-        if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail')
+        {
+            return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
+        }
 
         $task = $data->data->task;
         $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
