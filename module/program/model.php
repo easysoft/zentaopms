@@ -819,7 +819,7 @@ class programModel extends model
         while($program = $stmt->fetch())
         {
             $link     = $this->getLink($moduleName, $methodName, $program->id, $vars, $from);
-            $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis' title=$program->name");
+            $linkHtml = html::a($link, $program->name, '', "id='program$program->id' class='text-ellipsis programName' title=$program->name");
 
             if(isset($programMenu[$program->id]) and !empty($programMenu[$program->id]))
             {

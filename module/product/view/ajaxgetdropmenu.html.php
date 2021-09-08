@@ -95,7 +95,7 @@ foreach($products as $programID => $programProducts)
         }
         else if($product->status == 'closed')
         {
-            $closedProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected' title='$productName' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
+            $closedProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='$productName' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'closed';
         }

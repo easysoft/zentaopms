@@ -1555,7 +1555,7 @@ class productModel extends model
             ->fetchGroup('product', 'id');
 
         $executionListKey = $this->config->systemMode == 'new' ? 'project' : 'productID';
-        $executionList = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executionList    = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('type')->in('stage,sprint')
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.project')->in(array_keys($projectList))->fi()
