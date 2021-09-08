@@ -35,15 +35,15 @@ function processKanbanData(key, programGroup)
                 $.each(statusProjects, function(_, project)
                 {
                     var projectID = project.id;
-                    itemsList.push($.extend({}, project, {id: 'project-' + projectID, _id: projectID}));
+                    var projectItem = $.extend({}, project, {id: 'project-' + projectID, _id: projectID});
+                    itemsList.push(projectItem);
 
                     if(status === 'doing')
                     {
                         var execution = latestExecutions[projectID];
                         if(execution && execution.id)
                         {
-                            var executionItem = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
-                            items.doingExecution = [executionItem];
+                            projectItem.execution = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                         }
                     }
                 });
