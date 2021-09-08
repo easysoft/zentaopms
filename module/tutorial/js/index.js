@@ -81,8 +81,7 @@ $(function()
 
     var clearTips = function()
     {
-        appsWindow.$('#menuMainNav > li.hl-tutorial').removeClass('hl-tutorial hl-in').tooltip('destroy');
-        var $menuMainNav = appsWindow.$('#menuMainNav');
+        var $menuMainNav = appsWindow.$('#menuNav');
         $menuMainNav.find('.hl-tutorial').removeClass('hl-tutorial hl-in');
         $menuMainNav.find('.tooltip-tutorial').tooltip('destroy').removeClass('tooltip-tutorial');
         var appWindow = getAppWindow();
@@ -178,15 +177,24 @@ $(function()
             html: true
         }, options);
         $e = $e.first();
-        if($e.css('display') == 'none')
-        {
-            $e.parent().addClass('tooltip-tutorial').after("<div id='typeLabel' class='text-danger help-text'>" + options.title + "</div>");
-        }
-        else
+        if($e.css('display') !== 'none')
         {
             if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
             $e.tooltip('show');
             if($e[0].getBoundingClientRect().top > $(window).height() || $e[0].getBoundingClientRect().top < 0) $e[0].scrollIntoView();
+        }
+        else if($e.parent().is('#menuMainNav'))
+        {
+            var $menuMoreItem = appsWindow.$('#menuMoreNav>li.dropdown');
+            highlight($menuMoreItem);
+            showToolTip($menuMoreItem, text, $.extend({}, options, {tipClass: 'tooltip-warning tooltip-max tooltip-menu-more text-nowrap', container: false}));
+            var appCode = $e.data('app');
+            appsWindow.$('#menuMoreList>li').removeClass('active').attr('data-tip', '');
+            appsWindow.$('#menuMoreList>li[data-app="' + appCode + '"]').addClass('active hl-tutorial hl-in').attr('data-tip', text);
+        }
+        else
+        {
+            $e.parent().addClass('tooltip-tutorial').after("<div id='typeLabel' class='text-danger help-text'>" + options.title + "</div>");
         }
     };
 
