@@ -66,7 +66,7 @@
             <th class='c-review<?php  echo zget($visibleFields, 'review', ' hidden') . zget($requiredFields, 'review', '', ' required')?>'><?php echo $lang->testcase->review;?></th>
             <?php
             $extendFields = $this->testcase->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='c-other'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
             ?>
           </tr>
         </thead>

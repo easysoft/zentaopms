@@ -59,7 +59,7 @@
             <th class='c-stage<?php echo zget($visibleFields, 'stage', ' hidden') . zget($requiredFields, 'stage', '', ' required');?>'><?php echo $lang->testcase->stage;?></th>
             <?php
             $extendFields = $this->testcase->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='c-other'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
             ?>
           </tr>
         </thead>
