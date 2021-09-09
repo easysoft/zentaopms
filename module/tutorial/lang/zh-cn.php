@@ -68,7 +68,7 @@ $lang->tutorial->tasks['createExecution']['desc'] = "<p>在系统创建一个新
 
 $lang->tutorial->tasks['manageExecutionTeam']         = array('title' => "管理{$lang->executionCommon}团队");
 $lang->tutorial->tasks['manageExecutionTeam']['mode'] = 'classic';
-$lang->tutorial->tasks['manageExecutionTeam']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#executionTableList>tr:first>.c-name>a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="team"],.manage-team-btn', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => '团队管理');
+$lang->tutorial->tasks['manageExecutionTeam']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#executionTableList>tr:first>.c-name>a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="team"],.manage-team-btn', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1,accounts', 'submit' => '#submit', 'targetPageName' => '团队管理');
 $lang->tutorial->tasks['manageExecutionTeam']['desc'] = "<p>管理{$lang->executionCommon}团队成员：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> 设置 <i class='icon icon-angle-right'></i> 团队 <i class='icon icon-angle-right'></i> 团队管理</span> 页面；</li><li data-target='form'>选择要加入团队的成员；</li><li data-target='submit'>保存团队成员信息。</li></ul>";
 
 $lang->tutorial->tasks['linkStory']         = array('title' => "关联{$lang->SRCommon}");
