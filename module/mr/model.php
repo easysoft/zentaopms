@@ -332,7 +332,7 @@ class mrModel extends model
                         $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
-                        $todo->desc         = $this->app->user->account . $this->lang->mr->at . date("Y-m-d", strtotime($rawTodo->target->created_at)) . $this->lang->mr->on . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . $rawTodo->target->description .'</a>' . $this->lang->mr->todomessage . '</br>' . $this->app->user->account. $this->lang->mr->on . '<a href="' . $rawTodo->author->web_url . '/' . $rawTodo->project->path . '" target="_blank">' . $rawTodo->project->path .'</a>' . $this->lang->mr->todomessage;
+                        $todo->desc         = $this->app->user->account. $this->lang->mr->on . '<a href="' . $rawTodo->author->web_url . '/' . $rawTodo->project->path . '" target="_blank">' . $rawTodo->project->path .'</a>' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . $this->lang->mr->common .'</a>' . '。';
                         $todo->status       = 'wait';
                         $todo->finishedBy   = '';
 
