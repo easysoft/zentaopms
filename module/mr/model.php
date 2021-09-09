@@ -330,7 +330,7 @@ class mrModel extends model
                         $todo->type         = 'custom';
                         $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
-                        $todo->name         = $lang->mr->common . ": " . $rawTodo->target->title;
+                        $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
                         $todo->desc         = $rawTodo->target->description . "<br>" . '<a href="' . $this->todoDescriptionLink($gitlabID, $projectID) . '" target="_blank">' . $this->todoDescriptionLink($gitlabID, $projectID) .'</a>';
                         $todo->status       = 'wait';
                         $todo->finishedBy   = '';
