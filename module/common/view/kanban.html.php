@@ -387,6 +387,7 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     /* laneItemsClass: 'scrollbar-hover', */ // only show scrollbar on mouse hover
     itemRender: renderKanbanItem,
     useFlex: false,
+    showZeroCount: true,
     onRenderHeaderCol: function($col, col)
     {
         if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
@@ -408,8 +409,8 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
             doingProjectCount = $doingProjectItems.find('.project-item').length;
             doingExecutionCount = $doingProjectItems.find('.execution-item').length;
         }
-        $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || '');
-        $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || '');
+        $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || 0);
+        $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || 0);
 
         updateKanbanAffixState();
     }
