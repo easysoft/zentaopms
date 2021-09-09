@@ -23,6 +23,12 @@ class qaModel extends model
      */
     public function setMenu($products, $productID, $branch = 0, $extra = '')
     {
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false)
+        {
+            $this->app->loadLang('product');
+            die(js::error($this->lang->product->accessDenied) . js::locate('back'));
+        }
+
         if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->loadModel('product')->getSwitcher($productID, $extra, $branch);
         if($this->app->rawModule == 'product' and $this->app->rawMethod == 'showerrornone') $this->lang->switcherMenu = '';
         common::setMenuVars('qa', $productID);
