@@ -54,6 +54,9 @@
                 }
             }
             sessionStorage.setItem('TID', _tid);
+
+            var link = $.parseLink(window.location.href);
+            if(!link.tid) window.location.href = convertUrlWithTid(window.location.href, _tid);
         }
 
         $.tabSession =
@@ -61,7 +64,6 @@
             getTid:            getTid,
             convertUrlWithTid: convertUrlWithTid,
         };
-
 
         /* Handle all links in page */
         $('a').each(function()

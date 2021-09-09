@@ -487,6 +487,7 @@ class user extends control
     {
         $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
         if(!empty($referer)) $this->referer = helper::safe64Decode($referer);
+        if($this->post->referer) $this->referer = $this->post->referer;
 
         /* Build zentao link regular. */
         $webRoot = $this->config->webRoot;
