@@ -218,9 +218,16 @@ class productplan extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
+        if(isset($products[$productID])) $productName = $products[$productID];
+        if(!isset($products[$productID]))
+        {
+            $product     = $this->loadModel('product')->getById($productID);
+            $productName = empty($product) ? '' : $product->name;
+        }
+
         $this->commonAction($productID, $branch);
         $products               = $this->product->getPairs();
-        $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->productplan->browse;
+        $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
