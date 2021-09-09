@@ -334,7 +334,7 @@ class doc extends control
 
         $lib     = $this->doc->getLibByID($libID);
         $type    = isset($lib->type) ? $lib->type : 'product';
-        $libName = isset($lib->name) ? $lib->name : 'product';
+        $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
         $this->view->title = $libName . $this->lang->doc->create;
 
