@@ -391,13 +391,26 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     {
         if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
     },
-    onRenderKanban: function($kanban)
+    onRenderKanban: function($kanban, kanbanData)
     {
         $kanban.find('.kanban-lane-name').each(function(index)
         {
             var color = kanbanColorList[index % kanbanColorList.length];
             $(this).css('background-color', color);
         });
+
+        /* Update project count and execution count */
+        var doingProjectCount   = 0;
+        var doingExecutionCount = 0;
+        var $doingProjectItems = $kanban.find('.kanban-lane-col[data-type="doingProject"] > .kanban-lane-items');
+        if($doingProjectItems.length)
+        {
+            doingProjectCount = $doingProjectItems.find('.project-item').length;
+            doingExecutionCount = $doingProjectItems.find('.execution-item').length;
+        }
+        $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || '');
+        $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || '');
+
         updateKanbanAffixState();
     }
 });
