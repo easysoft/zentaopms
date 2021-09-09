@@ -33,6 +33,7 @@
 #kanbanList .kanban-item.has-left-border.border-left-red {border-left-color: #ff5d5d;}
 #kanbanList .kanban-item.has-left-border.border-left-blue {border-left-color: #0991ff;}
 
+.kanban-affixed {padding-top: 72px;}
 .kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
 
 #kanbanList .kanban-header-col[data-type="doingProject"],
@@ -341,9 +342,9 @@ function renderKanbanItem(item, $item, col)
  */
 function affixKanbanHeader($kanbanBoard, affixed)
 {
-    $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
     var $header = $kanbanBoard.children('.kanban-header');
     $header.css('width', affixed ? $kanbanBoard.width() : '');
+    $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
 }
 
