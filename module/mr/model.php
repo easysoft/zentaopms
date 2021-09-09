@@ -99,7 +99,6 @@ class mrModel extends model
         $MRObject->title             = $MR->title;
         $MRObject->description       = $MR->description;
         $MRObject->assignee_ids      = $MR->assignee;
-        $MRObject->reviewer_ids      = $MR->reviewer;
 
         $rawMR = $this->apiCreateMR($this->post->gitlabID, $this->post->sourceProject, $MRObject);
 
@@ -131,7 +130,6 @@ class mrModel extends model
         /* Change gitlab user ID to zentao account. */
         $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
         $newMR->assignee = zget($gitlabUsers, $MR->assignee, '');
-        $newMR->reviewer = zget($gitlabUsers, $MR->reviewer, '');
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($newMR)
@@ -160,7 +158,6 @@ class mrModel extends model
         $newMR->title         = $MR->title;
         $newMR->description   = $MR->description;
         $newMR->assignee_ids  = $MR->assignee;
-        $newMR->reviewer_ids  = $MR->reviewer;
         $newMR->target_branch = $MR->targetBranch;
 
         $oldMR = $this->getByID($MRID);
@@ -171,7 +168,6 @@ class mrModel extends model
         /* Change gitlab user ID to zentao account. */
         $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($oldMR->gitlabID);
         $MR->assignee = zget($gitlabUsers, $MR->assignee, '');
-        $MR->reviewer = zget($gitlabUsers, $MR->reviewer, '');
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR)
