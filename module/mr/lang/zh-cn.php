@@ -55,7 +55,6 @@ $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";
 $lang->mr->at   = "于";
-$lang->mr->on   = "在";
 
 $lang->mr->pipeline        = "流水线";
 $lang->mr->pipelineSuccess = "已通过";
