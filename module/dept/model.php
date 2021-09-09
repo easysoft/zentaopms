@@ -407,7 +407,7 @@ class deptModel extends model
         return $this->dao->select("$keyField, realname")->from(TABLE_USER)
             ->where('deleted')->eq(0)
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
-            ->beginIF($deptID)->andWhere('dept')->in($childDepts)->fi()
+            ->beginIF($childDepts)->andWhere('dept')->in($childDepts)->fi()
             ->orderBy('account')
             ->fetchPairs();
     }
