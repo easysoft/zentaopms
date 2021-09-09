@@ -6,6 +6,12 @@ $(function()
         $('#featuresCarousel').carousel('next');
     });
 
+    $('#features').on('click', '.btn-close-modal', function()
+    {
+        var feature = features[features.length - 1];
+        $.post(createLink('misc', 'ajaxSaveViewed', 'feature=' + feature));
+    });
+
     $('#featuresCarousel').on('slide.zui.carousel', function(e)
     {
         var $next      = $(e.relatedTarget);
@@ -19,9 +25,11 @@ $(function()
         $nav.find('li.active').removeClass('active');
         $nav.find('a[data-slide-to="' + index + '"]').parent().addClass('active');
 
-
         $features.toggleClass('is-last-item', isLastItem);
         if(isLastItem) $features.addClass('enabled');
+
+        var feature = features[index - 1];
+        if(feature) $.post(createLink('misc', 'ajaxSaveViewed', 'feature=' + feature));
     });
 
     $('#features').toggleClass('is-last-item', $('#featuresCarousel>.carousel-inner>.item').length < 2);
