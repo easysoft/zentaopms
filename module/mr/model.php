@@ -333,9 +333,10 @@ class mrModel extends model
                         $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
-                        $todo->desc         = $rawTodo->target->description . "<br>" . '<a href="' . $this->todoDescriptionLink($gitlabID, $projectID) . '" target="_blank">' . $this->todoDescriptionLink($gitlabID, $projectID) .'</a>';
+                        $todo->desc         = $rawTodo->target->description . "<br>" . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . $rawTodo->target->web_url .'</a>';
                         $todo->status       = 'wait';
                         $todo->finishedBy   = '';
+
                         $this->dao->insert(TABLE_TODO)->data($todo)->exec();
                     }
                 }
