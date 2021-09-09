@@ -63,7 +63,7 @@ class executionModel extends model
      */
     public function setMenu($executionID, $buildID = 0, $extra = '')
     {
-        if(strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false) die(js::error($this->lang->execution->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false) die(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
