@@ -24,5 +24,5 @@ $(function()
         if(isLastItem) $features.addClass('enabled');
     });
 
-    $('#features').toggleClass('is-last-item', $('#features>.carousel-inner>.item').length < 2);
+    $('#features').toggleClass('is-last-item', $('#featuresCarousel>.carousel-inner>.item').length < 2);
 });
