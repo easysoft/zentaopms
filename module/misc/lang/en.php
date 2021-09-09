@@ -81,8 +81,13 @@ $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenT
     </ol>";
 
 $lang->misc->feature = new stdclass();
-$lang->misc->feature->lastest  = 'Latest Version';
-$lang->misc->feature->detailed = 'Detail';
+$lang->misc->feature->lastest        = 'Latest Version';
+$lang->misc->feature->detailed       = 'Detail';
+$lang->misc->feature->introduction   = 'New features';
+$lang->misc->feature->tutorial       = 'Novice tutorial';
+$lang->misc->feature->brandBlueTheme = 'Bran new theme "Young Blue"';
+$lang->misc->feature->nextStep       = 'Next step';
+$lang->misc->feature->close          = 'Close';
 
 $lang->misc->releaseDate['15.4']        = '2021-08-23';
 $lang->misc->releaseDate['15.3']        = '2021-08-04';

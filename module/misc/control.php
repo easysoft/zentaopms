@@ -247,4 +247,12 @@ class misc extends control
         $data = array('content' => $this->misc->getRemind(), 'title' => $this->lang->misc->remind);
         $this->send(array('result' => 'success', 'data' => $data));
     }
+
+    /**
+     * Features dialog.
+     */
+    public function features()
+    {
+        $this->display();
+    }
 }

@@ -852,3 +852,9 @@ function getLatestVersion()
     $('#globalSearchInput').click();
     $('#upgradeContent').toggle();
 }
+
+/** Show features dialog */
+function showFeaturesDialog()
+{
+    $.zui.modalTrigger.show({url: $.createLink('misc', 'features'), type: 'ajax', width: 900, showHeader: false})
+}

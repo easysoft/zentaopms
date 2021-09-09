@@ -81,8 +81,13 @@ $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     </ol>";
 
 $lang->misc->feature = new stdclass();
-$lang->misc->feature->lastest  = '最新版本';
-$lang->misc->feature->detailed = '详情';
+$lang->misc->feature->lastest        = '最新版本';
+$lang->misc->feature->detailed       = '详情';
+$lang->misc->feature->introduction   = '新功能介绍';
+$lang->misc->feature->tutorial       = '新手引导教程';
+$lang->misc->feature->brandBlueTheme = '全新青春蓝主题';
+$lang->misc->feature->nextStep       = '下一步';
+$lang->misc->feature->close          = '关闭';
 
 $lang->misc->releaseDate['15.4']        = '2021-08-23';
 $lang->misc->releaseDate['15.3']        = '2021-08-04';
