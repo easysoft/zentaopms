@@ -12,7 +12,7 @@
 #kanbanList .kanban-header,
 #kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0; min-height: 60px;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
-#kanbanList .kanban-lane {border-top: 2px solid #fff; min-height: 110px;}
+#kanbanList .kanban-lane {border-top: 2px solid #fff; min-height: 100px;}
 #kanbanList .kanban-lane + .kanban-lane {border-top: 10px solid #fff;}
 #kanbanList .kanban-sub-lane + .kanban-sub-lane {border-top: 2px solid #fff;}
 #kanbanList .kanban-col + .kanban-col {border-left: 2px solid #fff;}
