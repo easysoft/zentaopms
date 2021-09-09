@@ -72,7 +72,7 @@ function processKanbanData(key, programsData)
 
                     var execution = project.execution;
                     if(!execution || !execution.id) return;
-                    projectItem.execution = execution;
+                    projectItem.execution = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                 });
             }
 
