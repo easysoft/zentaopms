@@ -310,7 +310,7 @@ $lang->execution->workloadTotal       = "The cumulative workload ratio should no
 // $lang->execution->linkProjectStoryTip = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linked under the execution, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
 if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "Choose a {$lang->execution->common} Team to copy.";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choose a {$lang->projectCommon} or {$lang->execution->common} Team to copy.";
+if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
 
 /* Interactive prompts. */
 $lang->execution->confirmDelete             = "Do you want to delete the {$lang->executionCommon}[%s]?";

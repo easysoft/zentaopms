@@ -310,7 +310,7 @@ $lang->execution->workloadTotal       = "工作量占比累计不应当超过100
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip     = "(项目下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联产品的{$lang->SRCommon})";
 if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择一个{$lang->execution->common}团队来复制";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->projectCommon}或{$lang->execution->common}团队来复制";
+if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->project->common}或{$lang->execution->common}团队来复制";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete             = "您确定删除{$lang->executionCommon}[%s]吗？";
