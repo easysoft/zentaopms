@@ -312,7 +312,6 @@ class mrModel extends model
             {
                 $sudo  = $accountPair[$account];
                 $todoList = $this->loadModel('gitlab')->apiGetTodoList($gitlabID, $projectID, $sudo);
-
                 foreach($todoList as $rawTodo)
                 {
                     $todoDesc = $this->dao->select('*')
@@ -333,7 +332,7 @@ class mrModel extends model
                         $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
-                        $todo->desc         = $rawTodo->target->description . "<br>" . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . $rawTodo->target->web_url .'</a>';
+                        $todo->desc         = $this->app->user->account . $this->lang->mr->at . date("Y-m-d", strtotime($rawTodo->target->created_at)) . $this->lang->mr->on . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . $rawTodo->target->description .'</a>' . $this->lang->mr->todomessage . '</br>' . $this->app->user->account. $this->lang->mr->on . '<a href="' . $rawTodo->author->web_url . '/' . $rawTodo->project->path . '" target="_blank">' . $rawTodo->project->path .'</a>' . $this->lang->mr->todomessage;
                         $todo->status       = 'wait';
                         $todo->finishedBy   = '';
 
@@ -343,8 +342,9 @@ class mrModel extends model
             }
         }
     }
-        /**
-         * Get a list of to-do items.
+
+    /**
+     * Get a list of to-do items.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID

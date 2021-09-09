@@ -55,6 +55,7 @@ $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";
 $lang->mr->at   = "于";
+$lang->mr->on   = "在";
 
 $lang->mr->pipeline        = "流水线";
 $lang->mr->pipelineSuccess = "已通过";
@@ -75,6 +76,10 @@ $lang->mr->commandLine    = "合并命令";
 $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
 $lang->mr->mergeSuccess   = "已成功合并";
+
+$lang->mr->todomessage = "项目中指派给你了合并请求。";
+$lang->mr->attime = "时间在";
+
 
 /**
  * Merge Command Document.
