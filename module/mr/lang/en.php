@@ -42,7 +42,7 @@ $lang->mr->sourceBranch  = 'Source branch';
 $lang->mr->targetProject = 'Target project';
 $lang->mr->targetBranch  = 'Target branch';
 
-$lang->mr->usersTips = 'Tip: If you cannot choose the assignee and reviewer, please go to the GitLab page to bind the user first.';
+$lang->mr->usersTips = 'Tip: If you cannot choose the assignee or reviewer, please go to the GitLab page to bind the user first.';
 $lang->mr->notFound  = "Merge Request does not exist!";
 
 $lang->mr->apiError = new stdclass;
