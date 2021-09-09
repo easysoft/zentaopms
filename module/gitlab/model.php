@@ -392,19 +392,20 @@ class gitlabModel extends model
     }
 
     /**
-     * Get a list of to-do items.
+     * Get a list of to-do items by API.
      *
-     * @see   https://docs.gitlab.com/ee/api/todos.html
+     * @docs   https://docs.gitlab.com/ee/api/todos.html
      * @param  int    $gitlabID
      * @param  int    $projectID
+     * @param  int    $sudo
      * @access public
      * @return object
      */
-    public function apiTodoList($gitlabID, $projectID)
+    public function apiGetTodoList($gitlabID, $projectID, $sudo)
     {
         $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
         if(!$gitlab) return '';
-        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&private_token={$gitlab->token}";
+        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&private_token={$gitlab->token}&sudo={$sudo}";
         return json_decode(commonModel::http($url));
     }
 
