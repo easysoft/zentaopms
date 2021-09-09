@@ -121,7 +121,7 @@ class mr extends control
         $MR = $this->mr->getByID($id);
 
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
-        $this->mr->apiDeleteMR($MR->gitlabID, $MR->sourceProject, $MR->mriid);
+        $this->mr->apiDeleteMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
 
         die(js::locate(inlink('browse'), 'parent'));
     }
