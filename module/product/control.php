@@ -1172,6 +1172,12 @@ class product extends control
         if(!empty($myProducts))    $kanbanList['my']    = $myProducts;
         if(!empty($otherProducts)) $kanbanList['other'] = $otherProducts;
 
+        $emptyHour = new stdclass();
+        $emptyHour->totalEstimate = 0;
+        $emptyHour->totalConsumed = 0;
+        $emptyHour->totalLeft     = 0;
+        $emptyHour->progress      = 0;
+
         $this->view->title            = $this->lang->product->kanban;
         $this->view->kanbanList       = $kanbanList;
         $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programList;
@@ -1182,7 +1188,7 @@ class product extends control
         $this->view->latestExecutions = $projectLatestExecutions;
         $this->view->executionList    = $executionList;
         $this->view->hourList         = $hourList;
-        $this->view->emptyHour        = (object) array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $this->view->emptyHour        = $emptyHour;
         $this->view->releaseList      = $releaseList;
 
         $this->display();

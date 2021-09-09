@@ -197,7 +197,6 @@ function renderExecutionItem(item, $item)
             $item.addClass('link-block');
             $title = $('<a class="title" />')
                 .attr('href', $.createLink('execution', 'task', 'executionID=' + item._id));
-            console.log($title);
         }
         else
         {

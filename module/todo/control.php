@@ -385,9 +385,10 @@ class todo extends control
         }
 
         /* Fix bug #936. */
-        if($this->app->user->account != $todo->account and !common::hasPriv('company', 'index'))
+        $account = $this->app->user->account;
+        if($account != $todo->account and $account != $todo->assignedTo and !common::hasPriv('my', 'team'))
         {
-            $this->locate($this->createLink('user', 'deny', "module=company&method=index"));
+            $this->locate($this->createLink('user', 'deny', "module=my&method=team"));
         }
 
         $this->loadModel('user');
