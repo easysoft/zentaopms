@@ -42,7 +42,7 @@ $lang->mr->sourceBranch  = '源分支';
 $lang->mr->targetProject = '目标项目';
 $lang->mr->targetBranch  = '目标分支';
 
-$lang->mr->usersTips = '提示：如果无法选择指派人或评审人，请先前往GitLab页面绑定用户。';
+$lang->mr->usersTips = '提示：如果无法选择指派人，请先前往GitLab页面绑定用户。';
 $lang->mr->notFound  = "此{$lang->mr->common}不存在。";
 
 $lang->mr->apiError = new stdclass;
