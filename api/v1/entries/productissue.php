@@ -192,10 +192,13 @@ class productIssueEntry extends entry
         /* Format user detail and date. */
         $accountList = array_unique($accountList);
         $profileList = $this->loadModel('user')->getUserDetailsForAPI($accountList);
-        foreach($actions as $action)
+        foreach($actions as $key => $action)
         {
-            $action->actor = $profileList[$action->actor];
+            $action->actor = isset($profileList[$action->actor]) ? $profileList[$action->actor] : array();
             $action->date  = gmdate("Y-m-d\TH:i:s\Z", strtotime($action->date));
+
+            /* Unset this action when actor is System. */
+            if(empty($action->actor)) unset($actions[$key]);
         }
 
         return $actions;
