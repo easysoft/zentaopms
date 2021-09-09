@@ -739,9 +739,12 @@ class programModel extends model
                 $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
 
                 /* Move product to new top program. */
-                $oldTopProgram = $this->getTopByPath($oldProgram->path);
-                $newTopProgram = $this->getTopByID($programID);
-                if($oldTopProgram != $newTopProgram) $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
+                if($oldProgram->parent == 0)
+                {
+                    $oldTopProgram = $this->getTopByPath($oldProgram->path);
+                    $newTopProgram = $this->getTopByID($programID);
+                    if($oldTopProgram != $newTopProgram) $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
+                }
             }
 
             return common::createChanges($oldProgram, $program);
