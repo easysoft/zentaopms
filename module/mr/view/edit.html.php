@@ -56,10 +56,6 @@
             <td><?php echo html::select('assignee', $users, $assignee, "class='form-control chosen'")?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->mr->reviewer;?></th>
-            <td><?php echo html::select('reviewer', $users, $reviewer, "class='form-control chosen'")?></td>
-          </tr>
-          <tr>
             <th></th>
             <td><?php echo $lang->mr->usersTips;?></td>
           </tr>
