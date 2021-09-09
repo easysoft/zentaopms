@@ -83,11 +83,14 @@ $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenT
 $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest        = 'Latest Version';
 $lang->misc->feature->detailed       = 'Detail';
-$lang->misc->feature->introduction   = 'New features';
-$lang->misc->feature->tutorial       = 'Novice tutorial';
-$lang->misc->feature->brandBlueTheme = 'Bran new theme "Young Blue"';
+$lang->misc->feature->introduction   = 'Features';
+$lang->misc->feature->tutorial       = 'Tutorial';
+$lang->misc->feature->youngBlueTheme = 'Young Blue Theme';
 $lang->misc->feature->nextStep       = 'Next step';
 $lang->misc->feature->close          = 'Close';
+$lang->misc->feature->downloadFile   = 'Download introduction';
+$lang->misc->feature->tutorialDesc   = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
+$lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 
 $lang->misc->releaseDate['15.4']        = '2021-08-23';
 $lang->misc->releaseDate['15.3']        = '2021-08-04';
