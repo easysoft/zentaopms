@@ -4,7 +4,7 @@
 <style>
 #kanbanList .panel-heading {padding: 10px;}
 #kanbanList .panel-body {padding: 0 10px 10px;}
-#kanbanList .kanban {min-height: 120px;}
+#kanbanList .kanban {min-height: 120px; overflow: visible;}
 #kanbanList .kanban-item {margin-top: 0; border: 1px solid #ebebeb; border-radius: 2px;}
 #kanbanList .kanban-item:hover {border: 1px solid #ccc;}
 #kanbanList .kanban-item + .kanban-item {margin-top: 10px;}
