@@ -120,6 +120,9 @@ class mrModel extends model
             return array('result' => 'fail', 'message' => $this->lang->mr->createFailedFromAPI);
         }
 
+        /* Create a todo item for this MR. */
+        $this->apiCreateMRTodo($this->post->gitlabID, $this->post->targetProject, $rawMR->iid);
+
         $newMR = new stdclass;
         $newMR->mriid       = $rawMR->iid;
         $newMR->status      = $rawMR->state;
@@ -493,5 +496,20 @@ class mrModel extends model
         }
         if(!empty($users[$zentaoUser])) return $users[$zentaoUser];
         return "";
+    }
+
+    /**
+     * Create a todo item for merge request.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiCreateMRTodo($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/todo");
+        return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'POST')));
     }
 }
