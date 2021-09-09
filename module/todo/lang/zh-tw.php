@@ -102,7 +102,6 @@ $lang->todo->typeList['bug']       = 'Bug';
 $lang->todo->typeList['task']      = '任務';
 $lang->todo->typeList['story']     = $lang->SRCommon;
 $lang->todo->typeList['testtask']  = '測試單';
-$lang->todo->typeList['mrapprove'] = '合併請求審批';
 
 $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
