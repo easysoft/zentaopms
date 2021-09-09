@@ -70,3 +70,4 @@ a.showMoreImage:hover {opacity: 1;}
 #userNav .dropdown-menu, #userNav .create-list {margin-right: -15px !important; border-top: 0px;}
 #userNav .dropdown-menu .dropdown-submenu>ul {margin-right: 0px !important;}
 #userNav .create-list:hover:before {right: 21.5% !important;}
+#modules li>a, #modules ul>li>a {overflow: hidden; white-space: nowrap;}

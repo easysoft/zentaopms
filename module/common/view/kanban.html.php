@@ -33,6 +33,7 @@
 #kanbanList .kanban-item.has-left-border.border-left-red {border-left-color: #ff5d5d;}
 #kanbanList .kanban-item.has-left-border.border-left-blue {border-left-color: #0991ff;}
 
+.kanban-affixed {padding-top: 72px;}
 .kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
 
 #kanbanList .kanban-header-col[data-type="doingProject"],
@@ -341,9 +342,9 @@ function renderKanbanItem(item, $item, col)
  */
 function affixKanbanHeader($kanbanBoard, affixed)
 {
-    $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
     var $header = $kanbanBoard.children('.kanban-header');
     $header.css('width', affixed ? $kanbanBoard.width() : '');
+    $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
 }
 
@@ -387,17 +388,31 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     /* laneItemsClass: 'scrollbar-hover', */ // only show scrollbar on mouse hover
     itemRender: renderKanbanItem,
     useFlex: false,
+    showZeroCount: true,
     onRenderHeaderCol: function($col, col)
     {
         if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
     },
-    onRenderKanban: function($kanban)
+    onRenderKanban: function($kanban, kanbanData)
     {
         $kanban.find('.kanban-lane-name').each(function(index)
         {
             var color = kanbanColorList[index % kanbanColorList.length];
             $(this).css('background-color', color);
         });
+
+        /* Update project count and execution count */
+        var doingProjectCount   = 0;
+        var doingExecutionCount = 0;
+        var $doingProjectItems = $kanban.find('.kanban-lane-col[data-type="doingProject"] > .kanban-lane-items');
+        if($doingProjectItems.length)
+        {
+            doingProjectCount = $doingProjectItems.find('.project-item').length;
+            doingExecutionCount = $doingProjectItems.find('.execution-item').length;
+        }
+        $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || 0);
+        $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || 0);
+
         updateKanbanAffixState();
     }
 });

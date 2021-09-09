@@ -1033,16 +1033,16 @@ class treeModel extends model
         {
             $productID = zget($extra, 'productID', 0);
             $projectID = $extra['projectID'];
-            return html::a(helper::createLink('projectstory', 'story', "projectID=$projectID&productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+            return html::a(helper::createLink('projectstory', 'story', "projectID=$projectID&productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
         }
         elseif(isset($extra['executionID']) and !empty($extra['executionID']))
         {
             $executionID = $extra['executionID'];
-            return html::a(helper::createLink('execution', 'story', "executionID=$executionID&orderBy=order_desc&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+            return html::a(helper::createLink('execution', 'story', "executionID=$executionID&orderBy=order_desc&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
         }
         else
         {
-            return html::a(helper::createLink('product', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+            return html::a(helper::createLink('product', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
         }
     }
 
@@ -1075,7 +1075,7 @@ class treeModel extends model
     {
         $executionID = $extra['executionID'];
         $productID   = $extra['productID'];
-        return html::a(helper::createLink('execution', 'task', "executionID={$executionID}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('execution', 'task', "executionID={$executionID}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1090,7 +1090,7 @@ class treeModel extends model
     public function createProjectStoryLink($type, $module, $extra)
     {
         $productID = $extra['productID'];
-        return html::a(helper::createLink('projectstory', 'story', "projectID={$extra['executionID']}&productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('projectstory', 'story', "projectID={$extra['executionID']}&productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1103,7 +1103,7 @@ class treeModel extends model
      */
     public function createRequirementLink($type, $module)
     {
-        return html::a(helper::createLink($this->app->rawModule, $this->app->rawMethod, "root={$module->root}&branch=&type=byModule&param={$module->id}&storyType=requirement"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink($this->app->rawModule, $this->app->rawMethod, "root={$module->root}&branch=&type=byModule&param={$module->id}&storyType=requirement"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1115,7 +1115,7 @@ class treeModel extends model
      */
     public function createDocLink($type, $module, $extra = '')
     {
-        return html::a(helper::createLink('doc', 'browse', "libID={$module->root}&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('doc', 'browse', "libID={$module->root}&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1187,7 +1187,7 @@ class treeModel extends model
      */
     public function createBugLink($type, $module)
     {
-        return html::a(helper::createLink('bug', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('bug', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1202,7 +1202,7 @@ class treeModel extends model
         $moduleName   = $this->app->tab == 'project' ? 'project'  : 'testcase';
         $methodName   = $this->app->tab == 'project' ? 'testcase' : 'browse';
         $projectParam = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-        return html::a(helper::createLink($moduleName, $methodName, $projectParam . "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}'");
+        return html::a(helper::createLink($moduleName, $methodName, $projectParam . "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
     }
 
     /**
@@ -1214,7 +1214,7 @@ class treeModel extends model
      */
     public function createTestTaskLink($type, $module, $extra)
     {
-        return html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1227,7 +1227,7 @@ class treeModel extends model
      */
     public function createCaseLibLink($type, $module)
     {
-        return html::a(helper::createLink('caselib', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('caselib', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1257,7 +1257,7 @@ class treeModel extends model
      */
     public function createFeedbackLink($type, $module)
     {
-        return html::a(helper::createLink('feedback', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('feedback', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1270,7 +1270,7 @@ class treeModel extends model
      */
     public function createTrainSkillLink($type, $module, $extra = '')
     {
-        return html::a(helper::createLink('trainskill', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+        return html::a(helper::createLink('trainskill', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1283,7 +1283,7 @@ class treeModel extends model
      */
     public function createTrainCourseLink($type, $module, $extra = '')
     {
-        return html::a(helper::createLink('traincourse', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+        return html::a(helper::createLink('traincourse', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1296,7 +1296,7 @@ class treeModel extends model
      */
     public function createTrainPostLink($type, $module, $extra = '')
     {
-        return html::a(helper::createLink('trainpost', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+        return html::a(helper::createLink('trainpost', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**

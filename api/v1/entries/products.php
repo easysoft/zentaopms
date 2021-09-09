@@ -12,7 +12,7 @@
 class productsEntry extends entry
 {
     /**
-     * POST method.
+     * GET method.
      *
      * @param  int    $projectID
      * @access public

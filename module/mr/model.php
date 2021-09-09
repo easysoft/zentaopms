@@ -66,7 +66,7 @@ class mrModel extends model
         $MR = $this->dao->select('id,title')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
-            ->AndWhere('repoID')->eq($repoID)
+            ->andWhere('repoID')->eq($repoID)
             ->orderBy('id')->fetchPairs('id', 'title');
         return array('' => '') + $MR;
     }
@@ -299,7 +299,9 @@ class mrModel extends model
         /* It can only get todo from GitLab API by its assignee. So here should use sudo as the assignee to get the todo list. */
         /* In this case, ignore sync todo for reviewer due to an issue in GitLab API. */
         $accountList = $this->dao->select('assignee')->from(TABLE_MR)
-            ->where('gitlabID')->eq($gitlabID)
+            ->where('deleted')->eq('0')
+            ->andWhere('status')->eq('opened')
+            ->andWhere('gitlabID')->eq($gitlabID)
             ->andWhere('targetProject')->eq($projectID)
             ->fetchPairs();
 
