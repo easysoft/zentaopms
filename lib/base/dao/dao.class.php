@@ -322,7 +322,7 @@ class baseDAO
      *
      * @param  string $fields
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function select($fields = '*')
     {
@@ -339,7 +339,7 @@ class baseDAO
      *
      * @param  string $distinctField
      * @access public
-     * @return void
+     * @return int
      */
     public function count($distinctField = '')
     {
@@ -388,7 +388,7 @@ class baseDAO
      *
      * @param  string $table
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function update($table)
     {
@@ -404,7 +404,7 @@ class baseDAO
      * The delete method, call sql::delete().
      *
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function delete()
     {
@@ -420,7 +420,7 @@ class baseDAO
      *
      * @param  string $table
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function insert($table)
     {
@@ -437,7 +437,7 @@ class baseDAO
      *
      * @param  string $table
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function replace($table)
     {
@@ -454,7 +454,7 @@ class baseDAO
      *
      * @param  string $table
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function from($table)
     {
@@ -469,7 +469,7 @@ class baseDAO
      *
      * @param  string $fields
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function fields($fields)
     {
@@ -483,7 +483,7 @@ class baseDAO
      *
      * @param  string $alias
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function alias($alias)
     {
@@ -498,7 +498,7 @@ class baseDAO
      *
      * @param  object $data  the data object or array
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function data($data, $skipFields = '')
     {
@@ -646,7 +646,7 @@ class baseDAO
      *
      * @param  object $dbh
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function dbh($dbh)
     {
@@ -707,7 +707,7 @@ class baseDAO
      * @param  object $pager
      * @param  string $distinctField
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function page($pager, $distinctField = '')
     {
@@ -957,7 +957,7 @@ class baseDAO
      * @param  string $funcName  the function name to be called
      * @param  array  $funcArgs  the params
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function __call($funcName, $funcArgs)
     {
@@ -1034,7 +1034,7 @@ class baseDAO
      * @param  string $funcName     the check rule
      * @param  string $condition     the condition
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function check($fieldName, $funcName, $condition = '')
     {
@@ -1115,7 +1115,7 @@ class baseDAO
      * @param  string $fieldName
      * @param  string $funcName
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function checkIF($condition, $fieldName, $funcName)
     {
@@ -1136,7 +1136,7 @@ class baseDAO
      * @param  string $fields       the fields to check, join with ,
      * @param  string $funcName
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function batchCheck($fields, $funcName)
     {
@@ -1158,7 +1158,7 @@ class baseDAO
      * @param  string $fields
      * @param  string $funcName
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function batchCheckIF($condition, $fields, $funcName)
     {
@@ -1179,7 +1179,7 @@ class baseDAO
      *
      * @param  string $skipFields   fields to skip checking
      * @access public
-     * @return object the dao object self.
+     * @return static the dao object self.
      */
     public function autoCheck($skipFields = '')
     {
@@ -1607,7 +1607,7 @@ class baseSQL
      *
      * @param  int    $count
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function markLeft($count = 1)
     {
@@ -1623,7 +1623,7 @@ class baseSQL
      *
      * @param  int    $count
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function markRight($count = 1)
     {
@@ -1639,7 +1639,7 @@ class baseSQL
      *
      * @param  string $set
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function set($set)
     {
@@ -1663,7 +1663,7 @@ class baseSQL
      *
      * @param  string $table
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function from($table)
     {
@@ -1677,7 +1677,7 @@ class baseSQL
      *
      * @param  string $alias
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function alias($alias)
     {
@@ -1691,7 +1691,7 @@ class baseSQL
      *
      * @param  string $table
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function leftJoin($table)
     {
@@ -1705,7 +1705,7 @@ class baseSQL
      *
      * @param  string $condition
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function on($condition)
     {
@@ -1719,7 +1719,7 @@ class baseSQL
      *
      * @param  bool $condition
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function beginIF($condition)
     {
@@ -1733,7 +1733,7 @@ class baseSQL
      * End the condition judge.
      *
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function fi()
     {
@@ -1750,7 +1750,7 @@ class baseSQL
      * @param  string $arg2     the operator
      * @param  string $arg3     the value
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function where($arg1, $arg2 = null, $arg3 = null)
     {
@@ -1776,7 +1776,7 @@ class baseSQL
      *
      * @param  string $condition
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function andWhere($condition, $addMark = false)
     {
@@ -1792,7 +1792,7 @@ class baseSQL
      *
      * @param  bool  $condition
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function orWhere($condition)
     {
@@ -1807,7 +1807,7 @@ class baseSQL
      *
      * @param  string $value
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function eq($value)
     {
@@ -1822,7 +1822,7 @@ class baseSQL
      *
      * @param  string $value
      * @access public
-     * @return void the sql object.
+     * @return static the sql object.
      */
     public function ne($value)
     {
@@ -1837,7 +1837,7 @@ class baseSQL
      *
      * @param  string $value
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function gt($value)
     {
@@ -1852,7 +1852,7 @@ class baseSQL
      *
      * @param  string $value
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function ge($value)
     {
@@ -1867,7 +1867,7 @@ class baseSQL
      *
      * @param  mixed  $value
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function lt($value)
     {
@@ -1882,7 +1882,7 @@ class baseSQL
      *
      * @param  mixed  $value
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function le($value)
     {
@@ -1898,7 +1898,7 @@ class baseSQL
      * @param  string $min
      * @param  string $max
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function between($min, $max)
     {
@@ -1915,7 +1915,7 @@ class baseSQL
      *
      * @param  string|array $ids   ','分割的字符串或者数组  list string by ',' or an array
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function in($ids)
     {
@@ -1930,7 +1930,7 @@ class baseSQL
      *
      * @param  string|array $ids   list string by ',' or an array
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function notin($ids)
     {
@@ -1945,7 +1945,7 @@ class baseSQL
      *
      * @param  string $string
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function like($string)
     {
@@ -1960,7 +1960,7 @@ class baseSQL
      *
      * @param  string $string
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function notLike($string)
     {
@@ -1975,7 +1975,7 @@ class baseSQL
      *
      * @param  string $order
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function orderBy($order)
     {
@@ -2030,7 +2030,7 @@ class baseSQL
      *
      * @param  string $limit
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function limit($limit)
     {
@@ -2054,7 +2054,7 @@ class baseSQL
      *
      * @param  string $groupBy
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function groupBy($groupBy)
     {
@@ -2074,7 +2074,7 @@ class baseSQL
      *
      * @param  string $having
      * @access public
-     * @return object the sql object.
+     * @return static the sql object.
      */
     public function having($having)
     {
@@ -2088,7 +2088,7 @@ class baseSQL
      * Get the sql string.
      *
      * @access public
-     * @return string
+     * @return static
      */
     public function get()
     {

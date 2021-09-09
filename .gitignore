@@ -17,5 +17,7 @@ tmp/extension/*
 .gitignore
 .DS_Store
 vendor/
+docker
+.docker-sync
 composer.lock
 
