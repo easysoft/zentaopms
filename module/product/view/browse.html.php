@@ -43,7 +43,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 <div id="mainMenu" class="clearfix">
   <?php if(!$isProjectStory):?>
   <div id="sidebarHeader">
-    <div class="title">
+    <div class="title" title="<?php echo $moduleName;?>">
       <?php
       echo $moduleName;
       if($moduleID)
