@@ -781,7 +781,7 @@ class actionModel extends model
         $docs = $this->doc->getPrivDocs(array_keys($libs), 0, 'all');
 
         $actionCondition = $this->getActionCondition();
-        if(!$actionCondition and isset($this->app->user->rights['acls']['actions'])) return array();
+        if(!$actionCondition and !$this->app->user->admin and isset($this->app->user->rights['acls']['actions'])) return array();
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
