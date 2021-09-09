@@ -130,16 +130,16 @@ class productIssueEntry extends entry
         $profileList = $this->loadModel('user')->getUserDetailsForAPI($accountList);
 
         /* Set the user detail to assignedTo and openedBy. */
-        foreach($issue->assignedTo as $index => $user)
+        foreach($issue->assignedTo as $key => $user)
         {
-            /* $index can be 'closed' in some case, so here should be process it. */
-            if($index == 'closed')
+            /* $key can be 'closed' in some case, so here should be process it. */
+            if($key == 'closed')
             {
                 $issue->assignedTo = array();
                 break;
             }
 
-            $issue->assignedTo[$index] = $profileList[$user];
+            $issue->assignedTo[$key] = $profileList[$user];
         }
         $issue->openedBy = $profileList[$issue->openedBy];
 
