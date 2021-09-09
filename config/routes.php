@@ -19,9 +19,10 @@ $routes['/productplans']             = 'productPlans';
 $routes['/product/:id/productplans'] = 'productPlans';
 $routes['/productplans/:id']         = 'productPlan';
 
-$routes['/releases']             = 'releases';
-$routes['/product/:id/releases'] = 'releases';
-$routes['/releases/:id']         = 'release';
+$routes['/releases']              = 'releases';
+$routes['/product/:id/releases']  = 'releases';
+$routes['/projects/:id/releases'] = 'projectreleases';
+$routes['/releases/:id']          = 'release';
 
 $routes['/products/:id/stories']   = 'stories';
 $routes['/executions/:id/stories'] = 'executionStories';
