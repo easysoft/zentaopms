@@ -296,39 +296,52 @@ class mrModel extends model
      */
     public function batchSyncTodo($gitlabID, $projectID)
     {
-        $todoList = $this->loadModel('gitlab')->apiTodoList($gitlabID, $projectID);
+        /* It can only get todo from GitLab API by its assignee. So here should use sudo as the assignee to get the todo list. */
+        /* In this case, ignore sync todo for reviewer due to an issue in GitLab API. */
+        $accountList = $this->dao->select('assignee')->from(TABLE_MR)
+            ->where('gitlabID')->eq($gitlabID)
+            ->andWhere('targetProject')->eq($projectID)
+            ->fetchPairs();
 
-        if(!empty($todoList))
+        foreach($accountList as $account)
         {
-            foreach($todoList as $do)
+            $accountPair = $this->getSudoAccountPair($gitlabID, $projectID, $account);
+            if(!empty($accountPair) and isset($accountPair[$account]))
             {
-                $todoDesc = $this->dao->select('*')
-                    ->from(TABLE_TODO)
-                    ->where('idvalue')->eq($do->id)
-                    ->fetch();
-                if(empty($todoDesc))
+                $sudo  = $accountPair[$account];
+                $todoList = $this->loadModel('gitlab')->apiGetTodoList($gitlabID, $projectID, $sudo);
+
+                foreach($todoList as $rawTodo)
                 {
-                    $todo = new stdClass;
-                    $todo->account      = $this->app->user->account;
-                    $todo->assignedTo   = $this->app->user->account;
-                    $todo->assignedBy   = $this->app->user->account;
-                    $todo->date         = $do->target->created_at;
-                    $todo->assignedDate = $do->target->created_at;
-                    $todo->begin        = $do->target->created_at;
-                    $todo->type         = 'mrapprove';
-                    $todo->idvalue      = $do->id;
-                    $todo->pri          = 1;
-                    $todo->name         = $do->target->title;
-                    $todo->desc         = $do->target->description . "<br>" . '<a href="' . $this->todoDescriptionLink($gitlabID, $projectID) . '"target="_blank">' . $this->todoDescriptionLink($gitlabID, $projectID) .'</a>';
-                    $todo->finishedBy   = $this->app->user->account;
-                    $this->dao->insert(TABLE_TODO)->data($todo)->exec();
+                    $todoDesc = $this->dao->select('*')
+                        ->from(TABLE_TODO)
+                        ->where('idvalue')->eq($rawTodo->id)
+                        ->fetch();
+                    if(empty($todoDesc))
+                    {
+                        $todo = new stdClass;
+                        $todo->account      = $this->app->user->account;
+                        $todo->assignedTo   = $account;
+                        $todo->assignedBy   = $this->app->user->account;
+                        $todo->date         = date("Y-m-d", strtotime($rawTodo->target->created_at));
+                        $todo->assignedDate = $rawTodo->target->created_at;
+                        $todo->begin        = date("Hi", strtotime($rawTodo->target->created_at));
+                        $todo->end          = '2400'; /* 2400 means end is 'undefined'. */
+                        $todo->type         = 'custom';
+                        $todo->idvalue      = $rawTodo->id;
+                        $todo->pri          = 3;
+                        $todo->name         = $rawTodo->target->title;
+                        $todo->desc         = $rawTodo->target->description . "<br>" . '<a href="' . $this->todoDescriptionLink($gitlabID, $projectID) . '" target="_blank">' . $this->todoDescriptionLink($gitlabID, $projectID) .'</a>';
+                        $todo->status       = 'wait';
+                        $todo->finishedBy   = '';
+                        $this->dao->insert(TABLE_TODO)->data($todo)->exec();
+                    }
                 }
             }
         }
     }
-
-    /**
-     * Get a list of to-do items.
+        /**
+         * Get a list of to-do items.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -468,6 +481,23 @@ class mrModel extends model
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
         return $scm->diff('', $MR->sourceBranch, $MR->targetBranch, $parse = true, $MR->sourceProject);
+    }
+
+    /**
+     * Get sudo account pair, such as "zentao account" => "gitlab account|id".
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $account
+     * @access public
+     * @return array
+     */
+    public function getSudoAccountPair($gitlabID, $projectID, $account)
+    {
+        $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $accuntPair = array();
+        if(isset($bindedUsers[$account])) $accuntPair[$account] = $bindedUsers[$account];
+        return $accuntPair;
     }
 
     /**
