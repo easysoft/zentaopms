@@ -35,7 +35,7 @@ $(function()
     $('#subNavbar li[data-id="doc"]').addClass('active');
 
     /* Automatically save document contents. */
-    setInterval("saveTempContent()", 60 * 1000);
+    setInterval("saveDraft()", 60 * 1000);
 
     $(document).on("mouseup", 'span[data-name="fullscreen"]', function()
     {
@@ -86,12 +86,12 @@ $(function()
 })
 
 /**
- * Save temporary doc content.
+ * Save draft doc.
  *
  * @access public
  * @return void
  */
-function saveTempContent()
+function saveDraft()
 {
     var content = $('#content').val();
     var link    = createLink('doc', 'ajaxSaveDraft', 'docID=' + docID);

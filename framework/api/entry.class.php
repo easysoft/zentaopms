@@ -264,6 +264,10 @@ class baseEntry
             global $app;
             $app->setModuleName($moduleName);
             $app->setMethodName($methodName);
+
+            /* Check user permission. */
+            $this->checkPriv();
+
             $app->setControlFile();
 
             /*
@@ -549,5 +553,21 @@ class baseEntry
         $entryName = $entry . 'Entry';
         $entry     = new $entryName();
         return call_user_func_array(array($entry, $method), $params);
+    }
+
+    /**
+     * Check the user has permission to access this method, if not, return 403.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkPriv()
+    {
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        if($module and $method and !commonModel::hasPriv($module, $method))
+        {
+            $this->send(403, array('error' => 'Access not allowed'));
+        }
     }
 }

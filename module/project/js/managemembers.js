@@ -4,7 +4,7 @@
  * @access public
  * @return void
  */
-function saveMemebers()
+function saveMembers()
 {
     var isDeleted   = false;
     var accountList = [];

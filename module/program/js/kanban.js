@@ -67,12 +67,12 @@ function processKanbanData(key, programsData)
                 $.each(doingProjects, function(_, project)
                 {
                     var projectID = project.id;
-                    var projectItem = $.extend({}, project, {id: 'project-' + projectID, _id: projectID});
+                    var projectItem = $.extend({}, project, {id: 'project-' + projectID, _id: projectID, execution: null});
                     items.doingProject.push(projectItem);
 
                     var execution = project.execution;
                     if(!execution || !execution.id) return;
-                    projectItem.execution = execution;
+                    projectItem.execution = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                 });
             }
 

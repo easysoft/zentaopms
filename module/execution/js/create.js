@@ -31,11 +31,11 @@ $(function()
     }
 
     /* Assign value to the manage products by the different request type.*/
-    var product = $('#products0');
-    if(copyExecutionID) productID = product.val();
-    product.val(productID);
-    product.trigger("chosen:updated");
-    loadBranches(product);
+    var $product = $('#products0');
+    if(copyExecutionID) productID = $product.val();
+    $product.val(productID);
+    $product.trigger("chosen:updated");
+    loadBranches($product);
 
     var adjustMainCol = function()
     {

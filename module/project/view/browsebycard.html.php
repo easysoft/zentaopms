@@ -169,7 +169,7 @@
                 <?php endif;?>
               </div>
               <?php endif;?>
-              <div class='project-members-total  pull-left'><?php echo html::a(helper::createLink('project', 'team', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></div>
+              <div class='project-members-total pull-left'><?php echo html::a(helper::createLink('project', 'team', "projectID=$projectID"), sprintf($lang->project->teamSumCount, $project->teamCount));?></div>
             </div>
             <div class='project-actions'>
               <div class='dropdown'>

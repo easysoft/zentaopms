@@ -41,7 +41,7 @@ $(function()
           <th><?php echo $lang->testcase->precondition?></th>
           <?php if(!empty($appendFields)):?>
           <?php foreach($appendFields as $appendField):?>
-          <th class='c-other'><?php echo $lang->testcase->{$appendField->field}?></th>
+          <th class='c-extend'><?php echo $lang->testcase->{$appendField->field}?></th>
           <?php endforeach;?>
           <?php endif;?>
           <th class='c-step'>

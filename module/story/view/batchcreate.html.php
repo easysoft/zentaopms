@@ -61,7 +61,7 @@
             <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='c-other'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
             ?>
           </tr>
         </thead>

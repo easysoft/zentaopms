@@ -933,7 +933,6 @@ class projectModel extends model
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
-            ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
@@ -1318,8 +1317,7 @@ class projectModel extends model
     {
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
 
-        $this->loadModel('user');
-        $this->user->updateUserView($projectID, 'project', array($account));
+        $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
 
         if($removeExecution == 'yes')
         {
@@ -1660,7 +1658,7 @@ class projectModel extends model
 
         $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
 
-        $members =  $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+        $members = $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq($type)

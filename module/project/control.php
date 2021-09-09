@@ -303,7 +303,7 @@ class project extends control
         extract($this->project->getStats4Kanban());
 
         $this->view->title            = $this->lang->project->kanban;
-        $this->view->kanbanGroup      = $kanbanGroup;
+        $this->view->kanbanGroup      = array_filter($kanbanGroup);
         $this->view->latestExecutions = $latestExecutions;
         $this->view->programPairs     = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true);
 

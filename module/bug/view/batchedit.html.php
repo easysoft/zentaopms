@@ -66,7 +66,7 @@
             <th class='c-resolution<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
             <?php
             $extendFields = $this->bug->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='c-other'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
             ?>
           </tr>
         </thead>

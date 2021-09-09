@@ -2,6 +2,20 @@
 class mr extends control
 {
     /**
+     * The mr constructor.
+     * @param string $moduleName
+     * @param string $methodName
+     */
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        /* This is essential when changing tab(menu) from gitlab to repo. */
+        /* Optional: common::setMenuVars('devops', $this->session->repoID); */
+        $this->loadModel('ci')->setMenu();
+    }
+
+    /**
      * Browse mr.
      *
      * @param  int    $objectID
@@ -20,7 +34,6 @@ class mr extends control
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
-        common::setMenuVars('devops', $this->session->repoID);
 
         /* Sync GitLab MR to ZenTao Database. */
         $MRList = $this->mr->batchSyncMR($MRList);
@@ -103,12 +116,12 @@ class mr extends control
      */
     public function delete($id, $confim = 'no')
     {
-        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confim != 'yes') die(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $MR = $this->mr->getByID($id);
 
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
-        $this->mr->apiDeleteMR($MR->gitlabID, $MR->sourceProject, $MR->mriid);
+        $this->mr->apiDeleteMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
 
         die(js::locate(inlink('browse'), 'parent'));
     }

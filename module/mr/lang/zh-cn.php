@@ -23,6 +23,7 @@ $lang->mr->reviewer    = '评审人';
 $lang->mr->mergeStatus = '是否可合并';
 $lang->mr->commits     = '提交数';
 $lang->mr->changes     = '更改数';
+$lang->mr->gitlabID    = 'GitLab';
 
 $lang->mr->statusList = array();
 $lang->mr->statusList['opened'] = '开放中';
@@ -41,7 +42,7 @@ $lang->mr->sourceBranch  = '源分支';
 $lang->mr->targetProject = '目标项目';
 $lang->mr->targetBranch  = '目标分支';
 
-$lang->mr->usersTips = '提示：如果无法选择指派人和评审人，请先前往GitLab页面绑定用户。';
+$lang->mr->usersTips = '提示：如果无法选择指派人或评审人，请先前往GitLab页面绑定用户。';
 $lang->mr->notFound  = "此{$lang->mr->common}不存在。";
 
 $lang->mr->apiError = new stdclass;

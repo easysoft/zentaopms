@@ -271,7 +271,7 @@ class executionModel extends model
     public function setProjectSession($executionID)
     {
         $execution = $this->getByID($executionID);
-        $this->session->set('project', $execution->project);
+        if(!empty($execution)) $this->session->set('project', $execution->project);
     }
 
     /**
@@ -486,7 +486,6 @@ class executionModel extends model
 
         /* Child stage inherits parent stage permissions. */
         if(!isset($execution->acl)) $execution->acl = $oldExecution->acl;
-        if($execution->acl == 'open') $execution->whitelist = '';
 
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->edit['id'], $this->post->uid);
 
@@ -2477,7 +2476,7 @@ class executionModel extends model
     {
         if(empty($projectID) and $this->config->systemMode == 'new') return array();
 
-        $teams = $this->dao->select('id,name,type')->from(TABLE_PROJECT)
+        $objects = $this->dao->select('id,name,type')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
             ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
@@ -2485,15 +2484,13 @@ class executionModel extends model
             ->orderBy('project_asc')
             ->fetchAll('id');
 
-        if(empty($teams)) return array();
+        if(empty($objects)) return array();
 
         $teamPairs = array();
-        foreach($teams as $id => $team)
+        foreach($objects as $id => $object)
         {
-            if(empty($team->name)) continue;
-
-            $prefix = ($team->type != 'project' and $this->config->systemMode == 'new') ? '&nbsp;&nbsp;&nbsp;' : '';
-            $teamPairs[$id] = $prefix . $team->name;
+            $prefix = ($object->type != 'project' and $this->config->systemMode == 'new') ? '&nbsp;&nbsp;&nbsp;' : '';
+            $teamPairs[$id] = $prefix . $object->name;
         }
 
         return $teamPairs;
@@ -3418,7 +3415,7 @@ class executionModel extends model
         $days         = count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (int)$rate, 1) . ',';
+        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (float)$rate, 1) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);

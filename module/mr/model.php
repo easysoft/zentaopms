@@ -99,7 +99,6 @@ class mrModel extends model
         $MRObject->title             = $MR->title;
         $MRObject->description       = $MR->description;
         $MRObject->assignee_ids      = $MR->assignee;
-        $MRObject->reviewer_ids      = $MR->reviewer;
 
         $rawMR = $this->apiCreateMR($this->post->gitlabID, $this->post->sourceProject, $MRObject);
 
@@ -120,6 +119,9 @@ class mrModel extends model
             return array('result' => 'fail', 'message' => $this->lang->mr->createFailedFromAPI);
         }
 
+        /* Create a todo item for this MR. */
+        $this->apiCreateMRTodo($this->post->gitlabID, $this->post->targetProject, $rawMR->iid);
+
         $newMR = new stdclass;
         $newMR->mriid       = $rawMR->iid;
         $newMR->status      = $rawMR->state;
@@ -128,7 +130,6 @@ class mrModel extends model
         /* Change gitlab user ID to zentao account. */
         $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
         $newMR->assignee = zget($gitlabUsers, $MR->assignee, '');
-        $newMR->reviewer = zget($gitlabUsers, $MR->reviewer, '');
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($newMR)
@@ -157,7 +158,6 @@ class mrModel extends model
         $newMR->title         = $MR->title;
         $newMR->description   = $MR->description;
         $newMR->assignee_ids  = $MR->assignee;
-        $newMR->reviewer_ids  = $MR->reviewer;
         $newMR->target_branch = $MR->targetBranch;
 
         $oldMR = $this->getByID($MRID);
@@ -168,7 +168,6 @@ class mrModel extends model
         /* Change gitlab user ID to zentao account. */
         $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($oldMR->gitlabID);
         $MR->assignee = zget($gitlabUsers, $MR->assignee, '');
-        $MR->reviewer = zget($gitlabUsers, $MR->reviewer, '');
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR)
@@ -255,7 +254,7 @@ class mrModel extends model
                     $value = '';
                     list($field, $optionType, $options) = explode('|', $config);
 
-                    if($optionType == 'field')       $value = $rawMR->$field;
+                    if($optionType == 'field') $value = $rawMR->$field;
                     if($optionType == 'userPairs')
                     {
                         $gitlabUserID = '';
@@ -269,7 +268,9 @@ class mrModel extends model
                     if($value) $newMR->$syncField = $value;
                 }
 
-                if(empty((array)$newMR)) continue;
+                /* For compatibility with PHP 5.4 . */
+                $condition = (array)$newMR;
+                if(empty($condition)) continue;
 
                 /* Update MR in Zentao database. */
                 $this->dao->update(TABLE_MR)->data($newMR)
@@ -491,5 +492,20 @@ class mrModel extends model
         }
         if(!empty($users[$zentaoUser])) return $users[$zentaoUser];
         return "";
+    }
+
+    /**
+     * Create a todo item for merge request.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiCreateMRTodo($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/todo");
+        return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'POST')));
     }
 }

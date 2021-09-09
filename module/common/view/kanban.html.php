@@ -8,9 +8,9 @@
 #kanbanList .kanban-item {margin-top: 0; border: 1px solid #ebebeb; border-radius: 2px;}
 #kanbanList .kanban-item:hover {border: 1px solid #ccc;}
 #kanbanList .kanban-item + .kanban-item {margin-top: 10px;}
-#kanbanList .kanban-lane-items {padding: 10px;}
+#kanbanList .kanban-lane-items {padding: 10px; min-height: 38px;}
 #kanbanList .kanban-header,
-#kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0;}
+#kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0; min-height: 60px;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
 #kanbanList .kanban-lane {border-top: 2px solid #fff;}
 #kanbanList .kanban-lane + .kanban-lane {border-top: 10px solid #fff;}
@@ -196,7 +196,7 @@ function renderExecutionItem(item, $item)
         {
             $item.addClass('link-block');
             $title = $('<a class="title" />')
-                .attr('href', $.createLink('execution', 'task', 'executionID=' + item.id));
+                .attr('href', $.createLink('execution', 'task', 'executionID=' + item._id));
         }
         else
         {

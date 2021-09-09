@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('systemMode', $config->systemMode);?>
-<?php js::set('projectCommon', $lang->projectCommon);?>
+<?php js::set('projectCommon', $lang->project->common);?>
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('team2Import', $team2Import);?>
 <?php js::set('roles', $roles);?>
