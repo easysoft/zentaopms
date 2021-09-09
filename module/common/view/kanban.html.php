@@ -24,7 +24,7 @@
 #kanbanList .kanban-header {position: relative;}
 #kanbanList .kanban-item.link-block {padding: 0;}
 #kanbanList .kanban-item.link-block > a {padding: 10px; display: block;}
-#kanbanList .kanban-item > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+#kanbanList .kanban-item > .title {white-space: nowrap; overflow: hidden; text-overflow: clip;}
 #kanbanList .kanban-item.link-block > a {padding: 10px; display: block;}
 #kanbanList .kanban-item.has-progress {padding-right: 40px; position: relative;}
 #kanbanList .kanban-item.has-progress > .progress-pie {position: absolute; right: 7px; top: 7px}
