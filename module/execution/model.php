@@ -271,7 +271,7 @@ class executionModel extends model
     public function setProjectSession($executionID)
     {
         $execution = $this->getByID($executionID);
-        $this->session->set('project', $execution->project);
+        if(!empty($execution)) $this->session->set('project', $execution->project);
     }
 
     /**
