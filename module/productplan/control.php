@@ -189,6 +189,8 @@ class productplan extends control
                 }
                 return $this->send($response);
             }
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             die(js::locate(inlink('browse', "productID=$plan->product&branch=$plan->branch"), 'parent'));
         }
     }
@@ -249,7 +251,11 @@ class productplan extends control
     {
         $planID = (int)$planID;
         $plan   = $this->productplan->getByID($planID, true);
-        if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$plan)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
 
         $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story', 'product');
         $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug', 'qa');
