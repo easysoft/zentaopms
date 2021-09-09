@@ -71,7 +71,7 @@ js::set('dittoNotice', $dittoNotice);
             <th class='c-reason<?php echo zget($visibleFields,    'closedReason', ' hidden') . zget($requiredFields, 'closedReason', '', ' required');?>'><?php echo $lang->task->closedReason;?></th>
             <?php
             $extendFields = $this->task->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='c-other'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
             ?>
           </tr>
         </thead>
