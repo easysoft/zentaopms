@@ -100,12 +100,13 @@ class projectreleaseModel extends model
      * @access public
      * @return int
      */
-    public function create()
+    public function create($projectID = 0)
     {
         /* Init vars. */
         $productID = $this->post->product;
         $branch    = $this->post->branch;
         $buildID   = 0;
+        $projectID = $projectID ? $projectID : $this->session->project;
 
         /* Check build if build is required. */
         if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
@@ -121,7 +122,7 @@ class projectreleaseModel extends model
         }
 
         $release = fixer::input('post')
-            ->add('project', $this->session->project)
+            ->add('project', $projectID)
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
             ->setDefault('stories', '')
@@ -152,7 +153,7 @@ class projectreleaseModel extends model
             else
             {
                 $build = new stdclass();
-                $build->project   = $this->session->project;
+                $build->project   = $projectID;
                 $build->product   = (int)$productID;
                 $build->branch    = (int)$branch;
                 $build->name      = $release->name;

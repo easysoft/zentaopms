@@ -259,8 +259,11 @@ class release extends control
                     $release = $this->release->getById($releaseID);
                     $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->build)->andWhere('name')->eq($release->name)->exec();
                 }
+
                 return $this->send($response);
             }
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $locateLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID={$release->product}");
             die(js::locate($locateLink, 'parent'));

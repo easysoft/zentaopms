@@ -305,6 +305,7 @@ class build extends control
             }
 
             $link = $this->app->tab == 'project' ? $this->createLink('project', 'build', "projectID=$build->project") : $this->createLink('execution', 'build', "executionID=$build->execution");
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::locate($link, 'parent'));
         }
     }

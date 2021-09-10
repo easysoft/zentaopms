@@ -9,10 +9,21 @@ $routes['/tokens'] = 'tokens';
 $routes['/configurations']       = 'configs';
 $routes['/configurations/:name'] = 'config';
 
-$routes['/products']         = 'products';
-$routes['/products/:id']     = 'product';
+$routes['/programs/:id/products'] = 'products';
+$routes['/products']              = 'products';
+$routes['/products/:id']          = 'product';
+
 $routes['/productlines']     = 'productLines';
 $routes['/productlines/:id'] = 'productLine';
+
+$routes['/productplans']             = 'productPlans';
+$routes['/product/:id/productplans'] = 'productPlans';
+$routes['/productplans/:id']         = 'productPlan';
+
+$routes['/releases']              = 'releases';
+$routes['/product/:id/releases']  = 'releases';
+$routes['/projects/:id/releases'] = 'projectreleases';
+$routes['/releases/:id']          = 'release';
 
 $routes['/products/:id/stories']   = 'stories';
 $routes['/executions/:id/stories'] = 'executionStories';

@@ -66,7 +66,7 @@ class mrModel extends model
         $MR = $this->dao->select('id,title')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
-            ->AndWhere('repoID')->eq($repoID)
+            ->andWhere('repoID')->eq($repoID)
             ->orderBy('id')->fetchPairs('id', 'title');
         return array('' => '') + $MR;
     }
@@ -299,7 +299,9 @@ class mrModel extends model
         /* It can only get todo from GitLab API by its assignee. So here should use sudo as the assignee to get the todo list. */
         /* In this case, ignore sync todo for reviewer due to an issue in GitLab API. */
         $accountList = $this->dao->select('assignee')->from(TABLE_MR)
-            ->where('gitlabID')->eq($gitlabID)
+            ->where('deleted')->eq('0')
+            ->andWhere('status')->eq('opened')
+            ->andWhere('gitlabID')->eq($gitlabID)
             ->andWhere('targetProject')->eq($projectID)
             ->fetchPairs();
 
@@ -331,17 +333,19 @@ class mrModel extends model
                         $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
-                        $todo->desc         = $rawTodo->target->description . "<br>" . '<a href="' . $this->todoDescriptionLink($gitlabID, $projectID) . '" target="_blank">' . $this->todoDescriptionLink($gitlabID, $projectID) .'</a>';
+                        $todo->desc         = $rawTodo->target->assignee->name . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->loadModel('gitlab')->apiGetSingleProject($gitlabID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';
                         $todo->status       = 'wait';
                         $todo->finishedBy   = '';
+
                         $this->dao->insert(TABLE_TODO)->data($todo)->exec();
                     }
                 }
             }
         }
     }
-        /**
-         * Get a list of to-do items.
+
+    /**
+     * Get a list of to-do items.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID

@@ -238,4 +238,10 @@
 </div>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('browseType', $browseType)?>
+<?php if(commonModel::isTutorialMode()): ?>
+<style>
+#productListForm {overflow: hidden;}
+#productList .table-nest-title {width: 200px;}
+</style>
+<?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>

@@ -529,6 +529,9 @@ class baseEntry
                 return gmdate("Y-m-d\TH:i:s\Z", strtotime($value));
             }
             return $value;
+        case 'date':
+            if(!$value or $value == '0000-00-00') return null;
+            return $value;
         case 'bool':
             return boolval($value) ? true : false;
         default:

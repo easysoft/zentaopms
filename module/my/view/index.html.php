@@ -10,7 +10,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('skipThemeGuide', $skipThemeGuide);?>
+<?php js::set('showFeatures', $showFeatures);?>
 <?php echo $this->fetch('block', 'dashboard', 'module=my');?>
-<?php echo html::a($this->createLink('my', 'guidechangeTheme', '', '', true), $lang->theme, '', 'class="iframe hidden" id="changeTheme" data-width="600px"');?>
 <?php include '../../common/view/footer.html.php';?>

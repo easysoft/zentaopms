@@ -405,7 +405,7 @@ class gitlabModel extends model
     {
         $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
         if(!$gitlab) return '';
-        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&private_token={$gitlab->token}&sudo={$sudo}";
+        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&state=pending&private_token={$gitlab->token}&sudo={$sudo}";
         return json_decode(commonModel::http($url));
     }
 

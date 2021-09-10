@@ -31,7 +31,7 @@ class userEntry extends Entry
         $user = $data->data->user;
         unset($user->password);
 
-        $this->send(200, $this->format($user, 'last:time,locked:time'));
+        $this->send(200, $user);
     }
 
     /**
@@ -46,8 +46,10 @@ class userEntry extends Entry
     {
         $info = new stdclass();
 
-        $info->profile = $this->loadModel('user')->getById($this->app->user->account);
-        unset($info->profile->password);
+        $profile = $this->loadModel('user')->getById($this->app->user->account);
+        unset($profile->password);
+
+        $info->profile = $this->format($profile, 'last:time,locked:time,birthday:date,join:date');
 
         if(!$fields) return $this->send(200, $info);
 

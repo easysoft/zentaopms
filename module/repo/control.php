@@ -434,7 +434,7 @@ class repo extends control
             {
                 if(!file_exists($cacheFile . '.lock'))
                 {
-                    touch($cacheFile .  '.lock');
+                    touch($cacheFile . '.lock');
                     file_put_contents($cacheFile, serialize($infos));
                     unlink($cacheFile . '.lock');
                 }

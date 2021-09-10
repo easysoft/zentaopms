@@ -250,9 +250,36 @@ class misc extends control
 
     /**
      * Features dialog.
+     *
+     * @access public
+     * @return void
      */
     public function features()
     {
+        $features = array();
+        foreach($this->config->newFeatures as $feature)
+        {
+            $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
+            if(strpos(",$accounts,", $this->app->user->account) === false) $features[] = $feature;
+        }
+
+        $this->app->loadLang('install');
+
+        $this->view->features = $features;
         $this->display();
+    }
+
+    /**
+     * Save viewed feature.
+     *
+     * @param  string $feature
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveViewed($feature)
+    {
+        $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
+        if(strpos(",$accounts,", $this->app->user->account) === false) $accounts .= ',' . $this->app->user->account;
+        $this->loadModel('setting')->setItem('system.common.global.skip' . ucfirst($feature), $accounts);
     }
 }

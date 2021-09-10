@@ -25,9 +25,11 @@
     <div class='main-header'>
       <?php $createTitle = isset($this->config->maxVersion) ? $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '') : $lang->project->create;?>
       <h2><?php echo $createTitle;?></h2>
+      <?php if(!commonModel::isTutorialMode()): ?>
       <div class="pull-right btn-toolbar">
         <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>
+      <?php endif; ?>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>

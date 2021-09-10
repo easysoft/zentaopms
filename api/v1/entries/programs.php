@@ -29,7 +29,7 @@ class ProgramsEntry extends Entry
             $result   = array();
             foreach($programs as $program)
             {
-                $result[] = $this->format($program, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
+                $result[] = $this->format($program, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
             }
             return $this->send(200, array('programs' => $result));
         }

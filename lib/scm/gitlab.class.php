@@ -535,10 +535,10 @@ class gitlab
 
         if($version and $version != 'HEAD')
         {
-            $lastCommit = $this->getSingleCommit($version);
-            if(!isset($lastCommit->committed_date)) return array('commits' => array(), 'files' => array());
+            $committedDate = $this->getCommitedDate($version);
+            if(!$committedDate) return array('commits' => array(), 'files' => array());
 
-            $params['until'] = $lastCommit->committed_date;
+            $params['until'] = $committedDate;
         }
 
         $list = $this->fetch($api, $params);
@@ -566,11 +566,16 @@ class gitlab
      * @access public
      * @return void
      */
-    public function getSingleCommit($sha)
+    public function getCommitedDate($sha)
     {
         if(!scm::checkRevision($sha)) return null;
-        $api = "commits/$sha";
-        return $this->fetch($api);
+
+        global $dao;
+        $time = $dao->select('time')->from(TABLE_REPOHISTORY)->where('revision')->eq($sha)->fetch('time');
+        if($time) return date('c', strtotime($time));
+
+        $result = $this->fetch("commits/$sha");
+        return (isset($result->committed_date)) ? $result->committed_date : false;
     }
 
     /**
@@ -589,19 +594,19 @@ class gitlab
         $param->path     = urldecode($path);
         $param->ref_name = $this->branch;
 
-        $fromRevision = ($fromRevision and $fromRevision != 'HEAD') ? $this->getSingleCommit($fromRevision) : '';
-        $toRevision   = ($toRevision and $toRevision != 'HEAD') ? $this->getSingleCommit($toRevision) : '';
+        $fromDate = $this->getCommitedDate($fromRevision);
+        $toDate   = $this->getCommitedDate($toRevision);
 
         $since = '';
         $until = '';
         if($fromRevision and $toRevision)
         {
-            $since = min($fromRevision->committed_date, $toRevision->committed_date);
-            $until = max($fromRevision->committed_date, $toRevision->committed_date);
+            $since = min($fromDate, $toDate);
+            $until = max($fromDate, $toDate);
         }
         elseif($fromRevision)
         {
-            $since = $fromRevision->committed_date;
+            $since = $fromDate;
         }
 
         if($since) $param->since = $since;

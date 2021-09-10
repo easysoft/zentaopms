@@ -12,15 +12,16 @@
 class productsEntry extends entry
 {
     /**
-     * POST method.
+     * GET method.
      *
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function get()
+    public function get($programID = 0)
     {
-        $programID = $this->param('program', 0);
+        if(!$programID) $programID = $this->param('program', 0);
+
         if($programID)
         {
             $control = $this->loadController('program', 'product');
@@ -67,16 +68,16 @@ class productsEntry extends entry
      */
     public function post()
     {
-        $fields = 'program,line,name,PO,QD,RD,type,desc,whitelist';
+        $fields = 'program,code,line,name,PO,QD,RD,type,desc,whitelist';
         $this->batchSetPost($fields);
 
         $this->setPost('acl', $this->request('acl', 'private'));
         $this->setPost('whitelist', $this->request('whitelist', array()));
 
         $control = $this->loadController('product', 'create');
-        $this->requireFields('name,program');
+        $this->requireFields('name,code');
 
-        $control->create($this->request('program'));
+        $control->create($this->request('program', 0));
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
