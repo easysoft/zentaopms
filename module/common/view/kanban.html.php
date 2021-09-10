@@ -343,7 +343,16 @@ function renderKanbanItem(item, $item, col)
 function affixKanbanHeader($kanbanBoard, affixed)
 {
     var $header = $kanbanBoard.children('.kanban-header');
-    $header.css('width', affixed ? $kanbanBoard.width() : '');
+    var headerStyle = {width: '', left: ''};
+    if(affixed)
+    {
+        headerStyle.width = $kanbanBoard.width();
+        if($kanbanBoard[0].getBoundingClientRect)
+        {
+            headerStyle.left = $kanbanBoard[0].getBoundingClientRect().left;
+        }
+    }
+    $header.css(headerStyle);
     $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
 }
