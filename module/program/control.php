@@ -97,7 +97,15 @@ class program extends control
      */
     public function product($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $programID = $this->program->saveState($programID, $this->program->getPairs());
+        $programPairs = $this->program->getPairs();
+
+        if(defined('RUN_MODE') && RUN_MODE == 'api' && !isset($programPairs[$programID]))
+        {
+            return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+        }
+
+        $programID = $this->program->saveState($programID, $programPairs);
+
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->program->setMenu($programID);
