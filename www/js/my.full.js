@@ -56,7 +56,10 @@
             sessionStorage.setItem('TID', _tid);
 
             var link = $.parseLink(window.location.href);
-            if(!link.tid) window.location.href = convertUrlWithTid(window.location.href, _tid);
+            if(link.moduleName == config.currentModule && link.methodName == config.currentMethod && !link.tid)
+            {
+                window.location.href = convertUrlWithTid(window.location.href, _tid);
+            }
         }
 
         $.tabSession =
