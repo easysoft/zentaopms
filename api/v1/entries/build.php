@@ -24,14 +24,14 @@ class buildEntry extends Entry
         $control->view($buildID);
 
         $data = $this->getData();
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $data->data->build);
+        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->build, 'stories:idList,bugs:idList,deleted:bool'));
 
         /* Exception handling. */
         if(isset($data->status) and $data->status == 'fail')
         {
-            if($data->message == '404 Not found') return $this->send404();
-            else return $this->sendError(400, $data->message);
+            return isset($data->code) and $data->code  == 404 ? $this->send404() : $this->sendError(400, $data->message);
         }
+
         $this->sendError(400, 'error');
     }
 

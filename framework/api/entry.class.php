@@ -534,6 +534,16 @@ class baseEntry
             return $value;
         case 'bool':
             return boolval($value) ? true : false;
+        case 'idList':
+            $values = explode(',', $value);
+            if(empty($values)) return array();
+
+            $idList = array();
+            foreach($values as $val)
+            {
+                if($val !== '') $idList[] = (int) $val;
+            }
+            return $idList;
         default:
             return $value;
         }

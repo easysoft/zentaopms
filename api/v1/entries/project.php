@@ -24,9 +24,14 @@ class projectEntry extends entry
         $control->view($projectID);
 
         $data = $this->getData();
-        if(!$data or (isset($data->status) and $data->message == '404 Not found')) return $this->send404();
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
+
+        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->project, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool'));
+        if(isset($data->status) and $data->status == 'fail')
+        {
+            if(isset($data->code) and $data->code == 404) $this->send404();
+            return $this->sendError(400, $data->message);
+        }
 
         $this->sendError(400, 'error');
     }

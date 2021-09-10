@@ -33,8 +33,9 @@ $routes['/stories/:id/change']     = 'storyChange';
 $routes['/products/:id/bugs'] = 'bugs';
 $routes['/bugs/:id']          = 'bug';
 
-$routes['/projects']     = 'projects';
-$routes['/projects/:id'] = 'project';
+$routes['/programs/:id/projects'] = 'projects';
+$routes['/projects']              = 'projects';
+$routes['/projects/:id']          = 'project';
 
 $routes['/projects/:project/executions'] = 'executions';
 $routes['/executions']                   = 'executions';
