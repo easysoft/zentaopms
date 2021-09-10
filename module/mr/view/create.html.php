@@ -22,8 +22,9 @@
             <!-- Use `array('') + $gitlabHosts` here because of this field must be changed when creating this MR. -->
             <td class='required'><?php echo html::select('gitlabID', array('') + $gitlabHosts, '', "class='form-control'");?></td>
           </tr>
+          <tr class='gitlab hide'>
           <tr>
-             <th><?php echo $lang->mr->sourceProject;?></th>
+             <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>
              <td>
                <div class='input-group'>
                  <?php echo html::select('sourceProject', array(''), '', "class='form-control chosen'");?>
@@ -33,7 +34,7 @@
              </td>
           </tr>
           <tr>
-             <th><?php echo $lang->mr->targetProject;?></th>
+             <th style="white-space: nowrap;"><?php echo $lang->mr->targetProject;?></th>
              <td>
                <div class='input-group'>
                  <?php echo html::select('targetProject', array(''), '', "class='form-control chosen'");?>
