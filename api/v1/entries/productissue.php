@@ -161,9 +161,9 @@ class productIssueEntry extends entry
         {
             $accountList[] = $action->actor;
             ob_start();
-            if(method_exists($this->action, "printActionAPI"))
+            if(method_exists($this->action, "printActionForGitLab"))
             {
-                $this->action->printActionAPI($action);
+                $this->action->printActionForGitLab($action);
             }
             else
             {
