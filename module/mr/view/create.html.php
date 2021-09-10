@@ -22,7 +22,6 @@
             <!-- Use `array('') + $gitlabHosts` here because of this field must be changed when creating this MR. -->
             <td class='required'><?php echo html::select('gitlabID', array('') + $gitlabHosts, '', "class='form-control'");?></td>
           </tr>
-          <tr class='gitlab hide'>
           <tr>
              <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>
              <td>
