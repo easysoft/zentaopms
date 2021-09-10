@@ -12,9 +12,10 @@
 #kanbanList .kanban-header,
 #kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0; min-height: 60px;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
-#kanbanList .kanban-lane {border-top: 2px solid #fff; min-height: 100px;}
+#kanbanList .kanban-lane {margin-top: 2px; min-height: 100px;}
+#kanbanList .kanban-lane.has-sub-lane {background-color: transparent;}
 #kanbanList .kanban-lane + .kanban-lane {border-top: 10px solid #fff;}
-#kanbanList .kanban-sub-lane + .kanban-sub-lane {border-top: 2px solid #fff;}
+#kanbanList .kanban-sub-lane + .kanban-sub-lane {margin-top: 2px;}
 #kanbanList .kanban-col + .kanban-col {border-left: 2px solid #fff;}
 #kanbanList .kanban-header-col {height: 72px; padding: 20px 5px;}
 #kanbanList .kanban-header-col > .title {margin: 0; line-height: 32px; height: 32px}
@@ -32,6 +33,8 @@
 #kanbanList .kanban-item.has-left-border.border-left-green {border-left-color: #0bd986;}
 #kanbanList .kanban-item.has-left-border.border-left-red {border-left-color: #ff5d5d;}
 #kanbanList .kanban-item.has-left-border.border-left-blue {border-left-color: #0991ff;}
+#kanbanList .no-flex .kanban-lane > .kanban-sub-lanes[data-sub-lanes-count="1"] > .kanban-sub-lane {min-height: 90px;}
+#kanbanList .no-flex .kanban-lane > .kanban-sub-lanes[data-sub-lanes-count="2"] > .kanban-sub-lane {min-height: 45px;}
 
 .kanban-affixed {padding-top: 72px;}
 .kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
