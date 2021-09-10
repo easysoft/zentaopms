@@ -31,7 +31,7 @@ $lang->file->preview       = "Preview";
 $lang->file->addFile       = 'Add';
 $lang->file->beginUpload   = 'Click to Upload';
 $lang->file->uploadSuccess = 'Uploaded!';
-$lang->file->partExport    = 'Part Export';
+$lang->file->batchExport   = 'Export in batches';
 
 $lang->file->pathname  = 'Path Name';
 $lang->file->title     = 'Title';

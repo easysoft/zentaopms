@@ -64,6 +64,6 @@ $(function()
     {
         var $kanban = $('#kanban-' + key);
         if(!$kanban.length) return;
-        $kanban.kanban({data: processKanbanData(key, programGroup)});
+        $kanban.kanban({data: processKanbanData(key, programGroup), maxColHeight: 'auto'});
     });
 });

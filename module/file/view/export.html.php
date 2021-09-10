@@ -279,7 +279,7 @@ if($isCustomExport)
                 <?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?>
               </td>
               <td class='checkbox part hidden'>
-                <?php echo html::checkbox('part', array( 1 => $lang->file->partExport), '', "onclick='setPart(this);'");?>
+                <?php echo html::checkbox('part', array( 1 => $lang->file->batchExport), '', "onclick='setPart(this);'");?>
                 <?php echo html::hidden('limit', '');?>
               </td>
             </tr>
