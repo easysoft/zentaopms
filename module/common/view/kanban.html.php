@@ -4,7 +4,7 @@
 <style>
 #kanbanList .panel-heading {padding: 10px;}
 #kanbanList .panel-body {padding: 0 10px 10px;}
-#kanbanList .kanban {min-height: 120px;}
+#kanbanList .kanban {min-height: 120px; overflow: visible;}
 #kanbanList .kanban-item {margin-top: 0; border: 1px solid #ebebeb; border-radius: 2px;}
 #kanbanList .kanban-item:hover {border: 1px solid #ccc;}
 #kanbanList .kanban-item + .kanban-item {margin-top: 10px;}
@@ -12,9 +12,10 @@
 #kanbanList .kanban-header,
 #kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0; min-height: 60px;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
-#kanbanList .kanban-lane {border-top: 2px solid #fff;}
+#kanbanList .kanban-lane {margin-top: 2px; min-height: 100px;}
+#kanbanList .kanban-lane.has-sub-lane {background-color: transparent;}
 #kanbanList .kanban-lane + .kanban-lane {border-top: 10px solid #fff;}
-#kanbanList .kanban-sub-lane + .kanban-sub-lane {border-top: 2px solid #fff;}
+#kanbanList .kanban-sub-lane + .kanban-sub-lane {margin-top: 2px;}
 #kanbanList .kanban-col + .kanban-col {border-left: 2px solid #fff;}
 #kanbanList .kanban-header-col {height: 72px; padding: 20px 5px;}
 #kanbanList .kanban-header-col > .title {margin: 0; line-height: 32px; height: 32px}
@@ -24,7 +25,7 @@
 #kanbanList .kanban-header {position: relative;}
 #kanbanList .kanban-item.link-block {padding: 0;}
 #kanbanList .kanban-item.link-block > a {padding: 10px; display: block;}
-#kanbanList .kanban-item > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+#kanbanList .kanban-item > .title {white-space: nowrap; overflow: hidden; text-overflow: clip;}
 #kanbanList .kanban-item.link-block > a {padding: 10px; display: block;}
 #kanbanList .kanban-item.has-progress {padding-right: 40px; position: relative;}
 #kanbanList .kanban-item.has-progress > .progress-pie {position: absolute; right: 7px; top: 7px}
@@ -32,6 +33,8 @@
 #kanbanList .kanban-item.has-left-border.border-left-green {border-left-color: #0bd986;}
 #kanbanList .kanban-item.has-left-border.border-left-red {border-left-color: #ff5d5d;}
 #kanbanList .kanban-item.has-left-border.border-left-blue {border-left-color: #0991ff;}
+#kanbanList .no-flex .kanban-lane > .kanban-sub-lanes[data-sub-lanes-count="1"] > .kanban-sub-lane {min-height: 90px;}
+#kanbanList .no-flex .kanban-lane > .kanban-sub-lanes[data-sub-lanes-count="2"] > .kanban-sub-lane {min-height: 45px;}
 
 .kanban-affixed {padding-top: 72px;}
 .kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
@@ -343,7 +346,16 @@ function renderKanbanItem(item, $item, col)
 function affixKanbanHeader($kanbanBoard, affixed)
 {
     var $header = $kanbanBoard.children('.kanban-header');
-    $header.css('width', affixed ? $kanbanBoard.width() : '');
+    var headerStyle = {width: '', left: ''};
+    if(affixed)
+    {
+        headerStyle.width = $kanbanBoard.width();
+        if($kanbanBoard[0].getBoundingClientRect)
+        {
+            headerStyle.left = $kanbanBoard[0].getBoundingClientRect().left;
+        }
+    }
+    $header.css(headerStyle);
     $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
 }

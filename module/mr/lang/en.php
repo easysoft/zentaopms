@@ -76,6 +76,7 @@ $lang->mr->acceptMR       = "Accept Merge request ";
 $lang->mr->mergeFailed    = "Unable to merge request, please check the merge request status";
 $lang->mr->mergeSuccess   = "Merge Request Successfully";
 
+$lang->mr->todomessage = "project was assigned to you";
 /**
  * Merge Command Document.
  *

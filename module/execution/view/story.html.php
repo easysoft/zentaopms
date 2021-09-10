@@ -79,7 +79,7 @@
             }
 
             $hidden = empty($buttonLink) ? 'hidden' : '';
-            echo "<div class='btn-group dropdown'>";
+            echo "<div class='btn-group dropdown' title='{$buttonTitle}'>";
             echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn btn-secondary $hidden' data-app='execution'");
 
             if($common::hasPriv('story', 'create') and common::hasPriv('story', 'batchCreate'))
@@ -223,7 +223,7 @@
               <?php if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-app='execution'");?>
             </td>
-            <td class='c-name' title='<?php echo zget($lang->story->categoryList, $story->category);?>'><?php echo zget($lang->story->categoryList, $story->category);?></td>
+            <td class='c-category' title='<?php echo zget($lang->story->categoryList, $story->category);?>'><?php echo zget($lang->story->categoryList, $story->category);?></td>
             <td class='c-user' title='<?php echo zget($users, $story->openedBy);?>'><?php echo zget($users, $story->openedBy);?></td>
             <td class='c-user' title='<?php echo zget($users, $story->assignedTo);?>'><?php echo zget($users, $story->assignedTo);?></td>
             <td class='c-estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
@@ -232,18 +232,18 @@
               <span class='status-story status-<?php echo $story->status;?>'><?php echo $status;?></span>
             </td>
             <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
-            <td class='linkbox'>
+            <td class='linkbox c-count'>
               <?php
               $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&executionID=$execution->id");
               $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
               ?>
-            <td>
+            <td class='c-count'>
               <?php
               $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&executionID=$execution->id");
               $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
               ?>
             </td>
-            <td>
+            <td class='c-count'>
               <?php
               $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&executionID=$execution->id");
               $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
@@ -468,4 +468,9 @@ $(function()
     });
 });
 </script>
+<?php if(commonModel::isTutorialMode()): ?>
+<style>
+#storyList .c-count, #storyList .c-category {display: none!important;}
+</style>
+<?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>

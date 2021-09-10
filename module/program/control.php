@@ -69,7 +69,7 @@ class program extends control
 
     /**
      * Program kanban list.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -79,7 +79,7 @@ class program extends control
         $this->app->session->set('projectList', $this->app->getURI(true), 'project');
 
         $this->view->title       = $this->lang->program->kanban->common;
-        $this->view->kanbanGroup = $this->program->getKanbanGroup();
+        $this->view->kanbanGroup = array_filter($this->program->getKanbanGroup());
         $this->display();
     }
 

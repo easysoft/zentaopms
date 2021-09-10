@@ -24,10 +24,14 @@ class buildEntry extends Entry
         $control->view($buildID);
 
         $data = $this->getData();
-        if(!$data or (isset($data->status) and $data->message == '404 Not found')) return $this->send404();
         if(isset($data->status) and $data->status == 'success') return $this->send(200, $data->data->build);
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
+        /* Exception handling. */
+        if(isset($data->status) and $data->status == 'fail')
+        {
+            if($data->message == '404 Not found') return $this->send404();
+            else return $this->sendError(400, $data->message);
+        }
         $this->sendError(400, 'error');
     }
 
@@ -40,10 +44,10 @@ class buildEntry extends Entry
      */
     public function put($buildID)
     {
-        $old = $this->loadModel('build')->getByID($buildID);
+        $oldBuild = $this->loadModel('build')->getByID($buildID);
 
         /* Set $_POST variables. */
-        $fields = 'type,title,severity,pri,assignedTo,deadline,desc';
+        $fields = 'execution,product,name,builder,date,scmPath,filePath,desc';
         $this->batchSetPost($fields, $oldBuild);
 
         $control = $this->loadController('build', 'edit');
@@ -54,7 +58,7 @@ class buildEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $build = $this->build->getByID($buildID);
-        $this->send(200, $this->format($build, 'createdDate:time,editedDate:time,assignedDate:time'));
+        $this->send(200, $build);
     }
 
     /**

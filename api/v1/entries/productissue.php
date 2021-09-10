@@ -53,14 +53,7 @@ class productIssueEntry extends entry
                 $storySpec   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('story')->eq($id)->andWhere('version')->eq($story->version)->fetch();
                 $issue->desc = $storySpec->spec;
 
-                if($story->assignedTo == "")
-                {
-                    $issue->assignedTo = array();
-                }
-                else
-                {
-                    $issue->assignedTo = array($story->assignedTo);
-                }
+                $issue->assignedTo = $story->assignedTo == "" ? array() : array($story->assignedTo);
 
                 break;
 
@@ -83,15 +76,7 @@ class productIssueEntry extends entry
                 $issue->url            = helper::createLink('bug', 'view', "bugID=$id");
                 $issue->desc           = $bug->steps;
 
-                if($bug->assignedTo == "")
-                {
-                    $issue->assignedTo = array();
-                }
-                else
-                {
-                    $issue->assignedTo = array($bug->assignedTo);
-                }
-
+                $issue->assignedTo = $bug->assignedTo == "" ? array() : array($bug->assignedTo);
                 break;
 
             case 'task':
@@ -120,21 +105,11 @@ class productIssueEntry extends entry
                     ->fetchAll();
                 if($users)
                 {
-                    foreach($users as $user)
-                    {
-                        $issue->assignedTo[] = $user->account;
-                    }
+                    foreach($users as $user) $issue->assignedTo[] = $user->account;
                 }
                 else
                 {
-                    if($task->assignedTo == "")
-                    {
-                        $issue->assignedTo = array();
-                    }
-                    else
-                    {
-                        $issue->assignedTo = array($task->assignedTo);
-                    }
+                    $issue->assignedTo = $task->assignedTo == "" ? array() : array($task->assignedTo);
                 }
 
                 break;
@@ -147,22 +122,26 @@ class productIssueEntry extends entry
 
         $issue->comments = array_values($this->processActions($type, $actions));
 
-        /* Get all users in issues so that we can bulk get user detail later. */
-        $userList = array();
-        foreach($issue->assignedTo as $user)
-        {
-            $userList[] = $user;
-        }
-        $userList[]  = $issue->openedBy;
-        $userList    = array_unique($userList);
-        $userDetails = $this->loadModel('user')->getUserDetailsForAPI($userList);
+        /* Get all users in issues so that we can get user detail later in batch. */
+        $accountList = array();
+        foreach($issue->assignedTo as $user) $accountList[] = $user;
+        $accountList[]  = $issue->openedBy;
+        $accountList    = array_unique($accountList);
+        $profileList = $this->loadModel('user')->getUserDetailsForAPI($accountList);
 
         /* Set the user detail to assignedTo and openedBy. */
-        foreach($issue->assignedTo as $index => $user)
+        foreach($issue->assignedTo as $key => $user)
         {
-            $issue->assignedTo[$index] = $userDetails[$user];
+            /* $key can be 'closed' in some case, so here should be process it. */
+            if($key == 'closed')
+            {
+                $issue->assignedTo = array();
+                break;
+            }
+
+            $issue->assignedTo[$key] = $profileList[$user];
         }
-        $issue->openedBy = $userDetails[$issue->openedBy];
+        $issue->openedBy = $profileList[$issue->openedBy];
 
         $this->send(200, array('issue' => $this->format($issue, 'openedDate:time,lastEditedDate:time')));
     }
@@ -177,10 +156,10 @@ class productIssueEntry extends entry
      */
     public function processActions($type, $actions)
     {
-        $accountsList = array();
+        $accountList = array();
         foreach($actions as $action)
         {
-            $accountsList[] = $action->actor;
+            $accountList[] = $action->actor;
             ob_start();
             if(method_exists($this->action, "printActionAPI"))
             {
@@ -211,12 +190,15 @@ class productIssueEntry extends entry
         }
 
         /* Format user detail and date. */
-        $accountsList = array_unique($accountsList);
-        $userDetails  = $this->loadModel('user')->getUserDetailsForAPI($accountsList);
-        foreach($actions as $action)
+        $accountList = array_unique($accountList);
+        $profileList = $this->loadModel('user')->getUserDetailsForAPI($accountList);
+        foreach($actions as $key => $action)
         {
-            $action->actor = $userDetails[$action->actor];
+            $action->actor = isset($profileList[$action->actor]) ? $profileList[$action->actor] : array();
             $action->date  = gmdate("Y-m-d\TH:i:s\Z", strtotime($action->date));
+
+            /* Unset this action when actor is System. */
+            if(empty($action->actor)) unset($actions[$key]);
         }
 
         return $actions;

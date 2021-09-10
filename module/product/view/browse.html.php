@@ -43,7 +43,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 <div id="mainMenu" class="clearfix">
   <?php if(!$isProjectStory):?>
   <div id="sidebarHeader">
-    <div class="title">
+    <div class="title" title="<?php echo $moduleName;?>">
       <?php
       echo $moduleName;
       if($moduleID)
@@ -81,44 +81,47 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     </div>
     <?php endif;?>
     <?php
-    foreach(customModel::getFeatureMenu($this->app->rawModule, $this->app->rawMethod) as $menuItem)
+    if(!commonModel::isTutorialMode())
     {
-        if(isset($menuItem->hidden)) continue;
-        if($menuItem->name == 'emptysr' && $storyType == 'story') continue;
-        $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
-        if($menuItem->name == 'more')
+        foreach(customModel::getFeatureMenu($this->app->rawModule, $this->app->rawMethod) as $menuItem)
         {
-            if(!empty($lang->product->moreSelects))
+            if(isset($menuItem->hidden)) continue;
+            if($menuItem->name == 'emptysr' && $storyType == 'story') continue;
+            $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
+            if($menuItem->name == 'more')
             {
-                $moreLabel       = $lang->more;
-                $moreLabelActive = '';
-                $storyBrowseType = $this->session->storyBrowseType;
-                if(isset($lang->product->moreSelects[$storyBrowseType]))
+                if(!empty($lang->product->moreSelects))
                 {
-                    $moreLabel       = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                    $moreLabelActive = 'btn-active-text';
+                    $moreLabel       = $lang->more;
+                    $moreLabelActive = '';
+                    $storyBrowseType = $this->session->storyBrowseType;
+                    if(isset($lang->product->moreSelects[$storyBrowseType]))
+                    {
+                        $moreLabel       = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                        $moreLabelActive = 'btn-active-text';
+                    }
+                    echo '<div class="btn-group" id="more">';
+                    echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
+                    echo "<ul class='dropdown-menu'>";
+                    foreach($lang->product->moreSelects as $key => $value)
+                    {
+                        $active = $key == $storyBrowseType ? 'btn-active-text' : '';
+                        echo '<li>' . html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
+                    }
+                    echo '</ul></div>';
                 }
-                echo '<div class="btn-group" id="more">';
-                echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
-                echo "<ul class='dropdown-menu'>";
-                foreach($lang->product->moreSelects as $key => $value)
-                {
-                    $active = $key == $storyBrowseType ? 'btn-active-text' : '';
-                    echo '<li>' . html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
-                }
-                echo '</ul></div>';
             }
-        }
-        elseif($menuItem->name == 'QUERY')
-        {
-            $searchBrowseLink = $this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s&storyType=$storyType");
-            $isBySearch       = $this->session->storyBrowseType == 'bysearch';
-            include '../../common/view/querymenu.html.php';
-        }
-        else
-        {
-            $menuItemName = strtolower($menuItem->name);
-            echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=0&storyType=$storyType"), "<span class='text'>$menuItem->text</span>" . ($menuItemName == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItemName ? ' btn-active-text' : '') . "'");
+            elseif($menuItem->name == 'QUERY')
+            {
+                $searchBrowseLink = $this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s&storyType=$storyType");
+                $isBySearch       = $this->session->storyBrowseType == 'bysearch';
+                include '../../common/view/querymenu.html.php';
+            }
+            else
+            {
+                $menuItemName = strtolower($menuItem->name);
+                echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=0&storyType=$storyType"), "<span class='text'>$menuItem->text</span>" . ($menuItemName == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItemName ? ' btn-active-text' : '') . "'");
+            }
         }
     }
     ?>

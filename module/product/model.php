@@ -150,7 +150,8 @@ class productModel extends model
         if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
         if(!isset($products[$this->session->product]))
         {
-            $this->session->set('product', key($products));
+            $product = $this->getById($productID);
+            if(empty($product)) $this->session->set('product', key($products));
             if($productID && strpos(",{$this->app->user->view->products},", ",{$this->session->product},") === false) $this->accessDenied();
         }
         if($this->cookie->preProductID != $productID)
@@ -287,7 +288,7 @@ class productModel extends model
             $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
             $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
                 ->from(TABLE_PRODUCT)
-                ->where('deleted')->eq(0)
+                ->beginIF(strpos($mode, 'all') === false)->where('deleted')->eq(0)->fi()
                 ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()

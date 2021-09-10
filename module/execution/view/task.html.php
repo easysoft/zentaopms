@@ -34,30 +34,29 @@ body {margin-bottom: 25px;}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>
 <div id="mainMenu" class="clearfix">
+  <?php
+  if(!empty($productID))
+  {
+      $product    = $this->product->getById($productID);
+      $removeLink = $browseType == 'byproduct' ? inlink('task', "executionID=$executionID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
+      $moduleName = $product->name;
+      $html       = $moduleName . html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
+  }
+  elseif(!empty($moduleID))
+  {
+      $module     = $this->tree->getById($moduleID);
+      $removeLink = $browseType == 'bymodule' ? inlink('task', "executionID=$executionID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
+      $moduleName = $module->name;
+      $html       = $moduleName . html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
+  }
+  else
+  {
+      $this->app->loadLang('tree');
+      $html = $moduleName = $this->lang->tree->all;
+  }
+  ?>
   <div id="sidebarHeader">
-    <div class="title">
-      <?php
-      if(!empty($productID))
-      {
-          $product    = $this->product->getById($productID);
-          $removeLink = $browseType == 'byproduct' ? inlink('task', "executionID=$executionID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
-          echo $product->name;
-          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
-      }
-      elseif(!empty($moduleID))
-      {
-          $module     = $this->tree->getById($moduleID);
-          $removeLink = $browseType == 'bymodule' ? inlink('task', "executionID=$executionID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
-          echo $module->name;
-          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
-      }
-      else
-      {
-          $this->app->loadLang('tree');
-          echo $this->lang->tree->all;
-      }
-      ?>
-    </div>
+    <div class="title" title="<?php echo $moduleName?>"><?php echo $html;?></div>
   </div>
   <div class="btn-toolbar pull-left">
     <?php

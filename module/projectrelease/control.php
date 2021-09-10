@@ -105,7 +105,7 @@ class projectrelease extends control
 
         if(!empty($_POST))
         {
-            $releaseID = $this->projectrelease->create();
+            $releaseID = $this->projectrelease->create($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
@@ -218,7 +218,11 @@ class projectrelease extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         $release = $this->projectrelease->getByID((int)$releaseID, true);
-        if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$release)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate('back'));
+        }
 
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)

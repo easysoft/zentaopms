@@ -315,9 +315,15 @@ class productIssuesEntry extends entry
          */
         foreach($result as $issue)
         {
-            foreach($issue->assignedTo as $index => $user)
+            foreach($issue->assignedTo as $key => $user)
             {
-                $issue->assignedTo[$index] = $userDetails[$user];
+                /* $key can be 'closed' in some case, so here should be process it. */
+                if($key == 'closed')
+                {
+                    $issue->assignedTo = array();
+                    break;
+                }
+                $issue->assignedTo[$key] = $userDetails[$user];
             }
             $issue->openedBy = $userDetails[$issue->openedBy];
         }

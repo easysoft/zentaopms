@@ -659,11 +659,11 @@ class testcase extends control
             if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
             if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
-            $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
+            $this->view->title      = "CASE #$case->id $case->title - " . $product->name;
 
             $this->view->product     = $product;
             $this->view->branches    = $branches;
-            $this->view->productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
+            $this->view->productName = $product->name;
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 

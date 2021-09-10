@@ -130,6 +130,7 @@ $config->openMethods[] = 'misc.about';
 $config->openMethods[] = 'misc.checkupdate';
 $config->openMethods[] = 'misc.ping';
 $config->openMethods[] = 'misc.captcha';
+$config->openMethods[] = 'misc.features';
 $config->openMethods[] = 'sso.login';
 $config->openMethods[] = 'sso.logout';
 $config->openMethods[] = 'sso.bind';
@@ -259,6 +260,8 @@ $config->objectTables['job']         = TABLE_JOB;
 $config->objectTables['team']        = TABLE_TEAM;
 $config->objectTables['pipeline']    = TABLE_PIPELINE;
 $config->objectTables['mr']          = TABLE_MR;
+
+$config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();

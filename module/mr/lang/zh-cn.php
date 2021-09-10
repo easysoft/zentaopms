@@ -76,6 +76,9 @@ $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
 $lang->mr->mergeSuccess   = "已成功合并";
 
+$lang->mr->todomessage = "项目中指派给你了";
+
+
 /**
  * Merge Command Document.
  *
