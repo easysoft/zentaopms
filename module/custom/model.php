@@ -365,7 +365,6 @@ class customModel extends model
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
         $flowModule = $config->global->flow . '_' . $module;
         $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
-        if(commonModel::isTutorialMode() && $module === 'main') $customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
 
