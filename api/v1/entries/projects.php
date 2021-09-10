@@ -14,13 +14,16 @@ class projectsEntry extends entry
     /**
      * GET method.
      *
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function get()
+    public function get($programID = 0)
     {
+        if(!$programID) $programID = $this->param('program', 0);
+
         $control = $this->loadController('project', 'browse');
-        $control->browse(0, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($programID, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')

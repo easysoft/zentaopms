@@ -34,7 +34,7 @@ class buildsEntry extends entry
         {
             foreach($builds as $build)
             {
-                $result[] = $build;
+                $result[] = $this->format($build, 'bugs:idList,stories:idList,deleted:bool');
             }
         }
 

@@ -31,7 +31,7 @@ $lang->file->preview       = "預覽";
 $lang->file->addFile       = '添加檔案';
 $lang->file->beginUpload   = '開始上傳';
 $lang->file->uploadSuccess = '上傳成功';
-$lang->file->partExport    = '分批導出';
+$lang->file->batchExport   = '分批導出';
 
 $lang->file->pathname  = '路徑';
 $lang->file->title     = '標題';

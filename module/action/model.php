@@ -1521,7 +1521,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printActionAPI($action)
+    public function printActionForGitLab($action)
     {
         if(!isset($action->objectType) or !isset($action->action)) return false;
 
