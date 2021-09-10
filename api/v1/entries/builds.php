@@ -20,6 +20,8 @@ class buildsEntry extends entry
      */
     public function get($projectID = 0)
     {
+        if(!$projectID) $projectID = $this->param('project', 0);
+
         $control = $this->loadController('project', 'build');
         $control->build($projectID, $this->param('type', 'all'), $this->param('param', 0));
         $data = $this->getData();
@@ -35,6 +37,7 @@ class buildsEntry extends entry
                 $result[] = $build;
             }
         }
+
         return $this->send(200, $result);
     }
 
@@ -47,6 +50,8 @@ class buildsEntry extends entry
      */
     public function post($projectID = 0)
     {
+        if(!$projectID) $projectID = $this->param('project', 0);
+
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->send404();
 
