@@ -12,9 +12,11 @@
 
   <div id='featuresCarousel' class='carousel slide' data-ride='carousel' data-interval='false'>
     <ol class='carousel-indicators'>
+      <?php if(count($features) > 1):?>
       <?php foreach($features as $key => $feature): ?>
       <li data-target='#featuresCarousel' data-slide-to='<?php echo $key;?>' <?php echo $key == 0 ? "class='active'" : ''?>></li>
       <?php endforeach;?>
+      <?php endif;?>
     </ol>
 
     <div class='carousel-inner'>
@@ -25,7 +27,7 @@
           <video src="<?php echo $lang->install->guideVideo;?>" height="320px" controls ="controls"></video>
           <div class='text-center' style='position:relative'>
             <p><?php echo $lang->install->introduction;?></p>
-            <div style='position: absolute; right: 0; bottom: 0;'>
+            <div class='download-file'>
               <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank'><?php echo $lang->misc->feature->downloadFile;?></a>
             </div>
           </div>

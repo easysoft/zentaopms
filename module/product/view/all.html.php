@@ -87,7 +87,7 @@
             <?php if($canBatchEdit):?>
             <td><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
-            <td class='text-left table-nest-title'>
+            <td class='text-left table-nest-title' title="<?php echo $program['programName']?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $program['programName']?>
             </td>
@@ -131,7 +131,7 @@
             <?php if($canBatchEdit):?>
             <td><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
-            <td class='text-left table-nest-title'>
+            <td class='text-left table-nest-title' title="<?php echo $line['lineName']?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>

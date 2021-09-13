@@ -22,7 +22,7 @@
             <td><?php echo $this->loadModel('gitlab')->getByID($MR->gitlabID)->name;?></td>
           </tr>
           <tr>
-             <th><?php echo $lang->mr->sourceProject;?></th>
+             <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>
              <td>
                <div>
                  <span class='fix-border text-left'>
@@ -33,7 +33,7 @@
              </td>
           </tr>
           <tr>
-             <th><?php echo $lang->mr->targetProject;?></th>
+             <th style="white-space: nowrap;"><?php echo $lang->mr->targetProject;?></th>
              <td>
                <div class='input-group'>
                  <span class='input-group-addon fix-border'>
