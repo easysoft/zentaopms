@@ -3068,7 +3068,7 @@ class taskModel extends model
                 echo $task->estStarted;
                 break;
             case 'realStarted':
-                echo $task->realStarted;
+                echo substr($task->realStarted, 5, 11);
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($task, $users);
