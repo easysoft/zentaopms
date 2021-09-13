@@ -12,9 +12,11 @@
 
   <div id='featuresCarousel' class='carousel slide' data-ride='carousel' data-interval='false'>
     <ol class='carousel-indicators'>
+      <?php if(count($features) > 1):?>
       <?php foreach($features as $key => $feature): ?>
       <li data-target='#featuresCarousel' data-slide-to='<?php echo $key;?>' <?php echo $key == 0 ? "class='active'" : ''?>></li>
       <?php endforeach;?>
+      <?php endif;?>
     </ol>
 
     <div class='carousel-inner'>
