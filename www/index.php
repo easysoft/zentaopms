@@ -39,7 +39,7 @@ if(!isset($config->installed) or !$config->installed) die(header('location: inst
 /* Run the app. */
 $common = $app->loadCommon();
 
-/* Check the reqeust is getconfig or not. */
+/* Check the request is getconfig or not. */
 if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die(helper::removeUTF8Bom($app->exportConfig()));
 
 /* Check for need upgrade. */
