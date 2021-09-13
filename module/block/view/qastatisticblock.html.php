@@ -93,7 +93,7 @@ $(function()
         <?php $index = 1;?>
         <?php foreach($products as $product):?>
         <li <?php if($product == reset($products)) echo "class='active'";?> productID='<?php echo $product->id;?>'>
-          <a href="javascript:;" data-target="#tabQaProduct<?php echo $product->id;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a>
+          <a href="javascript:;" data-target="#<?php echo $block->id;?>-tabQaProduct<?php echo $product->id;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a>
         <?php echo html::a(helper::createLink('bug', 'browse', "productID=$product->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->bug->browse}");?></li>
         <?php $index++;?>
         <?php endforeach;?>
@@ -103,7 +103,7 @@ $(function()
     <div class="col tab-content">
       <?php $index = 1;?>
       <?php foreach($products as $product):?>
-      <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="tabQaProduct<?php echo $product->id;?>">
+      <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="<?php echo $block->id;?>-tabQaProduct<?php echo $product->id;?>">
         <div class="statistic-menu input-group space w-400px">
           <div class="input-group-cell">
           <?php if($product->testtask):?>
