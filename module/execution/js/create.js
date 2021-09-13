@@ -48,11 +48,22 @@ $(function()
     {
         if(systemMode == 'new')
         {
-            var maxWidth = $('.chosen-container .chosen-drop.chosen-auto-max-width.in').width() - 70;
+            $('#teams_chosen ul li').each(function(index)
+            {
+                if(index == 0)
+                {
+                    var maxWidth = $('.chosen-container .chosen-drop.chosen-auto-max-width.in').width() - 70;
 
-            $('#teams_chosen ul .label').remove();
-            $('#teams_chosen ul li:first').after(' <label class="label">' + projectCommon + '</label>');
-            $('#teams_chosen ul > li:first').attr('style', 'display: inline-block; vertical-align: middle; max-width: ' + maxWidth + 'px');
+                    $('#teams_chosen ul .label').remove();
+                    $(this).after(' <label class="label">' + projectCommon + '</label>');
+                    $(this).attr('style', 'display: inline-block; vertical-align: middle; max-width: ' + maxWidth + 'px');
+                }
+                else
+                {
+                    $(this).html($(this).html().replace('&nbsp;&nbsp;&nbsp;', ''));
+                    $(this).prepend('&nbsp;&nbsp;&nbsp;');
+                }
+            })
         }
     })
 
