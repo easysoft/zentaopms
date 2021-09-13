@@ -39,7 +39,7 @@ $.extend(
                 /* try parse to json when response is json's string. */
                 try{if(typeof(response) == 'string') response = JSON.parse(response);}catch(e){}
 
-                /* The response is not an object, some error occers, alert it. */
+                /* The response is not an object, some error occurs, alert it. */
                 if(typeof(response) != 'object')
                 {
                     if(response) return alert(response);
@@ -176,7 +176,7 @@ $.extend(
                 }
             },
 
-            /* When error occers, alert the response text, status and error. */
+            /* When error occurs, alert the response text, status and error. */
             error:function(jqXHR, textStatus, errorThrown)
             {
                 $.enableForm(formID);

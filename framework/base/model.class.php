@@ -129,7 +129,7 @@ class baseModel
      *
      * The construct function.
      * 1. global the global vars, refer them by the class member such as $this->app.
-     * 2. set the pathes, config, lang of current module
+     * 2. set the paths, config, lang of current module
      *
      * @param  string $appName
      * @access public

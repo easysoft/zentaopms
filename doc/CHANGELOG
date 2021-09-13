@@ -3432,7 +3432,7 @@ Bug影响版本为多个时，统计报表无法统计。
 1174    将todo/view/footer.html.php移到todo/common.js
 1171    删除的用户名字上没有加横线
 1087    调整代码高亮的展示形式
-947     将pathFix变量改用DIRECTORY_SEPERATOR的缩写DS
+947     将pathFix变量改用DIRECTORY_SEPARATOR的缩写DS
 945     处理common和commonmodel的关系和逻辑
 722     清除没有使用的语言条目
 441     将统计报表程序移至model层

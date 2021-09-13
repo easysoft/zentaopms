@@ -230,7 +230,7 @@ class control extends baseControl
 
         /**
          * 切换到视图文件所在的目录，以保证视图文件里面的include语句能够正常运行。
-         * Change the dir to the view file to keep the relative pathes work.
+         * Change the dir to the view file to keep the relative paths work.
          */
         $currentPWD = getcwd();
         chdir(dirname($viewFile));
