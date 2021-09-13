@@ -1,7 +1,5 @@
 $(function()
 {
-    if(showFeatures) showFeaturesDialog();
-
     /* Set the heights of every block to keep them same height. */
     projectBoxHeight = $('#projectbox').height();
     productBoxHeight = $('#productbox').height();
@@ -37,14 +35,3 @@ $(function()
         $(this).find('.fixedHead').css('top',$(this).scrollTop());
     });
 });
-
-/**
- * Show features dialog.
- *
- * @access public
- * @return void
- */
-function showFeaturesDialog()
-{
-    $.zui.modalTrigger.show({url: $.createLink('misc', 'features'), type: 'ajax', width: 900, showHeader: false})
-}

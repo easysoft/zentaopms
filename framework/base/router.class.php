@@ -1025,7 +1025,7 @@ class baseRouter
 
     /**
      * 设置站点代号，可以针对不同的站点来加载不同的扩展。
-     * Set the code of current site, thus can load diffrent extension of diffrent site.
+     * Set the code of current site, thus can load different extension of different site.
      *
      * @access public
      * @return void
@@ -1075,7 +1075,7 @@ class baseRouter
 
     /**
      * 解析本次请求的入口方法，根据请求的类型(PATH_INFO GET)，调用相应的方法。
-     * The entrance of parseing request. According to the requestType, call related methods.
+     * The entrance of parsing request. According to the requestType, call related methods.
      *
      * @access public
      * @return void
@@ -1215,7 +1215,7 @@ class baseRouter
     }
 
     /**
-     * 获取$vewType变量。
+     * 获取$viewType变量。
      * Get the $viewType var.
      *
      * @access public
@@ -1237,8 +1237,8 @@ class baseRouter
      *
      * Load the common module
      *
-     *  The common module is a special module, which can be used to do some common things. For examle:
-     *  start session, check priviledge and so on.
+     *  The common module is a special module, which can be used to do some common things. For example:
+     *  start session, check privilege and so on.
      *  This method should called manually in the router file(www/index.php) after the $lang, $config, $dbh loaded.
      *
      * @access public
@@ -1393,7 +1393,7 @@ class baseRouter
     {
         $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
 
-        /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext pathes return false.*/
+        /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
 
         /* 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。If extensionLevel == 2 and site extensionFile exists, return it. */
@@ -1633,7 +1633,7 @@ class baseRouter
         {
             /*
              * 根据$requestFix分割符，分割网址。
-             * There's the request seperator, split the URI by it.
+             * There's the request separator, split the URI by it.
              **/
             if(strpos($this->URI, $this->config->requestFix) !== false)
             {
@@ -1643,7 +1643,7 @@ class baseRouter
             }
             /*
              * 如果网址中没有分隔符，使用默认的方法。
-             * No reqeust seperator, use the default method name.
+             * No request separator, use the default method name.
              **/
             else
             {
@@ -1966,7 +1966,7 @@ class baseRouter
         $classFile .= '.class.php';
         if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, $exit = true);
 
-        /* 如果是静态调用，则返回(If staitc, return) */
+        /* 如果是静态调用，则返回(If static, return) */
         if($static) return true;
 
         /* 实例化该类(Instance it) */
@@ -2267,7 +2267,7 @@ class baseRouter
 
         /*
          * 发现错误，保存到日志中。
-         * If any error occers, save it.
+         * If any error occurs, save it.
          * */
         if(!function_exists('error_get_last')) return;
         $error = error_get_last();
@@ -2279,8 +2279,8 @@ class baseRouter
      * Trigger an error.
      *
      * @param string    $message    错误信息      error message
-     * @param string    $file       所在文件      the file error occers
-     * @param int       $line       错误行        the line error occers
+     * @param string    $file       所在文件      the file error occurs
+     * @param int       $line       错误行        the line error occurs
      * @param bool      $exit       是否停止程序  exit the program or not
      * @access public
      * @return void

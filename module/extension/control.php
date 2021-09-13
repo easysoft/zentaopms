@@ -13,9 +13,9 @@ class extension extends control
 {
     /**
      * Construct function.
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
@@ -79,9 +79,9 @@ class extension extends control
 
     /**
      * Obtain extensions from the community.
-     * 
-     * @param  string $type 
-     * @param  string $param 
+     *
+     * @param  string $type
+     * @param  string $param
      * @access public
      * @return void
      */
@@ -119,16 +119,16 @@ class extension extends control
 
     /**
      * Install a extension
-     * 
-     * @param  string $extension 
-     * @param  string $downLink 
-     * @param  string $md5 
-     * @param  string $type 
-     * @param  string $overridePackage 
-     * @param  string $ignoreCompatible 
-     * @param  string $overrideFile 
-     * @param  string $agreeLicense 
-     * @param  int    $upgrade 
+     *
+     * @param  string $extension
+     * @param  string $downLink
+     * @param  string $md5
+     * @param  string $type
+     * @param  string $overridePackage
+     * @param  string $ignoreCompatible
+     * @param  string $overrideFile
+     * @param  string $agreeLicense
+     * @param  int    $upgrade
      * @access public
      * @return void
      */
@@ -138,12 +138,12 @@ class extension extends control
 
         $this->view->error = '';
         $installTitle      = $upgrade == 'no' ? $this->lang->extension->install : $this->lang->extension->upgrade;
-        $installType       = $upgrade == 'no' ? $this->lang->extension->installExt : $this->lang->extension->upgradeExt; 
+        $installType       = $upgrade == 'no' ? $this->lang->extension->installExt : $this->lang->extension->upgradeExt;
         $this->view->installType = $installType;
         $this->view->upgrade     = $upgrade;
         $this->view->title       = $installTitle . $extension;
 
-        
+
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
@@ -154,14 +154,14 @@ class extension extends control
         $packageFile = $this->extension->getPackageFile($extension);
 
         /* Check the package file exists or not. */
-        if(!file_exists($packageFile)) 
+        if(!file_exists($packageFile))
         {
             $this->view->error = sprintf($this->lang->extension->errorPackageNotFound, $packageFile);
             die($this->display());
         }
 
-        /* Checking the extension pathes. */
-        $return = $this->extension->checkExtensionPathes($extension);
+        /* Checking the extension paths. */
+        $return = $this->extension->checkExtensionPaths($extension);
         if($this->session->dirs2Created == false) $this->session->set('dirs2Created', $return->dirs2Created, 'admin');    // Save the dirs to be created.
         if($return->result != 'ok')
         {
@@ -328,8 +328,8 @@ class extension extends control
 
     /**
      * Uninstall an extension.
-     * 
-     * @param  string    $extension 
+     *
+     * @param  string    $extension
      * @access public
      * @return void
      */
@@ -367,8 +367,8 @@ class extension extends control
 
     /**
      * Activate an extension;
-     * 
-     * @param  string    $extension 
+     *
+     * @param  string    $extension
      * @access public
      * @return void
      */
@@ -395,8 +395,8 @@ class extension extends control
 
     /**
      * Deactivate an extension
-     * 
-     * @param  string    $extension 
+     *
+     * @param  string    $extension
      * @access public
      * @return void
      */
@@ -411,7 +411,7 @@ class extension extends control
 
     /**
      * Upload an extension
-     * 
+     *
      * @access public
      * @return void
      */
@@ -461,8 +461,8 @@ class extension extends control
 
     /**
      * Erase an extension.
-     * 
-     * @param  string    $extension 
+     *
+     * @param  string    $extension
      * @access public
      * @return void
      */
@@ -476,11 +476,11 @@ class extension extends control
 
     /**
      * Update extension.
-     * 
-     * @param  string $extension 
-     * @param  string $downLink 
-     * @param  string $md5 
-     * @param  string $type 
+     *
+     * @param  string $extension
+     * @param  string $downLink
+     * @param  string $md5
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -492,8 +492,8 @@ class extension extends control
 
     /**
      * Browse the structure of extension.
-     * 
-     * @param  int    $extension 
+     *
+     * @param  int    $extension
      * @access public
      * @return void
      */
