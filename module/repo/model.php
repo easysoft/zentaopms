@@ -350,7 +350,7 @@ class repoModel extends model
             $scm = $repo->SCM == 'Subversion' ? 'svn' : 'git';
             if($this->checkPriv($repo))
             {
-                if($type == 'project' or $type == 'execution')
+                if(($type == 'project' or $type == 'execution') and $projectID)
                 {
                     foreach($productIdList as $productID)
                     {
@@ -1510,6 +1510,7 @@ class repoModel extends model
                     elseif($taskAction == 'finish' and in_array($task->status, array('wait', 'pause', 'doing')))
                     {
                         $this->post->set('finishedDate', date('Y-m-d'));
+                        $this->post->set('realStarted', date('Y-m-d'));
                         $this->post->set('currentConsumed', $this->post->consumed);
                         $this->post->set('consumed', $this->post->consumed + $task->consumed);
                         $changes = $this->task->finish($taskID);

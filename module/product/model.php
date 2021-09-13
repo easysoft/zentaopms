@@ -371,7 +371,8 @@ class productModel extends model
     public function getProductIDByProject($projectID, $isFirst = true)
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)
-            ->where('product')->in($this->app->user->view->products)
+            ->where('1=1')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchPairs();
 
