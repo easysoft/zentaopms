@@ -1,11 +1,5 @@
 $(function()
 {
-    if(showFeatures)
-    {
-        /** Show features dialog */
-        new $.zui.ModalTrigger({url: $.createLink('misc', 'features'), type: 'iframe', width: 900, showHeader: false, backdrop: 'static'}).show();
-    }
-
     /* Set the heights of every block to keep them same height. */
     projectBoxHeight = $('#projectbox').height();
     productBoxHeight = $('#productbox').height();

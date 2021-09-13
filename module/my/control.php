@@ -32,15 +32,7 @@ class my extends control
      */
     public function index()
     {
-        $showFeatures = false;
-        foreach($this->config->newFeatures as $feature)
-        {
-            $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
-            if(strpos(",$accounts,", $this->app->user->account) === false) $showFeatures = true;
-        }
-
-        $this->view->title        = $this->lang->my->common;
-        $this->view->showFeatures = $showFeatures;
+        $this->view->title = $this->lang->my->common;
         $this->display();
     }
 

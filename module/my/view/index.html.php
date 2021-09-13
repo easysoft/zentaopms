@@ -10,6 +10,5 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('showFeatures', $showFeatures);?>
 <?php echo $this->fetch('block', 'dashboard', 'module=my');?>
 <?php include '../../common/view/footer.html.php';?>
