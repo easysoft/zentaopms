@@ -576,7 +576,7 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
 
                 $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-                $this->story->recordReviewAction($story);
+                if(isset($this->post->reviewer)) $this->story->recordReviewAction($story);
             }
 
             $this->executeHooks($storyID);

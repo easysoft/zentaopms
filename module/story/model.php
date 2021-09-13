@@ -789,8 +789,8 @@ class storyModel extends model
 
         if(isset($_POST['reviewer']))
         {
-            $_POST['reviewer']   = array_filter($_POST['reviewer']);
-            $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
+            $_POST['reviewer'] = array_filter($_POST['reviewer']);
+            $oldReviewer       = $this->getReviewerPairs($storyID, $oldStory->version);
             if(array_diff($_POST['reviewer'], array_keys($oldReviewer)) or array_diff(array_keys($oldReviewer), $_POST['reviewer']))
             {
                 /* Update story reviewer. */
@@ -4446,7 +4446,7 @@ class storyModel extends model
         {
             if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewRejected');
             if($story->status == 'active') $this->action->create('story', $story->id, 'ReviewPassed');
-            if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' || $story->status == 'changed')) $this->action->create('story', $story->id, 'ReviewClarified');
+            if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' or $story->status == 'changed')) $this->action->create('story', $story->id, 'ReviewClarified');
         }
 
         return $actionID;

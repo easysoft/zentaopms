@@ -2,7 +2,7 @@
  * Confirm left.
  *
  * @access public
- * @return void
+ * @return bool
  */
 function confirmLeft()
 {

@@ -2478,22 +2478,13 @@ class executionModel extends model
     {
         if(empty($projectID) and $this->config->systemMode == 'new') return array();
 
-        $objects = $this->dao->select('id,name,type')->from(TABLE_PROJECT)
+        $teamPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
             ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
             ->markRight(1)
             ->orderBy('project_asc')
-            ->fetchAll('id');
-
-        if(empty($objects)) return array();
-
-        $teamPairs = array();
-        foreach($objects as $id => $object)
-        {
-            $prefix = ($object->type != 'project' and $this->config->systemMode == 'new') ? '&nbsp;&nbsp;&nbsp;' : '';
-            $teamPairs[$id] = $prefix . $object->name;
-        }
+            ->fetchPairs();
 
         return $teamPairs;
     }
