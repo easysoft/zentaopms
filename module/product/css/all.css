@@ -49,3 +49,4 @@ th.table-nest-title .table-nest-toggle:hover {opacity: 1;}
 .main-table thead>tr>th {padding: 0px 8px; line-height: 24px;}
 
 .icon-move {color: #16a8f8;}
+.c-name {text-overflow: unset !important;}
