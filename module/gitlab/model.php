@@ -209,7 +209,7 @@ class gitlabModel extends model
      *
      * @param  int    $productID
      * @access public
-     * @return array
+     * @return object
      */
     public function getExecutionsByProduct($productID)
     {
@@ -239,7 +239,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Get issue id list group by obejct.
+     * Get issue id list group by object.
      *
      * @param  string $objectType
      * @param  int    $objectID
@@ -262,7 +262,7 @@ class gitlabModel extends model
      * @param  int       $gitlabID
      * @param  string    $account
      * @access public
-     * @return arary
+     * @return object
      */
     public function getGitlabUserID($gitlabID, $account)
     {
