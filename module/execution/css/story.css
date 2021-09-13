@@ -8,4 +8,6 @@ tbody > tr > td > .btn-icon {margin-right: 4px;}
 #batchToTask .checkbox-primary {display: inline-block; margin-left: 10px;}
 th.c-pri{width:50px;}
 .c-estimate {width: 50px;}
-.c-status, .c-user {width: 80px;}
+.c-status, .c-user {width: 70px;}
+.c-category {width: 80px;}
+.c-actions-7 {width: 190px;}

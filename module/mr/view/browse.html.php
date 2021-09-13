@@ -37,7 +37,7 @@
           <th class='text-left'><?php common::printOrderLink('targetProject', $orderBy, $vars, $lang->mr->targetProject); ?></th>
           <th class='w-120px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch); ?></th>
           <th class='w-120px text-left'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus); ?></th>
-          <th class='w-120px c-actions-4'><?php echo $lang->actions; ?></th>
+          <th class='c-actions-3'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
@@ -50,7 +50,7 @@
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace; ?></td>
           <td class='text'><?php echo $MR->targetBranch;?></td>
           <td class='text'><?php echo ($MR->status == 'merged') ? zget($lang->mr->statusList, $MR->status) : zget($lang->mr->mergeStatusList, $MR->mergeStatus); ?></td>
-          <td class='text-left c-actions'>
+          <td class='c-actions'>
             <?php
             common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
             common::printLink('mr', 'edit',   "mr={$MR->id}", '<i class="icon icon-edit"></i>', '', "title='{$lang->mr->edit}' class='btn btn-info'");
