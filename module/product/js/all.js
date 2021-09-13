@@ -44,7 +44,29 @@ $(function()
             var $checkbox       = $(this);
             var $tr             = $checkbox.closest('tr');
             var rowID           = $tr.data('id');
-            var isAllRowChecked = !$tbody.find('tr[data-parent="' + rowID + '"] input:checkbox:not(:checked)').length;
+            if($tbody.find('tr[data-parent="' + rowID + '"] .program-checkbox').length > 0)
+            {
+                var notCheckedCount = 0;
+                $tbody.find('tr[data-parent="' + rowID + '"]').each(function()
+                {
+                    if($(this).find('.program-checkbox').length > 0)
+                    {
+                        /* Get lines input length. */
+                        var lineRowID   = $(this).data('id');
+                        notCheckedCount = $tbody.find('tr[data-parent="' + lineRowID + '"] input:checkbox:not(:checked)').length + notCheckedCount;
+                    }
+                    else
+                    {
+                        notCheckedCount = $(this).find('input:checkbox:not(:checked)').length + notCheckedCount;
+                    }
+                });
+
+                var isAllRowChecked = !notCheckedCount;
+            }
+            else
+            {
+                var isAllRowChecked = !$tbody.find('tr[data-parent="' + rowID + '"] input:checkbox:not(:checked)').length;
+            }
             $checkbox.toggleClass('checked', isAllRowChecked);
         });
     }
