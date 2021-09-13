@@ -13,7 +13,7 @@
 <?php include '../../common/view/kanban.html.php';?>
 <?php if(empty($kanbanList)):?>
 <div class="table-empty-tip cell">
-  <p class="text-muted"><?php echo $lang->noData;?></p>
+  <p class="text-muted"><?php echo $lang->product->noProduct;?></p>
 </div>
 <?php else:?>
 <div id='kanbanList'>

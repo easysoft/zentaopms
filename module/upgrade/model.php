@@ -2826,7 +2826,7 @@ class upgradeModel extends model
     }
 
     /**
-     * Judge any error occers.
+     * Judge any error occurs.
      *
      * @access public
      * @return bool

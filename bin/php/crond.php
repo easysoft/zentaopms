@@ -10,7 +10,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-/* Set pathes and timezone. */
+/* Set paths and timezone. */
 $zentaoPath = dirname(dirname(dirname(__FILE__))) . "/";
 $cronPath   = $zentaoPath . 'bin/cron';
 include $zentaoPath . 'config/config.php';

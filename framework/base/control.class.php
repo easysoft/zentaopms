@@ -177,7 +177,7 @@ class baseControl
      * The construct function.
      *
      * 1. global the global vars, refer them by the class member such as $this->app.
-     * 2. set the pathes of current module, and load it's model class.
+     * 2. set the paths of current module, and load it's model class.
      * 3. auto assign the $lang and $config to the view.
      *
      * @param  string $moduleName
@@ -708,7 +708,7 @@ class baseControl
 
         /**
          * 切换到视图文件所在的目录，以保证视图文件里面的include语句能够正常运行。
-         * Change the dir to the view file to keep the relative pathes work.
+         * Change the dir to the view file to keep the relative paths work.
          */
         $currentPWD = getcwd();
         chdir(dirname($viewFile));
@@ -778,7 +778,7 @@ class baseControl
 
         /**
          * 设置引用的文件和路径。
-         * Set the pathes and files to included.
+         * Set the paths and files to included.
          */
         $modulePath        = $this->app->getModulePath($appName, $moduleName);
         $moduleControlFile = $modulePath . 'control.php';
