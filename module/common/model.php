@@ -687,7 +687,12 @@ class commonModel extends model
             $item->url        = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
 
             $items[] = $item;
+
         }
+
+        /* Fix bug 14574. */
+        if(array_slice($items, -1)[0] == 'divider') array_pop($items);
+
         return $items;
     }
 
