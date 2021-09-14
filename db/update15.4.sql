@@ -1,6 +1,7 @@
 UPDATE `zt_action` SET `action` = 'reviewpassed' WHERE `action` = 'passreviewed';
 UPDATE `zt_action` SET `action` = 'reviewrejected' WHERE `action` = 'reviewclosed';
 UPDATE `zt_action` SET `action` = 'reviewclarified' WHERE `action` = 'clarifyreviewed';
+UPDATE `zt_config` SET `key` = 'skipYoungBlueTheme' WHERE `key` = 'skipThemeGuide' and `section` = 'global';
 DELETE FROM `zt_score` WHERE `module` = 'tutorial' AND `method` = 'finish';
 CREATE TABLE `zt_mr` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
