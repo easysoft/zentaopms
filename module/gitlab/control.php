@@ -71,7 +71,7 @@ class gitlab extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action');
-            $actionID = $this->action->create('gitlab', $gitlabID, 'create');
+            $actionID = $this->action->create('gitlab', $gitlabID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -117,7 +117,7 @@ class gitlab extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
-            $actionID = $this->action->create('gitlab', $id, 'edit');
+            $actionID = $this->action->create('gitlab', $id, 'edited');
             $changes  = common::createChanges($oldGitLab, $gitLab);
             $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
@@ -222,7 +222,7 @@ class gitlab extends control
         $this->gitlab->delete(TABLE_PIPELINE, $id);
 
         $gitLab   = $this->gitlab->getByID($id);
-        $actionID = $this->action->create('gitlab', $id, 'delete');
+        $actionID = $this->action->create('gitlab', $id, 'deleted');
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->action->logHistory($actionID, $changes);
         die(js::reload('parent'));

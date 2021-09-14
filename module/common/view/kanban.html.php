@@ -400,7 +400,7 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     /* laneItemsClass: 'scrollbar-hover', */ // only show scrollbar on mouse hover
     itemRender: renderKanbanItem,
     useFlex: false,
-    showZeroCount: true,
+    showCount: false,
     onRenderHeaderCol: function($col, col)
     {
         if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
