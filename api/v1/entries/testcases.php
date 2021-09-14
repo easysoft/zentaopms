@@ -57,4 +57,53 @@ class testcasesEntry extends entry
 
         return $this->sendError(400, 'error');
     }
+
+    /**
+     * POST method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function post($productID = 0)
+    {
+        if(!$productID) $productID = $this->param('product');
+        if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
+        if(!$productID) return $this->sendError(400, 'Need product id.');
+
+        $fields = 'module,type,stage,story,title,precondition,pri';
+        $this->batchSetPost($fields);
+        $this->setPost('product', $productID);
+
+        /* Set steps and expects. */
+        if(isset($this->requestBody->steps))
+        {
+            $steps    = array();
+            $expects  = array();
+            $stepType = array();
+            foreach($this->requestBody->steps as $step)
+            {
+                $steps[]    = $step->desc;
+                $expects[]  = $step->expect;
+                $stepType[] = 'item';
+            }
+            $this->setPost('steps',    $steps);
+            $this->setPost('expects',  $expects);
+            $this->setPost('stepType', $stepType);
+        }
+
+        $control = $this->loadController('testcase', 'create');
+        $this->requireFields('title,type,pri,steps');
+
+        $control->create(0);
+
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
+
+        $case = $this->loadModel('testcase')->getByID($data->id);
+        $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values($case->steps) : array();
+
+        $this->send(200, $this->format($case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool'));
+    }
 }

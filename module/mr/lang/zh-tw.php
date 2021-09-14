@@ -23,6 +23,7 @@ $lang->mr->reviewer    = '評審人';
 $lang->mr->mergeStatus = '是否可合併';
 $lang->mr->commits     = '提交數';
 $lang->mr->changes     = '更改數';
+$lang->mr->gitlabID    = 'GitLab';
 
 $lang->mr->statusList = array();
 $lang->mr->statusList['opened'] = '開放中';
@@ -74,6 +75,8 @@ $lang->mr->commandLine    = "合併命令";
 $lang->mr->acceptMR       = "合併";
 $lang->mr->mergeFailed    = "無法合併，請核對合併請求狀態";
 $lang->mr->mergeSuccess   = "已成功合併";
+
+$lang->mr->todomessage = "項目中指派給你了";
 
 /**
  * Merge Command Document.

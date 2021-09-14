@@ -18,7 +18,7 @@ CREATE TABLE `zt_mr` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `deleted` tinyint(1) NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `status` char(30) NOT NULL,
   `mergeStatus` char(30) NOT NULL,
   PRIMARY KEY (`id`)

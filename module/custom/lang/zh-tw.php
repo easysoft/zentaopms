@@ -174,6 +174,7 @@ $lang->custom->notice->readOnlyOfProduct   = '禁止修改後，已關閉' . $la
 $lang->custom->notice->readOnlyOfExecution = "禁止修改後，已關閉{$lang->custom->execution}下的任務、版本、日誌以及關聯需求都禁止修改。";
 $lang->custom->notice->URSREmpty           = '自定義需求名稱不能為空！';
 $lang->custom->notice->confirmDelete       = '您確定要刪除嗎？';
+$lang->custom->notice->confirmReviewCase   = '是否將待評審的用例修改為正常狀態？';
 
 $lang->custom->notice->indexPage['product'] = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
 $lang->custom->notice->indexPage['project'] = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
