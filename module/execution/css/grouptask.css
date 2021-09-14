@@ -25,3 +25,5 @@
 .is-firefox .group-header > a,
 .is-firefox .group-header > .groupSummary {position: relative; z-index: 1;}
 .c-hours {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right;}
+.c-user, .c-type {width: 70px;}
+.c-progress {width: 60px;}

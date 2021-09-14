@@ -33,12 +33,12 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php echo $lang->stakeholder->name;?></th>
-          <th class="w-100px"><?php echo $lang->stakeholder->common . $lang->stakeholder->type;?></th>
-          <th class="w-120px"><?php echo $lang->stakeholder->phone;?></th>
-          <th class="w-120px"><?php echo $lang->stakeholder->qq;?></th>
-          <th class="w-120px"><?php echo $lang->stakeholder->weixin;?></th>
-          <th class="w-200px"><?php echo $lang->stakeholder->email;?></th>
-          <th class='c-actions text-center w-150px'><?php echo $lang->actions;?></th>
+          <th class="c-type"><?php echo $lang->stakeholder->common . $lang->stakeholder->type;?></th>
+          <th class="c-phone"><?php echo $lang->stakeholder->phone;?></th>
+          <th class="c-qq"><?php echo $lang->stakeholder->qq;?></th>
+          <th class="c-weixin"><?php echo $lang->stakeholder->weixin;?></th>
+          <th class="c-email"><?php echo $lang->stakeholder->email;?></th>
+          <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
