@@ -224,10 +224,7 @@ class html extends baseHTML
         if($stringLength == 0) return 0;
 
         $code = 0;
-        for($i = 0; $i < $stringLength; ++$i)
-        {
-            $code += ($i + 1) * ord($string[$i]);
-        }
+        for($i = 0; $i < $stringLength; ++ $i) $code += ($i + 1) * ord($string[$i]);
         return $code;
     }
 
