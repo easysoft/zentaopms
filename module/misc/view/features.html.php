@@ -21,7 +21,7 @@
 
     <div class='carousel-inner'>
       <?php foreach($features as $key => $feature): ?>
-      <div class='item <?php echo $key == 0 ? 'active' : '';?>' style='height: 400px'>
+      <div class='item <?php echo $key == 0 ? 'active' : '';?>' style='height: 395px'>
         <?php if($feature == 'introduction'):?>
         <div class='article-content text-center'>
           <video src="<?php echo $lang->install->guideVideo;?>" height="320px" controls ="controls"></video>
