@@ -47,8 +47,7 @@
           <td></td>
         </tr>
         <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton();?>
-          <?php if(!isonlybody()) echo html::backbutton();?>
+          <td colspan='2' class='text-center'><?php echo html::submitButton();?><?php if(!isonlybody()) echo html::backbutton();?>
           </td>
         </tr>
       </table>
