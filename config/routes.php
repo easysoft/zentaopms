@@ -16,21 +16,23 @@ $routes['/products/:id']          = 'product';
 $routes['/productlines']     = 'productLines';
 $routes['/productlines/:id'] = 'productLine';
 
-$routes['/productplans']             = 'productPlans';
-$routes['/product/:id/productplans'] = 'productPlans';
-$routes['/productplans/:id']         = 'productPlan';
+$routes['/productplans']       = 'productPlans';
+$routes['/products/:id/plans'] = 'productPlans';
+$routes['/productplans/:id']   = 'productPlan';
 
 $routes['/releases']              = 'releases';
 $routes['/product/:id/releases']  = 'releases';
 $routes['/projects/:id/releases'] = 'projectreleases';
 $routes['/releases/:id']          = 'release';
 
+$routes['/stories']                = 'stories';
 $routes['/products/:id/stories']   = 'stories';
 $routes['/executions/:id/stories'] = 'executionStories';
 $routes['/stories/:id']            = 'story';
 $routes['/stories/:id/change']     = 'storyChange';
 
 $routes['/products/:id/bugs'] = 'bugs';
+$routes['/bugs']              = 'bugs';
 $routes['/bugs/:id']          = 'bug';
 
 $routes['/programs/:id/projects'] = 'projects';
@@ -67,8 +69,9 @@ $routes['/projects/:projectID/builds'] = 'builds';
 $routes['/builds']                     = 'builds';
 $routes['/builds/:id']                 = 'build';
 
-$routes['/testcases']     = 'testcases';
-$routes['/testcases/:id'] = 'testcase';
+$routes['/products/:id/testcases'] = 'testcases';
+$routes['/testcases']              = 'testcases';
+$routes['/testcases/:id']          = 'testcase';
 
 $routes['/projects/:projectID/testtasks'] = 'testtasks';
 $routes['/testtasks']                     = 'testtasks';
