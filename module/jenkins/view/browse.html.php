@@ -15,7 +15,17 @@
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('jenkins', 'create')) common::printLink('jenkins', 'create', "", "<i class='icon icon-plus'></i> " . $lang->jenkins->create, '', "class='btn btn-primary'");?>
   </div>
+<?php if(empty($jenkinsList)):?>
+<div class="table-empty-tip">
+  <p>
+    <span class="text-muted"><?php echo $lang->noData;?></span>
+    <?php if(common::hasPriv('jenkins', 'create')):?>
+    <?php echo html::a($this->createLink('jenkins', 'create'), "<i class='icon icon-plus'></i> " . $lang->jenkins->create, '', "class='btn btn-info'");?>
+    <?php endif;?>
+  </p>
 </div>
+</div>
+<?php else:?>
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='jenkinsList' class='table has-sort-head table-fixed'>
@@ -49,4 +59,5 @@
     <?php endif; ?>
   </form>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php'; ?>
