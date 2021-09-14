@@ -546,7 +546,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   KEY `path` (`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_mr`;
-CREATE TABLE `zt_mr` (
+CREATE TABLE IF NOT EXISTS `zt_mr` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `gitlabID` mediumint(8) unsigned NOT NULL,
   `sourceProject` int unsigned NOT NULL,
@@ -562,7 +562,7 @@ CREATE TABLE `zt_mr` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `deleted` tinyint(1) NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `status` char(30) NOT NULL,
   `mergeStatus` char(30) NOT NULL,
   PRIMARY KEY (`id`)
@@ -1352,7 +1352,8 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('1',    '1',    '*',    '*',    '*',    'moduleName=todo&methodName=createCycle',    '生成周期性待办',  'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('1',    '0',    '*',    '*',    '*',    'moduleName=ci&methodName=initQueue', '创建周期性任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkCompileStatus', '同步DevOps构建任务状态', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行DevOps构建任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00');
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行DevOps构建任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=mr&methodName=syncMR', '定时同步GitLab合并数据到禅道数据库', 'zentao', 1, 'normal', '0000-00-00 00:00:00');
 
 INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (1, 'ADMIN', 'admin', 'for administrator'),

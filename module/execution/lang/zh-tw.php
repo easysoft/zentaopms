@@ -310,7 +310,7 @@ $lang->execution->workloadTotal       = "工作量占比累計不應當超過100
 // $lang->execution->linkProjectStoryTip = "(關聯{$lang->SRCommon}來源於項目下所關聯的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip     = "(項目下還未關聯{$lang->SRCommon}，可直接關聯該{$lang->execution->common}所關聯產品的{$lang->SRCommon})";
 if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "選擇一個{$lang->execution->common}團隊來複制";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "選擇一個{$lang->projectCommon}或{$lang->execution->common}團隊來複制";
+if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "選擇一個{$lang->project->common}或{$lang->execution->common}團隊來複制";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete             = "您確定刪除{$lang->executionCommon}[%s]嗎？";
