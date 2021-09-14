@@ -76,8 +76,12 @@ class bugsEntry extends entry
      * @access public
      * @return void
      */
-    public function post($productID)
+    public function post($productID = 0)
     {
+        if(!$productID) $productID = $this->param('product');
+        if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
+        if(!$productID) return $this->sendError(400, 'Need product id.');
+
         $fields = 'title,project,execution,openedBuild,assignedTo,pri,severity,type,story';
         $this->batchSetPost($fields);
 
