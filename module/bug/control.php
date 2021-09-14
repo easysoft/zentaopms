@@ -574,9 +574,8 @@ class bug extends control
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
-        $title = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
 
-        $this->view->title        = $title;
+        $this->view->title        = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
