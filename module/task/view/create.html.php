@@ -15,6 +15,12 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
+<?php if(!empty($storyID)):?>
+<style>
+.title-group.required > .required:after {right: 83px;}
+.input-control .colorpicker .btn {right: 10px;}
+</style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
