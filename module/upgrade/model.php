@@ -4543,7 +4543,6 @@ class upgradeModel extends model
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Project linked objects. */
         $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
