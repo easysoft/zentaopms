@@ -28,7 +28,10 @@ class testcaseEntry extends entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
         if(!isset($data->case)) $this->sendError(400, 'error');
 
-        $this->send(200, $this->format($data->case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool'));
+        $case = $data->case;
+        $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values(get_object_vars($case->steps)) : array();
+
+        $this->send(200, $this->format($case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool'));
     }
 
     /**

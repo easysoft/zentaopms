@@ -513,11 +513,13 @@ class router extends baseRouter
             extract($params);                   // $path = '/index.php'; $query = 'm=$module&f=browse&mode=search&label=1';
             parse_str($query, $params);         // $params = array('m' => $module, 'f' => 'browse', 'mode' = 'search', 'label' => 1);
 
+            $params = array_reverse($params);           // $params = array('label' => 1, 'mode' => 'search');
+            if($methodName == 'operate')      $params['action'] = $params[$this->config->methodVar];
+            if($methodName == 'batchOperate') $params['action'] = $params[$this->config->methodVar];
+
             /* Remove module and method. */
             unset($params[$this->config->moduleVar]);   // $params = array('f' => 'browse', 'mode' => 'search', 'label' => 1);
             unset($params[$this->config->methodVar]);   // $params = array('mode' => 'search', 'label' => 1);
-
-            $params = array_reverse($params);           // $params = array('label' => 1, 'mode' => 'search');
 
             /* Prepend other params. */
             if($methodName == 'browse')

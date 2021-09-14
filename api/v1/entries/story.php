@@ -49,7 +49,7 @@ class storyEntry extends Entry
 
         $this->getData();
         $story = $this->story->getByID($storyID);
-        $this->sendSuccess(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
+        $this->sendSuccess(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool'));
     }
 
     /**

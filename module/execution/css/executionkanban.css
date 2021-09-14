@@ -1,4 +1,4 @@
-.main-table .table {cursor: default;}
+.main-table .table {cursor: default; border-collapse: unset;}
 
 .boards {display: table; table-layout: fixed; width: 100%; min-width: 140px;}
 .board {display: table-cell; width: 25%; padding: 10px;}
@@ -12,7 +12,7 @@
 #kanban thead > tr > th:not(:last-child) {border-right: 2px solid #efefef;}
 #kanban tbody > tr > td {line-height: 24px;}
 #kanban tbody > tr > td {background-color: #F5F5F5;}
-#kanban tbody > tr:not(:last-child) {border-bottom: 5px solid #fff !important;}
+#kanban tbody > tr:not(:last-child) > td {border-bottom: 5px solid #fff !important;}
 
 .s-doing .table-row .table-col:last-child, .c-progress {width: 30px; padding-left: 3px; padding-top: 1px;}
 .table-row .table-col:first-child, .board-project {overflow: hidden; white-space: nowrap;}
