@@ -230,6 +230,7 @@ class task extends control
         $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
+        $this->view->storyID          = $storyID;
         $this->view->stories          = $stories;
         $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         $this->view->members          = $members;

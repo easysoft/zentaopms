@@ -1963,4 +1963,15 @@ class testcase extends control
         if($methodName == 'update') $status = zget($status, 1, '');
         die($status);
     }
+
+    /**
+     * Ajax: Get count of need review casese.
+     *
+     * @access public
+     * @return int
+     */
+    public function ajaxGetReviewCount()
+    {
+        echo $this->dao->select('count(id) as count')->from(TABLE_CASE)->where('status')->eq('wait')->fetch('count');
+    }
 }
