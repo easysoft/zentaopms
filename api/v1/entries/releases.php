@@ -15,16 +15,26 @@ class releasesEntry extends entry
      * GET method.
      *
      * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function get($productID = 0)
+    public function get($productID = 0, $projectID = 0)
     {
         if(!$productID) $productID = $this->param('product');
-        if(!$productID) return $this->sendError(400, 'No product id.');
+        if(!$projectID) $projectID = $this->param('project');
+        if(!$productID and !$projectID) return $this->sendError(400, 'Need product or project id.');
 
-        $control = $this->loadController('release', 'browse');
-        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'));
+        if($projectID)
+        {
+            $control = $this->loadController('projectrelease', 'browse');
+            $control->browse($projectID, 0, $this->param('status', 'all'));
+        }
+        else
+        {
+            $control = $this->loadController('release', 'browse');
+            $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'));
+        }
 
         /* Response */
         $data = $this->getData();
@@ -32,7 +42,7 @@ class releasesEntry extends entry
         {
             $result   = array();
             $releases = $data->data->releases;
-            foreach($releases as $release) $result[] = $release;
+            foreach($releases as $release) $result[] = $this->format($release, 'deleted:bool,date:date');
 
             return $this->send(200, array('releases' => $result));
         }

@@ -16,7 +16,7 @@
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $story->id;?></span>
-        <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?>
+        <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?>
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
     </div>
@@ -42,7 +42,16 @@
         <?php $this->printExtendFields($story, 'table');?>
         <tr>
           <th><?php echo $lang->story->title;?></th>
-          <td colspan='2'><?php echo html::input('title', $story->title, 'class="form-control"');?></td>
+          <td colspan='2'>
+            <div class="colorpicker">
+              <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+              <ul class="dropdown-menu clearfix">
+                <li class="heading"><?php echo $lang->story->colorTag; ?><i class="icon icon-close"></i></li>
+              </ul>
+              <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
+            </div>
+            <?php echo html::input('title', $story->title, 'class="form-control story-title"');?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->story->spec;?></th>

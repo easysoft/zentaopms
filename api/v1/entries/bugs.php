@@ -15,13 +15,37 @@ class bugsEntry extends entry
      * GET method.
      *
      * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function get($productID)
+    public function get($productID = 0, $projectID = 0, $executionID = 0)
     {
-        $control = $this->loadController('bug', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $this->param('status', ''), 0, $this->param('order', ''), 0, $this->param('limit', 20), $this->param('page', 1));
+        if(!$productID)   $productID   = $this->param('product', 0);
+        if(!$projectID)   $projectID   = $this->param('project', 0);
+        if(!$executionID) $executionID = $this->param('execution', 0);
+
+        if($projectID)
+        {
+            $control = $this->loadController('project', 'bug');
+            $control->bug($projectID, $productID, $this->param('order', 'status,id_desc'), $this->param('build', 0), $this->param('status', 'all'), 0, $this->param('limit', 20), $this->param('page', 1));
+        }
+        elseif($executionID)
+        {
+            $control = $this->loadController('execution', 'bug');
+            $control->bug($executionID, $productID, $this->param('order', 'status,id_desc'), $this->param('build', 0), $this->param('status', 'all'), 0, $this->param('limit', 20), $this->param('page', 1));
+        }
+        elseif($productID)
+        {
+            $control = $this->loadController('bug', 'browse');
+            $control->browse($productID, $this->param('branch', ''), $this->param('status', ''), 0, $this->param('order', ''), 0, $this->param('limit', 20), $this->param('page', 1));
+        }
+        else
+        {
+            return $this->sendError(400, 'Need product or project or execution id.');
+        }
+
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
@@ -31,10 +55,12 @@ class bugsEntry extends entry
             $result = array();
             foreach($bugs as $bug)
             {
-                $result[] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time');
+                $result[] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool');
             }
+
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'bugs' => $result));
         }
+
         if(isset($data->status) and $data->status == 'fail')
         {
             return $this->sendError(400, $data->message);

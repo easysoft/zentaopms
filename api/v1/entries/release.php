@@ -30,9 +30,9 @@ class releaseEntry extends Entry
             return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
         }
 
-        $plan = $this->format($data->data->release, 'date:date,deleted:bool');
+        $release = $this->format($data->data->release, 'date:date,deleted:bool');
 
-        return $this->send(200, $plan);
+        return $this->send(200, $release);
     }
 
     /**

@@ -32,7 +32,7 @@ class executionEntry extends Entry
             return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
         }
 
-        $execution = $this->format($data->data->execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
+        $execution = $this->format($data->data->execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
         if(!$fields) $this->send(200, $execution);
 
         /* Set other fields. */

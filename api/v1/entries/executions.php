@@ -30,7 +30,7 @@ class executionsEntry extends entry
             $result = array();
             foreach($data->data->executionStats as $execution)
             {
-                $result[] = $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
+                $result[] = $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'executions' => $result));
         }

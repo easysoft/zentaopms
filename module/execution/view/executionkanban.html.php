@@ -85,7 +85,7 @@
         </td>
       </tr>
       <?php $rowIndex++; ?>
-      <?php if($rowIndex == 9) $rowIndex = 0;?>
+      <?php if($rowIndex == 8) $rowIndex = 0;?>
       <?php endforeach;?>
     </tbody>
   </table>
