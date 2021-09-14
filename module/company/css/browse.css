@@ -4,3 +4,4 @@
 
 #userList tbody td {white-space: nowrap; overflow: hidden;}
 .space-sm + .text-center {display: none;}
+.c-role, .c-company, .c-visits {width: 90px;}

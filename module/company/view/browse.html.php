@@ -73,9 +73,9 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <th><?php common::printOrderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
           <th><?php common::printOrderLink('account', $orderBy, $vars, $lang->user->account);?></th>
           <?php if($browseType == 'inside'):?>
-          <th class="w-90px"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
+          <th class="c-role"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
           <?php else:?>
-          <th class="w-90px"><?php common::printOrderLink('company', $orderBy, $vars, $lang->user->company);?></th>
+          <th class="c-company"><?php common::printOrderLink('company', $orderBy, $vars, $lang->user->company);?></th>
           <?php endif;?>
           <th class="c-url"><?php common::printOrderLink('email', $orderBy, $vars, $lang->user->email);?></th>
           <th class="c-type"><?php common::printOrderLink('gender', $orderBy, $vars, $lang->user->gender);?></th>
@@ -83,7 +83,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <th><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
           <th><?php !empty($this->config->isINT) ? common::printOrderLink('skype', $orderBy, $vars, $lang->user->skype) : common::printOrderLink('qq', $orderBy, $vars, $lang->user->qq);?></th>
           <th class="c-date"><?php common::printOrderLink('last', $orderBy, $vars, $lang->user->last);?></th>
-          <th class="w-90px"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
+          <th class="c-visits"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
           <?php endif; ?>
           <th class='c-actions'><?php echo $lang->actions;?></th>
         </tr>
@@ -101,9 +101,9 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td title="<?php echo $user->realname;?>"><?php echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
           <?php if($browseType == 'inside'):?>
-          <td class="w-90px" title='<?php echo zget($lang->user->roleList, $user->role, '');?>'><?php echo zget($lang->user->roleList, $user->role, '');?></td>
+          <td title='<?php echo zget($lang->user->roleList, $user->role, '');?>'><?php echo zget($lang->user->roleList, $user->role, '');?></td>
           <?php else:?>
-          <td class="w-90px" title='<?php echo zget($companies, $user->company, '');?>'><?php echo zget($companies, $user->company, '');?></td>
+          <td title='<?php echo zget($companies, $user->company, '');?>'><?php echo zget($companies, $user->company, '');?></td>
           <?php endif;?>
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>
           <td class="c-type"><?php echo zget($lang->user->genderList, $user->gender, $user->gender);?></td>

@@ -69,13 +69,13 @@
           <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id="workload">
             <thead>
               <tr class='colhead text-center'>
-                <th class="w-100px"><?php echo $lang->report->user;?></th>
+                <th class="c-user"><?php echo $lang->report->user;?></th>
                 <th><?php echo $lang->report->execution;?></th>
-                <th class="w-100px"><?php echo $lang->report->task;?></th>
-                <th class="w-100px"><?php echo $lang->report->remain;?></th>
-                <th class="w-100px"><?php echo $lang->report->taskTotal;?></th>
-                <th class="w-100px"><?php echo $lang->report->manhourTotal;?></th>
-                <th class="w-100px"><?php echo $lang->report->workloadAB;?></th>
+                <th class="c-count"><?php echo $lang->report->task;?></th>
+                <th class="c-hours"><?php echo $lang->report->remain;?></th>
+                <th class="c-count"><?php echo $lang->report->taskTotal;?></th>
+                <th class="c-hours"><?php echo $lang->report->manhourTotal;?></th>
+                <th class="c-workload"><?php echo $lang->report->workloadAB;?></th>
               </tr>
             </thead>
             <tbody>

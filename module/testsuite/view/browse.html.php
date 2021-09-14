@@ -41,11 +41,11 @@
     <thead>
     <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr>
-        <th class='w-id text-left'>   <?php common::printOrderLink('id',   $orderBy, $vars, $lang->idAB);?></th>
-        <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->testsuite->name);?></th>
+        <th class='c-id text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+        <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->testsuite->name);?></th>
         <th><?php echo $lang->testsuite->desc;?></th>
-        <th class='w-90px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->testsuite->addedBy);?></th>
-        <th class='w-150px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->testsuite->addedDate);?></th>
+        <th class='c-user'><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->testsuite->addedBy);?></th>
+        <th class='c-full-date'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->testsuite->addedDate);?></th>
         <?php
         $extendFields = $this->testsuite->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";

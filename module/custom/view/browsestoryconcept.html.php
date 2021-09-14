@@ -24,13 +24,13 @@
         <thead>
           <tr>
             <?php if(common::hasPriv('custom', 'setDefaultConcept')):?>
-            <th class='w-70px text-center'><?php echo $lang->custom->default;?> </th>
+            <th class='c-default text-center'><?php echo $lang->custom->default;?> </th>
             <?php endif;?>
             <?php if($this->config->URAndSR):?>
             <th class='text-left'><?php echo $lang->custom->URConcept;?> </th>
             <?php endif;?>
             <th class='text-left'><?php echo $lang->custom->SRConcept;?> </th>
-            <th class='w-100px text-left'><?php echo $lang->actions;?> </th>
+            <th class='c-actions-2 text-left'><?php echo $lang->actions;?> </th>
           </tr>
         </thead>
         <tbody>

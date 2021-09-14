@@ -43,16 +43,16 @@
           <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='productList'>
             <thead>
               <tr>
-                <th class='w-200px'><?php echo $lang->product->name;?></th>
-                <th class='w-120px'><?php echo $lang->product->PO;?></th>
+                <th class='c-name'><?php echo $lang->product->name;?></th>
+                <th class='c-user'><?php echo $lang->product->PO;?></th>
                 <th><?php echo $lang->productplan->common;?></th>
-                <th class="w-100px"><?php echo $lang->productplan->begin;?></th>
-                <th class="w-100px"><?php echo $lang->productplan->end;?></th>
-                <th class="w-70px"><?php echo $lang->story->statusList['draft'];?></th>
-                <th class="w-70px"><?php echo $lang->story->statusList['active'];?></th>
-                <th class="w-70px"><?php echo $lang->story->statusList['changed'];?></th>
-                <th class="w-70px"><?php echo $lang->story->statusList['closed'];?></th>
-                <th class="w-70px"><?php echo $lang->report->total;?></th>
+                <th class="c-date"><?php echo $lang->productplan->begin;?></th>
+                <th class="c-date"><?php echo $lang->productplan->end;?></th>
+                <th class="c-count"><?php echo $lang->story->statusList['draft'];?></th>
+                <th class="c-count"><?php echo $lang->story->statusList['active'];?></th>
+                <th class="c-count"><?php echo $lang->story->statusList['changed'];?></th>
+                <th class="c-count"><?php echo $lang->story->statusList['closed'];?></th>
+                <th class="c-count"><?php echo $lang->report->total;?></th>
               </tr>
             </thead>
             <tbody>

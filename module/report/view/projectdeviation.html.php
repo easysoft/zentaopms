@@ -44,12 +44,12 @@
           <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='executionList'>
             <thead>
               <tr class='colhead'>
-                <th class='w-id'><?php echo $lang->report->id;?></th>
+                <th class='c-id'><?php echo $lang->report->id;?></th>
                 <th><?php echo $lang->report->execution;?></th>
-                <th class="w-100px"><?php echo $lang->report->estimate;?></th>
-                <th class="w-100px"><?php echo $lang->report->consumed;?></th>
-                <th class="w-100px"><?php echo $lang->report->deviation;?></th>
-                <th class="w-100px"><?php echo $lang->report->deviationRate;?></th>
+                <th class="c-hours"><?php echo $lang->report->estimate;?></th>
+                <th class="c-hours"><?php echo $lang->report->consumed;?></th>
+                <th class="c-deviation"><?php echo $lang->report->deviation;?></th>
+                <th class="c-deviation-rate"><?php echo $lang->report->deviationRate;?></th>
               </tr>
             </thead>
             <tbody>
