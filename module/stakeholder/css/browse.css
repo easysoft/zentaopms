@@ -1,1 +1,3 @@
 table td, table th {overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.c-phone {width: 120px;}
+.c-email {width: 200px;}

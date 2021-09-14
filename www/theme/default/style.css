@@ -58,6 +58,7 @@ a.showMoreImage:hover {opacity: 1;}
 .c-number, .c-stage, .c-role, .c-estimate-box, .c-result {width: 80px;}
 .c-company, .c-budget {width: 80px;}
 .c-status, .c-type, .c-user, .c-date, .c-encode, .c-resolution, .c-pri-box, .c-extend {width: 100px;}
+.c-qq, .c-weixin {width: 120px;}
 .c-object-type {width: 130px;}
 .c-full-date, .c-mobile, .c-email, .c-text, .c-subject, .c-assigned-box, .c-user-box {width: 150px;}
 .c-module, .c-date-box {width: 180px;}

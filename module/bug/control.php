@@ -202,7 +202,7 @@ class bug extends control
         $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
-        $productName = $productID ? $this->products[$productID] : $this->lang->product->allProduct;
+        $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
 
         /* Set view. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->bug->common;
@@ -573,16 +573,16 @@ class bug extends control
 
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+
+        $title = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
+
+        $this->view->title        = $title;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->bug->create;
-
         $this->view->products         = $products;
         $this->view->productID        = $productID;
-        $this->view->productName      = $this->products[$productID];
+        $this->view->productName      = isset($this->products[$productID]) ? $this->products[$productID] : '';
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->stories          = $stories;
         $this->view->projects         = $projects;

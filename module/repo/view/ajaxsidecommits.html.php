@@ -18,13 +18,13 @@ if(isset($entry)) $pathInfo .= '&type=file';
   <table class='table table-fixed'>
     <thead>
       <tr>
-        <th class='w-40px'></th>
-        <th class='w-80px'><?php echo $lang->repo->revisionA?></th>
+        <th class='c-checkbox'></th>
+        <th class='c-version'><?php echo $lang->repo->revisionA?></th>
         <?php if($repo->SCM != 'Subversion'):?>
-        <th class='w-70px'><?php echo $lang->repo->commit?></th>
+        <th class='c-commit'><?php echo $lang->repo->commit?></th>
         <?php endif;?>
-        <th class='w-80px'><?php echo $lang->repo->time?></th>
-        <th class='w-100px'><?php echo $lang->repo->committer?></th>
+        <th class='c-date'><?php echo $lang->repo->time?></th>
+        <th class='c-committer'><?php echo $lang->repo->committer?></th>
         <th><?php echo $lang->repo->comment?></th>
       </tr>
     </thead>

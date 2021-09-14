@@ -1288,7 +1288,7 @@ class bugModel extends model
     public function buildSearchForm($productID, $products, $queryID, $actionURL)
     {
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
-        $productParams = $productID ? array($productID => $products[$productID]) : $products;
+        $productParams = ($productID and isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
         $productParams = $productParams + array('all' => $this->lang->bug->allProduct);
 
         /* Get all modules. */
