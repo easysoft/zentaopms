@@ -27,7 +27,7 @@
       <?php $viewLink = $this->createLink('project', 'index', "programID={$project->id}");?>
       <tr>
         <td title='<?php echo $project->name?>'><?php echo html::a($viewLink, $project->name);?></td>
-        <td><?php echo zget($users, $project->PM, $project->PM)?></td>
+        <td title="<?php echo zget($users, $project->PM, $project->PM)?>"><?php echo zget($users, $project->PM, $project->PM)?></td>
         <td class='c-status'>
           <span class="status-program status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status);?></span>
         </td>
