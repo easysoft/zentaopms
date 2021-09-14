@@ -803,6 +803,7 @@ class projectModel extends model
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
             ->checkIF(!empty($project->code), 'code', 'unique', "type='project'")
+            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->check('name', 'unique', "type='project' AND deleted='0'")
             ->exec();
 
