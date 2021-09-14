@@ -100,7 +100,7 @@
         </tr>
         <tr>
           <th></th>
-          <td colspan='2' class='text-left form-actions'>
+          <td class='text-center form-actions'>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
           </td>
