@@ -378,6 +378,8 @@ class commonModel extends model
 
             if(common::hasPriv($objectType, $createMethod))
             {
+                if($objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) continue;
+
                 /* Determines whether to print a divider. */
                 if($needPrintDivider and $showCreateList)
                 {

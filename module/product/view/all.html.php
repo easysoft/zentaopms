@@ -41,22 +41,22 @@
         <thead>
           <tr class="text-center">
             <?php if($canBatchEdit):?>
-            <th class='text-left w-45px' rowspan="2">
+            <th class='text-left c-checkbox' rowspan="2">
               <?php echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";?>
             </th>
             <?php endif;?>
-            <th class='table-nest-title text-left' rowspan="2">
+            <th class='table-nest-title text-left c-name' rowspan="2">
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
             <?php if($this->config->URAndSR):?>
-            <th class="w-300px" colspan="4"><?php echo $lang->story->requirement;?></th>
+            <th class="c-story" colspan="4"><?php echo $lang->story->requirement;?></th>
             <?php endif;?>
-            <th class="w-300px" colspan="4"><?php echo $lang->story->story;?></th>
-            <th class="w-200px" colspan="3"><?php echo $lang->bug->common;?></th>
-            <th class="w-80px"  rowspan="2"><?php echo $lang->product->plan;?></th>
-            <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
-            <th class='c-actions w-70px' rowspan="2"><?php echo $lang->actions;?></th>
+            <th class="c-story" colspan="4"><?php echo $lang->story->story;?></th>
+            <th class="c-bug" colspan="3"><?php echo $lang->bug->common;?></th>
+            <th class="c-plan"  rowspan="2"><?php echo $lang->product->plan;?></th>
+            <th class="c-release"  rowspan="2"><?php echo $lang->product->release;?></th>
+            <th class='c-actions-2' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
             <?php if($this->config->URAndSR):?>

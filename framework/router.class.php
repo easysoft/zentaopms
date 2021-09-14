@@ -142,14 +142,14 @@ class router extends baseRouter
         if(!defined('FUNCTIONPOINT_KEY')) define('FUNCTIONPOINT_KEY', 2);
 
         global $lang, $app, $config;
-        $sprintConcept = $hourPoint = false;
+        $sprintConcept  = $hourPoint = false;
+        $commonSettings = array();
         /* Get config from DB. */
         if($this->dbh and !empty($this->config->db->name))
         {
             if(!isset($config->global)) $config->global = new stdclass();
             $config->global->flow = 'full';
 
-            $commonSettings = array();
             try
             {
                 $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus')")->fetchAll();
@@ -206,7 +206,8 @@ class router extends baseRouter
         $config->executionLink = 'execution-task';
 
         /* Get user preference. */
-        $account = isset($this->session->user->account) ? $this->session->user->account : '';
+        $account     = isset($this->session->user->account) ? $this->session->user->account : '';
+        $userSetting = array();
         if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
         foreach($userSetting as $setting)
         {

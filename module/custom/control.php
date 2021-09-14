@@ -122,6 +122,13 @@ class custom extends control
                 if($review->needReview) $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
                 if(!$review->needReview) $data = fixer::input('post')->join('forceReview', ',')->remove('forceNotReview')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
+
+                $reviewCase = isset($review->reviewCase) ? $review->reviewCase : 0;
+                if($review->needReview == 0 and $reviewCase)
+                {
+                    $waitCases = $this->loadModel('testcase')->getByStatus(0, 0, 'all', 'wait');
+                    $this->testcase->batchReview(array_keys($waitCases), 'pass');
+                }
             }
             elseif($module == 'task' and $field == 'hours')
             {

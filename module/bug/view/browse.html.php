@@ -93,6 +93,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->bug->byQuery;?></a>
   </div>
+  <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
     <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart muted');?>
     <div class='btn-group'>
@@ -182,6 +183,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <?php endif;?>
     <?php endif;?>
   </div>
+  <?php endif;?>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">

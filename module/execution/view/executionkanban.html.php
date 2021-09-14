@@ -52,13 +52,15 @@
                     <div class='table-row'>
                       <div class='table-col'>
                         <?php
+                        $executionName = empty($projectID) ? zget($projects, $execution->project) . ' / ' . $execution->name : $execution->name;
+
                         if(common::hasPriv('execution', 'task'))
                         {
-                            echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $execution->name, '', "title='{$execution->name}'");
+                            echo html::a($this->createLink('execution', 'task', "executionID=$execution->id"), $executionName, '', "title='{$executionName}'");
                         }
                         else
                         {
-                            echo "<span title='{$execution->name}'>{$execution->name}</span>";
+                            echo "<span title='{$executionName}'>{$executionName}</span>";
                         }
                         ?>
                       </div>
@@ -83,7 +85,7 @@
         </td>
       </tr>
       <?php $rowIndex++; ?>
-      <?php if($rowIndex == 9) $rowIndex = 0;?>
+      <?php if($rowIndex == 8) $rowIndex = 0;?>
       <?php endforeach;?>
     </tbody>
   </table>

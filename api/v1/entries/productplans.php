@@ -20,7 +20,7 @@ class productplansEntry extends entry
      */
     public function get($productID = 0)
     {
-        if(!$productID) $productID = $this->param('product');
+        if(!$productID) $productID = $this->param('product', 0);
         if(!$productID) return $this->sendError(400, 'No product id.');
 
         $control = $this->loadController('productplan', 'browse');
@@ -34,7 +34,7 @@ class productplansEntry extends entry
             $plans  = $data->data->plans;
             foreach($plans as $plan) $result[] = $plan;
 
-            return $this->send(200, array('productplans' => $result));
+            return $this->send(200, array('plans' => $result));
         }
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);

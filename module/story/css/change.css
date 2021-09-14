@@ -2,3 +2,4 @@
 #affectedProjects .table + h6 {border-top: 1px solid #ddd;}
 .nav-tabs>li>a {height: 36px;}
 .table-form>tbody>tr>th {width: 100px !important;}
+.colorpicker {right: 7px; top: 7px; opacity: 1;}

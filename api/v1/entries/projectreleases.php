@@ -20,19 +20,7 @@ class projectreleasesEntry extends entry
      */
     public function get($projectID = 0)
     {
-        $control = $this->loadController('projectrelease', 'browse');
-        $control->browse($projectID, $this->param('executionID', 0), $this->param('type', 'all'));
-        $data = $this->getData();
-
-        if(!isset($data->status)) return $this->sendError(400, 'error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
-
-        $result = array();
-        foreach($data->data->releases as $release)
-        {
-            $result[] = $release;
-        }
-        return $this->send(200, $result);
+        $this->fetch('releases', 'get', array('productID' => 0, 'projectID' => $projectID));
     }
 
     /**
