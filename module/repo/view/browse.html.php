@@ -66,11 +66,11 @@
     <table class='table table-fixed'>
       <thead>
         <tr>
-          <th width='30'></th>
-          <th style="min-width: 150px;"><?php echo $lang->repo->name?></th>
-          <th width='80' class='text-center'><?php echo $lang->repo->revisions?></th>
-          <th width='80'><?php echo $lang->repo->time?></th>
-          <th width='120'><?php echo $lang->repo->committer?></th>
+          <th class='c-icon'></th>
+          <th class='c-name'><?php echo $lang->repo->name?></th>
+          <th class='text-center c-version'><?php echo $lang->repo->revisions?></th>
+          <th class='c-date'><?php echo $lang->repo->time?></th>
+          <th class='c-user'><?php echo $lang->repo->committer?></th>
           <th><?php echo $lang->repo->comment?></th>
         </tr>
       </thead>

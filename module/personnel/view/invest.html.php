@@ -28,7 +28,7 @@
             <th colspan="2"><?php echo $lang->personnel->workingHours;?></th>
             <th colspan="3"><?php echo $lang->personnel->task;?></th>
             <th colspan="3"><?php echo $lang->personnel->bug;?></th>
-            <th <?php echo $config->URAndSR ? "colspan='2'" : "rowspan='2'";?> class="w-150px"><?php echo $lang->personnel->createStories;?></th>
+            <th <?php echo $config->URAndSR ? "colspan='2'" : "rowspan='2'";?> class="c-story"><?php echo $lang->personnel->createStories;?></th>
             <?php if(isset($this->config->maxVersion)): ?>
             <th colspan="3"><?php echo $lang->personnel->issue;?></th>
             <th colspan="3"><?php echo $lang->personnel->risk;?></th>

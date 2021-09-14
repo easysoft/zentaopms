@@ -36,12 +36,12 @@ js::set('deptID', $deptID);
       <table id="accessibleList" class="table has-sort-head">
         <thead>
           <tr>
-            <th class="c-id w-40px"><?php echo $lang->idAB;?></th>
-            <th class="w-120px"><?php echo $lang->personnel->department;?></th>
-            <th class="w-80px"><?php echo $lang->personnel->realName;?></th>
-            <th class="w-80px"><?php echo $lang->personnel->userName;?></th>
-            <th class="w-80px"><?php echo $lang->personnel->job;?></th>
-            <th class="w-60px"><?php echo $lang->personnel->genders;?></th>
+            <th class="c-id"><?php echo $lang->idAB;?></th>
+            <th class="c-department"><?php echo $lang->personnel->department;?></th>
+            <th class="c-user"><?php echo $lang->personnel->realName;?></th>
+            <th class="c-user"><?php echo $lang->personnel->userName;?></th>
+            <th class="c-job"><?php echo $lang->personnel->job;?></th>
+            <th class="c-genders"><?php echo $lang->personnel->genders;?></th>
           </tr>
         </thead>
         <tbody>

@@ -35,12 +35,12 @@
           </th>
           <th><?php echo $lang->user->realname;?></th>
           <th class="c-dept"><?php echo $lang->user->dept;?></th>
-          <th class="w-120px"><?php echo $lang->user->role;?></th>
-          <th class="w-120px"><?php echo $lang->user->phone;?></th>
-          <th class="w-120px"><?php echo $lang->user->qq;?></th>
-          <th class="w-120px"><?php echo $lang->user->weixin;?></th>
-          <th class="w-200px"><?php echo $lang->user->email;?></th>
-          <th class='c-actions w-60px'><?php echo $lang->actions;?></th>
+          <th class="c-role"><?php echo $lang->user->role;?></th>
+          <th class="c-phone"><?php echo $lang->user->phone;?></th>
+          <th class="c-qq"><?php echo $lang->user->qq;?></th>
+          <th class="c-weixin"><?php echo $lang->user->weixin;?></th>
+          <th class="c-email"><?php echo $lang->user->email;?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
