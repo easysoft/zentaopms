@@ -319,7 +319,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Get by suite.
+     * Get cases by suite.
      *
      * @param  int    $productID
      * @param  int    $branch
@@ -329,7 +329,7 @@ class testcaseModel extends model
      * @param  object $pager
      * @param  string $auto    no|unit
      * @access public
-     * @return void
+     * @return array
      */
     public function getBySuite($productID, $branch = 0, $suiteID, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
@@ -586,7 +586,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByStatus($productID = 0, $branch, $type = 'all', $status = 'all', $moduleID, $orderBy = 'id_desc', $pager, $auto = 'no')
+    public function getByStatus($productID = 0, $branch, $type = 'all', $status = 'all', $moduleID = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
