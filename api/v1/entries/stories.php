@@ -67,19 +67,20 @@ class storiesEntry extends entry
      */
     public function post($productID = 0)
     {
-        if(!$productID) $productID = $this->param('product');
+        if(!$productID) $productID = $this->param('product', 0);
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        $fields = 'title,spec,verify,reviewer,type';
+        $fields = 'title,spec,verify,reviewer,type,plan,module,source,sourceNote,category,pri,estimate';
         $this->batchSetPost($fields);
 
         /* If reviewer is not post, set needNotReview. */
         if(empty($this->request('reviewer'))) $this->setPost('needNotReview', 1);
         $this->setPost('product', $productID);
+        $this->setPost('type', $this->param('type', 'story'));
 
         $control = $this->loadController('story', 'create');
-        $this->requireFields('title,spec,type');
+        $this->requireFields('title,spec,pri,category');
 
         $control->create($productID);
         
@@ -89,6 +90,6 @@ class storiesEntry extends entry
 
         $story = $this->loadModel('story')->getByID($data->id);
 
-        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
+        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool'));
     }
 }
