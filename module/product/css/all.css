@@ -49,4 +49,8 @@ th.table-nest-title .table-nest-toggle:hover {opacity: 1;}
 .main-table thead>tr>th {padding: 0px 8px; line-height: 24px;}
 
 .icon-move {color: #16a8f8;}
-.c-name {text-overflow: unset !important;}
+.c-name {text-overflow: unset !important; width: 110px !important;}
+.c-checkbox {width: 45px;}
+.c-story {width: 300px;}
+.c-bug {width: 200px;}
+.c-plan, .c-release {width: 60px;}

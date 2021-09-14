@@ -174,6 +174,7 @@ $lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on
 $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
 $lang->custom->notice->confirmDelete       = 'Are you sure you want to delete it?';
+$lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
