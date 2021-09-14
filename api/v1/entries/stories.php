@@ -65,8 +65,12 @@ class storiesEntry extends entry
      * @access public
      * @return void
      */
-    public function post($productID)
+    public function post($productID = 0)
     {
+        if(!$productID) $productID = $this->param('product');
+        if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
+        if(!$productID) return $this->sendError(400, 'Need product id.');
+
         $fields = 'title,spec,verify,reviewer,type';
         $this->batchSetPost($fields);
 
