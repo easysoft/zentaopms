@@ -104,7 +104,7 @@
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::backButton();?>
+              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();?>
             </td>
           </tr>
         </tbody>

@@ -301,6 +301,7 @@ class story extends control
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->create;
+        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'browse', "productID=$productID") : '';
         $this->view->products         = $products;
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;

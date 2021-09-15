@@ -1206,11 +1206,12 @@ class execution extends control
      * @param int    $planID
      * @param string $confirm
      * @param string $productID
+     * @param string $extra
      *
      * @access public
      * @return void
      */
-    public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0)
+    public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
         /* Set menu. */
         if($this->app->tab == 'project')
@@ -1230,6 +1231,9 @@ class execution extends control
         {
             unset($this->lang->doc->menu->execution['subMenu']);
         }
+
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
 
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
@@ -1338,6 +1342,7 @@ class execution extends control
 
         $this->view->title           = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
+        $this->view->gobackLink      = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->executions      = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
