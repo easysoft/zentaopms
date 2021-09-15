@@ -211,7 +211,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->realStarted;?></th>
-                <td><?php echo html::input('realStarted', helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted, "class='form-control form-datetime'");?></td>
+                <td><?php echo html::input('realStarted', helper::isZeroDate($task->realStarted) ? '' : $task->realStarted, "class='form-control form-datetime'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->finishedBy;?></th>
