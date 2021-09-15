@@ -1156,6 +1156,10 @@ class product extends control
      */
     public function kanban()
     {
+        $this->session->set('projectList', $this->app->getURI(true), 'project');
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+        $this->session->set('releaseList', $this->app->getURI(true), 'product');
+
         $kanbanGroup = $this->product->getStats4Kanban();
         extract($kanbanGroup);
 
