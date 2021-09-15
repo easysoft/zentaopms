@@ -1592,7 +1592,11 @@ class productModel extends model
 
         $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);
 
-        $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)->where('product')->in(array_keys($productList))->fetchGroup('product', 'id');
+        $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)
+            ->where('product')->in(array_keys($productList))
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->eq('normal')
+            ->fetchGroup('product', 'id');
 
         return array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'executionList' => $executionList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
     }
