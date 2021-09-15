@@ -58,7 +58,7 @@ $lang->install->introductionContent = <<<EOT
       <p>Project is used to organize the manpower for development, track and manage the project process, and complete the project in a faster, better, and less costly way.</p>
     </div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-product'></i><strong>Execution</strong></p>
+      <p class='block-title'><i class='icon icon-run'></i><strong>Execution</strong></p>
       <p>Execution is used to decompose, assign, and track tasks to ensure that project goals can be implemented by manpower.<p>
     </div>
   </div>
