@@ -276,18 +276,23 @@ class projectModel extends model
             ->andWhere('type')->eq('project')
             ->groupBy('root')->fetchPairs();
 
+        $executionIdList = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('parent')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
+
         $hours = $this->dao->select('project,
             sum(consumed) as consumed,
             sum(estimate) as estimate')
             ->from(TABLE_TASK)
-            ->where('project')->in($projectIdList)
+            ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->groupBy('project')
             ->fetchAll('project');
 
         $leftTasks = $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
-            ->where('project')->in($projectIdList)
+            ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->in('wait,doing,pause')
             ->groupBy('project')
@@ -372,9 +377,9 @@ class projectModel extends model
             ->andWhere('parent')->lt(1)
             ->fetch();
 
-        $totalConsumed = $this->dao->select('ROUND(SUM(consumed), 1) AS totalConsumed')
-            ->from(TABLE_TASK)
-            ->where('project')->eq($projectID)
+        $totalConsumed = $this->dao->select('ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('project')->eq($projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch('totalConsumed');
