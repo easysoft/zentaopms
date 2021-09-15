@@ -327,7 +327,7 @@ class mrModel extends model
                         $todo->assignedBy   = $this->app->user->account;
                         $todo->date         = date("Y-m-d", strtotime($rawTodo->target->created_at));
                         $todo->assignedDate = $rawTodo->target->created_at;
-                        $todo->begin        = ceil(date("Hi", strtotime($rawTodo->target->created_at))/10)*10;
+                        $todo->begin        = '2400'; /* 2400 means begin is 'undefined'. */;
                         $todo->end          = '2400'; /* 2400 means end is 'undefined'. */
                         $todo->type         = 'custom';
                         $todo->idvalue      = $rawTodo->id;
