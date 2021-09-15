@@ -226,7 +226,7 @@ body {margin-bottom: 25px;}
       $task = reset($tasks);
       $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
       $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
-      $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
+      $canBatchCancel       = (common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null) and strtolower($browseType) != 'cancel');
       $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
       $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
 
