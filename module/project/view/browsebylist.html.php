@@ -50,7 +50,7 @@
     <?php if(isset($this->config->maxVersion)):?>
     <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary create-project-btn" data-toggle="modal" data-target="#guideDialog"');?>
     <?php else:?>
-    <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary create-project-btn"');?>
+    <?php common::printLink('project', 'create', "mode=scrum&programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary create-project-btn"');?>
     <?php endif;?>
   </div>
 </div>
@@ -74,7 +74,7 @@
         <?php if(isset($this->config->maxVersion)):?>
         <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal" data-target="#guideDialog"');?>
         <?php elseif($this->config->systemMode == 'new'):?>
-        <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info"');?>
+        <?php common::printLink('project', 'create', "mode=scrum&programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info"');?>
         <?php else:?>
         <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
         <?php endif;?>
