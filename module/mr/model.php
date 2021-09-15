@@ -311,7 +311,7 @@ class mrModel extends model
             if(!empty($accountPair) and isset($accountPair[$account]))
             {
                 $sudo  = $accountPair[$account];
-                $todoList = $this->loadModel('gitlab')->apiGetTodoList($gitlabID, $projectID, $sudo);
+                $todoList = $this->gitlab->apiGetTodoList($gitlabID, $projectID, $sudo);
 
                 foreach($todoList as $rawTodo)
                 {
@@ -327,13 +327,13 @@ class mrModel extends model
                         $todo->assignedBy   = $this->app->user->account;
                         $todo->date         = date("Y-m-d", strtotime($rawTodo->target->created_at));
                         $todo->assignedDate = $rawTodo->target->created_at;
-                        $todo->begin        = '2400'; /* 2400 means end is 'undefined'. */
+                        $todo->begin        = '2400'; /* 2400 means begin is 'undefined'. */
                         $todo->end          = '2400'; /* 2400 means end is 'undefined'. */
                         $todo->type         = 'custom';
                         $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
-                        $todo->desc         = $rawTodo->target->assignee->name . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->loadModel('gitlab')->apiGetSingleProject($gitlabID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';
+                        $todo->desc         = $rawTodo->target->assignee->name . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->gitlab->apiGetSingleProject($gitlabID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';
                         $todo->status       = 'wait';
                         $todo->finishedBy   = '';
 
@@ -345,7 +345,7 @@ class mrModel extends model
     }
 
     /**
-     * Get a list of to-do items.
+     * Get a list of todo items.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -354,7 +354,7 @@ class mrModel extends model
      */
     public function todoDescriptionLink($gitlabID, $projectID)
     {
-        $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
+        $gitlab = $this->gitlab->getByID($gitlabID);
         if(!$gitlab) return '';
         return rtrim($gitlab->url, '/')."/dashboard/todos?project_id=$projectID&type=MergeRequest";
     }
