@@ -1017,6 +1017,14 @@ class projectModel extends model
 
             if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
 
+            /* Fix whitelist changes. */
+            $oldWhitelist = explode(',', $oldProject->whitelist) and $oldWhitelist = array_filter($oldWhitelist);
+            $newWhitelist = explode(',', $project->whitelist) and $newWhitelist = array_filter($newWhitelist);
+            if(count($oldWhitelist) == count($newWhitelist) and count(array_diff($oldWhitelist, $newWhitelist)) == 0) unset($project->whitelist);
+            /* Add linkedproducts changes. */
+            $oldProject->linkedProducts = implode(',', $linkedProducts);
+            $project->linkedProducts    = implode(',', $_POST['products']);
+
             return common::createChanges($oldProject, $project);
         }
     }
