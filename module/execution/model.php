@@ -239,24 +239,24 @@ class executionModel extends model
         /* When the cookie and session do not exist, get it from the database. */
         if(empty($executionID) and isset($this->config->execution->lastExecution) and isset($executions[$this->config->execution->lastExecution]))
         {
-            $this->session->set('execution', $this->config->execution->lastExecution);
+            $this->session->set('execution', $this->config->execution->lastExecution, $this->app->tab);
             $this->setProjectSession($this->session->execution);
             return $this->session->execution;
         }
 
-        if($executionID > 0) $this->session->set('execution', (int)$executionID, $this->app->tab);
         if($executionID == 0 and $this->cookie->lastExecution)
         {
             /* Execution link is execution-task. */
             $executionID = (int)$this->cookie->lastExecution;
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
-            $this->session->set('execution', $executionID);
         }
-        if($executionID == 0 and $this->session->execution == '') $this->session->set('execution', key($executions));
-        if(!isset($executions[$this->session->execution]))
+        if($executionID == 0 and $this->session->execution == '') $executionID = key($executions);
+        $this->session->set('execution', (int)$executionID, $this->app->tab);
+
+        if(!isset($executions[$executionID]))
         {
-            $this->session->set('execution', key($executions));
-            if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->execution},") === false) $this->accessDenied();
+            $this->session->set('execution', key($executions), $this->app->tab);
+            if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
         }
 
         $this->setProjectSession($this->session->execution);
@@ -273,7 +273,7 @@ class executionModel extends model
     public function setProjectSession($executionID)
     {
         $execution = $this->getByID($executionID);
-        if(!empty($execution)) $this->session->set('project', $execution->project);
+        if(!empty($execution)) $this->session->set('project', $execution->project, $this->app->tab);
     }
 
     /**
