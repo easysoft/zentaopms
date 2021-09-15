@@ -552,6 +552,10 @@ function checkTutorial()
                 window.location.reload();
             }).error(function(){alert(lang.timeout)});
         }
+        else
+        {
+            window.location.href = createLink('tutorial', 'index');
+        }
     }
 }
 
