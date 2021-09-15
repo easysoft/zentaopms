@@ -303,6 +303,9 @@ class testcase extends control
         $testcaseID = ($from and strpos('testcase|work|contribute', $from) !== false) ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
 
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras, $output);
+
         $this->loadModel('story');
         if(!empty($_POST))
         {
@@ -454,6 +457,7 @@ class testcase extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
         $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (int)$this->cookie->lastCaseModule;
+        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
         $this->view->stories          = $stories;
         $this->view->caseTitle        = $caseTitle;
         $this->view->color            = $color;

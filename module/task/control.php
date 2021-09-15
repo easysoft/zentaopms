@@ -34,12 +34,15 @@ class task extends control
      * @param  int    $moduleID
      * @param  int    $taskID
      * @param  int    $todoID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
+    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '')
     {
         if(empty($this->app->user->view->sprints) and !$executionID) $this->locate($this->createLink('execution', 'create'));
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
 
         $executions  = $this->execution->getPairs();
         $executionID = $this->execution->saveState($executionID, $executions);
@@ -226,6 +229,7 @@ class task extends control
 
         $this->view->title            = $title;
         $this->view->position         = $position;
+        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
         $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
         $this->view->task             = $task;

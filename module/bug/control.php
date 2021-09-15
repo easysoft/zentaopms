@@ -579,6 +579,7 @@ class bug extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
+        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$productID") : '';
         $this->view->products         = $products;
         $this->view->productID        = $productID;
         $this->view->productName      = isset($this->products[$productID]) ? $this->products[$productID] : '';
