@@ -1,17 +1,8 @@
 $(document).ready(function()
 {
-    $('#files').change(function(){$('#avatarForm').submit();});
-
-    $.setAjaxForm('#avatarForm', function(response)
+    $('#files').change(function()
     {
-        if(response.result == 'success')
-        {
-            setTimeout(function()
-            {
-                $('#avatarUploadBtn').popover('destroy');
-                $('#ajaxModal').load(response.locate);
-            }, 800);
-        }
+        $('#avatarForm').submit();
     });
 
     $('#avatarUploadBtn').on('click', function()
