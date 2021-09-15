@@ -553,6 +553,10 @@ function checkTutorial()
             }).error(function(){alert(lang.timeout)});
         }
     }
+    else
+    {
+        window.location.href = createLink('tutorial', 'index');
+    }
 }
 
 /* Remove 'ditto' in first row when batch create or edit. */
