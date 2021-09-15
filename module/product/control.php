@@ -487,10 +487,7 @@ class product extends control
         $productID = $this->product->saveState($productID, $this->products);
         $this->product->setMenu($productID);
 
-        if($programID)
-        {
-            $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
-        }
+        if($programID) $this->loadModel('program')->setMenu($programID);
 
         /* Get the relevant person in charge. */
         $this->loadModel('user');
