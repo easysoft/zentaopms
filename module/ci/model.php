@@ -118,7 +118,7 @@ class ciModel extends model
 
     /**
      * Sync gitlab task status.
-     * 
+     *
      * @param  object    $compile
      * @access public
      * @return void
@@ -127,10 +127,21 @@ class ciModel extends model
     {
         $this->loadModel('gitlab');
 
-        $now      = helper::now();
-        $pipeline = $this->gitlab->apiGetSinglePipeline($compile->server, $compile->pipeline, $compile->queue);
-        $jobs     = $this->gitlab->apiGetJobs($compile->server, $compile->pipeline, $compile->queue);
+        $now = helper::now();
 
+        /* The value of `$compile->pipeline` is like `'{"project":"46","reference":"master"}'` in current design. */
+        $pipeline = json_decode($compile->pipeline);
+        $compile->project = isset($pipeline->project) ? $pipeline->project : $compile->pipeline;
+
+        $pipeline = $this->gitlab->apiGetSinglePipeline($compile->server, $compile->project, $compile->queue);
+        if(!isset($pipeline->id) or isset($pipeline->message)) /* The pipeline is not available. */
+        {
+            $pipeline->status = 'create_fail'; /* Set the status to fail. */
+            $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
+            return false;
+        }
+
+        $jobs = $this->gitlab->apiGetJobs($compile->server, $compile->project, $compile->queue);
         $data = new stdclass;
         $data->status     = $pipeline->status;
         $data->updateDate = $now;
@@ -140,7 +151,7 @@ class ciModel extends model
             if(empty($job->duration) or $job->duration == '') $job->duration = '-';
             $data->logs  = "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
             $data->logs .= "Job URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
-            $data->logs .= $this->transformAnsiToHtml($this->gitlab->apiGetJobLog($compile->server, $compile->pipeline, $job->id));
+            $data->logs .= $this->transformAnsiToHtml($this->gitlab->apiGetJobLog($compile->server, $compile->project, $job->id));
         }
 
         $this->dao->update(TABLE_COMPILE)->data($data)->where('id')->eq($compile->id)->exec();
