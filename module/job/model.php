@@ -24,6 +24,7 @@ class jobModel extends model
         if(strtolower($job->engine) == 'gitlab')
         {
             $pipeline = json_decode($job->pipeline);
+            if(!isset($pipeline->reference)) return $job;
             $job->project   = $pipeline->project;
             $job->reference = $pipeline->reference;
         }

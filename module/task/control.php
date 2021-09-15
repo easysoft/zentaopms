@@ -385,9 +385,9 @@ class task extends control
             $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
-                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
+                $action     = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
-                $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
+                $actionID   = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 

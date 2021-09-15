@@ -44,7 +44,7 @@
           <tr class='gitlabRepo hide'>
             <th><?php echo $lang->job->repo; ?></th>
             <td> <?php echo html::select('gitlabRepo', $gitlabRepos, $job->repo, "class='chosen form-control'");?> </td>
-            <td> <?php echo html::select('reference', $refList, $job->reference, "class='chosen form-control'");?> </td>
+            <td> <?php echo html::select('reference', $refList, isset($job->reference) ? $job->reference : '', "class='chosen form-control'");?> </td>
           </tr>
           <tr>
             <th><?php echo $lang->job->product;?></th>
