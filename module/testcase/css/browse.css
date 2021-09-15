@@ -20,7 +20,6 @@ body {margin-bottom: 25px;}
 .pass .result-pass {color: green;}
 
 tbody > tr > td > .btn-icon {margin-right: 3px;}
-tbody > tr > td   .icon-bug {margin-left: -8px;}
 tbody > tr > td   .icon-share {font-size: 9px;}
 
 .table td.c-title > a:first-child {display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
