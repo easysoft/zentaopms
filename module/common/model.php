@@ -597,11 +597,7 @@ class commonModel extends model
         {
             $nav = $lang->mainNav->$tab;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($tab == 'execution')
-            {
-                if($config->systemMode == 'new')     $currentMethod = 'executionKanban';
-                if($config->systemMode == 'classic') $currentMethod = 'all';
-            }
+            if($tab == 'execution') $currentMethod = 'all';
         }
         else
         {
