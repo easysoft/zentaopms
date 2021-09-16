@@ -950,7 +950,7 @@ class actionModel extends model
 
         /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
-        $deptUsers = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptUsers = isset($this->app->user->dept) ? $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id') : '';
 
         /* Get object names, object projects and requirements by actions. */
         $relatedData     = $this->getRelatedDataByActions($actions);
