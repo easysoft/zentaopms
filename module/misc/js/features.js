@@ -14,6 +14,9 @@ $(function()
 
     $('#featuresCarousel').on('slide.zui.carousel', function(e)
     {
+        /* Click next to pause the video play. */
+        $('#guideVideo').trigger('pause');
+
         var $next      = $(e.relatedTarget);
         var $items     = $next.parent().children();
         var index      = $items.index($next);
