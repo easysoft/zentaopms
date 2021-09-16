@@ -71,6 +71,14 @@ class tree extends control
             $lib      = $this->doc->getLibById($rootID);
             $this->view->root = $lib;
         }
+        elseif(strpos($viewType, 'api') !== false)
+        {
+            /* The viewType is doc. */
+            $this->loadModel('doc');
+            $viewType = 'api';
+            $lib      = $this->doc->getLibById($rootID);
+            $this->view->root = $lib;
+        }
         elseif(strpos($viewType, 'caselib') !== false)
         {
             $this->loadModel('caselib');

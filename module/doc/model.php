@@ -11,12 +11,17 @@
  */
 ?>
 <?php
+
 class docModel extends model
 {
+
+    // api doc type
+    const DOC_TYPE_API = 'api';
+
     /**
      * Get library by id.
      *
-     * @param  int    $libID
+     * @param int $libID
      * @access public
      * @return object
      */
@@ -26,12 +31,31 @@ class docModel extends model
     }
 
     /**
+     * Get api Libraries.
+     *
+     * @return array
+     * @author thanatos thanatos915@163.com
+     */
+    public function getApiLibs()
+    {
+        $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('api')
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+        $libs = array_filter($libs, function ($value) {
+            return $this->checkPrivLib($value);
+        });
+        return $libs;
+    }
+
+    /**
      * Get libraries.
      *
-     * @param  string $type
-     * @param  string $extra
-     * @param  string $appendLibs
-     * @param  int    $projectID
+     * @param string $type
+     * @param string $extra
+     * @param string $appendLibs
+     * @param int    $projectID
      * @access public
      * @return array
      */
@@ -59,17 +83,17 @@ class docModel extends model
         $libPairs = array();
         while($lib = $stmt->fetch())
         {
-            if($lib->product   != 0 and !isset($products[$lib->product])) continue;
+            if($lib->product != 0 and !isset($products[$lib->product])) continue;
             if($lib->execution != 0 and !isset($executions[$lib->execution])) continue;
-            if($lib->project   != 0 and !isset($projects[$lib->project]) and $lib->type == 'project') continue;
+            if($lib->project != 0 and !isset($projects[$lib->project]) and $lib->type == 'project') continue;
 
             if($this->checkPrivLib($lib, $extra))
             {
                 if(strpos($extra, 'withObject') !== false)
                 {
-                    if($lib->product   != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
+                    if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
                     if($lib->execution != 0) $lib->name = zget($executions, $lib->execution, '') . ' / ' . $lib->name;
-                    if($lib->project   != 0) $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
+                    if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
                 }
 
                 $libPairs[$lib->id] = $lib->name;
@@ -143,7 +167,7 @@ class docModel extends model
 
         if($lib->type == 'execution' and $lib->execution)
         {
-            $execution = $this->loadModel('execution')->getByID($lib->execution);
+            $execution    = $this->loadModel('execution')->getByID($lib->execution);
             $lib->project = $execution->project;
         }
 
@@ -156,9 +180,28 @@ class docModel extends model
     }
 
     /**
+     * creat a api doc library.
+     * @param stdClass $data form data.
+     * @return int
+     * @author thanatos thanatos915@163.com
+     */
+    public function createApiLib($data)
+    {
+        /* replace doc library name */
+        $this->lang->doclib->name = '接口库名称';
+
+        $data->type = static::DOC_TYPE_API;
+        $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
+            ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
+            ->check('name', 'unique', "`type` = '" . static::DOC_TYPE_API . "'")
+            ->exec();
+        return $this->dao->lastInsertID();
+    }
+
+    /**
      * Update a library.
      *
-     * @param  int    $libID
+     * @param int $libID
      * @access public
      * @return void
      */
@@ -166,7 +209,7 @@ class docModel extends model
     {
         $libID  = (int)$libID;
         $oldLib = $this->getLibById($libID);
-        $lib = fixer::input('post')
+        $lib    = fixer::input('post')
             ->setDefault('users', '')
             ->setDefault('groups', '')
             ->join('groups', ',')
@@ -187,11 +230,11 @@ class docModel extends model
     /**
      * Get docs by browse type.
      *
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $sort
-     * @param  object $pager
+     * @param string $browseType
+     * @param int    $queryID
+     * @param int    $moduleID
+     * @param string $sort
+     * @param object $pager
      * @access public
      * @return array
      */
@@ -227,7 +270,7 @@ class docModel extends model
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
+            $docs      = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in(array_keys($docIDList))
                 ->andWhere('lib')->in($allLibs)
@@ -305,7 +348,7 @@ class docModel extends model
                 }
                 else
                 {
-                    $fileSize = round($fileSize / 1024 / 1024 /1024, 2) . 'G';
+                    $fileSize = round($fileSize / 1024 / 1024 / 1024, 2) . 'G';
                 }
 
                 $docs[$index]->fileSize = $fileSize;
@@ -318,7 +361,7 @@ class docModel extends model
     /**
      * Get projects, executions and products by docIdList.
      *
-     * @param  array  $docIdList
+     * @param array $docIdList
      * @access public
      * @return array
      */
@@ -348,10 +391,10 @@ class docModel extends model
     /**
      * Get docs.
      *
-     * @param  int|string   $libID
-     * @param  int          $module
-     * @param  string       $orderBy
-     * @param  object       $pager
+     * @param int|string $libID
+     * @param int        $module
+     * @param string     $orderBy
+     * @param object     $pager
      * @access public
      * @return void
      */
@@ -369,9 +412,9 @@ class docModel extends model
     /**
      * Get priv docs.
      *
-     * @param  int    $libID
-     * @param  int    $module
-     * @param  string $mode  normal|all
+     * @param int    $libID
+     * @param int    $module
+     * @param string $mode normal|all
      * @access public
      * @return void
      */
@@ -397,9 +440,9 @@ class docModel extends model
     /**
      * Get doc info by id.
      *
-     * @param  int    $docID
-     * @param  int    $version
-     * @param  bool   $setImgSize
+     * @param int  $docID
+     * @param int  $version
+     * @param bool $setImgSize
      * @access public
      * @return void
      */
@@ -414,46 +457,46 @@ class docModel extends model
             if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
-        $version = $version ? $version : $doc->version;
+        $version    = $version ? $version : $doc->version;
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
 
         /* When file change then version add one. */
-        $files = $this->loadModel('file')->getByObject('doc', $docID);
+        $files    = $this->loadModel('file')->getByObject('doc', $docID);
         $docFiles = array();
         foreach($files as $file)
         {
-            $pathName = $this->file->getRealPathName($file->pathname);
+            $pathName       = $this->file->getRealPathName($file->pathname);
             $file->webPath  = $this->file->webPath . $pathName;
             $file->realPath = $this->file->savePath . $pathName;
             if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
         }
 
         /* Check file change. */
-        if($version == $doc->version and ((empty($docContent->files) and $docFiles) OR ($docContent->files and count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
+        if($version == $doc->version and ((empty($docContent->files) and $docFiles) or ($docContent->files and count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
         {
             unset($docContent->id);
             $doc->version        += 1;
-            $docContent->version  = $doc->version;
-            $docContent->files    = join(',', array_keys($docFiles));
+            $docContent->version = $doc->version;
+            $docContent->files   = join(',', array_keys($docFiles));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
         }
 
-        $doc->title       = isset($docContent->title)   ? $docContent->title  : '';
-        $doc->digest      = isset($docContent->digest)  ? $docContent->digest  : '';
+        $doc->title       = isset($docContent->title) ? $docContent->title : '';
+        $doc->digest      = isset($docContent->digest) ? $docContent->digest : '';
         $doc->content     = isset($docContent->content) ? $docContent->content : '';
-        $doc->contentType = isset($docContent->type)    ? $docContent->type : '';
+        $doc->contentType = isset($docContent->type) ? $docContent->type : '';
 
-        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc  = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
+        if($doc->type != 'url' and $doc->contentType != 'markdown') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
         $doc->productName   = '';
         $doc->executionName = '';
         $doc->moduleName    = '';
-        if($doc->product)   $doc->productName   = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
+        if($doc->product) $doc->productName = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
         if($doc->execution) $doc->executionName = $this->dao->findByID($doc->execution)->from(TABLE_EXECUTION)->fetch('name');
-        if($doc->module)    $doc->moduleName    = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
+        if($doc->module) $doc->moduleName = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
         if(!$doc->module and $doc->type == 'article' and $doc->parent) $doc->moduleName = $this->dao->findByID($doc->parent)->from(TABLE_DOC)->fetch('title');
         return $doc;
     }
@@ -461,7 +504,7 @@ class docModel extends model
     /**
      * Get docs info by id list.
      *
-     * @param  array    $docIdList
+     * @param array $docIdList
      * @access public
      * @return array
      */
@@ -506,18 +549,18 @@ class docModel extends model
         }
 
         /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
+        $doc                  = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $doc->contentMarkdown = $this->post->contentMarkdown;
         if($doc->acl == 'private') $doc->users = $this->app->user->account;
 
         if($doc->title)
         {
             $condition = "lib = '$doc->lib' AND module = $doc->module";
-            $result = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
+            $result    = $this->loadModel('common')->removeDuplicate('doc', $doc, $condition);
             if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
         }
 
-        $lib = $this->getLibByID($doc->lib);
+        $lib            = $this->getLibByID($doc->lib);
         $doc->product   = $lib->product;
         $doc->project   = $lib->project;
         $doc->execution = $lib->execution;
@@ -527,7 +570,7 @@ class docModel extends model
             $doc->contentType = 'html';
         }
 
-        $docContent = new stdclass();
+        $docContent          = new stdclass();
         $docContent->title   = $doc->title;
         $docContent->content = $doc->contentType == 'html' ? $doc->content : $doc->contentMarkdown;
         $docContent->type    = $doc->contentType;
@@ -566,7 +609,7 @@ class docModel extends model
     /**
      * Update a doc.
      *
-     * @param  int    $docID
+     * @param int $docID
      * @access public
      * @return void
      */
@@ -586,7 +629,7 @@ class docModel extends model
             ->setDefault('groups', '')
             ->setDefault('product', 0)
             ->setDefault('execution', 0)
-            ->add('editedBy',   $this->app->user->account)
+            ->add('editedBy', $this->app->user->account)
             ->add('editedDate', $now)
             ->cleanInt('module')
             ->join('groups', ',')
@@ -638,17 +681,17 @@ class docModel extends model
 
         if($changed)
         {
-            $doc->version  = $oldDoc->version + 1;
-            $docContent = new stdclass();
+            $doc->version        = $oldDoc->version + 1;
+            $docContent          = new stdclass();
             $docContent->doc     = $docID;
             $docContent->title   = $doc->title;
             $docContent->content = isset($doc->content) ? $doc->content : '';
             $docContent->version = $doc->version;
             $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
-            if(isset($doc->digest)) $docContent->digest  = $doc->digest;
+            if(isset($doc->digest)) $docContent->digest = $doc->digest;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
-            $docContent->files   = trim($docContent->files, ',');
+            $docContent->files = trim($docContent->files, ',');
             $this->dao->replace(TABLE_DOCCONTENT)->data($docContent)->exec();
         }
         unset($doc->contentType);
@@ -670,16 +713,16 @@ class docModel extends model
     /**
      * Save draft.
      *
-     * @param  int    $docID
+     * @param int $docID
      * @access public
      * @return void
      */
     public function saveDraft($docID)
     {
-        $data = fixer::input('post')
+        $data       = fixer::input('post')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->get();
-        $doc  = new stdclass();
+        $doc        = new stdclass();
         $doc->draft = $data->content;
 
         $docType = $this->dao->select('type')->from(TABLE_DOCCONTENT)->where('doc')->eq((int)$docID)->orderBy('version_desc')->fetch();
@@ -691,23 +734,23 @@ class docModel extends model
     /**
      * Build search form.
      *
-     * @param  string $libID
-     * @param  array  $libs
-     * @param  int    $queryID
-     * @param  string $actionURL
+     * @param string $libID
+     * @param array  $libs
+     * @param int    $queryID
+     * @param string $actionURL
      * @access public
      * @return void
      */
     public function buildSearchForm($libID, $libs, $queryID, $actionURL, $type)
     {
-        $this->config->doc->search['actionURL'] = $actionURL;
-        $this->config->doc->search['queryID']   = $queryID;
-        $this->config->doc->search['params']['product']['values']   = array(''=>'') + $this->loadModel('product')->getPairs('nocode', $this->session->project) + array('all'=>$this->lang->doc->allProduct);
-        $this->config->doc->search['params']['execution']['values'] = array(''=>'') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all'=>$this->lang->doc->allExecutions);
-        $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
+        $this->config->doc->search['actionURL']                     = $actionURL;
+        $this->config->doc->search['queryID']                       = $queryID;
+        $this->config->doc->search['params']['product']['values']   = array('' => '') + $this->loadModel('product')->getPairs('nocode', $this->session->project) + array('all' => $this->lang->doc->allProduct);
+        $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
+        $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
-        $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $moduleOptionMenu                                        = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
         if($type == 'index' || $type == 'objectLibs' || $libID == 0)
@@ -737,8 +780,8 @@ class docModel extends model
     /**
      * Get doc menu.
      *
-     * @param  int    $libID
-     * @param  int    $parent
+     * @param int $libID
+     * @param int $parent
      * @access public
      * @return array
      */
@@ -772,13 +815,13 @@ class docModel extends model
      *
      * Like this: <table class="ke-table1" style="width:100%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
      *
-     * @param  string    $content
+     * @param string $content
      * @access public
      * @return void
      */
     public function extractKETableCSS($content)
     {
-        $css = '';
+        $css  = '';
         $rule = '/<table class="ke(.*)" .*/';
         if(preg_match_all($rule, $content, $results))
         {
@@ -794,11 +837,11 @@ class docModel extends model
 
                 if(!isset($class)) continue;
                 $className   = $class;
-                $borderSize  = isset($border)      ? $border . 'px' : '1px';
+                $borderSize  = isset($border) ? $border . 'px' : '1px';
                 $borderColor = isset($bordercolor) ? $bordercolor : 'gray';
                 $borderStyle = "{border:$borderSize $borderColor solid}\n";
-                $css .= ".$className$borderStyle";
-                $css .= ".$className td$borderStyle";
+                $css         .= ".$className$borderStyle";
+                $css         .= ".$className td$borderStyle";
             }
         }
         return $css;
@@ -807,8 +850,8 @@ class docModel extends model
     /**
      * Check priv for lib.
      *
-     * @param  object $object
-     * @param  string $extra
+     * @param object $object
+     * @param string $extra
      * @access public
      * @return bool
      */
@@ -840,7 +883,7 @@ class docModel extends model
         if(!empty($object->product) or !empty($object->execution))
         {
             $acls = $this->app->user->rights['acls'];
-            if(!empty($object->product)   and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
+            if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
             if(!empty($object->execution) and !empty($acls['sprints']) and !in_array($object->execution, $acls['sprints'])) return false;
             if(!empty($object->execution)) return $this->loadModel('execution')->checkPriv($object->execution);
             if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
@@ -852,7 +895,7 @@ class docModel extends model
     /**
      * Check priv for doc.
      *
-     * @param  object    $object
+     * @param object $object
      * @access public
      * @return bool
      */
@@ -888,9 +931,9 @@ class docModel extends model
     /**
      * Get all libs by type.
      *
-     * @param  string $type
-     * @param  int    $pager
-     * @param  string $extra
+     * @param string $type
+     * @param int    $pager
+     * @param string $extra
      * @access public
      * @return array
      */
@@ -946,7 +989,7 @@ class docModel extends model
     /**
      * Get all lib groups.
      *
-     * @param  string $appendLibs
+     * @param string $appendLibs
      * @access public
      * @return array
      */
@@ -988,8 +1031,8 @@ class docModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs('product', 'product');
 
-        $hasLibsPriv  = common::hasPriv('doc', 'allLibs');
-        $hasFilesPriv = common::hasPriv('doc', 'showFiles');
+        $hasLibsPriv      = common::hasPriv('doc', 'allLibs');
+        $hasFilesPriv     = common::hasPriv('doc', 'showFiles');
         $productOrderLibs = array();
         foreach($products as $product)
         {
@@ -1006,7 +1049,7 @@ class docModel extends model
             }
         }
 
-        $executions = $this->dao->select('id,name,status')->from(TABLE_EXECUTION)
+        $executions         = $this->dao->select('id,name,status')->from(TABLE_EXECUTION)
             ->where('id')->in(array_keys($executionLibs))
             ->andWhere('deleted')->eq('0')
             ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
@@ -1033,8 +1076,8 @@ class docModel extends model
     /**
      * Get limit libs.
      *
-     * @param  string $type
-     * @param  int    $limit
+     * @param string $type
+     * @param int    $limit
      * @access public
      * @return array
      */
@@ -1093,7 +1136,7 @@ class docModel extends model
                 }
                 $libs[$docLib->id] = $docLib->name;
 
-                $i ++;
+                $i++;
             }
         }
 
@@ -1103,8 +1146,8 @@ class docModel extends model
     /**
      * Get execution or product libs groups.
      *
-     * @param  string $type
-     * @param  array  $idList
+     * @param string $type
+     * @param array  $idList
      * @access public
      * @return array
      */
@@ -1130,10 +1173,10 @@ class docModel extends model
     /**
      * Get libs by object.
      *
-     * @param  string $type
-     * @param  int    $objectID
-     * @param  string $mode
-     * @param  int    $appendLib
+     * @param string $type
+     * @param int    $objectID
+     * @param string $mode
+     * @param int    $appendLib
      * @access public
      * @return array
      */
@@ -1190,7 +1233,7 @@ class docModel extends model
     /**
      * Get ordered objects for dic.
      *
-     * @param  string $objectType
+     * @param string $objectType
      * @access public
      * @return array
      */
@@ -1233,7 +1276,7 @@ class docModel extends model
 
             foreach($objects as $objectID => $object)
             {
-                $object->parent = $this->program->getTopByID($object->parent);
+                $object->parent             = $this->program->getTopByID($object->parent);
                 $orderedProjects[$objectID] = $object;
                 unset($objects[$object->id]);
             }
@@ -1291,7 +1334,7 @@ class docModel extends model
     /**
      * Stat module and document counts of lib.
      *
-     * @param  array    $idList
+     * @param array $idList
      * @access public
      * @return array
      */
@@ -1315,14 +1358,14 @@ class docModel extends model
         {
             if(!$this->checkPrivDoc($doc)) continue;
             if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
-            $docCounts[$doc->lib] ++;
+            $docCounts[$doc->lib]++;
         }
 
         $itemCounts = array();
         foreach($idList as $libID)
         {
-            $docCount    = isset($docCounts[$libID]) ? $docCounts[$libID] : 0;
-            $moduleCount = isset($moduleCounts[$libID]) ? $moduleCounts[$libID] : 0;
+            $docCount           = isset($docCounts[$libID]) ? $docCounts[$libID] : 0;
+            $moduleCount        = isset($moduleCounts[$libID]) ? $moduleCounts[$libID] : 0;
             $itemCounts[$libID] = $docCount + $moduleCount;
         }
 
@@ -1332,10 +1375,10 @@ class docModel extends model
     /**
      * Get lib files.
      *
-     * @param  string $type
-     * @param  int    $objectID
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param string $type
+     * @param int    $objectID
+     * @param string $orderBy
+     * @param object $pager
      * @access public
      * @return array
      */
@@ -1353,7 +1396,7 @@ class docModel extends model
         $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = 0;
 
         $userView = $this->app->user->view->products;
-        if($type == 'project')   $userView = $this->app->user->view->projects;
+        if($type == 'project') $userView = $this->app->user->view->projects;
         if($type == 'execution') $userView = $this->app->user->view->sprints;
 
         $bugPairs = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->andWhere($type)->in($userView)->fetchPairs('id');
@@ -1393,7 +1436,7 @@ class docModel extends model
             $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
 
-            $buildPairs  = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
+            $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
             $executionIdList = join(',', $executionIdList);
@@ -1414,24 +1457,20 @@ class docModel extends model
             ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
             ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
             ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
-
             ->beginIF($type == 'product')
             ->orWhere("(objectType in ('story','requirement') and objectID in ($storyIdList))")
             ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
             ->fi()
-
             ->beginIF($type == 'project')
             ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
             ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
             ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
             ->fi()
-
             ->beginIF($type == 'project' or $type == 'execution')
             ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
             ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
             ->fi()
-
             ->markRight(1)
             ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
             ->orderBy($orderBy)
@@ -1442,7 +1481,7 @@ class docModel extends model
         {
             $pathName       = $this->file->getRealPathName($file->pathname);
             $file->realPath = $this->file->savePath . $pathName;
-            $file->webPath  = $this->file->webPath  . $pathName;
+            $file->webPath  = $this->file->webPath . $pathName;
         }
 
         return $files;
@@ -1451,7 +1490,7 @@ class docModel extends model
     /**
      * Get file source pairs.
      *
-     * @param  array    $files
+     * @param array $files
      * @access public
      * @return array
      */
@@ -1468,9 +1507,9 @@ class docModel extends model
 
         foreach($sourceList as $type => $idList)
         {
-            $table = $this->config->objectTables[$type];
-            $title = in_array($type, array('story', 'bug', 'issue', 'case', 'testcase', 'testreport', 'doc', 'requirement')) ? 'title' : 'name';
-            $name  = $this->dao->select('id,' . $title)->from($table)->where('id')->in($idList)->fetchPairs('id');
+            $table              = $this->config->objectTables[$type];
+            $title              = in_array($type, array('story', 'bug', 'issue', 'case', 'testcase', 'testreport', 'doc', 'requirement')) ? 'title' : 'name';
+            $name               = $this->dao->select('id,' . $title)->from($table)->where('id')->in($idList)->fetchPairs('id');
             $sourcePairs[$type] = $name;
         }
 
@@ -1480,7 +1519,7 @@ class docModel extends model
     /**
      * Get file icon.
      *
-     * @param  array    $files
+     * @param array $files
      * @access public
      * @return array
      */
@@ -1511,7 +1550,7 @@ class docModel extends model
     /**
      * Get doc tree.
      *
-     * @param  int    $libID
+     * @param int $libID
      * @access public
      * @return array
      */
@@ -1521,7 +1560,7 @@ class docModel extends model
         array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'doc', 'actions' => false, 'root' => $libID));
         foreach($fullTrees as $i => $tree)
         {
-            $tree = (object)$tree;
+            $tree          = (object)$tree;
             $fullTrees[$i] = $this->fillDocsInTree($tree, $libID);
         }
         if(empty($fullTrees[0]->children)) array_shift($fullTrees);
@@ -1531,8 +1570,8 @@ class docModel extends model
     /**
      * Fill docs in tree.
      *
-     * @param  object $node
-     * @param  int    $libID
+     * @param object $node
+     * @param int    $libID
      * @access public
      * @return array
      */
@@ -1542,7 +1581,7 @@ class docModel extends model
         static $docGroups;
         if(empty($docGroups))
         {
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
+            $docs      = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('lib')->eq((int)$libID)
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll();
@@ -1554,25 +1593,25 @@ class docModel extends model
         }
 
         if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->fillDocsInTree($child, $libID);
-        if(!isset($node->id))$node->id = 0;
+        if(!isset($node->id)) $node->id = 0;
 
         $node->type = 'module';
-        $docs = isset($docGroups[$node->id]) ? $docGroups[$node->id] : array();
-        $menu = !empty($node->children) ? $node->children : array();
+        $docs       = isset($docGroups[$node->id]) ? $docGroups[$node->id] : array();
+        $menu       = !empty($node->children) ? $node->children : array();
         if(!empty($docs))
         {
             $docItems = array();
             foreach($docs as $doc)
             {
-                $docItem = new stdclass();
-                $docItem->type         = 'doc';
-                $docItem->id           = $doc->id;
-                $docItem->title        = $doc->title;
-                $docItem->url          = helper::createLink('doc', 'view', "doc=$doc->id");
+                $docItem        = new stdclass();
+                $docItem->type  = 'doc';
+                $docItem->id    = $doc->id;
+                $docItem->title = $doc->title;
+                $docItem->url   = helper::createLink('doc', 'view', "doc=$doc->id");
 
-                $buttons  = '';
-                $buttons .= common::buildIconButton('doc', 'edit',    "docID=$doc->id", '', 'list');
-                if(common::hasPriv('doc', 'delete'))$buttons .= html::a(helper::createLink('doc', 'delete', "docID=$doc->id"), "<i class='icon icon-remove'></i>", 'hiddenwin', "class='btn-icon' title='{$this->lang->doc->delete}'");
+                $buttons = '';
+                $buttons .= common::buildIconButton('doc', 'edit', "docID=$doc->id", '', 'list');
+                if(common::hasPriv('doc', 'delete')) $buttons .= html::a(helper::createLink('doc', 'delete', "docID=$doc->id"), "<i class='icon icon-remove'></i>", 'hiddenwin', "class='btn-icon' title='{$this->lang->doc->delete}'");
                 $docItem->buttons = $buttons;
                 $docItem->actions = false;
                 $docItems[]       = $docItem;
@@ -1592,8 +1631,8 @@ class docModel extends model
     /**
      * Get product crumb.
      *
-     * @param  int    $productID
-     * @param  int    $executionID
+     * @param int $productID
+     * @param int $executionID
      * @access public
      * @return string
      */
@@ -1612,7 +1651,7 @@ class docModel extends model
         $object = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
         if(empty($object)) return '';
 
-        $crumb  = '';
+        $crumb = '';
         $crumb .= html::a(helper::createLink('doc', 'allLibs', "type=product"), $this->lang->productCommon) . $this->lang->doc->separator;
         $crumb .= html::a(helper::createLink('doc', 'objectLibs', "type=product&objectID=$productID"), $object->name) . $this->lang->doc->separator;
         $crumb .= html::a(helper::createLink('doc', 'allLibs', "type=execution&product=$productID"), $this->lang->doclib->execution);
@@ -1623,8 +1662,8 @@ class docModel extends model
     /**
      * Set lib users.
      *
-     * @param  string $type
-     * @param  int    $objectID
+     * @param string $type
+     * @param int    $objectID
      * @access public
      * @return bool
      */
@@ -1665,7 +1704,7 @@ class docModel extends model
         $executionLibs = array();
         $productLibs   = array();
         if($executions) $executionLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('execution')->in(array_keys($executions))->fetchPairs();
-        if($products)   $productLibs   = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->in($products)->fetchPairs();
+        if($products) $productLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('product')->in($products)->fetchPairs();
         $customLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('custom')->fetchPairs();
 
         $libIdList = array_merge($customLibs, $executionLibs, $productLibs);
@@ -1684,8 +1723,8 @@ class docModel extends model
         $libIdList = $this->getLibIdListByProject($this->session->project);
         $docIdList = $this->getPrivDocs($libIdList);
 
-        $today  = date('Y-m-d');
-        $lately = date('Y-m-d', strtotime('-3 day'));
+        $today         = date('Y-m-d');
+        $lately        = date('Y-m-d', strtotime('-3 day'));
         $statisticInfo = $this->dao->select("count(id) as totalDocs, count(editedDate like '{$today}%' or null) as todayEditedDocs,
             count(editedDate > '{$lately}' or null) as lastEditedDocs, count(addedDate > '{$lately}' or null) as lastAddedDocs,
             count(collector like '%,{$this->app->user->account},%' or null) as myCollection, count(addedBy = '{$this->app->user->account}' or null) as myDocs")->from(TABLE_DOC)
@@ -1705,8 +1744,8 @@ class docModel extends model
     /**
      * Get the previous and next doc.
      *
-     * @param  int    $docID
-     * @param  int    $libID
+     * @param int $docID
+     * @param int $libID
      * @access public
      * @return object
      */
@@ -1728,8 +1767,8 @@ class docModel extends model
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->get();
         $query .= " order by field(module, $sortedModules)";
-        $stmt   = $this->dbh->query($query);
-        $docs   = $stmt->fetchAll();
+        $stmt  = $this->dbh->query($query);
+        $docs  = $stmt->fetchAll();
 
         $preAndNextDoc       = new stdClass();
         $preAndNextDoc->pre  = '';
@@ -1800,7 +1839,7 @@ class docModel extends model
 
         foreach($parantMoudles as $parentID => $moduleName)
         {
-            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " <i class='icon icon-chevron-right'></i> " . $moduleName->name , '');
+            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " <i class='icon icon-chevron-right'></i> " . $moduleName->name, '');
         }
 
         return $title;
@@ -1809,9 +1848,9 @@ class docModel extends model
     /**
      * Build document module index page create document button.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  int    $libID
+     * @param string $objectType
+     * @param int    $objectID
+     * @param int    $libID
      * @access public
      * @return string
      */
@@ -1823,16 +1862,16 @@ class docModel extends model
         }
         elseif($libID)
         {
-            $html  = "<div class='dropdown' id='createDropdown'>";
+            $html = "<div class='dropdown' id='createDropdown'>";
             $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->doc->createAB . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu pull-right'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
                 $icon  = zget($this->config->doc->iconList, $typeKey);
-                $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                $html .= "</li>";
+                $html  .= "<li>";
+                $html  .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
+                $html  .= "</li>";
                 if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }
 
@@ -1871,7 +1910,7 @@ class docModel extends model
             ->limit($favoritesLimit)
             ->fetchAll();
 
-        $html  = "<div class='btn-group dropdown-hover'>";
+        $html = "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
         $html .= "<ul class='dropdown-menu pull-right' id='collection-menu'>";
 
@@ -1880,8 +1919,8 @@ class docModel extends model
         foreach($docs as $doc)
         {
             $objectID = 0;
-            if($doc->type == 'product')   $objectID = $doc->product;
-            if($doc->type == 'project')   $objectID = $doc->project;
+            if($doc->type == 'product') $objectID = $doc->product;
+            if($doc->type == 'project') $objectID = $doc->project;
             if($doc->type == 'execution') $objectID = $doc->execution;
 
             $tab = $this->app->tab;
@@ -1905,17 +1944,17 @@ class docModel extends model
     /**
      * Build browse switch button.
      *
-     * @param  int    $type
-     * @param  int    $objectID
-     * @param  int    $viewType
+     * @param int $type
+     * @param int $objectID
+     * @param int $viewType
      * @access public
      * @return void
      */
     public function buildBrowseSwitch($type, $objectID, $viewType)
     {
-        $html  = "<div class='btn-group'>";
+        $html = "<div class='btn-group'>";
         $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$this->lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");
-        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$this->lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");
+        $html .= html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>", '', "title={$this->lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "' data-app='{$this->app->tab}'");
         $html .= "</div>";
 
         return $html;
@@ -1924,22 +1963,22 @@ class docModel extends model
     /**
      * Set past menu.
      *
-     * @param  string $fastLib
+     * @param string $fastLib
      * @access public
      * @return string
      */
     public function setFastMenu($fastLib)
     {
-        $actions  = '';
+        $actions = '';
         $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->doc->search . '</a>';
         $actions .= "<a data-toggle='dropdown' class='btn btn-link' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
         {
-            $link     = helper::createLink('doc', 'browse', "libID=0&browseType={$key}");
+            $link    = helper::createLink('doc', 'browse', "libID=0&browseType={$key}");
             $actions .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
         }
-        $actions .='</ul>';
+        $actions .= '</ul>';
 
         return $actions;
     }
@@ -1947,15 +1986,15 @@ class docModel extends model
     /**
      * Get toList and ccList.
      *
-     * @param  object     $doc
+     * @param object $doc
      * @access public
      * @return bool|array
      */
     public function getToAndCcList($doc)
     {
         /* Set toList and ccList. */
-        $toList   = '';
-        $ccList   = str_replace(' ', '', trim($doc->mailto, ','));
+        $toList = '';
+        $ccList = str_replace(' ', '', trim($doc->mailto, ','));
 
         if(empty($toList))
         {
@@ -1978,11 +2017,11 @@ class docModel extends model
     /**
      * Create the select code of doc.
      *
-     * @param  string $type
-     * @param  array  $objects
-     * @param  int    $objectID
-     * @param  array  $libs
-     * @param  int    $libID
+     * @param string $type
+     * @param array  $objects
+     * @param int    $objectID
+     * @param array  $libs
+     * @param int    $libID
      * @access public
      * @return string
      */
@@ -1993,8 +2032,8 @@ class docModel extends model
         $output            = '';
         $closedObjectsHtml = '';
         $closedObjects     = array();
-        $maxHeight         = (in_array($type, array('project','execution')) and $this->app->tab == 'doc') ? '260px' : '290px';
-        $class             = (in_array($type, array('project','execution')) and $this->app->tab == 'doc') ? 'col-left' : '';
+        $maxHeight         = (in_array($type, array('project', 'execution')) and $this->app->tab == 'doc') ? '260px' : '290px';
+        $class             = (in_array($type, array('project', 'execution')) and $this->app->tab == 'doc') ? 'col-left' : '';
 
         $currentMethod = $this->app->getMethodName();
         $methodName    = in_array($currentMethod, array('tablecontents', 'showfiles')) ? 'tablecontents' : 'objectLibs';
@@ -2021,7 +2060,7 @@ class docModel extends model
         <div class='table-col $class'>
           <div class='list-group' style='max-height: $maxHeight'>
 EOT;
-            if(in_array($type, array('project','execution')) and $this->app->tab == 'doc')
+            if(in_array($type, array('project', 'execution')) and $this->app->tab == 'doc')
             {
                 $closedObjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in(array_keys($objects))->andWhere('status')->eq('closed')->fetchPairs();
             }
@@ -2039,7 +2078,7 @@ EOT;
                     $output .= html::a(inlink($methodName, "type=$type&objectID=$key"), $object, '', "class='$selected' title='$object' data-app='{$this->app->tab}'");
                 }
             }
-            if(in_array($type, array('project','execution')) and $this->app->tab == 'doc')
+            if(in_array($type, array('project', 'execution')) and $this->app->tab == 'doc')
             {
                 $output .= <<<EOT
             </div>
@@ -2066,7 +2105,7 @@ EOT;
         if(!empty($libs))
         {
             $libName = empty($libID) ? $this->lang->doclib->files : $libs[$libID]->name;
-            $output .= <<<EOT
+            $output  .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$libName} <span class='caret'></span>
@@ -2083,12 +2122,12 @@ EOT;
             foreach($libs as $key => $lib)
             {
                 $selected = $key == $libID ? 'selected' : '';
-                $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+                $output   .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
             }
             if($type != 'custom' and $type != 'book')
             {
                 $selected = empty($libID) ? 'selected' : '';
-                $output  .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->tab}'");
+                $output   .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->tab}'");
             }
             $output .= "</div></div></div></div></div>";
         }
@@ -2097,17 +2136,11 @@ EOT;
     }
 
     /**
-     * Get doc tree menu.
+     * Get api doc module tree
      *
-     * @param  string  $type
-     * @param  int     $objectID
-     * @param  int     $rootID
-     * @param  int     $startModule
-     * @param  pointer $docID
-     * @access public
-     * @return string
+     * @author thanatos thanatos915@163.com
      */
-    public function getTreeMenu($type, $objectID, $rootID, $startModule = 0, & $docID = 0)
+    public function getApiModuleTree($rootID, &$docID = 0)
     {
         $startModulePath = '';
         $currentMethod   = $this->app->getMethodName();
@@ -2118,7 +2151,76 @@ EOT;
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        $docs = $this->dao->select('*')->from(TABLE_DOC)
+        $docs       = $this->dao->select('*')->from(TABLE_API)
+            ->where('lib')->eq($rootID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+        $moduleDocs = [];
+        foreach($docs as $doc)
+        {
+            if(!$this->checkPrivDoc($doc)) continue;
+            if(!isset($moduleDocs[$doc->module])) $moduleDocs[$doc->module] = array();
+            $moduleDocs[$doc->module][] = $doc;
+        }
+
+        $treeMenu = [];
+        $query    = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('root')->eq((int)$rootID)
+            ->andWhere('type')->eq('api')
+            ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade desc, `order`')
+            ->get();
+        $stmt     = $this->dbh->query($query);
+        while($module = $stmt->fetch())
+        {
+            $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID);
+        }
+
+        if(isset($moduleDocs[0]))
+        {
+            if(!isset($treeMenu[0])) $treeMenu[0] = '';
+
+            foreach($moduleDocs[0] as $doc)
+            {
+                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . '>';
+
+                $treeMenu[0] .= html::a(inlink('index', "apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+
+                $treeMenu[0] .= '</li>';
+            }
+        }
+
+        if(empty($treeMenu)) return '';
+
+        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>" . $treeMenu[0] . '</ul>';
+        return $menu;
+
+    }
+
+    /**
+     * Get doc tree menu.
+     *
+     * @param string  $type
+     * @param int     $objectID
+     * @param int     $rootID
+     * @param int     $startModule
+     * @param pointer $docID
+     * @access public
+     * @return string
+     */
+    public function getTreeMenu($type, $objectID, $rootID, $startModule = 0, &$docID = 0)
+    {
+        $startModulePath = '';
+        $currentMethod   = $this->app->getMethodName();
+        $users           = $this->loadModel('user')->getPairs('noletter');
+        if($startModule > 0)
+        {
+            $startModule = $this->tree->getById($startModule);
+            if($startModule) $startModulePath = $startModule->path . '%';
+        }
+
+        $docs       = $this->dao->select('*')->from(TABLE_DOC)
             ->where('lib')->eq($rootID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
@@ -2131,14 +2233,14 @@ EOT;
         }
 
         $treeMenu = array();
-        $query = $this->dao->select('*')->from(TABLE_MODULE)
+        $query    = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('type')->eq('doc')
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->get();
-        $stmt = $this->dbh->query($query);
+        $stmt     = $this->dbh->query($query);
         while($module = $stmt->fetch())
         {
             $this->buildTree($treeMenu, $type, $objectID, $rootID, $module, $moduleDocs, $docID);
@@ -2174,17 +2276,17 @@ EOT;
     /**
      * Build doc tree menu.
      *
-     * @param  pointer $treeMenu
-     * @param  string  $type
-     * @param  int     $objectID
-     * @param  int     $libID
-     * @param  object  $module
-     * @param  array   $moduleDocs
-     * @param  pointer $docID
+     * @param pointer $treeMenu
+     * @param string  $type
+     * @param int     $objectID
+     * @param int     $libID
+     * @param object  $module
+     * @param array   $moduleDocs
+     * @param pointer $docID
      * @access private
      * @return string
      */
-    private function buildTree(& $treeMenu, $type, $objectID, $libID, $module, $moduleDocs, & $docID)
+    private function buildTree(&$treeMenu, $type, $objectID, $libID, $module, $moduleDocs, &$docID)
     {
         if(!isset($treeMenu[$module->id])) $treeMenu[$module->id] = '';
 
@@ -2195,33 +2297,71 @@ EOT;
         {
             foreach($moduleDocs[$module->id] as $doc)
             {
-                if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
-                $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
-
-                if($currentMethod == 'tablecontents')
+                if($type == static::DOC_TYPE_API)
                 {
-                    $treeMenu[$module->id] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
-                }
-                $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                    $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
 
-                $treeMenu[$module->id] .= '</li>';
+                    $treeMenu[$module->id] .= html::a(inlink('index', "apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+
+                    $treeMenu[$module->id] .= '</li>';
+                }
+                else
+                {
+                    if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
+                    $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
+
+                    if($currentMethod == 'tablecontents')
+                    {
+                        $treeMenu[$module->id] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                    }
+                    $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+
+                    $treeMenu[$module->id] .= '</li>';
+                }
             }
         }
 
-        $li = "<a title='{$module->name}'>" . $module->name . '</a>';
+        if($type == static::DOC_TYPE_API)
+        {
+            $li = html::a(inlink('index', "libID=$libID&module={$module->id}"), $module->name, '', "data-app='{$this->app->tab}' class='doc-title' title='{$module->name}'");
+        }
+        else
+        {
+            $li = "<a title='{$module->name}'>" . $module->name . '</a>';
+        }
         if($treeMenu[$module->id])
         {
             $li .= '<ul>' . $treeMenu[$module->id] . '</ul>';
         }
 
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
-        $treeMenu[$module->parent] .= '<li' . ($treeMenu[$module->id] ? ' class="closed catalog"' : ' class="catalog"') . '>' . $li . '</li>';
+
+        $class = ['catalog'];
+        if($treeMenu[$module->id])
+        {
+            array_push($class, 'closed');
+        }
+
+        if($type == static::DOC_TYPE_API)
+        {
+            $params = $_GET;
+            if(intval($params['module']) > 0 && $params['module'] == $module->id)
+            {
+                array_push($class, 'active');
+            }
+            else
+            {
+                array_push($class, 'doc');
+            }
+        }
+
+        $treeMenu[$module->parent] .= '<li class="' . implode(' ', $class) . '">' . $li . '</li>';
     }
 
     /**
      * Count the number and size of files on the current page.
      *
-     * @param  arary    $files
+     * @param arary $files
      * @access public
      * @return string
      */
@@ -2236,11 +2376,11 @@ EOT;
         {
             if(!isset($extensionCount[$file->extension])) $extensionCount[$file->extension] = 0;
 
-            $filesCount ++;
+            $filesCount++;
 
             $sizeCount += $file->size;
 
-            $extensionCount[$file->extension] ++;
+            $extensionCount[$file->extension]++;
         }
 
         /* Unit conversion. */
@@ -2248,7 +2388,7 @@ EOT;
         while($sizeCount > 1024 and $i <= 4)
         {
             $sizeCount = $sizeCount / 1024;
-            $i ++;
+            $i++;
         }
         $unitList  = array('B', 'K', 'M', 'G', 'T');
         $sizeCount = round($sizeCount, 1) . $unitList[$i];
@@ -2256,7 +2396,7 @@ EOT;
         /* Summary of each type. */
         foreach($extensionCount as $extension => $count)
         {
-            if(in_array($this->app->getClientLang(), array('zh-cn','zh-tw')))
+            if(in_array($this->app->getClientLang(), array('zh-cn', 'zh-tw')))
             {
                 $extensionSummary .= $extension . ' ' . $count . $this->lang->doc->ge . $this->lang->doc->point;
             }
@@ -2273,10 +2413,10 @@ EOT;
     /**
      * Set doc menu by type.
      *
-     * @param  string    $type
-     * @param  int       $objectID
-     * @param  int       $libID
-     * @param  int       $appendLib
+     * @param string $type
+     * @param int    $objectID
+     * @param int    $libID
+     * @param int    $appendLib
      * @access public
      * @return array
      */
@@ -2284,8 +2424,8 @@ EOT;
     {
         if(empty($type))
         {
-            $doclib   = $this->getLibById($libID);
-            $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
+            $doclib = $this->getLibById($libID);
+            $type   = $doclib->type == 'execution' ? 'project' : $doclib->type;
             $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
         }
 
@@ -2295,22 +2435,22 @@ EOT;
 
         if($type == 'custom')
         {
-            $libs = $this->getLibsByObject('custom', 0, '', $appendLib);
+            $libs                 = $this->getLibsByObject('custom', 0, '', $appendLib);
             $this->app->rawMethod = 'custom';
             if($libID == 0) $libID = key($libs);
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
-            $object = new stdclass();
+            $object     = new stdclass();
             $object->id = 0;
         }
         elseif($type == 'book')
         {
-            $libs = $this->getLibsByObject('book', 0, '', $appendLib);
+            $libs                 = $this->getLibsByObject('book', 0, '', $appendLib);
             $this->app->rawMethod = 'book';
             if(!empty($libs) and ($libID == 0 or !isset($libs[$libID]))) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
-            $object = new stdclass();
+            $object     = new stdclass();
             $object->id = 0;
         }
         else
@@ -2331,7 +2471,7 @@ EOT;
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($tab != 'doc') $this->loadModel($tab)->setMenu($objectID);
 
-        $this->lang->TRActions  = $this->buildCollectButton4Doc();
+        $this->lang->TRActions = $this->buildCollectButton4Doc();
         $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->buildCreateButton4Doc($type, $objectID, $libID) : '';
 
         return array($libs, $libID, $object, $objectID);

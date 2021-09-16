@@ -1,7 +1,7 @@
 ALTER TABLE `zt_doclib`
     ADD COLUMN `desc` text NULL AFTER `collector`;
 
-CREATE TABLE `zt_interfacelib_release`
+CREATE TABLE `zt_api_lib_release`
 (
     `id`        int UNSIGNED NOT NULL AUTO_INCREMENT,
     `doclib`    int UNSIGNED NOT NULL DEFAULT 0,
@@ -12,7 +12,7 @@ CREATE TABLE `zt_interfacelib_release`
     PRIMARY KEY (`id`)
 )
 
-CREATE TABLE `zt_interface`
+CREATE TABLE `zt_api`
 (
     `id`           int UNSIGNED NOT NULL AUTO_INCREMENT,
     `product`      varchar(255) NOT NULL DEFAULT '',
@@ -29,37 +29,39 @@ CREATE TABLE `zt_interface`
     `desc`         varchar(255) NOT NULL DEFAULT '',
     `version`      smallint UNSIGNED NOT NULL DEFAULT 0,
     `params`       text NULL,
+    `response`     text NULL,
     `commonParams` text NULL,
     `addedBy`      varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate`    datetime     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `addedDate`    datetime     NOT NULL,
     `editEdBy`     varchar(30)  NOT NULL DEFAULT 0,
-    `editedDate`   datetime     NOT NULL DEFAULT '0000-00-00 00:00:00',
-    `deleted`      enum(0, 1) NOT NULL DEFAULT 0,
+    `editedDate`   datetime     NOT NULL,
+    `deleted`      enum('0', '1') NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `zt_interface_spec`
+CREATE TABLE `zt_apispec`
 (
     `id`             int UNSIGNED NOT NULL AUTO_INCREMENT,
     `doc`            int UNSIGNED NOT NULL DEFAULT 0,
     `module`         int UNSIGNED NOT NULL DEFAULT 0,
     `title`          varchar(100) NOT NULL DEFAULT '',
     `path`           varchar(255) NOT NULL DEFAULT '',
-    `agreement`      enum('http','https') NOT NULL,
+    `protocol`       varchar(10)  NOT NULL DEFAULT '',
     `method`         varchar(10)  NOT NULL DEFAULT '',
-    `requestFormat`  varchar(100) NOT NULL DEFAULT '',
-    `responseFormat` varchar(100) NOT NULL DEFAULT '',
+    `requestType`  varchar(100) NOT NULL DEFAULT '',
+    `responseType` varchar(100) NOT NULL DEFAULT '',
     `status`         tinyint UNSIGNED NOT NULL DEFAULT 0,
-    `owner`          int UNSIGNED NOT NULl DEFAULT 0,
+    `owner`          varchar(255) NOT NULl DEFAULT 0,
     `desc`           varchar(255) NOT NULL DEFAULT '',
     `version`        smallint UNSIGNED NOT NULL DEFAULT 0,
     `params`         text NULL,
+    `response`       text NULL,
     `addedBy`        varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate`      datetime     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `addedDate`      datetime     NULL,
     PRIMARY KEY (`id`)
 );
 
-create table `zt_interface_const`
+create table `zt_api_const`
 (
     `id`          int UNSIGNED NOT NULL AUTO_INCREMENT,
     `doclib`      int UNSIGNED NOT NULL DEFAULT 0,
@@ -78,7 +80,7 @@ create table `zt_interface_const`
     PRIMARY KEY (`id`)
 )
 
-create table `zt_interface_const_spec`
+create table `zt_api_const_spec`
 (
     `id`        int UNSIGNED NOT NULL AUTO_INCREMENT,
     `doclib`    int UNSIGNED NOT NULL DEFAULT 0,

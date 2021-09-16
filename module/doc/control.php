@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The control file of doc module of ZenTaoPMS.
  *
@@ -58,13 +59,13 @@ class doc extends control
     /**
      * Browse docs.
      *
-     * @param  string|int $libID    product|execution or the int id of custom library
-     * @param  string $browseType
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param string|int $libID product|execution or the int id of custom library
+     * @param string $browseType
+     * @param int $param
+     * @param string $orderBy
+     * @param int $recTotal
+     * @param int $recPerPage
+     * @param int $pageID
      * @access public
      * @return void
      */
@@ -72,10 +73,10 @@ class doc extends control
     {
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
-        $this->session->set('docList',       $uri, 'doc');
-        $this->session->set('productList',   $uri, 'product');
+        $this->session->set('docList', $uri, 'doc');
+        $this->session->set('productList', $uri, 'product');
         $this->session->set('executionList', $uri, 'execution');
-        $this->session->set('projectList',   $uri, 'project');
+        $this->session->set('projectList', $uri, 'project');
         $this->loadModel('search');
 
         /* Set browseType.*/
@@ -84,7 +85,7 @@ class doc extends control
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
 
         /* Set header and position. */
-        $this->view->title      = $this->lang->doc->common;
+        $this->view->title = $this->lang->doc->common;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -120,8 +121,8 @@ class doc extends control
     /**
      * Create a library.
      *
-     * @param  string $type
-     * @param  int    $objectID
+     * @param string $type
+     * @param int $objectID
      * @access public
      * @return void
      */
@@ -133,10 +134,10 @@ class doc extends control
             if(!dao::isError())
             {
                 $objectType = $this->post->type;
-                if($objectType == 'project' and $this->post->project)     $objectID = $this->post->project;
-                if($objectType == 'product' and $this->post->product)     $objectID = $this->post->product;
+                if($objectType == 'project' and $this->post->project) $objectID = $this->post->project;
+                if($objectType == 'product' and $this->post->product) $objectID = $this->post->product;
                 if($objectType == 'execution' and $this->post->execution) $objectID = $this->post->execution;
-                if($objectType == 'custom' or $objectType == 'book')      $objectID = 0;
+                if($objectType == 'custom' or $objectType == 'book') $objectID = 0;
 
                 $this->action->create('docLib', $libID, 'Created');
 
@@ -161,8 +162,8 @@ class doc extends control
         }
 
         $libTypeList = $this->lang->doc->libTypeList;
-        if(empty($products))   unset($libTypeList['product']);
-        if(empty($projects))   unset($libTypeList['project']);
+        if(empty($products)) unset($libTypeList['product']);
+        if(empty($projects)) unset($libTypeList['project']);
         if(empty($executions)) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
@@ -179,7 +180,7 @@ class doc extends control
     /**
      * Edit a library.
      *
-     * @param  int    $libID
+     * @param int $libID
      * @access public
      * @return void
      */
@@ -205,7 +206,7 @@ class doc extends control
         }
 
         $lib = $this->doc->getLibByID($libID);
-        if(!empty($lib->product))   $this->view->product   = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
+        if(!empty($lib->product)) $this->view->product = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
         if(!empty($lib->execution))
         {
             $execution = $this->execution->getByID($lib->execution);
@@ -213,10 +214,10 @@ class doc extends control
 
             $this->view->execution = $execution;
         }
-        $this->view->lib     = $lib;
-        $this->view->groups  = $this->loadModel('group')->getPairs();
-        $this->view->users   = $this->user->getPairs('noletter|noclosed', $lib->users);
-        $this->view->libID   = $libID;
+        $this->view->lib    = $lib;
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
+        $this->view->libID  = $libID;
 
         die($this->display());
     }
@@ -224,9 +225,9 @@ class doc extends control
     /**
      * Delete a library.
      *
-     * @param  int    $libID
-     * @param  string $confirm yes|no
-     * @param  string $from    lib|book
+     * @param int $libID
+     * @param string $confirm yes|no
+     * @param string $from lib|book
      * @access public
      * @return void
      */
@@ -265,11 +266,11 @@ class doc extends control
     /**
      * Create a doc.
      *
-     * @param  string       $objectType
-     * @param  int          $objectID
-     * @param  int|string   $libID
-     * @param  int          $moduleID
-     * @param  string       $docType
+     * @param string $objectType
+     * @param int $objectID
+     * @param int|string $libID
+     * @param int $moduleID
+     * @param string $docType
      * @access public
      * @return void
      */
@@ -290,7 +291,7 @@ class doc extends control
             }
 
             $fileAction = '';
-            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
@@ -354,11 +355,11 @@ class doc extends control
     /**
      * Edit a doc.
      *
-     * @param  int    $docID
-     * @param  bool   $comment
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  int    $libID
+     * @param int $docID
+     * @param bool $comment
+     * @param string $objectType
+     * @param int $objectID
+     * @param int $libID
      * @access public
      * @return void
      */
@@ -375,9 +376,9 @@ class doc extends control
             }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action     = !empty($changes) ? 'Edited' : 'Commented';
                 $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
@@ -420,9 +421,9 @@ class doc extends control
         }
         else if($this->app->tab == 'my')
         {
-            $this->lang->doc->menu     = $this->lang->my->menu->contribute;
-            $this->lang->modulePageNav = '';
-            $this->lang->TRActions     = '';
+            $this->lang->doc->menu                         = $this->lang->my->menu->contribute;
+            $this->lang->modulePageNav                     = '';
+            $this->lang->TRActions                         = '';
             $this->lang->my->menu->contribute['subModule'] = 'doc';
         }
         else
@@ -437,15 +438,15 @@ class doc extends control
             /* High light menu. */
             if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)
             {
-                $menu = $this->lang->doc->menu->$objectType;
-                $menu['alias']    .= ',edit';
-                $menu['subModule'] = 'doc';
+                $menu                               = $this->lang->doc->menu->$objectType;
+                $menu['alias']                      .= ',edit';
+                $menu['subModule']                  = 'doc';
                 $this->lang->doc->menu->$objectType = $menu;
             }
         }
 
-        $objects = $this->doc->getOrderedObjects($objectType);
-        $libs    = $this->doc->getLibsByObject($objectType, $objectID);
+        $objects                   = $this->doc->getOrderedObjects($objectType);
+        $libs                      = $this->doc->getLibsByObject($objectType, $objectID);
         $this->lang->modulePageNav = $this->doc->select($objectType, $objects, $objectID, $libs, $libID);
         $this->lang->TRActions     = common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($objectType, $objectID, $libID) : '';
 
@@ -465,8 +466,8 @@ class doc extends control
     /**
      * View a doc.
      *
-     * @param  int    $docID
-     * @param  int    $version
+     * @param int $docID
+     * @param int $version
      * @access public
      * @return void
      */
@@ -527,9 +528,9 @@ class doc extends control
     /**
      * Delete a doc.
      *
-     * @param  int    $docID
-     * @param  string $confirm  yes|no
-     * @param  string $from
+     * @param int $docID
+     * @param string $confirm yes|no
+     * @param string $from
      * @access public
      * @return void
      */
@@ -563,7 +564,7 @@ class doc extends control
 
                     if($from == 'lib')
                     {
-                        $response['locate']  = $this->createLink('doc', 'objectLibs', "type=$objectType");
+                        $response['locate'] = $this->createLink('doc', 'objectLibs', "type=$objectType");
                     }
                 }
                 return $this->send($response);
@@ -576,9 +577,9 @@ class doc extends control
     /**
      * Delete file for doc.
      *
-     * @param  int    $docID
-     * @param  int    $fileID
-     * @param  string $confirm
+     * @param int $docID
+     * @param int $fileID
+     * @param string $confirm
      * @access public
      * @return void
      */
@@ -592,17 +593,17 @@ class doc extends control
         else
         {
             $docContent = $this->dao->select('t1.*')->from(TABLE_DOCCONTENT)->alias('t1')
-                ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
-                ->where('t2.id')->eq($docID)
-                ->fetch();
+                                    ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
+                                    ->where('t2.id')->eq($docID)
+                                    ->fetch();
             unset($docContent->id);
-            $docContent->files    = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
+            $docContent->files   = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
             $docContent->version += 1;
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
 
             $file = $this->file->getById($fileID);
-            $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
+            $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
             die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
     }
@@ -610,14 +611,14 @@ class doc extends control
     /**
      * Collect doc, doclib or module of doclib.
      *
-     * @param  int    $objectID
-     * @param  int    $objectType
+     * @param int $objectID
+     * @param int $objectType
      * @access public
      * @return void
      */
     public function collect($objectID, $objectType)
     {
-        if($objectType == 'doc')    $table = TABLE_DOC;
+        if($objectType == 'doc') $table = TABLE_DOC;
         if($objectType == 'doclib') $table = TABLE_DOCLIB;
         if($objectType == 'module') $table = TABLE_MODULE;
         $collectors = $this->dao->select('collector')->from($table)->where('id')->eq($objectID)->fetch('collector');
@@ -629,9 +630,9 @@ class doc extends control
         }
         else
         {
-            $collectors = explode(',', $collectors);
+            $collectors   = explode(',', $collectors);
             $collectors[] = $this->app->user->account;
-            $collectors = implode(',', $collectors);
+            $collectors   = implode(',', $collectors);
         }
 
         $collectors = trim($collectors, ',') ? ',' . trim($collectors, ',') . ',' : '';
@@ -644,7 +645,7 @@ class doc extends control
     /**
      * Sort doc lib.
      *
-     * @param  string $type
+     * @param string $type
      * @access public
      * @return void
      */
@@ -669,7 +670,7 @@ class doc extends control
     /**
      * Ajax get modules by libID.
      *
-     * @param  int    $libID
+     * @param int $libID
      * @access public
      * @return void
      */
@@ -682,28 +683,28 @@ class doc extends control
     /**
      * Ajax fixed menu.
      *
-     * @param  int    $libID
-     * @param  string $type
+     * @param int $libID
+     * @param string $type
      * @access public
      * @return void
      */
     public function ajaxFixedMenu($libID, $type = 'fixed')
     {
         $customMenuKey = $this->config->global->flow . '_doc';
-        $customMenus = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=common&section=customMenu&key={$customMenuKey}");
+        $customMenus   = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=common&section=customMenu&key={$customMenuKey}");
         if($customMenus) $customMenus = json_decode($customMenus);
         if(empty($customMenus))
         {
             if($type == 'remove') die(js::reload('parent'));
             $customMenus = array();
-            $i = 0;
+            $i           = 0;
             foreach($this->lang->doc->menu as $name => $item)
             {
                 if($name == 'list') continue;
-                $customMenu = new stdclass();
-                $customMenu->name = $name;
+                $customMenu        = new stdclass();
+                $customMenu->name  = $name;
                 $customMenu->order = $i;
-                $customMenus[] = $customMenu;
+                $customMenus[]     = $customMenu;
                 $i++;
             }
         }
@@ -714,11 +715,11 @@ class doc extends control
             if(isset($customMenu->name) and $customMenu->name == "custom{$libID}") unset($customMenus[$i]);
         }
 
-        $lib = $this->doc->getLibByID($libID);
-        $customMenu = new stdclass();
-        $customMenu->name      = "custom{$libID}";
-        $customMenu->order     = count($customMenus);
-        $customMenu->float     = 'right';
+        $lib               = $this->doc->getLibByID($libID);
+        $customMenu        = new stdclass();
+        $customMenu->name  = "custom{$libID}";
+        $customMenu->order = count($customMenus);
+        $customMenu->float = 'right';
         if($type == 'fixed') $customMenus[] = $customMenu;
         $this->setting->setItem("{$this->app->user->account}.common.customMenu.{$customMenuKey}", json_encode($customMenus));
         die(js::reload('parent'));
@@ -744,14 +745,14 @@ class doc extends control
     public function ajaxGetChild($libID, $type = 'module')
     {
         $childModules = $this->tree->getOptionMenu($libID, 'doc');
-        $select = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
+        $select       = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
         die($select);
     }
 
     /**
      * Ajax save draft.
      *
-     * @param  int    $docID
+     * @param int $docID
      * @access public
      * @return void
      */
@@ -763,13 +764,13 @@ class doc extends control
     /**
      * Show files.
      *
-     * @param  string $type
-     * @param  int    $objectID
-     * @param  string $viewType
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param string $type
+     * @param int $objectID
+     * @param string $viewType
+     * @param string $orderBy
+     * @param int $recTotal
+     * @param int $recPerPage
+     * @param int $pageID
      * @access public
      * @return void
      */
@@ -778,9 +779,9 @@ class doc extends control
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
         setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        $objects  = $this->doc->getOrderedObjects($type);
-        $objectID = $this->{$type}->saveState($objectID, $objects);
-        $libs     = $this->doc->getLibsByObject($type, $objectID);
+        $objects                   = $this->doc->getOrderedObjects($type);
+        $objectID                  = $this->{$type}->saveState($objectID, $objects);
+        $libs                      = $this->doc->getLibsByObject($type, $objectID);
         $this->lang->modulePageNav = $this->doc->select($type, $objects, $objectID, $libs);
 
         $tab = strpos('doc,product,project,execution', $this->app->tab) !== false ? $this->app->tab : 'doc';
@@ -789,7 +790,7 @@ class doc extends control
         $table  = $this->config->objectTables[$type];
         $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
-        $this->lang->TRActions  = $this->doc->buildCollectButton4Doc();
+        $this->lang->TRActions = $this->doc->buildCollectButton4Doc();
         $this->lang->TRActions .= $this->doc->buildBrowseSwitch($type, $objectID, $viewType);
 
         /* Load pager. */
@@ -820,11 +821,11 @@ class doc extends control
     /**
      * Show all libs by type.
      *
-     * @param  string $type
-     * @param  string $product
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param string $type
+     * @param string $product
+     * @param int $recTotal
+     * @param int $recPerPage
+     * @param int $pageID
      * @access public
      * @return void
      */
@@ -885,12 +886,12 @@ class doc extends control
     /**
      * Show libs for product or project.
      *
-     * @param  string $type
-     * @param  int    $objectID  projectID|productID
-     * @param  int    $libID
-     * @param  int    $docID
-     * @param  int    $version
-     * @param  int    $appendLib
+     * @param string $type
+     * @param int $objectID projectID|productID
+     * @param int $libID
+     * @param int $docID
+     * @param int $version
+     * @param int $appendLib
      * @access public
      * @return void
      */
@@ -967,7 +968,7 @@ class doc extends control
 
                             /* Add the anchor to the element. */
                             $content[$index] = str_replace('<' . $includeHeadElement[0] . $headElement[2] . '>', '<' . $includeHeadElement[0] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'");
+                            $outline         .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'");
 
                             $preElement = $headElement[1];
                         }
@@ -978,12 +979,12 @@ class doc extends control
 
                             /* Add the anchor to the element. */
                             $content[$index] = str_replace('<' . $includeHeadElement[1] . $headElement[2] . '>', '<' . $includeHeadElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'") . '</li>';
+                            $outline         .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'") . '</li>';
 
                             $preElement = $includeHeadElement[1];
                         }
                     }
-                    if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1] and !isset($content[$index+1])) $outline .= '</ul></li>';
+                    if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1] and !isset($content[$index + 1])) $outline .= '</ul></li>';
                 }
                 $outline .= '</ul>';
 
@@ -1020,9 +1021,9 @@ class doc extends control
     /**
      * Show the catalog of the doc library.
      *
-     * @param  string    $type
-     * @param  int       $objectID
-     * @param  int       $libID
+     * @param string $type
+     * @param int $objectID
+     * @param int $libID
      * @access public
      * @return void
      */

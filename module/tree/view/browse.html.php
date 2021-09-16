@@ -37,6 +37,10 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
         {
             echo $lang->doc->manageType . $lang->colon . $root->name;
         }
+        elseif($viewType == 'api')
+        {
+            echo $lang->api->manageType . $lang->colon . $root->name;
+        }
         elseif($viewType == 'feedback')
         {
             echo $lang->feedback->manageCate;
