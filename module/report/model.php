@@ -317,9 +317,9 @@ class reportModel extends model
         $stmt = $this->dao->select('t1.*, t2.name as executionName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->in('wait,doing')
+            ->andWhere('t1.status')->in('wait,pause,doing')
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.status')->in('wait, doing')
+            ->andWhere('t2.status')->in('wait,suspended,doing')
             ->andWhere('assignedTo')->ne('');
 
         $allTasks = $stmt->fetchAll('id');
