@@ -24,7 +24,7 @@
       <div class='item <?php echo $key == 0 ? 'active' : '';?>' style='height: 395px'>
         <?php if($feature == 'introduction'):?>
         <div class='article-content text-center'>
-          <video src="<?php echo $lang->install->guideVideo;?>" height="320px" controls ="controls"></video>
+          <video src="<?php echo $lang->install->guideVideo;?>" height="320px" controls ="controls" id='guideVideo'></video>
           <div class='text-center' style='position:relative'>
             <p><?php echo $lang->install->introduction;?></p>
             <div class='download-file'>
