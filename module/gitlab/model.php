@@ -15,7 +15,7 @@ class gitlabModel extends model
     /**
      * Get a gitlab by id.
      *
-     * @param  int    $id
+     * @param  int $id
      * @access public
      * @return object
      */
@@ -42,7 +42,6 @@ class gitlabModel extends model
     /**
      * Get gitlab pairs.
      *
-
      * @access public
      * @return array
      */
@@ -54,7 +53,7 @@ class gitlabModel extends model
     /**
      * Get gitlab api base url by gitlab id.
      *
-     * @param  int    $id
+     * @param  int $id
      * @access public
      * @return string
      */
@@ -62,13 +61,13 @@ class gitlabModel extends model
     {
         $gitlab = $this->getByID($id);
         if(!$gitlab) return '';
-        return rtrim($gitlab->url, '/').'/api/v4%s'."?private_token={$gitlab->token}";
+        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}";
     }
 
     /**
      * Get gitlab user id and realname pairs of one gitlab.
      *
-     * @param  int    $gitlabID
+     * @param  int $gitlabID
      * @access public
      * @return array
      */
@@ -86,7 +85,7 @@ class gitlabModel extends model
     /**
      * Get gitlab user id and zentao account pairs of one gitlab.
      *
-     * @param  int    $gitlab
+     * @param  int $gitlab
      * @access public
      * @return array
      */
@@ -101,7 +100,7 @@ class gitlabModel extends model
     /**
      * Get zentao account gitlab user id pairs of one gitlab.
      *
-     * @param  int    $gitlab
+     * @param  int $gitlab
      * @access public
      * @return array
      */
@@ -116,7 +115,7 @@ class gitlabModel extends model
     /**
      * Get project pairs of one gitlab.
      *
-     * @param  int    $gitlabID
+     * @param  int $gitlabID
      * @access public
      * @return array
      */
@@ -133,8 +132,8 @@ class gitlabModel extends model
     /**
      * Get matched gitlab users.
      *
-     * @param  array    $gitlabUsers
-     * @param  array    $zentaoUsers
+     * @param  array $gitlabUsers
+     * @param  array $zentaoUsers
      * @access public
      * @return array
      */
@@ -145,9 +144,9 @@ class gitlabModel extends model
         {
             foreach($zentaoUsers as $zentaoUser)
             {
-                if($gitlabUser->account  == $zentaoUser->account)  $matches->accounts[$gitlabUser->account][] = $zentaoUser->account;
-                if($gitlabUser->realname == $zentaoUser->realname) $matches->names[$gitlabUser->realname][]   = $zentaoUser->account;
-                if($gitlabUser->email    == $zentaoUser->email)    $matches->emails[$gitlabUser->email][]     = $zentaoUser->account;
+                if($gitlabUser->account == $zentaoUser->account) $matches->accounts[$gitlabUser->account][] = $zentaoUser->account;
+                if($gitlabUser->realname == $zentaoUser->realname) $matches->names[$gitlabUser->realname][] = $zentaoUser->account;
+                if($gitlabUser->email == $zentaoUser->email) $matches->emails[$gitlabUser->email][] = $zentaoUser->account;
             }
         }
 
@@ -163,20 +162,20 @@ class gitlabModel extends model
             if(isset($bindedUsers[$gitlabUser->id]))
             {
                 $gitlabUser->zentaoAccount = $bindedUsers[$gitlabUser->id];
-                $matchedUsers[] = $gitlabUser;
+                $matchedUsers[]            = $gitlabUser;
                 continue;
             }
 
             $matchedZentaoUsers = array();
             if(isset($matches->accounts[$gitlabUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitlabUser->account]);
-            if(isset($matches->emails[$gitlabUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
-            if(isset($matches->names[$gitlabUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitlabUser->realname]);
+            if(isset($matches->emails[$gitlabUser->email])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitlabUser->email]);
+            if(isset($matches->names[$gitlabUser->realname])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitlabUser->realname]);
 
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
                 $gitlabUser->zentaoAccount = current($matchedZentaoUsers);
-                $matchedUsers[] = $gitlabUser;
+                $matchedUsers[]            = $gitlabUser;
             }
         }
 
@@ -186,7 +185,7 @@ class gitlabModel extends model
     /**
      * Get gitlab projects by executionID.
      *
-     * @param  int    $executionID
+     * @param  int $executionID
      * @access public
      * @return array
      */
@@ -207,7 +206,7 @@ class gitlabModel extends model
     /**
      * Get executions by one product for gitlab module.
      *
-     * @param  int    $productID
+     * @param  int $productID
      * @access public
      * @return object
      */
@@ -259,8 +258,8 @@ class gitlabModel extends model
     /**
      * Get gitlab userID by account.
      *
-     * @param  int       $gitlabID
-     * @param  string    $account
+     * @param  int    $gitlabID
+     * @param  string $account
      * @access public
      * @return object
      */
@@ -276,8 +275,8 @@ class gitlabModel extends model
     /**
      * Get gitlab project name of one gitlab project.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return string|false
      */
@@ -291,8 +290,8 @@ class gitlabModel extends model
     /**
      * Get reference option menus.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return array
      */
@@ -313,8 +312,8 @@ class gitlabModel extends model
     /**
      * Get branches.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return array
      */
@@ -344,7 +343,7 @@ class gitlabModel extends model
     /**
      * Update a gitlab.
      *
-     * @param  int    $id
+     * @param  int $id
      * @access public
      * @return bool
      */
@@ -356,10 +355,10 @@ class gitlabModel extends model
     /**
      * Send an api get request.
      *
-     * @param  int|string    $host     gitlab server ID | gitlab host url.
-     * @param  int           $api
-     * @param  int           $data
-     * @param  int           $options
+     * @param  int|string $host gitlab server ID | gitlab host url.
+     * @param  int        $api
+     * @param  int        $data
+     * @param  int        $options
      * @access public
      * @return object
      */
@@ -375,10 +374,10 @@ class gitlabModel extends model
     /**
      * Send an api post request.
      *
-     * @param  int|string    $host     gitlab server ID | gitlab host url.
-     * @param  int           $api
-     * @param  int           $data
-     * @param  int           $options
+     * @param  int|string $host gitlab server ID | gitlab host url.
+     * @param  int        $api
+     * @param  int        $data
+     * @param  int        $options
      * @access public
      * @return object
      */
@@ -395,9 +394,9 @@ class gitlabModel extends model
      * Get a list of to-do items by API.
      *
      * @docs   https://docs.gitlab.com/ee/api/todos.html
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $sudo
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $sudo
      * @access public
      * @return object
      */
@@ -405,15 +404,15 @@ class gitlabModel extends model
     {
         $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);
         if(!$gitlab) return '';
-        $url = rtrim($gitlab->url, '/')."/api/v4/todos?project_id=$projectID&type=MergeRequest&state=pending&private_token={$gitlab->token}&sudo={$sudo}";
+        $url = rtrim($gitlab->url, '/') . "/api/v4/todos?project_id=$projectID&type=MergeRequest&state=pending&private_token={$gitlab->token}&sudo={$sudo}";
         return json_decode(commonModel::http($url));
     }
 
     /**
      * Get current user.
      *
-     * @param  string   $host
-     * @param  string   $token
+     * @param  string $host
+     * @param  string $token
      * @access public
      * @return array
      */
@@ -426,7 +425,7 @@ class gitlabModel extends model
     /**
      * Get gitlab user list.
      *
-     * @param  object   $gitlab
+     * @param  object $gitlab
      * @access public
      * @return array
      */
@@ -439,7 +438,7 @@ class gitlabModel extends model
         $users = array();
         foreach($response as $gitlabUser)
         {
-            $user = new stdclass;
+            $user           = new stdclass;
             $user->id       = $gitlabUser->id;
             $user->realname = $gitlabUser->name;
             $user->account  = $gitlabUser->username;
@@ -455,7 +454,7 @@ class gitlabModel extends model
     /**
      * Get projects of one gitlab.
      *
-     * @param  int    $gitlabID
+     * @param  int $gitlabID
      * @access public
      * @return void
      */
@@ -464,11 +463,11 @@ class gitlabModel extends model
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();
 
-        $host  = rtrim($gitlab->url, '/');
+        $host = rtrim($gitlab->url, '/');
         $host .= '/api/v4/projects';
 
         $allResults = array();
-        for($page = 1; true; $page ++)
+        for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));
             if(empty($results) or $page > 10) break;
@@ -481,8 +480,8 @@ class gitlabModel extends model
     /**
      * Get single project by API.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return object
      */
@@ -495,8 +494,8 @@ class gitlabModel extends model
     /**
      * Get project users.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return object
      */
@@ -509,8 +508,8 @@ class gitlabModel extends model
     /**
      * Get project all members(users and users in groups).
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return object
      */
@@ -523,9 +522,9 @@ class gitlabModel extends model
     /**
      * Get the member detail in project.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $userID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $userID
      * @access public
      * @return object
      */
@@ -554,8 +553,8 @@ class gitlabModel extends model
      * Get Forks of a project by API.
      *
      * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return object
      */
@@ -568,12 +567,12 @@ class gitlabModel extends model
     /**
      * Get upstream project by API.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return void
      */
-    public function apiGetUpstream($gitlabID,$projectID)
+    public function apiGetUpstream($gitlabID, $projectID)
     {
         $currentProject = $this->apiGetSingleProject($gitlabID, $projectID);
         if(isset($currentProject->forked_from_project)) return $currentProject->forked_from_project;
@@ -583,8 +582,8 @@ class gitlabModel extends model
     /**
      * Get hooks.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return array
      */
@@ -600,9 +599,9 @@ class gitlabModel extends model
     /**
      * Get specific hook by api.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $hookID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $hookID
      * @access public
      * @return object
      */
@@ -618,9 +617,9 @@ class gitlabModel extends model
     /**
      * Create hook by api.
      *
-     * @param  int       $gitlabID
-     * @param  int       $projectID
-     * @param  string    $url
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $url
      * @access public
      * @return object
      */
@@ -632,7 +631,7 @@ class gitlabModel extends model
             ->where('id')->eq($gitlabID)
             ->fetch('accessToken');
 
-        $postData = new stdclass;
+        $postData                          = new stdclass;
         $postData->enable_ssl_verification = "false";
         $postData->issues_events           = "true";
         $postData->merge_requests_events   = "true";
@@ -648,9 +647,9 @@ class gitlabModel extends model
     /**
      * Delete hook by api.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $hookID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $hookID
      * @access public
      * @return null|object
      */
@@ -665,9 +664,9 @@ class gitlabModel extends model
     /**
      * Update hook by api.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $hookID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $hookID
      * @access public
      * @return object
      */
@@ -675,7 +674,7 @@ class gitlabModel extends model
     {
         $apiRoot = $this->getApiRoot($gitlabID);
 
-        $postData = new stdclass;
+        $postData                          = new stdclass;
         $postData->enable_ssl_verification = "false";
         $postData->issues_events           = "true";
         $postData->merge_requests_events   = "true";
@@ -692,9 +691,9 @@ class gitlabModel extends model
     /**
      * Create Label for gitlab project.
      *
-     * @param  int      $gitlabID
-     * @param  int      $projectID
-     * @param  object   $label
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $label
      * @access public
      * @return object
      */
@@ -710,8 +709,8 @@ class gitlabModel extends model
     /**
      * Get labels of project by api.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return array
      */
@@ -727,9 +726,9 @@ class gitlabModel extends model
     /**
      * Delete a Label with labelName by api.
      *
-     * @param  int       $gitlabID
-     * @param  int       $projectID
-     * @param  string    $labelName
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $labelName
      * @access public
      * @return object
      */
@@ -752,9 +751,9 @@ class gitlabModel extends model
     /**
      * Get single issue by api.
      *
-     * @param  int   $gitlabID
-     * @param  int   $projectID
-     * @param  int   $issueID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $issueID
      * @access public
      * @return object
      */
@@ -767,9 +766,9 @@ class gitlabModel extends model
     /**
      * Get gitlab issues by api.
      *
-     * @param  int       $gitlabID
-     * @param  int       $projectID
-     * @param  string    $options
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $options
      * @access public
      * @return object
      */
@@ -790,11 +789,11 @@ class gitlabModel extends model
     /**
      * Create issue by api.
      *
-     * @param  int       $gitlabID
-     * @param  int       $projectID
-     * @param  string    $objectType
-     * @param  int       $objectID
-     * @param  object    $object
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  object $object
      * @access public
      * @return object
      */
@@ -823,12 +822,12 @@ class gitlabModel extends model
     /**
      * Update issue by gitlab API.
      *
-     * @param  int      $gitlabID
-     * @param  int      $projectID
-     * @param  int      $issueID
-     * @param  string   $objectType
-     * @param  object   $object
-     * @param  int      $objectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $issueID
+     * @param  string $objectType
+     * @param  object $object
+     * @param  int    $objectID
      * @access public
      * @return object
      */
@@ -853,9 +852,9 @@ class gitlabModel extends model
     /**
      * Delete an issue by api.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  int    $issueID
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @param  int $issueID
      * @access public
      * @return object
      */
@@ -869,9 +868,9 @@ class gitlabModel extends model
     /**
      * Create a new pipeline by api.
      *
-     * @param  int     $gitlabID
-     * @param  int     $projectID
-     * @param  object  $params
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $params
      * @access public
      * @return object
      * @docment https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
@@ -947,8 +946,8 @@ class gitlabModel extends model
     /**
      * Get project repository branches by api.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return object
      */
@@ -961,16 +960,16 @@ class gitlabModel extends model
     /**
      * Get project repository tags by api.
      *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return object
      */
-     public function apiGetTags($gitlabID, $projectID)
-     {
-         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/tags");
-         return json_decode(commonModel::http($url));
-     }
+    public function apiGetTags($gitlabID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/tags");
+        return json_decode(commonModel::http($url));
+    }
 
     /**
      * Check webhook token by HTTP_X_GITLAB_TOKEN.
@@ -987,8 +986,8 @@ class gitlabModel extends model
     /**
      * Parse webhook body function.
      *
-     * @param  object    $body
-     * @param  int       $gitlabID
+     * @param  object $body
+     * @param  int    $gitlabID
      * @access public
      * @return object
      */
@@ -996,14 +995,16 @@ class gitlabModel extends model
     {
         $type = zget($body, 'object_kind', '');
         if(!$type or !is_callable(array($this, "webhookParse{$type}"))) return false;
-        return call_user_func_array(array($this, "webhookParse{$type}"), array('body' => $body, $gitlabID));
+        // fix php 8.0 bug. link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953
+        //return call_user_func_array(array($this, "webhookParse{$type}"), array('body' => $body, $gitlabID));
+        return call_user_func_array(array($this, "webhookParse{$type}"), [$body, $gitlabID]);
     }
 
     /**
      * Parse Webhook issue.
      *
-     * @param  object    $body
-     * @param  int       $gitlabID
+     * @param  object $body
+     * @param  int    $gitlabID
      * @access public
      * @return object
      */
@@ -1012,7 +1013,7 @@ class gitlabModel extends model
         $object = $this->webhookParseObject($body->labels);
         if(empty($object)) return null;
 
-        $issue = new stdclass;
+        $issue             = new stdclass;
         $issue->action     = $body->object_attributes->action . $body->object_kind;
         $issue->issue      = $body->object_attributes;
         $issue->changes    = $body->changes;
@@ -1033,7 +1034,7 @@ class gitlabModel extends model
     /**
      * Webhook parse note.
      *
-     * @param  object    $body
+     * @param  object $body
      * @access public
      * @return void
      */
@@ -1045,9 +1046,9 @@ class gitlabModel extends model
     /**
      * Webhook sync issue.
      *
-     * @param  object   $issue
-     * @param  int      $objectType
-     * @param  int      $objectID
+     * @param  object $issue
+     * @param  int    $objectType
+     * @param  int    $objectID
      * @access public
      * @return void
      */
@@ -1061,7 +1062,7 @@ class gitlabModel extends model
     /**
      * Parse zentao object from labels.
      *
-     * @param  array    $labels
+     * @param  array $labels
      * @access public
      * @return object
      */
@@ -1078,7 +1079,7 @@ class gitlabModel extends model
             if($objectType)
             {
                 list($prefix, $id) = explode('/', $label->title);
-                $object = new stdclass;
+                $object       = new stdclass;
                 $object->id   = $id;
                 $object->type = $objectType;
             }
@@ -1090,7 +1091,7 @@ class gitlabModel extends model
     /**
      * Process webhook issue assign option.
      *
-     * @param  object   $issue
+     * @param  object $issue
      * @access public
      * @return bool
      */
@@ -1099,7 +1100,7 @@ class gitlabModel extends model
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if(!$tableName) return false;
 
-        $data = $issue->object;
+        $data               = $issue->object;
         $data->assignedDate = $issue->object->lastEditedDate;
         $data->assignedTo   = $issue->object->assignedTo;
 
@@ -1117,7 +1118,7 @@ class gitlabModel extends model
     /**
      * Process issue close option.
      *
-     * @param  object    $issue
+     * @param  object $issue
      * @access public
      * @return bool
      */
@@ -1126,7 +1127,7 @@ class gitlabModel extends model
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if(!$tableName) return false;
 
-        $data = $issue->object;
+        $data             = $issue->object;
         $data->assignedTo = 'closed';
         $data->status     = 'closed';
         $data->closedBy   = $issue->object->lastEditedBy;
@@ -1146,16 +1147,16 @@ class gitlabModel extends model
     /**
      * Create zentao object label for gitlab project.
      *
-     * @param  int     $gitlabID
-     * @param  int     $projectID
-     * @param  string  $objectType
-     * @param  string  $objectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $objectType
+     * @param  string $objectID
      * @access public
      * @return object
      */
     public function createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID)
     {
-        $label = new stdclass;
+        $label              = new stdclass;
         $label->name        = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
         $label->color       = $this->config->gitlab->zentaoObjectLabel->color->$objectType;
         $label->description = common::getSysURL() . helper::createLink($objectType, 'view', "id={$objectID}");
@@ -1166,9 +1167,9 @@ class gitlabModel extends model
     /**
      * Create relationship between zentao product and  gitlab project.
      *
-     * @param  array  $products
-     * @param  int    $gitlabID
-     * @param  int    $gitlabProjectID
+     * @param  array $products
+     * @param  int   $gitlabID
+     * @param  int   $gitlabProjectID
      * @access public
      * @return void
      */
@@ -1176,7 +1177,7 @@ class gitlabModel extends model
     {
         $programs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('id')->in($products)->fetchPairs();
 
-        $relation = new stdclass;
+        $relation            = new stdclass;
         $relation->execution = 0;
         $relation->AType     = 'gitlab';
         $relation->AID       = $gitlabID;
@@ -1201,7 +1202,7 @@ class gitlabModel extends model
      *
      * condition: when user deleting a repo.
      *
-     * @param  int    $repoID
+     * @param  int $repoID
      * @access public
      * @return void
      */
@@ -1230,9 +1231,9 @@ class gitlabModel extends model
     /**
      * Create webhook for zentao.
      *
-     * @param  int    $products
-     * @param  int    $gitlabID
-     * @param  int    $projectID
+     * @param  int $products
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return bool
      */
@@ -1253,9 +1254,9 @@ class gitlabModel extends model
     /**
      * Delete an issue from zentao and gitlab.
      *
-     * @param  string    $objectType
-     * @param  int       $objectID
-     * @param  int       $issueID
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $issueID
      * @access public
      * @return void
      */
@@ -1270,10 +1271,10 @@ class gitlabModel extends model
     /**
      * Save synced issue to relation table.
      *
-     * @param  string   $objectType
-     * @param  object   $object
-     * @param  int      $gitlabID
-     * @param  object   $issue
+     * @param  string $objectType
+     * @param  object $object
+     * @param  int    $gitlabID
+     * @param  object $issue
      * @access public
      * @return void
      */
@@ -1281,7 +1282,7 @@ class gitlabModel extends model
     {
         if(empty($issue->iid) or empty($issue->project_id)) return false;
 
-        $relation = new stdclass;
+        $relation            = new stdclass;
         $relation->product   = zget($object, 'product', 0);
         $relation->execution = zget($object, 'execution', 0);
         $relation->AType     = $objectType;
@@ -1298,11 +1299,11 @@ class gitlabModel extends model
     /**
      * Save imported issue.
      *
-     * @param  int       $gitlabID
-     * @param  int       $projectID
-     * @param  string    $objectType
-     * @param  int       $objectID
-     * @param  object    $issue
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  object $issue
      * @access public
      * @return void
      */
@@ -1338,8 +1339,8 @@ class gitlabModel extends model
             $value = '';
             list($field, $optionType, $options) = explode('|', $config);
 
-            if($optionType == 'field')       $value = $task->$taskField;
-            if($optionType == 'userPairs')   $value = zget($gitlabUsers, $task->$taskField);
+            if($optionType == 'field') $value = $task->$taskField;
+            if($optionType == 'userPairs') $value = zget($gitlabUsers, $task->$taskField);
             if($optionType == 'configItems') $value = zget($this->config->gitlab->$options, $task->$taskField, '');
 
             if($value) $issue->$field = $value;
@@ -1348,11 +1349,11 @@ class gitlabModel extends model
         if($isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
-        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event = 'reopen';
 
         /* Append this object link in zentao to gitlab issue description. */
-        $zentaoLink = common::getSysURL() . helper::createLink('task', 'view', "taskID={$task->id}");
+        $zentaoLink         = common::getSysURL() . helper::createLink('task', 'view', "taskID={$task->id}");
         $issue->description = $issue->description . "\n\n" . $zentaoLink;
 
         return $issue;
@@ -1361,16 +1362,16 @@ class gitlabModel extends model
     /**
      * Parse story to issue.
      *
-     * @param  int       $gitlabID
-     * @param  int       $gitlabProjectID
-     * @param  object    $story
+     * @param  int    $gitlabID
+     * @param  int    $gitlabProjectID
+     * @param  object $story
      * @access public
      * @return object
      */
     public function storyToIssue($gitlabID, $gitlabProjectID, $story)
     {
-        $map   = $this->config->gitlab->maps->story;
-        $issue = new stdclass;
+        $map         = $this->config->gitlab->maps->story;
+        $issue       = new stdclass;
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
         if(empty($gitlabUsers)) return false;
 
@@ -1394,11 +1395,11 @@ class gitlabModel extends model
         if($issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
-        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event = 'reopen';
 
         /* Append this object link in zentao to gitlab issue description */
-        $zentaoLink = common::getSysURL() . helper::createLink('story', 'view', "storyID={$story->id}");
+        $zentaoLink         = common::getSysURL() . helper::createLink('story', 'view', "storyID={$story->id}");
         $issue->description = $issue->description . "\n\n" . $zentaoLink;
 
         return $issue;
@@ -1407,16 +1408,16 @@ class gitlabModel extends model
     /**
      * Parse bug to issue.
      *
-     * @param  int       $gitlabID
-     * @param  int       $projectID
-     * @param  object    $bug
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $bug
      * @access public
      * @return object
      */
     public function bugToIssue($gitlabID, $projectID, $bug)
     {
-        $map   = $this->config->gitlab->maps->bug;
-        $issue = new stdclass;
+        $map         = $this->config->gitlab->maps->bug;
+        $issue       = new stdclass;
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
         if(empty($gitlabUsers)) return false;
 
@@ -1440,11 +1441,11 @@ class gitlabModel extends model
         if($issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
-        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event = 'reopen';
 
         /* Append this object link in zentao to gitlab issue description */
-        $zentaoLink = common::getSysURL() . helper::createLink('bug', 'view', "bugID={$bug->id}");
+        $zentaoLink         = common::getSysURL() . helper::createLink('bug', 'view', "bugID={$bug->id}");
         $issue->description = $issue->description . "\n\n" . $zentaoLink;
 
         return $issue;
@@ -1453,10 +1454,10 @@ class gitlabModel extends model
     /**
      * Parse zentao object to issue. object can be task, bug and story.
      *
-     * @param  int       $gitlabID
-     * @param  int       $projectID
-     * @param  string    $objectType
-     * @param  object    $object
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $objectType
+     * @param  object $object
      * @access public
      * @return object
      */
@@ -1465,12 +1466,12 @@ class gitlabModel extends model
         $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);
         if(empty($gitlabUsers)) return false;
         $issue = new stdclass;
-        $map = $this->config->gitlab->maps->$objectType;
+        $map   = $this->config->gitlab->maps->$objectType;
         foreach($map as $objectField => $config)
         {
             $value = '';
             list($field, $optionType, $options) = explode('|', $config);
-            if($optionType == 'field')  $value = $object->$objectField;
+            if($optionType == 'field') $value = $object->$objectField;
             if($optionType == 'fields') $value = $object->$objectField . "\n\n" . $object->$options;
             if($optionType == 'userPairs')
             {
@@ -1485,8 +1486,8 @@ class gitlabModel extends model
         if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
-        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event='close';
-        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event='reopen';
+        if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
+        if(isset($issue->state) and $issue->state == 'opened') $issue->state_event = 'reopen';
 
         /* Append this object link in zentao to gitlab issue description */
         $zentaoLink = common::getSysURL() . helper::createLink($objectType, 'view', "id={$object->id}");
@@ -1498,9 +1499,9 @@ class gitlabModel extends model
     /**
      * Parse issue to zentao object.
      *
-     * @param  object    $issue
-     * @param  int       $gitlabID
-     * @param  object    $changes
+     * @param  object $issue
+     * @param  int    $gitlabID
+     * @param  object $changes
      * @access public
      * @return object
      */
@@ -1520,9 +1521,9 @@ class gitlabModel extends model
             list($gitlabField, $optionType, $options) = explode('|', $config);
             if(!isset($changes->$gitlabField) and $object->id != 0) continue;
             if($optionType == 'field' or $optionType == 'fields') $value = $issue->$gitlabField;
-            if($options == 'date')      $value = $value ? date('Y-m-d', strtotime($value)) : '0000-00-00';
-            if($options == 'datetime')  $value = $value ? date('Y-m-d H:i:s', strtotime($value)) : '0000-00-00 00:00:00';
-            if($optionType == 'userPairs' and isset($issue->$gitlabField))   $value = zget($gitlabUsers, $issue->$gitlabField);
+            if($options == 'date') $value = $value ? date('Y-m-d', strtotime($value)) : '0000-00-00';
+            if($options == 'datetime') $value = $value ? date('Y-m-d H:i:s', strtotime($value)) : '0000-00-00 00:00:00';
+            if($optionType == 'userPairs' and isset($issue->$gitlabField)) $value = zget($gitlabUsers, $issue->$gitlabField);
             if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
 
             /* Execute this line even `$value == ""`, such as `$issue->description == ""`. */

@@ -27,33 +27,33 @@ class search extends control
     /**
      * Build search form.
      *
-     * @param  string  $module
-     * @param  array   $searchFields
-     * @param  array   $fieldParams
-     * @param  string  $actionURL
-     * @param  int     $queryID
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $params
+     * @param  string $actionURL
+     * @param  int    $queryID
      * @access public
      * @return void
      */
-    public function buildForm($module = '', $searchFields = '', $fieldParams = '', $actionURL = '', $queryID = 0)
+    public function buildForm($module = '', $fields = '', $params = '', $actionURL = '', $queryID = 0)
     {
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
         $queryID      = (empty($module) and empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
-        $searchFields = empty($searchFields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $searchFields;
-        $fieldParams  = empty($fieldParams) ?  json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $fieldParams;
+        $fields       = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
+        $params       = empty($params) ?  json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
         $actionURL    = empty($actionURL) ?    $_SESSION[$searchParams]['actionURL'] : $actionURL;
         $style        = isset($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : '';
         $onMenuBar    = isset($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : '';
 
         $_SESSION['searchParams']['module'] = $module;
-        $this->search->initSession($module, $searchFields, $fieldParams);
+        $this->search->initSession($module, $fields, $params);
 
         $this->view->module       = $module;
         $this->view->groupItems   = $this->config->search->groupItems;
-        $this->view->searchFields = $searchFields;
+        $this->view->searchFields = $fields;
         $this->view->actionURL    = $actionURL;
-        $this->view->fieldParams  = $this->search->setDefaultParams($searchFields, $fieldParams);
+        $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
         $this->view->queries      = $this->search->getQueryPairs($module);
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
