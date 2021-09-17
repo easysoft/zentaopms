@@ -30,7 +30,7 @@ $lang->company->admins   = '管理员';
 
 $lang->company->product   = $lang->productCommon;
 $lang->company->project   = '项目';
-$lang->company->execution = $lang->executionCommon;
+$lang->company->execution = '执行';
 $lang->company->user      = '用户';
 
 $lang->company->guestOptions[0] = '不允许';

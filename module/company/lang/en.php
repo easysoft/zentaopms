@@ -30,7 +30,7 @@ $lang->company->admins   = 'Administrator';
 
 $lang->company->product   = $lang->productCommon;
 $lang->company->project   = 'Project';
-$lang->company->execution = $lang->executionCommon;
+$lang->company->execution = 'Execution';
 $lang->company->user      = 'User';
 
 $lang->company->guestOptions[0] = 'Deny';
