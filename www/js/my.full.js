@@ -39,13 +39,18 @@
         {
             if(window.parent.$.tabSession) _tid = window.parent.$.tabSession.getTid();
         }
-        else if((config.currentModule === 'index' && config.currentMethod === 'index') || (config.currentModule === 'user' && config.currentMethod === 'login'))
+        else
         {
-            _tid = sessionStorage.getItem('TID');
+            var isIndexOrLoginPage = (config.currentModule === 'index' && config.currentMethod === 'index') || (config.currentModule === 'user' && config.currentMethod === 'login');
             var link = $.parseLink(window.location.href);
+
+            _tid = sessionStorage.getItem('TID');
             if(!_tid)
             {
-                _tid = link.tid
+                if(link.tid && isIndexOrLoginPage)
+                {
+                    _tid = link.tid
+                }
 
                 if(!_tid)
                 {
@@ -55,7 +60,7 @@
             }
             sessionStorage.setItem('TID', _tid);
 
-            if(link.moduleName == config.currentModule && link.methodName == config.currentMethod && !link.tid)
+            if(isIndexOrLoginPage && !link.tid)
             {
                 window.location.href = convertUrlWithTid(window.location.href, _tid);
             }
