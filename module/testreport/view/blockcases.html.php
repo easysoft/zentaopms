@@ -1,4 +1,5 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
+<style>.c-date {width: 130px;}</style>
 <table class='table main-table' id='cases'>
   <thead>
     <tr>
