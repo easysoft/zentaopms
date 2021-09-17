@@ -42,9 +42,9 @@
         else if((config.currentModule === 'index' && config.currentMethod === 'index') || (config.currentModule === 'user' && config.currentMethod === 'login'))
         {
             _tid = sessionStorage.getItem('TID');
+            var link = $.parseLink(window.location.href);
             if(!_tid)
             {
-                var link = $.parseLink(window.location.href);
                 _tid = link.tid
 
                 if(!_tid)
@@ -55,7 +55,6 @@
             }
             sessionStorage.setItem('TID', _tid);
 
-            var link = $.parseLink(window.location.href);
             if(link.moduleName == config.currentModule && link.methodName == config.currentMethod && !link.tid)
             {
                 window.location.href = convertUrlWithTid(window.location.href, _tid);
