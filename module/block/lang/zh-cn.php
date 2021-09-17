@@ -538,7 +538,7 @@ $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';
+$lang->block->modules['project']->moreLinkList->recentproject  = $config->systemMode == 'new' ? 'project|browse|' : 'execution|all|';
 $lang->block->modules['project']->moreLinkList->statistic      = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->project        = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
