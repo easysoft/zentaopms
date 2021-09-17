@@ -404,7 +404,7 @@ class commonModel extends model
                 if($objectType == 'testcase')  $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
                 if($objectType == 'execution') $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
                 if($objectType == 'project')   $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
-                if($objectType == 'product')   $params = "programID=0&extra=from=global";
+                if($objectType == 'product')   $params = "programID=&extra=from=global";
                 if($objectType == 'program')   $params = "parentProgramID=0&extra=from=global";
 
                 $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
