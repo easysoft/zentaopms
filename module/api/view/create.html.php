@@ -111,32 +111,32 @@
                                 <div class='col-md-3 col-lg-2'>
                                     <div class="table-row">
                                         <span class='input-group-addon w-50px'><?php echo $lang->api->field; ?></span>
-                                        <?php echo html::input("params[0][field]", $param['field'], "class='form-control'"); ?>
+                                        <?php echo html::input("params[0][field]", '', "class='form-control'"); ?>
                                     </div>
                                 </div>
                                 <div class='col-md-3 col-lg-2'>
                                     <div class="table-row">
                                         <span
                                             class='input-group-addon w-70px'><?php echo $lang->api->required; ?></span>
-                                        <?php echo html::select('params[0][required]', $lang->api->requiredOptions, $param['required'] ? $param['required'] : 0, "class='form-control'"); ?>
+                                        <?php echo html::select('params[0][required]', $lang->api->requiredOptions, 0, "class='form-control'"); ?>
                                     </div>
                                 </div>
                                 <div class='col-md-3 col-lg-2'>
                                     <div class="table-row">
                                         <span class='input-group-addon w-50px'><?php echo $lang->api->scope; ?></span>
-                                        <?php echo html::select('params[0][scope]', $lang->api->paramsScopeOptions, $param['scope'], "class='form-control' onchange='loadParamsTypeOptions(this);'"); ?>
+                                        <?php echo html::select('params[0][scope]', $lang->api->paramsScopeOptions, '', "class='form-control' onchange='loadParamsTypeOptions(this);'"); ?>
                                     </div>
                                 </div>
                                 <div class='col-md-3 col-lg-2'>
                                     <div class="table-row">
                                         <span
                                             class='input-group-addon w-50px'><?php echo $lang->api->paramsType; ?></span>
-                                        <?php echo html::select('params[0][paramsType]', $lang->api->paramsTypeOptions, $param['paramsType'], "class='form-control' onchange='changeType(this);'"); ?>
+                                        <?php echo html::select('params[0][paramsType]', $lang->api->paramsTypeOptions, '', "class='form-control' onchange='changeType(this);'"); ?>
                                     </div>
                                 </div>
-                                <div class='col-md-3 col-lg-2 typeCustom <?php echo $param['paramsType'] == apiModel::PARAMS_TYPE_CUSTOM ? '' : 'hidden' ?>'>
+                                <div class='col-md-3 col-lg-2 typeCustom hidden'>
                                     <div class="table-row">
-                                        <input type="hidden" class="custom" name="params[0][custom]" value="<?php echo htmlspecialchars($param['custom']) ?>">
+                                        <input type="hidden" class="custom" name="params[0][custom]" value="">
                                         <button type="button" data-toggle="modal" data-target="#customType"
                                                 class="btn btn-wide customType" style="width: 80px;background: #eee">
                                             <?php echo $lang->api->customType ?>
