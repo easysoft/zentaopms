@@ -632,10 +632,11 @@ class programModel extends model
 
             $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
-            if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             $this->file->updateObjectID($this->post->uid, $programID, 'program');
             $this->setTreePath($programID);
+
+            if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
             return $programID;
         }
