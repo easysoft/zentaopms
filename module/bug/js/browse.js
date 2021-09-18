@@ -7,8 +7,5 @@ $(function()
     {
         $("#sidebarHeader").toggle("fast");
     });
-    if($("main").is(".hide-sidebar"))
-    {
-        $("#sidebarHeader").hide();
-    }
+    if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
 });
