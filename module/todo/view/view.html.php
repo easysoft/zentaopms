@@ -49,7 +49,7 @@
         <?php
         if($this->session->todoList)
         {
-            $browseLink = $this->session->todoList;
+            $browseLink = empty($todo->deleted) ? $this->session->todoList : $this->createLink('action', 'trash');
         }
         elseif($todo->account == $app->user->account)
         {

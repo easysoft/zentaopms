@@ -958,13 +958,24 @@ class productModel extends model
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-
+        if($this->config->systemMode == 'new')
+        {
+            $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+                ->from(TABLE_TASK)
+                ->where('project')->in($projectKeys)
+                ->andWhere('parent')->lt(1)
+                ->andWhere('deleted')->eq(0)
+                ->fetchGroup('project', 'id');
+        }
+        else
+        {
+            $tasks = $this->dao->select('id, execution, estimate, consumed, `left`, status, closedReason')
+                ->from(TABLE_TASK)
+                ->where('execution')->in($projectKeys)
+                ->andWhere('parent')->lt(1)
+                ->andWhere('deleted')->eq(0)
+                ->fetchGroup('execution', 'id');
+        }
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $projectID => $projectTasks)
         {

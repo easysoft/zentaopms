@@ -112,7 +112,7 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName']) and !in_array($line['lineName'], $lineNames)):?>
+          <?php if(isset($line['lineName'])):?>
           <?php $lineNames[] = $line['lineName'];?>
           <?php
           if($this->config->systemMode == 'new' and $programID)

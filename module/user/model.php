@@ -1917,8 +1917,12 @@ class userModel extends model
                 $whiteList    = zget($whiteListGroup, $program->id, array());
                 if($program->acl == 'program')
                 {
-                    $stakeholders += zget($parentStakeholderGroup, $program->id, array());
-                    $stakeholders += zget($parentPMGroup, $program->id, array());
+                    $parentIds = explode(',', $program->path);
+                    foreach($parentIds as $parentId)
+                    {
+                        $stakeholders += zget($parentStakeholderGroup, $parentId, array());
+                        $stakeholders += zget($parentPMGroup, $parentId, array());
+                    }
                 }
                 $authedUsers += $this->getProgramAuthedUsers($program, $stakeholders, $whiteList);
             }
