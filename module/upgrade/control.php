@@ -181,24 +181,21 @@ class upgrade extends control
             if($mode == 'new')     $this->locate(inlink('mergeTips'));
         }
 
+        $title = $this->lang->upgrade->toPMS15Guide;
         if(isset($this->config->maxVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', 'Max', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->maxName, $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toMAXGuide;
         }
         elseif(isset($this->config->bizVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', 'Biz5', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->bizName . '5', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toBIZ5Guide;
         }
         elseif(isset($this->config->proVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', 'Pro10', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->proName . '10', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toPRO10Guide;
-        }
-        else
-        {
-            $title = $this->lang->upgrade->toPMS15Guide;
         }
 
         $this->view->title = $title;
