@@ -5294,7 +5294,7 @@ class upgradeModel extends model
      * Adjust for bug required field.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function adjustBugRequired()
     {
@@ -5304,9 +5304,11 @@ class upgradeModel extends model
             ->andWhere('section')->eq('create')
             ->andWhere('`key`')->eq('requiredFields')
             ->fetch();
+        if(empty($data)) return true;
 
         $data->value = ',' . $data->value . ',';
         $data->value = str_replace(',project,', ',', $data->value);
         $this->dao->update(TABLE_CONFIG)->set('`value`')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
+        return true;
     }
 }
