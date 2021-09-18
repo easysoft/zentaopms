@@ -368,7 +368,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->task->realStarted;?></th>
-              <td><?php echo $task->realStarted; ?> </td>
+              <td><?php echo helper::isZeroDate($task->realStarted) ? '' : $task->realStarted; ?> </td>
             </tr>
             <tr>
               <th><?php echo $lang->task->deadline;?></th>
