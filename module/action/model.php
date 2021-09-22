@@ -49,7 +49,7 @@ class actionModel extends model
         $action->date       = helper::now();
         $action->extra      = $extra;
 
-        if($objectType == 'story' and $actionType !== 'reviewed' and strpos(',reviewclosed,passreviewed,clarifyreviewed,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
+        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
         $action->comment = fixer::stripDataTags($comment);
