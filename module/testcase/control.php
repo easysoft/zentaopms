@@ -696,7 +696,7 @@ class testcase extends control
         $this->view->isLibCase  = $isLibCase;
         $this->view->caseFails  = $caseFails;
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'case' => $case));
+        if(defined('RUN_MODE') and RUN_MODE == 'api' and !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
         $this->display();
     }
 
