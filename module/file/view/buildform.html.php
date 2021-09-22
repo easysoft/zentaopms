@@ -4,6 +4,7 @@
 .file-input-list .input-group-btn{float:left}
 </style>
 <?php js::set('dangerExtensions', ',' . $this->config->file->dangers . ',');?>
+<?php js::set('maxUploadSize', $maxUploadSize);?>
 <div class="file-input-list" data-provide="fileInputList" data-each-file-max-size="<?php echo $maxUploadSize;?>" data-file-size-error="<?php echo sprintf($lang->file->errorFileSize, $maxUploadSize);?>">
   <div class="file-input">
     <div class="file-input-empty">
@@ -32,11 +33,38 @@
   </div>
 </div>
 <script>
-function checkDangerExtension(obj)
+var totalSize = 0;
+maxUploadSize = unitConversion(maxUploadSize);
+
+/**
+ * Conversion unit to byte.
+ *
+ * @param  string $maxUploadSize
+ * @access public
+ * @return int
+ */
+function unitConversion(maxUploadSize)
 {
-    var fileName = $(obj).val();
+    var sizeOfString = maxUploadSize;
+    if(sizeOfString.indexOf('K') != -1) maxUploadSize = parseFloat(maxUploadSize) * 1024;
+    if(sizeOfString.indexOf('M') != -1) maxUploadSize = parseFloat(maxUploadSize) * 1024 * 1024;
+    if(sizeOfString.indexOf('G') != -1) maxUploadSize = parseFloat(maxUploadSize) * 1024 * 1024 * 1024;
+    return parseFloat(maxUploadSize);
+}
+
+/**
+ * Check danger extension and file size.
+ *
+ * @param  object $file
+ * @access public
+ * @return void
+ */
+function checkDangerExtension(file)
+{
+    var fileName = $(file).val();
     var index    = fileName.lastIndexOf(".");
-    var fileSize = $(obj)[0].files[0].size;
+    var fileSize = $(file)[0].files[0].size;
+    totalSize   += fileSize;
 
     if(index >= 0)
     {
@@ -44,14 +72,22 @@ function checkDangerExtension(obj)
         if(dangerExtensions.lastIndexOf(',' + extension + ',') >= 0)
         {
             alert(<?php echo json_encode($this->lang->file->dangerFile);?>);
-            $(obj).val('');
+            $(file).val('');
             return false;
         }
 
         if(fileSize == 0)
         {
             alert(<?php echo json_encode($this->lang->file->fileContentEmpty);?>);
-            $(obj).val('');
+            $(file).val('');
+            return false;
+        }
+
+        if(totalSize >= maxUploadSize)
+        {
+            alert(<?php echo json_encode(sprintf($lang->file->errorFileSize, $maxUploadSize));?>);
+            totalSize -= fileSize;
+            $(file).val('');
             return false;
         }
     }
