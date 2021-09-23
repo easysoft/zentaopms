@@ -11,6 +11,7 @@ tmp/log/*
 tmp/model/*
 tmp/cache/*
 tmp/extension/*
+test/data/sql/
 .gitkeep
 .bak
 .idea

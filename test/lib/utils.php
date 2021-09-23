@@ -46,29 +46,29 @@ function zdRun($dir)
     {
         $config = new stdclass();
         $config->db = new stdclass();
-        include dirname(dirname(dirname(__FILE__))) . '/config/my.php';
+        include dirname(dirname(dirname(__FILE__))) . '/config/config.php';
 
         $dsn = "mysql:host={$config->db->host}:{$config->db->port};dbname={$config->db->name}";
         $dbh = new PDO($dsn, $config->db->user, $config->db->password);
-        echo 'Connect success' . PHP_EOL;
+        echo 'MySQL connect success' . PHP_EOL;
     
-        $command = "$zdPath -c $zdRoot/%s -d %s -n %s -o $zdRoot/sql/%s.sql -table %s";
+        $command = "$zdPath -c $zdRoot/%s -n %s -o $zdRoot/sql/%s.sql -table %s";
         $yamlFilePath = scandir($zdRoot);
         foreach($yamlFilePath as $file)
         {
-            if(strpos($file, '.yaml'))
-            {
-                $fileName = basename($file, '.yaml');
-                $count    = isset($zdataCount[$fileName]) ? $zdataCount[$fileName] : 10;
-                $execYaml = sprintf($command, $file, $file, $count, $fileName, $fileName);
-                exec($execYaml); // create sql files.
-    
-                echo 'Execute:' . $execYaml . PHP_EOL;
-            }
+            if(!strpos($file, '.yaml')) continue;
+
+            $fileName = basename($file, '.yaml');
+            $count    = isset($zdataCount[$fileName]) ? $zdataCount[$fileName] : 10;
+            $execYaml = sprintf($command, $file, $count, $fileName, $fileName);
+            echo $execYaml . "\n";
+            exec($execYaml); // create sql files.
+
+            echo 'Execute: ' . $file . PHP_EOL;
         }
     
         /* Export SQL files to mysql. */
-        $sqlDir      = $dirPath . '/sql/';
+        $sqlDir      = $zdRoot . '/sql/';
         $sqlFilePath = scandir($sqlDir);
     
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // 设置报错处理方式。
@@ -78,17 +78,16 @@ function zdRun($dir)
     
         foreach($sqlFilePath as $file)
         {
-            if(strpos($file, '.sql'))
-            {
-                $tableName = basename($file, '.sql');
-    
-                $truncate  = 'truncate table ' . $tableName;
-                $dbh->exec($truncate);
-    
-                $sql   = file_get_contents($sqlDir . $file);
-                $count = $dbh->exec($sql);
-                echo $tableName . '表影响行数:' . $count . PHP_EOL;
-            }
+            if(!strpos($file, '.sql')) continue;
+
+            $tableName = basename($file, '.sql');
+
+            $truncate  = 'truncate table ' . $tableName;
+            $dbh->exec($truncate);
+
+            $sql   = file_get_contents($sqlDir . $file);
+            $count = $dbh->exec($sql);
+            echo $tableName . ' insert rows ' . $count . PHP_EOL;
         }
     
         $dbh->commit();
@@ -123,7 +122,7 @@ Usage:
         ui           ui testing 
         all          run all tests
         clean        remove data, files and cached files
-    
+
 
 EOT;
 }
