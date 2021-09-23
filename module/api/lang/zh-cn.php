@@ -48,6 +48,7 @@ $lang->api->confirmDeleteLib = "您确定删除该接口库吗？";
 
 /* fields of form */
 $lang->api->name               = '接口库名称';
+$lang->api->baseUrl            = '请求基路径';
 $lang->api->desc               = '描述';
 $lang->api->control            = '访问控制';
 $lang->api->noLib              = '暂时没有接口库。';

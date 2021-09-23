@@ -27,6 +27,10 @@
               <td style="width: 80%"><?php echo html::input('name', '', "class='form-control'")?></td>
             </tr>
             <tr>
+              <th><?php echo $lang->api->baseUrl?></th>
+              <td style="width: 80%"><?php echo html::input('name', '', "class='form-control'")?></td>
+            </tr>
+            <tr>
               <th><?php echo $lang->api->control;?></th>
               <td>
                 <span><?php echo html::radio('acl', $lang->acl->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>

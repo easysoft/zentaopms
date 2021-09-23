@@ -96,33 +96,33 @@
           <th><?php echo $lang->api->params; ?></th>
           <td colspan='2' id='paramDiv'>
             <div class="row row-no-gutters col-custom">
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
                   <span class='input-group-addon w-50px'><?php echo $lang->api->field; ?></span>
                     <?php echo html::input("params[0][field]", '', "class='form-control'"); ?>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
                                         <span
                                             class='input-group-addon w-70px'><?php echo $lang->api->required; ?></span>
                     <?php echo html::select('params[0][required]', $lang->api->requiredOptions, 0, "class='form-control'"); ?>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
                   <span class='input-group-addon w-50px'><?php echo $lang->api->scope; ?></span>
                     <?php echo html::select('params[0][scope]', $lang->api->paramsScopeOptions, '', "class='form-control' onchange='loadParamsTypeOptions(this);'"); ?>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
                                         <span
                                             class='input-group-addon w-50px'><?php echo $lang->api->paramsType; ?></span>
                     <?php echo html::select('params[0][paramsType]', $lang->api->paramsTypeOptions, '', "class='form-control' onchange='changeType(this);'"); ?>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2 typeCustom hidden'>
+              <div class='col-md-3 typeCustom hidden'>
                 <div class="table-row">
                   <input type="hidden" class="custom" name="params[0][custom]" value="">
                   <button type="button" data-toggle="modal" data-target="#customType"
@@ -131,19 +131,19 @@
                   </button>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
                   <span class='input-group-addon w-60px'><?php echo $lang->api->default; ?></span>
                     <?php echo html::input('params[0][default]', '', "class='form-control'"); ?>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
                   <span class='input-group-addon w-50px'><?php echo $lang->api->desc; ?></span>
                     <?php echo html::textarea('params[0][desc]', '', "class='form-control' style='height:32px'"); ?>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <span class='input-group-addon w-40px'><a onclick='addItem(this);'><i
                         class='icon icon-plus'></i></a></span>
                 <span class='input-group-addon w-40px'><a onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
@@ -155,27 +155,26 @@
           <th><?php echo $lang->api->response; ?></th>
           <td colspan='2' id='paramDiv'>
             <div class="row row-no-gutters col-custom">
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
                   <span class='input-group-addon w-50px'><?php echo $lang->api->res->name; ?></span>
                     <?php echo html::input("response[name]", '', "class='form-control'"); ?>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
                   <span class='input-group-addon w-50px'><?php echo $lang->api->res->desc; ?></span>
                     <?php echo html::input("response[desc]", '', "class='form-control'"); ?>
                 </div>
               </div>
-              <div class='col-md-3 col-lg-2'>
+              <div class='col-md-3'>
                 <div class="table-row">
-                                        <span
-                                            class='input-group-addon w-50px'><?php echo $lang->api->res->type; ?></span>
+                  <span class='input-group-addon w-50px'><?php echo $lang->api->res->type; ?></span>
                     <?php echo html::select('response[type]', $lang->api->allParamsTypeOptions, '', "class='form-control' onchange='changeType(this);'"); ?>
                 </div>
               </div>
               <div
-                  class="col-md-3 col-lg-2 typeCustom hidden">
+                  class="col-md-3 typeCustom hidden">
                 <div class="table-row">
                   <input type="hidden" class="custom" name="response[custom]"
                          value="">
