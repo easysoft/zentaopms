@@ -7,7 +7,7 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
- * @version     $Id: control.php 5143 2013-07-15 06:11:59Z zhujinyonging@gmail.com $
+ * @version     $Id: control.php 5143 2013-07-15 06:11:59Z thanatos thanatos915@163.com $
  * @link        http://www.zentao.net
  */
 class api extends control
@@ -25,39 +25,35 @@ class api extends control
 
     /**
      * Api doc index page.
+     *
+     * @param  int $libID
+     * @param  int $moduleID
+     * @param  int $apiID
+     * @access public
      * @return void
-     * @author thanatos thanatos915@163.com
      */
-    public function index()
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 1)
     {
-        $params  = $_GET;
-        $libID   = $params['libID'];
-        $module  = $params['module'];
-        $apiID   = $params['apiID'];
-        $version = $params['version'];
-
-        /* Get all api doc libraries */
+        /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs();
 
-        /* generate bread crumbs dropMenu */
+        /* Generate bread crumbs dropMenu. */
         if($libs)
         {
             if($libID == 0) $libID = key($libs);
             $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
-            $this->view->libID         = $libID;
         }
         $this->setMenu($libID);
 
-
-        /* Get an api doc */
+        /* Get an api doc. */
         if($apiID > 0)
         {
             $api = $this->api->getLibById($apiID, $version);
             if($api)
             {
-                $module              = $api->module;
-                $_GET['module']      = $module;
-                $libID               = $api->lib;
+                $moduleID = $api->module;
+                $libID    = $api->lib;
+
                 $this->view->api     = $api;
                 $this->view->apiID   = $apiID;
                 $this->view->version = $version;
@@ -66,36 +62,27 @@ class api extends control
         }
         else
         {
-            /* Get module api list */
-            $apiList             = $this->api->getListByModuleId($libID, $module);
+            /* Get module api list. */
+            $apiList = $this->api->getListByModuleId($libID, $moduleID);
+
             $this->view->apiList = $apiList;
-            $this->view->moudle  = $module;
         }
 
-        /* Get module tree */
-        $moduleTree = $this->doc->getApiModuleTree($libID, $apiID);
-
         $this->view->title      = $this->lang->api->title;
+        $this->view->libID      = $libID;
+        $this->view->apiID      = $apiID;
         $this->view->libs       = $libs;
-        $this->view->moduleTree = $moduleTree;
+        $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID) : '';
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
 
         $this->display();
     }
 
     /**
-     * Show an Api doc
-     * @param $id
-     * @author thanatos thanatos915@163.com
-     */
-    public function detail($id)
-    {
-
-    }
-
-    /**
      * Create a api doc library.
-     * @author thanatos thanatos915@163.com
+     *
+     * @access public
+     * @return void
      */
     public function createLib()
     {
@@ -129,9 +116,15 @@ class api extends control
         $this->display();
     }
 
-    public function edit()
+    /**
+     * Edit library.
+     *
+     * @param  int $apiID
+     * @access public
+     * @return void
+     */
+    public function edit($apiID)
     {
-        $apiID = $_GET['apiID'];
         if(helper::isAjaxRequest() && !empty($_POST))
         {
             $this->loadModel('api');
@@ -169,16 +162,15 @@ class api extends control
             $this->view->edit = true;
         }
 
-        $example             = [
-            'example' => 'type,description'
-        ];
-        $this->view->example = json_encode($example, JSON_PRETTY_PRINT);
+        $example = array('example' => 'type,description');
+        $example = json_encode($example, JSON_PRETTY_PRINT);
 
         $allUsers                     = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $allUsers;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($api->lib, 'api', $startModuleID = 0);
         $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
+        $this->view->example          = $example;
         $this->view->title            = $api->title . $this->lang->api->edit;
 
         $this->display();
@@ -187,16 +179,16 @@ class api extends control
 
     /**
      * Create an api doc.
-     * @author thanatos thanatos915@163.com
+     *
+     * @param  int $libID
+     * @param  int $moduleID
+     * @access public
+     * @return void
      */
-    public function create()
+    public function create($libID, $moduleID = 0)
     {
-        $libID    = $_GET['libID'];
-        $moduleID = $_GET['moduleID'];
-        if(helper::isAjaxRequest() && !empty($_POST))
+        if(!empty($_POST))
         {
-            $this->loadModel('api');
-
             $now    = helper::now();
             $userId = $this->app->user->account;
             $params = fixer::input('post')
@@ -211,17 +203,10 @@ class api extends control
                 ->get();
 
             $apiID = $this->api->create($params);
-            if(empty($apiID))
-            {
-                $this->sendError(dao::getError());
-                exit;
-            }
+            if(empty($apiID)) return $this->sendError(dao::getError());
 
             $this->action->create('api', $apiID, 'Created');
-            $this->sendSuccess([
-                'locate' => helper::createLink('api', 'index', "apiID=$apiID"),
-            ]);
-            exit;
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "apiID=$apiID")));
         }
 
         $libs = $this->doc->getLibs('api', '', $libID);
@@ -230,10 +215,8 @@ class api extends control
         $lib     = $this->doc->getLibByID($libID);
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
-        $example             = [
-            'example' => 'type,description'
-        ];
-        $this->view->example = json_encode($example, JSON_PRETTY_PRINT);
+        $example = array('example' => 'type,description');
+        $example = json_encode($example, JSON_PRETTY_PRINT);
 
         $allUsers                     = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->user             = $this->app->user->account;
@@ -243,10 +226,11 @@ class api extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'api', $startModuleID = 0);
         $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         $this->view->libs             = $libs;
+        $this->view->example          = $example;
         $this->view->title            = $libName . $this->lang->api->create;
         $this->view->users            = $this->user->getPairs('nocode');
 
-        $this->display('api', 'create');
+        $this->display();
     }
 
     /**

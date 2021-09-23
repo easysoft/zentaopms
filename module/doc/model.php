@@ -2145,17 +2145,12 @@ EOT;
         $startModulePath = '';
         $currentMethod   = $this->app->getMethodName();
         $users           = $this->loadModel('user')->getPairs('noletter');
-        if($startModule > 0)
-        {
-            $startModule = $this->tree->getById($startModule);
-            if($startModule) $startModulePath = $startModule->path . '%';
-        }
 
-        $docs       = $this->dao->select('*')->from(TABLE_API)
+        $docs = $this->dao->select('*')->from(TABLE_API)
             ->where('lib')->eq($rootID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
-        $moduleDocs = [];
+        $moduleDocs = array();
         foreach($docs as $doc)
         {
             if(!$this->checkPrivDoc($doc)) continue;
@@ -2163,7 +2158,7 @@ EOT;
             $moduleDocs[$doc->module][] = $doc;
         }
 
-        $treeMenu = [];
+        $treeMenu = array();
         $query    = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('type')->eq('api')
