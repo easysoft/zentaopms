@@ -2,11 +2,7 @@
 <?php
 include 'lib/utils.php';
 
-if(count($argv) <= 1)
-{
-    printUsage();
-    exit;
-}
+if(count($argv) <= 1) die(printUsage());
 
 switch($argv[1])
 {

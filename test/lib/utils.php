@@ -47,6 +47,7 @@ function zdRun($dir)
         $config = new stdclass();
         $config->db = new stdclass();
         include dirname(dirname(dirname(__FILE__))) . '/config/config.php';
+        include $zdRoot . '/count.php';
 
         $dsn = "mysql:host={$config->db->host}:{$config->db->port};dbname={$config->db->name}";
         $dbh = new PDO($dsn, $config->db->user, $config->db->password);
@@ -59,10 +60,9 @@ function zdRun($dir)
             if(!strpos($file, '.yaml')) continue;
 
             $fileName = basename($file, '.yaml');
-            $count    = isset($zdataCount[$fileName]) ? $zdataCount[$fileName] : 10;
+            $count    = isset($config->dataRows[$fileName]) ? $config->dataRows[$fileName] : 10;
             $execYaml = sprintf($command, $file, $count, $fileName, $fileName);
-            echo $execYaml . "\n";
-            exec($execYaml); // create sql files.
+            exec($execYaml); // Create sql files.
 
             echo 'Execute: ' . $file . PHP_EOL;
         }
