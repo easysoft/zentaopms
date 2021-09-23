@@ -15,7 +15,7 @@
 /* Set the error reporting. */
 error_reporting(E_ALL & E_STRICT);
 
-$frameworkRoot = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
+$frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
 
 /* Load the framework. */
 include $frameworkRoot . 'router.class.php';
@@ -26,8 +26,9 @@ include $frameworkRoot . 'helper.class.php';
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $tester = $app->loadCommon();
 
-$config->zendataRoot = dirname(__FILE__) . DS . 'zendata';
-$config->zdPath      = __DIR__ . "/runtime/zd/zd";
+$config->zendataRoot = dirname(dirname(__FILE__)) . '/zendata';
+$config->ztfPath     = dirname(dirname(__FILE__)) . '/tools/ztf';
+$config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
 
 /**
  * Save variable to $_result.

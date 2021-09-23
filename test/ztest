@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+include 'lib/utils.php';
+
+if(count($argv) <= 1)
+{
+    printUsage();
+    exit;
+}
+
+switch($argv[1])
+{
+    case 'init':
+        zdRun('data');
+        break;
+    case 'control':
+        ztfRun('control');
+        break;
+    case 'model':
+        ztfRun('model');
+        break;
+}
