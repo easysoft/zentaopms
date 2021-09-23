@@ -145,6 +145,7 @@ class docModel extends model
             ->join('groups', ',')
             ->join('users', ',')
             ->get();
+
         if($lib->type == 'execution' and $lib->execution)
         {
             $execution = $this->loadModel('execution')->getByID($lib->execution);
