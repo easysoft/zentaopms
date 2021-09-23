@@ -134,13 +134,17 @@ class docModel extends model
      */
     public function createLib()
     {
+        if($_POST['acl'] == 'custom')
+        {
+           if(!in_array($this->app->user->account, $this->post->users)) $_POST['users'][] = $this->app->user->account;
+        }
+
         $lib = fixer::input('post')
             ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
             ->setForce('execution', $this->post->type == 'execution' ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
             ->get();
-
         if($lib->type == 'execution' and $lib->execution)
         {
             $execution = $this->loadModel('execution')->getByID($lib->execution);
