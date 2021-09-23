@@ -134,11 +134,6 @@ class docModel extends model
      */
     public function createLib()
     {
-        if($_POST['acl'] == 'custom')
-        {
-           if(!in_array($this->app->user->account, $this->post->users)) $_POST['users'][] = $this->app->user->account;
-        }
-
         $lib = fixer::input('post')
             ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
             ->setForce('execution', $this->post->type == 'execution' ? $this->post->execution : 0)
@@ -153,6 +148,12 @@ class docModel extends model
         }
 
         if($lib->acl == 'private') $lib->users = $this->app->user->account;
+        if($lib->acl == 'custom')
+        {
+            $trimedUsers = ',' . trim($lib->users, ',') . ',';
+            if(strpos($trimedUsers, ',' . $this->app->user->account . ',') === false) $lib->users .= ',' . $this->app->user->account;
+        }
+
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->doc->createlib->requiredFields, 'notempty')
             ->exec();
