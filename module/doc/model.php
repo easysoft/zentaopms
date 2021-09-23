@@ -2180,7 +2180,7 @@ EOT;
             {
                 $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . '>';
 
-                $treeMenu[0] .= html::a(inlink('index', "apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                $treeMenu[0] .= html::a(inlink('index', "libID=0&moduelID=0&apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
 
                 $treeMenu[0] .= '</li>';
             }
@@ -2296,7 +2296,7 @@ EOT;
                 {
                     $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
 
-                    $treeMenu[$module->id] .= html::a(inlink('index', "apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                    $treeMenu[$module->id] .= html::a(inlink('index', "libID=0&moduleID=0&apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
 
                     $treeMenu[$module->id] .= '</li>';
                 }
@@ -2318,7 +2318,7 @@ EOT;
 
         if($type == static::DOC_TYPE_API)
         {
-            $li = html::a(inlink('index', "libID=$libID&module={$module->id}"), $module->name, '', "data-app='{$this->app->tab}' class='doc-title' title='{$module->name}'");
+            $li = html::a(inlink('index', "libID=$libID&moduleID={$module->id}"), $module->name, '', "data-app='{$this->app->tab}' class='doc-title' title='{$module->name}'");
         }
         else
         {
@@ -2340,7 +2340,8 @@ EOT;
         if($type == static::DOC_TYPE_API)
         {
             $params = $_GET;
-            if(intval($params['module']) > 0 && $params['module'] == $module->id)
+            $moduleID = isset($params['moduleID']) ? $params['moduleID'] : 0;
+            if($moduleID && $moduleID == $module->id)
             {
                 array_push($class, 'active');
             }

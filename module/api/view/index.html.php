@@ -73,9 +73,9 @@
           <?php foreach($apiList as $api): ?>
           <li class="list-group-item">
             <div class="heading <?php echo $api->method;?>">
-              <a href="<?php echo helper::createLink('api', 'index', 'apiID='. $api->id) ?>">
+              <a href="<?php echo helper::createLink('api', 'index', 'libID=0&moduleID=0&apiID='. $api->id) ?>">
                 <span class="label label-primary"><?php echo $api->method; ?></span>
-                <span class="label label-warning"><?php echo apiModel::getApiStatusText($api->status); ?></span>
+                <span class="label label-warning" style="width: 60px"><?php echo apiModel::getApiStatusText($api->status); ?></span>
                 <span class="path"><?php echo $api->path; ?></span>
                 <span class="desc"><?php echo $api->title; ?></span>
               </a>

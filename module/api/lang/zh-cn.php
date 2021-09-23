@@ -39,6 +39,7 @@ $lang->api->module           = '模块';
 $lang->api->apiDoc           = '接口';
 $lang->api->manageType       = '维护模块';
 $lang->api->doing            = '开发中';
+$lang->api->done             = '开发完成';
 $lang->api->basicInfo        = '基本信息';
 $lang->api->principal        = '负责人';
 $lang->api->apiDesc          = '接口说明';
@@ -75,52 +76,52 @@ $lang->api->desc               = '描述';
 $lang->api->customType         = '自定义结构';
 $lang->api->format             = '格式化';
 $lang->api->methodOptions      = [
-    'GET'     => 'GET',
-    'POST'    => 'POST',
-    'PUT'     => 'PUT',
-    'DELETE'  => 'DELETE',
-    'PATCH'   => 'PATCH',
+    'GET' => 'GET',
+    'POST' => 'POST',
+    'PUT' => 'PUT',
+    'DELETE' => 'DELETE',
+    'PATCH' => 'PATCH',
     'OPTIONS' => 'OPTIONS',
-    'HEAD'    => 'HEAD'
+    'HEAD' => 'HEAD'
 ];
 $lang->api->protocalOptions    = [
-    'HTTP'  => 'HTTP',
+    'HTTP' => 'HTTP',
     'HTTPS' => 'HTTPS',
 ];
 $lang->api->requestTypeOptions = [
-    'application/json'                  => 'application/json',
+    'application/json' => 'application/json',
     'application/x-www-form-urlencoded' => 'application/x-www-form-urlencoded',
-    'multipart/form-data'               => 'multipart/form-data'
+    'multipart/form-data' => 'multipart/form-data'
 ];
 $lang->api->statusOptions      = [
-    'doing'  => '开发中',
-    'done'   => '开发完成',
+    'doing' => '开发中',
+    'done' => '开发完成',
     'hidden' => '不显示'
 ];
 $lang->api->paramsScopeOptions = [
     'formData' => 'formData',
-    'path'     => 'path',
-    'query'    => 'query',
-    'body'     => 'body',
-    'header'   => 'header',
-    'cookie'   => 'cookie',
+    'path' => 'path',
+    'query' => 'query',
+    'body' => 'body',
+    'header' => 'header',
+    'cookie' => 'cookie',
 ];
 /* Api global common params */
 $lang->api->paramsTypeOptions = [
-    'string'   => 'string',
-    'date'     => 'date',
+    'string' => 'string',
+    'date' => 'date',
     'datetime' => 'datetime',
-    'boolean'  => 'boolean',
-    'int'      => 'int',
-    'long'     => 'long',
-    'float'    => 'float',
-    'double'   => 'double',
-    'decimal'  => 'decimal'
+    'boolean' => 'boolean',
+    'int' => 'int',
+    'long' => 'long',
+    'float' => 'float',
+    'double' => 'double',
+    'decimal' => 'decimal'
 ];
 /* Api params */
 $lang->api->paramsTypeCustomOptions = [
-    'file'   => 'file',
-    'ref'    => 'ref',
+    'file' => 'file',
+    'ref' => 'ref',
     'custom' => '自定义'
 ];
 $lang->api->allParamsTypeOptions    = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);

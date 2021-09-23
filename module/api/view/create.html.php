@@ -37,7 +37,7 @@
         <?php if($edit): ?>
       <h2>
         <span class='label label-id'><?php echo $api->id;?></span>
-          <?php echo html::a($this->createLink('api', 'index', "apiID=$api->id"), $api->title, '', "title='$api->title'");?>
+          <?php echo html::a($this->createLink('api', 'index', "libID=0&moduleID=0&apiID=$api->id"), $api->title, '', "title='$api->title'");?>
         <small> <?php echo $lang->arrow . ' ' . $lang->api->edit;?></small>
       </h2>
       <div
@@ -64,21 +64,21 @@
         </tr>
         <tr>
           <th><?php echo $lang->api->formTitle; ?></th>
-          <td colspan='2'><?php echo html::input('title', $api->title, "class='form-control' required"); ?></td>
+          <td colspan='2'><?php echo html::input('title', '', "class='form-control' required"); ?></td>
         </tr>
         <tr>
           <th><?php echo $lang->api->path; ?></th>
-          <td colspan='2'><?php echo html::input('path', $api->path, "class='form-control'"); ?></td>
+          <td colspan='2'><?php echo html::input('path', '', "class='form-control'"); ?></td>
         </tr>
         <tr>
           <th><?php echo $lang->api->protocol; ?></th>
-          <td><?php echo html::radio('protocol', $lang->api->protocalOptions, $api->protocol ? $api->protocol : 'HTTP'); ?></td>
+          <td><?php echo html::radio('protocol', $lang->api->protocalOptions, 'HTTP'); ?></td>
         </tr>
         <tr>
           <th><?php echo $lang->api->method; ?></th>
           <td>
             <span
-                id='moduleBox'><?php echo html::select('method', $lang->api->methodOptions, $api->method ? $api->method : 'GET', "class='form-control chosen'"); ?></span>
+                id='moduleBox'><?php echo html::select('method', $lang->api->methodOptions, 'GET', "class='form-control chosen'"); ?></span>
           </td>
         </tr>
         <tr>

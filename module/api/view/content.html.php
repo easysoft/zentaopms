@@ -19,7 +19,7 @@
                       style='max-height:240px; max-width: 300px; overflow-y:auto'>
                       <?php for($version = $api->version; $version > 0; $version--): ?>
                     <li><a href='javascript:void(0)'
-                           data-url='<?php echo $this->createLink('api', 'index', "apiID=$apiID&version=$version"); ?>'>#<?php echo $version; ?></a>
+                           data-url='<?php echo $this->createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID&version=$version"); ?>'>#<?php echo $version; ?></a>
                     </li>
                       <?php endfor; ?>
                   </ul>

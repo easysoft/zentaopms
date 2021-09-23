@@ -146,13 +146,13 @@
               <div class='col-md-3 col-lg-2'>
                 <div class="table-row">
                   <span class='input-group-addon w-60px'><?php echo $lang->api->default; ?></span>
-                    <?php echo html::input('params[0][default]', $param->default, "class='form-control'"); ?>
+                    <?php echo html::input('params[0][default]', $param['default'], "class='form-control'"); ?>
                 </div>
               </div>
               <div class='col-md-3 col-lg-2'>
                 <div class="table-row">
                   <span class='input-group-addon w-50px'><?php echo $lang->api->desc; ?></span>
-                    <?php echo html::textarea('params[0][desc]', $param->desc, "class='form-control' style='height:32px'"); ?>
+                    <?php echo html::textarea('params[0][desc]', $param['desc'], "class='form-control' style='height:32px'"); ?>
                 </div>
               </div>
               <div class='col-md-3 col-lg-2'>

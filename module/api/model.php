@@ -306,7 +306,7 @@ class apiModel extends model
             'protocol' => $data->protocol,
             'method' => $data->method,
             'requestType' => $data->requestType,
-            'responseType' => $data->responseType,
+            'responseType' => isset($data->responseType) ? $data->responseType : '',
             'status' => $data->status,
             'owner' => $data->owner,
             'desc' => $data->desc,

@@ -32,7 +32,7 @@ class api extends control
      * @access public
      * @return void
      */
-    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 1)
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0)
     {
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs();
@@ -150,7 +150,7 @@ class api extends control
 
             $this->action->create('api', $apiID, 'Edited');
             $this->sendSuccess([
-                'locate' => helper::createLink('api', 'index', "apiID=$apiID"),
+                'locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID"),
             ]);
             exit;
         }
@@ -206,7 +206,7 @@ class api extends control
             if(empty($apiID)) return $this->sendError(dao::getError());
 
             $this->action->create('api', $apiID, 'Created');
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "apiID=$apiID")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID")));
         }
 
         $libs = $this->doc->getLibs('api', '', $libID);
@@ -272,7 +272,7 @@ class api extends control
     public function ajaxGetParamsTypeOptions($scope)
     {
         if(empty($scope)) die();
-        $options = [];
+        $options = array();
         if($scope == apiModel::SCOPE_BODY)
         {
             $options = $this->lang->api->allParamsTypeOptions;
