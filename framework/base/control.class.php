@@ -952,6 +952,7 @@ class baseControl
      * send success json
      *
      * @param array $data
+     * @return void
      * @author thanatos thanatos915@163.com
      */
     public function sendSuccess($data)

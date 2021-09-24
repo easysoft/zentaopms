@@ -4,6 +4,8 @@ global $lang;
 $config->api                            = new stdClass();
 $config->api->createlib                 = new stdclass();
 $config->api->createlib->requiredFields = 'name';
+$config->api->editlib                   = new stdclass();
+$config->api->editlib->requiredFields = 'name';
 
 $config->api->create                 = new stdclass();
 $config->api->create->requiredFields = 'lib,module,title,path,method,protocol';

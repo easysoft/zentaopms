@@ -161,3 +161,18 @@ $(document).ready(function()
     });
 
 });
+
+
+/**
+ * Redirect the parent window.
+ *
+ * @param  int    hasLibPriv
+ * @param  int    libID
+ * @access public
+ * @return void
+ */
+function redirectParentWindow(libID)
+{
+    var link = createLink('api', 'index', 'libID=' + libID);
+    parent.location.href = link;
+}

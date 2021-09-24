@@ -1,5 +1,5 @@
 ALTER TABLE `zt_doclib` ADD COLUMN `desc` text NULL AFTER `collector`;
-ALTER TABLE `zt_doc` ADD COLUMN `baseUrl` varchar(255) NOT NULL DEFAULT '' AFTER `title`;
+ALTER TABLE `zt_doclib` ADD COLUMN `baseUrl` varchar(255) NOT NULL DEFAULT '' AFTER `name`;
 
 -- DROP TABLE IF EXISTS `zt_api_lib_release`;
 CREATE TABLE `zt_api_lib_release`

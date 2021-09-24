@@ -117,6 +117,46 @@ class api extends control
     }
 
     /**
+     * Edit an api doc library
+     *
+     * @param $id
+     * @access public
+     * @return void
+     */
+    public function editLib($id)
+    {
+
+        $doc = $this->doc->getLibById($id);
+        if(!empty($_POST))
+        {
+            $lib = fixer::input('post')
+                ->join('groups', ',')
+                ->join('users', ',')
+                ->get();
+
+            if($lib->acl == 'private') $lib->users = $this->app->user->account;
+            $this->doc->updateApiLib($id, $doc, $lib);
+            if(dao::isError())
+            {
+                $this->sendError(dao::getError());
+                exit;
+            }
+            $res = array(
+                'message'    => $this->lang->saveSuccess,
+                'closeModal' => true,
+                'callback'   => "redirectParentWindow($id)",
+            );
+            return $this->sendSuccess($res);
+        }
+
+        $this->view->doc    = $doc;
+        $this->view->groups = $this->group->getPairs();
+        $this->view->users  = $this->user->getPairs('nocode');
+
+        $this->display();
+    }
+
+    /**
      * Edit library.
      *
      * @param  int $apiID
@@ -234,8 +274,8 @@ class api extends control
     }
 
     /**
-     * @param        $apiID
-     * @param string $confirm
+     * @param         $apiID
+     * @param  string $confirm
      * @author thanatos thanatos915@163.com
      */
     public function delete($apiID, $confirm = 'no')
@@ -266,7 +306,7 @@ class api extends control
     /**
      * Get params type options by scope
      *
-     * @param string $scope the params position
+     * @param  string $scope the params position
      * @author thanatos thanatos915@163.com
      */
     public function ajaxGetParamsTypeOptions($scope)
@@ -366,6 +406,7 @@ EOT;
 
     /**
      * Show doc of api doc library
+     *
      * @author thanatos thanatos915@163.com
      */
     public function showLibs($libID = 0)
@@ -395,9 +436,9 @@ EOT;
     /**
      * Execute a module's model's method, return the result.
      *
-     * @param string $moduleName
-     * @param string $methodName
-     * @param string $params param1=value1,param2=value2, don't use & to join them.
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $params param1=value1,param2=value2, don't use & to join them.
      * @access public
      * @return string
      */
@@ -428,8 +469,8 @@ EOT;
     /**
      * The interface of api.
      *
-     * @param int $filePath
-     * @param int $action
+     * @param  int $filePath
+     * @param  int $action
      * @access public
      * @return void
      */
@@ -469,7 +510,7 @@ EOT;
     /**
      * Query sql.
      *
-     * @param string $keyField
+     * @param  string $keyField
      * @access public
      * @return void
      */
