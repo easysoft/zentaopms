@@ -124,22 +124,21 @@ class productIssueEntry extends entry
 
         /* Get all users in issues so that we can get user detail later in batch. */
         $accountList = array();
-        foreach($issue->assignedTo as $user) $accountList[] = $user;
+        foreach($issue->assignedTo as $account) $accountList[] = $account;
         $accountList[]  = $issue->openedBy;
         $accountList    = array_unique($accountList);
         $profileList = $this->loadModel('user')->getUserDetailsForAPI($accountList);
 
         /* Set the user detail to assignedTo and openedBy. */
-        foreach($issue->assignedTo as $key => $user)
+        foreach($issue->assignedTo as $key => $account)
         {
-            /* $user can be 'closed' in some case, so here should be process it. */
-            if($user == 'closed')
+            if($account == 'closed')
             {
                 $issue->assignedTo = array();
                 break;
             }
 
-            $issue->assignedTo[$key] = $profileList[$user];
+            $issue->assignedTo[$key] = $profileList[$account];
         }
         $issue->openedBy = $profileList[$issue->openedBy];
 

@@ -303,9 +303,9 @@ class productIssuesEntry extends entry
         $userList = array();
         foreach($result as $issue)
         {
-            foreach($issue->assignedTo as $user)
+            foreach($issue->assignedTo as $account)
             {
-                $userList[] = $user;
+                $userList[] = $account;
             }
             $userList[] = $issue->openedBy;
         }
@@ -318,15 +318,14 @@ class productIssuesEntry extends entry
          */
         foreach($result as $issue)
         {
-            foreach($issue->assignedTo as $key => $user)
+            foreach($issue->assignedTo as $key => $account)
             {
-                /* $user can be 'closed' in some case, so here should be process it. */
-                if($user == 'closed')
+                if($account == 'closed')
                 {
                     $issue->assignedTo = array();
                     break;
                 }
-                $issue->assignedTo[$key] = $userDetails[$user];
+                $issue->assignedTo[$key] = $userDetails[$account];
             }
             $issue->openedBy = $userDetails[$issue->openedBy];
         }
