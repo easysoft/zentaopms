@@ -986,7 +986,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed or empty
+     * @param  string $mode all|noclosed|waterfallfilter or empty
      * @access public
      * @return array
      */
@@ -1024,6 +1024,7 @@ class executionModel extends model
         foreach($executions as $execution)
         {
             if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
+            if(strpos($mode, 'waterfallfilter') !== false and isset($executionModel) and $executionModel == 'waterfall' and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
             $pairs[$execution->id] = $execution->name;
         }
 
