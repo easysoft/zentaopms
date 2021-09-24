@@ -132,8 +132,8 @@ class productIssueEntry extends entry
         /* Set the user detail to assignedTo and openedBy. */
         foreach($issue->assignedTo as $key => $user)
         {
-            /* $key can be 'closed' in some case, so here should be process it. */
-            if($key == 'closed')
+            /* $user can be 'closed' in some case, so here should be process it. */
+            if($user == 'closed')
             {
                 $issue->assignedTo = array();
                 break;

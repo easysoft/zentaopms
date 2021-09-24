@@ -92,12 +92,11 @@ class productIssuesEntry extends entry
             $taskTypeMap  = array_flip($this->app->lang->task->typeList);
             $bugTypeMap   = array_flip($this->app->lang->bug->typeList);
 
-            $labelExistStatus = array(); /* Set this value to judge if label is not exist. Exist => true, not Exist => false. */
-            $objectTypeMap = array_merge(array_keys(array_merge($storyTypeMap, $taskTypeMap, $bugTypeMap)), array($this->app->lang->story->common, $this->app->lang->task->common, $this->app->lang->bug->common));
+            $allValidLabels = array_merge(array_keys(array_merge($storyTypeMap, $taskTypeMap, $bugTypeMap)), array($this->app->lang->story->common, $this->app->lang->task->common, $this->app->lang->bug->common));
             foreach($labels as $label)
             {
-                /* Set label exist status. */
-                $labelExistStatus[$label] = in_array($label, $objectTypeMap) ? true : false;
+                /* Return empty result if label is not exists.*/
+                if(!in_array($label, $allValidLabels)) $this->send(200, array('page' => $page, 'total' => 0, 'limit' => $limit, 'issues' => array()));
 
                 if($label == $this->app->lang->story->common) $storyFilter[] = 'all';
                 if(isset($storyTypeMap[$label])) $storyFilter[] = $storyTypeMap[$label];
@@ -108,9 +107,6 @@ class productIssuesEntry extends entry
                 if($label == $this->app->lang->bug->common) $bugFilter[] = 'all';
                 if(isset($bugTypeMap[$label])) $bugFilter[] = $bugTypeMap[$label];
             }
-
-            /* Return empty result if one label is not exists. We assume user usually input one label to search by labels. */
-            if(in_array(false, $labelExistStatus) and empty($storyFilter) and empty($taskFilter) and empty($bugFilter)) $this->send(200, array('page' => $page, 'total' => 0, 'limit' => $limit, 'issues' => array()));
         }
 
         if(!empty($storyFilter)) $labelTypes[] = 'story';
@@ -247,7 +243,6 @@ class productIssuesEntry extends entry
                         $r->assignedTo = array($task->assignedTo);
                     }
                 }
-
             }
             elseif($issue['type'] == 'story')
             {
@@ -325,8 +320,8 @@ class productIssuesEntry extends entry
         {
             foreach($issue->assignedTo as $key => $user)
             {
-                /* $key can be 'closed' in some case, so here should be process it. */
-                if($key == 'closed')
+                /* $user can be 'closed' in some case, so here should be process it. */
+                if($user == 'closed')
                 {
                     $issue->assignedTo = array();
                     break;
