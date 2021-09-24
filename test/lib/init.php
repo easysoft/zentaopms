@@ -37,7 +37,7 @@ $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
  * @access public
  * @return bool true
  */
-function run($result)
+function r($result)
 {
     global $_result;
     $_result = $result;
@@ -45,14 +45,14 @@ function run($result)
 }
 
 /**
- * Print expect data.
+ * Print value or properties.
  *
  * @param  string    $key
  * @param  string    $delimiter
  * @access public
  * @return void
  */
-function expect($key, $delimiter = ',')
+function p($key, $delimiter = ',')
 {
     global $_result;
     echo ">> ";
@@ -80,6 +80,19 @@ function expect($key, $delimiter = ',')
     }
     echo $result . "\n";
     echo "\n";
+
+    return true;
+}
+
+/**
+ * Expect values, ztf will put params to comment.
+ *
+ * @param  string    $exepect
+ * @access public
+ * @return void
+ */
+function e($expect)
+{
 }
 
 /**
