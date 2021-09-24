@@ -1026,10 +1026,11 @@ class productModel extends model
      * @param  int    $branch
      * @param  string $orderBy
      * @param  int    $projectID
+     * @param  string $mode waterfallfilter or empty
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0)
+    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0, $mode = '')
     {
         if(empty($productID)) return array();
         if(empty($projectID) or $this->config->systemMode == 'classic') return $this->getAllExecutionPairsByProduct($productID, $branch);
@@ -1037,7 +1038,7 @@ class productModel extends model
         $project = $this->loadModel('project')->getByID($projectID);
         $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
-        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($projectID)
@@ -1068,6 +1069,7 @@ class productModel extends model
                     $executionList = $executionList + $execution->children;
                     continue;
                 }
+                if(strpos($mode, 'waterfallfilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
                 $executionList[$execution->id] = $execution->name;
             }
         }
