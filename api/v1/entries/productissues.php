@@ -92,8 +92,12 @@ class productIssuesEntry extends entry
             $taskTypeMap  = array_flip($this->app->lang->task->typeList);
             $bugTypeMap   = array_flip($this->app->lang->bug->typeList);
 
+            $allValidLabels = array_merge(array_keys(array_merge($storyTypeMap, $taskTypeMap, $bugTypeMap)), array($this->app->lang->story->common, $this->app->lang->task->common, $this->app->lang->bug->common));
             foreach($labels as $label)
             {
+                /* Return empty result if label is not exists.*/
+                if(!in_array($label, $allValidLabels)) $this->send(200, array('page' => $page, 'total' => 0, 'limit' => $limit, 'issues' => array()));
+
                 if($label == $this->app->lang->story->common) $storyFilter[] = 'all';
                 if(isset($storyTypeMap[$label])) $storyFilter[] = $storyTypeMap[$label];
 
@@ -239,7 +243,6 @@ class productIssuesEntry extends entry
                         $r->assignedTo = array($task->assignedTo);
                     }
                 }
-
             }
             elseif($issue['type'] == 'story')
             {
@@ -300,9 +303,9 @@ class productIssuesEntry extends entry
         $userList = array();
         foreach($result as $issue)
         {
-            foreach($issue->assignedTo as $user)
+            foreach($issue->assignedTo as $account)
             {
-                $userList[] = $user;
+                $userList[] = $account;
             }
             $userList[] = $issue->openedBy;
         }
@@ -315,15 +318,14 @@ class productIssuesEntry extends entry
          */
         foreach($result as $issue)
         {
-            foreach($issue->assignedTo as $key => $user)
+            foreach($issue->assignedTo as $key => $account)
             {
-                /* $key can be 'closed' in some case, so here should be process it. */
-                if($key == 'closed')
+                if($account == 'closed')
                 {
                     $issue->assignedTo = array();
                     break;
                 }
-                $issue->assignedTo[$key] = $userDetails[$user];
+                $issue->assignedTo[$key] = $userDetails[$account];
             }
             $issue->openedBy = $userDetails[$issue->openedBy];
         }
