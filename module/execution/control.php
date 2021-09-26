@@ -140,6 +140,8 @@ class execution extends control
 
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         /* Set browse type. */
         $browseType = strtolower($status);
 

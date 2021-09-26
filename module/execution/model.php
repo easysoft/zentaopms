@@ -1416,7 +1416,7 @@ class executionModel extends model
 
         /* Get all teams of all executions and group by executions, save it as static. */
         $executions = $this->dao->select('root, limited')->from(TABLE_TEAM)
-            ->where('type')->in('sprint,stage')
+            ->where('type')->eq('execution')
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('limited')->eq('yes')
             ->orderBy('root asc')
