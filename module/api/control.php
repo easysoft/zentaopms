@@ -238,7 +238,6 @@ class api extends control
                 ->add('editedDate', $now)
                 ->add('version', 1)
                 ->setDefault('product,module', 0)
-                ->unHtml('params,response')
                 ->json('params,response')
                 ->get();
 

@@ -28,7 +28,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->api->baseUrl?></th>
-              <td style="width: 80%"><?php echo html::input('name', '', "class='form-control'")?></td>
+              <td style="width: 80%"><?php echo html::input('baseUrl', '', "class='form-control'")?></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->control;?></th>

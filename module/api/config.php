@@ -8,10 +8,10 @@ $config->api->editlib                   = new stdclass();
 $config->api->editlib->requiredFields = 'name';
 
 $config->api->create                 = new stdclass();
-$config->api->create->requiredFields = 'lib,module,title,path,method,protocol';
+$config->api->create->requiredFields = 'lib,title,path,method,protocol';
 
 $config->api->edit                 = new stdclass();
-$config->api->edit->requiredFields = 'lib,module,title,path,method,protocol';
+$config->api->edit->requiredFields = 'lib,title,path,method,protocol';
 
 $config->api->editor            = new stdclass();
 $config->api->editor->createlib = ['id' => 'desc', 'tools' => 'simpleTools'];

@@ -1184,8 +1184,9 @@ class baseFixer
     public function unHtml($fields)
     {
         $fields = strpos($fields, ',') ? explode(',', str_replace(' ', '', $fields)) : array($fields);
-        foreach($fields as $field)
+        foreach($fields as $field) {
             if(isset($this->data->$field)) $this->data->$field = htmlspecialchars_decode($this->data->$field);
+        }
         return $this;
     }
 
