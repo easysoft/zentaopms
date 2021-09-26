@@ -120,7 +120,13 @@ function subString(title, lengthOfTitle)
     var length = 0;
     for(var i = 0; i < title.length; i ++)
     {
-        title.charCodeAt(i) > 255 ? length += 2 : length += 1;
-        if(length > lengthOfTitle) return title.substring(0, i) + '...';
+        length += title.charCodeAt(i) > 255 ? 2 : 1;
+        if(length > lengthOfTitle)
+        {
+            title = title.substring(0, i) + '...';
+            break;
+        }
     }
+
+    return title;
 }
