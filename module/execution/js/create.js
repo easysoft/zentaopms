@@ -109,22 +109,23 @@ function refreshPage(projectID)
  * Cut a string of letters and characters with the same length.
  *
  * @param  string $title
- * @param  int    $lengthOfTitle
+ * @param  int    $stringLength
  * @access public
  * @return string
  */
-function subString(title, lengthOfTitle)
+function subString(title, stringLength)
 {
-    if(title.replace(/[\u4e00-\u9fa5]/g, "**").length <= lengthOfTitle) return title;
-
-    var length = 0;
-    for(var i = 0; i < title.length; i ++)
+    if(title.replace(/[\u4e00-\u9fa5]/g, "**").length > stringLength)
     {
-        length += title.charCodeAt(i) > 255 ? 2 : 1;
-        if(length > lengthOfTitle)
+        var length = 0;
+        for(var i = 0; i < title.length; i ++)
         {
-            title = title.substring(0, i) + '...';
-            break;
+            length += title.charCodeAt(i) > 255 ? 2 : 1;
+            if(length > stringLength)
+            {
+                title = title.substring(0, i) + '...';
+                break;
+            }
         }
     }
 
