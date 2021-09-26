@@ -62,5 +62,5 @@ $lang->file->errorFileMove    = " Uploading failed. An error prompts when moving
 $lang->file->dangerFile       = " The file failed to be uploaded for security reasons.";
 $lang->file->errorSuffix      = 'Format is incorrect. .zip files ONLY!';
 $lang->file->errorExtract     = 'Extracting files failed. Files might be damaged or there might be invalid files in the zip package.';
-$lang->file->fileNotFound     = '<html><head><meta charset="utf-8"></head><body>The file was not found. The physical file might have been deleted!</body></html>';
+$lang->file->fileNotFound     = 'The file was not found. The physical file might have been deleted!';
 $lang->file->fileContentEmpty = 'The file is empty. Check the file and upload it again.';
