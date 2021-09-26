@@ -2394,8 +2394,8 @@ class storyModel extends model
         /* Get the sql and form status from the query. */
         if($query)
         {
-            $this->session->set('storyQuery', $query->sql, $this->app->tab);
-            $this->session->set('storyForm', $query->form, $this->app->tab);
+            $this->session->set('storyQuery', $query->sql);
+            $this->session->set('storyForm', $query->form);
         }
         if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
 
