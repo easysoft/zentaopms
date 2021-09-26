@@ -9,10 +9,20 @@ switch($argv[1])
     case 'init':
         zdRun('data');
         break;
+    case 'extract':
+        ztfExtract('model');
+        break;
+    case 'api':
+        ztfExtract('api');
+        ztfRun('api');
+        break;
     case 'control':
         ztfRun('control');
         break;
     case 'model':
         ztfRun('model');
         break;
+    default:
+        ztfExtract($argv[1]);
+        system("php " . $argv[1]);
 }

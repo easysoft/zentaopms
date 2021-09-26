@@ -1,0 +1,69 @@
+title: table zt_project
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: project
+    range: 1-10000
+  - field: model
+    range:
+  - field: type
+    range: project
+  - field: product
+    range: single
+  - field: lifetime
+    range:
+  - field: budget
+    range: 0
+  - field: budgetUnit
+    range: CNY,USD
+  - field: attribute
+    note: "Only stage has attribute"
+    range:
+  - field: percent
+    range: 1-100:R
+  - field: milestone
+    note: "Is it milestone"
+    range: 0
+  - field: output
+    note: "Output document"
+    range:
+  - field: auth
+    note: "Only project has auth"
+    range:
+  - field: parent
+    range: 1,2,3,4,2,1,[1-7]{2},[7-19]{3}
+  - field: path
+    prefix: ","
+    postfix: ","
+    range:
+  - field: grade
+    range:
+  - field: name
+    range: 1-10000
+    prefix: "测试项目"
+  - field: code
+    range: 1-10000
+    prefix: "project"
+  - field: begin
+    from: common.date.v1.yaml
+    use: date
+  - field: PO
+    range:
+  - field: PM
+    range: 
+  - field: QD
+    range:
+  - field: RD
+    range:
+  - field: team
+    range:
+  - field: acl
+    range: open,private,custom
+  - field: whitelist
+    range:
+  - field: order
+    range: 5-10000:5
+  - field: deleted
+    range: 0

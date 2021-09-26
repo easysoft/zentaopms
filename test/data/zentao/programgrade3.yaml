@@ -1,0 +1,10 @@
+title: program
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: grade
+    range: 1
+  - field: parent
+    range: 1
+  - field: path
+    range: 1

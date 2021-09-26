@@ -3,12 +3,13 @@ desc: 创建一些默认用户
 author: ly
 version: 1.0
 
+field: user
 instances:
   - instance: user
-    note: 默认用户列表
     fields:
-     - field: user
+     - field: account
        range: admin,dev1,dev2,dev3,test1,test2,test3
+
   - instance: userB
     note: 逗号拼接用户
     fields:

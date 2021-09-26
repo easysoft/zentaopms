@@ -1,16 +1,15 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/init.php';
+
 /**
-[case]
+
 title=测试 userModel::getById();
 cid=1
 pid=1
-[group]
-  1. 使用ID获取一个存在的用户   >> `\d,\w+`
-  2. 使用account获取一个存在的用户 >> `\d`
-  3. 使用account获取一个存在的用户 >> ``
-[esac]
+
+
+
 */
 $user = $tester->loadModel('user');
 

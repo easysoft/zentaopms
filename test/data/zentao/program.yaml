@@ -1,0 +1,22 @@
+title: program
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: project
+    range: 1-10000
+  - field: model
+    range: 
+  - field: type
+    range: program
+  - field: status
+    range: doing,wait,suspended,closed
+  - field: desc
+    range: 1-10000
+    prefix: "项目集描述"
+  - field: acl
+    range: open,private
+  - field: whitelist
+    from: common.user.v1.yaml
+    use: user
