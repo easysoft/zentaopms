@@ -173,7 +173,7 @@ class programModel extends model
         $plans = $this->dao->select('id, product, title')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productPairs)
-            ->andWhere('end')->gt(helper::today())
+            ->andWhere('end')->ge(helper::today())
             ->fetchGroup('product');
 
         /* Get all products linked projects. */
