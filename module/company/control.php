@@ -163,10 +163,14 @@ class company extends control
      * @param  int    $recTotal
      * @param  string $date
      * @param  string $direction    next|pre
+     * @param  int    $userID
+     * @param  int    $product
+     * @param  int    $project
+     * @param  int    $execution
      * @access public
      * @return void
      */
-    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next', $userID = '', $product = 0, $project = 0, $execution = 0)
     {
         $this->company->setMenu();
         $this->app->loadLang('user');
@@ -202,20 +206,8 @@ class company extends control
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $sort    = $this->loadModel('common')->appendOrder($orderBy);
 
-        /* Set the user and type. */
-        $account = 'all';
-        $user    = '';
-        if($browseType == 'account')
-        {
-            $user = $this->loadModel('user')->getById((int)$param, 'id');
-            if($user) $account = $user->account;
-        }
-        $product   = $browseType  == 'product'   ? $param : 'all';
-        $project   = $browseType  == 'project'   ? $param : 'all';
-        $execution = $browseType  == 'execution' ? $param : 'all';
-        $period    = in_array($browseType, array('account', 'product', 'project', 'execution')) ? 'all' : $browseType;
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
-        $date      = empty($date) ? '' : date('Y-m-d', $date);
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+        $date    = empty($date) ? '' : date('Y-m-d', $date);
 
         /* Get products' list.*/
         $products = $this->loadModel('product')->getPairs('nocode');
@@ -232,7 +224,10 @@ class company extends control
         $executions = array($this->lang->company->execution) + $executions;
         $this->view->executions = $executions;
 
-        /* Get users.*/
+        /* Set account and get users.*/
+        $user    = $userID ? $this->loadModel('user')->getById($userID, 'id') : '';
+        $account = $user ? $user->account : 'all';
+
         $userIdPairs = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter|useid');
         $userIdPairs[''] = $this->lang->company->user;
         $this->view->userIdPairs = $userIdPairs;
@@ -247,7 +242,10 @@ class company extends control
         /* Get actions. */
         if($browseType != 'bysearch')
         {
-            $actions = $this->action->getDynamic($account, $period, $sort, $pager, $product, $project, $execution, $date, $direction);
+            $product   = $product ? $product : 'all';
+            $project   = $project ? $project : 'all';
+            $execution = $execution ? $execution : 'all';
+            $actions   = $this->action->getDynamic($account, $browseType, $sort, $pager, $product, $project, $execution, $date, $direction);
         }
         else
         {
@@ -286,8 +284,9 @@ class company extends control
         $this->view->queryID      = $queryID;
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
-        $this->view->user         = $user;
+        $this->view->userID       = $userID;
         $this->view->param        = $param;
+        $this->view->browseType   = $browseType;
         $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType);
         $this->view->direction    = $direction;
         $this->display();
