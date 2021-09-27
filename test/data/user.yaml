@@ -1,0 +1,26 @@
+title: table zt_user
+author: ly
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+  - field: company
+    range: 1
+  - field: type
+    range: [inside,outside]
+  - field: dept
+    range: 1-10000
+  - field: account
+    range: 1-10000
+    prefix: "account"
+  - field: password
+    range: 123456
+  - field: role
+    range: qa,dev,pm,po,td,pd,qd,top,market,service,operation,support,others
+  - field: realname
+    range: 1-10000
+    prefix: "真实姓名"
+  - field: nickname
+    range: 1-10000
+    prefix: "昵称"

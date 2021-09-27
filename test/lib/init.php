@@ -64,7 +64,7 @@ function p($key, $delimiter = ',')
     }
     else
     {
-        $keyList =  explode(',', $key);
+        $keyList   = explode(',', $key);
         $dimension = 1;
         foreach($_result as $value)
         {
@@ -78,14 +78,14 @@ function p($key, $delimiter = ',')
         }
         $result = trim($result, $delimiter);
     }
-    echo $result . "\n";
-    echo "\n";
+
+    echo $result . "\n\n";
 
     return true;
 }
 
 /**
- * Expect values, ztf will put params to comment.
+ * Expect values, ztf will put params to step.
  *
  * @param  string    $exepect
  * @access public

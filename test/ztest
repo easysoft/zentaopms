@@ -7,7 +7,14 @@ if(count($argv) <= 1) die(printUsage());
 switch($argv[1])
 {
     case 'init':
-        zdRun('data');
+        zdRun();
+        break;
+    case 'extract':
+        ztfExtract('model');
+        break;
+    case 'api':
+        ztfExtract('api');
+        ztfRun('api');
         break;
     case 'control':
         ztfRun('control');
@@ -15,4 +22,7 @@ switch($argv[1])
     case 'model':
         ztfRun('model');
         break;
+    default:
+        ztfExtract($argv[1]);
+        system("php " . $argv[1]);
 }

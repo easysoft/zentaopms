@@ -1,11 +1,11 @@
-title: moreDate
+title: date
 desc: 系统可用日期类型
 author: ly
 version: 1.0
 
-field: moreDate
+field: date
 instances:
-  - instance: dateA
+  - instance: datetime
     fields:
      - field: year
        range: 2019-2022
@@ -30,7 +30,7 @@ instances:
        range: 0-59
        format: "%02d"
 
-  - instance: dateB
+  - instance: date
     fields:
      - field: year
        range: 2019-2022
@@ -42,8 +42,3 @@ instances:
      - field: day
        range: 1-27
        format: "%02d"
-
-  - instance: dateC
-    fields:
-      - field: time
-        range: 1262275200-1893427200:R
