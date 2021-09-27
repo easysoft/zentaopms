@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(dirname(dirname(__FILE__))) . '/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
 /**
 
@@ -8,23 +8,19 @@ title=测试 userModel::getById();
 cid=1
 pid=1
 
-
+通过id获取存在的用户 >> account1
+使用account字段获取存在的用户 >> account1
+通过默认字段获取存在的用户 >> account1
 
 */
 $user = $tester->loadModel('user');
 
-$app->dbh->query("truncate zt_user");
-zdImport(TABLE_USER, "zendata/user.yaml", 10);
+r($user->getById(1, 'id'))               && p('account') && e('account1'); // 通过id获取存在的用户
+r($user->getByID('account1', 'account')) && p('account') && e('account1'); // 使用account字段获取存在的用户
+r($user->getByID('account1'))            && p('account') && e('account1'); // 通过默认字段获取存在的用户
 
-$randUser = $tester->dao->select('*,rand() as rand')->from(TABLE_USER)->orderBy('rand')->fetch();
-if(!$randUser) exit("Prepair data error.");
-unset($randUser->rand);
-
-/* Step 1.*/
-run($user->getByID($randUser->id, 'id')) and expect('id,account');
-
-/* Step 2.*/
-run($user->getByID($randUser->account, 'account')) and expect('id');
-
-/* Step 3.*/
-run($user->getByID(null, 'id')) and expect('id');
+/*
+r($user->getByID(1))                     && p('account') && e('');         // 通过默认字段获取不存在的用户
+r($user->getByID(100000, 'id'))          && p('account') && e('');         // 通过id字段获取不存在的用户
+r($user->getByID('error', 'account'))    && p('account') && e('');         // 通过默认字段获取不存在的用户
+ */

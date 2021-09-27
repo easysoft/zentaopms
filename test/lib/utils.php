@@ -130,7 +130,9 @@ function zdRun()
             }
 
             /* Refresh runtime/tmp/config.yaml. */
-            $spyc    = new Spyc();
+            $spyc = new Spyc();
+            $spyc->setting_dump_force_quotes = true;
+
             $content = $spyc->dump($configData);
             $yaml    = fopen(RUNTIME_ROOT . 'tmp/config.yaml', 'w');
             fwrite($yaml, $content);
@@ -142,6 +144,8 @@ function zdRun()
 
             $execYaml = sprintf($command, RUNTIME_ROOT . 'tmp/config.yaml', $defaultName . '.yaml', $info['rows'], $fileName, $tableName);
             system($execYaml);
+
+            echo $execYaml . "\n";
             echo 'Execute: ' . $fileName . PHP_EOL;
 
             $tables[$tableName] = $tableName;

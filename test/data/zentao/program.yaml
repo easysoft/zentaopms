@@ -2,8 +2,6 @@ title: program
 author: Zhu Jinyong
 version: "1.0"
 fields:
-  - field: id
-    range: 1-10000
   - field: project
     range: 1-10000
   - field: model
@@ -11,12 +9,25 @@ fields:
   - field: type
     range: program
   - field: status
-    range: doing,wait,suspended,closed
+    range: wait,doing,suspended,closed
   - field: desc
     range: 1-10000
     prefix: "项目集描述"
   - field: acl
-    range: open,private
+    range: open{4},private{4}
   - field: whitelist
-    from: common.user.v1.yaml
-    use: user
+    froms:
+      - from: common.user.v1.yaml
+        use: empty{8}
+      - from: common.user.v1.yaml
+        use: empty{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: one{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: two{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: three{8}
+        prefix: ","

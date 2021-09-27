@@ -19,4 +19,6 @@ test/data/sql/
 .DS_Store
 vendor/
 composer.lock
+
 test/runtime/*
+test/www

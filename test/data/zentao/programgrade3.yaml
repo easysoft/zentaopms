@@ -2,6 +2,11 @@ title: program
 author: Zhu Jinyong
 version: "1.0"
 fields:
+  - field: id
+    range: 81-10000
+  - field: name
+    range: 81-10000
+    prefix: "测试项目集"
   - field: grade
     range: 1
   - field: parent

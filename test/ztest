@@ -7,7 +7,7 @@ if(count($argv) <= 1) die(printUsage());
 switch($argv[1])
 {
     case 'init':
-        zdRun('data');
+        zdRun();
         break;
     case 'extract':
         ztfExtract('model');

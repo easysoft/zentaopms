@@ -61,8 +61,6 @@ fields:
     range:
   - field: acl
     range: open,private,custom
-  - field: whitelist
-    range:
   - field: order
     range: 5-10000:5
   - field: deleted
