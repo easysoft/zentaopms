@@ -100,6 +100,12 @@ function zdRun()
         $dbh->exec("set names 'utf8'");
         $dbh->beginTransaction();
 
+        /* Copy common to tmp. */
+        $tmpCommonPath = RUNTIME_ROOT . 'tmp/common';
+        if(file_exists($tmpCommonPath)) system("rm -rf $tmpCommonPath");
+        system("cp -r {$zdRoot}common $tmpCommonPath");
+
+        /* Generate SQL files. */
         $command = "$zdPath -c %s -d $zdRoot%s -n %s -o {$zdRoot}sql/%s.sql -table %s";
         $tables  = array();
         foreach($builder as $key => $info)

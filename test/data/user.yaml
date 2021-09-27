@@ -3,7 +3,6 @@ author: ly
 version: "1.0"
 fields:
   - field: id
-    note: "ID"
     range: 1-10000
   - field: company
     range: 1
