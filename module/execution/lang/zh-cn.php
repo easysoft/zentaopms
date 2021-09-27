@@ -313,32 +313,32 @@ if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择�
 if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->project->common}或{$lang->execution->common}团队来复制";
 
 /* 交互提示。*/
-$lang->execution->confirmDelete             = "您确定删除{$lang->executionCommon}[%s]吗？";
-$lang->execution->confirmUnlinkMember       = "您确定从该{$lang->executionCommon}中移除该用户吗？";
-$lang->execution->confirmUnlinkStory        = "您确定从该{$lang->executionCommon}中移除该{$lang->SRCommon}吗？";
-$lang->execution->confirmSyncStories        = "修改所属项目后，执行关联的{$lang->SRCommon}是否同步到新项目中？";
+$lang->execution->confirmDelete               = "您确定删除{$lang->executionCommon}[%s]吗？";
+$lang->execution->confirmUnlinkMember         = "您确定从该{$lang->executionCommon}中移除该用户吗？";
+$lang->execution->confirmUnlinkStory          = "移除该{$lang->SRCommon}后，该{$lang->SRCommon}关联的用例将被移除，该{$lang->SRCommon}关联的任务将被取消，请确认。";
+$lang->execution->confirmSyncStories          = "修改所属项目后，执行关联的{$lang->SRCommon}是否同步到新项目中？";
 $lang->execution->confirmUnlinkExecutionStory = "您确定从该项目中移除该{$lang->SRCommon}吗？";
-$lang->execution->notAllowedUnlinkStory     = "该{$lang->SRCommon}已经与项目下{$lang->executionCommon}相关联，请从{$lang->executionCommon}中移除后再操作。";
-$lang->execution->notAllowRemoveProducts    = "该{$lang->productCommon}中的{$lang->SRCommon}已与该{$lang->executionCommon}进行了关联，请取消关联后再操作。";
-$lang->execution->errorNoLinkedProducts     = "该{$lang->executionCommon}没有关联的{$lang->productCommon}，系统将转到{$lang->productCommon}关联页面";
-$lang->execution->errorSameProducts         = "{$lang->executionCommon}不能关联多个相同的{$lang->productCommon}。";
-$lang->execution->errorBegin                = "{$lang->executionCommon}的开始时间不能小于所属项目的开始时间%s。";
-$lang->execution->errorEnd                  = "{$lang->executionCommon}的截止时间不能大于所属项目的结束时间%s。";
-$lang->execution->accessDenied              = "您无权访问该{$lang->executionCommon}！";
-$lang->execution->tips                      = '提示';
-$lang->execution->afterInfo                 = "{$lang->executionCommon}添加成功，您现在可以进行以下操作：";
-$lang->execution->setTeam                   = '设置团队';
-$lang->execution->linkStory                 = "关联{$lang->SRCommon}";
-$lang->execution->createTask                = '创建任务';
-$lang->execution->goback                    = "返回任务列表";
-$lang->execution->noweekend                 = '去除周末';
-$lang->execution->withweekend               = '显示周末';
-$lang->execution->interval                  = '间隔';
-$lang->execution->fixFirstWithLeft          = '修改剩余工时';
+$lang->execution->notAllowedUnlinkStory       = "该{$lang->SRCommon}已经与项目下{$lang->executionCommon}相关联，请从{$lang->executionCommon}中移除后再操作。";
+$lang->execution->notAllowRemoveProducts      = "该{$lang->productCommon}中的{$lang->SRCommon}已与该{$lang->executionCommon}进行了关联，请取消关联后再操作。";
+$lang->execution->errorNoLinkedProducts       = "该{$lang->executionCommon}没有关联的{$lang->productCommon}，系统将转到{$lang->productCommon}关联页面";
+$lang->execution->errorSameProducts           = "{$lang->executionCommon}不能关联多个相同的{$lang->productCommon}。";
+$lang->execution->errorBegin                  = "{$lang->executionCommon}的开始时间不能小于所属项目的开始时间%s。";
+$lang->execution->errorEnd                    = "{$lang->executionCommon}的截止时间不能大于所属项目的结束时间%s。";
+$lang->execution->accessDenied                = "您无权访问该{$lang->executionCommon}！";
+$lang->execution->tips                        = '提示';
+$lang->execution->afterInfo                   = "{$lang->executionCommon}添加成功，您现在可以进行以下操作：";
+$lang->execution->setTeam                     = '设置团队';
+$lang->execution->linkStory                   = "关联{$lang->SRCommon}";
+$lang->execution->createTask                  = '创建任务';
+$lang->execution->goback                      = "返回任务列表";
+$lang->execution->noweekend                   = '去除周末';
+$lang->execution->withweekend                 = '显示周末';
+$lang->execution->interval                    = '间隔';
+$lang->execution->fixFirstWithLeft            = '修改剩余工时';
 $lang->execution->unfinishedExecution         = "该{$lang->executionCommon}下还有";
-$lang->execution->unfinishedTask            = "[%s]个未完成的任务，";
-$lang->execution->unresolvedBug             = "[%s]个未解决的bug，";
-$lang->execution->projectNotEmpty           = '所属项目不能为空。';
+$lang->execution->unfinishedTask              = "[%s]个未完成的任务，";
+$lang->execution->unresolvedBug               = "[%s]个未解决的bug，";
+$lang->execution->projectNotEmpty             = '所属项目不能为空。';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
