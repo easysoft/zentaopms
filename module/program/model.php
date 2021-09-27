@@ -1338,7 +1338,7 @@ class programModel extends model
      */
     public function getTeamMemberPairs($programID = 0)
     {
-      $projectList = $this->loadModel('project')->getPairsByProgram($programID);
+      $projectList = $this->getProjectList($programID);
       if(!$projectList) return array('' => '');
 
       $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
