@@ -164,13 +164,13 @@ class company extends control
      * @param  string $date
      * @param  string $direction    next|pre
      * @param  int    $userID
-     * @param  int    $product
-     * @param  int    $project
-     * @param  int    $execution
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next', $userID = '', $product = 0, $project = 0, $execution = 0)
+    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next', $userID = '', $productID = 0, $projectID = 0, $executionID = 0)
     {
         $this->company->setMenu();
         $this->app->loadLang('user');
@@ -242,10 +242,10 @@ class company extends control
         /* Get actions. */
         if($browseType != 'bysearch')
         {
-            $product   = $product ? $product : 'all';
-            $project   = $project ? $project : 'all';
-            $execution = $execution ? $execution : 'all';
-            $actions   = $this->action->getDynamic($account, $browseType, $sort, $pager, $product, $project, $execution, $date, $direction);
+            if(!$productID) $productID = 'all';
+            if(!$projectID) $projectID = 'all';
+            if(!$executionID) $executionID = 'all';
+            $actions = $this->action->getDynamic($account, $browseType, $sort, $pager, $productID, $projectID, $executionID, $date, $direction);
         }
         else
         {
@@ -278,9 +278,9 @@ class company extends control
         $this->view->browseType   = $browseType;
         $this->view->account      = $account;
         $this->view->accountPairs = $accountPairs;
-        $this->view->product      = $product;
-        $this->view->project      = $project;
-        $this->view->execution    = $execution;
+        $this->view->productID    = $productID;
+        $this->view->projectID    = $projectID;
+        $this->view->executionID  = $executionID;
         $this->view->queryID      = $queryID;
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
