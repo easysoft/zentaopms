@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php $this->app->loadLang('story');?>
 <?php if(empty($stories)): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>

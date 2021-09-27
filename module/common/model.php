@@ -119,6 +119,7 @@ class commonModel extends model
             $user->id         = 0;
             $user->account    = 'guest';
             $user->realname   = 'guest';
+            $user->avatar     = '';
             $user->role       = 'guest';
             $user->admin      = false;
             $user->rights     = $this->loadModel('user')->authorize('guest');
@@ -223,6 +224,7 @@ class commonModel extends model
             $user = $this->app->user;
             $user->rights = $this->loadModel('user')->authorize($user->account);
             $user->groups = $this->user->getGroups($user->account);
+            $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
             if(commonModel::hasPriv($module, $method)) return true;
