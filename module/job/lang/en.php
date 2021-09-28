@@ -38,6 +38,12 @@ $lang->job->customParam = 'Custom build parameters';
 $lang->job->paramName   = 'Name';
 $lang->job->paramValue  = 'Value';
 $lang->job->custom      = 'Custom';
+$lang->job->createdBy   = 'Created By';
+$lang->job->createdDate = 'Created Date';
+$lang->job->editedBy    = 'Edited By';
+$lang->job->editedDate  = 'Edited Date';
+$lang->job->lastTag     = 'Last Tag';
+$lang->job->deleted     = 'Deleted';
 
 $lang->job->lblBasic = 'Basic Info';
 

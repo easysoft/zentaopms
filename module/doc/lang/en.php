@@ -53,6 +53,12 @@ $lang->doc->searchResult = 'Search Result';
 $lang->doc->mailto       = 'Mailto';
 $lang->doc->noModule     = 'No document in this lib, please create it';
 $lang->doc->noChapter    = 'No chapters or articles in this book. Please add chapters and articles.';
+$lang->doc->views        = 'Views';
+$lang->doc->draft        = 'Draft';
+$lang->doc->collector    = 'Collector';
+$lang->doc->main         = 'Main Document Library';
+$lang->doc->order        = 'Order';
+$lang->doc->doc          = 'Document';
 
 $lang->doc->moduleDoc     = 'By Module';
 $lang->doc->searchDoc     = 'Search';

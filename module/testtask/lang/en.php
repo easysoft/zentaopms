@@ -47,6 +47,12 @@ $lang->testtask->all              = "All " . $lang->productCommon . "s";
 $lang->testtask->allTasks         = 'All Requests';
 $lang->testtask->collapseAll      = 'Collapse';
 $lang->testtask->expandAll        = 'Expand';
+$lang->testtask->auto             = 'Test Automation Tasks';
+$lang->testtask->task             = 'Test Task';
+$lang->testtask->run              = 'Test Run ID';
+$lang->testtask->job              = 'Job';
+$lang->testtask->compile          = 'Compile';
+$lang->testtask->duration         = 'Duration';
 
 $lang->testtask->viewAction     = "View Request";
 $lang->testtask->casesAction    = 'View Case';
