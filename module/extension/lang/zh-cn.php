@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->extension->common           = '插件管理';
+$lang->extension->id               = '编号';
 $lang->extension->browse           = '浏览插件';
 $lang->extension->install          = '安装插件';
 $lang->extension->installAuto      = '自动安装';

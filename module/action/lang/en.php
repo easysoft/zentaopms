@@ -11,19 +11,24 @@
  */
 global $config;
 
-$lang->action->common     = 'Log';
-$lang->action->product    = $lang->productCommon;
-$lang->action->project    = 'Project';
-$lang->action->execution  = $lang->executionCommon;
-$lang->action->objectType = 'Object Type';
-$lang->action->objectID   = 'ID';
-$lang->action->objectName = 'Object Name';
-$lang->action->actor      = 'User';
-$lang->action->action     = 'Action';
-$lang->action->actionID   = 'Action ID';
-$lang->action->date       = 'Date';
-$lang->action->extra      = 'Extra';
-$lang->action->system     = 'System';
+$lang->action->common      = 'Log';
+$lang->action->id          = 'ID';
+$lang->action->product     = $lang->productCommon;
+$lang->action->project     = 'Project';
+$lang->action->execution   = $lang->executionCommon;
+$lang->action->objectType  = 'Object Type';
+$lang->action->objectID    = 'ID';
+$lang->action->objectName  = 'Object Name';
+$lang->action->actor       = 'User';
+$lang->action->action      = 'Action';
+$lang->action->actionID    = 'Action ID';
+$lang->action->date        = 'Date';
+$lang->action->extra       = 'Extra';
+$lang->action->system      = 'System';
+$lang->action->url         = 'URL';
+$lang->action->contentType = 'Content Type';
+$lang->action->data        = 'Data';
+$lang->action->result      = 'Result';
 
 $lang->action->trash       = 'Recycle';
 $lang->action->undelete    = 'Restore';

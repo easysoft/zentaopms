@@ -53,6 +53,12 @@ $lang->doc->searchResult = '搜索结果';
 $lang->doc->mailto       = '抄送给';
 $lang->doc->noModule     = '文档库下没有目录和文档，请维护目录或者创建文档';
 $lang->doc->noChapter    = '手册下没有章节和文章，请维护手册';
+$lang->doc->views        = '浏览次数';
+$lang->doc->draft        = '草稿';
+$lang->doc->collector    = '收藏者';
+$lang->doc->main         = '文档主库';
+$lang->doc->order        = '排序';
+$lang->doc->doc          = '文档';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';

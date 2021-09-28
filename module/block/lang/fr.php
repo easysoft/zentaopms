@@ -76,10 +76,6 @@ $lang->block->selectProduct       = 'Product selection';
 $lang->block->of                  = ' di ';
 $lang->block->remain              = 'Left';
 
-$lang->block->params = new stdclass();
-$lang->block->params->name  = 'Nom';
-$lang->block->params->value = 'Valeur';
-
 $lang->block->createBlock        = 'Ajouter Bloc';
 $lang->block->editBlock          = 'Editer Bloc';
 $lang->block->ordersSaved        = 'L´ordre a été sauvegardé.';

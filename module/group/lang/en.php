@@ -34,6 +34,8 @@ $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Blank means no access limit.';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
+$lang->group->project            = 'Project';
+$lang->group->group              = 'Group';
 
 global $config;
 if($config->systemMode == 'new') $lang->group->noneProject = 'No Project';
