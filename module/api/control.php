@@ -79,6 +79,78 @@ class api extends control
     }
 
     /**
+     * Api doc global struct page.
+     *
+     * @param  int $libID
+     * @access public
+     * @return void
+     */
+    public function struct($libID = 0, $structID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $now    = helper::now();
+            $userId = $this->app->user->account;
+            $data   = fixer::input('post')
+                ->add('lib', $libID)
+                ->add('addedBy', $userId)
+                ->add('addedDate', $now)
+                ->add('editedBy', $userId)
+                ->add('editedDate', $now)
+                ->json('attribute')
+                ->get();
+
+            $id = 0;
+            if($structID <= 0)
+            {
+                $id = $this->api->createStruct($data);
+                $this->action->create('apistruct', $id, 'Created');
+            }
+            else
+            {
+                $changes = $this->api->updateStruct($structID, $data);
+                if(dao::isError()) return $this->sendError(dao::getError());
+
+                $actionID = $this->action->create('apistruct', $structID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+                $id = $structID;
+            }
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID&structID=$id")));
+        }
+
+        /* Get all api doc libraries. */
+        $libs = $this->doc->getApiLibs();
+
+        /* Generate bread crumbs dropMenu. */
+        if($libs)
+        {
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
+        }
+
+        /* Get a struct info */
+        $struct = '';
+        if($structID > 0)
+        {
+            $struct = $this->api->getStructByID($structID);
+        }
+
+        /* Set Tr actions */
+        $menu = "<div class='btn-group dropdown-hover'>";
+        $menu .= html::a(helper::createLink('api', 'index', "libID=$libID"), $this->lang->api->common, '', 'class="btn btn-link"');
+        $menu .= "</div>";
+
+        $this->lang->TRActions = $menu;
+        $this->view->struct    = $struct;
+        $this->view->structID  = $structID;
+        $this->view->tree      = $this->api->getStructTreeByLib($libID, $structID);
+        $this->view->libID     = $libID;
+        $this->view->title     = $this->lang->api->struct;
+        $this->display();
+    }
+
+    /**
      * Create a api doc library.
      *
      * @access public
@@ -205,6 +277,15 @@ class api extends control
         $example = array('example' => 'type,description');
         $example = json_encode($example, JSON_PRETTY_PRINT);
 
+        /* Load All struct */
+        $structs = $this->api->getStructListByLibID($api->lib);
+        $options = array();
+        foreach($structs as $item)
+        {
+            $options[$item->id] = $item->name;
+        }
+        $this->view->allStruct  = $options;
+
         $allUsers                     = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $allUsers;
@@ -256,6 +337,15 @@ class api extends control
 
         $example = array('example' => 'type,description');
         $example = json_encode($example, JSON_PRETTY_PRINT);
+
+        /* Load All struct */
+        $structs = $this->api->getStructListByLibID($libID);
+        $options = array();
+        foreach($structs as $item)
+        {
+            $options[$item->id] = $item->name;
+        }
+        $this->view->allStruct  = $options;
 
         $allUsers                     = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->user             = $this->app->user->account;
@@ -326,17 +416,52 @@ class api extends control
     }
 
     /**
+     * @param  int $libID
+     * @return void
+     */
+    public function ajaxGetRefOptions($libID = 0, $structID = 0)
+    {
+        $res = $this->api->getStructListByLibID($libID);
+
+        $options = array();
+        foreach($res as $item)
+        {
+            if($item->id == $structID)
+                continue;
+            $options[$item->id] = $item->name;
+        }
+
+        echo html::select('refTarget', $options, '', "class='form-control'");
+    }
+
+    /**
+     * Get ref info
+     *
+     * @param  int $refID
+     * @return void
+     */
+    public function ajaxGetRefInfo($refID = 0)
+    {
+        $info = $this->api->getStructByID($refID);
+        $this->sendSuccess(array('info' => $info));
+    }
+
+    /**
      * Set doc menu by method name.
      *
      * @author thanatos thanatos915@163.com
      */
     private function setMenu($libID = 0)
     {
-        $menu = '';
+        // global struct link
+        $menu = "<div class='btn-group dropdown-hover'>";
+        $menu .= html::a(helper::createLink('api', 'struct', "libID=$libID"), $this->lang->api->struct, '', 'class="btn btn-link"');
+        $menu .= "</div>";
+
         // page of index menu
         if(intval($libID) > 0)
         {
-            $menu = "<div class='dropdown' id='createDropdown'>";
+            $menu .= "<div class='dropdown' id='createDropdown'>";
             $menu .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->curd->create . " <span class='caret'></span></button>";
             $menu .= "<ul class='dropdown-menu pull-right'>";
 
@@ -344,7 +469,7 @@ class api extends control
             if(common::hasPriv('api', 'create'))
             {
                 $menu .= "<li>";
-                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID"), "<i class='icon-rich-text icon'></i> 接口", '', "data-app='{$this->app->tab}'");
+                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->apiDoc, '', "data-app='{$this->app->tab}'");
                 $menu .= "</li>";
             }
 
@@ -362,7 +487,7 @@ class api extends control
             /* generate create api doc lib button */
             if(common::hasPriv('api', 'createDoc'))
             {
-                $menu = html::a(helper::createLink('api', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->api->createLib, '', 'class="btn btn-secondary iframe"');
+                $menu .= html::a(helper::createLink('api', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->api->createLib, '', 'class="btn btn-secondary iframe"');
             }
         }
 

@@ -28,7 +28,8 @@ class apiModel extends model
 
     /**
      * Create an api doc.
-     * @param stdClass $params
+     *
+     * @param  stdClass $params
      * @return int
      * @author thanatos thanatos915@163.com
      */
@@ -45,7 +46,50 @@ class apiModel extends model
     }
 
     /**
+     * Create a global struct
+     *
+     * @param $data
+     * @access public
+     * @return int
+     */
+    public function createStruct($data)
+    {
+        $this->dao->insert(TABLE_APISTRUCT)->data($data)
+            ->autoCheck()
+            ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
+            ->exec();
+
+        return dao::isError() ? 0 : $this->dao->lastInsertID();
+    }
+
+    /**
+     * Update a struct.
+     *
+     * @param $id
+     * @param $data
+     * @return array
+     */
+    public function updateStruct($id, $data)
+    {
+        $old = $this->dao->findByID($id)->from(TABLE_APISTRUCT)->fetch();
+
+        unset($data->addedBy);
+        unset($data->addedDate);
+
+        $this->dao->update(TABLE_APISTRUCT)
+            ->data($data)->autoCheck()
+            ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
+            ->where('id')->eq($id)
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        return common::createChanges($old, $data);
+    }
+
+    /**
      * Update an api doc.
+     *
      * @param $id
      * @param $data
      * @author thanatos thanatos915@163.com
@@ -61,8 +105,7 @@ class apiModel extends model
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
         unset($data->id);
-        $this->dao
-            ->update(TABLE_API)
+        $this->dao->update(TABLE_API)
             ->data($data)
             ->autoCheck()
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
@@ -72,9 +115,51 @@ class apiModel extends model
     }
 
     /**
+     * Get struct list by api doc id.
+     *
+     * @param $id
+     * @access public
+     * @return array
+     */
+    public function getStructListByLibID($id)
+    {
+        $res = $this->dao->select('*')
+            ->from(TABLE_APISTRUCT)
+            ->where('lib')->eq($id)
+            ->fetchAll();
+
+        array_map(function ($item) {
+            $item->attribute = json_decode(htmlspecialchars_decode($item->attribute), true);
+            return $item;
+        }, $res);
+        return $res;
+    }
+
+    /**
+     * Get a struct info.
+     *
+     * @param $id
+     * @access public
+     * @return stdClass
+     */
+    public function getStructByID($id)
+    {
+        $model = $this->dao->select('*')
+            ->from(TABLE_APISTRUCT)
+            ->where('id')->eq($id)
+            ->fetch();
+
+        if($model)
+            $model->attribute = json_decode(htmlspecialchars_decode($model->attribute), true);
+
+        return $model;
+    }
+
+
+    /**
      * Get api doc by id.
      *
-     * @param int $id
+     * @param  int $id
      * @access public
      * @return object
      */
@@ -110,8 +195,9 @@ class apiModel extends model
 
     /**
      * Get api doc list by module id
-     * @param int $libID
-     * @param int $moduleID
+     *
+     * @param  int $libID
+     * @param  int $moduleID
      * @return array $list
      * @author thanatos thanatos915@163.com
      */
@@ -140,6 +226,7 @@ class apiModel extends model
 
     /**
      * Get status text by status.
+     *
      * @param $status
      * @return string
      * @author thanatos thanatos915@163.com
@@ -157,10 +244,39 @@ class apiModel extends model
     }
 
     /**
+     * Get struct tree by lib id
+     *
+     * @param  int $libID
+     * @param  int $structID
+     * @return string
+     * @access public
+     */
+    public function getStructTreeByLib($libID = 0, $structID = 0)
+    {
+        $list = $this->getStructListByLibID($libID);
+
+        $html = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>";
+        foreach($list as $item)
+        {
+            $class = ['catalog'];
+            if($structID && $structID == $item->id)
+                array_push($class, 'active');
+            else
+                array_push($class, 'doc');
+
+            $html .= '<li class="' . implode(' ', $class) . '">';
+            $html .= html::a(helper::createLink('api', 'struct', "libID=$libID&structID=$item->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $item->name, '', "data-app='{$this->app->tab}' class='doc-title' title='{$item->name}'");
+            $html .= "</li>";
+        }
+        $html .= "</ul>";
+        return $html;
+    }
+
+    /**
      * Get the details of the method by file path.
      *
-     * @param string $filePath
-     * @param string $ext
+     * @param  string $filePath
+     * @param  string $ext
      * @access public
      * @return object
      */
@@ -196,9 +312,9 @@ class apiModel extends model
     /**
      * Request the api.
      *
-     * @param string $moduleName
-     * @param string $methodName
-     * @param string $action
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $action
      * @access public
      * @return array
      */
@@ -240,8 +356,8 @@ class apiModel extends model
     /**
      * Query sql.
      *
-     * @param string $sql
-     * @param string $keyField
+     * @param  string $sql
+     * @param  string $keyField
      * @access public
      * @return array
      */
@@ -299,22 +415,22 @@ class apiModel extends model
 
         $now = helper::now();
         return [
-            'doc' => $data->id,
-            'module' => $data->module,
-            'title' => $data->title,
-            'path' => $data->path,
-            'protocol' => $data->protocol,
-            'method' => $data->method,
-            'requestType' => $data->requestType,
+            'doc'          => $data->id,
+            'module'       => $data->module,
+            'title'        => $data->title,
+            'path'         => $data->path,
+            'protocol'     => $data->protocol,
+            'method'       => $data->method,
+            'requestType'  => $data->requestType,
             'responseType' => isset($data->responseType) ? $data->responseType : '',
-            'status' => $data->status,
-            'owner' => $data->owner,
-            'desc' => $data->desc,
-            'version' => $data->version,
-            'params' => $data->params,
-            'response' => $data->response,
-            'addedBy' => $this->app->user->account,
-            'addedDate' => $now,
+            'status'       => $data->status,
+            'owner'        => $data->owner,
+            'desc'         => $data->desc,
+            'version'      => $data->version,
+            'params'       => $data->params,
+            'response'     => $data->response,
+            'addedBy'      => $this->app->user->account,
+            'addedDate'    => $now,
         ];
     }
 }

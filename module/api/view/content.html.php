@@ -50,6 +50,64 @@
               <th class='c-lib'><?php echo $lang->api->apiDesc; ?></th>
               <td><?php echo $api->desc; ?></td>
             </tr>
+            <?php
+            $header = array();
+            $query = array();
+            $params = array();
+            foreach($api->params as $param)
+            {
+                if($param['scope'] == apiModel::SCOPE_HEADER)
+                    array_push($header, $param);
+                elseif($param['scope'] == apiModel::SCOPE_QUERY)
+                    array_push($query, $param);
+                else
+                    array_push($params, $param);
+            }
+            $types = ['header', 'query', 'params']
+            ?>
+            <?php
+                foreach($types as $type):
+            ?>
+            <?php
+                if(empty($$type)) continue;
+            ?>
+            <tr>
+              <th class='c-lib'><h2><?php echo $lang->api->$type; ?></h2></th>
+            </tr>
+            <tr>
+              <td width="100%">
+                <table class="table table-data paramsTable">
+                  <tbody>
+                  <tr>
+                    <th class="w-300px">参数</th>
+                    <th class="w-100px">类型</th>
+                    <th>必填</th>
+                    <th class="w-300px">说明</th>
+                  </tr>
+                  <?php foreach($$type as $param):?>
+                  <tr>
+                    <td class="w-300px" style="text-align: left"><?php echo $param['field']; ?></td>
+                    <td class="w-300px">
+                        <?php
+                        if($param['paramsType'] == apiModel::PARAMS_TYPE_CUSTOM)
+                        {
+                            echo '<pre><code>' . $param['custom'] . '</code></pre>';
+                        }
+                        else
+                        {
+                            echo $param['paramsType'];
+                        }
+                        ?>
+                    </td>
+                    <td><?php echo $param['required'] ? '是' : '否'; ?></td>
+                    <td><?php echo $param['desc']; ?></td>
+                  <tr>
+                  <?php endforeach;?>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <?php endforeach; ?>
             <tr>
               <th class='c-lib'><?php echo $lang->api->response; ?></th>
               <td>
@@ -63,42 +121,6 @@
                       echo $api->response['type'];
                   }
                   ?>
-              </td>
-            </tr>
-            <tr>
-              <th class='c-lib'><?php echo $lang->api->params; ?></th>
-            </tr>
-            <tr>
-              <td width="100%">
-                <table class="table table-data paramsTable">
-                  <tbody>
-                  <tr>
-                    <th>参数</th>
-                    <th>参数位置</th>
-                    <th class="w-300px">类型</th>
-                    <th class="w-200px">说明</th>
-                  </tr>
-                  <?php foreach($api->params as $param):?>
-                  <tr>
-                    <td><?php echo $param['field']; ?></td>
-                    <td><?php echo $param['scope']; ?></td>
-                    <td class="w-200px" style="text-align: left">
-                        <?php
-                        if($param['paramsType'] == apiModel::PARAMS_TYPE_CUSTOM)
-                        {
-                            echo '<pre><code>' . $param['custom'] . '</code></pre>';
-                        }
-                        else
-                        {
-                            echo $param['paramsType'];
-                        }
-                        ?>
-                    </td>
-                    <td><?php echo $param['desc']; ?></td>
-                  <tr>
-                  <?php endforeach;?>
-                  </tbody>
-                </table>
               </td>
             </tr>
             </tbody>

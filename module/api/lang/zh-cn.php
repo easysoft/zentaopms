@@ -30,6 +30,8 @@ $lang->api->noModule         = '接口库下没有目录，请先维护目录';
 $lang->api->post             = 'POST方式调试请参照页面表单';
 $lang->api->noUniqueName     = '接口库名已存在。';
 $lang->api->createLib        = '创建接口库';
+$lang->api->createStruct     = '创建数据结构';
+$lang->api->editStruct       = '修改数据结构';
 $lang->api->editLib          = '编辑接口库';
 $lang->api->deleteLib        = '删除接口库';
 $lang->api->create           = '创建文档';
@@ -45,8 +47,19 @@ $lang->api->principal        = '负责人';
 $lang->api->apiDesc          = '接口说明';
 $lang->api->confirmDelete    = "您确定删除该接口吗？";
 $lang->api->confirmDeleteLib = "您确定删除该接口库吗？";
+$lang->api->filterStruct     = "使用数据结构填充";
+
+/* fields of struct */
+$lang->struct = new stdClass();
+
+$lang->struct->field      = '字段';
+$lang->struct->paramsType = '类型';
+$lang->struct->desc       = '描述';
 
 /* fields of form */
+$lang->api->struct             = '数据结构';
+$lang->api->structName         = '结构名';
+$lang->api->structAttr         = '属性';
 $lang->api->name               = '接口库名称';
 $lang->api->baseUrl            = '请求基路径';
 $lang->api->desc               = '描述';
@@ -62,8 +75,12 @@ $lang->api->method             = '请求方式';
 $lang->api->requestType        = '请求格式';
 $lang->api->status             = '开发状态';
 $lang->api->owner              = '负责人';
-$lang->api->params             = '请求参数';
+$lang->api->paramsExample      = '请求示例';
+$lang->api->header             = '请求头';
+$lang->api->query              = '请求参数';
+$lang->api->params             = '请求体';
 $lang->api->response           = '请求响应';
+$lang->api->responseExample    = '响应实例';
 $lang->api->res                = new stdClass();
 $lang->api->res->name          = '名称';
 $lang->api->res->desc          = '描述';
@@ -76,55 +93,55 @@ $lang->api->default            = '默认值';
 $lang->api->desc               = '描述';
 $lang->api->customType         = '自定义结构';
 $lang->api->format             = '格式化';
-$lang->api->methodOptions      = [
-    'GET' => 'GET',
-    'POST' => 'POST',
-    'PUT' => 'PUT',
-    'DELETE' => 'DELETE',
-    'PATCH' => 'PATCH',
+$lang->api->methodOptions      = array(
+    'GET'     => 'GET',
+    'POST'    => 'POST',
+    'PUT'     => 'PUT',
+    'DELETE'  => 'DELETE',
+    'PATCH'   => 'PATCH',
     'OPTIONS' => 'OPTIONS',
-    'HEAD' => 'HEAD'
-];
-$lang->api->protocalOptions    = [
-    'HTTP' => 'HTTP',
+    'HEAD'    => 'HEAD'
+);
+$lang->api->protocalOptions    = array(
+    'HTTP'  => 'HTTP',
     'HTTPS' => 'HTTPS',
-];
-$lang->api->requestTypeOptions = [
-    'application/json' => 'application/json',
+);
+$lang->api->requestTypeOptions = array(
+    'application/json'                  => 'application/json',
     'application/x-www-form-urlencoded' => 'application/x-www-form-urlencoded',
-    'multipart/form-data' => 'multipart/form-data'
-];
-$lang->api->statusOptions      = [
-    'doing' => '开发中',
-    'done' => '开发完成',
+    'multipart/form-data'               => 'multipart/form-data'
+);
+$lang->api->statusOptions      = array(
+    'doing'  => '开发中',
+    'done'   => '开发完成',
     'hidden' => '不显示'
-];
-$lang->api->paramsScopeOptions = [
+);
+$lang->api->paramsScopeOptions = array(
     'formData' => 'formData',
-    'path' => 'path',
-    'query' => 'query',
-    'body' => 'body',
-    'header' => 'header',
-    'cookie' => 'cookie',
-];
+    'path'     => 'path',
+    'query'    => 'query',
+    'body'     => 'body',
+    'header'   => 'header',
+    'cookie'   => 'cookie',
+);
 /* Api global common params */
-$lang->api->paramsTypeOptions = [
-    'string' => 'string',
-    'date' => 'date',
+$lang->api->paramsTypeOptions = array(
+    'string'   => 'string',
+    'date'     => 'date',
     'datetime' => 'datetime',
-    'boolean' => 'boolean',
-    'int' => 'int',
-    'long' => 'long',
-    'float' => 'float',
-    'double' => 'double',
-    'decimal' => 'decimal'
-];
+    'boolean'  => 'boolean',
+    'int'      => 'int',
+    'long'     => 'long',
+    'float'    => 'float',
+    'double'   => 'double',
+    'decimal'  => 'decimal'
+);
 /* Api params */
-$lang->api->paramsTypeCustomOptions = [
+$lang->api->paramsTypeCustomOptions = array(
     'file' => 'file',
-    'ref' => 'ref',
-    'custom' => '自定义'
-];
+    'ref'  => 'ref',
+);
+$lang->api->structParamsOptons      = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
 $lang->api->allParamsTypeOptions    = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
 $lang->api->requiredOptions         = [
     0 => '否',

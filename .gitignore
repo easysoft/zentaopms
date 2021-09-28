@@ -20,4 +20,5 @@ vendor/
 docker
 .docker-sync
 composer.lock
+.editorconfig
 

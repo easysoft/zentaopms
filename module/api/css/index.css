@@ -117,8 +117,9 @@
 }
 
 .paramsTable th {
-    text-align: center!important;
+    text-align: left!important;
+    font-size: 14px;
 }
 .paramsTable td {
-    text-align: center;
+    text-align: left;
 }

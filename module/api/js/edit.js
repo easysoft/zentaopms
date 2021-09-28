@@ -44,7 +44,24 @@ function addItem(t)
     paramsLen += 1
     html = html.replace(/params\[\d\]/g, 'params['+ paramsLen +']')
     $('#paramDiv').append('<div class="row row-no-gutters col-custom">' + html + '</div>')
-    changeType($('#paramDiv .col-custom').last().find('#paramsTypeOptions'));
+    changeType($('#paramDiv .col-custom').last().find('#paramsTypeOptions'), 'params');
+}
+
+function addResponseItem(t)
+{
+    var html = $(t).parents('#responseDiv').find('.col-custom:first').html()
+    paramsLen += 1
+    html = html.replace(/response\[\d\]/g, 'response['+ paramsLen +']')
+    $('#responseDiv').append('<div class="row row-no-gutters col-custom">' + html + '</div>')
+    changeType($('#responseDiv .col-custom').last().find('#paramsTypeOptions'), 'response');
+}
+
+function deleteResponseItem(t)
+{
+    if ($(t).parents('#responseDiv').find('.col-custom').length < 2) {
+        return false
+    }
+    $(t).parents('.col-custom').remove()
 }
 
 function deleteItem(t)
@@ -72,16 +89,24 @@ function loadParamsTypeOptions(t)
     });
 }
 
-function changeType(t)
+function changeType(t, name)
 {
     var val = $(t).val()
 
-    console.log(val)
     var customRef = $(t).parents('.col-custom').find('.typeCustom')
-    if (val == 'custom') {
+    if (val == 'ref') {
         customRef.removeClass('hidden')
+        var field = $(t).attr('name');
+        field = field.replace(name, 'ref')
+        console.log(field);
+        var url = createLink('api', 'ajaxGetRefOptions', 'libID='+ libID)
+        $.get(url, function(data)
+        {
+            data = data.replace('refTarget', field)
+            $(t).parents('.col-custom').find('select[name="'+ field +'"]').replaceWith(data)
+        });
+
     } else {
         customRef.addClass('hidden')
     }
-
 }

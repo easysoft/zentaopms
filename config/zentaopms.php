@@ -195,7 +195,7 @@ define('TABLE_DOCLIB',        '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',           '`' . $config->db->prefix . 'doc`');
 define('TABLE_API',           '`' . $config->db->prefix . 'api`');
 define('TABLE_API_SPEC',      '`' . $config->db->prefix . 'apispec`');
-
+define('TABLE_APISTRUCT',           '`' . $config->db->prefix . 'apistruct`');
 
 define('TABLE_MODULE',        '`' . $config->db->prefix . 'module`');
 define('TABLE_ACTION',        '`' . $config->db->prefix . 'action`');
