@@ -100,7 +100,7 @@
           <pre><code><?php echo $api->paramsExample ?></code></pre>
           <?php endif;?>
           <?php if($api->response): ?>
-          <h3><?php echo $lang->api->responseExample; ?></h3>
+          <h3><?php echo $lang->api->response; ?></h3>
           <table class="table">
             <thead>
               <tr>
@@ -120,6 +120,10 @@
             </tbody>
           </table>
           <?php endif; ?>
+          <?php if($api->responseExample): ?>
+            <h3><?php echo $lang->api->responseExample ?></h3>
+            <pre><code><?php echo $api->responseExample ?></code></pre>
+          <?php endif;?>
         </div>
       </div>
       <!-- 历史记录 -->
