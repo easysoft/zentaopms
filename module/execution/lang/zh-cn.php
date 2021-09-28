@@ -102,6 +102,12 @@ $lang->execution->noTeam          = '暂时没有团队成员';
 $lang->execution->or              = '或';
 $lang->execution->selectProject   = '请选择项目';
 
+/* Fields of zt_team. */
+$lang->execution->root     = '源ID';
+$lang->execution->estimate = '预计';
+$lang->execution->consumed = '消耗';
+$lang->execution->left     = '剩余';
+
 if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
 if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以选择复制{$lang->executionCommon}团队的成员";
 
