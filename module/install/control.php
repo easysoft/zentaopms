@@ -37,6 +37,7 @@ class install extends control
         if(!isset($this->config->installed) or !$this->config->installed) $this->session->set('installing', true);
 
         $this->view->title = $this->lang->install->welcome;
+        if(!isset($this->view->versionName)) $this->view->versionName = $this->config->version;
         $this->display();
     }
 
