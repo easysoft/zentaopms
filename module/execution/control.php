@@ -2984,6 +2984,9 @@ class execution extends control
             $executionLang   = $this->lang->execution;
             $executionConfig = $this->config->execution;
 
+            $projectID = $from == 'project' ? $this->session->project : 0;
+            if($projectID) $this->project->setMenu($projectID);
+
             /* Create field lists. */
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $executionConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
@@ -2993,7 +2996,6 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $projectID = $from == 'project' ? $this->session->project : 0;
             $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
             $users = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
