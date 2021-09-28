@@ -2932,11 +2932,6 @@ class storyModel extends model
      */
     public function formatStories($stories, $type = 'full', $limit = 0)
     {
-        /* Get module names of stories. */
-        /*$modules = array();
-        foreach($stories as $story) $modules[] = $story->module;
-        $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();*/
-
         /* Format these stories. */
         $storyPairs = array(0 => '');
         $i = 0;

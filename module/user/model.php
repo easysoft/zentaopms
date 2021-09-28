@@ -989,10 +989,11 @@ class userModel extends model
         $user->rights = $this->authorize($user->account);
         $user->groups = $this->getGroups($user->account);
         $user->view   = $this->grantUserView($user->account, $user->rights['acls'], $user->rights['projects']);
+        $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
 
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
-        $this->loadModel('action')->create('user', $user->id, 'login');
+        if(isset($user->id)) $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
         /* Keep login. */

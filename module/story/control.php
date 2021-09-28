@@ -1864,6 +1864,7 @@ class story extends control
     public function ajaxGetInfo($storyID)
     {
         $story = $this->story->getByID($storyID);
+        if(empty($story)) return;
 
         $storyInfo['moduleID'] = $story->module;
         $storyInfo['estimate'] = $story->estimate;
