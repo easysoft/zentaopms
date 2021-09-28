@@ -119,6 +119,7 @@ class commonModel extends model
             $user->id         = 0;
             $user->account    = 'guest';
             $user->realname   = 'guest';
+            $user->dept       = 0;
             $user->avatar     = '';
             $user->role       = 'guest';
             $user->admin      = false;

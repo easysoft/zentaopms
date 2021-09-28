@@ -341,7 +341,9 @@ class control extends baseControl
         $message        = array();
         foreach($fields as $field)
         {
-            if($field->buildin or !$field->show or !isset($layouts[$field->field])) continue;
+            if(!empty($field->buildin)) continue;
+            if(empty($field->show)) continue;
+            if(!isset($layouts[$field->field])) continue;
 
             $fieldRules = explode(',', trim($field->rules, ','));
             $fieldRules = array_unique($fieldRules);
