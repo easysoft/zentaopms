@@ -11,7 +11,14 @@
  */
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
+$lang->testcase->project          = 'Project';
+$lang->testcase->execution        = 'Execution';
 $lang->testcase->module           = 'Module';
+$lang->testcase->auto             = 'Test Automation Cases';
+$lang->testcase->frame            = 'Test Automation Cramework';
+$lang->testcase->howRun           = 'Testing Method';
+$lang->testcase->frequency        = 'Frequency';
+$lang->testcase->path             = 'Path';
 $lang->testcase->lib              = "Case Library";
 $lang->testcase->branch           = "Branch/Platform";
 $lang->testcase->moduleAB         = 'Module';
@@ -37,6 +44,10 @@ $lang->testcase->linkCase         = 'Linked Cases';
 $lang->testcase->linkCases        = 'Link Case';
 $lang->testcase->unlinkCase       = 'Unlink Cases';
 $lang->testcase->stage            = 'Phase';
+$lang->testcase->scriptedBy       = 'ScriptedBy';
+$lang->testcase->scriptedDate     = 'ScriptedDate';
+$lang->testcase->scriptStatus     = 'Script Status';
+$lang->testcase->scriptLocation   = 'Script Location';
 $lang->testcase->reviewedBy       = 'ReviewedBy';
 $lang->testcase->reviewedDate     = 'ReviewedDate';
 $lang->testcase->reviewResult     = 'Review Result';
@@ -54,6 +65,7 @@ $lang->testcase->assignedTo       = 'AssingedTo';
 $lang->testcase->colorTag         = 'Color';
 $lang->testcase->lastRunResult    = 'Result';
 $lang->testcase->desc             = 'Steps';
+$lang->testcase->parent           = 'Parent';
 $lang->testcase->xml              = 'XML';
 $lang->testcase->expect           = 'Expectations';
 $lang->testcase->allProduct       = "All {$lang->productCommon}s";
@@ -73,8 +85,12 @@ $lang->testcase->sync             = 'Synchronize Case';
 $lang->testcase->ignore           = 'Ignore';
 $lang->testcase->fromTesttask     = 'From Test Request';
 $lang->testcase->fromCaselib      = 'From Case Library';
+$lang->testcase->fromCaseID       = 'From Case ID';
+$lang->testcase->fromCaseVersion  = 'From Case Version';
+$lang->testcase->mailto           = 'Mailto';
 $lang->testcase->deleted          = 'Deleted';
 $lang->testcase->browseUnits      = 'Unit Test';
+$lang->testcase->suite            = 'Test Suite';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 

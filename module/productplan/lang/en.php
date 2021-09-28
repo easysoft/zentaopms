@@ -67,6 +67,7 @@ $lang->productplan->children   = "Child Plan";
 $lang->productplan->childrenAB = "C";
 $lang->productplan->order      = "Order";
 $lang->productplan->deleted    = "Deleted";
+$lang->productplan->mailto     = "Mailto";
 
 $lang->productplan->endList[7]    = '1 Week';
 $lang->productplan->endList[14]   = '2 Weeks';

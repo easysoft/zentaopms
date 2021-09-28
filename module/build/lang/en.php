@@ -29,6 +29,7 @@ $lang->build->basicInfo = 'Basic Info';
 
 $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
+$lang->build->project        = 'Project';
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->execution      = $lang->executionCommon;
 $lang->build->name           = 'Name';
@@ -37,6 +38,7 @@ $lang->build->builder        = 'Builder';
 $lang->build->scmPath        = 'SCM Path';
 $lang->build->filePath       = 'File Path';
 $lang->build->desc           = 'Description';
+$lang->build->mailto         = 'Mailto';
 $lang->build->files          = 'Files';
 $lang->build->last           = 'Last Build';
 $lang->build->packageType    = 'Package Type';

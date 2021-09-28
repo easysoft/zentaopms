@@ -25,10 +25,12 @@ $lang->testsuite->successSaved     = '保存成功';
 
 $lang->testsuite->id             = '编号';
 $lang->testsuite->common         = '套件';
+$lang->testsuite->project        = '所属项目';
 $lang->testsuite->product        = '所属' . $lang->productCommon;
 $lang->testsuite->name           = '名称';
 $lang->testsuite->type           = '类型';
 $lang->testsuite->desc           = '描述';
+$lang->testsuite->mailto         = '抄送给';
 $lang->testsuite->author         = '访问权限';
 $lang->testsuite->addedBy        = '由谁创建';
 $lang->testsuite->addedDate      = '创建时间';

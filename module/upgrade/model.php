@@ -717,6 +717,10 @@ class upgradeModel extends model
                 }
             }
             $this->appendExec('15_4');
+        case '15_5':
+            $this->saveLogs('Execute 15_5');
+            $this->execSQL($this->getUpgradeFile('15.5'));
+            $this->appendExec('15_5');
         }
 
         $this->deletePatch();

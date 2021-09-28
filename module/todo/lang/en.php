@@ -56,6 +56,7 @@ $lang->todo->pri          = 'Priority';
 $lang->todo->name         = 'Title';
 $lang->todo->status       = 'Status';
 $lang->todo->desc         = 'Description';
+$lang->todo->config       = 'Config';
 $lang->todo->private      = 'Private';
 $lang->todo->cycleDay     = 'Day';
 $lang->todo->cycleWeek    = 'Week';
