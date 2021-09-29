@@ -84,4 +84,9 @@ $routes['/risks/:id']                 = 'risk';
 $routes['/departments']     = 'departments';
 $routes['/departments/:id'] = 'department';
 
+$routes['/z/folders']           = 'zfolders';
+$routes['/z/folders/:id']       = 'zfolder';
+$routes['/z/files/:id']         = 'zfile';
+$routes['/z/files/:id/content'] = 'zfileContent';
+
 $config->routes = $routes;

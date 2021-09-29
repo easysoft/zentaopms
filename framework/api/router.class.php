@@ -98,6 +98,8 @@ class api extends router
 
         $this->version = $subPos ? substr($this->path, 1, $subPos - 1) : '';
         $this->path    = $subPos ? substr($this->path, $subPos) : $this->path;
+
+        $this->loadApiLang();
     }
 
     /**
@@ -200,6 +202,35 @@ class api extends router
 
         if($this->action == 'options') return $entry->send(204);
         call_user_func_array(array($entry, $this->action), $this->params);
+    }
+
+    /**
+     * 加载配置文件
+     *
+     * Load config file of api.
+     *
+     * @param configPath
+     * @access public
+     * @return void
+     */
+    public function loadApiConfig($configPath)
+    {
+        global $config;
+        include($this->appRoot . "api/$this->version/config/$configPath.php");
+    }
+
+    /**
+     * 加载语言文件
+     *
+     * Load lang file of api.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadApiLang()
+    {
+        global $lang;
+        include($this->appRoot . "api/$this->version/lang/$this->clientLang.php");
     }
 
     /**
