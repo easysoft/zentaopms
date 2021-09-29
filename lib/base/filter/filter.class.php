@@ -1163,30 +1163,39 @@ class baseFixer
 
     /**
      * 将字段的值进行json编码
+     * Cast fields to json type.
+     *
      * @param string $filed
-     * @return static
-     * @author thanatos thanatos915@163.com
+     * @access public
+     * @return object fixer object
      */
     public function json($fields)
     {
         $fields = strpos($fields, ',') ? explode(',', str_replace(' ', '', $fields)) : array($fields);
         foreach($fields as $field)
+        {
             if(isset($this->data->$field)) $this->data->$field = json_encode($this->data->$field);
+        }
+
         return $this;
     }
 
     /**
      * 将字段的值进行HTML标签解码
+     * Html decode fields
+     *
      * @param string $filed
-     * @return static
-     * @author thanatos thanatos915@163.com
+     * @access public
+     * @return object fixer object
      */
     public function unHtml($fields)
     {
         $fields = strpos($fields, ',') ? explode(',', str_replace(' ', '', $fields)) : array($fields);
-        foreach($fields as $field) {
+        foreach($fields as $field)
+        {
             if(isset($this->data->$field)) $this->data->$field = htmlspecialchars_decode($this->data->$field);
         }
+
         return $this;
     }
 
