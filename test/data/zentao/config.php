@@ -11,3 +11,5 @@ $builder->deptGrade3 = array('rows' => 10, 'data' => array('dept', 'deptgrade3')
 $builder->company   = array('rows' => 1,   'data' => array('company'));
 $builder->user      = array('rows' => 350, 'data' => array('user'));
 $builder->usergroup = array('rows' => 349, 'data' => array('usergroup'));
+$builder->product   = array('rows' => 21,  'data' => array('product'));
+$builder->branch    = array('rows' => 28,  'data' => array('branch'));
