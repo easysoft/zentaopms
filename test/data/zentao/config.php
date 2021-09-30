@@ -4,4 +4,10 @@ $builder->programGrade1 = array('rows' => 40, 'data' => array('project', 'progra
 $builder->programGrade2 = array('rows' => 40, 'data' => array('project', 'program', 'programgrade2'));
 $builder->programGrade3 = array('rows' => 40, 'data' => array('project', 'program', 'programgrade3'));
 
-$builder->user = array('rows' => 100, 'data' => array('user'));
+$builder->deptGrade1 = array('rows' => 15, 'data' => array('dept', 'deptgrade1'));
+$builder->deptGrade2 = array('rows' => 10, 'data' => array('dept', 'deptgrade2'));
+$builder->deptGrade3 = array('rows' => 10, 'data' => array('dept', 'deptgrade3'));
+
+$builder->company   = array('rows' => 1,   'data' => array('company'));
+$builder->user      = array('rows' => 350, 'data' => array('user'));
+$builder->usergroup = array('rows' => 340, 'data' => array('usergroup'));

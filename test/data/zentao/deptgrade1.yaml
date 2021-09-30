@@ -1,0 +1,21 @@
+title: dept
+author: Li yuhcun
+version: "1.0"
+fields:
+  - field:   id
+    note:    "ID"
+    range:   1-10000
+  - field:   grade
+    note:    "部门级别"
+    range:   1
+  - field:   parent
+    note:    "上级部门ID"
+    range:   0
+  - field:   path
+    range:   1-15
+    prefix:  ","
+    postfix: ","
+  - field:   manager
+    note:    "负责人"
+    range:   1{5},1-100:10
+    prefix:  "test"
