@@ -3,6 +3,11 @@ $builder = new stdclass();
 $builder->programGrade1 = array('rows' => 40, 'data' => array('project', 'program', 'programgrade1'));
 $builder->programGrade2 = array('rows' => 40, 'data' => array('project', 'program', 'programgrade2'));
 $builder->programGrade3 = array('rows' => 40, 'data' => array('project', 'program', 'programgrade3'));
+$builder->projectGrade1 = array('rows' => 10, 'data' => array('project', 'commonproject', 'projectgrade1'));
+$builder->projectGrade2 = array('rows' => 30, 'data' => array('project', 'commonproject', 'projectgrade2'));
+$builder->projectGrade3 = array('rows' => 40, 'data' => array('project', 'commonproject', 'projectgrade3'));
+$builder->projectGrade4 = array('rows' => 40, 'data' => array('project', 'commonproject', 'projectgrade4'));
+$builder->execution     = array('rows' => 700, 'data' => array('project', 'execution'));
 
 $builder->deptGrade1 = array('rows' => 15, 'data' => array('dept', 'deptgrade1'));
 $builder->deptGrade2 = array('rows' => 10, 'data' => array('dept', 'deptgrade2'));

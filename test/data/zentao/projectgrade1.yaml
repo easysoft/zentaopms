@@ -3,15 +3,19 @@ author: Zhu Jinyong
 version: "1.0"
 fields:
   - field: id
-    range: 1-10000
+    range: 121-10000
   - field: name
     range: 1-10000
-    prefix: "一级测试项目集"
+    prefix: "独立测试项目"
+  - field: status
+    range: wait
   - field: grade
     range: 1
   - field: parent
     range: 0
   - field: path
-    prefix: ","
-    postfix: ","
-    range: 1-10000
+    fields:
+     - field: grade1
+       prefix: ","
+       postfix: ","
+       range: 121-10000
