@@ -10,4 +10,4 @@ $builder->deptGrade3 = array('rows' => 10, 'data' => array('dept', 'deptgrade3')
 
 $builder->company   = array('rows' => 1,   'data' => array('company'));
 $builder->user      = array('rows' => 350, 'data' => array('user'));
-$builder->usergroup = array('rows' => 340, 'data' => array('usergroup'));
+$builder->usergroup = array('rows' => 349, 'data' => array('usergroup'));
