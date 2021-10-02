@@ -7,12 +7,17 @@ fields:
     range: 1-1000
   - field: program
     note: "所属项目集"
-    range: 0{3},1-40
+    range: 1-40
   - field: name
     note: "产品名称"
+    #fields:
+    #- field: name1
+    #  range: [独立产品@#$%%&&*测试名称长度能有多长并且包含特殊字符的一个长长的字符串（）！@#￥%……&*],独立产品{2},正常产品{6},多分支产品{6},多平台产品{6}
+    #- field: name2
+    #  range: 1-1000
     fields:
     - field: name1
-      range: [独立产品@#$%%&&*测试名称长度能有多长并且包含特殊字符的一个长长的字符串（）！@#￥%……&*],独立产品{2},正常产品{6},多分支产品{6},多平台产品{6}
+      range: 正常产品{40},多分支产品{40},多平台产品{40}
     - field: name2
       range: 1-1000
   - field: code
@@ -24,10 +29,10 @@ fields:
     range: 0
   - field: type
     note: "产品类型"
-    range: normal,branch,platform,normal{6},branch{6},platform{6}
+    range: normal{40},branch{40},platform{40}
   - field: status
     note: "状态"
-    range: normal{3},normal{3},closed{3}
+    range: normal{20},closed{20}
   - field: subStatus
     note: "子状态"
     range: 0
@@ -61,14 +66,14 @@ fields:
     range: 0
   - field: acl
     note: "访问控制"
-    range: open,private{2}
+    range: open{10},private{10}
   - field: whitelist
     note: "分组白名单"
-    range: []{2},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`
+    range: []{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5}
   - field: createdBy
     note: "创建者"
-    from: common.user.v1.yaml
-    use: one
+    from: user.yaml
+    user: account
   - field: createdDate
     note: "创建日期"
     from: common.date.v1.yaml

@@ -8,7 +8,7 @@ fields:
     range: 1-10000
   - field: product
     note: "所属产品"
-    range: 2{2},3{2},10-21{2}
+    range: 41-120{2!}
   - field: name
     note: "名称"
     range: 1-10000
@@ -26,8 +26,4 @@ fields:
     format: ""
   - field: deleted
     note: "是否删除"
-    range: 0,1
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: 0
