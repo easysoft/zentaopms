@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The model file of api module of ZenTaoCMS.
  *
@@ -12,26 +11,28 @@
  */
 class apiModel extends model
 {
-
-    const STATUS_DOING = 'doing';
-    const STATUS_DONE = 'done';
+    /* Status. */
+    const STATUS_DOING  = 'doing';
+    const STATUS_DONE   = 'done';
     const STATUS_HIDDEN = 'hidden';
 
-    const SCOPE_QUERY = 'query';
+    /* Scope. */
+    const SCOPE_QUERY     = 'query';
     const SCOPE_FORM_DATA = 'formData';
-    const SCOPE_PATH = 'path';
-    const SCOPE_BODY = 'body';
-    const SCOPE_HEADER = 'header';
-    const SCOPE_COOKIE = 'cookie';
+    const SCOPE_PATH      = 'path';
+    const SCOPE_BODY      = 'body';
+    const SCOPE_HEADER    = 'header';
+    const SCOPE_COOKIE    = 'cookie';
 
+    /* Params. */
     const PARAMS_TYPE_CUSTOM = 'custom';
 
     /**
      * Create an api doc.
      *
-     * @param  stdClass $params
+     * @param  object $params
+     * @access public
      * @return int
-     * @author thanatos thanatos915@163.com
      */
     public function create($params)
     {
@@ -40,15 +41,13 @@ class apiModel extends model
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
             ->exec();
 
-        if(dao::isError()) return false;
-
-        return $this->dao->lastInsertID();
+        return dao::isError() ? false : $this->dao->lastInsertID();
     }
 
     /**
      * Create a global struct
      *
-     * @param $data
+     * @param  object $data
      * @access public
      * @return int
      */
@@ -65,8 +64,9 @@ class apiModel extends model
     /**
      * Update a struct.
      *
-     * @param $id
-     * @param $data
+     * @param  int    $id
+     * @param  object $data
+     * @access public
      * @return array
      */
     public function updateStruct($id, $data)
@@ -90,9 +90,10 @@ class apiModel extends model
     /**
      * Update an api doc.
      *
-     * @param $id
-     * @param $data
-     * @author thanatos thanatos915@163.com
+     * @param  int    $id
+     * @param  object $data
+     * @access public
+     * @return void
      */
     public function update($id, $data)
     {
@@ -111,13 +112,12 @@ class apiModel extends model
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
             ->where('id')->eq($id)
             ->exec();
-        return;
     }
 
     /**
      * Get struct list by api doc id.
      *
-     * @param $id
+     * @param  int $id
      * @access public
      * @return array
      */
@@ -128,7 +128,8 @@ class apiModel extends model
             ->where('lib')->eq($id)
             ->fetchAll();
 
-        array_map(function ($item) {
+        array_map(function ($item)
+        {
             $item->attribute = json_decode(htmlspecialchars_decode($item->attribute), true);
             return $item;
         }, $res);
@@ -138,9 +139,9 @@ class apiModel extends model
     /**
      * Get a struct info.
      *
-     * @param $id
+     * @param  int $id
      * @access public
-     * @return stdClass
+     * @return object
      */
     public function getStructByID($id)
     {
@@ -149,8 +150,7 @@ class apiModel extends model
             ->where('id')->eq($id)
             ->fetch();
 
-        if($model)
-            $model->attribute = json_decode(htmlspecialchars_decode($model->attribute), true);
+        if($model) $model->attribute = json_decode(htmlspecialchars_decode($model->attribute), true);
 
         return $model;
     }
@@ -227,9 +227,9 @@ class apiModel extends model
     /**
      * Get status text by status.
      *
-     * @param $status
+     * @param  string $status
+     * @access public
      * @return string
-     * @author thanatos thanatos915@163.com
      */
     public static function getApiStatusText($status)
     {
@@ -237,9 +237,13 @@ class apiModel extends model
         switch($status)
         {
             case static::STATUS_DOING:
+            {
                 return $lang->api->doing;
+            }
             case static::STATUS_DONE:
+            {
                 return $lang->api->done;
+            }
         }
     }
 
@@ -248,8 +252,8 @@ class apiModel extends model
      *
      * @param  int $libID
      * @param  int $structID
-     * @return string
      * @access public
+     * @return string
      */
     public function getStructTreeByLib($libID = 0, $structID = 0)
     {
@@ -258,17 +262,22 @@ class apiModel extends model
         $html = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>";
         foreach($list as $item)
         {
-            $class = ['catalog'];
+            $class = array('catalog');
             if($structID && $structID == $item->id)
-                array_push($class, 'active');
+            {
+                $class[] = 'active';
+            }
             else
-                array_push($class, 'doc');
+            {
+                $class[] = 'doc';
+            }
 
             $html .= '<li class="' . implode(' ', $class) . '">';
             $html .= html::a(helper::createLink('api', 'struct', "libID=$libID&structID=$item->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $item->name, '', "data-app='{$this->app->tab}' class='doc-title' title='{$item->name}'");
             $html .= "</li>";
         }
         $html .= "</ul>";
+
         return $html;
     }
 
@@ -379,42 +388,43 @@ class apiModel extends model
             $result['message'] = $this->lang->api->error->onlySelect;
             return $result;
         }
-        else
+
+        try
         {
-            try
-            {
-                $stmt = $this->dbh->query($sql);
+            $stmt = $this->dbh->query($sql);
 
-                $rows = array();
-                if(empty($keyField))
-                {
-                    $rows = $stmt->fetchAll();
-                }
-                else
-                {
-                    while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
-                }
-
-                $result['status'] = 'success';
-                $result['data']   = $rows;
-            } catch(PDOException $e)
+            $rows = array();
+            if(empty($keyField))
             {
-                $result['status']  = 'fail';
-                $result['message'] = $e->getMessage();
+                $rows = $stmt->fetchAll();
+            }
+            else
+            {
+                while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
             }
 
-            return $result;
+            $result['status'] = 'success';
+            $result['data']   = $rows;
         }
+        catch(PDOException $e)
+        {
+            $result['status']  = 'fail';
+            $result['message'] = $e->getMessage();
+        }
+
+        return $result;
     }
 
     /**
-     * @author thanatos thanatos915@163.com
+     * Get spec of api.
+     *
+     * @param object $data
+     * @access private
+     * @return array
      */
     private function getApiSpecByData($data)
     {
-
-        $now = helper::now();
-        return [
+        return array(
             'doc'          => $data->id,
             'module'       => $data->module,
             'title'        => $data->title,
@@ -430,7 +440,7 @@ class apiModel extends model
             'params'       => $data->params,
             'response'     => $data->response,
             'addedBy'      => $this->app->user->account,
-            'addedDate'    => $now,
-        ];
+            'addedDate'    => helper::now(),
+        );
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The control file of api of ZenTaoPMS.
  *
@@ -15,12 +14,10 @@ class api extends control
     public function __construct($moduleName = '', $methodName = '', $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
-        $this->group  = $this->loadModel('group');
         $this->user   = $this->loadModel('user');
         $this->doc    = $this->loadModel('doc');
         $this->action = $this->loadModel('action');
         $this->tree   = $this->loadModel('tree');
-        $this->api    = $this->loadModel('api');
     }
 
     /**
@@ -182,7 +179,7 @@ class api extends control
             ]);
             exit;
         }
-        $this->view->groups = $this->group->getPairs();
+        $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->user->getPairs('nocode');
 
         $this->display();
@@ -222,7 +219,7 @@ class api extends control
         }
 
         $this->view->doc    = $doc;
-        $this->view->groups = $this->group->getPairs();
+        $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->user->getPairs('nocode');
 
         $this->display();
@@ -363,9 +360,10 @@ class api extends control
     }
 
     /**
-     * @param         $apiID
+     * @param  int    $apiID
      * @param  string $confirm
-     * @author thanatos thanatos915@163.com
+     * @access public
+     * @return void
      */
     public function delete($apiID, $confirm = 'no')
     {
@@ -395,8 +393,9 @@ class api extends control
     /**
      * Get params type options by scope
      *
-     * @param  string $scope the params position
-     * @author thanatos thanatos915@163.com
+     * @param  string $scope   the params position
+     * @access public
+     * @return void
      */
     public function ajaxGetParamsTypeOptions($scope)
     {
@@ -416,7 +415,9 @@ class api extends control
     }
 
     /**
+     * Get ref options by ajax.
      * @param  int $libID
+     * @access public
      * @return void
      */
     public function ajaxGetRefOptions($libID = 0, $structID = 0)
@@ -435,9 +436,10 @@ class api extends control
     }
 
     /**
-     * Get ref info
+     * Get ref info by ajax.
      *
      * @param  int $refID
+     * @access public
      * @return void
      */
     public function ajaxGetRefInfo($refID = 0)
@@ -449,7 +451,9 @@ class api extends control
     /**
      * Set doc menu by method name.
      *
-     * @author thanatos thanatos915@163.com
+     * @param  int $libID
+     * @access public
+     * @return void
      */
     private function setMenu($libID = 0)
     {
@@ -497,7 +501,10 @@ class api extends control
     /**
      * Generate api doc index page dropMenu
      *
-     * @author thanatos thanatos915@163.com
+     * @param  array $libs
+     * @param  int   $libID
+     * @access public
+     * @return string
      */
     private function generateLibsDropMenu($libs, $libID)
     {
@@ -531,14 +538,14 @@ EOT;
     /**
      * Show doc of api doc library
      *
-     * @author thanatos thanatos915@163.com
+     * @param int $libID
+     * @access public
+     * @return void
      */
     public function showLibs($libID = 0)
     {
         $lib = $this->doc->getLibById($libID);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
-
-
     }
 
     /**
@@ -649,35 +656,4 @@ EOT;
         $this->output  = json_encode($output);
         die($this->output);
     }
-
-
-    /**
-     * @var groupModel
-     */
-    public $group;
-
-    /**
-     * @var userModel
-     */
-    public $user;
-
-    /**
-     * @var docModel
-     */
-    public $doc;
-
-    /**
-     * @var actionModel
-     */
-    public $action;
-
-    /**
-     * @var treeModel;
-     */
-    public $tree;
-
-    /**
-     * @var apiModel
-     */
-    public $api;
 }
