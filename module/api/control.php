@@ -126,6 +126,8 @@ class api extends control
             $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
         }
 
+        $this->setMenu($libID);
+
         /* Get a struct info */
         $struct = '';
         if($structID > 0)
@@ -255,6 +257,8 @@ class api extends control
             $this->view->edit = true;
         }
 
+        $this->setMenu($api->lib);
+
         $example = array('example' => 'type,description');
         $example = json_encode($example, JSON_PRETTY_PRINT);
 
@@ -306,6 +310,8 @@ class api extends control
 
         $libs = $this->doc->getLibs('api', '', $libID);
         if(!$libID and !empty($libs)) $libID = key($libs);
+
+        $this->setMenu($libID);
 
         $lib     = $this->doc->getLibByID($libID);
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
