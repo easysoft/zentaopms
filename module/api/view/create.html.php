@@ -66,29 +66,27 @@
             </tr>
             <tr>
               <th><?php echo $lang->api->path; ?></th>
-              <td colspan='2'><?php echo html::input('path', '', "class='form-control'"); ?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->api->protocol; ?></th>
-              <td><?php echo html::radio('protocol', $lang->api->protocalOptions, 'HTTP'); ?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->api->method; ?></th>
-              <td>
-            <span
-                id='moduleBox'><?php echo html::select('method', $lang->api->methodOptions, 'GET', "class='form-control chosen'"); ?></span>
+              <td colspan='2'>
+                <div class='table-row'>
+                  <div class='table-col col-prefix'>
+                    <?php echo html::select('protocol', $lang->api->protocalOptions, 'HTTP', "class='form-control chosen'"); ?>
+                  </div>
+                  <div class='table-col col-prefix'>
+                    <?php echo html::select('method', $lang->api->methodOptions, 'GET', "class='form-control chosen'"); ?>
+                  </div>
+                  <div class='table-col'>
+                    <?php echo html::input('path', '', "class='form-control'"); ?>
+                  </div>
+                </div>
               </td>
             </tr>
             <tr>
               <th><?php echo $lang->api->requestType; ?></th>
-              <td>
-            <span
-                id='moduleBox'><?php echo html::select('requestType', $lang->api->requestTypeOptions, 'application/json', "class='form-control chosen'"); ?></span>
-              </td>
+              <td><span id='moduleBox'><?php echo html::select('requestType', $lang->api->requestTypeOptions, 'application/json', "class='form-control chosen'"); ?></span></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->status; ?></th>
-              <td><?php echo html::radio('status', $lang->api->statusOptions, apiModel::STATUS_DOING); ?></td>
+              <td><?php echo html::radio('status', $lang->api->statusOptions, apiModel::STATUS_DONE); ?></td>
             </tr>
             <tr>
               <th>

@@ -227,6 +227,8 @@ $lang->doc->api       = '接口库';
 $lang->doc->execution = "{$lang->execution->common}库";
 $lang->doc->custom    = '自定义库';
 $lang->doc->wiki      = 'WIKI';
+$lang->doc->apiDoc    = '文档';
+$lang->doc->apiStruct = '数据结构';
 
 $lang->product->list   = $lang->productCommon . '列表';
 $lang->product->kanban = $lang->productCommon . '看板';

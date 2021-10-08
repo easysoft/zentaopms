@@ -376,8 +376,10 @@ $lang->doc->menu->product['subMenu'] = new stdclass();
 if($config->systemMode == 'new') $lang->doc->menu->project['subMenu'] = new stdclass();
 $lang->doc->menu->execution['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']    = new stdclass();
-$lang->doc->menu->api['subMenu']       = new stdclass();
 
+$lang->doc->menu->api['subMenu'] = new stdclass();
+$lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}|api|index|libID=%s");
+$lang->doc->menu->api['subMenu']->struct = array('link' => "{$lang->doc->apiStruct}|api|struct|libID=%s");
 
 /* Report menu.*/
 $lang->report->menu          = new stdclass();

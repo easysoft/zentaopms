@@ -2,11 +2,10 @@
   <div id="mainContent" class="main-row in">
     <div class="main-col col-8">
       <div class="cell" id="content">
-        <div class="detail no-padding">
+        <div class="no-padding">
           <div class="detail-title no-padding doc-title">
             <div class="http-method label"><?php echo $api->method ?></div>
             <div class="path"><?php echo $api->path; ?></div>
-            <div class="title" title="<?php echo $api->title; ?>"><?php echo $api->title; ?></div>
             <div class="info">
               <div class="version">
                 <div class='btn-group'>
@@ -40,39 +39,33 @@
             </div>
           </div>
         </div>
-        <div class="table-row">
-          <table class="table table-data">
-            <tbody>
-              <tr>
-                <th class='c-lib'><?php echo $lang->api->principal; ?></th>
-                <td><?php echo $api->owner; ?></td>
-              </tr>
-              <tr>
-                <th class='c-lib'><?php echo $lang->api->apiDesc; ?></th>
-                <td><?php echo $api->desc; ?></td>
-              </tr>
-            </tbody>
-          </table>
+        <div>
+          <h2 class="title" title="<?php echo $api->title;?>"><?php echo $api->title;?></h2>
+          <div class="desc"><?php echo $api->desc;?></div>
           <?php
           $header = array();
           $query  = array();
           $params = array();
           foreach($api->params as $param)
           {
-            if($param['scope'] == apiModel::SCOPE_HEADER)
-              array_push($header, $param);
-            elseif($param['scope'] == apiModel::SCOPE_QUERY)
-              array_push($query, $param);
-            else
-              array_push($params, $param);
+              if($param['scope'] == apiModel::SCOPE_HEADER)
+              {
+                  $header[] = $param;
+              }
+              elseif($param['scope'] == apiModel::SCOPE_QUERY)
+              {
+                  $query[] = $param;
+              }
+              else
+              {
+                  $params[] = $param;
+              }
           }
-          $types = ['header', 'query', 'params']
+          $types = array('header', 'query', 'params');
           ?>
           <?php foreach($types as $type): ?>
-            <?php
-            if(empty($$type)) continue;
-            ?>
-            <h3><?php echo $lang->api->$type ?></h3>
+            <?php if(empty($$type)) continue;?>
+            <h3 class="title"><?php echo $lang->api->$type ?></h3>
             <table class="table table-data paramsTable">
               <thead>
                 <tr>
@@ -94,29 +87,29 @@
                   ?>
               </tbody>
             </table>
-          <?php endforeach; ?>
+          <?php endforeach;?>
           <?php if($api->paramsExample): ?>
-          <h3><?php echo $lang->api->paramsExample ?></h3>
-          <pre><code><?php echo $api->paramsExample ?></code></pre>
+          <h3 class="title"><?php echo $lang->api->paramsExample;?></h3>
+          <pre><code><?php echo $api->paramsExample;?></code></pre>
           <?php endif;?>
-          <?php if($api->response): ?>
-          <h3><?php echo $lang->api->response; ?></h3>
+          <?php if($api->response):?>
+          <h3 class="title"><?php echo $lang->api->response;?></h3>
           <table class="table">
             <thead>
               <tr>
-                <th><?php echo $lang->api->res->name ?></th>
-                <th><?php echo $lang->api->res->type ?></th>
-                <th><?php echo $lang->api->res->desc ?></th>
+                <th><?php echo $lang->api->res->name;?></th>
+                <th><?php echo $lang->api->res->type;?></th>
+                <th><?php echo $lang->api->res->desc;?></th>
               </tr>
             </thead>
             <tbody>
-              <?php foreach($api->response as $res): ?>
+              <?php foreach($api->response as $res):?>
               <tr>
-                <td><?php echo $res['name'] ?></td>
-                <td><?php echo $res['type'] ?></td>
-                <td><?php echo $res['desc'] ?></td>
+                <td><?php echo $res['name'];?></td>
+                <td><?php echo $res['type'];?></td>
+                <td><?php echo $res['desc'];?></td>
               </tr>
-              <?php endforeach; ?>
+              <?php endforeach;?>
             </tbody>
           </table>
           <?php endif; ?>
@@ -146,24 +139,28 @@
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th class='c-lib'><?php echo $lang->api->lib; ?></th>
-                  <td><?php echo $api->libName; ?></td>
+                  <th class='c-lib'><?php echo $lang->api->lib;?></th>
+                  <td><?php echo $api->libName;?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->doc->module; ?></th>
-                  <td><?php echo $api->moduleName ? $api->moduleName : '/'; ?></td>
+                  <th><?php echo $lang->doc->module;?></th>
+                  <td><?php echo $api->moduleName ? $api->moduleName : '/';?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->doc->addedDate; ?></th>
-                  <td><?php echo $api->addedDate; ?></td>
+                  <th><?php echo $lang->doc->addedDate;?></th>
+                  <td><?php echo $api->addedDate;?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->doc->editedBy; ?></th>
-                  <td><?php echo zget($users, $api->editedBy); ?></td>
+                  <th><?php echo $lang->api->owner;?></th>
+                  <td><?php echo zget($users, $api->owner, '');?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->doc->editedDate; ?></th>
-                  <td><?php echo $api->editedDate; ?></td>
+                  <th><?php echo $lang->doc->editedBy;?></th>
+                  <td><?php echo zget($users, $api->editedBy, '');?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->doc->editedDate;?></th>
+                  <td><?php echo $api->editedDate;?></td>
                 </tr>
               </tbody>
             </table>

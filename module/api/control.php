@@ -17,7 +17,6 @@ class api extends control
         $this->user   = $this->loadModel('user');
         $this->doc    = $this->loadModel('doc');
         $this->action = $this->loadModel('action');
-        $this->tree   = $this->loadModel('tree');
     }
 
     /**
@@ -48,8 +47,9 @@ class api extends control
             $api = $this->api->getLibById($apiID, $version);
             if($api)
             {
-                $moduleID = $api->module;
-                $libID    = $api->lib;
+                $moduleID  = $api->module;
+                $libID     = $api->lib;
+                $api->desc = htmlspecialchars_decode($api->desc);
 
                 $this->view->api     = $api;
                 $this->view->apiID   = $apiID;
@@ -133,17 +133,11 @@ class api extends control
             $struct = $this->api->getStructByID($structID);
         }
 
-        /* Set Tr actions */
-        $menu = "<div class='btn-group dropdown-hover'>";
-        $menu .= html::a(helper::createLink('api', 'index', "libID=$libID"), $this->lang->api->common, '', 'class="btn btn-link"');
-        $menu .= "</div>";
-
-        $this->lang->TRActions = $menu;
-        $this->view->struct    = $struct;
-        $this->view->structID  = $structID;
-        $this->view->tree      = $this->api->getStructTreeByLib($libID, $structID);
-        $this->view->libID     = $libID;
-        $this->view->title     = $this->lang->api->struct;
+        $this->view->struct   = $struct;
+        $this->view->structID = $structID;
+        $this->view->tree     = $this->api->getStructTreeByLib($libID, $structID);
+        $this->view->libID    = $libID;
+        $this->view->title    = $this->lang->api->struct;
         $this->display();
     }
 
@@ -168,16 +162,12 @@ class api extends control
             $libID = $this->doc->createApiLib($lib);
             if(dao::isError())
             {
-                $this->sendError(dao::getError());
-                exit;
+                return $this->sendError(dao::getError());
             }
             $this->action->create('docLib', $libID, 'Created');
 
             /* save doc library success */
-            $this->sendSuccess([
-                'locate' => $this->createLink('api', 'index', "libID=$libID"),
-            ]);
-            exit;
+            return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
         $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->user->getPairs('nocode');
@@ -205,11 +195,9 @@ class api extends control
 
             if($lib->acl == 'private') $lib->users = $this->app->user->account;
             $this->doc->updateApiLib($id, $doc, $lib);
-            if(dao::isError())
-            {
-                $this->sendError(dao::getError());
-                exit;
-            }
+
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             $res = array(
                 'message'    => $this->lang->saveSuccess,
                 'closeModal' => true,
@@ -253,15 +241,11 @@ class api extends control
             $this->api->update($apiID, $params);
             if(dao::isError())
             {
-                $this->sendError(dao::getError());
-                exit;
+                return $this->sendError(dao::getError());
             }
 
             $this->action->create('api', $apiID, 'Edited');
-            $this->sendSuccess([
-                'locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID"),
-            ]);
-            exit;
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID")));
         }
 
         $api = $this->api->getLibById($apiID);
@@ -277,22 +261,17 @@ class api extends control
         /* Load All struct */
         $structs = $this->api->getStructListByLibID($api->lib);
         $options = array();
-        foreach($structs as $item)
-        {
-            $options[$item->id] = $item->name;
-        }
-        $this->view->allStruct  = $options;
+        foreach($structs as $item) $options[$item->id] = $item->name;
 
-        $allUsers                     = $this->loadModel('user')->getPairs('devfirst|noclosed');
+        $this->view->allStruct        = $options;
         $this->view->user             = $this->app->user->account;
-        $this->view->allUsers         = $allUsers;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($api->lib, 'api', $startModuleID = 0);
-        $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
+        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
+        $this->view->moduleID         = $api->module ? (int) $api->module : (int)$this->cookie->lastDocModule;
         $this->view->example          = $example;
         $this->view->title            = $api->title . $this->lang->api->edit;
 
         $this->display();
-
     }
 
     /**
@@ -308,11 +287,10 @@ class api extends control
         if(!empty($_POST))
         {
             $now    = helper::now();
-            $userId = $this->app->user->account;
             $params = fixer::input('post')
-                ->add('addedBy', $userId)
+                ->add('addedBy', $this->app->user->account)
                 ->add('addedDate', $now)
-                ->add('editedBy', $userId)
+                ->add('editedBy', $this->app->user->account)
                 ->add('editedDate', $now)
                 ->add('version', 1)
                 ->setDefault('product,module', 0)
@@ -344,12 +322,11 @@ class api extends control
         }
         $this->view->allStruct  = $options;
 
-        $allUsers                     = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->user             = $this->app->user->account;
-        $this->view->allUsers         = $allUsers;
+        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;
         $this->view->libName          = $lib->name;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'api', $startModuleID = 0);
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'api', $startModuleID = 0);
         $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         $this->view->libs             = $libs;
         $this->view->example          = $example;
@@ -383,9 +360,7 @@ class api extends control
             }
             else
             {
-                $this->sendSuccess([
-                    'locate' => $this->createLink('api', 'index', "libID=$api->lib&module=$api->module"),
-                ]);
+                $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$api->lib&module=$api->module")));
             }
         }
     }
@@ -457,10 +432,10 @@ class api extends control
      */
     private function setMenu($libID = 0)
     {
+        common::setMenuVars('doc', $libID);
+
         // global struct link
-        $menu = "<div class='btn-group dropdown-hover'>";
-        $menu .= html::a(helper::createLink('api', 'struct', "libID=$libID"), $this->lang->api->struct, '', 'class="btn btn-link"');
-        $menu .= "</div>";
+        $menu = '';
 
         // page of index menu
         if(intval($libID) > 0)

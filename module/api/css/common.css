@@ -27,6 +27,7 @@
 .col-sm-size .table .c-user,
 .col-sm-size .table .c-num,
 .col-md-size .table .c-datetime {display: none;}
+.col-prefix {width: 10%; padding: 0;}
 
 .table-files .btn {padding: 0 6px;}
 

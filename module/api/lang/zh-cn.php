@@ -43,7 +43,6 @@ $lang->api->manageType       = '维护模块';
 $lang->api->doing            = '开发中';
 $lang->api->done             = '开发完成';
 $lang->api->basicInfo        = '基本信息';
-$lang->api->principal        = '负责人';
 $lang->api->apiDesc          = '接口说明';
 $lang->api->confirmDelete    = "您确定删除该接口吗？";
 $lang->api->confirmDeleteLib = "您确定删除该接口库吗？";
@@ -117,8 +116,8 @@ $lang->api->requestTypeOptions = array(
     'multipart/form-data'               => 'multipart/form-data'
 );
 $lang->api->statusOptions      = array(
-    'doing'  => '开发中',
     'done'   => '开发完成',
+    'doing'  => '开发中',
     'hidden' => '不显示'
 );
 $lang->api->paramsScopeOptions = array(
