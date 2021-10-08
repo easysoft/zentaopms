@@ -680,8 +680,8 @@ class commonModel extends model
                 foreach($lang->$currentModule->menu as $menu)
                 {
                     $linkPart = explode('|', $menu['link']);
-                    if(isset($linkPart[2])) $method = $linkPart[2];
-                    else continue;
+                    if(!isset($linkPart[2])) continue;
+                    $method = $linkPart[2];
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;
