@@ -18,3 +18,7 @@ $builder->user      = array('rows' => 350, 'data' => array('user'));
 $builder->usergroup = array('rows' => 349, 'data' => array('usergroup'));
 $builder->product   = array('rows' => 120, 'data' => array('product'));
 $builder->branch    = array('rows' => 160, 'data' => array('branch'));
+
+$builder->blockDefault   = array('rows' => 150, 'data' => array('blockdefault'));
+$builder->blockRandom    = array('rows' => 120, 'data' => array('blockrandom'));
+$builder->projectProduct = array('rows' => 8,   'data' => array('projectproduct'));
