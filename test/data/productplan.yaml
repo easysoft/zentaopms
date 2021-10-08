@@ -8,18 +8,16 @@ fields:
     range: 1-10000
   - field: product 
     note: "所属产品"
-    from: product.yaml
-    use: id 
+    range: 1-120{3}
   - field: branch 
     note: "所属分支"
-    from: branch.yaml
-    use: id 
+    range: 0
   - field: parent 
     note: "父计划"
     range: 0
   - field: title 
     note: "名称"
-    range: 1-9:0.1
+    range: 1-2:0.1
   - field: desc 
     note: "描述"
     range: <div>
@@ -31,16 +29,17 @@ fields:
            </div>
   - field: begin 
     note: "开始日期"
-    range: 
+    range: "(-10M)-(-7M):30D"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: end 
     note: "结束日期"
-    range: 
+    range: "(-6M)-(-1M):30D"
+    type: timestamp
+    format: "YYYY-MM-DD"
   - field: order 
     note: "排序"
-    range: 
+    value: "$id * 5"
   - field: deleted 
     note: "是否删除"
-    range: 
-  - field: mailto
-    note: "抄送给"
-    range: 
+    range: 0 
