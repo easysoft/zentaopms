@@ -221,7 +221,7 @@ class company extends control
 
         /* Get executions' list.*/
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
-        $executions = array($this->lang->company->execution) + $executions;
+        $executions = array($this->lang->execution->common) + $executions;
         $this->view->executions = $executions;
 
         /* Set account and get users.*/
