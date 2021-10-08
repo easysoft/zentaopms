@@ -7,7 +7,7 @@ fields:
     range: 1-1000
   - field: program
     note: "所属项目集"
-    range: 1-40{3!},0{60}
+    range: 1-40{3!},0{60},1{5},0{5}
   - field: name
     note: "产品名称"
     #fields:
@@ -17,7 +17,7 @@ fields:
     #  range: 1-1000
     fields:
     - field: name1
-      range: 正常产品{40},多分支产品{40},多平台产品{40},独立产品{60}
+      range: 正常产品{40},多分支产品{40},多平台产品{40},独立产品{60},[@#$%%&&*测试名称长度能有多长并且包含特殊字符的一个长长的字符串（）！@#￥%……&*]{10}
     - field: name2
       range: 1-1000
   - field: code
@@ -29,10 +29,10 @@ fields:
     range: 0
   - field: type
     note: "产品类型"
-    range: normal{40},branch{40},platform{40},normal{20},branch{20},platform{20}
+    range: normal{40},branch{40},platform{40},normal{20},branch{20},platform{20},normal{10}
   - field: status
     note: "状态"
-    range: normal{20},closed{20},normal{20},closed{20},normal{20},closed{20},normal{10},closed{10},normal{10},closed{10},normal{10},closed{10}
+    range: normal{20},closed{20},normal{20},closed{20},normal{20},closed{20},normal{10},closed{10},normal{10},closed{10},normal{10},closed{10},normal{10}
   - field: subStatus
     note: "子状态"
     range: 0
@@ -66,10 +66,10 @@ fields:
     range: 0
   - field: acl
     note: "访问控制"
-    range: open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5}
+    range: open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{10},private{10},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{5},private{5},open{10}
   - field: whitelist
     note: "分组白名单"
-    range: []{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3}
+    range: []{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{15},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{5},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{7},`,test1,dev1,pm1,td1,pd2,qd2,top1,others1`{3},[]{10}
   - field: createdBy
     note: "创建者"
     from: user.yaml
