@@ -187,7 +187,7 @@ class gitlab extends control
 
         $this->view->title         = $this->lang->gitlab->bindUser;
         $this->view->userPairs     = $userPairs;
-        $this->view->gitlabUsers   = $this->gitlab->apiGetUsers($gitlab);
+        $this->view->gitlabUsers   = $this->gitlab->apiGetUsers($gitlabID);
         $this->view->matchedResult = $this->gitlab->getMatchedUsers($gitlabID, $this->view->gitlabUsers, $zentaoUsers);
         $this->display();
     }
