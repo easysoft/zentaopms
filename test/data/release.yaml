@@ -1,4 +1,4 @@
-title: table zt_build
+title: table zt_release
 desc: ""
 version: "1.0"
 fields:
@@ -14,22 +14,19 @@ fields:
   - field: branch
     range: [0,1]{2!},0{2},2,0
 
-  - field: execution
-    range: 391{2},392{2},393,396{2},0
+  - field: build
+    range: 1-8
 
   - field: name
     fields:
       - field: name.1
-        range: 版本
+        range: 发布
 
       - field: name.2
         range: 1-100
 
-  - field: scmPath
-    range: ' '
-
-  - field: filePath
-    range: ' '
+  - field: marker
+    range: 0,1
 
   - field: date
     range: "(-1M)-(+1w):60"
@@ -42,10 +39,16 @@ fields:
   - field: bugs
     range: ' '
 
-  - field: builder
-    range: [hjj,admin,test1]
+  - field: leftBugs
+    range: ' '
 
   - field: desc
+    range: ' '
+
+  - field: status
+    range: [normal,terminate]
+
+  - field: subStatus
     range: ' '
 
   - field: deleted

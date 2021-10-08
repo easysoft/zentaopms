@@ -21,4 +21,7 @@ $builder->branch    = array('rows' => 160, 'data' => array('branch'));
 
 $builder->blockDefault   = array('rows' => 150, 'data' => array('blockdefault'));
 $builder->blockRandom    = array('rows' => 120, 'data' => array('blockrandom'));
-$builder->projectProduct = array('rows' => 14,   'data' => array('projectproduct'));
+$builder->projectProduct = array('rows' => 14,  'data' => array('projectproduct'));
+
+$builder->build   = array('rows' => 8, 'data' => array('build'));
+$builder->release = array('rows' => 8, 'data' => array('release'));
