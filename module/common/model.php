@@ -691,7 +691,7 @@ class commonModel extends model
         }
 
         /* Fix bug 14574. */
-        if(array_slice($items, -1)[0] == 'divider') array_pop($items);
+        if(end($items) == 'divider') array_pop($items);
 
         return $items;
     }
