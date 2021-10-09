@@ -126,6 +126,12 @@ class projectModel extends model
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false) $this->accessDenied();
         }
 
+        /* Reset program priv. */
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
+        $this->loadModel('common')->resetProjectPriv($this->session->project);
+        if(!commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
+
         return $this->session->project;
     }
 

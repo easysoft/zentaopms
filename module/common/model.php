@@ -708,7 +708,7 @@ class commonModel extends model
         }
 
         /* Fix bug 14574. */
-        if(array_slice($items, -1)[0] == 'divider') array_pop($items);
+        if(end($items) == 'divider') array_pop($items);
 
         return $items;
     }
@@ -1921,18 +1921,6 @@ EOD;
         if(isset($this->app->user))
         {
             $this->app->user = $this->session->user;
-
-            $inProject = (isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project');
-            if(!defined('IN_UPGRADE') and $inProject)
-            {
-                /* Check program priv. */
-                $viewProjects = trim($this->app->user->view->projects, ',');
-                $accessDenied = ($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false);
-                if($accessDenied and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
-                $this->resetProgramPriv($module, $method);
-                if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
-            }
-
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
         else
@@ -2001,20 +1989,19 @@ EOD;
     }
 
     /**
-     * Reset program priv.
+     * Reset project priv.
      *
-     * @param  string $module
-     * @param  string $method
-     * @static
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function resetProgramPriv($module, $method)
+    public function resetProjectPriv($projectID = 0)
     {
         /* Get user program priv. */
-        if(!$this->app->session->project) return;
+        if(empty($projectID) and $this->session->project) $projectID = $this->session->project;
+        if(empty($projectID)) return;
 
-        $program = $this->dao->findByID($this->app->session->project)->from(TABLE_PROJECT)->fetch();
+        $program = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
         if(empty($program)) return;
 
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
@@ -2030,18 +2017,30 @@ EOD;
         foreach($programRights as $programRight) $programRightGroup[$programRight->module][$programRight->method] = 1;
 
         /* Reset priv by program privway. */
-        $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
         $rights = $this->app->user->rights['rights'];
+        $this->app->user  = clone $_SESSION['user'];
+
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
         {
+            $recomputedRights = $this->loadModel('user')->authorize($this->app->user->account);
+            $recomputedRights = $recomputedRights['rights'];
+
             /* If priv way is reset, unset common program priv, and cover by program priv. */
             foreach($rights as $moduleKey => $methods)
             {
                 if(in_array($moduleKey, $this->config->programPriv->waterfall)) unset($rights[$moduleKey]);
             }
 
-            $this->app->user->rights['rights'] = array_merge($rights, $programRightGroup);
+            $recomputedRights = array_merge($rights, $programRightGroup);
+
+            /* Set base priv for project. */
+            $projectRights = zget($this->app->user->rights['rights'], 'project', array());
+            if(isset($projectRights['browse']) and !isset($recomputedRights['project']['browse'])) $recomputedRights['project']['browse'] = 1;
+            if(isset($projectRights['kanban']) and !isset($recomputedRights['project']['kanban'])) $recomputedRights['project']['kanban'] = 1;
+            if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
+
+            $this->app->user->rights['rights'] = $recomputedRights;
         }
     }
 

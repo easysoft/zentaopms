@@ -1234,10 +1234,24 @@ class executionModel extends model
             $executions = $executionList;
         }
 
+        $projects = array();
+        if(empty($projectID))
+        {
+            $projects = $this->dao->select('t1.id,t1.name')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.project')
+                ->where('t2.id')->in(array_keys($executions))
+                ->fetchPairs('id', 'name');
+        }
+
         if($pairs)
         {
             $executionPairs = array();
-            foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
+            foreach($executions as $execution)
+            {
+                $executionPairs[$execution->id] = '';
+                if(isset($projects[$execution->project])) $executionPairs[$execution->id] .= $projects[$execution->project] . ' / ';
+                $executionPairs[$execution->id] .= $execution->name;
+            }
             $executions = $executionPairs;
         }
 
