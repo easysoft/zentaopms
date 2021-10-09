@@ -565,7 +565,7 @@ class build extends control
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($build->project), $build->execution);
+        $this->loadModel('execution')->setMenu($build->execution);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

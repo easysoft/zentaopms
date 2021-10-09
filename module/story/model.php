@@ -1327,7 +1327,7 @@ class storyModel extends model
             $oldStory = $oldStories[$storyID];
             if($oldStory->status != 'draft' and $oldStory->status != 'changed') continue;
             if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID]))) continue;
-            if(isset($hasResult[$storyID])) continue;
+            if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
 
             $story = new stdClass();
             $story->reviewedDate   = $now;

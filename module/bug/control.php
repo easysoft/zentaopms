@@ -574,12 +574,12 @@ class bug extends control
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
-        $title = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
 
-        $this->view->title        = $title;
+        $this->view->title        = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
+        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$productID") : '';
         $this->view->products         = $products;
         $this->view->productID        = $productID;
         $this->view->productName      = isset($this->products[$productID]) ? $this->products[$productID] : '';
@@ -1719,6 +1719,7 @@ class bug extends control
             /* Get users, products and executions. */
             $users      = $this->loadModel('user')->getPairs('noletter');
             $products   = $this->loadModel('product')->getPairs();
+            $projects   = $this->loadModel('project')->getPairsByProgram();
             $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'all');
 
             /* Get related objects id lists. */
@@ -1777,6 +1778,7 @@ class bug extends control
 
                 /* fill some field with useful value. */
                 $bug->product   = !isset($products[$bug->product])     ? '' : $products[$bug->product] . "(#$bug->product)";
+                $bug->project   = !isset($projects[$bug->project])     ? '' : $projects[$bug->project] . "(#$bug->project)";
                 $bug->execution = !isset($executions[$bug->execution]) ? '' : $executions[$bug->execution] . "(#$bug->execution)";
                 $bug->story     = !isset($relatedStories[$bug->story]) ? '' : $relatedStories[$bug->story] . "(#$bug->story)";
                 $bug->task      = !isset($relatedTasks[$bug->task])    ? '' : $relatedTasks[$bug->task] . "($bug->task)";
@@ -1802,7 +1804,7 @@ class bug extends control
                 if(isset($users[$bug->lastEditedBy])) $bug->lastEditedBy = $users[$bug->lastEditedBy];
                 if(isset($users[$bug->closedBy]))     $bug->closedBy     = $users[$bug->closedBy];
 
-                $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);
+                $bug->title = htmlspecialchars_decode($bug->title,ENT_QUOTES);
 
                 if($bug->linkBug)
                 {

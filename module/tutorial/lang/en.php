@@ -92,7 +92,7 @@ $lang->tutorial->tasks['createTask']['mode'] = 'new';
 $lang->tutorial->tasks['createTask']['nav']  = array('app' => 'execution', 'module' => 'task', 'method' => 'create', 'menuModule' => 'story', 'menu' => '', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Create Task');
 $lang->tutorial->tasks['createTask']['desc'] = "<p>Task breakdown for a story: </p><ul><li data-target='nav'>Open <span class='task-nav'> Execution <i class='icon icon-angle-right'></i> Story <i class='icon icon-angle-right'></i> WBS;</span></li><li data-target='form'>Fill the form with task information;</li><li data-target='submit'>Save</li></ul>";
 
-$lang->tutorial->tasks['createExecutionTask']         = array('title' => '分解任务');
+$lang->tutorial->tasks['createExecutionTask']         = array('title' => 'Task Breakdown');
 $lang->tutorial->tasks['createExecutionTask']['mode'] = 'classic';
 $lang->tutorial->tasks['createExecutionTask']['nav']  = array('app' => 'execution', 'module' => 'task', 'method' => 'create', 'menuModule' => 'story', 'menu' => '', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Create Task');
 $lang->tutorial->tasks['createExecutionTask']['desc'] = "<p>Task breakdown for a story: </p><ul><li data-target='nav'>Open <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> Story <i class='icon icon-angle-right'></i> WBS;</span></li><li data-target='form'>Fill the form with task information;</li><li data-target='submit'>Save</li></ul>";

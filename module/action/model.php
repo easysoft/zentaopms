@@ -49,7 +49,7 @@ class actionModel extends model
         $action->date       = helper::now();
         $action->extra      = $extra;
 
-        if($objectType == 'story' and $actionType !== 'reviewed' and strpos(',reviewclosed,passreviewed,clarifyreviewed,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
+        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
         $action->comment = fixer::stripDataTags($comment);
@@ -338,7 +338,7 @@ class actionModel extends model
             elseif($actionName == 'moved')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = common::hasPriv('project', 'task') ? html::a(helper::createLink('project', 'task', "projectID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+                if($name) $action->extra = common::hasPriv('execution', 'task') ? html::a(helper::createLink('execution', 'task', "executionID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'frombug' and common::hasPriv('bug', 'view'))
             {

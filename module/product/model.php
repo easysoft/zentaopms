@@ -845,7 +845,7 @@ class productModel extends model
     {
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs(($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID);
 
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
@@ -958,13 +958,24 @@ class productModel extends model
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-
+        if($this->config->systemMode == 'new')
+        {
+            $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+                ->from(TABLE_TASK)
+                ->where('project')->in($projectKeys)
+                ->andWhere('parent')->lt(1)
+                ->andWhere('deleted')->eq(0)
+                ->fetchGroup('project', 'id');
+        }
+        else
+        {
+            $tasks = $this->dao->select('id, execution, estimate, consumed, `left`, status, closedReason')
+                ->from(TABLE_TASK)
+                ->where('execution')->in($projectKeys)
+                ->andWhere('parent')->lt(1)
+                ->andWhere('deleted')->eq(0)
+                ->fetchGroup('execution', 'id');
+        }
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $projectID => $projectTasks)
         {
@@ -1593,7 +1604,11 @@ class productModel extends model
 
         $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);
 
-        $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)->where('product')->in(array_keys($productList))->fetchGroup('product', 'id');
+        $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)
+            ->where('product')->in(array_keys($productList))
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->eq('normal')
+            ->fetchGroup('product', 'id');
 
         return array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'executionList' => $executionList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
     }

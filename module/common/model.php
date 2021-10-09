@@ -395,12 +395,20 @@ class commonModel extends model
                 $attr           = $objectType == 'doc' ? "class='iframe' data-width='650px'" : '';
 
                 $params = '';
-                if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
                 if($objectType == 'doc')
                 {
                     $params       = "objectType=&objectID=0&libID=0";
                     $createMethod = 'selectLibType';
                 }
+
+                if($objectType == 'bug')       $params = "productID=$productID&branch=&extras=from=global";
+                if($objectType == 'story')     $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                if($objectType == 'task')      $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
+                if($objectType == 'testcase')  $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
+                if($objectType == 'execution') $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                if($objectType == 'project')   $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
+                if($objectType == 'product')   $params = "programID=&extra=from=global";
+                if($objectType == 'program')   $params = "parentProgramID=0&extra=from=global";
 
                 $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
             }
@@ -1297,7 +1305,7 @@ EOD;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if($config->systemMode == 'classic' and strtolower($module) == 'project') $method = substr(strtolower($method), 3);
+        if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 

@@ -47,7 +47,7 @@
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item:hover {box-shadow: none;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item > .title {white-space: normal;}
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; height: 38px;}
-#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: block; white-space: nowrap; text-overflow: clip; overflow: hidden;}
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title.has-icon > .text {margin-right: 5px; max-width: calc(100% - 20px);}
 #kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: block; height: 38px;}
 #kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: inline-block;}
