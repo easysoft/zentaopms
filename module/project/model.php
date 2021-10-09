@@ -129,7 +129,7 @@ class projectModel extends model
         /* Reset program priv. */
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
-        $this->loadModel('common')->resetProgramPriv($this->session->project);
+        $this->loadModel('common')->resetProjectPriv($this->session->project);
         if(!commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
         return $this->session->project;

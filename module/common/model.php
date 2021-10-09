@@ -1972,13 +1972,13 @@ EOD;
     }
 
     /**
-     * Reset program priv.
+     * Reset project priv.
      *
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function resetProgramPriv($projectID = 0)
+    public function resetProjectPriv($projectID = 0)
     {
         /* Get user program priv. */
         if(empty($projectID) and $this->session->project) $projectID = $this->session->project;
@@ -2002,10 +2002,6 @@ EOD;
         /* Reset priv by program privway. */
         $rights = $this->app->user->rights['rights'];
         $this->app->user  = clone $_SESSION['user'];
-        if($projectID == '1649')
-        {
-            a($_SESSION['user']->rights['rights']['project']);
-        }
 
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
@@ -2022,9 +2018,10 @@ EOD;
             $recomputedRights = array_merge($rights, $programRightGroup);
 
             /* Set base priv for project. */
-            if(isset($this->app->user->rights['rights']['project']['browse']) and !isset($recomputedRights['project']['browse'])) $recomputedRights['project']['browse'] = 1;
-            if(isset($this->app->user->rights['rights']['project']['kanban']) and !isset($recomputedRights['project']['kanban'])) $recomputedRights['project']['kanban'] = 1;
-            if(isset($this->app->user->rights['rights']['project']['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
+            $projectRights = zget($this->app->user->rights['rights'], 'project', array());
+            if(isset($projectRights['browse']) and !isset($recomputedRights['project']['browse'])) $recomputedRights['project']['browse'] = 1;
+            if(isset($projectRights['kanban']) and !isset($recomputedRights['project']['kanban'])) $recomputedRights['project']['kanban'] = 1;
+            if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
 
             $this->app->user->rights['rights'] = $recomputedRights;
         }
