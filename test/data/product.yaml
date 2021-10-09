@@ -10,16 +10,11 @@ fields:
     range: 1-40{3!},0{60},1{5},0{5}
   - field: name
     note: "产品名称"
-    #fields:
-    #- field: name1
-    #  range: [独立产品@#$%%&&*测试名称长度能有多长并且包含特殊字符的一个长长的字符串（）！@#￥%……&*],独立产品{2},正常产品{6},多分支产品{6},多平台产品{6}
-    #- field: name2
-    #  range: 1-1000
     fields:
     - field: name1
-      range: 正常产品{40},多分支产品{40},多平台产品{40},独立产品{60},[@#$%%&&*测试名称长度能有多长并且包含特殊字符的一个长长的字符串（）！@#￥%……&*]{10}
+      range: 正常产品{40},多分支产品{40},多平台产品{40},独立测试项目{7},独立产品{53},[@#$%%&&*测试名称长度能有多长并且包含特殊字符的一个长长的字符串（）！@#￥%……&*]{10}
     - field: name2
-      range: 1-1000
+      range: 1-120,1-7,128-1000
   - field: code
     note: "产品代号"
     range: 1-300
@@ -44,23 +39,23 @@ fields:
     note: "产品负责人"
     fields:
     - field: po1
-      range: po{10}
+      range: po{120},[]{7}
     - field: po2
-      range: 1-10
+      range: 1-10{12!},[]{7}
   - field: QD
     note: "测试负责人"
     fields:
     - field: account1
-      range: test{100}
+      range: test{120},[]{7}
     - field: account2
-      range: 1-100
+      range: 1-100,1-20,[]{7}
   - field: RD
     note: "发布负责人"
     fields:
     - field: dev1
-      range: dev{200}
+      range: dev{120},[]{7},dev{80}
     - field: dev2
-      range: 1-200
+      range: 1-120,[]{7},121-200
   - field: storyConcept
     note: "需求概念"
     range: 0

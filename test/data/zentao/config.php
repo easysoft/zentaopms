@@ -13,15 +13,16 @@ $builder->deptGrade1 = array('rows' => 15, 'data' => array('dept', 'deptgrade1')
 $builder->deptGrade2 = array('rows' => 10, 'data' => array('dept', 'deptgrade2'));
 $builder->deptGrade3 = array('rows' => 10, 'data' => array('dept', 'deptgrade3'));
 
-$builder->company   = array('rows' => 1,   'data' => array('company'));
-$builder->user      = array('rows' => 350, 'data' => array('user'));
-$builder->usergroup = array('rows' => 349, 'data' => array('usergroup'));
-$builder->product   = array('rows' => 190, 'data' => array('product'));
-$builder->branch    = array('rows' => 160, 'data' => array('branch'));
-
-$builder->blockDefault   = array('rows' => 150, 'data' => array('blockdefault'));
-$builder->blockRandom    = array('rows' => 120, 'data' => array('blockrandom'));
-$builder->projectProduct = array('rows' => 14,  'data' => array('projectproduct'));
+$builder->company     = array('rows' => 1,   'data' => array('company'));
+$builder->user        = array('rows' => 346, 'data' => array('user'));
+$builder->usergroup   = array('rows' => 349, 'data' => array('usergroup'));
+$builder->product     = array('rows' => 190, 'data' => array('product'));
+$builder->productplan = array('rows' => 120, 'data' => array('productplan'));
+$builder->branch      = array('rows' => 160, 'data' => array('branch'));
 
 $builder->build   = array('rows' => 8, 'data' => array('build'));
 $builder->release = array('rows' => 8, 'data' => array('release'));
+
+$builder->blockDefault   = array('rows' => 150, 'data' => array('block', 'blockdefault'));
+$builder->blockRandom    = array('rows' => 120, 'data' => array('block', 'blockrandom'));
+$builder->projectProduct = array('rows' => 14,  'data' => array('projectproduct'));
