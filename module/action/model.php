@@ -774,7 +774,7 @@ class actionModel extends model
 
         /* If is project, select its related. */
         $executions = array();
-        if(is_numeric($projectID)) $executions = $this->loadModel('execution')->getPairs($projectID);
+        if(is_numeric($projectID) and $executionID == 'all') $executions = $this->loadModel('execution')->getPairs($projectID);
 
         $this->loadModel('doc');
         $libs = $this->doc->getLibs('includeDeleted') + array('' => '');
