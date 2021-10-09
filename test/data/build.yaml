@@ -1,0 +1,52 @@
+title: table zt_build
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+
+  - field: project
+    range: 131{5},132{2},0
+
+  - field: product
+    range: [1,41]{2!},1{2},42,2
+
+  - field: branch
+    range: [0,1]{2!},0{2},2,0
+
+  - field: execution
+    range: 391{2},392{2},393,396{2},0
+
+  - field: name
+    fields:
+      - field: name.1
+        range: 版本
+
+      - field: name.2
+        range: 1-100
+
+  - field: scmPath
+    range: ' '
+
+  - field: filePath
+    range: ' '
+
+  - field: date
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+
+  - field: stories
+    range: ''
+
+  - field: bugs
+    range: ' '
+
+  - field: builder
+    range: [hjj,admin,test1]
+
+  - field: desc
+    range: ' '
+
+  - field: deleted
+    range: 0

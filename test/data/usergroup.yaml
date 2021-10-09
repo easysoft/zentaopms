@@ -1,0 +1,18 @@
+title: table zt_usergroup
+desc: "用户分组"
+author: Li yuchun
+version: "1.0"
+fields:
+  - field: account
+    note: "用户名"
+    fields:
+    - field: account1
+      range: test{100},dev{200},pm{10},po{10},td{2},pd{2},qd{2},top{6},test,dev,pm,po,td,pd,qd,other{10}
+    - field: account2
+      range: 1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1{8},1-10
+  - field: group
+    note: "分组名称"
+    range: 3{100},2{200},4{10},5{10},6{2},7{2},8{2},9{5},1{8},12{10}
+  - field: project
+    note:  "项目ID"
+    range:

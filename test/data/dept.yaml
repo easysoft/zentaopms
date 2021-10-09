@@ -1,0 +1,20 @@
+title: table zt_dept
+desc: "部门"
+author: Li yuchun
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: name
+    fields:
+      - field: name1
+        range: [@#$%%&&*((adfdfss,测试名称长度能有多长并且包含特殊字符的一个长长的字符串！@#￥%……&×（）哈哈哈哈,一级部门]{5}
+      - field: name2
+        range: A-E
+  - field: order
+    note:  "排序"
+    range: 10-150:10,10-100:10{2!}
+  - field: position
+    range: ""
+  - field: function
+    range: ""

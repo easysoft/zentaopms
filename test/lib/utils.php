@@ -94,7 +94,7 @@ function zdRun()
         $dsn = "mysql:host={$config->db->host}:{$config->db->port};dbname={$config->db->name}";
         $dbh = new PDO($dsn, $config->db->user, $config->db->password);
         echo 'MySQL connect success' . PHP_EOL;
-    
+
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // 设置报错处理方式。
         $dbh->exec("SET GLOBAL sql_mode = '';");
         $dbh->exec("set names 'utf8'");
@@ -104,6 +104,7 @@ function zdRun()
         $tmpCommonPath = RUNTIME_ROOT . 'tmp/common';
         if(file_exists($tmpCommonPath)) system("rm -rf $tmpCommonPath");
         system("cp -r {$zdRoot}common $tmpCommonPath");
+        system("rm {$zdRoot}sql/*");
 
         /* Generate SQL files. */
         $command = "$zdPath -c %s -d $zdRoot%s -n %s -o {$zdRoot}sql/%s.sql -table %s";
@@ -177,7 +178,7 @@ function zdRun()
             $count = $dbh->exec($sql);
             echo $tableName . ' insert rows ' . $count . PHP_EOL;
         }
-    
+
         $dbh->commit();
         $dbh = null;
     }
@@ -207,7 +208,7 @@ Usage:
         init         only init data and files
         control      run unit test for controllers
         model        run unit test for models
-        ui           ui testing 
+        ui           ui testing
         all          run all tests
         clean        remove data, files and cached files
 

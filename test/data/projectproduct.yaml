@@ -1,0 +1,12 @@
+title: zt_projectproduct
+desc: 项目关联产品表
+version: 1.0
+fields:
+  - field: project
+    range: 131,132,133,131,132,161,201,391{2},392{2},393,396{2}
+  - field: product
+    range: 1{2},2,[41,42]{2!},[1,41]{2!},1{2},42
+  - field: branch
+    range: 0{3},[1,2]{2!},[0,1]{2!},0{2},2
+  - field: plan
+    range: 0

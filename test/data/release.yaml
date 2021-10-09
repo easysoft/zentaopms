@@ -1,0 +1,55 @@
+title: table zt_release
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+
+  - field: project
+    range: 131{5},132{2},0
+
+  - field: product
+    range: [1,41]{2!},1{2},42,2
+
+  - field: branch
+    range: [0,1]{2!},0{2},2,0
+
+  - field: build
+    range: 1-8
+
+  - field: name
+    fields:
+      - field: name.1
+        range: 发布
+
+      - field: name.2
+        range: 1-100
+
+  - field: marker
+    range: 0,1
+
+  - field: date
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+
+  - field: stories
+    range: ''
+
+  - field: bugs
+    range: ' '
+
+  - field: leftBugs
+    range: ' '
+
+  - field: desc
+    range: ' '
+
+  - field: status
+    range: [normal,terminate]
+
+  - field: subStatus
+    range: ' '
+
+  - field: deleted
+    range: 0
