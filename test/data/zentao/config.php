@@ -18,7 +18,7 @@ $builder->user        = array('rows' => 346, 'data' => array('user'));
 $builder->usergroup   = array('rows' => 349, 'data' => array('usergroup'));
 $builder->product     = array('rows' => 200, 'data' => array('product'));
 $builder->productplan = array('rows' => 360, 'data' => array('productplan'));
-$builder->branch      = array('rows' => 160, 'data' => array('branch'));
+$builder->branch      = array('rows' => 240, 'data' => array('branch'));
 
 $builder->build   = array('rows' => 8, 'data' => array('build'));
 $builder->release = array('rows' => 8, 'data' => array('release'));

@@ -74,8 +74,9 @@ fields:
       range: 1-10
   - field: createdDate
     note: "创建日期"
-    from: common.date.v1.yaml
-    use: datetime
+    range: "-:60"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: createdVersion
     note: "创建版本"
     range: 15.6
