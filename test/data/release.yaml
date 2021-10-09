@@ -20,10 +20,16 @@ fields:
   - field: name
     fields:
       - field: name.1
-        range: 发布
+        range: [正常的,停止维护的]{3!},[]{2}
 
       - field: name.2
-        range: 1-100
+        range: [,里程碑]{3},[]{2}
+
+      - field: name.3
+        range: 发布{7},`!@#$$%^&*()asdlfkjla`
+
+      - field: name.4
+        range: 1-1000
 
   - field: marker
     range: 0,1
@@ -43,7 +49,7 @@ fields:
     range: ' '
 
   - field: desc
-    range: ' '
+    range: <div><p>代金券哦放假啊理发店啦发啦打扫房间群殴OAf</p><p>sSL卡洛斯等放假啦水电费来看四方达Kjl;阿斯顿发顺丰啊aksdjl</p><p>jlaksdfj la阿里肯定是放假啦水电费看来时代峰峻拉水电费拉打扫房间阿拉丁佛爷发</p></div>
 
   - field: status
     range: [normal,terminate]
