@@ -233,10 +233,11 @@ class install extends control
      */
     public function step6()
     {
-        $this->view->title = $this->lang->install->success;
+        $delInstallFile = unlink($this->app->getAppRoot() . 'www/install.php');
+        $this->view->delInstallFile = $delInstallFile;
+        $this->view->title          = $this->lang->install->success;
         $this->display();
 
-        unlink($this->app->getAppRoot() . 'www/install.php');
         unlink($this->app->getAppRoot() . 'www/upgrade.php');
         unset($_SESSION['installing']);
         session_destroy();
