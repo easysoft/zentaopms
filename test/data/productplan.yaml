@@ -29,12 +29,12 @@ fields:
            </div>
   - field: begin 
     note: "开始日期"
-    range: "(-10M)-(-7M):30D"
+    range: "(-10M)-(-7M):7D"
     type: timestamp
     format: "YYYY-MM-DD"
   - field: end 
     note: "结束日期"
-    range: "(-6M)-(-1M):30D"
+    range: "(-6M)-(+6M):7D"
     type: timestamp
     format: "YYYY-MM-DD"
   - field: order 
@@ -42,4 +42,4 @@ fields:
     value: "$id * 5"
   - field: deleted 
     note: "是否删除"
-    range: 0{119},1 
+    range: 0{359},1 
