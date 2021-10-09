@@ -674,6 +674,23 @@ class commonModel extends model
                 }
             }
 
+            /* Check whether other methods under the module have permissions. If yes, point to other methods. */
+            if($display == false and isset($lang->$currentModule->menu))
+            {
+                foreach($lang->$currentModule->menu as $menu)
+                {
+                    $linkPart = explode('|', $menu['link']);
+                    if(!isset($linkPart[2])) continue;
+                    $method = $linkPart[2];
+                    if(common::hasPriv($currentModule, $method))
+                    {
+                        $display       = true;
+                        $currentMethod = $method;
+                        if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
+                    }
+                }
+            }
+
             if(!$display) continue;
 
             /* Assign vars. */
