@@ -29,7 +29,7 @@ class zfoldersEntry extends entry
                 'id'           => $code,
                 'parentID'     => null,
                 'storeID'      => 0,
-                'name'         => $node['name'],
+                'name'         => $node['name'] . ($node['type'] == 'file' ? '.txt' : ''),
                 'type'         => $node['type'],
                 'size'         => 0,
                 'createdTime'  => $now,
