@@ -25,4 +25,4 @@ $builder->release = array('rows' => 8, 'data' => array('release'));
 
 $builder->blockDefault   = array('rows' => 150, 'data' => array('block', 'blockdefault'));
 $builder->blockRandom    = array('rows' => 120, 'data' => array('block', 'blockrandom'));
-$builder->projectProduct = array('rows' => 14,  'data' => array('projectproduct'));
+$builder->projectProduct = array('rows' => 21,  'data' => array('projectproduct'));
