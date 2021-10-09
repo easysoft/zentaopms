@@ -20,9 +20,15 @@ fields:
   - field: name
     fields:
       - field: name1
-        range: 版本{7},`!@()[]{}|\+=%^&*$#测试版本名称到底可以有多长！@#￥%&*'":.<>。?/（）;`
+        range: 迭代{7},无相关迭代的
 
       - field: name2
+        range: 131{5},132{2},[]
+
+      - field: name2
+        range: 版本{6},`版本!@()[]{}|\+=%^&*$#测试版本名称到底可以有多长！@#￥%&*'":.<>。?/（）;`,版本
+
+      - field: name3
         range: 1-1000
 
   - field: scmPath

@@ -20,15 +20,19 @@ fields:
   - field: name
     fields:
       - field: name.1
-        range: [正常的,停止维护的]{3!},[]{2}
+        range: [1,41]{2!},1{2},42,2
+        prefix: "产品"
 
       - field: name.2
-        range: [,里程碑]{3},[]{2}
+        range: [正常的,停止维护的]{3!},[]{2}
 
       - field: name.3
-        range: 发布{7},`!@#$$%^&*()asdlfkjla`
+        range: [,里程碑]{3},[]{2}
 
       - field: name.4
+        range: 发布{7},`发布!@#$$%^&*()测试发布的名称到底可以有多长asdlfkjla`
+
+      - field: name.5
         range: 1-1000
 
   - field: marker
