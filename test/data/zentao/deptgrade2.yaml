@@ -29,5 +29,5 @@ fields:
         postfix: ","
   - field:  manager
     note:   "负责人"
-    range:  101-200:10
+    range:  1-200:10
     prefix: "dev"

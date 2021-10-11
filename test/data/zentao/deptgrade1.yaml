@@ -17,5 +17,8 @@ fields:
     postfix: ","
   - field:   manager
     note:    "负责人"
-    range:   1{5},1-100:10
-    prefix:  "test"
+    fields:
+      - field: manager1
+        range: test{5},[]{5}
+      - field: manager2
+        range: 1-50:10,[]{5},51-100:10
