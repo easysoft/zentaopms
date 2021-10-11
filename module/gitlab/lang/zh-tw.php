@@ -13,6 +13,8 @@ $lang->gitlab->delete        = '刪除GitLab';
 $lang->gitlab->confirmDelete = '確認刪除該GitLab嗎？';
 $lang->gitlab->gitlabAccount = 'GitLab用戶';
 $lang->gitlab->zentaoAccount = '禪道用戶';
+$lang->gitlab->bindingStatus = '綁定狀態';
+$lang->gitlab->binded        = '已綁定';
 $lang->gitlab->serverFail    = '連接GitLab伺服器異常，請檢查GitLab伺服器。';
 
 $lang->gitlab->browseAction  = 'GitLab列表';

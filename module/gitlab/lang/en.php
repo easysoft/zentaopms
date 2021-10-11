@@ -13,6 +13,8 @@ $lang->gitlab->delete        = 'Delete GitLab';
 $lang->gitlab->confirmDelete = 'Do you want to delete this GitLab server?';
 $lang->gitlab->gitlabAccount = 'GitLab Account';
 $lang->gitlab->zentaoAccount = 'Zentao Account';
+$lang->gitlab->bindingStatus = 'Binding Status';
+$lang->gitlab->binded        = 'Binded';
 $lang->gitlab->serverFail    = 'Conntect to GitLab server failed, please check the GitLab server.';
 
 $lang->gitlab->browseAction  = 'GitLab List';

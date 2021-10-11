@@ -22,6 +22,7 @@
           <tr>
             <th colspan='2'><?php echo $lang->gitlab->gitlabAccount;?></th>
             <th><?php echo $lang->gitlab->zentaoAccount;?></th>
+            <th><?php echo $lang->gitlab->bindingStatus;?></th>
           </tr>
         </thead>
         <tbody>
@@ -35,6 +36,7 @@
               <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, '', "class='form-control select chosen'" );?></td>
+            <td></td>
          </tr>
          <?php endforeach;?>
          <?php foreach($gitlabUsers as $gitlabUser):?>
@@ -47,6 +49,7 @@
               <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
+            <td><?php echo isset($bindedUsers[$gitlabUser->account]) ? $lang->gitlab->binded : ""; ?></td>
          </tr>
          <?php endforeach;?>
         </tbody>

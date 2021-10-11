@@ -85,30 +85,30 @@ class gitlabModel extends model
     /**
      * Get gitlab user id and zentao account pairs of one gitlab.
      *
-     * @param  int $gitlab
+     * @param  int $gitlabID
      * @access public
      * @return array
      */
-    public function getUserIdAccountPairs($gitlab)
+    public function getUserIdAccountPairs($gitlabID)
     {
         return $this->dao->select('openID,account')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlab)
+            ->andWhere('providerID')->eq($gitlabID)
             ->fetchPairs();
     }
 
     /**
      * Get zentao account gitlab user id pairs of one gitlab.
      *
-     * @param  int $gitlab
+     * @param  int $gitlabID
      * @access public
      * @return array
      */
-    public function getUserAccountIdPairs($gitlab)
+    public function getUserAccountIdPairs($gitlabID)
     {
         return $this->dao->select('account,openID')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlab)
+            ->andWhere('providerID')->eq($gitlabID)
             ->fetchPairs();
     }
 
