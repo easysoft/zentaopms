@@ -294,7 +294,7 @@ function initSteps(selector)
         var $step = $checkbox.closest('.step');
         var isChecked = $checkbox.is(':checked');
         var suggestType = isChecked ? 'group' : 'item';
-        if(!isChecked && ($step.find('textarea[name^="steps"]').val().length || $step.find('textarea[name^="expects"]').val().length))
+        if(!isChecked)
         {
             var $prevStep = $step.prev('.step:not(.drag-shadow)');
             var suggestChild = $prevStep.length && $prevStep.is('.step-group') && $step.next('.step:not(.drag-shadow)').length;
