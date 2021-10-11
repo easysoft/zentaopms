@@ -687,17 +687,14 @@ class personnelModel extends model
     /**
      * Determine whether the user exists in the white list of multiple products.
      *
-     * @param  int     $objectID
+     * @param  int     $programID
      * @param  string  $account
      * @access public
      * @return void
      */
-    public function deleteProgramWhitelist($objectID = 0, $account = '')
+    public function deleteProgramWhitelist($programID = 0, $account = '')
     {
-        $program = $this->dao->select('id,program,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($objectID)->fetch();
-        if(empty($program)) return false;
-
-        $programID = $program->program;
+        $program   = $this->loadModel('program')->getByID($programID);
         $products  = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs('id');
         $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($products)->andWhere('account')->eq($account)->andWhere('objectType')->eq('product')->fetch();
 

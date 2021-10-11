@@ -25,10 +25,13 @@ $lang->testsuite->successSaved     = 'Saved';
 
 $lang->testsuite->id             = 'ID';
 $lang->testsuite->common         = 'Test Suite';
+$lang->testsuite->project        = 'Project';
+$lang->testsuite->suite          = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
 $lang->testsuite->type           = 'Type';
 $lang->testsuite->desc           = 'Description';
+$lang->testsuite->mailto         = 'Mailto';
 $lang->testsuite->author         = 'Access Control';
 $lang->testsuite->addedBy        = 'CreatedBy';
 $lang->testsuite->addedDate      = 'CreatedDate';

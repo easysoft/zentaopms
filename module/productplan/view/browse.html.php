@@ -130,7 +130,7 @@
           <?php
           if(common::hasPriv('execution', 'create', $plan))
           {
-              $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id");
+              $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$productID");
               if($config->systemMode == 'new')
               {
                   echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this)' class='btn' title='{$lang->productplan->createExecution}'");

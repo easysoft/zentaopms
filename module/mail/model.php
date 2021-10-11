@@ -672,6 +672,8 @@ class mailModel extends model
      */
     public function sendmail($objectID, $actionID)
     {
+        if(empty($objectID) or empty($actionID)) return;
+
         /* Load module and get vars. */
         $this->loadModel('action');
         $users      = $this->loadModel('user')->getPairs('noletter');

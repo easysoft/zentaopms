@@ -10,6 +10,10 @@
  * @link        http://www.zentao.net
  */
 $lang->search->common        = 'Search';
+$lang->search->id            = 'ID';
+$lang->search->editedDate    = 'Edited Date';
+$lang->search->key           = 'Key';
+$lang->search->value         = 'Value';
 $lang->search->reset         = 'Reset';
 $lang->search->saveQuery     = 'Save Query';
 $lang->search->myQuery       = 'My Query';

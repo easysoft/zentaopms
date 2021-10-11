@@ -1327,7 +1327,7 @@ class storyModel extends model
             $oldStory = $oldStories[$storyID];
             if($oldStory->status != 'draft' and $oldStory->status != 'changed') continue;
             if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID]))) continue;
-            if(isset($hasResult[$storyID])) continue;
+            if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
 
             $story = new stdClass();
             $story->reviewedDate   = $now;
@@ -2394,8 +2394,8 @@ class storyModel extends model
         /* Get the sql and form status from the query. */
         if($query)
         {
-            $this->session->set('storyQuery', $query->sql, $this->app->tab);
-            $this->session->set('storyForm', $query->form, $this->app->tab);
+            $this->session->set('storyQuery', $query->sql);
+            $this->session->set('storyForm', $query->form);
         }
         if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
 
@@ -2932,11 +2932,6 @@ class storyModel extends model
      */
     public function formatStories($stories, $type = 'full', $limit = 0)
     {
-        /* Get module names of stories. */
-        /*$modules = array();
-        foreach($stories as $story) $modules[] = $story->module;
-        $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();*/
-
         /* Format these stories. */
         $storyPairs = array(0 => '');
         $i = 0;
@@ -3871,7 +3866,7 @@ class storyModel extends model
             {
                 $requirements = $this->dao->select('t3.*')->from(TABLE_PROJECTSTORY)->alias('t1')
                     ->leftJoin(TABLE_RELATION)->alias('t2')->on("t1.story=t2.AID && t2.AType='story'")
-                    ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.BID=t3.id && t2.BType='requirement'")
+                    ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.BID=t3.id && t2.BType='requirement' && t3.deleted='0'")
                     ->where('t1.project')->eq($projectID)
                     ->andWhere('t1.product')->eq($productID)
                     ->andWhere('t3.id')->ne('')
@@ -3924,11 +3919,13 @@ class storyModel extends model
             $tracks = $requirements;
 
             /* Get no requirements story. */
-            $excludeStories = $this->dao->select('BID')->from(TABLE_RELATION)
-                ->where('AType')->eq('requirement')
-                ->andWhere('BType')->eq('story')
-                ->andWhere('relation')->eq('subdivideinto')
-                ->andWhere('product')->eq($productID)
+            $excludeStories = $this->dao->select('t1.BID')->from(TABLE_RELATION)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on("t1.AID=t2.id")
+                ->where('t2.deleted')->eq('0')
+                ->andWhere('t1.AType')->eq('requirement')
+                ->andWhere('t1.BType')->eq('story')
+                ->andWhere('t1.relation')->eq('subdivideinto')
+                ->andWhere('t1.product')->eq($productID)
                 ->fetchPairs('BID', 'BID');
             if($projectID)
             {

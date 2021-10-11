@@ -12,6 +12,8 @@
 global $config;
 $lang->block = new stdclass();
 $lang->block->common     = '区块';
+$lang->block->id         = '编号';
+$lang->block->params     = '参数';
 $lang->block->name       = '区块名称';
 $lang->block->style      = '外观';
 $lang->block->grid       = '位置';
@@ -75,10 +77,6 @@ $lang->block->month               = '月';
 $lang->block->selectProduct       = '选择产品';
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩余工时';
-
-$lang->block->params = new stdclass();
-$lang->block->params->name  = '参数名称';
-$lang->block->params->value = '参数值';
 
 $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';

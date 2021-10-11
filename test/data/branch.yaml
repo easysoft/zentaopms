@@ -1,0 +1,29 @@
+title: table zt_branch
+desc: "平台/分支"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+  - field: product
+    note: "所属产品"
+    range: 41-120{2},141-180{2}
+  - field: name
+    note: "名称"
+    range: 1-10000
+    fields:
+    - field: name1
+      range: 分支
+    - field: name2
+      range: 1-10000
+  - field: order
+    note: "排序"
+    range: 1-2
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0

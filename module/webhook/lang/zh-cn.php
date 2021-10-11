@@ -36,6 +36,11 @@ $lang->webhook->editedDate  = '编辑时间';
 $lang->webhook->date        = '发送时间';
 $lang->webhook->data        = '数据';
 $lang->webhook->result      = '结果';
+$lang->webhook->products    = $lang->productCommon;
+$lang->webhook->executions  = $lang->execution->common;
+$lang->webhook->actions     = '系统日志';
+$lang->webhook->editedBy    = '由谁编辑';
+$lang->webhook->deleted     = '已删除';
 
 $lang->webhook->typeList['']            = '';
 $lang->webhook->typeList['dinggroup']   = '钉钉群通知机器人';

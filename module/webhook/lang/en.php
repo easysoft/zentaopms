@@ -36,6 +36,11 @@ $lang->webhook->editedDate  = 'EditedDate';
 $lang->webhook->date        = 'Sent';
 $lang->webhook->data        = 'Data';
 $lang->webhook->result      = 'Result';
+$lang->webhook->products    = $lang->productCommon;
+$lang->webhook->executions  = $lang->execution->common;
+$lang->webhook->actions     = 'Log';
+$lang->webhook->editedBy    = 'Edited By';
+$lang->webhook->deleted     = 'Deleted';
 
 $lang->webhook->typeList['']            = '';
 $lang->webhook->typeList['dinggroup']   = 'Dingding Robot';

@@ -328,7 +328,8 @@ js::set('moduleID', $moduleID);
               <?php $browseLink = $this->session->bugList ? $this->session->bugList : $this->inlink('browse', "productID=$productID");?>
               <?php echo html::submitButton();?>
               <?php if($caseID) echo html::a($browseLink, $lang->goback, '', 'class="btn btn-wide"');?>
-              <?php if(!$caseID) echo html::backButton();?>
+              <?php if(!$caseID and $gobackLink) echo html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"');?>
+              <?php if(!$caseID and !$gobackLink) echo html::backButton();?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
               <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', empty($testtask) ? 0 : $testtask->id);?>
             </td>

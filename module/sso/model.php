@@ -68,6 +68,7 @@ class ssoModel extends model
             $user->gender     = isset($data->gender) ? $data->gender : '';
             $user->email      = $data->email;
             $user->ranzhi     = $this->session->ssoData->account;
+            $user->role       = isset($data->role) ? $data->role : '';
 
             $this->dao->insert(TABLE_USER)->data($user)
                 ->autoCheck()

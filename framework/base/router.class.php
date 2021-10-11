@@ -898,7 +898,7 @@ class baseRouter
      */
     public function setOpenApp()
     {
-        if(isset($_COOKIE['tab']) and $_COOKIE['tab'])
+        if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', $_COOKIE['tab']))
         {
             $this->tab = $_COOKIE['tab'];
         }

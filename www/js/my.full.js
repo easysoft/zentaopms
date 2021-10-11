@@ -674,7 +674,7 @@ function notifyMessage(data)
         }
         else if(Notification.permission != "denied")
         {
-            Notification.requestPermission(function(permission)
+            Notification.requestPermission().then(function(permission)
             {
                 notify = new Notification("", {body:message, tag:'zentao', data:data});
             });

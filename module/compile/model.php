@@ -144,8 +144,9 @@ class compileModel extends model
             $this->dao->update(TABLE_COMPILE)->set('tag')->eq($lastTag)->where('id')->eq($compile->id)->exec();
         }
 
-        if($job->engine == 'gitlab')  $compile = $this->loadModel('job')->execGitlabPipeline($job, $compileID);
-        if($job->engine == 'jenkins') $compile = $this->job->execJenkinsPipeline($job, $repo, $compile->id);
+        $this->loadModel('job');
+        if($job->engine == 'gitlab')  $compile = $this->job->execGitlabPipeline($job, $compileID);
+        if($job->engine == 'jenkins') $compile = $this->job->execJenkinsPipeline($job, $repo, $compileID);
 
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)

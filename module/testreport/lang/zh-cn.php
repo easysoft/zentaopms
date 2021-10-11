@@ -1,5 +1,6 @@
 <?php
 $lang->testreport->common       = '测试报告';
+$lang->testreport->id           = '编号';
 $lang->testreport->browse       = '报告列表';
 $lang->testreport->create       = '创建报告';
 $lang->testreport->edit         = '编辑报告';

@@ -6,7 +6,7 @@ $(function()
         {
             $('#content').html(draft);
             editor = KindEditor.instances[0];
-            editor.html(draft);
+            editor.html('' + draft);
             $('.kindeditor-ph').remove();
         }
     }, 100)

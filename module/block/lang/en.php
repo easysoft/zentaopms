@@ -12,6 +12,8 @@
 global $config;
 $lang->block = new stdclass();
 $lang->block->common     = 'Block';
+$lang->block->id         = 'ID';
+$lang->block->params     = 'Params';
 $lang->block->name       = 'Name';
 $lang->block->style      = 'Style';
 $lang->block->grid       = 'Position';
@@ -75,10 +77,6 @@ $lang->block->month               = 'Month';
 $lang->block->selectProduct       = 'Product selection';
 $lang->block->of                  = ' of ';
 $lang->block->remain              = 'Left';
-
-$lang->block->params = new stdclass();
-$lang->block->params->name  = 'Name';
-$lang->block->params->value = 'Value';
 
 $lang->block->createBlock        = 'Add Block';
 $lang->block->editBlock          = 'Edit Block';

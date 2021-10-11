@@ -140,6 +140,8 @@ class execution extends control
 
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         /* Set browse type. */
         $browseType = strtolower($status);
 
@@ -1206,11 +1208,12 @@ class execution extends control
      * @param int    $planID
      * @param string $confirm
      * @param string $productID
+     * @param string $extra
      *
      * @access public
      * @return void
      */
-    public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0)
+    public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
         /* Set menu. */
         if($this->app->tab == 'project')
@@ -1230,6 +1233,9 @@ class execution extends control
         {
             unset($this->lang->doc->menu->execution['subMenu']);
         }
+
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
 
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
@@ -1338,6 +1344,7 @@ class execution extends control
 
         $this->view->title           = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]      = $this->view->title;
+        $this->view->gobackLink      = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->executions      = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
@@ -2982,6 +2989,9 @@ class execution extends control
             $executionLang   = $this->lang->execution;
             $executionConfig = $this->config->execution;
 
+            $projectID = $from == 'project' ? $this->session->project : 0;
+            if($projectID) $this->project->setMenu($projectID);
+
             /* Create field lists. */
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $executionConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
@@ -2991,7 +3001,6 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $projectID = $from == 'project' ? $this->session->project : 0;
             $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
             $users = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)

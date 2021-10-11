@@ -70,7 +70,24 @@ class search extends control
     public function buildQuery()
     {
         $this->search->buildQuery();
-        die(js::locate($this->post->actionURL, 'parent'));
+
+        $actionURL = $this->post->actionURL;
+        $parsedURL = parse_url($actionURL);
+        if(isset($parsedURL['host'])) die();
+        if($this->config->requestType != 'GET')
+        {
+            $path = $parsedURL['path'];
+            $path = str_replace($this->config->webRoot, '', $path);
+            if(strpos($path, '.') !== false) $path = substr($path, 0, strpos($path, '.'));
+            if(preg_match("/^\w+{$this->config->requestFix}\w+/", $path) == 0) die();
+        }
+        else
+        {
+            $query = $parsedURL['query'];
+            if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) die();
+        }
+
+        die(js::locate($actionURL, 'parent'));
     }
 
     /**

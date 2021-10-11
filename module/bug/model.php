@@ -202,7 +202,7 @@ class bugModel extends model
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($bug->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+                if($field and isset($bug->$field) and empty($bug->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
             }
 
             $bugs[$i] = $bug;

@@ -20,3 +20,5 @@ test/data/sql/
 vendor/
 composer.lock
 
+test/runtime/*
+test/www

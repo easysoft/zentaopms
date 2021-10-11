@@ -20,3 +20,13 @@ function confirmBatchDelete(actionLink)
     if(confirm(batchDelete)) setFormAction(actionLink);
     return false;
 }
+
+$(function()
+{
+    /* The display of the adjusting sidebarHeader is synchronized with the sidebar. */
+    $(".sidebar-toggle").click(function()
+    {
+        $("#sidebarHeader").toggle("fast");
+    });
+    if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
+});

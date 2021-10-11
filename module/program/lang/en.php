@@ -85,6 +85,7 @@ $lang->program->beginGreateChild   = "Child earliest begin: %s, parent begin dat
 $lang->program->endLetterChild     = "Child latest end: %s, parent end date >                        = child latest end date.";
 $lang->program->closeErrorMessage  = 'There are subprograms or projects that are not closed';
 $lang->program->hasChildren        = 'The program has a child program or the project exists and can not be deleted.';
+$lang->program->hasProduct         = 'The program has products exist and can not be deleted.';
 $lang->program->confirmDelete      = "Do you want to delete it?";
 $lang->program->readjustTime       = 'Change the program begin&end date.';
 $lang->program->accessDenied       = 'You have no access to the program.';

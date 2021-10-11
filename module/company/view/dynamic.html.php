@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('browseType', $browseType);?>
+<?php js::set('systemMode', $config->systemMode);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->action->periods as $period => $label):?>
@@ -22,15 +24,15 @@
         $active = 'btn-active-text';
         $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
     }
-    echo html::a(inlink('dynamic', "browseType=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
+    echo html::a(inlink('dynamic', "browseType=$period&param=&recTotal=0&date=&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
-    <div class="input-control space c-user"><?php echo html::select('account', $userIdPairs, $user ? $user->id : '', 'onchange=changeUser(this.value) class="form-control chosen" data-max_drop_width="215"');?></div>
-    <div class="input-control space c-product"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen" data-max_drop_width="215"');?></div>
+    <div class="input-control space c-user"><?php echo html::select('account', $userIdPairs, $userID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
+    <div class="input-control space c-product"><?php echo html::select('product', $products, $productID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
     <?php if($config->systemMode == 'new'):?>
-    <div class="input-control space c-project"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen" data-max_drop_width="215"');?></div>
+    <div class="input-control space c-project"><?php echo html::select('project', $projects, $projectID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
     <?php endif;?>
-    <div class="input-control space c-execution"><?php echo html::select('execution', $executions, $execution, 'onchange=changeExecution(this.value) class="form-control chosen" data-max_drop_width="215"'); ?></div>
+    <div class="input-control space c-execution"><?php echo html::select('execution', $executions, $executionID, 'class="form-control chosen" data-max_drop_width="215"'); ?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>
   </div>
 </div>

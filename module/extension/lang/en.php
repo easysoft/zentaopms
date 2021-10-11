@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->extension->common           = 'Extension';
+$lang->extension->id               = 'ID';
 $lang->extension->browse           = 'Extensions';
 $lang->extension->install          = 'Install Extension';
 $lang->extension->installAuto      = 'Auto Installation';

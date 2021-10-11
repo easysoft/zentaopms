@@ -1,0 +1,24 @@
+title: program
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 131-10000
+  - field: name
+    range: 11-10000
+    prefix: "测试项目"
+  - field: status
+    range: wait
+  - field: grade
+    range: 2
+  - field: parent
+    range: 1-40{2}
+  - field: path
+    fields:
+     - field: grade1
+       prefix: ","
+       postfix: ","
+       range: 1-40{2}
+     - field: grade2
+       postfix: ","
+       range: 131-10000

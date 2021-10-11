@@ -239,24 +239,24 @@ class executionModel extends model
         /* When the cookie and session do not exist, get it from the database. */
         if(empty($executionID) and isset($this->config->execution->lastExecution) and isset($executions[$this->config->execution->lastExecution]))
         {
-            $this->session->set('execution', $this->config->execution->lastExecution);
+            $this->session->set('execution', $this->config->execution->lastExecution, $this->app->tab);
             $this->setProjectSession($this->session->execution);
             return $this->session->execution;
         }
 
-        if($executionID > 0) $this->session->set('execution', (int)$executionID, $this->app->tab);
         if($executionID == 0 and $this->cookie->lastExecution)
         {
             /* Execution link is execution-task. */
             $executionID = (int)$this->cookie->lastExecution;
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
-            $this->session->set('execution', $executionID);
         }
-        if($executionID == 0 and $this->session->execution == '') $this->session->set('execution', key($executions));
-        if(!isset($executions[$this->session->execution]))
+        if($executionID == 0 and $this->session->execution == '') $executionID = key($executions);
+        $this->session->set('execution', (int)$executionID, $this->app->tab);
+
+        if(!isset($executions[$executionID]))
         {
-            $this->session->set('execution', key($executions));
-            if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$this->session->execution},") === false) $this->accessDenied();
+            $this->session->set('execution', key($executions), $this->app->tab);
+            if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
         }
 
         $this->setProjectSession($this->session->execution);
@@ -273,7 +273,7 @@ class executionModel extends model
     public function setProjectSession($executionID)
     {
         $execution = $this->getByID($executionID);
-        if(!empty($execution)) $this->session->set('project', $execution->project);
+        if(!empty($execution)) $this->session->set('project', $execution->project, $this->app->tab);
     }
 
     /**
@@ -986,7 +986,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|waterfallfilter or empty
+     * @param  string $mode all|noclosed|stagefilter or empty
      * @access public
      * @return array
      */
@@ -1024,7 +1024,7 @@ class executionModel extends model
         foreach($executions as $execution)
         {
             if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
-            if(strpos($mode, 'waterfallfilter') !== false and isset($executionModel) and $executionModel == 'waterfall' and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
+            if(strpos($mode, 'stagefilter') !== false and isset($executionModel) and $executionModel == 'waterfall' and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
             $pairs[$execution->id] = $execution->name;
         }
 
@@ -1234,10 +1234,24 @@ class executionModel extends model
             $executions = $executionList;
         }
 
+        $projects = array();
+        if(empty($projectID))
+        {
+            $projects = $this->dao->select('t1.id,t1.name')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.project')
+                ->where('t2.id')->in(array_keys($executions))
+                ->fetchPairs('id', 'name');
+        }
+
         if($pairs)
         {
             $executionPairs = array();
-            foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
+            foreach($executions as $execution)
+            {
+                $executionPairs[$execution->id] = '';
+                if(isset($projects[$execution->project])) $executionPairs[$execution->id] .= $projects[$execution->project] . ' / ';
+                $executionPairs[$execution->id] .= $execution->name;
+            }
             $executions = $executionPairs;
         }
 
@@ -1417,7 +1431,7 @@ class executionModel extends model
 
         /* Get all teams of all executions and group by executions, save it as static. */
         $executions = $this->dao->select('root, limited')->from(TABLE_TEAM)
-            ->where('type')->in('sprint,stage')
+            ->where('type')->eq('execution')
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('limited')->eq('yes')
             ->orderBy('root asc')

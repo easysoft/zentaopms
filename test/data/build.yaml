@@ -1,0 +1,67 @@
+title: table zt_build
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+
+  - field: project
+    range: 131{5},132{2},0
+
+  - field: product
+    range: [1,41]{2!},1{2},42,2
+
+  - field: branch
+    range: [0,1]{2!},0{2},2,0
+
+  - field: execution
+    range: 391{2},392{2},393,396{2},0
+
+  - field: name
+    fields:
+      - field: name1
+        range: 迭代{7},无相关迭代的
+
+      - field: name2
+        range: 131{5},132{2},[]
+
+      - field: name2
+        range: 版本{6},`版本!@()[]{}|\+=%^&*$#测试版本名称到底可以有多长！@#￥%&*'":.<>。?/（）;`,版本
+
+      - field: name3
+        range: 1-1000
+
+  - field: scmPath
+    fields:
+      - field: scmPath1
+        range: [gitlab.zcorp.cc/easycorp/,svn.zcorp.cc/easysoft/trunk/zentaoext/]{3},[]{2}
+
+      - field: scmPath2
+        range: zentaopms,xuanxuan,zdoo,zentaopro,zentaobiz,zentaomax,[]{2}
+
+      - field: scmPath3
+        range: [.git]{3},[]{5}
+
+  - field: filePath
+    range: [www.csdn.net/,www.baidu.com/,www.juejin.cn/]{2},[]{2}
+
+  - field: date
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+
+  - field: stories
+    range: ''
+
+  - field: bugs
+    range: ' '
+
+  - field: builder
+    range: 1-8
+    prefix: "test"
+
+  - field: desc
+    range: <div> <p>司法局阿里水电费加快了时代峰峻辣三丁防 显卡鲁大师，，，asdf，，</p> <p>qoqao穷OA怄气袄怄气欧文饿哦啊OAof噢诶区文诗  熊熊0哦到OA山东全文怄气袄安全o</p> <p>zmvzxcmv啊，。你啊是否为欧舒斯蒂芬你先吃，哪吒，门下车，哦企鹅跑跑水电费，充满着那些，聪明在，需自行车，起伏阿萨德从，名字</p></div>
+
+  - field: deleted
+    range: 0
