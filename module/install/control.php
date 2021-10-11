@@ -233,9 +233,9 @@ class install extends control
      */
     public function step6()
     {
-        $delInstallFile = unlink($this->app->getAppRoot() . 'www/install.php');
-        $this->view->delInstallFile = $delInstallFile;
-        $this->view->title          = $this->lang->install->success;
+        $installFileDeleted = unlink($this->app->getAppRoot() . 'www/install.php');
+        $this->view->installFileDeleted = $installFileDeleted;
+        $this->view->title              = $this->lang->install->success;
         $this->display();
 
         unlink($this->app->getAppRoot() . 'www/upgrade.php');

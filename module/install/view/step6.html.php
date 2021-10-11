@@ -19,7 +19,7 @@
       <div class='alert with-icon alert-pure'>
         <i class='icon-check-circle'></i>
         <div class='content'>
-          <?php $joinZentao = ($delInstallFile ? $lang->install->successLabel : $lang->install->successNoticeLabel) . $lang->install->joinZentao;?>
+          <?php $joinZentao = ($installFileDeleted ? $lang->install->successLabel : $lang->install->successNoticeLabel) . $lang->install->joinZentao;?>
           <?php echo nl2br(sprintf($joinZentao, $config->version, $this->createLink('admin', 'register'), $this->createLink('admin', 'bind'), inlink('step6')));?>
         </div>
       </div>
