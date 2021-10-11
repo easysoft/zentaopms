@@ -530,6 +530,9 @@ class testreport extends control
         $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end);
         $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
 
+        /* save session .*/
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
         if($report->objectType == 'testtask')
         {
             $this->setChartDatas($report->objectID);

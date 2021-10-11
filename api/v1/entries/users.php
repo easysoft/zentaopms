@@ -48,8 +48,10 @@ class usersEntry extends entry
         $fields = 'account,dept,realname,email,commiter,gender';
         $this->batchSetPost($fields);
 
-        $this->setPost('password1', $this->request('password'));
-        $this->setPost('password2', $this->request('password'));
+        $password = $this->request('password', '') ? md5($this->request('password')) : '';
+
+        $this->setPost('password1', $password);
+        $this->setPost('password2', $password);
         $this->setPost('passwordStrength', 3);
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 

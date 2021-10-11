@@ -39,11 +39,12 @@ class devModel extends model
     {
         $module      = substr($table, strpos($table, '_') + 1);
         $aliasModule = $subLang = '';
+        $this->app->loadLang($module);
         try
         {
             if(isset($this->config->dev->tableMap[$module])) $aliasModule = $this->config->dev->tableMap[$module];
             if(strpos($aliasModule, '-') !== false) list($aliasModule, $subLang) = explode('-', $aliasModule);
-            if(empty($aliasModule) and strpos($module, 'im_') === false) $this->app->loadLang($aliasModule ? $aliasModule : $module);
+            if(!empty($aliasModule) and strpos($module, 'im_') === false) $this->app->loadLang($aliasModule);
         }
         catch(PDOException $e)
         {
@@ -69,7 +70,7 @@ class devModel extends model
             $type     = str_replace(array('big', 'small', 'medium', 'tiny'), '', $type);
             $field    = array();
             $field['name'] = isset($this->lang->$module->{$rawField->field}) ? $this->lang->$module->{$rawField->field} : '';
-            if(empty($field['name']) and $aliasModule) $field['name'] = isset($this->lang->$aliasModule->{$rawField->field}) ? $this->lang->$aliasModule->{$rawField->field} : '';
+            if((empty($field['name']) or !is_string($field['name'])) and $aliasModule) $field['name'] = isset($this->lang->$aliasModule->{$rawField->field}) ? $this->lang->$aliasModule->{$rawField->field} : '';
             if($subLang) $field['name'] = isset($this->lang->$aliasModule->$subLang->{$rawField->field}) ? $this->lang->$aliasModule->$subLang->{$rawField->field} : $field['name'];
             if(!is_string($field['name'])) $field['name'] = '';
             $field['null'] = $rawField->null;

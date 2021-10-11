@@ -1,0 +1,101 @@
+title: table zt_team
+desc: "团队"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    fields:
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: root
+    note: "项目/执行ID"
+    range: 121-130{100},241-250{100}
+    #range: 4{100},5{100}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "项目类型"
+    range: project{100},execution{100}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户账号"
+    fields:
+      - field: account1
+        range: test,dev
+      - field: account2
+        range: 1-100
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: role
+    note: "角色"
+    range: 研发{60},测试{30},项目经理{5},产品经理{5}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: limited
+    note: "受限用户"
+    range: yes,no
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: join
+    note: "加盟日"
+    range: Y-m-d
+    prefix: ""
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: days
+    note: "可用工作日"
+    range: 1-50:R
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: hours
+    note: "可用工时/天"
+    range: 1-8:R
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: estimate
+    note: ""
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: consumed
+    note: ""
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: left
+    note: ""
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: order
+    note: "排序"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

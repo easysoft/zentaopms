@@ -176,11 +176,11 @@
             <table class='table table-form'>
               <tr>
                 <th class='thWidth'><?php echo $lang->task->estStarted;?></th>
-                <td><?php echo html::input('estStarted', helper::isZeroDate($task->estStarted) ? '' : $task->estStarted, "class='form-control form-date'");?></td>
+                <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->deadline;?></th>
-                <td><?php echo html::input('deadline', helper::isZeroDate($task->deadline) ? '' : $task->deadline, "class='form-control form-date'");?></td>
+                <td><?php echo html::input('deadline', $task->deadline, "class='form-control form-date'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->estimate;?></th>
@@ -211,7 +211,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->realStarted;?></th>
-                <td><?php echo html::input('realStarted', helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted, "class='form-control form-datetime'");?></td>
+                <td><?php echo html::input('realStarted', helper::isZeroDate($task->realStarted) ? '' : $task->realStarted, "class='form-control form-datetime'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->finishedBy;?></th>

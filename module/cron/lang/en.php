@@ -1,5 +1,7 @@
 <?php
 $lang->cron->common       = 'Cron';
+$lang->cron->id           = 'ID';
+$lang->cron->buildin      = 'Build In';
 $lang->cron->index        = 'Cron Home';
 $lang->cron->list         = 'Task';
 $lang->cron->create       = 'Add';

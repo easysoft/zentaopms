@@ -194,7 +194,7 @@ $(function()
         }
         else
         {
-            $e.parent().addClass('tooltip-tutorial').after("<div id='typeLabel' class='text-danger help-text'>" + options.title + "</div>");
+            $e.parent().addClass('tooltip-tutorial').append("<div id='typeLabel' class='text-danger help-text'>" + options.title + "</div>");
         }
     };
 

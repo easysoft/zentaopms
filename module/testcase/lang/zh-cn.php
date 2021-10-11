@@ -11,7 +11,14 @@
  */
 $lang->testcase->id               = '用例编号';
 $lang->testcase->product          = "所属{$lang->productCommon}";
+$lang->testcase->project          = '所属项目';
+$lang->testcase->execution        = '所属执行';
 $lang->testcase->module           = '所属模块';
+$lang->testcase->auto             = '自动化测试用例';
+$lang->testcase->frame            = '自动化测试框架';
+$lang->testcase->howRun           = '测试方式';
+$lang->testcase->frequency        = '使用频率';
+$lang->testcase->path             = '路径';
 $lang->testcase->lib              = "所属库";
 $lang->testcase->branch           = "分支/平台";
 $lang->testcase->moduleAB         = '模块';
@@ -37,6 +44,10 @@ $lang->testcase->linkCase         = '相关用例';
 $lang->testcase->linkCases        = '关联相关用例';
 $lang->testcase->unlinkCase       = '移除相关用例';
 $lang->testcase->stage            = '适用阶段';
+$lang->testcase->scriptedBy       = '脚本由谁创建';
+$lang->testcase->scriptedDate     = '脚本创建日期';
+$lang->testcase->scriptStatus     = '脚本状态';
+$lang->testcase->scriptLocation   = '脚本地址';
 $lang->testcase->reviewedBy       = '由谁评审';
 $lang->testcase->reviewedDate     = '评审时间';
 $lang->testcase->reviewResult     = '评审结果';
@@ -54,6 +65,7 @@ $lang->testcase->assignedTo       = '指派给';
 $lang->testcase->colorTag         = '颜色标签';
 $lang->testcase->lastRunResult    = '结果';
 $lang->testcase->desc             = '步骤';
+$lang->testcase->parent           = '上级步骤';
 $lang->testcase->xml              = 'XML';
 $lang->testcase->expect           = '预期';
 $lang->testcase->allProduct       = "所有{$lang->productCommon}";
@@ -73,8 +85,12 @@ $lang->testcase->sync             = '同步';
 $lang->testcase->ignore           = '忽略';
 $lang->testcase->fromTesttask     = '来自测试单用例';
 $lang->testcase->fromCaselib      = '来自用例库用例';
+$lang->testcase->fromCaseID       = '用例来源ID';
+$lang->testcase->fromCaseVersion  = '用例来源版本';
+$lang->testcase->mailto           = '抄送给';
 $lang->testcase->deleted          = '是否删除';
 $lang->testcase->browseUnits      = '单元测试';
+$lang->testcase->suite            = '套件';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 

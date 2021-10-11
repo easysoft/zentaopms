@@ -11,6 +11,10 @@
  */
 $lang->file = new stdclass();
 $lang->file->common        = 'File';
+$lang->file->id            = 'ID';
+$lang->file->objectType    = 'Object Type';
+$lang->file->objectID      = 'Object ID';
+$lang->file->deleted       = 'Deleted';
 $lang->file->uploadImages  = 'Batch Upload Images';
 $lang->file->download      = 'Download Files';
 $lang->file->uploadDate    = 'Uploaded';

@@ -29,6 +29,7 @@ $lang->build->basicInfo = '基本信息';
 
 $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
+$lang->build->project        = '所属项目';
 $lang->build->branch         = '平台/分支';
 $lang->build->execution      = '所属' . $lang->executionCommon;
 $lang->build->name           = '名称编号';
@@ -37,6 +38,7 @@ $lang->build->builder        = '构建者';
 $lang->build->scmPath        = '源代码地址';
 $lang->build->filePath       = '下载地址';
 $lang->build->desc           = '描述';
+$lang->build->mailto         = 'Mailto';
 $lang->build->files          = '上传发行包';
 $lang->build->last           = '上个版本';
 $lang->build->packageType    = '包类型';

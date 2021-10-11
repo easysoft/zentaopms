@@ -1,0 +1,60 @@
+title: project
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 241-10000
+  - field: name
+    fields:
+     - field: grade1
+       prefix: "测试项目"
+       range: 1-120
+     - field: grade2
+       prefix: "下的迭代"
+       range: 1-10000
+  - field: project
+    range: 121-130{15},131-240{5}
+  - field: model
+    range:
+  - field: type
+    range: sprint
+  - field: status
+    range: wait,doing
+  - field: percent
+    range: 0
+  - field: auth
+    range:
+  - field: desc
+    range: 1-10000
+    prefix: "迭代描述"
+  - field: grade
+    range: 1
+  - field: parent
+    range: 121-130{15},131-240{5}
+  - field: path
+    fields:
+     - field: grade1
+       prefix: ","
+       postfix: ","
+       range: 121-130{15},131-240{5}
+     - field: self
+       postfix: ","
+       range: 241-10000
+  - field: acl
+    range: open{4},private{4}
+  - field: whitelist
+    froms:
+      - from: common.user.v1.yaml
+        use: empty{8}
+      - from: common.user.v1.yaml
+        use: empty{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: one{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: two{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: three{8}
+        prefix: ","

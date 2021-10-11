@@ -117,14 +117,21 @@ class projectModel extends model
      */
     public function saveState($projectID = 0, $projects = array())
     {
-        if($projectID > 0) $this->session->set('project', (int)$projectID);
-        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('project', (int)$this->cookie->lastProject);
-        if($projectID == 0 and $this->session->project == '') $this->session->set('project', key($projects));
+        if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
+        if($projectID == 0 and $this->session->project == '') $projectID = key($projects);
+        $this->session->set('project', (int)$projectID, $this->app->tab);
+
         if(!isset($projects[$this->session->project]))
         {
-            $this->session->set('project', key($projects));
+            $this->session->set('project', key($projects), $this->app->tab);
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false) $this->accessDenied();
         }
+
+        /* Reset program priv. */
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
+        $this->loadModel('common')->resetProjectPriv($this->session->project);
+        if(!commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
         return $this->session->project;
     }
@@ -808,6 +815,7 @@ class projectModel extends model
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
             ->checkIF(!empty($project->code), 'code', 'unique', "type='project'")
+            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->check('name', 'unique', "type='project' AND deleted='0'")
             ->exec();
 
@@ -1020,6 +1028,14 @@ class projectModel extends model
             }
 
             if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade);
+
+            /* Fix whitelist changes. */
+            $oldWhitelist = explode(',', $oldProject->whitelist) and $oldWhitelist = array_filter($oldWhitelist);
+            $newWhitelist = explode(',', $project->whitelist) and $newWhitelist = array_filter($newWhitelist);
+            if(count($oldWhitelist) == count($newWhitelist) and count(array_diff($oldWhitelist, $newWhitelist)) == 0) unset($project->whitelist);
+            /* Add linkedproducts changes. */
+            $oldProject->linkedProducts = implode(',', $linkedProducts);
+            $project->linkedProducts    = implode(',', $_POST['products']);
 
             return common::createChanges($oldProject, $project);
         }
@@ -1513,18 +1529,19 @@ class projectModel extends model
                     echo "<div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}</div></div>";
                     break;
                 case 'actions':
-                    if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('project', 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);
-                    if($project->status == 'doing') common::printIcon('project', 'close', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);
-                    if($project->status == 'closed') common::printIcon('project', 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
+                    $moduleName = $this->config->systemMode == 'classic' ? "execution" : "project";
+                    if($project->status == 'wait' || $project->status == 'suspended') common::printIcon($moduleName, 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);
+                    if($project->status == 'doing') common::printIcon($moduleName, 'close', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);
+                    if($project->status == 'closed') common::printIcon($moduleName, 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
 
-                    if(common::hasPriv('project','suspend') || (common::hasPriv('project','close') && $project->status != 'doing') || (common::hasPriv('project','activate') && $project->status != 'closed'))
+                    if(common::hasPriv($moduleName, 'suspend') || (common::hasPriv($moduleName, 'close') && $project->status != 'doing') || (common::hasPriv($moduleName, 'activate') && $project->status != 'closed'))
                     {
                         echo "<div class='btn-group'>";
                         echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
                         echo "<ul class='dropdown-menu pull-right text-center' role='menu' style='position: unset; min-width: auto; padding: 5px 6px;'>";
-                        common::printIcon('project', 'suspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
-                        if($project->status != 'doing') common::printIcon('project', 'close', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
-                        if($project->status != 'closed') common::printIcon('project', 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
+                        common::printIcon($moduleName, 'suspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
+                        if($project->status != 'doing') common::printIcon($moduleName, 'close', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
+                        if($project->status != 'closed') common::printIcon($moduleName, 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
                         echo "</ul>";
                         echo "</div>";
                     }
@@ -1532,18 +1549,19 @@ class projectModel extends model
                     $from     = $project->from == 'project' ? 'project' : 'pgmproject';
                     $iframe   = $this->app->tab == 'program' ? 'iframe' : '';
                     $onlyBody = $this->app->tab == 'program' ? true : '';
-                    common::printIcon('project', 'edit', "projectID=$project->id", $project, 'list', 'edit', '', $iframe, $onlyBody, "data-app=project", '', $project->id);
-                    common::printIcon('project', 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', "data-app=project", $this->lang->execution->team, $project->id);
-                    if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', "data-app=project", '', $project->id);
+                    $dataApp  = $this->config->systemMode == 'classic' ? "data-app=execution" : "data-app=project";
+                    common::printIcon($moduleName, 'edit', "projectID=$project->id", $project, 'list', 'edit', '', $iframe, $onlyBody, $dataApp, '', $project->id);
+                    common::printIcon($moduleName, 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', $dataApp, $this->lang->execution->team, $project->id);
+                    if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', $dataApp, '', $project->id);
 
-                    if(common::hasPriv('project','manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
+                    if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
                     {
                         echo "<div class='btn-group'>";
                         echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                         echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                        common::printIcon('project', 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action', '', "data-app=project", $this->lang->project->manageProducts, $project->id);
-                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', "data-app=project", '', $project->id);
-                        if(common::hasPriv('project','delete')) echo html::a(inLink("delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
+                        common::printIcon($moduleName, 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action', '', $dataApp, $this->lang->project->manageProducts, $project->id);
+                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', $dataApp, '', $project->id);
+                        if(common::hasPriv($moduleName, 'delete')) echo html::a(helper::createLink($moduleName, "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
                         echo "</ul>";
                         echo "</div>";
                     }

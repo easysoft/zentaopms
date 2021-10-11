@@ -76,10 +76,6 @@ $lang->block->selectProduct       = 'Product selection';
 $lang->block->of                  = ' von ';
 $lang->block->remain              = 'Left';
 
-$lang->block->params = new stdclass();
-$lang->block->params->name  = 'Name';
-$lang->block->params->value = 'Wert';
-
 $lang->block->createBlock        = 'InfoBlock erstellen';
 $lang->block->editBlock          = 'Bearbeiten';
 $lang->block->ordersSaved        = 'Sortierung gespeichert.';

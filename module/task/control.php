@@ -34,12 +34,15 @@ class task extends control
      * @param  int    $moduleID
      * @param  int    $taskID
      * @param  int    $todoID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
+    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '')
     {
         if(empty($this->app->user->view->sprints) and !$executionID) $this->locate($this->createLink('execution', 'create'));
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
 
         $executions  = $this->execution->getPairs();
         $executionID = $this->execution->saveState($executionID, $executions);
@@ -226,6 +229,7 @@ class task extends control
 
         $this->view->title            = $title;
         $this->view->position         = $position;
+        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
         $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
         $this->view->task             = $task;
@@ -385,9 +389,9 @@ class task extends control
             $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
-                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
+                $action     = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
-                $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
+                $actionID   = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
@@ -419,6 +423,18 @@ class task extends control
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
+        if($this->config->systemMode == 'classic') $executionsPair = $this->execution->getPairs();
+        else
+        {
+            $executionsPair = array();
+            $executions     = $this->execution->getByProject(0, 'all', 0);
+            $projects       = $this->project->getPairsByProgram(0, 'noclosed');
+            foreach($executions as $executionId => $execution)
+            {
+                $executionsPair[$executionId] = (isset($projects[$execution->project]) ? $projects[$execution->project] . ' / ' : '') . $execution->name;
+            }
+        }
+
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
@@ -430,7 +446,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject(0, 'all', 0, true);
+        $this->view->executions    = $executionsPair;
         $this->display();
     }
 

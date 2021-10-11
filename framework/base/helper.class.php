@@ -581,7 +581,7 @@ class baseHelper
      * @access public
      * @return void
      */
-    static function cd($path = '')
+    static public function cd($path = '')
     {
         static $cwd = '';
         if($path) $cwd = getcwd();

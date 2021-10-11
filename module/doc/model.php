@@ -148,6 +148,12 @@ class docModel extends model
         }
 
         if($lib->acl == 'private') $lib->users = $this->app->user->account;
+        if($lib->acl == 'custom')
+        {
+            $trimedUsers = ',' . trim($lib->users, ',') . ',';
+            if(strpos($trimedUsers, ',' . $this->app->user->account . ',') === false) $lib->users .= ',' . $this->app->user->account;
+        }
+
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->doc->createlib->requiredFields, 'notempty')
             ->exec();

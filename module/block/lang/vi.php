@@ -76,10 +76,6 @@ $lang->block->selectProduct       = 'Product selection';
 $lang->block->of                  = ' thực ';
 $lang->block->remain              = 'Left';
 
-$lang->block->params = new stdclass();
-$lang->block->params->name  = 'Tên';
-$lang->block->params->value = 'Giá trị';
-
 $lang->block->createBlock        = 'Thêm Block';
 $lang->block->editBlock          = 'Sửa Block';
 $lang->block->ordersSaved        = 'Thứ tự đã được lưu';

@@ -154,7 +154,7 @@ class file extends control
         }
         else
         {
-            die($this->lang->file->fileNotFound);
+            die("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
         }
     }
 

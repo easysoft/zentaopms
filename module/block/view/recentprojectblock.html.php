@@ -17,7 +17,7 @@
 #cards .project-infos > span {display: inline-block; line-height: 12px;}
 #cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
 #cards .project-infos > span + span {margin-left: 10px;}
-#cards .project-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
+#cards .project-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px; padding-left: 10px;}
 #cards .project-detail > p {margin-bottom: 8px;}
 #cards .project-detail .progress {height: 4px;}
 #cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}

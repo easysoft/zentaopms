@@ -5,7 +5,7 @@
  *
  * @package framework
  *
- * The author disclaims copyright to this source code.  In place of
+ * The author disclaims copyright to this source code. In place of
  * a legal notice, here is a blessing:
  *
  *  May you do good and not evil.
@@ -41,6 +41,15 @@ class baseEntry
     public $app;
 
     /**
+     * 语言项 $lang。
+     * The global $app object.
+     *
+     * @var object
+     * @access public
+     */
+    public $lang;
+
+    /**
      * 提交的POST数据
      * The decoded request body.
      *
@@ -58,9 +67,11 @@ class baseEntry
      */
     public function __construct()
     {
-        global $app, $config;
+        global $app, $config, $lang;
+
         $this->app    = $app;
         $this->config = $config;
+        $this->lang   = $lang;
 
         $this->parseRequestBody();
     }

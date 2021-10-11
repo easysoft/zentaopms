@@ -2,6 +2,7 @@
 global $config;
 
 $lang->custom->common               = '自定义';
+$lang->custom->id                   = '编号';
 $lang->custom->index                = '首页';
 $lang->custom->set                  = '自定义配置';
 $lang->custom->restore              = '恢复默认';
