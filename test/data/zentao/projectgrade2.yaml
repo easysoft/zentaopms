@@ -3,12 +3,12 @@ author: Zhu Jinyong
 version: "1.0"
 fields:
   - field: id
-    range: 41-10000
+    range: 131-10000
   - field: name
-    range: 41-10000
-    prefix: "二级测试项目集"
-  - field: type
-    range: program
+    range: 11-10000
+    prefix: "测试项目"
+  - field: status
+    range: wait
   - field: grade
     range: 2
   - field: parent
@@ -19,6 +19,6 @@ fields:
        prefix: ","
        postfix: ","
        range: 1-40{2}
-     - field: self
+     - field: grade2
        postfix: ","
-       range: 41-10000
+       range: 131-10000

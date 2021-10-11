@@ -34,25 +34,21 @@ fields:
     range:
   - field: parent
     range: 1,2,3,4,2,1,[1-7]{2},[7-19]{3}
-  - field: path
-    prefix: ","
-    postfix: ","
-    range:
   - field: grade
     range:
-  - field: name
-    range: 1-10000
-    prefix: "测试项目"
   - field: code
     range: 1-10000
     prefix: "project"
   - field: begin
     from: common.date.v1.yaml
     use: date
+  - field: end
+    from: common.date.v1.yaml
+    use: date
   - field: PO
     range:
   - field: PM
-    range: 
+    range:
   - field: QD
     range:
   - field: RD
