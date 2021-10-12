@@ -4,24 +4,24 @@
       <div class="cell" id="content">
         <div class="no-padding">
           <div class="detail-title no-padding doc-title">
-            <div class="http-method label"><?php echo $api->method ?></div>
-            <div class="path"><?php echo $api->path; ?></div>
+            <div class="http-method label"><?php echo $api->method;?></div>
+            <div class="path"><?php echo $api->path;?></div>
             <div class="info">
               <div class="version">
                 <div class='btn-group'>
                   <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis'
                      data-toggle='dropdown' style="max-width: 120px;">
-                    #<?php echo $version ? $version : $api->version; ?>
+                    #<?php echo $version ? $version : $api->version;?>
                     <span class="caret"></span>
                   </a>
                   <ul class='dropdown-menu api-version-menu'
                       style='max-height:240px; max-width: 300px; overflow-y:auto'>
-                    <?php for($version = $api->version; $version > 0; $version--): ?>
+                    <?php for($version = $api->version; $version > 0; $version--):?>
                       <li>
                         <a href='javascript:void(0)'
-                           data-url='<?php echo $this->createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID&version=$version"); ?>'>#<?php echo $version; ?></a>
+                           data-url='<?php echo $this->createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID&version=$version");?>'>#<?php echo $version;?></a>
                       </li>
-                    <?php endfor; ?>
+                    <?php endfor;?>
                   </ul>
                 </div>
               </div>
@@ -35,87 +35,129 @@
                 $deleteURL = $this->createLink('api', 'delete', "apiID=$api->id&confirm=yes");
                 echo html::a("javascript:ajaxDeleteApi(\"$deleteURL\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link'");
               }
-              ?>
+             ;?>
             </div>
           </div>
         </div>
         <div>
           <h2 class="title" title="<?php echo $api->title;?>"><?php echo $api->title;?></h2>
           <div class="desc"><?php echo $api->desc;?></div>
-          <?php
-          $header = array();
-          $query  = array();
-          $params = array();
-          foreach($api->params as $param)
-          {
-              if($param['scope'] == apiModel::SCOPE_HEADER)
-              {
-                  $header[] = $param;
-              }
-              elseif($param['scope'] == apiModel::SCOPE_QUERY)
-              {
-                  $query[] = $param;
-              }
-              else
-              {
-                  $params[] = $param;
-              }
-          }
-          $types = array('header', 'query', 'params');
-          ?>
-          <?php foreach($types as $type): ?>
-            <?php if(empty($$type)) continue;?>
-            <h3 class="title"><?php echo $lang->api->$type ?></h3>
+          <?php if($api->params['header']):?>
+            <h3 class="title"><?php echo $lang->api->header;?></h3>
             <table class="table table-data paramsTable">
               <thead>
                 <tr>
-                  <th><?php echo $lang->api->req->name ?></th>
-                  <th><?php echo $lang->api->req->type ?></th>
-                  <th><?php echo $lang->api->req->required ?></th>
-                  <th><?php echo $lang->api->req->desc ?></th>
+                  <th><?php echo $lang->api->req->name;?></th>
+                  <th><?php echo $lang->api->req->type;?></th>
+                  <th><?php echo $lang->api->req->required;?></th>
+                  <th><?php echo $lang->api->req->desc;?></th>
                 </tr>
               </thead>
               <tbody>
-                <?php foreach($$type as $param): ?>
+                <?php foreach($api->params['header'] as $param):?>
                 <tr>
-                  <td><?php echo $param['field']; ?></td>
-                  <td><?php echo $param['paramsType'] ?></td>
-                  <td><?php echo $param['required'] ? '是' : '否'; ?></td>
-                  <td><?php echo $param['desc']; ?></td>
+                  <td><?php echo $param['field'];?></td>
+                  <td>
+                    String
+                  </td>
+                  <td><?php echo $param['required'] ? '是' : '否';?></td>
+                  <td><?php echo $param['desc'];?></td>
                 <tr>
                   <?php endforeach;
-                  ?>
+                 ;?>
               </tbody>
             </table>
-          <?php endforeach;?>
-          <?php if($api->paramsExample): ?>
-          <h3 class="title"><?php echo $lang->api->paramsExample;?></h3>
-          <pre><code><?php echo $api->paramsExample;?></code></pre>
+          <?php endif;?>
+          <?php if($api->params['query']):?>
+            <h3 class="title"><?php echo $lang->api->query;?></h3>
+            <table class="table table-data paramsTable">
+              <thead>
+                <tr>
+                  <th><?php echo $lang->api->req->name;?></th>
+                  <th><?php echo $lang->api->req->type;?></th>
+                  <th><?php echo $lang->api->req->required;?></th>
+                  <th><?php echo $lang->api->req->desc;?></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($api->params['query'] as $param):?>
+                <tr>
+                  <td><?php echo $param['field'];?></td>
+                  <td>
+                    String
+                  </td>
+                  <td><?php echo $param['required'] ? '是' : '否';?></td>
+                  <td><?php echo $param['desc'];?></td>
+                <tr>
+                  <?php endforeach;
+                 ;?>
+              </tbody>
+            </table>
+          <?php endif;?>
+          <?php
+          function parseTree($data) {
+            $str = '<tr>';
+            $str .= '<td>'. $data['field'] .'</td>';
+            $str .= '<td>'. $data['paramsType'] .'</td>';
+            $require = $data['required'] ? '是' : '否';
+            $str .= '<td>'. $require .'</td>';
+            $str .= '<td>'. $data['desc'] .'</td>';
+            $str .= '</tr>';
+            if(isset($data['children']) && count($data['children']) > 0) {
+              foreach($data['children'] as $item) {
+                $str .= parseTree($item);
+              }
+            }
+            return $str;
+          }
+          ?>
+          <?php if($api->params['params']):?>
+            <h3 class="title"><?php echo $lang->api->params;?></h3>
+            <table class="table table-data paramsTable">
+              <thead>
+                <tr>
+                  <th><?php echo $lang->api->req->name;?></th>
+                  <th><?php echo $lang->api->req->type;?></th>
+                  <th><?php echo $lang->api->req->required;?></th>
+                  <th><?php echo $lang->api->req->desc;?></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                foreach($api->params['params'] as $item) {
+                  echo parseTree($item);
+                }
+                ?>
+              </tbody>
+            </table>
+          <?php endif;?>
+          <?php if($api->paramsExample):?>
+            <h3 class="title"><?php echo $lang->api->paramsExample;?></h3>
+            <pre><code><?php echo $api->paramsExample;?></code></pre>
           <?php endif;?>
           <?php if($api->response):?>
-          <h3 class="title"><?php echo $lang->api->response;?></h3>
-          <table class="table">
-            <thead>
-              <tr>
-                <th><?php echo $lang->api->res->name;?></th>
-                <th><?php echo $lang->api->res->type;?></th>
-                <th><?php echo $lang->api->res->desc;?></th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach($api->response as $res):?>
-              <tr>
-                <td><?php echo $res['name'];?></td>
-                <td><?php echo $res['type'];?></td>
-                <td><?php echo $res['desc'];?></td>
-              </tr>
-              <?php endforeach;?>
-            </tbody>
-          </table>
-          <?php endif; ?>
-          <?php if($api->responseExample): ?>
-            <h3><?php echo $lang->api->responseExample ?></h3>
-            <pre><code><?php echo $api->responseExample ?></code></pre>
+            <h3 class="title"><?php echo $lang->api->response;?></h3>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th><?php echo $lang->api->req->name;?></th>
+                  <th><?php echo $lang->api->req->type;?></th>
+                  <th><?php echo $lang->api->req->required;?></th>
+                  <th><?php echo $lang->api->req->desc;?></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                foreach($api->response as $item) {
+                  echo parseTree($item);
+                }
+                ?>
+              </tbody>
+            </table>
+          <?php endif;?>
+          <?php if($api->responseExample):?>
+            <h3><?php echo $lang->api->responseExample;?></h3>
+            <pre><code><?php echo $api->responseExample;?></code></pre>
           <?php endif;?>
         </div>
       </div>
@@ -124,8 +166,8 @@
         <?php
         $canBeChanged = common::canBeChanged('api', $api);
         if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$api->id");
-        ?>
-        <?php include '../../common/view/action.html.php'; ?>
+       ;?>
+        <?php include '../../common/view/action.html.php';?>
       </div>
     </div>
     <div class="side-col col-2" id="sidebar">
@@ -134,7 +176,7 @@
       </div>
       <div class="cell">
         <details class="detail" open>
-          <summary class="detail-title"><?php echo $lang->api->basicInfo; ?></summary>
+          <summary class="detail-title"><?php echo $lang->api->basicInfo;?></summary>
           <div class="detail-content">
             <table class="table table-data">
               <tbody>

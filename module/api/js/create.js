@@ -6,9 +6,7 @@ var app = new Vue({
         body: [],
         params: "",
         response: "",
-        defaultHeader: [
-            { field: '', required: '', desc: '' }
-        ],
+        defaultHeader: { field: '', required: '', desc: '' },
     },
     created() {
         this.header.push({...this.defaultHeader})
@@ -27,7 +25,7 @@ var app = new Vue({
             },
             deep: true
         },
-        params: {
+        body: {
             handler() {
                 this.setParams()
             },
@@ -36,7 +34,7 @@ var app = new Vue({
     },
     methods: {
         changeAttr(val) {
-            this.params = JSON.stringify(val)
+            this.body = val;
         },
         changeRes(val) {
             this.response = JSON.stringify(val)
@@ -47,7 +45,6 @@ var app = new Vue({
                 params: this.body,
                 query: this.queryP,
             }
-            // console.log(params)
             this.params = JSON.stringify(params);
         },
         del(data, key) {
