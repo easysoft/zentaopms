@@ -749,6 +749,7 @@ class personnelModel extends model
         $this->dao->delete()->from(TABLE_ACL)
             ->where('objectID')->eq($objectID)
             ->andWhere('account')->in($users)
+            ->andWhere('source')->eq('sync')
             ->exec();
 
         foreach($users as $account)
