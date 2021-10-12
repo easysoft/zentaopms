@@ -206,8 +206,10 @@ $lang->install->success  = "安裝成功";
 $lang->install->login    = '登錄禪道管理系統';
 $lang->install->register = '禪道社區註冊';
 
-$lang->install->joinZentao = <<<EOT
-<p>您已經成功安裝禪道管理系統%s，<strong class='text-danger'>請及時刪除install.php</strong>。</p><p>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='https://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)進行登記。</p>
+$lang->install->successLabel       = "<p>您已經成功安裝禪道管理系統%s。</p>";
+$lang->install->successNoticeLabel = "<p>您已經成功安裝禪道管理系統%s，<strong class='text-danger'>請及時刪除install.php</strong>。</p>";
+$lang->install->joinZentao         = <<<EOT
+<p>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='https://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)進行登記。</p>
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
