@@ -1180,6 +1180,8 @@ class executionModel extends model
      */
     public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false)
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionPairs();
+
         $project = $this->loadModel('project')->getByID($projectID);
         $orderBy = (isset($project->model) and $project->model == 'waterfall') ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
