@@ -476,6 +476,7 @@ class projectModel extends model
      */
     public function getPairsByProgram($programID = 0, $status = 'all')
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
