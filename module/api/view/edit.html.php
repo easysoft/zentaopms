@@ -12,8 +12,23 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 <?php include '../../common/view/kindeditor.html.php'; ?>
+<?php js::import($jsRoot . 'vue/vue.js'); ?>
 <?php js::set('example', $example); ?>
 <?php js::set('libID', $api->lib); ?>
+<?php
+js::set('typeOptions', $typeOptions);
+js::set('langField', $lang->struct->field);
+js::set('langDesc', $lang->struct->desc);
+js::set('structAdd', $lang->struct->add);
+js::set('structDelete', $lang->delete);
+js::set('addSubField', $lang->struct->addSubField);
+js::set('struct_field', $lang->struct->field);
+js::set('struct_desc', $lang->struct->desc);
+js::set('struct_action', $lang->struct->action);
+js::set('struct_required', $lang->struct->required);
+js::set('struct_paramsType', $lang->struct->paramsType);
+js::set('api', $api);
+?>
   <div class='modal fade' id='customType'>
     <div class='modal-dialog mw-500px'>
       <div class='modal-content'>
@@ -35,7 +50,7 @@
     </div>
   </div>
   <div id="mainContent" class="main-content">
-    <div class='center-block'>
+    <div class='center-block' id="apiApp">
       <div class='main-header'>
         <?php if($edit): ?>
           <h2>
@@ -101,70 +116,80 @@
               </td>
             </tr>
             <tr>
+              <th><?php echo $lang->api->header; ?></th>
+              <td colspan="2">
+                <table class="table table-data">
+                  <thead>
+                    <tr>
+                      <th class="w-300px"><?php echo $lang->struct->field;?></th>
+                      <th class="w-80px"><?php echo $lang->struct->required;?></th>
+                      <th class="w-200px"><?php echo $lang->struct->desc;?></th>
+                      <th><?php echo $lang->struct->action;?></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item,key) in header">
+                      <td class="w-300px">
+                        <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
+                      </td>
+                      <td class="w-80px">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" v-model="item.required">
+                          </label>
+                        </div>
+                      </td>
+                      <td class="w-200px">
+                        <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
+                      </td>
+                      <td>
+                        <button class="btn btn-link" type="button" @click="add(header, key, 'header')"><?php echo $lang->struct->add;?></button>
+                        <button class="btn btn-link" type="button" @click="del(header, key)"><?php echo $lang->delete;?></button>
+                      </td>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->api->query; ?></th>
+              <td colspan="2">
+                <table class="table table-data">
+                  <thead>
+                    <tr>
+                      <th class="w-300px"><?php echo $lang->struct->field;?></th>
+                      <th class="w-80px"><?php echo $lang->struct->required;?></th>
+                      <th class="w-200px"><?php echo $lang->struct->desc;?></th>
+                      <th><?php echo $lang->struct->action;?></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item,key) in queryP">
+                      <td class="w-300px">
+                        <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
+                      </td>
+                      <td class="w-80px">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" v-model="item.required">
+                          </label>
+                        </div>
+                      </td>
+                      <td class="w-200px">
+                        <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
+                      </td>
+                      <td>
+                        <button class="btn btn-link" type="button" @click="add(query, key, 'query')"><?php echo $lang->struct->add;?></button>
+                        <button class="btn btn-link" type="button" @click="del(query, key)"><?php echo $lang->delete;?></button>
+                      </td>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
               <th><?php echo $lang->api->params; ?></th>
-              <td colspan='2' id='paramDiv'>
-                <?php
-                $params = $api->params ? $api->params : ['']
-                ?>
-                <?php foreach($params as $param): ?>
-                  <div class="row row-no-gutters col-custom">
-                    <div class='col-md-3 col-lg-2'>
-                      <div class="table-row">
-                        <span class='input-group-addon w-50px'><?php echo $lang->api->field; ?></span>
-                        <?php echo html::input("params[0][field]", $param['field'], "class='form-control'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3 col-lg-2'>
-                      <div class="table-row">
-                                        <span
-                                            class='input-group-addon w-70px'><?php echo $lang->api->required; ?></span>
-                        <?php echo html::select('params[0][required]', $lang->api->requiredOptions, $param['required'] ? $param['required'] : 0, "class='form-control'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3 col-lg-2'>
-                      <div class="table-row">
-                        <span class='input-group-addon w-50px'><?php echo $lang->api->scope; ?></span>
-                        <?php echo html::select('params[0][scope]', $lang->api->paramsScopeOptions, $param['scope'], "class='form-control' onchange='loadParamsTypeOptions(this);'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3 col-lg-2'>
-                      <div class="table-row">
-                                        <span
-                                            class='input-group-addon w-50px'><?php echo $lang->api->paramsType; ?></span>
-                        <?php $typeOpt = $param['scope'] == apiModel::SCOPE_BODY ? $lang->api->allParamsTypeOptions : $lang->api->paramsTypeOptions ?>
-                        <?php echo html::select('params[0][paramsType]', $typeOpt, $param['paramsType'], "class='form-control' onchange='changeType(this);'"); ?>
-                      </div>
-                    </div>
-                    <div
-                        class='col-md-3 col-lg-2 typeCustom <?php echo $param['paramsType'] == apiModel::PARAMS_TYPE_CUSTOM ? '' : 'hidden' ?>'>
-                      <div class="table-row">
-                        <input type="hidden" class="custom" name="params[0][custom]"
-                               value="<?php echo htmlspecialchars($param['custom']) ?>">
-                        <button type="button" data-toggle="modal" data-target="#customType"
-                                class="btn btn-wide customType" style="width: 80px;background: #eee">
-                          <?php echo $lang->api->customType ?>
-                        </button>
-                      </div>
-                    </div>
-                    <div class='col-md-3 col-lg-2'>
-                      <div class="table-row">
-                        <span class='input-group-addon w-60px'><?php echo $lang->api->default; ?></span>
-                        <?php echo html::input('params[0][default]', $param['default'], "class='form-control'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3 col-lg-2'>
-                      <div class="table-row">
-                        <span class='input-group-addon w-50px'><?php echo $lang->api->desc; ?></span>
-                        <?php echo html::textarea('params[0][desc]', $param['desc'], "class='form-control' style='height:32px'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3 col-lg-2'>
-                <span class='input-group-addon w-40px'><a onclick='addItem(this);'><i
-                        class='icon icon-plus'></i></a></span>
-                      <span class='input-group-addon w-40px'><a onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
-                    </div>
-                  </div>
-                <?php endforeach; ?>
+              <td colspan='2'>
+                <body-field @change="changeAttr" :attr="api.params.params"></body-field>
+                <input type="hidden" name="params" v-model="params">
               </td>
             </tr>
             <tr>
@@ -173,48 +198,15 @@
               </th>
               <td>
                 <div class='input-group'>
-                  <?php echo html::textarea('paramsExample', '', "style='width:100%;height:200px'"); ?>
+                  <?php echo html::textarea('paramsExample', $api->paramsExample, "style='width:100%;height:200px'"); ?>
                 </div>
               </td>
             </tr>
             <tr>
               <th><?php echo $lang->api->response; ?></th>
               <td colspan='2' id='responseDiv'>
-                <?php
-                $params = $api->response ? $api->response : [''];
-                ?>
-                <?php foreach($params as $key => $param): ?>
-                  <div class="row row-no-gutters col-custom">
-                    <div class='col-md-3'>
-                      <div class="table-row">
-                        <span class='input-group-addon w-50px'><?php echo $lang->api->res->name; ?></span>
-                        <?php echo html::input("response[0][name]", $param['name'], "class='form-control'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3'>
-                      <div class="table-row">
-                        <span class='input-group-addon w-50px'><?php echo $lang->api->res->desc; ?></span>
-                        <?php echo html::input("response[0][desc]", $param['desc'], "class='form-control'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3'>
-                      <div class="table-row">
-                        <span class='input-group-addon w-50px'><?php echo $lang->api->res->type; ?></span>
-                        <?php echo html::select('response[0][type]', $lang->api->allParamsTypeOptions, $param['type'], "class='form-control' onchange='changeType(this, \"type\");'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3 typeCustom hidden'>
-                      <div class="table-row">
-                        <span class='input-group-addon w-70px'><?php echo $lang->api->struct; ?></span>
-                        <?php echo html::select("response[0][ref]", '', '', "class='form-control'"); ?>
-                      </div>
-                    </div>
-                    <div class='col-md-3'>
-                      <span class='input-group-addon w-40px'><a onclick='addResponseItem(this);'><i class='icon icon-plus'></i></a></span>
-                      <span class='input-group-addon w-40px'><a onclick='deleteResponseItem(this)'><i class='icon icon-close'></i></a></span>
-                    </div>
-                  </div>
-                <?php endforeach; ?>
+                <body-field @change="changeRes" :struct-type="'json'" :show-type="false" :attr="api.response"></body-field>
+                <input type="hidden" name="response" v-model="response">
               </td>
             </tr>
             <tr>
@@ -223,7 +215,7 @@
               </th>
               <td>
                 <div class='input-group'>
-                  <?php echo html::textarea('responseExample', '', "style='width:100%;height:200px'"); ?>
+                  <?php echo html::textarea('responseExample', $api->responseExample, "style='width:100%;height:200px'"); ?>
                 </div>
               </td>
             </tr>

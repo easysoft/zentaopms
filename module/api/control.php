@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The control file of api of ZenTaoPMS.
  *
@@ -78,12 +79,42 @@ class api extends control
     /**
      * Api doc global struct page.
      *
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function struct($libID = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
+        $structs = $this->api->getStructByQuery($libID, $pager, $sort);
+
+        common::setMenuVars('doc', $libID);
+        $this->view->libID   = $libID;
+        $this->view->structs = $structs;
+        $this->view->orderBy = $orderBy;
+        $this->view->title   = $this->lang->api->struct;
+        $this->view->pager   = $pager;
+        $this->display();
+    }
+
+    /**
+     * Create struct page.
+     *
      * @param  int $libID
      * @access public
      * @return void
      */
-    public function struct($libID = 0, $structID = 0)
+    public function createStruct($libID = 0)
     {
+        common::setMenuVars('doc', $libID);
         if(!empty($_POST))
         {
             $now    = helper::now();
@@ -94,53 +125,98 @@ class api extends control
                 ->add('addedDate', $now)
                 ->add('editedBy', $userId)
                 ->add('editedDate', $now)
+                ->get();
+
+
+            $id = $this->api->createStruct($data);
+            $this->action->create('apistruct', $id, 'Created');
+
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'editStruct', "libID=$libID&structID=$id")));
+        }
+
+        $options = [];
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
+        {
+            $options[] = [
+                'label' => $item,
+                'value' => $key,
+            ];
+        }
+        $this->view->typeOptions = $options;
+        $this->view->title       = $this->lang->api->createStruct;
+
+        $this->display();
+    }
+
+    /**
+     * Edit struct
+     *
+     * @param  int $libID
+     * @param  int $structID
+     * @access public
+     * @return void
+     */
+    public function editStruct($libID, $structID)
+    {
+        $struct = $this->api->getStructByID($structID);
+
+        if(!empty($_POST))
+        {
+            $now    = helper::now();
+            $userId = $this->app->user->account;
+            $data   = fixer::input('post')
+                ->add('lib', $struct->lib)
+                ->add('editedBy', $userId)
+                ->add('editedDate', $now)
                 ->json('attribute')
                 ->get();
 
-            $id = 0;
-            if($structID <= 0)
-            {
-                $id = $this->api->createStruct($data);
-                $this->action->create('apistruct', $id, 'Created');
-            }
-            else
-            {
-                $changes = $this->api->updateStruct($structID, $data);
-                if(dao::isError()) return $this->sendError(dao::getError());
-
-                $actionID = $this->action->create('apistruct', $structID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-                $id = $structID;
-            }
+            $changes = $this->api->updateStruct($structID, $data);
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID&structID=$id")));
+            $actionID = $this->action->create('apistruct', $structID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'editStruct', "libID={$struct->lib}&structID=$structID")));
         }
 
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs();
-
-        /* Generate bread crumbs dropMenu. */
-        if($libs)
+        $options = [];
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
-            if($libID == 0) $libID = key($libs);
-            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
+            $options[] = [
+                'label' => $item,
+                'value' => $key,
+            ];
         }
 
-        $this->setMenu($libID);
-
-        /* Get a struct info */
-        $struct = '';
-        if($structID > 0)
-        {
-            $struct = $this->api->getStructByID($structID);
-        }
-
-        $this->view->struct   = $struct;
-        $this->view->structID = $structID;
-        $this->view->tree     = $this->api->getStructTreeByLib($libID, $structID);
-        $this->view->libID    = $libID;
-        $this->view->title    = $this->lang->api->struct;
+        $this->view->struct      = $struct;
+        $this->view->typeOptions = $options;
+        $this->view->title       = $struct->name . $this->lang->api->edit;
         $this->display();
+    }
+
+    /**
+     * Delete a struct.
+     *
+     * @param  int    $libID
+     * @param  int    $structID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteStruct($libID, $structID = 0, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            echo js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('api', 'deleteStruct', "libID=$libID&structID=$structID&confirm=yes"), '');
+            die;
+        }
+        else
+        {
+            $this->api->deleteStruct($structID);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            $this->action->create('apistruct', $structID, 'Deleted');
+            die(js::locate(inlink('struct', "libID=$libID"), 'parent'));
+        }
     }
 
     /**
@@ -231,14 +307,13 @@ class api extends control
             $now    = helper::now();
             $userId = $this->app->user->account;
             $params = fixer::input('post')
+                ->remove('type')
                 ->add('addedBy', $userId)
                 ->add('addedDate', $now)
                 ->add('editedBy', $userId)
                 ->add('editedDate', $now)
                 ->setDefault('product,module', 0)
-                ->json('params,response')
                 ->get();
-
 
             $this->api->update($apiID, $params);
             if(dao::isError())
@@ -262,16 +337,19 @@ class api extends control
         $example = array('example' => 'type,description');
         $example = json_encode($example, JSON_PRETTY_PRINT);
 
-        /* Load All struct */
-        $structs = $this->api->getStructListByLibID($api->lib);
-        $options = array();
-        foreach($structs as $item) $options[$item->id] = $item->name;
-
-        $this->view->allStruct        = $options;
-        $this->view->user             = $this->app->user->account;
-        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
+        $options = [];
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
+        {
+            $options[] = [
+                'label' => $item,
+                'value' => $key,
+            ];
+        }
+        $this->view->typeOptions      = $options;
+        $this->view->user      = $this->app->user->account;
+        $this->view->allUsers  = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
-        $this->view->moduleID         = $api->module ? (int) $api->module : (int)$this->cookie->lastDocModule;
+        $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
         $this->view->example          = $example;
         $this->view->title            = $api->title . $this->lang->api->edit;
 
@@ -292,13 +370,13 @@ class api extends control
         {
             $now    = helper::now();
             $params = fixer::input('post')
+                ->remove('type')
                 ->add('addedBy', $this->app->user->account)
                 ->add('addedDate', $now)
                 ->add('editedBy', $this->app->user->account)
                 ->add('editedDate', $now)
                 ->add('version', 1)
                 ->setDefault('product,module', 0)
-                ->json('params,response')
                 ->get();
 
             $apiID = $this->api->create($params);
@@ -319,15 +397,15 @@ class api extends control
         $example = array('example' => 'type,description');
         $example = json_encode($example, JSON_PRETTY_PRINT);
 
-        /* Load All struct */
-        $structs = $this->api->getStructListByLibID($libID);
-        $options = array();
-        foreach($structs as $item)
+        $options = [];
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
-            $options[$item->id] = $item->name;
+            $options[] = [
+                'label' => $item,
+                'value' => $key,
+            ];
         }
-        $this->view->allStruct  = $options;
-
+        $this->view->typeOptions      = $options;
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;
@@ -374,29 +452,25 @@ class api extends control
     /**
      * Get params type options by scope
      *
-     * @param  string $scope   the params position
      * @access public
      * @return void
      */
-    public function ajaxGetParamsTypeOptions($scope)
+    public function ajaxGetParamsTypeOptions()
     {
-        if(empty($scope)) die();
-        $options = array();
-        if($scope == apiModel::SCOPE_BODY)
+        $options = [];
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
-            $options = $this->lang->api->allParamsTypeOptions;
+            $options[] = [
+                'label' => $item,
+                'value' => $key,
+            ];
         }
-        else
-        {
-            $options = $this->lang->api->paramsTypeOptions;
-        }
-
-        echo html::select('paramsTypeOptions', $options, '', "class='form-control'  onchange='changeType(this);'");
-        exit;
+        $this->sendSuccess(array('data' => $options));
     }
 
     /**
      * Get ref options by ajax.
+     *
      * @param  int $libID
      * @access public
      * @return void
@@ -519,7 +593,7 @@ EOT;
     /**
      * Show doc of api doc library
      *
-     * @param int $libID
+     * @param  int $libID
      * @access public
      * @return void
      */
@@ -637,4 +711,5 @@ EOT;
         $this->output  = json_encode($output);
         die($this->output);
     }
+
 }

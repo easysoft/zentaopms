@@ -695,6 +695,7 @@ class baseControl
          * Set viewFile. (Can't assign $viewFile = $this->setViewFile() directly because one php7's bug.)
          */
         $results  = $this->setViewFile($moduleName, $methodName);
+
         $viewFile = $results;
         if(is_array($results)) extract($results);
 

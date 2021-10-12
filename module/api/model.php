@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The model file of api module of ZenTaoCMS.
  *
@@ -12,17 +13,17 @@
 class apiModel extends model
 {
     /* Status. */
-    const STATUS_DOING  = 'doing';
-    const STATUS_DONE   = 'done';
+    const STATUS_DOING = 'doing';
+    const STATUS_DONE = 'done';
     const STATUS_HIDDEN = 'hidden';
 
     /* Scope. */
-    const SCOPE_QUERY     = 'query';
+    const SCOPE_QUERY = 'query';
     const SCOPE_FORM_DATA = 'formData';
-    const SCOPE_PATH      = 'path';
-    const SCOPE_BODY      = 'body';
-    const SCOPE_HEADER    = 'header';
-    const SCOPE_COOKIE    = 'cookie';
+    const SCOPE_PATH = 'path';
+    const SCOPE_BODY = 'body';
+    const SCOPE_HEADER = 'header';
+    const SCOPE_COOKIE = 'cookie';
 
     /* Params. */
     const PARAMS_TYPE_CUSTOM = 'custom';
@@ -88,6 +89,21 @@ class apiModel extends model
     }
 
     /**
+     * Delete a struct.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function deleteStruct($id)
+    {
+        $this->dao->update(TABLE_APISTRUCT)
+            ->set('deleted')->eq(1)
+            ->where('id')->eq($id)
+            ->exec();
+    }
+
+    /**
      * Update an api doc.
      *
      * @param  int    $id
@@ -128,8 +144,7 @@ class apiModel extends model
             ->where('lib')->eq($id)
             ->fetchAll();
 
-        array_map(function ($item)
-        {
+        array_map(function ($item) {
             $item->attribute = json_decode(htmlspecialchars_decode($item->attribute), true);
             return $item;
         }, $res);
@@ -245,6 +260,23 @@ class apiModel extends model
                 return $lang->api->done;
             }
         }
+    }
+
+    /**
+     * @param  int    $libID
+     * @param  string $pager
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getStructByQuery($libID, $pager = '', $orderBy = '')
+    {
+        return $this->dao->select('*')->from(TABLE_APISTRUCT)
+            ->where('deleted')->eq(0)
+            ->andWhere('lib')->eq($libID)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
     }
 
     /**
@@ -405,8 +437,7 @@ class apiModel extends model
 
             $result['status'] = 'success';
             $result['data']   = $rows;
-        }
-        catch(PDOException $e)
+        } catch(PDOException $e)
         {
             $result['status']  = 'fail';
             $result['message'] = $e->getMessage();
@@ -418,7 +449,7 @@ class apiModel extends model
     /**
      * Get spec of api.
      *
-     * @param object $data
+     * @param  object $data
      * @access private
      * @return array
      */

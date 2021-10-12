@@ -379,7 +379,7 @@ $lang->doc->menu->custom['subMenu']    = new stdclass();
 
 $lang->doc->menu->api['subMenu'] = new stdclass();
 $lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}|api|index|libID=%s", 'alias' => 'create,edit');
-$lang->doc->menu->api['subMenu']->struct = array('link' => "{$lang->doc->apiStruct}|api|struct|libID=%s");
+$lang->doc->menu->api['subMenu']->struct = array('link' => "{$lang->doc->apiStruct}|api|struct|libID=%s", 'alias' => 'createstruct,editstruct');
 
 /* Report menu.*/
 $lang->report->menu          = new stdclass();

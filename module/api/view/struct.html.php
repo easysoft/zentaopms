@@ -11,79 +11,46 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
-<?php js::set('libID', $libID)?>
-<?php js::set('structID', $structID)?>
-<div class="fade main-row split-row" id="mainRow">
-  <?php if($libID): ?>
-    <?php $sideWidth = common::checkNotCN() ? '270' : '238'; ?>
-    <div class="side-col" style="width:<?php echo $sideWidth; ?>px" data-min-width="<?php echo $sideWidth; ?>">
-      <div class="cell" style="min-height: 286px">
-        <div id='title'>
-          <li class='menu-title'>
-            <?php echo $structID ? $this->lang->api->editStruct : $this->lang->api->struct; ?>
-          </li>
-        </div>
-        <hr class="space">
-        <?php echo $tree; ?>
+<div id='mainContent' class='main-row fade'>
+  <div class='main-col'>
+    <div class="cell" id="queryBox" data-module='user'></div>
+    <div id='mainMenu' class='clearfix'>
+      <div class='btn-toolbar pull-right'>
+        <?php common::printLink('api', 'createStruct', "libID=$libID", "<i class='icon icon-plus'></i> " . $lang->api->createStruct, '', "class='btn btn-primary create-user-btn'");?>
       </div>
     </div>
-  <?php endif; ?>
-  <div class="main-col" data-min-width="400">
-    <div id="mainContent" class="main-content in">
-      <div class='center-block'>
-        <div class='main-header'>
-          <h2><?php echo $structID ? $this->lang->api->editStruct : $this->lang->api->createStruct; ?></h2>
-        </div>
-        <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
-          <table class='table table-form'>
-            <tr>
-              <th><?php echo $lang->api->structName ?></th>
-              <td style="width: 80%"><?php echo html::input('name', $struct ? $struct->name : '', "class='form-control'") ?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->api->structAttr ?></th>
-              <td colspan="2" id="paramDiv">
-                <?php
-                $params = array();
-                if($struct && $struct->attribute)
-                  foreach($struct->attribute as $item)
-                    array_push($params, $item);
-                else
-                  array_push($params, '');
-                ?>
-                <?php foreach($params as $key => $param): ?>
-                <div class="row row-no-gutters col-attr">
-                  <div class='col-md-10'>
-                    <div class="table-row input-group">
-                      <span class='input-group-addon w-50px'><?php echo $lang->struct->field; ?></span>
-                      <?php echo html::input("attribute[$key][field]", $param ? $param['field'] : '', "class='form-control'"); ?>
-                      <span class='input-group-addon w-50px'><?php echo $lang->struct->paramsType; ?></span>
-                      <?php echo html::select("attribute[$key][paramsType]", $lang->api->structParamsOptons, $param ? $param['paramsType'] : '', "class='form-control paramsType' onchange='changeType(this);'"); ?>
-                      <div class="ref" style="display: none">
-                        <span class='input-group-addon w-70px'><?php echo $lang->api->struct; ?></span>
-                        <?php echo html::select("attribute[$key][ref]", '', $param ? $param['ref'] : '', "class='form-control'"); ?>
-                      </div>
-                      <span class='input-group-addon w-50px'><?php echo $lang->struct->desc; ?></span>
-                      <?php echo html::input("attribute[$key][desc]", $param ? $param['desc'] : '', "class='form-control'"); ?>
-                    </div>
-                  </div>
-                  <div class='col-md-2 '>
-                    <span class='input-group-addon w-40px'><a onclick='addItem(this);'><i class='icon icon-plus'></i></a></span>
-                    <span class='input-group-addon w-40px'><a onclick='deleteItem(this)'><i class='icon icon-close'></i></a></span>
-                  </div>
-                </div>
-                <?php endforeach; ?>
-              </td>
-            </tr>
-            <tr>
-              <td colspan='3' class='text-center form-actions'>
-                <?php echo html::submitButton(); ?>
-              </td>
-            </tr>
-          </table>
-        </form>
-      </div>
-    </div>
+    <form class='main-table table-user' data-ride='table' method='post' data-checkable='false' id='userListForm'>
+      <table class='table has-sort-head' id='userList'>
+        <thead>
+          <tr>
+            <?php $vars = "libID={$libID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+            <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->api->structType);?></th>
+            <th class='c-name'><?php echo $lang->api->structName;?></th>
+            <th class='c-user'><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->api->structAddedBy);?></th>
+            <th class='c-date'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->api->structAddedDate);?></th>
+            <th class='c-actions'><?php echo $lang->actions;?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($structs as $struct):?>
+          <tr>
+            <td><?php printf('%03d', $struct->id);?></td>
+            <td><?php echo $struct->type ?></td>
+            <td><?php echo $struct->name ?></td>
+            <td><?php echo $struct->addedBy ?></td>
+            <td class="c-date"><?php echo $struct->addedDate ?></td>
+            <td class='c-actions'>
+              <?php
+              echo html::a($this->createLink('api', 'editStruct', "libID=$libID&structID=$struct->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn'");
+              echo html::a($this->createLink('api', 'deleteStruct', "libID=$libID&structID=$struct->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->api->delete}' class='btn'");
+              ?>
+            </td>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+    </form>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php'; ?>

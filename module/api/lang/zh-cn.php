@@ -51,14 +51,29 @@ $lang->api->filterStruct     = "使用数据结构填充";
 /* fields of struct */
 $lang->struct = new stdClass();
 
-$lang->struct->field      = '字段';
-$lang->struct->paramsType = '类型';
-$lang->struct->desc       = '描述';
+$lang->struct->add             = '添加';
+$lang->struct->field           = '字段';
+$lang->struct->paramsType      = '类型';
+$lang->struct->required        = '必填';
+$lang->struct->desc            = '描述';
+$lang->struct->descPlaceholder = '参数说明';
+$lang->struct->action          = '操作';
+$lang->struct->addSubField     = '添加子字段';
+
+$lang->struct->typeOptions = array(
+    'formData' => 'FormData',
+    'json'     => 'Json',
+    'array'    => 'Array',
+    'object'   => 'Object',
+);
 
 /* fields of form */
 $lang->api->struct             = '数据结构';
 $lang->api->structName         = '结构名';
+$lang->api->structType         = '类型';
 $lang->api->structAttr         = '属性';
+$lang->api->structAddedBy      = '创建人';
+$lang->api->structAddedDate    = '创建时间';
 $lang->api->name               = '接口库名称';
 $lang->api->baseUrl            = '请求基路径';
 $lang->api->desc               = '描述';
@@ -78,6 +93,8 @@ $lang->api->paramsExample      = '请求示例';
 $lang->api->header             = '请求头';
 $lang->api->query              = '请求参数';
 $lang->api->params             = '请求体';
+$lang->api->header             = '请求头';
+$lang->api->query              = 'Query参数';
 $lang->api->response           = '请求响应';
 $lang->api->responseExample    = '响应示例';
 $lang->api->res                = new stdClass();
@@ -130,6 +147,7 @@ $lang->api->paramsScopeOptions = array(
 );
 /* Api global common params */
 $lang->api->paramsTypeOptions = array(
+    'object'   => 'object',
     'string'   => 'string',
     'date'     => 'date',
     'datetime' => 'datetime',
