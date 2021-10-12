@@ -914,6 +914,7 @@ class productModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('sprint')->fi()
             ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->systemMode != 'new')->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()

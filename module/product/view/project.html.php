@@ -41,9 +41,9 @@
           <th class='c-date'><?php echo $lang->project->end;?></th>
           <th class='c-status'><?php echo $lang->project->status;?></th>
           <th class="c-budget text-center"><?php echo $lang->project->budget;?></th>
-          <th class="c-number text-center"><?php echo $lang->project->estimate;?></th>
-          <th class="c-number text-center"><?php echo $lang->project->consume;?></th>
-          <th class='c-progress'><?php echo $lang->project->progress;?></th>
+          <th class="c-number text-right"><?php echo $lang->project->estimate;?></th>
+          <th class="c-number text-right"><?php echo $lang->project->consume;?></th>
+          <th class="c-progress <?php if($config->systemMode == 'classic') echo 'text-center';?>"><?php echo $lang->project->progress;?></th>
         </tr>
       </thead>
       <tbody>
@@ -80,9 +80,9 @@
           <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
           <?php $textStyle = $project->budget != 0 ? 'text-right' : 'text-center';?>
           <td title='<?php echo $budgetTitle;?>' class="text-ellipsis <?php echo $textStyle;?>"><?php echo $budgetTitle;?></td>
-          <td class="text-right padding-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
-          <td class="text-right padding-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
-          <td class='padding-right text-center'>
+          <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
+          <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
+          <td class="<?php if($config->systemMode == 'classic') echo 'c-progress';?>">
             <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo $project->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
               <div class='progress-info'><?php echo $project->hours->progress;?></div>
             </div>
