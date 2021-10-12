@@ -38,6 +38,12 @@ $lang->job->customParam = '自定義構建參數';
 $lang->job->paramName   = '名稱';
 $lang->job->paramValue  = '值';
 $lang->job->custom      = '自定義';
+$lang->job->createdBy   = '由誰創建';
+$lang->job->createdDate = '創建日期';
+$lang->job->editedBy    = '由誰編輯';
+$lang->job->editedDate  = '編輯日期';
+$lang->job->lastTag     = '最後標籤';
+$lang->job->deleted     = '已刪除';
 
 $lang->job->lblBasic = '基本信息';
 

@@ -26,7 +26,6 @@ $lang->testsuite->successSaved     = 'Saved';
 $lang->testsuite->id             = 'ID';
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->project        = 'Project';
-$lang->testsuite->suite          = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
 $lang->testsuite->type           = 'Type';
