@@ -58,7 +58,7 @@ $lang->install->introductionContent = <<<EOT
       <p>項目用來組織相應的人力進行研發，做好項目過程的跟蹤管理，多快好省地完成項目。</p>
     </div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-product'></i><strong>執行</strong></p>
+      <p class='block-title'><i class='icon icon-run'></i><strong>執行</strong></p>
       <p>執行用來做任務的分解、指派和跟蹤，保證項目目標可以落實到人來執行。<p>
     </div>
   </div>

@@ -923,6 +923,7 @@ class upgradeModel extends model
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.4.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
+            case '15_5': $confirmContent .= file_get_contents($this->getUpgradeFile('15.5'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

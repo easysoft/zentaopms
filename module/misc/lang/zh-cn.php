@@ -92,6 +92,7 @@ $lang->misc->feature->downloadFile   = '下载新版本功能介绍文档';
 $lang->misc->feature->tutorialDesc   = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
 $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
 
+$lang->misc->releaseDate['15.6']        = '2021-10-12';
 $lang->misc->releaseDate['15.5']        = '2021-09-14';
 $lang->misc->releaseDate['15.4']        = '2021-08-23';
 $lang->misc->releaseDate['15.3']        = '2021-08-04';
@@ -157,6 +158,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['15.6'][] = array('title' => '修复Bug。', 'desc' => '');
 $lang->misc->feature->all['15.5'][] = array('title' => '增加项目集/产品/项目看板视图、全局添加功能、新手引导。 修复Bug。', 'desc' => '');
 $lang->misc->feature->all['15.4'][] = array('title' => '修复Bug', 'desc' => '');
 $lang->misc->feature->all['15.3'][] = array('title' => '实现界面风格改动和文档优化，修复Bug', 'desc' => '');
