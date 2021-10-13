@@ -85,30 +85,30 @@ class gitlabModel extends model
     /**
      * Get gitlab user id and zentao account pairs of one gitlab.
      *
-     * @param  int $gitlab
+     * @param  int $gitlabID
      * @access public
      * @return array
      */
-    public function getUserIdAccountPairs($gitlab)
+    public function getUserIdAccountPairs($gitlabID)
     {
         return $this->dao->select('openID,account')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlab)
+            ->andWhere('providerID')->eq($gitlabID)
             ->fetchPairs();
     }
 
     /**
      * Get zentao account gitlab user id pairs of one gitlab.
      *
-     * @param  int $gitlab
+     * @param  int $gitlabID
      * @access public
      * @return array
      */
-    public function getUserAccountIdPairs($gitlab)
+    public function getUserAccountIdPairs($gitlabID)
     {
         return $this->dao->select('account,openID')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($gitlab)
+            ->andWhere('providerID')->eq($gitlabID)
             ->fetchPairs();
     }
 
@@ -425,13 +425,31 @@ class gitlabModel extends model
     /**
      * Get gitlab user list.
      *
-     * @param  object $gitlab
+     * @param  int    $gitlabID
      * @access public
      * @return array
      */
-    public function apiGetUsers($gitlab)
+    public function apiGetUsers($gitlabID)
     {
-        $response = $this->apiGet($gitlab->id, '/users');
+        /* GitLab API '/users' can only return 20 users per page in default, so we use a loop to fetch all users. */
+        $page     = 1;
+        $response = array();
+        $apiRoot  = $this->getApiRoot($gitlabID);
+        while(true)
+        {
+            /* Also use `per_page=20` to fetch users in API. Fetch active users only. */
+            $url      = sprintf($apiRoot, "/users") . "&page={$page}&per_page=20&active=true";
+            $result   = json_decode(commonModel::http($url));
+            if(!empty($result))
+            {
+                $response = array_merge($response, $result);
+                $page += 1;
+            }
+            else
+            {
+                break;
+            }
+        }
 
         if(!$response) return array();
 
