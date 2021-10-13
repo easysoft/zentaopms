@@ -492,6 +492,8 @@ class baseHTML
         global $lang, $app, $config;
         if(empty($label)) $label = $lang->goback;
 
+        if(!isset($_SERVER['HTTP_REFERER'])) return "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";;
+
         $tab           = $_COOKIE['tab'];
         $referer       = strtolower($_SERVER['HTTP_REFERER']);
         $refererParts  = parse_url($referer);
