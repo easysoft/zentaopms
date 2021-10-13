@@ -98,7 +98,7 @@ class reportModel extends model
      */
     public function getExecutions($begin = 0, $end = 0)
     {
-        $tasks = $this->dao->select('t1.*,t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
