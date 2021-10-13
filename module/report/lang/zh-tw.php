@@ -107,6 +107,7 @@ $lang->report->mailTitle->task     = " 任務(%s),";
 $lang->report->mailTitle->todo     = " 待辦(%s),";
 $lang->report->mailTitle->testTask = " 測試版本(%s),";
 
+$lang->report->reportDesc   = '按照已關閉執行統計偏差率（偏差率 = (總消耗 - 總預計) / 總預計），總預計為0時偏差率為n/a。';
 $lang->report->proVersion   = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，盡在專業版！</a>';
 $lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
 

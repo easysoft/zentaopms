@@ -107,6 +107,7 @@ $lang->report->mailTitle->task     = " %s) nhiệm vụ,";
 $lang->report->mailTitle->todo     = " (%s) việc,";
 $lang->report->mailTitle->testTask = " (%s) yêu cầu,";
 
+$lang->report->reportDesc   = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
 $lang->report->proVersion   = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Hãy thử ZenTao Pro để biết thêm!</a>';
 $lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Hãy thử ZenTao Pro để biết thêm!</a>';
 

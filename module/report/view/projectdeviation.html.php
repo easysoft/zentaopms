@@ -37,7 +37,11 @@
     <div class='cell'>
       <div class='panel'>
         <div class="panel-heading">
-          <div class="panel-title"><?php echo $title;?></div>
+          <div class="panel-title">
+            <?php echo $title;?>
+            <i class="icon icon-exclamation-sign icon-rotate-180"></i>
+            <span class="hidden" id="desc"><?php echo $lang->report->reportDesc;?></span>
+          </div>
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
@@ -59,9 +63,9 @@
                 <td><?php echo $id;?></td>
                 <td class="text-left" title="<?php echo $execution->projectName;?>"><?php echo $execution->projectName;?></td>
                 <td class="text-left" title="<?php echo $execution->name;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name);?></td>
-                <td><?php echo $execution->estimate;?></td>
-                <td><?php echo $execution->consumed;?></td>
-                <?php $deviation = $execution->consumed - $execution->estimate;?>
+                <td><?php echo round($execution->estimate, 2);?></td>
+                <td><?php echo round($execution->consumed, 2);?></td>
+                <?php $deviation = round($execution->consumed - $execution->estimate, 2);?>
                 <td class="deviation">
                 <?php
                     if($deviation > 0)
