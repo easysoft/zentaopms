@@ -1,15 +1,20 @@
 /* Set the story priview link. */
 function setPreview()
 {
-    if(!$('#story').val())
+    if($('#story').val() == 0)
     {
         $('#preview').addClass('hidden');
     }
     else
     {
         storyLink = createLink('story', 'view', "storyID=" + $('#story').val());
-        var concat = config.requestType != 'GET' ? '?'  : '&';
-        storyLink  = storyLink + concat + 'onlybody=yes';
+        if(!isonlybody)
+        {
+            var concat = config.requestType != 'GET' ? '?'  : '&';
+            storyLink  = storyLink + concat + 'onlybody=yes';
+        }
+
+        $('#preview').addClass('iframe');
         $('#preview').removeClass('hidden');
         $('#preview').attr('href', storyLink);
     }
@@ -131,8 +136,6 @@ $(function()
         else if(e.keyCode == 13) selectItem($selected);
     });
 
-    $("#preview").modalTrigger({width:960, type:'iframe'});
-
     $('[data-toggle=tooltip]').tooltip();
 
     initSteps();
@@ -151,17 +154,4 @@ $(function()
     });
 
     $('#subNavbar li[data-id="testcase"]').addClass('active');
-
-    $('#story').change(function()
-    {
-        var storyID = $('#story').val();
-        if(storyID != 0)
-        {
-            $('#storyIdBox span').removeClass('hidden');
-        }
-        else
-        {
-            $('#storyIdBox span').addClass('hidden');
-        }
-    })
 });
