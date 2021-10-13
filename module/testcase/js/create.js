@@ -151,4 +151,17 @@ $(function()
     });
 
     $('#subNavbar li[data-id="testcase"]').addClass('active');
+
+    $('#story').change(function()
+    {
+        var storyID = $('#story').val();
+        if(storyID != 0)
+        {
+            $('#storyIdBox span').removeClass('hidden');
+        }
+        else
+        {
+            $('#storyIdBox span').addClass('hidden');
+        }
+    })
 });
