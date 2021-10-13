@@ -136,6 +136,8 @@ $(function()
         else if(e.keyCode == 13) selectItem($selected);
     });
 
+    if(!isonlybody) $("#preview").modalTrigger({width:960, type:'iframe'});
+
     $('[data-toggle=tooltip]').tooltip();
 
     initSteps();
