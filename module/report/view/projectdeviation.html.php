@@ -40,7 +40,7 @@
           <div class="panel-title">
             <?php echo $title;?>
             <i class="icon icon-exclamation-sign icon-rotate-180"></i>
-            <span class="hidden" id="desc"><?php echo $lang->report->reportDesc;?></span>
+            <span class="hidden" id="desc"><?php echo $lang->report->deviationDesc;?></span>
           </div>
           <nav class="panel-actions btn-toolbar"></nav>
         </div>

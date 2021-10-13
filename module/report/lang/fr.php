@@ -107,9 +107,9 @@ $lang->report->mailTitle->task     = " Tâches (%s),";
 $lang->report->mailTitle->todo     = " Agenda (%s),";
 $lang->report->mailTitle->testTask = " Recettes (%s),";
 
-$lang->report->reportDesc   = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
-$lang->report->proVersion   = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Essayez ZenTao Pro pour en savoir plus !</a>';
-$lang->report->proVersionEn = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
+$lang->report->proVersion    = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Essayez ZenTao Pro pour en savoir plus !</a>';
+$lang->report->proVersionEn  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
