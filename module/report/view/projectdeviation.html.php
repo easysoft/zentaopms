@@ -45,6 +45,7 @@
             <thead>
               <tr class='colhead'>
                 <th class='c-id'><?php echo $lang->report->id;?></th>
+                <th><?php echo $lang->report->project;?></th>
                 <th><?php echo $lang->report->execution;?></th>
                 <th class="c-hours"><?php echo $lang->report->estimate;?></th>
                 <th class="c-hours"><?php echo $lang->report->consumed;?></th>
@@ -56,6 +57,7 @@
               <?php foreach($executions as $id  =>$execution):?>
               <tr class="text-center">
                 <td><?php echo $id;?></td>
+                <td class="text-left" title="<?php echo $execution->projectName;?>"><?php echo $execution->projectName;?></td>
                 <td class="text-left" title="<?php echo $execution->name;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name);?></td>
                 <td><?php echo $execution->estimate;?></td>
                 <td><?php echo $execution->consumed;?></td>
