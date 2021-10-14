@@ -73,7 +73,7 @@
             <span><i class='icon icon-clock'></i> <?php printf($lang->project->hoursUnit, $project->estimate); ?></span>
           </div>
           <?php if($config->systemMode == 'new'):?>
-          <?php if($project->model !== 'waterfall'): ?>
+          <?php if($project->model === 'waterfall'): ?>
           <div class='project-detail project-stages'>
             <?php
             $projectProjects = array();
