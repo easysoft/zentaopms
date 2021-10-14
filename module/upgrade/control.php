@@ -350,17 +350,22 @@ class upgrade extends control
                 if(dao::isError()) die(js::error(dao::getError()));
 
                 /* Process merged independent projects. */
+                $productIdList = array();
+                if($type == 'noProject')
+                {
+                    $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($linkedSprints)->fetchPairs();
+                }
                 if($_POST['projectType'] == 'execution')
                 {
                     /* Use historical projects as execution upgrades. */
-                    $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
+                    $this->upgrade->processMergedData($programID, $projectList, $lineID, $productIdList, $linkedSprints);
                 }
                 else
                 {
                     /* Use historical projects as project upgrades. */
                     foreach($linkedSprints as $sprint)
                     {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $productIdList, array($sprint => $sprint));
                     }
                 }
             }
