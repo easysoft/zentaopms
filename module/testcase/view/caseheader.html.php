@@ -188,7 +188,7 @@
       <?php
       $link = common::hasPriv('testcase', 'create') ? $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '###';
       $disabled = common::hasPriv('testcase', 'create') ? '' : "disabled";
-      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->testcase->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled' data-app='project'");
+      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->testcase->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled' data-app={$this->app->tab}");
       ?>
       <ul class='dropdown-menu'>
         <?php $disabled = common::hasPriv('testcase', 'batchCreate') ? '' : "class='disabled'";?>

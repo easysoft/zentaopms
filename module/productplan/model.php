@@ -347,7 +347,7 @@ class productplanModel extends model
             ->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
-            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'gt', $plan->begin)
+            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
             ->exec();
         if(!dao::isError())
         {
@@ -389,7 +389,7 @@ class productplanModel extends model
             ->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
-            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'gt', $plan->begin)
+            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
             ->where('id')->eq((int)$planID)
             ->exec();
         if(!dao::isError())

@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('weekend', $config->execution->weekend);?>
+<?php js::set('type', $type);?>
 <div class='container'>
   <form method='post' target='hiddenwin'>
     <div class='modal-dialog'>
@@ -23,7 +24,7 @@
         <?php include './mergebyline.html.php';?>
         <?php elseif($type == 'product'):?>
         <?php include './mergebyproduct.html.php';?>
-        <?php elseif($type == 'sprint'):?>
+        <?php elseif($type == 'sprint' or $type == 'noProject'):?>
         <?php include './mergebysprint.html.php';?>
         <?php elseif($type == 'moreLink'):?>
         <div class='alert alert-info'>

@@ -85,7 +85,6 @@ class task extends control
 
         $execution = $this->execution->getById($executionID);
         $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
-        $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
         $this->execution->setMenu($execution->id);
@@ -167,7 +166,7 @@ class task extends control
             }
             elseif($this->post->after == 'toStoryList')
             {
-                $response['locate'] = $storyLink;
+                $response['locate'] = $this->createLink('execution', 'story', "executionID=$executionID");
                 return $this->send($response);
             }
             else
@@ -280,7 +279,6 @@ class task extends control
         {
             $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID");
         }
-        $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('execution', 'story', "executionID=$executionID");
 
         /* Set menu. */
         $this->execution->setMenu($execution->id);
@@ -692,7 +690,7 @@ class task extends control
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
 
         $this->session->project = $task->project;

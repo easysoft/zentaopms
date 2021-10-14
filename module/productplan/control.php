@@ -261,7 +261,7 @@ class productplan extends control
         if(!$plan)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
         }
 
         $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story', 'product');

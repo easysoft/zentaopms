@@ -507,7 +507,9 @@ class userModel extends model
             ->batchCheck($requiredFields, 'notempty')
             ->check('account', 'unique', "id != '$userID'")
             ->check('account', 'account')
-            ->checkIF($this->post->email != '', 'email', 'email')
+            ->checkIF($this->post->email  != '', 'email',  'email')
+            ->checkIF($this->post->phone  != '', 'phone',  'phone')
+            ->checkIF($this->post->mobile != '', 'mobile', 'mobile')
             ->where('id')->eq((int)$userID)
             ->exec();
 

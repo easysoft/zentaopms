@@ -2495,7 +2495,7 @@ class taskModel extends model
         /* Delayed or not?. */
         if($task->status !== 'done' and $task->status !== 'cancel' and $task->status != 'closed')
         {
-            if(!helper::isZeroDate($task->deadline))
+            if(!empty($taks->deadline) and !helper::isZeroDate($task->deadline))
             {
                 $delay = helper::diffDate($today, $task->deadline);
                 if($delay > 0) $task->delay = $delay;

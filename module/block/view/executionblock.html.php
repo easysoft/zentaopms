@@ -17,7 +17,7 @@
 .table .c-burn {width: 150px;}
 </style>
 <?php if(empty($executionStats)): ?>
-<div class='empty-tip'><?php common::printLink('execution', 'create', '', "<i class='icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary'")?></div>
+<div class='empty-tip'><?php common::printLink('execution', 'create', '', "<i class='icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-primary' data-app='execution'")?></div>
 <?php else:?>
 <div class="panel-body has-table scrollbar-hover">
   <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-projects tablesorter'>

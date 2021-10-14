@@ -44,3 +44,4 @@ html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 #typeBox .required:after {right: 1px;}
 #osBox .required:after {right: 1px;}
 #osBox {width: 190px;}
+#projectBox .required:after {right: 1px;}

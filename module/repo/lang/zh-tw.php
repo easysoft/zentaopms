@@ -19,6 +19,10 @@ $lang->repo->deleteBug       = '刪除評審';
 $lang->repo->addComment      = '添加備註';
 $lang->repo->editComment     = '編輯備註';
 $lang->repo->deleteComment   = '刪除備註';
+$lang->repo->encrypt         = '加密方式';
+$lang->repo->repo            = '代碼庫';
+$lang->repo->parent          = '父檔案夾';
+$lang->repo->branch          = '分支';
 
 $lang->repo->browseAction    = '瀏覽版本庫';
 $lang->repo->createAction    = '創建版本庫';

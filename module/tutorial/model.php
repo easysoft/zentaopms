@@ -156,6 +156,17 @@ class tutorialModel extends model
     }
 
     /**
+     * Get tutorial project pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectPairs()
+    {
+        return array(2 => 'Test Project');
+    }
+
+    /**
      * Get project stats for tutorial
      *
      * @access public
