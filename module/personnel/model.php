@@ -677,17 +677,26 @@ class personnelModel extends model
      */
     public function deleteProductWhitelist($productID, $account = '')
     {
-        $whitelist = $this->dao->select('id,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('whitelist');
+        $product = $this->dao->select('id,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
         if(empty($product)) return false;
 
-        $newWhitelist = str_replace(',' . $account, '', $whitelist);
+        $newWhitelist = str_replace(',' . $account, '', $product->whitelist);
         $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($productID)->exec();
-        $this->dao->delete()->from(TABLE_ACL)
+        $result = $this->dao->delete()->from(TABLE_ACL)
              ->where('objectID')->eq($productID)
              ->andWhere('account')->eq($account)
              ->andWhere('objectType')->eq('product')
              ->andWhere('source')->eq('sync')
              ->exec();
+
+        /* Update user view when delete success. */
+        if($result)
+        {
+            $viewProducts    = $this->dao->select('products')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('products');
+            $newViewProducts = trim(str_replace(",$productID,", '', ",$viewProducts,"), ',');
+            $this->dao->update(TABLE_USERVIEW)->set('products')->eq($newViewProducts)->where('account')->eq($account)->exec();
+        }
+
     }
 
     /**
@@ -711,12 +720,20 @@ class personnelModel extends model
         {
             $newWhitelist = str_replace(',' . $account, '', $program->whitelist);
             $this->dao->update(TABLE_PROGRAM)->set('whitelist')->eq($newWhitelist)->where('id')->eq($programID)->exec();
-            $this->dao->delete()->from(TABLE_ACL)
+            $result = $this->dao->delete()->from(TABLE_ACL)
                 ->where('objectID')->eq($programID)
                 ->andWhere('account')->eq($account)
                 ->andWhere('objectType')->eq('program')
                 ->andWhere('source')->eq('sync')
                 ->exec();
+
+            /* Update user view when delete success. */
+            if($result)
+            {
+                $viewPrograms    = $this->dao->select('programs')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('programs');
+                $newViewPrograms = trim(str_replace(",$programID,", '', ",$viewPrograms,"), ',');
+                $this->dao->update(TABLE_USERVIEW)->set('programs')->eq($newViewPrograms)->where('account')->eq($account)->exec();
+            }
         }
         $this->loadModel('user')->updateUserView($programID, 'program', array($account));
     }
@@ -734,7 +751,7 @@ class personnelModel extends model
         $project = $this->dao->select('id,project,whitelist')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
         if(empty($project)) return false;
 
-        $projectID = $project->project;
+        $projectID = $project->project ? $project->project : $objectID;
         $sprints   = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetchPairs('id');
         $whitelist = $this->dao->select('*')->from(TABLE_ACL)->where('objectID')->in($sprints)->andWhere('account')->eq($account)->andWhere('objectType')->eq('sprint')->fetch();
 
@@ -743,12 +760,20 @@ class personnelModel extends model
         {
             $newWhitelist = str_replace(',' . $account, '', $project->whitelist);
             $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
-            $this->dao->delete()->from(TABLE_ACL)
+            $result = $this->dao->delete()->from(TABLE_ACL)
                 ->where('objectID')->eq($projectID)
                 ->andWhere('account')->eq($account)
                 ->andWhere('objectType')->eq('project')
                 ->andWhere('source')->eq('sync')
                 ->exec();
+
+            /* Update user view when delete success. */
+            if($result)
+            {
+                $viewProjects    = $this->dao->select('projects')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('projects');
+                $newViewProjects = trim(str_replace(",$projectID,", '', ",$viewProjects,"), ',');
+                $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($newViewProjects)->where('account')->eq($account)->exec();
+            }
         }
         $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
     }
