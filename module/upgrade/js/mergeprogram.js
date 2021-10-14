@@ -831,12 +831,16 @@ function setProgramByProduct(product)
             {
                 $(this).prop('checked', false);
                 $(this).attr('disabled', 'disabled');
+                $('#checkAllProducts').attr('disabled', 'disabled');
+                $('#checkAllProjects').attr('disabled', 'disabled');
                 $('[data-product=' + currentProductID + ']').prop('checked', false);
                 $('[data-product=' + currentProductID + ']').attr('disabled', 'disabled');
             }
             else if($(':checkbox:checked[data-programid=' + programID + ']').length == 0)
             {
                 $(this).removeAttr('disabled');
+                $('#checkAllProducts').removeAttr('disabled');
+                $('#checkAllProjects').removeAttr('disabled');
                 $('[data-product=' + currentProductID + ']').removeAttr('disabled');
             }
         }
