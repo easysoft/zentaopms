@@ -5,7 +5,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -14,7 +14,7 @@
 /**
  * validater类，检查数据是否符合规则。
  * The validater class, checking data by rules.
- * 
+ *
  * @package framework
  */
 class baseValidater
@@ -28,8 +28,8 @@ class baseValidater
     /**
      * 是否是Bool类型。
      * Bool checking.
-     * 
-     * @param  bool $var 
+     *
+     * @param  bool $var
      * @static
      * @access public
      * @return bool
@@ -42,8 +42,8 @@ class baseValidater
     /**
      * 是否是Int类型。
      * Int checking.
-     * 
-     * @param  int $var 
+     *
+     * @param  int $var
      * @static
      * @access public
      * @return bool
@@ -77,9 +77,9 @@ class baseValidater
 
     /**
      * 检查不是Int类型。
-     * Not int checking. 
-     * 
-     * @param  int    $var 
+     * Not int checking.
+     *
+     * @param  int    $var
      * @static
      * @access public
      * @return bool
@@ -92,9 +92,9 @@ class baseValidater
     /**
      * 检查Float类型。
      * Float checking.
-     * 
-     * @param  float  $var 
-     * @param  string $decimal 
+     *
+     * @param  float  $var
+     * @param  string $decimal
      * @static
      * @access public
      * @return bool
@@ -107,8 +107,8 @@ class baseValidater
     /**
      * 检查Email。
      * Email checking.
-     * 
-     * @param  string $var 
+     *
+     * @param  string $var
      * @static
      * @access public
      * @return bool
@@ -121,8 +121,8 @@ class baseValidater
     /**
      * 检查电话或手机号码
      * Check phone number.
-     * 
-     * @param  string    $var 
+     *
+     * @param  string    $var
      * @static
      * @access public
      * @return void
@@ -135,39 +135,39 @@ class baseValidater
     /**
      * 检查电话号码
      * Check tel number.
-     * 
-     * @param  int    $var 
+     *
+     * @param  int    $var
      * @static
      * @access public
      * @return void
      */
     public static function checkTel($var)
     {
-        return preg_match("/^([0-9]{3,4}-?)?[0-9]{7,8}$/", $var);
+        return preg_match("/^([0-9]{3,4}-?)?[0-9]{7,8}$/", $var) ? true : false;
     }
 
     /**
      * 检查手机号码
      * Check mobile number.
-     * 
-     * @param  string    $var 
+     *
+     * @param  string    $var
      * @static
      * @access public
      * @return void
      */
     public static function checkMobile($var)
     {
-        return preg_match("/^1[3-5,7,8]{1}[0-9]{9}$/", $var);
+        return preg_match("/^1[3-5,7,8]{1}[0-9]{9}$/", $var) ? true : false;
     }
 
     /**
      * 检查网址。
      * 该规则不支持中文字符的网址。
      *
-     * URL checking. 
+     * URL checking.
      * The check rule of filter don't support chinese.
-     * 
-     * @param  string $var 
+     *
+     * @param  string $var
      * @static
      * @access public
      * @return bool
@@ -179,25 +179,25 @@ class baseValidater
 
     /**
      * 检查域名，不支持中文。
-     * Domain checking. 
+     * Domain checking.
      *
      * The check rule of filter don't support chinese.
-     * 
-     * @param  string $var 
+     *
+     * @param  string $var
      * @static
      * @access public
      * @return bool
      */
     public static function checkDomain($var)
     {
-        return preg_match('/^([a-z0-9-]+\.)+[a-z]{2,15}$/', $var);
+        return preg_match('/^([a-z0-9-]+\.)+[a-z]{2,15}$/', $var) ? true : false;
     }
 
     /**
      * 检查IP地址。
      * IP checking.
-     * 
-     * @param  ip $var 
+     *
+     * @param  ip $var
      * @param  string $range all|public|static|private
      * @static
      * @access public
@@ -217,14 +217,14 @@ class baseValidater
     /**
      * 身份证号检查。
      * Idcard checking.
-     * 
+     *
      * @access public
      * @return void
      */
     public static function checkIdcard($idcard)
     {
         if(strlen($idcard)!=18) return false;
-        $idcard = strtoupper($idcard); 
+        $idcard = strtoupper($idcard);
         $cityList = array(
             '11','12','13','14','15','21','22',
             '23','31','32','33','34','35','36',
@@ -254,8 +254,8 @@ class baseValidater
     /**
      * 日期检查。注意，2009-09-31是一个合法日期，系统会将它转换为2009-10-01。
      * Date checking. Note: 2009-09-31 will be an valid date, because strtotime auto fixed it to 10-01.
-     * 
-     * @param  date $date 
+     *
+     * @param  date $date
      * @static
      * @access public
      * @return bool
@@ -270,8 +270,8 @@ class baseValidater
 
     /**
      * Check datetime.
-     * 
-     * @param  string    $datetime 
+     *
+     * @param  string    $datetime
      * @static
      * @access public
      * @return bool
@@ -289,9 +289,9 @@ class baseValidater
     /**
      * 检查正则表达式。
      * REG checking.
-     * 
-     * @param  string $var 
-     * @param  string $reg 
+     *
+     * @param  string $var
+     * @param  string $reg
      * @static
      * @access public
      * @return bool
@@ -304,10 +304,10 @@ class baseValidater
     /**
      * 检查长度。
      * Length checking.
-     * 
-     * @param  string $var 
-     * @param  string $max 
-     * @param  int    $min 
+     *
+     * @param  string $var
+     * @param  string $max
+     * @param  int    $min
      * @static
      * @access public
      * @return bool
@@ -321,8 +321,8 @@ class baseValidater
     /**
      * 检查不为空。
      * Not empty checking.
-     * 
-     * @param  mixed $var 
+     *
+     * @param  mixed $var
      * @static
      * @access public
      * @return bool
@@ -335,8 +335,8 @@ class baseValidater
     /**
      * 检查为空。
      * Empty checking.
-     * 
-     * @param  mixed $var 
+     *
+     * @param  mixed $var
      * @static
      * @access public
      * @return bool
@@ -349,8 +349,8 @@ class baseValidater
     /**
      * 检查用户名。
      * Account checking.
-     * 
-     * @param  string $var 
+     *
+     * @param  string $var
      * @static
      * @access public
      * @return bool
@@ -365,8 +365,8 @@ class baseValidater
     /**
      * 检查Code。
      * Check code.
-     * 
-     * @param  string $var 
+     *
+     * @param  string $var
      * @static
      * @access public
      * @return bool
@@ -379,8 +379,8 @@ class baseValidater
     /**
      * 检查验证码。
      * Check captcha.
-     * 
-     * @param  mixed    $var 
+     *
+     * @param  mixed    $var
      * @static
      * @access public
      * @return bool
@@ -394,9 +394,9 @@ class baseValidater
     /**
      * 是否等于给定的值。
      * Must equal a value.
-     * 
-     * @param  mixed  $var 
-     * @param  mixed $value 
+     *
+     * @param  mixed  $var
+     * @param  mixed $value
      * @static
      * @access public
      * @return bool
@@ -409,9 +409,9 @@ class baseValidater
     /**
      * 检查不等于给定的值
      * Must not equal a value.
-     * 
-     * @param  mixed    $var 
-     * @param  mixed    $value 
+     *
+     * @param  mixed    $var
+     * @param  mixed    $value
      * @static
      * @access public
      * @return bool
@@ -424,9 +424,9 @@ class baseValidater
     /**
      * 检查大于给定的值。
      * Must greater than a value.
-     * 
-     * @param  mixed    $var 
-     * @param  mixed    $value 
+     *
+     * @param  mixed    $var
+     * @param  mixed    $value
      * @static
      * @access public
      * @return bool
@@ -439,9 +439,9 @@ class baseValidater
     /**
      * 检查小于给定的值
      * Must less than a value.
-     * 
-     * @param  mixed    $var 
-     * @param  mixed    $value 
+     *
+     * @param  mixed    $var
+     * @param  mixed    $value
      * @static
      * @access public
      * @return bool
@@ -454,9 +454,9 @@ class baseValidater
     /**
      * 检查大于等于给定的值
      * Must greater than a value or equal a value.
-     * 
-     * @param  mixed    $var 
-     * @param  mixed    $value 
+     *
+     * @param  mixed    $var
+     * @param  mixed    $value
      * @static
      * @access public
      * @return bool
@@ -469,9 +469,9 @@ class baseValidater
     /**
      * 检查小于等于给定的值
      * Must less than a value or equal a value.
-     * 
-     * @param  mixed    $var 
-     * @param  mixed    $value 
+     *
+     * @param  mixed    $var
+     * @param  mixed    $value
      * @static
      * @access public
      * @return bool
@@ -484,9 +484,9 @@ class baseValidater
     /**
      * 检查是否在给定的列表里面。
      * Must in value list.
-     * 
-     * @param  mixed  $var 
-     * @param  mixed $value 
+     *
+     * @param  mixed  $var
+     * @param  mixed $value
      * @static
      * @access public
      * @return bool
@@ -500,8 +500,8 @@ class baseValidater
     /**
      * 检查文件名。
      * Check file name.
-     * 
-     * @param  string    $var 
+     *
+     * @param  string    $var
      * @static
      * @access public
      * @return bool
@@ -514,9 +514,9 @@ class baseValidater
     /**
      * 检查敏感词。
      * Check sensitive words.
-     * 
-     * @param  object   $vars 
-     * @param  array    $dicts 
+     *
+     * @param  object   $vars
+     * @param  array    $dicts
      * @static
      * @access public
      * @return void
@@ -537,8 +537,8 @@ class baseValidater
 
     /**
      * 过滤附件。
-     * Filter files. 
-     * 
+     * Filter files.
+     *
      * @access public
      * @return array
      */
@@ -578,8 +578,8 @@ class baseValidater
     /**
      * 过滤超级变量。
      * Filter super vars.
-     * 
-     * @param  array    $super 
+     *
+     * @param  array    $super
      * @access public
      * @return array
      */
@@ -613,8 +613,8 @@ class baseValidater
     /**
      * 过滤不符合规则的键值。
      * Filter bad keys.
-     * 
-     * @param  mix    $var 
+     *
+     * @param  mix    $var
      * @access public
      * @return mix
      */
@@ -629,8 +629,8 @@ class baseValidater
     /**
      * 过滤木马代码。
      * Filter trojan codes.
-     * 
-     * @param  string    $var 
+     *
+     * @param  string    $var
      * @access public
      * @return string
      */
@@ -651,8 +651,8 @@ class baseValidater
     /**
      * 过滤 XSS代码。
      * Filter XSS codes.
-     * 
-     * @param  string    $var 
+     *
+     * @param  string    $var
      * @access public
      * @return string
      */
@@ -677,9 +677,9 @@ class baseValidater
 
     /**
      * Filter param.
-     * 
-     * @param  array    $var 
-     * @param  string   $type 
+     *
+     * @param  array    $var
+     * @param  string   $type
      * @static
      * @access public
      * @return array
@@ -722,8 +722,8 @@ class baseValidater
 
     /**
      * Replace space to i tag.
-     * 
-     * @param  string    $var 
+     *
+     * @param  string    $var
      * @static
      * @access public
      * @return string
@@ -743,8 +743,8 @@ class baseValidater
 
     /**
      * Check by rule.
-     * 
-     * @param  string   $var 
+     *
+     * @param  string   $var
      * @param  string   $rule   like: int account reg::md5 reg::/^[a-zA-Z0-9]+$/.
      * @static
      * @access public
@@ -779,7 +779,7 @@ class baseValidater
 
     /**
      * Parse rule string.
-     * 
+     *
      * @param  string $rule   like: int account reg::md5 reg::/^[a-zA-Z0-9]+$/.
      * @static
      * @access public
@@ -799,9 +799,9 @@ class baseValidater
     /**
      * 调用一个方法进行检查。
      * Call a function to check it.
-     * 
-     * @param  mixed  $var 
-     * @param  string $func 
+     *
+     * @param  mixed  $var
+     * @param  string $func
      * @static
      * @access public
      * @return bool
@@ -815,7 +815,7 @@ class baseValidater
 /**
  * fixer类，处理数据。
  * fixer class, to fix data types.
- * 
+ *
  * @package framework
  */
 class baseFixer
@@ -823,7 +823,7 @@ class baseFixer
     /**
      * 处理的数据。
      * The data to be fixed.
-     * 
+     *
      * @var object
      * @access public
      */
@@ -832,8 +832,8 @@ class baseFixer
     /**
      * 跳过处理的字段。
      * The fields to striped.
-     * 
-     * @var array 
+     *
+     * @var array
      * @access public
      */
     public $stripedFields = array();
@@ -841,7 +841,7 @@ class baseFixer
     /**
      * 构造方法，将超级全局变量转换为对象。
      * The construction function, according the scope, convert it to object.
-     * 
+     *
      * @param  string $scope    the scope of the var, should be post|get|server|session|cookie|env
      * @access public
      * @return void
@@ -880,8 +880,8 @@ class baseFixer
     /**
      * 工厂方法。
      * The factory function.
-     * 
-     * @param  string $scope 
+     *
+     * @param  string $scope
      * @access public
      * @return object fixer object.
      */
@@ -893,8 +893,8 @@ class baseFixer
     /**
      * 处理Email。
      * Email fix.
-     * 
-     * @param  string $fieldName 
+     *
+     * @param  string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -908,8 +908,8 @@ class baseFixer
     /**
      * url编码。
      * urlencode.
-     * 
-     * @param  string $fieldName 
+     *
+     * @param  string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -927,8 +927,8 @@ class baseFixer
     /**
      * 清理网址。
      * Clean the url.
-     * 
-     * @param  string $fieldName 
+     *
+     * @param  string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -942,8 +942,8 @@ class baseFixer
     /**
      * 处理Float类型。
      * Float fixer.
-     * 
-     * @param  string $fieldName 
+     *
+     * @param  string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -956,9 +956,9 @@ class baseFixer
 
     /**
      * 处理Int类型。
-     * Int fixer. 
-     * 
-     * @param  string $fieldName 
+     * Int fixer.
+     *
+     * @param  string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -978,8 +978,8 @@ class baseFixer
     /**
      * 将字符串转换为可以在浏览器查看的编码。
      * Special chars.
-     * 
-     * @param  string $fieldName 
+     *
+     * @param  string $fieldName
      * @access public
      * @return object fixer object
      */
@@ -998,9 +998,9 @@ class baseFixer
     }
 
     /**
-     * Special array 
-     * 
-     * @param  mix      $data 
+     * Special array
+     *
+     * @param  mix      $data
      * @access public
      * @return mix
      */
@@ -1015,10 +1015,10 @@ class baseFixer
 
     /**
      * 忽略该标签。
-     * Strip tags 
-     * 
-     * @param  string $fieldName 
-     * @param  string $allowableTags 
+     * Strip tags
+     *
+     * @param  string $fieldName
+     * @param  string $allowableTags
      * @param  array  $attributes
      * @access public
      * @return object fixer object
@@ -1042,9 +1042,9 @@ class baseFixer
 
     /**
      * Strip tags for data
-     * 
-     * @param  string $data 
-     * @param  string $allowedTags 
+     *
+     * @param  string $data
+     * @param  string $allowedTags
      * @param  array  $attributes
      * @static
      * @access public
@@ -1118,8 +1118,8 @@ class baseFixer
     /**
      * 忽略处理给定的字段。
      * Skip special chars check.
-     * 
-     * @param  string    $filename 
+     *
+     * @param  string    $filename
      * @access public
      * @return object fixer object
      */
@@ -1132,9 +1132,9 @@ class baseFixer
 
     /**
      * 给字段添加引用，防止字符与关键字冲突。
-     * Quote 
-     * 
-     * @param  string $fieldName 
+     * Quote
+     *
+     * @param  string $fieldName
      * @access public
      * @return object fixer object
      */
@@ -1148,9 +1148,9 @@ class baseFixer
     /**
      * 设置字段的默认值。
      * Set default value of some fileds.
-     * 
-     * @param  string $fields 
-     * @param  mixed  $value 
+     *
+     * @param  string $fields
+     * @param  mixed  $value
      * @access public
      * @return object fixer object
      */
@@ -1164,10 +1164,10 @@ class baseFixer
     /**
      * 如果条件为真，则为字段赋值。
      * Set value of a filed on the condition is true.
-     * 
-     * @param  bool   $condition 
-     * @param  string $fieldName 
-     * @param  string $value 
+     *
+     * @param  bool   $condition
+     * @param  string $fieldName
+     * @param  string $value
      * @access public
      * @return object fixer object
      */
@@ -1180,9 +1180,9 @@ class baseFixer
     /**
      * 强制给字段赋值。
      * Set the value of a filed in force.
-     * 
-     * @param  string $fieldName 
-     * @param  mixed  $value 
+     *
+     * @param  string $fieldName
+     * @param  mixed  $value
      * @access public
      * @return object fixer object
      */
@@ -1195,8 +1195,8 @@ class baseFixer
     /**
      * 移除一个字段。
      * Remove a field.
-     * 
-     * @param  string $fieldName 
+     *
+     * @param  string $fieldName
      * @access public
      * @return object fixer object
      */
@@ -1210,9 +1210,9 @@ class baseFixer
     /**
      * 如果条件为真，移除该字段。
      * Remove a filed on the condition is true.
-     * 
-     * @param  bool   $condition 
-     * @param  string $fields 
+     *
+     * @param  bool   $condition
+     * @param  string $fields
      * @access public
      * @return object fixer object
      */
@@ -1226,9 +1226,9 @@ class baseFixer
     /**
      * 为数据添加新的项。
      * Add an item to the data.
-     * 
-     * @param  string $fieldName 
-     * @param  mixed  $value 
+     *
+     * @param  string $fieldName
+     * @param  mixed  $value
      * @access public
      * @return object fixer object
      */
@@ -1241,10 +1241,10 @@ class baseFixer
     /**
      * 如果条件为真，则为数据添加新的项。
      * Add an item to the data on the condition if true.
-     * 
-     * @param  bool   $condition 
-     * @param  string $fieldName 
-     * @param  mixed  $value 
+     *
+     * @param  bool   $condition
+     * @param  string $fieldName
+     * @param  mixed  $value
      * @access public
      * @return object fixer object
      */
@@ -1255,11 +1255,11 @@ class baseFixer
     }
 
     /**
-     * 为指定字段增加值。 
+     * 为指定字段增加值。
      * Join the field.
-     * 
-     * @param  string $fieldName 
-     * @param  string $value 
+     *
+     * @param  string $fieldName
+     * @param  string $value
      * @access public
      * @return object fixer object
      */
@@ -1273,9 +1273,9 @@ class baseFixer
     /**
      * 调用一个方法来处理数据。
      * Call a function to fix it.
-     * 
-     * @param  string $fieldName 
-     * @param  string $func 
+     *
+     * @param  string $fieldName
+     * @param  string $func
      * @access public
      * @return object fixer object
      */
@@ -1289,8 +1289,8 @@ class baseFixer
     /**
      * 处理完成后返回数据。
      * Get the data after fixing.
-     * 
-     * @param  string $fieldName 
+     *
+     * @param  string $fieldName
      * @access public
      * @return object
      */
@@ -1315,8 +1315,8 @@ class baseFixer
     /**
      * 处理字段，如果字段中含有','，拆分成数组。如果字段不在$data中，删除掉。
      * Process fields, if contains ',', split it to array. If not in $data, remove it.
-     * 
-     * @param  string $fields 
+     *
+     * @param  string $fields
      * @access public
      * @return array
      */
