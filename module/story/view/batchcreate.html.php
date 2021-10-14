@@ -36,7 +36,6 @@
           if(strpos(",{$config->story->list->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
-  if($this->story->checkForceReview()) unset($visibleFields['review']);
   unset($visibleFields['module']);
   ?>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
