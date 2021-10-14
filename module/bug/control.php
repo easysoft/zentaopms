@@ -724,7 +724,7 @@ class bug extends control
         /* Judge bug exits or not. */
         $bugID = (int)$bugID;
         $bug   = $this->bug->getById($bugID, true);
-        if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$bug) die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
 
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
