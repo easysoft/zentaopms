@@ -45,15 +45,17 @@ class programModel extends model
      * Get program pairs.
      *
      * @param  bool   $isQueryAll
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getPairs($isQueryAll = false)
+    public function getPairs($isQueryAll = false, $orderBy = 'id_desc')
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->orderBy($orderBy)
             ->fetchPairs();
     }
 

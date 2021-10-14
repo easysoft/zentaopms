@@ -9,3 +9,4 @@ $config->group->acl = new stdclass();
 $config->group->acl->objectTypes['programs'] = 'program';
 $config->group->acl->objectTypes['projects'] = 'project';
 $config->group->acl->objectTypes['products'] = 'product';
+$config->group->acl->objectTypes['sprints']  = 'sprint';

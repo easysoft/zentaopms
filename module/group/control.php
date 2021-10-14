@@ -138,22 +138,13 @@ class group extends control
 
         /* Get the group data by id. */
         $group = $this->group->getByID($groupID);
+        $this->view->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
 
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('type')->in('sprint,stage')->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-            ->orderBy('order_desc')
-            ->fetchPairs('id', 'name');
-
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
-        $this->view->position[] = $group->name;
-        $this->view->position[] = $this->lang->group->manageView;
-
-        $this->view->group    = $group;
-        $this->view->programs = $this->dao->select('*')->from(TABLE_PROGRAM)->where('deleted')->eq('0')->andWhere('type')->eq('program')->orderBy('order_desc')->fetchPairs('id', 'name');
-        $this->view->projects = $projects;
-        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->orderBy('order_desc')->fetchPairs('id', 'name');
+        $this->view->group      = $group;
+        $this->view->programs   = $this->loadModel('program')->getPairs(true, 'order_desc');
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', true, 'order_desc');
+        $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
+        $this->view->products   = $this->loadModel('product')->getPairs();
 
         $navGroup = array();
         foreach($this->lang->navGroup as $moduleName => $groupName)
