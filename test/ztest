@@ -22,6 +22,9 @@ switch($argv[1])
     case 'model':
         ztfRun('model');
         break;
+    case 'api':
+        ztfRun('api');
+        break;
     default:
         ztfExtract($argv[1]);
         system("php " . $argv[1]);

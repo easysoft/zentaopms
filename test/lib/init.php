@@ -26,6 +26,10 @@ include $frameworkRoot . 'helper.class.php';
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $tester = $app->loadCommon();
 
+/* Load libraries. */
+$app->loadClass('requests', true);
+
+/* Set configs. */
 $config->zendataRoot = dirname(dirname(__FILE__)) . '/zendata';
 $config->ztfPath     = dirname(dirname(__FILE__)) . '/tools/ztf';
 $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
@@ -107,9 +111,11 @@ function e($expect)
 function zdImport($table, $yaml, $count = 10)
 {
     chdir(dirname(__FILE__));
+
     global $app, $config;
     $dns   = "mysql://{$config->db->user}:{$config->db->password}@{$config->db->host}:{$config->db->port}/{$config->db->name}#utf8";
     $table = trim($table, '`');
+
     $command = "$config->zdPath -c $yaml -t $table -T -dns $dns --clear -n $count";
     system($command);
 }
