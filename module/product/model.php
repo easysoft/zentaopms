@@ -527,7 +527,7 @@ class productModel extends model
             $line->parent = 0;
             $line->grade  = 1;
             $line->name   = $this->post->lineName;
-            $line->root   = $product->program;
+            $line->root   = $this->config->systemMode == 'new' ? $product->program : 0;
             $line->order  = $maxOrder;
             $this->dao->insert(TABLE_MODULE)->data($line)->exec();
 

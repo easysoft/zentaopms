@@ -124,7 +124,7 @@ class projectModel extends model
         if(!isset($projects[$this->session->project]))
         {
             $this->session->set('project', key($projects), $this->app->tab);
-            if($projectID && strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false) $this->accessDenied();
+            if($projectID and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !empty($projects)) $this->accessDenied();
         }
 
         /* Reset program priv. */
@@ -478,6 +478,7 @@ class projectModel extends model
      */
     public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'id_desc')
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)

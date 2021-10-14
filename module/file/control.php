@@ -114,6 +114,7 @@ class file extends control
     {
         if(session_id() != $this->app->sessionID) helper::restartSession($this->app->sessionID);
         $file = $this->file->getById($fileID);
+        if(empty($file)) die("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
 
         /* Judge the mode, down or open. */
         $mode      = 'down';

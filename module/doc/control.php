@@ -914,7 +914,7 @@ class doc extends control
         if($docID)
         {
             $doc = $this->doc->getById($docID, $version, true);
-            if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
+            if(!$doc) die(js::error($this->lang->notFound) . js::locate($this->createLink('doc', 'index')));
 
             if($doc->keywords)
             {
