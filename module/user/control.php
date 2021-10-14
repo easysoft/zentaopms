@@ -60,7 +60,7 @@ class user extends control
     {
         $userID = (int)$userID;
         $user   = $this->user->getById($userID, 'id');
-        if(empty($user)) die(js::error($this->lang->notFound) . js::locate($this->createLink('company', 'browse')));
+        if(empty($user)) die(js::error($this->lang->notFound) . js::locate($this->createLink('my', 'team')));
         if($user->deleted == 1) die(js::error($this->lang->user->noticeHasDeleted) . js::locate('back'));
 
         /* Set thie url to session. */
