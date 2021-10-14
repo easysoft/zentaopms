@@ -492,11 +492,12 @@ class baseHTML
         global $lang, $app, $config;
         if(empty($label)) $label = $lang->goback;
 
-        if(!isset($_SERVER['HTTP_REFERER'])) return "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";;
-
         $tab           = $_COOKIE['tab'];
-        $referer       = strtolower($_SERVER['HTTP_REFERER']);
+        $referer       = isset($_SERVER['HTTP_REFERER']) ? strtolower($_SERVER['HTTP_REFERER']) : '';
         $refererParts  = parse_url($referer);
+
+        if(empty($refererParts) or !isset($refererParts['query'])) return "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";
+
         $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
