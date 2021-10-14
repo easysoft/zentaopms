@@ -471,10 +471,12 @@ class projectModel extends model
      *
      * @param  int    $programID
      * @param  status $status    all|wait|doing|suspended|closed|noclosed
+     * @param  bool   $isQueryAll
+     * @param  string $orderBy
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = 0, $status = 'all')
+    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'id_desc')
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -482,7 +484,8 @@ class projectModel extends model
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($status != 'all' && $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy($orderBy)
             ->fetchPairs();
     }
 
