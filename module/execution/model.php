@@ -49,7 +49,7 @@ class executionModel extends model
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
         if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('execution', 'index')));
 
-        die(js::locate('back'));
+        die(js::locate(helper::createLink('execution', 'all')));
     }
 
     /**
