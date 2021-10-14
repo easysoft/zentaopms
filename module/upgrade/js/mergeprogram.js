@@ -648,6 +648,7 @@ function toggleProgram(obj)
         $('form .pgm-exist').addClass('hidden');
         $programs.attr('disabled', 'disabled');
         $('.programStatus').show();
+        $('#programStatus').val('wait');
         $('#programStatus').removeAttr('disabled').trigger("chosen:updated");
 
         $('form #newProject0').prop('checked', true);
