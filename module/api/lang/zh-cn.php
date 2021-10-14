@@ -14,6 +14,7 @@ $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
 $lang->api->sql      = 'SQL查询接口';
 
+$lang->api->publish          = '发布';
 $lang->api->edit             = '编辑';
 $lang->api->delete           = '删除';
 $lang->api->position         = '位置';
@@ -29,6 +30,8 @@ $lang->api->noParam          = 'GET方式调试不需要输入参数，';
 $lang->api->noModule         = '接口库下没有目录，请先维护目录';
 $lang->api->post             = 'POST方式调试请参照页面表单';
 $lang->api->noUniqueName     = '接口库名已存在。';
+$lang->api->noUniqueVersion  = '版本已存在。';
+$lang->api->version          = '版本';
 $lang->api->createLib        = '创建接口库';
 $lang->api->createStruct     = '创建数据结构';
 $lang->api->editStruct       = '修改数据结构';

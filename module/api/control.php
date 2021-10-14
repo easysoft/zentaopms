@@ -77,6 +77,38 @@ class api extends control
     }
 
     /**
+     * Publish a api doc lib.
+     *
+     * @param  $libID
+     * @access public
+     * @return void
+     */
+    public function publish($libID)
+    {
+        $lib = $this->doc->getLibById($libID);
+
+        if(!empty($_POST)) {
+            $data   = fixer::input('post')
+                ->add('lib', $libID)
+                ->add('addedBy', $this->app->user->account)
+                ->add('addedDate', helper::now())
+                ->get();
+
+            // check version is exist.
+            if($this->api->getReleaseByVersion($data->version))
+            {
+                return $this->sendError($this->lang->api->noUniqueVersion);
+            }
+            $this->api->publishLib($data);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
+        }
+
+        $this->view->title = $this->lang->api->publish . $lib->name;
+        $this->display();
+    }
+
+    /**
      * Api doc global struct page.
      *
      * @param  string $orderBy
@@ -159,6 +191,7 @@ class api extends control
      */
     public function editStruct($libID, $structID)
     {
+        common::setMenuVars('doc', $libID);
         $struct = $this->api->getStructByID($structID);
 
         if(!empty($_POST))
@@ -321,7 +354,6 @@ class api extends control
                 return $this->sendError(dao::getError());
             }
 
-            $this->action->create('api', $apiID, 'Edited');
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID")));
         }
 
@@ -345,9 +377,9 @@ class api extends control
                 'value' => $key,
             ];
         }
-        $this->view->typeOptions      = $options;
-        $this->view->user      = $this->app->user->account;
-        $this->view->allUsers  = $this->loadModel('user')->getPairs('devfirst|noclosed');;
+        $this->view->typeOptions = $options;
+        $this->view->user        = $this->app->user->account;
+        $this->view->allUsers    = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
         $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
         $this->view->example          = $example;
@@ -517,6 +549,7 @@ class api extends control
         // global struct link
         $menu = '';
 
+        $menu .= html::a(helper::createLink('api', 'publish', "libID=$libID"), $this->lang->api->publish, '', 'class="btn btn-link iframe"');
         // page of index menu
         if(intval($libID) > 0)
         {

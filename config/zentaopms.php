@@ -191,11 +191,13 @@ define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
 define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
-define('TABLE_DOCLIB',        '`' . $config->db->prefix . 'doclib`');
-define('TABLE_DOC',           '`' . $config->db->prefix . 'doc`');
-define('TABLE_API',           '`' . $config->db->prefix . 'api`');
-define('TABLE_API_SPEC',      '`' . $config->db->prefix . 'apispec`');
-define('TABLE_APISTRUCT',           '`' . $config->db->prefix . 'apistruct`');
+define('TABLE_DOCLIB',          '`' . $config->db->prefix . 'doclib`');
+define('TABLE_DOC',             '`' . $config->db->prefix . 'doc`');
+define('TABLE_API',             '`' . $config->db->prefix . 'api`');
+define('TABLE_API_SPEC',        '`' . $config->db->prefix . 'apispec`');
+define('TABLE_APISTRUCT',       '`' . $config->db->prefix . 'apistruct`');
+define('TABLE_APISTRUCT_SPEC',  '`' . $config->db->prefix . 'apistruct_spec`');
+define('TABLE_API_LIB_RELEASE', '`' . $config->db->prefix . 'api_lib_release`');
 
 define('TABLE_MODULE',        '`' . $config->db->prefix . 'module`');
 define('TABLE_ACTION',        '`' . $config->db->prefix . 'action`');

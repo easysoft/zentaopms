@@ -29,6 +29,59 @@ class apiModel extends model
     const PARAMS_TYPE_CUSTOM = 'custom';
 
     /**
+     * @param  object $data
+     * @access public
+     * @return int
+     */
+    public function publishLib($data)
+    {
+        /* Get lib modules list. */
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('root')->eq((int)$data->lib)
+            ->andWhere('type')->eq('api')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade desc, `order`')
+            ->fetchAll();
+
+        /* Get all api list. */
+        $apis = $this->dao->select('id,version')->from(TABLE_API)
+            ->where('lib')->eq($data->lib)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+
+        /* Get all struct list. */
+        $structs = $this->dao->select('id,version')->from(TABLE_APISTRUCT)
+            ->where('lib')->eq($data->lib)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+
+        $snap = array('modules' => $modules, 'apis' => $apis, 'structs' => $structs);
+
+        $data->snap = json_encode($snap);
+        $this->dao->insert(TABLE_API_LIB_RELEASE)->data($data)
+            ->autoCheck()
+            ->batchCheck($this->config->api->publish->requiredFields, 'notempty')
+            ->exec();
+
+        return dao::isError() ? false : $this->dao->lastInsertID();
+    }
+
+    /**
+     * Delete a lib publish.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function deletePublish($id)
+    {
+        $this->dao->update(TABLE_API_LIB_RELEASE)
+            ->set('deleted')->eq(1)
+            ->where('id')->eq($id)
+            ->exec();
+    }
+
+    /**
      * Create an api doc.
      *
      * @param  object $params
@@ -54,10 +107,23 @@ class apiModel extends model
      */
     public function createStruct($data)
     {
+        $data->version = 1;
         $this->dao->insert(TABLE_APISTRUCT)->data($data)
             ->autoCheck()
             ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
             ->exec();
+
+        /* Create a struct version. */
+        $version = array(
+            'name'      => $data->name,
+            'type'      => $data->type,
+            'desc'      => $data->desc,
+            'version'   => $data->version,
+            'attribute' => $data->attribute,
+            'addedBy'   => $data->addedBy,
+            'addedDate' => $data->addedDate
+        );
+        $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($version)->exec();
 
         return dao::isError() ? 0 : $this->dao->lastInsertID();
     }
@@ -77,6 +143,8 @@ class apiModel extends model
         unset($data->addedBy);
         unset($data->addedDate);
 
+        $data->version = $old->version + 1;
+
         $this->dao->update(TABLE_APISTRUCT)
             ->data($data)->autoCheck()
             ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
@@ -84,6 +152,18 @@ class apiModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+
+        /* Create a struct version */
+        $version = array(
+            'name'      => $data->name,
+            'type'      => $data->type,
+            'desc'      => $data->desc,
+            'version'   => $data->version,
+            'attribute' => $data->attribute,
+            'addedBy'   => $data->editedBy,
+            'addedDate' => $data->editedDate
+        );
+        $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($version)->exec();
 
         return common::createChanges($old, $data);
     }
@@ -170,6 +250,23 @@ class apiModel extends model
         return $model;
     }
 
+    /**
+     * Get release by version.
+     *
+     * @param  $version
+     * @access public
+     * @return object
+     */
+    public function getReleaseByVersion($version)
+    {
+        $model = $this->dao->select('*')
+            ->from(TABLE_API_LIB_RELEASE)
+            ->where('version')->eq($version)
+            ->fetch();
+        if($model) $model->snap = json_decode(htmlspecialchars_decode($model->snap), true);
+        return $model;
+    }
+
 
     /**
      * Get api doc by id.
@@ -249,7 +346,7 @@ class apiModel extends model
     public static function getApiStatusText($status)
     {
         global $lang;
-        switch($status)
+        switch ($status)
         {
             case static::STATUS_DOING:
             {
@@ -432,12 +529,12 @@ class apiModel extends model
             }
             else
             {
-                while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
+                while ($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
             }
 
             $result['status'] = 'success';
             $result['data']   = $rows;
-        } catch(PDOException $e)
+        } catch (PDOException $e)
         {
             $result['status']  = 'fail';
             $result['message'] = $e->getMessage();

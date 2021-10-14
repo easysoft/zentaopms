@@ -3,9 +3,9 @@ var app = new Vue({
     data: {
         header: [],
         queryP: [],
-        body: [],
-        params: "",
+        body: "",
         response: "",
+        params: "",
         defaultHeader: [
             { field: '', required: '', desc: '' }
         ],
@@ -33,7 +33,7 @@ var app = new Vue({
             },
             deep: true
         },
-        params: {
+        body: {
             handler() {
                 this.setParams()
             },
@@ -42,7 +42,7 @@ var app = new Vue({
     },
     methods: {
         changeAttr(val) {
-            this.params = JSON.stringify(val)
+            this.body = val
         },
         changeRes(val) {
             this.response = JSON.stringify(val)

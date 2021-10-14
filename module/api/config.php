@@ -15,7 +15,12 @@ $config->api->create->requiredFields = 'lib,title,path';
 $config->api->edit = new stdclass();
 $config->api->edit->requiredFields = 'lib,title,path';
 
+$config->api->publish = new stdclass();
+$config->api->publish->requiredFields = 'version';
+
 $config->api->editor = new stdclass();
 $config->api->editor->createlib = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->api->editor->create    = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->api->editor->edit      = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->api->editor->publish   = array('id' => 'desc', 'tools' => 'simpleTools');
+

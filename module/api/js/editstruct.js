@@ -1,3 +1,4 @@
+console.log(struct)
 new Vue({
     el: '#app',
     data: function () {

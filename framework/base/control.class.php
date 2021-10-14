@@ -181,9 +181,9 @@ class baseControl
      * 2. set the pathes of current module, and load it's model class.
      * 3. auto assign the $lang and $config to the view.
      *
-     * @param string $moduleName
-     * @param string $methodName
-     * @param string $appName
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $appName
      * @access public
      * @return void
      */
@@ -253,7 +253,7 @@ class baseControl
      * 设置方法名。
      * Set the method name.
      *
-     * @param string $methodName 方法名，如果为空，则从$app中获取。The method name, if empty, get it from $app.
+     * @param  string $methodName 方法名，如果为空，则从$app中获取。The method name, if empty, get it from $app.
      * @access  public
      * @return  void
      */
@@ -266,8 +266,8 @@ class baseControl
      * 加载指定模块的model文件。
      * Load the model file of one module.
      *
-     * @param string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
-     * @param string $appName    The app name, if empty, use current app's name.
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    The app name, if empty, use current app's name.
      * @access  public
      * @return  object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
@@ -365,8 +365,8 @@ class baseControl
      * 设置视图文件：主视图文件，扩展视图文件， 站点扩展视图文件，以及钩子脚本。
      * Set view files: the main file, extension view file, site extension view file and hook files.
      *
-     * @param string $moduleName module name
-     * @param string $methodName method name
+     * @param  string $moduleName module name
+     * @param  string $methodName method name
      * @access public
      * @return string  the view file
      */
@@ -404,7 +404,7 @@ class baseControl
      * 获取某一个视图文件的扩展。
      * Get the extension file of an view.
      *
-     * @param string $viewFile
+     * @param  string $viewFile
      * @access public
      * @return string|bool  If extension view file exists, return the path. Else return fasle.
      */
@@ -440,8 +440,8 @@ class baseControl
      * 获取适用于当前方法的css：该模块公用的css + 当前方法的css + 扩展的css。
      * Get css codes applied to current method: module common css + method css + extension css.
      *
-     * @param string $moduleName
-     * @param string $methodName
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return string
      */
@@ -507,7 +507,7 @@ class baseControl
     /**
      * Get extension css and extension css with lang.
      *
-     * @param array $files
+     * @param  array $files
      * @access public
      * @return string
      */
@@ -559,8 +559,8 @@ class baseControl
      * 获取适用于当前方法的js：该模块公用的js + 当前方法的js + 扩展的js。
      * Get js codes applied to current method: module common js + method js + extension js.
      *
-     * @param string $moduleName
-     * @param string $methodName
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return string
      */
@@ -609,8 +609,8 @@ class baseControl
      * 向$view传递一个变量。
      * Assign one var to the view vars.
      *
-     * @param string $name  the name.
-     * @param mixed  $value the value.
+     * @param  string $name  the name.
+     * @param  mixed  $value the value.
      * @access  public
      * @return  void
      */
@@ -635,8 +635,8 @@ class baseControl
      * 渲染视图文件。
      * Parse view file.
      *
-     * @param string $moduleName module name, if empty, use current module.
-     * @param string $methodName method name, if empty, use current method.
+     * @param  string $moduleName module name, if empty, use current module.
+     * @param  string $methodName method name, if empty, use current method.
      * @access public
      * @return string the parsed result.
      */
@@ -655,8 +655,8 @@ class baseControl
      * 渲染json格式。
      * Parse json format.
      *
-     * @param string $moduleName module name
-     * @param string $methodName method name
+     * @param  string $moduleName module name
+     * @param  string $methodName method name
      * @access public
      * @return void
      */
@@ -683,8 +683,8 @@ class baseControl
      * 默认渲染方法，适用于viewType = html的时候。
      * Default parse method when viewType != json, like html.
      *
-     * @param string $moduleName module name
-     * @param string $methodName method name
+     * @param  string $moduleName module name
+     * @param  string $methodName method name
      * @access public
      * @return void
      */
@@ -694,7 +694,7 @@ class baseControl
          * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
          * Set viewFile. (Can't assign $viewFile = $this->setViewFile() directly because one php7's bug.)
          */
-        $results  = $this->setViewFile($moduleName, $methodName);
+        $results = $this->setViewFile($moduleName, $methodName);
 
         $viewFile = $results;
         if(is_array($results)) extract($results);
@@ -740,9 +740,9 @@ class baseControl
      * Get the output of one module's one method as a string, thus in one module's method, can fetch other module's content.
      * If the module name is empty, then use the current module and method. If set, use the user defined module and method.
      *
-     * @param string $moduleName module name.
-     * @param string $methodName method name.
-     * @param array  $params     params.
+     * @param  string $moduleName module name.
+     * @param  string $methodName method name.
+     * @param  array  $params     params.
      * @access  public
      * @return  string  the parsed html.
      */
@@ -868,8 +868,8 @@ class baseControl
      * 向浏览器输出内容。
      * Print the content of the view.
      *
-     * @param string $moduleName module name
-     * @param string $methodName method name
+     * @param  string $moduleName module name
+     * @param  string $methodName method name
      * @access  public
      * @return  void
      */
@@ -883,8 +883,8 @@ class baseControl
      * 直接输出data数据，通常用于ajax请求中。
      * Send data directly, for ajax requests.
      *
-     * @param mixed  $data
-     * @param string $type
+     * @param  mixed  $data
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -938,21 +938,23 @@ class baseControl
 
     /**
      * return error json
-     * @param mixed $error
+     *
+     * @param  mixed $error
+     * @return void
      * @author thanatos thanatos915@163.com
      */
     public function sendError($error)
     {
         $this->send([
-                        'result'  => 'fail',
-                        'message' => $error,
-                    ]);
+            'result'  => 'fail',
+            'message' => $error,
+        ]);
     }
 
     /**
      * send success json
      *
-     * @param array $data
+     * @param  array $data
      * @return void
      * @author thanatos thanatos915@163.com
      */
@@ -967,11 +969,11 @@ class baseControl
      * 创建一个模块方法的链接。
      * Create a link to one method of one module.
      *
-     * @param string       $moduleName module name
-     * @param string       $methodName method name
-     * @param string|array $vars       the params passed, can be array(key=>value) or key1=value1&key2=value2
-     * @param string       $viewType   the view type
-     * @param string       $onlybody   remove header and footer or not in iframe
+     * @param  string       $moduleName module name
+     * @param  string       $methodName method name
+     * @param  string|array $vars       the params passed, can be array(key=>value) or key1=value1&key2=value2
+     * @param  string       $viewType   the view type
+     * @param  string       $onlybody   remove header and footer or not in iframe
      * @access  public
      * @return  string the link string.
      */
@@ -985,9 +987,9 @@ class baseControl
      * 创建当前模块的一个方法链接。
      * Create a link to the inner method of current module.
      *
-     * @param string       $methodName method name
-     * @param string|array $vars       the params passed, can be array(key=>value) or key1=value1&key2=value2
-     * @param string       $viewType   the view type
+     * @param  string       $methodName method name
+     * @param  string|array $vars       the params passed, can be array(key=>value) or key1=value1&key2=value2
+     * @param  string       $viewType   the view type
      * @access  public
      * @return  string  the link string.
      */
@@ -1000,7 +1002,7 @@ class baseControl
      * 重定向到另一个页面。
      * Location to another page.
      *
-     * @param string $url the target url.
+     * @param  string $url the target url.
      * @access  public
      * @return  void
      */
