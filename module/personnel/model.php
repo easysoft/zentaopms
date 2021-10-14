@@ -677,10 +677,10 @@ class personnelModel extends model
      */
     public function deleteProductWhitelist($productID, $account = '')
     {
-        $product = $this->dao->select('id,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('whitelist');
+        $whitelist = $this->dao->select('id,whitelist')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('whitelist');
         if(empty($product)) return false;
 
-        $newWhitelist = str_replace(',' . $account, '', $product->whitelist);
+        $newWhitelist = str_replace(',' . $account, '', $whitelist);
         $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($productID)->exec();
         $this->dao->delete()->from(TABLE_ACL)
              ->where('objectID')->eq($productID)
