@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('weekend', $config->execution->weekend);?>
+<?php js::set('type', $type);?>
 <div class='container'>
   <form method='post' target='hiddenwin'>
     <div class='modal-dialog'>
