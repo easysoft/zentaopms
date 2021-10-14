@@ -522,6 +522,7 @@ $(function()
         setProgramBegin(programBegin);
         setProgramEnd(programEnd);
         setProjectPM();
+        toggleProgram();
 
         hiddenProject();
     })
@@ -638,7 +639,7 @@ function getLineByProgram()
 function toggleProgram(obj)
 {
     var $obj = $(obj);
-    if($obj.length == 0) return false;
+    if($obj.length == 0 && type != 'noProject') return false;
 
     var $programs = $obj.closest('table').find('#programs');
     if($obj.prop('checked'))
@@ -647,6 +648,8 @@ function toggleProgram(obj)
         $('form .pgm-exist').addClass('hidden');
         $programs.attr('disabled', 'disabled');
         $('.programStatus').show();
+        $('#programStatus').val('wait');
+        $('#programStatus').removeAttr('disabled').trigger("chosen:updated");
 
         $('form #newProject0').prop('checked', true);
         $('form #newLine0').prop('checked', true);
@@ -658,6 +661,7 @@ function toggleProgram(obj)
         $('form .pgm-exist').removeClass('hidden');
         $('form .pgm-no-exist').addClass('hidden');
         $('.programStatus').hide();
+        $('#programStatus').attr('disabled', 'disabled');
 
         if(!$('#newProgram0').prop('disabled'))
         {

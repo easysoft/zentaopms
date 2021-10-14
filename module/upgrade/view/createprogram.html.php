@@ -13,8 +13,7 @@
     </th>
     <td class='required'>
       <div class='input-group'>
-        <?php $hidden = $type == 'noProject' ? '' : 'hidden';?>
-        <?php echo html::select("programs", $programs, $programID, "class='form-control $hidden pgm-exist' onchange='getProjectByProgram(this)'");?>
+        <?php echo html::select("programs", $programs, $programID, "class='form-control hidden pgm-exist' onchange='getProjectByProgram(this)'");?>
         <?php if($type != 'noProject'):?>
         <?php echo html::input("programName", '', "class='form-control pgm-no-exist'");?>
         <span class='input-group-addon'>
