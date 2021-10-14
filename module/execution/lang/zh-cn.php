@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* 字段列表。*/
-$lang->execution->allExecutions   = '所有' . $lang->executionCommon;
+$lang->execution->allExecutions   = '所有' . $lang->execution->common;
 $lang->execution->allExecutionAB  = "{$lang->execution->common}列表";
 $lang->execution->id              = $lang->executionCommon . '编号';
 $lang->execution->type            = $lang->executionCommon . '类型';
