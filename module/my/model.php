@@ -15,7 +15,7 @@ class myModel extends model
 {
     /**
      * Set menu.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -56,7 +56,7 @@ class myModel extends model
             }
         }
     }
-    
+
     /**
      * Get my charged products.
      *
@@ -134,54 +134,82 @@ class myModel extends model
      * @access public
      * @return object
      */
-    public function getProjects()
+    public function getDoingProjects()
     {
         $data = new stdClass();
-        $allConsumed      = 0;
-        $thisYearConsumed = 0;
-        $doingProjects    = array();
-
-        $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
-        $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');
-        $doingCount       = 0;
+        $doingProjects = array();
+        $projects      = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
+        $maxCount      = 5;
         foreach($projects as $key => $project)
         {
             if($project->status == 'doing')
             {
-                $doingCount++;
                 $workhour = $this->project->getWorkhour($project->id);
                 $projects[$key]->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
                 $doingProjects[] = $projects[$key];
+                if(count($doingProjects) >= $maxCount) break;
             }
-            $allConsumed      += $project->consumed;
-            $thisYearConsumed += $projectsConsumed[$project->id]->totalConsumed;
         }
 
-        /* Sort by consumed,get five record */
-        array_multisort(array_column($doingProjects, 'consumed'), SORT_DESC, $doingProjects);
-        $doingProjects = array_slice($doingProjects, 0, 5);
-
-        $data->allCount           = count($projects);
-        $data->doingCount         = $doingCount;
-        $data->allConsumed        = $allConsumed;
-        $data->thisYearConsumed   = $thisYearConsumed;
-        $data->projects           = $doingProjects;
+        $data->doingCount = count($doingProjects);
+        $data->projects   = $doingProjects;
         return $data;
     }
 
     /**
-     * Get my doc.
+     * Get overview.
      *
      * @access public
      * @return object
      */
-    public function getDocs()
+    public function getOverview()
     {
-        /* Get count of docs created by me. */
-        $doc = new stdclass();
-        $doc->createdCount = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
+        $allConsumed      = 0;
+        $thisYearConsumed = 0;
 
-        return $doc;
+        $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
+        $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');
+        foreach($projects as $project)
+        {
+            $allConsumed      += $project->consumed;
+            $thisYearConsumed += $projectsConsumed[$project->id]->totalConsumed;
+        }
+
+        $overview->projectTotal     = count($projects);
+        $overview->allConsumed      = $allConsumed;
+        $overview->thisYearConsumed = $thisYearConsumed;
+
+        return $overview;
+    }
+
+    /**
+     * Get contribute
+     *
+     * @access public
+     * @return object
+     */
+    public function getContribute()
+    {
+        $account    = $this->app->user->account;
+        $contribute = new stdclass();
+
+        $contribute->docCreatedTotal   = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
+        $contribute->ownerProductTotal = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('PO')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
+
+        $inTeam = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($this->app->user->account)->fetchPairs('root', 'root');
+        $contribute->involvedProjectTotal = $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->eq('project')
+            ->andWhere('id', true)->in($inTeam)
+            ->orWhere('openedBy')->eq($account)
+            ->orWhere('PO')->eq($account)
+            ->orWhere('PM')->eq($account)
+            ->orWhere('QD')->eq($account)
+            ->orWhere('RD')->eq($account)
+            ->markRight(1)
+            ->fetch('count');
+
+        return $contribute;
     }
 
     /**
@@ -193,10 +221,32 @@ class myModel extends model
     public function getActions()
     {
         $actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc');
-        $users   = $this->loadModel('user')->getPairs('noletter');
+        $users   = $this->loadModel('user')->getList();
+
+        $simplifyUsers = array();
+        foreach($users as $user)
+        {
+            $simplifyUser = new stdclass();
+            $simplifyUser->id       = $user->id;
+            $simplifyUser->account  = $user->account;
+            $simplifyUser->realname = $user->realname;
+            $simplifyUser->avatar   = $user->avatar;
+            $simplifyUsers[$user->account] = $simplifyUser;
+        }
+
         foreach($actions as $key => $action)
         {
-            $actions[$key]->actor = $users[$action->actor];
+            $simplifyUser = zget($simplifyUsers, $action->actor, '');
+            $actionActor  = $simplifyUser;
+            if(empty($simplifyUser))
+            {
+                $actionActor = new stdclass();
+                $actionActor->id = 0;
+                $actionActor->account  = $action->actor;
+                $actionActor->realname = $action->actor;
+                $actionActor->avatar   = '';
+            }
+            $actions[$key]->actor = $actionActor;
         }
 
         return $actions;
