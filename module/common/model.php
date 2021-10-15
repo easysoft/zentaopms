@@ -403,26 +403,55 @@ class commonModel extends model
                 }
 
                 $showCreateList = true;
-                $isOnlyBody     = $objectType == 'doc';
-                $attr           = $objectType == 'doc' ? "class='iframe' data-width='650px'" : '';
+                $isOnlyBody     = false;
+                $attr           = '';
 
                 $params = '';
-                if($objectType == 'doc')
+                switch($objectType)
                 {
-                    $params       = "objectType=&objectID=0&libID=0";
-                    $createMethod = 'selectLibType';
+                    case 'doc':
+                        $params       = "objectType=&objectID=0&libID=0";
+                        $createMethod = 'selectLibType';
+                        $isOnlyBody   = true;
+                        $attr         = "class='iframe' data-width='650px'";
+                        break;
+                    case 'project':
+                        if(isset($config->maxVersion) and!defined('TUTORIAL'))
+                        {
+                            $params       = "programID=0&copyProjectID=0&extra=from=global";
+                            $createMethod = 'createGuide';
+                            $attr         = 'data-toggle="modal" data-target="#guideDialog"';
+                        }
+                        else
+                        {
+                            $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
+                        }
+
+                        break;
+                    case 'bug':
+                        $params = "productID=$productID&branch=&extras=from=global";
+                        break;
+                    case 'story':
+                        $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        break;
+                    case 'task':
+                        $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
+                        break;
+                    case 'testcase':
+                        $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
+                        break;
+                    case 'execution':
+                        $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                        break;
+                    case 'product':
+                        $params = "programID=&extra=from=global";
+                        break;
+                    case 'program':
+                        $params = "parentProgramID=0&extra=from=global";
+                        break;
                 }
 
-                if($objectType == 'bug')       $params = "productID=$productID&branch=&extras=from=global";
-                if($objectType == 'story')     $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
-                if($objectType == 'task')      $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
-                if($objectType == 'testcase')  $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
-                if($objectType == 'execution') $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
-                if($objectType == 'project')   $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
-                if($objectType == 'product')   $params = "programID=&extra=from=global";
-                if($objectType == 'program')   $params = "parentProgramID=0&extra=from=global";
-
-                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
+                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $attr) . '</li>';
             }
         }
 
