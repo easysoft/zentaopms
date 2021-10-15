@@ -373,21 +373,18 @@ class projectModel extends model
             ROUND(SUM(`left`), 2) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere('project')->eq($projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
 
         $totalConsumed = $this->dao->select('ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere('project')->eq($projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch('totalConsumed');
 
         $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere('project')->eq($projectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->andWhere('status')->in('closed,cancel')
