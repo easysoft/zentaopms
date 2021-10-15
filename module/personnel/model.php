@@ -622,10 +622,13 @@ class personnelModel extends model
             $product = $this->loadModel('product')->getById($objectID);
             if(empty($product)) return false;
 
-            $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
-            $newWhitelist     = array_merge($programWhitelist, $accounts);
-            $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source, $updateType);
+            if($this->config->systemMode == 'new')
+            {
+                $programWhitelist = $this->getWhitelistAccount($product->program, 'program');
+                $newWhitelist     = array_merge($programWhitelist, $accounts);
+                $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
+                $this->updateWhitelist($newWhitelist, 'program', $product->program, 'whitelist', $source, $updateType);
+            }
 
             /* Removal of persons from centralized program whitelisting. */
             if($updateType == 'replace')
@@ -640,10 +643,13 @@ class personnelModel extends model
             $sprint = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
             if(empty($sprint)) return false;
 
-            $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
-            $newWhitelist     = array_merge($projectWhitelist, $accounts);
-            $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
-            $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source, $updateType);
+            if($this->config->systemMode == 'new')
+            {
+                $projectWhitelist = $this->getWhitelistAccount($sprint->project, 'project');
+                $newWhitelist     = array_merge($projectWhitelist, $accounts);
+                $source           = $source == 'upgrade' ? 'upgrade' : 'sync';
+                $this->updateWhitelist($newWhitelist, 'project', $sprint->project, 'whitelist', $source, $updateType);
+            }
 
             /* Removal of whitelisted persons from projects. */
             if($updateType == 'replace')
