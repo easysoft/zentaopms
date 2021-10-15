@@ -1271,11 +1271,11 @@ class programModel extends model
         /* Get the number of left tasks. */
         if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
         {
-            $leftTasks = $this->dao->select('project,count(*) as tasks')->from(TABLE_TASK)
-                ->where('project')->in($projectKeys)
-                ->andWhere('status')->notIn('cancel,closed')
-                ->andWhere('execution')->in(array_keys($executions))
-                ->groupBy('project')
+            $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+                ->where('t1.execution')->in(array_keys($executions))
+                ->andWhere('t1.status')->notIn('cancel,closed')
+                ->groupBy('t2.parent')
                 ->fetchAll('project');
         }
 

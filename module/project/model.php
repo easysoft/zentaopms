@@ -283,26 +283,20 @@ class projectModel extends model
             ->andWhere('type')->eq('project')
             ->groupBy('root')->fetchPairs();
 
-        $executionIdList = $this->dao->select('id')->from(TABLE_PROJECT)
-            ->where('parent')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
-
-        $hours = $this->dao->select('project,
-            sum(consumed) as consumed,
-            sum(estimate) as estimate')
-            ->from(TABLE_TASK)
-            ->where('execution')->in($executionIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('project')
+        $hours = $this->dao->select('t2.parent as project, sum(t1.consumed) as consumed, sum(t1.estimate) as estimate')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t2.parent')->in($projectIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
+            ->groupBy('t2.parent')
             ->fetchAll('project');
 
-        $leftTasks = $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
-            ->where('execution')->in($executionIdList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->in('wait,doing,pause')
-            ->groupBy('project')
+        $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t2.parent')->in($projectIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.status')->in('wait,doing,pause')
+            ->groupBy('t2.parent')
             ->fetchPairs();
 
         $this->loadModel('product');
