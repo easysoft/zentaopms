@@ -1043,7 +1043,7 @@ class userModel extends model
     }
 
     /**
-     * Get execution a user participated.
+     * Get the project or execution in which the user participates..
      *
      * @param  string $account
      * @param  string $type project|execution
@@ -1053,13 +1053,13 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getExecutions($account, $type = 'execution', $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getObjects($account, $type = 'execution', $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $projectType    = $type == 'execution' ? 'sprint,stage' : $type;
-        $myProjectsList = $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
+        $objectType    = $type == 'execution' ? 'sprint,stage' : $type;
+        $myObjectsList = $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.type')->eq($type)
-            ->andWhere('t2.type')->in($projectType)
+            ->andWhere('t2.type')->in($objectType)
             ->beginIF(strpos('doing|wait|suspended|closed', $status) !== false)->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
@@ -1070,12 +1070,14 @@ class userModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy("t2.$orderBy")
             ->page($pager)
-            ->fetchGroup('project');
+            ->fetchAll('root');
 
+        $objectIdList  = array();
         $projectIdList = array();
-        foreach($myProjectsList as $projects)
+        foreach($myObjectsList as $object)
         {
-            foreach($projects as $project) $projectIdList[] = $project->id;
+            $objectIdList[]  = $object->id;
+            $projectIdList[] = $object->project;
         }
 
         /* Get all tasks and compute totalConsumed, totalLeft, totalWait, progress according to them. */
@@ -1085,22 +1087,22 @@ class userModel extends model
         $tasks       = $this->dao->select('id, project, execution, consumed, `left`, status, assignedTo')
             ->from(TABLE_TASK)
             ->where('parent')->lt(1)
-            ->andWhere($searchField)->in($projectIdList)->fi()
+            ->andWhere($searchField)->in($objectIdList)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchGroup($searchField, 'id');
 
         /* Compute totalEstimate, totalConsumed, totalLeft. */
-        foreach($tasks as $projectID => $projectTasks)
+        foreach($tasks as $objectID => $objectTasks)
         {
             $hour = (object)$emptyHour;
-            foreach($projectTasks as $task)
+            foreach($objectTasks as $task)
             {
                 if($task->status == 'wait') $hour->waitTasks += 1;
                 if($task->status != 'cancel') $hour->totalConsumed += $task->consumed;
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
                 if($task->assignedTo == $account) $hour->assignedToMeTasks += 1;
             }
-            $hours[$projectID] = $hour;
+            $hours[$objectID] = $hour;
         }
 
         /* Compute totalReal and progress. */
@@ -1112,37 +1114,31 @@ class userModel extends model
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
         }
 
-        $projectIdList = array_keys($myProjectsList);
-        $projectList   = $this->loadModel('project')->getByIdList($projectIdList);
-
-        $myProjects = array();
-        foreach($myProjectsList as $projects)
+        $myObjects   = array();
+        $projectList = $this->loadModel('project')->getByIdList($projectIdList);
+        foreach($myObjectsList as $object)
         {
-            foreach($projects as $project)
+            /* Judge whether the project or execution is delayed. */
+            if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
             {
-                /* Judge whether the project is delayed. */
-                if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
-                {
-                    $delay = helper::diffDate(helper::today(), $project->end);
-                    if($delay > 0) $project->delay = $delay;
-                }
-
-                /* Process the hours. */
-                $project->progress          = isset($hours[$project->id]) ? $hours[$project->id]->progress : 0;
-                $project->waitTasks         = isset($hours[$project->id]) ? $hours[$project->id]->waitTasks : 0;
-                $project->assignedToMeTasks = isset($hours[$project->id]) ? $hours[$project->id]->assignedToMeTasks : 0;
-
-                if($project->project)
-                {
-                    $parentProject = zget($projectList, $project->project, '');
-                    if(empty($parentProject)) $parentProject = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
-                    $project->projectName = $parentProject ? $parentProject->name : '';
-                }
-                $myProjects[$project->id] = $project;
+                $delay = helper::diffDate(helper::today(), $object->end);
+                if($delay > 0) $object->delay = $delay;
             }
+
+            /* Process the hours. */
+            $object->progress          = isset($hours[$object->id]) ? $hours[$object->id]->progress : 0;
+            $object->waitTasks         = isset($hours[$object->id]) ? $hours[$object->id]->waitTasks : 0;
+            $object->assignedToMeTasks = isset($hours[$object->id]) ? $hours[$object->id]->assignedToMeTasks : 0;
+
+            if($object->project)
+            {
+                $parentProject = zget($projectList, $object->project, '');
+                $object->projectName = $parentProject ? $parentProject->name : '';
+            }
+            $myObjects[$object->id] = $object;
         }
 
-        return $myProjects;
+        return $myObjects;
     }
 
     /**
