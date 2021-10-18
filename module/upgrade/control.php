@@ -677,8 +677,8 @@ class upgrade extends control
 
             $installFile = $this->app->getAppRoot() . 'www/install.php';
             $upgradeFile = $this->app->getAppRoot() . 'www/upgrade.php';
-            if(file_exists($installPath)) @unlink($installPath);
-            if(file_exists($upgradePath)) @unlink($upgradePath);
+            if(file_exists($installFile)) @unlink($installFile);
+            if(file_exists($upgradeFile)) @unlink($upgradeFile);
             unset($_SESSION['upgrading']);
         }
     }
