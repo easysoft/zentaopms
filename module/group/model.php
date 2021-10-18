@@ -462,7 +462,7 @@ class groupModel extends model
             foreach($acl->{$key} as $objectID)
             {
                 $this->personnel->updateWhitelist($newUsers, $objectType, $objectID, 'whitelist', 'sync', 'increase');
-                $this->personnel->deleteWhitelist($delUsers, $objectType, $objectID);
+                $this->personnel->deleteWhitelist($delUsers, $objectType, $objectID, $groupID);
             }
         }
 
