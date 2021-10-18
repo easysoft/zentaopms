@@ -493,7 +493,6 @@ class projectModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
             ->andWhere('id')->in($projectIdList)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchAll('id');

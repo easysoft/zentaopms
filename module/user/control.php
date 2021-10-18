@@ -362,7 +362,7 @@ class user extends control
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
         $this->view->position[] = $this->lang->user->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getExecutions($account, 'execution', 'all', $orderBy, $pager);
+        $this->view->executions = $this->user->getObjects($account, 'execution', 'all', $orderBy, $pager);
         $this->view->user       = $user;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;

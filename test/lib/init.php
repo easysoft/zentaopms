@@ -17,6 +17,26 @@ error_reporting(E_ALL & E_STRICT);
 
 $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
 
+/**
+ * Assert status code and set body as $_result.
+ *
+ * @param  int $code
+ * @access public
+ * @return bool
+ */
+function c($code)
+{
+    global $_result;
+    if($_result and isset($_result->status_code) and $_result->status_code == $code)
+    {
+        $_result = $_result->body;
+        return true;
+    }
+
+    echo ">> \n\n";
+    return false;
+}
+
 /* Load the framework. */
 include $frameworkRoot . 'router.class.php';
 include $frameworkRoot . 'control.class.php';
@@ -26,8 +46,12 @@ include $frameworkRoot . 'helper.class.php';
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $tester = $app->loadCommon();
 
-/* Load libraries. */
+/* Load rest for api. */
+if(!isset($config->webSite)) die("Error: \$config->webSite is not set.\n");
+
 $app->loadClass('requests', true);
+include 'rest.php';
+$rest = new Rest($config->webSite . '/api.php/v1');
 
 /* Set configs. */
 $config->zendataRoot = dirname(dirname(__FILE__)) . '/zendata';
@@ -83,7 +107,7 @@ function p($key, $delimiter = ',')
         $result = trim($result, $delimiter);
     }
 
-    echo $result . "\n\n";
+    echo $result . "\n";
 
     return true;
 }
