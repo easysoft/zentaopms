@@ -75,8 +75,7 @@ class apiModel extends model
      */
     public function deletePublish($id)
     {
-        $this->dao->update(TABLE_API_LIB_RELEASE)
-            ->set('deleted')->eq(1)
+        $this->dao->delete()->from(TABLE_API_LIB_RELEASE)
             ->where('id')->eq($id)
             ->exec();
     }
@@ -260,15 +259,17 @@ class apiModel extends model
     /**
      * Get release by version.
      *
-     * @param  $version
-     * @access public
+     * @param  int $libID
+     * @param  string $version
      * @return object
+     * @access public
      */
-    public function getReleaseByVersion($version)
+    public function getReleaseByVersion($libID, $version)
     {
         $model = $this->dao->select('*')
             ->from(TABLE_API_LIB_RELEASE)
             ->where('version')->eq($version)
+            ->andWhere('lib')->eq($libID)
             ->fetch();
         if($model) $model->snap = json_decode(htmlspecialchars_decode($model->snap), true);
         return $model;
@@ -347,8 +348,8 @@ class apiModel extends model
     /**
      * Get api list by release.
      *
-     * @param object $release
-     * @param string $where
+     * @param  object $release
+     * @param  string $where
      * @return array
      */
     public function getApiListByRelease($release, $where = '')
@@ -459,6 +460,22 @@ class apiModel extends model
         return $this->dao->select('*')->from(TABLE_APISTRUCT)
             ->where('deleted')->eq(0)
             ->andWhere('lib')->eq($libID)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * @param  int    $libID
+     * @param  string $pager
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReleaseByQuery($libID, $pager = '', $orderBy = '')
+    {
+        return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
+            ->where('lib')->eq($libID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

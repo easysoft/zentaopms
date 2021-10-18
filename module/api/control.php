@@ -81,6 +81,53 @@ class api extends control
     }
 
     /**
+     * Release manage page.
+     *
+     * @param  int $libID
+     * @access public
+     * @return void
+     */
+    public function editPublish($libID, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $libs = $this->doc->getApiLibs();
+        $this->app->loadClass('pager', $static = true);
+        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
+
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Append id for secend sort. */
+        $sort     = $this->loadModel('common')->appendOrder($orderBy);
+        $releases = $this->api->getReleaseByQuery($libID, $pager, $sort);
+
+        $this->view->releases = $releases;
+        $this->view->pager    = $pager;
+        $this->view->orderBy  = $orderBy;
+        $this->view->title    = $this->lang->api->managePublish;
+        $this->view->libID    = $libID;
+        $this->display();
+    }
+
+    /**
+     * @param  int    $libID
+     * @param  int    $id
+     * @param  string $confirm
+     */
+    public function deleteRelease($libID, $id = 0, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            echo js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('api', 'deleteRelease', "libID=$libID&id=$id&confirm=yes"), '');
+            die;
+        }
+        else
+        {
+            $this->api->deletePublish($id);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            die(js::locate(inlink('editPublish', "libID=$libID"), 'parent'));
+        }
+    }
+
+    /**
      * Publish a api doc lib.
      *
      * @param  $libID
@@ -100,7 +147,7 @@ class api extends control
                 ->get();
 
             // check version is exist.
-            if($this->api->getReleaseByVersion($data->version))
+            if($this->api->getReleaseByVersion($libID, $data->version))
             {
                 return $this->sendError($this->lang->api->noUniqueVersion);
             }
@@ -564,7 +611,8 @@ class api extends control
      * @access public
      * @return void
      */
-    private function setMenu($libID = 0)
+    private
+    function setMenu($libID = 0)
     {
         common::setMenuVars('doc', $libID);
 
@@ -620,7 +668,8 @@ class api extends control
      * @access public
      * @return string
      */
-    private function generateLibsDropMenu($libs, $libID, $version = 0)
+    private
+    function generateLibsDropMenu($libs, $libID, $version = 0)
     {
         if(empty($libs)) return '';
 
@@ -715,8 +764,7 @@ EOT;
      * @access public
      * @return string
      */
-    public
-    function getModel($moduleName, $methodName, $params = '')
+    public function getModel($moduleName, $methodName, $params = '')
     {
         if(!$this->config->features->apiGetModel) die(sprintf($this->lang->api->error->disabled, '$config->features->apiGetModel'));
 
@@ -747,8 +795,7 @@ EOT;
      * @access public
      * @return void
      */
-    public
-    function debug($filePath, $action)
+    public function debug($filePath, $action)
     {
         $filePath = helper::safe64Decode($filePath);
         if($action == 'extendModel')
@@ -799,7 +846,8 @@ EOT;
         die($this->output);
     }
 
-    private function getTypeOptions($libID)
+    private
+    function getTypeOptions($libID)
     {
         $options = [];
         foreach($this->lang->api->paramsTypeOptions as $key => $item)

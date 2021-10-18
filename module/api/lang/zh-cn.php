@@ -59,6 +59,7 @@ $lang->api->title            = '接口库';
 $lang->api->module           = '目录';
 $lang->api->apiDoc           = '接口';
 $lang->api->manageType       = '维护目录';
+$lang->api->managePublish    = '版本管理';
 $lang->api->doing            = '开发中';
 $lang->api->done             = '开发完成';
 $lang->api->basicInfo        = '基本信息';
