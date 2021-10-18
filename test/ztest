@@ -10,10 +10,10 @@ switch($argv[1])
         zdRun();
         break;
     case 'extract':
+        ztfExtract('api');
         ztfExtract('model');
         break;
     case 'api':
-        ztfExtract('api');
         ztfRun('api');
         break;
     case 'control':
