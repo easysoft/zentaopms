@@ -138,7 +138,7 @@ class gitlab extends control
      */
     public function bindUser($gitlabID)
     {
-        $userPairs = $this->loadModel('user')->getPairs();
+        $userPairs = $this->loadModel('user')->getPairs('noclosed');
 
         $gitlab = $this->gitlab->getByID($gitlabID);
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
