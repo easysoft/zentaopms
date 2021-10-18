@@ -130,7 +130,7 @@ class api extends control
     /**
      * Publish a api doc lib.
      *
-     * @param  $libID
+     * @param  int $libID
      * @access public
      * @return void
      */
@@ -668,8 +668,7 @@ class api extends control
      * @access public
      * @return string
      */
-    private
-    function generateLibsDropMenu($libs, $libID, $version = 0)
+    private function generateLibsDropMenu($libs, $libID, $version = 0)
     {
         if(empty($libs)) return '';
 
