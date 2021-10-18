@@ -312,10 +312,11 @@ class product extends control
      * Create a product.
      *
      * @param  int    $programID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function create($programID = 0)
+    public function create($programID = 0, $extra = '')
     {
         if(!empty($_POST))
         {
@@ -348,6 +349,9 @@ class product extends control
             }
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
@@ -366,6 +370,7 @@ class product extends control
 
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
+        $this->view->gobackLink = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'all') : '';
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->programID  = $programID;
         $this->view->poUsers    = $poUsers;
@@ -692,7 +697,7 @@ class product extends control
         if(!$product)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
         }
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
@@ -1153,6 +1158,10 @@ class product extends control
      */
     public function kanban()
     {
+        $this->session->set('projectList', $this->app->getURI(true), 'project');
+        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+        $this->session->set('releaseList', $this->app->getURI(true), 'product');
+
         $kanbanGroup = $this->product->getStats4Kanban();
         extract($kanbanGroup);
 

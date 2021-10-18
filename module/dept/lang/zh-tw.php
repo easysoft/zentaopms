@@ -10,6 +10,9 @@
  * @link        http://www.zentao.net
  */
 $lang->dept->common      = '部門結構';
+$lang->dept->id          = '編號';
+$lang->dept->path        = '路徑';
+$lang->dept->position    = '職位';
 $lang->dept->manageChild = "下級部門";
 $lang->dept->edit        = "編輯部門";
 $lang->dept->delete      = "刪除部門";

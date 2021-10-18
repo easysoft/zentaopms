@@ -58,6 +58,7 @@ $lang->program->confirmChangePRJUint    = 'Synchronize the budget unit of the su
 $lang->program->exRateNotNegative       = 'The『exchange rate』should not be negative.';
 $lang->program->changePRJUnit           = 'Update the budget unit of the project';
 $lang->program->hasChildren             = 'It has child programs or projects. You cannot delete it.';
+$lang->program->hasProduct              = 'It has products. You cannot delete it.';
 $lang->program->readjustTime            = 'Change the program begin&end date.';
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';

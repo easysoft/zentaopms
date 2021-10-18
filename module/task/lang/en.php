@@ -59,11 +59,13 @@ $lang->task->project           = 'Project';
 $lang->task->execution         = $lang->executionCommon;
 $lang->task->module            = 'Module';
 $lang->task->moduleAB          = 'Module';
+$lang->task->design            = 'Design';
 $lang->task->story             = 'Story';
 $lang->task->storyAB           = 'Story';
 $lang->task->storySpec         = 'Story Description';
 $lang->task->storyVerify       = 'Acceptance Criteria';
 $lang->task->storyVersion      = 'Story Version';
+$lang->task->designVersion     = "Design Version";
 $lang->task->color             = 'Color';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Type';
@@ -91,6 +93,12 @@ $lang->task->deadlineAB        = 'Deadline';
 $lang->task->status            = 'Status';
 $lang->task->subStatus         = 'Sub Status';
 $lang->task->desc              = 'Description';
+$lang->task->version           = 'Version';
+$lang->task->estimateStartDate = 'Estimate Start Date';
+$lang->task->actualStartDate   = 'Actual Start Date';
+$lang->task->planDuration      = 'Plan Duration';
+$lang->task->realDuration      = 'Real Duration';
+$lang->task->version           = 'Version';
 $lang->task->assign            = 'Assign';
 $lang->task->assignAction      = 'Assign Task';
 $lang->task->assignTo          = $lang->task->assign;
@@ -101,6 +109,7 @@ $lang->task->assignedDate      = 'AssignedDate';
 $lang->task->openedBy          = 'CreatedBy';
 $lang->task->openedDate        = 'CreatedDate';
 $lang->task->openedDateAB      = 'CreatedOn';
+$lang->task->activatedDate     = 'Activated Date';
 $lang->task->finishedBy        = 'FinishedBy';
 $lang->task->finishedByAB      = 'FinishedBy';
 $lang->task->finishedDate      = 'ActualFinished';
@@ -132,6 +141,11 @@ $lang->task->parentAB          = 'Parent';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
+
+/* Fields of zt_taskestimate. */
+$lang->task->task    = 'Task';
+$lang->task->account = 'Account';
+$lang->task->work    = 'Work';
 
 $lang->task->recordEstimateAction = 'Record Estimate';
 

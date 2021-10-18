@@ -19,6 +19,10 @@ $lang->repo->deleteBug       = 'Delete Bug';
 $lang->repo->addComment      = 'Add Comment';
 $lang->repo->editComment     = 'Edit Comment';
 $lang->repo->deleteComment   = 'Delete Comment';
+$lang->repo->encrypt         = 'Encrypt';
+$lang->repo->repo            = 'Repository';
+$lang->repo->parent          = 'Parent File';
+$lang->repo->branch          = 'Branch';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Create Repo';

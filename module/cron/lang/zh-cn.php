@@ -1,5 +1,7 @@
 <?php
 $lang->cron->common       = '定时任务';
+$lang->cron->id           = '编号';
+$lang->cron->buildin      = '内置';
 $lang->cron->index        = '首页';
 $lang->cron->list         = '任务列表';
 $lang->cron->create       = '添加';

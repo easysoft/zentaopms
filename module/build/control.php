@@ -46,7 +46,7 @@ class build extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($projectID);
-            $executions  = $this->execution->getPairs($projectID);
+            $executions  = $this->execution->getPairs($projectID, 'all', 'stagefilter');
             $executionID = empty($executionID) ? key($executions) : $executionID;
             $this->session->set('project', $projectID);
         }
@@ -136,7 +136,7 @@ class build extends control
             $execution->name = '';
         }
 
-        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project);
+        $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
         if(!isset($executions[$build->execution])) $executions[$build->execution] = $execution->name;
 
         $productGroups = $this->execution->getProducts($build->execution);
@@ -188,7 +188,7 @@ class build extends control
         if(!$build)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
         $this->session->project = $build->project;
 
@@ -565,7 +565,7 @@ class build extends control
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
-        $this->loadModel('execution')->setMenu($this->execution->getPairs($build->project), $build->execution);
+        $this->loadModel('execution')->setMenu($build->execution);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

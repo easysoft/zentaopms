@@ -47,6 +47,12 @@ $lang->testtask->all              = "全部" . $lang->productCommon;
 $lang->testtask->allTasks         = '所有測試';
 $lang->testtask->collapseAll      = '全部摺疊';
 $lang->testtask->expandAll        = '全部展開';
+$lang->testtask->auto             = '自動化';
+$lang->testtask->task             = '測試單';
+$lang->testtask->run              = '執行編號';
+$lang->testtask->job              = '構建任務';
+$lang->testtask->compile          = '構建';
+$lang->testtask->duration         = '持續時間';
 
 $lang->testtask->viewAction     = "測試單概況";
 $lang->testtask->casesAction    = '查看用例';

@@ -67,6 +67,7 @@ $lang->productplan->children   = "子计划";
 $lang->productplan->childrenAB = "子";
 $lang->productplan->order      = "排序";
 $lang->productplan->deleted    = "已删除";
+$lang->productplan->mailto     = "抄送给";
 
 $lang->productplan->endList[7]   = '一星期';
 $lang->productplan->endList[14]  = '两星期';

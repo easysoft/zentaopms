@@ -149,13 +149,13 @@ body {margin-bottom: 25px;}
     <?php if($canBeChanged and (common::hasPriv('task', 'batchCreate', $checkObject) or common::hasPriv('task', 'create', $checkObject))):?>
     <div class='btn-group dropdown'>
       <?php
-      $actionLink = $this->createLink('task', 'create', "executionID=$executionID");
+      $actionLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
       echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
       ?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <li><?php echo html::a($actionLink, $lang->task->create);?></li>
-        <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID"), $lang->task->batchCreate);?></li>
+        <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), $lang->task->batchCreate);?></li>
       </ul>
     </div>
     <?php endif;?>

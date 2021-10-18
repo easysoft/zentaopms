@@ -14,6 +14,13 @@ $(function()
     adjustTableFooter();
     $('body').on('click', '#toggleFold', adjustTableFooter);
     $('body').on('click', '.icon.icon-angle-double-right', adjustTableFooter);
+
+    /* The display of the adjusting sidebarHeader is synchronized with the sidebar. */
+    $(".sidebar-toggle").click(function()
+    {
+        $("#sidebarHeader").toggle("fast");
+    });
+    if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
 });
 
 $('#module' + moduleID).closest('li').addClass('active');

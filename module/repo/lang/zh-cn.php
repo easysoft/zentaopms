@@ -19,6 +19,10 @@ $lang->repo->deleteBug       = '删除评审';
 $lang->repo->addComment      = '添加备注';
 $lang->repo->editComment     = '编辑备注';
 $lang->repo->deleteComment   = '删除备注';
+$lang->repo->encrypt         = '加密方式';
+$lang->repo->repo            = '代码库';
+$lang->repo->parent          = '父文件夹';
+$lang->repo->branch          = '分支';
 
 $lang->repo->browseAction    = '浏览版本库';
 $lang->repo->createAction    = '创建版本库';

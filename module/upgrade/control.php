@@ -181,24 +181,21 @@ class upgrade extends control
             if($mode == 'new')     $this->locate(inlink('mergeTips'));
         }
 
+        $title = $this->lang->upgrade->toPMS15Guide;
         if(isset($this->config->maxVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', 'Max', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->maxName, $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toMAXGuide;
         }
         elseif(isset($this->config->bizVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', 'Biz5', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->bizName . '5', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toBIZ5Guide;
         }
         elseif(isset($this->config->proVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', 'Pro10', $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->proName . '10', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toPRO10Guide;
-        }
-        else
-        {
-            $title = $this->lang->upgrade->toPMS15Guide;
         }
 
         $this->view->title = $title;
@@ -344,7 +341,7 @@ class upgrade extends control
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
                 if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
             }
-            elseif($type == 'sprint')
+            elseif($type == 'sprint' or $type == 'noProject')
             {
                 $linkedSprints = $this->post->sprints;
 
@@ -353,17 +350,22 @@ class upgrade extends control
                 if(dao::isError()) die(js::error(dao::getError()));
 
                 /* Process merged independent projects. */
+                $productIdList = array();
+                if($type == 'noProject')
+                {
+                    $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($linkedSprints)->fetchPairs();
+                }
                 if($_POST['projectType'] == 'execution')
                 {
                     /* Use historical projects as execution upgrades. */
-                    $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
+                    $this->upgrade->processMergedData($programID, $projectList, $lineID, $productIdList, $linkedSprints);
                 }
                 else
                 {
                     /* Use historical projects as project upgrades. */
                     foreach($linkedSprints as $sprint)
                     {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $productIdList, array($sprint => $sprint));
                     }
                 }
             }
@@ -456,6 +458,7 @@ class upgrade extends control
             $this->view->lineGroups    = $lineGroups;
             $this->view->productGroups = $productGroups;
         }
+
         /* Get projects group by product. */
         if($type == 'product')
         {
@@ -489,7 +492,6 @@ class upgrade extends control
 
             if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=sprint&programID=0&projectType=$projectType"));
 
-
             /* Group project by product. */
             $productGroups = array();
             foreach($noMergedSprints as $sprint)
@@ -504,6 +506,7 @@ class upgrade extends control
             $this->view->noMergedProducts = $noMergedProducts;
             $this->view->productGroups    = $productGroups;
         }
+
         /* Get no merged projects than is not linked product. */
         if($type == 'sprint')
         {
@@ -511,10 +514,26 @@ class upgrade extends control
             $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
             foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
 
-            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink"));
+            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=noProject"));
 
             $this->view->noMergedSprints = $noMergedSprints;
         }
+
+        /* Get one no merged sprint that link more then two products and no project in the system. */
+        if($type == 'noProject')
+        {
+            $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->fetch();
+            if($project) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=moreLink'));
+            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq(0)->andWhere('path')->eq('')->orderBy('id_desc')->limit(1)->fetchAll('id');
+
+            $productPrograms = $this->dao->select('t3.id as id, t3.name as name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+                ->leftJoin(TABLE_PROGRAM)->alias('t3')->on('t2.program=t3.id')
+                ->where('t1.project')->eq(key($noMergedSprints))
+                ->fetchPairs();
+            $this->view->noMergedSprints = $noMergedSprints;
+        }
+
         /* Get no merged projects that link more then two products. */
         if($type == 'moreLink')
         {
@@ -552,7 +571,7 @@ class upgrade extends control
         $currentProgramID = $programID ? $programID : key($programs);
 
         $this->view->title       = $this->lang->upgrade->mergeProgram;
-        $this->view->programs    = $programs;
+        $this->view->programs    = $type == 'noProject' ? $productPrograms : $programs;
         $this->view->programID   = $programID;
         $this->view->projects    = array('' => '') + $this->upgrade->getProjectPairsByProgram($currentProgramID);
         $this->view->lines       = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');

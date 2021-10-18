@@ -1,5 +1,11 @@
 <?php
 /* Field. */
+$lang->projectstory->project = "項目ID";
+$lang->projectstory->product = "產品ID";
+$lang->projectstory->story   = "需求ID";
+$lang->projectstory->version = "版本";
+$lang->projectstory->order   = "排序";
+
 $lang->projectstory->common            = "項目{$lang->SRCommon}";
 $lang->projectstory->index             = "{$lang->SRCommon}主頁";
 $lang->projectstory->view              = "{$lang->SRCommon}詳情";

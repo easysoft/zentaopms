@@ -479,7 +479,7 @@ class testreport extends control
     {
         $reportID = (int)$reportID;
         $report   = $this->testreport->getById($reportID);
-        if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$report) die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         $this->session->project = $report->project;
 
         $browseLink = '';
@@ -529,6 +529,9 @@ class testreport extends control
         $builds  = $report->builds ? $this->build->getByList($report->builds) : array();
         $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end);
         $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
+
+        /* save session .*/
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         if($report->objectType == 'testtask')
         {

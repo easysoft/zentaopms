@@ -10,7 +10,7 @@
  * @link  http://www.zentao.net
  */
 /* Fields. */
-$lang->execution->allExecutions   = 'Tất cả ' . $lang->executionCommon;
+$lang->execution->allExecutions   = 'Tất cả ' . $lang->execution->common;
 $lang->execution->allExecutionAB  = 'Execution List';
 $lang->execution->id              = 'ID '.$lang->executionCommon;
 $lang->execution->type            = 'Loại';
@@ -312,31 +312,31 @@ $lang->execution->linkPRJStoryTip     = "(Link {$lang->SRCommon} comes from {$la
 $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linked under the project, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
 
 /* Interactive prompts. */
-$lang->execution->confirmDelete             = "Bạn có muốn xóa {$lang->executionCommon}[%s] này?";
-$lang->execution->confirmUnlinkMember       = "Bạn có muốn hủy liên kết người dùng này từ {$lang->executionCommon}?";
-$lang->execution->confirmUnlinkStory        = "Bạn có muốn hủy liên kết câu chuyện này từ {$lang->executionCommon}?";
+$lang->execution->confirmDelete               = "Bạn có muốn xóa {$lang->executionCommon}[%s] này?";
+$lang->execution->confirmUnlinkMember         = "Bạn có muốn hủy liên kết người dùng này từ {$lang->executionCommon}?";
+$lang->execution->confirmUnlinkStory          = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?;"
 $lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the project?";
-$lang->execution->notAllowedUnlinkStory     = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
-$lang->execution->notAllowRemoveProducts    = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
-$lang->execution->errorNoLinkedProducts     = "Không có {$lang->productCommon} liên kết tới {$lang->executionCommon}. Bạn sẽ được chuyển tới trang  {$lang->productCommon} để liên kết.";
-$lang->execution->errorSameProducts         = "{$lang->executionCommon} không thể liên kết tới {$lang->productCommon} giống nhau 2 lần.";
-$lang->execution->errorBegin                = "The start time of {$lang->executionCommon} cannot be less than the start time of the project %s.";
-$lang->execution->errorEnd                  = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
-$lang->execution->accessDenied              = "Truy cập của bạn tới {$lang->executionCommon} bị từ chối!";
-$lang->execution->tips                      = 'Ghi chú';
-$lang->execution->afterInfo                 = "{$lang->executionCommon} được tạo. Tiếp theo bạn có thể ";
-$lang->execution->setTeam                   = 'Thiết lập đội nhóm';
-$lang->execution->linkStory                 = 'Liên kết câu chuyện';
-$lang->execution->createTask                = 'Tạo nhiệm vụ';
-$lang->execution->goback                    = "Trở lại";
-$lang->execution->noweekend                 = 'Không gồm cuối tuần';
-$lang->execution->withweekend               = 'Bao gồm cuối tuần';
-$lang->execution->interval                  = 'Intervals ';
-$lang->execution->fixFirstWithLeft          = 'Cập nhật cả giờ còn lại';
+$lang->execution->notAllowedUnlinkStory       = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
+$lang->execution->notAllowRemoveProducts      = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
+$lang->execution->errorNoLinkedProducts       = "Không có {$lang->productCommon} liên kết tới {$lang->executionCommon}. Bạn sẽ được chuyển tới trang  {$lang->productCommon} để liên kết.";
+$lang->execution->errorSameProducts           = "{$lang->executionCommon} không thể liên kết tới {$lang->productCommon} giống nhau 2 lần.";
+$lang->execution->errorBegin                  = "The start time of {$lang->executionCommon} cannot be less than the start time of the project %s.";
+$lang->execution->errorEnd                    = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
+$lang->execution->accessDenied                = "Truy cập của bạn tới {$lang->executionCommon} bị từ chối!";
+$lang->execution->tips                        = 'Ghi chú';
+$lang->execution->afterInfo                   = "{$lang->executionCommon} được tạo. Tiếp theo bạn có thể ";
+$lang->execution->setTeam                     = 'Thiết lập đội nhóm';
+$lang->execution->linkStory                   = 'Liên kết câu chuyện';
+$lang->execution->createTask                  = 'Tạo nhiệm vụ';
+$lang->execution->goback                      = "Trở lại";
+$lang->execution->noweekend                   = 'Không gồm cuối tuần';
+$lang->execution->withweekend                 = 'Bao gồm cuối tuần';
+$lang->execution->interval                    = 'Intervals ';
+$lang->execution->fixFirstWithLeft            = 'Cập nhật cả giờ còn lại';
 $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
-$lang->execution->unfinishedTask            = "[%s] unfinished tasks. ";
-$lang->execution->unresolvedBug             = "[%s] unresolved bugs. ";
-$lang->execution->projectNotEmpty           = 'Project cannot be empty.';
+$lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
+$lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
+$lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

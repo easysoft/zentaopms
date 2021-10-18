@@ -168,7 +168,7 @@
             <?php
               echo html::hidden('model', $model);
               echo html::submitButton();
-              echo html::backButton();
+              echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();
             ?>
           </td>
         </tr>

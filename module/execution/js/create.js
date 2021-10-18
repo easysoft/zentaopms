@@ -52,15 +52,12 @@ $(function()
             {
                 if(index == 0)
                 {
-                    var maxWidth = $('.chosen-container .chosen-drop.chosen-auto-max-width.in').width() - 70;
-
-                    $('#teams_chosen ul .label').remove();
-                    $(this).after(' <label class="label">' + projectCommon + '</label>');
-                    $(this).attr('style', 'display: inline-block; vertical-align: middle; max-width: ' + maxWidth + 'px');
+                    var projectName = subString($(this).text(), 56);
+                    $(this).text(projectName);
+                    $(this).append(' <label class="label">' + projectCommon + '</label>');
                 }
                 else
                 {
-                    $(this).html($(this).html().replace('&nbsp;&nbsp;&nbsp;', ''));
                     $(this).prepend('&nbsp;&nbsp;&nbsp;');
                 }
             })
@@ -106,4 +103,31 @@ function showLifeTimeTips()
 function refreshPage(projectID)
 {
     location.href = createLink('execution', 'create', 'projectID=' + projectID);
+}
+
+/**
+ * Cut a string of letters and characters with the same length.
+ *
+ * @param  string $title
+ * @param  int    $stringLength
+ * @access public
+ * @return string
+ */
+function subString(title, stringLength)
+{
+    if(title.replace(/[\u4e00-\u9fa5]/g, "**").length > stringLength)
+    {
+        var length = 0;
+        for(var i = 0; i < title.length; i ++)
+        {
+            length += title.charCodeAt(i) > 255 ? 2 : 1;
+            if(length > stringLength)
+            {
+                title = title.substring(0, i) + '...';
+                break;
+            }
+        }
+    }
+
+    return title;
 }

@@ -11,7 +11,14 @@
  */
 $lang->testcase->id               = '用例編號';
 $lang->testcase->product          = "所屬{$lang->productCommon}";
+$lang->testcase->project          = '所屬項目';
+$lang->testcase->execution        = '所屬執行';
 $lang->testcase->module           = '所屬模組';
+$lang->testcase->auto             = '自動化測試用例';
+$lang->testcase->frame            = '自動化測試框架';
+$lang->testcase->howRun           = '測試方式';
+$lang->testcase->frequency        = '使用頻率';
+$lang->testcase->path             = '路徑';
 $lang->testcase->lib              = "所屬庫";
 $lang->testcase->branch           = "分支/平台";
 $lang->testcase->moduleAB         = '模組';
@@ -37,6 +44,10 @@ $lang->testcase->linkCase         = '相關用例';
 $lang->testcase->linkCases        = '關聯相關用例';
 $lang->testcase->unlinkCase       = '移除相關用例';
 $lang->testcase->stage            = '適用階段';
+$lang->testcase->scriptedBy       = '腳本由誰創建';
+$lang->testcase->scriptedDate     = '腳本創建日期';
+$lang->testcase->scriptStatus     = '腳本狀態';
+$lang->testcase->scriptLocation   = '腳本地址';
 $lang->testcase->reviewedBy       = '由誰評審';
 $lang->testcase->reviewedDate     = '評審時間';
 $lang->testcase->reviewResult     = '評審結果';
@@ -54,6 +65,7 @@ $lang->testcase->assignedTo       = '指派給';
 $lang->testcase->colorTag         = '顏色標籤';
 $lang->testcase->lastRunResult    = '結果';
 $lang->testcase->desc             = '步驟';
+$lang->testcase->parent           = '上級步驟';
 $lang->testcase->xml              = 'XML';
 $lang->testcase->expect           = '預期';
 $lang->testcase->allProduct       = "所有{$lang->productCommon}";
@@ -73,8 +85,12 @@ $lang->testcase->sync             = '同步';
 $lang->testcase->ignore           = '忽略';
 $lang->testcase->fromTesttask     = '來自測試單用例';
 $lang->testcase->fromCaselib      = '來自用例庫用例';
+$lang->testcase->fromCaseID       = '用例來源ID';
+$lang->testcase->fromCaseVersion  = '用例來源版本';
+$lang->testcase->mailto           = '抄送給';
 $lang->testcase->deleted          = '是否刪除';
 $lang->testcase->browseUnits      = '單元測試';
+$lang->testcase->suite            = '套件';
 
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 

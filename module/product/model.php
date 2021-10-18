@@ -542,7 +542,7 @@ class productModel extends model
             $line->parent = 0;
             $line->grade  = 1;
             $line->name   = $this->post->lineName;
-            $line->root   = $product->program;
+            $line->root   = $this->config->systemMode == 'new' ? $product->program : 0;
             $line->order  = $maxOrder;
             $this->dao->insert(TABLE_MODULE)->data($line)->exec();
 
@@ -845,7 +845,7 @@ class productModel extends model
     {
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs(($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID);
 
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
@@ -958,13 +958,24 @@ class productModel extends model
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-
+        if($this->config->systemMode == 'new')
+        {
+            $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+                ->from(TABLE_TASK)
+                ->where('project')->in($projectKeys)
+                ->andWhere('parent')->lt(1)
+                ->andWhere('deleted')->eq(0)
+                ->fetchGroup('project', 'id');
+        }
+        else
+        {
+            $tasks = $this->dao->select('id, execution, estimate, consumed, `left`, status, closedReason')
+                ->from(TABLE_TASK)
+                ->where('execution')->in($projectKeys)
+                ->andWhere('parent')->lt(1)
+                ->andWhere('deleted')->eq(0)
+                ->fetchGroup('execution', 'id');
+        }
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $projectID => $projectTasks)
         {
@@ -1026,10 +1037,11 @@ class productModel extends model
      * @param  int    $branch
      * @param  string $orderBy
      * @param  int    $projectID
+     * @param  string $mode stagefilter or empty
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0)
+    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0, $mode = '')
     {
         if(empty($productID)) return array();
         if(empty($projectID) or $this->config->systemMode == 'classic') return $this->getAllExecutionPairsByProduct($productID, $branch);
@@ -1037,7 +1049,7 @@ class productModel extends model
         $project = $this->loadModel('project')->getByID($projectID);
         $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
-        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($projectID)
@@ -1068,6 +1080,7 @@ class productModel extends model
                     $executionList = $executionList + $execution->children;
                     continue;
                 }
+                if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
                 $executionList[$execution->id] = $execution->name;
             }
         }
@@ -1499,7 +1512,6 @@ class productModel extends model
             foreach($products as $product) $programKeys[] = $product->program;
             $programs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
                 ->where('id')->in(array_unique($programKeys))
-                ->andWhere('deleted')->eq('0')
                 ->fetchPairs();
 
             foreach($products as $product) $product->programName = isset($programs[$product->program]) ? $programs[$product->program] : '';
@@ -1592,7 +1604,11 @@ class productModel extends model
 
         $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);
 
-        $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)->where('product')->in(array_keys($productList))->fetchGroup('product', 'id');
+        $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)
+            ->where('product')->in(array_keys($productList))
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->eq('normal')
+            ->fetchGroup('product', 'id');
 
         return array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'executionList' => $executionList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
     }

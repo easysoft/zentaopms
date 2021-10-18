@@ -47,6 +47,12 @@ $lang->testtask->all              = "全部" . $lang->productCommon;
 $lang->testtask->allTasks         = '所有测试';
 $lang->testtask->collapseAll      = '全部折叠';
 $lang->testtask->expandAll        = '全部展开';
+$lang->testtask->auto             = '自动化';
+$lang->testtask->task             = '测试单';
+$lang->testtask->run              = '执行编号';
+$lang->testtask->job              = '构建任务';
+$lang->testtask->compile          = '构建';
+$lang->testtask->duration         = '持续时间';
 
 $lang->testtask->viewAction     = "测试单概况";
 $lang->testtask->casesAction    = '查看用例';

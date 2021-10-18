@@ -56,6 +56,7 @@ $lang->todo->pri          = '優先順序';
 $lang->todo->name         = '待辦名稱';
 $lang->todo->status       = '狀態';
 $lang->todo->desc         = '描述';
+$lang->todo->config       = '配置';
 $lang->todo->private      = '私人事務';
 $lang->todo->cycleDay     = '天';
 $lang->todo->cycleWeek    = '周';

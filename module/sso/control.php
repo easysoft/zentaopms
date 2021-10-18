@@ -213,7 +213,8 @@ class sso extends control
             $user->rights = $this->user->authorize($user->account);
             $user->groups = $this->user->getGroups($user->account);
 
-            $user->last   = date(DT_DATETIME1);
+            $user->last  = date(DT_DATETIME1);
+            $user->admin = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
             $this->loadModel('action')->create('user', $user->id, 'login');

@@ -717,6 +717,10 @@ class upgradeModel extends model
                 }
             }
             $this->appendExec('15_4');
+        case '15_5':
+            $this->saveLogs('Execute 15_5');
+            $this->execSQL($this->getUpgradeFile('15.5'));
+            $this->appendExec('15_5');
         }
 
         $this->deletePatch();
@@ -919,6 +923,7 @@ class upgradeModel extends model
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.4.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
+            case '15_5': $confirmContent .= file_get_contents($this->getUpgradeFile('15.5'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -4543,7 +4548,6 @@ class upgradeModel extends model
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Project linked objects. */
         $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
@@ -5295,7 +5299,7 @@ class upgradeModel extends model
      * Adjust for bug required field.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function adjustBugRequired()
     {
@@ -5305,9 +5309,11 @@ class upgradeModel extends model
             ->andWhere('section')->eq('create')
             ->andWhere('`key`')->eq('requiredFields')
             ->fetch();
+        if(empty($data)) return true;
 
         $data->value = ',' . $data->value . ',';
         $data->value = str_replace(',project,', ',', $data->value);
         $this->dao->update(TABLE_CONFIG)->set('`value`')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
+        return true;
     }
 }

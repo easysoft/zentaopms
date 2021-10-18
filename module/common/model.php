@@ -119,6 +119,8 @@ class commonModel extends model
             $user->id         = 0;
             $user->account    = 'guest';
             $user->realname   = 'guest';
+            $user->dept       = 0;
+            $user->avatar     = '';
             $user->role       = 'guest';
             $user->admin      = false;
             $user->rights     = $this->loadModel('user')->authorize('guest');
@@ -223,6 +225,7 @@ class commonModel extends model
             $user = $this->app->user;
             $user->rights = $this->loadModel('user')->authorize($user->account);
             $user->groups = $this->user->getGroups($user->account);
+            $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
             if(commonModel::hasPriv($module, $method)) return true;
@@ -358,9 +361,21 @@ class commonModel extends model
         $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
         $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
 
+        /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
-        $productID      = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
-        if(!$productID and $app->user->view->products) $productID = current(explode(',', $app->user->view->products));
+
+        /* Get default product id. */
+        $deletedProducts   = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '1'")->fetchAll();
+        $deletedProductIds = array();
+        foreach($deletedProducts as $product) $deletedProductIds[] = $product->id;
+
+        $productID = (isset($_SESSION['product']) and !in_array($_SESSION['product'], $deletedProductIds)) ? $_SESSION['product'] : 0;
+        if(!$productID and $app->user->view->products)
+        {
+            $viewProducts = explode(',', $app->user->view->products);
+            $viewProducts = array_diff($viewProducts, $deletedProductIds);
+            $productID    = current($viewProducts);
+        }
 
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)
@@ -392,12 +407,20 @@ class commonModel extends model
                 $attr           = $objectType == 'doc' ? "class='iframe' data-width='650px'" : '';
 
                 $params = '';
-                if(strpos('bug|testcase|story', $objectType) !== false) $params = "productID=$productID";
                 if($objectType == 'doc')
                 {
                     $params       = "objectType=&objectID=0&libID=0";
                     $createMethod = 'selectLibType';
                 }
+
+                if($objectType == 'bug')       $params = "productID=$productID&branch=&extras=from=global";
+                if($objectType == 'story')     $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                if($objectType == 'task')      $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
+                if($objectType == 'testcase')  $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
+                if($objectType == 'execution') $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                if($objectType == 'project')   $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
+                if($objectType == 'product')   $params = "programID=&extra=from=global";
+                if($objectType == 'program')   $params = "parentProgramID=0&extra=from=global";
 
                 $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
             }
@@ -671,6 +694,23 @@ class commonModel extends model
                 }
             }
 
+            /* Check whether other methods under the module have permissions. If yes, point to other methods. */
+            if($display == false and isset($lang->$currentModule->menu))
+            {
+                foreach($lang->$currentModule->menu as $menu)
+                {
+                    $linkPart = explode('|', $menu['link']);
+                    if(!isset($linkPart[2])) continue;
+                    $method = $linkPart[2];
+                    if(common::hasPriv($currentModule, $method))
+                    {
+                        $display       = true;
+                        $currentMethod = $method;
+                        if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
+                    }
+                }
+            }
+
             if(!$display) continue;
 
             /* Assign vars. */
@@ -688,7 +728,7 @@ class commonModel extends model
         }
 
         /* Fix bug 14574. */
-        if(array_slice($items, -1)[0] == 'divider') array_pop($items);
+        if(end($items) == 'divider') array_pop($items);
 
         return $items;
     }
@@ -1277,7 +1317,7 @@ EOD;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if($config->systemMode == 'classic' and strtolower($module) == 'project') $method = substr(strtolower($method), 3);
+        if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
@@ -1914,18 +1954,6 @@ EOD;
         if(isset($this->app->user))
         {
             $this->app->user = $this->session->user;
-
-            $inProject = (isset($this->lang->navGroup->$module) && $this->lang->navGroup->$module == 'project');
-            if(!defined('IN_UPGRADE') and $inProject)
-            {
-                /* Check program priv. */
-                $viewProjects = trim($this->app->user->view->projects, ',');
-                $accessDenied = ($this->session->project and $viewProjects and strpos(",{$viewProjects},", ",{$this->session->project},") === false);
-                if($accessDenied and !$this->app->user->admin) $this->loadModel('project')->accessDenied();
-                $this->resetProgramPriv($module, $method);
-                if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method, false);
-            }
-
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
         else
@@ -1994,20 +2022,19 @@ EOD;
     }
 
     /**
-     * Reset program priv.
+     * Reset project priv.
      *
-     * @param  string $module
-     * @param  string $method
-     * @static
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function resetProgramPriv($module, $method)
+    public function resetProjectPriv($projectID = 0)
     {
         /* Get user program priv. */
-        if(!$this->app->session->project) return;
+        if(empty($projectID) and $this->session->project) $projectID = $this->session->project;
+        if(empty($projectID)) return;
 
-        $program = $this->dao->findByID($this->app->session->project)->from(TABLE_PROJECT)->fetch();
+        $program = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
         if(empty($program)) return;
 
         $programRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
@@ -2023,18 +2050,30 @@ EOD;
         foreach($programRights as $programRight) $programRightGroup[$programRight->module][$programRight->method] = 1;
 
         /* Reset priv by program privway. */
-        $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
         $rights = $this->app->user->rights['rights'];
+        $this->app->user  = clone $_SESSION['user'];
+
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
         {
+            $recomputedRights = $this->loadModel('user')->authorize($this->app->user->account);
+            $recomputedRights = $recomputedRights['rights'];
+
             /* If priv way is reset, unset common program priv, and cover by program priv. */
             foreach($rights as $moduleKey => $methods)
             {
                 if(in_array($moduleKey, $this->config->programPriv->waterfall)) unset($rights[$moduleKey]);
             }
 
-            $this->app->user->rights['rights'] = array_merge($rights, $programRightGroup);
+            $recomputedRights = array_merge($rights, $programRightGroup);
+
+            /* Set base priv for project. */
+            $projectRights = zget($this->app->user->rights['rights'], 'project', array());
+            if(isset($projectRights['browse']) and !isset($recomputedRights['project']['browse'])) $recomputedRights['project']['browse'] = 1;
+            if(isset($projectRights['kanban']) and !isset($recomputedRights['project']['kanban'])) $recomputedRights['project']['kanban'] = 1;
+            if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
+
+            $this->app->user->rights['rights'] = $recomputedRights;
         }
     }
 

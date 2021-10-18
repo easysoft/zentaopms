@@ -29,7 +29,7 @@
           <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
-            <?php if($programID):?>
+            <?php if($config->systemMode == 'classic' or $programID):?>
             <td>
               <div class='input-group'>
                 <?php echo html::select("line", $lines, '', "class='form-control hidden line-exist'");?>
@@ -104,7 +104,7 @@
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::backButton();?>
+              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();?>
             </td>
           </tr>
         </tbody>

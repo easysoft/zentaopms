@@ -85,6 +85,7 @@ $lang->program->beginGreateChild   = "子项目集的最小开始日期：%s，�
 $lang->program->endLetterChild     = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
 $lang->program->closeErrorMessage  = '存在子项目集或项目为未关闭状态';
 $lang->program->hasChildren        = '该项目集有子项目集或项目存在，不能删除。';
+$lang->program->hasProduct         = '该项目集有产品存在，不能删除。';
 $lang->program->confirmDelete      = "您确定要删除吗？";
 $lang->program->readjustTime       = '重新调整项目集起止时间';
 $lang->program->accessDenied       = '你无权访问该项目集';

@@ -173,7 +173,7 @@ class programModel extends model
         $plans = $this->dao->select('id, product, title')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productPairs)
-            ->andWhere('end')->gt(helper::today())
+            ->andWhere('end')->ge(helper::today())
             ->fetchGroup('product');
 
         /* Get all products linked projects. */
@@ -1247,9 +1247,13 @@ class programModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                $hour->totalConsumed += $task->consumed;
-                if(isset($executions[$task->execution])) $hour->totalEstimate += $task->estimate;
-                if($task->status != 'cancel' and $task->status != 'closed' and isset($executions[$task->execution])) $hour->totalLeft += $task->left;
+                if(isset($executions[$task->execution]))
+                {
+                    $hour->totalConsumed += $task->consumed;
+                    $hour->totalEstimate += $task->estimate;
+
+                    if(strpos('cancel,closed', $task->status) !== false) $hour->totalLeft += $task->left;
+                }
             }
             $hours[$projectID] = $hour;
         }
@@ -1267,11 +1271,11 @@ class programModel extends model
         /* Get the number of left tasks. */
         if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
         {
-            $leftTasks = $this->dao->select('project,count(*) as tasks')->from(TABLE_TASK)
-                ->where('project')->in($projectKeys)
-                ->andWhere('status')->notIn('cancel,closed')
-                ->andWhere('execution')->in(array_keys($executions))
-                ->groupBy('project')
+            $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+                ->where('t1.execution')->in(array_keys($executions))
+                ->andWhere('t1.status')->notIn('cancel,closed')
+                ->groupBy('t2.parent')
                 ->fetchAll('project');
         }
 
@@ -1338,7 +1342,7 @@ class programModel extends model
      */
     public function getTeamMemberPairs($programID = 0)
     {
-      $projectList = $this->loadModel('project')->getPairsByProgram($programID);
+      $projectList = $this->getProjectList($programID);
       if(!$projectList) return array('' => '');
 
       $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')

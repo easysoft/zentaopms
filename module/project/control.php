@@ -337,10 +337,11 @@ class project extends control
      * @param  string $model
      * @param  int    $programID
      * @param  int    $copyProjectID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function create($model = 'scrum', $programID = 0, $copyProjectID = 0)
+    public function create($model = 'scrum', $programID = 0, $copyProjectID = 0, $extra = '')
     {
         $this->loadModel('execution');
 
@@ -402,6 +403,9 @@ class project extends control
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
         $this->session->set('projectModel', $model);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $name      = '';
         $code      = '';
         $team      = '';
@@ -437,6 +441,7 @@ class project extends control
         $this->view->title      = $this->lang->project->create;
         $this->view->position[] = $this->lang->project->create;
 
+        $this->view->gobackLink      = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
         $this->view->copyProjects    = $this->project->getPairsByModel();
@@ -628,7 +633,7 @@ class project extends control
         if(empty($project) || strpos('scrum,waterfall', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
         }
 
         $this->project->setMenu($projectID);
@@ -1539,10 +1544,12 @@ class project extends control
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
 
+            $url = $this->createLink('project', 'browse');
+
             if(empty($executionIdList))
             {
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-                die(js::reload('parent'));
+                die(js::locate($url, 'parent'));
             }
 
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
@@ -1552,7 +1559,7 @@ class project extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $this->session->set('project', '');
-            die(js::reload('parent'));
+            die(js::locate($url, 'parent'));
         }
     }
 

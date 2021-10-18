@@ -37,6 +37,7 @@ class install extends control
         if(!isset($this->config->installed) or !$this->config->installed) $this->session->set('installing', true);
 
         $this->view->title = $this->lang->install->welcome;
+        if(!isset($this->view->versionName)) $this->view->versionName = $this->config->version; // If the versionName variable has been defined in the max version, it cannot be defined here to avoid being overwritten.
         $this->display();
     }
 
@@ -232,10 +233,11 @@ class install extends control
      */
     public function step6()
     {
-        $this->view->title = $this->lang->install->success;
+        $installFileDeleted = unlink($this->app->getAppRoot() . 'www/install.php');
+        $this->view->installFileDeleted = $installFileDeleted;
+        $this->view->title              = $this->lang->install->success;
         $this->display();
 
-        unlink($this->app->getAppRoot() . 'www/install.php');
         unlink($this->app->getAppRoot() . 'www/upgrade.php');
         unset($_SESSION['installing']);
         session_destroy();

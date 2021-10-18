@@ -10,7 +10,7 @@
  * @link        https://www.zentao.pm
  */
 /* Fields. */
-$lang->execution->allExecutions   = 'Tous les ' . $lang->executionCommon . 's';
+$lang->execution->allExecutions   = 'Tous les ' . $lang->execution->common . 's';
 $lang->execution->allExecutionAB  = 'Execution List';
 $lang->execution->id              = $lang->executionCommon . ' ID';
 $lang->execution->type            = $lang->executionCommon . 'Type';
@@ -311,31 +311,31 @@ $lang->execution->linkPRJStoryTip     = "(Link {$lang->SRCommon} comes from {$la
 $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linked under the project, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
 
 /* 交互提示。*/
-$lang->execution->confirmDelete             = "Voulez-vous réellement supprimer le {$lang->executionCommon}[%s] ?";
-$lang->execution->confirmUnlinkMember       = "Voulez-vous retirer cet utilisateur du {$lang->executionCommon} ?";
-$lang->execution->confirmUnlinkStory        = "Voulez-vous retirer cette Story du {$lang->executionCommon} ?";
+$lang->execution->confirmDelete               = "Voulez-vous réellement supprimer le {$lang->executionCommon}[%s] ?";
+$lang->execution->confirmUnlinkMember         = "Voulez-vous retirer cet utilisateur du {$lang->executionCommon} ?";
+$lang->execution->confirmUnlinkStory          = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?";
 $lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the project?";
-$lang->execution->notAllowedUnlinkStory     = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
-$lang->execution->notAllowRemoveProducts    = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
-$lang->execution->errorNoLinkedProducts     = "Aucun {$lang->productCommon} n'est associé à ce {$lang->executionCommon}. Vous allez être redirigé vers la page {$lang->productCommon} pour en associer un.";
-$lang->execution->errorSameProducts         = "Ce {$lang->executionCommon} ne peut pas être associé deux fois au même {$lang->productCommon}. Imaginez un peu les résultats !";
-$lang->execution->errorBegin                = "The start time of {$lang->executionCommon} cannot be less than the start time of the project %s.";
-$lang->execution->errorEnd                  = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
-$lang->execution->accessDenied              = "Votre accès au {$lang->executionCommon} est refusé ! Désolé.";
-$lang->execution->tips                      = 'Note';
-$lang->execution->afterInfo                 = "Le {$lang->executionCommon} a été créé avec succès ! Ensuite vous pouvez ";
-$lang->execution->setTeam                   = "Composer l'Equipe";
-$lang->execution->linkStory                 = 'Associer Story';
-$lang->execution->createTask                = 'Créer des Tâches';
-$lang->execution->goback                    = "Revenir en arrière";
-$lang->execution->noweekend                 = 'Exclure les Weekends';
-$lang->execution->withweekend               = 'Inclure les Weekends';
-$lang->execution->interval                  = 'Intervalles';
-$lang->execution->fixFirstWithLeft          = 'Mettre à jour les heures également';
+$lang->execution->notAllowedUnlinkStory       = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
+$lang->execution->notAllowRemoveProducts      = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
+$lang->execution->errorNoLinkedProducts       = "Aucun {$lang->productCommon} n'est associé à ce {$lang->executionCommon}. Vous allez être redirigé vers la page {$lang->productCommon} pour en associer un.";
+$lang->execution->errorSameProducts           = "Ce {$lang->executionCommon} ne peut pas être associé deux fois au même {$lang->productCommon}. Imaginez un peu les résultats !";
+$lang->execution->errorBegin                  = "The start time of {$lang->executionCommon} cannot be less than the start time of the project %s.";
+$lang->execution->errorEnd                    = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
+$lang->execution->accessDenied                = "Votre accès au {$lang->executionCommon} est refusé ! Désolé.";
+$lang->execution->tips                        = 'Note';
+$lang->execution->afterInfo                   = "Le {$lang->executionCommon} a été créé avec succès ! Ensuite vous pouvez ";
+$lang->execution->setTeam                     = "Composer l'Equipe";
+$lang->execution->linkStory                   = 'Associer Story';
+$lang->execution->createTask                  = 'Créer des Tâches';
+$lang->execution->goback                      = "Revenir en arrière";
+$lang->execution->noweekend                   = 'Exclure les Weekends';
+$lang->execution->withweekend                 = 'Inclure les Weekends';
+$lang->execution->interval                    = 'Intervalles';
+$lang->execution->fixFirstWithLeft            = 'Mettre à jour les heures également';
 $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
-$lang->execution->unfinishedTask            = "[%s] unfinished tasks. ";
-$lang->execution->unresolvedBug             = "[%s] unresolved bugs. ";
-$lang->execution->projectNotEmpty           = 'Project cannot be empty.';
+$lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
+$lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
+$lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();

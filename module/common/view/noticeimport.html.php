@@ -25,6 +25,7 @@
 function submitForm(type)
 {
     $('.modal-body #insert').val(type == 'insert' ? 1 : 0);
+    $('#importNoticeModal .form-actions .btn').addClass('disabled');
     $("button[data-target='#importNoticeModal']").closest('form').submit();
 }
 </script>

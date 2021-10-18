@@ -848,8 +848,7 @@ class taskModel extends model
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('story, estimate, left, consumed', 0)
-            ->setDefault('estStarted', '0000-00-00')
-            ->setDefault('deadline', '0000-00-00')
+            ->setDefault('realStarted', '0000-00-00 00:00:00')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
@@ -1922,7 +1921,7 @@ class taskModel extends model
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
         foreach($task as $key => $value)
         {
-            if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
+            if((strpos($key, 'Date') !== false or strpos('estStarted|deadline', $key) !== false) and !(int)substr($value, 0, 4)) $task->$key = '';
         }
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
 
@@ -2496,7 +2495,7 @@ class taskModel extends model
         /* Delayed or not?. */
         if($task->status !== 'done' and $task->status !== 'cancel' and $task->status != 'closed')
         {
-            if(!helper::isZeroDate($task->deadline))
+            if(!empty($taks->deadline) and !helper::isZeroDate($task->deadline))
             {
                 $delay = helper::diffDate($today, $task->deadline);
                 if($delay > 0) $task->delay = $delay;

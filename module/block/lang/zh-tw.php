@@ -12,6 +12,8 @@
 global $config;
 $lang->block = new stdclass();
 $lang->block->common     = '區塊';
+$lang->block->id         = '編號';
+$lang->block->params     = '參數';
 $lang->block->name       = '區塊名稱';
 $lang->block->style      = '外觀';
 $lang->block->grid       = '位置';
@@ -75,10 +77,6 @@ $lang->block->month               = '月';
 $lang->block->selectProduct       = '選擇產品';
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩餘工時';
-
-$lang->block->params = new stdclass();
-$lang->block->params->name  = '參數名稱';
-$lang->block->params->value = '參數值';
 
 $lang->block->createBlock        = '添加區塊';
 $lang->block->editBlock          = '編輯區塊';
@@ -538,7 +536,7 @@ $lang->block->typeList->testtask['done']    = '已測版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';
+$lang->block->modules['project']->moreLinkList->recentproject  = $config->systemMode == 'new' ? 'project|browse|' : 'execution|all|';
 $lang->block->modules['project']->moreLinkList->statistic      = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->project        = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';

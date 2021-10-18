@@ -141,11 +141,12 @@ class program extends control
     /**
      * Create a program.
      *
-     * @param  int  $parentProgramID
+     * @param  int    $parentProgramID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function create($parentProgramID = 0)
+    public function create($parentProgramID = 0, $extra = '')
     {
         $parentProgram = $this->program->getByID($parentProgramID);
 
@@ -159,9 +160,13 @@ class program extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $this->view->title      = $this->lang->program->create;
         $this->view->position[] = $this->lang->program->create;
 
+        $this->view->gobackLink     = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('program', 'browse') : '';
         $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
@@ -378,6 +383,9 @@ class program extends control
     {
         $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
         if($childrenCount) die(js::alert($this->lang->program->hasChildren));
+
+        $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
+        if($productCount) die(js::alert($this->lang->program->hasProduct));
 
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
         if($confirm == 'no') die(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
