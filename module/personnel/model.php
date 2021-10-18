@@ -830,15 +830,15 @@ class personnelModel extends model
      */
     public function deleteWhitelist($users = array(), $objectType = 'program', $objectID = 0, $groupID = 0)
     {
-        $this->loadModel('group');
+        $groups = $this->loadModel('group')->getByAccounts($users);
 
         /* Determine whether to delete the whitelist. */
         foreach($users as $account)
         {
-            $groups = $this->group->getByAccount($account);
-            foreach($groups as $key => $group)
+            $groups = zget($groups, $account, array());
+            foreach($groups as $group)
             {
-                if($key == $groupID) continue;
+                if($group->id == $groupID) continue;
 
                 $acl     = json_decode($group->acl);
                 $keyName = $objectType . 's';

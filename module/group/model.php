@@ -157,6 +157,22 @@ class groupModel extends model
     }
 
     /**
+     * Get groups by accounts.
+     *
+     * @param  array  $accounts
+     * @access public
+     * @return array
+     */
+    public function getByAccounts($accounts)
+    {
+        return $this->dao->select('t1.account, t2.acl, t2.id')->from(TABLE_USERGROUP)->alias('t1')
+            ->leftJoin(TABLE_GROUP)->alias('t2')
+            ->on('t1.`group` = t2.id')
+            ->where('t1.account')->in($accounts)
+            ->fetchGroup('account');
+    }
+
+    /**
      * Get the account number in the group.
      *
      * @param  array  $groupIdList
