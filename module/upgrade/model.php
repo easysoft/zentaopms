@@ -721,6 +721,9 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_5');
             $this->execSQL($this->getUpgradeFile('15.5'));
             $this->appendExec('15_5');
+        case '15_6':
+            $this->saveLogs('Execute 15_6');
+            $this->appendExec('15_6');
         }
 
         $this->deletePatch();
@@ -924,6 +927,7 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '15_5': $confirmContent .= file_get_contents($this->getUpgradeFile('15.5'));
+            case '15_6':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

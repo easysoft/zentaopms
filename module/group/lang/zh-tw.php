@@ -30,10 +30,12 @@ $lang->group->manageProject      = '可管理項目';
 $lang->group->programList        = '可訪問項目集';
 $lang->group->productList        = '可訪問' . $lang->productCommon;
 $lang->group->projectList        = '可訪問項目';
+$lang->group->executionList      = "可訪問{$lang->execution->common}";
 $lang->group->dynamic            = '可查看動態';
 $lang->group->noticeVisit        = '空代表沒有訪問限制';
 $lang->group->noneProgram        = "暫時沒有項目集";
 $lang->group->noneProduct        = "暫時沒有{$lang->productCommon}";
+$lang->group->noneExecution      = "暫時沒有{$lang->execution->common}";
 $lang->group->project            = '項目';
 $lang->group->group              = '分組';
 

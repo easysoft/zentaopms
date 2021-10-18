@@ -92,6 +92,7 @@ $lang->misc->feature->downloadFile   = 'Download introduction';
 $lang->misc->feature->tutorialDesc   = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 
+$lang->misc->releaseDate['15.7']        = '2021-10-18';
 $lang->misc->releaseDate['15.6']        = '2021-10-12';
 $lang->misc->releaseDate['15.5']        = '2021-09-14';
 $lang->misc->releaseDate['15.4']        = '2021-08-23';
@@ -158,6 +159,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['15.7'][] = array('title' => 'Fix bug.', 'desc' => '');
 $lang->misc->feature->all['15.6'][] = array('title' => 'Fix bug.', 'desc' => '');
 $lang->misc->feature->all['15.5'][] = array('title' => 'Add Program / Product / Project Kanban, global addition function and novice guidance. Fix bug.', 'desc' => '');
 $lang->misc->feature->all['15.4'][] = array('title' => 'Fix bug', 'desc' => '');
