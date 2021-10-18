@@ -7,7 +7,7 @@ ALTER TABLE `zt_doclib`
 CREATE TABLE `zt_api_lib_release`
 (
     `id`        int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `doclib`    int UNSIGNED NOT NULL DEFAULT 0,
+    `lib`    int UNSIGNED NOT NULL DEFAULT 0,
     `desc`      varchar(255) NOT NULL DEFAULT '',
     `version`   varchar(255) NOT NULL DEFAULT '',
     `snap`      mediumtext   NOT NULL,
