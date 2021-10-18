@@ -1755,7 +1755,7 @@ EOD;
                 $objectList[$id] = $id;
             }
 
-            $this->session->set($objectIdListKey, array('idkey' => $key, 'objectList' => $objectList), $this->app->tab);
+            $this->session->set($objectIdListKey, array('sql' => $sql, 'idkey' => $key, 'objectList' => $objectList), $this->app->tab);
             $existsObjectList = $this->session->$objectIdListKey;
         }
 
@@ -1791,10 +1791,14 @@ EOD;
             }
             else
             {
-                $key      = $existsObjectList['idkey'];
-                $hasWhere = stripos($queryCondition, ' where ') !== false;
-                if(!empty($preAndNextObject->pre))   $preAndNextObject->pre  = $this->dao->query($queryCondition . ($hasWhere ? " AND `$key`='{$preAndNextObject->pre}' "  : " WHERE `$key`='{$preAndNextObject->pre}' "))->fetch();
-                if(!empty($preAndNextObject->next))  $preAndNextObject->next = $this->dao->query($queryCondition . ($hasWhere ? " AND `$key`='{$preAndNextObject->next}' " : " WHERE `$key`='{$preAndNextObject->next}' "))->fetch();
+                $key = $existsObjectList['idkey'];
+                $queryObjects = $this->dao->query($existsObjectList['sql']);
+                while($object = $queryObjects->fetch())
+                {
+                    if(!empty($preAndNextObject->pre)  and is_numeric($preAndNextObject->pre)  and $object->$key == $preAndNextObject->pre)  $preAndNextObject->pre  = $object;
+                    if(!empty($preAndNextObject->next) and is_numeric($preAndNextObject->next) and $object->$key == $preAndNextObject->next) $preAndNextObject->next = $object;
+                    if((empty($preAndNextObject->pre) or is_object($preAndNextObject->pre)) and (empty($preAndNextObject->next) or is_object($preAndNextObject->next))) break;
+                }
             }
         }
 
