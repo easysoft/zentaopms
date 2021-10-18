@@ -50,6 +50,7 @@ class userEntry extends Entry
         unset($profile->password);
 
         $info->profile = $this->format($profile, 'last:time,locked:time,birthday:date,join:date');
+        $info->profile->role = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
 
         if(!$fields) return $this->send(200, $info);
 
@@ -62,19 +63,30 @@ class userEntry extends Entry
             switch($field)
             {
                 case 'product':
-                    $info->product = $this->my->getProducts();
+                    $info->product = array('total' => 0, 'products' => array());
+
+                    $products = $this->my->getProducts();
+                    if($products)
+                    {
+                        $info->product['total']    = $products->allCount;
+                        $info->product['products'] = $products->products;
+                    }
                     break;
                 case 'project':
-                    $info->project = $this->my->getProjects();
-                    break;
-                case 'doc':
-                    $info->doc = $this->my->getDocs();
+                    $info->project = array('total' => 0, 'projects' => array());
+
+                    $projects = $this->my->getDoingProjects();
+                    if($projects)
+                    {
+                        $info->project['total']    = $projects->doingCount;
+                        $info->project['projects'] = $projects->projects;
+                    }
                     break;
                 case 'actions':
                     $info->actions = $this->my->getActions();
                     break;
                 case 'task':
-                    $info->task = array('count' => 0, 'recentTask' => array());
+                    $info->task = array('total' => 0, 'tasks' => array());
 
                     $control = $this->loadController('my', 'task');
                     $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -82,13 +94,13 @@ class userEntry extends Entry
 
                     if($data->status == 'success')
                     {
-                        $info->task['count']       = $data->data->pager->recTotal;
-                        $info->task['recentTasks'] = $data->data->tasks;
+                        $info->task['total'] = $data->data->pager->recTotal;
+                        $info->task['tasks'] = $data->data->tasks;
                     }
 
                     break;
                 case 'todo':
-                    $info->todo = array('count' => 0, 'recentTodos' => array());
+                    $info->todo = array('total' => 0, 'todos' => array());
 
                     $control = $this->loadController('my', 'todo');
                     $control->todo($this->param('date', 'all'), '', 'all', 'date_desc', 0, 0, $this->param('limit', 10), 1);
@@ -96,10 +108,48 @@ class userEntry extends Entry
 
                     if($data->status == 'success')
                     {
-                        $info->todo['count']       = $data->data->pager->recTotal;
-                        $info->todo['recentTodos'] = $data->data->todos;
+                        $info->todo['total'] = $data->data->pager->recTotal;
+                        $info->todo['todos'] = $data->data->todos;
                     }
 
+                    break;
+                case 'issue':
+                    if(!empty($this->config->maxVersion))
+                    {
+                        $info->issue = array('total' => 0, 'issues' => array());
+
+                        $control = $this->loadController('my', 'issue');
+                        $control->issue('createdBy', 'id_desc', 0, $this->param('limit', 10), 1);
+                        $data = $this->getData();
+
+                        if($data->status == 'success')
+                        {
+                            $info->issue['total']  = $data->data->pager->recTotal;
+                            $info->issue['issues'] = $data->data->issues;
+                        }
+                    }
+                    break;
+                case 'risk':
+                    if(!empty($this->config->maxVersion))
+                    {
+                        $info->risk = array('total' => 0, 'risks' => array());
+
+                        $control = $this->loadController('my', 'risk');
+                        $control->risk('createdBy', 'id_desc', 0, $this->param('limit', 10), 1);
+                        $data = $this->getData();
+
+                        if($data->status == 'success')
+                        {
+                            $info->risk['total'] = $data->data->pager->recTotal;
+                            $info->risk['risks'] = $data->data->risks;
+                        }
+                    }
+                    break;
+                case 'overview':
+                    $info->overview = $this->my->getOverview();
+                    break;
+                case 'contribute':
+                    $info->contribute = $this->my->getContribute();
                     break;
             }
         }

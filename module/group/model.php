@@ -435,6 +435,21 @@ class groupModel extends model
             }
         }
 
+        /* Update whitelist. */
+        $acl = $this->dao->select('acl')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('acl');
+        $acl = json_decode($acl);
+
+        $this->loadModel('personnel');
+        foreach($this->config->group->acl->objectTypes as $key => $objectType)
+        {
+            if(!isset($acl->{$key})) continue;
+            foreach($acl->{$key} as $objectID)
+            {
+                $this->personnel->updateWhitelist($newUsers, $objectType, $objectID, 'whitelist', 'sync', 'increase');
+                $this->personnel->deleteWhitelist($delUsers, $objectType, $objectID);
+            }
+        }
+
         /* Adjust user view. */
         $changedUsers = array_merge($newUsers, $delUsers);
         if(!empty($changedUsers))
