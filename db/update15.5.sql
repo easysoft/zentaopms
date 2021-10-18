@@ -58,7 +58,7 @@ CREATE TABLE `zt_apispec`
     `method`       varchar(10)  NOT NULL DEFAULT '',
     `requestType`  varchar(100) NOT NULL DEFAULT '',
     `responseType` varchar(100) NOT NULL DEFAULT '',
-    `status`       tinyint UNSIGNED NOT NULL DEFAULT 0,
+    `status`       varchar(20)  NOT NULL DEFAULT '',
     `owner`        varchar(255) NOT NULl DEFAULT 0,
     `desc`         text NULL,
     `version`      smallint UNSIGNED NOT NULL DEFAULT 0,
@@ -90,13 +90,13 @@ create table `zt_apistruct`
 -- DROP TABLE IF EXISTS `zt_apistruct_spec`;
 create table `zt_apistruct_spec`
 (
-    `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name` varchar(255) NOT NULL DEFAULT '',
-    `type`       varchar(50)  NOT NULL DEFAULT '',
-    `desc`       varchar(255) NOT NULL DEFAULT '',
-    `attribute`  text NULL,
-    `version`    smallint unsigned NOT NULL DEFAULT 0,
-    `addedBy`    varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate`  datetime     NOT NULL,
+    `id`        int UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name`      varchar(255) NOT NULL DEFAULT '',
+    `type`      varchar(50)  NOT NULL DEFAULT '',
+    `desc`      varchar(255) NOT NULL DEFAULT '',
+    `attribute` text NULL,
+    `version`   smallint unsigned NOT NULL DEFAULT 0,
+    `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
+    `addedDate` datetime     NOT NULL,
     primary key (`id`)
 )

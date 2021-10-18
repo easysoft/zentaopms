@@ -122,7 +122,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                   <tr>
                     <th class="w-300px"><?php echo $lang->struct->field;?></th>
                     <th class="w-80px"><?php echo $lang->struct->required;?></th>
-                    <th class="w-200px"><?php echo $lang->struct->desc;?></th>
+                    <th class="w-300px"><?php echo $lang->struct->desc;?></th>
                     <th><?php echo $lang->struct->action;?></th>
                   </tr>
                 </thead>
@@ -138,7 +138,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                         </label>
                       </div>
                     </td>
-                    <td class="w-200px">
+                    <td class="w-300px">
                       <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                     </td>
                     <td>
@@ -157,7 +157,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                   <tr>
                     <th class="w-300px"><?php echo $lang->struct->field;?></th>
                     <th class="w-80px"><?php echo $lang->struct->required;?></th>
-                    <th class="w-200px"><?php echo $lang->struct->desc;?></th>
+                    <th class="w-300px"><?php echo $lang->struct->desc;?></th>
                     <th><?php echo $lang->struct->action;?></th>
                   </tr>
                 </thead>
@@ -173,7 +173,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                         </label>
                       </div>
                     </td>
-                    <td class="w-200px">
+                    <td class="w-300px">
                       <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                     </td>
                     <td>

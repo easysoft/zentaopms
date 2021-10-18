@@ -95,7 +95,12 @@ class apiModel extends model
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
             ->exec();
 
-        return dao::isError() ? false : $this->dao->lastInsertID();
+        $id = $this->dao->lastInsertID();
+
+        $apiSpec = $this->getApiSpecByData($params);
+        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
+
+        return dao::isError() ? false : $id;
     }
 
     /**
@@ -113,6 +118,8 @@ class apiModel extends model
             ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
             ->exec();
 
+        $id = $this->dao->lastInsertID();
+
         /* Create a struct version. */
         $version = array(
             'name'      => $data->name,
@@ -125,7 +132,7 @@ class apiModel extends model
         );
         $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($version)->exec();
 
-        return dao::isError() ? 0 : $this->dao->lastInsertID();
+        return dao::isError() ? 0 : $id;
     }
 
     /**
@@ -267,6 +274,38 @@ class apiModel extends model
         return $model;
     }
 
+    /**
+     * Get release by id.
+     *
+     * @param  int $id
+     * @access public
+     * @return array
+     */
+    public function getReleaseById($id)
+    {
+        $model = $this->dao->select('*')
+            ->from(TABLE_API_LIB_RELEASE)
+            ->where('id')->eq($id)
+            ->fetch();
+        if($model) $model->snap = json_decode(htmlspecialchars_decode($model->snap), true);
+        return $model;
+    }
+
+    /**
+     * Get Versions by api id
+     *
+     * @param  int $libID
+     * @access public
+     * @return array
+     */
+    public function getReleaseListByApi($libID)
+    {
+        $versions = $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
+            ->where('lib')->eq($libID)
+            ->fetchAll('id');
+        return $versions;
+    }
+
 
     /**
      * Get api doc by id.
@@ -306,29 +345,78 @@ class apiModel extends model
     }
 
     /**
+     * Get api list by release.
+     *
+     * @param object $release
+     * @param string $where
+     * @return array
+     */
+    public function getApiListByRelease($release, $where = '')
+    {
+        $strJoin = array();
+        foreach($release->snap['apis'] as $api)
+        {
+            $strJoin[] = "(doc = {$api['id']} and version = {$api['version']} )";
+        }
+
+        $where .= 'and (' . implode(' or ', $strJoin) . ')';
+        $list  = $this->dao->select('*')->from(TABLE_API_SPEC)
+            ->where($where)
+            ->fetchAll();
+        return $list;
+    }
+
+    /**
      * Get api doc list by module id
      *
      * @param  int $libID
      * @param  int $moduleID
+     * @param  int $release
      * @return array $list
      * @author thanatos thanatos915@163.com
      */
-    public function getListByModuleId($libID = 0, $moduleID = 0)
+    public function getListByModuleId($libID = 0, $moduleID = 0, $release = 0)
     {
-        if($moduleID > 0)
+        /* Get release info. */
+        if($release > 0)
         {
-            $sub   = $this->dao->select('id')->from(TABLE_MODULE)->where('FIND_IN_SET(' . $moduleID . ', path)')->processSQL();
-            $where = 'module in (' . $sub . ')';
+            $rel = $this->getReleaseById($release);
+
+            $where = '1=1 ';
+            if($moduleID > 0)
+            {
+                $sub = array();
+                foreach($rel->snap['modules'] as $module)
+                {
+                    $tmp = explode(',', $module['path']);
+                    if(in_array($moduleID, $tmp))
+                    {
+                        $sub[] = $module['id'];
+                    }
+                }
+                $where .= 'and module in (' . implode(',', $sub) . ')';
+            }
+
+            $list = $this->getApiListByRelease($rel, $where);
         }
         else
         {
-            $where = 'lib = ' . $libID;
+
+            if($moduleID > 0)
+            {
+                $sub   = $this->dao->select('id')->from(TABLE_MODULE)->where('FIND_IN_SET(' . $moduleID . ', path)')->processSQL();
+                $where = 'module in (' . $sub . ')';
+            }
+            else
+            {
+                $where = 'lib = ' . $libID;
+            }
+            $list = $this->dao->select('*')
+                ->from(TABLE_API)
+                ->where($where)
+                ->andWhere('deleted')->eq(0)
+                ->fetchAll();
         }
-        $list = $this->dao->select('*')
-            ->from(TABLE_API)
-            ->where($where)
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll();
         array_map(function ($item) {
             $item->params = json_decode(htmlspecialchars_decode($item->params), true);
             return $item;

@@ -6,7 +6,7 @@ new Vue({
             attr: '',
             struct: {
                 ...struct,
-                attribute: JSON.parse(struct.attribute)
+                attribute: struct.attribute
             }
         }
     },

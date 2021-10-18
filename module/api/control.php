@@ -26,10 +26,12 @@ class api extends control
      * @param  int $libID
      * @param  int $moduleID
      * @param  int $apiID
+     * @param  int $version
+     * @param  int $release
      * @access public
      * @return void
      */
-    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0)
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0)
     {
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs();
@@ -38,7 +40,7 @@ class api extends control
         if($libs)
         {
             if($libID == 0) $libID = key($libs);
-            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
+            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
         }
         $this->setMenu($libID);
 
@@ -61,11 +63,13 @@ class api extends control
         else
         {
             /* Get module api list. */
-            $apiList = $this->api->getListByModuleId($libID, $moduleID);
+            $apiList = $this->api->getListByModuleId($libID, $moduleID, $release);
 
             $this->view->apiList = $apiList;
         }
 
+        $this->view->isRelease  = $release > 0;
+        $this->view->release    = $release;
         $this->view->title      = $this->lang->api->title;
         $this->view->libID      = $libID;
         $this->view->apiID      = $apiID;
@@ -87,8 +91,9 @@ class api extends control
     {
         $lib = $this->doc->getLibById($libID);
 
-        if(!empty($_POST)) {
-            $data   = fixer::input('post')
+        if(!empty($_POST))
+        {
+            $data = fixer::input('post')
                 ->add('lib', $libID)
                 ->add('addedBy', $this->app->user->account)
                 ->add('addedDate', helper::now())
@@ -120,7 +125,10 @@ class api extends control
      */
     public function struct($libID = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $libs = $this->doc->getApiLibs();
         $this->app->loadClass('pager', $static = true);
+        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
+
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
@@ -299,10 +307,7 @@ class api extends control
         $doc = $this->doc->getLibById($id);
         if(!empty($_POST))
         {
-            $lib = fixer::input('post')
-                ->join('groups', ',')
-                ->join('users', ',')
-                ->get();
+            $lib = fixer::input('post')->join('groups', ',')->join('users', ',')->get();
 
             if($lib->acl == 'private') $lib->users = $this->app->user->account;
             $this->doc->updateApiLib($id, $doc, $lib);
@@ -322,6 +327,31 @@ class api extends control
         $this->view->users  = $this->user->getPairs('nocode');
 
         $this->display();
+    }
+
+
+    /**
+     * @param  int    $libID
+     * @param  string $confirm
+     * @param  string $from
+     */
+    public function deleteLib($libID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->doc->confirmDeleteLib, $this->createLink('api', 'deleteLib', "libID=$libID&confirm=yes")));
+        }
+        else
+        {
+            $this->doc->delete(TABLE_DOCLIB, $libID);
+            if(isonlybody())
+            {
+                unset($_GET['onlybody']);
+                die(js::locate($this->createLink('api', 'index'), 'parent.parent'));
+            }
+
+            die(js::locate($this->createLink('api', 'index'), 'parent'));
+        }
     }
 
     /**
@@ -429,15 +459,7 @@ class api extends control
         $example = array('example' => 'type,description');
         $example = json_encode($example, JSON_PRETTY_PRINT);
 
-        $options = [];
-        foreach($this->lang->api->paramsTypeOptions as $key => $item)
-        {
-            $options[] = [
-                'label' => $item,
-                'value' => $key,
-            ];
-        }
-        $this->view->typeOptions      = $options;
+        $this->getTypeOptions($libID);
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;
@@ -549,7 +571,10 @@ class api extends control
         // global struct link
         $menu = '';
 
-        $menu .= html::a(helper::createLink('api', 'publish', "libID=$libID"), $this->lang->api->publish, '', 'class="btn btn-link iframe"');
+        if(common::hasPriv('api', 'publish'))
+        {
+            $menu .= html::a(helper::createLink('api', 'publish', "libID=$libID"), $this->lang->api->publish, '', 'class="btn btn-link iframe"');
+        }
         // page of index menu
         if(intval($libID) > 0)
         {
@@ -591,10 +616,11 @@ class api extends control
      *
      * @param  array $libs
      * @param  int   $libID
+     * @param  int   $version
      * @access public
      * @return string
      */
-    private function generateLibsDropMenu($libs, $libID)
+    private function generateLibsDropMenu($libs, $libID, $version = 0)
     {
         if(empty($libs)) return '';
 
@@ -620,6 +646,35 @@ EOT;
         }
         $output .= "</div></div></div></div></div>";
 
+        /* Get lib version */
+        $versions = $this->api->getReleaseListByApi($libID);
+        if(!empty($versions))
+        {
+            $versionName = $version > 0 ? $versions[$version]->desc : $this->lang->api->defaultVersion;
+            $output      .= <<<EOT
+<div class='btn-group angle-btn'>
+  <div class='btn-group'>
+    <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$versionName} <span class='caret'></span>
+    </button>
+    <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
+      <div class="input-control search-box has-icon-left has-icon-right search-example">
+        <input type="search" class="form-control search-input" />
+        <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+        <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+      </div>
+      <div class='table-col'>
+        <div class='list-group'>
+EOT;
+            $selected    = $version > 0 ? '' : 'selected';
+            $output      .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0"), $this->lang->api->defaultVersion, '', "class='$selected'");
+            foreach($versions as $key => $item)
+            {
+                $selected = $key == $version ? 'selected' : '';
+                $output   .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=$key"), $item->desc, '', "class='$selected' data-app='{$this->app->tab}'");
+            }
+            $output .= "</div></div></div></div></div>";
+        }
+
         return $output;
     }
 
@@ -642,8 +697,7 @@ EOT;
      * @access public
      * @return void
      */
-    public
-    function getSessionID()
+    public function getSessionID()
     {
         $this->session->set('rand', mt_rand(0, 10000));
         $this->view->sessionName = session_name();
@@ -743,6 +797,28 @@ EOT;
         $output['sql'] = $sql;
         $this->output  = json_encode($output);
         die($this->output);
+    }
+
+    private function getTypeOptions($libID)
+    {
+        $options = [];
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
+        {
+            $options[] = [
+                'label' => $item,
+                'value' => $key,
+            ];
+        }
+        /* get all struct by libID. */
+        $structs = $this->api->getStructListByLibID($libID);
+        foreach($structs as $struct)
+        {
+            $options[] = [
+                'label' => $struct->name,
+                'value' => $struct->id,
+            ];
+        }
+        $this->view->typeOptions = $options;
     }
 
 }

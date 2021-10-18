@@ -86,7 +86,7 @@ class docModel extends model
         $executions = $this->loadModel('execution')->getPairs();
 
         $libPairs = array();
-        while($lib = $stmt->fetch())
+        while ($lib = $stmt->fetch())
         {
             if($lib->product != 0 and !isset($products[$lib->product])) continue;
             if($lib->execution != 0 and !isset($executions[$lib->execution])) continue;
@@ -108,7 +108,7 @@ class docModel extends model
         if(!empty($appendLibs))
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy('`order`, id desc')->query();
-            while($lib = $stmt->fetch())
+            while ($lib = $stmt->fetch())
             {
                 if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
             }
@@ -133,7 +133,7 @@ class docModel extends model
 
             $account    = ",{$this->app->user->account},";
             $userGroups = $this->app->user->groups;
-            while($lib = $stmt->fetch())
+            while ($lib = $stmt->fetch())
             {
                 if(strpos(",$lib->users,", $account) !== false)
                 {
@@ -219,9 +219,10 @@ class docModel extends model
             ->exec();
 
         $changes = array();
-        if(!dao::isError()) {
+        if(!dao::isError())
+        {
             $this->loadModel('action');
-            $changes = common::createChanges($oldDoc, $data);
+            $changes  = common::createChanges($oldDoc, $data);
             $actionID = $this->action->create('docLib', $id, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
@@ -460,7 +461,7 @@ class docModel extends model
             ->query();
 
         $docIdList = array();
-        while($doc = $stmt->fetch())
+        while ($doc = $stmt->fetch())
         {
             if($this->checkPrivDoc($doc)) $docIdList[$doc->id] = $doc->id;
         }
@@ -1037,7 +1038,7 @@ class docModel extends model
         $executionLibs = array();
 
         $otherLibs = array();
-        while($lib = $stmt->fetch())
+        while ($lib = $stmt->fetch())
         {
             if($lib->type == 'product')
             {
@@ -2170,16 +2171,26 @@ EOT;
      *
      * @author thanatos thanatos915@163.com
      */
-    public function getApiModuleTree($rootID, &$docID = 0)
+    public function getApiModuleTree($rootID, &$docID = 0, $release = 0)
     {
         $startModulePath = '';
         $currentMethod   = $this->app->getMethodName();
         $users           = $this->loadModel('user')->getPairs('noletter');
+        $this->loadModel('api');
 
-        $docs       = $this->dao->select('*')->from(TABLE_API)
-            ->where('lib')->eq($rootID)
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll();
+        if($release)
+        {
+            $rel  = $this->api->getReleaseById($release);
+            $docs = $this->api->getApiListByRelease($rel);
+        }
+        else
+        {
+            $docs = $this->dao->select('*')->from(TABLE_API)
+                ->where('lib')->eq($rootID)
+                ->andWhere('deleted')->eq(0)
+                ->fetchAll();
+        }
+
         $moduleDocs = array();
         foreach($docs as $doc)
         {
@@ -2189,18 +2200,29 @@ EOT;
         }
 
         $treeMenu = array();
-        $query    = $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('root')->eq((int)$rootID)
-            ->andWhere('type')->eq('api')
-            ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('grade desc, `order`')
-            ->get();
-        $stmt     = $this->dbh->query($query);
-        while($module = $stmt->fetch())
+        if($release)
         {
-            $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID);
+            foreach($release->snap['modules'] as $module)
+            {
+                $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID);
+            }
         }
+        else
+        {
+            $query = $this->dao->select('*')->from(TABLE_MODULE)
+                ->where('root')->eq((int)$rootID)
+                ->andWhere('type')->eq('api')
+                ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('grade desc, `order`')
+                ->get();
+            $stmt  = $this->dbh->query($query);
+            while ($module = $stmt->fetch())
+            {
+                $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID);
+            }
+        }
+
 
         if(isset($moduleDocs[0]))
         {
@@ -2266,7 +2288,7 @@ EOT;
             ->orderBy('grade desc, `order`')
             ->get();
         $stmt     = $this->dbh->query($query);
-        while($module = $stmt->fetch())
+        while ($module = $stmt->fetch())
         {
             $this->buildTree($treeMenu, $type, $objectID, $rootID, $module, $moduleDocs, $docID);
         }
@@ -2411,7 +2433,7 @@ EOT;
 
         /* Unit conversion. */
         $i = 0;
-        while($sizeCount > 1024 and $i <= 4)
+        while ($sizeCount > 1024 and $i <= 4)
         {
             $sizeCount = $sizeCount / 1024;
             $i++;

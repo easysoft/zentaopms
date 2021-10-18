@@ -235,7 +235,7 @@ try {
                 </label>
               </div>
           </td>
-          <td class="w-200px">
+          <td class="w-300px">
             <input type="text" :placeholder="langDesc" autocomplete="off" class="form-control" v-model="value.desc">
           </td>
           <td>
@@ -400,7 +400,7 @@ try {
                       <th class="w-300px">${struct_field}</th>
                       <th class="w-100px">${struct_paramsType}</th>
                       <th class="w-80px">${struct_required}</th>
-                      <th class="w-200px">${struct_desc}</th>
+                      <th class="w-300px">${struct_desc}</th>
                       <th>${struct_action}</th>
                     </tr>
                   </thead>

@@ -19,7 +19,7 @@
                     <?php for($version = $api->version; $version > 0; $version--):?>
                     <li>
                       <a href='javascript:void(0)'
-                         data-url='<?php echo $this->createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID&version=$version");?>'>#<?php echo $version;?></a>
+                         data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$version&release=$release");?>'>#<?php echo $version;?></a>
                     </li>
                     <?php endfor;?>
                   </ul>
@@ -29,13 +29,16 @@
             <div class="actions">
               <?php
               echo html::a("javascript:fullScreen()", '<i class="icon-fullscreen"></i>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");
-              if(common::hasPriv('api', 'edit')) echo html::a(inlink('edit', "apiID=$api->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
-              if(common::hasPriv('doc', 'delete'))
+              if(!$isRelease)
               {
-                $deleteURL = $this->createLink('api', 'delete', "apiID=$api->id&confirm=yes");
-                echo html::a("javascript:ajaxDeleteApi(\"$deleteURL\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link'");
+                if(common::hasPriv('api', 'edit')) echo html::a(inlink('edit', "apiID=$api->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
+                if(common::hasPriv('api', 'delete'))
+                {
+                  $deleteURL = $this->createLink('api', 'delete', "apiID=$api->id&confirm=yes");
+                  echo html::a("javascript:ajaxDeleteApi(\"$deleteURL\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link'");
+                }
               }
-              ;?>
+              ?>
             </div>
           </div>
         </div>
@@ -97,13 +100,13 @@
           <?php
           function parseTree($data, $level = 0)
           {
-            $str     = '<tr>';
+            $str   = '<tr>';
             $field = '';
-            for($i=0; $i < $level; $i++)
+            for($i = 0; $i < $level; $i++)
             {
-              $field .= '&nbsp;&nbsp;&nbsp;';
+              $field .= '&nbsp;&nbsp;∟&nbsp;&nbsp;';
             }
-            $field .= $data['field'];
+            $field   .= $data['field'];
             $str     .= '<td>' . $field . '</td>';
             $str     .= '<td>' . $data['paramsType'] . '</td>';
             $require = $data['required'] ? '是' : '否';

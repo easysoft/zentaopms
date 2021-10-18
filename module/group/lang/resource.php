@@ -1061,6 +1061,36 @@ $lang->doc->methodOrder[60] = 'collect';
 $lang->doc->methodOrder[65] = 'tableContents';
 $lang->doc->methodOrder[70] = 'showFiles';
 
+/* Api Lib */
+$lang->resource->apiDoc = new stdClass();
+$lang->resource->apiDoc->index = 'index';
+$lang->resource->apiDoc->createLib = 'createLib';
+$lang->resource->apiDoc->editLib = 'editLib';
+$lang->resource->apiDoc->deleteLib = 'deleteLib';
+$lang->resource->apiDoc->publish = 'publish';
+$lang->resource->apiDoc->struct = 'structPage';
+$lang->resource->apiDoc->createStruct = 'createStruct';
+$lang->resource->apiDoc->editStruct = 'editStruct';
+$lang->resource->apiDoc->deleteStruct = 'deleteStruct';
+$lang->resource->apiDoc->create = 'createApi';
+$lang->resource->apiDoc->edit = 'editApi';
+$lang->resource->apiDoc->delete = 'deleteApi';
+
+$lang->apiDoc->methodOrder[0] = 'index';
+$lang->apiDoc->methodOrder[5] = 'createLib';
+$lang->apiDoc->methodOrder[10] = 'editLib';
+$lang->apiDoc->methodOrder[15] = 'deleteLib';
+$lang->apiDoc->methodOrder[20] = 'publish';
+$lang->apiDoc->methodOrder[25] = 'structPage';
+$lang->apiDoc->methodOrder[30] = 'createStruct';
+$lang->apiDoc->methodOrder[35] = 'editStruct';
+$lang->apiDoc->methodOrder[40] = 'deleteStruct';
+$lang->apiDoc->methodOrder[45] = 'createApi';
+$lang->apiDoc->methodOrder[50] = 'editApi';
+$lang->apiDoc->methodOrder[55] = 'deleteApi';
+
+
+
 /* Mail. */
 $lang->resource->mail = new stdclass();
 $lang->resource->mail->index  = 'index';
