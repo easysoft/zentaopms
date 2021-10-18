@@ -1752,10 +1752,10 @@ EOD;
             {
                 $key = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? 'case' : 'id';
                 $id  = $object->$key;
-                $objectList[$id] = $object;
+                $objectList[$id] = $id;
             }
 
-            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList), $this->app->tab);
+            $this->session->set($objectIdListKey, array('idkey' => $key, 'objectList' => $objectList), $this->app->tab);
             $existsObjectList = $this->session->$objectIdListKey;
         }
 
@@ -1766,12 +1766,12 @@ EOD;
         $preObj = false;
         if(isset($existsObjectList['objectList']))
         {
-            foreach($existsObjectList['objectList'] as $id => $object)
+            foreach($existsObjectList['objectList'] as $id)
             {
                 /* Get next object. */
                 if($preObj === true)
                 {
-                    $preAndNextObject->next = $object;
+                    $preAndNextObject->next = $id;
                     break;
                 }
 
@@ -1781,7 +1781,20 @@ EOD;
                     if($preObj) $preAndNextObject->pre = $preObj;
                     $preObj = true;
                 }
-                if($preObj !== true) $preObj = $object;
+                if($preObj !== true) $preObj = $id;
+            }
+
+            if(empty($queryCondition) or $this->session->$typeOnlyCondition)
+            {
+                if(!empty($preAndNextObject->pre))  $preAndNextObject->pre  = $this->dao->select('*')->from($table)->where('id')->eq($preAndNextObject->pre)->fetch();
+                if(!empty($preAndNextObject->next)) $preAndNextObject->next = $this->dao->select('*')->from($table)->where('id')->eq($preAndNextObject->next)->fetch();
+            }
+            else
+            {
+                $key      = $existsObjectList['idkey'];
+                $hasWhere = srtipos($queryCondition, ' where ') !== false;
+                if(!empty($preAndNextObject->pre))   $preAndNextObject->pre  = $this->dao->query($queryCondition . ($hasWhere ? " AND `$key`='{$preAndNextObject->pre}' "  : " WHERE `$key`='{$preAndNextObject->pre}' "))->fetch();
+                if(!empty($preAndNextObject->next))  $preAndNextObject->next = $this->dao->query($queryCondition . ($hasWhere ? " AND `$key`='{$preAndNextObject->next}' " : " WHERE `$key`='{$preAndNextObject->next}' "))->fetch();
             }
         }
 
