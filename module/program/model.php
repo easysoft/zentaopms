@@ -1254,7 +1254,7 @@ class programModel extends model
                     $hour->totalConsumed += $task->consumed;
                     $hour->totalEstimate += $task->estimate;
 
-                    if(strpos('cancel,closed', $task->status) !== false) $hour->totalLeft += $task->left;
+                    if(strpos('cancel,closed', $task->status) === false) $hour->totalLeft += $task->left;
                 }
             }
             $hours[$projectID] = $hour;
