@@ -1763,7 +1763,7 @@ EOD;
             else
             {
                 $key      = $existsObjectList['idkey'];
-                $hasWhere = srtipos($queryCondition, ' where ') !== false;
+                $hasWhere = stripos($queryCondition, ' where ') !== false;
                 if(!empty($preAndNextObject->pre))   $preAndNextObject->pre  = $this->dao->query($queryCondition . ($hasWhere ? " AND `$key`='{$preAndNextObject->pre}' "  : " WHERE `$key`='{$preAndNextObject->pre}' "))->fetch();
                 if(!empty($preAndNextObject->next))  $preAndNextObject->next = $this->dao->query($queryCondition . ($hasWhere ? " AND `$key`='{$preAndNextObject->next}' " : " WHERE `$key`='{$preAndNextObject->next}' "))->fetch();
             }
