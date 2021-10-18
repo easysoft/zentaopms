@@ -99,6 +99,20 @@ class userEntry extends Entry
                     }
 
                     break;
+                case 'bug':
+                    $info->bug = array('total' => 0, 'bugs' => array());
+
+                    $control = $this->loadController('my', 'bug');
+                    $control->bug($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $info->bug['total'] = $data->data->pager->recTotal;
+                        $info->bug['bugs']  = $data->data->bugs;
+                    }
+
+                    break;
                 case 'todo':
                     $info->todo = array('total' => 0, 'todos' => array());
 
