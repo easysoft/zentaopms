@@ -824,13 +824,27 @@ class personnelModel extends model
      * @param  array  $users
      * @param  string $objectType
      * @param  int    $objectID
+     * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function deleteWhitelist($users = array(), $objectType = 'program', $objectID = 0)
+    public function deleteWhitelist($users = array(), $objectType = 'program', $objectID = 0, $groupID = 0)
     {
+        $this->loadModel('group');
+
+        /* Determine whether to delete the whitelist. */
         foreach($users as $account)
         {
+            $groups = $this->group->getByAccount($account);
+            foreach($groups as $key => $group)
+            {
+                if($key == $groupID) continue;
+
+                $acl     = json_decode($group->acl);
+                $keyName = $objectType . 's';
+                if(isset($acl->$keyName) and in_array($objectID, $acl->$keyName)) return false;
+            }
+
             if($objectType == 'program') $this->deleteProgramWhitelist($objectID, $account);
             if($objectType == 'project') $this->deleteProjectWhitelist($objectID, $account);
             if($objectType == 'product') $this->deleteProductWhitelist($objectID, $account);

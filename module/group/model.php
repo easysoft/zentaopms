@@ -375,7 +375,7 @@ class groupModel extends model
             $needRemoveAcls = array_diff($oldAcls, $newAcls);
             $needAddAcls    = array_diff($newAcls, $oldAcls);
             foreach($needAddAcls as $objectID) $this->personnel->updateWhitelist($users, $objectType, $objectID, 'whitelist', 'sync', 'increase');
-            foreach($needRemoveAcls as $objectID) $this->personnel->deleteWhitelist($users, $objectType, $objectID);
+            foreach($needRemoveAcls as $objectID) $this->personnel->deleteWhitelist($users, $objectType, $objectID, $groupID);
         }
 
 
