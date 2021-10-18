@@ -102,7 +102,7 @@ class execution extends control
         $products        = $this->execution->getProducts($executionID);
         $childExecutions = $this->execution->getChildExecutions($executionID);
         $teamMembers     = $this->execution->getTeamMembers($executionID);
-        $actions         = $this->loadModel('action')->getList('execution', $executionID);
+        $actions         = $this->loadModel('action')->getList($this->objectType, $executionID);
 
         /* Set menu. */
         $this->execution->setMenu($executionID, $buildID = 0, $extra);
@@ -1612,7 +1612,7 @@ class execution extends control
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
         $this->view->position[] = $this->lang->execution->start;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('execution', $executionID);
+        $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
     }
 
@@ -1647,7 +1647,7 @@ class execution extends control
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
         $this->view->position[] = $this->lang->execution->putoff;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('execution', $executionID);
+        $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
     }
 
@@ -1682,7 +1682,7 @@ class execution extends control
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
         $this->view->position[] = $this->lang->execution->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('execution', $executionID);
+        $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
     }
 
@@ -1722,7 +1722,7 @@ class execution extends control
         $this->view->position[] = $this->lang->execution->activate;
         $this->view->execution    = $execution;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('execution', $executionID);
+        $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->view->newBegin   = $newBegin;
         $this->view->newEnd     = $newEnd;
         $this->display();
@@ -1759,7 +1759,7 @@ class execution extends control
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
         $this->view->position[] = $this->lang->execution->close;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('execution', $executionID);
+        $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
     }
 
@@ -1809,7 +1809,7 @@ class execution extends control
         $this->view->products     = $products;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->planGroups   = $this->execution->getPlans($products);
-        $this->view->actions      = $this->loadModel('action')->getList('execution', $executionID);
+        $this->view->actions      = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', 'all', $executionID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
