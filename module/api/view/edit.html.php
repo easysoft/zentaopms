@@ -164,7 +164,7 @@ js::set('api', $api);
                   <tbody>
                     <tr v-for="(item,key) in queryP">
                       <td class="w-300px">
-                        <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
+                        <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="queryP[key].field">
                       </td>
                       <td class="w-50px">
                         <div class="checkbox">
@@ -177,8 +177,8 @@ js::set('api', $api);
                         <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                       </td>
                       <td>
-                        <button class="btn btn-link" type="button" @click="add(query, key, 'query')"><?php echo $lang->struct->add;?></button>
-                        <button class="btn btn-link" type="button" @click="del(query, key)"><?php echo $lang->delete;?></button>
+                        <button class="btn btn-link" type="button" @click="add(queryP, key, 'query')"><?php echo $lang->struct->add;?></button>
+                        <button class="btn btn-link" type="button" @click="del(queryP, key)"><?php echo $lang->delete;?></button>
                       </td>
                   </tbody>
                 </table>

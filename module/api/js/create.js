@@ -68,7 +68,7 @@ var app = new Vue({
         },
         add(data, key, t) {
             if (t == "header" || t == 'query') {
-                data.splice(key + 1, 0, this.defaultHeader);
+                data.splice(key + 1, 0, {...this.defaultHeader})
             }
         }
     }

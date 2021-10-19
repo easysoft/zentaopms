@@ -261,7 +261,6 @@ class api extends control
                 ->add('lib', $struct->lib)
                 ->add('editedBy', $userId)
                 ->add('editedDate', $now)
-                ->json('attribute')
                 ->get();
 
             $changes = $this->api->updateStruct($structID, $data);
@@ -614,7 +613,7 @@ class api extends control
     {
         $this->loadModel('tree');
         $childModules = $this->tree->getOptionMenu($libID, 'api');
-        $select       = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
+        $select       = ($type == 'module') ? html::select('module', $childModules, '0', "class='form-control chosen'") : html::select('parent', $childModules, '0', "class='form-control chosen'");
         die($select);
     }
 

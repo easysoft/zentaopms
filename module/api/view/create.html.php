@@ -69,7 +69,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
           <tr>
             <th><?php echo $lang->api->module;?></th>
             <td>
-            <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>
+            <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, '', "class='form-control chosen'");?></span>
             </td>
             <td></td>
           </tr>
