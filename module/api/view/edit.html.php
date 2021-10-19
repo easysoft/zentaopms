@@ -187,7 +187,7 @@ js::set('api', $api);
             <tr>
               <th><?php echo $lang->api->params;?></th>
               <td colspan='2'>
-                <body-field @change="changeAttr" :attr="attr"></body-field>
+                <body-field @change="changeAttr" :attr="attr" :struct-type="attrType" @change-type="changeType"></body-field>
                 <input type="hidden" name="params" v-model="params">
               </td>
             </tr>
