@@ -268,7 +268,7 @@ class api extends control
             if(dao::isError()) return $this->sendError(dao::getError());
             $actionID = $this->action->create('apistruct', $structID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'editStruct', "libID={$struct->lib}&structID=$structID")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID={$struct->lib}")));
         }
 
         $options = array();
