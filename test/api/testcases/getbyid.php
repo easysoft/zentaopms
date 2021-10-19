@@ -12,11 +12,11 @@ pid=1
 使用不存在的用例id查询用例详情 >> 404 Not found
 
 */
-$token = $rest->post('/tokens', array('account' => 'admin', 'password' => '123456'));
-$token = array('Token' => $token->body->token);
+global $token;
+$header = array('Token' => $token->token);
 
-$existCase = $rest->get('/testcases/100', $token);
-$noCase    = $rest->get('/testcases/100001', $token);
+$existCase = $rest->get('/testcases/100', $header);
+$noCase    = $rest->get('/testcases/100001', $header);
 
 $existCase->body = array($existCase->body);
 $noCase->body    = array($noCase->body);
