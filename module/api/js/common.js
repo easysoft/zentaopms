@@ -1,9 +1,11 @@
 function loadDocModule(libID)
 {
-    var link = createLink('api', 'ajaxGetChild', 'libID=' + libID + '&type=parent');
+    var link = createLink('api', 'ajaxGetChild', 'libID=' + libID + '&type=module');
     $.post(link, function(data)
     {
-        $('#module').empty().append($(data).children()).trigger('chosen:updated');
+        $('#module').replaceWith(data);
+        $('#module_chosen').remove();
+        $('#module').chosen();
     });
 }
 /**
@@ -426,7 +428,7 @@ try {
                       <param-field :value.sync="item" @add="add(current, $event)" @del="del(current, key)"  @sub="addSub(current, key, $event)"></param-field>
                     </template>
                   </tbody>
-              </table> 
+              </table>
           </div>
         `
     });
