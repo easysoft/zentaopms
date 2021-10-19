@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+
+/**
+
+title=测试获取根据ID获取用户真实姓名;
+cid=1
+pid=1
+
+
+*/
+$token = $rest->post('/tokens', array('account' => 'admin', 'password' => '123qwe!@#'));
+$user  = $rest->get('/users/2', array('token' => $token->body->token));
+
+r($user) && c(200) && p('realname') && e('测试2'); // 插入一个新用户

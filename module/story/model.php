@@ -401,13 +401,17 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
+        $forceReview = $this->checkForceReview();
         foreach($_POST['needReview'] as $index => $value)
         {
             if($_POST['title'][$index] and isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
-            if($_POST['title'][$index] and $value and empty($_POST['reviewer'][$index]))
+            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]))
             {
-                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-                return false;
+                if($value || $forceReview)
+                {
+                    dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+                    return false;
+                }
             }
         }
 
@@ -441,7 +445,6 @@ class storyModel extends model
         if(isset($stories->uploadImage)) $this->loadModel('file');
 
         $extendFields = $this->getFlowExtendFields();
-        $forceReview  = $this->checkForceReview();
         $data         = array();
         foreach($stories->title as $i => $title)
         {

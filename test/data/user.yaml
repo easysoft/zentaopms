@@ -30,7 +30,7 @@ fields:
       range: n,1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1-10
   - field: password
     note: "密码"
-    range: 123456{346}
+    range: 123qwe!@#{346}
     format: md5
   - field: role
     note: "职位"
