@@ -33,8 +33,8 @@ js::set('struct', $struct);
     <div class='center-block'>
       <div class='main-header'>
         <h2>
-            <?php echo $struct->name;?>
-            <small><?php echo $lang->arrow . ' ' . $lang->api->editStruct;?></small>
+          <?php echo $struct->name;?>
+          <small><?php echo $lang->arrow . ' ' . $lang->api->editStruct;?></small>
         </h2>
       </div>
       <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
