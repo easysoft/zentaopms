@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The control file of api of ZenTaoPMS.
  *
@@ -683,7 +684,7 @@ class api extends control
     private function generateLibsDropMenu($libs, $libID, $version = 0)
     {
         if(empty($libs)) return '';
-        if (!isset($libs[$libID])) return '';
+        if(!isset($libs[$libID])) return '';
 
         $libName = $libs[$libID]->name;
         $output  = <<<EOT
@@ -703,7 +704,7 @@ EOT;
         foreach($libs as $key => $lib)
         {
             $selected = $key == $libID ? 'selected' : '';
-            $output  .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+            $output   .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
         }
         $output .= "</div></div></div></div></div>";
 
@@ -712,7 +713,7 @@ EOT;
         if(!empty($versions))
         {
             $versionName = $version > 0 ? $versions[$version]->version : $this->lang->api->defaultVersion;
-            $output     .= <<<EOT
+            $output      .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$versionName} <span class='caret'></span>
