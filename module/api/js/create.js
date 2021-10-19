@@ -6,7 +6,7 @@ var app = new Vue({
         body: [],
         params: "",
         response: "",
-        defaultHeader: { field: '', required: '', desc: '' },
+        defaultHeader: {field: '', required: '', desc: ''},
     },
     created() {
         this.header.push({...this.defaultHeader});
@@ -40,12 +40,24 @@ var app = new Vue({
             this.response = JSON.stringify(val);
         },
         setParams() {
+            const header = this.filterParams(this.header)
+            const body = this.filterParams(this.body)
+            const queryP = this.filterParams(this.queryP)
             const params = {
-                header: this.header,
-                params: this.body,
-                query: this.queryP,
+                header: header,
+                params: body,
+                query: queryP,
             }
             this.params = JSON.stringify(params);
+        },
+        filterParams(data) {
+            const res = []
+            data.forEach(item => {
+                if (item.field && item.field.length > 0) {
+                    res.push(item)
+                }
+            })
+            return res
         },
         del(data, key) {
             if (data.length <= 1) {
@@ -55,7 +67,7 @@ var app = new Vue({
         },
         add(data, key, t) {
             if (t == "header" || t == 'query') {
-                data.splice(key+1, 0, this.defaultHeader);
+                data.splice(key + 1, 0, this.defaultHeader);
             }
         }
     }

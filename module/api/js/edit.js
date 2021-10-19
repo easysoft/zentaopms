@@ -7,16 +7,18 @@ var app = new Vue({
         response: "",
         params: "",
         defaultHeader: [
-            { field: '', required: '', desc: '' }
+            {field: '', required: '', desc: ''}
         ],
+        attr: [],
         api
     },
     created() {
         this.header.push({...this.defaultHeader})
         this.queryP.push({...this.defaultHeader})
-        if (api) {
-            this.header = api.params.header
-            this.queryP = api.params.query
+        if(api) {
+            if(api.params.header && api.params.header.length > 0) this.header = api.params.header
+            if(api.params.query && api.params.query.length > 0) this.queryP = api.params.query
+            if(api.params.params && api.params.params.length > 0) this.attr = api.params.params
             this.setParams();
         }
     },
@@ -48,23 +50,37 @@ var app = new Vue({
             this.response = JSON.stringify(val)
         },
         setParams() {
+            const header = this.filterParams(this.header)
+            const body = this.filterParams(this.body)
+            const queryP = this.filterParams(this.queryP)
             const params = {
-                header: this.header,
-                params: this.body,
-                query: this.queryP,
+                header: header,
+                params: body,
+                query: queryP,
             }
             // console.log(params)
             this.params = JSON.stringify(params);
         },
+        filterParams(data) {
+            const res = []
+            if(data && data.length > 0) {
+                data.forEach(item => {
+                    if(item.field && item.field.length > 0) {
+                        res.push(item)
+                    }
+                })
+            }
+            return res
+        },
         del(data, key) {
-            if (data.length <= 1) {
+            if(data.length <= 1) {
                 return
             }
             data.splice(key, 1)
         },
         add(data, key, t) {
-            if (t == "header" || t == 'query') {
-                data.splice(key+1, 0, this.defaultHeader)
+            if(t == "header" || t == 'query') {
+                data.splice(key + 1, 0, this.defaultHeader)
             }
         }
     }

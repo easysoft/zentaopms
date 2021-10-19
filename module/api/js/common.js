@@ -220,8 +220,9 @@ try {
         template: `
         <tr>
           <td class="w-300px">
-            <span v-for="item in value.sub" style="display: inline-block; width: 10px"></span>
-            <input type="text" :placeholder="langField" autocomplete="off" class="form-control" style="display: inline-block;width: auto" v-model="value.field">
+            <div :style="{'padding-left': 10 * value.sub + 'px'}">
+                <input type="text" :placeholder="langField" autocomplete="off" class="form-control" v-model="value.field">
+            </div>
           </td>
           <td class="w-100px">
               <select class="form-control" v-model="value.paramsType">
@@ -305,7 +306,7 @@ try {
         created() {
             console.log(this.showType, this.structType)
             this.current = [this.getInitField()]
-            if (this.attr) {
+            if (this.attr && this.attr.length > 0) {
                 const attr = [];
                 this.decodeParams(this.attr, attr)
                 this.current = attr
@@ -387,6 +388,13 @@ try {
                 }
                 this.current = this.params[this.structType];
                 console.log(this.current)
+            },
+            getPadding(sub) {
+                var padding = 0;
+                sub.forEach(item => {
+                    padding += 15;
+                })
+                return padding + 'px';
             }
         },
         template: `

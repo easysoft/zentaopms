@@ -167,12 +167,6 @@ $lang->api->paramsTypeCustomOptions = array(
     'file' => 'file',
     'ref'  => 'ref',
 );
-$lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
-$lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
-$lang->api->requiredOptions      = array(0 => 'No', 1 => 'Yes');
-
-$lang->doclib       = new stdclass();
-$lang->doclib->name = 'Interface Library Name';
 
 $lang->api->position  = 'Position';
 $lang->api->startLine = "%s,%s";
@@ -185,6 +179,13 @@ $lang->api->status    = 'Status';
 $lang->api->data      = 'Data';
 $lang->api->noParam   = 'No parameters required if GET Debug';
 $lang->api->post      = 'Refer to page list if POST Debug';
+
+$lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
+$lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
+$lang->api->requiredOptions      = array(0 => 'No', 1 => 'Yes');
+
+$lang->doclib       = new stdclass();
+$lang->doclib->name = 'Interface Library Name';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'SQL interface only allow SELECT query.';

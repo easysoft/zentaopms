@@ -687,7 +687,7 @@ EOT;
         $versions = $this->api->getReleaseListByApi($libID);
         if(!empty($versions))
         {
-            $versionName = $version > 0 ? $versions[$version]->desc : $this->lang->api->defaultVersion;
+            $versionName = $version > 0 ? $versions[$version]->version : $this->lang->api->defaultVersion;
             $output      .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
@@ -707,7 +707,7 @@ EOT;
             foreach($versions as $key => $item)
             {
                 $selected = $key == $version ? 'selected' : '';
-                $output   .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=$key"), $item->desc, '', "class='$selected' data-app='{$this->app->tab}'");
+                $output   .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=$key"), $item->version, '', "class='$selected' data-app='{$this->app->tab}'");
             }
             $output .= "</div></div></div></div></div>";
         }
