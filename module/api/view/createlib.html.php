@@ -28,24 +28,24 @@
             </tr>
             <tr>
               <th><?php echo $lang->api->baseUrl?></th>
-              <td style="width: 80%"><?php echo html::input('baseUrl', '', "class='form-control'")?></td>
+              <td style="width: 80%"><?php echo html::input('baseUrl', '', "class='form-control' placeholder='" . $lang->api->baseUrlDesc . "'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->control;?></th>
               <td>
-                <span><?php echo html::radio('acl', $lang->acl->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
-                <span class='text-info' id='noticeAcl'><?php echo $lang->noticeAcl['open'];?></span>
+                <span><?php echo html::radio('acl', $lang->api->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
+                <span class='text-info' id='noticeAcl'><?php echo $lang->api->noticeAcl['open'];?></span>
               </td>
             </tr>
             <tr id='whiteListBox' class='hidden'>
-              <th><?php echo $lang->acl->whiteList;?></th>
+              <th><?php echo $lang->api->whiteList;?></th>
               <td>
                 <div class='input-group'>
-                  <span class='input-group-addon groups-addon'><?php echo $lang->acl->group?></span>
+                  <span class='input-group-addon groups-addon'><?php echo $lang->api->group?></span>
                     <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
                 </div>
                 <div class='input-group'>
-                  <span class='input-group-addon'><?php echo $lang->acl->user?></span>
+                  <span class='input-group-addon'><?php echo $lang->api->user?></span>
                     <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
                 </div>
               </td>
@@ -77,5 +77,5 @@
     </tr>
   </table>
 </div>
-<?php js::set('noticeAcl', $lang->noticeAcl);?>
+<?php js::set('noticeAcl', $lang->api->noticeAcl);?>
 <?php include '../../common/view/footer.lite.html.php';?>

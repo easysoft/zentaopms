@@ -41,7 +41,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
         <table class='table table-form'>
           <tbody>
             <tr>
-              <td> <?php echo html::select('filter', $allStruct, '', "class='form-control chosen filterSelect'");?> </td>
+              <td><?php echo html::select('filter', $allStruct, '', "class='form-control chosen filterSelect'");?></td>
               <td></td>
             </tr>
           </tbody>

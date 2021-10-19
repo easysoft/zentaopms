@@ -617,7 +617,7 @@ class api extends control
         if(intval($libID) > 0)
         {
             $menu .= "<div class='dropdown' id='createDropdown'>";
-            $menu .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->curd->create . " <span class='caret'></span></button>";
+            $menu .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->api->createAB . " <span class='caret'></span></button>";
             $menu .= "<ul class='dropdown-menu pull-right'>";
 
             /* check has permission create api doc */
@@ -681,7 +681,7 @@ EOT;
         foreach($libs as $key => $lib)
         {
             $selected = $key == $libID ? 'selected' : '';
-            $output   .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+            $output  .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
         }
         $output .= "</div></div></div></div></div>";
 
@@ -690,7 +690,7 @@ EOT;
         if(!empty($versions))
         {
             $versionName = $version > 0 ? $versions[$version]->version : $this->lang->api->defaultVersion;
-            $output      .= <<<EOT
+            $output     .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$versionName} <span class='caret'></span>

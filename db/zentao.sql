@@ -121,7 +121,7 @@ CREATE TABLE `zt_apistruct_spec`
     `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
     `addedDate` datetime     NOT NULL,
     primary key (`id`)
-)
+);
 -- DROP TABLE IF EXISTS `zt_block`;
 CREATE TABLE IF NOT EXISTS `zt_block` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

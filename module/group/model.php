@@ -381,10 +381,11 @@ class groupModel extends model
 
         /* Update whitelist. */
         $this->loadModel('personnel');
-        $users = $this->getUserPairs($groupID);
-        $users = array_keys($users);
+        $users       = $this->getUserPairs($groupID);
+        $users       = array_keys($users);
+        $objectTypes = array_reverse($this->config->group->acl->objectTypes); //Adjust the order of object types, because execution is subordinate to the whitelist of projects, as well as products to programs.
 
-        foreach($this->config->group->acl->objectTypes as $key => $objectType)
+        foreach($objectTypes as $key => $objectType)
         {
             $oldAcls        = isset($oldGroup->acl[$key]) ? $oldGroup->acl[$key] : array();
             $newAcls        = isset($actions[$key]) ? $actions[$key] : array();
@@ -456,7 +457,9 @@ class groupModel extends model
         $acl = json_decode($acl);
 
         $this->loadModel('personnel');
-        foreach($this->config->group->acl->objectTypes as $key => $objectType)
+        $objectTypes = array_reverse($this->config->group->acl->objectTypes); //Adjust the order of object types, because execution is subordinate to the whitelist of projects, as well as products to programs.
+
+        foreach($objectTypes as $key => $objectType)
         {
             if(!isset($acl->{$key})) continue;
             foreach($acl->{$key} as $objectID)

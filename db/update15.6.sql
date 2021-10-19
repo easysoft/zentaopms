@@ -101,4 +101,4 @@ CREATE TABLE `zt_apistruct_spec`
     `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
     `addedDate` datetime     NOT NULL,
     primary key (`id`)
-)
+);

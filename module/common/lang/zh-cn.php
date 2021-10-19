@@ -320,25 +320,6 @@ $lang->themes['pink']       = '芙蕖粉';
 $lang->themes['blackberry'] = '露莓黑';
 $lang->themes['classic']    = '经典蓝';
 
-/* global access control lang */
-/* common access control lang */
-$lang->acl->whiteList          = '白名单';
-$lang->acl->aclList['open']    = '公开';
-$lang->acl->aclList['private'] = '私有';
-$lang->acl->aclList['custom']  = '自定义';
-$lang->acl->group              = '分组';
-$lang->acl->user               = '用户';
-
-$lang->noticeAcl = [
-    'open'    => '所有人都可以访问',
-    'custom'  => '白名单的用户可以访问',
-    'private' => '只有创建者自己可以访问',
-];
-
-/* 全局公众配置 */
-$lang->curd->create = '创建';
-
-
 /* 错误提示信息。*/
 $lang->error                  = new stdclass();
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";

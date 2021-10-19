@@ -33,12 +33,12 @@
             <tr>
               <th><?php echo $lang->api->control;?></th>
               <td>
-                <span><?php echo html::radio('acl', $lang->acl->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"lib\")'");?></span>
-                <span class='text-info' id='noticeAcl'><?php echo $lang->noticeAcl['open'];?></span>
+                <span><?php echo html::radio('acl', $lang->api->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
+                <span class='text-info' id='noticeAcl'><?php echo $lang->api->noticeAcl['open'];?></span>
               </td>
             </tr>
-            <tr id='whiteListBox' class='<?php echo $doc->acl === 'custom' ? '' : 'hidden'; ?>'>
-              <th><?php echo $lang->acl->whiteList;?></th>
+            <tr id='whiteListBox' class='hidden'>
+              <th><?php echo $lang->api->whiteList;?></th>
               <td>
                 <div class='input-group'>
                   <span class='input-group-addon groups-addon'><?php echo $lang->acl->group?></span>
@@ -75,11 +75,9 @@
     </tr>
     <tr id='aclBoxB'>
       <th><?php echo $lang->api->control;?></th>
-      <td>
-          <?php echo html::radio('acl', $lang->api->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'");?>
-      </td>
+      <td><?php echo html::radio('acl', $lang->api->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></td>
     </tr>
   </table>
 </div>
-<?php js::set('noticeAcl', $lang->noticeAcl);?>
+<?php js::set('noticeAcl', $lang->api->noticeAcl);?>
 <?php include '../../common/view/footer.lite.html.php';?>
