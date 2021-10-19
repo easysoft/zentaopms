@@ -16,6 +16,7 @@ $lang->api->sql      = 'SQL查询接口';
 
 $lang->api->index            = '接口库主页';
 $lang->api->editLib          = '编辑接口库';
+$lang->api->editPublish      = '编辑版本';
 $lang->api->deleteLib        = '删除接口库';
 $lang->api->publish          = '发布接口';
 $lang->api->createLib        = '创建接口库';
