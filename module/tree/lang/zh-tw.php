@@ -9,7 +9,7 @@
  * @version     $Id: zh-tw.php 4836 2013-06-19 05:39:40Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->tree = new stdclass();
+$lang->tree                     = new stdclass();
 $lang->tree->common             = '模組維護';
 $lang->tree->edit               = '編輯模組';
 $lang->tree->delete             = '刪除模組';
@@ -24,7 +24,7 @@ $lang->tree->manageBug          = '維護測試視圖模組';
 $lang->tree->manageCase         = '維護用例視圖模組';
 $lang->tree->manageCaseLib      = '維護用例庫模組';
 $lang->tree->manageCustomDoc    = '維護文檔庫分類';
-$lang->tree->manageApiChild     = '維護接口庫目錄';
+$lang->tree->manageApiChild     = '維護介面庫目錄';
 $lang->tree->updateOrder        = '更新排序';
 $lang->tree->manageChild        = '維護子模組';
 $lang->tree->manageStoryChild   = '維護子模組';
