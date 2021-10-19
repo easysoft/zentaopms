@@ -99,7 +99,6 @@ $lang->action->objectTypes['testreport']  = '報告';
 $lang->action->objectTypes['doc']         = '文檔';
 $lang->action->objectTypes['api']         = '介面';
 $lang->action->objectTypes['doclib']      = '文檔庫';
-$lang->action->objectTypes['api']         = '介面庫';
 $lang->action->objectTypes['apistruct']   = '資料結構';
 $lang->action->objectTypes['todo']        = '待辦';
 $lang->action->objectTypes['risk']        = '風險';
@@ -456,6 +455,10 @@ $lang->action->dynamicAction->doc['deleted']   = '刪除文檔';
 $lang->action->dynamicAction->doc['undeleted'] = '還原文檔';
 $lang->action->dynamicAction->doc['hidden']    = '隱藏文檔';
 
+$lang->action->dynamicAction->api['created'] = '創建介面';
+$lang->action->dynamicAction->api['edited']  = '編輯介面';
+$lang->action->dynamicAction->api['deleted'] = '刪除介面';
+
 $lang->action->dynamicAction->user['created']       = '創建用戶';
 $lang->action->dynamicAction->user['edited']        = '編輯用戶';
 $lang->action->dynamicAction->user['deleted']       = '刪除用戶';
@@ -502,6 +505,7 @@ $lang->action->label->risk        = '風險|risk|view|riskID=%s';
 $lang->action->label->issue       = '問題|issue|view|issueID=%s';
 $lang->action->label->design      = '設計|design|view|designID=%s';
 $lang->action->label->stakeholder = '干係人|stakeholder|view|userID=%s';
+$lang->action->label->api         = '介面|api|index|libID=%s&moduleID=%s&apiID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
