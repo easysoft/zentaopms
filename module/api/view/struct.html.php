@@ -42,8 +42,8 @@
             <td class="c-date"><?php echo $struct->addedDate;?></td>
             <td class='c-actions'>
               <?php
-              echo html::a($this->createLink('api', 'editStruct', "libID=$libID&structID=$struct->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn'");
-              echo html::a($this->createLink('api', 'deleteStruct', "libID=$libID&structID=$struct->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->api->delete}' class='btn'");
+              if(common::hasPriv('api', 'edit')) echo html::a($this->createLink('api', 'editStruct', "libID=$libID&structID=$struct->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn'");
+              if(common::hasPriv('api', 'delete')) echo html::a($this->createLink('api', 'deleteStruct', "libID=$libID&structID=$struct->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->api->delete}' class='btn'");
               ?>
             </td>
           </tr>
