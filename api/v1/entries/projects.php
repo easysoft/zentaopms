@@ -57,6 +57,7 @@ class projectsEntry extends entry
         $fields = 'name,begin,end,products';
         $this->batchSetPost($fields);
 
+        $this->setPost('code', $this->request('code', ''));
         $this->setPost('acl', $this->request('acl', 'private'));
         $this->setPost('parent', $this->request('program', 0));
         $this->setPost('whitelist', $this->request('whitelist', array()));
@@ -64,7 +65,7 @@ class projectsEntry extends entry
         $this->setPost('model', $this->request('model', 'scrum'));
 
         $control = $this->loadController('project', 'create');
-        $this->requireFields('name,begin,end,products');
+        $this->requireFields('name,code,begin,end,products');
 
         $control->create($this->request('model', 'scrum'));
 
