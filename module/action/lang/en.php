@@ -456,6 +456,10 @@ $lang->action->dynamicAction->doc['deleted']   = 'Delete Document';
 $lang->action->dynamicAction->doc['undeleted'] = 'Restore Document';
 $lang->action->dynamicAction->doc['hidden']    = 'Hide Document';
 
+$lang->action->dynamicAction->api['created'] = 'Create Interface';
+$lang->action->dynamicAction->api['edited']  = 'Edit Interface';
+$lang->action->dynamicAction->api['deleted'] = 'Delete Interface';
+
 $lang->action->dynamicAction->user['created']       = 'Create User';
 $lang->action->dynamicAction->user['edited']        = 'Edit User';
 $lang->action->dynamicAction->user['deleted']       = 'Delete User';
@@ -502,6 +506,7 @@ $lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
+$lang->action->label->api         = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

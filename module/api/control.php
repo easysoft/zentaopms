@@ -428,10 +428,13 @@ class api extends control
                 ->setDefault('product,module', 0)
                 ->get();
 
-            $this->api->update($apiID, $params);
-            if(dao::isError())
+            $changes = $this->api->update($apiID, $params);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            if($changes)
             {
-                return $this->sendError(dao::getError());
+                $actionID = $this->action->create('api', $apiID, 'edited');
+                $this->action->logHistory($actionID, $changes);
             }
 
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID")));

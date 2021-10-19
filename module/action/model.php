@@ -1172,6 +1172,11 @@ class actionModel extends model
 
                     $params = sprintf($vars, $type, $libObjectID, $libID);
                 }
+                elseif($action->objectType == 'api')
+                {
+                    $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
+                    $params = sprintf($vars, $api->lib, $api->module, $api->id);
+                }
                 else
                 {
                     $params = sprintf($vars, $action->objectID);

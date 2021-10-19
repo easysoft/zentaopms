@@ -214,6 +214,8 @@ class apiModel extends model
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
             ->where('id')->eq($id)
             ->exec();
+
+        return common::createChanges($oldApi, $data);
     }
 
     /**

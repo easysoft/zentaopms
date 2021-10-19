@@ -455,6 +455,10 @@ $lang->action->dynamicAction->doc['deleted']   = '删除文档';
 $lang->action->dynamicAction->doc['undeleted'] = '还原文档';
 $lang->action->dynamicAction->doc['hidden']    = '隐藏文档';
 
+$lang->action->dynamicAction->api['created'] = '创建接口';
+$lang->action->dynamicAction->api['edited']  = '编辑接口';
+$lang->action->dynamicAction->api['deleted'] = '删除接口';
+
 $lang->action->dynamicAction->user['created']       = '创建用户';
 $lang->action->dynamicAction->user['edited']        = '编辑用户';
 $lang->action->dynamicAction->user['deleted']       = '删除用户';
@@ -501,6 +505,7 @@ $lang->action->label->risk        = '风险|risk|view|riskID=%s';
 $lang->action->label->issue       = '问题|issue|view|issueID=%s';
 $lang->action->label->design      = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
+$lang->action->label->api         = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
