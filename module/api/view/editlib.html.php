@@ -37,7 +37,7 @@
                 <span class='text-info' id='noticeAcl'><?php echo $lang->api->noticeAcl['open'];?></span>
               </td>
             </tr>
-            <tr id='whiteListBox' class='hidden'>
+            <tr id='whiteListBox' class='<?php echo $doc->acl == 'custom' ? '' : 'hidden';?>'>
               <th><?php echo $lang->api->whiteList;?></th>
               <td>
                 <div class='input-group'>
@@ -75,7 +75,7 @@
     </tr>
     <tr id='aclBoxB'>
       <th><?php echo $lang->api->control;?></th>
-      <td><?php echo html::radio('acl', $lang->api->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></td>
+      <td><?php echo html::radio('acl', $lang->api->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'");?></td>
     </tr>
   </table>
 </div>
