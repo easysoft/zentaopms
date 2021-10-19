@@ -53,6 +53,10 @@ $app->loadClass('requests', true);
 include 'rest.php';
 $rest = new Rest($config->webSite . '/api.php/v1');
 
+/* Global token for api. */
+$token = $rest->post('/tokens', array('account' => 'admin', 'password' => '123qwe!@#'));
+if(isset($token->body)) $token = $token->body;
+
 /* Set configs. */
 $config->zendataRoot = dirname(dirname(__FILE__)) . '/zendata';
 $config->ztfPath     = dirname(dirname(__FILE__)) . '/tools/ztf';
