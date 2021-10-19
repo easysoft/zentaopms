@@ -66,7 +66,6 @@ var app = new Vue({
                 params: body,
                 query: queryP,
             }
-            // console.log(params)
             this.params = JSON.stringify(params);
         },
         filterParams(data) {
