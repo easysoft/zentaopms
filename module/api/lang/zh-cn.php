@@ -195,6 +195,9 @@ $lang->api->requiredOptions      = array(0 => '否', 1 => '是');
 $lang->doclib       = new stdclass();
 $lang->doclib->name = '接口库名称';
 
+$lang->apistruct = new stdClass();
+$lang->apistruct->name = '结构名';
+
 $lang->api->error             = new stdclass();
 $lang->api->error->onlySelect = 'SQL查询接口只允许SELECT查询';
 $lang->api->error->disabled   = '因为安全原因，该功能被禁用。可以到config目录，修改配置项 %s，打开此功能。';

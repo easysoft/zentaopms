@@ -47,6 +47,7 @@ var app = new Vue({
             this.body = val
         },
         changeRes(val) {
+            val = this.filterParams(val)
             this.response = JSON.stringify(val)
         },
         setParams() {

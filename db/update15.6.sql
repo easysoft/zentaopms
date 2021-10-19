@@ -7,7 +7,7 @@ ALTER TABLE `zt_doclib`
 CREATE TABLE `zt_api_lib_release`
 (
     `id`        int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `lib`    int UNSIGNED NOT NULL DEFAULT 0,
+    `lib`       int UNSIGNED NOT NULL DEFAULT 0,
     `desc`      varchar(255) NOT NULL DEFAULT '',
     `version`   varchar(255) NOT NULL DEFAULT '',
     `snap`      mediumtext   NOT NULL,
@@ -49,23 +49,25 @@ CREATE TABLE `zt_api`
 -- DROP TABLE IF EXISTS `zt_apispec`;
 CREATE TABLE `zt_apispec`
 (
-    `id`           int UNSIGNED NOT NULL AUTO_INCREMENT,
-    `doc`          int UNSIGNED NOT NULL DEFAULT 0,
-    `module`       int UNSIGNED NOT NULL DEFAULT 0,
-    `title`        varchar(100) NOT NULL DEFAULT '',
-    `path`         varchar(255) NOT NULL DEFAULT '',
-    `protocol`     varchar(10)  NOT NULL DEFAULT '',
-    `method`       varchar(10)  NOT NULL DEFAULT '',
-    `requestType`  varchar(100) NOT NULL DEFAULT '',
-    `responseType` varchar(100) NOT NULL DEFAULT '',
-    `status`       varchar(20)  NOT NULL DEFAULT '',
-    `owner`        varchar(255) NOT NULl DEFAULT 0,
-    `desc`         text NULL,
-    `version`      smallint UNSIGNED NOT NULL DEFAULT 0,
-    `params`       text NULL,
-    `response`     text NULL,
-    `addedBy`      varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate`    datetime NULL,
+    `id`              int UNSIGNED NOT NULL AUTO_INCREMENT,
+    `doc`             int UNSIGNED NOT NULL DEFAULT 0,
+    `module`          int UNSIGNED NOT NULL DEFAULT 0,
+    `title`           varchar(100) NOT NULL DEFAULT '',
+    `path`            varchar(255) NOT NULL DEFAULT '',
+    `protocol`        varchar(10)  NOT NULL DEFAULT '',
+    `method`          varchar(10)  NOT NULL DEFAULT '',
+    `requestType`     varchar(100) NOT NULL DEFAULT '',
+    `responseType`    varchar(100) NOT NULL DEFAULT '',
+    `status`          varchar(20)  NOT NULL DEFAULT '',
+    `owner`           varchar(255) NOT NULl DEFAULT 0,
+    `desc`            text NULL,
+    `version`         smallint UNSIGNED NOT NULL DEFAULT 0,
+    `params`          text NULL,
+    `paramsExample`   text NUll,
+    `responseExample` text NUll,
+    `response`        text NULL,
+    `addedBy`         varchar(30)  NOT NULL DEFAULT 0,
+    `addedDate`       datetime NULL,
     PRIMARY KEY (`id`)
 );
 
