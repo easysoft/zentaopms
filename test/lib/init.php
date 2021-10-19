@@ -80,7 +80,7 @@ function r($result)
  * @access public
  * @return void
  */
-function p($key, $delimiter = ',')
+function p($key = '', $delimiter = ',')
 {
     global $_result;
     echo ">> ";
