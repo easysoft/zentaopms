@@ -38,7 +38,7 @@
             <td><?php printf('%03d', $release->id);?></td>
             <td><?php echo $release->version;?></td>
             <td><?php echo $release->desc;?></td>
-            <td><?php echo $release->addedBy;?></td>
+            <td><?php echo zget($users, $release->addedBy, '');?></td>
             <td class="c-date"><?php echo $release->addedDate;?></td>
             <td class='c-actions'>
               <?php echo html::a($this->createLink('api', 'deleteRelease', "libID=$libID&id=$release->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->api->delete}' class='btn'");?>

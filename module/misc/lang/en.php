@@ -159,7 +159,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['15.7'][] = array('title' => 'Fix bug.', 'desc' => '');
+$lang->misc->feature->all['15.7'][] = array('title' => 'Add API Lib. Fix bug.', 'desc' => '');
 $lang->misc->feature->all['15.6'][] = array('title' => 'Fix bug.', 'desc' => '');
 $lang->misc->feature->all['15.5'][] = array('title' => 'Add Program / Product / Project Kanban, global addition function and novice guidance. Fix bug.', 'desc' => '');
 $lang->misc->feature->all['15.4'][] = array('title' => 'Fix bug', 'desc' => '');

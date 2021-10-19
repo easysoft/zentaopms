@@ -20,11 +20,11 @@
       <div id='title'>
         <li class='menu-title'><?php echo $this->lang->api->module;?></li>
         <?php
-        $canTreeBrowse  = common::hasPriv('tree', 'browse');
-        $canEditPublish = common::hasPriv('api', 'editPublish');
-        $canEditLib     = common::hasPriv('api', 'editLib');
-        $canDeleteLib   = common::hasPriv('api', 'deleteLib');
-        $haveMoreButton = ($canTreeBrowse or $canEditPublish or $canEditLib or $canDeleteLib);
+        $canTreeBrowse   = common::hasPriv('tree', 'browse');
+        $canViewReleases = common::hasPriv('api', 'releases');
+        $canEditLib      = common::hasPriv('api', 'editLib');
+        $canDeleteLib    = common::hasPriv('api', 'deleteLib');
+        $haveMoreButton  = ($canTreeBrowse or $canViewReleases or $canEditLib or $canDeleteLib);
 
         if(!$isRelease and $haveMoreButton)
         {
@@ -32,7 +32,7 @@
             echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
             echo "<ul class='dropdown-menu pull-right'>";
             if($canTreeBrowse) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe'") . '</li>';
-            if($canEditPublish) echo '<li>' . html::a($this->createLink('api', 'editPublish', "libID=$libID", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
+            if($canViewReleases) echo '<li>' . html::a($this->createLink('api', 'releases', "libID=$libID", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
             echo "<li class='divider'></li>";
             if($canEditLib) echo '<li>' . html::a($this->createLink('api', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->api->editLib, '', "class='iframe'") . '</li>';
             if($canDeleteLib) echo '<li>' . html::a($this->createLink('api', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->api->deleteLib, 'hiddenwin') . '</li>';

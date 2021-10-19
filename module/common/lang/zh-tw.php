@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 
-include (dirname(__FILE__) . '/common.php');
+include(dirname(__FILE__) . '/common.php');
 
 global $config;
 
@@ -113,7 +113,7 @@ $lang->selectAll     = '全選';
 $lang->selectReverse = '反選';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您訪問的對象不存在！';
-$lang->notPage       =  '抱歉，您訪問的功能正在開發中！';
+$lang->notPage       = '抱歉，您訪問的功能正在開發中！';
 $lang->showAll       = '[[全部顯示]]';
 $lang->selectedItems = '已選擇 <strong>{0}</strong> 項';
 
@@ -223,19 +223,21 @@ $lang->doc->my        = '我的文檔';
 $lang->doc->favorite  = '我的收藏';
 $lang->doc->product   = '產品庫';
 $lang->doc->project   = '項目庫';
-$lang->doc->interface = '項目庫';
+$lang->doc->api       = '介面庫';
 $lang->doc->execution = "{$lang->execution->common}庫";
 $lang->doc->custom    = '自定義庫';
 $lang->doc->wiki      = 'WIKI';
+$lang->doc->apiDoc    = '文檔';
+$lang->doc->apiStruct = '資料結構';
 
 $lang->product->list   = $lang->productCommon . '列表';
 $lang->product->kanban = $lang->productCommon . '看板';
 
 $lang->project->report = '報告';
 
-$lang->report->weekly = '周報';
-$lang->report->annual = '年度總結';
-$lang->report->notice = new stdclass();
+$lang->report->weekly       = '周報';
+$lang->report->annual       = '年度總結';
+$lang->report->notice       = new stdclass();
 $lang->report->notice->help = '註：統計報表的數據來源於列表頁面的檢索結果，生成統計報表前請先在列表頁面進行檢索。比如列表頁面我們檢索的是%tab%，那麼報表就是基于之前檢索的%tab%的結果集進行統計。';
 
 $lang->testcase->case      = '用例';
@@ -319,7 +321,7 @@ $lang->themes['blackberry'] = '露莓黑';
 $lang->themes['classic']    = '經典藍';
 
 /* 錯誤提示信息。*/
-$lang->error = new stdclass();
+$lang->error                  = new stdclass();
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
 $lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且大於『%s』。");
 $lang->error->reg             = "『%s』不符合格式，應當為:『%s』。";
@@ -351,7 +353,7 @@ $lang->error->tutorialData    = '新手模式下不會插入數據，請退出�
 $lang->error->noCurlExt       = '伺服器未安裝Curl模組。';
 
 /* 分頁信息。*/
-$lang->pager = new stdclass();
+$lang->pager               = new stdclass();
 $lang->pager->noRecord     = "暫時沒有記錄";
 $lang->pager->digest       = "共 <strong>%s</strong> 條記錄，%s <strong>%s/%s</strong> &nbsp; ";
 $lang->pager->recPerPage   = "每頁 <strong>%s</strong> 條";
@@ -374,7 +376,7 @@ $lang->pager->pageSize     = '每頁 <strong>{recPerPage}</strong> 項';
 $lang->pager->itemsRange   = '第 <strong>{start}</strong> ~ <strong>{end}</strong> 項';
 $lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</strong> 頁';
 
-$lang->colorPicker = new stdclass();
+$lang->colorPicker           = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的顏色值';
 
 $lang->downNotify     = "下載桌面提醒";
@@ -400,23 +402,23 @@ $lang->pasteImgFail      = "貼圖失敗，請稍後重試。";
 $lang->pasteImgUploading = "正在上傳圖片，請稍後...";
 
 /* 時間格式設置。*/
-if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');
-if(!defined('DT_DATETIME2'))  define('DT_DATETIME2',  'y-m-d H:i');
+if(!defined('DT_DATETIME1')) define('DT_DATETIME1', 'Y-m-d H:i:s');
+if(!defined('DT_DATETIME2')) define('DT_DATETIME2', 'y-m-d H:i');
 if(!defined('DT_MONTHTIME1')) define('DT_MONTHTIME1', 'n/d H:i');
 if(!defined('DT_MONTHTIME2')) define('DT_MONTHTIME2', 'n月d日 H:i');
-if(!defined('DT_DATE1'))      define('DT_DATE1',     'Y-m-d');
-if(!defined('DT_DATE2'))      define('DT_DATE2',     'Ymd');
-if(!defined('DT_DATE3'))      define('DT_DATE3',     'Y年m月d日');
-if(!defined('DT_DATE4'))      define('DT_DATE4',     'n月j日');
-if(!defined('DT_DATE5'))      define('DT_DATE5',     'j/n');
-if(!defined('DT_TIME1'))      define('DT_TIME1',     'H:i:s');
-if(!defined('DT_TIME2'))      define('DT_TIME2',     'H:i');
-if(!defined('LONG_TIME'))     define('LONG_TIME',    '2059-12-31');
+if(!defined('DT_DATE1')) define('DT_DATE1', 'Y-m-d');
+if(!defined('DT_DATE2')) define('DT_DATE2', 'Ymd');
+if(!defined('DT_DATE3')) define('DT_DATE3', 'Y年m月d日');
+if(!defined('DT_DATE4')) define('DT_DATE4', 'n月j日');
+if(!defined('DT_DATE5')) define('DT_DATE5', 'j/n');
+if(!defined('DT_TIME1')) define('DT_TIME1', 'H:i:s');
+if(!defined('DT_TIME2')) define('DT_TIME2', 'H:i');
+if(!defined('LONG_TIME')) define('LONG_TIME', '2059-12-31');
 
 /* datepicker 時間*/
 $lang->datepicker = new stdclass();
 
-$lang->datepicker->dpText = new stdclass();
+$lang->datepicker->dpText                   = new stdclass();
 $lang->datepicker->dpText->TEXT_OR          = '或 ';
 $lang->datepicker->dpText->TEXT_PREV_YEAR   = '去年';
 $lang->datepicker->dpText->TEXT_PREV_MONTH  = '上月';
@@ -435,4 +437,4 @@ $lang->datepicker->dayNames     = array('星期日', '星期一', '星期二', '
 $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
 
-include (dirname(__FILE__) . '/menu.php');
+include(dirname(__FILE__) . '/menu.php');

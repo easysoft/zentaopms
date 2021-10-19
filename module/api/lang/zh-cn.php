@@ -16,9 +16,10 @@ $lang->api->sql      = 'SQL查询接口';
 
 $lang->api->index            = '接口库主页';
 $lang->api->editLib          = '编辑接口库';
-$lang->api->editPublish      = '版本管理';
+$lang->api->releases         = '版本管理';
+$lang->api->deleteRelease    = '删除版本';
 $lang->api->deleteLib        = '删除接口库';
-$lang->api->publish          = '发布接口';
+$lang->api->createRelease    = '发布接口';
 $lang->api->createLib        = '创建接口库';
 $lang->api->createApi        = '创建接口';
 $lang->api->createAB         = '创建';
@@ -58,6 +59,7 @@ $lang->api->confirmDeleteLib = "您确定删除该接口库吗？";
 $lang->api->filterStruct     = "使用数据结构填充";
 $lang->api->defaultVersion   = "当前版本";
 
+/* Common access control lang. */
 $lang->api->whiteList          = '白名单';
 $lang->api->aclList['open']    = '公开';
 $lang->api->aclList['private'] = '私有';
@@ -118,8 +120,6 @@ $lang->api->paramsExample      = '请求示例';
 $lang->api->header             = '请求头';
 $lang->api->query              = '请求参数';
 $lang->api->params             = '请求体';
-$lang->api->header             = '请求头';
-$lang->api->query              = 'Query参数';
 $lang->api->response           = '请求响应';
 $lang->api->responseExample    = '响应示例';
 $lang->api->res                = new stdClass();
