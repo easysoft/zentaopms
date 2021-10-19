@@ -14,25 +14,9 @@ $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
 $lang->api->sql      = 'SQL Query API';
 
-/* function of api doc */
-$lang->apiDoc               = new stdClass();
-$lang->apiDoc->common       = 'Api Doc';
-$lang->apiDoc->index        = 'Api Doc Home';
-$lang->apiDoc->createLib    = 'Create Api Library';
-$lang->apiDoc->editLib      = 'Edit Api Library';
-$lang->apiDoc->deleteLib    = 'Delete Api Library';
-$lang->apiDoc->publish      = 'Publish';
-$lang->apiDoc->structPage   = 'Data Structure';
-$lang->apiDoc->createStruct = 'Create Data Structure';
-$lang->apiDoc->editStruct   = 'Edit Data Structure';
-$lang->apiDoc->deleteStruct = 'Delete Data Structure';
-$lang->apiDoc->createApi    = 'Create Api';
-$lang->apiDoc->editApi      = 'Edit Api';
-$lang->apiDoc->deleteApi    = 'Delete Api';
-
+$lang->api->index            = 'Api Doc Home';
 $lang->api->editLib          = 'Edit Api Doc';
 $lang->api->deleteLib        = 'Delete Api Doc';
-$lang->api->createStruct     = 'Create Data Structure';
 $lang->api->publish          = 'Publish';
 $lang->api->createLib        = 'Create Api Library';
 $lang->api->createApi        = 'Create Api';
@@ -52,7 +36,9 @@ $lang->api->post             = 'Please refer to the page form for post debugging
 $lang->api->noUniqueName     = 'Api library name already exists。';
 $lang->api->noUniqueVersion  = 'Version already exists。';
 $lang->api->version          = 'Version';
+$lang->api->createStruct     = 'Create Data Structure';
 $lang->api->editStruct       = 'Edit Data Structure';
+$lang->api->deleteStruct     = 'Delete Data Structure';
 $lang->api->create           = 'Ceate Doc';
 $lang->api->title            = 'Api Library';
 $lang->api->module           = 'Directory';
@@ -81,7 +67,7 @@ $lang->struct->addSubField     = 'Add Subfield';
 
 $lang->struct->typeOptions = array(
     'formData' => 'FormData',
-    'json'     => 'Json',
+    'json'     => 'JSON',
     'array'    => 'Array',
     'object'   => 'Object',
 );
@@ -181,12 +167,9 @@ $lang->api->paramsTypeCustomOptions = array(
     'file' => 'file',
     'ref'  => 'ref',
 );
-$lang->api->structParamsOptons      = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
-$lang->api->allParamsTypeOptions    = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
-$lang->api->requiredOptions         = [
-    0 => 'No',
-    1 => 'Yes',
-];
+$lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
+$lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
+$lang->api->requiredOptions      = array(0 => 'No', 1 => 'Yes');
 
 $lang->doclib       = new stdclass();
 $lang->doclib->name = 'Interface Library Name';

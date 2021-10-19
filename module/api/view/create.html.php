@@ -121,8 +121,8 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                 <thead>
                   <tr>
                     <th class="w-300px"><?php echo $lang->struct->field;?></th>
-                    <th class="w-80px"><?php echo $lang->struct->required;?></th>
-                    <th class="w-300px"><?php echo $lang->struct->desc;?></th>
+                    <th class="w-50px"><?php echo $lang->struct->required;?></th>
+                    <th class="w-500px"><?php echo $lang->struct->desc;?></th>
                     <th><?php echo $lang->struct->action;?></th>
                   </tr>
                 </thead>
@@ -131,14 +131,14 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                     <td class="w-300px">
                       <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
                     </td>
-                    <td class="w-80px">
+                    <td class="w-50px">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" v-model="item.required">
                         </label>
                       </div>
                     </td>
-                    <td class="w-300px">
+                    <td class="w-500px">
                       <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                     </td>
                     <td>
@@ -156,8 +156,8 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                 <thead>
                   <tr>
                     <th class="w-300px"><?php echo $lang->struct->field;?></th>
-                    <th class="w-80px"><?php echo $lang->struct->required;?></th>
-                    <th class="w-300px"><?php echo $lang->struct->desc;?></th>
+                    <th class="w-50px"><?php echo $lang->struct->required;?></th>
+                    <th class="w-500px"><?php echo $lang->struct->desc;?></th>
                     <th><?php echo $lang->struct->action;?></th>
                   </tr>
                 </thead>
@@ -166,14 +166,14 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                     <td class="w-300px">
                       <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
                     </td>
-                    <td class="w-80px">
+                    <td class="w-50px">
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" v-model="item.required">
                         </label>
                       </div>
                     </td>
-                    <td class="w-300px">
+                    <td class="w-500px">
                       <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                     </td>
                     <td>

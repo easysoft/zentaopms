@@ -94,12 +94,12 @@ class apiModel extends model
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
             ->exec();
 
-        $id = $this->dao->lastInsertID();
+        $params->id = $this->dao->lastInsertID();
 
         $apiSpec = $this->getApiSpecByData($params);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
-        return dao::isError() ? false : $id;
+        return dao::isError() ? false : $params->id;
     }
 
     /**

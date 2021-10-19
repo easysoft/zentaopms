@@ -9,35 +9,19 @@
  * @version     $Id: zh-cn.php 5129 2013-07-15 00:16:07Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->api           = new stdclass();
+$lang->api = new stdclass();
 $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
 $lang->api->sql      = 'SQL查询接口';
 
-/* function of api doc */
-$lang->apiDoc               = new stdClass();
-$lang->apiDoc->common       = '接口库';
-$lang->apiDoc->index        = '接口库主页';
-$lang->apiDoc->createLib    = '创建接口库';
-$lang->apiDoc->editLib      = '编辑接口库';
-$lang->apiDoc->deleteLib    = '删除接口库';
-$lang->apiDoc->publish      = '发布接口';
-$lang->apiDoc->structPage   = '数据结构';
-$lang->apiDoc->createStruct = '创建数据结构';
-$lang->apiDoc->editStruct   = '创建数据结构';
-$lang->apiDoc->deleteStruct = '删除数据结构';
-$lang->apiDoc->createApi    = '创建接口';
-$lang->apiDoc->editApi      = '编辑接口';
-$lang->apiDoc->deleteApi    = '删除接口';
-
+$lang->api->index            = '接口库主页';
 $lang->api->editLib          = '编辑接口库';
 $lang->api->deleteLib        = '删除接口库';
-$lang->api->createStruct     = '创建数据结构';
 $lang->api->publish          = '发布接口';
 $lang->api->createLib        = '创建接口库';
 $lang->api->createApi        = '创建接口';
-$lang->api->edit             = '编辑';
-$lang->api->delete           = '删除';
+$lang->api->edit             = '编辑接口';
+$lang->api->delete           = '删除接口';
 $lang->api->position         = '位置';
 $lang->api->startLine        = "%s,%s行";
 $lang->api->desc             = '描述';
@@ -53,8 +37,10 @@ $lang->api->post             = 'POST方式调试请参照页面表单';
 $lang->api->noUniqueName     = '接口库名已存在。';
 $lang->api->noUniqueVersion  = '版本已存在。';
 $lang->api->version          = '版本';
+$lang->api->createStruct     = '创建数据结构';
 $lang->api->editStruct       = '修改数据结构';
-$lang->api->create           = '创建文档';
+$lang->api->deleteStruct     = '删除数据结构';
+$lang->api->create           = '创建接口';
 $lang->api->title            = '接口库';
 $lang->api->module           = '目录';
 $lang->api->apiDoc           = '接口';
@@ -83,7 +69,7 @@ $lang->struct->addSubField     = '添加子字段';
 
 $lang->struct->typeOptions = array(
     'formData' => 'FormData',
-    'json'     => 'Json',
+    'json'     => 'JSON',
     'array'    => 'Array',
     'object'   => 'Object',
 );
@@ -184,12 +170,9 @@ $lang->api->paramsTypeCustomOptions = array(
     'file' => 'file',
     'ref'  => 'ref',
 );
-$lang->api->structParamsOptons      = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
-$lang->api->allParamsTypeOptions    = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
-$lang->api->requiredOptions         = [
-    0 => '否',
-    1 => '是',
-];
+$lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
+$lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
+$lang->api->requiredOptions      = array(0 => '否', 1 => '是');
 
 $lang->doclib       = new stdclass();
 $lang->doclib->name = '接口库名称';

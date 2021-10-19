@@ -12,7 +12,7 @@ CREATE TABLE `zt_api_lib_release`
     `version`   varchar(255) NOT NULL DEFAULT '',
     `snap`      mediumtext   NOT NULL,
     `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
-    `addedDate` datetime     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `addedDate` datetime     NOT NULL,
     PRIMARY KEY (`id`)
 );
 

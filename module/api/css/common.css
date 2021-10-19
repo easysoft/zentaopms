@@ -97,3 +97,6 @@ ol, ul {margin-bottom: 0}
 .c-product, .c-execution, .c-lib {width: 80px !important;}
 
 .header-btn .btn > .text {text-overflow: unset !important;}
+
+.table-data {border: 1px solid #e2e2e3;}
+.table-data thead {background: #f9f9f9;}

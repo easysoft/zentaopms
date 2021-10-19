@@ -136,12 +136,7 @@
             </tr>
             </thead>
             <tbody>
-            <?php
-            foreach($api->params['params'] as $item)
-            {
-              echo parseTree($item);
-            }
-            ?>
+              <?php foreach($api->params['params'] as $item) echo parseTree($item);?>
             </tbody>
           </table>
           <?php endif;?>
@@ -151,7 +146,7 @@
           <?php endif;?>
           <?php if($api->response):?>
           <h3 class="title"><?php echo $lang->api->response;?></h3>
-          <table class="table">
+          <table class="table table-data">
             <thead>
             <tr>
               <th><?php echo $lang->api->req->name;?></th>
@@ -161,12 +156,7 @@
             </tr>
             </thead>
             <tbody>
-            <?php
-            foreach($api->response as $item)
-            {
-              echo parseTree($item);
-            }
-            ?>
+              <?php foreach($api->response as $item) echo parseTree($item);?>
             </tbody>
           </table>
           <?php endif;?>

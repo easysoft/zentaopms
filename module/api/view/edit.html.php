@@ -122,8 +122,8 @@ js::set('api', $api);
                   <thead>
                     <tr>
                       <th class="w-300px"><?php echo $lang->struct->field;?></th>
-                      <th class="w-80px"><?php echo $lang->struct->required;?></th>
-                      <th class="w-200px"><?php echo $lang->struct->desc;?></th>
+                      <th class="w-50px"><?php echo $lang->struct->required;?></th>
+                      <th class="w-500px"><?php echo $lang->struct->desc;?></th>
                       <th><?php echo $lang->struct->action;?></th>
                     </tr>
                   </thead>
@@ -132,14 +132,14 @@ js::set('api', $api);
                       <td class="w-300px">
                         <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
                       </td>
-                      <td class="w-80px">
+                      <td class="w-50px">
                         <div class="checkbox">
                           <label>
                             <input type="checkbox" v-model="item.required">
                           </label>
                         </div>
                       </td>
-                      <td class="w-200px">
+                      <td class="w-500px">
                         <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                       </td>
                       <td>
@@ -157,8 +157,8 @@ js::set('api', $api);
                   <thead>
                     <tr>
                       <th class="w-300px"><?php echo $lang->struct->field;?></th>
-                      <th class="w-80px"><?php echo $lang->struct->required;?></th>
-                      <th class="w-200px"><?php echo $lang->struct->desc;?></th>
+                      <th class="w-50px"><?php echo $lang->struct->required;?></th>
+                      <th class="w-500px"><?php echo $lang->struct->desc;?></th>
                       <th><?php echo $lang->struct->action;?></th>
                     </tr>
                   </thead>
@@ -167,14 +167,14 @@ js::set('api', $api);
                       <td class="w-300px">
                         <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
                       </td>
-                      <td class="w-80px">
+                      <td class="w-50px">
                         <div class="checkbox">
                           <label>
                             <input type="checkbox" v-model="item.required">
                           </label>
                         </div>
                       </td>
-                      <td class="w-200px">
+                      <td class="w-500px">
                         <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                       </td>
                       <td>
@@ -222,8 +222,7 @@ js::set('api', $api);
             <tr id='contentBox'>
               <th><?php echo $lang->api->desc; ?></th>
               <td colspan='2'>
-                <div
-                    class='contenthtml'><?php echo html::textarea('desc', $api->desc, "style='width:100%;height:200px'"); ?></div>
+                <div class='contenthtml'><?php echo html::textarea('desc', $api->desc, "style='width:100%;height:200px'"); ?></div>
               </td>
             </tr>
             <tr>

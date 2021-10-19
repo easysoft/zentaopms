@@ -265,7 +265,7 @@ try {
                 type: Array,
                 default: [
                     {label: 'FormData', value: 'formData'},
-                    {label: 'Json', value: 'json'},
+                    {label: 'JSON', value: 'json'},
                     {label: 'Array', value: 'array'},
                     {label: 'Object', value: 'Object'},
                 ]

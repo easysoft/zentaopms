@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The control file of api of ZenTaoPMS.
  *
@@ -350,8 +349,8 @@ class api extends control
      */
     public function editLib($id)
     {
-
         $doc = $this->doc->getLibById($id);
+
         if(!empty($_POST))
         {
             $lib = fixer::input('post')->join('groups', ',')->join('users', ',')->get();

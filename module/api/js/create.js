@@ -9,8 +9,8 @@ var app = new Vue({
         defaultHeader: { field: '', required: '', desc: '' },
     },
     created() {
-        this.header.push({...this.defaultHeader})
-        this.queryP.push({...this.defaultHeader})
+        this.header.push({...this.defaultHeader});
+        this.queryP.push({...this.defaultHeader});
     },
     watch: {
         header: {
@@ -21,13 +21,13 @@ var app = new Vue({
         },
         queryP: {
             handler() {
-                this.setParams()
+                this.setParams();
             },
             deep: true
         },
         body: {
             handler() {
-                this.setParams()
+                this.setParams();
             },
             deep: true
         }
@@ -37,7 +37,7 @@ var app = new Vue({
             this.body = val;
         },
         changeRes(val) {
-            this.response = JSON.stringify(val)
+            this.response = JSON.stringify(val);
         },
         setParams() {
             const params = {
@@ -49,13 +49,13 @@ var app = new Vue({
         },
         del(data, key) {
             if (data.length <= 1) {
-                return
+                return;
             }
-            data.splice(key, 1)
+            data.splice(key, 1);
         },
         add(data, key, t) {
             if (t == "header" || t == 'query') {
-                data.splice(key+1, 0, this.defaultHeader)
+                data.splice(key+1, 0, this.defaultHeader);
             }
         }
     }
