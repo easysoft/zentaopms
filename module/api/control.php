@@ -156,7 +156,9 @@ class api extends control
             return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
 
-        $this->view->title = $this->lang->api->publish . $lib->name;
+        $libName = isset($lib->name) ? $lib->name : '';
+        $this->view->title = $this->lang->api->publish . $libName;
+
         $this->display();
     }
 
@@ -607,7 +609,7 @@ class api extends control
         /* Global struct link. */
         $menu = '';
 
-        if(common::hasPriv('api', 'publish'))
+        if($libID and common::hasPriv('api', 'publish'))
         {
             $menu .= html::a(helper::createLink('api', 'publish', "libID=$libID"), $this->lang->api->publish, '', 'class="btn btn-link iframe"');
         }
