@@ -90,7 +90,7 @@ class rest
         $headers['Accept']       = 'application/json';
         $headers['Content-Type'] = 'application/json';
 
-        $resp = requests::put($this->base . $url, $headers, $data, $options);
+        $resp = requests::put($this->base . $url, $headers, $data, $options = array());
         try
         {
             $resp->body = json_decode($resp->body);

@@ -28,6 +28,8 @@ class userEntry extends Entry
         $control->profile($userID);
 
         $data = $this->getData();
+        if(!$data) return $this->send404(); // If no user, send 404.
+
         $user = $data->data->user;
         unset($user->password);
 
