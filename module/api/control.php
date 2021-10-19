@@ -145,13 +145,14 @@ class api extends control
                 ->add('addedDate', helper::now())
                 ->get();
 
-            // check version is exist.
+            /* Check version is exist. */
             if($this->api->getReleaseByVersion($libID, $data->version))
             {
                 return $this->sendError($this->lang->api->noUniqueVersion);
             }
             $this->api->publishLib($data);
             if(dao::isError()) return $this->sendError(dao::getError());
+
             return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
 
@@ -221,13 +222,10 @@ class api extends control
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'editStruct', "libID=$libID&structID=$id")));
         }
 
-        $options = [];
+        $options = array();
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
-            $options[] = [
-                'label' => $item,
-                'value' => $key,
-            ];
+            $options[] = array('label' => $item, 'value' => $key);
         }
         $this->view->typeOptions = $options;
         $this->view->title       = $this->lang->api->createStruct;
@@ -266,13 +264,10 @@ class api extends control
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'editStruct', "libID={$struct->lib}&structID=$structID")));
         }
 
-        $options = [];
+        $options = array();
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
-            $options[] = [
-                'label' => $item,
-                'value' => $key,
-            ];
+            $options[] = array('label' => $item, 'value' => $key);
         }
 
         $this->view->struct      = $struct;
@@ -445,13 +440,10 @@ class api extends control
         $example = array('example' => 'type,description');
         $example = json_encode($example, JSON_PRETTY_PRINT);
 
-        $options = [];
+        $options = array();
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
-            $options[] = [
-                'label' => $item,
-                'value' => $key,
-            ];
+            $options[] = array('label' => $item, 'value' => $key);
         }
         $this->view->typeOptions = $options;
         $this->view->user        = $this->app->user->account;
@@ -557,13 +549,10 @@ class api extends control
      */
     public function ajaxGetParamsTypeOptions()
     {
-        $options = [];
+        $options = array();
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
-            $options[] = [
-                'label' => $item,
-                'value' => $key,
-            ];
+            $options[] = array('label' => $item, 'value' => $key);
         }
         $this->sendSuccess(array('data' => $options));
     }
@@ -615,14 +604,15 @@ class api extends control
     {
         common::setMenuVars('doc', $libID);
 
-        // global struct link
+        /* Global struct link. */
         $menu = '';
 
         if(common::hasPriv('api', 'publish'))
         {
             $menu .= html::a(helper::createLink('api', 'publish', "libID=$libID"), $this->lang->api->publish, '', 'class="btn btn-link iframe"');
         }
-        // page of index menu
+
+        /* page of index menu. */
         if(intval($libID) > 0)
         {
             $menu .= "<div class='dropdown' id='createDropdown'>";
@@ -844,25 +834,26 @@ EOT;
         die($this->output);
     }
 
-    private
-    function getTypeOptions($libID)
+    /**
+     * Get options of type.
+     *
+     * @param  string $keyField
+     * @access public
+     * @return void
+     */
+    private function getTypeOptions($libID)
     {
-        $options = [];
+        $options = array();
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
-            $options[] = [
-                'label' => $item,
-                'value' => $key,
-            ];
+            $options[] = array('label' => $item, 'value' => $key);
         }
-        /* get all struct by libID. */
+
+        /* Get all struct by libID. */
         $structs = $this->api->getStructListByLibID($libID);
         foreach($structs as $struct)
         {
-            $options[] = [
-                'label' => $struct->name,
-                'value' => $struct->id,
-            ];
+            $options[] = array('label' => $struct->name, 'value' => $struct->id);
         }
         $this->view->typeOptions = $options;
     }

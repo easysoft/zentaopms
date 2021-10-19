@@ -17,7 +17,7 @@
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
 .main-col .doc-title .actions a + a {margin-left: 8px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
-#content h2.title {margin: 0; font-size: 17px; font-weight: normal;}
+#content h2.title {margin: 0; font-size: 17px;}
 #content h3.title {font-weight: 500; font-size: 17px!important;}
 #content .desc  {margin: 10px 0; color: #57585b;}
 #content .detail-content {padding-left: 10px;}

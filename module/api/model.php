@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The model file of api module of ZenTaoCMS.
  *
@@ -13,17 +12,17 @@
 class apiModel extends model
 {
     /* Status. */
-    const STATUS_DOING = 'doing';
-    const STATUS_DONE = 'done';
+    const STATUS_DOING  = 'doing';
+    const STATUS_DONE   = 'done';
     const STATUS_HIDDEN = 'hidden';
 
     /* Scope. */
-    const SCOPE_QUERY = 'query';
+    const SCOPE_QUERY     = 'query';
     const SCOPE_FORM_DATA = 'formData';
-    const SCOPE_PATH = 'path';
-    const SCOPE_BODY = 'body';
-    const SCOPE_HEADER = 'header';
-    const SCOPE_COOKIE = 'cookie';
+    const SCOPE_PATH      = 'path';
+    const SCOPE_BODY      = 'body';
+    const SCOPE_HEADER    = 'header';
+    const SCOPE_COOKIE    = 'cookie';
 
     /* Params. */
     const PARAMS_TYPE_CUSTOM = 'custom';
