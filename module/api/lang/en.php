@@ -18,6 +18,7 @@ $lang->api->index            = 'Api Doc Home';
 $lang->api->editLib          = 'Edit Api Doc';
 $lang->api->deleteLib        = 'Delete Api Doc';
 $lang->api->publish          = 'Publish';
+$lang->api->editPublish      = 'Edit Publish';
 $lang->api->createLib        = 'Create Api Library';
 $lang->api->createApi        = 'Create Api';
 $lang->api->edit             = 'Edit';
