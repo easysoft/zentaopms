@@ -37,7 +37,7 @@ CREATE TABLE `zt_api_lib_release`
     `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
     `addedDate` datetime     NOT NULL,
     PRIMARY KEY (`id`)
-);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_api`
 (
     `id`              int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -65,7 +65,7 @@ CREATE TABLE `zt_api`
     `editedDate`      datetime     NOT NULL,
     `deleted`         enum ('0', '1') NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`)
-);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_apispec`
 (
     `id`              int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -88,7 +88,7 @@ CREATE TABLE `zt_apispec`
     `addedBy`         varchar(30)  NOT NULL DEFAULT 0,
     `addedDate`       datetime NULL,
     PRIMARY KEY (`id`)
-);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_apistruct`
 (
     `id`         int unsigned NOT NULL AUTO_INCREMENT,
@@ -104,7 +104,7 @@ CREATE TABLE `zt_apistruct`
     `editedDate` datetime     NOT NULL,
     `deleted`    enum ('0', '1') NOT NULL DEFAULT '0',
     primary key (`id`)
-);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_apistruct_spec`
 (
     `id`        int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -116,7 +116,7 @@ CREATE TABLE `zt_apistruct_spec`
     `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
     `addedDate` datetime     NOT NULL,
     primary key (`id`)
-);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_block` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL,
