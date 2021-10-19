@@ -20,26 +20,23 @@
       <div id='title'>
         <li class='menu-title'><?php echo $this->lang->api->module;?></li>
         <?php
-        if(!$isRelease)
+        $canTreeBrowse  = common::hasPriv('tree', 'browse');
+        $canEditPublish = common::hasPriv('api', 'editPublish');
+        $canEditLib     = common::hasPriv('api', 'editLib');
+        $canDeleteLib   = common::hasPriv('api', 'deleteLib');
+        $haveMoreButton = ($canTreeBrowse or $canEditPublish or $canEditLib or $canDeleteLib);
+
+        if(!$isRelease and $haveMoreButton)
         {
             echo "<div class='menu-actions'>";
             echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
             echo "<ul class='dropdown-menu pull-right'>";
-            echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe'") . '</li>';
-          if(common::hasPriv('api', 'publish'))
-          {
-              echo '<li>' . html::a($this->createLink('api', 'editPublish', "libID=$libID", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
-          }
-          echo "<li class='divider'></li>";
-          if(common::hasPriv('api', 'createLib'))
-          {
-              echo '<li>' . html::a($this->createLink('api', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->api->editLib, '', "class='iframe'") . '</li>';
-          }
-          if(common::hasPriv('api', 'deleteLib'))
-          {
-              echo '<li>' . html::a($this->createLink('api', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->api->deleteLib, 'hiddenwin') . '</li>';
-          }
-          echo '</ul></div>';
+            if($canTreeBrowse) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe'") . '</li>';
+            if($canEditPublish) echo '<li>' . html::a($this->createLink('api', 'editPublish', "libID=$libID", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
+            echo "<li class='divider'></li>";
+            if($canEditLib) echo '<li>' . html::a($this->createLink('api', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->api->editLib, '', "class='iframe'") . '</li>';
+            if($canDeleteLib) echo '<li>' . html::a($this->createLink('api', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->api->deleteLib, 'hiddenwin') . '</li>';
+            echo '</ul></div>';
         }
         ?>
       </div>
@@ -61,8 +58,7 @@
       <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->pageTitle;?></li>
     </div>
     <div class="detail">
-      <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/>
-      </div>
+      <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/></div>
       <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi;?></div>
       <div class="no-content-button">
         <?php
