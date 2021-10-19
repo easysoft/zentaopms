@@ -18,9 +18,9 @@
     <div id='mainContent' class='main-content'>
       <div class='center-block'>
         <div class='main-header'>
-          <h2><?php echo $lang->api->publish;?></h2>
+          <h2><?php echo $lang->api->createRelease;?></h2>
         </div>
-        <form class='load-indicator main-form' id="apiForm" method='post' enctype='multipart/form-data'>
+        <form class='load-indicator main-form form-ajax' id="apiForm" method='post' enctype='multipart/form-data'>
           <table class='table table-form'>
             <tr>
               <th><?php echo $lang->api->version?></th>

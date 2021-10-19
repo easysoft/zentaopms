@@ -16,9 +16,10 @@ $lang->api->sql      = 'SQL查询接口';
 
 $lang->api->index            = '接口库主页';
 $lang->api->editLib          = '编辑接口库';
-$lang->api->editPublish      = '版本管理';
+$lang->api->releases         = '版本管理';
+$lang->api->deleteRelease    = '删除版本';
 $lang->api->deleteLib        = '删除接口库';
-$lang->api->publish          = '发布接口';
+$lang->api->createRelease    = '发布接口';
 $lang->api->createLib        = '创建接口库';
 $lang->api->createApi        = '创建接口';
 $lang->api->createAB         = '创建';

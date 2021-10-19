@@ -60,7 +60,7 @@ class apiModel extends model
         $data->snap = json_encode($snap);
         $this->dao->insert(TABLE_API_LIB_RELEASE)->data($data)
             ->autoCheck()
-            ->batchCheck($this->config->api->publish->requiredFields, 'notempty')
+            ->batchCheck($this->config->api->createrelease->requiredFields, 'notempty')
             ->exec();
 
         return dao::isError() ? false : $this->dao->lastInsertID();
@@ -73,7 +73,7 @@ class apiModel extends model
      * @access public
      * @return void
      */
-    public function deletePublish($id)
+    public function deleteRelease($id)
     {
         $this->dao->delete()->from(TABLE_API_LIB_RELEASE)
             ->where('id')->eq($id)

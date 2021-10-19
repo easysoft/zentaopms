@@ -82,13 +82,13 @@ class api extends control
     }
 
     /**
-     * Release manage page.
+     * Release list.
      *
      * @param  int $libID
      * @access public
      * @return void
      */
-    public function editPublish($libID, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function releases($libID, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $libs = $this->doc->getApiLibs();
         $this->app->loadClass('pager', $static = true);
@@ -105,6 +105,7 @@ class api extends control
         $this->view->orderBy  = $orderBy;
         $this->view->title    = $this->lang->api->managePublish;
         $this->view->libID    = $libID;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -122,20 +123,20 @@ class api extends control
         }
         else
         {
-            $this->api->deletePublish($id);
+            $this->api->deleteRelease($id);
             if(dao::isError()) return $this->sendError(dao::getError());
-            die(js::locate(inlink('editPublish', "libID=$libID"), 'parent'));
+            die(js::locate(inlink('releases', "libID=$libID"), 'parent'));
         }
     }
 
     /**
-     * Publish a api doc lib.
+     * Create a api doc lib.
      *
      * @param  int $libID
      * @access public
      * @return void
      */
-    public function publish($libID)
+    public function createRelease($libID)
     {
         $lib = $this->doc->getLibById($libID);
 
@@ -148,7 +149,7 @@ class api extends control
                 ->get();
 
             /* Check version is exist. */
-            if($this->api->getReleaseByVersion($libID, $data->version))
+            if(!empty($data->version) and $this->api->getReleaseByVersion($libID, $data->version))
             {
                 return $this->sendError($this->lang->api->noUniqueVersion);
             }
@@ -159,7 +160,7 @@ class api extends control
         }
 
         $libName = isset($lib->name) ? $lib->name : '';
-        $this->view->title = $this->lang->api->publish . $libName;
+        $this->view->title = $this->lang->api->createRelease . $libName;
 
         $this->display();
     }
@@ -632,9 +633,9 @@ class api extends control
         /* Global struct link. */
         $menu = '';
 
-        if($libID and common::hasPriv('api', 'publish'))
+        if($libID and common::hasPriv('api', 'createRelease'))
         {
-            $menu .= html::a(helper::createLink('api', 'publish', "libID=$libID"), $this->lang->api->publish, '', 'class="btn btn-link iframe"');
+            $menu .= html::a(helper::createLink('api', 'createRelease', "libID=$libID"), $this->lang->api->createRelease, '', 'class="btn btn-link iframe"');
         }
 
         /* page of index menu. */
@@ -742,19 +743,6 @@ EOT;
         }
 
         return $output;
-    }
-
-    /**
-     * Show doc of api doc library
-     *
-     * @param  int $libID
-     * @access public
-     * @return void
-     */
-    public function showLibs($libID = 0)
-    {
-        $lib = $this->doc->getLibById($libID);
-        if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
     }
 
     /**
