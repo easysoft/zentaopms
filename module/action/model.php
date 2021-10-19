@@ -1168,7 +1168,7 @@ class actionModel extends model
 
                     $libObjectID = $type != 'custom' ? $action->$type : '';
                     $libObjectID = trim($libObjectID, ',');
-                    if(empty($libObjectID)) return false;
+                    if(empty($libObjectID) and $type != 'custom') return false;
 
                     $params = sprintf($vars, $type, $libObjectID, $libID);
                 }
@@ -1183,7 +1183,14 @@ class actionModel extends model
                     $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
                     $docLib->objectID   = strpos('product,project,execution', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
                     $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
-                    $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                    if($docLib->type == 'api')
+                    {
+                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}");
+                    }
+                    else
+                    {
+                        $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                    }
                 }
                 elseif($action->objectType == 'user')
                 {
