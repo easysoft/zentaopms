@@ -105,6 +105,7 @@ $lang->api->desc               = 'Description';
 $lang->api->control            = 'Access Control';
 $lang->api->noLib              = 'There is no interface library at present。';
 $lang->api->noApi              = 'There is no interface for the time being。';
+$lang->api->noStruct           = 'There is no structure for the time being。';
 $lang->api->lib                = 'Interface Library';
 $lang->api->apiList            = 'Interface List';
 $lang->api->formTitle          = 'Interface Name';

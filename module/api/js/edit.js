@@ -1,3 +1,11 @@
+$(function()
+{
+    $('#top-submit').click(function()
+    {
+        $(this).addClass('disabled');
+        $('form').submit();
+    })
+})
 var app = new Vue({
     el: '#apiApp',
     data: {

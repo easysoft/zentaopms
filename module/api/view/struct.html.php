@@ -19,6 +19,13 @@
         <?php common::printLink('api', 'createStruct', "libID=$libID", "<i class='icon icon-plus'></i> " . $lang->api->createStruct, '', "class='btn btn-primary create-user-btn'");?>
       </div>
     </div>
+    <?php if(empty($structs)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->api->noStruct;?></span>
+      </p>
+    </div>
+    <?php else:?>
     <form class='main-table table-user' data-ride='table' method='post' data-checkable='false' id='userListForm'>
       <table class='table has-sort-head' id='userList'>
         <thead>
@@ -51,6 +58,7 @@
         </tbody>
       </table>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

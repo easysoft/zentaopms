@@ -104,6 +104,7 @@ $lang->api->desc               = '描述';
 $lang->api->control            = '访问控制';
 $lang->api->noLib              = '暂时没有接口库。';
 $lang->api->noApi              = '暂时没有接口。';
+$lang->api->noStruct           = '暂时没有数据结构。';
 $lang->api->lib                = '所属接口库';
 $lang->api->apiList            = '接口列表';
 $lang->api->formTitle          = '接口名称';

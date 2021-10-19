@@ -235,5 +235,4 @@ js::set('struct_paramsType', $lang->struct->paramsType);
     </form>
   </div>
 </div>
-<?php js::set('noticeAcl', $lang->api->noticeAcl);?>
 <?php include '../../common/view/footer.html.php';?>
