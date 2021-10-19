@@ -24,29 +24,29 @@
           <table class='table table-form'>
             <tr>
               <th><?php echo $lang->api->name?></th>
-              <td style="width: 80%"><?php echo html::input('name', $doc->name, "class='form-control'")?></td>
+              <td style="width: 80%"><?php echo html::input('name', $doc->name, "class='form-control'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->baseUrl?></th>
-              <td style="width: 80%"><?php echo html::input('baseUrl', $doc->baseUrl, "class='form-control'")?></td>
+              <td style="width: 80%"><?php echo html::input('baseUrl', $doc->baseUrl, "class='form-control'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->control;?></th>
               <td>
-                <span><?php echo html::radio('acl', $lang->acl->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
+                <span><?php echo html::radio('acl', $lang->acl->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"lib\")'");?></span>
                 <span class='text-info' id='noticeAcl'><?php echo $lang->noticeAcl['open'];?></span>
               </td>
             </tr>
-            <tr id='whiteListBox' class='hidden'>
+            <tr id='whiteListBox' class='<?php echo $doc->acl === 'custom' ? '' : 'hidden'; ?>'>
               <th><?php echo $lang->acl->whiteList;?></th>
               <td>
                 <div class='input-group'>
                   <span class='input-group-addon groups-addon'><?php echo $lang->acl->group?></span>
-                    <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control chosen' multiple")?>
+                    <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control chosen' multiple");?>
                 </div>
                 <div class='input-group'>
                   <span class='input-group-addon'><?php echo $lang->acl->user?></span>
-                    <?php echo html::select('users[]', $users, $doc->users, "class='form-control chosen' multiple")?>
+                    <?php echo html::select('users[]', $users, $doc->users, "class='form-control chosen' multiple");?>
                 </div>
               </td>
             </tr>
@@ -70,13 +70,13 @@
     <tr id='aclBoxA'>
       <th><?php echo $lang->api->control;?></th>
       <td>
-          <?php echo html::radio('acl', $lang->api->aclListA, 'default', "onchange='toggleAcl(this.value, \"lib\")'")?>
+          <?php echo html::radio('acl', $lang->api->aclListA, 'default', "onchange='toggleAcl(this.value, \"lib\")'");?>
       </td>
     </tr>
     <tr id='aclBoxB'>
       <th><?php echo $lang->api->control;?></th>
       <td>
-          <?php echo html::radio('acl', $lang->api->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?>
+          <?php echo html::radio('acl', $lang->api->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'");?>
       </td>
     </tr>
   </table>

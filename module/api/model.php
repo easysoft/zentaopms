@@ -311,15 +311,23 @@ class apiModel extends model
      * Get api doc by id.
      *
      * @param  int $id
+     * @param  int $version
+     * @param  int $release
      * @access public
      * @return object
      */
-    public function getLibById($id, $version = 0)
+    public function getLibById($id, $version = 0, $release = 0)
     {
-
+        if ($release) {
+            $rel = $this->getReleaseById($release);
+            foreach ($rel->snap['apis'] as $api)
+            {
+                if ($api['id'] == $id) $version = $api['version'];
+            }
+        }
         if($version)
         {
-            $fields = 'spec.*,api.id,api.product,api.lib,api.version,doc.name as libName,module.name as moduleName';
+            $fields = 'spec.*,api.id,api.product,api.lib,api.version,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
         }
         else
         {
@@ -356,11 +364,12 @@ class apiModel extends model
         $strJoin = array();
         foreach($release->snap['apis'] as $api)
         {
-            $strJoin[] = "(doc = {$api['id']} and version = {$api['version']} )";
+            $strJoin[] = "(spec.doc = {$api['id']} and spec.version = {$api['version']} )";
         }
 
-        $where .= 'and (' . implode(' or ', $strJoin) . ')';
-        $list  = $this->dao->select('*')->from(TABLE_API_SPEC)
+        if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
+        $list  = $this->dao->select('api.lib,spec.*,api.id')->from(TABLE_API)->alias('api')
+            ->leftJoin(TABLE_API_SPEC)->alias('spec')->on('api.id = spec.doc')
             ->where($where)
             ->fetchAll();
         return $list;
@@ -382,7 +391,7 @@ class apiModel extends model
         {
             $rel = $this->getReleaseById($release);
 
-            $where = '1=1 ';
+            $where = "1=1 and lib = $libID ";
             if($moduleID > 0)
             {
                 $sub = array();
@@ -394,9 +403,8 @@ class apiModel extends model
                         $sub[] = $module['id'];
                     }
                 }
-                $where .= 'and module in (' . implode(',', $sub) . ')';
+                if ($sub) $where .= 'and module in (' . implode(',', $sub) . ')';
             }
-
             $list = $this->getApiListByRelease($rel, $where);
         }
         else

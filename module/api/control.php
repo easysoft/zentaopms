@@ -46,7 +46,7 @@ class api extends control
         /* Get an api doc. */
         if($apiID > 0)
         {
-            $api = $this->api->getLibById($apiID, $version);
+            $api = $this->api->getLibById($apiID, $version, $release);
             if($api)
             {
                 $moduleID  = $api->module;
@@ -317,6 +317,7 @@ class api extends control
                 ->get();
 
             if($lib->acl == 'private') $lib->users = $this->app->user->account;
+            if($lib->acl == 'custom' && strpos($lib->users, $this->app->user->account) === false) $lib->users .= ',' . $this->app->user->account;
 
             /* save api doc library */
             $libID = $this->doc->createApiLib($lib);
@@ -660,6 +661,7 @@ class api extends control
     private function generateLibsDropMenu($libs, $libID, $version = 0)
     {
         if(empty($libs)) return '';
+        if (!isset($libs[$libID])) return '';
 
         $libName = $libs[$libID]->name;
         $output  = <<<EOT
