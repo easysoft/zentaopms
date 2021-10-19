@@ -16,7 +16,7 @@ $lang->api->sql      = 'SQL查询接口';
 
 $lang->api->index            = '接口库主页';
 $lang->api->editLib          = '编辑接口库';
-$lang->api->editPublish      = '编辑版本';
+$lang->api->editPublish      = '版本管理';
 $lang->api->deleteLib        = '删除接口库';
 $lang->api->publish          = '发布接口';
 $lang->api->createLib        = '创建接口库';
@@ -43,7 +43,8 @@ $lang->api->createStruct     = '创建数据结构';
 $lang->api->editStruct       = '修改数据结构';
 $lang->api->deleteStruct     = '删除数据结构';
 $lang->api->create           = '创建接口';
-$lang->api->title            = '接口库';
+$lang->api->title            = '接口名称';
+$lang->api->pageTitle        = '接口库';
 $lang->api->module           = '目录';
 $lang->api->apiDoc           = '接口';
 $lang->api->manageType       = '维护目录';
@@ -197,6 +198,9 @@ $lang->doclib->name = '接口库名称';
 
 $lang->apistruct = new stdClass();
 $lang->apistruct->name = '结构名';
+
+$lang->api_lib_release = new stdClass();
+$lang->api_lib_release->version = '版本';
 
 $lang->api->error             = new stdclass();
 $lang->api->error->onlySelect = 'SQL查询接口只允许SELECT查询';

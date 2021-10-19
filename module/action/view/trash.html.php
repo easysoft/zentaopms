@@ -57,6 +57,11 @@
                 $methodName = 'view';
                 $module     = 'caselib';
             }
+            if ($action->objectType == 'api')
+            {
+                $params = "libID=0&moduelID=0&apiID={$action->objectID}";
+                $methodName = 'index';
+            }
             if(isset($config->action->customFlows[$action->objectType]))
             {
                 $flow   = $config->action->customFlows[$action->objectType];

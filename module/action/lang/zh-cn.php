@@ -97,6 +97,7 @@ $lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['testtask']    = '测试单';
 $lang->action->objectTypes['testreport']  = '报告';
 $lang->action->objectTypes['doc']         = '文档';
+$lang->action->objectTypes['api']         = '接口';
 $lang->action->objectTypes['doclib']      = '文档库';
 $lang->action->objectTypes['todo']        = '待办';
 $lang->action->objectTypes['risk']        = '风险';

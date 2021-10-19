@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The model file of api module of ZenTaoCMS.
  *
@@ -12,23 +13,23 @@
 class apiModel extends model
 {
     /* Status. */
-    const STATUS_DOING  = 'doing';
-    const STATUS_DONE   = 'done';
+    const STATUS_DOING = 'doing';
+    const STATUS_DONE = 'done';
     const STATUS_HIDDEN = 'hidden';
 
     /* Scope. */
-    const SCOPE_QUERY     = 'query';
+    const SCOPE_QUERY = 'query';
     const SCOPE_FORM_DATA = 'formData';
-    const SCOPE_PATH      = 'path';
-    const SCOPE_BODY      = 'body';
-    const SCOPE_HEADER    = 'header';
-    const SCOPE_COOKIE    = 'cookie';
+    const SCOPE_PATH = 'path';
+    const SCOPE_BODY = 'body';
+    const SCOPE_HEADER = 'header';
+    const SCOPE_COOKIE = 'cookie';
 
     /* Params. */
     const PARAMS_TYPE_CUSTOM = 'custom';
 
     /**
-     * @param  object $data
+     * @param object $data
      * @access public
      * @return int
      */
@@ -68,7 +69,7 @@ class apiModel extends model
     /**
      * Delete a lib publish.
      *
-     * @param  int $id
+     * @param int $id
      * @access public
      * @return void
      */
@@ -82,7 +83,7 @@ class apiModel extends model
     /**
      * Create an api doc.
      *
-     * @param  object $params
+     * @param object $params
      * @access public
      * @return int
      */
@@ -104,7 +105,7 @@ class apiModel extends model
     /**
      * Create a global struct
      *
-     * @param  object $data
+     * @param object $data
      * @access public
      * @return int
      */
@@ -136,8 +137,8 @@ class apiModel extends model
     /**
      * Update a struct.
      *
-     * @param  int    $id
-     * @param  object $data
+     * @param int $id
+     * @param object $data
      * @access public
      * @return array
      */
@@ -156,7 +157,7 @@ class apiModel extends model
             ->where('id')->eq($id)
             ->exec();
 
-        if(dao::isError()) return false;
+        if (dao::isError()) return false;
 
         /* Create a struct version */
         $version = array(
@@ -176,7 +177,7 @@ class apiModel extends model
     /**
      * Delete a struct.
      *
-     * @param  int $id
+     * @param int $id
      * @access public
      * @return void
      */
@@ -191,8 +192,8 @@ class apiModel extends model
     /**
      * Update an api doc.
      *
-     * @param  int    $id
-     * @param  object $data
+     * @param int $id
+     * @param object $data
      * @access public
      * @return void
      */
@@ -218,7 +219,7 @@ class apiModel extends model
     /**
      * Get struct list by api doc id.
      *
-     * @param  int $id
+     * @param int $id
      * @access public
      * @return array
      */
@@ -230,7 +231,7 @@ class apiModel extends model
             ->fetchAll();
 
         array_map(function ($item) {
-            $item->attribute = json_decode(htmlspecialchars_decode($item->attribute), true);
+            $item->attribute = json_decode($item->attribute, true);
             return $item;
         }, $res);
         return $res;
@@ -239,7 +240,7 @@ class apiModel extends model
     /**
      * Get a struct info.
      *
-     * @param  int $id
+     * @param int $id
      * @access public
      * @return object
      */
@@ -250,7 +251,7 @@ class apiModel extends model
             ->where('id')->eq($id)
             ->fetch();
 
-        if($model) $model->attribute = json_decode(htmlspecialchars_decode($model->attribute), true);
+        if ($model) $model->attribute = json_decode($model->attribute, true);
 
         return $model;
     }
@@ -258,8 +259,8 @@ class apiModel extends model
     /**
      * Get release by version.
      *
-     * @param  int $libID
-     * @param  string $version
+     * @param int $libID
+     * @param string $version
      * @return object
      * @access public
      */
@@ -270,14 +271,14 @@ class apiModel extends model
             ->where('version')->eq($version)
             ->andWhere('lib')->eq($libID)
             ->fetch();
-        if($model) $model->snap = json_decode(htmlspecialchars_decode($model->snap), true);
+        if ($model) $model->snap = json_decode($model->snap, true);
         return $model;
     }
 
     /**
      * Get release by id.
      *
-     * @param  int $id
+     * @param int $id
      * @access public
      * @return array
      */
@@ -287,14 +288,14 @@ class apiModel extends model
             ->from(TABLE_API_LIB_RELEASE)
             ->where('id')->eq($id)
             ->fetch();
-        if($model) $model->snap = json_decode(htmlspecialchars_decode($model->snap), true);
+        if ($model) $model->snap = json_decode($model->snap, true);
         return $model;
     }
 
     /**
      * Get Versions by api id
      *
-     * @param  int $libID
+     * @param int $libID
      * @access public
      * @return array
      */
@@ -310,22 +311,23 @@ class apiModel extends model
     /**
      * Get api doc by id.
      *
-     * @param  int $id
-     * @param  int $version
-     * @param  int $release
+     * @param int $id
+     * @param int $version
+     * @param int $release
      * @access public
      * @return object
      */
     public function getLibById($id, $version = 0, $release = 0)
     {
-        if ($release) {
+        if ($release)
+        {
             $rel = $this->getReleaseById($release);
             foreach ($rel->snap['apis'] as $api)
             {
                 if ($api['id'] == $id) $version = $api['version'];
             }
         }
-        if($version)
+        if ($version)
         {
             $fields = 'spec.*,api.id,api.product,api.lib,api.version,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
         }
@@ -344,10 +346,10 @@ class apiModel extends model
             ->beginIF($version)->andWhere('spec.version')->eq($version)->fi()
             ->fetch();
 
-        if($model)
+        if ($model)
         {
-            $model->params   = json_decode(htmlspecialchars_decode($model->params), true);
-            $model->response = json_decode(htmlspecialchars_decode($model->response), true);
+            $model->params   = json_decode($model->params, true);
+            $model->response = json_decode($model->response, true);
         }
         return $model;
     }
@@ -355,20 +357,20 @@ class apiModel extends model
     /**
      * Get api list by release.
      *
-     * @param  object $release
-     * @param  string $where
+     * @param object $release
+     * @param string $where
      * @return array
      */
     public function getApiListByRelease($release, $where = '')
     {
         $strJoin = array();
-        foreach($release->snap['apis'] as $api)
+        foreach ($release->snap['apis'] as $api)
         {
             $strJoin[] = "(spec.doc = {$api['id']} and spec.version = {$api['version']} )";
         }
 
-        if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
-        $list  = $this->dao->select('api.lib,spec.*,api.id')->from(TABLE_API)->alias('api')
+        if ($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
+        $list = $this->dao->select('api.lib,spec.*,api.id')->from(TABLE_API)->alias('api')
             ->leftJoin(TABLE_API_SPEC)->alias('spec')->on('api.id = spec.doc')
             ->where($where)
             ->fetchAll();
@@ -378,27 +380,27 @@ class apiModel extends model
     /**
      * Get api doc list by module id
      *
-     * @param  int $libID
-     * @param  int $moduleID
-     * @param  int $release
+     * @param int $libID
+     * @param int $moduleID
+     * @param int $release
      * @return array $list
      * @author thanatos thanatos915@163.com
      */
     public function getListByModuleId($libID = 0, $moduleID = 0, $release = 0)
     {
         /* Get release info. */
-        if($release > 0)
+        if ($release > 0)
         {
             $rel = $this->getReleaseById($release);
 
             $where = "1=1 and lib = $libID ";
-            if($moduleID > 0)
+            if ($moduleID > 0)
             {
                 $sub = array();
-                foreach($rel->snap['modules'] as $module)
+                foreach ($rel->snap['modules'] as $module)
                 {
                     $tmp = explode(',', $module['path']);
-                    if(in_array($moduleID, $tmp))
+                    if (in_array($moduleID, $tmp))
                     {
                         $sub[] = $module['id'];
                     }
@@ -410,7 +412,7 @@ class apiModel extends model
         else
         {
 
-            if($moduleID > 0)
+            if ($moduleID > 0)
             {
                 $sub   = $this->dao->select('id')->from(TABLE_MODULE)->where('FIND_IN_SET(' . $moduleID . ', path)')->processSQL();
                 $where = 'module in (' . $sub . ')';
@@ -426,7 +428,8 @@ class apiModel extends model
                 ->fetchAll();
         }
         array_map(function ($item) {
-            $item->params = json_decode(htmlspecialchars_decode($item->params), true);
+            $item->params   = json_decode($item->params, true);
+            $item->response = json_decode($item->response, true);
             return $item;
         }, $list);
         return $list;
@@ -435,7 +438,7 @@ class apiModel extends model
     /**
      * Get status text by status.
      *
-     * @param  string $status
+     * @param string $status
      * @access public
      * @return string
      */
@@ -456,26 +459,27 @@ class apiModel extends model
     }
 
     /**
-     * @param  int    $libID
-     * @param  string $pager
-     * @param  string $orderBy
+     * @param int $libID
+     * @param string $pager
+     * @param string $orderBy
      * @access public
      * @return array
      */
     public function getStructByQuery($libID, $pager = '', $orderBy = '')
     {
-        return $this->dao->select('*')->from(TABLE_APISTRUCT)
-            ->where('deleted')->eq(0)
-            ->andWhere('lib')->eq($libID)
+        return $this->dao->select('s.*,user.realname as addedName')->from(TABLE_APISTRUCT)->alias('s')
+            ->leftJoin(TABLE_USER)->alias('user')->on('user.account = s.addedBy')
+            ->where('s.deleted')->eq(0)
+            ->andWhere('s.lib')->eq($libID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
     }
 
     /**
-     * @param  int    $libID
-     * @param  string $pager
-     * @param  string $orderBy
+     * @param int $libID
+     * @param string $pager
+     * @param string $orderBy
      * @access public
      * @return array
      */
@@ -491,8 +495,8 @@ class apiModel extends model
     /**
      * Get struct tree by lib id
      *
-     * @param  int $libID
-     * @param  int $structID
+     * @param int $libID
+     * @param int $structID
      * @access public
      * @return string
      */
@@ -501,10 +505,10 @@ class apiModel extends model
         $list = $this->getStructListByLibID($libID);
 
         $html = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-lib'>";
-        foreach($list as $item)
+        foreach ($list as $item)
         {
             $class = array('catalog');
-            if($structID && $structID == $item->id)
+            if ($structID && $structID == $item->id)
             {
                 $class[] = 'active';
             }
@@ -525,8 +529,8 @@ class apiModel extends model
     /**
      * Get the details of the method by file path.
      *
-     * @param  string $filePath
-     * @param  string $ext
+     * @param string $filePath
+     * @param string $ext
      * @access public
      * @return object
      */
@@ -534,7 +538,7 @@ class apiModel extends model
     {
         $fileName  = dirname($filePath);
         $className = basename(dirname(dirname($filePath)));
-        if(!class_exists($className)) helper::import($fileName);
+        if (!class_exists($className)) helper::import($fileName);
         $methodName = basename($filePath);
 
         $method           = new ReflectionMethod($className . $ext, $methodName);
@@ -549,9 +553,9 @@ class apiModel extends model
         $data->post       = false;
 
         $file = file($fileName);
-        for($i = $data->startLine - 1; $i <= $data->endLine; $i++)
+        for ($i = $data->startLine - 1; $i <= $data->endLine; $i++)
         {
-            if(strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST'))
+            if (strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST'))
             {
                 $data->post = true;
             }
@@ -562,9 +566,9 @@ class apiModel extends model
     /**
      * Request the api.
      *
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @param  string $action
+     * @param string $moduleName
+     * @param string $methodName
+     * @param string $action
      * @access public
      * @return array
      */
@@ -572,11 +576,11 @@ class apiModel extends model
     {
         $host  = common::getSysURL();
         $param = '';
-        if($action == 'extendModel')
+        if ($action == 'extendModel')
         {
-            if(!isset($_POST['noparam']))
+            if (!isset($_POST['noparam']))
             {
-                foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
+                foreach ($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
                 $param = ltrim($param, ',');
             }
             $url = rtrim($host, '/') . inlink('getModel', "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
@@ -585,9 +589,9 @@ class apiModel extends model
         }
         else
         {
-            if(!isset($_POST['noparam']))
+            if (!isset($_POST['noparam']))
             {
-                foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
+                foreach ($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
                 $param = ltrim($param, '&');
             }
             $url = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
@@ -606,25 +610,25 @@ class apiModel extends model
     /**
      * Query sql.
      *
-     * @param  string $sql
-     * @param  string $keyField
+     * @param string $sql
+     * @param string $keyField
      * @access public
      * @return array
      */
     public function sql($sql, $keyField = '')
     {
-        if(!$this->config->features->apiSQL) return sprintf($this->lang->api->error->disabled, '$config->features->apiSQL');
+        if (!$this->config->features->apiSQL) return sprintf($this->lang->api->error->disabled, '$config->features->apiSQL');
 
         $sql = trim($sql);
-        if(strpos($sql, ';') !== false) $sql = substr($sql, 0, strpos($sql, ';'));
+        if (strpos($sql, ';') !== false) $sql = substr($sql, 0, strpos($sql, ';'));
 
         $result            = array();
         $result['status']  = 'fail';
         $result['message'] = '';
 
-        if(empty($sql)) return $result;
+        if (empty($sql)) return $result;
 
-        if(stripos($sql, 'select ') !== 0)
+        if (stripos($sql, 'select ') !== 0)
         {
             $result['message'] = $this->lang->api->error->onlySelect;
             return $result;
@@ -635,7 +639,7 @@ class apiModel extends model
             $stmt = $this->dbh->query($sql);
 
             $rows = array();
-            if(empty($keyField))
+            if (empty($keyField))
             {
                 $rows = $stmt->fetchAll();
             }
@@ -646,7 +650,8 @@ class apiModel extends model
 
             $result['status'] = 'success';
             $result['data']   = $rows;
-        } catch (PDOException $e)
+        }
+        catch (PDOException $e)
         {
             $result['status']  = 'fail';
             $result['message'] = $e->getMessage();
@@ -658,7 +663,7 @@ class apiModel extends model
     /**
      * Get spec of api.
      *
-     * @param  object $data
+     * @param object $data
      * @access private
      * @return array
      */

@@ -43,7 +43,8 @@ $lang->api->createStruct     = 'Create Data Structure';
 $lang->api->editStruct       = 'Edit Data Structure';
 $lang->api->deleteStruct     = 'Delete Data Structure';
 $lang->api->create           = 'Ceate Doc';
-$lang->api->title            = 'Api Library';
+$lang->api->title            = 'Interface Name';
+$lang->api->pageTitle        = 'Api Library';
 $lang->api->module           = 'Directory';
 $lang->api->apiDoc           = 'Interface';
 $lang->api->manageType       = 'Manage Directory';
@@ -194,6 +195,12 @@ $lang->api->requiredOptions      = array(0 => 'No', 1 => 'Yes');
 
 $lang->doclib       = new stdclass();
 $lang->doclib->name = 'Interface Library Name';
+
+$lang->apistruct = new stdClass();
+$lang->apistruct->name = 'Structure Name';
+
+$lang->api_lib_release = new stdClass();
+$lang->api_lib_release->version = 'Version';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'SQL interface only allow SELECT query.';

@@ -236,5 +236,5 @@ js::set('api', $api);
       </form>
     </div>
   </div>
-<?php js::set('noticeAcl', $lang->noticeAcl);?>
+<?php js::set('noticeAcl', $lang->api->noticeAcl);?>
 <?php include '../../common/view/footer.html.php';?>

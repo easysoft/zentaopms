@@ -38,7 +38,7 @@
             <td><?php printf('%03d', $struct->id);?></td>
             <td><?php echo $struct->type;?></td>
             <td><?php echo $struct->name;?></td>
-            <td><?php echo $struct->addedBy;?></td>
+            <td><?php echo $struct->addedName;?></td>
             <td class="c-date"><?php echo $struct->addedDate;?></td>
             <td class='c-actions'>
               <?php

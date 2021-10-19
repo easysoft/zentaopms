@@ -58,7 +58,7 @@
   <?php if(empty($libs) || empty($apiList)):?>
   <div class="cell">
     <div class="detail">
-      <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->title;?></li>
+      <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->pageTitle;?></li>
     </div>
     <div class="detail">
       <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/>
