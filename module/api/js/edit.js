@@ -60,7 +60,6 @@ var app = new Vue({
             const header = this.filterParams(this.header)
             const body = this.filterParams(this.body)
             const queryP = this.filterParams(this.queryP)
-            console.log(header)
             const params = {
                 header: header,
                 params: body,
