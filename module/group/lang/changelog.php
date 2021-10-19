@@ -424,3 +424,16 @@ $lang->changelog['15.0.rc1'][] = 'stakeholder-createExpect';
 $lang->changelog['15.0.rc1'][] = 'stakeholder-editExpect';
 $lang->changelog['15.0.rc1'][] = 'stakeholder-viewExpect';
 $lang->changelog['15.0.rc1'][] = 'stakeholder-userIssue';
+
+$lang->changelog['15.7'][] = 'api-index';
+$lang->changelog['15.7'][] = 'api-createLib';
+$lang->changelog['15.7'][] = 'api-editLib';
+$lang->changelog['15.7'][] = 'api-deleteLib';
+$lang->changelog['15.7'][] = 'api-publish';
+$lang->changelog['15.7'][] = 'api-struct';
+$lang->changelog['15.7'][] = 'api-createStruct';
+$lang->changelog['15.7'][] = 'api-editStruct';
+$lang->changelog['15.7'][] = 'api-deleteStruct';
+$lang->changelog['15.7'][] = 'api-create';
+$lang->changelog['15.7'][] = 'api-edit';
+$lang->changelog['15.7'][] = 'api-delete';
