@@ -59,6 +59,7 @@ $lang->api->confirmDeleteLib = "您确定删除该接口库吗？";
 $lang->api->filterStruct     = "使用数据结构填充";
 $lang->api->defaultVersion   = "当前版本";
 
+/* Common access control lang. */
 $lang->api->whiteList          = '白名单';
 $lang->api->aclList['open']    = '公开';
 $lang->api->aclList['private'] = '私有';
@@ -119,8 +120,6 @@ $lang->api->paramsExample      = '请求示例';
 $lang->api->header             = '请求头';
 $lang->api->query              = '请求参数';
 $lang->api->params             = '请求体';
-$lang->api->header             = '请求头';
-$lang->api->query              = 'Query参数';
 $lang->api->response           = '请求响应';
 $lang->api->responseExample    = '响应示例';
 $lang->api->res                = new stdClass();

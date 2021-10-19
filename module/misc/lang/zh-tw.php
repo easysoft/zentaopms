@@ -159,7 +159,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['15.7'][] = array('title' => '修復Bug。', 'desc' => '');
+$lang->misc->feature->all['15.7'][] = array('title' => '新增介面庫。修復Bug。', 'desc' => '');
 $lang->misc->feature->all['15.6'][] = array('title' => '修復Bug。', 'desc' => '');
 $lang->misc->feature->all['15.5'][] = array('title' => '增加項目集/產品/項目看板視圖、全局添加功能、新手引導。 修復Bug。', 'desc' => '');
 $lang->misc->feature->all['15.4'][] = array('title' => '修復Bug', 'desc' => '');
