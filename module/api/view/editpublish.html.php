@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-row fade'>
   <div class='main-col'>
     <div class="cell" id="queryBox" data-module='user'></div>
@@ -38,12 +38,10 @@
             <td><?php printf('%03d', $release->id);?></td>
             <td><?php echo $release->version;?></td>
             <td><?php echo $release->desc;?></td>
-            <td><?php echo $release->addedBy ?></td>
-            <td class="c-date"><?php echo $release->addedDate ?></td>
+            <td><?php echo $release->addedBy;?></td>
+            <td class="c-date"><?php echo $release->addedDate;?></td>
             <td class='c-actions'>
-              <?php
-              echo html::a($this->createLink('api', 'deleteRelease', "libID=$libID&id=$release->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->api->delete}' class='btn'");
-              ?>
+              <?php echo html::a($this->createLink('api', 'deleteRelease', "libID=$libID&id=$release->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->api->delete}' class='btn'");?>
             </td>
           </tr>
           <?php endforeach;?>
@@ -52,4 +50,4 @@
     </form>
   </div>
 </div>
-<?php include '../../common/view/footer.html.php'; ?>
+<?php include '../../common/view/footer.html.php';?>

@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-row fade'>
   <div class='main-col'>
     <div class="cell" id="queryBox" data-module='user'></div>
@@ -36,10 +36,10 @@
           <?php foreach($structs as $struct):?>
           <tr>
             <td><?php printf('%03d', $struct->id);?></td>
-            <td><?php echo $struct->type ?></td>
-            <td><?php echo $struct->name ?></td>
-            <td><?php echo $struct->addedBy ?></td>
-            <td class="c-date"><?php echo $struct->addedDate ?></td>
+            <td><?php echo $struct->type;?></td>
+            <td><?php echo $struct->name;?></td>
+            <td><?php echo $struct->addedBy;?></td>
+            <td class="c-date"><?php echo $struct->addedDate;?></td>
             <td class='c-actions'>
               <?php
               echo html::a($this->createLink('api', 'editStruct', "libID=$libID&structID=$struct->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn'");
@@ -53,4 +53,4 @@
     </form>
   </div>
 </div>
-<?php include '../../common/view/footer.html.php'; ?>
+<?php include '../../common/view/footer.html.php';?>

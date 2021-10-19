@@ -10,15 +10,15 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->api->confirmDelete);?>
 <div class="fade main-row split-row" id="mainRow">
   <?php if($libID):?>
-  <?php $sideWidth = common::checkNotCN() ? '270' : '238'; ?>
-  <div class="side-col" style="width:<?php echo $sideWidth; ?>px" data-min-width="<?php echo $sideWidth; ?>">
+  <?php $sideWidth = common::checkNotCN() ? '270' : '238';?>
+  <div class="side-col" style="width:<?php echo $sideWidth;?>px" data-min-width="<?php echo $sideWidth;?>">
     <div class="cell" style="min-height: 286px">
       <div id='title'>
-        <li class='menu-title'><?php echo $this->lang->api->module; ?></li>
+        <li class='menu-title'><?php echo $this->lang->api->module;?></li>
         <?php
         if(!$isRelease)
         {
@@ -43,27 +43,27 @@
         }
         ?>
       </div>
-      <?php if(!$moduleTree): ?>
+      <?php if(!$moduleTree):?>
       <hr class="space">
-      <div class="text-center text-muted tips"><?php echo $lang->api->noModule; ?></div>
-      <?php endif; ?>
-      <?php echo $moduleTree; ?>
+      <div class="text-center text-muted tips"><?php echo $lang->api->noModule;?></div>
+      <?php endif;?>
+      <?php echo $moduleTree;?>
     </div>
   </div>
   <?php endif;?>
 
   <?php if($apiID):?>
-    <?php include './content.html.php'; ?>
-  <?php else: ?>
-  <?php if(empty($libs) || empty($apiList)): ?>
+    <?php include './content.html.php';?>
+  <?php else:?>
+  <?php if(empty($libs) || empty($apiList)):?>
   <div class="cell">
     <div class="detail">
-      <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->title; ?></li>
+      <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->title;?></li>
     </div>
     <div class="detail">
-      <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png' ?>"/>
+      <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/>
       </div>
-      <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi; ?></div>
+      <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi;?></div>
       <div class="no-content-button">
         <?php
         $html = '';
@@ -80,27 +80,26 @@
       </div>
     </div>
   </div>
-  <?php else: ?>
+  <?php else:?>
   <div class="cell">
     <div class="detail">
       <ul class="list-group">
-        <?php foreach($apiList as $api): ?>
+        <?php foreach($apiList as $api):?>
         <li class="list-group-item">
           <div class="heading <?php echo $api->method;?>">
-            <a href="<?php echo helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0&release=$release") ?>">
-              <span class="label label-primary"><?php echo $api->method; ?></span>
-              <span class="label label-warning"
-                    style="width: 60px"><?php echo apiModel::getApiStatusText($api->status); ?></span>
-              <span class="path"><?php echo $api->path; ?></span>
-              <span class="desc"><?php echo $api->title; ?></span>
+            <a href="<?php echo helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0&release=$release");?>">
+              <span class="label label-primary"><?php echo $api->method;?></span>
+              <span class="label label-warning" style="width: 60px"><?php echo apiModel::getApiStatusText($api->status);?></span>
+              <span class="path"><?php echo $api->path;?></span>
+              <span class="desc"><?php echo $api->title;?></span>
             </a>
           </div>
         </li>
-        <?php endforeach; ?>
+        <?php endforeach;?>
       </ul>
     </div>
   </div>
-  <?php endif; ?>
-  <?php endif; ?>
+  <?php endif;?>
+  <?php endif;?>
 </div>
-<?php include '../../common/view/footer.html.php'; ?>
+<?php include '../../common/view/footer.html.php';?>

@@ -9,11 +9,11 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php'; ?>
-<?php include '../../common/view/chosen.html.php'; ?>
-<?php include '../../common/view/kindeditor.html.php'; ?>
-<?php js::import($jsRoot . 'vue/vue.js'); ?>
-<?php js::set('paramsTypeOption', $lang->api->paramsScopeOptions)?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
+<?php js::import($jsRoot . 'vue/vue.js');?>
+<?php js::set('paramsTypeOption', $lang->api->paramsScopeOptions);?>
 <?php
 js::set('typeOptions', $typeOptions);
 js::set('structAdd', $lang->struct->add);
@@ -32,19 +32,14 @@ js::set('struct', '');
   <div id="mainContent" class="main-content">
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->api->createStruct; ?></h2>
+        <h2><?php echo $lang->api->createStruct;?></h2>
       </div>
       <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
         <table class='table table-form'>
           <tbody>
             <tr>
-              <th class='w-110px'><?php echo $lang->api->structName; ?></th>
-              <td><?php echo html::input('name', '', "class='form-control' required"); ?> </td>
-              <td></td>
-            </tr>
-            <tr>
-              <th class='w-110px'><?php echo $lang->api->desc; ?></th>
-              <td> <?php echo html::input('desc', '', "class='form-control'"); ?> </td>
+              <th class='w-110px'><?php echo $lang->api->structName;?></th>
+              <td><?php echo html::input('name', '', "class='form-control' required");?> </td>
               <td></td>
             </tr>
             <tr>
@@ -55,10 +50,14 @@ js::set('struct', '');
               </td>
             </tr>
             <tr>
+              <th class='w-110px'><?php echo $lang->api->desc;?></th>
+              <td colspan="2"><?php echo html::textarea('desc', '', "class='form-control'");?></td>
+            </tr>
+            <tr>
               <td colspan='3' class='text-center form-actions'>
-                <?php echo html::submitButton(); ?>
-                <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}'"); ?>
-                <?php if(!empty($gobackLink)) echo html::a($gobackLink, $lang->goback, '', "class='btn btn-back btn-wide'"); ?>
+                <?php echo html::submitButton();?>
+                <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}'");?>
+                <?php if(!empty($gobackLink)) echo html::a($gobackLink, $lang->goback, '', "class='btn btn-back btn-wide'");?>
               </td>
             </tr>
           </tbody>
@@ -67,4 +66,4 @@ js::set('struct', '');
     </div>
   </div>
 </div>
-<?php include '../../common/view/footer.html.php'; ?>
+<?php include '../../common/view/footer.html.php';?>
