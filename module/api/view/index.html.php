@@ -28,7 +28,7 @@
           echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe'") . '</li>';
           if(common::hasPriv('api', 'publish'))
           {
-            echo '<li>' . html::a($this->createLink('api', 'editPublish', "libID=$libID", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
+              echo '<li>' . html::a($this->createLink('api', 'editPublish', "libID=$libID", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
           }
           echo "<li class='divider'></li>";
           if(common::hasPriv('api', 'createLib'))
