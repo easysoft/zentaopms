@@ -22,22 +22,22 @@
         <?php
         if(!$isRelease)
         {
-          echo "<div class='menu-actions'>";
-          echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
-          echo "<ul class='dropdown-menu pull-right'>";
-          echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe'") . '</li>';
+            echo "<div class='menu-actions'>";
+            echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+            echo "<ul class='dropdown-menu pull-right'>";
+            echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe'") . '</li>';
           if(common::hasPriv('api', 'publish'))
           {
-            echo '<li>' . html::a($this->createLink('api', 'editPublish', "libID=$libID", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
+              echo '<li>' . html::a($this->createLink('api', 'editPublish', "libID=$libID", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
           }
           echo "<li class='divider'></li>";
           if(common::hasPriv('api', 'createLib'))
           {
-            echo '<li>' . html::a($this->createLink('api', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->api->editLib, '', "class='iframe'") . '</li>';
+              echo '<li>' . html::a($this->createLink('api', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->api->editLib, '', "class='iframe'") . '</li>';
           }
           if(common::hasPriv('api', 'deleteLib'))
           {
-            echo '<li>' . html::a($this->createLink('api', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->api->deleteLib, 'hiddenwin') . '</li>';
+              echo '<li>' . html::a($this->createLink('api', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->api->deleteLib, 'hiddenwin') . '</li>';
           }
           echo '</ul></div>';
         }
@@ -66,16 +66,10 @@
       <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi;?></div>
       <div class="no-content-button">
         <?php
-        $html = '';
         if($libID && common::hasPriv('api', 'create'))
         {
-          $html = html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info btn-wide"');
+            echo html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info btn-wide"');
         }
-        else
-        {
-          $html = html::a(helper::createLink('api', 'createLib'), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-info btn-wide iframe"');
-        }
-        echo $html;
         ?>
       </div>
     </div>
