@@ -1,3 +1,11 @@
+function loadDocModule(libID)
+{
+    var link = createLink('api', 'ajaxGetChild', 'libID=' + libID + '&type=parent');
+    $.post(link, function(data)
+    {
+        $('#module').empty().append($(data).children()).trigger('chosen:updated');
+    });
+}
 /**
  * Toggle acl.
  *
@@ -378,6 +386,7 @@ try {
                 data.push(field);
             },
             del(data, index) {
+                if(data.length <= 1) return;
                 data.splice(index, 1)
             },
             changeType() {

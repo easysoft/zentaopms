@@ -251,6 +251,7 @@ $config->objectTables['testtask']    = TABLE_TESTTASK;
 $config->objectTables['testsuite']   = TABLE_TESTSUITE;
 $config->objectTables['testreport']  = TABLE_TESTREPORT;
 $config->objectTables['user']        = TABLE_USER;
+$config->objectTables['api']         = TABLE_API;
 $config->objectTables['doc']         = TABLE_DOC;
 $config->objectTables['doclib']      = TABLE_DOCLIB;
 $config->objectTables['todo']        = TABLE_TODO;

@@ -97,6 +97,7 @@ $lang->action->objectTypes['testsuite']   = 'Suite';
 $lang->action->objectTypes['testtask']    = 'Test Build';
 $lang->action->objectTypes['testreport']  = 'Report';
 $lang->action->objectTypes['doc']         = 'Document';
+$lang->action->objectTypes['api']         = 'Interface';
 $lang->action->objectTypes['doclib']      = 'Document Library';
 $lang->action->objectTypes['api']         = 'Interface Library';
 $lang->action->objectTypes['apistruct']   = 'API struct';
