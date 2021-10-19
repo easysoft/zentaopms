@@ -1,0 +1,5 @@
+.modal-dialog {width: 75%;}
+form {margin-bottom: 100px; padding-left: 65px;}
+table {width: 90% !important;}
+#whiteListBox div.input-group {margin-bottom: 2px;}
+#whiteListBox .input-group:last-child {margin-top: 10px;}

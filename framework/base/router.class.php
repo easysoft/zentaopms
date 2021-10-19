@@ -422,7 +422,7 @@ class baseRouter
      * @param string $className 应用类名，如果对router类做了扩展，需要指定类名。When extends router class, you should pass in the child router class name.
      * @static
      * @access public
-     * @return object   the app object
+     * @return static   the app object
      */
     public static function createApp($appName = 'demo', $appRoot = '', $className = '')
     {

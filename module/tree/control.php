@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The control file of tree module of ZenTaoPMS.
  *
@@ -17,7 +18,7 @@ class tree extends control
      * Module browse.
      *
      * @param  int    $rootID
-     * @param  string $viewType         story|bug|case|doc
+     * @param  string $viewType story|bug|case|doc
      * @param  int    $currentModuleID
      * @param  int    $branch
      * @param  string $from
@@ -67,14 +68,25 @@ class tree extends control
         {
             /* The viewType is doc. */
             $this->loadModel('doc');
-            $viewType = 'doc';
-            $lib      = $this->doc->getLibById($rootID);
+            $viewType         = 'doc';
+            $lib              = $this->doc->getLibById($rootID);
+            $this->view->root = $lib;
+        }
+        elseif(strpos($viewType, 'api') !== false)
+        {
+            /* The viewType is doc. */
+            $this->loadModel('doc');
+            $viewType         = 'api';
+            $lib              = $this->doc->getLibById($rootID);
+            $title            = $this->lang->tree->manageCustomDoc;
+            $position[] = html::a($this->createLink('api', 'index', "libID=$rootID"), $lib->name);
+            $position[] = $this->lang->tree->manageCustomDoc;
             $this->view->root = $lib;
         }
         elseif(strpos($viewType, 'caselib') !== false)
         {
             $this->loadModel('caselib');
-            $lib = $this->caselib->getById($rootID);
+            $lib              = $this->caselib->getById($rootID);
             $this->view->root = $lib;
         }
 
@@ -110,9 +122,9 @@ class tree extends control
         {
             $this->app->loadLang('feedback');
             $this->lang->tree->menu = $this->lang->feedback->menu;
-            $root = new stdclass();
-            $root->name = $this->lang->feedback->common;
-            $this->view->root = $root;
+            $root                   = new stdclass();
+            $root->name             = $this->lang->feedback->common;
+            $this->view->root       = $root;
 
             $title      = $this->lang->tree->manageFeedback;
             $position[] = html::a($this->createLink('feedback', 'admin'), $this->lang->tree->manageFeedback);
@@ -163,7 +175,7 @@ class tree extends control
             }
 
             if($from == 'doc') $this->lang->navGroup->doc = 'doc';
-            $type = $lib->product ? 'product' : ($lib->project ? 'project' : ($lib->execution ? 'execution' : 'custom'));
+            $type                        = $lib->product ? 'product' : ($lib->project ? 'project' : ($lib->execution ? 'execution' : 'custom'));
             $this->lang->tree->menu      = $this->lang->doc->menu;
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
 
@@ -212,7 +224,7 @@ class tree extends control
             $position[] = $this->lang->tree->manageTrainpost;
         }
 
-        $parentModules = $this->tree->getParents($currentModuleID);
+        $parentModules               = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
@@ -231,9 +243,9 @@ class tree extends control
     /**
      * Browse task module.
      *
-     * @param  int    $rootID
-     * @param  int    $productID
-     * @param  int    $currentModuleID
+     * @param  int $rootID
+     * @param  int $productID
+     * @param  int $currentModuleID
      * @access public
      * @return void
      */
@@ -242,11 +254,11 @@ class tree extends control
         $this->lang->navGroup->tree = 'execution';
 
         /* Get execution. */
-        $execution = $this->loadModel('execution')->getById($rootID);
+        $execution        = $this->loadModel('execution')->getById($rootID);
         $this->view->root = $execution;
 
         /* Get all associated products. */
-        $products = $this->execution->getProducts($rootID);
+        $products             = $this->execution->getProducts($rootID);
         $this->view->products = $products;
 
         $executions = $this->execution->getPairs($this->session->project);
@@ -282,7 +294,7 @@ class tree extends control
     /**
      * Edit a module.
      *
-     * @param  int    $moduleID
+     * @param  int $moduleID
      * @access public
      * @return void
      */
@@ -299,7 +311,7 @@ class tree extends control
 
         if($type == 'task')
         {
-            $optionMenu = $this->tree->getTaskOptionMenu($module->root);
+            $optionMenu             = $this->tree->getTaskOptionMenu($module->root);
             $this->view->optionMenu = $optionMenu;
         }
         else
@@ -313,7 +325,7 @@ class tree extends control
         $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 
-        $showProduct = strpos('story|bug|case', $type) !== false ? true : false;
+        $showProduct             = strpos('story|bug|case', $type) !== false ? true : false;
         $this->view->showProduct = $showProduct;
         if($showProduct)
         {
@@ -333,8 +345,8 @@ class tree extends control
     /**
      * Fix path, grades.
      *
-     * @param  string    $root
-     * @param  string    $type
+     * @param  string $root
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -374,7 +386,7 @@ class tree extends control
             $moduleIDList = $this->tree->manageChild($rootID, $viewType);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $moduleIDList));
-            if($viewType == 'doc' and isonlybody()) die(js::reload('parent.parent'));
+            if(($viewType == 'doc' || $viewType == 'api') and isonlybody()) die(js::reload('parent.parent'));
             if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
 
             die(js::reload('parent'));
@@ -386,7 +398,7 @@ class tree extends control
      *
      * @param  int    $rootID
      * @param  int    $moduleID
-     * @param  string $confirm  yes|no
+     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
@@ -394,7 +406,7 @@ class tree extends control
     {
         if($confirm == 'no')
         {
-            $module = $this->tree->getByID($moduleID);
+            $module      = $this->tree->getByID($moduleID);
             $confirmLang = $this->lang->tree->confirmDelete;
             if($module->type == 'doc') $confirmLang = $this->lang->tree->confirmDeleteMenu;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
@@ -443,7 +455,7 @@ class tree extends control
             {
                 $lineID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('id_desc')->limit(1)->fetch('id');
                 $output = html::select("line", $optionMenu, $lineID, "class='form-control'");
-                $output .=  "<span class='input-group-addon' style='border-radius: 0px 2px 2px 0px; border-right-width: 1px;'>";
+                $output .= "<span class='input-group-addon' style='border-radius: 0px 2px 2px 0px; border-right-width: 1px;'>";
                 $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                 $output .= '</span>';
             }
@@ -451,11 +463,11 @@ class tree extends control
             {
                 $changeFunc = '';
                 if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
-                $field = $fieldID ? "modules[$fieldID]" : 'module';
+                $field  = $fieldID ? "modules[$fieldID]" : 'module';
                 $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
                 if(count($optionMenu) == 1 and $needManage)
                 {
-                    $output .=  "<span class='input-group-addon'>";
+                    $output .= "<span class='input-group-addon'>";
                     $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     $output .= '&nbsp; ';
                     $output .= html::a("javascript:void(0)", $this->lang->refresh, '', "class='refresh' onclick='loadProductModules($rootID)'");
@@ -469,7 +481,7 @@ class tree extends control
         {
             $changeFunc = '';
             if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
-            $field = $fieldID ? "modules[$fieldID]" : 'module';
+            $field  = $fieldID ? "modules[$fieldID]" : 'module';
             $output = html::select("$field", $optionMenu, '', "class='input' $changeFunc");
             die($output);
         }
@@ -495,9 +507,9 @@ class tree extends control
 
         $viewType = $module;
         if($module == 'bug') $viewType = 'bug';
-        if($module == 'testcase')  $viewType = 'case';
+        if($module == 'testcase') $viewType = 'case';
 
-        $modules = $this->tree->getOptionMenu($rootID, $viewType);
+        $modules       = $this->tree->getOptionMenu($rootID, $viewType);
         $modulesPinyin = common::convert2Pinyin($modules);
 
         $this->view->link          = $viewType == 'caselib' ? helper::createLink($module, $method, "rootID=%s&type=byModule&param=%s") : helper::createLink($module, $method, "rootID=%s&branch=&type=byModule&param=%s");

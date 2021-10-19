@@ -63,7 +63,7 @@ class baseModel
      * $dao对象，用于访问或者更新数据库。
      * The $dao object, used to access or update database.
      *
-     * @var object
+     * @var dao
      * @access public
      */
     public $dao;

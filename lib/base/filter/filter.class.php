@@ -29,7 +29,7 @@ class baseValidater
      * 是否是Bool类型。
      * Bool checking.
      *
-     * @param  bool $var
+     * @param bool $var
      * @static
      * @access public
      * @return bool
@@ -43,7 +43,7 @@ class baseValidater
      * 是否是Int类型。
      * Int checking.
      *
-     * @param  int $var
+     * @param int $var
      * @static
      * @access public
      * @return bool
@@ -79,7 +79,7 @@ class baseValidater
      * 检查不是Int类型。
      * Not int checking.
      *
-     * @param  int    $var
+     * @param int $var
      * @static
      * @access public
      * @return bool
@@ -93,8 +93,8 @@ class baseValidater
      * 检查Float类型。
      * Float checking.
      *
-     * @param  float  $var
-     * @param  string $decimal
+     * @param float  $var
+     * @param string $decimal
      * @static
      * @access public
      * @return bool
@@ -108,7 +108,7 @@ class baseValidater
      * 检查Email。
      * Email checking.
      *
-     * @param  string $var
+     * @param string $var
      * @static
      * @access public
      * @return bool
@@ -122,7 +122,7 @@ class baseValidater
      * 检查电话或手机号码
      * Check phone number.
      *
-     * @param  string    $var
+     * @param string $var
      * @static
      * @access public
      * @return void
@@ -136,7 +136,7 @@ class baseValidater
      * 检查电话号码
      * Check tel number.
      *
-     * @param  int    $var
+     * @param int $var
      * @static
      * @access public
      * @return void
@@ -150,7 +150,7 @@ class baseValidater
      * 检查手机号码
      * Check mobile number.
      *
-     * @param  string    $var
+     * @param string $var
      * @static
      * @access public
      * @return void
@@ -167,7 +167,7 @@ class baseValidater
      * URL checking.
      * The check rule of filter don't support chinese.
      *
-     * @param  string $var
+     * @param string $var
      * @static
      * @access public
      * @return bool
@@ -183,7 +183,7 @@ class baseValidater
      *
      * The check rule of filter don't support chinese.
      *
-     * @param  string $var
+     * @param string $var
      * @static
      * @access public
      * @return bool
@@ -197,8 +197,8 @@ class baseValidater
      * 检查IP地址。
      * IP checking.
      *
-     * @param  ip $var
-     * @param  string $range all|public|static|private
+     * @param ip     $var
+     * @param string $range all|public|static|private
      * @static
      * @access public
      * @return bool
@@ -223,19 +223,19 @@ class baseValidater
      */
     public static function checkIdcard($idcard)
     {
-        if(strlen($idcard)!=18) return false;
-        $idcard = strtoupper($idcard);
+        if(strlen($idcard) != 18) return false;
+        $idcard   = strtoupper($idcard);
         $cityList = array(
-            '11','12','13','14','15','21','22',
-            '23','31','32','33','34','35','36',
-            '37','41','42','43','44','45','46',
-            '50','51','52','53','54','61','62',
-            '63','64','65','71','81','82','91'
+            '11', '12', '13', '14', '15', '21', '22',
+            '23', '31', '32', '33', '34', '35', '36',
+            '37', '41', '42', '43', '44', '45', '46',
+            '50', '51', '52', '53', '54', '61', '62',
+            '63', '64', '65', '71', '81', '82', '91'
         );
 
-        if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $idcard)) return false;
+        if(!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $idcard)) return false;
 
-        if (!in_array(substr($idcard, 0, 2), $cityList)) return false;
+        if(!in_array(substr($idcard, 0, 2), $cityList)) return false;
 
         $baseCode     = substr($idcard, 0, 17);
         $verifyCode   = substr($idcard, 17, 1);
@@ -244,7 +244,7 @@ class baseValidater
         $verifyConfig = array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
 
         $total = 0;
-        for($i=0; $i<17; $i++) $total += substr($baseCode, $i, 1) * $interference[$i];
+        for($i = 0; $i < 17; $i++) $total += substr($baseCode, $i, 1) * $interference[$i];
 
         $mod = $total % 11;
 
@@ -255,7 +255,7 @@ class baseValidater
      * 日期检查。注意，2009-09-31是一个合法日期，系统会将它转换为2009-10-01。
      * Date checking. Note: 2009-09-31 will be an valid date, because strtotime auto fixed it to 10-01.
      *
-     * @param  date $date
+     * @param date $date
      * @static
      * @access public
      * @return bool
@@ -264,14 +264,14 @@ class baseValidater
     {
         if(empty($date)) return true;
         if($date == '0000-00-00') return true;
-        if(preg_match ("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date, $parts)) return checkdate($parts[2], $parts[3], $parts[1]);
+        if(preg_match("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date, $parts)) return checkdate($parts[2], $parts[3], $parts[1]);
         return false;
     }
 
     /**
      * Check datetime.
      *
-     * @param  string    $datetime
+     * @param string $datetime
      * @static
      * @access public
      * @return bool
@@ -282,7 +282,7 @@ class baseValidater
         if($datetime == '0000-00-00') return true;
         if($datetime == '0000-00-00 00:00:00') return true;
         $date = substr($datetime, 0, 10);
-        if(preg_match ("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date, $parts)) return checkdate($parts[2], $parts[3], $parts[1]);
+        if(preg_match("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $date, $parts)) return checkdate($parts[2], $parts[3], $parts[1]);
         return false;
     }
 
@@ -290,8 +290,8 @@ class baseValidater
      * 检查正则表达式。
      * REG checking.
      *
-     * @param  string $var
-     * @param  string $reg
+     * @param string $var
+     * @param string $reg
      * @static
      * @access public
      * @return bool
@@ -305,9 +305,9 @@ class baseValidater
      * 检查长度。
      * Length checking.
      *
-     * @param  string $var
-     * @param  string $max
-     * @param  int    $min
+     * @param string $var
+     * @param string $max
+     * @param int    $min
      * @static
      * @access public
      * @return bool
@@ -322,7 +322,7 @@ class baseValidater
      * 检查不为空。
      * Not empty checking.
      *
-     * @param  mixed $var
+     * @param mixed $var
      * @static
      * @access public
      * @return bool
@@ -336,7 +336,7 @@ class baseValidater
      * 检查为空。
      * Empty checking.
      *
-     * @param  mixed $var
+     * @param mixed $var
      * @static
      * @access public
      * @return bool
@@ -350,7 +350,7 @@ class baseValidater
      * 检查用户名。
      * Account checking.
      *
-     * @param  string $var
+     * @param string $var
      * @static
      * @access public
      * @return bool
@@ -366,7 +366,7 @@ class baseValidater
      * 检查Code。
      * Check code.
      *
-     * @param  string $var
+     * @param string $var
      * @static
      * @access public
      * @return bool
@@ -380,7 +380,7 @@ class baseValidater
      * 检查验证码。
      * Check captcha.
      *
-     * @param  mixed    $var
+     * @param mixed $var
      * @static
      * @access public
      * @return bool
@@ -395,8 +395,8 @@ class baseValidater
      * 是否等于给定的值。
      * Must equal a value.
      *
-     * @param  mixed  $var
-     * @param  mixed $value
+     * @param mixed $var
+     * @param mixed $value
      * @static
      * @access public
      * @return bool
@@ -410,8 +410,8 @@ class baseValidater
      * 检查不等于给定的值
      * Must not equal a value.
      *
-     * @param  mixed    $var
-     * @param  mixed    $value
+     * @param mixed $var
+     * @param mixed $value
      * @static
      * @access public
      * @return bool
@@ -425,8 +425,8 @@ class baseValidater
      * 检查大于给定的值。
      * Must greater than a value.
      *
-     * @param  mixed    $var
-     * @param  mixed    $value
+     * @param mixed $var
+     * @param mixed $value
      * @static
      * @access public
      * @return bool
@@ -440,8 +440,8 @@ class baseValidater
      * 检查小于给定的值
      * Must less than a value.
      *
-     * @param  mixed    $var
-     * @param  mixed    $value
+     * @param mixed $var
+     * @param mixed $value
      * @static
      * @access public
      * @return bool
@@ -455,8 +455,8 @@ class baseValidater
      * 检查大于等于给定的值
      * Must greater than a value or equal a value.
      *
-     * @param  mixed    $var
-     * @param  mixed    $value
+     * @param mixed $var
+     * @param mixed $value
      * @static
      * @access public
      * @return bool
@@ -470,8 +470,8 @@ class baseValidater
      * 检查小于等于给定的值
      * Must less than a value or equal a value.
      *
-     * @param  mixed    $var
-     * @param  mixed    $value
+     * @param mixed $var
+     * @param mixed $value
      * @static
      * @access public
      * @return bool
@@ -485,8 +485,8 @@ class baseValidater
      * 检查是否在给定的列表里面。
      * Must in value list.
      *
-     * @param  mixed  $var
-     * @param  mixed $value
+     * @param mixed $var
+     * @param mixed $value
      * @static
      * @access public
      * @return bool
@@ -501,7 +501,7 @@ class baseValidater
      * 检查文件名。
      * Check file name.
      *
-     * @param  string    $var
+     * @param string $var
      * @static
      * @access public
      * @return bool
@@ -515,8 +515,8 @@ class baseValidater
      * 检查敏感词。
      * Check sensitive words.
      *
-     * @param  object   $vars
-     * @param  array    $dicts
+     * @param object $vars
+     * @param array  $dicts
      * @static
      * @access public
      * @return void
@@ -579,7 +579,7 @@ class baseValidater
      * 过滤超级变量。
      * Filter super vars.
      *
-     * @param  array    $super
+     * @param array $super
      * @access public
      * @return array
      */
@@ -596,13 +596,13 @@ class baseValidater
                 foreach($item as $subkey => $subItem)
                 {
                     if(is_array($subItem)) continue;
-                    $subItem = self::filterTrojan($subItem);
+                    $subItem              = self::filterTrojan($subItem);
                     $super[$key][$subkey] = self::filterXSS($subItem);
                 }
             }
             else
             {
-                $item = self::filterTrojan($item);
+                $item        = self::filterTrojan($item);
                 $super[$key] = self::filterXSS($item);
             }
         }
@@ -614,7 +614,7 @@ class baseValidater
      * 过滤不符合规则的键值。
      * Filter bad keys.
      *
-     * @param  mix    $var
+     * @param mix $var
      * @access public
      * @return mix
      */
@@ -630,7 +630,7 @@ class baseValidater
      * 过滤木马代码。
      * Filter trojan codes.
      *
-     * @param  string    $var
+     * @param string $var
      * @access public
      * @return string
      */
@@ -640,7 +640,7 @@ class baseValidater
         if(empty($config->framework->filterTrojan)) return $var;
         if(strpos(htmlspecialchars_decode($var), '<?') === false) return $var;
 
-        $var      = (string) $var;
+        $var      = (string)$var;
         $evils    = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert');
         $replaces = array('e v a l', 'e x e c', 'p a s s t h r u', 'p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t');
         $var      = str_ireplace($evils, $replaces, $var);
@@ -652,7 +652,7 @@ class baseValidater
      * 过滤 XSS代码。
      * Filter XSS codes.
      *
-     * @param  string    $var
+     * @param string $var
      * @access public
      * @return string
      */
@@ -663,7 +663,7 @@ class baseValidater
 
         if(stripos($var, '<script') !== false)
         {
-            $var      = (string) $var;
+            $var      = (string)$var;
             $evils    = array('appendchild(', 'createElement(', 'xss.re', 'onfocus', 'onclick', 'innerHTML', 'replaceChild(', 'html(', 'append(', 'appendTo(', 'prepend(', 'prependTo(', 'after(', 'insertBefore', 'before(', 'replaceWith(');
             $replaces = array('a p p e n d c h i l d (', 'c r e a t e E l e m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'i n s e r t B e f o r e (', 'b e f o r e (', 'r e p l a c e W i t h (');
             $var      = str_ireplace($evils, $replaces, $var);
@@ -678,8 +678,8 @@ class baseValidater
     /**
      * Filter param.
      *
-     * @param  array    $var
-     * @param  string   $type
+     * @param array  $var
+     * @param string $type
      * @static
      * @access public
      * @return array
@@ -688,13 +688,13 @@ class baseValidater
     {
         global $config, $filter, $app;
 
-        $moduleName   = $app->getModuleName();
-        $methodName   = $app->getMethodName();
-        $params       = $app->getParams();
+        $moduleName = $app->getModuleName();
+        $methodName = $app->getMethodName();
+        $params     = $app->getParams();
 
         if($type == 'cookie')
         {
-            $pagerCookie = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
+            $pagerCookie                           = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
             $filter->default->cookie[$pagerCookie] = 'int';
         }
         foreach($var as $key => $value)
@@ -723,7 +723,7 @@ class baseValidater
     /**
      * Replace space to i tag.
      *
-     * @param  string    $var
+     * @param string $var
      * @static
      * @access public
      * @return string
@@ -744,8 +744,8 @@ class baseValidater
     /**
      * Check by rule.
      *
-     * @param  string   $var
-     * @param  string   $rule   like: int account reg::md5 reg::/^[a-zA-Z0-9]+$/.
+     * @param string $var
+     * @param string $rule like: int account reg::md5 reg::/^[a-zA-Z0-9]+$/.
      * @static
      * @access public
      * @return bool
@@ -761,7 +761,7 @@ class baseValidater
         $checkMethod = 'check' . $operator;
         if(method_exists('baseValidater', $checkMethod))
         {
-            if(empty($param)  and self::$checkMethod($var) === false) return false;
+            if(empty($param) and self::$checkMethod($var) === false) return false;
             if(!empty($param) and self::$checkMethod($var, $param) === false) return false;
         }
         elseif(function_exists('is_' . $operator))
@@ -780,7 +780,7 @@ class baseValidater
     /**
      * Parse rule string.
      *
-     * @param  string $rule   like: int account reg::md5 reg::/^[a-zA-Z0-9]+$/.
+     * @param string $rule like: int account reg::md5 reg::/^[a-zA-Z0-9]+$/.
      * @static
      * @access public
      * @return array
@@ -800,8 +800,8 @@ class baseValidater
      * 调用一个方法进行检查。
      * Call a function to check it.
      *
-     * @param  mixed  $var
-     * @param  string $func
+     * @param mixed  $var
+     * @param string $func
      * @static
      * @access public
      * @return bool
@@ -842,38 +842,38 @@ class baseFixer
      * 构造方法，将超级全局变量转换为对象。
      * The construction function, according the scope, convert it to object.
      *
-     * @param  string $scope    the scope of the var, should be post|get|server|session|cookie|env
+     * @param string $scope the scope of the var, should be post|get|server|session|cookie|env
      * @access public
      * @return void
      */
     public function __construct($scope)
     {
-        switch($scope)
+        switch ($scope)
         {
-        case 'post':
-            $this->data = (object)$_POST;
-            break;
-        case 'server':
-            $this->data = (object)$_SERVER;
-            break;
-        case 'get':
-            $this->data = (object)$_GET;
-            break;
-        case 'session':
-            $this->data = (object)$_SESSION;
-            break;
-        case 'cookie':
-            $this->data = (object)$_COOKIE;
-            break;
-        case 'env':
-            $this->data = (object)$_ENV;
-            break;
-        case 'file':
-            $this->data = (object)$_FILES;
-            break;
+            case 'post':
+                $this->data = (object)$_POST;
+                break;
+            case 'server':
+                $this->data = (object)$_SERVER;
+                break;
+            case 'get':
+                $this->data = (object)$_GET;
+                break;
+            case 'session':
+                $this->data = (object)$_SESSION;
+                break;
+            case 'cookie':
+                $this->data = (object)$_COOKIE;
+                break;
+            case 'env':
+                $this->data = (object)$_ENV;
+                break;
+            case 'file':
+                $this->data = (object)$_FILES;
+                break;
 
-        default:
-            die('scope not supported, should be post|get|server|session|cookie|env');
+            default:
+                die('scope not supported, should be post|get|server|session|cookie|env');
         }
     }
 
@@ -881,7 +881,7 @@ class baseFixer
      * 工厂方法。
      * The factory function.
      *
-     * @param  string $scope
+     * @param string $scope
      * @access public
      * @return object fixer object.
      */
@@ -894,7 +894,7 @@ class baseFixer
      * 处理Email。
      * Email fix.
      *
-     * @param  string $fieldName
+     * @param string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -909,7 +909,7 @@ class baseFixer
      * url编码。
      * urlencode.
      *
-     * @param  string $fieldName
+     * @param string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -919,7 +919,7 @@ class baseFixer
         $args   = func_get_args();
         foreach($fields as $fieldName)
         {
-            $this->data->$fieldName = isset($args[1]) ?  filter_var($this->data->$fieldName, FILTER_SANITIZE_ENCODED, $args[1]) : filter_var($this->data->$fieldName, FILTER_SANITIZE_ENCODED);
+            $this->data->$fieldName = isset($args[1]) ? filter_var($this->data->$fieldName, FILTER_SANITIZE_ENCODED, $args[1]) : filter_var($this->data->$fieldName, FILTER_SANITIZE_ENCODED);
         }
         return $this;
     }
@@ -928,7 +928,7 @@ class baseFixer
      * 清理网址。
      * Clean the url.
      *
-     * @param  string $fieldName
+     * @param string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -943,14 +943,14 @@ class baseFixer
      * 处理Float类型。
      * Float fixer.
      *
-     * @param  string $fieldName
+     * @param string $fieldName
      * @access public
      * @return object fixer object.
      */
     public function cleanFloat($fieldName)
     {
         $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName) $this->data->$fieldName = (float)filter_var($this->data->$fieldName, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION|FILTER_FLAG_ALLOW_THOUSAND);
+        foreach($fields as $fieldName) $this->data->$fieldName = (float)filter_var($this->data->$fieldName, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND);
         return $this;
     }
 
@@ -958,7 +958,7 @@ class baseFixer
      * 处理Int类型。
      * Int fixer.
      *
-     * @param  string $fieldName
+     * @param string $fieldName
      * @access public
      * @return object fixer object.
      */
@@ -979,7 +979,7 @@ class baseFixer
      * 将字符串转换为可以在浏览器查看的编码。
      * Special chars.
      *
-     * @param  string $fieldName
+     * @param string $fieldName
      * @access public
      * @return object fixer object
      */
@@ -990,7 +990,7 @@ class baseFixer
         {
             if(empty($this->stripedFields) or !isset($this->stripedFields[$fieldName]))
             {
-                $this->data->$fieldName = $this->specialArray($this->data->$fieldName);
+                $this->data->$fieldName          = $this->specialArray($this->data->$fieldName);
                 $this->stripedFields[$fieldName] = $fieldName;
             }
         }
@@ -1000,7 +1000,7 @@ class baseFixer
     /**
      * Special array
      *
-     * @param  mix      $data
+     * @param mix $data
      * @access public
      * @return mix
      */
@@ -1017,9 +1017,9 @@ class baseFixer
      * 忽略该标签。
      * Strip tags
      *
-     * @param  string $fieldName
-     * @param  string $allowableTags
-     * @param  array  $attributes
+     * @param string $fieldName
+     * @param string $allowableTags
+     * @param array  $attributes
      * @access public
      * @return object fixer object
      */
@@ -1043,9 +1043,9 @@ class baseFixer
     /**
      * Strip tags for data
      *
-     * @param  string $data
-     * @param  string $allowedTags
-     * @param  array  $attributes
+     * @param string $data
+     * @param string $allowedTags
+     * @param array  $attributes
      * @static
      * @access public
      * @return string
@@ -1073,7 +1073,7 @@ class baseFixer
                 $purifierConfig->set('HTML.Attr.Name.UseCDATA', true);
 
                 $purifier = new HTMLPurifier($purifierConfig);
-                $def = $purifierConfig->getHTMLDefinition(true);
+                $def      = $purifierConfig->getHTMLDefinition(true);
                 $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
 
                 if(!empty($attributes))
@@ -1119,7 +1119,7 @@ class baseFixer
      * 忽略处理给定的字段。
      * Skip special chars check.
      *
-     * @param  string    $filename
+     * @param string $filename
      * @access public
      * @return object fixer object
      */
@@ -1134,7 +1134,7 @@ class baseFixer
      * 给字段添加引用，防止字符与关键字冲突。
      * Quote
      *
-     * @param  string $fieldName
+     * @param string $fieldName
      * @access public
      * @return object fixer object
      */
@@ -1149,15 +1149,53 @@ class baseFixer
      * 设置字段的默认值。
      * Set default value of some fileds.
      *
-     * @param  string $fields
-     * @param  mixed  $value
+     * @param string $fields
+     * @param mixed  $value
      * @access public
      * @return object fixer object
      */
     public function setDefault($fields, $value)
     {
         $fields = strpos($fields, ',') ? explode(',', str_replace(' ', '', $fields)) : array($fields);
-        foreach($fields as $fieldName)if(!isset($this->data->$fieldName) or empty($this->data->$fieldName)) $this->data->$fieldName = $value;
+        foreach($fields as $fieldName) if(!isset($this->data->$fieldName) or empty($this->data->$fieldName)) $this->data->$fieldName = $value;
+        return $this;
+    }
+
+    /**
+     * 将字段的值进行json编码
+     * Cast fields to json type.
+     *
+     * @param string $filed
+     * @access public
+     * @return object fixer object
+     */
+    public function json($fields)
+    {
+        $fields = strpos($fields, ',') ? explode(',', str_replace(' ', '', $fields)) : array($fields);
+        foreach($fields as $field)
+        {
+            if(isset($this->data->$field)) $this->data->$field = json_encode($this->data->$field);
+        }
+
+        return $this;
+    }
+
+    /**
+     * 将字段的值进行HTML标签解码
+     * Html decode fields
+     *
+     * @param string $filed
+     * @access public
+     * @return object fixer object
+     */
+    public function unHtml($fields)
+    {
+        $fields = strpos($fields, ',') ? explode(',', str_replace(' ', '', $fields)) : array($fields);
+        foreach($fields as $field)
+        {
+            if(isset($this->data->$field)) $this->data->$field = htmlspecialchars_decode($this->data->$field);
+        }
+
         return $this;
     }
 
@@ -1165,9 +1203,9 @@ class baseFixer
      * 如果条件为真，则为字段赋值。
      * Set value of a filed on the condition is true.
      *
-     * @param  bool   $condition
-     * @param  string $fieldName
-     * @param  string $value
+     * @param bool   $condition
+     * @param string $fieldName
+     * @param string $value
      * @access public
      * @return object fixer object
      */
@@ -1181,8 +1219,8 @@ class baseFixer
      * 强制给字段赋值。
      * Set the value of a filed in force.
      *
-     * @param  string $fieldName
-     * @param  mixed  $value
+     * @param string $fieldName
+     * @param mixed  $value
      * @access public
      * @return object fixer object
      */
@@ -1196,7 +1234,7 @@ class baseFixer
      * 移除一个字段。
      * Remove a field.
      *
-     * @param  string $fieldName
+     * @param string $fieldName
      * @access public
      * @return object fixer object
      */
@@ -1211,8 +1249,8 @@ class baseFixer
      * 如果条件为真，移除该字段。
      * Remove a filed on the condition is true.
      *
-     * @param  bool   $condition
-     * @param  string $fields
+     * @param bool   $condition
+     * @param string $fields
      * @access public
      * @return object fixer object
      */
@@ -1227,8 +1265,8 @@ class baseFixer
      * 为数据添加新的项。
      * Add an item to the data.
      *
-     * @param  string $fieldName
-     * @param  mixed  $value
+     * @param string $fieldName
+     * @param mixed  $value
      * @access public
      * @return object fixer object
      */
@@ -1242,9 +1280,9 @@ class baseFixer
      * 如果条件为真，则为数据添加新的项。
      * Add an item to the data on the condition if true.
      *
-     * @param  bool   $condition
-     * @param  string $fieldName
-     * @param  mixed  $value
+     * @param bool   $condition
+     * @param string $fieldName
+     * @param mixed  $value
      * @access public
      * @return object fixer object
      */

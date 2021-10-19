@@ -223,9 +223,12 @@ $lang->doc->my        = 'My';
 $lang->doc->favorite  = 'Favorite';
 $lang->doc->product   = 'Product';
 $lang->doc->project   = 'Project';
+$lang->doc->api       = 'API';
 $lang->doc->execution = $lang->execution->common;
 $lang->doc->custom    = 'Custom';
 $lang->doc->wiki      = 'WIKI';
+$lang->doc->apiDoc    = 'Doc';
+$lang->doc->apiStruct = 'Struct';
 
 $lang->product->list   = $lang->productCommon . ' List';
 $lang->product->kanban = $lang->productCommon . ' Kanban';

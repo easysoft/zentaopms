@@ -1385,13 +1385,38 @@ $lang->webhook->methodOrder[35] = 'chooseDept';
 
 /* Others. */
 $lang->resource->api = new stdclass();
-$lang->resource->api->getModel    = 'getModel';
-$lang->resource->api->debug       = 'debug';
-$lang->resource->api->sql         = 'sql';
+$lang->resource->api->index        = 'index';
+$lang->resource->api->createLib    = 'createLib';
+$lang->resource->api->editLib      = 'editLib';
+$lang->resource->api->deleteLib    = 'deleteLib';
+$lang->resource->api->publish      = 'publish';
+$lang->resource->api->struct       = 'struct';
+$lang->resource->api->createStruct = 'createStruct';
+$lang->resource->api->editStruct   = 'editStruct';
+$lang->resource->api->deleteStruct = 'deleteStruct';
+$lang->resource->api->create       = 'create';
+$lang->resource->api->edit         = 'edit';
+$lang->resource->api->delete       = 'delete';
 
-$lang->api->methodOrder[5]  = 'getModel';
-$lang->api->methodOrder[10] = 'debug';
-$lang->api->methodOrder[15] = 'sql';
+$lang->resource->api->getModel     = 'getModel';
+$lang->resource->api->debug        = 'debug';
+$lang->resource->api->sql          = 'sql';
+
+$lang->api->methodOrder[0]  = 'index';
+$lang->api->methodOrder[5]  = 'createLib';
+$lang->api->methodOrder[10] = 'editLib';
+$lang->api->methodOrder[15] = 'deleteLib';
+$lang->api->methodOrder[20] = 'publish';
+$lang->api->methodOrder[25] = 'struct';
+$lang->api->methodOrder[30] = 'createStruct';
+$lang->api->methodOrder[35] = 'editStruct';
+$lang->api->methodOrder[40] = 'deleteStruct';
+$lang->api->methodOrder[45] = 'create';
+$lang->api->methodOrder[50] = 'edit';
+$lang->api->methodOrder[55] = 'delete';
+$lang->api->methodOrder[60] = 'getModel';
+$lang->api->methodOrder[65] = 'debug';
+$lang->api->methodOrder[70] = 'sql';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';
