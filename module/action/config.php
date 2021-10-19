@@ -13,6 +13,7 @@ $config->action->objectNameFields['testcase']    = 'title';
 $config->action->objectNameFields['case']        = 'title';
 $config->action->objectNameFields['testtask']    = 'name';
 $config->action->objectNameFields['user']        = 'account';
+$config->action->objectNameFields['api']         = 'title';
 $config->action->objectNameFields['doc']         = 'title';
 $config->action->objectNameFields['doclib']      = 'name';
 $config->action->objectNameFields['todo']        = 'name';

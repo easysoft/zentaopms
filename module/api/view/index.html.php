@@ -55,23 +55,17 @@
   <?php if(empty($libs) || empty($apiList)):?>
   <div class="cell">
     <div class="detail">
-      <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->title;?></li>
+      <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->pageTitle;?></li>
     </div>
     <div class="detail">
       <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/></div>
       <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi;?></div>
       <div class="no-content-button">
         <?php
-        $html = '';
         if($libID && common::hasPriv('api', 'create'))
         {
-            $html = html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info btn-wide"');
+            echo html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info btn-wide"');
         }
-        else
-        {
-            $html = html::a(helper::createLink('api', 'createLib'), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-info btn-wide iframe"');
-        }
-        echo $html;
         ?>
       </div>
     </div>

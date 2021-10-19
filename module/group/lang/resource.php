@@ -1408,6 +1408,7 @@ $lang->api->methodOrder[5]  = 'createLib';
 $lang->api->methodOrder[10] = 'editLib';
 $lang->api->methodOrder[15] = 'deleteLib';
 $lang->api->methodOrder[20] = 'publish';
+$lang->api->methodOrder[21] = 'editPublish';
 $lang->api->methodOrder[25] = 'struct';
 $lang->api->methodOrder[30] = 'createStruct';
 $lang->api->methodOrder[35] = 'editStruct';

@@ -170,8 +170,7 @@
       <div class='cell'>
         <?php
         $canBeChanged = common::canBeChanged('api', $api);
-        if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$api->id");
-        ;?>
+        if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=api&objectID=$api->id");?>
         <?php include '../../common/view/action.html.php';?>
       </div>
     </div>

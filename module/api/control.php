@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The control file of api of ZenTaoPMS.
  *
@@ -32,16 +33,6 @@ class api extends control
      */
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0)
     {
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs();
-
-        /* Generate bread crumbs dropMenu. */
-        if($libs)
-        {
-            if($libID == 0) $libID = key($libs);
-            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
-        }
-        $this->setMenu($libID);
 
         /* Get an api doc. */
         if($apiID > 0)
@@ -67,9 +58,20 @@ class api extends control
             $this->view->apiList = $apiList;
         }
 
+        /* Get all api doc libraries. */
+        $libs = $this->doc->getApiLibs();
+
+        /* Generate bread crumbs dropMenu. */
+        if($libs)
+        {
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
+        }
+        $this->setMenu($libID);
+
         $this->view->isRelease  = $release > 0;
         $this->view->release    = $release;
-        $this->view->title      = $this->lang->api->title;
+        $this->view->title      = $this->lang->api->pageTitle;
         $this->view->libID      = $libID;
         $this->view->apiID      = $apiID;
         $this->view->libs       = $libs;
@@ -210,6 +212,7 @@ class api extends control
             $userId = $this->app->user->account;
             $data   = fixer::input('post')
                 ->add('lib', $libID)
+                ->skipSpecial('attribute')
                 ->add('addedBy', $userId)
                 ->add('addedDate', $now)
                 ->add('editedBy', $userId)
@@ -221,7 +224,7 @@ class api extends control
             $this->action->create('apistruct', $id, 'Created');
 
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'editStruct', "libID=$libID&structID=$id")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID")));
         }
 
         $options = array();
@@ -231,6 +234,7 @@ class api extends control
         }
         $this->view->typeOptions = $options;
         $this->view->title       = $this->lang->api->createStruct;
+        $this->view->gobackLink  = $this->createLink('api', 'struct', "libID=$libID");
 
         $this->display();
     }
@@ -253,6 +257,7 @@ class api extends control
             $now    = helper::now();
             $userId = $this->app->user->account;
             $data   = fixer::input('post')
+                ->skipSpecial('attribute')
                 ->add('lib', $struct->lib)
                 ->add('editedBy', $userId)
                 ->add('editedDate', $now)
@@ -383,7 +388,7 @@ class api extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->doc->confirmDeleteLib, $this->createLink('api', 'deleteLib', "libID=$libID&confirm=yes")));
+            die(js::confirm($this->lang->api->confirmDeleteLib, $this->createLink('api', 'deleteLib', "libID=$libID&confirm=yes")));
         }
         else
         {
@@ -415,6 +420,7 @@ class api extends control
             $userId = $this->app->user->account;
             $params = fixer::input('post')
                 ->remove('type')
+                ->skipSpecial('params,response')
                 ->add('addedBy', $userId)
                 ->add('addedDate', $now)
                 ->add('editedBy', $userId)
@@ -449,6 +455,7 @@ class api extends control
             $options[] = array('label' => $item, 'value' => $key);
         }
         $this->view->typeOptions = $options;
+        $this->view->gobackLink  = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
         $this->view->user        = $this->app->user->account;
         $this->view->allUsers    = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
@@ -474,6 +481,7 @@ class api extends control
             $now    = helper::now();
             $params = fixer::input('post')
                 ->remove('type')
+                ->skipSpecial('params,response')
                 ->add('addedBy', $this->app->user->account)
                 ->add('addedDate', $now)
                 ->add('editedBy', $this->app->user->account)
@@ -501,6 +509,7 @@ class api extends control
         $example = json_encode($example, JSON_PRETTY_PRINT);
 
         $this->getTypeOptions($libID);
+        $this->view->gobackLink       = $this->createLink('api', 'index', "libID=$libID&moduleID=$moduleID");
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
         $this->view->libID            = $libID;
@@ -596,6 +605,21 @@ class api extends control
     }
 
     /**
+     * Ajax get all child module.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetChild($libID, $type = 'module')
+    {
+        $this->loadModel('tree');
+        $childModules = $this->tree->getOptionMenu($libID, 'api');
+        $select       = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
+        die($select);
+    }
+
+
+    /**
      * Set doc menu by method name.
      *
      * @param  int $libID
@@ -665,7 +689,7 @@ class api extends control
     private function generateLibsDropMenu($libs, $libID, $version = 0)
     {
         if(empty($libs)) return '';
-        if (!isset($libs[$libID])) return '';
+        if(!isset($libs[$libID])) return '';
 
         $libName = $libs[$libID]->name;
         $output  = <<<EOT
@@ -685,7 +709,7 @@ EOT;
         foreach($libs as $key => $lib)
         {
             $selected = $key == $libID ? 'selected' : '';
-            $output  .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+            $output   .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
         }
         $output .= "</div></div></div></div></div>";
 
@@ -694,7 +718,7 @@ EOT;
         if(!empty($versions))
         {
             $versionName = $version > 0 ? $versions[$version]->version : $this->lang->api->defaultVersion;
-            $output     .= <<<EOT
+            $output      .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$versionName} <span class='caret'></span>

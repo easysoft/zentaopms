@@ -69,8 +69,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
           <tr>
             <th><?php echo $lang->api->module;?></th>
             <td>
-            <span
-                id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>
+            <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>
             </td>
             <td></td>
           </tr>
@@ -177,8 +176,8 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                       <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                     </td>
                     <td>
-                      <button class="btn btn-link" type="button" @click="add(query, key, 'query')"><?php echo $lang->struct->add;?></button>
-                      <button class="btn btn-link" type="button" @click="del(query, key)"><?php echo $lang->delete;?></button>
+                      <button class="btn btn-link" type="button" @click="add(queryP, key, 'query')"><?php echo $lang->struct->add;?></button>
+                      <button class="btn btn-link" type="button" @click="del(queryP, key)"><?php echo $lang->delete;?></button>
                     </td>
                 </tbody>
               </table>
@@ -236,5 +235,4 @@ js::set('struct_paramsType', $lang->struct->paramsType);
     </form>
   </div>
 </div>
-<?php js::set('noticeAcl', $lang->noticeAcl);?>
 <?php include '../../common/view/footer.html.php';?>
