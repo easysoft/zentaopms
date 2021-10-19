@@ -437,3 +437,4 @@ $lang->changelog['15.7'][] = 'api-deleteStruct';
 $lang->changelog['15.7'][] = 'api-create';
 $lang->changelog['15.7'][] = 'api-edit';
 $lang->changelog['15.7'][] = 'api-delete';
+$lang->changelog['15.7'][] = 'api-editPublish';
