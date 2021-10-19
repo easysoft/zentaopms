@@ -295,6 +295,7 @@ try {
             structType: {
                 handler(val) {
                     this.changeType()
+                    this.$emit('change-type', this.structType)
                 }
             },
             current: {
@@ -312,7 +313,6 @@ try {
             }
         },
         created() {
-            console.log(this.showType, this.structType)
             this.current = [this.getInitField()]
             if (this.attr && this.attr.length > 0) {
                 const attr = [];

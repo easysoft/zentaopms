@@ -186,7 +186,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
           <tr>
             <th><?php echo $lang->api->params;?></th>
             <td colspan='2'>
-              <body-field @change="changeAttr"></body-field>
+              <body-field @change="changeAttr" @change-type="changeType"></body-field>
               <input type="hidden" name="params" v-model="params">
             </td>
           </tr>

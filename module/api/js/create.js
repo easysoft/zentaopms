@@ -7,6 +7,7 @@ var app = new Vue({
         params: "",
         response: "",
         defaultHeader: {field: '', required: '', desc: ''},
+        attrType: '',
     },
     created() {
         this.header.push({...this.defaultHeader});
@@ -30,11 +31,20 @@ var app = new Vue({
                 this.setParams();
             },
             deep: true
+        },
+        attrType: {
+            handler() {
+                this.setParams()
+            },
+            deep: true
         }
     },
     methods: {
         changeAttr(val) {
             this.body = val;
+        },
+        changeType(val) {
+            this.attrType = val
         },
         changeRes(val) {
             val = this.filterParams(val)
@@ -47,6 +57,7 @@ var app = new Vue({
             const params = {
                 header: header,
                 params: body,
+                paramsType: this.attrType,
                 query: queryP,
             }
             this.params = JSON.stringify(params);

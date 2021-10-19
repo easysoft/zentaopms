@@ -16,6 +16,7 @@ var app = new Vue({
         params: "",
         defaultHeader: {field: '', required: '', desc: ''},
         attr: [],
+        attrType: 'formData',
         api
     },
     created() {
@@ -25,6 +26,7 @@ var app = new Vue({
             if(api.params.header && api.params.header.length > 0) this.header = api.params.header
             if(api.params.query && api.params.query.length > 0) this.queryP = api.params.query
             if(api.params.params && api.params.params.length > 0) this.attr = api.params.params
+            if(api.params.paramsType) this.attrType = api.params.paramsType
             this.setParams();
         }
     },
@@ -46,11 +48,20 @@ var app = new Vue({
                 this.setParams()
             },
             deep: true
+        },
+        attrType: {
+            handler() {
+                this.setParams()
+            },
+            deep: true
         }
     },
     methods: {
         changeAttr(val) {
             this.body = val
+        },
+        changeType(val) {
+            this.attrType = val
         },
         changeRes(val) {
             val = this.filterParams(val)
@@ -63,6 +74,7 @@ var app = new Vue({
             const params = {
                 header: header,
                 params: body,
+                paramsType: this.attrType,
                 query: queryP,
             }
             this.params = JSON.stringify(params);
