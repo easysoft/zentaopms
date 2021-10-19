@@ -21,6 +21,7 @@ $lang->api->deleteLib        = '删除接口库';
 $lang->api->publish          = '发布接口';
 $lang->api->createLib        = '创建接口库';
 $lang->api->createApi        = '创建接口';
+$lang->api->createAB         = '创建';
 $lang->api->edit             = '编辑接口';
 $lang->api->delete           = '删除接口';
 $lang->api->position         = '位置';
@@ -56,6 +57,19 @@ $lang->api->confirmDeleteLib = "您确定删除该接口库吗？";
 $lang->api->filterStruct     = "使用数据结构填充";
 $lang->api->defaultVersion   = "当前版本";
 
+$lang->api->whiteList          = '白名单';
+$lang->api->aclList['open']    = '公开';
+$lang->api->aclList['private'] = '私有';
+$lang->api->aclList['custom']  = '自定义';
+$lang->api->group              = '分组';
+$lang->api->user               = '用户';
+
+$lang->api->noticeAcl = array(
+    'open'    => '所有人都可以访问',
+    'custom'  => '白名单的用户可以访问',
+    'private' => '只有创建者自己可以访问',
+);
+
 /* fields of struct */
 $lang->struct = new stdClass();
 
@@ -84,6 +98,7 @@ $lang->api->structAddedBy      = '创建人';
 $lang->api->structAddedDate    = '创建时间';
 $lang->api->name               = '接口库名称';
 $lang->api->baseUrl            = '请求基路径';
+$lang->api->baseUrlDesc        = '网址或者路径，比如 test.zentao.net 或者 /v1';
 $lang->api->desc               = '描述';
 $lang->api->control            = '访问控制';
 $lang->api->noLib              = '暂时没有接口库。';
@@ -166,11 +181,13 @@ $lang->api->paramsTypeOptions = array(
     'double'   => 'double',
     'decimal'  => 'decimal'
 );
+
 /* Api params */
 $lang->api->paramsTypeCustomOptions = array(
     'file' => 'file',
     'ref'  => 'ref',
 );
+
 $lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
 $lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
 $lang->api->requiredOptions      = array(0 => '否', 1 => '是');

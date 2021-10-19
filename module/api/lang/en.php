@@ -21,9 +21,11 @@ $lang->api->publish          = 'Publish';
 $lang->api->editPublish      = 'Edit Publish';
 $lang->api->createLib        = 'Create Api Library';
 $lang->api->createApi        = 'Create Api';
+$lang->api->createAB         = 'Create';
 $lang->api->edit             = 'Edit';
 $lang->api->delete           = 'Delete';
 $lang->api->position         = 'Positions';
+$lang->api->startLine        = "%s,%s";
 $lang->api->desc             = 'Description';
 $lang->api->debug            = 'Debug';
 $lang->api->submit           = 'Submit';
@@ -52,7 +54,22 @@ $lang->api->basicInfo        = 'Essential Information';
 $lang->api->apiDesc          = 'Interface Description';
 $lang->api->confirmDelete    = "Are you sure to delete this interface？";
 $lang->api->confirmDeleteLib = "Are you sure to delete this interface library？";
+$lang->api->filterStruct     = "use struct";
 $lang->api->defaultVersion   = "Current Version";
+
+/* Common access control lang. */
+$lang->api->whiteList          = 'White list';
+$lang->api->aclList['open']    = 'Open';
+$lang->api->aclList['private'] = 'Private';
+$lang->api->aclList['custom']  = 'Custom';
+$lang->api->group              = 'Group';
+$lang->api->user               = 'User';
+
+$lang->api->noticeAcl = array(
+    'open'    => 'Users who can access the api library which the library belongs can access it.',
+    'custom'  => 'Users in the whiltelist can access it.',
+    'private' => 'Only the one who created it can access it.',
+);
 
 /* fields of struct */
 $lang->struct = new stdClass();
@@ -82,6 +99,7 @@ $lang->api->structAddedBy      = 'Creator';
 $lang->api->structAddedDate    = 'Created Time';
 $lang->api->name               = 'Interface Library Name';
 $lang->api->baseUrl            = 'Base Url';
+$lang->api->baseUrlDesc        = 'Site or path. for example, api.zentao.com or /v1';
 $lang->api->desc               = 'Description';
 $lang->api->control            = 'Access Control';
 $lang->api->noLib              = 'There is no interface library at present。';
@@ -163,23 +181,12 @@ $lang->api->paramsTypeOptions = array(
     'double'   => 'double',
     'decimal'  => 'decimal'
 );
+
 /* Api params */
 $lang->api->paramsTypeCustomOptions = array(
     'file' => 'file',
     'ref'  => 'ref',
 );
-
-$lang->api->position  = 'Position';
-$lang->api->startLine = "%s,%s";
-$lang->api->desc      = 'Description';
-$lang->api->debug     = 'Debug';
-$lang->api->submit    = 'Submit';
-$lang->api->url       = 'Request URL';
-$lang->api->result    = 'Results';
-$lang->api->status    = 'Status';
-$lang->api->data      = 'Data';
-$lang->api->noParam   = 'No parameters required if GET Debug';
-$lang->api->post      = 'Refer to page list if POST Debug';
 
 $lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
 $lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
