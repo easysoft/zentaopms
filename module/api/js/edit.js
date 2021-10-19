@@ -14,9 +14,7 @@ var app = new Vue({
         body: "",
         response: "",
         params: "",
-        defaultHeader: [
-            {field: '', required: '', desc: ''}
-        ],
+        defaultHeader: {field: '', required: '', desc: ''},
         attr: [],
         api
     },
@@ -62,6 +60,7 @@ var app = new Vue({
             const header = this.filterParams(this.header)
             const body = this.filterParams(this.body)
             const queryP = this.filterParams(this.queryP)
+            console.log(header)
             const params = {
                 header: header,
                 params: body,
@@ -89,7 +88,7 @@ var app = new Vue({
         },
         add(data, key, t) {
             if(t == "header" || t == 'query') {
-                data.splice(key + 1, 0, this.defaultHeader)
+                data.splice(key + 1, 0, {...this.defaultHeader})
             }
         }
     }
