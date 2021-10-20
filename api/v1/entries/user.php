@@ -50,7 +50,8 @@ class userEntry extends Entry
         unset($profile->password);
 
         $info->profile = $this->format($profile, 'last:time,locked:time,birthday:date,join:date');
-        $info->profile->role = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
+        $info->profile->role  = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
+        $info->profile->admin = $this->lang->user->admin;
 
         if(!$fields) return $this->send(200, $info);
 
@@ -87,6 +88,7 @@ class userEntry extends Entry
                     break;
                 case 'task':
                     $info->task = array('total' => 0, 'tasks' => array());
+                    if(!common::hasPriv('my', 'task')) break;
 
                     $control = $this->loadController('my', 'task');
                     $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -95,12 +97,13 @@ class userEntry extends Entry
                     if($data->status == 'success')
                     {
                         $info->task['total'] = $data->data->pager->recTotal;
-                        $info->task['tasks'] = $data->data->tasks;
+                        $info->task['tasks'] = array_values((array)$data->data->tasks);
                     }
 
                     break;
                 case 'bug':
                     $info->bug = array('total' => 0, 'bugs' => array());
+                    if(!common::hasPriv('my', 'bug')) break;
 
                     $control = $this->loadController('my', 'bug');
                     $control->bug($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -109,53 +112,88 @@ class userEntry extends Entry
                     if($data->status == 'success')
                     {
                         $info->bug['total'] = $data->data->pager->recTotal;
-                        $info->bug['bugs']  = $data->data->bugs;
+                        $info->bug['bugs']  = array_values((array)$data->data->bugs);
                     }
 
                     break;
                 case 'todo':
                     $info->todo = array('total' => 0, 'todos' => array());
+                    if(!common::hasPriv('my', 'todo')) break;
 
                     $control = $this->loadController('my', 'todo');
-                    $control->todo($this->param('date', 'all'), '', 'all', 'date_desc', 0, 0, $this->param('limit', 10), 1);
+                    $control->todo($this->param('date', 'all'), '', 'all', 'date_desc', 0, 0, $this->param('limit', 5), 1);
                     $data = $this->getData();
 
                     if($data->status == 'success')
                     {
                         $info->todo['total'] = $data->data->pager->recTotal;
-                        $info->todo['todos'] = $data->data->todos;
+                        $info->todo['todos'] = array_values((array)$data->data->todos);
+                    }
+
+                    break;
+                case 'story':
+                    $info->story = array('total' => 0, 'stories' => array());
+                    if(!common::hasPriv('my', 'story')) break;
+
+                    $control = $this->loadController('my', 'story');
+                    $control->story($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $info->story['total']   = $data->data->pager->recTotal;
+                        $info->story['stories'] = array_values((array)$data->data->stories);
                     }
 
                     break;
                 case 'issue':
+                    $info->issue = array('total' => 0, 'issues' => array());
+                    if(!common::hasPriv('my', 'issue')) break;
+
                     if(!empty($this->config->maxVersion))
                     {
-                        $info->issue = array('total' => 0, 'issues' => array());
-
                         $control = $this->loadController('my', 'issue');
-                        $control->issue('createdBy', 'id_desc', 0, $this->param('limit', 10), 1);
+                        $control->issue('createdBy', 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
                         {
                             $info->issue['total']  = $data->data->pager->recTotal;
-                            $info->issue['issues'] = $data->data->issues;
+                            $info->issue['issues'] = array_values((array)$data->data->issues);
                         }
                     }
                     break;
                 case 'risk':
+                    $info->risk = array('total' => 0, 'risks' => array());
+                    if(!common::hasPriv('my', 'risk')) break;
+
                     if(!empty($this->config->maxVersion))
                     {
-                        $info->risk = array('total' => 0, 'risks' => array());
-
                         $control = $this->loadController('my', 'risk');
-                        $control->risk('createdBy', 'id_desc', 0, $this->param('limit', 10), 1);
+                        $control->risk('createdBy', 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
                         {
                             $info->risk['total'] = $data->data->pager->recTotal;
-                            $info->risk['risks'] = $data->data->risks;
+                            $info->risk['risks'] = array_values((array)$data->data->risks);
+                        }
+                    }
+                    break;
+                case 'meeting':
+                    $info->meeting = array('total' => 0, 'meetings' => array());
+                    if(!common::hasPriv('my', 'myMeeting')) break;
+
+                    if(!empty($this->config->maxVersion))
+                    {
+                        $control = $this->loadController('my', 'myMeeting');
+                        $control->myMeeting('futureMeeting', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $data = $this->getData();
+
+                        if($data->status == 'success')
+                        {
+                            $info->meeting['total']    = $data->data->pager->recTotal;
+                            $info->meeting['meetings'] = array_values((array)$data->data->meetings);
                         }
                     }
                     break;
@@ -166,13 +204,15 @@ class userEntry extends Entry
                     $info->contribute = $this->my->getContribute();
                     break;
                 case 'rights':
-                    $info->rights = array();
                     $inAdminGroup = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
                         ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group=t2.id')
                         ->where('t1.account')->eq($info->profile->account)
                         ->andWhere('t2.role')->eq('admin')
                         ->fetch();
-                    $info->rights['admin'] = (!empty($inAdminGroup) or $this->app->user->admin);
+
+                    $info->rights = array();
+                    $info->rights['admin']  = (!empty($inAdminGroup) or $this->app->user->admin);
+                    $info->rights['rights'] = $this->app->user->rights['rights'];
             }
         }
 

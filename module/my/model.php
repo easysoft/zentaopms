@@ -66,39 +66,61 @@ class myModel extends model
     public function getProducts()
     {
         $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-                ->where('t1.deleted')->eq(0)
-                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-                ->orderBy('t1.order_asc')
-                ->fetchAll('id');
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->orderBy('t1.order_asc')
+            ->fetchAll('id');
         $productKeys = array_keys($products);
 
-        $stories = $this->dao->select('product, sum(estimate) AS estimateCount')
-                ->from(TABLE_STORY)
-                ->where('deleted')->eq(0)
-                ->andWhere('product')->in($productKeys)
-                ->groupBy('product')
-                ->fetchPairs();
+        $storyGroups = $this->dao->select('id,product,status,stage,estimate')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productKeys)
+            ->groupBy('product')
+            ->fetchGroup('product', 'id');
+        $summaryStories = array();
+        foreach($storyGroups as $productID => $stories)
+        {
+            $summaryStory = new stdclass();
+            $summaryStory->total = count($stories);
+
+            $finishedTotal = 0;
+            $leftTotal     = 0;
+            $estimateCount = 0;
+            foreach($stories as $story)
+            {
+                $estimateCount += $story->estimate;
+                ($story->status == 'closed' or $story->stage == 'released' or $story->stage == 'closed') ? $finishedTotal ++ : $leftTotal ++;
+            }
+
+            $summaryStory->finishedTotal = $finishedTotal;
+            $summaryStory->leftTotal     = $leftTotal;
+            $summaryStory->estimateCount = $estimateCount;
+            $summaryStory->finishedRate  = $summaryStory->total == 0 ? 0 : ($finishedTotal / $summaryStory->total) * 100;
+            $summaryStories[$productID]  = $summaryStory;
+        }
+
         $plans = $this->dao->select('product, count(*) AS count')
-                ->from(TABLE_PRODUCTPLAN)
-                ->where('deleted')->eq(0)
-                ->andWhere('product')->in($productKeys)
-                ->andWhere('end')->gt(helper::now())
-                ->groupBy('product')
-                ->fetchPairs();
+            ->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productKeys)
+            ->andWhere('end')->gt(helper::now())
+            ->groupBy('product')
+            ->fetchPairs();
         $releases = $this->dao->select('product, count(*) AS count')
-                ->from(TABLE_RELEASE)
-                ->where('deleted')->eq(0)
-                ->andWhere('product')->in($productKeys)
-                ->groupBy('product')
-                ->fetchPairs();
+            ->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productKeys)
+            ->groupBy('product')
+            ->fetchPairs();
         $executions = $this->dao->select('t1.product,t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->in($productKeys)
-                ->andWhere('t2.type')->in('stage,sprint')
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy('t1.project')
-                ->fetchAll('product');
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productKeys)
+            ->andWhere('t2.type')->in('stage,sprint')
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('t1.project')
+            ->fetchAll('product');
         foreach($executions as $key => $execuData)
         {
             $execution = $this->loadModel('execution')->getById($execuData->id);
@@ -112,7 +134,11 @@ class myModel extends model
             $product->plans      = isset($plans[$product->id]) ? $plans[$product->id] : 0;
             $product->releases   = isset($releases[$product->id]) ? $releases[$product->id] : 0;
             if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
-            $product->storyEstimateCount = isset($stories[$product->id]) ? $stories[$product->id] : 0;
+            $product->storyEstimateCount = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->estimateCount : 0;
+            $product->storyTotal         = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->total : 0;
+            $product->storyFinishedTotal = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->finishedTotal : 0;
+            $product->storyLeftTotal     = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->leftTotal : 0;
+            $product->storyFinishedRate  = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->finishedRate : 0;
             if($product->status != 'closed') $unclosedCount ++;
             if($product->status == 'closed') unset($products[$key]);
         }
@@ -137,22 +163,37 @@ class myModel extends model
     public function getDoingProjects()
     {
         $data = new stdClass();
-        $doingProjects = array();
-        $projects      = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
+        $doingProjects = $this->loadModel('project')->getOverviewList('byStatus', 'doing', 'id_desc');
         $maxCount      = 5;
-        foreach($projects as $key => $project)
+        $myProjects    = array();
+        foreach($doingProjects as $key => $project)
         {
-            if($project->status == 'doing')
+            if($project->PM == $this->app->user->account)
             {
-                $workhour = $this->project->getWorkhour($project->id);
-                $projects[$key]->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
-                $doingProjects[] = $projects[$key];
-                if(count($doingProjects) >= $maxCount) break;
+                $myProjects[$key] = $project;
+                unset($doingProjects[$key]);
+            }
+            if(count($myProjects) >= $maxCount) break;
+        }
+        if(count($myProjects) < $maxCount and !empty($doingProjects))
+        {
+            foreach($doingProjects as $key => $project)
+            {
+                $myProjects[$key] = $project;
+                if(count($myProjects) >= $maxCount) break;
             }
         }
 
-        $data->doingCount = count($doingProjects);
-        $data->projects   = $doingProjects;
+        foreach($myProjects as $key => $project)
+        {
+            $workhour = $this->project->getWorkhour($project->id);
+            $project->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
+            $project->delay    = (helper::diffDate(helper::today(), $project->end) > 0);
+            $project->link     = common::hasPriv('project', 'view') ? helper::createLink('project', 'view', "projectID={$project->id}") : '';
+        }
+
+        $data->doingCount = count($myProjects);
+        $data->projects   = array_values($myProjects);
         return $data;
     }
 
@@ -164,20 +205,36 @@ class myModel extends model
      */
     public function getOverview()
     {
-        $allConsumed      = 0;
-        $thisYearConsumed = 0;
+        $inAdminGroup = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
+            ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group=t2.id')
+            ->where('t1.account')->eq($this->app->user->account)
+            ->andWhere('t2.role')->eq('admin')
+            ->fetch();
 
-        $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
-        $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');
-        foreach($projects as $project)
+        $overview = new stdclass();
+        if(!empty($inAdminGroup) or $this->app->user->admin)
         {
-            $allConsumed      += $project->consumed;
-            $thisYearConsumed += $projectsConsumed[$project->id]->totalConsumed;
-        }
+            $allConsumed      = 0;
+            $thisYearConsumed = 0;
 
-        $overview->projectTotal     = count($projects);
-        $overview->allConsumed      = $allConsumed;
-        $overview->thisYearConsumed = $thisYearConsumed;
+            $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
+            $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');
+            foreach($projects as $project)
+            {
+                $allConsumed      += $project->consumed;
+                $thisYearConsumed += $projectsConsumed[$project->id]->totalConsumed;
+            }
+
+            $overview->projectTotal     = count($projects);
+            $overview->allConsumed      = $allConsumed;
+            $overview->thisYearConsumed = $thisYearConsumed;
+        }
+        else
+        {
+            $overview->myTaskTotal  = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+            $overview->myStoryTotal = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
+            $overview->myBugTotal   = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+        }
 
         return $overview;
     }
@@ -223,7 +280,10 @@ class myModel extends model
      */
     public function getActions()
     {
-        $actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc');
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 50, 1);
+
+        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
         $users   = $this->loadModel('user')->getList();
 
         $simplifyUsers = array();
@@ -237,8 +297,14 @@ class myModel extends model
             $simplifyUsers[$user->account] = $simplifyUser;
         }
 
+        $i = 1;
+        $maxCount = 5;
+        $filterActions = array();
         foreach($actions as $key => $action)
         {
+            if($i > $maxCount) break;
+            if($action->objectType == 'user') continue;
+
             $simplifyUser = zget($simplifyUsers, $action->actor, '');
             $actionActor  = $simplifyUser;
             if(empty($simplifyUser))
@@ -249,9 +315,12 @@ class myModel extends model
                 $actionActor->realname = $action->actor;
                 $actionActor->avatar   = '';
             }
-            $actions[$key]->actor = $actionActor;
+
+            $action->actor = $actionActor;
+            $filterActions[] = $action;
+            $i++;
         }
 
-        return $actions;
+        return $filterActions;
     }
 }
