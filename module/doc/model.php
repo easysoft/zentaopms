@@ -78,8 +78,8 @@ class docModel extends model
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
-                ->beginIF($type and $type != 'api')->andWhere('type')->eq($type)->fi()
-                ->andWhere('type')->ne('api')
+                ->beginIF($type)->andWhere('type')->eq($type)->fi()
+                ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->orderBy('`order`, id desc')->query();
         }
 

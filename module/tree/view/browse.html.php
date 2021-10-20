@@ -32,6 +32,19 @@ $childTitle = $lang->tree->child;
 if(strpos($viewType, 'feedback') !== false) $childTitle = $lang->tree->subCategory;
 if(strpos($viewType, 'doc') !== false or $viewType == 'api') $childTitle = $lang->doc->childType;
 if($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') $childTitle = '';
+
+$editTitle   = $lang->tree->edit;
+$deleteTitle = $lang->tree->delete;
+if($viewType == 'feedback')
+{
+    $editTitle   = $lang->tree->editCategory;
+    $deleteTitle = $lang->tree->delCategory;
+}
+if($viewType == 'doc' or $viewType == 'api')
+{
+    $editTitle   = $lang->doc->editType;
+    $deleteTitle = $lang->doc->deleteType;
+}
 ?>
 <!--div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -224,13 +237,13 @@ $(function()
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=$viewType"); ?>',
-                title: '<?php echo $viewType == 'doc' ? $lang->doc->editType : ($viewType == 'feedback' ? $lang->tree->editCategory : $lang->tree->edit);?>',
+                title: '<?php echo $editTitle;?>',
                 template: '<a><i class="icon-edit"></i></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
-                title: '<?php echo $viewType == 'doc' ? $lang->doc->deleteType : ($viewType == 'feedback' ? $lang->tree->delCategory : $lang->tree->delete)?>',
+                title: '<?php echo $deleteTitle;?>',
                 template: '<a><i class="icon-trash"></i></a>'
             },
             subModules:
