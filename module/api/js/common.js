@@ -302,11 +302,17 @@ try {
             },
             current: {
                 handler(val) {
+                    // console.log(val)
                     /* handle level field data. */
                     const attr = [];
                     val.forEach((item) => {
                         if (item.sub == 1) {
-                            attr.push(this.handleParams(item))
+                            const newItem = {
+                                ...item,
+                                children: []
+                            }
+                            this.handleParams(val, newItem);
+                            attr.push(newItem)
                         }
                     })
                     this.$emit('change', attr)
@@ -319,17 +325,25 @@ try {
             if (this.attr && this.attr.length > 0) {
                 const attr = [];
                 this.decodeParams(this.attr, attr)
-                this.current = attr
-                this.params[this.structType] = this.current;
+                const current = [];
+                attr.forEach(item => {
+                    current.push({
+                        ...item,
+                        children: [],
+                    })
+                })
+                this.current = current.splice(0);
+                this.params[this.structType] = [...this.current];
             }
         },
         methods: {
             genKey() {
-                this.fieldKey++;
-                if (this.current.findIndex(item => item.key == this.fieldKey) != -1) {
-                    this.genKey();
+                let key = Date.now().toString(36)
+                key += Math.random().toString(36).substr(2)
+                if (this.current.findIndex(item => item.key == key) != -1) {
+                    return this.genKey();
                 }
-                return this.fieldKey
+                return key
             },
             getInitField() {
                 const data = {
@@ -345,25 +359,27 @@ try {
                 data.key = this.genKey()
                 return data
             },
-            handleParams(field) {
-                this.current.forEach(item => {
+            handleParams(current, field) {
+                current.forEach(item => {
                     if (!field.children) field.children = []
                     if (item.parentKey == field.key && field.children.findIndex(i => i.key == item.key) == -1) {
-                        this.handleParams(item)
-                        field.children.push(item)
+                        const newField = {
+                            ...item,
+                            children: [],
+                        }
+                        this.handleParams(current, newField)
+                        field.children.push({...newField})
                     }
                 })
-                return field
             },
             decodeParams(data, attr) {
                 if (!data) return;
                 data.forEach(item => {
-                    const tmp = {
-                        ...item
-                    }
-                    delete tmp.children
-                    attr.push(tmp)
-                    if (item.children) {
+                    attr.push({
+                        ...item,
+                        children: [],
+                    })
+                    if (item.children && item.children.length> 0) {
                         this.decodeParams(item.children, attr)
                     }
                 })
@@ -375,6 +391,7 @@ try {
                     sub = s.sub + 1
                 }
                 fieldKey = s.key
+                // console.log('添加子字段', JSON.stringify(s), fieldKey)
                 const field = {
                     ...this.getInitField(),
                     parentKey: fieldKey,
@@ -385,7 +402,7 @@ try {
             add(data, sub) {
                 const field = this.getInitField();
                 field.sub = sub;
-                data.push(field);
+                data.push({...field});
             },
             del(data, index) {
                 if(data.length <= 1) return;
@@ -398,7 +415,6 @@ try {
                     ];
                 }
                 this.current = this.params[this.structType];
-                console.log(this.current)
             },
             getPadding(sub) {
                 var padding = 0;
