@@ -69,7 +69,9 @@ class docModel extends model
         if($type == 'all' or $type == 'includeDeleted')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
-                ->beginIF($type == 'all')->where('deleted')->eq(0)->fi()
+                ->where(1)
+                ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
+                ->andWhere('type')->ne('api')
                 ->orderBy('id_desc')
                 ->query();
         }
@@ -77,7 +79,8 @@ class docModel extends model
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
-                ->beginIF($type)->andWhere('type')->eq($type)->fi()
+                ->beginIF($type and $type != 'api')->andWhere('type')->eq($type)->fi()
+                ->andWhere('type')->ne('api')
                 ->orderBy('`order`, id desc')->query();
         }
 
