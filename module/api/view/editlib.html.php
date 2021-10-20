@@ -18,7 +18,7 @@
     <div id='mainContent' class='main-content'>
       <div class='center-block'>
         <div class='main-header'>
-          <h2><?php echo $lang->api->createLib;?></h2>
+          <h2><?php echo $lang->api->editLib;?></h2>
         </div>
         <form class='load-indicator main-form form-ajax' id="apiForm" method='post' enctype='multipart/form-data'>
           <table class='table table-form'>
