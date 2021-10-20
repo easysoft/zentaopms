@@ -50,4 +50,10 @@
     </form>
   </div>
 </div>
+<script>
+parent.$('#triggerModal .modal-content .modal-header .close').click(function()
+{
+    parent.location.reload();
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,6 +1,5 @@
 $(document).ready(function()
 {
-
     /* Update doc content silently on switch doc version, story #40503 */
     $(document).on('click', '.api-version-menu a, #mainActions .container a', function(event)
     {
