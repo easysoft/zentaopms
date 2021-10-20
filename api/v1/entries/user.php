@@ -185,10 +185,10 @@ class userEntry extends Entry
         $oldUser = $this->loadModel('user')->getByID($userID, 'id');
 
         /* Set $_POST variables. */
-        $fields = 'account,dept,realname,email,commiter,gender';
+        $fields = 'dept,realname,email,commiter,gender';
         $this->batchSetPost($fields, $oldUser);
 
-        if(!in_array($this->request('gender', 'f'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
+        if($this->request('gender') and !in_array($this->request('gender'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
 
         $this->setPost('password1', $this->request('password', ''));
         $this->setPost('password2', $this->request('password', ''));
