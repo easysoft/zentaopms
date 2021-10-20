@@ -497,7 +497,7 @@ class api extends control
             if(empty($apiID)) return $this->sendError(dao::getError());
 
             $this->action->create('api', $apiID, 'Created');
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=0&moduleID=0&apiID=$apiID")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$params->lib}&moduleID=0&apiID=$apiID")));
         }
 
         $libs = $this->doc->getLibs('api', '', $libID);
