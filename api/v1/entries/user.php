@@ -165,6 +165,14 @@ class userEntry extends Entry
                 case 'contribute':
                     $info->contribute = $this->my->getContribute();
                     break;
+                case 'rights':
+                    $info->rights = array();
+                    $inAdminGroup = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
+                        ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group=t2.id')
+                        ->where('t1.account')->eq($info->profile->account)
+                        ->andWhere('t2.role')->eq('admin')
+                        ->fetch();
+                    $info->rights['admin'] = (!empty($inAdminGroup) or $this->app->user->admin);
             }
         }
 
