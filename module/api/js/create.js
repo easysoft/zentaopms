@@ -41,6 +41,7 @@ var app = new Vue({
     },
     methods: {
         changeAttr(val) {
+            // console.log('更新之前', JSON.stringify(val))
             this.body = val;
         },
         changeType(val) {
