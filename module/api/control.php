@@ -33,6 +33,15 @@ class api extends control
      */
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0)
     {
+        /* Get all api doc libraries. */
+        $libs = $this->doc->getApiLibs();
+
+        /* Generate bread crumbs dropMenu. */
+        if($libs)
+        {
+            if($libID == 0) $libID = key($libs);
+            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
+        }
 
         /* Get an api doc. */
         if($apiID > 0)
@@ -58,15 +67,6 @@ class api extends control
             $this->view->apiList = $apiList;
         }
 
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs();
-
-        /* Generate bread crumbs dropMenu. */
-        if($libs)
-        {
-            if($libID == 0) $libID = key($libs);
-            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
-        }
         $this->setMenu($libID);
 
         $this->view->isRelease  = $release > 0;
