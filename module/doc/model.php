@@ -2205,7 +2205,6 @@ EOT;
         $moduleDocs = array();
         foreach($docs as $doc)
         {
-            //if(!$this->checkPrivDoc($doc)) continue;
             if(!isset($moduleDocs[$doc->module])) $moduleDocs[$doc->module] = array();
             $moduleDocs[$doc->module][] = $doc;
         }
@@ -2243,7 +2242,7 @@ EOT;
             {
                 $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . '>';
 
-                $treeMenu[0] .= html::a(inlink('index', "libID=0&moduelID=0&apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                $treeMenu[0] .= html::a(inlink('index', "libID=$rootID&moduelID=0&apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
 
                 $treeMenu[0] .= '</li>';
             }
