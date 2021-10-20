@@ -671,7 +671,7 @@ class api extends control
         else
         {
             /* generate create api doc lib button */
-            if(common::hasPriv('api', 'createDoc'))
+            if(common::hasPriv('api', 'createLib'))
             {
                 $menu .= html::a(helper::createLink('api', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->api->createLib, '', 'class="btn btn-secondary iframe"');
             }
