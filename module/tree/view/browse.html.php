@@ -21,9 +21,18 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
 <?php js::set('viewType', $viewType);?>
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
-<?php $name = $viewType == 'line' ? $lang->tree->line : (($viewType == 'doc' or $viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') ? $lang->tree->cate : ($viewType == 'api' ? $lang->tree->dir : $lang->tree->name));?>
-<?php $name = $viewType == 'doc' ? $lang->doc->catalogName : $name;?>
-<?php $title = ($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') ? '' : ((strpos($viewType, 'doc') !== false or $viewType == 'api') ? $lang->doc->childType : ((strpos($viewType, 'feedback') !== false) ? $lang->tree->subCategory : $lang->tree->child));?>
+<?php
+$name = $lang->tree->name;
+if($viewType == 'line') $name = $lang->tree->line;
+if($viewType == 'api')  $name = $lang->tree->dir;
+if($viewType == 'doc')  $name = $lang->doc->catalogName;
+if($viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->dir;
+
+$childTitle = $lang->tree->child;
+if(strpos($viewType, 'feedback') !== false) $childTitle = $lang->tree->subCategory;
+if(strpos($viewType, 'doc') !== false or $viewType == 'api') $childTitle = $lang->doc->childType;
+if($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') $childTitle = '';
+?>
 <!--div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
@@ -70,7 +79,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
   <div class="side-col col-4">
     <div class="panel">
       <div class="panel-heading">
-        <div class="panel-title"><?php echo $title;?></div>
+        <div class="panel-title"><?php echo $childTitle;?></div>
       </div>
       <div class="panel-body">
         <ul id='modulesTree' data-name='tree-<?php echo $viewType;?>'></ul>
@@ -227,7 +236,7 @@ $(function()
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
-                title: '<?php echo $title;?>',
+                title: '<?php echo $childTitle;?>',
                 template: '<a><?php echo $viewType == 'line' ? '' : '<i class="icon-split"></i>';?></a>',
             }
         },
