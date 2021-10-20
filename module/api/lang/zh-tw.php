@@ -16,9 +16,10 @@ $lang->api->sql      = 'SQL查詢介面';
 
 $lang->api->index            = '介面庫主頁';
 $lang->api->editLib          = '編輯介面庫';
-$lang->api->editPublish      = '版本管理';
+$lang->api->releases         = '版本管理';
+$lang->api->deleteRelease    = '刪除版本';
 $lang->api->deleteLib        = '刪除介面庫';
-$lang->api->publish          = '發佈介面';
+$lang->api->createRelease    = '發佈介面';
 $lang->api->createLib        = '創建介面庫';
 $lang->api->createApi        = '創建介面';
 $lang->api->createAB         = '創建';
