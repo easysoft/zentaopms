@@ -84,34 +84,73 @@ function r($result)
  * @access public
  * @return void
  */
-function p($key = '', $delimiter = ',')
+function p($keys = '', $delimiter = ',')
 {
     global $_result;
-    echo ">> ";
-    $result = "";
 
-    if(!is_array($_result) and !is_object($_result))
+    /* Print $_result. */
+    if(!$keys or !is_array($_result) and !is_object($_result)) return print(">> " . (string) $_result . "\n");
+
+    $object = '';
+    $index  = -1;
+    $pos    = strpos($keys, ':');
+    if($pos)
     {
-        $result = (string) $_result;
+        $arrKey = substr($keys, 0, $pos);
+        $keys   = substr($keys, $pos + 1);
+
+        $pos = strpos($arrKey, '[');
+        if($pos)
+        {
+            $object = substr($arrKey, 0, $pos);
+            $index  = trim(substr($arrKey, $pos + 1), ']');
+        }
+        else
+        {
+            $index = $arrKey;
+        }
     }
-    else
+    $keys = explode($delimiter, $keys);
+
+    $value = $_result;
+    if($object)
     {
-        $keyList   = explode(',', $key);
-        $dimension = 1;
-        foreach($_result as $value)
+        if(is_array($value))
         {
-            if(is_array($value) or is_object($value)) $dimension = 2;
+            $value = $value[$object];
         }
-
-        if($dimension == 1) $_result = array($_result);
-        foreach($_result as $object)
+        else if(is_object($value))
         {
-            foreach($keyList as $key) $result .= zget($object, $key, '') . $delimiter;
+            $value = $value->$object;
         }
-        $result = trim($result, $delimiter);
+        else
+        {
+            return print(">> Error: No object name '$object'.\n");
+        }
     }
 
-    echo $result . "\n";
+    if($index != -1)
+    {
+        if(is_array($value))
+        {
+            if(!isset($value[$index])) return print(">> Error: Cannot get index $index.\n");
+            $value = $value[$index];
+        }
+        else if(is_object($value))
+        {
+            if(!isset($value->$index)) return print(">> Error: Cannot get index $index.\n");
+            $value = $value->$index;
+        }
+        else
+        {
+            return print(">> Error: Not array, cannot get index $index.\n");
+        }
+    }
+
+    $values = array();
+    foreach($keys as $key) $values[] = zget($value, $key, '');
+
+    echo ">> " . implode($delimiter, $values) . "\n";
 
     return true;
 }
