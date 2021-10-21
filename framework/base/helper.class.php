@@ -504,7 +504,12 @@ class baseHelper
      */
     static public function diffDate($date1, $date2)
     {
-        return round((strtotime($date1) - strtotime($date2)) / 86400, 0);
+        /* Get the timestamp in the current operating system. */
+        $date1 = new DateTime($date1);
+        $date2 = new DateTime($date2);
+        $date1 = date_format($date1, "U");
+        $date2 = date_format($date2, "U");
+        return round(($date1 - $date2) / 86400, 0);
     }
 
     /**
