@@ -63,8 +63,9 @@ $routes['/projects/:projectID/issues'] = 'issues';
 $routes['/issues']                     = 'issues';
 $routes['/issues/:issueID']            = 'issue';
 
-$routes['/todos']     = 'todos';
-$routes['/todos/:id'] = 'todo';
+$routes['/todos']            = 'todos';
+$routes['/todos/:id']        = 'todo';
+$routes['/todos/:id/finish'] = 'todoFinish';
 
 $routes['/projects/:projectID/builds'] = 'builds';
 $routes['/builds']                     = 'builds';

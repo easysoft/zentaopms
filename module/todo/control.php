@@ -476,8 +476,10 @@ class todo extends control
             if($todo->type == 'task')  $app = 'execution';
             if($todo->type == 'story') $app = 'product';
             $cancelURL   = $this->server->HTTP_REFERER;
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => sprintf($this->lang->todo->$confirmNote, $todo->idvalue), 'locate' => $confirmURL));
             die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
         }
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody())die(js::reload('parent.parent'));
         die(js::reload('parent'));
     }
