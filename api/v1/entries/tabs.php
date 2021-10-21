@@ -40,6 +40,6 @@ class tabsEntry extends baseEntry
             }
         }
 
-        $this->send(200, array('menus' => $menus));
+        $this->send(200, array('tabs' => $menus));
     }
 }

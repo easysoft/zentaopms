@@ -51,7 +51,7 @@ class userEntry extends Entry
 
         $info->profile = $this->format($profile, 'last:time,locked:time,birthday:date,join:date');
         $info->profile->role  = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
-        $info->profile->admin = $this->lang->user->admin;
+        $info->profile->admin = strpos($this->app->company->admins, ",{$profile->account},") !== false;
 
         if(!$fields) return $this->send(200, $info);
 
@@ -81,6 +81,20 @@ class userEntry extends Entry
                     {
                         $info->project['total']    = $projects->doingCount;
                         $info->project['projects'] = $projects->projects;
+                    }
+                    break;
+                case 'execution':
+                    $info->execution = array('total' => 0, 'executions' => array());
+                    if(!common::hasPriv('my', 'execution')) break;
+
+                    $control = $this->loadController('my', 'execution');
+                    $control->execution($this->param('type', 'undone'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $info->execution['total'] = $data->data->pager->recTotal;
+                        $info->execution['executions'] = array_values((array)$data->data->executions);
                     }
                     break;
                 case 'actions':

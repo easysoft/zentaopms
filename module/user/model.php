@@ -1082,9 +1082,9 @@ class userModel extends model
 
         /* Get all tasks and compute totalConsumed, totalLeft, totalWait, progress according to them. */
         $hours       = array();
-        $emptyHour   = array('totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0, 'waitTasks' => 0, 'assignedToMeTasks' => 0);
+        $emptyHour   = array('totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0, 'waitTasks' => 0, 'assignedToMeTasks' => 0, 'doneTasks' => 0, 'taskTotal' => 0);
         $searchField = $type == 'project' ? 'project' : 'execution';
-        $tasks       = $this->dao->select('id, project, execution, consumed, `left`, status, assignedTo')
+        $tasks       = $this->dao->select('id, project, execution, consumed, `left`, status, assignedTo,finishedBy')
             ->from(TABLE_TASK)
             ->where('parent')->lt(1)
             ->andWhere($searchField)->in($objectIdList)->fi()
@@ -1095,9 +1095,11 @@ class userModel extends model
         foreach($tasks as $objectID => $objectTasks)
         {
             $hour = (object)$emptyHour;
+            $hour->taskTotal = count($objectTasks);
             foreach($objectTasks as $task)
             {
                 if($task->status == 'wait') $hour->waitTasks += 1;
+                if($task->finishedBy != '') $hour->doneTasks += 1;
                 if($task->status != 'cancel') $hour->totalConsumed += $task->consumed;
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
                 if($task->assignedTo == $account) $hour->assignedToMeTasks += 1;
@@ -1128,6 +1130,9 @@ class userModel extends model
             /* Process the hours. */
             $object->progress          = isset($hours[$object->id]) ? $hours[$object->id]->progress : 0;
             $object->waitTasks         = isset($hours[$object->id]) ? $hours[$object->id]->waitTasks : 0;
+            $object->doneTasks         = isset($hours[$object->id]) ? $hours[$object->id]->doneTasks : 0;
+            $object->taskTotal         = isset($hours[$object->id]) ? $hours[$object->id]->taskTotal : 0;
+            $object->totalConsumed     = isset($hours[$object->id]) ? $hours[$object->id]->totalConsumed : 0;
             $object->assignedToMeTasks = isset($hours[$object->id]) ? $hours[$object->id]->assignedToMeTasks : 0;
 
             if($object->project)
