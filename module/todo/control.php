@@ -312,6 +312,7 @@ class todo extends control
     {
         $todo = $this->todo->getById($todoID);
         if($todo->status == 'done' or $todo->status == 'closed') $this->todo->activate($todoID);
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) die(js::reload('parent.parent'));
         die(js::reload('parent'));
     }
