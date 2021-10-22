@@ -28,3 +28,4 @@ $builder->blockRandom    = array('rows' => 120, 'data' => array('block', 'blockr
 $builder->projectProduct = array('rows' => 21,  'data' => array('projectproduct'));
 
 $builder->case = array('rows' => 10000, 'data' => array('case'));
+$builder->bug  = array('rows' => 100, 'data' => array('bug'));
