@@ -1825,27 +1825,44 @@ class execution extends control
      * Kanban.
      *
      * @param  int    $executionID
-     * @param  string $objectType
-     * @param  string $groupBy
+     * @param  string $orderBy
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function kanban($executionID, $objectType = 'all', $groupBy = 'id_desc')
+    public function kanban($executionID, $orderBy = 'all', $type = 'id_desc')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
 
-        /* Compatibility IE8*/
+        /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $lanes = $this->loadModel('kanban')->getLanesByExecution($executionID, $objectType);
+        $kanbanLanes   = $this->loadModel('kanban')->getLanesByExecution($executionID);
+        $kanbanColumns = $this->kanban->getColumnsByLane(array_keys($kanbanLanes));
+        $kanban = array();
+
+        foreach($kanbanLanes as $laneID => $lane)
+        {
+            $kanban[$lane->type]          = $lane;
+            $kanban[$lane->type]->columns = array();
+            foreach($kanbanColumns as $columnID => $column)
+            {
+                if($column->lane == $laneID)
+                {
+                    $kanban[$lane->type]->columns[$columnID] = $column;
+                    unset($kanbanColumns[$columnID]);
+                }
+            }
+        }
+
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
         $tasks     = $this->execution->getKanbanTasks($executionID, "id");
         $bugs      = $this->loadModel('bug')->getExecutionBugs($executionID);
-        $stories   = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
+        $stories   = $this->loadModel('story')->getExecutionStories($executionID);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);

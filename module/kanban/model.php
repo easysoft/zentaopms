@@ -31,6 +31,25 @@ class kanbanModel extends model
     }
 
     /**
+     * Get Kanban columns by lane ID.
+     *
+     * @param  int|array $lanes
+     * @param  string    $type
+     * @access public
+     * @return void
+     */
+    public function getColumnsByLane($lanes, $type = 'all')
+    {
+        if(empty($lanes)) return array();
+        return $this->dao->select('t2.id as id, t2.*')->from(TABLE_KANBANLANE)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.id=t2.lane')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t2.lane')->in($lanes)
+            ->beginIF($type !== 'all')->andWhere('t1.type')->eq($type)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * Add execution Kanban lanes.
      *
      * @param  int|array $executionIdList
