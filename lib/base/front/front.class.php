@@ -172,7 +172,6 @@ class baseHTML
         $selectedItems = ",$selectedItems,";
         foreach($options as $key => $value)
         {
-            $key      = str_replace('item', '', $key);
             $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
             $string  .= "<option value='$key'$selected>$value</option>\n";
         }
@@ -209,7 +208,6 @@ class baseHTML
             $string .= "<optgroup label='$groupName'>\n";
             foreach($options as $key => $value)
             {
-                $key      = str_replace('item', '', $key);
                 $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
                 $string  .= "<option value='$key'$selected>$value</option>\n";
             }
@@ -280,7 +278,6 @@ class baseHTML
 
         foreach($options as $key => $value)
         {
-            $key     = str_replace('item', '', $key);
             if($isBlock) $string .= "<div class='checkbox'><label>";
             else $string .= "<label class='checkbox-inline'>";
             $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
