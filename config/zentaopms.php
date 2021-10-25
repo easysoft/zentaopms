@@ -223,13 +223,13 @@ define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 
-define('TABLE_REPO',        '`' . $config->db->prefix . 'repo`');
-define('TABLE_RELATION',    '`' . $config->db->prefix . 'relation`');
-define('TABLE_REPOHISTORY', '`' . $config->db->prefix . 'repohistory`');
-define('TABLE_REPOFILES',   '`' . $config->db->prefix . 'repofiles`');
-define('TABLE_REPOBRANCH',  '`' . $config->db->prefix . 'repobranch`');
-define('TABLE_KANBANLANE',  '`' . $config->db->prefix . 'kanbanlane`');
-define('TABLE_KANBANCOLUMN',  '`' . $config->db->prefix . 'kanbancolumn`');
+define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
+define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
+define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
+define('TABLE_REPOFILES',    '`' . $config->db->prefix . 'repofiles`');
+define('TABLE_REPOBRANCH',   '`' . $config->db->prefix . 'repobranch`');
+define('TABLE_KANBANLANE',   '`' . $config->db->prefix . 'kanbanlane`');
+define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
 if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 

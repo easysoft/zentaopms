@@ -36,16 +36,16 @@ class kanbanModel extends model
      * @param  int|array $lanes
      * @param  string    $type
      * @access public
-     * @return void
+     * @return array
      */
-    public function getColumnsByLane($lanes, $type = 'all')
+    public function getColumnsByLane($lanes, $type)
     {
         if(empty($lanes)) return array();
         return $this->dao->select('t2.id as id, t2.*')->from(TABLE_KANBANLANE)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.id=t2.lane')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t2.lane')->in($lanes)
-            ->beginIF($type !== 'all')->andWhere('t1.type')->eq($type)->fi()
+            ->andWhere('t1.type')->eq($type)->fi()
             ->fetchAll('id');
     }
 
@@ -85,17 +85,20 @@ class kanbanModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->ne('-1')
             ->andWhere('t2.project')->in($executionIdList)
+            ->orderBy('id_asc')
             ->fetchGroup('project', 'id');
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->andWhere('execution')->in($executionIdList)
+            ->orderBy('id_asc')
             ->fetchGroup('execution', 'id');
 
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('parent')->ne('-1')
             ->andWhere('execution')->in($executionIdList)
+            ->orderBy('id_asc')
             ->fetchGroup('execution', 'id');
 
         foreach($executionIdList as $executionID)

@@ -1825,12 +1825,12 @@ class execution extends control
      * Kanban.
      *
      * @param  int    $executionID
-     * @param  string $orderBy
      * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function kanban($executionID, $orderBy = 'all', $type = 'id_desc')
+    public function kanban($executionID, $type = 'story', $orderBy = 'order_asc')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -1840,14 +1840,14 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanLanes   = $this->loadModel('kanban')->getLanesByExecution($executionID);
-        $kanbanColumns = $this->kanban->getColumnsByLane(array_keys($kanbanLanes));
-        $kanban = array();
+        $kanbanLanes = $this->loadModel('kanban')->getLanesByExecution($executionID);
 
+        $kanban = array();
         foreach($kanbanLanes as $laneID => $lane)
         {
             $kanban[$lane->type]          = $lane;
             $kanban[$lane->type]->columns = array();
+            $kanbanColumns = $this->kanban->getColumnsByLane(array_keys($kanbanLanes), $executionID, $lane->type);
             foreach($kanbanColumns as $columnID => $column)
             {
                 if($column->lane == $laneID)
