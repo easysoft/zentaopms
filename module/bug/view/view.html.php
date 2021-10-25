@@ -300,7 +300,11 @@
                     if($bug->openedBuild)
                     {
                         $openedBuilds = explode(',', $bug->openedBuild);
-                        foreach($openedBuilds as $openedBuild) isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
+                        foreach($openedBuilds as $openedBuild)
+                        {
+                            if(!$openedBuild) continue;
+                            isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
+                        }
                     }
                     else
                     {
