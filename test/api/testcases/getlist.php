@@ -18,14 +18,17 @@ pid=1
 global $token;
 $header = array('Token' => $token->token);
 
-$existProductCases = $rest->get('/products/2/testcases?page=1&limit=100&order=id_asc', $header);
-$noProductCases    = $rest->get('/products/1000/testcases?page=1&limit=10&order=id_asc', $header);
+$existProductCases    = $rest->get('/products/2/testcases?page=1&limit=100&order=id_asc', $header);
+$notExistProductCases = $rest->get('/products/1000/testcases?page=1&limit=10&order=id_asc', $header);
+$noProductCases       = $rest->get('/products/0/testcases', $header);
 
-r($existProductCases->status_code) && p() && e('200'); // 使用正确产品id查询用例列表的状态码
-r($noProductCases->status_code)    && p() && e('200'); // 使用不存在的产品id查询用例列表的状态码
+r($existProductCases->status_code)    && p() && e('200'); // 使用正确产品id查询用例列表的状态码
+r($notExistProductCases->status_code) && p() && e('200'); // 使用不存在的产品id查询用例列表的状态码
+
+r($noProductCases) && c(400) && p('error') && e('"Need product or project or execution id.'); // 使用产品id为0查询用例列表的状态码
 
 $existCases = $existProductCases->body->testcases;
-$emptyCases = $noProductCases->body->testcases;
+$emptyCases = $notExistProductCases->body->testcases;
 
 r(count($existCases)) && p() && e('50'); // 使用正确产品id获取用例列表的数量
 r(count($emptyCases)) && p() && e('0');  // 使用不存在的产品id获取用例列表的数量

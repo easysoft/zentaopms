@@ -10,8 +10,6 @@ fields:
     range:
   - field: type
     range: project
-  - field: product
-    range: single
   - field: lifetime
     range:
   - field: budget
