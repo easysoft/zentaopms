@@ -1825,26 +1825,27 @@ class execution extends control
      * Kanban.
      *
      * @param  int    $executionID
-     * @param  string $type
-     * @param  string $orderBy
+     * @param  string $objectType
+     * @param  string $groupBy
      * @access public
      * @return void
      */
-    public function kanban($executionID, $type = 'story', $orderBy = 'order_asc')
+    public function kanban($executionID, $objectType = 'all', $groupBy = 'id_desc')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',  $uri, 'execution');
-        $this->app->session->set('bugList',   $uri, 'qa');
+        $this->app->session->set('taskList', $uri, 'execution');
+        $this->app->session->set('bugList',  $uri, 'qa');
 
         /* Compatibility IE8*/
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
+        $lanes = $this->loadModel('kanban')->getLanesByExecution($executionID, $objectType);
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
-        $tasks   = $this->execution->getKanbanTasks($executionID, "id");
-        $bugs    = $this->loadModel('bug')->getExecutionBugs($executionID);
-        $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
+        $tasks     = $this->execution->getKanbanTasks($executionID, "id");
+        $bugs      = $this->loadModel('bug')->getExecutionBugs($executionID);
+        $stories   = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);

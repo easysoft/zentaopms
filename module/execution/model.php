@@ -379,6 +379,8 @@ class executionModel extends model
             $creatorExists = false;
             $teamMembers   = array();
 
+            $this->loadModel('kanban')->addKanbanLanes($executionID);
+
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
@@ -3154,7 +3156,7 @@ class executionModel extends model
      */
     public function getKanbanTasks($executionID, $orderBy = 'status_asc, id_desc', $pager = null)
     {
-        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+        $tasks = $this->dao->select('t1.*, t1.id as id, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
@@ -3163,7 +3165,7 @@ class executionModel extends model
             ->andWhere('t1.parent')->ge(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
 

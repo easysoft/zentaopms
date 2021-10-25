@@ -1575,7 +1575,9 @@ class bugModel extends model
                 ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
