@@ -288,3 +288,6 @@ $lang->project->beginGreateChild    = "The minimum start date of the project set
 $lang->project->endLetterChild      = "The maximum finish date for the project set: %s. The completion date of a project cannot be greater than the maximum completion date of the project set.";
 $lang->project->childLongTime       = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
 $lang->project->confirmUnlinkMember = "Do you want to remove this user from project?";
+
+$lang->project->action = new stdclass();
+$lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";

@@ -288,3 +288,6 @@ $lang->project->beginGreateChild    = "项目集的最小开始日期：%s，项
 $lang->project->endLetterChild      = "项目集的最大完成日期：%s，项目的完成日期不能大于项目集的最大完成日期";
 $lang->project->childLongTime       = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->project->confirmUnlinkMember = "您确定从该项目中移除该用户吗？";
+
+$lang->project->action = new stdclass();
+$lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
