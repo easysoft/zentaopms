@@ -66,7 +66,17 @@ class userEntry extends Entry
                 case 'product':
                     $info->product = array('total' => 0, 'products' => array());
 
-                    $products = $this->my->getProducts();
+                    $products = $this->my->getProducts('ownbyme');
+                    if($products)
+                    {
+                        $info->product['total']    = $products->allCount;
+                        $info->product['products'] = $products->products;
+                    }
+                    break;
+                case 'undoneproduct':
+                    $info->product = array('total' => 0, 'products' => array());
+
+                    $products = $this->my->getProducts('undone');
                     if($products)
                     {
                         $info->product['total']    = $products->allCount;

@@ -60,14 +60,17 @@ class myModel extends model
     /**
      * Get my charged products.
      *
+     * @param  string $type     undone|ownbyme
      * @access public
      * @return object
      */
-    public function getProducts()
+    public function getProducts($type = 'undone')
     {
         $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
+            ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()
+            ->beginIF($type == 'ownbyme')->andWhere('t1.PO')->eq($this->app->user->account)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
@@ -121,10 +124,11 @@ class myModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t1.project')
             ->fetchAll('product');
-        foreach($executions as $key => $execuData)
+        $this->loadModel('execution');
+        foreach($executions as $productID => $execution)
         {
-            $execution = $this->loadModel('execution')->getById($execuData->id);
-            $executions[$key]->progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
+            $execution = $this->execution->getById($execution->id);
+            $executions[$productID]->progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
         }
 
         $allCount      = count($products);
@@ -139,6 +143,7 @@ class myModel extends model
             $product->storyFinishedTotal = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->finishedTotal : 0;
             $product->storyLeftTotal     = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->leftTotal : 0;
             $product->storyFinishedRate  = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->finishedRate : 0;
+            $product->latestExecution    = isset($executions[$product->id])     ? $executions[$product->id] : '';
             if($product->status != 'closed') $unclosedCount ++;
             if($product->status == 'closed') unset($products[$key]);
         }
