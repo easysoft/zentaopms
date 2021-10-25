@@ -66,7 +66,7 @@ class myModel extends model
      */
     public function getProducts($type = 'undone')
     {
-        $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
+        $products = $this->dao->select('t1.*, t2.name as programName')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()

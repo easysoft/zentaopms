@@ -135,8 +135,32 @@ class userEntry extends Entry
 
                     if($data->status == 'success')
                     {
+                        $bugs = array();
+                        foreach($data->data->bugs as $bug)
+                        {
+                            $status = array('code' => $bug->status, 'name' => $this->lang->bug->statusList[$bug->status]);
+                            if($bug->status == 'active' and $bug->confirmed) $status = array('code' => 'confirmed', 'name' => $this->lang->bug->labelConfirmed);
+                            if($bug->resolution == 'postponed') $status = array('code' => 'postponed', 'name' => $this->lang->bug->labelPostponed);
+                            if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
+                            $bug->status = $status;
+
+                            $bugs[$bug->id] = $bug;
+                        }
+
+                        $storyChangeds = $this->dao->select('t1.id')->from(TABLE_BUG)->alias('t1')
+                            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+                            ->where('t1.id')->in(array_keys($bugs))
+                            ->andWhere('t1.story')->ne('0')
+                            ->andWhere('t1.storyVersion != t2.version')
+                            ->fetchAll();
+                        foreach($storyChangeds as $bugID)
+                        {
+                            $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->storyChanged);
+                            $bugs[$bugID]->status = $status;
+                        }
+
                         $info->bug['total'] = $data->data->pager->recTotal;
-                        $info->bug['bugs']  = array_values((array)$data->data->bugs);
+                        $info->bug['bugs']  = array_values($bugs);
                     }
 
                     break;

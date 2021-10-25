@@ -150,12 +150,15 @@ $lang->bug->assignToMeAB   = '指派给我';
 $lang->bug->openedByMeAB   = '由我创建';
 $lang->bug->resolvedByMeAB = '由我解决';
 
-$lang->bug->ditto         = '同上';
-$lang->bug->dittoNotice   = '该bug与上一bug不属于同一产品！';
-$lang->bug->noAssigned    = '未指派';
-$lang->bug->noBug         = '暂时没有Bug。';
-$lang->bug->noModule      = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
-$lang->bug->delayWarning  = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->ditto          = '同上';
+$lang->bug->dittoNotice    = '该bug与上一bug不属于同一产品！';
+$lang->bug->noAssigned     = '未指派';
+$lang->bug->noBug          = '暂时没有Bug。';
+$lang->bug->noModule       = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
+$lang->bug->delayWarning   = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->labelConfirmed = '已确认';
+$lang->bug->labelPostponed = '被延期';
+$lang->bug->storyChanged   = '需求变动';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = '当前指派';
