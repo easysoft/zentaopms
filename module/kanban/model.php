@@ -265,4 +265,51 @@ class kanbanModel extends model
             }
         }
     }
+
+    /**
+     ** Get column by id.
+     **
+     ** @param  int    $columnID
+     ** @access public
+     ** @return object
+     **/
+    public function getColumnById($columnID)
+    {
+        $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
+            ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
+            ->where('t1.id')->eq($columnID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetch();
+
+        if(!empty($column->parent)) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
+
+        return $column;
+    }
+
+    /**
+     * Set WIP limit.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return bool
+     */
+    public function setWIP($columnID)
+    {
+        $column = $this->getColumnById($columnID);
+        $data   = fixer::input('post')
+            ->remove('WIPCount,noLimit')
+            ->get();
+
+        $this->lang->kanbancolumn = new stdclass();
+        $this->lang->kanbancolumn->limit = $this->lang->kanban->WIPCount;
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
+            ->autoCheck()
+            ->check(is_numeric($data->limit), 'limit', 'gt', 0)
+            ->batchcheck($this->config->kanban->setwip->requiredFields, 'notempty')
+            ->where('id')->eq($columnID)
+            ->exec();
+
+        return dao::isError();
+    }
 }
