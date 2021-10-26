@@ -48,7 +48,7 @@
   </div>
 </div>
 
-<div class='panel'>
+<div class='panel' id='kanbanContainer'>
   <div class='panel-heading'>
     <strong>Section</strong>
   </div>

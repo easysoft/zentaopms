@@ -489,7 +489,7 @@ addColumnRenderer('task', renderTaskItem);
  */
 function renderColumnCount($count, count, col)
 {
-    var text = count + '/' + (!col.maxCount ? '<i class="icon icon-infinite"></i>' : '');
+    var text = count + '/' + (col.maxCount || '<i class="icon icon-infinite"></i>');
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
 }
 
@@ -523,6 +523,20 @@ function createKanban(kanbanID, data, options)
     $kanban.kanban($.extend({data: data}, options));
 }
 
+/* Overload kanban default options */
+$.extend($.fn.kanban.Constructor.DEFAULTS,
+{
+    onRender: function()
+    {
+        var maxWidth = 0;
+        $('#kanbans .kanban-board').each(function()
+        {
+            maxWidth = Math.max(maxWidth, $(this).outerWidth());
+        });
+        $('#kanbanContainer').css('min-width', maxWidth + 40);
+    }
+});
+
 /* Example code: */
 $(function()
 {
@@ -531,7 +545,7 @@ $(function()
     {
         maxColHeight:  'auto',
         minColWidth:    240,
-        dropable:       true,
+        droppable:      true,
         showCount:      true,
         showZeroCount:  true,
         countRender:    renderColumnCount
