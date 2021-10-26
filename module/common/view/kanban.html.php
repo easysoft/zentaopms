@@ -331,9 +331,10 @@ function addColumnRenderer(columnType, renderer)
  * @param {Object} col   Column object
  * @returns {JQuery} $item Kanban item element
  */
-function renderKanbanItem(item, $item, col)
+function renderKanbanItem(item, $item, col, lane, kanban)
 {
-    var renderer = window.columnRenderers[col.type];
+    const columnRenderers = window.columnRenderers;
+    var renderer = columnRenderers[col.type] || columnRenderers[col.itemType] || columnRenderers[lane.defaultItemType] || columnRenderers[kanban.defaultItemType];
     if(renderer) return renderer(item, $item, col);
     return $item;
 }
@@ -407,10 +408,14 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     },
     onRenderKanban: function($kanban, kanbanData)
     {
-        $kanban.find('.kanban-lane-name').each(function(index)
+        $kanban.find('.kanban-lane').each(function(index)
         {
+            var $lane = $(this);
+            if ($lane.data('lane').color) return;
+
+            var $laneName = $lane.find('.kanban-lane-name');
             var color = kanbanColorList[index % kanbanColorList.length];
-            $(this).css('background-color', color);
+            $laneName.css('background-color', color);
         });
 
         /* Update project count and execution count */
@@ -424,7 +429,10 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
         }
         $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || 0);
         $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || 0);
-
+    },
+    onCreate(kanban)
+    {
+        kanban.$.on('scroll', updateKanbanAffixState);
         updateKanbanAffixState();
     }
 });
