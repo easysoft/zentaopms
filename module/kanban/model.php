@@ -59,8 +59,14 @@ class kanbanModel extends model
             }
         }
 
-        foreach($lanes as $laneID => $lane) $lane->columns = $columns[$laneID];
-        return $lanes;
+        $kanban = array();
+        foreach($lanes as $laneID => $lane) 
+        {
+            $lane->columns = $columns[$laneID];
+            $kanban[$lane->type] = $lane;
+        }
+
+        return $kanban;
     }
 
     /**
