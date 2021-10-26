@@ -36,7 +36,7 @@ class executionEntry extends Entry
         if(!$fields) $this->send(200, $execution);
 
         /* Set other fields. */
-        $fields = explode(',', $fields);
+        $fields = explode(',', strtolower($fields));
         foreach($fields as $field)
         {
             switch($field)
@@ -49,6 +49,15 @@ class executionEntry extends Entry
                     {
                         $execution->modules = $data->data->tree;
                     }
+                    break;
+                case 'moduleoptionmenu':
+                    $execution->moduleOptionMenu = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');
+                    break;
+                case 'members':
+                    $execution->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');;
+                    break;
+                case 'stories':
+                    $execution->stories = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 0, '', 'full', 'unclosed');
                     break;
             }
         }
