@@ -194,7 +194,7 @@ class apiModel extends model
      *
      * @param int $apiID
      * @access public
-     * @return void
+     * @return bool|array
      */
     public function update($apiID)
     {
