@@ -102,8 +102,8 @@ class kanbanModel extends model
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',ready,develop,test,', $colType) === false)
                 {
-                    $storyStatus = $this->config->kanban->column->status['story'][$colType];
-                    $storyStage  = $this->config->kanban->column->stage['story'][$colType];
+                    $storyStatus = $this->config->kanban->storyColumnStatusList[$colType];
+                    $storyStage  = $this->config->kanban->storyColumnStageList[$colType];
                     foreach($objects as $storyID => $story)
                     {
                         if($story->status == $storyStatus and $story->stage == $storyStage) $data->cards .= $storyID . ',';
@@ -129,7 +129,7 @@ class kanbanModel extends model
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
                 {
-                    $bugStatus = $this->config->kanban->column->status['bug'][$colType];
+                    $bugStatus = $this->config->kanban->bugColumnStatusList[$colType];
                     foreach($objects as $bugID => $bug)
                     {
                         if($colType == 'unconfirmed' and $bug->status == $bugStatus and $bug->confirmed == 0)
@@ -164,7 +164,7 @@ class kanbanModel extends model
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if(strpos(',develop,', $colType) === false)
                 {
-                    $taskStatus = $this->config->kanban->column->status['task'][$colType];
+                    $taskStatus = $this->config->kanban->taskColumnStatusList[$colType];
                     foreach($objects as $taskID => $task)
                     {
                         if($task->status == $taskStatus) $data->cards .= $taskID . ',';
