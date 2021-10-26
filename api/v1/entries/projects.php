@@ -21,7 +21,7 @@ class projectsEntry extends entry
     public function get($programID = 0)
     {
         if(!$programID) $programID = $this->param('program', 0);
-        $returnFields = explode(',', $this->param('return', ''));
+        $returnFields = $this->param('return', '');
 
         $control = $this->loadController('project', 'browse');
         $control->browse($programID, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));

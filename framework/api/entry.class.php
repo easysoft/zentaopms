@@ -532,10 +532,12 @@ class baseEntry
     public function filterFields($object, $allowable = '')
     {
         if(empty($allowable)) return $object;
+        if(is_string($allowable)) $allowable = explode(',', $allowable);
 
         $filtered = new stdclass();
         foreach($allowable as $field)
         {
+            $field = trim($field);
             if(!isset($object->$field)) continue;
             $filtered->$field = $object->$field;
         }

@@ -20,7 +20,7 @@ class executionsEntry extends entry
      */
     public function get($projectID = 0)
     {
-        $returnFields = explode(',', $this->param('return', ''));
+        $returnFields = $this->param('return', '');
 
         $control = $this->loadController('execution', 'all');
         $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
