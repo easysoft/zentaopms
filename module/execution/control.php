@@ -1834,17 +1834,20 @@ class execution extends control
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',  $uri, 'execution');
-        $this->app->session->set('bugList',   $uri, 'qa');
+        $this->app->session->set('taskList', $uri, 'execution');
+        $this->app->session->set('bugList',  $uri, 'qa');
 
-        /* Compatibility IE8*/
+        /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
+
+        $kanban = $this->loadModel('kanban')->getExecutionKanban($executionID);
+        if(empty($kanban)) $this->kanban->createLanes($executionID);
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
-        $tasks   = $this->execution->getKanbanTasks($executionID, "id");
-        $bugs    = $this->loadModel('bug')->getExecutionBugs($executionID);
-        $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
+        $tasks     = $this->execution->getKanbanTasks($executionID, "id");
+        $bugs      = $this->loadModel('bug')->getExecutionBugs($executionID);
+        $stories   = $this->loadModel('story')->getExecutionStories($executionID);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);

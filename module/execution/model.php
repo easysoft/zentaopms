@@ -78,7 +78,7 @@ class executionModel extends model
             global $lang;
             $this->app->loadLang('project');
             $lang->executionCommon = $lang->project->stage;
-            include $this->app->getModulePath('execution') . 'lang/' . $this->app->getClientLang() . '.php';
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
         if($execution and $execution->lifetime == 'ops')
@@ -378,6 +378,8 @@ class executionModel extends model
             $today         = helper::today();
             $creatorExists = false;
             $teamMembers   = array();
+
+            $this->loadModel('kanban')->createLanes($executionID);
 
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
@@ -3163,7 +3165,7 @@ class executionModel extends model
             ->andWhere('t1.parent')->ge(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
 
