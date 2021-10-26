@@ -21,6 +21,7 @@
     </div>
     <form method='post' target='hiddenwin' onsubmit='return setWIPLimit();'>
       <table align='center' class='table table-form'>
+        <?php if(!in_array($column->type, $config->kanban->parentColumn[$column->laneType])):?>
         <tr>
           <th><?php echo $lang->kanban->WIPStatus;?></th>
           <td colspan='2'>
@@ -36,6 +37,7 @@
             <?php echo html::input('WIPStage', zget($lang->story->stageList, $stage), "class='form-control' disabled");?>
           </td>
         </tr>
+        <?php endif;?>
         <?php endif;?>
         <tr>
           <th><?php echo $lang->kanban->WIPCount;?></th>

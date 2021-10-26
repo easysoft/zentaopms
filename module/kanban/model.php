@@ -267,12 +267,12 @@ class kanbanModel extends model
     }
 
     /**
-     ** Get column by id.
-     **
-     ** @param  int    $columnID
-     ** @access public
-     ** @return object
-     **/
+     * Get column by id.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return object
+     */
     public function getColumnById($columnID)
     {
         $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
