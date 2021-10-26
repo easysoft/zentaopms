@@ -35,10 +35,22 @@ class kanbanModel extends model
             ->andWhere('lane')->in(array_keys($lanes))
             ->fetchGroup('lane', 'id');
 
+        if($objectType == 'story' or $objectType == 'all') $stories = $this->loadModel('story')->getExecutionStories($executionID);
+        if($objectType == 'bug' or $objectType == 'all')   $bugs    = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($objectType == 'task' or $objectType == 'all')  $tasks   = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
         foreach($columns as $laneID => $cols)
         {
+            $laneType = $lanes[$laneID]->type;
             foreach($cols as $colID => $col)
             {
+                $cardIdList = array_filter(explode(',', $col->cards));
+                $col->cards = array();
+                foreach($cardIdList as $objectID)
+                {
+                    if($laneType == 'story') $col->cards[$objectID] = zget($stories, $objectID, '');
+                    if($laneType == 'bug')   $col->cards[$objectID] = zget($bugs,    $objectID, '');
+                    if($laneType == 'task')  $col->cards[$objectID] = zget($tasks,   $objectID, '');
+                }
                 if($col->parent > 0)
                 {
                     $cols[$col->parent]->childs[$colID] = $col;
