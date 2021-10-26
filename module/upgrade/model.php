@@ -728,7 +728,6 @@ class upgradeModel extends model
         case '15_7':
             $this->saveLogs('Execute 15_7');
             $this->execSQL($this->getUpgradeFile('15.7'));
-            $this->addKanbanLanes();
             $this->appendExec('15_7');
         }
 
@@ -5324,24 +5323,6 @@ class upgradeModel extends model
         $data->value = ',' . $data->value . ',';
         $data->value = str_replace(',project,', ',', $data->value);
         $this->dao->update(TABLE_CONFIG)->set('`value`')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
-        return true;
-    }
-
-    /**
-     * Add single execution Kanban lanes.
-     *
-     * @access public
-     * @return bool
-     */
-    public function addKanbanLanes()
-    {
-        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->in('sprint,stage')->fetchPairs();
-
-        if(empty($executionIdList)) return true;
-
-        /* Create lanes. */
-        $lanes = $this->loadModel('kanban')->addKanbanLanes($executionIdList);
-
         return true;
     }
 }

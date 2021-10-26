@@ -1840,23 +1840,8 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanLanes = $this->loadModel('kanban')->getLanesByExecution($executionID);
-
-        $kanban = array();
-        foreach($kanbanLanes as $laneID => $lane)
-        {
-            $kanban[$lane->type]          = $lane;
-            $kanban[$lane->type]->columns = array();
-            $kanbanColumns = $this->kanban->getColumnsByLane(array_keys($kanbanLanes), $executionID, $lane->type);
-            foreach($kanbanColumns as $columnID => $column)
-            {
-                if($column->lane == $laneID)
-                {
-                    $kanban[$lane->type]->columns[$columnID] = $column;
-                    unset($kanbanColumns[$columnID]);
-                }
-            }
-        }
+        $kanban = $this->loadModel('kanban')->getExecutionKanban($executionID);
+        if(empty($kanban)) $this->kanban->createLane($executionID);
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);

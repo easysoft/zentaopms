@@ -14,230 +14,235 @@
 class kanbanModel extends model
 {
     /**
-     * Get lanes by execution id.
+     * Get Kanban by execution id.
      *
      * @param  int    $executionID
      * @param  string $objectType all|story|bug|task
      * @access public
      * @return array
      */
-    public function getLanesByExecution($executionID, $objectType = 'all')
+    public function getExecutionKanban($executionID, $objectType = 'all')
     {
-        return $this->dao->select('*')->from(TABLE_KANBANLANE)
+        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($objectType != 'all')->andWhere('type')->eq($objectType)
             ->fetchAll('id');
-    }
 
-    /**
-     * Get Kanban columns by lane ID.
-     *
-     * @param  int|array $lanes
-     * @param  string    $type
-     * @access public
-     * @return array
-     */
-    public function getColumnsByLane($lanes, $type)
-    {
         if(empty($lanes)) return array();
-        return $this->dao->select('t2.id as id, t2.*')->from(TABLE_KANBANLANE)->alias('t1')
-            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.id=t2.lane')
-            ->where('t2.deleted')->eq(0)
-            ->andWhere('t2.lane')->in($lanes)
-            ->andWhere('t1.type')->eq($type)->fi()
-            ->fetchAll('id');
+        $columns = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
+            ->where('deleted')->eq(0)
+            ->andWhere('lane')->in(array_keys($lanes))
+            ->fetchGroup('lane', 'id');
+
+        foreach($columns as $laneID => $cols)
+        {
+            foreach($cols as $colID => $col)
+            {
+                if($col->parent > 0)
+                {
+                    $cols[$col->parent]->childs[$colID] = $col;
+                    unset($cols[$colID]);
+                }
+            }
+        }
+
+        foreach($lanes as $laneID => $lane) $lane->columns = $columns[$laneID];
+        return $lanes;
     }
 
     /**
-     * Add execution Kanban lanes.
+     * Add execution Kanban lanes and columns.
      *
-     * @param  int|array $executionIdList
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function addKanbanLanes($executionIdList)
+    public function createLane($executionID)
     {
-        if(is_numeric($executionIdList)) $executionIdList = (array)$executionIdList;
-        if(!is_array($executionIdList) or empty($executionIdList)) return;
-
-        /* Set lane Information. */
-        global $lang;
-        $storyLane = clone $bugLane = clone $taskLane = new stdClass();
-        $storyLane->type  = 'story';
-        $storyLane->name  = $lang->SRCommon;
-        $storyLane->color = '#7ec5ff';
-        $storyLane->order = '5';
-
-        $bugLane->type  = 'bug';
-        $bugLane->name  = $lang->bug->common;
-        $bugLane->color = '#ba55d3';
-        $bugLane->order = '10';
-
-        $taskLane->type  = 'task';
-        $taskLane->name  = $lang->task->common;
-        $taskLane->color = '#4169e1';
-        $taskLane->order = '15';
-
-        /* Get stories, bugs and tasks. */
-        $stories = $this->dao->select('t1.*,t2.project as project')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->ne('-1')
-            ->andWhere('t2.project')->in($executionIdList)
-            ->orderBy('id_asc')
-            ->fetchGroup('project', 'id');
-
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andWhere('execution')->in($executionIdList)
-            ->orderBy('id_asc')
-            ->fetchGroup('execution', 'id');
-
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->andWhere('parent')->ne('-1')
-            ->andWhere('execution')->in($executionIdList)
-            ->orderBy('id_asc')
-            ->fetchGroup('execution', 'id');
-
-        foreach($executionIdList as $executionID)
+        foreach($this->config->kanban->default as $type => $lane)
         {
-            $storyLaneID     = 0;
-            $bugLaneID       = 0;
-            $taskLaneID      = 0;
-            $developColumn   = 0;
-            $testColumn      = 0;
-            $resolvingColumn = 0;
+            $lane->type      = $type;
+            $lane->execution = $executionID;
+            $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
-            $lanes[$executionID] = new stdClass();
-            $storyLane->execution = $bugLane->execution = $taskLane->execution = $executionID;
+            $laneID = $this->dao->lastInsertId();
+            $this->createColumn($laneID, $type, $executionID);
+        }
+    }
 
-            $this->dao->insert(TABLE_KANBANLANE)->data($storyLane)->exec();
-            $storyLaneID = $this->dao->lastInsertId();
+    public function createColumn($laneID, $type, $executionID)
+    {
+        $objects = array();
+        if($type == 'story') $objects = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't2.id_desc');
+        if($type == 'bug')   $objects = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($type == 'task')  $objects = $this->loadModel('execution')->getKanbanTasks($executionID);
 
-            $this->dao->insert(TABLE_KANBANLANE)->data($bugLane)->exec();
-            $bugLaneID = $this->dao->lastInsertId();
-
-            $this->dao->insert(TABLE_KANBANLANE)->data($taskLane)->exec();
-            $taskLaneID = $this->dao->lastInsertId();
-
-            $executionStories = empty($stories[$executionID]) ? array() : $stories[$executionID];
-            foreach($this->lang->kanban->storyColumn as $type => $name)
+        $devColumnID = $testColumnID = $resolvingColumnID = 0;
+        if($type == 'story')
+        {
+            foreach($this->lang->kanban->storyColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->lane  = $storyLaneID;
+                $data->lane  = $laneID;
                 $data->name  = $name;
-                $data->type  = $type;
+                $data->type  = $colType;
                 $data->cards = '';
-                if(strpos(',developing,developed,', $type) !== false) $data->parent = $developColumn;
-                if(strpos(',testing,tested,', $type) !== false) $data->parent = $testColumn;
-                if(strpos(',ready,develop,test,', $type) === false)
+                if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
+                if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
+                if(strpos(',ready,develop,test,', $colType) === false)
                 {
-                    foreach($executionStories as $storyID => $story)
+                    foreach($objects as $storyID => $story)
                     {
-                        if($type == 'backlog' and $story->status == 'active' and $story->stage == 'projected')
-                        {
-                            $data->cards .= $storyID . ',';
-                            unset($executionStories[$storyID]);
-                        }
+                        if($colType == 'backlog' and $story->status == 'active' and $story->stage == 'projected') $data->cards .= $storyID . ',';
 
-                        if($type == 'closed' and $story->status == 'closed' and $story->stage == 'closed')
-                        {
-                            $data->cards .= $storyID . ',';
-                            unset($executionStories[$storyID]);
-                        }
+                        if($colType == 'closed' and $story->status == 'closed' and $story->stage == 'closed') $data->cards .= $storyID . ',';
 
-                        if($story->stage == $type and strpos(',backlog,closed,', $type) === false and $story->status == 'active')
-                        {
-                            $data->cards .= $storyID . ',';
-                            unset($executionStories[$storyID]);
-                        }
+                        if($story->stage == $colType and strpos(',backlog,closed,', $colType) === false and $story->status == 'active') $data->cards .= $storyID . ',';
                     }
                     if(!empty($data->cards)) $data->cards = ',' . $data->cards;
                 }
-                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                if($type == 'develop') $developColumn = $this->dao->lastInsertId();
-                if($type == 'test')    $testColumn    = $this->dao->lastInsertId();
-            }
 
-            $executionBugs = empty($bugs[$executionID]) ? array() : $bugs[$executionID];
-            foreach($this->lang->kanban->bugColumn as $type => $name)
+                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+                if($colType == 'develop') $devColumnID  = $this->dao->lastInsertId();
+                if($colType == 'test')    $testColumnID = $this->dao->lastInsertId();
+            }
+        }
+        elseif($type == 'bug')
+        {
+            foreach($this->lang->kanban->bugColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->lane  = $bugLaneID;
+                $data->lane  = $laneID;
                 $data->name  = $name;
-                $data->type  = $type;
+                $data->type  = $colType;
                 $data->cards = '';
-                if(strpos(',fixing,fixed,', $type) !== false) $data->parent = $resolvingColumn;
-                if(strpos(',testing,tested,', $type) !== false) $data->parent = $testColumn;
-                if(strpos(',resolving,fixing,test,testing,tested,', $type) === false)
+                if(strpos(',fixing,fixed,', $colType) !== false) $data->parent = $resolvingColumnID;
+                if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
+                if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
                 {
-                    foreach($executionBugs as $bugID => $bug)
+                    foreach($objects as $bugID => $bug)
                     {
-                        if($type == 'unconfirmed' and $bug->status == 'active' and $bug->confirmed == 0)
-                        {
-                            $data->cards .= $bugID . ',';
-                            unset($executionBugs[$bugID]);
-                        }
+                        if($colType == 'unconfirmed' and $bug->status == 'active' and $bug->confirmed == 0) $data->cards .= $bugID . ',';
 
-                        if($type == 'confirmed' and $bug->status == 'active' and $bug->confirmed == 1)
-                        {
-                            $data->cards .= $bugID . ',';
-                            unset($executionBugs[$bugID]);
-                        }
+                        if($colType == 'confirmed' and $bug->status == 'active' and $bug->confirmed == 1) $data->cards .= $bugID . ',';
 
-                        if($type == 'fixed' and $bug->status == 'resolved')
-                        {
-                            $data->cards .= $bugID . ',';
-                            unset($executionBugs[$bugID]);
-                        }
+                        if($colType == 'fixed' and $bug->status == 'resolved') $data->cards .= $bugID . ',';
 
-                        if($type == 'closed' and $bug->status == 'closed')
-                        {
-                            $data->cards .= $bugID . ',';
-                            unset($executionBugs[$bugID]);
-                        }
+                        if($colType == 'closed' and $bug->status == 'closed') $data->cards .= $bugID . ',';
                     }
                     $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                    if($type == 'resolving') $resolvingColumn = $this->dao->lastInsertId();
-                    if($type == 'test')      $testColumn      = $this->dao->lastInsertId();
+                    if($colType == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
+                    if($colType == 'test')      $testColumnID      = $this->dao->lastInsertId();
                 }
             }
-
-            $executionTasks = empty($tasks[$executionID]) ? array() : $tasks[$executionID];
-            foreach($this->lang->kanban->taskColumn as $type => $name)
+        }
+        elseif($type == 'task')
+        {
+            foreach($this->lang->kanban->taskColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->lane  = $taskLaneID;
+                $data->lane  = $laneID;
                 $data->name  = $name;
-                $data->type  = $type;
+                $data->type  = $colType;
                 $data->cards = '';
-                if(strpos(',developing,developed,', $type) !== false) $data->parent = $developColumn;
-                if(strpos(',develop,', $type) === false)
+                if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
+                if(strpos(',develop,', $colType) === false)
                 {
-                    foreach($executionTasks as $taskID => $task)
+                    foreach($objects as $taskID => $task)
                     {
-                        if($type == 'developing' and $task->status == 'doing')
-                        {
-                            $data->cards .= $taskID . ',';
-                            unset($executionTasks[$taskID]);
-                        }
+                        if($colType == 'developing' and $task->status == 'doing') $data->cards .= $taskID . ',';
 
-                        if($type == 'developed' and $task->status == 'done')
-                        {
-                            $data->cards .= $taskID . ',';
-                            unset($executionTasks[$taskID]);
-                        }
+                        if($colType == 'developed' and $task->status == 'done') $data->cards .= $taskID . ',';
 
-                        if(strpos(',wait,pause,canceled,closed,', $type) !== false and $task->status == $type)
-                        {
-                            $data->cards .= $taskID . ',';
-                            unset($executionTasks[$taskID]);
-                        }
+                        if(strpos(',wait,pause,canceled,closed,', $colType) !== false and $task->status == $colType) $data->cards .= $taskID . ',';
+                    }
+
+                    $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+                    if($colType == 'develop') $devColumnID = $this->dao->lastInsertId();
+                }
+            }
+        }
+    }
+
+    public function updateCards($executionID, $objectType, $columns)
+    {
+        $objects = array();
+        if($objectType == 'story') $objects = $this->loadModel('story')->getExecutionStories($executionID);
+        if($objectType == 'bug')   $objects = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($objectType == 'task')  $objects = $this->loadModel('execution')->getKanbanTasks($executionID);
+        if($objectType == 'story')
+        {
+            $data = new stdClass();
+            foreach($columns as $colID => $col)
+            {
+                foreach($objects as $storyID => $story)
+                {
+                    if($col->type == 'backlog' and $story->status == 'active' and $story->stage == 'projected') $data->cards .= $storyID . ',';
+
+                    if($colType == 'closed' and $story->status == 'closed' and $story->stage == 'closed') $data->cards .= $storyID . ',';
+
+                    if($story->stage == $colType and strpos(',backlog,closed,', $colType) === false and $story->status == 'active') $data->cards .= $storyID . ',';
+                }
+                if(!empty($data->cards)) $data->cards = ',' . $data->cards;
+            }
+
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+            if($colType == 'develop') $devColumnID  = $this->dao->lastInsertId();
+            if($colType == 'test')    $testColumnID = $this->dao->lastInsertId();
+        }
+        elseif($type == 'bug')
+        {
+            foreach($this->lang->kanban->bugColumn as $colType => $name)
+            {
+                $data = new stdClass();
+                $data->lane  = $laneID;
+                $data->name  = $name;
+                $data->type  = $colType;
+                $data->cards = '';
+                if(strpos(',fixing,fixed,', $colType) !== false) $data->parent = $resolvingColumnID;
+                if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
+                if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
+                {
+                    foreach($objects as $bugID => $bug)
+                    {
+                        if($colType == 'unconfirmed' and $bug->status == 'active' and $bug->confirmed == 0) $data->cards .= $bugID . ',';
+
+                        if($colType == 'confirmed' and $bug->status == 'active' and $bug->confirmed == 1) $data->cards .= $bugID . ',';
+
+                        if($colType == 'fixed' and $bug->status == 'resolved') $data->cards .= $bugID . ',';
+
+                        if($colType == 'closed' and $bug->status == 'closed') $data->cards .= $bugID . ',';
                     }
                     $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                    if($type == 'develop') $developColumn = $this->dao->lastInsertId();
+                    if($colType == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
+                    if($colType == 'test')      $testColumnID      = $this->dao->lastInsertId();
+                }
+            }
+        }
+        elseif($type == 'task')
+        {
+            foreach($this->lang->kanban->taskColumn as $colType => $name)
+            {
+                $data = new stdClass();
+                $data->lane  = $laneID;
+                $data->name  = $name;
+                $data->type  = $colType;
+                $data->cards = '';
+                if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
+                if(strpos(',develop,', $colType) === false)
+                {
+                    foreach($objects as $taskID => $task)
+                    {
+                        if($colType == 'developing' and $task->status == 'doing') $data->cards .= $taskID . ',';
+
+                        if($colType == 'developed' and $task->status == 'done') $data->cards .= $taskID . ',';
+
+                        if(strpos(',wait,pause,canceled,closed,', $colType) !== false and $task->status == $colType) $data->cards .= $taskID . ',';
+                    }
+
+                    $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+                    if($colType == 'develop') $devColumnID = $this->dao->lastInsertId();
                 }
             }
         }
