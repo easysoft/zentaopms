@@ -8,3 +8,6 @@
 .kanban-item > .infos > .label-pri {min-width: 16px; line-height: 14px; height: 16px; padding: 0;}
 .kanban-item > .infos > .label-severity {transform: scale(.75);}
 .kanban-item > .infos > .avatar {position: absolute; right: 0; top: 0}
+
+.kanban-affixed .kanban-header-col > .title > .text,
+.kanban-affixed .kanban-header-col > .title > .count {color: #fff!important;}
