@@ -414,21 +414,7 @@ class api extends control
     {
         if(helper::isAjaxRequest() && !empty($_POST))
         {
-            $this->loadModel('api');
-
-            $now    = helper::now();
-            $userId = $this->app->user->account;
-            $params = fixer::input('post')
-                ->remove('type')
-                ->skipSpecial('params,response')
-                ->add('addedBy', $userId)
-                ->add('addedDate', $now)
-                ->add('editedBy', $userId)
-                ->add('editedDate', $now)
-                ->setDefault('product,module', 0)
-                ->get();
-
-            $changes = $this->api->update($apiID, $params);
+            $changes = $this->api->update($apiID);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             if($changes)
