@@ -379,7 +379,7 @@ class executionModel extends model
             $creatorExists = false;
             $teamMembers   = array();
 
-            $this->loadModel('kanban')->createLane($executionID);
+            $this->loadModel('kanban')->createLanes($executionID);
 
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();

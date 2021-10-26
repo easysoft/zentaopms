@@ -58,7 +58,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createLane($executionID)
+    public function createLanes($executionID)
     {
         foreach($this->config->kanban->default as $type => $lane)
         {
@@ -67,11 +67,20 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
-            $this->createColumn($laneID, $type, $executionID);
+            $this->createColumns($laneID, $type, $executionID);
         }
     }
 
-    public function createColumn($laneID, $type, $executionID)
+    /**
+     * createColumn
+     *
+     * @param  int    $laneID
+     * @param  string $type story|bug|task
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function createColumns($laneID, $type, $executionID)
     {
         $objects = array();
         if($type == 'story') $objects = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't2.id_desc');
@@ -165,6 +174,15 @@ class kanbanModel extends model
         }
     }
 
+    /**
+     * Update column cards.
+     *
+     * @param  int    $executionID
+     * @param  string $objectType story|bug|task
+     * @param  object $columns
+     * @access public
+     * @return void
+     */
     public function updateCards($executionID, $objectType, $columns)
     {
         $objects = array();

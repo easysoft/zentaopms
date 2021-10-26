@@ -1841,7 +1841,7 @@ class execution extends control
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
         $kanban = $this->loadModel('kanban')->getExecutionKanban($executionID);
-        if(empty($kanban)) $this->kanban->createLane($executionID);
+        if(empty($kanban)) $this->kanban->createLanes($executionID);
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
