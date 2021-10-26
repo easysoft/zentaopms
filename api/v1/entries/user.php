@@ -189,8 +189,15 @@ class userEntry extends Entry
 
                     if($data->status == 'success')
                     {
+                        $stories = array();
+                        foreach($data->data->stories as $story)
+                        {
+                            $story->status = array('code' => $story->status, 'name' => $this->lang->story->statusList[$story->status]);
+                            $stories[$story->id] = $story;
+                        }
+
                         $info->story['total']   = $data->data->pager->recTotal;
-                        $info->story['stories'] = array_values((array)$data->data->stories);
+                        $info->story['stories'] = array_values($stories);
                     }
 
                     break;

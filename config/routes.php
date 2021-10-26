@@ -5,6 +5,8 @@
 $routes = array();
 
 $routes['/tokens'] = 'tokens';
+$routes['/langs']  = 'langs';
+
 $routes['/tabs/:module'] = 'tabs';
 
 $routes['/configurations']       = 'configs';
