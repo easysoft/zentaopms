@@ -740,11 +740,6 @@ class commonModel extends model
                 }
             }
 
-            /* Check has views permission. */
-            global $app;
-            $acls = $app->user->rights['acls'];
-            if($currentModule == 'report' and !(empty($acls['views'] || in_array($currentModule, $acls['views'])))) $display = false;
-
             if(!$display) continue;
 
             /* Assign vars. */
