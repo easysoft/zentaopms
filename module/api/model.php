@@ -177,7 +177,7 @@ class apiModel extends model
     /**
      * Delete a struct.
      *
-     * @param int $id
+     * @param  int $id
      * @access public
      * @return void
      */
@@ -192,7 +192,7 @@ class apiModel extends model
     /**
      * Update an api doc.
      *
-     * @param int $apiID
+     * @param  int $apiID
      * @access public
      * @return bool|array
      */
@@ -206,9 +206,9 @@ class apiModel extends model
             return false;
         }
 
-        $now    = helper::now();
+        $now     = helper::now();
         $account = $this->app->user->account;
-        $data = fixer::input('post')
+        $data    = fixer::input('post')
             ->remove('type')
             ->skipSpecial('params,response')
             ->add('editedBy', $account)
