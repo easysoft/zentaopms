@@ -56,7 +56,7 @@ class userEntry extends Entry
         if(!$fields) return $this->send(200, $info);
 
         /* Set other fields. */
-        $fields = explode(',', $fields);
+        $fields = explode(',', strtolower($fields));
 
         $this->loadModel('my');
         foreach($fields as $field)
@@ -74,13 +74,13 @@ class userEntry extends Entry
                     }
                     break;
                 case 'undoneproduct':
-                    $info->product = array('total' => 0, 'products' => array());
+                    $info->undoneProduct = array('total' => 0, 'products' => array());
 
                     $products = $this->my->getProducts('undone');
                     if($products)
                     {
-                        $info->product['total']    = $products->allCount;
-                        $info->product['products'] = $products->products;
+                        $info->undoneProduct['total']    = $products->allCount;
+                        $info->undoneProduct['products'] = $products->products;
                     }
                     break;
                 case 'project':
