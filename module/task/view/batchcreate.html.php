@@ -51,7 +51,7 @@
       }
   }
   $colspan     = count($visibleFields) + 3;
-  $hiddenStory = (isonlybody() and $storyID) ? ' hidden' : '';
+  $hiddenStory = '';
   if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
   ?>
   <form method='post' class='load-indicator batch-actions-form form-ajax' enctype='multipart/form-data' id="batchCreateForm">
