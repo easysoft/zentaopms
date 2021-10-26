@@ -25,7 +25,8 @@ class langsEntry extends entry
         if($language and !isset($this->config->langs[$language])) return $this->sendError(400, 'Error lang parameter');
         if(empty($modules)) return $this->sendError(400, 'Need modules');
 
-        if($language) $this->app->setClientLang($language);
+        if(empty($language)) $language = 'zh-cn';
+        $this->app->setClientLang($language);
 
         $modules = explode(',', $modules);
         foreach($modules as $module)
