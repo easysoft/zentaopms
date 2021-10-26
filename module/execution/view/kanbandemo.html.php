@@ -48,13 +48,11 @@
   </div>
 </div>
 
-<div class='panel'>
+<div class='panel' id='kanbanContainer'>
   <div class='panel-heading'>
     <strong>Section</strong>
   </div>
-  <div class='panel-body'>
-    <div id='kanbans'></div>
-  </div>
+  <div id='kanbans' class='panel-body'></div>
 </div>
 <?php js::set('executionID', $executionID);?>
 <?php js::set('statusMap', $statusMap);?>

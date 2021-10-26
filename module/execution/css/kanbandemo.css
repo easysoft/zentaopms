@@ -1,6 +1,9 @@
-#main > .container {max-width: none!important; padding: 0 15px}
+#header {position: fixed; top: 0; left: 0; right: 0; z-index: 10;}
+#mainMenu {position: fixed; padding: 10px 15px; top: 60px; left: 0; right: 0; background-color: #efefef; z-index: 0;}
+#main {padding-bottom: 0; padding-top: 50px;}
+#main > .container {max-width: none!important; padding: 0}
+#kanbanContainer {border-radius: 0; margin: 48px 0 0 0;}
 
-.kanban {overflow-x: auto}
 .kanban + .kanban {margin-top: 15px}
 .kanban-item > .title { display: block;white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .kanban-item > .infos {position: relative; margin-top: 5px}
