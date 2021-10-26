@@ -1841,24 +1841,21 @@ class execution extends control
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
         $kanban = $this->loadModel('kanban')->getExecutionKanban($executionID);
-        if(empty($kanban)) $this->kanban->createLanes($executionID);
+        if(empty($kanban))
+        {
+            $this->kanban->createLanes($executionID);
+            $kanban = $this->kanban->getExecutionKanban($executionID);
+        }
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
-        $tasks     = $this->execution->getKanbanTasks($executionID, "id");
-        $bugs      = $this->loadModel('bug')->getExecutionBugs($executionID);
-        $stories   = $this->loadModel('story')->getExecutionStories($executionID);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);
 
-        $kanbanGroup   = $this->execution->getKanbanGroupData($stories, $tasks, $bugs, $type);
-        $kanbanSetting = $this->execution->getKanbanSetting();
-
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[]    = $this->lang->execution->kanban;
-        $this->view->stories       = $stories;
         $this->view->realnames     = $this->loadModel('user')->getPairs('noletter');
         $this->view->storyOrder    = $orderBy;
         $this->view->orderBy       = 'id_asc';
@@ -1866,11 +1863,6 @@ class execution extends control
         $this->view->browseType    = '';
         $this->view->execution     = $execution;
         $this->view->type          = $type;
-        $this->view->kanbanGroup   = $kanbanGroup;
-        $this->view->kanbanColumns = $this->execution->getKanbanColumns($kanbanSetting);
-        $this->view->statusMap     = $canBeChanged ? $this->execution->getKanbanStatusMap($kanbanSetting) : array();
-        $this->view->statusList    = $this->execution->getKanbanStatusList($kanbanSetting);
-        $this->view->colorList     = $this->execution->getKanbanColorList($kanbanSetting);
         $this->view->canBeChanged  = $canBeChanged;
 
         $this->display();
