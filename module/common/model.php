@@ -731,6 +731,9 @@ class commonModel extends model
                     $linkPart = explode('|', $menu['link']);
                     if(!isset($linkPart[2])) continue;
                     $method = $linkPart[2];
+
+                    if($currentModule == 'report' and $method == 'annualData') continue; // Skip some pages that do not require permissions.
+
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;
