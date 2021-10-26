@@ -46,6 +46,6 @@ class langsEntry extends entry
             $this->app->loadLang($module);
         }
 
-        return $this->send(200, array('lang' => $this->lang));
+        return $this->send(200, $this->lang);
     }
 }
