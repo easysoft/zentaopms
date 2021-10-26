@@ -75,7 +75,6 @@ $lang->file        = new stdclass();
 $lang->misc        = new stdclass();
 $lang->acl         = new stdclass();
 $lang->curd        = new stdclass();
-$lang->kanban      = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

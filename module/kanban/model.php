@@ -97,17 +97,16 @@ class kanbanModel extends model
                 $data->name  = $name;
                 $data->type  = $colType;
                 $data->cards = '';
+
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',ready,develop,test,', $colType) === false)
                 {
+                    $storyStatus = $this->config->kanban->column->status['story'][$colType];
+                    $storyStage  = $this->config->kanban->column->stage['story'][$colType];
                     foreach($objects as $storyID => $story)
                     {
-                        if($colType == 'backlog' and $story->status == 'active' and $story->stage == 'projected') $data->cards .= $storyID . ',';
-
-                        if($colType == 'closed' and $story->status == 'closed' and $story->stage == 'closed') $data->cards .= $storyID . ',';
-
-                        if($story->stage == $colType and strpos(',backlog,closed,', $colType) === false and $story->status == 'active') $data->cards .= $storyID . ',';
+                        if($story->status == $storyStatus and $story->stage == $storyStage) $data->cards .= $storyID . ',';
                     }
                     if(!empty($data->cards)) $data->cards = ',' . $data->cards;
                 }
@@ -130,20 +129,27 @@ class kanbanModel extends model
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
                 {
+                    $bugStatus = $this->config->kanban->column->status['bug'][$colType];
                     foreach($objects as $bugID => $bug)
                     {
-                        if($colType == 'unconfirmed' and $bug->status == 'active' and $bug->confirmed == 0) $data->cards .= $bugID . ',';
-
-                        if($colType == 'confirmed' and $bug->status == 'active' and $bug->confirmed == 1) $data->cards .= $bugID . ',';
-
-                        if($colType == 'fixed' and $bug->status == 'resolved') $data->cards .= $bugID . ',';
-
-                        if($colType == 'closed' and $bug->status == 'closed') $data->cards .= $bugID . ',';
+                        if($colType == 'unconfirmed' and $bug->status == $bugStatus and $bug->confirmed == 0)
+                        {
+                            $data->cards .= $bugID . ',';
+                        }
+                        elseif($colType == 'confirmed' and $bug->status == $bugStatus and $bug->confirmed == 1)
+                        {
+                            $data->cards .= $bugID . ',';
+                        }
+                        elseif($bug->status == $bugStatus)
+                        {
+                            $data->cards .= $bugID . ',';
+                        }
                     }
-                    $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                    if($colType == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
-                    if($colType == 'test')      $testColumnID      = $this->dao->lastInsertId();
+                    if(!empty($data->cards)) $data->cards = ',' . $data->cards;
                 }
+                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+                if($colType == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
+                if($colType == 'test')      $testColumnID      = $this->dao->lastInsertId();
             }
         }
         elseif($type == 'task')
@@ -158,18 +164,16 @@ class kanbanModel extends model
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if(strpos(',develop,', $colType) === false)
                 {
+                    $taskStatus = $this->config->kanban->column->status['task'][$colType];
                     foreach($objects as $taskID => $task)
                     {
-                        if($colType == 'developing' and $task->status == 'doing') $data->cards .= $taskID . ',';
+                        if($task->status == $taskStatus) $data->cards .= $taskID . ',';
 
-                        if($colType == 'developed' and $task->status == 'done') $data->cards .= $taskID . ',';
-
-                        if(strpos(',wait,pause,canceled,closed,', $colType) !== false and $task->status == $colType) $data->cards .= $taskID . ',';
                     }
-
-                    $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                    if($colType == 'develop') $devColumnID = $this->dao->lastInsertId();
+                    if(!empty($data->cards)) $data->cards = ',' . $data->cards;
                 }
+                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+                if($colType == 'develop') $devColumnID = $this->dao->lastInsertId();
             }
         }
     }
