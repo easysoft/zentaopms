@@ -1,6 +1,13 @@
 <?php
 $lang->kanban = new stdClass();
 
+$lang->kanban->WIP       = 'WIP';
+$lang->kanban->setWIP    = '在制品设置';
+$lang->kanban->WIPStatus = '在制品状态';
+$lang->kanban->WIPStage  = '在制品阶段';
+$lang->kanban->WIPCount  = '在制品数量';
+$lang->kanban->noLimit   = '不限制∞';
+
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';
 $lang->kanban->storyColumn['ready']      = '准备好';
