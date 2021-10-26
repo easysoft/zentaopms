@@ -227,6 +227,7 @@ js::set('api', $api);
             <tr>
               <td colspan='3' class='text-center form-actions'>
                 <?php echo html::submitButton();?>
+                <?php echo html::hidden('editedDate', $api->editedDate);?>
                 <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}'");?>
                 <?php if(!empty($gobackLink)) echo html::a($gobackLink, $lang->goback, '', "class='btn btn-back btn-wide'");?>
               </td>
