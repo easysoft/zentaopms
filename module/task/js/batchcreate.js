@@ -222,7 +222,6 @@ $(document).on('mousedown', 'select', function()
 
 $(function()
 {
-
     $('.chosen-container[id^=module]').width(chosenWidth);
     $('.chosen-container[id^=module]').css('max-width', chosenWidth);
 
