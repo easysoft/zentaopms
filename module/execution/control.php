@@ -1840,12 +1840,13 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanban = $this->loadModel('kanban')->getExecutionKanban($executionID);
-        if(empty($kanban))
+        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID);
+        if(empty($kanbanGroup))
         {
             $this->kanban->createLanes($executionID);
-            $kanban = $this->kanban->getExecutionKanban($executionID);
+            $kanbanGroup = $this->kanban->getExecutionKanban($executionID);
         }
+        a($kanbanGroup);die;
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
@@ -1861,6 +1862,7 @@ class execution extends control
         $this->view->orderBy       = 'id_asc';
         $this->view->executionID   = $executionID;
         $this->view->browseType    = '';
+        $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->execution     = $execution;
         $this->view->type          = $type;
         $this->view->canBeChanged  = $canBeChanged;

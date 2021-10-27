@@ -57,5 +57,5 @@
   </div>
 </div>
 <?php js::set('executionID', $executionID);?>
-<?php //js::set('statusMap', $statusMap);?>
+<?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php include '../../common/view/footer.html.php';?>
