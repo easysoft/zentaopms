@@ -54,6 +54,7 @@ class ciModel extends model
      */
     public function syncCompileStatus($compile)
     {
+        # Max retry times is: 3 .
         if($compile->times >= 3)
         {
             $this->dao->update(TABLE_COMPILE)->set('status')->eq('failure')->where('id')->eq($compile->id)->exec();
