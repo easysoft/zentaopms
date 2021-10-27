@@ -578,7 +578,6 @@ window.kanbanDropRules =
 }
 
 /**
-<<<<<<< module/execution/js/kanban.js
  * Exit full screen.
  *
  * @access public
@@ -591,6 +590,7 @@ function exitFullScreen()
     $.cookie('isFullScreen', 0);
 }
 
+/*
  * Find drop columns
  * @param {JQuery} $element Drag element
  * @param {JQuery} $root Dnd root element
