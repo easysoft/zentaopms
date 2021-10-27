@@ -3,6 +3,7 @@ global $config;
 
 /* 方法列表。*/
 $lang->my->index           = '首页';
+$lang->my->data            = '我的数据';
 $lang->my->todo            = '我的待办';
 $lang->my->calendar        = '日程';
 $lang->my->work            = '待处理';

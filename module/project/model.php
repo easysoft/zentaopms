@@ -286,18 +286,18 @@ class projectModel extends model
 
         $hours = $this->dao->select('t2.parent as project, sum(t1.consumed) as consumed, sum(t1.estimate) as estimate')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.parent')->in($projectIdList)
+            ->where('t2.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
-            ->groupBy('t2.parent')
+            ->groupBy('t2.project')
             ->fetchAll('project');
 
         $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.parent')->in($projectIdList)
+            ->where('t2.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait,doing,pause')
-            ->groupBy('t2.parent')
+            ->groupBy('t2.project')
             ->fetchPairs();
 
         $this->loadModel('product');
@@ -412,13 +412,13 @@ class projectModel extends model
     {
         $projects = array();
 
-        $totalConsumeds = $this->dao->select('project,ROUND(SUM(consumed), 1) AS totalConsumed')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectIdList)
-            ->beginIF($time == 'THIS_YEAR')->andWhere('realStarted')->ge(date("Y-01-01 00:00:00"))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('project')
+        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_TASKESTIMATE)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+            ->where('t2.project')->in($projectIdList)
+            ->beginIF($time == 'THIS_YEAR')->andWhere('LEFT(t1.`date`, 4)')->eq(date('Y'))->fi()
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.parent')->lt(1)
+            ->groupBy('t2.project')
             ->fetchAll('project');
 
         foreach($projectIdList as $projectID)

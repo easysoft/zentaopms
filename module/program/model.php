@@ -444,7 +444,7 @@ class programModel extends model
             ->where('deleted')->eq('0')
             ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
             ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('status')->eq($browseType)->fi()
-            ->beginIF($browseType != 'undone')->andWhere('status')->in('wait,doing')->fi()
+            ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()

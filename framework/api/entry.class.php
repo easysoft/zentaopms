@@ -538,6 +538,7 @@ class baseEntry
         foreach($allowable as $field)
         {
             $field = trim($field);
+            if(empty($field)) continue;
             if(!isset($object->$field)) continue;
             $filtered->$field = $object->$field;
         }

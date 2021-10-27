@@ -222,7 +222,7 @@ class myModel extends model
             $allConsumed      = 0;
             $thisYearConsumed = 0;
 
-            $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc');
+            $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc', 0);
             $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');
             foreach($projects as $project)
             {

@@ -21,7 +21,7 @@ class projectsEntry extends entry
     public function get($programID = 0)
     {
         if(!$programID) $programID = $this->param('program', 0);
-        $returnFields = $this->param('return', '');
+        $appendFields = $this->param('fields', '');
 
         $control = $this->loadController('project', 'browse');
         $control->browse($programID, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
@@ -33,7 +33,7 @@ class projectsEntry extends entry
             $result = array();
             foreach($data->data->projectStats as $project)
             {
-                if($returnFields) $project = $this->filterFields($project, $returnFields);
+                $project = $this->filterFields($project, 'id,name,code,type,parent,begin,end,status,openedBy,openedDate,' . $appendFields);
                 $result[] = $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => (int)$pager->recPerPage, 'projects' => $result));

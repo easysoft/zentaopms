@@ -57,7 +57,10 @@ class executionEntry extends Entry
                     $execution->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');;
                     break;
                 case 'stories':
-                    $execution->stories = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 0, '', 'full', 'unclosed');
+                    $stories = $this->loadModel('story')->getExecutionStories($executionID);
+                    foreach($stories as $storyID => $story) $stories[$storyID] = $this->filterFields($story, 'id,title,module,pri,status,stage,estimate');
+
+                    $execution->stories = array_values($stories);
                     break;
             }
         }
