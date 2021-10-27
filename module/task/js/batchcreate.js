@@ -222,15 +222,6 @@ $(document).on('mousedown', 'select', function()
 
 $(function()
 {
-    /* Adjust width for ie chosen width. */
-    if(!hiddenStory)
-    {
-        var chosenWidth = $('#module1_chosen').width();
-    }
-    else
-    {
-        var chosenWidth = 170;
-    }
 
     $('.chosen-container[id^=module]').width(chosenWidth);
     $('.chosen-container[id^=module]').css('max-width', chosenWidth);
