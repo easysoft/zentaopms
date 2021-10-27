@@ -402,4 +402,23 @@ class kanbanModel extends model
 
         return dao::isError();
     }
+
+    
+
+    /**
+     * Update lane column.
+     *
+     * @param  int $columnID
+     * @access public
+     * @return array
+     */
+    public function updateLaneColumn($columnID, $data)
+    {
+        $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
+            ->autoCheck()
+            ->batchcheck($this->config->kanban->setlaneColumn->requiredFields, 'notempty')
+            ->where('id')->eq($columnID)
+            ->exec();
+    }
+    
 }

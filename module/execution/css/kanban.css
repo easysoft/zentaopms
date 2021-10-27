@@ -14,6 +14,4 @@
 .kanban-affixed .kanban-header-col > .title > .count {color: #fff!important;}
 
 .dropdown-menu a {text-align: left;}
-.panel{ position: unset }
-.menu-actions { display: contents }
 .scrollbar-hover {max-height: 2000px; overflow: scroll !important;}
