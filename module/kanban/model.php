@@ -345,6 +345,13 @@ class kanbanModel extends model
         return dao::isError();
     }
 
+    /**
+     * Set lane info.
+     *
+     * @param  int    $laneID
+     * @access public
+     * @return bool
+     */
     public function setLane($laneID)
     {
         $lane = fixer::input('post')->get();
