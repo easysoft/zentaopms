@@ -216,7 +216,7 @@ class kanbanModel extends model
                 $data->type  = $colType;
                 $data->cards = '';
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
-                if(strpos(',develop,', $colType) !== false) $data->parent = -1;
+                if($colType == 'develop') $data->parent = -1;
                 if(strpos(',develop,', $colType) === false)
                 {
                     $taskStatus = $this->config->kanban->taskColumnStatusList[$colType];
