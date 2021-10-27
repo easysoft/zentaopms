@@ -521,10 +521,12 @@ $lang->navGroup->build          = 'project';
 $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->milestone      = 'project';
 
-$lang->navGroup->execution = 'execution';
-$lang->navGroup->task      = 'execution';
-$lang->navGroup->build     = 'execution';
-$lang->navGroup->team      = 'execution';
+$lang->navGroup->execution    = 'execution';
+$lang->navGroup->task         = 'execution';
+$lang->navGroup->build        = 'execution';
+$lang->navGroup->team         = 'execution';
+$lang->navGroup->kanbancolumn = 'execution';
+$lang->navGroup->kanbanlane   = 'execution';
 
 $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
