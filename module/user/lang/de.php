@@ -121,7 +121,7 @@ $lang->user->testTask2Him = 'Build';
 $lang->user->case2Him     = 'Fall zugeordnet';
 $lang->user->caseByHim    = 'Fall geöffnet';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%2\$s</b> of <b>%1\$s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
 $lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
 $lang->user->loginFailed  = "Login fehlgeschlagen. Bitte prüfen Sie Ihren Benutzernamen und das Passwort.";
 $lang->user->lockWarning  = "Sie haben %s Versuche.";
@@ -249,14 +249,14 @@ $lang->user->process4DB  = "It is detected that you may be using the one click i
 $lang->user->mkdirWin = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
-    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div> 
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
     <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
     </td></tr></table></body></html>
 EOT;
 $lang->user->mkdirLinux = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
-    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>  
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
     <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
     <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
     <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>
