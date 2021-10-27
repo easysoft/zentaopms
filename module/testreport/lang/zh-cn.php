@@ -84,6 +84,7 @@ $lang->testreport->noTestTask     = "该{$lang->productCommon}下还没有关联
 $lang->testreport->noObjectID     = "没有选定测试单或{$lang->executionCommon}，无法创建测试报告！";
 $lang->testreport->moreProduct    = "只能对同一个{$lang->productCommon}生成测试报告。";
 $lang->testreport->hiddenCase     = "隐藏 %s 个用例";
+$lang->testreport->goalTip        = "该版本所属执行的描述信息";
 
 $lang->testreport->bugSummary = <<<EOD
 共发现<strong>%s</strong>个Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>，
