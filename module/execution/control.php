@@ -1853,6 +1853,18 @@ class execution extends control
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);
 
+        /* Get execution's product. */
+        $productID = 0;
+        $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
+        if($productPairs) $productID = key($productPairs);
+
+        $plans    = $this->execution->getPlans($products);
+        $allPlans = array('' => '');
+        if(!empty($plans))
+        {
+            foreach($plans as $plan) $allPlans += $plan;
+        }
+
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[]    = $this->lang->execution->kanban;
@@ -1860,6 +1872,8 @@ class execution extends control
         $this->view->storyOrder    = $orderBy;
         $this->view->orderBy       = 'id_asc';
         $this->view->executionID   = $executionID;
+        $this->view->productID     = $productID;
+        $this->view->allPlans      = $allPlans;
         $this->view->browseType    = '';
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->execution     = $execution;
