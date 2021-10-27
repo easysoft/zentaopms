@@ -120,7 +120,7 @@ class job extends control
         $this->view->repoTypes   = $repoTypes;
         $this->view->products    = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
-        $this->view->jenkinsServerList = $this->loadModel('jenkins')->getPairs();
+        $this->view->jenkinsServerList = array("" => "") + $this->loadModel('jenkins')->getPairs();
 
         $this->display();
     }
