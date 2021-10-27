@@ -524,18 +524,21 @@ function createKanban(kanbanID, data, options)
 }
 
 /* Define drag and drop rules */
-window.kanbanDropRules =
+if(!window.kanbanDropRules)
 {
-    story:
+    window.kanbanDropRules =
     {
-        blacklog: true,
-        ready: ['blacklog', 'dev-doing'],
-        'dev-doing': ['dev-done'],
-        'dev-done': ['test-doing'],
-        'test-doing': ['test-done'],
-        'test-done': ['accepted'],
-        'accepted': ['published'],
-        'published': false,
+        story:
+        {
+            blacklog: true,
+            ready: ['blacklog', 'dev-doing'],
+            'dev-doing': ['dev-done'],
+            'dev-done': ['test-doing'],
+            'test-doing': ['test-done'],
+            'test-done': ['accepted'],
+            'accepted': ['published'],
+            'published': false,
+        }
     }
 }
 
