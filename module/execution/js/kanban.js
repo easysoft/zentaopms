@@ -523,6 +523,58 @@ function createKanban(kanbanID, data, options)
     $kanban.kanban($.extend({data: data}, options));
 }
 
+function fullScreen()
+{
+    var element = document.getElementById('kanbanContainer');
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    if(requestMethod)
+    {
+        var afterEnterFullscreen = function()
+        {
+            $('#kanbanContainer').addClass('scrollbar-hover');
+            $.cookie('isFullScreen', 1);
+        }
+
+        var whenFailEnterFullscreen = function()
+        {
+            $.cookie('isFullScreen', 0);
+        }
+
+        try
+        {
+            var result = requestMethod.call(element);
+            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
+            {
+                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
+            }
+            else
+            {
+                afterEnterFullscreen();
+            }
+        }
+        catch (error)
+        {
+            whenFailEnterFullscreen(error);
+        }
+
+    }
+}
+
+/**
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
+function exitFullScreen()
+{
+    $('#kanbanContainer').removeClass('scrollbar-hover');
+    $('#content .actions').removeClass('hidden');
+    $.cookie('isFullScreen', 0);
+}
+
+
+
 /* Overload kanban default options */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
