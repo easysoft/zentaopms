@@ -27,7 +27,7 @@ class kanban extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('wip', $columnID, 'Edited');
-            die(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $this->app->loadLang('story');
@@ -41,6 +41,35 @@ class kanban extends control
         $this->view->title  = $title . $this->lang->colon . $this->lang->kanban->setWIP . '(' . $this->lang->kanban->WIP . ')';
         $this->view->column = $column;
         $this->view->status = $status;
+        $this->display();
+    }
+
+    /**
+     * Set lane info.
+     *
+     * @param  int    $laneID
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function setLane($laneID, $executionID = 0)
+    {
+        if($_POST)
+        {
+            $this->kanban->setLane($laneID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action')->create('lane', $laneID, 'Edited');
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $lane = $this->kanban->getLaneById($laneID);
+        if(!$lane) die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
+
+        $this->view->title = zget($this->lang->kanban->laneTypeList, $lane->type) . $this->lang->colon . $this->lang->kanban->setLane;
+        $this->view->lane  = $lane;
+
         $this->display();
     }
 }

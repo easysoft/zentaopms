@@ -379,6 +379,7 @@ $lang->execution->kanban        = "看板";
 $lang->execution->kanbanSetting = "看板设置";
 $lang->execution->resetKanban   = "恢复默认";
 $lang->execution->printKanban   = "打印看板";
+$lang->execution->fullScreen    = "看板全屏展示";
 $lang->execution->bugList       = "Bug列表";
 
 $lang->execution->kanbanHideCols   = '看板隐藏已关闭、已取消列';

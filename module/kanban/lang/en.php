@@ -1,6 +1,22 @@
 <?php
 $lang->kanban = new stdClass();
 
+$lang->kanban->WIP       = 'WIP';
+$lang->kanban->setWIP    = 'WIP Settings';
+$lang->kanban->WIPStatus = 'WIP Status';
+$lang->kanban->WIPStage  = 'WIP Stage';
+$lang->kanban->WIPType   = 'WIP Type';
+$lang->kanban->WIPCount  = 'WIP Count';
+$lang->kanban->noLimit   = 'No Limit ∞';
+$lang->kanban->setLane   = 'Lane Settings';
+$lang->kanban->laneName  = 'Lane Name';
+$lang->kanban->laneColor = 'Lane Color';
+
+$this->lang->kanban->laneTypeList = array();
+$this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
+$this->lang->kanban->laneTypeList['bug']   = 'Bug';
+$this->lang->kanban->laneTypeList['task']  = 'Task';
+
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';
 $lang->kanban->storyColumn['ready']      = 'Ready';
@@ -33,3 +49,9 @@ $lang->kanban->taskColumn['developed']  = 'Developed';
 $lang->kanban->taskColumn['pause']      = 'Pause';
 $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
+
+$lang->kanbancolumn = new stdclass();
+$lang->kanbancolumn->limit = $lang->kanban->WIPCount;
+
+$lang->kanbanlane = new stdclass();
+$lang->kanbanlane->name = $lang->kanban->laneName;

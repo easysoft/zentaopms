@@ -13,14 +13,12 @@
 
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-right'>
-    <?php echo html::a($this->createLink('execution', 'ajaxKanbanSetting', "executionID=$executionID"), "<i class='icon-cog muted'></i> " . $lang->execution->kanbanSetting, '', "class='iframe btn btn-link'");?>
-    <?php if(common::hasPriv('execution', 'printKanban')) echo html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'");?>
     <?php
     $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=kanban");
-    if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-export muted'></i> " . $lang->task->export, '', "class='btn btn-link iframe export' data-width='700'");
+    if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-export muted'></i> " . $lang->export, '', "class='btn btn-link iframe export' data-width='700'");
     ?>
     <?php if($canBeChanged):?>
-    <div class='btn-group'>
+    <div class='btn-group' style="margin-right: 0">
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'>
         <i class='icon-import muted'></i> <?php echo $lang->import ?>
         <span class='caret'></span>
@@ -37,6 +35,16 @@
         ?>
       </ul>
     </div>
+
+    <?php
+    echo "<div class='btn-group menu-actions'>";
+    echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+    // TODO 暂时解决样式问题
+    echo "<ul class='dropdown-menu pull-right' style='position: relative'>";
+    if(common::hasPriv('execution', 'printKanban')) echo '<li>' .html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
+    echo '<li>' .html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->execution->fullScreen, '', "class='btn btn-link' title='{$lang->execution->fullScreen}' data-width='500'") . '</li>';
+    echo '</ul></div>';
+?>
     <?php
     $checkObject = new stdclass();
     $checkObject->execution = $executionID;

@@ -453,7 +453,7 @@ function renderTaskItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
+        $title = $('<a class="title iframe"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
                 .attr('href', $.createLink('task', 'view', 'taskID=' + item.id));
         $title.appendTo($item);
     }
@@ -467,7 +467,7 @@ function renderTaskItem(item, $item, col)
     $infos.html(
     [
         '<span class="info info-id text-muted">#' + item.id + '</span>',
-        '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
+        '<span class="info i nfo-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
     ].join(''));
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
@@ -477,7 +477,7 @@ function renderTaskItem(item, $item, col)
     return $item;
 }
 
-
+ 
 /* Add column renderer/  添加特定列类型或列条目类型渲染方法 */
 addColumnRenderer('story', renderStoryItem);
 addColumnRenderer('bug', renderBugItem);
@@ -522,8 +522,135 @@ function createKanban(kanbanID, data, options)
     var $kanban = $('#kanban-' + kanbanID);
     if($kanban.length) return updateKanban(kanbanID, data);
 
-    $kanban = $('<div id="kanban-' + kanbanID + '"></div>').appendTo('#kanbans');
+    $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>').appendTo('#kanbans');
     $kanban.kanban($.extend({data: data}, options));
+}
+
+function fullScreen()
+{
+    var element = document.getElementById('kanbanContainer');
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    if(requestMethod)
+    {
+        var afterEnterFullscreen = function()
+        {
+            $('#kanbanContainer').addClass('scrollbar-hover');
+            $.cookie('isFullScreen', 1);
+        }
+
+        var whenFailEnterFullscreen = function()
+        {
+            $.cookie('isFullScreen', 0);
+        }
+
+        try
+        {
+            var result = requestMethod.call(element);
+            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
+            {
+                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
+            }
+            else
+            {
+                afterEnterFullscreen();
+            }
+        }
+        catch (error)
+        {
+            whenFailEnterFullscreen(error);
+        }
+    }
+}
+
+window.kanbanDropRules =
+{
+    story:
+    {
+        blacklog: true,
+        ready: ['blacklog', 'dev-doing'],
+        'dev-doing': ['dev-done'],
+        'dev-done': ['test-doing'],
+        'test-doing': ['test-done'],
+        'test-done': ['accepted'],
+        'accepted': ['published'],
+        'published': false,
+    }
+}
+
+/**
+<<<<<<< module/execution/js/kanban.js
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
+function exitFullScreen()
+{
+    $('#kanbanContainer').removeClass('scrollbar-hover');
+    $('#content .actions').removeClass('hidden');
+    $.cookie('isFullScreen', 0);
+}
+
+ * Find drop columns
+ * @param {JQuery} $element Drag element
+ * @param {JQuery} $root Dnd root element
+ */
+function findDropColumns($element, $root)
+{
+    var $col     = $element.closest('.kanban-col');
+    var col      = $col.data();
+    var kanbanID = $root.data('id');
+    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
+
+    if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
+
+    var colRules = kanbanRules[col.type];
+    var lane     = $col.closest('.kanban-lane').data('lane');
+    return $root.find('.kanban-lane-col').filter(function()
+    {
+        if(!colRules) return false;
+        if(colRules === true) return true;
+
+        var $newCol = $(this);
+        var newCol = $newCol.data();
+        if(newCol.id === col.id) return false;
+
+        var $newLane = $newCol.closest('.kanban-lane');
+        var newLane = $newLane.data('lane');
+        var canDropHere = colRules.indexOf(newCol.type) > -1 && newLane.id === lane.id;
+        if(canDropHere) $newCol.addClass('can-drop-here');
+        return canDropHere;
+    });
+}
+
+/**
+ * Handle finish drop task
+ * @param {Object} event Event object
+ * @returns {void}
+ */
+function handleFinishDrop(event)
+{
+    var $item = $(event.element); // The drag item
+    var $dragCol = $item.closest('.kanban-lane-col');
+    var $dropCol = $(event.target);
+
+    /* Get d-n-d(drag and drop) infos  获取拖放操作相关信息 */
+    var item = $item.data('item');
+    var fromColType = $dragCol.data('type');
+    var toColType = $dropCol.data('type');
+    var kanbanID = $item.closest('.kanban').data('id');
+
+    /* TODO: Save d-n-d infos to server 将拖放操作信息提交到服务器  */
+    console.log('TODO: Save d-n-d infos to server 将拖放操作信息提交到服务器', {item, fromColType, toColType, kanbanID});
+
+    /*
+        // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
+
+        // 调用 updateKanban 更新看板数据
+        updateKanban(kanbanID, newKanbanData);
+     */
+
+    $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
 }
 
 /* Overload kanban default options */
@@ -546,12 +673,19 @@ $(function()
     /* Common options 用于初始化看板的通用选项 */　
     var commonOptions =
     {
-        maxColHeight:  'auto',
-        minColWidth:    240,
-        droppable:      true,
-        showCount:      true,
-        showZeroCount:  true,
-        countRender:    renderColumnCount
+        maxColHeight:   'auto',
+        minColWidth:     240,
+        maxColWidth:     240,
+        showCount:       true,
+        showZeroCount:   true,
+        fluidBoardWidth: true,
+        countRender:     renderColumnCount,
+        droppable:
+        {
+            target:       findDropColumns,
+            finish:       handleFinishDrop,
+            mouseButton: 'left'
+        }
     };
 
     /* Create story kanban 创建需求看板 */
