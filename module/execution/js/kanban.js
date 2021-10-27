@@ -477,8 +477,8 @@ function renderTaskItem(item, $item, col)
 /* Add column renderer/  添加特定列类型或列条目类型渲染方法 */
 /* Add column renderer/  添加特定列类型或列卡片类型渲染方法 */
 addColumnRenderer('story', renderStoryItem);
-addColumnRenderer('bug', renderBugItem);
-addColumnRenderer('task', renderTaskItem);
+addColumnRenderer('bug',   renderBugItem);
+addColumnRenderer('task',  renderTaskItem);
 
 /**
  * Render column count 渲染看板列头上的卡片数目
