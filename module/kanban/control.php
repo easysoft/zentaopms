@@ -72,4 +72,37 @@ class kanban extends control
 
         $this->display();
     }
+
+    /**
+     * Set lane column info.
+     *
+     * @param  int $columnID
+     * @access public
+     * @return void
+     */
+    public function setLaneColumn($columnID)
+    {
+        $column = $this->kanban->getColumnById($columnID);
+        
+        if($_POST)
+        {
+            $params = fixer::input('post')->get();
+            $this->kanban->updateLaneColumn($columnID, $params);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            
+            $changes = common::createChanges($column, $params);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            return $this->sendSuccess(array('locate' => 'parent'));
+        }
+
+        $this->view->column = $column;
+        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setLaneColumn;
+        $this->display();
+    }
+
 }

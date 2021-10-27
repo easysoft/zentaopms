@@ -1,16 +1,19 @@
 <?php
 $lang->kanban = new stdClass();
 
-$lang->kanban->WIP       = 'WIP';
-$lang->kanban->setWIP    = '在制品设置';
-$lang->kanban->WIPStatus = '在制品状态';
-$lang->kanban->WIPStage  = '在制品阶段';
-$lang->kanban->WIPType   = '在制品类型';
-$lang->kanban->WIPCount  = '在制品数量';
-$lang->kanban->noLimit   = '不限制∞';
-$lang->kanban->setLane   = '泳道设置';
-$lang->kanban->laneName  = '泳道名称';
-$lang->kanban->laneColor = '泳道颜色';
+$lang->kanban->WIP             = 'WIP';
+$lang->kanban->setWIP          = '在制品设置';
+$lang->kanban->WIPStatus       = '在制品状态';
+$lang->kanban->WIPStage        = '在制品阶段';
+$lang->kanban->WIPType         = '在制品类型';
+$lang->kanban->WIPCount        = '在制品数量';
+$lang->kanban->noLimit         = '不限制∞';
+$lang->kanban->setLane         = '泳道设置';
+$lang->kanban->laneName        = '泳道名称';
+$lang->kanban->laneColor       = '泳道颜色';
+$lang->kanban->setLaneColumn   = '看板列设置';
+$lang->kanban->columnName      = '看板列名称';
+$lang->kanban->columnColor     = '看板列颜色';
 
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
