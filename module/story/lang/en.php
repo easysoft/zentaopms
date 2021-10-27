@@ -115,8 +115,8 @@ $lang->story->stage          = 'Phase';
 $lang->story->stageAB        = 'Phase';
 $lang->story->stagedBy       = 'SetBy';
 $lang->story->mailto         = 'Mailto';
-$lang->story->openedBy       = 'CreatedBy';
-$lang->story->openedDate     = 'CreatedDate';
+$lang->story->openedBy       = 'Created By';
+$lang->story->openedDate     = 'Created Date';
 $lang->story->assignedTo     = 'AssignTo';
 $lang->story->assignedDate   = 'AssignedDate';
 $lang->story->lastEditedBy   = 'EditedBy';
@@ -256,7 +256,7 @@ $lang->story->lblClose    = 'Close';
 $lang->story->lblTBC      = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Influence';
-$lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
+$lang->story->affectedProjects     = $config->systemMode == 'new' ? "{$lang->project->common}s/{$lang->execution->common}s" : "{$lang->project->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'Cases';
 

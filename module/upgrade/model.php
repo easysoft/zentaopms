@@ -4584,7 +4584,7 @@ class upgradeModel extends model
         {
             $projectCase->project = $projectID;
             $projectCase->order   = $projectCase->case * 5;
-            $this->dao->insert(TABLE_PROJECTCASE)->data($projectCase)->exec();
+            $this->dao->replace(TABLE_PROJECTCASE)->data($projectCase)->exec();
         }
 
         /* Put sprint cases into project case table. */
