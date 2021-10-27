@@ -6,5 +6,5 @@ td.normal {color: #00da88;}
 td.acl {white-space: nowrap;}
 .row > .col-sm-12:first-child {padding-bottom: 20px;}
 .c-product ,.c-release ,.c-code  {width: 100px !important;}
-.c-openedBy ,.c-acl ,.c-pss ,.c-common {width:110px !important;}
+.c-openedBy ,.c-acl ,.c-prs ,.c-common {width:110px !important;}
 .c-bugs ,.c-type {width:120px !important;}
