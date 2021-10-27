@@ -209,28 +209,29 @@ class apiModel extends model
         $now     = helper::now();
         $account = $this->app->user->account;
         $data    = fixer::input('post')
-            ->remove('type')
             ->skipSpecial('params,response')
             ->add('editedBy', $account)
             ->add('editedDate', $now)
+            ->add('version', $oldApi->version)
             ->setDefault('product,module', 0)
+            ->remove('type')
             ->get();
+       
+        $changes = common::createChanges($oldApi, $data);
+        if(!empty($changes)) $data->version = $oldApi->version + 1;
 
-        $data->id      = $oldApi->id;
-        $data->version = $oldApi->version + 1;
-        $apiSpec       = $this->getApiSpecByData($data);
-
-        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
-
-        unset($data->id);
         $this->dao->update(TABLE_API)
             ->data($data)
             ->autoCheck()
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
             ->where('id')->eq($apiID)
             ->exec();
+        
+        $data->id = $apiID;
+        $apiSpec  = $this->getApiSpecByData($data);
+        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
-        return common::createChanges($oldApi, $data);
+        return $changes; 
     }
 
     /**
