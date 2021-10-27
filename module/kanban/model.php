@@ -38,32 +38,66 @@ class kanbanModel extends model
         if($objectType == 'story' or $objectType == 'all') $stories = $this->loadModel('story')->getExecutionStories($executionID);
         if($objectType == 'bug' or $objectType == 'all')   $bugs    = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($objectType == 'task' or $objectType == 'all')  $tasks   = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
-        foreach($columns as $laneID => $cols)
-        {
-            $laneType = $lanes[$laneID]->type;
-            foreach($cols as $colID => $col)
-            {
-                $cardIdList = array_filter(explode(',', $col->cards));
-                $col->cards = array();
-                foreach($cardIdList as $objectID)
-                {
-                    if($laneType == 'story') $col->cards[$objectID] = zget($stories, $objectID, '');
-                    if($laneType == 'bug')   $col->cards[$objectID] = zget($bugs,    $objectID, '');
-                    if($laneType == 'task')  $col->cards[$objectID] = zget($tasks,   $objectID, '');
-                }
-                if($col->parent > 0)
-                {
-                    $cols[$col->parent]->childs[$colID] = $col;
-                    unset($cols[$colID]);
-                }
-            }
-        }
 
+        /* Init vars. */
         $kanban = array();
         foreach($lanes as $laneID => $lane)
         {
-            $lane->columns = $columns[$laneID];
-            $kanban[$lane->type] = $lane;
+            $laneData   = array();
+            $columnData = array();
+            $cards      = array();
+
+            $laneData['id']              = $lane->type;
+            $laneData['name']            = $lane->name;
+            $laneData['color']           = $lane->color;
+            $laneData['defaultItemType'] = $lane->type;
+            $laneData['order']           = $lane->order;
+
+            foreach($columns[$laneID] as $colID => $col)
+            {
+                if($col->parent > 0) continue;
+
+                $columnData[$col->id]['id']       = $lane->type . '-' . $col->type;
+                $columnData[$col->id]['type']     = $col->type;
+                $columnData[$col->id]['name']     = $col->name;
+                $columnData[$col->id]['color']    = $col->color;
+                $columnData[$col->id]['limit']    = $col->limit;
+                $columnData[$col->id]['asParent'] = $col->parent == -1 ? true : false;
+
+                unset($columns[$laneID][$colID]);
+            }
+
+            foreach($columns[$laneID] as $colID => $col)
+            {
+                $columnData[$col->parent]['subs']['id']         = $lane->type . '-' . $col->type;
+                $columnData[$col->parent]['subs']['type']       = $col->type;
+                $columnData[$col->parent]['subs']['name']       = $col->name;
+                $columnData[$col->parent]['subs']['color']      = $col->color;
+                $columnData[$col->parent]['subs']['limit']      = $col->limit;
+                $columnData[$col->parent]['subs']['parentType'] = $columnData[$col->parent]['type'];
+
+                $cardIdList = array_filter(explode(',', $col->cards));
+                $cardOrder  = 1;
+                foreach($cardIdList as $cardID)
+                {
+                    if($lane->type == 'story') $object = zget($stories, $cardID, array());
+                    if($lane->type == 'task')  $object = zget($tasks, $cardID, array());
+                    if($lane->type == 'bug')   $object = zget($bugs, $cardID, array());
+
+                    $laneData['cards'][$col->type][$object->id]['id']         = $object->id;
+                    $laneData['cards'][$col->type][$object->id]['order']      = $cardOrder;
+                    $laneData['cards'][$col->type][$object->id]['pri']        = $object->pri;
+                    $laneData['cards'][$col->type][$object->id]['estimate']   = $lane->type == 'bug' ? '' : $object->estimate;
+                    $laneData['cards'][$col->type][$object->id]['assignedTo'] = $object->assignedTo;
+                    $laneData['cards'][$col->type][$object->id]['deadline']   = $lane->type == 'task' ? $object->deadline : '';
+
+                    $cardOrder ++;
+                }
+            }
+
+            $kanban[$lane->type]['id']      = $lane->type;
+            $kanban[$lane->type]['columns'] = $columnData;
+            $kanban[$lane->type]['lanes']   = $laneData;
         }
 
         return $kanban;

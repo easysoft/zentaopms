@@ -6,6 +6,7 @@
  */
 function getStoryKanbanDemoData()
 {
+    return kanbanGroup.story;
     /* Define kanban columns  定义看板列 */
     var columns =
     [
@@ -134,6 +135,7 @@ function getStoryKanbanDemoData()
  */
 function getBugKanbanDemoData()
 {
+    return kanbanGroup.bug;
     /* Define kanban columns  定义看板列 */
     var columns =
     [
@@ -252,6 +254,7 @@ function getBugKanbanDemoData()
  */
 function getTaskKanbanDemoData()
 {
+    return kanbanGroup.task;
     /* Define kanban columns  定义看板列 */
     var columns =
     [
