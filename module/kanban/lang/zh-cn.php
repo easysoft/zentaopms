@@ -5,8 +5,17 @@ $lang->kanban->WIP       = 'WIP';
 $lang->kanban->setWIP    = '在制品设置';
 $lang->kanban->WIPStatus = '在制品状态';
 $lang->kanban->WIPStage  = '在制品阶段';
+$lang->kanban->WIPType   = '在制品类型';
 $lang->kanban->WIPCount  = '在制品数量';
 $lang->kanban->noLimit   = '不限制∞';
+$lang->kanban->setLane   = '泳道设置';
+$lang->kanban->laneName  = '泳道名称';
+$lang->kanban->laneColor = '泳道颜色';
+
+$this->lang->kanban->laneTypeList = array();
+$this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
+$this->lang->kanban->laneTypeList['bug']   = 'Bug';
+$this->lang->kanban->laneTypeList['task']  = '任务';
 
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';
@@ -40,3 +49,9 @@ $lang->kanban->taskColumn['developed']  = '研发完毕';
 $lang->kanban->taskColumn['pause']      = '已暂停';
 $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
+
+$lang->kanbancolumn = new stdclass();
+$lang->kanbancolumn->limit = $lang->kanban->WIPCount;
+
+$lang->kanbanlane = new stdclass();
+$lang->kanbanlane->name = $lang->kanban->laneName;
