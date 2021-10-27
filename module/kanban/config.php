@@ -23,11 +23,6 @@ $config->kanban->default->task->name  = $lang->task->common;
 $config->kanban->default->task->color = '#4169e1';
 $config->kanban->default->task->order = '15';
 
-$config->kanban->parentColumn = array();
-$config->kanban->parentColumn['story'] = array('develop', 'test');
-$config->kanban->parentColumn['bug']   = array('resolving', 'test');
-$config->kanban->parentColumn['task']  = array('develop');
-
 $config->kanban->storyColumnStageList = array();
 $config->kanban->storyColumnStageList['backlog']    = 'projected';
 $config->kanban->storyColumnStageList['ready']      = 'projected';

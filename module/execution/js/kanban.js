@@ -6,7 +6,6 @@
  */
 function getStoryKanbanDemoData()
 {
-    return kanbanGroup.story;
     /* Define kanban columns  定义看板列 */
     var columns =
     [
@@ -124,6 +123,7 @@ function getStoryKanbanDemoData()
        columns:  定义看板上的所有列,
        lanes:    定义看板上的所有泳道
        defaultCardType: 看板上的卡片默认类型，例如：'story'（需求） */
+    return kanbanGroup.story;
     return {id: 'story', columns: columns, lanes: lanes, defaultCardType: 'story'};
 }
 
