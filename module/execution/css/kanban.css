@@ -1,8 +1,4 @@
-#header {position: fixed; top: 0; left: 0; right: 0; z-index: 10;}
-#mainMenu {position: fixed; padding: 10px 15px; top: 60px; left: 0; right: 0; background-color: #efefef; z-index: 0;}
-#main {padding-bottom: 0; padding-top: 50px;}
-#main > .container {max-width: none!important; padding: 0}
-#kanbanContainer {border-radius: 0; margin: 48px 0 0 0;}
+#main > .container {max-width: 1960px!important; padding: 0 10px}
 
 .kanban + .kanban {margin-top: 15px}
 .kanban-item > .title { display: block;white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
@@ -16,3 +12,8 @@
 
 .kanban-affixed .kanban-header-col > .title > .text,
 .kanban-affixed .kanban-header-col > .title > .count {color: #fff!important;}
+
+.dropdown-menu a {text-align: left;}
+.panel{ position: unset }
+.menu-actions { display: contents }
+.scrollbar-hover {max-height: 2000px; overflow: scroll !important;}

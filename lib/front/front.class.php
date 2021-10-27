@@ -229,7 +229,7 @@ class html extends baseHTML
     /**
      * Create user avatar.
      *
-     * @param  string|object|array  $user        User object or user avatar url or user account
+     * @param  string|object|array  $user        User object or user account
      * @param  string|int           $size        Avatar size, can be a number or preset sizes: "xs", "sm", "", "lg", "xl", default is ""
      * @param  string               $className   Avatar element class name, default is "avatar-circle"
      * @param  string               $attrib      Extra attributes on avatar element
@@ -248,7 +248,6 @@ class html extends baseHTML
         if(is_string($user))
         {
             $userObj->account = $user;
-            if(strlen($user) > 1) $userObj->avatar = $user;
             $user = $userObj;
         }
         elseif(is_array($user))

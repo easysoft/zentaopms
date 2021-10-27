@@ -2,8 +2,10 @@
 global $lang;
 $config->kanban = new stdclass();
 
-$config->kanban->setwip = new stdclass();
-$config->kanban->setwip->requiredFields = 'limit';
+$config->kanban->setwip  = new stdclass();
+$config->kanban->setlane = new stdclass();
+$config->kanban->setwip->requiredFields  = 'limit';
+$config->kanban->setlane->requiredFields = 'name,type';
 
 $config->kanban->default = new stdclass();
 $config->kanban->default->story  = new stdclass();
@@ -64,3 +66,5 @@ $config->kanban->taskColumnStatusList['developed']  = 'done';
 $config->kanban->taskColumnStatusList['pause']      = 'pause';
 $config->kanban->taskColumnStatusList['canceled']   = 'cancel';
 $config->kanban->taskColumnStatusList['closed']     = 'closed';
+
+$config->kanban->laneColorList = array('#7ec5ff', '#333', '#2b529c', '#e48600', '#d2323d', '#229f24', '#777', '#d2691e', '#008b8b', '#2e8b57', '#4169e1', '#4b0082', '#fa8072', '#ba55d3', '#2e8b57', '#6b8e23');
