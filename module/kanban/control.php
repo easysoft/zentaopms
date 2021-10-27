@@ -26,7 +26,7 @@ class kanban extends control
             $this->kanban->setWIP($columnID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('wip', $columnID, 'Edited');
+            $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited', '', $executionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
@@ -59,7 +59,7 @@ class kanban extends control
             $this->kanban->setLane($laneID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('lane', $laneID, 'Edited');
+            $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
