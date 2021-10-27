@@ -180,6 +180,7 @@ class kanbanModel extends model
                 $data->cards = '';
                 if(strpos(',fixing,fixed,', $colType) !== false) $data->parent = $resolvingColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
+                if(strpos(',resolving,test,', $colType) !== false) $data->parent = -1;
                 if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
                 {
                     $bugStatus = $this->config->kanban->bugColumnStatusList[$colType];
@@ -215,6 +216,7 @@ class kanbanModel extends model
                 $data->type  = $colType;
                 $data->cards = '';
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
+                if(strpos(',develop,', $colType) !== false) $data->parent = -1;
                 if(strpos(',develop,', $colType) === false)
                 {
                     $taskStatus = $this->config->kanban->taskColumnStatusList[$colType];
