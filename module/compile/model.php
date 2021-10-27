@@ -121,7 +121,7 @@ class compileModel extends model
      */
     public function exec($compile)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($compile->job)
@@ -150,8 +150,8 @@ class compileModel extends model
 
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
-            ->set('lastStatus')->eq($build->status)
-            ->set('lastExec')->eq($build->updateDate)
+            ->set('lastStatus')->eq($compile->status)
+            ->set('lastExec')->eq($compile->updateDate)
             ->where('id')->eq($job->id)
             ->exec();
 
