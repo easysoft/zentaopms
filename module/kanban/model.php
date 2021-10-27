@@ -60,7 +60,7 @@ class kanbanModel extends model
         }
 
         $kanban = array();
-        foreach($lanes as $laneID => $lane) 
+        foreach($lanes as $laneID => $lane)
         {
             $lane->columns = $columns[$laneID];
             $kanban[$lane->type] = $lane;
@@ -309,6 +309,18 @@ class kanbanModel extends model
     }
 
     /**
+     * Get lane by id.
+     *
+     * @param  int    $laneID
+     * @access public
+     * @return object
+     */
+    public function getLaneById($laneID)
+    {
+        return $this->dao->findById($laneID)->from(TABLE_KANBANLANE)->fetch();
+    }
+
+    /**
      * Set WIP limit.
      *
      * @param  int    $columnID
@@ -319,17 +331,35 @@ class kanbanModel extends model
     {
         $column = $this->getColumnById($columnID);
         $data   = fixer::input('post')
+            ->cleanInt('limit')
             ->remove('WIPCount,noLimit')
             ->get();
 
-        $this->lang->kanbancolumn = new stdclass();
-        $this->lang->kanbancolumn->limit = $this->lang->kanban->WIPCount;
-
         $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
             ->autoCheck()
-            ->check(is_numeric($data->limit), 'limit', 'gt', 0)
+            ->check('limit', 'gt', 0)
             ->batchcheck($this->config->kanban->setwip->requiredFields, 'notempty')
             ->where('id')->eq($columnID)
+            ->exec();
+
+        return dao::isError();
+    }
+
+    /**
+     * Set lane info.
+     *
+     * @param  int    $laneID
+     * @access public
+     * @return bool
+     */
+    public function setLane($laneID)
+    {
+        $lane = fixer::input('post')->get();
+
+        $this->dao->update(TABLE_KANBANLANE)->data($lane)
+            ->autoCheck()
+            ->batchcheck($this->config->kanban->setlane->requiredFields, 'notempty')
+            ->where('id')->eq($laneID)
             ->exec();
 
         return dao::isError();
