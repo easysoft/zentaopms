@@ -16,3 +16,27 @@ $lang->message->browserSetting->pollTimePlaceholder = '通知的時間間隔，�
 
 $lang->message->browserSetting->turnonList[1] = '打開';
 $lang->message->browserSetting->turnonList[0] = '關閉';
+
+$lang->message->label = new stdclass();
+$lang->message->label->created   = '創建';
+$lang->message->label->opened    = '創建';
+$lang->message->label->changed   = '變更';
+$lang->message->label->edited    = '編輯';
+$lang->message->label->assigned  = '指派';
+$lang->message->label->closed    = '關閉';
+$lang->message->label->deleted   = '刪除';
+$lang->message->label->undeleted = '還原';
+$lang->message->label->commented = '評論';
+$lang->message->label->activated = '激活';
+$lang->message->label->blocked   = '阻塞';
+$lang->message->label->resolved  = '解決';
+$lang->message->label->reviewed  = '評審';
+$lang->message->label->confirmed = "確認{$lang->SRCommon}";
+$lang->message->label->frombug   = "轉{$lang->SRCommon}";
+$lang->message->label->started   = '開始';
+$lang->message->label->restarted = '繼續';
+$lang->message->label->canceled  = '取消';
+$lang->message->label->finished  = '完成';
+$lang->message->label->paused    = '暫停';
+$lang->message->label->delayed   = '延期';
+$lang->message->label->suspended = '掛起';
