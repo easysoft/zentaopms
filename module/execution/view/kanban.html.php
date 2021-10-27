@@ -39,9 +39,10 @@
     <?php
     echo "<div class='btn-group menu-actions'>";
     echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
-    echo "<ul class='dropdown-menu pull-right'>";
+    // TODO 暂时解决样式问题
+    echo "<ul class='dropdown-menu pull-right' style='position: relative'>";
     if(common::hasPriv('execution', 'printKanban')) echo '<li>' .html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
-    echo '<li>' .html::a('', "<i class='icon-fullscreen muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
+    echo '<li>' .html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->execution->printKanban, '', "class='btn btn-link' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
     echo '</ul></div>';
 ?>
     <?php
