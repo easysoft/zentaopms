@@ -354,16 +354,15 @@ function getTaskKanbanDemoData()
 
 
 /**
- * Render user account
- * @param {String} userAccount User account
+ * Render user avatar
+ * @param {String|{account: string, avatar: string}} user User account or user object
  * @returns {string}
  */
-function renderUserAvatar(userAccount)
+function renderUserAvatar(user)
 {
-    var hue = $.zui.strCode(userAccount) * 43 / 360;
-    return ('<div class="avatar has-text avatar-sm avatar-circle" style="background: hsl(' + hue + ', 40%, 60%);"><span>'
-        + userAccount[0].toUpperCase()
-        + '</span></div>');
+    if(typeof user === 'string') user = {account: user};
+    if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+    return $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
 }
 
 /**
@@ -394,8 +393,8 @@ function renderStoryItem(item, $item, col)
         '<span class="info info-id text-muted">#' + item.id + '</span>',
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
-        item.assignedTo ? renderUserAvatar(item.assignedTo) : '',
     ].join(''));
+    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
 
     $item.attr('data-type', 'story').addClass('kanban-item-story');
 
@@ -431,8 +430,8 @@ function renderBugItem(item, $item, col)
         '<span class="info info-id text-muted">#' + item.id + '</span>',
         '<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>',
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
-        item.assignedTo ? renderUserAvatar(item.assignedTo) : '',
     ].join(''));
+    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
 
     $item.attr('data-type', 'bug').addClass('kanban-item-bug');
 
@@ -467,8 +466,8 @@ function renderTaskItem(item, $item, col)
         '<span class="info info-id text-muted">#' + item.id + '</span>',
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
-        item.assignedTo ? renderUserAvatar(item.assignedTo) : '',
     ].join(''));
+    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
 
     $item.attr('data-type', 'task').addClass('kanban-item-task');
 
@@ -490,7 +489,7 @@ addColumnRenderer('task', renderTaskItem);
  */
 function renderColumnCount($count, count, col)
 {
-    var text = count + '/' + (!col.maxCount ? '<i class="icon icon-infinite"></i>' : '');
+    var text = count + '/' + (col.maxCount || '<i class="icon icon-infinite"></i>');
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
 }
 
@@ -524,6 +523,20 @@ function createKanban(kanbanID, data, options)
     $kanban.kanban($.extend({data: data}, options));
 }
 
+/* Overload kanban default options */
+$.extend($.fn.kanban.Constructor.DEFAULTS,
+{
+    onRender: function()
+    {
+        var maxWidth = 0;
+        $('#kanbans .kanban-board').each(function()
+        {
+            maxWidth = Math.max(maxWidth, $(this).outerWidth());
+        });
+        $('#kanbanContainer').css('min-width', maxWidth + 40);
+    }
+});
+
 /* Example code: */
 $(function()
 {
@@ -532,7 +545,7 @@ $(function()
     {
         maxColHeight:  'auto',
         minColWidth:    240,
-        dropable:       true,
+        droppable:      true,
         showCount:      true,
         showZeroCount:  true,
         countRender:    renderColumnCount
