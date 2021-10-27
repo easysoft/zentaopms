@@ -17,22 +17,22 @@ function getStoryKanbanDemoData()
            color:      列名称颜色,
            parentType: 所属的父级列类型
            asParent:   是否作为父级列
-           itemType:   看板条目类型，例如：'story'（需求）
-           maxCount:   最大数目，该列上允许展示的条目最大数目，如果为 0 表示无限制 */
-        {id: 'story-blacklog',   type: 'blacklog',   name: 'Blacklog', color: '', maxCount: 0},
-        {id: 'story-ready',      type: 'ready',      name: '准备好',    color: '', maxCount: 4},
-        {id: 'story-dev',        type: 'dev',        name: '开发',      color: '', maxCount: 4, asParent: true},
-        {id: 'story-dev-doing',  type: 'dev-doing',  name: '进行中',    color: '#126eed', maxCount: 2, parentType: 'dev'},
-        {id: 'story-dev-done',   type: 'dev-done',   name: '完成',      color: '#2fab8e', maxCount: 2, parentType: 'dev'},
-        {id: 'story-test',        type: 'test',       name: '测试',     color: '', maxCount: 4, asParent: true},
-        {id: 'story-test-doing', type: 'test-doing', name: '进行中',    color: '#126eed', maxCount: 2, parentType: 'test'},
-        {id: 'story-test-done',  type: 'test-done',  name: '完成',      color: '#2fab8e', maxCount: 2, parentType: 'test'},
-        {id: 'story-accepted',   type: 'accepted',   name: '已验收',    color: '', maxCount: 0},
-        {id: 'story-published',  type: 'published',  name: '已发布',    color: '', maxCount: 0},
+           cardType:   看板卡片类型，例如：'story'（需求）
+           limit:      最大数目，该列上允许展示的卡片最大数目，如果为 0 表示无限制 */
+        {id: 'story-blacklog',   type: 'blacklog',   name: 'Blacklog', color: '', limit: 0},
+        {id: 'story-ready',      type: 'ready',      name: '准备好',    color: '', limit: 4},
+        {id: 'story-dev',        type: 'dev',        name: '开发',      color: '', limit: 4, asParent: true},
+        {id: 'story-dev-doing',  type: 'dev-doing',  name: '进行中',    color: '#126eed', limit: 2, parentType: 'dev'},
+        {id: 'story-dev-done',   type: 'dev-done',   name: '完成',      color: '#2fab8e', limit: 2, parentType: 'dev'},
+        {id: 'story-test',        type: 'test',       name: '测试',     color: '', limit: 4, asParent: true},
+        {id: 'story-test-doing', type: 'test-doing', name: '进行中',    color: '#126eed', limit: 2, parentType: 'test'},
+        {id: 'story-test-done',  type: 'test-done',  name: '完成',      color: '#2fab8e', limit: 2, parentType: 'test'},
+        {id: 'story-accepted',   type: 'accepted',   name: '已验收',    color: '', limit: 0},
+        {id: 'story-published',  type: 'published',  name: '已发布',    color: '', limit: 0},
     ];
 
-    /* Define items in blacklog column  定义 Blacklog 列上的条目 */
-    var blacklogColItems =
+    /* Define cards in blacklog column  定义 Blacklog 列上的卡片 */
+    var blacklogColCards =
     [
         /* 需求数据结构：
            id:          ID，通常为需求 ID,
@@ -48,62 +48,62 @@ function getStoryKanbanDemoData()
         {id: 10013, title: 'Blacklog 3',         order: 4, pri: 0, estimate: 0,  assignedTo: 'sunhao'},
         {id: 10014, title: '实现泳道的更多操作菜单', order: 5, pri: 0, estimate: 0,  assignedTo: 'sunhao'},
     ];
-    /* Define items in ready column  定义 准备好 列上的条目 */
-    var readyColItems =
+    /* Define cards in ready column  定义 准备好 列上的卡片 */
+    var readyColCards =
     [
-        /* 需求数据结构参见 blacklogColItems 定义 */
+        /* 需求数据结构参见 blacklogColCards 定义 */
         {id: 10020, title: '在看板列中实现创建任务功能', order: 10, pri: 1, estimate: 2,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10021, title: '实现泳道的上下移动',       order: 11, pri: 2,  estimate: 0,  assignedTo: 'sunhao'},
         {id: 10024, title: '实现泳道的更多操作菜单',    order: 15, pri: 0, estimate: 0,  assignedTo: 'sunhao'},
     ];
-    var devDoingColItems = /* Define items in dev/doing column  定义 开发/进行中 列上的条目 */
+    var devDoingColCards = /* Define cards in dev/doing column  定义 开发/进行中 列上的卡片 */
     [
-        /* 需求数据结构参见 blacklogColItems 定义 */
+        /* 需求数据结构参见 blacklogColCards 定义 */
         {id: 10030, title: '实现看板的更多操作菜单', order: 10, pri: 3, estimate: 0,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10031, title: '实现卡片拖动效果功能',  order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
     ];
-    var devDoneColItems = /* Define items in dev/done column  定义 开发/完成 列上的条目 */
+    var devDoneColCards = /* Define cards in dev/done column  定义 开发/完成 列上的卡片 */
     [
-        /* 需求数据结构参见 blacklogColItems 定义 */
+        /* 需求数据结构参见 blacklogColCards 定义 */
         {id: 10040, title: '实现看板列卡片排序功能',  order: 10, pri: 1, estimate: 4,  assignedTo: 'admin', deadline: '2021-10-30'},
     ];
-    var testDoingColItems = /* Define items in test/doing column  定义 测试/进行中 列上的条目 */
+    var testDoingColCards = /* Define cards in test/doing column  定义 测试/进行中 列上的卡片 */
     [
-        /* 需求数据结构参见 blacklogColItems 定义 */
+        /* 需求数据结构参见 blacklogColCards 定义 */
         {id: 10050, title: '实现看板列的更多操作菜单',  order: 10, pri: 3, estimate: 0,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10051, title: '实现Bug卡片的更多操作功能', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
     ];
-    var testDoneColItems = /* Define items in test/done column  定义 测试/完成 列上的条目 */
+    var testDoneColCards = /* Define cards in test/done column  定义 测试/完成 列上的卡片 */
     [
-        /* 需求数据结构参见 blacklogColItems 定义 */
+        /* 需求数据结构参见 blacklogColCards 定义 */
         {id: 10060, title: '实现任务卡片的更多操作功能', order: 10, pri: 1, estimate: 4,  assignedTo: 'admin', deadline: '2021-10-30'},
     ];
-    var acceptedColItems =
+    var acceptedColCards =
     [
-        /* 需求数据结构参见 blacklogColItems 定义 */
+        /* 需求数据结构参见 blacklogColCards 定义 */
         {id: 10070, title: '实现执行看板的新建按钮组功能',  order: 10, pri: 3, estimate: 12,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10071, title: '在看板列中实现提交Bug功能', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
         {id: 10072, title: '在看板列中实现需求的添加和关联功能',  order: 10, pri: 3, estimate: 10,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10073, title: '实现任务看板视图中不同分组条件的看板展示方式', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
     ];
-    var publishedColItems =
+    var publishedColCards =
     [
-        /* 需求数据结构参见 blacklogColItems 定义 */
+        /* 需求数据结构参见 blacklogColCards 定义 */
         {id: 10080, title: '实现任务看板视图中泳道分组下拉菜单功能',  order: 10, pri: 3, estimate: 2,  assignedTo: 'admin'},
     ];
 
-    /* Define kanban items in lane  定义看板泳道内每一列的条目，属性名为看板列类型，属性值为条目列表 */
-    var items =
+    /* Define kanban cards in lane  定义看板泳道内每一列的卡片，属性名为看板列类型，属性值为卡片列表 */
+    var cards =
     {
-        /* 看板列类型:  条目列表 */
-        blacklog:     blacklogColItems,
-        ready:        readyColItems,
-        'dev-doing':  devDoingColItems,
-        'dev-done':   devDoneColItems,
-        'test-doing': testDoingColItems,
-        'test-done':  testDoneColItems,
-        accepted:     acceptedColItems,
-        published:    publishedColItems,
+        /* 看板列类型:  卡片列表 */
+        blacklog:     blacklogColCards,
+        ready:        readyColCards,
+        'dev-doing':  devDoingColCards,
+        'dev-done':   devDoneColCards,
+        'test-doing': testDoingColCards,
+        'test-done':  testDoneColCards,
+        accepted:     acceptedColCards,
+        published:    publishedColCards,
     };
 
     /* Define kanban lanes  定义看板泳道 */
@@ -112,10 +112,10 @@ function getStoryKanbanDemoData()
         /* 泳道数据结构：
            id:              泳道 ID，确保页面上唯一，可以为数字或字符串,
            name:            名称,
-           items:           定义每列上的条目
+           cards:           定义每列上的卡片
            color:           泳道名称背景色
-           defaultItemType: 看板泳道上的条目默认类型，例如：'story'（需求） */
-        {id: 'story', name: '软件需求', items: items, color: '#3dc6fc', defaultItemType: 'story'},
+           defaultCardType: 看板泳道上的卡片默认类型，例如：'story'（需求） */
+        {id: 'story', name: '软件需求', cards: cards, color: '#3dc6fc', defaultCardType: 'story'},
     ]
 
     /* Return kanban data  返回看板数据 */
@@ -123,8 +123,8 @@ function getStoryKanbanDemoData()
        id:       ID，确保页面上唯一，可以为数字或字符串,
        columns:  定义看板上的所有列,
        lanes:    定义看板上的所有泳道
-       defaultItemType: 看板上的条目默认类型，例如：'story'（需求） */
-    return {id: 'story', columns: columns, lanes: lanes, defaultItemType: 'story'};
+       defaultCardType: 看板上的卡片默认类型，例如：'story'（需求） */
+    return {id: 'story', columns: columns, lanes: lanes, defaultCardType: 'story'};
 }
 
 /**
@@ -146,21 +146,21 @@ function getBugKanbanDemoData()
         color:      列名称颜色,
         parentType: 所属的父级列类型
         asParent:   是否作为父级列
-        itemType:   看板条目类型，例如：'story'（需求）
-        maxCount:   最大数目，该列上允许展示的条目最大数目，如果为 0 表示无限制 */
-        {id: 'bug-wait',            type: 'wait',            name: '待确认',  color: '', maxCount: 0},
-        {id: 'bug-confirmed',       type: 'confirmed',      name: '已确认',  color: '', maxCount: 4},
-        {id: 'bug-resolving',       type: 'resolving',      name: '解决中',  color: '', maxCount: 4, asParent: true},
-        {id: 'bug-resolving-doing', type: 'resolving-doing',name: '进行中',  color: '#126eed', maxCount: 2, parentType: 'resolving'},
-        {id: 'bug-resolving-done',  type: 'resolving-done', name: '完成',    color: '#2fab8e', maxCount: 2, parentType: 'resolving'},
-        {id: 'bug-test',            type: 'test',           name: '测试',    color: '', maxCount: 4, asParent: true},
-        {id: 'bug-test-doing',      type: 'test-doing',     name: '测试中',  color: '#126eed', maxCount: 2, parentType: 'test'},
-        {id: 'bug-test-done',       type: 'test-done',      name: '测试完毕', color: '#2fab8e', maxCount: 2, parentType: 'test'},
-        {id: 'bug-closed',          type: 'closed',         name: '已关闭',   color: '', maxCount: 0},
+        cardType:   看板卡片类型，例如：'story'（需求）
+        limit:   最大数目，该列上允许展示的卡片最大数目，如果为 0 表示无限制 */
+        {id: 'bug-wait',            type: 'wait',            name: '待确认',  color: '', limit: 0},
+        {id: 'bug-confirmed',       type: 'confirmed',      name: '已确认',  color: '', limit: 4},
+        {id: 'bug-resolving',       type: 'resolving',      name: '解决中',  color: '', limit: 4, asParent: true},
+        {id: 'bug-resolving-doing', type: 'resolving-doing',name: '进行中',  color: '#126eed', limit: 2, parentType: 'resolving'},
+        {id: 'bug-resolving-done',  type: 'resolving-done', name: '完成',    color: '#2fab8e', limit: 2, parentType: 'resolving'},
+        {id: 'bug-test',            type: 'test',           name: '测试',    color: '', limit: 4, asParent: true},
+        {id: 'bug-test-doing',      type: 'test-doing',     name: '测试中',  color: '#126eed', limit: 2, parentType: 'test'},
+        {id: 'bug-test-done',       type: 'test-done',      name: '测试完毕', color: '#2fab8e', limit: 2, parentType: 'test'},
+        {id: 'bug-closed',          type: 'closed',         name: '已关闭',   color: '', limit: 0},
     ];
 
-    /* Define items in wait column  定义 待确认 列上的条目 */
-    var waitColItems =
+    /* Define cards in wait column  定义 待确认 列上的卡片 */
+    var waitColCards =
     [
         /* bug 数据结构：
         id:          ID，通常为 Bug ID,
@@ -173,56 +173,56 @@ function getBugKanbanDemoData()
         {id: 10011, title: '实现泳道的上下移动',       order: 11, pri: 2,  severity: 1,  assignedTo: 'sunhao'},
         {id: 10014, title: '实现泳道的更多操作菜单',    order: 15, pri: 0, severity: 1,  assignedTo: 'sunhao'},
     ];
-    /* Define items in confirmed column  定义 已确认 列上的条目 */
-    var confirmedColItems =
+    /* Define cards in confirmed column  定义 已确认 列上的卡片 */
+    var confirmedColCards =
     [
-        /* Bug 数据结构参见 waitColItems 定义 */
+        /* Bug 数据结构参见 waitColCards 定义 */
         {id: 10020, title: '在看板列中实现创建任务功能', order: 10, pri: 1, severity: 2,  assignedTo: 'admin'},
         {id: 10021, title: '实现泳道的上下移动',       order: 11, pri: 2,  severity: 1,  assignedTo: 'sunhao'},
         {id: 10024, title: '实现泳道的更多操作菜单',    order: 15, pri: 0, severity: 1,  assignedTo: 'sunhao'},
     ];
-    var resolvingDoingColItems = /* Define items in resolving/doing column  定义 开发/进行中 列上的条目 */
+    var resolvingDoingColCards = /* Define cards in resolving/doing column  定义 开发/进行中 列上的卡片 */
     [
-        /* Bug 数据结构参见 waitColItems 定义 */
+        /* Bug 数据结构参见 waitColCards 定义 */
         {id: 10030, title: '实现看板的更多操作菜单', order: 10, pri: 3, severity: 1,  assignedTo: 'admin'},
         {id: 10031, title: '实现卡片拖动效果功能',  order: 11, pri: 2,  severity: 2,  assignedTo: 'sunhao'},
     ];
-    var resolvingDoneColItems = /* Define items in resolving/done column  定义 开发/完成 列上的条目 */
+    var resolvingDoneColCards = /* Define cards in resolving/done column  定义 开发/完成 列上的卡片 */
     [
-        /* Bug 数据结构参见 waitColItems 定义 */
+        /* Bug 数据结构参见 waitColCards 定义 */
         {id: 10040, title: '实现看板列卡片排序功能',  order: 10, pri: 1, severity: 4,  assignedTo: 'admin'},
     ];
-    var testDoingColItems = /* Define items in test/doing column  定义 测试/进行中 列上的条目 */
+    var testDoingColCards = /* Define cards in test/doing column  定义 测试/进行中 列上的卡片 */
     [
-        /* Bug 数据结构参见 waitColItems 定义 */
+        /* Bug 数据结构参见 waitColCards 定义 */
         {id: 10050, title: '实现看板列的更多操作菜单',  order: 10, pri: 3, severity: 3,  assignedTo: 'admin'},
         {id: 10051, title: '实现Bug卡片的更多操作功能', order: 11, pri: 2,  severity: 2,  assignedTo: 'sunhao'},
     ];
-    var testDoneColItems = /* Define items in test/done column  定义 测试/完成 列上的条目 */
+    var testDoneColCards = /* Define cards in test/done column  定义 测试/完成 列上的卡片 */
     [
-        /* Bug 数据结构参见 waitColItems 定义 */
+        /* Bug 数据结构参见 waitColCards 定义 */
         {id: 10060, title: '实现任务卡片的更多操作功能', order: 10, pri: 1, severity: 4,  assignedTo: 'admin'},
     ];
-    var closedColItems =
+    var closedColCards =
     [
-        /* Bug 数据结构参见 waitColItems 定义 */
+        /* Bug 数据结构参见 waitColCards 定义 */
         {id: 10070, title: '实现执行看板的新建按钮组功能',  order: 10, pri: 3, severity: 3,  assignedTo: 'admin'},
         {id: 10071, title: '在看板列中实现提交Bug功能', order: 11, pri: 2,  severity: 2,  assignedTo: 'sunhao'},
         {id: 10072, title: '在看板列中实现需求的添加和关联功能',  order: 10, pri: 3, severity: 3,  assignedTo: 'admin'},
         {id: 10073, title: '实现任务看板视图中不同分组条件的看板展示方式', order: 11, pri: 2,  severity: 2,  assignedTo: 'sunhao'},
     ];
 
-    /* Define kanban items in lane  定义看板泳道内每一列的条目，属性名为看板列类型，属性值为条目列表 */
-    var items =
+    /* Define kanban cards in lane  定义看板泳道内每一列的卡片，属性名为看板列类型，属性值为卡片列表 */
+    var cards =
     {
-        /* 看板列类型:  条目列表 */
-        wait:              waitColItems,
-        confirmed:         confirmedColItems,
-        'resolving-doing': resolvingDoingColItems,
-        'resolving-done':  resolvingDoneColItems,
-        'test-doing':      testDoingColItems,
-        'test-done':       testDoneColItems,
-        closed:            closedColItems,
+        /* 看板列类型:  卡片列表 */
+        wait:              waitColCards,
+        confirmed:         confirmedColCards,
+        'resolving-doing': resolvingDoingColCards,
+        'resolving-done':  resolvingDoneColCards,
+        'test-doing':      testDoingColCards,
+        'test-done':       testDoneColCards,
+        closed:            closedColCards,
     };
 
     /* Define kanban lanes  定义看板泳道 */
@@ -231,10 +231,10 @@ function getBugKanbanDemoData()
         /* 泳道数据结构：
         id:              泳道 ID，确保页面上唯一，可以为数字或字符串,
         name:            名称,
-        items:           定义每列上的条目
+        cards:           定义每列上的卡片
         color:           泳道名称背景色
-        defaultItemType: 看板泳道上的条目默认类型，例如：'bug'（Bug） */
-        {id: 'bug', name: 'Bug', items: items, color: '#9c30b0', defaultItemType: 'bug'},
+        defaultCardType: 看板泳道上的卡片默认类型，例如：'bug'（Bug） */
+        {id: 'bug', name: 'Bug', cards: cards, color: '#9c30b0', defaultCardType: 'bug'},
     ]
 
     /* Return kanban data  返回看板数据 */
@@ -242,8 +242,8 @@ function getBugKanbanDemoData()
     id:       ID，确保页面上唯一，可以为数字或字符串,
     columns:  定义看板上的所有列,
     lanes:    定义看板上的所有泳道
-    defaultItemType: 看板上的条目默认类型，例如：'bug'（Bug） */
-    return {id: 'bug', columns: columns, lanes: lanes, defaultItemType: 'bug'};
+    defaultCardType: 看板上的卡片默认类型，例如：'bug'（Bug） */
+    return {id: 'bug', columns: columns, lanes: lanes, defaultCardType: 'bug'};
 }
 
 /**
@@ -265,19 +265,19 @@ function getTaskKanbanDemoData()
         color:      列名称颜色,
         parentType: 所属的父级列类型
         asParent:   是否作为父级列
-        itemType:   看板条目类型，例如：'task'（任务）
-        maxCount:   最大数目，该列上允许展示的条目最大数目，如果为 0 表示无限制 */
-        {id: 'task-wait',      type: 'wait',      name: '未开始',   color: '', maxCount: 0},
-        {id: 'task-dev',       type: 'dev',       name: '开发',     color: '', maxCount: 4, asParent: true},
-        {id: 'task-dev-doing', type: 'dev-doing', name: '研发中',   color: '#126eed', maxCount: 2, parentType: 'dev'},
-        {id: 'task-dev-done',  type: 'dev-done',  name: '研发完成', color: '#2fab8e', maxCount: 2, parentType: 'dev'},
-        {id: 'task-pause',     type: 'pause',     name: '已暂停',   color: '', maxCount: 0},
-        {id: 'task-cancel',    type: 'cancel',    name: '已取消',   color: '', maxCount: 0},
-        {id: 'task-closed',    type: 'closed',    name: '已关闭',   color: '', maxCount: 0},
+        cardType:   看板卡片类型，例如：'task'（任务）
+        limit:   最大数目，该列上允许展示的卡片最大数目，如果为 0 表示无限制 */
+        {id: 'task-wait',      type: 'wait',      name: '未开始',   color: '', limit: 0},
+        {id: 'task-dev',       type: 'dev',       name: '开发',     color: '', limit: 4, asParent: true},
+        {id: 'task-dev-doing', type: 'dev-doing', name: '研发中',   color: '#126eed', limit: 2, parentType: 'dev'},
+        {id: 'task-dev-done',  type: 'dev-done',  name: '研发完成', color: '#2fab8e', limit: 2, parentType: 'dev'},
+        {id: 'task-pause',     type: 'pause',     name: '已暂停',   color: '', limit: 0},
+        {id: 'task-cancel',    type: 'cancel',    name: '已取消',   color: '', limit: 0},
+        {id: 'task-closed',    type: 'closed',    name: '已关闭',   color: '', limit: 0},
     ];
 
-    /* Define items in wait column  定义 未开始 列上的条目 */
-    var waitColItems =
+    /* Define cards in wait column  定义 未开始 列上的卡片 */
+    var waitColCards =
     [
         /* 任务数据结构：
         id:          ID，通常为任务 ID,
@@ -291,47 +291,47 @@ function getTaskKanbanDemoData()
         {id: 10021, name: '实现泳道的上下移动',       order: 11, pri: 2,  estimate: 0,  assignedTo: 'sunhao', deadline: '2021-10-22'},
         {id: 10024, name: '实现泳道的更多操作菜单',    order: 15, pri: 0, estimate: 0,  assignedTo: 'sunhao'},
     ];
-    var devDoingColItems = /* Define items in dev/doing column  定义 开发/进行中 列上的条目 */
+    var devDoingColCards = /* Define cards in dev/doing column  定义 开发/进行中 列上的卡片 */
     [
-        /* 任务数据结构参见 waitColItems 定义 */
+        /* 任务数据结构参见 waitColCards 定义 */
         {id: 10030, name: '实现看板的更多操作菜单', order: 10, pri: 3, estimate: 0,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10031, name: '实现卡片拖动效果功能',  order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
     ];
-    var devDoneColItems = /* Define items in dev/done column  定义 开发/完成 列上的条目 */
+    var devDoneColCards = /* Define cards in dev/done column  定义 开发/完成 列上的卡片 */
     [
-        /* 任务数据结构参见 waitColItems 定义 */
+        /* 任务数据结构参见 waitColCards 定义 */
         {id: 10040, name: '实现看板列卡片排序功能',  order: 10, pri: 1, estimate: 4,  assignedTo: 'admin', deadline: '2021-10-30'},
     ];
-    var pauseColItems = /* Define items in pause column  定义 已暂停 列上的条目 */
+    var pauseColCards = /* Define cards in pause column  定义 已暂停 列上的卡片 */
     [
-        /* 任务数据结构参见 waitColItems 定义 */
+        /* 任务数据结构参见 waitColCards 定义 */
         {id: 10050, name: '实现看板列的更多操作菜单',  order: 10, pri: 3, estimate: 0,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10051, name: '实现Bug卡片的更多操作功能', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
     ];
-    var cancelColItems = /* Define items in cancel column  定义 已取消 列上的条目 */
+    var cancelColCards = /* Define cards in cancel column  定义 已取消 列上的卡片 */
     [
-        /* 任务数据结构参见 waitColItems 定义 */
+        /* 任务数据结构参见 waitColCards 定义 */
         {id: 10060, name: '实现任务卡片的更多操作功能', order: 10, pri: 1, estimate: 4,  assignedTo: 'admin', deadline: '2021-10-30'},
     ];
-    var closedColItems =
+    var closedColCards =
     [
-        /* 任务数据结构参见 waitColItems 定义 */
+        /* 任务数据结构参见 waitColCards 定义 */
         {id: 10070, name: '实现执行看板的新建按钮组功能',  order: 10, pri: 3, estimate: 12,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10071, name: '在看板列中实现提交Bug功能', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
         {id: 10072, name: '在看板列中实现任务的添加和关联功能',  order: 10, pri: 3, estimate: 10,  assignedTo: 'admin', deadline: '2021-10-30'},
         {id: 10073, name: '实现任务看板视图中不同分组条件的看板展示方式', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
     ];
 
-    /* Define kanban items in lane  定义看板泳道内每一列的条目，属性名为看板列类型，属性值为条目列表 */
-    var items =
+    /* Define kanban cards in lane  定义看板泳道内每一列的卡片，属性名为看板列类型，属性值为卡片列表 */
+    var cards =
     {
-        /* 看板列类型:  条目列表 */
-        wait:        waitColItems,
-        'dev-doing': devDoingColItems,
-        'dev-done':  devDoneColItems,
-        pause:       pauseColItems,
-        cancel:      cancelColItems,
-        closed:      closedColItems,
+        /* 看板列类型:  卡片列表 */
+        wait:        waitColCards,
+        'dev-doing': devDoingColCards,
+        'dev-done':  devDoneColCards,
+        pause:       pauseColCards,
+        cancel:      cancelColCards,
+        closed:      closedColCards,
     };
 
     /* Define kanban lanes  定义看板泳道 */
@@ -340,10 +340,10 @@ function getTaskKanbanDemoData()
         /* 泳道数据结构：
         id:              泳道 ID，确保页面上唯一，可以为数字或字符串,
         name:            名称,
-        items:           定义每列上的条目
+        cards:           定义每列上的卡片
         color:           泳道名称背景色
-        defaultItemType: 看板泳道上的条目默认类型，例如：'task'（任务） */
-        {id: 'task', name: '任务', items: items, color: '#126eed', defaultItemType: 'task'},
+        defaultCardType: 看板泳道上的卡片默认类型，例如：'task'（任务） */
+        {id: 'task', name: '任务', cards: cards, color: '#126eed', defaultCardType: 'task'},
     ]
 
     /* Return kanban data  返回看板数据 */
@@ -351,8 +351,8 @@ function getTaskKanbanDemoData()
     id:       ID，确保页面上唯一，可以为数字或字符串,
     columns:  定义看板上的所有列,
     lanes:    定义看板上的所有泳道
-    defaultItemType: 看板上的条目默认类型，例如：'task'（任务） */
-    return {id: 'task', columns: columns, lanes: lanes, defaultItemType: 'task'};
+    defaultCardType: 看板上的卡片默认类型，例如：'task'（任务） */
+    return {id: 'task', columns: columns, lanes: lanes, defaultCardType: 'task'};
 }
 
 
@@ -369,7 +369,7 @@ function renderUserAvatar(user)
 }
 
 /**
- * Render story item  提供方法渲染看板中的需求条目
+ * Render story item  提供方法渲染看板中的需求卡片
  * @param {Object} item  Story item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -406,7 +406,7 @@ function renderStoryItem(item, $item, col)
 
 
 /**
- * Render bug item  提供方法渲染看板中的 Bug 条目
+ * Render bug item  提供方法渲染看板中的 Bug 卡片
  * @param {Object} item  Bug item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -442,7 +442,7 @@ function renderBugItem(item, $item, col)
 }
 
 /**
- * Render task item  提供方法渲染看板中的任务条目
+ * Render task item  提供方法渲染看板中的任务卡片
  * @param {Object} item  Task item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -477,22 +477,22 @@ function renderTaskItem(item, $item, col)
     return $item;
 }
 
- 
 /* Add column renderer/  添加特定列类型或列条目类型渲染方法 */
+/* Add column renderer/  添加特定列类型或列卡片类型渲染方法 */
 addColumnRenderer('story', renderStoryItem);
-addColumnRenderer('bug', renderBugItem);
-addColumnRenderer('task', renderTaskItem);
+addColumnRenderer('bug',   renderBugItem);
+addColumnRenderer('task',  renderTaskItem);
 
 /**
- * Render column count 渲染看板列头上的条目数目
+ * Render column count 渲染看板列头上的卡片数目
  * @param {JQuery} $count Kanban count element
- * @param {number} count  Column items count
+ * @param {number} count  Column cards count
  * @param {number} col    Column object
  * @param {Object} kanban Kanban intance
  */
 function renderColumnCount($count, count, col)
 {
-    var text = count + '/' + (col.maxCount || '<i class="icon icon-infinite"></i>');
+    var text = count + '/' + (!col.limit ? '<i class="icon icon-infinite"></i>' : '');
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
 }
 
@@ -562,21 +562,6 @@ function fullScreen()
     }
 }
 
-window.kanbanDropRules =
-{
-    story:
-    {
-        blacklog: true,
-        ready: ['blacklog', 'dev-doing'],
-        'dev-doing': ['dev-done'],
-        'dev-done': ['test-doing'],
-        'test-doing': ['test-done'],
-        'test-done': ['accepted'],
-        'accepted': ['published'],
-        'published': false,
-    }
-}
-
 /**
  * Exit full screen.
  *
@@ -590,6 +575,25 @@ function exitFullScreen()
     $.cookie('isFullScreen', 0);
 }
 
+/* Define drag and drop rules */
+if(!window.kanbanDropRules)
+{
+    window.kanbanDropRules =
+    {
+        story:
+        {
+            blacklog: true,
+            ready: ['blacklog', 'dev-doing'],
+            'dev-doing': ['dev-done'],
+            'dev-done': ['test-doing'],
+            'test-doing': ['test-done'],
+            'test-done': ['accepted'],
+            'accepted': ['published'],
+            'published': false,
+        }
+    }
+}
+
 /*
  * Find drop columns
  * @param {JQuery} $element Drag element
@@ -597,9 +601,9 @@ function exitFullScreen()
  */
 function findDropColumns($element, $root)
 {
-    var $col     = $element.closest('.kanban-col');
-    var col      = $col.data();
-    var kanbanID = $root.data('id');
+    var $col        = $element.closest('.kanban-col');
+    var col         = $col.data();
+    var kanbanID    = $root.data('id');
     var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
 
     if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
