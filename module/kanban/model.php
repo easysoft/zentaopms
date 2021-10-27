@@ -50,7 +50,7 @@ class kanbanModel extends model
             $laneData['id']              = $lane->type;
             $laneData['name']            = $lane->name;
             $laneData['color']           = $lane->color;
-            $laneData['defaultItemType'] = $lane->type;
+            $laneData['defaultCardType'] = $lane->type;
             $laneData['order']           = $lane->order;
 
             foreach($columns[$laneID] as $colID => $col)
@@ -69,12 +69,12 @@ class kanbanModel extends model
 
             foreach($columns[$laneID] as $colID => $col)
             {
-                $columnData[$col->parent]['subs']['id']         = $lane->type . '-' . $col->type;
-                $columnData[$col->parent]['subs']['type']       = $col->type;
-                $columnData[$col->parent]['subs']['name']       = $col->name;
-                $columnData[$col->parent]['subs']['color']      = $col->color;
-                $columnData[$col->parent]['subs']['limit']      = $col->limit;
-                $columnData[$col->parent]['subs']['parentType'] = $columnData[$col->parent]['type'];
+                $columnData[$col->parent]['subs'][$col->id]['id']         = $lane->type . '-' . $col->type;
+                $columnData[$col->parent]['subs'][$col->id]['type']       = $col->type;
+                $columnData[$col->parent]['subs'][$col->id]['name']       = $col->name;
+                $columnData[$col->parent]['subs'][$col->id]['color']      = $col->color;
+                $columnData[$col->parent]['subs'][$col->id]['limit']      = $col->limit;
+                $columnData[$col->parent]['subs'][$col->id]['parentType'] = $columnData[$col->parent]['type'];
 
                 $cardIdList = array_filter(explode(',', $col->cards));
                 $cardOrder  = 1;
@@ -96,7 +96,7 @@ class kanbanModel extends model
             }
 
             $kanban[$lane->type]['id']      = $lane->type;
-            $kanban[$lane->type]['columns'] = $columnData;
+            $kanban[$lane->type]['columns'] = array_values($columnData);
             $kanban[$lane->type]['lanes']   = $laneData;
         }
 
@@ -152,6 +152,7 @@ class kanbanModel extends model
 
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
+                if(strpos(',develop,test,', $colType) !== false) $data->parent = -1;
                 if(strpos(',ready,develop,test,', $colType) === false)
                 {
                     $storyStatus = $this->config->kanban->storyColumnStatusList[$colType];
@@ -179,6 +180,7 @@ class kanbanModel extends model
                 $data->cards = '';
                 if(strpos(',fixing,fixed,', $colType) !== false) $data->parent = $resolvingColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
+                if(strpos(',resolving,test,', $colType) !== false) $data->parent = -1;
                 if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
                 {
                     $bugStatus = $this->config->kanban->bugColumnStatusList[$colType];
@@ -214,6 +216,7 @@ class kanbanModel extends model
                 $data->type  = $colType;
                 $data->cards = '';
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
+                if($colType == 'develop') $data->parent = -1;
                 if(strpos(',develop,', $colType) === false)
                 {
                     $taskStatus = $this->config->kanban->taskColumnStatusList[$colType];

@@ -1846,7 +1846,6 @@ class execution extends control
             $this->kanban->createLanes($executionID);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID);
         }
-        a($kanbanGroup);die;
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
