@@ -628,31 +628,44 @@ function findDropColumns($element, $root)
 }
 
 /**
- * Handle finish drop task
- * @param {Object} event Event object
- * @returns {void}
+ * Change column type for a card
+ * 变更卡片类型
+ * @param {Object} card        Card object
+ * @param {String} fromColType The column type before change
+ * @param {String} toColType   The column type after change
+ * @param {String} kanbanID    Kanban ID
  */
-function handleFinishDrop(event)
+function changeCardColType(card, fromColType, toColType, kanbanID)
 {
-    var $item = $(event.element); // The drag item
-    var $dragCol = $item.closest('.kanban-lane-col');
-    var $dropCol = $(event.target);
-
-    /* Get d-n-d(drag and drop) infos  获取拖放操作相关信息 */
-    var item = $item.data('item');
-    var fromColType = $dragCol.data('type');
-    var toColType = $dropCol.data('type');
-    var kanbanID = $item.closest('.kanban').data('id');
-
-    /* TODO: Save d-n-d infos to server 将拖放操作信息提交到服务器  */
-    console.log('TODO: Save d-n-d infos to server 将拖放操作信息提交到服务器', {item, fromColType, toColType, kanbanID});
+    /* TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器  */
+    console.log('TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器', {card, fromColType, toColType, kanbanID});
 
     /*
         // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
 
         // 调用 updateKanban 更新看板数据
         updateKanban(kanbanID, newKanbanData);
-     */
+    */
+}
+
+/**
+ * Handle finish drop task
+ * @param {Object} event Event object
+ * @returns {void}
+ */
+function handleFinishDrop(event)
+{
+    var $card = $(event.element); // The drag card
+    var $dragCol = $card.closest('.kanban-lane-col');
+    var $dropCol = $(event.target);
+
+    /* Get d-n-d(drag and drop) infos  获取拖放操作相关信息 */
+    var card = $card.data('item');
+    var fromColType = $dragCol.data('type');
+    var toColType = $dropCol.data('type');
+    var kanbanID = $card.closest('.kanban').data('id');
+
+    changeCardColType(card, fromColType, toColType, kanbanID);
 
     $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
 }
