@@ -42,9 +42,9 @@
       </div>
       <?php if(!$moduleTree):?>
       <hr class="space">
-				<?php if(!$isRelease):?>
-				<div class="text-center text-muted tips"><?php echo $lang->api->noModule;?></div>
-				<?php endif;?>
+      <?php if(!$isRelease):?>
+      <div class="text-center text-muted tips"><?php echo $lang->api->noModule;?></div>
+      <?php endif;?>
       <?php endif;?>
       <?php echo $moduleTree;?>
     </div>
