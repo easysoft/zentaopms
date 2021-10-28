@@ -24,7 +24,6 @@ $lang->null      = '空';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
-$lang->create    = '新建';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
@@ -48,6 +47,7 @@ $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' cla
 $lang->reset        = '重填';
 $lang->cancel       = '取消';
 $lang->refresh      = '刷新';
+$lang->create       = '新建';
 $lang->edit         = '编辑';
 $lang->delete       = '删除';
 $lang->close        = '关闭';

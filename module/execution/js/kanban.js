@@ -249,11 +249,6 @@ function renderLaneName($name, lane, $kanban, columns, kanban)
     }
 }
 
-function renderCardsCount($count, count, col)
-{
-    console.log('renderCardsCount', {$count, count, col});
-}
-
 /**
  * Updata kanban data
  * 更新看板上的数据
@@ -434,9 +429,9 @@ function createColumnMenu(options)
     var kanbanID = options.kanban;
     var items =
     [
-        {label: '编辑名称', url: $.createLink('kanban', 'editcolname', 'col=' + col.id + '&kanban=' + kanbanID), className: 'iframe'},
-        {label: '在制品数目', url: $.createLink('kanban', 'editcolwip'), className: 'iframe'},
-        {label: '看板卡片排序', items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards},
+        {label: editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'},
+        {label: setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'},
+        {label: sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards},
     ];
     return items;
 }
@@ -593,7 +588,7 @@ $(function()
     /* Init iframe modals */
     $(document).on('click', '.iframe', function(event)
     {
-        $(this).modalTrigger({show: true});
+        $(this).modalTrigger({show: true, width: '500px'});
         event.preventDefault();
     });
 

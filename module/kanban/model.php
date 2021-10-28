@@ -65,6 +65,7 @@ class kanbanModel extends model
             foreach($columns[$laneID] as $columnID => $column)
             {
                 $columnData[$column->id]['id']         = $laneType . '-' . $column->type;
+                $columnData[$column->id]['columnID']   = $columnID;
                 $columnData[$column->id]['type']       = $column->type;
                 $columnData[$column->id]['name']       = $column->name;
                 $columnData[$column->id]['color']      = $column->color;

@@ -47,6 +47,7 @@ $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' cla
 $lang->reset        = 'Reset';
 $lang->cancel       = 'Cancel';
 $lang->refresh      = 'Refresh';
+$lang->create       = 'Create';
 $lang->edit         = 'Edit';
 $lang->delete       = 'Delete';
 $lang->close        = 'Close';

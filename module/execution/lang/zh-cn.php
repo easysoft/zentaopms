@@ -101,6 +101,9 @@ $lang->execution->copyNoExecution = '没有可用的' . $lang->executionCommon .
 $lang->execution->noTeam          = '暂时没有团队成员';
 $lang->execution->or              = '或';
 $lang->execution->selectProject   = '请选择项目';
+$lang->execution->editName        = '编辑名称';
+$lang->execution->setWIP          = '在制品数量设置（WIP）';
+$lang->execution->sortColumn      = '看板列卡片排序';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';
