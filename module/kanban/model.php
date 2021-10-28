@@ -64,7 +64,7 @@ class kanbanModel extends model
             $laneData['order']           = $lane->order;
             $laneData['defaultCardType'] = $laneType;
 
-            foreach($columns[$laneID] as $colID => $column)
+            foreach($columns[$laneID] as $columnID => $column)
             {
                 $columnData[$column->id]['id']         = $laneType . '-' . $column->type;
                 $columnData[$column->id]['type']       = $column->type;
