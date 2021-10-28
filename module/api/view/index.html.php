@@ -71,7 +71,7 @@
     </div>
   </div>
   <?php else:?>
-  <div class="cell">
+  <div class="cell main-col" data-min-width="400">
     <div class="detail">
       <ul class="list-group">
         <?php foreach($apiList as $api):?>
