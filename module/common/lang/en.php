@@ -227,8 +227,8 @@ $lang->doc->api       = 'API';
 $lang->doc->execution = $lang->execution->common;
 $lang->doc->custom    = 'Custom';
 $lang->doc->wiki      = 'WIKI';
-$lang->doc->apiDoc    = 'Doc';
-$lang->doc->apiStruct = 'Struct';
+$lang->doc->apiDoc    = 'API Docuemnt';
+$lang->doc->apiStruct = 'Data Structure';
 
 $lang->product->list   = $lang->productCommon . ' List';
 $lang->product->kanban = $lang->productCommon . ' Kanban';
