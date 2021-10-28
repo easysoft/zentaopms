@@ -203,7 +203,9 @@ class program extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
         }
 
-        $program       = $this->program->getByID($programID);
+        $program            = $this->program->getByID($programID);
+        $program->realBegan = helper::isZeroDate($program->realBegan) ? '' : $program->realBegan;
+
         $parentProgram = $program->parent ? $this->program->getByID($program->parent) : '';
         $parents       = $this->program->getParentPairs();
 
