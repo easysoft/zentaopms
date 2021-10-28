@@ -385,6 +385,11 @@ $lang->execution->kanbanHideCols   = 'Closed & Cancelled Columns';
 $lang->execution->kanbanShowOption = 'Unfold';
 $lang->execution->kanbanColsColor  = 'Customize Column Color';
 
+$lang->execution->kanbanViewList['all']   = 'All';
+$lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";
+$lang->execution->kanbanViewList['bug']   = 'Bug';
+$lang->execution->kanbanViewList['task']  = 'Task';
+
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = 'Do you want to reset Kanban?';
 $lang->kanbanSetting->optionList['0'] = 'Hide';
