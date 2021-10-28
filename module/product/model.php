@@ -728,9 +728,9 @@ class productModel extends model
         foreach($data->modules as $id => $name)
         {
             if(!$name) continue;
+            if(!($this->config->systemMode == 'classic') and !$data->programs[$id]) continue;
             $line->name  = strip_tags(trim($name));
             $line->root  = $data->programs[$id];
-            if(!($this->config->systemMode == 'classic') and !$line->root) continue;
 
             if(is_numeric($id))
             {
