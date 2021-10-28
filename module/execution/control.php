@@ -1855,8 +1855,8 @@ class execution extends control
 
         /* Get execution's product. */
         $productID = 0;
-        $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
-        if($productPairs) $productID = key($productPairs);
+        $products  = $this->execution->getProducts($executionID);
+        if($products) $productID = key($products);
 
         $plans    = $this->execution->getPlans($products);
         $allPlans = array('' => '');
