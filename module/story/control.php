@@ -136,8 +136,15 @@ class story extends control
 
             if($objectID != 0)
             {
-                if($objectID != $this->session->project) $this->loadModel('action')->create('story', $storyID, 'linked2execution', '', $objectID);
-                if($this->config->systemMode == 'new') $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $this->session->project);
+                $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
+                if($object->type != 'project')
+                {
+                    $this->loadModel('action')->create('story', $storyID, 'linked2execution', '', $objectID);
+                }
+                else
+                {
+                    $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
+                }
             }
 
             if($todoID > 0)

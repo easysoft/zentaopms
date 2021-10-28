@@ -588,7 +588,7 @@ $(function()
     if(browseType == 'all' || browseType == 'bug') createKanban('bug', kanbanGroup.bug, commonOptions);
 
     /* Create task kanban 创建 任务 看板 */
-    createKanban('task', kanbanGroup.task, commonOptions);
+    if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
 
     /* Init iframe modals */
     $(document).on('click', '.iframe', function(event)
