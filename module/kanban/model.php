@@ -31,7 +31,7 @@ class kanbanModel extends model
 
         if(empty($lanes)) return array();
 
-        foreach($lanes as $lane) $this->updateCards($executionID, $lane);
+        foreach($lanes as $lane) $this->updateCards($lane);
 
         $columns = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
@@ -250,14 +250,14 @@ class kanbanModel extends model
     /**
      * Update column cards.
      *
-     * @param  int    $executionID
      * @param  object $lane
      * @access public
      * @return void
      */
-    public function updateCards($executionID, $lane)
+    public function updateCards($lane)
     {
-        $laneType  = $lane->type;
+        $laneType    = $lane->type;
+        $executionID = $lane->type;
         $cardPairs = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
             ->andWhere('lane')->eq($lane->id)
@@ -273,23 +273,18 @@ class kanbanModel extends model
                     if(strpos(',ready,develop,test,', $colType) !== false) continue;
                     if($colType == 'backlog' and $story->stage == $stage and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
                     {
-                        foreach($cardPairs as $type => $cards)
-                        {
-                            if(strpos($cards, ",$storyID,") !== false) $cardPairs[$type] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
-                        }
                         $cardPairs['backlog'] .= empty($cardPairs['backlog']) ? ',' . $storyID . ',' : $storyID . ',';
                     }
                     elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
                     {
-                        foreach($cardPairs as $type => $cards)
-                        {
-                            if(strpos($cards, ",$storyID,") !== false) $cardPairs[$type] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
-                        }
                         $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $storyID . ',' : $storyID . ',';
+                    }
+                    elseif($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                     }
                 }
             }
-
         }
         elseif($laneType == 'bug')
         {
@@ -300,39 +295,25 @@ class kanbanModel extends model
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
                 {
                     if(strpos(',resolving,fixing,test,testing,tested,', $colType) !== false) continue;
-                    if($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false)
+                    if($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
                     {
-                        foreach($cardPairs as $type => $cards)
-                        {
-                            if(strpos($cards, ",$bugID,") !== false) $existed = true;
-                        }
-                        if(!$existed)
-                        {
-                            $cardPairs['unconfirmed'] .= empty($cardPairs['unconfirmed']) ? ',' . $bugID . ',' : $bugID . ',';
-                        }
+                        $cardPairs['unconfirmed'] .= empty($cardPairs['unconfirmed']) ? ',' . $bugID . ',' : $bugID . ',';
                     }
-                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false)
+                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
                     {
-                        if(strpos($cardcardPairs['unconfirmed'], ",$bugID,") !== false)
-                        {
-                            $cardPairs['unconfirmed'] = str_replace(",$bugID,", ',', $cardPairs['unconfirmed']);
-                        }
-                        foreach($cardPairs as $type => $cards)
-                        {
-                            if(strpos($cards, ",$bugID,") !== false) $existed = true;
-                        }
-                        if(!$existed)
-                        {
-                            $cardPairs['confirmed'] .= empty($cardPairs['confirmed']) ? ',' . $bugID . ',' : $bugID . ',';
-                        }
+                        $cardPairs['confirmed'] .= empty($cardPairs['confirmed']) ? ',' . $bugID . ',' : $bugID . ',';
+                    }
+                    elseif($colType == 'fixed' and $bug->status == $status and strpos($cardPairs['fixed'], ",$bugID,") === false and strpos($cardPairs['testing'], ",$bugID,") === false and strpos($cardPairs['tested'], ",$bugID,") === false)
+                    {
+                        $cardPairs['confirmed'] .= empty($cardPairs['confirmed']) ? ',' . $bugID . ',' : $bugID . ',';
                     }
                     elseif($bug->status == $status and strpos($cardPairs[$colType], ",$bugID,") === false)
                     {
-                        foreach($cardPairs as $type => $cards)
-                        {
-                            if(strpos($cards, ",$bugID,") !== false) $cardPairs[$type] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
-                        }
                         $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $bugID . ',' : $bugID . ',';
+                    }
+                    elseif($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
                     }
                 }
             }
@@ -347,11 +328,11 @@ class kanbanModel extends model
                     if($colType == 'develop') continue;
                     if($task->status == $status and strpos($cardPairs[$colType], ",$taskID,") === false)
                     {
-                        foreach($cardPairs as $type => $cards)
-                        {
-                            if(strpos($cards, ",$taskID,") !== false) $cardPairs[$type] = str_replace(",$taskID,", ',', $cardPairs[$colType]);
-                        }
                         $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $taskID . ',' : $taskID . ',';
+                    }
+                    elseif($task->status != $status and strpos($cardPairs[$colType], ",$taskID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$taskID,", ',', $cardPairs[$colType]);
                     }
                 }
             }
