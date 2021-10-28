@@ -11,6 +11,23 @@ function renderUserAvatar(user)
 }
 
 /**
+ * Render deadline
+ * @param {String|Date} deadline Deadline
+ * @returns {JQuery}
+ */
+function renderDeadline(deadline)
+{
+    var date = $.zui.createDate(deadline);
+    var now = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    var isEarlyThanToday = date.getTime() < now.getTime();
+    return $('<span class="info info-deadline"/>').text(deadline).addClass(isEarlyThanToday ? 'text-red' : 'text-muted');
+}
+
+/**
  * Render story item  提供方法渲染看板中的需求卡片
  * @param {Object} item  Story item object
  * @param {JQuery} $item Kanban item element
@@ -76,6 +93,7 @@ function renderBugItem(item, $item, col)
         '<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>',
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
     ].join(''));
+    if(item.deadline) $infos.append(renderDeadline(item.deadline));
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
 
     $item.attr('data-type', 'bug').addClass('kanban-item-bug');
@@ -112,6 +130,7 @@ function renderTaskItem(item, $item, col)
         '<span class="info i nfo-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
     ].join(''));
+    if(item.deadline) $infos.append(renderDeadline(item.deadline));
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
 
     $item.attr('data-type', 'task').addClass('kanban-item-task');
