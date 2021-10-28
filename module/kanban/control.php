@@ -80,17 +80,21 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function setLaneColumn($columnID)
+    public function setColumn($columnID)
     {
         $column = $this->kanban->getColumnById($columnID);
         
         if($_POST)
         {
-            $params = fixer::input('post')->get();
-            $this->kanban->updateLaneColumn($columnID, $params);
+            /* Check lane column name is unique. */
+            $exist = $this->kanban->getColumnByName($this->post->name, $column->lane);
+            if($exist and $exist->id != $columnID)
+            {
+                return $this->sendError($this->lang->kanban->noColumnUniqueName);
+            }
+
+            $changes = $this->kanban->updateLaneColumn($columnID, $column);
             if(dao::isError()) return $this->sendError(dao::getError());
-            
-            $changes = common::createChanges($column, $params);
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited');

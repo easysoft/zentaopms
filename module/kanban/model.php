@@ -355,6 +355,24 @@ class kanbanModel extends model
     }
 
     /**
+     * Get Column by column name.
+     *
+     * @param  string $name
+     * @param  int    $laneID
+     * @access public
+     * @return object
+     */
+    public function getColumnByName($name, $laneID)
+    {
+        return $this->dao->select('*')
+            ->from(TABLE_KANBANCOLUMN)
+            ->where('name')->eq($name)
+            ->andWhere('lane')->eq($laneID)
+            ->fetch();
+    }
+
+
+    /**
      * Get lane by id.
      *
      * @param  int    $laneID
@@ -416,17 +434,25 @@ class kanbanModel extends model
     /**
      * Update lane column.
      *
-     * @param  int $columnID
+     * @param  int    $columnID
+     * @param  object $column
      * @access public
      * @return array
      */
-    public function updateLaneColumn($columnID, $data)
+    public function updateLaneColumn($columnID, $column)
     {
+        $data = fixer::input('post')->get();
+
         $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
             ->autoCheck()
             ->batchcheck($this->config->kanban->setlaneColumn->requiredFields, 'notempty')
             ->where('id')->eq($columnID)
             ->exec();
+
+        if(dao::isError()) return;
+
+        $changes = common::createChanges($column, $data);
+        return $changes;
     }
     
 }
