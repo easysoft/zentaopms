@@ -257,7 +257,7 @@ class kanbanModel extends model
     public function updateCards($lane)
     {
         $laneType    = $lane->type;
-        $executionID = $lane->type;
+        $executionID = $lane->exeuction;
         $cardPairs = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
             ->andWhere('lane')->eq($lane->id)
@@ -291,7 +291,6 @@ class kanbanModel extends model
             $bugs = $this->loadModel('bug')->getExecutionBugs($executionID);
             foreach($bugs as $bugID => $bug)
             {
-                $existed = false;
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
                 {
                     if(strpos(',resolving,fixing,test,testing,tested,', $colType) !== false) continue;
