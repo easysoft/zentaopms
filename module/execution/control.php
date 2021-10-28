@@ -1825,12 +1825,12 @@ class execution extends control
      * Kanban.
      *
      * @param  int    $executionID
-     * @param  string $type
+     * @param  string $browseType story|bug|task|all
      * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function kanban($executionID, $type = 'story', $orderBy = 'order_asc')
+    public function kanban($executionID, $browseType = 'all', $orderBy = 'order_asc')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -1840,19 +1840,30 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID);
+        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType);
         if(empty($kanbanGroup))
         {
             $this->kanban->createLanes($executionID);
-            $kanbanGroup = $this->kanban->getExecutionKanban($executionID);
+            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType);
         }
-        a($kanbanGroup);die;
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);
+
+        /* Get execution's product. */
+        $productID = 0;
+        $products  = $this->execution->getProducts($executionID);
+        if($products) $productID = key($products);
+
+        $plans    = $this->execution->getPlans($products);
+        $allPlans = array('' => '');
+        if(!empty($plans))
+        {
+            foreach($plans as $plan) $allPlans += $plan;
+        }
 
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
@@ -1861,10 +1872,12 @@ class execution extends control
         $this->view->storyOrder    = $orderBy;
         $this->view->orderBy       = 'id_asc';
         $this->view->executionID   = $executionID;
+        $this->view->productID     = $productID;
+        $this->view->allPlans      = $allPlans;
         $this->view->browseType    = '';
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->execution     = $execution;
-        $this->view->type          = $type;
+        $this->view->browseType    = $browseType;
         $this->view->canBeChanged  = $canBeChanged;
 
         $this->display();

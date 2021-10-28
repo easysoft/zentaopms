@@ -19,9 +19,9 @@
         <?php echo "<span title='$title'>" . $title . '</span>';?>
       </h2>
     </div>
-    <form method='post' target='hiddenwin' onsubmit='return setWIPLimit();'>
+    <form method='post' class="load-indicator main-form form-ajax" target='hiddenwin' onsubmit='return setWIPLimit();'>
       <table align='center' class='table table-form'>
-        <?php if(!in_array($column->type, $config->kanban->parentColumn[$column->laneType])):?>
+        <?php if($column->parent != -1):?>
         <tr>
           <th><?php echo $lang->kanban->WIPStatus;?></th>
           <td colspan='2'>
@@ -42,12 +42,12 @@
         <tr>
           <th><?php echo $lang->kanban->WIPCount;?></th>
           <td colspan='2'>
-            <?php echo html::hidden('limit', $column->limit, "class='form-control'");?>
             <div class="table-col">
               <?php $attr = $column->limit == -1 ? 'disabled' : '';?>
               <?php echo html::input('WIPCount', $column->limit != -1 ? $column->limit : '', "class='form-control' $attr");?>
             </div>
             <div class="table-col w-50px">
+              <?php echo html::hidden('limit', $column->limit, "class='form-control'");?>
               <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
                 <div class='checkbox-primary'>
                   <input id='noLimit' name='noLimit' value='-1' type='checkbox' class='no-margin' <?php echo $column->limit == -1 ? 'checked' : '';?>/>

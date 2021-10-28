@@ -333,8 +333,9 @@ function addColumnRenderer(columnType, renderer)
  */
 function renderKanbanItem(item, $item, col, lane, kanban)
 {
-    const columnRenderers = window.columnRenderers;
-    var renderer = columnRenderers[col.type] || columnRenderers[col.itemType] || columnRenderers[lane.defaultItemType] || columnRenderers[kanban.defaultItemType];
+    var columnRenderers = window.columnRenderers;
+    var cardType        = col.cardType || lane.defaultCardType || kanban.defaultCardType;
+    var renderer        = columnRenderers[col.type] || columnRenderers[cardType];
     if(renderer) return renderer(item, $item, col);
     return $item;
 }

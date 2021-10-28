@@ -26,7 +26,7 @@ class kanban extends control
             $this->kanban->setWIP($columnID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('wip', $columnID, 'Edited');
+            $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited', '', $executionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
@@ -59,7 +59,7 @@ class kanban extends control
             $this->kanban->setLane($laneID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('lane', $laneID, 'Edited');
+            $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
@@ -72,4 +72,41 @@ class kanban extends control
 
         $this->display();
     }
+
+    /**
+     * Set lane column info.
+     *
+     * @param  int $columnID
+     * @access public
+     * @return void
+     */
+    public function setColumn($columnID)
+    {
+        $column = $this->kanban->getColumnById($columnID);
+        
+        if($_POST)
+        {
+            /* Check lane column name is unique. */
+            $exist = $this->kanban->getColumnByName($this->post->name, $column->lane);
+            if($exist and $exist->id != $columnID)
+            {
+                return $this->sendError($this->lang->kanban->noColumnUniqueName);
+            }
+
+            $changes = $this->kanban->updateLaneColumn($columnID, $column);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            return $this->sendSuccess(array('locate' => 'parent'));
+        }
+
+        $this->view->column = $column;
+        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setLaneColumn;
+        $this->display();
+    }
+
 }

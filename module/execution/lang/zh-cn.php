@@ -386,6 +386,11 @@ $lang->execution->kanbanHideCols   = '看板隐藏已关闭、已取消列';
 $lang->execution->kanbanShowOption = '显示折叠信息';
 $lang->execution->kanbanColsColor  = '看板列自定义颜色';
 
+$lang->execution->kanbanViewList['all']   = '综合看板';
+$lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}看板";
+$lang->execution->kanbanViewList['bug']   = 'Bug看板';
+$lang->execution->kanbanViewList['task']  = '任务看板';
+
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = '是否恢复看板默认设置？';
 $lang->kanbanSetting->optionList['0'] = '隐藏';
