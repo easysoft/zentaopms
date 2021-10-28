@@ -116,7 +116,7 @@ class kanban extends control
      * @param  int    $columnID
      * @param  string $orderBy id_desc|id_asc|pri_desc|pri_asc|lastEditedDate_desc|lastEditedDate_asc|deadline_desc|deadline_asc|assignedTo_asc
      * @access public
-     * @return bool
+     * @return void
      */
     public function ajaxCardsSort($laneType, $columnID, $orderBy = 'id_desc')
     {
