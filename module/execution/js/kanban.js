@@ -361,4 +361,11 @@ $(function()
 
     /* Create task kanban 创建 任务 看板 */
     createKanban('task', kanbanGroup.task, commonOptions);
+
+    /* Init iframe modals */
+    $(document).on('click', '.iframe', function(event)
+    {
+        $(this).modalTrigger({show: true});
+        event.preventDefault();
+    });
 });
