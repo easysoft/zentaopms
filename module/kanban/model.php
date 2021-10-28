@@ -18,15 +18,17 @@ class kanbanModel extends model
      *
      * @param  int    $executionID
      * @param  string $objectType all|story|bug|task
+     * @param  string $groupBy
      * @access public
      * @return array
      */
-    public function getExecutionKanban($executionID, $objectType = 'all')
+    public function getExecutionKanban($executionID, $objectType = 'all', $groupBy = 'default')
     {
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($objectType != 'all')->andWhere('type')->eq($objectType)
+            ->beginIF($groupBy != 'default')->andWhere('extra')->eq($groupBy)
             ->fetchAll('id');
 
         if(empty($lanes)) return array();
@@ -116,19 +118,87 @@ class kanbanModel extends model
      * Add execution Kanban lanes and columns.
      *
      * @param  int    $executionID
+     * @param  string $type all|story|bug|task
+     * @param  string $groupBy default
      * @access public
      * @return void
      */
-    public function createLanes($executionID)
+    public function createLanes($executionID, $type = 'all', $groupBy = 'default')
     {
-        foreach($this->config->kanban->default as $type => $lane)
+        if($groupBy == 'default')
         {
-            $lane->type      = $type;
-            $lane->execution = $executionID;
-            $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
+            foreach($this->config->kanban->default as $type => $lane)
+            {
+                $lane->type      = $type;
+                $lane->execution = $executionID;
+                $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
-            $laneID = $this->dao->lastInsertId();
-            $this->createColumns($laneID, $type, $executionID);
+                $laneID = $this->dao->lastInsertId();
+                $this->createColumns($laneID, $type, $executionID);
+            }
+        }
+        else
+        {
+            $this->loadModel($type);
+
+            $groupList = array();
+            $table     = zget($this->config->objectTables, $type);
+
+            if($groupBy == 'story' or $type == 'story')
+            {
+                $selectField = $groupBy == 'story' ? "t1.$groupBy" : "t2.$groupBy";
+                $groupList = $this->dao->select($selectField)->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+                    ->where('t1.project')->eq($executionID)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->orderBy($groupBy . '_desc')
+                    ->fetchPairs();
+            }
+            else
+            {
+                $groupList = $this->dao->select($groupBy)->from($table)
+                    ->where('execution')->eq($executionID)
+                    ->beginIF($type == 'task')->andWhere('parent')->ge(0)->fi()
+                    ->andWhere('deleted')->eq(0)
+                    ->orderBy($groupBy . '_desc')
+                    ->fetchPairs();
+            }
+
+            $modulePairs     = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetchPairs();
+            $storyPairs      = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
+            $assignedToPairs = $this->loadModel('user')->getPairs('noletter');
+
+            $laneName  = '';
+            $laneOrder = 5;
+            foreach($groupList as $groupKey)
+            {
+                if($groupKey)
+                {
+                    if(strpos('module,story,assignedTo', $groupBy) !== false)
+                    {
+                        $laneName = zget(${$groupBy . 'Pairs'}, $groupKey);
+                    }
+                    else
+                    {
+                        $laneName = zget($this->lang->$type->{$groupBy . 'List'}, $groupKey);
+                    }
+                }
+                else
+                {
+                    $laneName = $this->lang->kanban->noGroup;
+                }
+
+                $lane = new stdClass();
+                $lane->execution = $executionID;
+                $lane->type      = $type;
+                $lane->extra     = $groupBy;
+                $lane->name      = $laneName;
+                $lane->color     = '#7ec5ff';
+                $lane->order     = $laneOrder;
+
+                $laneOrder += 5;
+                $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
+            }
         }
     }
 
@@ -411,7 +481,7 @@ class kanbanModel extends model
         return dao::isError();
     }
 
-    
+
 
     /**
      * Update lane column.
@@ -428,5 +498,5 @@ class kanbanModel extends model
             ->where('id')->eq($columnID)
             ->exec();
     }
-    
+
 }

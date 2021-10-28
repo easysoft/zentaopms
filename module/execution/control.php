@@ -1827,10 +1827,11 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $type
      * @param  string $orderBy
+     * @param  string $groupBy
      * @access public
      * @return void
      */
-    public function kanban($executionID, $type = 'story', $orderBy = 'order_asc')
+    public function kanban($executionID, $type = 'story', $orderBy = 'order_asc', $groupBy = 'default')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -1840,10 +1841,10 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID);
+        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $type, $groupBy);
         if(empty($kanbanGroup))
         {
-            $this->kanban->createLanes($executionID);
+            $this->kanban->createLanes($executionID, $type, $groupBy);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID);
         }
 
