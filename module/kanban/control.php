@@ -95,8 +95,7 @@ class kanban extends control
                 return $this->sendError($this->lang->kanban->noColumnUniqueName);
             }
 
-            
-            $this->kanban->updateLaneColumn($columnID, $params);
+           $this->kanban->updateLaneColumn($columnID, $params);
             if(dao::isError()) return $this->sendError(dao::getError());
             
             $changes = common::createChanges($column, $params);
