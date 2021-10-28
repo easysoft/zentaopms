@@ -87,7 +87,7 @@ class kanban extends control
         if($_POST)
         {
             /* Check lane column name is unique. */
-            $exist = $this->kanban->getColumnByName($_POST['name'], $column->lane);
+            $exist = $this->kanban->getColumnByName($this->post->name, $column->lane);
             if($exist and $exist->id != $columnID)
             {
                 return $this->sendError($this->lang->kanban->noColumnUniqueName);
