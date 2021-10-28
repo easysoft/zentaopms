@@ -9,6 +9,8 @@ $routes['/langs']  = 'langs';
 
 $routes['/tabs/:module'] = 'tabs';
 
+$routes['/files'] = 'files';
+
 $routes['/configurations']       = 'configs';
 $routes['/configurations/:name'] = 'config';
 

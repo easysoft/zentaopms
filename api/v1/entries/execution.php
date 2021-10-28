@@ -55,6 +55,7 @@ class executionEntry extends Entry
                     break;
                 case 'members':
                     $execution->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');;
+                    unset($execution->members['']);
                     break;
                 case 'stories':
                     $stories = $this->loadModel('story')->getExecutionStories($executionID);

@@ -231,8 +231,8 @@ class myModel extends model
             }
 
             $overview->projectTotal     = count($projects);
-            $overview->allConsumed      = $allConsumed;
-            $overview->thisYearConsumed = $thisYearConsumed;
+            $overview->allConsumed      = round($allConsumed, 1);
+            $overview->thisYearConsumed = round($thisYearConsumed, 1);
         }
         else
         {

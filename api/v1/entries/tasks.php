@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class tasksEntry extends entry 
+class tasksEntry extends entry
 {
     /**
      * GET method.
@@ -71,7 +71,7 @@ class tasksEntry extends entry
         $this->requireFields('name,assignedTo,type,estStarted,deadline');
 
         $control->create($executionID, $this->request('storyID', 0), $this->request('moduleID', 0), $this->request('copyTaskID', 0), $this->request('copyTodoID', 0));
-        
+
         $data = $this->getData();
         if(!isset($data->id)) return $this->sendError(400, $data->message);
 

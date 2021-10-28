@@ -79,7 +79,7 @@ class file extends control
                 if(defined('RUN_MODE') && RUN_MODE == 'api')
                 {
                     $_SERVER['SCRIPT_NAME'] = 'index.php';
-                    die(json_encode(array('status' => 'success', 'data' => commonModel::getSysURL() . $this->config->webRoot . $url)));
+                    die(json_encode(array('status' => 'success', 'id' => $fileID, 'data' => commonModel::getSysURL() . $this->config->webRoot . $url)));
                 }
                 else
                 {
