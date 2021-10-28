@@ -727,9 +727,9 @@ class productModel extends model
         $maxOrder = $maxOrder ? $maxOrder : 0;
         foreach($data->modules as $id => $name)
         {
-            if(!$name) continue;
             $line->name  = strip_tags(trim($name));
             $line->root  = $data->programs[$id];
+            if(!$line->name or !$line->root) continue;
 
             if(is_numeric($id))
             {
