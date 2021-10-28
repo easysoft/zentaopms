@@ -356,12 +356,11 @@ class kanbanModel extends model
      */
     public function getColumnByName($name, $laneID)
     {
-        $column = $this->dao->select('*')
+        return $this->dao->select('*')
             ->from(TABLE_KANBANCOLUMN)
             ->where('name')->eq($name)
             ->andWhere('lane')->eq($laneID)
             ->fetch();
-        return $column;
     }
 
 
