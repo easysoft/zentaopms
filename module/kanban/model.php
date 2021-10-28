@@ -71,6 +71,7 @@ class kanbanModel extends model
                 $columnData[$column->id]['name']       = $column->name;
                 $columnData[$column->id]['color']      = $column->color;
                 $columnData[$column->id]['limit']      = $column->limit;
+                $columnData[$column->id]['laneType']   = $laneType;
                 $columnData[$column->id]['asParent']   = $column->parent == -1 ? true : false;
 
                 if($column->parent > 0)
@@ -106,6 +107,7 @@ class kanbanModel extends model
                     $laneData['cards'][$column->type][] = $cardData;
                     $cardOrder ++;
                 }
+                if(!isset($laneData['cards'][$column->type])) $laneData['cards'][$column->type] = array();
             }
 
             $kanbanGroup[$laneType]['id']              = $laneType;

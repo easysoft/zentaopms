@@ -109,4 +109,27 @@ class kanban extends control
         $this->display();
     }
 
+    /**
+     * AJAX: Update the cards sorting of the lane column.
+     *
+     * @param  string $laneType story|bug|task
+     * @param  int    $columnID
+     * @param  string $orderBy id_desc|id_asc|pri_desc|pri_asc|lastEditedDate_desc|lastEditedDate_asc|deadline_desc|deadline_asc|assignedTo_asc
+     * @access public
+     * @return void
+     */
+    public function ajaxCardsSort($laneType, $columnID, $orderBy = 'id_desc')
+    {
+        $oldCards = $this->dao->select('cards')->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->fetch('cards');
+        if(empty($oldCards)) return;
+
+        $table   = $this->config->objectTables[$laneType];
+        $objects = $this->dao->select('*')->from($table)
+            ->where('id')->in($oldCards)
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+        $cards = ',' . implode(',', array_keys($objects)) . ',';
+
+        $this->update(TABLE_KANBANCOLUMN)->set('cards')->eq($cards)->where('id')->eq($columnID)->exec();
+    }
 }
