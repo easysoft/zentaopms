@@ -434,7 +434,7 @@ function createColumnMenu(options)
     var kanbanID = options.kanban;
     var items =
     [
-        {label: '编辑名称', url: $.createLink('kanban', 'editcolname', 'col=' + col.id + '&kanban=' + kanbanID), className: 'iframe'},
+        {label: '编辑名称', url: $.createLink('kanban', 'editcolname', 'col=' + col.columnID + '&kanban=' + kanbanID), className: 'iframe'},
         {label: '在制品数目', url: $.createLink('kanban', 'editcolwip'), className: 'iframe'},
         {label: '看板卡片排序', items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards},
     ];
