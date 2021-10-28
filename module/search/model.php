@@ -136,7 +136,15 @@ class searchModel extends model
             }
             elseif($operator == "notinclude")
             {
-                $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                if($this->post->$fieldName == 'module')
+                {
+                    $allModules = $this->loadModel('tree')->getAllChildId($value);
+                    if($allModules) $condition = " NOT IN ('" . join("','", $allModules) . "')";
+                }
+                else
+                {
+                    $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                }
             }
             elseif($operator == 'belong')
             {
