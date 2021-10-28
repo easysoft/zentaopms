@@ -16,6 +16,10 @@ $lang->kanban->columnName         = '看板列名称';
 $lang->kanban->columnColor        = '看板列颜色';
 $lang->kanban->noColumnUniqueName = '看板列名称已存在。';
 
+$lang->kanban->error = new stdclass();
+$lang->kanban->error->parentLimitNote = '父列的在制品数量不能小与子列在制品数量之和。';
+$lang->kanban->error->childLimitNote  = '子列在制品数量之和不能大于父列的在制品数量。';
+
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
 $this->lang->kanban->laneTypeList['bug']   = 'Bug';

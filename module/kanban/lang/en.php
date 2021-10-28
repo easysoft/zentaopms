@@ -1,16 +1,24 @@
 <?php
 $lang->kanban = new stdClass();
 
-$lang->kanban->WIP       = 'WIP';
-$lang->kanban->setWIP    = 'WIP Settings';
-$lang->kanban->WIPStatus = 'WIP Status';
-$lang->kanban->WIPStage  = 'WIP Stage';
-$lang->kanban->WIPType   = 'WIP Type';
-$lang->kanban->WIPCount  = 'WIP Count';
-$lang->kanban->noLimit   = 'No Limit ∞';
-$lang->kanban->setLane   = 'Lane Settings';
-$lang->kanban->laneName  = 'Lane Name';
-$lang->kanban->laneColor = 'Lane Color';
+$lang->kanban->WIP                = 'WIP';
+$lang->kanban->setWIP             = 'WIP Settings';
+$lang->kanban->WIPStatus          = 'WIP Status';
+$lang->kanban->WIPStage           = 'WIP Stage';
+$lang->kanban->WIPType            = 'WIP Type';
+$lang->kanban->WIPCount           = 'WIP Count';
+$lang->kanban->noLimit            = 'No Limit ∞';
+$lang->kanban->setLane            = 'Lane Settings';
+$lang->kanban->laneName           = 'Lane Name';
+$lang->kanban->laneColor          = 'Lane Color';
+$lang->kanban->setLaneColumn      = 'Column Settings';
+$lang->kanban->columnName         = 'Column Name';
+$lang->kanban->columnColor        = 'Column Color';
+$lang->kanban->noColumnUniqueName = 'The Kanban column name already exists.';
+
+$lang->kanban->error = new stdclass();
+$lang->kanban->error->parentLimitNote = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
+$lang->kanban->error->childLimitNote  = 'The sum of products in the child column cannot be > the number of products in the parent column.';
 
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;

@@ -396,15 +396,57 @@ class kanbanModel extends model
      */
     public function setWIP($columnID)
     {
-        $column = $this->getColumnById($columnID);
-        $data   = fixer::input('post')
+        $oldColumn = $this->getColumnById($columnID);
+        $column    = fixer::input('post')
             ->cleanInt('limit')
             ->remove('WIPCount,noLimit')
             ->get();
 
-        $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
+        /* Check column limit. */
+        $sumChildLimit = 0;
+        if($oldColumn->parent == -1 and $column->limit != -1)
+        {
+            $childColumns = $this->dao->select('id,`limit`')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetchAll();
+            foreach($childColumns as $childColumn)
+            {
+                if($childColumn->limit == -1)
+                {
+                    dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+                    return false;
+                }
+
+                $sumChildLimit += $childColumn->limit;
+            }
+
+            if($sumChildLimit > $column->limit)
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+                return false;
+            }
+        }
+        elseif($oldColumn->parent > 0)
+        {
+            $parentColumn = $this->getColumnByID($oldColumn->parent);
+            if($parentColumn->limit != -1)
+            {
+                $brotherColumnLimit = $this->dao->select('`limit`')->from(TABLE_KANBANCOLUMN)
+                    ->where('`parent`')->eq($oldColumn->parent)
+                    ->andWhere('id')->ne($columnID)
+                    ->fetch('limit');
+
+                $sumChildLimit = $brotherColumnLimit + $column->limit;
+
+                if($column->limit == -1 or $brotherColumnLimit == -1 or $sumChildLimit > $parentColumn->limit)
+                {
+                    dao::$errors['limit'] = $this->lang->kanban->error->childLimitNote;
+                    return false;
+                }
+            }
+        }
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->data($column)
             ->autoCheck()
-            ->checkIF($data->limit != -1, 'limit', 'gt', 0)
+            ->checkIF($column->limit != -1, 'limit', 'gt', 0)
             ->batchcheck($this->config->kanban->setwip->requiredFields, 'notempty')
             ->where('id')->eq($columnID)
             ->exec();
