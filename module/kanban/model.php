@@ -257,7 +257,7 @@ class kanbanModel extends model
     public function updateCards($lane)
     {
         $laneType    = $lane->type;
-        $executionID = $lane->exeuction;
+        $executionID = $lane->execution;
         $cardPairs = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
             ->andWhere('lane')->eq($lane->id)
