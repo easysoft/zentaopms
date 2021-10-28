@@ -8,11 +8,11 @@ $lang->datatable->reset  = 'Reset';
 
 $lang->datatable->custom             = 'Customize Columns';
 $lang->datatable->customTip          = 'Check columns to display and drag columns to order.';
-$lang->datatable->switchToTable      = 'Switch to Common Table';
-$lang->datatable->switchToDatatable  = 'Switch to Advanced Table';
+$lang->datatable->switchToTable      = 'Common Table';
+$lang->datatable->switchToDatatable  = 'Advanced Table';
 $lang->datatable->required           = 'Required';
 $lang->datatable->confirmReset       = 'Do you want to restore the default settings?';
-$lang->datatable->setGlobal          = 'Set as Global';
+$lang->datatable->setGlobal          = 'Set Global';
 $lang->datatable->resetGlobal        = 'Global Reset';
 
 $lang->datatable->branch   = 'Branch';
