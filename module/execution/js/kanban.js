@@ -17,6 +17,23 @@ function renderUserAvatar(user)
 }
 
 /**
+ * Render deadline
+ * @param {String|Date} deadline Deadline
+ * @returns {JQuery}
+ */
+function renderDeadline(deadline)
+{
+    var date = $.zui.createDate(deadline);
+    var now = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    var isEarlyThanToday = date.getTime() < now.getTime();
+    return $('<span class="info info-deadline"/>').text(deadline).addClass(isEarlyThanToday ? 'text-red' : 'text-muted');
+}
+
+/**
  * Render story item  提供方法渲染看板中的需求卡片
  * @param {Object} item  Story item object
  * @param {JQuery} $item Kanban item element
@@ -47,11 +64,22 @@ function renderStoryItem(item, $item, col)
     ].join(''));
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
 
+    var $actions = $item.find('.actions');
+    if(!$actions.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="story" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
+
     $item.attr('data-type', 'story').addClass('kanban-item-story');
 
     return $item;
 }
-
 
 /**
  * Render bug item  提供方法渲染看板中的 Bug 卡片
@@ -82,7 +110,20 @@ function renderBugItem(item, $item, col)
         '<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>',
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
     ].join(''));
+    if(item.deadline) $infos.append(renderDeadline(item.deadline));
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
+
+    var $actions = $item.find('.actions');
+    if(!$actions.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="bug" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
 
     $item.attr('data-type', 'bug').addClass('kanban-item-bug');
 
@@ -118,7 +159,20 @@ function renderTaskItem(item, $item, col)
         '<span class="info i nfo-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
     ].join(''));
+    if(item.deadline) $infos.append(renderDeadline(item.deadline));
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo));
+
+    var $actions = $item.find('.actions');
+    if(!$actions.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="task" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
 
     $item.attr('data-type', 'task').addClass('kanban-item-task');
 
@@ -126,7 +180,6 @@ function renderTaskItem(item, $item, col)
 }
 
 /* Add column renderer/  添加特定列类型或列条目类型渲染方法 */
-/* Add column renderer/  添加特定列类型或列卡片类型渲染方法 */
 addColumnRenderer('story', renderStoryItem);
 addColumnRenderer('bug',   renderBugItem);
 addColumnRenderer('task',  renderTaskItem);
@@ -142,6 +195,63 @@ function renderColumnCount($count, count, col)
 {
     var text = count + '/' + (!col.limit ? '<i class="icon icon-infinite"></i>' : '');
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
+}
+
+/**
+ * Render header column 渲染看板列头部
+ * @param {JQuery} $col    Header column element
+ * @param {Object} col     Header column object
+ * @param {JQuery} $header Header element
+ * @param {Object} kanban  Kanban object
+ */
+function renderHeaderCol($col, col, $header, kanban)
+{
+    if(col.asParent) $col = $col.children('.kanban-header-col');
+    if(!$col.children('.actions').length)
+    {
+        var $actions = $('<div class="actions" />');
+        if(col.type === 'blacklog' || col.type === 'wait')
+        {
+            $actions.append([
+                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
+                    '<i class="icon icon-expand-alt"></i>',
+                '</a>'
+            ].join(''));
+        }
+        $actions.append([
+                '<a data-contextmenu="column" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>'
+            ].join(''));
+        $actions.appendTo($col);
+    }
+}
+
+/**
+ * Render lane name 渲染看板泳道名称
+ * @param {JQuery} $name    Name element
+ * @param {Object} lane     Lane object
+ * @param {JQuery} $kanban  $kanban element
+ * @param {Object} columns  Kanban columns
+ * @param {Object} kanban   Kanban object
+ */
+function renderLaneName($name, lane, $kanban, columns, kanban)
+{
+    if(!$name.children('.actions').length)
+    {
+        $([
+            '<div class="actions">',
+                '<a data-contextmenu="lane" data-lane="' + lane.id + '" data-kanban="' + kanban.id + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($name);
+    }
+}
+
+function renderCardsCount($count, count, col)
+{
+    console.log('renderCardsCount', {$count, count, col});
 }
 
 /**
@@ -305,6 +415,135 @@ function handleFinishDrop(event)
     $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
 }
 
+/**
+ * Handle sort cards in column 处理对列卡片进行排序
+ */
+function handleSortColCards()
+{
+    /* TODO: handle sort cards from column contextmenu */
+}
+
+/**
+ * Create column menu  创建列操作菜单
+ * @returns {Object[]}
+ */
+function createColumnMenu(options)
+{
+    var $col     = options.$trigger.closest('.kanban-col');
+    var col      = $col.data('col');
+    var kanbanID = options.kanban;
+    var items =
+    [
+        {label: '编辑名称', url: $.createLink('kanban', 'editcolname', 'col=' + col.id + '&kanban=' + kanbanID), className: 'iframe'},
+        {label: '在制品数目', url: $.createLink('kanban', 'editcolwip'), className: 'iframe'},
+        {label: '看板卡片排序', items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards},
+    ];
+    return items;
+}
+
+/**
+ * Create column create button menu  创建列添加按钮操作菜单
+ * @returns {Object[]}
+ */
+function createColumnCreateMenu(options)
+{
+    var $col  = options.$trigger.closest('.kanban-col');
+    var col   = $col.data('col');
+    var items =
+    [
+        {label: '创建',    url: $.createLink(col.kanban, 'create'), className: 'iframe'},
+        {label: '批量创建', url: $.createLink(col.kanban, 'batchcreate'), className: 'iframe'},
+    ];
+    return items;
+}
+
+/**
+ * Create lane menu  创建泳道操作菜单
+ * @returns {Object[]}
+ */
+function createLaneMenu(options)
+{
+    var $lane      = options.$trigger.closest('.kanban-lane');
+    var $kanban    = $lane.closest('.kanban');
+    var lane       = $lane.data('lane');
+    var kanbanID   = options.kanban;
+    var items =
+    [
+        {label: '泳道设置', icon: 'edit', url: $.createLink('kanban', 'laneedit', 'lane=' + lane.id + '&kanban=' + kanbanID), className: 'iframe'},
+        {label: '泳道上移', icon: 'arrow-up', url: $.createLink('kanban', 'lanemove', 'direction=up&lane=' + lane.id + '&kanban=' + kanbanID), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
+        {label: '泳道下移', icon: 'arrow-down', url: $.createLink('kanban', 'lanemove', 'direction=down&lane=' + lane.id + '&kanban=' + kanbanID), className: 'iframe', disabled: !$kanban.next('.kanban').length},
+    ];
+    var bounds = options.$trigger[0].getBoundingClientRect();
+    items.$options = {x: bounds.right, y: bounds.top};
+    return items;
+}
+
+/**
+ * Create story menu  创建需求卡片操作菜单
+ * @returns {Object[]}
+ */
+function createStoryMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var story = $card.data('item');
+    var items =
+    [
+        {label: '编辑需求', icon: 'edit', url: $.createLink('story', 'edit', 'storyID=' + story.id), className: 'iframe'},
+        {label: '变更需求', icon: 'change', url: $.createLink('story', 'change', 'storyID=' + story.id), className: 'iframe'},
+        {label: '移除需求', icon: 'unlink', url: $.createLink('story', 'unlink', 'storyID=' + story.id), className: 'iframe'},
+        {label: '分解任务', icon: 'plus', url: $.createLink('task', 'create', 'storyID=' + story.id), className: 'iframe'},
+        {label: '批量分解', icon: 'pluses', url: $.createLink('task', 'batchCreate', 'storyID=' + story.id), className: 'iframe'},
+    ];
+    return items;
+}
+
+/**
+ * Create bug menu  创建 Bug 卡片操作菜单
+ * @returns {Object[]}
+ */
+function createBugMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var bug   = $card.data('item');
+    var items =
+    [
+        {label: '编辑Bug', icon: 'edit', url: $.createLink('bug', 'edit', 'bugID=' + bug.id), className: 'iframe'},
+        {label: '确认Bug', icon: 'ok', url: $.createLink('bug', 'confirm', 'bugID=' + bug.id), className: 'iframe'},
+        {label: '复制Bug', icon: 'copy', url: $.createLink('bug', 'copy', 'bugID=' + bug.id), className: 'iframe'},
+        {label: '转软件需求', icon: 'lightbulb', url: $.createLink('story', 'create', 'bugID=' + bug.id), className: 'iframe'},
+    ];
+    return items;
+}
+
+ /**
+ * Create task menu  创建任务卡片操作菜单
+ * @returns {Object[]}
+ */
+function createTaskMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var task  = $card.data('item');
+    var items =
+    [
+        {label: '编辑任务', icon: 'edit', url: $.createLink('task', 'edit', 'taskID=' + task.id), className: 'iframe'},
+        {label: '拆分子任务', icon: 'plus', url: $.createLink('task', 'create', 'taskID=' + task.id), className: 'iframe'},
+        {label: '复制任务', icon: 'copy', url: $.createLink('task', 'copy', 'taskID=' + task.id), className: 'iframe'},
+        {label: '取消任务', icon: 'cancel', url: $.createLink('task', 'cancel', 'taskID=' + task.id), className: 'iframe'},
+    ];
+    return items;
+}
+
+/* Define menu creators */
+window.menuCreators =
+{
+    column:       createColumnMenu,
+    columnCreate: createColumnCreateMenu,
+    lane:         createLaneMenu,
+    story:        createStoryMenu,
+    bug:          createBugMenu,
+    task:         createTaskMenu,
+};
+
 /* Overload kanban default options */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
@@ -331,13 +570,15 @@ $(function()
         showCount:       true,
         showZeroCount:   true,
         fluidBoardWidth: true,
-        countRender:     renderColumnCount,
         droppable:
         {
             target:       findDropColumns,
             finish:       handleFinishDrop,
             mouseButton: 'left'
-        }
+        },
+        onRenderHeaderCol: renderHeaderCol,
+        onRenderLaneName:  renderLaneName,
+        onRenderCount:     renderColumnCount
     };
 
     /* Create story kanban 创建需求看板 */
@@ -347,5 +588,35 @@ $(function()
     if(browseType == 'all' || browseType == 'bug') createKanban('bug', kanbanGroup.bug, commonOptions);
 
     /* Create task kanban 创建 任务 看板 */
-    if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
+    createKanban('task', kanbanGroup.task, commonOptions);
+
+    /* Init iframe modals */
+    $(document).on('click', '.iframe', function(event)
+    {
+        $(this).modalTrigger({show: true});
+        event.preventDefault();
+    });
+
+    /* Init contextmenu */
+    $('#kanbans').on('click', '[data-contextmenu]', function(event)
+    {
+        var $trigger    = $(this);
+        var menuType    = $trigger.data('contextmenu');
+
+        var menuCreator = window.menuCreators[menuType];
+        if(!menuCreator) return;
+
+        var options = $.extend({event, $trigger: $trigger}, $trigger.data());
+        var items   = menuCreator(options);
+        console.log('ContextMenu', {items, options});
+        if(!items || !items.length) return;
+
+        $.zui.ContextMenu.show(items, items.$options || {event: event});
+    });
+
+    /* Hide contextmenu when page scroll */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
 });

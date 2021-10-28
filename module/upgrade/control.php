@@ -184,7 +184,7 @@ class upgrade extends control
         $title = $this->lang->upgrade->toPMS15Guide;
         if(isset($this->config->maxVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->maxName, $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15.0', $this->lang->maxName, $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toMAXGuide;
         }
         elseif(isset($this->config->bizVersion))
