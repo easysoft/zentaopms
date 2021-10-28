@@ -71,7 +71,6 @@ class kanbanModel extends model
                 $columnData[$column->id]['name']       = $column->name;
                 $columnData[$column->id]['color']      = $column->color;
                 $columnData[$column->id]['limit']      = $column->limit;
-                $columnData[$column->id]['columnID']   = $column->id;
                 $columnData[$column->id]['laneType']   = $laneType;
                 $columnData[$column->id]['asParent']   = $column->parent == -1 ? true : false;
 
