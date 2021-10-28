@@ -132,14 +132,22 @@ class searchModel extends model
             $condition = '';
             if($operator == "include")
             {
-                $condition = ' LIKE ' . $this->dbh->quote("%$value%");
+                if($this->post->$fieldName == 'module')
+                {
+                    $allModules = $this->loadModel('tree')->getAllChildId($value);
+                    if($allModules) $condition = helper::dbIN($allModules);
+                }
+                else
+                {
+                    $condition = ' LIKE ' . $this->dbh->quote("%$value%");
+                }
             }
             elseif($operator == "notinclude")
             {
                 if($this->post->$fieldName == 'module')
                 {
                     $allModules = $this->loadModel('tree')->getAllChildId($value);
-                    if($allModules) $condition = " NOT IN ('" . join("','", $allModules) . "')";
+                    if($allModules) $condition = " NOT " . helper::dbIN($allModules);
                 }
                 else
                 {
