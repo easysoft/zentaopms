@@ -85,7 +85,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->realBegan;?></th>
-          <td><?php echo html::input('realBegan', helper::isZeroDate($program->realBegan) ? '' : $program->realBegan, "class='form-control form-date'");?></td><td></td>
+          <td><?php echo html::input('realBegan', helper::isZeroDate($program->realBegan) ? '' : $program->realBegan, "class='form-control form-date'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->desc;?></th>
