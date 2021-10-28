@@ -1215,6 +1215,7 @@ class execution extends control
      */
     public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
+        if($projectID == 'null')die(js::alert($this->lang->execution->projectNotEmpty) . js::locate($this->server->http_referer , 'parent'));
         /* Set menu. */
         if($this->app->tab == 'project')
         {
