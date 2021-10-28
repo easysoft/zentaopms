@@ -87,6 +87,15 @@ class kanban extends control
         if($_POST)
         {
             $params = fixer::input('post')->get();
+
+            /* Check lane column name is unique. */
+            $exist = $this->kanban->getColumnByName($params->name);
+            if($exist && $exist->id != $column->id)
+            {
+                return $this->sendError($this->lang->kanban->noColumnUniqueName);
+            }
+
+            
             $this->kanban->updateLaneColumn($columnID, $params);
             if(dao::isError()) return $this->sendError(dao::getError());
             

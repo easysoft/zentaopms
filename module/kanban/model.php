@@ -347,6 +347,23 @@ class kanbanModel extends model
     }
 
     /**
+     * Get Column by column name.
+     *
+     * @param  string $name
+     * @access public
+     * @return object
+     */
+    public function getColumnByName($name)
+    {
+        $column = $this->dao->select('*')
+            ->from(TABLE_KANBANCOLUMN)
+            ->where('name')->eq($name)
+            ->fetch();
+        return $column;
+    }
+
+
+    /**
      * Get lane by id.
      *
      * @param  int    $laneID
