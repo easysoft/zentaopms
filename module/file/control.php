@@ -78,8 +78,9 @@ class file extends control
                 if($uid) $_SESSION['album'][$uid][] = $fileID;
                 if(defined('RUN_MODE') && RUN_MODE == 'api')
                 {
+                    if($uid) $_SESSION['album']['used'][$uid][$fileID] = $fileID;
                     $_SERVER['SCRIPT_NAME'] = 'index.php';
-                    die(json_encode(array('status' => 'success', 'id' => $fileID, 'data' => commonModel::getSysURL() . $this->config->webRoot . $url)));
+                    return $this->send(array('status' => 'success', 'id' => $fileID, 'data' => commonModel::getSysURL() . $this->config->webRoot . $url));
                 }
                 else
                 {
@@ -91,7 +92,7 @@ class file extends control
                 $error = strip_tags(sprintf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath));
                 if(defined('RUN_MODE') && RUN_MODE == 'api')
                 {
-                    die(json_encode(array('status' => 'error', 'message' => $error)));
+                    return $this->send(array('status' => 'error', 'message' => $error));
                 }
                 else
                 {
@@ -99,7 +100,7 @@ class file extends control
                 }
             }
         }
-        die(json_encode(array('status' => 'error', 'message' => $this->lang->file->uploadImagesExplain)));
+        return $this->send(array('status' => 'error', 'message' => $this->lang->file->uploadImagesExplain));
     }
 
     /**

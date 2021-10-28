@@ -61,7 +61,7 @@ class tasksEntry extends entry
      */
     public function post($executionID)
     {
-        $fields = 'name,type,assignedTo,estimate,story,parent,execution,module,pri,desc,estStarted,deadline,mailto';
+        $fields = 'name,type,assignedTo,estimate,story,execution,project,module,pri,desc,estStarted,deadline,mailto,team,teamEstimate,multiple,uid';
         $this->batchSetPost($fields);
 
         $assignedTo = $this->request('assignedTo');

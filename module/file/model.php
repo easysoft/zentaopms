@@ -834,7 +834,7 @@ class fileModel extends model
         $data = new stdclass();
         $data->objectID   = $objectID;
         $data->objectType = $objectType;
-        $data->extra      = 'editor';
+        if(!defined('RUN_MODE') OR RUN_MODE != 'api') $data->extra = 'editor';
         if(isset($_SESSION['album']['used'][$uid]) and $_SESSION['album']['used'][$uid])
         {
             $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$uid])->exec();
