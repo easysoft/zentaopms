@@ -1,0 +1,5 @@
+td>ul {padding-left: 0;}
+li {display: block; float: left; padding: 5px; width: 28px; height: 28px;}
+li>a { position: relative; display: block; width: 100%; height: 100%; padding: 0; margin: 0; font-family: ZentaoIcon; font-size: 14px; font-style: normal; font-weight: 400; font-variant: normal; line-height: 1; text-align: center; text-transform: none; border: 1px solid transparent; border-radius: 50%; speak: none; -webkit-font-smoothing: antialiased; }
+li>a.active:before {font-size: 14px; content: "\e5ca"}
+
