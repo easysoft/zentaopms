@@ -318,6 +318,35 @@ function handleFinishDrop(event)
     $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
 }
 
+ /**
+ * Create task menu  创建任务卡片操作菜单
+ * @returns {Object[]}
+ */
+function createTaskMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var task  = $card.data('item');
+    var items =
+    [
+        {label: '编辑任务', icon: 'edit', url: $.createLink('task', 'edit', 'taskID=' + task.id), className: 'iframe'},
+        {label: '拆分子任务', icon: 'plus', url: $.createLink('task', 'create', 'taskID=' + task.id), className: 'iframe'},
+        {label: '复制任务', icon: 'copy', url: $.createLink('task', 'copy', 'taskID=' + task.id), className: 'iframe'},
+        {label: '取消任务', icon: 'cancel', url: $.createLink('task', 'cancel', 'taskID=' + task.id), className: 'iframe'},
+    ];
+    return items;
+}
+
+/* Define menu creators */
+window.menuCreators =
+{
+    column:       createColumnMenu,
+    columnCreate: createColumnCreateMenu,
+    lane:         createLaneMenu,
+    story:        createStoryMenu,
+    bug:          createBugMenu,
+    task:         createTaskMenu,
+};
+
 /* Overload kanban default options */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
@@ -350,7 +379,9 @@ $(function()
             target:       findDropColumns,
             finish:       handleFinishDrop,
             mouseButton: 'left'
-        }
+        },
+        onRenderHeaderCol: renderHeaderCol,
+        onRenderLaneName:  renderLaneName
     };
 
     /* Create story kanban 创建需求看板 */
@@ -367,5 +398,28 @@ $(function()
     {
         $(this).modalTrigger({show: true});
         event.preventDefault();
+    });
+
+    /* Init contextmenu */
+    $('#kanbans').on('click', '[data-contextmenu]', function(event)
+    {
+        var $trigger    = $(this);
+        var menuType    = $trigger.data('contextmenu');
+
+        var menuCreator = window.menuCreators[menuType];
+        if(!menuCreator) return;
+
+        var options = $.extend({event, $trigger: $trigger}, $trigger.data());
+        var items   = menuCreator(options);
+        console.log('ContextMenu', {items, options});
+        if(!items || !items.length) return;
+
+        $.zui.ContextMenu.show(items, items.$options || {event: event});
+    });
+
+    /* Hide contextmenu when page scroll */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
     });
 });

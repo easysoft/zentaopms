@@ -1,14 +1,30 @@
 #main > .container {max-width: 1960px!important; padding: 0 10px}
 
 .kanban + .kanban {margin-top: 15px}
+.kanban-item {position: relative;}
 .kanban-item > .title { display: block;white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .kanban-item > .infos {position: relative; margin-top: 5px}
-.kanban-item > .infos > .info + .info {margin-left: 10px}
+.kanban-item > .infos > .info + .info {margin-left: 8px}
 .kanban-item > .infos > .info-id,
+.kanban-item > .infos > .info-deadline,
 .kanban-item > .infos > .info-estimate {font-size: 12px; position: relative; top: 2px}
 .kanban-item > .infos > .label-pri {min-width: 16px; line-height: 14px; height: 16px; padding: 0}
 .kanban-item > .infos > .label-severity {transform: scale(.75)}
 .kanban-item > .infos > .avatar {position: absolute; right: 0; top: 0}
+.kanban-item > .actions {position: absolute; top: 4px; right: 4px; opacity: 0;}
+.kanban-item:hover > .actions {opacity: 1;}
+.kanban-item > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.kanban-item > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
+
+.kanban-header-col > .actions {padding-top: 22px}
+.kanban-header-parent-col .kanban-header-col > .actions {padding-top: 6px; padding-right: 2px;}
+.kanban-header-col > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.kanban-header-col > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
+
+.kanban-lane-name > .actions {position: absolute; top: 0; left: 0; right: 0; opacity: 0;}
+.kanban-lane-name:hover > .actions {opacity: 1;}
+.kanban-lane-name > .actions > a {display: block; width: 20px; height: 20px; line-height: 20px; text-align: center; opacity: .7; color: #fff;}
+.kanban-lane-name > .actions > a:hover {background-color: rgba(0,0,0,.2); opacity: 1;}
 
 .kanban-affixed .kanban-header-col > .title > .text,
 .kanban-affixed .kanban-header-col > .title > .count {color: #fff!important;}
