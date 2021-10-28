@@ -12,6 +12,9 @@
 <?php include '../../common/view/kanban.html.php';?>
 
 <div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <div class="input-control space w-150px"><?php echo html::select('view', $lang->execution->kanbanViewList, $browseType, "onchange='changeView(this.value)' class='form-control chosen'");?></div>
+  </div>
   <div class='btn-toolbar pull-right'>
     <?php
     $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=kanban");
@@ -104,4 +107,5 @@
 </div>
 <?php js::set('executionID', $executionID);?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
+<?php js::set('browseType', $browseType);?>
 <?php include '../../common/view/footer.html.php';?>

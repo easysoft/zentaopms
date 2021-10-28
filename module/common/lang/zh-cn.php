@@ -24,6 +24,7 @@ $lang->null      = '空';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
+$lang->create    = '新建';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';

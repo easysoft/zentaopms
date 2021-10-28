@@ -1,3 +1,9 @@
+function changeView(view)
+{
+    var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + view);
+    location.href = link;
+}
+
 /**
  * Render user avatar
  * @param {String|{account: string, avatar: string}} user User account or user object
@@ -335,11 +341,11 @@ $(function()
     };
 
     /* Create story kanban 创建需求看板 */
-    createKanban('story', kanbanGroup.story, commonOptions);
+    if(browseType == 'all' || browseType == 'story') createKanban('story', kanbanGroup.story, commonOptions);
 
     /* Create bug kanban 创建 Bug 看板 */
-    createKanban('bug', kanbanGroup.bug, commonOptions);
+    if(browseType == 'all' || browseType == 'bug') createKanban('bug', kanbanGroup.bug, commonOptions);
 
     /* Create task kanban 创建 任务 看板 */
-    createKanban('task', kanbanGroup.task, commonOptions);
+    if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
 });

@@ -17,16 +17,16 @@ class kanbanModel extends model
      * Get Kanban by execution id.
      *
      * @param  int    $executionID
-     * @param  string $objectType all|story|bug|task
+     * @param  string $browseType all|story|bug|task
      * @access public
      * @return array
      */
-    public function getExecutionKanban($executionID, $objectType = 'all')
+    public function getExecutionKanban($executionID, $browseType = 'all')
     {
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($objectType != 'all')->andWhere('type')->eq($objectType)
+            ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)
             ->fetchAll('id');
 
         if(empty($lanes)) return array();
@@ -44,9 +44,9 @@ class kanbanModel extends model
             ->fetchPairs('id', 'type');
 
         /* Get group objects. */
-        $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
-        $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
-        $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
         /* Build kanban group data. */
         $kanbanGroup = array();
