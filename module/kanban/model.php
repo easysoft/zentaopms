@@ -84,13 +84,21 @@ class kanbanModel extends model
 
                     $item['id']         = $object->id;
                     $item['order']      = $cardOrder;
-                    $item['pri']        = $object->pri;
+                    $item['pri']        = $object->pri ? $object->pri : '';
                     $item['estimate']   = $lane->type == 'bug' ? '' : $object->estimate;
                     $item['assignedTo'] = $object->assignedTo;
                     $item['deadline']   = $lane->type == 'task' ? $object->deadline : '';
 
-                    $laneData['cards'][$col->type][] = $item;
+                    if($lane->type == 'task')
+                    {
+                        $item['name'] = $object->name;
+                    }
+                    else
+                    {
+                        $item['title'] = $object->title;
+                    }
 
+                    $laneData['cards'][$col->type][] = $item;
                     $cardOrder ++;
                 }
             }
