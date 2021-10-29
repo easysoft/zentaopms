@@ -1831,7 +1831,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function kanban($executionID, $type = 'all', $orderBy = 'order_asc', $groupBy = 'default')
+    public function kanban($executionID, $browseType = 'all', $orderBy = 'order_asc', $groupBy = 'default')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -1844,7 +1844,7 @@ class execution extends control
         $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType);
         if(empty($kanbanGroup))
         {
-            $this->kanban->createLanes($executionID);
+            $this->kanban->createLanes($executionID, $browseType, $groupBy);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType);
         }
 
@@ -1875,10 +1875,9 @@ class execution extends control
         $this->view->executionID   = $executionID;
         $this->view->productID     = $productID;
         $this->view->allPlans      = $allPlans;
-        $this->view->browseType    = '';
+        $this->view->browseType    = $browseType;
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->execution     = $execution;
-        $this->view->type          = $type;
         $this->view->groupBy       = $groupBy;
         $this->view->canBeChanged  = $canBeChanged;
 

@@ -843,6 +843,7 @@ class bug extends control
                     }
                 }
             }
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 

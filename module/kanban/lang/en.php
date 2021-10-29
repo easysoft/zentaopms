@@ -50,6 +50,7 @@ $lang->kanban->columnColor        = 'Column Color';
 $lang->kanban->noColumnUniqueName = 'The Kanban column name already exists.';
 
 $lang->kanban->error = new stdclass();
+$lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
 $lang->kanban->error->parentLimitNote = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
 $lang->kanban->error->childLimitNote  = 'The sum of products in the child column cannot be > the number of products in the parent column.';
 

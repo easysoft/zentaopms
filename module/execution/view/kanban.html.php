@@ -14,10 +14,10 @@
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
       <i class="icon icon-list-all"></i>
-      <?php echo html::select('type', $lang->kanban->type, $type, 'class="form-control chosen" data-max_drop_width="215"');?>
+      <?php echo html::select('type', $lang->kanban->type, $browseType, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
     <div class="input-control space c-group">
-      <?php echo html::select('group',  $lang->kanban->group->$type, $groupBy, 'class="form-control chosen" data-max_drop_width="215"');?>
+      <?php echo html::select('group',  $lang->kanban->group->$browseType, $groupBy, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
   </div>
   <div class='btn-toolbar pull-right'>
