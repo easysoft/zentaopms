@@ -202,7 +202,7 @@ addColumnRenderer('task',  renderTaskItem);
  */
 function renderColumnCount($count, count, col)
 {
-    var text = count + '/' + (!col.limit ? '<i class="icon icon-infinite"></i>' : '');
+    var text = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
 }
 
