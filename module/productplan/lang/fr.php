@@ -46,6 +46,7 @@ $lang->productplan->confirmUnlinkBug   = "Voulez-vous retirer ce bug du plan ?";
 $lang->productplan->noPlan             = "Aucun plan pour l'instant. ";
 $lang->productplan->cannotDeleteParent = 'Impossible de supprimer le plan parent';
 $lang->productplan->selectProjects     = "Please select the project";
+$lang->productplan->projectNotEmpty    = 'Project cannot be empty.';
 $lang->productplan->nextStep           = "Next step";
 
 $lang->productplan->id         = 'ID';

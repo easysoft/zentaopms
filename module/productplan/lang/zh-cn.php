@@ -46,6 +46,7 @@ $lang->productplan->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->productplan->noPlan             = "暂时没有计划。";
 $lang->productplan->cannotDeleteParent = "不能删除父计划";
 $lang->productplan->selectProjects     = "请选择所属项目";
+$lang->productplan->projectNotEmpty    = '所属项目不能为空。';
 $lang->productplan->nextStep           = "下一步";
 
 $lang->productplan->id         = '编号';
