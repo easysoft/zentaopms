@@ -429,14 +429,14 @@ class kanbanModel extends model
             $parentColumn = $this->getColumnByID($oldColumn->parent);
             if($parentColumn->limit != -1)
             {
-                $brotherColumnLimit = $this->dao->select('`limit`')->from(TABLE_KANBANCOLUMN)
+                $siblingLimit = $this->dao->select('`limit`')->from(TABLE_KANBANCOLUMN)
                     ->where('`parent`')->eq($oldColumn->parent)
                     ->andWhere('id')->ne($columnID)
                     ->fetch('limit');
 
-                $sumChildLimit = $brotherColumnLimit + $column->limit;
+                $sumChildLimit = $siblingLimit + $column->limit;
 
-                if($column->limit == -1 or $brotherColumnLimit == -1 or $sumChildLimit > $parentColumn->limit)
+                if($column->limit == -1 or $siblingLimit == -1 or $sumChildLimit > $parentColumn->limit)
                 {
                     dao::$errors['limit'] = $this->lang->kanban->error->childLimitNote;
                     return false;
