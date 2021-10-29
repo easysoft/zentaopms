@@ -46,6 +46,7 @@ $lang->productplan->confirmUnlinkBug   = "Bạn có muốn hủy liên kết bug
 $lang->productplan->noPlan             = 'Không có kế hoạch nào';
 $lang->productplan->cannotDeleteParent = 'Không thể xóa kế hoạch mẹ';
 $lang->productplan->selectProjects     = "Please select the project";
+$lang->productplan->projectNotEmpty    = 'Project cannot be empty.';
 $lang->productplan->nextStep           = "Next step";
 
 $lang->productplan->id         = 'ID';
