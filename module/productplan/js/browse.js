@@ -27,6 +27,7 @@ $(function()
         if(!projectID)
         {
             alert(projectNotEmpty);
+            return false;
         }
         else
         {
