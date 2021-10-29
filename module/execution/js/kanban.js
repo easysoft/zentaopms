@@ -692,7 +692,7 @@ $(function()
         }
     };
 
-    /* Restore select menu */
+    /* Hide second menu. */
     restoreSelect();
 
     /* Create story kanban 创建需求看板 */
@@ -706,7 +706,10 @@ $(function()
 });
 
 /**
- * Restore select menu.
+ * Hide second menu.
+ *
+ * @access public
+ * @return void
  */
 function restoreSelect()
 {
@@ -714,13 +717,11 @@ function restoreSelect()
     if(type == 'all') $('.c-group').css("display", "none");
 }
 
-/**
- * Choose type.
- */
 $('#type').change(function()
 {
-    var type = $('#type').val();
     $('.c-group').css("display", "");
+
+    var type = $('#type').val();
     if(type == 'all')
     {
         $('.c-group').css("display", "none");
@@ -734,13 +735,11 @@ $('#type').change(function()
             $('#group').chosen();
         })
     }
+
     var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + type);
     location.herf = link;
 });
 
-/**
- * Choose group of lane.
- */
 $('.c-group').change(function()
 {
     $('.c-group').css("display","");

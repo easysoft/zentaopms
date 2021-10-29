@@ -3257,9 +3257,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function ajaxGetGroup($type, $group='id')
+    public function ajaxGetGroup($type, $group = 'default')
     {
-        $this->loadModel('kanban');
+        $this->app->loadLang('kanban');
         $groups = array();
         $groups = $this->lang->kanban->group->$type;
         die(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
