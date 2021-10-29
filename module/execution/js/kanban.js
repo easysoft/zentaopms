@@ -556,14 +556,17 @@ function createStoryMenu(options)
 {
     var $card = options.$trigger.closest('.kanban-item');
     var story = $card.data('item');
-    var items =
-    [
-        {label: '编辑需求', icon: 'edit', url: $.createLink('story', 'edit', 'storyID=' + story.id), className: 'iframe'},
-        {label: '变更需求', icon: 'change', url: $.createLink('story', 'change', 'storyID=' + story.id), className: 'iframe'},
-        {label: '移除需求', icon: 'unlink', url: $.createLink('story', 'unlink', 'storyID=' + story.id), className: 'iframe'},
-        {label: '分解任务', icon: 'plus', url: $.createLink('task', 'create', 'storyID=' + story.id), className: 'iframe'},
-        {label: '批量分解', icon: 'pluses', url: $.createLink('task', 'batchCreate', 'storyID=' + story.id), className: 'iframe'},
-    ];
+
+    var items = [];
+    $.each(story.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        if(this.icon == 'unlink') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
+        items.push(item);
+    });
+
     return items;
 }
 
@@ -575,13 +578,16 @@ function createBugMenu(options)
 {
     var $card = options.$trigger.closest('.kanban-item');
     var bug   = $card.data('item');
-    var items =
-    [
-        {label: '编辑Bug', icon: 'edit', url: $.createLink('bug', 'edit', 'bugID=' + bug.id), className: 'iframe'},
-        {label: '确认Bug', icon: 'ok', url: $.createLink('bug', 'confirm', 'bugID=' + bug.id), className: 'iframe'},
-        {label: '复制Bug', icon: 'copy', url: $.createLink('bug', 'copy', 'bugID=' + bug.id), className: 'iframe'},
-        {label: '转软件需求', icon: 'lightbulb', url: $.createLink('story', 'create', 'bugID=' + bug.id), className: 'iframe'},
-    ];
+
+    var items = [];
+    $.each(bug.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
+    });
+
     return items;
 }
 
@@ -593,13 +599,16 @@ function createTaskMenu(options)
 {
     var $card = options.$trigger.closest('.kanban-item');
     var task  = $card.data('item');
-    var items =
-    [
-        {label: '编辑任务', icon: 'edit', url: $.createLink('task', 'edit', 'taskID=' + task.id), className: 'iframe'},
-        {label: '拆分子任务', icon: 'plus', url: $.createLink('task', 'create', 'taskID=' + task.id), className: 'iframe'},
-        {label: '复制任务', icon: 'copy', url: $.createLink('task', 'copy', 'taskID=' + task.id), className: 'iframe'},
-        {label: '取消任务', icon: 'cancel', url: $.createLink('task', 'cancel', 'taskID=' + task.id), className: 'iframe'},
-    ];
+
+    var items = [];
+    $.each(task.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
+    });
+
     return items;
 }
 
