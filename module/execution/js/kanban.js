@@ -736,7 +736,7 @@ $('#type').change(function()
     }
 
     var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + type);
-    location.herf = link;
+    location.href = link;
 });
 
 $('.c-group').change(function()
