@@ -10,7 +10,6 @@ $lang->kanban->type['bug']   = "bug看板";
 $lang->kanban->group = new stdClass();
 
 $lang->kanban->group->all = array();
-
 $lang->kanban->group->story = array();
 $lang->kanban->group->story['default']    = "默认方式";
 $lang->kanban->group->story['pri']        = "需求优先级";

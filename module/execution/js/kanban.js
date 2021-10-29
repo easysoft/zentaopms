@@ -710,11 +710,8 @@ $(function()
  */
 function restoreSelect()
 {
-    var  type = $('#type').val();
-    if(type == 'all')
-    {
-        $('.c-group').css("display","none");
-    }
+    var type = $('#type').val();
+    if(type == 'all') $('.c-group').css("display", "none");
 }
 
 /**
@@ -722,11 +719,11 @@ function restoreSelect()
  */
 $('#type').change(function()
 {
-    var  type = $('#type').val();
-    $('.c-group').css("display","");
+    var type = $('#type').val();
+    $('.c-group').css("display", "");
     if(type == 'all')
     {
-        $('.c-group').css("display","none");
+        $('.c-group').css("display", "none");
     }
     else
     {
@@ -745,8 +742,9 @@ $('#type').change(function()
 $('.c-group').change(function()
 {
     $('.c-group').css("display","");
-    var  type = $('#type').val();
-    var  group = $('#group').val();
+
+    var type  = $('#type').val();
+    var group = $('#group').val();
     link = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&group=' + group);
     location.href = link;
 });
