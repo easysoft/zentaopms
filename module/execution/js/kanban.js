@@ -493,7 +493,7 @@ function createStoryMenu(options)
     var items = [];
     $.each(story.menus, function()
     {
-        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': this.size, 'data-toggle': 'modal', 'data-type': 'iframe'}};
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
         if(this.size) item.attrs['data-width'] = this.size;
 
         if(this.icon == 'unlink') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
@@ -515,7 +515,7 @@ function createBugMenu(options)
     var items = [];
     $.each(bug.menus, function()
     {
-        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': this.size, 'data-toggle': 'modal', 'data-type': 'iframe'}};
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
         if(this.size) item.attrs['data-width'] = this.size;
 
         items.push(item);
@@ -536,7 +536,7 @@ function createTaskMenu(options)
     var items = [];
     $.each(task.menus, function()
     {
-        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': this.size, 'data-toggle': 'modal', 'data-type': 'iframe'}};
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
         if(this.size) item.attrs['data-width'] = this.size;
 
         items.push(item);
