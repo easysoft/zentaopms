@@ -51,9 +51,9 @@ class kanbanModel extends model
         if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
         /* Get objects cards menus. */
-        $storyCardMenu = $this->getExecutionCardMenu($executionID, $objectGroup['story'], 'story');
-        $bugCardMenu   = $this->getExecutionCardMenu($executionID, $objectGroup['bug'], 'bug');
-        $taskCardMenu  = $this->getExecutionCardMenu($executionID, $objectGroup['task'], 'task');
+        $storyCardMenu = $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
+        $bugCardMenu   = $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
+        $taskCardMenu  = $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
 
         /* Build kanban group data. */
         $kanbanGroup = array();
@@ -525,7 +525,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionCardMenu($executionID, $objects, $objecType)
+    public function getKanbanCardMenu($executionID, $objects, $objecType)
     {
         $menus = array();
         switch ($objecType)
