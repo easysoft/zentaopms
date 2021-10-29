@@ -126,7 +126,7 @@ class kanban extends control
         /* Get the cards of the kanban column. */
         if($column->parent == -1)
         {
-            $childColumns = $this->dao->select('id,cards')->from(TABLE_KANBANCOLUMN)->where('parent')->in($columnID)->fetchAll();
+            $childColumns = $this->dao->select('id,cards')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetchAll();
             foreach($childColumns as $childColumn)
             {
                 $oldCards[$childColumn->id] = $childColumn->cards;
@@ -137,18 +137,17 @@ class kanban extends control
             $oldCards[$columnID] = $column->cards;
         }
 
-        if(empty(array_values($oldCards)) == 0) echo true;
-
         /* Update Kanban column card order. */
         $table = $this->config->objectTables[$laneType];
         foreach($oldCards as $colID => $cards)
         {
-            $objects = $this->dao->select('*')->from($table)
+            if(empty($cards)) continue;
+            $objects = $this->dao->select('id')->from($table)
                 ->where('id')->in($cards)
                 ->orderBy($orderBy)
-                ->fetchAll('id');
+                ->fetchPairs('id');
 
-            $objectIdList = empty($objects) ? '' : ',' . implode(',', array_keys($objects)) . ',';
+            $objectIdList = ',' . implode(',', $objects) . ',';
             $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($objectIdList)->where('id')->eq($colID)->exec();
         }
         echo true;
