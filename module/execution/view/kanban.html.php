@@ -115,6 +115,7 @@
 			)
 	 );
 ?>
+<?php js::set('execution', $lang->execution);?>
 <?php js::set('editName', $lang->execution->editName);?>
 <?php js::set('setWIP', $lang->execution->setWIP);?>
 <?php js::set('sortColumn', $lang->execution->sortColumn);?>
