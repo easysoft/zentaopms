@@ -109,10 +109,10 @@
 <?php js::set('browseType', $browseType);?>
 <?php
 js::set('priv',
-  array(
-    'hasEditName' => common::hasPriv('kanban', 'setColumn'),
-    'hasSetWIP'   => common::hasPriv('kanban', 'setWIP'),
-  )
+    array(
+        'hasEditName' => common::hasPriv('kanban', 'setColumn'),
+        'hasSetWIP'   => common::hasPriv('kanban', 'setWIP'),
+    )
 );
 ?>
 <?php js::set('execution', $lang->execution);?>
