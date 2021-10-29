@@ -242,7 +242,7 @@ class userEntry extends Entry
                     if(!empty($this->config->maxVersion))
                     {
                         $control = $this->loadController('my', 'myMeeting');
-                        $control->myMeeting('futureMeeting', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->myMeeting('all', 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
