@@ -279,6 +279,7 @@ class kanbanModel extends model
                 $data = new stdClass();
                 $data->lane  = $laneID;
                 $data->name  = $name;
+                $data->color = '#333';
                 $data->type  = $colType;
                 $data->cards = '';
                 if(strpos(',fixing,fixed,', $colType) !== false) $data->parent = $resolvingColumnID;
@@ -316,6 +317,7 @@ class kanbanModel extends model
                 $data = new stdClass();
                 $data->lane  = $laneID;
                 $data->name  = $name;
+                $data->color = '#333';
                 $data->type  = $colType;
                 $data->cards = '';
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
