@@ -491,10 +491,12 @@ class kanbanModel extends model
     public function setWIP($columnID)
     {
         $oldColumn = $this->getColumnById($columnID);
-        $column    = fixer::input('post')
-            ->cleanInt('limit')
-            ->remove('WIPCount,noLimit')
-            ->get();
+        $column    = fixer::input('post')->remove('WIPCount,noLimit')->get();
+        if(!preg_match("/^-?\d+$/", $column->limit))
+        {
+            dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+            return false;
+        }
 
         /* Check column limit. */
         $sumChildLimit = 0;

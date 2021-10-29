@@ -50,6 +50,7 @@ $lang->kanban->columnColor        = '看板列颜色';
 $lang->kanban->noColumnUniqueName = '看板列名称已存在';
 
 $lang->kanban->error = new stdclass();
+$lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
 $lang->kanban->error->parentLimitNote = '父列的在制品数量不能小于子列在制品数量之和';
 $lang->kanban->error->childLimitNote  = '子列在制品数量之和不能大于父列的在制品数量';
 
