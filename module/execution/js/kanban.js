@@ -692,6 +692,9 @@ $(function()
         }
     };
 
+    /* Restore select menu */
+    restoreSelect();
+
     /* Create story kanban 创建需求看板 */
     createKanban('story', getStoryKanbanDemoData(), commonOptions);
 
@@ -700,4 +703,50 @@ $(function()
 
     /* Create task kanban 创建 任务 看板 */
     createKanban('task', getTaskKanbanDemoData(), commonOptions);
+});
+
+/**
+ * Restore select menu.
+ */
+function restoreSelect()
+{
+    var  type = $('#type').val();
+    if(type == 'all')
+    {
+        $('.c-group').css("display","none");
+    }
+}
+
+/**
+ * Choose type.
+ */
+$('#type').change(function()
+{
+    var  type = $('#type').val();
+    $('.c-group').css("display","");
+    if(type == 'all')
+    {
+        $('.c-group').css("display","none");
+    }
+    else
+    {
+        $.get(createLink('execution', 'ajaxGetGroup', 'type=' + type), function(data)
+        {
+            $('#group_chosen').remove();
+            $('#group').replaceWith(data);
+            $('#group').chosen();
+        })
+    }
+});
+
+/**
+ * Choose group of lane.
+ */
+$('.c-group').change(function()
+{
+    $('.c-group').css("display","");
+    var  type = $('#type').val();
+    var  group = $('#group').val();
+    link = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&group=' + group);
+    location.href = link;
 });

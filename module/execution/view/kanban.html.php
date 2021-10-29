@@ -10,8 +10,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
-
+<?php js::set('executionID', $executionID);?>
 <div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+     <div class="input-control space c-type"><i class="icon icon-list-all"></i><?php echo html::select('type', $lang->kanban->type, $type, 'class="form-control chosen" data-max_drop_width="215"');?></div>
+     <div class="input-control space c-group"><?php echo html::select('group',  $lang->kanban->group->$type, $group, 'class="form-control chosen" data-max_drop_width="215"');?></div>
+  </div>
   <div class='btn-toolbar pull-right'>
     <?php
     $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=kanban");
@@ -58,7 +62,7 @@
     ?>
     <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane):?>
     <div class='dropdown' id='createDropdown'>
-      <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
+      <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->task->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <?php if($canCreateStory) echo '<li>' . html::a(helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), $lang->story->create, '', "data-app='execution'") . '</li>';?>
         <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), $lang->story->batchCreate, '', "data-app='execution'") . '</li>';?>

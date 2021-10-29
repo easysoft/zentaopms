@@ -1,6 +1,40 @@
 <?php
 $lang->kanban = new stdClass();
 
+$lang->kanban->type = array();
+$lang->kanban->type['all']   = "综合看板";
+$lang->kanban->type['story'] = "{$lang->SRCommon}看板";
+$lang->kanban->type['task']  = "任务看板";
+$lang->kanban->type['bug']   = "bug看板";
+
+$lang->kanban->group = new stdClass();
+
+$lang->kanban->group->all = array();
+
+$lang->kanban->group->story = array();
+$lang->kanban->group->story['default']    = "默认方式";
+$lang->kanban->group->story['pri']        = "需求优先级";
+$lang->kanban->group->story['category']   = "需求类别";
+$lang->kanban->group->story['module']     = "需求模块";
+$lang->kanban->group->story['source']     = "需求来源";
+$lang->kanban->group->story['assignedTo'] = "指派人员";
+
+$lang->kanban->group->task = array();
+$lang->kanban->group->task['default']    = "默认方式";
+$lang->kanban->group->task['pri']        = "任务优先级";
+$lang->kanban->group->task['type']       = "任务类型";
+$lang->kanban->group->task['module']     = "任务所属模块";
+$lang->kanban->group->task['story']      = "软件需求";
+$lang->kanban->group->task['assignedTo'] = "指派人员";
+
+$lang->kanban->group->bug = array();
+$lang->kanban->group->bug['default']    = "默认方式";
+$lang->kanban->group->bug['pri']        = "bug优先级";
+$lang->kanban->group->bug['type']       = "bug类型";
+$lang->kanban->group->bug['module']     = "bug模块";
+$lang->kanban->group->bug['severity']   = "bug严重程度";
+$lang->kanban->group->bug['assignedTo'] = "指派人员";
+
 $lang->kanban->WIP             = 'WIP';
 $lang->kanban->setWIP          = '在制品设置';
 $lang->kanban->WIPStatus       = '在制品状态';
