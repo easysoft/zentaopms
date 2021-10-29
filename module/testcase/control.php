@@ -1368,7 +1368,7 @@ class testcase extends control
                 $result = isset($results[$case->id]) ? $results[$case->id] : array();
 
                 $case->real = '';
-                if(!empty($result))
+                if(!empty($result) and !isset($relatedSteps[$case->id]))
                 {
                     $firstStep  = reset($result);
                     $case->real = $firstStep['real'];
