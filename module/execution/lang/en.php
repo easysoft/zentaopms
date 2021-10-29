@@ -101,6 +101,9 @@ $lang->execution->copyNoExecution = 'There are no ' . $lang->executionCommon . '
 $lang->execution->noTeam          = 'No team members at the moment';
 $lang->execution->or              = ' or ';
 $lang->execution->selectProject   = 'Please select project';
+$lang->execution->editName        = 'Edit Name';
+$lang->execution->setWIP          = 'WIP Settings';
+$lang->execution->sortColumn      = 'Kanban Card Sorting';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -384,6 +387,11 @@ $lang->execution->bugList       = "Bugs";
 $lang->execution->kanbanHideCols   = 'Closed & Cancelled Columns';
 $lang->execution->kanbanShowOption = 'Unfold';
 $lang->execution->kanbanColsColor  = 'Customize Column Color';
+
+$lang->execution->kanbanViewList['all']   = 'All';
+$lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";
+$lang->execution->kanbanViewList['bug']   = 'Bug';
+$lang->execution->kanbanViewList['task']  = 'Task';
 
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = 'Do you want to reset Kanban?';

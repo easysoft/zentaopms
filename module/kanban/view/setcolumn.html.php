@@ -1,12 +1,12 @@
 <?php
 /**
- * The set lane file of task module of ZenTaoPMS.
+ * The set column file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Yuchun Li <liyuchun@easycorp.ltd>
+ * @author      Thanatos<xiawenlong@easycorp.ltd>
  * @package     kanban
- * @version     $Id: setlane.html.php 935 2021-10-26 16:24:24Z liyuchun@easycorp.ltd $
+ * @version     $Id: setcolumn.html.php 935 2021-10-26 16:24:24Z xiawenlong@easycorp.ltd $
  * @link        https://www.zentao.net
  */
 ?>

@@ -32,86 +32,94 @@ class kanbanModel extends model
             ->fetchAll('id');
 
         if(empty($lanes)) return array();
+
+        foreach($lanes as $lane) $this->updateCards($lane);
+
         $columns = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
             ->andWhere('lane')->in(array_keys($lanes))
             ->fetchGroup('lane', 'id');
 
+        /* Get parent column type pairs. */
         $parentTypes = $this->dao->select('id, type')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
             ->andWhere('lane')->in(array_keys($lanes))
             ->andWhere('parent')->eq(-1)
             ->fetchPairs('id', 'type');
 
-        if($objectType == 'story' or $objectType == 'all') $stories = $this->loadModel('story')->getExecutionStories($executionID);
-        if($objectType == 'bug' or $objectType == 'all')   $bugs    = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($objectType == 'task' or $objectType == 'all')  $tasks   = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        /* Get group objects. */
+        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
-        /* Init vars. */
-        $kanban = array();
+        /* Build kanban group data. */
+        $kanbanGroup = array();
         foreach($lanes as $laneID => $lane)
         {
             $laneData   = array();
             $columnData = array();
-            $cards      = array();
+            $laneType   = $lane->type;
 
-            $laneData['id']              = $lane->type;
+            $laneData['id']              = $laneType;
             $laneData['name']            = $lane->name;
             $laneData['color']           = $lane->color;
-            $laneData['defaultCardType'] = $lane->type;
             $laneData['order']           = $lane->order;
+            $laneData['defaultCardType'] = $laneType;
 
-            foreach($columns[$laneID] as $colID => $col)
+            foreach($columns[$laneID] as $columnID => $column)
             {
-                $columnData[$col->id]['id']         = $lane->type . '-' . $col->type;
-                $columnData[$col->id]['type']       = $col->type;
-                $columnData[$col->id]['name']       = $col->name;
-                $columnData[$col->id]['color']      = $col->color;
-                $columnData[$col->id]['limit']      = $col->limit;
-                $columnData[$col->id]['asParent']   = $col->parent == -1 ? true : false;
+                $columnData[$column->id]['id']         = $laneType . '-' . $column->type;
+                $columnData[$column->id]['columnID']   = $columnID;
+                $columnData[$column->id]['type']       = $column->type;
+                $columnData[$column->id]['name']       = $column->name;
+                $columnData[$column->id]['color']      = $column->color;
+                $columnData[$column->id]['limit']      = $column->limit;
+                $columnData[$column->id]['laneType']   = $laneType;
+                $columnData[$column->id]['asParent']   = $column->parent == -1 ? true : false;
 
-                if($col->parent > 0)
+                if($column->parent > 0)
                 {
-                    $columnData[$col->id]['parentType'] = zget($parentTypes, $col->parent, '');
+                    $columnData[$column->id]['parentType'] = zget($parentTypes, $column->parent, '');
                 }
 
-                $cardIdList = array_filter(explode(',', $col->cards));
                 $cardOrder  = 1;
-                $item       = array();
+                $cardIdList = array_filter(explode(',', $column->cards));
                 foreach($cardIdList as $cardID)
                 {
-                    if($lane->type == 'story') $object = zget($stories, $cardID, array());
-                    if($lane->type == 'task')  $object = zget($tasks, $cardID, array());
-                    if($lane->type == 'bug')   $object = zget($bugs, $cardID, array());
+                    $cardData = array();
+                    $objects  = zget($objectGroup, $laneType, array());
+                    $object   = zget($objects, $cardID, array());
 
-                    $item['id']         = $object->id;
-                    $item['order']      = $cardOrder;
-                    $item['pri']        = $object->pri ? $object->pri : '';
-                    $item['estimate']   = $lane->type == 'bug' ? '' : $object->estimate;
-                    $item['assignedTo'] = $object->assignedTo;
-                    $item['deadline']   = $lane->type == 'task' ? $object->deadline : '';
+                    $cardData['id']         = $object->id;
+                    $cardData['order']      = $cardOrder;
+                    $cardData['pri']        = $object->pri ? $object->pri : '';
+                    $cardData['estimate']   = $laneType == 'bug' ? '' : $object->estimate;
+                    $cardData['assignedTo'] = $object->assignedTo;
+                    $cardData['deadline']   = $laneType == 'task' ? $object->deadline : '';
+                    $cardData['severity']   = $laneType == 'bug' ? $object->severity : '';
 
-                    if($lane->type == 'task')
+                    if($laneType == 'task')
                     {
-                        $item['name'] = $object->name;
+                        $cardData['name'] = $object->name;
                     }
                     else
                     {
-                        $item['title'] = $object->title;
+                        $cardData['title'] = $object->title;
                     }
 
-                    $laneData['cards'][$col->type][] = $item;
+                    $laneData['cards'][$column->type][] = $cardData;
                     $cardOrder ++;
                 }
+                if(!isset($laneData['cards'][$column->type])) $laneData['cards'][$column->type] = array();
             }
 
-            $kanban[$lane->type]['id']              = $lane->type;
-            $kanban[$lane->type]['columns']         = array_values($columnData);
-            $kanban[$lane->type]['lanes'][]         = $laneData;
-            $kanban[$lane->type]['defaultCardType'] = $lane->type;
+            $kanbanGroup[$laneType]['id']              = $laneType;
+            $kanbanGroup[$laneType]['columns']         = array_values($columnData);
+            $kanbanGroup[$laneType]['lanes'][]         = $laneData;
+            $kanbanGroup[$laneType]['defaultCardType'] = $laneType;
         }
 
-        return $kanban;
+        return $kanbanGroup;
     }
 
     /**
@@ -330,92 +338,96 @@ class kanbanModel extends model
     /**
      * Update column cards.
      *
-     * @param  int    $executionID
-     * @param  string $objectType story|bug|task
-     * @param  object $columns
+     * @param  object $lane
      * @access public
      * @return void
      */
-    public function updateCards($executionID, $objectType, $columns)
+    public function updateCards($lane)
     {
-        $objects = array();
-        if($objectType == 'story') $objects = $this->loadModel('story')->getExecutionStories($executionID);
-        if($objectType == 'bug')   $objects = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($objectType == 'task')  $objects = $this->loadModel('execution')->getKanbanTasks($executionID);
-        if($objectType == 'story')
+        $laneType    = $lane->type;
+        $executionID = $lane->execution;
+        $cardPairs = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
+            ->where('deleted')->eq(0)
+            ->andWhere('lane')->eq($lane->id)
+            ->fetchPairs('type' ,'cards');
+
+        if($laneType == 'story')
         {
-            $data = new stdClass();
-            foreach($columns as $colID => $col)
+            $stories = $this->loadModel('story')->getExecutionStories($executionID);
+            foreach($stories as $storyID => $story)
             {
-                foreach($objects as $storyID => $story)
+                foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
                 {
-                    if($col->type == 'backlog' and $story->status == 'active' and $story->stage == 'projected') $data->cards .= $storyID . ',';
-
-                    if($colType == 'closed' and $story->status == 'closed' and $story->stage == 'closed') $data->cards .= $storyID . ',';
-
-                    if($story->stage == $colType and strpos(',backlog,closed,', $colType) === false and $story->status == 'active') $data->cards .= $storyID . ',';
-                }
-                if(!empty($data->cards)) $data->cards = ',' . $data->cards;
-            }
-
-            $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-            if($colType == 'develop') $devColumnID  = $this->dao->lastInsertId();
-            if($colType == 'test')    $testColumnID = $this->dao->lastInsertId();
-        }
-        elseif($type == 'bug')
-        {
-            foreach($this->lang->kanban->bugColumn as $colType => $name)
-            {
-                $data = new stdClass();
-                $data->lane  = $laneID;
-                $data->name  = $name;
-                $data->type  = $colType;
-                $data->cards = '';
-                if(strpos(',fixing,fixed,', $colType) !== false) $data->parent = $resolvingColumnID;
-                if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
-                if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
-                {
-                    foreach($objects as $bugID => $bug)
+                    if(strpos(',ready,develop,test,', $colType) !== false) continue;
+                    if($colType == 'backlog' and $story->stage == $stage and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
                     {
-                        if($colType == 'unconfirmed' and $bug->status == 'active' and $bug->confirmed == 0) $data->cards .= $bugID . ',';
-
-                        if($colType == 'confirmed' and $bug->status == 'active' and $bug->confirmed == 1) $data->cards .= $bugID . ',';
-
-                        if($colType == 'fixed' and $bug->status == 'resolved') $data->cards .= $bugID . ',';
-
-                        if($colType == 'closed' and $bug->status == 'closed') $data->cards .= $bugID . ',';
+                        $cardPairs['backlog'] .= empty($cardPairs['backlog']) ? ',' . $storyID . ',' : $storyID . ',';
                     }
-                    $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                    if($colType == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
-                    if($colType == 'test')      $testColumnID      = $this->dao->lastInsertId();
+                    elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
+                    {
+                        $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $storyID . ',' : $storyID . ',';
+                    }
+                    elseif($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
+                    }
                 }
             }
         }
-        elseif($type == 'task')
+        elseif($laneType == 'bug')
         {
-            foreach($this->lang->kanban->taskColumn as $colType => $name)
+            $bugs = $this->loadModel('bug')->getExecutionBugs($executionID);
+            foreach($bugs as $bugID => $bug)
             {
-                $data = new stdClass();
-                $data->lane  = $laneID;
-                $data->name  = $name;
-                $data->type  = $colType;
-                $data->cards = '';
-                if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
-                if(strpos(',develop,', $colType) === false)
+                foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
                 {
-                    foreach($objects as $taskID => $task)
+                    if(strpos(',resolving,fixing,test,testing,tested,', $colType) !== false) continue;
+                    if($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
                     {
-                        if($colType == 'developing' and $task->status == 'doing') $data->cards .= $taskID . ',';
-
-                        if($colType == 'developed' and $task->status == 'done') $data->cards .= $taskID . ',';
-
-                        if(strpos(',wait,pause,canceled,closed,', $colType) !== false and $task->status == $colType) $data->cards .= $taskID . ',';
+                        $cardPairs['unconfirmed'] .= empty($cardPairs['unconfirmed']) ? ',' . $bugID . ',' : $bugID . ',';
                     }
-
-                    $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                    if($colType == 'develop') $devColumnID = $this->dao->lastInsertId();
+                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    {
+                        $cardPairs['confirmed'] .= empty($cardPairs['confirmed']) ? ',' . $bugID . ',' : $bugID . ',';
+                    }
+                    elseif($colType == 'fixed' and $bug->status == $status and strpos($cardPairs['fixed'], ",$bugID,") === false and strpos($cardPairs['testing'], ",$bugID,") === false and strpos($cardPairs['tested'], ",$bugID,") === false)
+                    {
+                        $cardPairs['confirmed'] .= empty($cardPairs['confirmed']) ? ',' . $bugID . ',' : $bugID . ',';
+                    }
+                    elseif($bug->status == $status and strpos($cardPairs[$colType], ",$bugID,") === false)
+                    {
+                        $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $bugID . ',' : $bugID . ',';
+                    }
+                    elseif($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
+                    }
                 }
             }
+        }
+        elseif($laneType == 'task')
+        {
+            $tasks = $this->loadModel('execution')->getKanbanTasks($executionID);
+            foreach($tasks as $taskID => $task)
+            {
+                foreach($this->config->kanban->taskColumnStatusList as $colType => $status)
+                {
+                    if($colType == 'develop') continue;
+                    if($task->status == $status and strpos($cardPairs[$colType], ",$taskID,") === false)
+                    {
+                        $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $taskID . ',' : $taskID . ',';
+                    }
+                    elseif($task->status != $status and strpos($cardPairs[$colType], ",$taskID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$taskID,", ',', $cardPairs[$colType]);
+                    }
+                }
+            }
+        }
+
+        foreach($cardPairs as $colType => $cards)
+        {
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($cards)->where('lane')->eq($lane->id)->andWhere('type')->eq($colType)->exec();
         }
     }
 
@@ -440,6 +452,24 @@ class kanbanModel extends model
     }
 
     /**
+     * Get Column by column name.
+     *
+     * @param  string $name
+     * @param  int    $laneID
+     * @access public
+     * @return object
+     */
+    public function getColumnByName($name, $laneID)
+    {
+        return $this->dao->select('*')
+            ->from(TABLE_KANBANCOLUMN)
+            ->where('name')->eq($name)
+            ->andWhere('lane')->eq($laneID)
+            ->fetch();
+    }
+
+
+    /**
      * Get lane by id.
      *
      * @param  int    $laneID
@@ -460,15 +490,57 @@ class kanbanModel extends model
      */
     public function setWIP($columnID)
     {
-        $column = $this->getColumnById($columnID);
-        $data   = fixer::input('post')
+        $oldColumn = $this->getColumnById($columnID);
+        $column    = fixer::input('post')
             ->cleanInt('limit')
             ->remove('WIPCount,noLimit')
             ->get();
 
-        $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
+        /* Check column limit. */
+        $sumChildLimit = 0;
+        if($oldColumn->parent == -1 and $column->limit != -1)
+        {
+            $childColumns = $this->dao->select('id,`limit`')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetchAll();
+            foreach($childColumns as $childColumn)
+            {
+                if($childColumn->limit == -1)
+                {
+                    dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+                    return false;
+                }
+
+                $sumChildLimit += $childColumn->limit;
+            }
+
+            if($sumChildLimit > $column->limit)
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+                return false;
+            }
+        }
+        elseif($oldColumn->parent > 0)
+        {
+            $parentColumn = $this->getColumnByID($oldColumn->parent);
+            if($parentColumn->limit != -1)
+            {
+                $siblingLimit = $this->dao->select('`limit`')->from(TABLE_KANBANCOLUMN)
+                    ->where('`parent`')->eq($oldColumn->parent)
+                    ->andWhere('id')->ne($columnID)
+                    ->fetch('limit');
+
+                $sumChildLimit = $siblingLimit + $column->limit;
+
+                if($column->limit == -1 or $siblingLimit == -1 or $sumChildLimit > $parentColumn->limit)
+                {
+                    dao::$errors['limit'] = $this->lang->kanban->error->childLimitNote;
+                    return false;
+                }
+            }
+        }
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->data($column)
             ->autoCheck()
-            ->checkIF($data->limit != -1, 'limit', 'gt', 0)
+            ->checkIF($column->limit != -1, 'limit', 'gt', 0)
             ->batchcheck($this->config->kanban->setwip->requiredFields, 'notempty')
             ->where('id')->eq($columnID)
             ->exec();
@@ -499,16 +571,24 @@ class kanbanModel extends model
     /**
      * Update lane column.
      *
-     * @param  int $columnID
+     * @param  int    $columnID
+     * @param  object $column
      * @access public
      * @return array
      */
-    public function updateLaneColumn($columnID, $data)
+    public function updateLaneColumn($columnID, $column)
     {
+        $data = fixer::input('post')->get();
+
         $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
             ->autoCheck()
             ->batchcheck($this->config->kanban->setlaneColumn->requiredFields, 'notempty')
             ->where('id')->eq($columnID)
             ->exec();
+
+        if(dao::isError()) return;
+
+        $changes = common::createChanges($column, $data);
+        return $changes;
     }
 }

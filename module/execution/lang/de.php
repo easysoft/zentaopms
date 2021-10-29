@@ -376,6 +376,11 @@ $lang->execution->kanbanHideCols   = 'Geschlossene und abgebrochene Spalten in K
 $lang->execution->kanbanShowOption = 'Aufklappen';
 $lang->execution->kanbanColsColor  = 'Spaltenfarben';
 
+$lang->execution->kanbanViewList['all']   = 'All';
+$lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";
+$lang->execution->kanbanViewList['bug']   = 'Bug';
+$lang->execution->kanbanViewList['task']  = 'Task';
+
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = 'Möchten Sie die Einstellungen des Kanbans zurücksetzen?';
 $lang->kanbanSetting->optionList['0'] = 'Verstecken';

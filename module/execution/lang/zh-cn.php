@@ -101,6 +101,9 @@ $lang->execution->copyNoExecution = '没有可用的' . $lang->executionCommon .
 $lang->execution->noTeam          = '暂时没有团队成员';
 $lang->execution->or              = '或';
 $lang->execution->selectProject   = '请选择项目';
+$lang->execution->editName        = '编辑名称';
+$lang->execution->setWIP          = '在制品数量设置（WIP）';
+$lang->execution->sortColumn      = '看板列卡片排序';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';
@@ -385,6 +388,11 @@ $lang->execution->bugList       = "Bug列表";
 $lang->execution->kanbanHideCols   = '看板隐藏已关闭、已取消列';
 $lang->execution->kanbanShowOption = '显示折叠信息';
 $lang->execution->kanbanColsColor  = '看板列自定义颜色';
+
+$lang->execution->kanbanViewList['all']   = '综合看板';
+$lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}看板";
+$lang->execution->kanbanViewList['bug']   = 'Bug看板';
+$lang->execution->kanbanViewList['task']  = '任务看板';
 
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = '是否恢复看板默认设置？';

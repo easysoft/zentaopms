@@ -80,17 +80,21 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function setLaneColumn($columnID)
+    public function setColumn($columnID)
     {
         $column = $this->kanban->getColumnById($columnID);
-        
+
         if($_POST)
         {
-            $params = fixer::input('post')->get();
-            $this->kanban->updateLaneColumn($columnID, $params);
+            /* Check lane column name is unique. */
+            $exist = $this->kanban->getColumnByName($this->post->name, $column->lane);
+            if($exist and $exist->id != $columnID)
+            {
+                return $this->sendError($this->lang->kanban->noColumnUniqueName);
+            }
+
+            $changes = $this->kanban->updateLaneColumn($columnID, $column);
             if(dao::isError()) return $this->sendError(dao::getError());
-            
-            $changes = common::createChanges($column, $params);
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited');
@@ -101,8 +105,51 @@ class kanban extends control
         }
 
         $this->view->column = $column;
-        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setLaneColumn;
+        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
         $this->display();
     }
 
+    /**
+     * AJAX: Update the cards sorting of the lane column.
+     *
+     * @param  string $laneType story|bug|task
+     * @param  int    $columnID
+     * @param  string $orderBy id_desc|id_asc|pri_desc|pri_asc|lastEditedDate_desc|lastEditedDate_asc|deadline_desc|deadline_asc|assignedTo_asc
+     * @access public
+     * @return void
+     */
+    public function ajaxCardsSort($laneType, $columnID, $orderBy = 'id_desc')
+    {
+        $oldCards = array();
+        $column   = $this->dao->select('parent,cards')->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->fetch();
+
+        /* Get the cards of the kanban column. */
+        if($column->parent == -1)
+        {
+            $childColumns = $this->dao->select('id,cards')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetchAll();
+            foreach($childColumns as $childColumn)
+            {
+                $oldCards[$childColumn->id] = $childColumn->cards;
+            }
+        }
+        else
+        {
+            $oldCards[$columnID] = $column->cards;
+        }
+
+        /* Update Kanban column card order. */
+        $table = $this->config->objectTables[$laneType];
+        foreach($oldCards as $colID => $cards)
+        {
+            if(empty($cards)) continue;
+            $objects = $this->dao->select('id')->from($table)
+                ->where('id')->in($cards)
+                ->orderBy($orderBy)
+                ->fetchPairs('id');
+
+            $objectIdList = ',' . implode(',', $objects) . ',';
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($objectIdList)->where('id')->eq($colID)->exec();
+        }
+        echo true;
+    }
 }

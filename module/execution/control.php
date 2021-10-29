@@ -1825,7 +1825,7 @@ class execution extends control
      * Kanban.
      *
      * @param  int    $executionID
-     * @param  string $type
+     * @param  string $browseType story|bug|task|all
      * @param  string $orderBy
      * @param  string $groupBy
      * @access public
@@ -1841,11 +1841,11 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $type, $groupBy);
+        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType);
         if(empty($kanbanGroup))
         {
-            $this->kanban->createLanes($executionID, $type, $groupBy);
-            $kanbanGroup = $this->kanban->getExecutionKanban($executionID);
+            $this->kanban->createLanes($executionID);
+            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType);
         }
 
         $this->execution->setMenu($executionID);

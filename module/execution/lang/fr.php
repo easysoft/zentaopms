@@ -376,6 +376,11 @@ $lang->execution->kanbanHideCols   = 'Colonnes masquées';
 $lang->execution->kanbanShowOption = 'Déplier';
 $lang->execution->kanbanColsColor  = 'Personnalisation Couleurs';
 
+$lang->execution->kanbanViewList['all']   = 'All';
+$lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";
+$lang->execution->kanbanViewList['bug']   = 'Bug';
+$lang->execution->kanbanViewList['task']  = 'Task';
+
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = 'Voulez-vous réinitialiser le tableau Kanban ?';
 $lang->kanbanSetting->optionList['0'] = 'Masquer';

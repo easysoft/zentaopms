@@ -81,6 +81,8 @@
       </ul>
     </div>
     <?php endif;?>
+    <?php else:?>
+    <?php $canCreateTask = $canBatchCreateTask = $canCreateBug = $canBatchCreateBug = $canCreateStory = $canBatchCreateStory = $canLinkStory = $canLinkStoryByPlane = false;?>
     <?php endif;?>
   </div>
 </div>
@@ -104,12 +106,37 @@
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toStoryButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>
   </div>
 </div>
 <?php js::set('executionID', $executionID);?>
+<?php js::set('productID', $productID);?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
+<?php js::set('browseType', $browseType);?>
+<?php
+js::set('priv',
+    array(
+        'hasEditName'         => common::hasPriv('kanban', 'setColumn'),
+        'hasSetWIP'           => common::hasPriv('kanban', 'setWIP'),
+        'canCreateTask'       => $canCreateTask,
+        'canBatchCreateTask'  => $canBatchCreateTask,
+        'canCreateBug'        => $canCreateBug,
+        'canBatchCreateBug'   => $canBatchCreateBug,
+        'canCreateStory'      => $canCreateStory,
+        'canBatchCreateStory' => $canBatchCreateStory,
+        'canLinkStory'        => $canLinkStory,
+        'canLinkStoryByPlane' => $canLinkStoryByPlane,
+    )
+);
+?>
+<?php js::set('executionLang', $lang->execution);?>
+<?php js::set('storyLang', $lang->story);?>
+<?php js::set('taskLang', $lang->task);?>
+<?php js::set('bugLang', $lang->bug);?>
+<?php js::set('editName', $lang->execution->editName);?>
+<?php js::set('setWIP', $lang->execution->setWIP);?>
+<?php js::set('sortColumn', $lang->execution->sortColumn);?>
 <?php include '../../common/view/footer.html.php';?>
