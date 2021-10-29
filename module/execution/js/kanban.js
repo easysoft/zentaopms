@@ -598,6 +598,9 @@ $(function()
         onRenderCount:     renderColumnCount
     };
 
+    /* Hide group menu. */
+    hideGroupMenu();
+
     /* Create story kanban 创建需求看板 */
     if(browseType == 'all' || browseType == 'story') createKanban('story', kanbanGroup.story, commonOptions);
 
@@ -644,4 +647,48 @@ $(function()
             parent.location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID);
         }
     })
+});
+
+/**
+ * Hide group menu.
+ *
+ * @access public
+ * @return void
+ */
+function hideGroupMenu()
+{
+    var type = $('#type').val();
+    if(type == 'all') $('.c-group').hide();
+}
+
+$('#type').change(function()
+{
+    var type = $('#type').val();
+    if(type == 'all')
+    {
+        $('.c-group').hide();
+    }
+    else
+    {
+        $('.c-group').show();
+        $.get(createLink('execution', 'ajaxGetGroup', 'type=' + type), function(data)
+        {
+            $('#group_chosen').remove();
+            $('#group').replaceWith(data);
+            $('#group').chosen();
+        })
+    }
+
+    var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + type);
+    location.href = link;
+});
+
+$('.c-group').change(function()
+{
+    $('.c-group').show();
+
+    var type  = $('#type').val();
+    var group = $('#group').val();
+    var link  = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
+    location.href = link;
 });

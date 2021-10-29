@@ -1,25 +1,52 @@
 <?php
 $lang->kanban = new stdClass();
 
-$lang->kanban->common             = '看板';
-$lang->kanban->WIP                = 'WIP';
-$lang->kanban->setWIP             = '在制品设置';
-$lang->kanban->WIPStatus          = '在制品状态';
-$lang->kanban->WIPStage           = '在制品阶段';
-$lang->kanban->WIPType            = '在制品类型';
-$lang->kanban->WIPCount           = '在制品数量';
-$lang->kanban->noLimit            = '不限制∞';
-$lang->kanban->setLane            = '泳道设置';
-$lang->kanban->laneName           = '泳道名称';
-$lang->kanban->laneColor          = '泳道颜色';
-$lang->kanban->setColumn          = '看板列设置';
-$lang->kanban->columnName         = '看板列名称';
-$lang->kanban->columnColor        = '看板列颜色';
-$lang->kanban->noColumnUniqueName = '看板列名称已存在。';
+$lang->kanban->type = array();
+$lang->kanban->type['all']   = "综合看板";
+$lang->kanban->type['story'] = "{$lang->SRCommon}看板";
+$lang->kanban->type['task']  = "任务看板";
+$lang->kanban->type['bug']   = "bug看板";
 
-$lang->kanban->error = new stdclass();
-$lang->kanban->error->parentLimitNote = '父列的在制品数量不能小与子列在制品数量之和。';
-$lang->kanban->error->childLimitNote  = '子列在制品数量之和不能大于父列的在制品数量。';
+$lang->kanban->group = new stdClass();
+
+$lang->kanban->group->all = array();
+$lang->kanban->group->story = array();
+$lang->kanban->group->story['default']    = "默认方式";
+$lang->kanban->group->story['pri']        = "需求优先级";
+$lang->kanban->group->story['category']   = "需求类别";
+$lang->kanban->group->story['module']     = "需求模块";
+$lang->kanban->group->story['source']     = "需求来源";
+$lang->kanban->group->story['assignedTo'] = "指派人员";
+
+$lang->kanban->group->task = array();
+$lang->kanban->group->task['default']    = "默认方式";
+$lang->kanban->group->task['pri']        = "任务优先级";
+$lang->kanban->group->task['type']       = "任务类型";
+$lang->kanban->group->task['module']     = "任务所属模块";
+$lang->kanban->group->task['story']      = "软件需求";
+$lang->kanban->group->task['assignedTo'] = "指派人员";
+
+$lang->kanban->group->bug = array();
+$lang->kanban->group->bug['default']    = "默认方式";
+$lang->kanban->group->bug['pri']        = "bug优先级";
+$lang->kanban->group->bug['type']       = "bug类型";
+$lang->kanban->group->bug['module']     = "bug模块";
+$lang->kanban->group->bug['severity']   = "bug严重程度";
+$lang->kanban->group->bug['assignedTo'] = "指派人员";
+
+$lang->kanban->WIP             = 'WIP';
+$lang->kanban->setWIP          = '在制品设置';
+$lang->kanban->WIPStatus       = '在制品状态';
+$lang->kanban->WIPStage        = '在制品阶段';
+$lang->kanban->WIPType         = '在制品类型';
+$lang->kanban->WIPCount        = '在制品数量';
+$lang->kanban->noLimit         = '不限制∞';
+$lang->kanban->setLane         = '泳道设置';
+$lang->kanban->laneName        = '泳道名称';
+$lang->kanban->laneColor       = '泳道颜色';
+$lang->kanban->setLaneColumn   = '看板列设置';
+$lang->kanban->columnName      = '看板列名称';
+$lang->kanban->columnColor     = '看板列颜色';
 
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
@@ -58,6 +85,8 @@ $lang->kanban->taskColumn['developed']  = '研发完毕';
 $lang->kanban->taskColumn['pause']      = '已暂停';
 $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
+
+$lang->kanban->noGroup = '无';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;

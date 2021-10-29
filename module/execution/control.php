@@ -1827,10 +1827,11 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $browseType story|bug|task|all
      * @param  string $orderBy
+     * @param  string $groupBy
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = 'all', $orderBy = 'order_asc')
+    public function kanban($executionID, $type = 'all', $orderBy = 'order_asc', $groupBy = 'default')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -1877,7 +1878,8 @@ class execution extends control
         $this->view->browseType    = '';
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->execution     = $execution;
-        $this->view->browseType    = $browseType;
+        $this->view->type          = $type;
+        $this->view->groupBy       = $groupBy;
         $this->view->canBeChanged  = $canBeChanged;
 
         $this->display();
@@ -3246,4 +3248,21 @@ class execution extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
+
+    /**
+     *Ajax get group menu of lanes.
+     *
+     * @param string $type all|syory|task|bug
+     * @param string $group
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGroup($type, $group = 'default')
+    {
+        $this->app->loadLang('kanban');
+        $groups = array();
+        $groups = $this->lang->kanban->group->$type;
+        die(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
+    }
+
 }

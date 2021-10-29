@@ -12,7 +12,13 @@
 <?php include '../../common/view/kanban.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <div class="input-control space w-150px"><?php echo html::select('view', $lang->execution->kanbanViewList, $browseType, "onchange='changeView(this.value)' class='form-control chosen'");?></div>
+    <div class="input-control space c-type">
+      <i class="icon icon-list-all"></i>
+      <?php echo html::select('type', $lang->kanban->type, $type, 'class="form-control chosen" data-max_drop_width="215"');?>
+    </div>
+    <div class="input-control space c-group">
+      <?php echo html::select('group',  $lang->kanban->group->$type, $groupBy, 'class="form-control chosen" data-max_drop_width="215"');?>
+    </div>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php

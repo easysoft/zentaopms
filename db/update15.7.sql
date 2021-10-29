@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `execution` mediumint(8) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL,
+  `extra` char(30) NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `color` char(30) NOT NULL,
   `order` smallint(6) NOT NULL DEFAULT '0',
