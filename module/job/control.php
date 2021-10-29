@@ -352,7 +352,7 @@ class job extends control
                     if($productLeft == $productRight) $matchedProducts[$productName] = $productRight;
                 }
             }
-            die(json_encode($matchedProduct));
+            die(json_encode($matchedProducts));
         }
 
         $productName = $this->loadModel('product')->getByID($repo->product)->name;

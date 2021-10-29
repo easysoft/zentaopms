@@ -134,7 +134,7 @@ class compileModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $lastTag = $this->getLastTagByRepo($repo);
+            $lastTag = $this->loadModel('job')->getLastTagByRepo($repo);
             if($lastTag)
             {
                 $job->lastTag = $lastTag;
