@@ -745,6 +745,6 @@ $('.c-group').change(function()
 
     var type  = $('#type').val();
     var group = $('#group').val();
-    link = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&group=' + group);
+    link = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
     location.href = link;
 });

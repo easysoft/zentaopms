@@ -1879,7 +1879,7 @@ class execution extends control
         $this->view->kanbanGroup   = $kanbanGroup;
         $this->view->execution     = $execution;
         $this->view->type          = $type;
-        $this->view->group         = $group;
+        $this->view->groupBy       = $groupBy;
         $this->view->canBeChanged  = $canBeChanged;
 
         $this->display();
