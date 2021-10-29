@@ -386,7 +386,7 @@ class gitlabModel extends model
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
 
-        $url = sprintf($host, $api);
+        $url = sprintf($apiRoot, $api);
         return json_decode(commonModel::http($url, $data, $options));
     }
 
@@ -456,7 +456,7 @@ class gitlabModel extends model
      *
      * @param  int $gitlabID
      * @access public
-     * @return array
+     * @return void
      */
     public function apiGetProjects($gitlabID)
     {
@@ -673,7 +673,6 @@ class gitlabModel extends model
     public function apiUpdateHook($gitlabID, $projectID, $hookID)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
-        $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
         $postData                          = new stdclass;
         $postData->enable_ssl_verification = "false";
@@ -682,6 +681,8 @@ class gitlabModel extends model
         $postData->push_events             = "true";
         $postData->tag_push_events         = "true";
         $postData->note_events             = "true";
+        $postData->url                     = $url;
+        $postData->token                   = $token;
 
         $url = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
         return commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
@@ -1230,9 +1231,9 @@ class gitlabModel extends model
     /**
      * Create webhook for zentao.
      *
-     * @param  array $products
-     * @param  int   $gitlabID
-     * @param  int   $projectID
+     * @param  int $products
+     * @param  int $gitlabID
+     * @param  int $projectID
      * @access public
      * @return bool
      */
@@ -1345,7 +1346,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
-        if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
+        if($isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';
