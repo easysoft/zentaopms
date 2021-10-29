@@ -249,6 +249,7 @@ class kanbanModel extends model
                 $data = new stdClass();
                 $data->lane  = $laneID;
                 $data->name  = $name;
+                $data->color = '#333';
                 $data->type  = $colType;
                 $data->cards = '';
 
