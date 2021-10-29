@@ -595,7 +595,7 @@ $(function()
     if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
 
     /* Init iframe modals */
-    $(document).on('click', '.iframe', function(event)
+    $(document).on('click', '#kanbans .iframe,.contextmenu-menu .iframe', function(event)
     {
         $(this).modalTrigger({show: true, width: '500px'});
         event.preventDefault();
