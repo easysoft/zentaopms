@@ -493,21 +493,11 @@ function createStoryMenu(options)
     var items = [];
     $.each(story.menus, function()
     {
-        if(this.size == 'big')
-        {
-            items.push({label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': '95%', 'data-toggle': 'modal', 'data-type': 'iframe'}});
-        }
-        else
-        {
-            if(this.icon == 'unlink')
-            {
-                items.push({label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}});
-            }
-            else
-            {
-                items.push({label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}});
-            }
-        }
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': this.size, 'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        if(this.icon == 'unlink') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
+        items.push(item);
     });
 
     return items;
@@ -525,14 +515,10 @@ function createBugMenu(options)
     var items = [];
     $.each(bug.menus, function()
     {
-        if(this.size == 'big')
-        {
-            items.push({label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': '95%', 'data-toggle': 'modal', 'data-type': 'iframe'}});
-        }
-        else
-        {
-            items.push({label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}});
-        }
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': this.size, 'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
     });
 
     return items;
@@ -550,14 +536,10 @@ function createTaskMenu(options)
     var items = [];
     $.each(task.menus, function()
     {
-        if(this.size == 'big')
-        {
-            items.push({label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': '95%', 'data-toggle': 'modal', 'data-type': 'iframe'}});
-        }
-        else
-        {
-            items.push({label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}});
-        }
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-width': this.size, 'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
     });
 
     return items;
