@@ -1,6 +1,39 @@
 <?php
 $lang->kanban = new stdClass();
 
+$lang->kanban->type = array();
+$lang->kanban->type['all']   = "All KanBan";
+$lang->kanban->type['story'] = "Story KanBan";
+$lang->kanban->type['task']  = "Task KanBan";
+$lang->kanban->type['bug']   = "Bug KanBan";
+
+$lang->kanban->group = new stdClass();
+
+$lang->kanban->group->all = array();
+$lang->kanban->group->story = array();
+$lang->kanban->group->story['default']    = "Default";
+$lang->kanban->group->story['pri']        = "Story Priority";
+$lang->kanban->group->story['category']   = "Story Category";
+$lang->kanban->group->story['module']     = "Story Module";
+$lang->kanban->group->story['source']     = "Story Source";
+$lang->kanban->group->story['assignedTo'] = "Assigned To";
+
+$lang->kanban->group->task = array();
+$lang->kanban->group->task['default']    = "Default";
+$lang->kanban->group->task['pri']        = "Task Priority";
+$lang->kanban->group->task['type']       = "Task Type";
+$lang->kanban->group->task['module']     = "Task Module";
+$lang->kanban->group->task['story']      = "Story";
+$lang->kanban->group->task['assignedTo'] = "Assigned To";
+
+$lang->kanban->group->bug = array();
+$lang->kanban->group->bug['default']    = "Default";
+$lang->kanban->group->bug['pri']        = "Bug Priority";
+$lang->kanban->group->bug['type']       = "Bug Type";
+$lang->kanban->group->bug['module']     = "Bug Module";
+$lang->kanban->group->bug['severity']   = "Bug Severity";
+$lang->kanban->group->bug['assignedTo'] = "Assigned To";
+
 $lang->kanban->WIP                = 'WIP';
 $lang->kanban->setWIP             = 'WIP Settings';
 $lang->kanban->WIPStatus          = 'WIP Status';
@@ -11,7 +44,7 @@ $lang->kanban->noLimit            = 'No Limit ∞';
 $lang->kanban->setLane            = 'Lane Settings';
 $lang->kanban->laneName           = 'Lane Name';
 $lang->kanban->laneColor          = 'Lane Color';
-$lang->kanban->setLaneColumn      = 'Column Settings';
+$lang->kanban->setColumn          = 'Column Settings';
 $lang->kanban->columnName         = 'Column Name';
 $lang->kanban->columnColor        = 'Column Color';
 $lang->kanban->noColumnUniqueName = 'The Kanban column name already exists.';
