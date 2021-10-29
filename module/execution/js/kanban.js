@@ -219,7 +219,7 @@ function renderHeaderCol($col, col, $header, kanban)
     if(!$col.children('.actions').length)
     {
         var $actions = $('<div class="actions" />');
-        if(col.type === 'blacklog' || col.type === 'wait')
+        if(col.type === 'backlog' || col.type === 'wait' || col.type == 'unconfirmed')
         {
             $actions.append([
                 '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
@@ -438,9 +438,9 @@ function createColumnMenu(options)
     var kanbanID = options.kanban;
 
 	var items = [];
-	if(priv.hasEditName) items.push({label: execution.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'})
-	if(priv.hasSetWIP) items.push({label: execution.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'})
-	items.push({label: execution.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
+	if(priv.hasEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'})
+	if(priv.hasSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'})
+	items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
     return items;
 }
 
@@ -452,11 +452,25 @@ function createColumnCreateMenu(options)
 {
     var $col  = options.$trigger.closest('.kanban-col');
     var col   = $col.data('col');
-    var items =
-    [
-        {label: '创建',    url: $.createLink(col.kanban, 'create'), className: 'iframe'},
-        {label: '批量创建', url: $.createLink(col.kanban, 'batchcreate'), className: 'iframe'},
-    ];
+    var items = [];
+
+    if(col.laneType == 'story')
+    {
+        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID)});
+        if(priv.canBatchCreateStory) items.push({label: storyLang.batchCreate, url: $.createLink('story', 'batchcreate', 'productID=' + productID)});
+        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID)});
+        if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
+    }
+    else if(col.laneType == 'bug')
+    {
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID)});
+        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID)});
+    }
+    else
+    {
+        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID)});
+        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID)});
+    }
     return items;
 }
 
@@ -622,4 +636,13 @@ $(function()
     {
         $.zui.ContextMenu.hide();
     });
+
+    $('#toStoryButton').on('click', function()
+    {
+        var planID = $('#plan').val();
+        if(planID)
+        {
+            parent.location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID);
+        }
+    })
 });
