@@ -408,6 +408,7 @@ class task extends control
                 }
             }
 
+            if(isonlybody()) die(js::reload('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('status' => 'success', 'data' => $taskID));
