@@ -5,7 +5,7 @@ $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
 $lang->kanban->type['story'] = "{$lang->SRCommon}看板";
 $lang->kanban->type['task']  = "任务看板";
-$lang->kanban->type['bug']   = "bug看板";
+$lang->kanban->type['bug']   = "Bug看板";
 
 $lang->kanban->group = new stdClass();
 
@@ -23,15 +23,15 @@ $lang->kanban->group->task['default']    = "默认方式";
 $lang->kanban->group->task['pri']        = "任务优先级";
 $lang->kanban->group->task['type']       = "任务类型";
 $lang->kanban->group->task['module']     = "任务所属模块";
-$lang->kanban->group->task['story']      = "软件需求";
+$lang->kanban->group->task['story']      = "{$lang->SRCommon}";
 $lang->kanban->group->task['assignedTo'] = "指派人员";
 
 $lang->kanban->group->bug = array();
 $lang->kanban->group->bug['default']    = "默认方式";
-$lang->kanban->group->bug['pri']        = "bug优先级";
-$lang->kanban->group->bug['type']       = "bug类型";
-$lang->kanban->group->bug['module']     = "bug模块";
-$lang->kanban->group->bug['severity']   = "bug严重程度";
+$lang->kanban->group->bug['pri']        = "Bug优先级";
+$lang->kanban->group->bug['type']       = "Bug类型";
+$lang->kanban->group->bug['module']     = "Bug模块";
+$lang->kanban->group->bug['severity']   = "Bug严重程度";
 $lang->kanban->group->bug['assignedTo'] = "指派人员";
 
 $lang->kanban->WIP             = 'WIP';
@@ -44,7 +44,7 @@ $lang->kanban->noLimit         = '不限制∞';
 $lang->kanban->setLane         = '泳道设置';
 $lang->kanban->laneName        = '泳道名称';
 $lang->kanban->laneColor       = '泳道颜色';
-$lang->kanban->setLaneColumn   = '看板列设置';
+$lang->kanban->setColumn       = '看板列设置';
 $lang->kanban->columnName      = '看板列名称';
 $lang->kanban->columnColor     = '看板列颜色';
 
