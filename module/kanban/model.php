@@ -198,6 +198,9 @@ class kanbanModel extends model
 
                 $laneOrder += 5;
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
+
+                $laneID = $this->dao->lastInsertId();
+                $this->createColumns($laneID, $type, $executionID, $groupBy, $groupKey);
             }
         }
     }
@@ -208,15 +211,26 @@ class kanbanModel extends model
      * @param  int    $laneID
      * @param  string $type story|bug|task
      * @param  int    $executionID
+     * @param  string $groupBy
+     * @param  string $groupValue
      * @access public
      * @return void
      */
-    public function createColumns($laneID, $type, $executionID)
+    public function createColumns($laneID, $type, $executionID, $groupBy = '', $groupValue = '')
     {
         $objects = array();
+
         if($type == 'story') $objects = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't2.id_desc');
         if($type == 'bug')   $objects = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($type == 'task')  $objects = $this->loadModel('execution')->getKanbanTasks($executionID);
+
+        if(!empty($groupBy))
+        {
+            foreach($objects as $objectID => $object)
+            {
+                if($object->$groupBy != $groupValue) unset($objects[$objectID]);
+            }
+        }
 
         $devColumnID = $testColumnID = $resolvingColumnID = 0;
         if($type == 'story')
