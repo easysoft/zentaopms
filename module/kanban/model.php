@@ -22,12 +22,12 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionKanban($executionID, $objectType = 'all', $groupBy = 'default')
+    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default')
     {
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($objectType != 'all')->andWhere('type')->eq($objectType)
+            ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)
             ->beginIF($groupBy != 'default')->andWhere('extra')->eq($groupBy)
             ->fetchAll('id');
 
