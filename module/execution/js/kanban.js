@@ -692,8 +692,8 @@ $(function()
         }
     };
 
-    /* Hide second menu. */
-    restoreSelect();
+    /* Hide group menu. */
+    hideGroupMenu();
 
     /* Create story kanban 创建需求看板 */
     createKanban('story', getStoryKanbanDemoData(), commonOptions);
@@ -706,28 +706,27 @@ $(function()
 });
 
 /**
- * Hide second menu.
+ * Hide group menu.
  *
  * @access public
  * @return void
  */
-function restoreSelect()
+function hideGroupMenu()
 {
     var type = $('#type').val();
-    if(type == 'all') $('.c-group').css("display", "none");
+    if(type == 'all') $('.c-group').hide();
 }
 
 $('#type').change(function()
 {
-    $('.c-group').css("display", "");
-
     var type = $('#type').val();
     if(type == 'all')
     {
-        $('.c-group').css("display", "none");
+        $('.c-group').hide();
     }
     else
     {
+        $('.c-group').show();
         $.get(createLink('execution', 'ajaxGetGroup', 'type=' + type), function(data)
         {
             $('#group_chosen').remove();
@@ -742,10 +741,10 @@ $('#type').change(function()
 
 $('.c-group').change(function()
 {
-    $('.c-group').css("display","");
+    $('.c-group').show();
 
     var type  = $('#type').val();
     var group = $('#group').val();
-    var link = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
+    var link  = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
     location.href = link;
 });

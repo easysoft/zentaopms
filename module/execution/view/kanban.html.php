@@ -67,7 +67,7 @@
     ?>
     <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane):?>
     <div class='dropdown' id='createDropdown'>
-      <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->task->create;?> <span class='caret'></span></button>
+      <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <?php if($canCreateStory) echo '<li>' . html::a(helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), $lang->story->create, '', "data-app='execution'") . '</li>';?>
         <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), $lang->story->batchCreate, '', "data-app='execution'") . '</li>';?>
