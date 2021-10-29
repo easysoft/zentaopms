@@ -46,6 +46,7 @@ $lang->productplan->confirmUnlinkBug   = "Do you want to unlink this bug?";
 $lang->productplan->noPlan             = 'No plans yet. ';
 $lang->productplan->cannotDeleteParent = 'Cannot delete parent plan';
 $lang->productplan->selectProjects     = "Please select the project";
+$lang->productplan->projectNotEmpty    = 'Project cannot be empty.';
 $lang->productplan->nextStep           = "Next step";
 
 $lang->productplan->id         = 'ID';
@@ -77,10 +78,12 @@ $lang->productplan->endList[93]   = '3 Months';
 $lang->productplan->endList[186]  = '6 Months';
 $lang->productplan->endList[365]  = '1 Year';
 
-$lang->productplan->errorNoTitle = 'ID %s title should not be empty.';
-$lang->productplan->errorNoBegin = 'ID %s begin time should not be empty.';
-$lang->productplan->errorNoEnd   = 'ID %s end time should not be empty.';
-$lang->productplan->beginGeEnd   = 'ID %s begin time should not be >= end time.';
+$lang->productplan->errorNoTitle      = 'ID %s title should not be empty.';
+$lang->productplan->errorNoBegin      = 'ID %s begin time should not be empty.';
+$lang->productplan->errorNoEnd        = 'ID %s end time should not be empty.';
+$lang->productplan->beginGeEnd        = 'ID %s begin time should not be >= end time.';
+$lang->productplan->beginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
+$lang->productplan->endGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
 
 $lang->productplan->featureBar['browse']['all']       = 'All';
 $lang->productplan->featureBar['browse']['unexpired'] = 'Unexpired';
