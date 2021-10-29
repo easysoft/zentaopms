@@ -1,7 +1,7 @@
 <?php
 $lang->kanban = new stdClass();
 
-$lang->kanban->commom             = '看板';
+$lang->kanban->common             = '看板';
 $lang->kanban->WIP                = 'WIP';
 $lang->kanban->setWIP             = '在制品设置';
 $lang->kanban->WIPStatus          = '在制品状态';
