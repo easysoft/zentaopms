@@ -164,9 +164,10 @@ class kanbanModel extends model
                     ->fetchPairs();
             }
 
-            $modulePairs     = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetchPairs();
-            $storyPairs      = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
-            $assignedToPairs = $this->loadModel('user')->getPairs('noletter');
+            $objectPairs = array();
+            if($groupBy == 'module') $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetchPairs();
+            if($groupBy == 'story')  $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
+            if($groupBy == 'bug')    $objectPairs = $this->loadModel('user')->getPairs('noletter');
 
             $laneName  = '';
             $laneOrder = 5;
@@ -176,7 +177,7 @@ class kanbanModel extends model
                 {
                     if(strpos('module,story,assignedTo', $groupBy) !== false)
                     {
-                        $laneName = zget(${$groupBy . 'Pairs'}, $groupKey);
+                        $laneName = zget($objectPairs, $groupKey);
                     }
                     else
                     {
@@ -495,8 +496,6 @@ class kanbanModel extends model
         return dao::isError();
     }
 
-
-
     /**
      * Update lane column.
      *
@@ -512,5 +511,4 @@ class kanbanModel extends model
             ->where('id')->eq($columnID)
             ->exec();
     }
-
 }
