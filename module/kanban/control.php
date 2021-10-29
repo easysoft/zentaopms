@@ -120,16 +120,36 @@ class kanban extends control
      */
     public function ajaxCardsSort($laneType, $columnID, $orderBy = 'id_desc')
     {
-        $oldCards = $this->dao->select('cards')->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->fetch('cards');
-        if(empty($oldCards)) return;
+        $oldCards = array();
+        $column   = $this->dao->select('parent,cards')->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->fetch();
 
-        $table   = $this->config->objectTables[$laneType];
-        $objects = $this->dao->select('*')->from($table)
-            ->where('id')->in($oldCards)
-            ->orderBy($orderBy)
-            ->fetchAll('id');
-        $cards = ',' . implode(',', array_keys($objects)) . ',';
+        /* Get the cards of the kanban column. */
+        if($column->parent == -1)
+        {
+            $childColumns = $this->dao->select('id,cards')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetchAll();
+            foreach($childColumns as $childColumn)
+            {
+                $oldCards[$childColumn->id] = $childColumn->cards;
+            }
+        }
+        else
+        {
+            $oldCards[$columnID] = $column->cards;
+        }
 
-        $this->update(TABLE_KANBANCOLUMN)->set('cards')->eq($cards)->where('id')->eq($columnID)->exec();
+        /* Update Kanban column card order. */
+        $table = $this->config->objectTables[$laneType];
+        foreach($oldCards as $colID => $cards)
+        {
+            if(empty($cards)) continue;
+            $objects = $this->dao->select('id')->from($table)
+                ->where('id')->in($cards)
+                ->orderBy($orderBy)
+                ->fetchPairs('id');
+
+            $objectIdList = ',' . implode(',', $objects) . ',';
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($objectIdList)->where('id')->eq($colID)->exec();
+        }
+        echo true;
     }
 }
