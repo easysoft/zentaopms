@@ -290,19 +290,30 @@ function createKanban(kanbanID, data, options)
 
 function fullScreen()
 {
-    var element = document.getElementById('kanbanContainer');
+    var element       = document.getElementById('kanbanContainer');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
     if(requestMethod)
     {
         var afterEnterFullscreen = function()
         {
             $('#kanbanContainer').addClass('scrollbar-hover');
+            $('.actions').hide();
+            $('#kanbanContainer a.iframe').each(function()
+            {
+                if($(this).hasClass('iframe'))
+                {
+                    var href = $(this).attr('href');
+                    $(this).removeClass('iframe');
+                    $(this).attr('href', 'javascript:void(0)');
+                    $(this).attr('href-bak', href);
+                }
+            })
             $.cookie('isFullScreen', 1);
         }
 
         var whenFailEnterFullscreen = function()
         {
-            $.cookie('isFullScreen', 0);
+            exitFullScreen();
         }
 
         try
@@ -333,9 +344,38 @@ function fullScreen()
 function exitFullScreen()
 {
     $('#kanbanContainer').removeClass('scrollbar-hover');
-    $('#content .actions').removeClass('hidden');
+    $('.actions').show();
+    $('#kanbanContainer a').each(function()
+    {
+        var hrefBak = $(this).attr('href-bak');
+        if(hrefBak)
+        {
+            $(this).addClass('iframe');
+            $(this).attr('href', hrefBak);
+        }
+    })
     $.cookie('isFullScreen', 0);
 }
+
+document.addEventListener('fullscreenchange', function (e)
+{
+    if(!document.fullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('webkitfullscreenchange', function (e)
+{
+    if(!document.webkitFullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('mozfullscreenchange', function (e)
+{
+    if(!document.mozFullScreenElement) exitFullScreen();
+});
+
+document.addEventListener('msfullscreenChange', function (e)
+{
+    if(!document.msfullscreenElement) exitFullScreen();
+});
 
 /* Define drag and drop rules */
 if(!window.kanbanDropRules)
