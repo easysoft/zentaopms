@@ -424,7 +424,6 @@ function handleSortColCards()
  */
 function createColumnMenu(options)
 {
-	console.log(priv['hasEditname']);
     var $col     = options.$trigger.closest('.kanban-col');
     var col      = $col.data('col');
     var kanbanID = options.kanban;
