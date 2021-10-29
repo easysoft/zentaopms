@@ -1,6 +1,7 @@
 <?php
 $lang->kanban = new stdClass();
 
+$lang->kanban->commom             = '看板';
 $lang->kanban->WIP                = 'WIP';
 $lang->kanban->setWIP             = '在制品设置';
 $lang->kanban->WIPStatus          = '在制品状态';
@@ -11,7 +12,7 @@ $lang->kanban->noLimit            = '不限制∞';
 $lang->kanban->setLane            = '泳道设置';
 $lang->kanban->laneName           = '泳道名称';
 $lang->kanban->laneColor          = '泳道颜色';
-$lang->kanban->setLaneColumn      = '看板列设置';
+$lang->kanban->setColumn          = '看板列设置';
 $lang->kanban->columnName         = '看板列名称';
 $lang->kanban->columnColor        = '看板列颜色';
 $lang->kanban->noColumnUniqueName = '看板列名称已存在。';

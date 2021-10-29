@@ -107,6 +107,15 @@
 <?php js::set('executionID', $executionID);?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php js::set('browseType', $browseType);?>
+<?php
+js::set('priv',
+    array(
+        'hasEditName' => common::hasPriv('kanban', 'setColumn'),
+        'hasSetWIP'   => common::hasPriv('kanban', 'setWIP'),
+    )
+);
+?>
+<?php js::set('execution', $lang->execution);?>
 <?php js::set('editName', $lang->execution->editName);?>
 <?php js::set('setWIP', $lang->execution->setWIP);?>
 <?php js::set('sortColumn', $lang->execution->sortColumn);?>

@@ -83,7 +83,7 @@ class kanban extends control
     public function setColumn($columnID)
     {
         $column = $this->kanban->getColumnById($columnID);
-        
+
         if($_POST)
         {
             /* Check lane column name is unique. */
@@ -105,7 +105,7 @@ class kanban extends control
         }
 
         $this->view->column = $column;
-        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setLaneColumn;
+        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
         $this->display();
     }
 

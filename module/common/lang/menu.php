@@ -246,7 +246,7 @@ if($config->systemMode == 'new') $lang->execution->homeMenu->executionkanban = a
 
 $lang->execution->menu           = new stdclass();
 $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->execution->menu->kanban   = array('link' => "$lang->kanban|execution|kanban|executionID=%s");
+$lang->execution->menu->kanban   = array('link' => "$lang->executionKanban|execution|kanban|executionID=%s");
 $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|executionID=%s");
 $lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
 $lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban');
@@ -521,6 +521,7 @@ $lang->navGroup->build          = 'project';
 $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->milestone      = 'project';
 
+$lang->navGroup->kanban       = 'execution';
 $lang->navGroup->execution    = 'execution';
 $lang->navGroup->task         = 'execution';
 $lang->navGroup->build        = 'execution';
