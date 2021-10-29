@@ -25,6 +25,7 @@ $lang->moduleOrder[40]  = 'release';
 $lang->moduleOrder[45]  = 'project';
 $lang->moduleOrder[50]  = 'projectstory';
 $lang->moduleOrder[55]  = 'execution';
+$lang->moduleOrder[56]  = 'kanban';
 $lang->moduleOrder[60]  = 'task';
 $lang->moduleOrder[65]  = 'build';
 
@@ -546,6 +547,16 @@ $lang->release->methodOrder[55] = 'linkBug';
 $lang->release->methodOrder[60] = 'unlinkBug';
 $lang->release->methodOrder[65] = 'batchUnlinkBug';
 $lang->release->methodOrder[70] = 'changeStatus';
+
+/* Kanban */
+$lang->resource->kanban = new stdclass();
+$lang->resource->kanban->setLane   = 'setLane';
+$lang->resource->kanban->setColumn = 'setColumn';
+$lang->resource->kanban->setWIP    = 'setWIP';
+
+$lang->kanban->methodOrder[5]   = 'setLane';
+$lang->kanban->methodOrder[10]  = 'setColumn';
+$lang->kanban->methodOrder[15]  = 'setWIP';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();

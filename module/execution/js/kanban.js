@@ -424,15 +424,15 @@ function handleSortColCards()
  */
 function createColumnMenu(options)
 {
+	console.log(priv['hasEditname']);
     var $col     = options.$trigger.closest('.kanban-col');
     var col      = $col.data('col');
     var kanbanID = options.kanban;
-    var items =
-    [
-        {label: editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'},
-        {label: setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'},
-        {label: sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards},
-    ];
+
+	var items = [];
+	if(priv.hasEditName) items.push({label: editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'})
+	if(priv.hasSetWIP) items.push({label: setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'})
+	items.push({label: sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
     return items;
 }
 

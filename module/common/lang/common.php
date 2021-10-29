@@ -9,6 +9,7 @@ $lang->project     = new stdclass();
 $lang->scrum       = new stdclass();
 $lang->waterfall   = new stdclass();
 $lang->execution   = new stdclass();
+$lang->kanban      = new stdclass();
 $lang->story       = new stdclass();
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
