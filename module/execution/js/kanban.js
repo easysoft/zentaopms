@@ -290,16 +290,15 @@ function createKanban(kanbanID, data, options)
 
 function fullScreen()
 {
-    var element = document.getElementById('kanbanContainer');
+    var element       = document.getElementById('kanbanContainer');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
-    var aArr = $('#kanbanContainer a.iframe');
     if(requestMethod)
     {
         var afterEnterFullscreen = function()
         {
             $('#kanbanContainer').addClass('scrollbar-hover');
             $('.actions').hide();
-            aArr.each(function()
+            $('#kanbanContainer a.iframe').each(function()
             {
                 if($(this).hasClass('iframe'))
                 {
@@ -349,7 +348,6 @@ function exitFullScreen()
     $('#kanbanContainer a').each(function()
     {
         var hrefBak = $(this).attr('href-bak');
-        console.log(hrefBak)
         if(hrefBak)
         {
             $(this).addClass('iframe');
@@ -358,6 +356,7 @@ function exitFullScreen()
     })
     $.cookie('isFullScreen', 0);
 }
+
 document.addEventListener('fullscreenchange', function (e)
 {
     if(!document.fullscreenElement) exitFullScreen();
