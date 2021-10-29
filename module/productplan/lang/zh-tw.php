@@ -77,10 +77,12 @@ $lang->productplan->endList[93]  = '三個月';
 $lang->productplan->endList[186] = '半年';
 $lang->productplan->endList[365] = '一年';
 
-$lang->productplan->errorNoTitle = 'ID %s 標題不能為空';
-$lang->productplan->errorNoBegin = 'ID %s 開始時間不能為空';
-$lang->productplan->errorNoEnd   = 'ID %s 結束時間不能為空';
-$lang->productplan->beginGeEnd   = 'ID %s 開始時間不能大於結束時間';
+$lang->productplan->errorNoTitle      = 'ID %s 標題不能為空';
+$lang->productplan->errorNoBegin      = 'ID %s 開始時間不能為空';
+$lang->productplan->errorNoEnd        = 'ID %s 結束時間不能為空';
+$lang->productplan->beginGeEnd        = 'ID %s 開始時間不能大於結束時間';
+$lang->productplan->beginLetterParent = "父計畫的開始日期：%s，開始日期不能小於父計畫的開始日期";
+$lang->productplan->endGreaterParent  = "父計畫的完成日期：%s，完成日期不能大於父計畫的完成日期";
 
 $lang->productplan->featureBar['browse']['all']       = '全部';
 $lang->productplan->featureBar['browse']['unexpired'] = '未過期';

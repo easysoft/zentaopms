@@ -76,10 +76,12 @@ $lang->productplan->endList[93]   = '3 tháng';
 $lang->productplan->endList[186]  = '6 tháng';
 $lang->productplan->endList[365]  = '1 năm';
 
-$lang->productplan->errorNoTitle = 'Tiêu đề ID %s không nên trống.';
-$lang->productplan->errorNoBegin = 'Thời gian bắt đầu ID %s không nên trống.';
-$lang->productplan->errorNoEnd   = 'Thời gian kết thúc ID %s không nên trống.';
-$lang->productplan->beginGeEnd   = 'ID %s thời gian bắt đầu không nên >= thời gian kết thúc.';
+$lang->productplan->errorNoTitle      = 'Tiêu đề ID %s không nên trống.';
+$lang->productplan->errorNoBegin      = 'Thời gian bắt đầu ID %s không nên trống.';
+$lang->productplan->errorNoEnd        = 'Thời gian kết thúc ID %s không nên trống.';
+$lang->productplan->beginGeEnd        = 'ID %s thời gian bắt đầu không nên >= thời gian kết thúc.';
+$lang->productplan->beginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
+$lang->productplan->endGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
 
 $lang->productplan->featureBar['browse']['all']       = 'Tất cả';
 $lang->productplan->featureBar['browse']['unexpired'] = 'Chưa quá hạn';

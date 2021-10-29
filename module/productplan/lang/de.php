@@ -76,10 +76,12 @@ $lang->productplan->endList[93]   = '3 Monate';
 $lang->productplan->endList[186]  = '6 Monate';
 $lang->productplan->endList[365]  = '1 Jahr';
 
-$lang->productplan->errorNoTitle = 'ID %s Titel darf nicht leer sein.';
-$lang->productplan->errorNoBegin = 'ID %s Start darf nicht leer sein.';
-$lang->productplan->errorNoEnd   = 'ID %s Ende darf nicht leer sein.';
-$lang->productplan->beginGeEnd   = 'ID %s Start darf nicht größer als Ende sein.';
+$lang->productplan->errorNoTitle      = 'ID %s Titel darf nicht leer sein.';
+$lang->productplan->errorNoBegin      = 'ID %s Start darf nicht leer sein.';
+$lang->productplan->errorNoEnd        = 'ID %s Ende darf nicht leer sein.';
+$lang->productplan->beginGeEnd        = 'ID %s Start darf nicht größer als Ende sein.';
+$lang->productplan->beginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
+$lang->productplan->endGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
 
 $lang->productplan->featureBar['browse']['all']       = 'Alle';
 $lang->productplan->featureBar['browse']['unexpired'] = 'Nicht abgelaufen';

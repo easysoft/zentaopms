@@ -76,10 +76,12 @@ $lang->productplan->endList[93]   = '3 Mois';
 $lang->productplan->endList[186]  = '6 Mois';
 $lang->productplan->endList[365]  = '1 Année';
 
-$lang->productplan->errorNoTitle = 'ID %s titre ne doit pas être à blanc.';
-$lang->productplan->errorNoBegin = "ID %s l'heure de début devrait être renseignée.";
-$lang->productplan->errorNoEnd   = "ID %s l'heure de fin devrait être renseignée.";
-$lang->productplan->beginGeEnd   = "ID %s l'heure de début ne doit pas être >= à l'heure de fin.";
+$lang->productplan->errorNoTitle      = 'ID %s titre ne doit pas être à blanc.';
+$lang->productplan->errorNoBegin      = "ID %s l'heure de début devrait être renseignée.";
+$lang->productplan->errorNoEnd        = "ID %s l'heure de fin devrait être renseignée.";
+$lang->productplan->beginGeEnd        = "ID %s l'heure de début ne doit pas être >= à l'heure de fin.";
+$lang->productplan->beginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
+$lang->productplan->endGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
 
 $lang->productplan->featureBar['browse']['all']       = 'Tous';
 $lang->productplan->featureBar['browse']['unexpired'] = 'Non échus';
