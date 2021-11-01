@@ -31,4 +31,5 @@
 
 .dropdown-menu a {text-align: left;}
 .scrollbar-hover {max-height: 2000px; overflow: scroll !important;}
-.c-type, .c-group {width: 150px !important; overflow: unset; display: "";}
+.c-type, .c-group {width: 150px !important; overflow: unset;}
+.c-type {margin-left: 0px !important;}

@@ -660,9 +660,6 @@ $(function()
         onRenderCount:     renderColumnCount
     };
 
-    /* Hide group menu. */
-    hideGroupMenu();
-
     if(groupBy == 'default')
     {
         /* Create story kanban 创建需求看板 */
@@ -719,26 +716,10 @@ $(function()
     })
 });
 
-/**
- * Hide group menu.
- *
- * @access public
- * @return void
- */
-function hideGroupMenu()
-{
-    var type = $('#type').val();
-    if(type == 'all') $('.c-group').hide();
-}
-
 $('#type').change(function()
 {
     var type = $('#type').val();
-    if(type == 'all')
-    {
-        $('.c-group').hide();
-    }
-    else
+    if(type != 'all')
     {
         $('.c-group').show();
         $.get(createLink('execution', 'ajaxGetGroup', 'type=' + type), function(data)
