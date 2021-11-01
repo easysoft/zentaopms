@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = $lang->SRCommon;
 $lang->productplan->unlinkedStories  = "未关联{$lang->SRCommon}";
 $lang->productplan->updateOrder      = '排序';
 $lang->productplan->createChildren   = "创建子计划";
-$lang->productplan->createExecution  = "创建{$lang->executionCommon}";
+$lang->productplan->createExecution  = "创建执行";
 
 $lang->productplan->linkBug          = "关联Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
