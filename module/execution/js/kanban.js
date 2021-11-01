@@ -660,17 +660,22 @@ $(function()
         onRenderCount:     renderColumnCount
     };
 
-    /* Hide group menu. */
-    hideGroupMenu();
+    if(groupBy == 'default')
+    {
+        /* Create story kanban 创建需求看板 */
+        if(browseType == 'all' || browseType == 'story') createKanban('story', kanbanGroup.story, commonOptions);
 
-    /* Create story kanban 创建需求看板 */
-    if(browseType == 'all' || browseType == 'story') createKanban('story', kanbanGroup.story, commonOptions);
+        /* Create bug kanban 创建 Bug 看板 */
+        if(browseType == 'all' || browseType == 'bug') createKanban('bug', kanbanGroup.bug, commonOptions);
 
-    /* Create bug kanban 创建 Bug 看板 */
-    if(browseType == 'all' || browseType == 'bug') createKanban('bug', kanbanGroup.bug, commonOptions);
-
-    /* Create task kanban 创建 任务 看板 */
-    if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
+        /* Create task kanban 创建 任务 看板 */
+        if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
+    }
+    else
+    {
+        /* Create kanban by group. 分泳道创建看板. */
+        createKanban(browseType, kanbanGroup[groupBy], commonOptions);
+    }
 
     /* Init iframe modals */
     $(document).on('click', '#kanbans .iframe,.contextmenu-menu .iframe', function(event)
@@ -711,26 +716,10 @@ $(function()
     })
 });
 
-/**
- * Hide group menu.
- *
- * @access public
- * @return void
- */
-function hideGroupMenu()
-{
-    var type = $('#type').val();
-    if(type == 'all') $('.c-group').hide();
-}
-
 $('#type').change(function()
 {
     var type = $('#type').val();
-    if(type == 'all')
-    {
-        $('.c-group').hide();
-    }
-    else
+    if(type != 'all')
     {
         $('.c-group').show();
         $.get(createLink('execution', 'ajaxGetGroup', 'type=' + type), function(data)

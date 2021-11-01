@@ -13,12 +13,13 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
-      <i class="icon icon-list-all"></i>
       <?php echo html::select('type', $lang->kanban->type, $browseType, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
+    <?php if($browseType != 'all'):?>
     <div class="input-control space c-group">
       <?php echo html::select('group',  $lang->kanban->group->$browseType, $groupBy, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
+    <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
@@ -116,6 +117,7 @@
 <?php js::set('productID', $productID);?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php js::set('browseType', $browseType);?>
+<?php js::set('groupBy', $groupBy);?>
 <?php
 js::set('priv',
     array(
