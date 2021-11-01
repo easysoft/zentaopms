@@ -670,9 +670,6 @@ $(function()
         onRenderCount:     renderColumnCount
     };
 
-    /* Hide group menu. */
-    hideGroupMenu();
-
     /* Create kanban 创建看板 */
     if(groupBy == 'default')
     {
