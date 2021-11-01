@@ -219,7 +219,12 @@ function renderHeaderCol($col, col, $header, kanban)
     if(!$col.children('.actions').length)
     {
         var $actions = $('<div class="actions" />');
-        if(col.type === 'backlog' || col.type === 'wait' || col.type == 'unconfirmed')
+        var printStoryButton =  printTaskButton = printBugButton = false;
+        if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlane) printStoryButton = true;
+        if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
+        if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
+
+        if((col.type === 'backlog' && printStoryButton) || (col.type === 'wait' && printTaskButton) || (col.type == 'unconfirmed' && printBugButton))
         {
             $actions.append([
                 '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
@@ -227,11 +232,12 @@ function renderHeaderCol($col, col, $header, kanban)
                 '</a>'
             ].join(''));
         }
+
         $actions.append([
-                '<a data-contextmenu="column" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
-                    '<i class="icon icon-ellipsis-v"></i>',
-                '</a>'
-            ].join(''));
+            '<a data-contextmenu="column" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+                '<i class="icon icon-ellipsis-v"></i>',
+            '</a>'
+        ].join(''));
         $actions.appendTo($col);
     }
 }

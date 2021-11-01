@@ -1,6 +1,4 @@
 <?php
-$lang->kanban = new stdClass();
-
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
 $lang->kanban->type['story'] = "Story KanBan";
