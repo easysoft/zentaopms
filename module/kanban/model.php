@@ -629,14 +629,17 @@ class kanbanModel extends model
         $orderList = $this->dao->select('id,type,`order`')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('type')->in(array($currentType, $targetType))
+            ->andWhere('groupby')->eq('')
             ->fetchAll('type');
 
         $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$targetType]->order)
             ->where('id')->eq($orderList[$currentType]->id)
+            ->andWhere('groupby')->eq('')
             ->exec();
 
         $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$currentType]->order)
             ->where('id')->eq($orderList[$targetType]->id)
+            ->andWhere('groupby')->eq('')
             ->exec();
     }
 
