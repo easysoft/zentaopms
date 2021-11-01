@@ -28,7 +28,8 @@ class kanbanModel extends model
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
-            ->beginIF($groupBy != 'default')->andWhere('extra')->eq($groupBy)->fi()
+            ->beginIF($groupBy == 'default')->andWhere('groupby')->eq('')->fi()
+            ->beginIF($groupBy != 'default')->andWhere('groupby')->eq($groupBy)->fi()
             ->orderBy('order_asc')
             ->fetchAll('id');
 
