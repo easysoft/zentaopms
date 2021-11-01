@@ -668,14 +668,22 @@ $(function()
     hideGroupMenu();
 
     /* Create kanban 创建看板 */
-    var kanbanLane = '';
-    for(var i in kanbanList)
+    if(groupBy == 'default')
     {
-        if(kanbanList[i] == 'story') kanbanLane = kanbanGroup.story;
-        if(kanbanList[i] == 'bug')   kanbanLane = kanbanGroup.bug;
-        if(kanbanList[i] == 'task')  kanbanLane = kanbanGroup.task;
+        var kanbanLane = '';
+        for(var i in kanbanList)
+        {
+            if(kanbanList[i] == 'story') kanbanLane = kanbanGroup.story;
+            if(kanbanList[i] == 'bug')   kanbanLane = kanbanGroup.bug;
+            if(kanbanList[i] == 'task')  kanbanLane = kanbanGroup.task;
 
-        if(browseType == kanbanList[i] || browseType == 'all') createKanban(kanbanList[i], kanbanLane, commonOptions);
+            if(browseType == kanbanList[i] || browseType == 'all') createKanban(kanbanList[i], kanbanLane, commonOptions);
+        }
+    }
+    else
+    {
+        /* Create kanban by group. 分泳道创建看板. */
+        createKanban(browseType, kanbanGroup[groupBy], commonOptions);
     }
 
     /* Init iframe modals */
