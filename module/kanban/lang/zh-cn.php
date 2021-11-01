@@ -1,6 +1,4 @@
 <?php
-$lang->kanban = new stdClass();
-
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
 $lang->kanban->type['story'] = "{$lang->SRCommon}看板";
@@ -44,10 +42,13 @@ $lang->kanban->noLimit            = '不限制∞';
 $lang->kanban->setLane            = '泳道设置';
 $lang->kanban->laneName           = '泳道名称';
 $lang->kanban->laneColor          = '泳道颜色';
-$lang->kanban->setLaneColumn      = '看板列设置';
+$lang->kanban->setColumn          = '看板列设置';
 $lang->kanban->columnName         = '看板列名称';
 $lang->kanban->columnColor        = '看板列颜色';
 $lang->kanban->noColumnUniqueName = '看板列名称已存在';
+$lang->kanban->moveUp             = '泳道上移';
+$lang->kanban->moveDown           = '泳道下移';
+$lang->kanban->laneMove           = '泳道排序';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';

@@ -357,6 +357,7 @@ $lang->action->dynamicAction->execution['moved']     = '导入任务';
 
 $lang->action->dynamicAction->kanbancolumn['edited'] = '设置看板列';
 $lang->action->dynamicAction->kanbanlane['edited']   = '设置泳道';
+$lang->action->dynamicAction->kanbanlane['moved']    = '移动泳道';
 
 $lang->action->dynamicAction->team['managedTeam'] = '维护团队';
 
@@ -510,7 +511,7 @@ $lang->action->label->design       = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder  = '干系人|stakeholder|view|userID=%s';
 $lang->action->label->api          = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
 $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
-$lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s';
+$lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

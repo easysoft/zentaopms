@@ -152,4 +152,28 @@ class kanban extends control
         }
         echo true;
     }
+
+    /**
+     * Change the order through the lane move up and down.
+     *
+     * @param  int     $executionID
+     * @param  string  $currentType
+     * @param  string  $targetType
+     * @access public
+     * @return void
+     */
+    public function laneMove($executionID, $currentType, $targetType)
+    {
+        if(empty($targetType)) return false;
+
+        $this->kanban->updateLaneOrder($executionID, $currentType, $targetType);
+
+        if(!dao::isError())
+        {
+            $laneID = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->andWhere('type')->eq($currentType)->fetch('id');
+            $this->loadModel('action')->create('kanbanlane', $laneID, 'Moved');
+        }
+
+        die(js::locate($this->createLink('execution', 'kanban', 'executionID=' . $executionID . '&type=all'), 'parent'));
+    }
 }
