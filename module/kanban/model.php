@@ -309,7 +309,7 @@ class kanbanModel extends model
                         {
                             $data->cards .= $bugID . ',';
                         }
-                        elseif($bug->status == $bugStatus)
+                        elseif(strpos(',unconfirmed,confirmed,', $colType) === false and $bug->status == $bugStatus)
                         {
                             $data->cards .= $bugID . ',';
                         }
@@ -412,7 +412,7 @@ class kanbanModel extends model
                     {
                         $cardPairs['confirmed'] .= empty($cardPairs['confirmed']) ? ',' . $bugID . ',' : $bugID . ',';
                     }
-                    elseif($bug->status == $status and strpos($cardPairs[$colType], ",$bugID,") === false)
+                    elseif($bug->status == 'closed' and strpos($cardPairs[$colType], ",$bugID,") === false)
                     {
                         $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $bugID . ',' : $bugID . ',';
                     }
