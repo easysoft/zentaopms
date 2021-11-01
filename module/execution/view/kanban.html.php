@@ -62,7 +62,7 @@
     $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
     $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
     $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
-    $canLinkStoryByPlane = ($productID and common::hasPriv('execution', 'story'));
+    $canLinkStoryByPlane = ($productID and common::hasPriv('execution', 'importplanstories'));
     ?>
     <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane):?>
     <div class='dropdown' id='createDropdown'>
