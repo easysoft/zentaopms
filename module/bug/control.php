@@ -364,6 +364,7 @@ class bug extends control
                 return $this->send($response);
             }
 
+	    $executionID = $_POST['execution'];
             $bugID = $bugResult['id'];
             if($bugResult['status'] == 'exists')
             {
@@ -402,7 +403,7 @@ class bug extends control
 
             if($this->app->tab == 'execution')
             {
-                $location = $this->session->bugList ? $this->session->bugList : $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
+                $location = $this->createLink('execution', 'bug', "executionID=$executionID");
             }
             elseif($this->app->tab == 'project')
             {
