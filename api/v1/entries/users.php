@@ -48,6 +48,8 @@ class usersEntry extends entry
         $fields = 'account,dept,realname,email,commiter,gender';
         $this->batchSetPost($fields);
 
+        if(!in_array($this->request('gendar', 'f'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
+
         $password = $this->request('password', '') ? md5($this->request('password')) : '';
 
         $this->setPost('password1', $password);

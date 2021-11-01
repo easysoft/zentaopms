@@ -98,8 +98,9 @@ class reportModel extends model
      */
     public function getExecutions($begin = 0, $end = 0)
     {
-        $tasks = $this->dao->select('t1.*,t2.name as executionName')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -122,9 +123,10 @@ class reportModel extends model
                 $executions[$executionID]->consumed = 0;
             }
 
-            $executions[$executionID]->name      = $task->executionName;
-            $executions[$executionID]->estimate += $task->estimate;
-            $executions[$executionID]->consumed += $task->consumed;
+            $executions[$executionID]->projectName = $task->projectName;
+            $executions[$executionID]->name        = $task->executionName;
+            $executions[$executionID]->estimate   += $task->estimate;
+            $executions[$executionID]->consumed   += $task->consumed;
         }
 
         return $executions;

@@ -54,7 +54,7 @@ $('#future').on('change', function()
 {
     if($(this).prop('checked'))
     {
-        $('#begin').val('').attr('disabled', 'disabled');
+        $('#begin').attr('disabled', 'disabled');
         $('#end').val('').parents('tr').hide();
     }
     else

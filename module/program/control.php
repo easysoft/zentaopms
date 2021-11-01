@@ -124,6 +124,8 @@ class program extends control
             $path      = explode(',', $program->path);
             $path      = array_filter($path);
             $programID = current($path);
+
+            $this->view->program = $program;
         }
 
         $this->view->title       = $this->lang->program->product;

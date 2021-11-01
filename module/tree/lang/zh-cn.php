@@ -9,7 +9,7 @@
  * @version     $Id: zh-cn.php 4836 2013-06-19 05:39:40Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->tree = new stdclass();
+$lang->tree                     = new stdclass();
 $lang->tree->common             = '模块维护';
 $lang->tree->edit               = '编辑模块';
 $lang->tree->delete             = '删除模块';
@@ -24,6 +24,7 @@ $lang->tree->manageBug          = '维护测试视图模块';
 $lang->tree->manageCase         = '维护用例视图模块';
 $lang->tree->manageCaseLib      = '维护用例库模块';
 $lang->tree->manageCustomDoc    = '维护文档库分类';
+$lang->tree->manageApiChild     = '维护接口库目录';
 $lang->tree->updateOrder        = '更新排序';
 $lang->tree->manageChild        = '维护子模块';
 $lang->tree->manageStoryChild   = '维护子模块';
@@ -51,6 +52,7 @@ $lang->tree->module       = '模块';
 $lang->tree->name         = '模块名称';
 $lang->tree->line         = "{$lang->productCommon}线名称";
 $lang->tree->cate         = '分类名称';
+$lang->tree->dir          = '目录名称';
 $lang->tree->root         = '所属根';
 $lang->tree->branch       = '平台/分支';
 $lang->tree->path         = '路径';

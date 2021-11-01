@@ -18,7 +18,10 @@ test/data/sql/
 .gitignore
 .DS_Store
 vendor/
+docker
+.docker-sync
 composer.lock
+.editorconfig
 
 test/runtime/*
 test/www

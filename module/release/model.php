@@ -474,7 +474,7 @@ class releaseModel extends model
     public function changeStatus($releaseID, $status)
     {
         $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
-        return dao::isError();
+        return !dao::isError();
     }
 
     /**

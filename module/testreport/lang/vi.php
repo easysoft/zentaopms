@@ -83,6 +83,7 @@ $lang->testreport->noTestTask     = "Không có yêu cầu thử nghiệm {$lang
 $lang->testreport->noObjectID     = "Không có yêu cầu test hoặc {$lang->executionCommon} được chọn, bởi vậy không có báo cáo có thể được tạo.";
 $lang->testreport->moreProduct    = "Báo cáo Test chỉ có thể được tạo cho cùng {$lang->productCommon}.";
 $lang->testreport->hiddenCase     = "Hide %s use cases";
+$lang->testreport->goalTip        = "Descriptive information about the execution of this build";
 
 $lang->testreport->bugSummary = <<<EOD
 Total <strong>%s</strong> Bugs reported <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,

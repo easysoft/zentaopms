@@ -17,6 +17,26 @@ error_reporting(E_ALL & E_STRICT);
 
 $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
 
+/**
+ * Assert status code and set body as $_result.
+ *
+ * @param  int $code
+ * @access public
+ * @return bool
+ */
+function c($code)
+{
+    global $_result;
+    if($_result and isset($_result->status_code) and $_result->status_code == $code)
+    {
+        $_result = $_result->body;
+        return true;
+    }
+
+    echo ">> \n\n";
+    return false;
+}
+
 /* Load the framework. */
 include $frameworkRoot . 'router.class.php';
 include $frameworkRoot . 'control.class.php';
@@ -26,6 +46,18 @@ include $frameworkRoot . 'helper.class.php';
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $tester = $app->loadCommon();
 
+/* Load rest for api. */
+if(!isset($config->webSite)) die("Error: \$config->webSite is not set.\n");
+
+$app->loadClass('requests', true);
+include 'rest.php';
+$rest = new Rest($config->webSite . '/api.php/v1');
+
+/* Global token for api. */
+$token = $rest->post('/tokens', array('account' => 'admin', 'password' => '123qwe!@#'));
+if(isset($token->body)) $token = $token->body;
+
+/* Set configs. */
 $config->zendataRoot = dirname(dirname(__FILE__)) . '/zendata';
 $config->ztfPath     = dirname(dirname(__FILE__)) . '/tools/ztf';
 $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
@@ -52,7 +84,7 @@ function r($result)
  * @access public
  * @return void
  */
-function p($key, $delimiter = ',')
+function p($key = '', $delimiter = ',')
 {
     global $_result;
     echo ">> ";
@@ -79,7 +111,7 @@ function p($key, $delimiter = ',')
         $result = trim($result, $delimiter);
     }
 
-    echo $result . "\n\n";
+    echo $result . "\n";
 
     return true;
 }
@@ -107,9 +139,11 @@ function e($expect)
 function zdImport($table, $yaml, $count = 10)
 {
     chdir(dirname(__FILE__));
+
     global $app, $config;
     $dns   = "mysql://{$config->db->user}:{$config->db->password}@{$config->db->host}:{$config->db->port}/{$config->db->name}#utf8";
     $table = trim($table, '`');
+
     $command = "$config->zdPath -c $yaml -t $table -T -dns $dns --clear -n $count";
     system($command);
 }

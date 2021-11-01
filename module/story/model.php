@@ -401,13 +401,17 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
+        $forceReview = $this->checkForceReview();
         foreach($_POST['needReview'] as $index => $value)
         {
             if($_POST['title'][$index] and isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
-            if($_POST['title'][$index] and $value and empty($_POST['reviewer'][$index]))
+            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]))
             {
-                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-                return false;
+                if($value || $forceReview)
+                {
+                    dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+                    return false;
+                }
             }
         }
 
@@ -441,7 +445,6 @@ class storyModel extends model
         if(isset($stories->uploadImage)) $this->loadModel('file');
 
         $extendFields = $this->getFlowExtendFields();
-        $forceReview  = $this->checkForceReview();
         $data         = array();
         foreach($stories->title as $i => $title)
         {
@@ -2475,7 +2478,7 @@ class storyModel extends model
             $story->planTitle = '';
             $storyPlans = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
-            $stories[] = $story;
+            $stories[$story->id] = $story;
         }
         return $stories;
     }
@@ -3768,7 +3771,7 @@ class storyModel extends model
                     common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");
-                    common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
+                    if($this->app->rawModule != 'projectstory') common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
                     if($this->app->rawModule == 'projectstory') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->project}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
                 }
                 else

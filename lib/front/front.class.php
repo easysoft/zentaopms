@@ -86,7 +86,6 @@ class html extends baseHTML
 
         foreach($options as $key => $value)
         {
-            $key = str_replace('item', '', $key);
             if($isBlock) $string .= "<div class='checkbox-primary'>";
             else $string .= "<div class='checkbox-primary checkbox-inline'>";
             $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
@@ -185,7 +184,6 @@ class html extends baseHTML
         foreach($options as $key => $value)
         {
             $optionPinyin = zget($convertedPinYin, $value, '');
-            $key      = str_replace('item', '', $key);
             $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
             $string  .= "<option value='$key'$selected title='{$value}' data-keys='{$optionPinyin}'>$value</option>\n";
         }

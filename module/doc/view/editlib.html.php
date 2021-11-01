@@ -25,7 +25,7 @@
       <?php echo $lib->type != 'book' ? $lang->doc->editLib : $lang->doc->editBook;?>
     </h2>
   </div>
-  <form method='post' target="hiddenwin">
+  <form method='post' class='load-indicator main-form form-ajax'>
     <table class='table table-form'>
       <?php if(!empty($lib->product)):?>
       <tr>

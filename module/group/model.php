@@ -157,6 +157,22 @@ class groupModel extends model
     }
 
     /**
+     * Get groups by accounts.
+     *
+     * @param  array  $accounts
+     * @access public
+     * @return array
+     */
+    public function getByAccounts($accounts)
+    {
+        return $this->dao->select('t1.account, t2.acl, t2.id')->from(TABLE_USERGROUP)->alias('t1')
+            ->leftJoin(TABLE_GROUP)->alias('t2')
+            ->on('t1.`group` = t2.id')
+            ->where('t1.account')->in($accounts)
+            ->fetchGroup('account');
+    }
+
+    /**
      * Get the account number in the group.
      *
      * @param  array  $groupIdList
@@ -365,17 +381,18 @@ class groupModel extends model
 
         /* Update whitelist. */
         $this->loadModel('personnel');
-        $users = $this->getUserPairs($groupID);
-        $users = array_keys($users);
+        $users       = $this->getUserPairs($groupID);
+        $users       = array_keys($users);
+        $objectTypes = array_reverse($this->config->group->acl->objectTypes); //Adjust the order of object types, because execution is subordinate to the whitelist of projects, as well as products to programs.
 
-        foreach($this->config->group->acl->objectTypes as $key => $objectType)
+        foreach($objectTypes as $key => $objectType)
         {
             $oldAcls        = isset($oldGroup->acl[$key]) ? $oldGroup->acl[$key] : array();
             $newAcls        = isset($actions[$key]) ? $actions[$key] : array();
             $needRemoveAcls = array_diff($oldAcls, $newAcls);
             $needAddAcls    = array_diff($newAcls, $oldAcls);
             foreach($needAddAcls as $objectID) $this->personnel->updateWhitelist($users, $objectType, $objectID, 'whitelist', 'sync', 'increase');
-            foreach($needRemoveAcls as $objectID) $this->personnel->deleteWhitelist($users, $objectType, $objectID);
+            foreach($needRemoveAcls as $objectID) $this->personnel->deleteWhitelist($users, $objectType, $objectID, $groupID);
         }
 
 
@@ -432,6 +449,23 @@ class groupModel extends model
                 $data->account = $account;
                 $data->group   = $groupID;
                 $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+            }
+        }
+
+        /* Update whitelist. */
+        $acl = $this->dao->select('acl')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('acl');
+        $acl = json_decode($acl);
+
+        $this->loadModel('personnel');
+        $objectTypes = array_reverse($this->config->group->acl->objectTypes); //Adjust the order of object types, because execution is subordinate to the whitelist of projects, as well as products to programs.
+
+        foreach($objectTypes as $key => $objectType)
+        {
+            if(!isset($acl->{$key})) continue;
+            foreach($acl->{$key} as $objectID)
+            {
+                $this->personnel->updateWhitelist($newUsers, $objectType, $objectID, 'whitelist', 'sync', 'increase');
+                $this->personnel->deleteWhitelist($delUsers, $objectType, $objectID, $groupID);
             }
         }
 

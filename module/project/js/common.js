@@ -37,6 +37,8 @@ function computeDaysDelta(date1, date2)
     date2 = convertStringToDate(date2);
     delta = (date2 - date1) / (1000 * 60 * 60 * 24) + 1;
 
+    if(isNaN(delta)) return;
+
     weekEnds = 0;
     for(i = 0; i < delta; i++)
     {

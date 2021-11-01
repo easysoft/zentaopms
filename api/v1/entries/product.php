@@ -78,7 +78,7 @@ class productEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $product = $this->product->getByID($productID);
-        $this->sendSuccess(200, $this->format($product, 'createdDate:time'));
+        $this->send(200, array('product' => $this->format($product, 'createdDate:time')));
     }
 
     /**

@@ -84,6 +84,7 @@ $lang->testreport->noTestTask     = "No test requests for this {$lang->productCo
 $lang->testreport->noObjectID     = "No test request or {$lang->executionCommon} is selected, so no report can be generated.";
 $lang->testreport->moreProduct    = "Testing reports can only be generated for the same {$lang->productCommon}.";
 $lang->testreport->hiddenCase     = "Hide %s use cases";
+$lang->testreport->goalTip        = "Descriptive information about the execution of this build";
 
 $lang->testreport->bugSummary = <<<EOD
 Total <strong>%s</strong> Bugs reported <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,

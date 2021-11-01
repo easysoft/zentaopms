@@ -86,7 +86,20 @@
           <?php endif;?>
         </td>
       </tr>
-     <tr>
+      <tr id='executionBox' style='display:none'>
+        <th class='text-right'><?php echo $lang->group->executionList;?></th>
+        <td>
+          <?php if($executions):?>
+          <div class='input-group'>
+            <?php echo html::select("actions[sprints][]", $executions, isset($group->acl['sprints']) ? join(',', $group->acl['sprints']) : '', "class='form-control chosen' drop_direction='down' multiple")?>
+            <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
+          </div>
+          <?php else:?>
+          <?php echo $lang->group->noneExecution;?>
+          <?php endif;?>
+        </td>
+      </tr>
+      <tr>
         <th class='text-right text-top'><?php echo $lang->group->dynamic?></th>
         <td class='pl-0px pt-0px'>
           <table class='table table-form'>

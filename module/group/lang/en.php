@@ -30,10 +30,12 @@ $lang->group->manageProject      = 'Manage Project';
 $lang->group->programList        = 'Access Program';
 $lang->group->productList        = 'Access Product';
 $lang->group->projectList        = 'Access Project';
+$lang->group->executionList      = "Access {$lang->execution->common}";
 $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Blank means no access limit.';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "No {$lang->productCommon}";
+$lang->group->noneExecution      = "No {$lang->execution->common}";
 $lang->group->project            = 'Project';
 $lang->group->group              = 'Group';
 
@@ -61,6 +63,7 @@ $lang->group->copyOptions['copyPriv'] = 'Copy Privileges';
 $lang->group->copyOptions['copyUser'] = 'Copy Users';
 
 $lang->group->versions['']          = 'History';
+$lang->group->versions['15_7']      = 'ZenTao15.7';
 $lang->group->versions['15_0_rc1']  = 'ZenTao15.0.rc1';
 $lang->group->versions['12_5']      = 'ZenTao12.5';
 $lang->group->versions['12_3']      = 'ZenTao12.3';

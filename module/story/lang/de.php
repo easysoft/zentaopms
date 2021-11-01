@@ -254,7 +254,7 @@ $lang->story->lblClose    = 'Close';
 $lang->story->lblTBC      = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Impact';
-$lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
+$lang->story->affectedProjects     = $config->systemMode == 'new' ? "{$lang->project->common}s/{$lang->execution->common}s" : "{$lang->project->common}s";
 $lang->story->affectedBugs         = 'Bug';
 $lang->story->affectedCases        = 'Fall';
 

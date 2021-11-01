@@ -83,6 +83,7 @@ $lang->testreport->noTestTask     = "Pas de campagne de test pour ce {$lang->pro
 $lang->testreport->noObjectID     = "Pas de campagne de test ou un {$lang->executionCommon} est sélectionné, aucun rapport ne peut être généré.";
 $lang->testreport->moreProduct    = "Les rapports de test ne peuvent être produits que pour le même {$lang->productCommon}.";
 $lang->testreport->hiddenCase     = "Hide %s use cases";
+$lang->testreport->goalTip        = "Descriptive information about the execution of this build";
 
 $lang->testreport->bugSummary = <<<EOD
 Total <strong>%s</strong> Bugs signalés <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,

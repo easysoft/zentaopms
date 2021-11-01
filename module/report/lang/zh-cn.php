@@ -107,8 +107,9 @@ $lang->report->mailTitle->task     = " 任务(%s),";
 $lang->report->mailTitle->todo     = " 待办(%s),";
 $lang->report->mailTitle->testTask = " 测试版本(%s),";
 
-$lang->report->proVersion   = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，尽在专业版！</a>';
-$lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->deviationDesc = '按照已关闭执行统计偏差率（偏差率 = (总消耗 - 总预计) / 总预计），总预计为0时偏差率为n/a。';
+$lang->report->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，尽在专业版！</a>';
+$lang->report->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s %s年工作汇总";

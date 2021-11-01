@@ -96,6 +96,14 @@ $(function()
     var highlight = function($e, callback)
     {
         $e = $e.first();
+        var ele      = $e[0];
+        var bounds   = ele.getBoundingClientRect();
+        var winWidth = $e.closest('body').outerWidth();
+        if(bounds.width < (winWidth / 2) && bounds.right > winWidth)
+        {
+            ele[ele.scrollIntoViewIfNeeded ? 'scrollIntoViewIfNeeded' : 'scrollIntoView']({behavior: 'instant', block: 'center'});
+        }
+
         $e.closest('body').find('.hl-tutorial').removeClass('hl-tutorial hl-in');
         $e.addClass('hl-tutorial').parent().css('overflow', 'visible');
         setTimeout(function() {$e.addClass('hl-in'); callback && callback()}, 50);
@@ -150,6 +158,16 @@ $(function()
     var showToolTip = function($e, text, options)
     {
         if(!$e.length) return;
+        var container = 'body';
+        var ele       = $e[0];
+        var bounds    = ele.getBoundingClientRect();
+        var winWidth  = $e.closest('body').outerWidth();
+        if(bounds.width < (winWidth / 2) && (bounds.right + bounds.width) >= winWidth)
+        {
+            ele[ele.scrollIntoViewIfNeeded ? 'scrollIntoViewIfNeeded' : 'scrollIntoView']({behavior: 'instant', block: 'center'});
+            container = null;
+        }
+
         $e.closest('body').find('.tooltip-tutorial').tooltip('destroy');
         var offset   = $e.offset();
         var winWidth = $(window).width();
@@ -172,7 +190,7 @@ $(function()
             trigger: 'manual',
             title: text,
             placement: placement,
-            container: 'body',
+            container: container,
             tipClass: 'tooltip-warning tooltip-max',
             html: true
         }, options);
