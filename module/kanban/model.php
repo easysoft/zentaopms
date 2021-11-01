@@ -96,6 +96,8 @@ class kanbanModel extends model
                     $objects  = zget($objectGroup, $lane->type, array());
                     $object   = zget($objects, $cardID, array());
 
+                    if(empty($object)) continue;
+
                     $cardData['id']         = $object->id;
                     $cardData['order']      = $cardOrder;
                     $cardData['pri']        = $object->pri ? $object->pri : '';
