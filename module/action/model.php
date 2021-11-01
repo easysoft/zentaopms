@@ -66,8 +66,6 @@ class actionModel extends model
         $action->product   = $relation['product'];
         $action->project   = (int)$relation['project'];
         $action->execution = (int)$relation['execution'];
-
-
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dbh->lastInsertID();
 
@@ -190,7 +188,7 @@ class actionModel extends model
             $fields = '*';
             if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
             if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project, execution';
-            if(strpos('case, repo', $objectType) !== false) $fields = 'execution';
+            if(strpos('case, repo, kanbanlane', $objectType) !== false) $fields = 'execution';
             if($objectType == 'release') $fields = 'product, build';
             if($objectType == 'task')    $fields = 'project, execution, story';
 
@@ -199,6 +197,7 @@ class actionModel extends model
             /* Process story, release and task. */
             if($objectType == 'story') $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
+            if($objectType == 'kanbanlane') $record->execution = $this->dao->select($fields)->from(TABLE_KANBANLANE)->where('id')->eq($objectID)->fetch('execution');
             if($objectType == 'team')
             {
                 $team   = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();

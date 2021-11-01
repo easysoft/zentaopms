@@ -168,6 +168,12 @@ class kanban extends control
 
         $this->kanban->updateLaneOrder($executionID, $currentType, $targetType);
 
+        if(!dao::isError())
+        {
+            $laneID = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->andWhere('type')->eq($currentType)->fetch('id');
+            $this->loadModel('action')->create('kanbanlane', $laneID, 'Moved', '', $executionID);
+        }
+
         die(js::locate($this->createLink('execution', 'kanban', 'executionID=' . $executionID . '&type=all'), 'parent'));
     }
 }
