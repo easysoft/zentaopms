@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = 'Verknüpfte Storys';
 $lang->productplan->unlinkedStories  = 'Unverknüpfte Storys';
 $lang->productplan->updateOrder      = 'Sortierung';
 $lang->productplan->createChildren   = "Create Child Plans";
-$lang->productplan->createExecution  = "Create Execution"
+$lang->productplan->createExecution  = "Create {$lang->execution->common}";
 
 $lang->productplan->linkBug          = "Bug Verknüpfen";
 $lang->productplan->unlinkBug        = "Bug Verknpfung aufheben";
@@ -61,7 +61,7 @@ $lang->productplan->future     = 'Wartend';
 $lang->productplan->stories    = 'Storys';
 $lang->productplan->bugs       = 'Bugs';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = "Execution";
+$lang->productplan->execution  = $lang->execution->common;
 $lang->productplan->parent     = "Parent Plan";
 $lang->productplan->parentAB   = "Parent";
 $lang->productplan->children   = "Child Plan";
