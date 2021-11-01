@@ -372,7 +372,10 @@ class groupModel extends model
             $dynamic = array();
             foreach($actions['actions'] as $moduleName => $moduleActions)
             {
-                if($moduleName != 'todo' and isset($actions['views']) and !in_array($this->lang->navGroup->$moduleName, $actions['views'])) continue;
+                $groupName = $moduleName;
+                if(isset($this->lang->navGroup->$moduleName)) $groupName = $this->lang->navGroup->$moduleName;
+                if($moduleName == 'case') $groupName = $this->lang->navGroup->testcase;
+                if($groupName != 'my' and isset($actions['views']) and !in_array($groupName, $actions['views'])) continue;
 
                 $dynamic[$moduleName] = $moduleActions;
             }
