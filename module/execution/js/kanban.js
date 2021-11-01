@@ -517,7 +517,7 @@ function createColumnCreateMenu(options)
     {
         if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
         if(priv.canBatchCreateStory) items.push({label: storyLang.batchCreate, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe'});
-        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '85%'}});
+        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
     }
     else if(col.laneType == 'bug')
