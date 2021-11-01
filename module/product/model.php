@@ -727,8 +727,13 @@ class productModel extends model
         $maxOrder = $maxOrder ? $maxOrder : 0;
         foreach($data->modules as $id => $name)
         {
-            if(!$name) continue;
-            if(!($this->config->systemMode == 'classic') and !$data->programs[$id]) continue;
+            if(empty($name)) continue;
+            if($this->config->systemMode == 'new' and empty($data->programs[$id]))
+            {
+                dao::$errors[] = $this->lang->product->programEmpty;
+                return false;
+            }
+
             $line->name  = strip_tags(trim($name));
             $line->root  = $data->programs[$id];
 

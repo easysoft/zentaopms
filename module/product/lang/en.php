@@ -85,6 +85,7 @@ $lang->product->programChangeTip     = "The projects linked with this {$lang->pr
 $lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
 $lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
 $lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
+$lang->product->programEmpty         = 'Program cannot be empty.';
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
