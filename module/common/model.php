@@ -361,9 +361,21 @@ class commonModel extends model
         $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
         $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
 
+        /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
-        $productID      = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
-        if(!$productID and $app->user->view->products) $productID = current(explode(',', $app->user->view->products));
+
+        /* Get default product id. */
+        $deletedProducts   = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '1'")->fetchAll();
+        $deletedProductIds = array();
+        foreach($deletedProducts as $product) $deletedProductIds[] = $product->id;
+
+        $productID = (isset($_SESSION['product']) and !in_array($_SESSION['product'], $deletedProductIds)) ? $_SESSION['product'] : 0;
+        if(!$productID and $app->user->view->products)
+        {
+            $viewProducts = explode(',', $app->user->view->products);
+            $viewProducts = array_diff($viewProducts, $deletedProductIds);
+            $productID    = current($viewProducts);
+        }
 
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)

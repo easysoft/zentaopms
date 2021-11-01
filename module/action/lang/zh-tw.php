@@ -11,19 +11,24 @@
  */
 global $config;
 
-$lang->action->common     = '系統日誌';
-$lang->action->product    = $lang->productCommon;
-$lang->action->project    = '項目';
-$lang->action->execution  = $lang->executionCommon;
-$lang->action->objectType = '對象類型';
-$lang->action->objectID   = '對象ID';
-$lang->action->objectName = '對象名稱';
-$lang->action->actor      = '操作者';
-$lang->action->action     = '動作';
-$lang->action->actionID   = '記錄ID';
-$lang->action->date       = '日期';
-$lang->action->extra      = '附加值';
-$lang->action->system     = '系統';
+$lang->action->common      = '系統日誌';
+$lang->action->id          = '編號';
+$lang->action->product     = $lang->productCommon;
+$lang->action->project     = '項目';
+$lang->action->execution   = $lang->executionCommon;
+$lang->action->objectType  = '對象類型';
+$lang->action->objectID    = '對象ID';
+$lang->action->objectName  = '對象名稱';
+$lang->action->actor       = '操作者';
+$lang->action->action      = '動作';
+$lang->action->actionID    = '記錄ID';
+$lang->action->date        = '日期';
+$lang->action->extra       = '附加值';
+$lang->action->system      = '系統';
+$lang->action->url         = '網址';
+$lang->action->contentType = '內容類型';
+$lang->action->data        = '數據';
+$lang->action->result      = '結果';
 
 $lang->action->trash       = '資源回收筒';
 $lang->action->undelete    = '還原';

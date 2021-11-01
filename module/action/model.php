@@ -864,8 +864,8 @@ class actionModel extends model
         }
         if($this->session->actionQuery == false) $this->session->set('actionQuery', ' 1 = 1');
 
-        $allProducts   = "`product`   = 'all'";
-        $allProjects   = "`project`   = 'all'";
+        $allProducts   = "`product` = 'all'";
+        $allProjects   = "`project` = 'all'";
         $allExecutions = "`execution` = 'all'";
         $actionQuery   = $this->session->actionQuery;
 

@@ -10,7 +10,7 @@
  * @link  http://www.zentao.net
  */
 /* Fields. */
-$lang->execution->allExecutions   = 'Tất cả ' . $lang->executionCommon;
+$lang->execution->allExecutions   = 'Tất cả ' . $lang->execution->common;
 $lang->execution->allExecutionAB  = 'Execution List';
 $lang->execution->id              = 'ID '.$lang->executionCommon;
 $lang->execution->type            = 'Loại';

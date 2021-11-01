@@ -98,6 +98,7 @@ $lang->story->source         = "來源";
 $lang->story->sourceNote     = '來源備註';
 $lang->story->fromBug        = '來源Bug';
 $lang->story->title          = "{$lang->SRCommon}名稱";
+$lang->story->type           = "需求類型";
 $lang->story->category       = "類型";
 $lang->story->color          = '標題顏色';
 $lang->story->toBug          = '轉Bug';

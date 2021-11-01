@@ -290,7 +290,7 @@ class testtask extends control
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         }
 
         /* When the session changes, you need to query the related products again. */

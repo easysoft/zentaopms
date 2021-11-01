@@ -49,7 +49,7 @@ class executionModel extends model
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
         if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('execution', 'index')));
 
-        die(js::locate('back'));
+        die(js::locate(helper::createLink('execution', 'all')));
     }
 
     /**
@@ -1180,6 +1180,8 @@ class executionModel extends model
      */
     public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false)
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionPairs();
+
         $project = $this->loadModel('project')->getByID($projectID);
         $orderBy = (isset($project->model) and $project->model == 'waterfall') ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 

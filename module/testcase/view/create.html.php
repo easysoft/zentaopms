@@ -15,6 +15,7 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
+<?php js::set('isonlybody', isonlybody());?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -80,7 +81,8 @@
                 <?php if($storyID == 0): ?>
                   <a href='' id='preview' class='btn hidden'><?php echo $lang->preview;?></a>
                 <?php else:?>
-                  <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn' id='preview'");?>
+                  <?php $class = isonlybody() ? "showinonlybody" : "iframe";?>
+                  <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn $class' id='preview'");?>
                 <?php endif;?>
                 </span>
               </div>

@@ -188,7 +188,7 @@ class build extends control
         if(!$build)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
         $this->session->project = $build->project;
 

@@ -12,7 +12,7 @@
 $lang->action->common     = 'Log';
 $lang->action->product    = $lang->productCommon;
 $lang->action->project    = 'Project';
-$lang->action->execution  = $lang->executionCommon;
+$lang->action->execution  = $lang->execution->common;
 $lang->action->objectType = 'Object Type';
 $lang->action->objectID   = 'ID';
 $lang->action->objectName = 'Objekt Name';

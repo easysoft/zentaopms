@@ -88,11 +88,11 @@ class api extends router
         }
         else
         {
-            $this->path = trim((strpos($_SERVER['REQUEST_URI'], '?') > 0 ? strstr($_SERVER['REQUEST_URI'], '?', true) : $_SERVER['REQUEST_URI']), '/');
+            $this->path = rtrim((strpos($_SERVER['REQUEST_URI'], '?') > 0 ? strstr($_SERVER['REQUEST_URI'], '?', true) : $_SERVER['REQUEST_URI']), '/');
         }
 
         $dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-        if($dir != '') $this->path = substr($this->path, strlen($dir));
+        if($dir != '' and strpos($this->path, $dir) === 0) $this->path = substr($this->path, strlen($dir));
 
         $subPos = strpos($this->path, '/', 1);
 

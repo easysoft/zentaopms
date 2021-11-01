@@ -1,5 +1,6 @@
 <?php
 $lang->testreport->common       = '測試報告';
+$lang->testreport->id           = '編號';
 $lang->testreport->browse       = '報告列表';
 $lang->testreport->create       = '創建報告';
 $lang->testreport->edit         = '編輯報告';

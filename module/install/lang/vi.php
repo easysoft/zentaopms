@@ -174,8 +174,10 @@ $lang->install->success  = "Đã được cài đặt!";
 $lang->install->login    = 'Đăng nhập ZenTao';
 $lang->install->register = 'Đăng ký cộng đồng ZenTao';
 
-$lang->install->joinZentao = <<<EOT
-<p>Bạn đã cài đặt ZenTao %s.<strong class='text-danger'> Vui lòng xóa install.php</strong>.</p><p>Chú ý: Để nhận tin tức mới nhất về ZenTao, vui lòng đăng ký trên Cộng đồng ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
+$lang->install->successLabel       = "<p>Bạn đã cài đặt ZenTao %s.</p>";
+$lang->install->successNoticeLabel = "<p>Bạn đã cài đặt ZenTao %s.<strong class='text-danger'> Vui lòng xóa install.php</strong>.</p>";
+$lang->install->joinZentao         = <<<EOT
+<p>Chú ý: Để nhận tin tức mới nhất về ZenTao, vui lòng đăng ký trên Cộng đồng ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');

@@ -907,7 +907,7 @@ class story extends control
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
-        if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$story) die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
         $story = $this->story->mergeReviewer($story, true);
 

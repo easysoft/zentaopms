@@ -633,7 +633,7 @@ class project extends control
         if(empty($project) || strpos('scrum,waterfall', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
         }
 
         $this->project->setMenu($projectID);
@@ -1544,10 +1544,12 @@ class project extends control
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
 
+            $url = $this->createLink('project', 'browse');
+
             if(empty($executionIdList))
             {
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-                die(js::reload('parent'));
+                die(js::locate($url, 'parent'));
             }
 
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
@@ -1557,7 +1559,7 @@ class project extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $this->session->set('project', '');
-            die(js::reload('parent'));
+            die(js::locate($url, 'parent'));
         }
     }
 

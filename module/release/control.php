@@ -160,7 +160,7 @@ class release extends control
     {
         $releaseID = (int)$releaseID;
         $release   = $this->release->getByID($releaseID, true);
-        if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$release) die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
