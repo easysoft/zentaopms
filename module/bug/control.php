@@ -403,8 +403,14 @@ class bug extends control
 
             if($this->app->tab == 'execution')
             {
-		if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList)) $location = $this->session->bugList;
-	        else $location = $this->createLink('execution', 'bug', "executionID=$executionID");
+	    	if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
+	        {
+		    $location = $this->session->bugList;
+		}
+		else
+		{
+	            $location = $this->createLink('execution', 'bug', "executionID=$executionID");
+		}
             }
             elseif($this->app->tab == 'project')
             {
