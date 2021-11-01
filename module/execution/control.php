@@ -1838,14 +1838,19 @@ class execution extends control
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
 
+        /* Load language. */
+        $this->app->loadLang('story');
+        $this->app->loadLang('task');
+        $this->app->loadLang('bug');
+
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType);
+        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
         if(empty($kanbanGroup))
         {
             $this->kanban->createLanes($executionID, $browseType, $groupBy);
-            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType);
+            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         }
 
         $this->execution->setMenu($executionID);
@@ -2404,6 +2409,8 @@ class execution extends control
         {
             $this->execution->linkStory($objectID);
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
+
+            if(isonlybody()) die(js::reload('parent'));
             die(js::locate($browseLink));
         }
 
@@ -3120,13 +3127,14 @@ class execution extends control
     /**
      * Import stories by plan.
      *
-     * @param int $executionID
-     * @param int $planID
-     * @param int $productID
+     * @param  int    $executionID
+     * @param  int    $planID
+     * @param  int    $productID
+     * @param  string $fromMethod
      * @access public
      * @return void
      */
-    public function importPlanStories($executionID, $planID, $productID = 0)
+    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story')
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
@@ -3161,7 +3169,7 @@ class execution extends control
             $param      = "projectID=$executionID";
         }
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
-        die(js::locate(helper::createLink($moduleName, 'story', $param), 'parent'));
+        die(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
 
     /**

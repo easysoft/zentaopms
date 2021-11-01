@@ -17,7 +17,7 @@ class kanbanModel extends model
      * Get Kanban by execution id.
      *
      * @param  int    $executionID
-     * @param  string $objectType all|story|bug|task
+     * @param  string $browseType all|story|bug|task
      * @param  string $groupBy
      * @access public
      * @return array
@@ -65,13 +65,13 @@ class kanbanModel extends model
         {
             $laneData   = array();
             $columnData = array();
-            $laneType   = $lane->type;
+            $laneType   = $groupBy == 'default' ? $lane->type : $lane->groupby;
 
-            $laneData['id']              = $laneType;
+            $laneData['id']              = $groupBy == 'default' ? $lane->type : $lane->groupby . '-' . $lane->extra;
             $laneData['name']            = $lane->name;
             $laneData['color']           = $lane->color;
             $laneData['order']           = $lane->order;
-            $laneData['defaultCardType'] = $laneType;
+            $laneData['defaultCardType'] = $lane->type;
 
             foreach($columns[$laneID] as $columnID => $column)
             {
@@ -81,7 +81,7 @@ class kanbanModel extends model
                 $columnData[$column->id]['name']       = $column->name;
                 $columnData[$column->id]['color']      = $column->color;
                 $columnData[$column->id]['limit']      = $column->limit;
-                $columnData[$column->id]['laneType']   = $laneType;
+                $columnData[$column->id]['laneType']   = $lane->type;
                 $columnData[$column->id]['asParent']   = $column->parent == -1 ? true : false;
 
                 if($column->parent > 0)
@@ -94,18 +94,18 @@ class kanbanModel extends model
                 foreach($cardIdList as $cardID)
                 {
                     $cardData = array();
-                    $objects  = zget($objectGroup, $laneType, array());
+                    $objects  = zget($objectGroup, $lane->type, array());
                     $object   = zget($objects, $cardID, array());
 
                     $cardData['id']         = $object->id;
                     $cardData['order']      = $cardOrder;
                     $cardData['pri']        = $object->pri ? $object->pri : '';
-                    $cardData['estimate']   = $laneType == 'bug' ? '' : $object->estimate;
+                    $cardData['estimate']   = $lane->type == 'bug' ? '' : $object->estimate;
                     $cardData['assignedTo'] = $object->assignedTo;
-                    $cardData['deadline']   = $laneType == 'task' ? $object->deadline : '';
-                    $cardData['severity']   = $laneType == 'bug' ? $object->severity : '';
+                    $cardData['deadline']   = $lane->type == 'task' ? $object->deadline : '';
+                    $cardData['severity']   = $lane->type == 'bug' ? $object->severity : '';
 
-                    if($laneType == 'task')
+                    if($lane->type == 'task')
                     {
                         $cardData['name'] = $object->name;
                     }
@@ -114,9 +114,9 @@ class kanbanModel extends model
                         $cardData['title'] = $object->title;
                     }
 
-                    if($laneType == 'story') $cardData['menus'] = $storyCardMenu[$object->id];
-                    if($laneType == 'bug')   $cardData['menus'] = $bugCardMenu[$object->id];
-                    if($laneType == 'task')  $cardData['menus'] = $taskCardMenu[$object->id];
+                    if($lane->type == 'story') $cardData['menus'] = $storyCardMenu[$object->id];
+                    if($lane->type == 'bug')   $cardData['menus'] = $bugCardMenu[$object->id];
+                    if($lane->type == 'task')  $cardData['menus'] = $taskCardMenu[$object->id];
 
                     $laneData['cards'][$column->type][] = $cardData;
                     $cardOrder ++;
@@ -127,7 +127,7 @@ class kanbanModel extends model
             $kanbanGroup[$laneType]['id']              = $laneType;
             $kanbanGroup[$laneType]['columns']         = array_values($columnData);
             $kanbanGroup[$laneType]['lanes'][]         = $laneData;
-            $kanbanGroup[$laneType]['defaultCardType'] = $laneType;
+            $kanbanGroup[$laneType]['defaultCardType'] = $lane->type;
         }
 
         return $kanbanGroup;
@@ -211,7 +211,8 @@ class kanbanModel extends model
                 $lane = new stdClass();
                 $lane->execution = $executionID;
                 $lane->type      = $type;
-                $lane->extra     = $groupBy;
+                $lane->groupby   = $groupBy;
+                $lane->extra     = $groupKey;
                 $lane->name      = $laneName;
                 $lane->color     = '#7ec5ff';
                 $lane->order     = $laneOrder;
@@ -309,7 +310,7 @@ class kanbanModel extends model
                         {
                             $data->cards .= $bugID . ',';
                         }
-                        elseif($bug->status == $bugStatus)
+                        elseif(strpos(',unconfirmed,confirmed,', $colType) === false and $bug->status == $bugStatus)
                         {
                             $data->cards .= $bugID . ',';
                         }
@@ -370,16 +371,18 @@ class kanbanModel extends model
             $stories = $this->loadModel('story')->getExecutionStories($executionID);
             foreach($stories as $storyID => $story)
             {
+                if($lane->groupby and $story->{$lane->groupby} != $lane->extra) continue;
+
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
                 {
                     if(strpos(',ready,develop,test,', $colType) !== false) continue;
                     if($colType == 'backlog' and $story->stage == $stage and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
                     {
-                        $cardPairs['backlog'] .= empty($cardPairs['backlog']) ? ',' . $storyID . ',' : $storyID . ',';
+                        $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
                     }
                     elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
                     {
-                        $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $storyID . ',' : $storyID . ',';
+                        $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
                     }
                     elseif($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
                     {
@@ -393,24 +396,26 @@ class kanbanModel extends model
             $bugs = $this->loadModel('bug')->getExecutionBugs($executionID);
             foreach($bugs as $bugID => $bug)
             {
+                if($lane->groupby and $bug->{$lane->groupby} != $lane->extra) continue;
+
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
                 {
                     if(strpos(',resolving,fixing,test,testing,tested,', $colType) !== false) continue;
                     if($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
                     {
-                        $cardPairs['unconfirmed'] .= empty($cardPairs['unconfirmed']) ? ',' . $bugID . ',' : $bugID . ',';
+                        $cardPairs['unconfirmed'] = empty($cardPairs['unconfirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['unconfirmed'];
                     }
                     elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
                     {
-                        $cardPairs['confirmed'] .= empty($cardPairs['confirmed']) ? ',' . $bugID . ',' : $bugID . ',';
+                        $cardPairs['confirmed'] = empty($cardPairs['confirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['confirmed'];
                     }
                     elseif($colType == 'fixed' and $bug->status == $status and strpos($cardPairs['fixed'], ",$bugID,") === false and strpos($cardPairs['testing'], ",$bugID,") === false and strpos($cardPairs['tested'], ",$bugID,") === false)
                     {
-                        $cardPairs['confirmed'] .= empty($cardPairs['confirmed']) ? ',' . $bugID . ',' : $bugID . ',';
+                        $cardPairs['confirmed'] = empty($cardPairs['confirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['confirmed'];
                     }
-                    elseif($bug->status == $status and strpos($cardPairs[$colType], ",$bugID,") === false)
+                    elseif($bug->status == 'closed' and strpos($cardPairs[$colType], ",$bugID,") === false)
                     {
-                        $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $bugID . ',' : $bugID . ',';
+                        $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$bugID," : ",$bugID". $cardPairs[$colType];
                     }
                     elseif($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
                     {
@@ -424,12 +429,14 @@ class kanbanModel extends model
             $tasks = $this->loadModel('execution')->getKanbanTasks($executionID);
             foreach($tasks as $taskID => $task)
             {
+                if($lane->groupby and $task->{$lane->groupby} != $lane->extra) continue;
+
                 foreach($this->config->kanban->taskColumnStatusList as $colType => $status)
                 {
                     if($colType == 'develop') continue;
                     if($task->status == $status and strpos($cardPairs[$colType], ",$taskID,") === false)
                     {
-                        $cardPairs[$colType] .= empty($cardPairs[$colType]) ? ',' . $taskID . ',' : $taskID . ',';
+                        $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$taskID," : ",$taskID". $cardPairs[$colType];
                     }
                     elseif($task->status != $status and strpos($cardPairs[$colType], ",$taskID,") !== false)
                     {

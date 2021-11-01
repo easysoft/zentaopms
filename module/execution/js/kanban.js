@@ -219,7 +219,12 @@ function renderHeaderCol($col, col, $header, kanban)
     if(!$col.children('.actions').length)
     {
         var $actions = $('<div class="actions" />');
-        if(col.type === 'backlog' || col.type === 'wait' || col.type == 'unconfirmed')
+        var printStoryButton =  printTaskButton = printBugButton = false;
+        if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlane) printStoryButton = true;
+        if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
+        if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
+
+        if((col.type === 'backlog' && printStoryButton) || (col.type === 'wait' && printTaskButton) || (col.type == 'unconfirmed' && printBugButton))
         {
             $actions.append([
                 '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
@@ -227,11 +232,12 @@ function renderHeaderCol($col, col, $header, kanban)
                 '</a>'
             ].join(''));
         }
+
         $actions.append([
-                '<a data-contextmenu="column" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
-                    '<i class="icon icon-ellipsis-v"></i>',
-                '</a>'
-            ].join(''));
+            '<a data-contextmenu="column" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+                '<i class="icon icon-ellipsis-v"></i>',
+            '</a>'
+        ].join(''));
         $actions.appendTo($col);
     }
 }
@@ -491,8 +497,8 @@ function createColumnMenu(options)
     var kanbanID = options.kanban;
 
 	var items = [];
-	if(priv.hasEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'})
-	if(priv.hasSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe'})
+	if(priv.hasEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
+	if(priv.hasSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
 	items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
     return items;
 }
@@ -509,20 +515,20 @@ function createColumnCreateMenu(options)
 
     if(col.laneType == 'story')
     {
-        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID)});
-        if(priv.canBatchCreateStory) items.push({label: storyLang.batchCreate, url: $.createLink('story', 'batchcreate', 'productID=' + productID)});
-        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID)});
+        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateStory) items.push({label: storyLang.batchCreate, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '85%'}});
         if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
     }
     else if(col.laneType == 'bug')
     {
-        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID)});
-        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID)});
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID, '', true), className: 'iframe'});
     }
     else
     {
-        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID)});
-        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID)});
+        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe'});
     }
     return items;
 }
@@ -687,9 +693,9 @@ $(function()
     }
 
     /* Init iframe modals */
-    $(document).on('click', '.iframe', function(event)
+    $(document).on('click', '#kanbans .iframe,.contextmenu-menu .iframe', function(event)
     {
-        $(this).modalTrigger({show: true, width: '500px'});
+        $(this).modalTrigger({show: true});
         event.preventDefault();
     });
 
@@ -720,31 +726,15 @@ $(function()
         var planID = $('#plan').val();
         if(planID)
         {
-            parent.location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID);
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
         }
     })
 });
 
-/**
- * Hide group menu.
- *
- * @access public
- * @return void
- */
-function hideGroupMenu()
-{
-    var type = $('#type').val();
-    if(type == 'all') $('.c-group').hide();
-}
-
 $('#type').change(function()
 {
     var type = $('#type').val();
-    if(type == 'all')
-    {
-        $('.c-group').hide();
-    }
-    else
+    if(type != 'all')
     {
         $('.c-group').show();
         $.get(createLink('execution', 'ajaxGetGroup', 'type=' + type), function(data)
