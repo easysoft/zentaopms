@@ -649,6 +649,9 @@ class bug extends control
             }
 
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+            /* If link from no head then reload. */
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('bug', 'browse', "productID={$productID}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc"), 'parent'));
         }
 
