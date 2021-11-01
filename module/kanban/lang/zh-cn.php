@@ -23,15 +23,15 @@ $lang->kanban->group->task['default']    = "默认方式";
 $lang->kanban->group->task['pri']        = "任务优先级";
 $lang->kanban->group->task['type']       = "任务类型";
 $lang->kanban->group->task['module']     = "任务所属模块";
-$lang->kanban->group->task['story']      = "{$lang->SRCommon}";
 $lang->kanban->group->task['assignedTo'] = "指派人员";
+$lang->kanban->group->task['story']      = "{$lang->SRCommon}";
 
 $lang->kanban->group->bug = array();
 $lang->kanban->group->bug['default']    = "默认方式";
 $lang->kanban->group->bug['pri']        = "Bug优先级";
-$lang->kanban->group->bug['type']       = "Bug类型";
-$lang->kanban->group->bug['module']     = "Bug模块";
 $lang->kanban->group->bug['severity']   = "Bug严重程度";
+$lang->kanban->group->bug['module']     = "Bug模块";
+$lang->kanban->group->bug['type']       = "Bug类型";
 $lang->kanban->group->bug['assignedTo'] = "指派人员";
 
 $lang->kanban->WIP                = 'WIP';
