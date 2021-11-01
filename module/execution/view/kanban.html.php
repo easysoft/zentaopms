@@ -64,6 +64,9 @@
     $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
     $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
     $canLinkStoryByPlane = ($productID and common::hasPriv('execution', 'importplanstories'));
+    $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane);
+    $hasTaskButton       = ($canCreateTask or $canBatchCreateTask);
+    $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
     ?>
     <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane):?>
     <div class='dropdown' id='createDropdown'>
@@ -73,10 +76,10 @@
         <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->story->batchCreate, '', "class='iframe'") . '</li>';?>
         <?php if($canLinkStory) echo '<li>' . html::a(helper::createLink('execution', 'linkStory', "execution=$execution->id", '', true), $lang->execution->linkStory, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStoryByPlane) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
-        <?php if(($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane) and ($canCreateTask or $canBatchCreateTask)) echo '<li class="divider"></li>';?>
+        <?php if($hasStoryButton and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->task->batchCreate, '', "class='iframe'") . '</li>';?>
-        <?php if(($canCreateTask or $canBatchCreateTask) and ($canCreateBug or $canBatchCreateBug)) echo '<li class="divider"></li>';?>
+        <?php if(($hasStoryButton or $hasTaskButton) and $hasBugButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe'") . '</li>';?>
         <?php if($canBatchCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=0&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';?>
       </ul>

@@ -68,6 +68,7 @@ class kanbanModel extends model
             $laneType   = $groupBy == 'default' ? $lane->type : $lane->groupby;
 
             $laneData['id']              = $groupBy == 'default' ? $lane->type : $lane->groupby . '-' . $lane->extra;
+            $laneData['laneID']          = $laneID;
             $laneData['name']            = $lane->name;
             $laneData['color']           = $lane->color;
             $laneData['order']           = $lane->order;
