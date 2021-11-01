@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = 'Verknüpfte Storys';
 $lang->productplan->unlinkedStories  = 'Unverknüpfte Storys';
 $lang->productplan->updateOrder      = 'Sortierung';
 $lang->productplan->createChildren   = "Create Child Plans";
-$lang->productplan->createExecution  = "Create {$lang->execution->common}"
+$lang->productplan->createExecution  = "Create {$lang->execution->common}";
 
 $lang->productplan->linkBug          = "Bug Verknüpfen";
 $lang->productplan->unlinkBug        = "Bug Verknpfung aufheben";
