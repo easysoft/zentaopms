@@ -183,12 +183,13 @@ class kanbanModel extends model
             }
 
             $objectPairs = array();
-            if($groupBy == 'module') $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetchPairs();
-            if($groupBy == 'story')  $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
-            if($groupBy == 'bug')    $objectPairs = $this->loadModel('user')->getPairs('noletter');
+            if($groupBy == 'module')     $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetchPairs();
+            if($groupBy == 'story')      $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
+            if($groupBy == 'assignedTo') $objectPairs = $this->loadModel('user')->getPairs('noletter');
 
-            $laneName  = '';
-            $laneOrder = 5;
+            $laneName   = '';
+            $laneOrder  = 5;
+            $colorIndex = 0;
             foreach($groupList as $groupKey)
             {
                 if($groupKey)
@@ -213,10 +214,12 @@ class kanbanModel extends model
                 $lane->groupby   = $groupBy;
                 $lane->extra     = $groupKey;
                 $lane->name      = $laneName;
-                $lane->color     = '#7ec5ff';
+                $lane->color     = $this->config->kanban->laneColorList[$colorIndex];
                 $lane->order     = $laneOrder;
 
-                $laneOrder += 5;
+                $laneOrder  += 5;
+                $colorIndex += 1;
+                if($colorIndex == 17) $colorIndex = 0;
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
                 $laneID = $this->dao->lastInsertId();
