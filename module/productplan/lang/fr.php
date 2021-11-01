@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = 'Stories Planifiées';
 $lang->productplan->unlinkedStories  = 'Stories non Planifiées';
 $lang->productplan->updateOrder      = 'Ordre';
 $lang->productplan->createChildren   = "Créer Sous-Plans";
-$lang->productplan->createExecution  = "Create Execution";
+$lang->productplan->createExecution  = "Create {$lang->execution->common}";
 
 $lang->productplan->linkBug          = "Planifier Bug";
 $lang->productplan->unlinkBug        = "Retirer Bug";
@@ -61,7 +61,7 @@ $lang->productplan->future     = 'A Définir';
 $lang->productplan->stories    = 'Story';
 $lang->productplan->bugs       = 'Bug';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = "Execution";
+$lang->productplan->execution  = $lang->execution->common;
 $lang->productplan->parent     = "Plan Parent";
 $lang->productplan->parentAB   = "Parent";
 $lang->productplan->children   = "Sous-Plan";

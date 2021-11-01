@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = 'Câu chuyện liên kết';
 $lang->productplan->unlinkedStories  = 'Câu chuyện chưa liên kết';
 $lang->productplan->updateOrder      = 'Sắp xếp';
 $lang->productplan->createChildren   = "Tạo kế hoạch con";
-$lang->productplan->createExecution  = "Create Execution";
+$lang->productplan->createExecution  = "Create {$lang->execution->common}";
 
 $lang->productplan->linkBug        = "Liên kết Bug";
 $lang->productplan->unlinkBug      = "Hủy liên kết Bug";
@@ -61,7 +61,7 @@ $lang->productplan->future     = 'TBD';
 $lang->productplan->stories    = 'Câu chuyện';
 $lang->productplan->bugs       = 'Bug';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = "Execution";
+$lang->productplan->execution  = $lang->execution->common;
 $lang->productplan->parent     = "Kế hoạch mẹ";
 $lang->productplan->parentAB   = "Mẹ";
 $lang->productplan->children   = "Kế hoạch con";
