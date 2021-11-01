@@ -1841,11 +1841,11 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType);
+        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
         if(empty($kanbanGroup))
         {
             $this->kanban->createLanes($executionID, $browseType, $groupBy);
-            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType);
+            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         }
 
         $this->execution->setMenu($executionID);

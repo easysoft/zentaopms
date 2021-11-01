@@ -116,6 +116,7 @@
 <?php js::set('productID', $productID);?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php js::set('browseType', $browseType);?>
+<?php js::set('groupBy', $groupBy);?>
 <?php
 js::set('priv',
     array(

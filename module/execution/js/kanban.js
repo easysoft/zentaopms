@@ -663,14 +663,22 @@ $(function()
     /* Hide group menu. */
     hideGroupMenu();
 
-    /* Create story kanban 创建需求看板 */
-    if(browseType == 'all' || browseType == 'story') createKanban('story', kanbanGroup.story, commonOptions);
+    if(groupBy == 'default')
+    {
+        /* Create story kanban 创建需求看板 */
+        if(browseType == 'all' || browseType == 'story') createKanban('story', kanbanGroup.story, commonOptions);
 
-    /* Create bug kanban 创建 Bug 看板 */
-    if(browseType == 'all' || browseType == 'bug') createKanban('bug', kanbanGroup.bug, commonOptions);
+        /* Create bug kanban 创建 Bug 看板 */
+        if(browseType == 'all' || browseType == 'bug') createKanban('bug', kanbanGroup.bug, commonOptions);
 
-    /* Create task kanban 创建 任务 看板 */
-    if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
+        /* Create task kanban 创建 任务 看板 */
+        if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
+    }
+    else
+    {
+        /* Create kanban by group. 分泳道创建看板. */
+        createKanban(browseType, kanbanGroup[groupBy], commonOptions);
+    }
 
     /* Init iframe modals */
     $(document).on('click', '.iframe', function(event)
