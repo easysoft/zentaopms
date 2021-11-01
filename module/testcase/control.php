@@ -1307,7 +1307,7 @@ class testcase extends control
             {
                 $cases   = array();
                 $orderBy = " ORDER BY " . str_replace(array('|', '^A', '_'), ' ', $orderBy);
-                $stmt    = $this->dbh->query($this->session->testcaseQueryCondition . $orderBy . ($this->post->limit ? ' LIMIT ' . $this->post->limit : ''));
+                $stmt    = $this->dao->query($this->session->testcaseQueryCondition . $orderBy . ($this->post->limit ? ' LIMIT ' . $this->post->limit : ''));
                 while($row = $stmt->fetch())
                 {
                     $caseID = isset($row->case) ? $row->case : $row->id;
@@ -1368,7 +1368,7 @@ class testcase extends control
                 $result = isset($results[$case->id]) ? $results[$case->id] : array();
 
                 $case->real = '';
-                if(!empty($result))
+                if(!empty($result) and !isset($relatedSteps[$case->id]))
                 {
                     $firstStep  = reset($result);
                     $case->real = $firstStep['real'];

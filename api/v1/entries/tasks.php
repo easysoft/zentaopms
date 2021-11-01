@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class tasksEntry extends entry 
+class tasksEntry extends entry
 {
     /**
      * GET method.
@@ -61,7 +61,7 @@ class tasksEntry extends entry
      */
     public function post($executionID)
     {
-        $fields = 'name,type,assignedTo,estimate,story,parent,execution,module,pri,desc,estStarted,deadline,mailto';
+        $fields = 'name,type,assignedTo,estimate,story,execution,project,module,pri,desc,estStarted,deadline,mailto,team,teamEstimate,multiple,uid';
         $this->batchSetPost($fields);
 
         $assignedTo = $this->request('assignedTo');
@@ -71,7 +71,7 @@ class tasksEntry extends entry
         $this->requireFields('name,assignedTo,type,estStarted,deadline');
 
         $control->create($executionID, $this->request('storyID', 0), $this->request('moduleID', 0), $this->request('copyTaskID', 0), $this->request('copyTodoID', 0));
-        
+
         $data = $this->getData();
         if(!isset($data->id)) return $this->sendError(400, $data->message);
 

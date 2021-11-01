@@ -5,6 +5,12 @@
 $routes = array();
 
 $routes['/tokens'] = 'tokens';
+$routes['/langs']  = 'langs';
+
+$routes['/tabs/:module'] = 'tabs';
+
+$routes['/files']     = 'files';
+$routes['/files/:id'] = 'file';
 
 $routes['/configurations']       = 'configs';
 $routes['/configurations/:name'] = 'config';
@@ -62,8 +68,10 @@ $routes['/projects/:projectID/issues'] = 'issues';
 $routes['/issues']                     = 'issues';
 $routes['/issues/:issueID']            = 'issue';
 
-$routes['/todos']     = 'todos';
-$routes['/todos/:id'] = 'todo';
+$routes['/todos']              = 'todos';
+$routes['/todos/:id']          = 'todo';
+$routes['/todos/:id/finish']   = 'todoFinish';
+$routes['/todos/:id/activate'] = 'todoActivate';
 
 $routes['/projects/:projectID/builds'] = 'builds';
 $routes['/builds']                     = 'builds';

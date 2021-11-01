@@ -145,14 +145,15 @@ class productModel extends model
      */
     public function saveState($productID, $products)
     {
-        if($productID > 0) $this->session->set('product', (int)$productID);
-        if($productID == 0 and $this->cookie->lastProduct)    $this->session->set('product', (int)$this->cookie->lastProduct);
-        if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
+        if($productID == 0 and $this->cookie->lastProduct)    $productID = $this->cookie->lastProduct;
+        if($productID == 0 and $this->session->product == '') $productID = key($products);
+        $this->session->set('product', (int)$productID, $this->app->tab);
+
         if(!isset($products[$this->session->product]))
         {
-            $product = $this->getById($productID);
-            if(empty($product)) $this->session->set('product', key($products));
-            if($productID && strpos(",{$this->app->user->view->products},", ",{$this->session->product},") === false) $this->accessDenied();
+            $productID = key($products);
+            $this->session->set('product', (int)$productID, $this->app->tab);
+            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false) $this->accessDenied();
         }
         if($this->cookie->preProductID != $productID)
         {

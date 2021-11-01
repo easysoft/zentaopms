@@ -186,8 +186,9 @@ $lang->user->personalData['createdIssues']       = '创建的问题数';
 $lang->user->personalData['resolvedIssues']      = '解决的问题数';
 $lang->user->personalData['createdDocs']         = '创建的文档数';
 
-$lang->user->keepLogin['on']      = '保持登录';
-$lang->user->loginWithDemoUser    = '使用demo帐号登录：';
+$lang->user->keepLogin['on']   = '保持登录';
+$lang->user->loginWithDemoUser = '使用demo帐号登录：';
+$lang->user->scanToLogin       = '扫一扫登录';
 
 $lang->user->tpl = new stdclass();
 $lang->user->tpl->type    = '类型';
@@ -199,12 +200,16 @@ $lang->usertpl = new stdclass();
 $lang->usertpl->title = '模板名称';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account     = '英文、数字和下划线的组合，三位以上';
-$lang->user->placeholder->password1   = '六位以上';
-$lang->user->placeholder->role        = '职位影响内容和用户列表的顺序。';
-$lang->user->placeholder->group       = '分组决定用户的权限列表。';
-$lang->user->placeholder->commiter    = '版本控制系统(subversion)中的帐号';
-$lang->user->placeholder->verify      = '请输入您的系统登录密码';
+$lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
+$lang->user->placeholder->password1 = '六位以上';
+$lang->user->placeholder->role      = '职位影响内容和用户列表的顺序。';
+$lang->user->placeholder->group     = '分组决定用户的权限列表。';
+$lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
+$lang->user->placeholder->verify    = '请输入您的系统登录密码';
+
+$lang->user->placeholder->loginPassword = '请输入密码';
+$lang->user->placeholder->loginAccount  = '请输入用户名';
+$lang->user->placeholder->loginUrl      = '请输入禅道系统网址';
 
 $lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
 $lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
@@ -219,6 +224,8 @@ $lang->user->error->reserved       = "【ID %s】的用户名已被系统预留"
 $lang->user->error->weakPassword   = "【ID %s】的密码强度小于系统设定。";
 $lang->user->error->dangerPassword = "【ID %s】的密码不能使用【%s】这些常用若口令。";
 
+$lang->user->error->url              = "网址不正确，请联系管理员";
+$lang->user->error->verify           = "用户名或密码错误";
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";
 $lang->user->error->originalPassword = "原密码不正确";
 $lang->user->error->companyEmpty     = "公司名称不能为空！";
@@ -267,16 +274,19 @@ $lang->user->process4DB  = "检测到您可能在使用一键安装包环境，�
 $lang->user->mkdirWin = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
-    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div> 
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
     <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
     </td></tr></table></body></html>
 EOT;
 $lang->user->mkdirLinux = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
-    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>  
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
     <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
     <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
     <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>
     </td></tr></table></body></html>
 EOT;
+
+$lang->user->zentaoapp = new stdclass();
+$lang->user->zentaoapp->logout = '退出登录';

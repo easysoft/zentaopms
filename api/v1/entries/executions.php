@@ -20,8 +20,10 @@ class executionsEntry extends entry
      */
     public function get($projectID = 0)
     {
+        $appendFields = $this->param('fields', '');
+
         $control = $this->loadController('execution', 'all');
-        $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+        $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
@@ -30,6 +32,7 @@ class executionsEntry extends entry
             $result = array();
             foreach($data->data->executionStats as $execution)
             {
+                $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,' . $appendFields);
                 $result[] = $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'executions' => $result));

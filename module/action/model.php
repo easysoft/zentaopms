@@ -69,7 +69,7 @@ class actionModel extends model
 
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
-        $actionID = $this->dbh->lastInsertID();
+        $actionID = $this->dao->lastInsertID();
 
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 

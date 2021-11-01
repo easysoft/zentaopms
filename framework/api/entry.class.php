@@ -486,6 +486,8 @@ class baseEntry
             $type    = $field[1];
             $isArray = false;
 
+            if(!isset($object->$key)) continue;
+
             $pos = strpos($type, ']');
             if($pos !== FALSE)
             {
@@ -517,6 +519,31 @@ class baseEntry
             }
             $object->$key = $value;
         }
+    }
+
+    /**
+     * Filter fields.
+     *
+     * @param  object $object
+     * @param  array  $filters
+     * @access public
+     * @return object
+     */
+    public function filterFields($object, $allowable = '')
+    {
+        if(empty($allowable)) return $object;
+        if(is_string($allowable)) $allowable = explode(',', $allowable);
+
+        $filtered = new stdclass();
+        foreach($allowable as $field)
+        {
+            $field = trim($field);
+            if(empty($field)) continue;
+            if(!isset($object->$field)) continue;
+            $filtered->$field = $object->$field;
+        }
+
+        return $filtered;
     }
 
     /**
