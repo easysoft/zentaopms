@@ -409,7 +409,7 @@ class bug extends control
 		else
 		{
 		    $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
-	            $location = $this->createLink('execution', 'bug', "executionID=$executionID");
+	            $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
 		}
             }
             elseif($this->app->tab == 'project')
