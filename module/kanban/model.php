@@ -611,24 +611,24 @@ class kanbanModel extends model
      * Change the order through the lane move up and down.
      *
      * @param  int     $executionID
-     * @param  string  $currentLane
-     * @param  string  $targetLane
+     * @param  string  $currentType
+     * @param  string  $targetType
      * @access public
      * @return void
      */
-    public function updateLaneOrder($executionID, $currentLane, $targetLane)
+    public function updateLaneOrder($executionID, $currentType, $targetType)
     {
         $orderList = $this->dao->select('id,type,`order`')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
-            ->andWhere('type')->in(array($currentLane, $targetLane))
+            ->andWhere('type')->in(array($currentType, $targetType))
             ->fetchAll('type');
 
-        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$targetLane]->order)
-            ->where('id')->eq($orderList[$currentLane]->id)
+        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$targetType]->order)
+            ->where('id')->eq($orderList[$currentType]->id)
             ->exec();
 
-        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$currentLane]->order)
-            ->where('id')->eq($orderList[$targetLane]->id)
+        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$currentType]->order)
+            ->where('id')->eq($orderList[$targetType]->id)
             ->exec();
     }
 

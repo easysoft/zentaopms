@@ -537,14 +537,16 @@ function createLaneMenu(options)
     var $kanban          = $lane.closest('.kanban');
     var lane             = $lane.data('lane');
     var kanbanID         = options.kanban;
-    var upTargetKanban   = !$kanban.prev('.kanban').length ? '' : $kanban.prev('.kanban').data('id');
-    var downTargetKanban = !$kanban.next('.kanban').length ? '' : $kanban.next('.kanban').data('id');
+    var upTargetKanban   = $kanban.prev('.kanban').length ? $kanban.prev('.kanban').data('id') : '';
+    var downTargetKanban = $kanban.next('.kanban').length ? $kanban.next('.kanban').data('id') : '';
+
     var items = [];
-    if(priv.hasSetLane)  items.push({label: setLaneLang, icon: 'edit', url: $.createLink('kanban', 'setLane', 'lane=' + lane.id + '&executionID=' + executionID), className: 'iframe'});
+    if(priv.hasSetLane)  items.push({label: kanbanLang.setLane, icon: 'edit', url: $.createLink('kanban', 'setLane', 'lane=' + lane.id + '&executionID=' + executionID), className: 'iframe'});
     if(priv.hasLaneMove) items.push(
-        {label: moveUpLang, icon: 'arrow-up', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + upTargetKanban), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
-        {label: moveDownLang, icon: 'arrow-down', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + downTargetKanban), className: 'iframe', disabled: !$kanban.next('.kanban').length}
+        {label: kanbanLang.moveUp, icon: 'arrow-up', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + upTargetKanban), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
+        {label: kanbanLang.moveDown, icon: 'arrow-down', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + downTargetKanban), className: 'iframe', disabled: !$kanban.next('.kanban').length}
     );
+
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
     return items;

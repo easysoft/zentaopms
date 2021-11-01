@@ -157,16 +157,16 @@ class kanban extends control
      * Change the order through the lane move up and down.
      *
      * @param  int     $executionID
-     * @param  string  $currentLane
-     * @param  string  $targetLane
+     * @param  string  $currentType
+     * @param  string  $targetType
      * @access public
      * @return void
      */
-    public function laneMove($executionID, $currentLane, $targetLane)
+    public function laneMove($executionID, $currentType, $targetType)
     {
-        if(empty($targetLane)) return false;
+        if(empty($targetType)) return false;
 
-        $this->kanban->updateLaneOrder($executionID, $currentLane, $targetLane);
+        $this->kanban->updateLaneOrder($executionID, $currentType, $targetType);
 
         die(js::locate($this->createLink('execution', 'kanban', 'executionID=' . $executionID . '&type=all'), 'parent'));
     }

@@ -142,7 +142,5 @@ js::set('priv',
 <?php js::set('editName', $lang->execution->editName);?>
 <?php js::set('setWIP', $lang->execution->setWIP);?>
 <?php js::set('sortColumn', $lang->execution->sortColumn);?>
-<?php js::set('setLaneLang', $lang->kanban->setLane);?>
-<?php js::set('moveUpLang', $lang->kanban->moveUp);?>
-<?php js::set('moveDownLang', $lang->kanban->moveDown);?>
+<?php js::set('kanbanLang', $lang->kanban);?>
 <?php include '../../common/view/footer.html.php';?>
