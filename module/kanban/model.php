@@ -27,8 +27,9 @@ class kanbanModel extends model
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)
-            ->beginIF($groupBy != 'default')->andWhere('extra')->eq($groupBy)
+            ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
+            ->beginIF($groupBy != 'default')->andWhere('extra')->eq($groupBy)->fi()
+            ->orderBy('order_asc')
             ->fetchAll('id');
 
         if(empty($lanes)) return array();
@@ -604,6 +605,31 @@ class kanbanModel extends model
 
         $changes = common::createChanges($column, $data);
         return $changes;
+    }
+
+    /**
+     * Change the order through the lane move up and down.
+     *
+     * @param  int     $executionID
+     * @param  string  $currentLane
+     * @param  string  $targetLane
+     * @access public
+     * @return void
+     */
+    public function updateLaneOrder($executionID, $currentLane, $targetLane)
+    {
+        $orderList = $this->dao->select('id,type,`order`')->from(TABLE_KANBANLANE)
+            ->where('execution')->eq($executionID)
+            ->andWhere('type')->in(array($currentLane, $targetLane))
+            ->fetchAll('type');
+
+        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$targetLane]->order)
+            ->where('id')->eq($orderList[$currentLane]->id)
+            ->exec();
+
+        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$currentLane]->order)
+            ->where('id')->eq($orderList[$targetLane]->id)
+            ->exec();
     }
 
     /**

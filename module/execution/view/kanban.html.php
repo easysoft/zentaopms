@@ -115,12 +115,15 @@
 <?php js::set('executionID', $executionID);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
+<?php js::set('kanbanList', array_keys($kanbanGroup));?>
 <?php js::set('browseType', $browseType);?>
 <?php
 js::set('priv',
     array(
         'hasEditName'         => common::hasPriv('kanban', 'setColumn'),
         'hasSetWIP'           => common::hasPriv('kanban', 'setWIP'),
+        'hasSetLane'          => common::hasPriv('kanban', 'setLane'),
+        'hasLaneMove'         => common::hasPriv('kanban', 'laneMove'),
         'canCreateTask'       => $canCreateTask,
         'canBatchCreateTask'  => $canBatchCreateTask,
         'canCreateBug'        => $canCreateBug,
@@ -139,4 +142,7 @@ js::set('priv',
 <?php js::set('editName', $lang->execution->editName);?>
 <?php js::set('setWIP', $lang->execution->setWIP);?>
 <?php js::set('sortColumn', $lang->execution->sortColumn);?>
+<?php js::set('setLaneLang', $lang->kanban->setLane);?>
+<?php js::set('moveUpLang', $lang->kanban->moveUp);?>
+<?php js::set('moveDownLang', $lang->kanban->moveDown);?>
 <?php include '../../common/view/footer.html.php';?>

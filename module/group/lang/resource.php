@@ -553,10 +553,12 @@ $lang->resource->kanban = new stdclass();
 $lang->resource->kanban->setLane   = 'setLane';
 $lang->resource->kanban->setColumn = 'setColumn';
 $lang->resource->kanban->setWIP    = 'setWIP';
+$lang->resource->kanban->laneMove  = 'laneMove';
 
-$lang->kanban->methodOrder[5]   = 'setLane';
-$lang->kanban->methodOrder[10]  = 'setColumn';
-$lang->kanban->methodOrder[15]  = 'setWIP';
+$lang->kanban->methodOrder[5]  = 'setLane';
+$lang->kanban->methodOrder[10] = 'setColumn';
+$lang->kanban->methodOrder[15] = 'setWIP';
+$lang->kanban->methodOrder[20] = 'laneMove';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();

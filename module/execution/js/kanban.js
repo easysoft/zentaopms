@@ -533,16 +533,18 @@ function createColumnCreateMenu(options)
  */
 function createLaneMenu(options)
 {
-    var $lane      = options.$trigger.closest('.kanban-lane');
-    var $kanban    = $lane.closest('.kanban');
-    var lane       = $lane.data('lane');
-    var kanbanID   = options.kanban;
-    var items =
-    [
-        {label: '泳道设置', icon: 'edit', url: $.createLink('kanban', 'laneedit', 'lane=' + lane.id + '&kanban=' + kanbanID), className: 'iframe'},
-        {label: '泳道上移', icon: 'arrow-up', url: $.createLink('kanban', 'lanemove', 'direction=up&lane=' + lane.id + '&kanban=' + kanbanID), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
-        {label: '泳道下移', icon: 'arrow-down', url: $.createLink('kanban', 'lanemove', 'direction=down&lane=' + lane.id + '&kanban=' + kanbanID), className: 'iframe', disabled: !$kanban.next('.kanban').length},
-    ];
+    var $lane            = options.$trigger.closest('.kanban-lane');
+    var $kanban          = $lane.closest('.kanban');
+    var lane             = $lane.data('lane');
+    var kanbanID         = options.kanban;
+    var upTargetKanban   = !$kanban.prev('.kanban').length ? '' : $kanban.prev('.kanban').data('id');
+    var downTargetKanban = !$kanban.next('.kanban').length ? '' : $kanban.next('.kanban').data('id');
+    var items = [];
+    if(priv.hasSetLane)  items.push({label: setLaneLang, icon: 'edit', url: $.createLink('kanban', 'setLane', 'lane=' + lane.id + '&executionID=' + executionID), className: 'iframe'});
+    if(priv.hasLaneMove) items.push(
+        {label: moveUpLang, icon: 'arrow-up', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + upTargetKanban), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
+        {label: moveDownLang, icon: 'arrow-down', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + downTargetKanban), className: 'iframe', disabled: !$kanban.next('.kanban').length}
+    );
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
     return items;
@@ -663,14 +665,16 @@ $(function()
     /* Hide group menu. */
     hideGroupMenu();
 
-    /* Create story kanban 创建需求看板 */
-    if(browseType == 'all' || browseType == 'story') createKanban('story', kanbanGroup.story, commonOptions);
+    /* Create kanban 创建看板 */
+    var kanbanLane = '';
+    for(var i in kanbanList)
+    {
+        if(kanbanList[i] == 'story') kanbanLane = kanbanGroup.story;
+        if(kanbanList[i] == 'bug')   kanbanLane = kanbanGroup.bug;
+        if(kanbanList[i] == 'task')  kanbanLane = kanbanGroup.task;
 
-    /* Create bug kanban 创建 Bug 看板 */
-    if(browseType == 'all' || browseType == 'bug') createKanban('bug', kanbanGroup.bug, commonOptions);
-
-    /* Create task kanban 创建 任务 看板 */
-    if(browseType == 'all' || browseType == 'task') createKanban('task', kanbanGroup.task, commonOptions);
+        if(browseType == kanbanList[i] || browseType == 'all') createKanban(kanbanList[i], kanbanLane, commonOptions);
+    }
 
     /* Init iframe modals */
     $(document).on('click', '.iframe', function(event)

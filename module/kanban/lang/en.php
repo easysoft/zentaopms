@@ -48,6 +48,9 @@ $lang->kanban->setColumn          = 'Column Settings';
 $lang->kanban->columnName         = 'Column Name';
 $lang->kanban->columnColor        = 'Column Color';
 $lang->kanban->noColumnUniqueName = 'The Kanban column name already exists.';
+$lang->kanban->moveUp             = 'Swimlane Up';
+$lang->kanban->moveDown           = 'Swimlane Down';
+$lang->kanban->laneMove           = 'Swimlane Sorting';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
