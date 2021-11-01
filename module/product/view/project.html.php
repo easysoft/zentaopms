@@ -32,12 +32,12 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->idAB;?></th>
-            <?php if($config->systemMode == 'new'):?>
-            <th class='c-program'><?php echo $lang->program->common;?></th>
-            <th><?php echo $lang->project->name;?></th>
-            <?php else:?>
-            <th><?php echo $lang->execution->name;?></th>
-            <?php endif;?>
+          <?php if($config->systemMode == 'new'):?>
+          <th class='c-program'><?php echo $lang->program->common;?></th>
+          <th><?php echo $lang->project->name;?></th>
+          <?php else:?>
+          <th><?php echo $lang->execution->name;?></th>
+          <?php endif;?>
           <th class='c-user text-left'><?php echo $lang->project->PM;?></th>
           <th class='c-date'><?php echo $lang->project->begin;?></th>
           <th class='c-date'><?php echo $lang->project->end;?></th>
