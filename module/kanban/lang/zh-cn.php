@@ -79,8 +79,8 @@ $lang->kanban->bugColumn['resolving']   = '解决中';
 $lang->kanban->bugColumn['fixing']      = '进行中';
 $lang->kanban->bugColumn['fixed']       = '完成';
 $lang->kanban->bugColumn['test']        = '测试';
-$lang->kanban->bugColumn['testing']     = '进行中';
-$lang->kanban->bugColumn['tested']      = '完成';
+$lang->kanban->bugColumn['testing']     = '测试中';
+$lang->kanban->bugColumn['tested']      = '测试完毕';
 $lang->kanban->bugColumn['closed']      = '已关闭';
 
 $lang->kanban->taskColumn = array();
