@@ -384,6 +384,7 @@ $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Settings";
 $lang->execution->resetKanban   = "Reset";
 $lang->execution->printKanban   = "Print";
+$lang->execution->fullScreen    = "Full Screen";
 $lang->execution->bugList       = "Bugs";
 
 $lang->execution->kanbanHideCols   = 'Closed & Cancelled Columns';
