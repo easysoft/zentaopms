@@ -988,7 +988,7 @@ class reportModel extends model
     }
 
     /**
-     * Get status vverview.
+     * Get status overview.
      *
      * @param  string $objectType
      * @param  array  $statusStat
@@ -1017,6 +1017,31 @@ class reportModel extends model
         $overview .= ' &nbsp; ' . $undoneCount;
 
         return $overview;
+    }
+
+    /**
+     * Get project status overview.
+     *
+     * @param  array  $accounts
+     * @access public
+     * @return array
+     */
+    public function getProjectStatusOverview($accounts = array())
+    {
+        $projectStatus = $this->dao->select('t1.id,t1.status')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.id=t2.root && t2.type='project'")
+            ->where('t1.type')->eq('project')
+            ->beginIF(!empty($accounts))->where('t2.account')->in($accounts)->fi()
+            ->fetchPairs('id', 'status');
+
+        $statusOverview = array();
+        foreach($projectStatus as $projectID => $status)
+        {
+            if(!isset($statusOverview[$status])) $statusOverview[$status] = 0;
+            $statusOverview[$status] ++;
+        }
+
+        return $statusOverview;
     }
 }
 
