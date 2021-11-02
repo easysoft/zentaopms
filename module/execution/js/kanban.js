@@ -59,7 +59,7 @@ function renderStoryItem(item, $item, col)
     if(!$title.length)
     {
         $title = $('<a class="title iframe"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('story', 'view', 'storyID=' + item.id));
+                .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
         $title.appendTo($item);
     }
     $title.attr('title', item.title).find('.text').text(item.title);
@@ -107,7 +107,7 @@ function renderBugItem(item, $item, col)
     if(!$title.length)
     {
         $title = $('<a class="title iframe"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id));
+                .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true));
         $title.appendTo($item);
     }
     $title.attr('title', item.title).find('.text').text(item.title);
@@ -156,7 +156,7 @@ function renderTaskItem(item, $item, col)
     if(!$title.length)
     {
         $title = $('<a class="title iframe"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('task', 'view', 'taskID=' + item.id));
+                .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
         $title.appendTo($item);
     }
     $title.attr('title', item.name).find('.text').text(item.name);
@@ -256,7 +256,7 @@ function renderHeaderCol($col, col, $header, kanban)
  */
 function renderLaneName($name, lane, $kanban, columns, kanban)
 {
-    if(!$name.children('.actions').length)
+    if(!$name.children('.actions').length && (priv.hasSetLane || priv.hasLaneMove))
     {
         $([
             '<div class="actions" title="' + kanbanLang.moreAction + '">',
