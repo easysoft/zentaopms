@@ -40,6 +40,7 @@ class kanbanModel extends model
         $columns = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq(0)
             ->andWhere('lane')->in(array_keys($lanes))
+            ->orderBy('id_asc')
             ->fetchGroup('lane', 'id');
 
         /* Get parent column type pairs. */
