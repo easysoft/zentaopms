@@ -92,9 +92,6 @@
 </div>
 
 <div class='panel' id='kanbanContainer'>
-  <div class='panel-heading'>
-    <strong>Section</strong>
-  </div>
   <div class='panel-body'>
     <div id='kanbans'></div>
   </div>
