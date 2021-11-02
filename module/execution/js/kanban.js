@@ -34,14 +34,15 @@ function renderDeadline(deadline)
 {
     if(deadline == '0000-00-00') return;
 
-    var date  = $.zui.createDate(deadline);
-    var now   = new Date();
+    var date = $.zui.createDate(deadline);
+    var now  = new Date();
     now.setHours(0);
     now.setMinutes(0);
     now.setSeconds(0);
     now.setMilliseconds(0);
     var isEarlyThanToday = date.getTime() < now.getTime();
-    var deadlineDate = $.zui.formatDate(date, 'MM-dd')
+    var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
+
     return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(isEarlyThanToday ? 'text-red' : 'text-muted');
 }
 
