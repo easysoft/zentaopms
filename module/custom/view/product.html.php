@@ -21,7 +21,7 @@
           <label class="radio-inline"><input type="radio" name="product" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="product<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>
         </td>
-        <td><span class='alert alert-info no-margin'><?php echo $lang->custom->notice->readOnlyOfProduct;?></span></td>
+        <td><div class='alert alert-info no-margin'><?php echo $lang->custom->notice->readOnlyOfProduct;?></div></td>
       </tr>
       <tr>
         <th></th>
