@@ -13,13 +13,22 @@ function renderUserAvatar(user, objectType, objectID)
 {
     if(typeof user === 'string') user = {account: user};
     if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+
+    var $noPrivAvatar = $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
     if(objectType == 'task')
     {
+        if(!priv.canAssignTask) return $noPrivAvatar;
         var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
     }
-    else
+    else if(objectType == 'story')
     {
-        var link = createLink(objectType, 'assignto', 'id=' + objectID, '', true);
+        if(!priv.canAssignStory) return $noPrivAvatar;
+        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+    }
+    else if(objectType == 'bug')
+    {
+        if(!priv.canAssignBug) return $noPrivAvatar;
+        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
     }
 
     return $('<a class="avatar has-text avatar-sm avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
