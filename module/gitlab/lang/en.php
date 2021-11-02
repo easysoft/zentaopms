@@ -15,7 +15,7 @@ $lang->gitlab->gitlabAccount = 'GitLab Account';
 $lang->gitlab->zentaoAccount = 'Zentao Account';
 $lang->gitlab->bindingStatus = 'Binding Status';
 $lang->gitlab->binded        = 'Binded';
-$lang->gitlab->serverFail    = 'Conntect to GitLab server failed, please check the GitLab server.';
+$lang->gitlab->serverFail    = 'Connect to GitLab server failed, please check the GitLab server.';
 
 $lang->gitlab->browseAction  = 'GitLab List';
 $lang->gitlab->deleteAction  = 'Delete GitLab';

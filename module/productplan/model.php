@@ -332,6 +332,18 @@ class productplanModel extends model
             ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
             ->remove('delta,uid,future')
             ->get();
+
+        if(!empty($plan->parentBegin))
+        {
+            if($plan->begin < $plan->parentBegin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $plan->parentBegin);
+        }
+        if(!empty($plan->parentEnd))
+        {
+            if($plan->end !=='2030-01-01' and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
+        }
+        unset($plan->parentBegin);
+        unset($plan->parentEnd);
+
         if(!$this->post->future and strpos($this->config->productplan->create->requiredFields, 'begin') !== false and empty($_POST['begin']))
         {
             dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);

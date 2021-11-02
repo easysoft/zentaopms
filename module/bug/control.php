@@ -402,7 +402,15 @@ class bug extends control
 
             if($this->app->tab == 'execution')
             {
-                $location = $this->session->bugList ? $this->session->bugList : $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
+	    	if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
+	        {
+		    $location = $this->session->bugList;
+		}
+		else
+		{
+		    $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
+	            $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
+		}
             }
             elseif($this->app->tab == 'project')
             {

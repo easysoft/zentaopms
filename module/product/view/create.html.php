@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', false);?>
+<?php js::set('programID', $programID);?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
@@ -32,7 +33,7 @@
             <?php if($config->systemMode == 'classic' or $programID):?>
             <td>
               <div class='input-group'>
-                <?php echo html::select("line", $lines, '', "class='form-control hidden line-exist'");?>
+                <?php echo html::select("line", $lines, '', "class='form-control hidden line-exist chosen'");?>
                 <?php echo html::input("lineName", '', "class='form-control line-no-exist'");?>
                 <?php if(count($lines)):?>
                 <span class='input-group-addon'>
@@ -54,19 +55,19 @@
           </tr>
           <tr>
             <th><?php echo $lang->product->code;?></th>
-            <td><?php echo html::input('code', '', "class='form-control' required");?></td><td></td>
+            <td><?php echo html::input('code', '', "class='form-control' required");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->PO;?></th>
-            <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td><td></td>
+            <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->QD;?></th>
-            <td><?php echo html::select('QD', $qdUsers, '', "class='form-control chosen'");?></td><td></td>
+            <td><?php echo html::select('QD', $qdUsers, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->RD;?></th>
-            <td><?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?></td><td></td>
+            <td><?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->type;?></th>
