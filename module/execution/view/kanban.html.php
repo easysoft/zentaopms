@@ -148,4 +148,5 @@ js::set('priv',
 <?php js::set('setWIP', $lang->execution->setWIP);?>
 <?php js::set('sortColumn', $lang->execution->sortColumn);?>
 <?php js::set('kanbanLang', $lang->kanban);?>
+<?php js::set('deadlineLang', $lang->task->deadlineAB);?>
 <?php include '../../common/view/footer.html.php';?>

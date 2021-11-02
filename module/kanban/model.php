@@ -105,7 +105,7 @@ class kanbanModel extends model
                     $cardData['pri']        = $object->pri ? $object->pri : '';
                     $cardData['estimate']   = $lane->type == 'bug' ? '' : $object->estimate;
                     $cardData['assignedTo'] = $object->assignedTo;
-                    $cardData['deadline']   = $lane->type == 'task' ? $object->deadline : '';
+                    $cardData['deadline']   = $lane->type == 'story' ? '' : $object->deadline;
                     $cardData['severity']   = $lane->type == 'bug' ? $object->severity : '';
 
                     if($lane->type == 'task')
