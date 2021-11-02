@@ -1831,10 +1831,10 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = 'default')
+    public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
         if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
-        if($groupBy == 'default') $groupBy = $this->session->kanbanGroupBy ? $this->session->kanbanGroupBy : 'default';
+        if(empty($groupBy))    $groupBy    = $this->session->kanbanGroupBy ? $this->session->kanbanGroupBy : 'default';
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
