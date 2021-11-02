@@ -77,10 +77,11 @@ class kanban extends control
      * Set lane column info.
      *
      * @param  int $columnID
+     * @param  int $executionID
      * @access public
      * @return void
      */
-    public function setColumn($columnID)
+    public function setColumn($columnID, $executionID = 0)
     {
         $column = $this->kanban->getColumnById($columnID);
 
@@ -97,7 +98,7 @@ class kanban extends control
             if(dao::isError()) return $this->sendError(dao::getError());
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited');
+                $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited', '', $executionID);
                 $this->action->logHistory($actionID, $changes);
             }
 

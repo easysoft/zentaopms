@@ -1176,7 +1176,7 @@ class actionModel extends model
                     $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
                     $params = sprintf($vars, $api->lib, $api->module, $api->id);
                 }
-                elseif($action->objectType == 'kanbancoloumn' or $action->objectType == 'kanbanlane')
+                elseif($action->objectType == 'kanbancolumn' or $action->objectType == 'kanbanlane')
                 {
                     $params = sprintf($vars, $action->extra);
                 }
