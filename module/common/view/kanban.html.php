@@ -367,11 +367,12 @@ function affixKanbanHeader($kanbanBoard, affixed)
  */
 function updateKanbanAffixState()
 {
-    var $boards = $('.kanban-board');
+    var $boards           = $('.kanban-board');
     var $lastAffixedBoard = $boards.filter('.kanban-affixed');
     var $currentAffixedBoard;
     var currentOffsetTop = 0;
     var scrollTop = $(window).scrollTop();
+
     $('.kanban-board').each(function()
     {
         var $board = $(this);
@@ -399,7 +400,6 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
     readonly: true,
     maxColHeight: 260,
-    /* laneItemsClass: 'scrollbar-hover', */ // only show scrollbar on mouse hover
     itemRender: renderKanbanItem,
     useFlex: false,
     showCount: false,
