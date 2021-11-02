@@ -125,10 +125,10 @@
 <?php
 js::set('priv',
     array(
-        'hasEditName'         => common::hasPriv('kanban', 'setColumn'),
-        'hasSetWIP'           => common::hasPriv('kanban', 'setWIP'),
-        'hasSetLane'          => common::hasPriv('kanban', 'setLane'),
-        'hasLaneMove'         => common::hasPriv('kanban', 'laneMove'),
+        'canEditName'         => common::hasPriv('kanban', 'setColumn'),
+        'canSetWIP'           => common::hasPriv('kanban', 'setWIP'),
+        'canSetLane'          => common::hasPriv('kanban', 'setLane'),
+        'canLaneMove'         => common::hasPriv('kanban', 'laneMove'),
         'canCreateTask'       => $canCreateTask,
         'canBatchCreateTask'  => $canBatchCreateTask,
         'canCreateBug'        => $canCreateBug,
