@@ -238,7 +238,7 @@ function renderHeaderCol($col, col, $header, kanban)
         }
 
         $actions.append([
-            '<a data-contextmenu="column" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+            '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
                 '<i class="icon icon-ellipsis-v"></i>',
             '</a>'
         ].join(''));
@@ -259,7 +259,7 @@ function renderLaneName($name, lane, $kanban, columns, kanban)
     if(!$name.children('.actions').length)
     {
         $([
-            '<div class="actions">',
+            '<div class="actions" title="' + kanbanLang.moreAction + '">',
                 '<a data-contextmenu="lane" data-lane="' + lane.id + '" data-kanban="' + kanban.id + '">',
                     '<i class="icon icon-ellipsis-v"></i>',
                 '</a>',
