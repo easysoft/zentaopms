@@ -134,6 +134,9 @@ js::set('priv',
         'canBatchCreateStory' => $canBatchCreateStory,
         'canLinkStory'        => $canLinkStory,
         'canLinkStoryByPlane' => $canLinkStoryByPlane,
+        'canAssignTask'       => common::hasPriv('task', 'assignto'),
+        'canAssignStory'      => common::hasPriv('story', 'assignto'),
+        'canAssignBug'        => common::hasPriv('bug', 'assignto')
     )
 );
 ?>
