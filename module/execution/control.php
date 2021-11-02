@@ -1831,16 +1831,17 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = 'default')
+    public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
-        if($browseType == '' and $this->session->kanbanType)  $browseType = $this->session->kanbanType;
-        if($browseType == '' and !$this->session->kanbanType) $browseType = 'all';
+        if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
+        if(empty($groupBy))    $groupBy    = $this->session->kanbanGroupBy ? $this->session->kanbanGroupBy : 'default';
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
         $this->app->session->set('kanbanType', $browseType, 'execution');
+        $this->app->session->set('kanbanGroupBy', $groupBy, 'execution');
 
         /* Load language. */
         $this->app->loadLang('story');
