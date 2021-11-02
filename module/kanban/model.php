@@ -219,7 +219,7 @@ class kanbanModel extends model
 
                 $laneOrder  += 5;
                 $colorIndex += 1;
-                if($colorIndex == 17) $colorIndex = 0;
+                if($colorIndex == count($this->config->kanban->laneColorList) + 1) $colorIndex = 0;
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
                 $laneID = $this->dao->lastInsertId();
