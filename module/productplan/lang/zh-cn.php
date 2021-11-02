@@ -85,7 +85,6 @@ $lang->productplan->beginGeEnd        = 'ID %s 开始时间不能大于结束时
 $lang->productplan->beginLetterParent = "父计划的开始日期：%s，开始日期不能小于父计划的开始日期";
 $lang->productplan->endGreaterParent  = "父计划的完成日期：%s，完成日期不能大于父计划的完成日期";
 
-
 $lang->productplan->featureBar['browse']['all']       = '全部';
 $lang->productplan->featureBar['browse']['unexpired'] = '未过期';
 $lang->productplan->featureBar['browse']['overdue']   = '已过期';

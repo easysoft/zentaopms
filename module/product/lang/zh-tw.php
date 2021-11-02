@@ -85,6 +85,7 @@ $lang->product->programChangeTip     = "如下項目只關聯了該{$lang->produ
 $lang->product->notChangeProgramTip  = "該{$lang->productCommon}的{$lang->SRCommon}已經關聯到如下項目，請取消關聯後再操作";
 $lang->product->confirmChangeProgram = "如下項目既關聯了該{$lang->productCommon}又關聯了其他{$lang->productCommon}，請確認是否繼續關聯該{$lang->productCommon}，勾選後將取消與其他{$lang->productCommon}的關聯關係，同時轉移至新項目集下。";
 $lang->product->changeProgramError   = "該{$lang->productCommon}的{$lang->SRCommon}已經關聯到項目，請取消關聯後再操作";
+$lang->product->programEmpty         = '項目集不能為空';
 
 $lang->product->id             = '編號';
 $lang->product->program        = "所屬項目集";

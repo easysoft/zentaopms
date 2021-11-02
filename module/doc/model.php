@@ -48,9 +48,7 @@ class docModel extends model
             ->andWhere('type')->eq('api')
             ->orderBy('id_desc')
             ->fetchAll('id');
-        $libs = array_filter($libs, function ($value) {
-            return $this->checkPrivLib($value);
-        });
+        $libs = array_filter($libs, array($this, 'checkPrivLib'));
         return $libs;
     }
 
@@ -2393,7 +2391,7 @@ EOT;
 
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
 
-        $class = ['catalog'];
+        $class = array('catalog');
         if($treeMenu[$module->id])
         {
             array_push($class, 'closed');
