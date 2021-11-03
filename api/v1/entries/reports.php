@@ -62,6 +62,32 @@ class reportsEntry extends entry
 
                 $report['projectOverview'] = $projectOverview;
             }
+            elseif($field == 'radar')
+            {
+                $allAccounts      = $this->loadModel('user')->getPairs('noletter|noclosed');
+                $radarData        = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
+                $contributions    = $this->report->getUserYearContributions(empty($accounts) ? array_keys($allAccounts) : $accounts, $year);
+                $annualDataConfig = $this->config->report->annualData;
+
+                foreach($contributions as $objectType => $objectContributions)
+                {
+                    foreach($objectContributions as $actionName => $count)
+                    {
+                        $radarTypes = isset($annualDataConfig['radar'][$objectType][$actionName]) ? $annualDataConfig['radar'][$objectType][$actionName] : array('other');
+                        foreach($radarTypes as $radarType) $radarData[$radarType] += $count;
+                    }
+                }
+
+                $radar = array();
+                foreach($radarData as $radarType => $total)
+                {
+                    $radar[$radarType]['code']  = $radarType;
+                    $radar[$radarType]['name']  = $this->lang->report->annualData->radarItems[$radarType];
+                    $radar[$radarType]['total'] = $total;
+                }
+
+                $report['radar'] = array_values($radar);
+            }
         }
 
         return $this->send(200, $report);

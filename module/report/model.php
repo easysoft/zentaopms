@@ -567,18 +567,40 @@ class reportModel extends model
      */
     public function getUserYearContributions($accounts, $year)
     {
-        $actionGroups = array();
-        foreach($this->config->report->annualData['contributions'] as $objectType => $actions)
+        $stmt = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('LEFT(date, 4)')->eq($year)
+            ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributions']))
+            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+            ->orderBy('objectType,objectID,id')
+            ->query();
+
+        $filterActions = array();
+        $deletedObject = array();
+        while($action = $stmt->fetch())
         {
-            $table = $this->config->objectTables[$objectType];
-            $actionGroups[$objectType] = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin($table)->alias('t2')->on("t1.objectType='$objectType' && t1.objectID=t2.id")
-            ->where('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t1.objectType')->eq($objectType)
-            ->andWhere('t1.action')->in(array_keys($actions))
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
-            ->fetchAll('id');
+            $objectType  = $action->objectType;
+            $objectID    = $action->objectID;
+            $lowerAction = strtolower($action->action);
+            if(!isset($this->config->report->annualData['contributions'][$objectType][$lowerAction])) continue;
+
+            if($action->action == 'deleted')   $deletedObject[$objectType][$objectID] = $objectID;
+            if($action->action == 'undeleted') unset($deletedObject[$objectType][$objectID]);
+
+            $filterActions[$objectType][$objectID][$action->id] = $action;
+        }
+
+        foreach($deletedObject as $objectType => $idList)
+        {
+            foreach($idList as $id) unset($filterActions[$objectType][$id]);
+        }
+
+        $actionGroups = array();
+        foreach($filterActions as $objectType => $objectActions)
+        {
+            foreach($objectActions as $objectID => $actions)
+            {
+                foreach($actions as $action) $actionGroups[$objectType][$action->id] = $action;
+            }
         }
 
         $contributions = array();
@@ -587,9 +609,7 @@ class reportModel extends model
             foreach($actions as $action)
             {
                 $lowerAction = strtolower($action->action);
-                if(!isset($this->config->report->annualData['contributions'][$objectType][$lowerAction])) continue;
-
-                $actionName = $this->config->report->annualData['contributions'][$objectType][$lowerAction];
+                $actionName  = $this->config->report->annualData['contributions'][$objectType][$lowerAction];
 
                 $type = ($actionName == 'svnCommit' or $actionName == 'gitCommit') ? 'repo' : $objectType;
                 if(!isset($contributions[$type][$actionName])) $contributions[$type][$actionName] = 0;
@@ -1030,8 +1050,8 @@ class reportModel extends model
     {
         $projectStatus = $this->dao->select('t1.id,t1.status')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.id=t2.root && t2.type='project'")
-            ->where('t1.type')->eq('project')
-            ->beginIF(!empty($accounts))->where('t2.account')->in($accounts)->fi()
+            ->where('t1.type')->in($this->config->systemMode == 'classic' ? 'sprint,stage' : 'project')
+            ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
             ->fetchPairs('id', 'status');
 
         $statusOverview = array();
