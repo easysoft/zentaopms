@@ -21,6 +21,8 @@
 <?php js::set('confirmUnlinkStory', $lang->execution->confirmUnlinkStory)?>
 <?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
 <?php js::set('workingHourError', sprintf($this->lang->error->notempty, $this->lang->workingHour))?>
+<?php js::set('linkedTaskStories', $linkedTaskStories);?>
+<?php js::set('confirmStoryToTask', $lang->execution->confirmStoryToTask);?>
 <style>
 .btn-group a i.icon-plus, .btn-group a i.icon-link {font-size: 16px;}
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}

@@ -32,12 +32,38 @@ $(function()
     /* Get checked stories. */
     $('#batchToTaskButton').on('click', function()
     {
-        var storyIdList = '';
+        var storyIdList     = '';
+        var linedTaskIdList = '';
+        var unlinTaskIdList = '';
         $("input[name^='storyIdList']:checked").each(function()
         {
+            if(linkedTaskStories[$(this).val()])
+            {
+                linedTaskIdList += '[' + $(this).val() +']';
+            }
+            else
+            {
+                unlinTaskIdList += $(this).val() + ',';
+            }
             storyIdList += $(this).val() + ',';
-            $('#storyIdList').val(storyIdList);
         });
+
+        if(linedTaskIdList)
+        {
+            confirmStoryToTask = confirmStoryToTask.replace('%s', linedTaskIdList);
+            if(confirm(confirmStoryToTask))
+            {
+                $('#storyIdList').val(storyIdList);
+            }
+            else
+            {
+                $('#storyIdList').val(unlinTaskIdList);
+            }
+        }
+        else
+        {
+            $('#storyIdList').val(storyIdList);
+        }
     });
 
     $('.sorter-false a').unwrap();

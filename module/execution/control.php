@@ -795,27 +795,28 @@ class execution extends control
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
         /* Assign. */
-        $this->view->title        = $title;
-        $this->view->position     = $position;
-        $this->view->productID    = $productID;
-        $this->view->execution    = $execution;
-        $this->view->stories      = $stories;
-        $this->view->allPlans     = $allPlans;
-        $this->view->summary      = $this->product->summary($stories);
-        $this->view->orderBy      = $orderBy;
-        $this->view->type         = $this->session->executionStoryBrowseType;
-        $this->view->param        = $param;
-        $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createStoryLink'));
-        $this->view->modulePairs  = $modulePairs;
-        $this->view->tabID        = 'story';
-        $this->view->storyTasks   = $storyTasks;
-        $this->view->storyBugs    = $storyBugs;
-        $this->view->storyCases   = $storyCases;
-        $this->view->users        = $users;
-        $this->view->pager        = $pager;
-        $this->view->setModule    = true;
-        $this->view->branchGroups = $branchGroups;
-        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->title             = $title;
+        $this->view->position          = $position;
+        $this->view->productID         = $productID;
+        $this->view->execution         = $execution;
+        $this->view->stories           = $stories;
+        $this->view->linkedTaskStories = $this->story->getIdListWithTask($executionID);
+        $this->view->allPlans          = $allPlans;
+        $this->view->summary           = $this->product->summary($stories);
+        $this->view->orderBy           = $orderBy;
+        $this->view->type              = $this->session->executionStoryBrowseType;
+        $this->view->param             = $param;
+        $this->view->moduleTree        = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createStoryLink'));
+        $this->view->modulePairs       = $modulePairs;
+        $this->view->tabID             = 'story';
+        $this->view->storyTasks        = $storyTasks;
+        $this->view->storyBugs         = $storyBugs;
+        $this->view->storyCases        = $storyCases;
+        $this->view->users             = $users;
+        $this->view->pager             = $pager;
+        $this->view->setModule         = true;
+        $this->view->branchGroups      = $branchGroups;
+        $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
     }
