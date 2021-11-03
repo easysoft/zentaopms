@@ -148,7 +148,7 @@ class kanbanModel extends model
      */
     public function createLanes($executionID, $type = 'all', $groupBy = 'default')
     {
-        if($groupBy == 'default')
+        if($groupBy == 'default' or $type == 'all')
         {
             foreach($this->config->kanban->default as $type => $lane)
             {
