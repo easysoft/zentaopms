@@ -1,4 +1,4 @@
 td.delayed {color: #fff; background: #e84e0f !important;}
-.confirm0 {color: gray;}
-.confirm1 {color: green;}
+.confirmed {color: #008000;}
+.unconfirmed {color: #808080;}
 .c-confirm {width:50px;}
