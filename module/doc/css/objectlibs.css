@@ -41,3 +41,6 @@
 
 .title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
+
+.tree-group .tree-actions{display: none}
+.tree-group:hover .tree-actions{display: inline}
