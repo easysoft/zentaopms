@@ -1,6 +1,7 @@
 $(function()
 {
     if(programID) $('#line_chosen').addClass('hidden');
+    $('#lineName').css('border-left-color', '');
 })
 /**
   * Load product Lines.
