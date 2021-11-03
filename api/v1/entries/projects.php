@@ -39,10 +39,7 @@ class projectsEntry extends entry
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => (int)$pager->recPerPage, 'projects' => $result));
         }
 
-        if(isset($data->status) and $data->status == 'fail')
-        {
-            return $this->sendError(400, $data->message);
-        }
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         // TODO There is no handle for 401.
         return $this->sendError(400, 'error');
