@@ -688,6 +688,7 @@ class programModel extends model
             $this->dao->update(TABLE_MODULE)
                 ->set('root')->eq($program->parent)
                 ->where('root')->eq($programID)
+                ->andwhere('type')->eq('line')
                 ->exec();
 
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
