@@ -198,6 +198,7 @@ class actionModel extends model
             if($objectType == 'story') $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
             if($objectType == 'kanbanlane') $record->execution = $this->dao->select($fields)->from(TABLE_KANBANLANE)->where('id')->eq($objectID)->fetch('execution');
+            if($objectType == 'kanbancolumn') $record->execution = $extra;
             if($objectType == 'team')
             {
                 $team   = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
