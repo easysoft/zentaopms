@@ -1834,7 +1834,8 @@ class execution extends control
     public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
         if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
-        if(empty($groupBy))    $groupBy    = $this->session->kanbanGroupBy ? $this->session->kanbanGroupBy : 'default';
+        if(empty($groupBy) and $browseType != 'all') $groupBy = $this->session->kanbanGroupBy ? $this->session->kanbanGroupBy : 'default';
+        if(empty($groupBy) and $browseType == 'all') $groupBy = 'default';
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
