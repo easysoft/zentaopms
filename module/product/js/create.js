@@ -1,6 +1,6 @@
 $(function()
 {
-    if(programID) $('#line_chosen').addClass('hidden');
+    if(systemMode=='classic' || programID) $('#line_chosen').addClass('hidden');
 })
 /**
   * Load product Lines.
