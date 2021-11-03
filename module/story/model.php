@@ -1769,7 +1769,7 @@ class storyModel extends model
 
         /* Create tasks. */
         $tasks   = array();
-        $stories = $this->getByList($data->storyIdList);
+        $stories = empty($data->storyIdList) ? array() : $this->getByList($data->storyIdList);
         foreach($stories as $story)
         {
             if(strpos('draft,closed', $story->status) !== false) continue;
@@ -2764,6 +2764,22 @@ class storyModel extends model
             ->orderBy('id_desc')
             ->limit($limit)
             ->fetchPairs('id', 'title');
+    }
+
+    /**
+     * Get the story ID list of the linked to task.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getIdListWithTask($executionID)
+    {
+        return $this->dao->select('story')->from(TABLE_TASK)
+            ->where('execution')->eq($executionID)
+            ->andWhere('story')->ne(0)
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
     }
 
     /**
