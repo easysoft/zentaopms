@@ -510,8 +510,8 @@ $lang->action->label->issue        = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design       = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder  = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->api          = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
-$lang->action->label->kanbancolumn = 'Column|execution|kanban|execution=%s';
-$lang->action->label->kanbanlane   = 'Lane|execution|kanban|execution=%s&type=all';
+$lang->action->label->kanbancolumn = 'Kanban column|execution|kanban|execution=%s';
+$lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();
