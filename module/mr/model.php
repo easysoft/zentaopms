@@ -462,11 +462,13 @@ class mrModel extends model
      *
      * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-mr-diff-versions
      * @param  object    $MR
+     * @param  string    $encoding
      * @access public
      * @return object
      */
-    public function getDiffs($MR)
+    public function getDiffs($MR, $encoding = '')
     {
+        $diffVersions = $this->apiGetDiffVersions($MR->gitlabID, $MR->targetProject, $MR->mriid);
         $gitlab = $this->gitlab->getByID($MR->gitlabID);
 
         $this->loadModel('repo');
@@ -477,12 +479,32 @@ class mrModel extends model
         $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $MR->targetProject);
         $repo->client   = $gitlab->url;
         $repo->password = $gitlab->token;
+        $repo->account  = '';
+        $repo->encoding = $encoding;
 
+        $lines = array();
+        foreach ($diffVersions as $diffVersion) 
+        {
+            $singleDiff = $this->apiGetSingleDiffVersion($MR->gitlabID, $MR->targetProject, $MR->mriid, $diffVersion->id);
+            if ($singleDiff->state == 'empty') continue;
+            $diffs = $singleDiff->diffs;
+            foreach ($diffs as $diff) 
+            {
+                /* Here use $index to make sure $index is unique in $lines. */
+                $index = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
+                if(in_array($index, $lines)) continue;
+                $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
+                $lines[] = $index;
+                $lines[] = sprintf("--a/%s", $diff->old_path);
+                $lines[] = sprintf("--b/%s", $diff->new_path);
+                $diffLines = explode("\n", $diff->diff);
+                foreach ($diffLines as $diffLine) $lines[] = $diffLine;
+            }
+        }
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-
-        /* TODO fix this malformed function. */
-        return $scm->diff('', $MR->sourceBranch, $MR->targetBranch, $parse = true, $MR->sourceProject);
+        $diff = $scm->engine->parseDiff($lines);
+        return $diff;
     }
 
     /**
@@ -539,5 +561,36 @@ class mrModel extends model
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/todo");
         return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'POST')));
+    }
+
+    /**
+     * Get diff versions of MR from GitLab API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiGetDiffVersions($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/versions");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get a single diff version of MR from GitLab API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @param  int    $versionID
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleDiffVersion($gitlabID, $projectID, $MRID, $versionID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
+        return json_decode(commonModel::http($url));
     }
 }

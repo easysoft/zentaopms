@@ -17,7 +17,7 @@
     $backURI = $this->session->mrView ? $this->session->mrView : $this->session->mrList;
     if($backURI)
     {
-        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->openApp}'");
+        echo html::a($backURI, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->tab}'");
     }
     else
     {
@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      <?php echo html::hidden('arrange', $arrange) . html::hidden('encoding', $encoding) . html::hidden('revision[]', $newRevision) . html::hidden('revision[]', $oldRevision)?>
+      <?php echo html::hidden('arrange', $arrange) . html::hidden('encoding', $encoding); ?>
     </form>
   </div>
   <?php foreach($diffs as $diffFile):?>
@@ -76,7 +76,6 @@
         <th class='w-num text-right'><?php if($line->type != 'new') echo $line->oldlc?></th>
         <th class='w-num text-left'><?php if($line->type != 'old') echo $line->newlc?></th>
         <td class='line-<?php echo $line->type?> code'><?php
-        $line->line = $repo->SCM == 'Subversion' ? htmlspecialchars($line->line) : $line->line;
         echo $line->type == 'old' ? preg_replace('/^\-/', '&ndash;', $line->line) : ($line->type == 'new' ? $line->line : ' ' . $line->line);
         ?></td>
       </tr>
@@ -105,13 +104,11 @@
         <th class='w-num text-right'><?php echo $oldlc?></th>
         <td class='w-code line-<?php if($line->type != 'new')echo $line->type?> <?php if($line->type == 'custom') echo "line-old"?> code'><?php
         if(!isset($content->old[$oldlc])) $content->old[$oldlc] = '';
-        $content->old[$oldlc] = $repo->SCM == 'Subversion' ? htmlspecialchars($content->old[$oldlc]) : $content->old[$oldlc];
         if(!empty($oldlc)) echo $line->type != 'all' ? preg_replace('/^\-/', '&ndash;', $content->old[$oldlc]) : ' ' . $content->old[$oldlc];
         ?></td>
         <th class='w-num text-right'><?php echo $newlc?></th>
         <td class='w-code line-<?php if($line->type != 'old') echo $line->type?> <?php if($line->type == 'custom') echo "line-new"?> code'><?php
         if(!isset($content->new[$newlc])) $content->new[$newlc] = '';
-        $content->new[$newlc] = $repo->SCM == 'Subversion' ? htmlspecialchars($content->new[$newlc]) : $content->new[$newlc];
         if(!empty($newlc)) echo $line->type != 'all' ? $content->new[$newlc] : ' ' . $content->new[$newlc];
         ?></td>
         <?php
@@ -125,20 +122,6 @@
     </table>
   </div>
   <?php endforeach?>
-</div>
-<div class='revisions hidden'>
-  <?php
-  if(strpos($repo->SCM, 'Subversion') === false)
-  {
-      $oldRevision = $oldRevision == '^' ? "$newRevision" : $oldRevision;
-      echo " <span class='label label-info'>" . substr($oldRevision, 0, 10) . " : " . substr($newRevision, 0, 10) . ' (' . $historys[$oldRevision] . ' : ' . $historys[$newRevision] . ')</span>';
-  }
-  else
-  {
-      $oldRevision = $oldRevision == '^' ? $newRevision - 1 : $oldRevision;
-      echo " <span class='label label-info'>$oldRevision : $newRevision</span>";
-  }
-  ?>
 </div>
 <form method="post" id="exchange" class="hidden">
   <input type="hidden" name="revision[]" value="<?php echo $oldRevision;?>"/>

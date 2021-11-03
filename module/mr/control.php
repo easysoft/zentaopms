@@ -258,10 +258,13 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function diff($MRID)
+    public function diff($MRID, $encoding= '')
     {
+        $encoding = empty($encoding) ? 'utf-8' : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
+
         $MR      = $this->mr->getByID($MRID);
-        $diffs   = $this->mr->getDiffs($MR);
+        $diffs   = $this->mr->getDiffs($MR, $encoding = '');
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
 
         if($this->server->request_method == 'POST')
@@ -294,9 +297,10 @@ class mr extends control
             }
         }
 
-        $this->view->title   = $this->lang->mr->viewDiff;
-        $this->view->diffs   = $diffs;
-        $this->view->arrange = $arrange;
+        $this->view->title    = $this->lang->mr->viewDiff;
+        $this->view->diffs    = $diffs;
+        $this->view->encoding = $encoding;
+        $this->view->arrange  = $arrange;
         $this->display();
     }
 }
