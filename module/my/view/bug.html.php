@@ -54,7 +54,9 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-severity' title='<?php echo $lang->bug->severity;?>'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-          <th class='c-pri' title='<?php echo $lang->bug->pri;?>'><?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-pri' title='<?php echo $lang->bug->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-confirm' title='<?php echo $lang->bug->confirmedAB;?>'><?php common::printOrderLink('confirmed', $orderBy, $vars, $lang->bug->confirmedAB);?></th>
+
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
           <th class='c-product'><?php common::printOrderLink('productName', $orderBy, $vars, $lang->bug->product);?></th>
           <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
@@ -106,6 +108,7 @@
             <?php endif;?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+          <td class="text-center"><span class='<?php echo 'confirm' . $bug->confirmed?>' title='<?php echo zget($lang->bug->confirmedList, $bug->confirmed);?>'><?php echo zget($lang->bug->confirmedList, $bug->confirmed)?></span></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
           <?php $param = $config->productLink == 'product-all' ? '' : "productID=$bug->product";?>
           <td class='text-left nobr'>
