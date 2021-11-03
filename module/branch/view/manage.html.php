@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main-content '>
   <div class="center-block mw-700px">
     <div class="main-header">
       <h2><?php printf($lang->branch->manageTitle, $this->lang->product->branchName[$this->session->currentProductType])?></h2>
@@ -53,6 +53,6 @@
         </tr>
       </table>
     </form>
-  </div>
+ </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
