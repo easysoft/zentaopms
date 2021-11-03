@@ -265,7 +265,7 @@ function renderHeaderCol($col, col, $header, kanban)
  */
 function renderLaneName($name, lane, $kanban, columns, kanban)
 {
-    if(!$name.children('.actions').length && (priv.hasSetLane || priv.hasLaneMove))
+    if(!$name.children('.actions').length && (priv.canSetLane || priv.canMoveLane))
     {
         $([
             '<div class="actions" title="' + kanbanLang.moreAction + '">',
