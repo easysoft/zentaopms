@@ -48,6 +48,10 @@ class reportsEntry extends entry
             {
                 $report['projectProgress'] = $this->projectProgress();
             }
+            elseif($field == 'executionprogress')
+            {
+                $report['executionProgress'] = $this->executionProgress();
+            }
         }
 
         return $this->send(200, $report);
@@ -121,9 +125,9 @@ class reportsEntry extends entry
             $newProject->id            = $project->id;
             $newProject->name          = $project->name;
             $newProject->status        = $project->status;
-            $newProject->progress      = $project->hours->progress;
-            $newProject->totalConsumed = $project->hours->totalConsumed;
-            $newProject->totalLeft     = $project->hours->totalLeft;
+            $newProject->progress      = round($project->hours->progress, 1);
+            $newProject->totalConsumed = round($project->hours->totalConsumed, 1);
+            $newProject->totalLeft     = round($project->hours->totalLeft, 1);
             if(isset($project->delay)) $newProject->delay = $project->delay;
 
             $statusList['all']['total'] += 1;
@@ -142,5 +146,44 @@ class reportsEntry extends entry
         }
 
         return array('statusList' => $statusList, 'projects' => array_values($processedProjects));
+    }
+
+    public function executionProgress()
+    {
+        $executions = $this->loadModel('project')->getStats(0, 'all', 0, 0, 30, 'id_desc');
+        $this->app->loadLang('execution');
+
+        $processedExecutions = array();
+        $statusList['all']['total']    = 0;
+        $statusList['doing']['total']  = 0;
+        $statusList['wait']['total']   = 0;
+        $statusList['closed']['total'] = 0;
+        foreach($executions as $execution)
+        {
+            $newExecution = new stdclass();
+            $newExecution->id            = $execution->id;
+            $newExecution->name          = $execution->name;
+            $newExecution->status        = $execution->status;
+            $newExecution->progress      = round($execution->hours->progress, 1);
+            $newExecution->totalConsumed = round($execution->hours->totalConsumed, 1);
+            $newExecution->totalLeft     = round($execution->hours->totalLeft, 1);
+            if(isset($execution->delay)) $newExecution->delay = $execution->delay;
+
+            $statusList['all']['total'] += 1;
+            if(isset($statusList[$execution->status])) $statusList[$execution->status]['total'] += 1;
+
+            $processedExecutions[$execution->id] = $newExecution;
+        }
+
+        foreach(array_keys($statusList) as $status)
+        {
+            $statusName = zget($this->lang->execution->statusList, $status);
+            if($status == 'all') $statusName = $this->lang->execution->allTasks;
+
+            $statusList[$status]['code'] = $status;
+            $statusList[$status]['name'] = $statusName;
+        }
+
+        return array('statusList' => $statusList, 'executions' => array_values($processedExecutions));
     }
 }
