@@ -272,6 +272,7 @@ class project extends control
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
+        
         $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
         $this->view->programID    = $programID;
