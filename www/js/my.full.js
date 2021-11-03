@@ -871,13 +871,19 @@ $(document).ready(function()
 
     $(document).on('click', '#helpMenuItem .close-help-tab', function(){$('#helpMenuItem').prev().remove();$('#helpMenuItem').remove();});
 
-    $(document).keydown(function(event)
+    /* Open link in new tab when pressed ctrl key in windows */
+    if(window.navigator.userAgent.match(/Windows/i))
     {
-        if(event.ctrlKey) $('a').attr('target', '_blank');
-    }).keyup(function()
-    {
-        $('a').attr('target', '');
-    });
+        $(document).on('mousedown', 'a', function(e)
+        {
+            var $a = $(this);
+            if(!e.ctrlKey || $a.attr('target')) return;
+            $a.attr('target', '_blank');
+            clearTimeout($a.data('ctrlTimer'));
+            $a.data('ctrlTimer', setTimeout(function(){$a.attr('target', null).data('ctrlTimer', 0)}, 100));
+            e.preventDefault();
+        });
+    }
 
     /* Hide the global create drop-down when hovering over the avatar. */
     $('.has-avatar').hover(function()
