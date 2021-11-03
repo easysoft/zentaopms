@@ -4654,11 +4654,16 @@ class upgradeModel extends model
         }
 
         /* Set product and project relation. */
+        $sprintPlans = $this->dao->select('product,plan')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($projectID)
+            ->andWhere('product')->in($productIdList)
+            ->fetchPairs();
         foreach($productIdList as $productID)
         {
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
+            $data->plan    = $sprintPlans[$productID];
 
             $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
         }
