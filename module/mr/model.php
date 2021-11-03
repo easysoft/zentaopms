@@ -359,7 +359,6 @@ class mrModel extends model
         return rtrim($gitlab->url, '/')."/dashboard/todos?project_id=$projectID&type=MergeRequest";
     }
 
-
     /**
      * Create MR by API.
      *
@@ -482,8 +481,7 @@ class mrModel extends model
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
-        $encoding = empty($encoding) ? $repo->encoding : $encoding;
-        $encoding = strtolower(str_replace('_', '-', $encoding));
+        /* TODO fix this malformed function. */
         return $scm->diff('', $MR->sourceBranch, $MR->targetBranch, $parse = true, $MR->sourceProject);
     }
 
@@ -499,9 +497,9 @@ class mrModel extends model
     public function getSudoAccountPair($gitlabID, $projectID, $account)
     {
         $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
-        $accuntPair = array();
-        if(isset($bindedUsers[$account])) $accuntPair[$account] = $bindedUsers[$account];
-        return $accuntPair;
+        $accountPair = array();
+        if(isset($bindedUsers[$account])) $accountPair[$account] = $bindedUsers[$account];
+        return $accountPair;
     }
 
     /**

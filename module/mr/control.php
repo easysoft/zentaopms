@@ -100,7 +100,7 @@ class mr extends control
         $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
         $this->view->targetBranchList = $targetBranchList;
-        $this->view->users            = array("" => "") + $users;
+        $this->view->users            = array('' => '') + $users;
         $this->view->assignee         = zget($gitlabUsers, $MR->assignee, '');
         $this->view->reviewer         = zget($gitlabUsers, $MR->reviewer, '');
 
@@ -114,9 +114,9 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function delete($id, $confim = 'no')
+    public function delete($id, $confirm = 'no')
     {
-        if($confim != 'yes') die(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confirm != 'yes') die(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $MR = $this->mr->getByID($id);
 

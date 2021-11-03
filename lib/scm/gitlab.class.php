@@ -96,7 +96,7 @@ class gitlab
      * @param  string    $path
      * @param  string    $ref
      * @access public
-     * @return array
+     * @return object
      * @doc    https://docs.gitlab.com/ee/api/repository_files.html
      */
     public function files($path, $ref = 'master')
@@ -369,7 +369,7 @@ class gitlab
      *
      * @param  string $cmd
      * @access public
-     * @todo Exec commads by gitlab api.
+     * @todo Exec commands by gitlab api.
      * @return array
      */
     public function exec($cmd)
@@ -539,7 +539,7 @@ class gitlab
 
         if($version and $version != 'HEAD')
         {
-            $committedDate = $this->getCommitedDate($version);
+            $committedDate = $this->getCommittedDate($version);
             if(!$committedDate) return array('commits' => array(), 'files' => array());
 
             $params['until'] = $committedDate;
@@ -570,7 +570,7 @@ class gitlab
      * @access public
      * @return void
      */
-    public function getCommitedDate($sha)
+    public function getCommittedDate($sha)
     {
         if(!scm::checkRevision($sha)) return null;
 
@@ -598,8 +598,8 @@ class gitlab
         $param->path     = urldecode($path);
         $param->ref_name = $this->branch;
 
-        $fromDate = $this->getCommitedDate($fromRevision);
-        $toDate   = $this->getCommitedDate($toRevision);
+        $fromDate = $this->getCommittedDate($fromRevision);
+        $toDate   = $this->getCommittedDate($toRevision);
 
         $since = '';
         $until = '';
@@ -667,7 +667,7 @@ class gitlab
      * @param  string    $path
      * @param  bool      $recursive
      * @access public
-     * @return void
+     * @return mixed
      */
     public function tree($path, $recursive = 1)
     {
@@ -685,7 +685,7 @@ class gitlab
      *
      * @param  string    $api
      * @access public
-     * @return void
+     * @return mixed
      */
     public function fetch($api, $params = array())
     {

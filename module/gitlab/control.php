@@ -214,9 +214,9 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function delete($id, $confim = 'no')
+    public function delete($id, $confirm = 'no')
     {
-        if($confim != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $oldGitLab = $this->gitlab->getByID($id);
         $this->loadModel('action');
