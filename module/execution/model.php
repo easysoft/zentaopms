@@ -78,7 +78,7 @@ class executionModel extends model
             global $lang;
             $this->app->loadLang('project');
             $lang->executionCommon = $lang->project->stage;
-            include $this->app->getModulePath('execution') . 'lang/' . $this->app->getClientLang() . '.php';
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
         if($execution and $execution->lifetime == 'ops')
