@@ -1307,7 +1307,7 @@ class bugModel extends model
 
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
-        $this->config->bug->search['params']['project']['values']       = $projectParams;
+        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $projectParams;
         $this->config->bug->search['params']['product']['values']       = $productParams;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
         $this->config->bug->search['params']['module']['values']        = $modules;
