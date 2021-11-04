@@ -427,8 +427,7 @@ class testcase extends control
             $story = $this->loadModel('story')->getByID($storyID);
             if(empty($moduleID)) $moduleID = $story->module;
         }
-        $currentModuleID = (int)$moduleID;
-
+        $currentModuleID = (int)$moduleID  ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
         unset($storyStatus['closed']);
@@ -438,11 +437,6 @@ class testcase extends control
             $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
-	else
-	{
-	    $modules = $this->loadModel('tree')->getStoryModule((int)$this->cookie->lastCaseModule);
-            $modules = $this->tree->getAllChildID($modules);
-	}
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
         if($this->app->tab != 'qa')
         {
