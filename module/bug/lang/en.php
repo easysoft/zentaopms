@@ -140,6 +140,7 @@ $lang->bug->overdueBugs        = 'Overdue';
 $lang->bug->allBugs            = 'All Bugs';
 $lang->bug->byQuery            = 'Search';
 $lang->bug->needConfirm        = 'Story Changed';
+$lang->bug->allProject         = 'All' . $lang->projectCommon . 's';
 $lang->bug->allProduct         = 'All' . $lang->productCommon . 's';
 $lang->bug->my                 = 'My';
 $lang->bug->yesterdayResolved  = 'Bug Resolved Yesterday ';
