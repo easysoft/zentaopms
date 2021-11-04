@@ -24,6 +24,8 @@ class kanbanModel extends model
      */
     public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default')
     {
+        if($browseType != 'all' and $groupBy != 'default') $this->updateGroupLanes($executionID, $browseType, $groupBy);
+
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
@@ -163,32 +165,10 @@ class kanbanModel extends model
         else
         {
             $this->loadModel($type);
-
-            $groupList = array();
-            $table     = zget($this->config->objectTables, $type);
-
-            if($groupBy == 'story' or $type == 'story')
-            {
-                $selectField = $groupBy == 'story' ? "t1.$groupBy" : "t2.$groupBy";
-                $groupList = $this->dao->select($selectField)->from(TABLE_PROJECTSTORY)->alias('t1')
-                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-                    ->where('t1.project')->eq($executionID)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->orderBy($groupBy . '_desc')
-                    ->fetchPairs();
-            }
-            else
-            {
-                $groupList = $this->dao->select($groupBy)->from($table)
-                    ->where('execution')->eq($executionID)
-                    ->beginIF($type == 'task')->andWhere('parent')->ge(0)->fi()
-                    ->andWhere('deleted')->eq(0)
-                    ->orderBy($groupBy . '_desc')
-                    ->fetchPairs();
-            }
+            $groupList = $this->getObjectGroup($executionID, $type, $groupBy);
 
             $objectPairs = array();
-            if($groupBy == 'module')     $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetchPairs();
+            if($groupBy == 'module')     $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->in('story,bug,task')->andWhere('deleted')->eq('0')->fetchPairs();
             if($groupBy == 'story')      $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
             if($groupBy == 'assignedTo') $objectPairs = $this->loadModel('user')->getPairs('noletter');
 
@@ -462,53 +442,99 @@ class kanbanModel extends model
     }
 
     /**
-     * Get column by id.
+     * Update group lanes.
      *
-     * @param  int    $columnID
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $groupBy
      * @access public
-     * @return object
+     * @return array
      */
-    public function getColumnById($columnID)
+    public function updateGroupLanes($executionID, $type, $groupBy)
     {
-        $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
-            ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
-            ->where('t1.id')->eq($columnID)
-            ->andWhere('t1.deleted')->eq(0)
-            ->fetch();
+        $this->loadModel($type);
 
-        if(!empty($column->parent)) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
+        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
+            ->where('execution')->eq($executionID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq($type)->fi()
+            ->andWhere('groupby')->eq($groupBy)->fi()
+            ->orderBy('order_asc')
+            ->fetchAll('id');
 
-        return $column;
-    }
+        /* Get old group list of kanban lane. */
+        $oldGroupList = array();
+        foreach($lanes as $lane) $oldGroupList[] = $lane->extra;
 
-    /**
-     * Get Column by column name.
-     *
-     * @param  string $name
-     * @param  int    $laneID
-     * @access public
-     * @return object
-     */
-    public function getColumnByName($name, $laneID)
-    {
-        return $this->dao->select('*')
-            ->from(TABLE_KANBANCOLUMN)
-            ->where('name')->eq($name)
-            ->andWhere('lane')->eq($laneID)
-            ->fetch();
-    }
+        /* Get new group list of kanban lane. */
+        $groupList = $this->getObjectGroup($executionID, $type, $groupBy);
 
+        $removeGroupList = array_diff($oldGroupList, $groupList);
+        $addGroupList    = array_diff($groupList, $oldGroupList);
 
-    /**
-     * Get lane by id.
-     *
-     * @param  int    $laneID
-     * @access public
-     * @return object
-     */
-    public function getLaneById($laneID)
-    {
-        return $this->dao->findById($laneID)->from(TABLE_KANBANLANE)->fetch();
+        $objectPairs = array();
+        if($groupBy == 'module')     $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->in('story,bug,task')->andWhere('deleted')->eq('0')->fetchPairs();
+        if($groupBy == 'story')      $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
+        if($groupBy == 'assignedTo') $objectPairs = $this->loadModel('user')->getPairs('noletter');
+
+        $laneOrder = $colorIndex = 0;
+
+        foreach($lanes as $laneID => $lane)
+        {
+            if(in_array($lane->extra, $removeGroupList))
+            {
+                /* Remove lane and cloumns by laneID. */
+                $this->dao->delete()->from(TABLE_KANBANLANE)->where('id')->eq($laneID)->exec();
+                $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->eq($laneID)->exec();
+            }
+            else
+            {
+                /* Update kanban lanes by group. */
+                $laneName = $this->lang->kanban->noGroup;
+                if($lane->extra)
+                {
+                    $namePairs = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
+                    $laneName  = zget($namePairs, $lane->extra);
+                }
+
+                $data = new stdClass();
+                $data->name  = $laneName;
+                $data->order = $laneOrder;
+                $laneOrder  += 5;
+                $colorIndex += 1;
+
+                $this->dao->update(TABLE_KANBANLANE)->data($lane)->where('id')->eq($laneID)->exec();
+                $this->updateCards($lane);
+            }
+        }
+
+        /* Add new lanes by group. */
+        foreach($addGroupList as $groupKey)
+        {
+            $laneName = $this->lang->kanban->noGroup;
+            if($groupKey)
+            {
+                $nameParis = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
+                $laneName  = zget($namePairs, $groupKey);
+            }
+
+            $lane = new stdClass();
+            $lane->execution = $executionID;
+            $lane->type      = $type;
+            $lane->groupby   = $groupBy;
+            $lane->extra     = $groupKey;
+            $lane->name      = $laneName;
+            $lane->color     = $this->config->kanban->laneColorList[$colorIndex];
+            $lane->order     = $laneOrder;
+
+            $laneOrder  += 5;
+            $colorIndex += 1;
+            if($colorIndex == count($this->config->kanban->laneColorList) + 1) $colorIndex = 0;
+            $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
+
+            $laneID = $this->dao->lastInsertId();
+            $this->createColumns($laneID, $type, $executionID, $groupBy, $groupKey);
+        }
     }
 
     /**
@@ -650,6 +676,92 @@ class kanbanModel extends model
             ->where('id')->eq($orderList[$targetType]->id)
             ->andWhere('groupby')->eq('')
             ->exec();
+    }
+
+    /**
+     * Get column by id.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return object
+     */
+    public function getColumnById($columnID)
+    {
+        $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
+            ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
+            ->where('t1.id')->eq($columnID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetch();
+
+        if(!empty($column->parent)) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
+
+        return $column;
+    }
+
+    /**
+     * Get Column by column name.
+     *
+     * @param  string $name
+     * @param  int    $laneID
+     * @access public
+     * @return object
+     */
+    public function getColumnByName($name, $laneID)
+    {
+        return $this->dao->select('*')
+            ->from(TABLE_KANBANCOLUMN)
+            ->where('name')->eq($name)
+            ->andWhere('lane')->eq($laneID)
+            ->fetch();
+    }
+
+
+    /**
+     * Get lane by id.
+     *
+     * @param  int    $laneID
+     * @access public
+     * @return object
+     */
+    public function getLaneById($laneID)
+    {
+        return $this->dao->findById($laneID)->from(TABLE_KANBANLANE)->fetch();
+    }
+
+    /**
+     * Get object group list.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $groupBy
+     * @access public
+     * @return array
+     */
+    public function getObjectGroup($executionID, $type, $groupBy)
+    {
+        $table = zget($this->config->objectTables, $type);
+
+        if($groupBy == 'story' or $type == 'story')
+        {
+            $selectField = $groupBy == 'story' ? "t1.$groupBy" : "t2.$groupBy";
+            $groupList   = $this->dao->select($selectField)->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+                ->where('t1.project')->eq($executionID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy($groupBy . '_desc')
+                ->fetchPairs();
+        }
+        else
+        {
+            $groupList = $this->dao->select($groupBy)->from($table)
+                ->where('execution')->eq($executionID)
+                ->beginIF($type == 'task')->andWhere('parent')->ge(0)->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($groupBy . '_desc')
+                ->fetchPairs();
+        }
+
+        return $groupList;
     }
 
     /**
