@@ -427,6 +427,7 @@ class testcase extends control
             $story = $this->loadModel('story')->getByID($storyID);
             if(empty($moduleID)) $moduleID = $story->module;
         }
+
         $currentModuleID = (int)$moduleID  ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
