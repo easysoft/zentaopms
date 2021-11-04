@@ -60,6 +60,16 @@ class reportsEntry extends entry
             {
                 $report['bugProgress'] = $this->bugProgress();
             }
+            elseif($field == 'bugprogress')
+            {
+                $report['bugProgress'] = $this->bugProgress();
+            }
+            elseif($field == 'output')
+            {
+                $this->loadModel('report');
+                $storyStat = $this->report->getYearObjectStat($accounts, $year, 'story');
+                $report['output']['story'] = $this->processStatus($storyStat['statusStat'], 'story');
+            }
         }
 
         return $this->send(200, $report);
@@ -230,7 +240,7 @@ class reportsEntry extends entry
             if(isset($productStatusList[$product->status])) $productStatusList[$product->status]['total'] += 1;
         }
 
-        $storyStatusList = array('draft' => array(), 'active' => array(), 'closed' => array(), 'changed' => array());
+        $storyStatusList = array('draft' => array(), 'active' => array(), 'changed' => array(), 'closed' => array());
         foreach($processedProducts as $productID => $product)
         {
             $product->storyStat = array();
@@ -319,5 +329,24 @@ class reportsEntry extends entry
         }
 
         return array('productStatusList' => $productStatusList, 'bugs' => array_values($processedProducts), 'bugStatusList' => $bugStatusList);
+    }
+
+    public function processStatus($statusStat, $objectType)
+    {
+        $this->app->loadLang($objectType);
+
+        $processedStatus = array();
+        $total = 0;
+        foreach($this->lang->$objectType->statusList as $status => $statusName)
+        {
+            if(empty($statusStat[$status])) continue;
+
+            $processedStatus[$status]['code']  = $status;
+            $processedStatus[$status]['name']  = $statusName;
+            $processedStatus[$status]['total'] = $statusStat[$status];
+            $total += $statusStat[$status];
+        }
+
+        return array('total' => $total, 'statusList' => array_values($processedStatus));
     }
 }
