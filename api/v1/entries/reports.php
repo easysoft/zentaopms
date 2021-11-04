@@ -52,6 +52,10 @@ class reportsEntry extends entry
             {
                 $report['executionProgress'] = $this->executionProgress();
             }
+            elseif($field == 'productprogress')
+            {
+                $report['productProgress'] = $this->productProgress();
+            }
         }
 
         return $this->send(200, $report);
@@ -185,5 +189,67 @@ class reportsEntry extends entry
         }
 
         return array('statusList' => $statusList, 'executions' => array_values($processedExecutions));
+    }
+
+    public function productProgress()
+    {
+        $this->app->loadLang('product');
+        $this->app->loadLang('story');
+        $storyStatusStat = $this->dao->select('t1.product,t2.name,t2.status,t1.status as storyStatus,count(*) as storyCount')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+            ->groupBy('t1.product,t1.status')
+            ->orderBy('t1.product_desc,t1.status')
+            ->fetchAll();
+
+        $productStatusList['all']['total']    = 0;
+        $productStatusList['normal']['total'] = 0;
+        $productStatusList['closed']['total'] = 0;
+
+        $processedProducts = array();
+        $productStoryStat  = array();
+        foreach($storyStatusStat as $product)
+        {
+            $productStoryStat[$product->product][$product->storyStatus] = $product->storyCount;
+
+            if(isset($processedProducts[$product->product])) continue;
+
+            $newProduct = new stdclass();
+            $newProduct->id     = $product->product;
+            $newProduct->name   = $product->name;
+            $newProduct->status = $product->status;
+
+            $processedProducts[$product->product] = $newProduct;
+            $productStatusList['all']['total'] += 1;
+            if(isset($productStatusList[$product->status])) $productStatusList[$product->status]['total'] += 1;
+        }
+
+        $storyStatusList = array('draft' => array(), 'active' => array(), 'closed' => array(), 'changed' => array());
+        foreach($processedProducts as $productID => $product)
+        {
+            $product->storyStat = array();
+            foreach(array_keys($storyStatusList) as $storyStatus) $product->storyStat[$storyStatus] = isset($productStoryStat[$productID][$storyStatus]) ? $productStoryStat[$productID][$storyStatus] : 0;
+        }
+
+        foreach(array_keys($productStatusList) as $status)
+        {
+            $statusName = zget($this->lang->product->statusList, $status);
+            if($status == 'all') $statusName = $this->lang->product->allStory;
+
+            $productStatusList[$status]['code'] = $status;
+            $productStatusList[$status]['name'] = $statusName;
+        }
+
+        foreach(array_keys($storyStatusList) as $status)
+        {
+            $statusName = zget($this->lang->story->statusList, $status);
+
+            $storyStatusList[$status]['code'] = $status;
+            $storyStatusList[$status]['name'] = $statusName;
+        }
+
+        return array('productStatusList' => $productStatusList, 'products' => array_values($processedProducts), 'storyStatusList' => $storyStatusList);
     }
 }
