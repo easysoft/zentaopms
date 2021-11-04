@@ -2500,7 +2500,7 @@ class bugModel extends model
         if($branch and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
-        $allProject    = "`project` = 'all'";
+        $allProject = "`project` = 'all'";
         if(strpos($bugQuery, $allProject) !== false)
         {
             $projectIDList = $this->getAllProjectIds();
