@@ -1293,6 +1293,8 @@ class bugModel extends model
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
         $productParams = ($productID and isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
         $productParams = $productParams + array('all' => $this->lang->bug->allProduct);
+        $projectParams = $this->getProjects($productID);
+        $projectParams = $projectParams + array('all' => $this->lang->bug->allProject);
 
         /* Get all modules. */
         $modules = array();
@@ -1305,6 +1307,7 @@ class bugModel extends model
 
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['params']['project']['values']       = $projectParams;
         $this->config->bug->search['params']['product']['values']       = $productParams;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
         $this->config->bug->search['params']['module']['values']        = $modules;
@@ -2497,6 +2500,15 @@ class bugModel extends model
         if($branch and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
+        $allProject = "`project` = 'all'";
+        if(strpos($bugQuery, $allProject) !== false)
+        {
+            $projectIDList = $this->getAllProjectIds();
+            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
+            $bugQuery = str_replace($allProject, '1', $bugQuery);
+            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIDList . ')';
+        }
+
         /* Fix bug #2878. */
         if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
         if(strpos($bugQuery, ' `closedDate` ') !== false)   $bugQuery = str_replace(' `closedDate` ', " `closedDate` != '0000-00-00 00:00:00' AND `closedDate` ", $bugQuery);
@@ -2957,5 +2969,38 @@ class bugModel extends model
         }
 
         return sprintf($this->lang->bug->summary, count($bugs), $unresolved);
+    }
+
+    /**
+     * Get project list.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function getProjects($productID)
+    {
+        return $this->dao->select('t1.id,t1.name')
+            ->from(TABLE_PROJECT)->alias('t1')
+            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.type')->eq('project')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.product')->eq($productID)
+            ->fetchPairs();
+    }
+
+    /**
+     * Get ID list of all projects.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllProjectIds()
+    {
+        return $this->dao->select('id')
+            ->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('project')
+            ->fetchPairs('id');
     }
 }
