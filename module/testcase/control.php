@@ -438,6 +438,11 @@ class testcase extends control
             $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
+	else
+	{
+	    $modules = $this->loadModel('tree')->getStoryModule((int)$this->cookie->lastCaseModule);
+            $modules = $this->tree->getAllChildID($modules);
+	}
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
         if($this->app->tab != 'qa')
         {
