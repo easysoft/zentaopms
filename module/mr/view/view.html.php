@@ -39,10 +39,15 @@
               </div>
             <?php endif;?>
             <strong><?php echo $lang->mr->mergeStatus;?> </strong>
-            <?php echo zget($lang->mr->mergeStatusList, $rawMR->merge_status);?>
+            <?php
+            if(empty($rawMR->changes_count)):
+              echo $lang->mr->noChanges;
+            else:
+              echo zget($lang->mr->mergeStatusList, $rawMR->merge_status);?>
             <br>
             <strong><?php echo $lang->mr->MRHasConflicts;?></strong>
             <?php echo ($rawMR->has_conflicts ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?>
+            <?php endif;?>
           </div>
         </div>
       </div>
