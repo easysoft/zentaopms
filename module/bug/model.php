@@ -2501,12 +2501,12 @@ class bugModel extends model
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
         $allProject    = "`project` = 'all'";
-        $projectIDList = $this->getAllProjectIds();
-        if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
         if(strpos($bugQuery, $allProject) !== false)
         {
-           $bugQuery = str_replace($allProject, '1', $bugQuery);
-           $bugQuery = $bugQuery . ' AND `project` ' . helper::dbIN($projectIDList);
+            $projectIDList = $this->getAllProjectIds();
+            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
+            $bugQuery = str_replace($allProject, '1', $bugQuery);
+            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIDList . ')';
         }
 
         /* Fix bug #2878. */
@@ -2972,7 +2972,7 @@ class bugModel extends model
     }
 
     /**
-     * Get project list
+     * Get project list.
      *
      * @param  int $productID
      * @access public
@@ -2990,7 +2990,7 @@ class bugModel extends model
     }
 
     /**
-     * Get ID list of all projects
+     * Get ID list of all projects.
      *
      * @access public
      * @return array
