@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('lastLang', $lang->productplan->last);?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <div id='mainContent'class='main-content'>
   <div class='center-block'>
