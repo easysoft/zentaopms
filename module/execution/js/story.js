@@ -33,8 +33,8 @@ $(function()
     $('#batchToTaskButton').on('click', function()
     {
         var storyIdList     = '';
-        var linedTaskIdList = '';
-        var unlinTaskIdList = '';
+        linedTaskIdList = '';
+        unlinTaskIdList = '';
         $("input[name^='storyIdList']:checked").each(function()
         {
             if(linkedTaskStories[$(this).val()])
@@ -47,7 +47,10 @@ $(function()
             }
             storyIdList += $(this).val() + ',';
         });
+    });
 
+    $('#submit').click(function()
+    {
         if(linedTaskIdList)
         {
             confirmStoryToTask = confirmStoryToTask.replace('%s', linedTaskIdList);
