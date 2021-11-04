@@ -2654,6 +2654,8 @@ class ztSessionHandler
     public $tagID;
     public $sessionFile;
     public $sessionID;
+    public $rawID;
+    public $rawFile;
 
     /**
      * Construct.
@@ -2697,6 +2699,8 @@ class ztSessionHandler
 
         $this->sessionFile = $this->sessSavePath . '/' . $fileName;
         $this->sessionID   = $sessionID;
+        $this->rawID       = $id;
+        $this->rawFile     = $this->sessSavePath . '/' . "sess_$id";
         return $this->sessionFile;
     }
 
@@ -2737,7 +2741,11 @@ class ztSessionHandler
         $sessFile = $this->getSessionFile($id);
         if(!file_exists($sessFile))
         {
-            ($this->tagID and file_exists("$this->sessSavePath/sess_$id")) ? copy("$this->sessSavePath/sess_$id", $sessFile) : touch($sessFile);
+            ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
+        }
+        elseif(!file_exists($this->rawFile))
+        {
+            if(strpos(file_get_contents($sessFile), 'user|') !== false) copy($sessFile, $this->rawFile);
         }
         return (string) file_get_contents($sessFile);
     }
