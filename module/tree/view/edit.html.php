@@ -119,7 +119,6 @@ $(function()
 {
     $('#root').change(function()
     {
-        if($(this).val() == currentRoot) return true;
         var confirmRoot = <?php echo json_encode($type == 'doc' ? $lang->tree->confirmRoot4Doc : $lang->tree->confirmRoot);?>;
         if(!confirm(confirmRoot))
         {
