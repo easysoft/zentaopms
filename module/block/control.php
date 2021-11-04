@@ -278,6 +278,11 @@ class block extends control
                 {
                     $block->moreLink = $this->createLink('project', 'testtask', "projectID=$projectID");
                 }
+                elseif($moduleName == 'testtask' and $method == 'browse')
+                {
+                    $block->moreLink = $this->createLink('testtask', 'browse', "projectID=$projectID" . '&branch=0' . '&type=all,totalStatus');
+                }
+
             }
             elseif($block->block == 'dynamic')
             {
