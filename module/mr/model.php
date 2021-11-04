@@ -482,19 +482,23 @@ class mrModel extends model
         $repo->account  = '';
         $repo->encoding = $encoding;
 
-        $lines = array();
-        foreach ($diffVersions as $diffVersion) 
+        $lines        = array();
+        $commitsAdded = array();
+        foreach ($diffVersions as $diffVersion)
         {
             $singleDiff = $this->apiGetSingleDiffVersion($MR->gitlabID, $MR->targetProject, $MR->mriid, $diffVersion->id);
             if ($singleDiff->state == 'empty') continue;
-            $diffs = $singleDiff->diffs;
-            foreach ($diffs as $diff) 
+            $commits = $singleDiff->commits;
+            $diffs   = $singleDiff->diffs;
+            foreach ($diffs as $index => $diff)
             {
-                /* Here use $index to make sure $index is unique in $lines. */
-                $index = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
-                if(in_array($index, $lines)) continue;
+                /* Make sure every file with same commitID is unique in $lines. */
+                $shortID = $commits[$index]->short_id;
+                if(in_array($shortID, $commitsAdded)) continue;
+                $commitsAdded[] = $shortID;
+
                 $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
-                $lines[] = $index;
+                $lines[] = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
                 $lines[] = sprintf("--a/%s", $diff->old_path);
                 $lines[] = sprintf("--b/%s", $diff->new_path);
                 $diffLines = explode("\n", $diff->diff);
