@@ -280,7 +280,7 @@ class block extends control
                 }
                 elseif($moduleName == 'testtask' and $method == 'browse')
                 {
-                    $block->moreLink = $this->createLink('testtask', 'browse', "projectID=$projectID" . '&branch=0' . '&type=all,totalStatus');
+                    $block->moreLink = $this->createLink('testtask', 'browse', "productID=0&branch=0&type=all,totalStatus");
                 }
 
             }
