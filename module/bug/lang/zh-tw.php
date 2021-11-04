@@ -140,6 +140,7 @@ $lang->bug->overdueBugs        = '過期Bug';
 $lang->bug->allBugs            = '所有';
 $lang->bug->byQuery            = '搜索';
 $lang->bug->needConfirm        = "{$lang->SRCommon}變動";
+$lang->bug->allProject         = '所有項目';
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
 $lang->bug->my                 = '我的';
 $lang->bug->yesterdayResolved  = '昨天解決Bug數';

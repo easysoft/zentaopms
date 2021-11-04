@@ -133,6 +133,7 @@ $lang->bug->overdueBugs        = 'Retard';
 $lang->bug->allBugs            = 'Tous';
 $lang->bug->byQuery            = 'Rechercher';
 $lang->bug->needConfirm        = 'Story Changée';
+$lang->bug->allProject         = 'All Projects';
 $lang->bug->allProduct         = 'Tous les ' . $lang->productCommon . 's';
 $lang->bug->my                 = 'Mes';
 $lang->bug->yesterdayResolved  = 'Bugs Résolus Hier ';
