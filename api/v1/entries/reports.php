@@ -56,6 +56,10 @@ class reportsEntry extends entry
             {
                 $report['productProgress'] = $this->productProgress();
             }
+            elseif($field == 'bugprogress')
+            {
+                $report['bugProgress'] = $this->bugProgress();
+            }
         }
 
         return $this->send(200, $report);
@@ -237,6 +241,7 @@ class reportsEntry extends entry
         {
             $statusName = zget($this->lang->product->statusList, $status);
             if($status == 'all') $statusName = $this->lang->product->allStory;
+            if($status == 'normal') $statusName = $this->lang->product->unclosed;
 
             $productStatusList[$status]['code'] = $status;
             $productStatusList[$status]['name'] = $statusName;
@@ -251,5 +256,68 @@ class reportsEntry extends entry
         }
 
         return array('productStatusList' => $productStatusList, 'products' => array_values($processedProducts), 'storyStatusList' => $storyStatusList);
+    }
+
+    public function bugProgress()
+    {
+        $this->app->loadLang('product');
+        $this->app->loadLang('bug');
+        $bugStatusStat = $this->dao->select('t1.product,t2.name,t2.status,t1.status as bugStatus,count(*) as bugCount')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+            ->groupBy('t1.product,t1.status')
+            ->orderBy('t1.product_desc,t1.status')
+            ->fetchAll();
+
+        $productStatusList['all']['total']    = 0;
+        $productStatusList['normal']['total'] = 0;
+        $productStatusList['closed']['total'] = 0;
+
+        $processedProducts = array();
+        $productBugStat  = array();
+        foreach($bugStatusStat as $product)
+        {
+            $productBugStat[$product->product][$product->bugStatus] = $product->bugCount;
+
+            if(isset($processedProducts[$product->product])) continue;
+
+            $newProduct = new stdclass();
+            $newProduct->id     = $product->product;
+            $newProduct->name   = $product->name;
+            $newProduct->status = $product->status;
+
+            $processedProducts[$product->product] = $newProduct;
+            $productStatusList['all']['total'] += 1;
+            if(isset($productStatusList[$product->status])) $productStatusList[$product->status]['total'] += 1;
+        }
+
+        $bugStatusList = array('active' => array(), 'resolved' => array(), 'closed' => array());
+        foreach($processedProducts as $productID => $product)
+        {
+            $product->bugStat = array();
+            foreach(array_keys($bugStatusList) as $bugStatus) $product->bugStat[$bugStatus] = isset($productBugStat[$productID][$bugStatus]) ? $productBugStat[$productID][$bugStatus] : 0;
+        }
+
+        foreach(array_keys($productStatusList) as $status)
+        {
+            $statusName = zget($this->lang->product->statusList, $status);
+            if($status == 'all') $statusName = $this->lang->product->allStory;
+            if($status == 'normal') $statusName = $this->lang->product->unclosed;
+
+            $productStatusList[$status]['code'] = $status;
+            $productStatusList[$status]['name'] = $statusName;
+        }
+
+        foreach(array_keys($bugStatusList) as $status)
+        {
+            $statusName = zget($this->lang->bug->statusList, $status);
+
+            $bugStatusList[$status]['code'] = $status;
+            $bugStatusList[$status]['name'] = $statusName;
+        }
+
+        return array('productStatusList' => $productStatusList, 'bugs' => array_values($processedProducts), 'bugStatusList' => $bugStatusList);
     }
 }
