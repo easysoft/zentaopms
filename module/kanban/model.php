@@ -523,7 +523,7 @@ class kanbanModel extends model
             $laneName = $this->lang->kanban->noGroup;
             if($groupKey)
             {
-                $nameParis = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
+                $namePairs = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
                 $laneName  = zget($namePairs, $groupKey);
             }
 
