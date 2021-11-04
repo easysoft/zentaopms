@@ -26,11 +26,14 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function browse($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($browseType = 'all', $assignee = 'all', $creator = 'all', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $assignee =  isset($_GET['assignee']) ? $this->get->assignee : "all";
+        $creator  = isset($_GET['creator']) ? $this->get->creator : "all";
+
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $MRList = $this->mr->getList($orderBy, $pager);
+        $MRList = $this->mr->getList($browseType, $assignee, $creator, $orderBy, $pager);
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
@@ -38,11 +41,14 @@ class mr extends control
         /* Sync GitLab MR to ZenTao Database. */
         $MRList = $this->mr->batchSyncMR($MRList);
 
-        $this->view->title    = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
-        $this->view->MRList   = $MRList;
-        $this->view->orderBy  = $orderBy;
-        $this->view->objectID = $objectID;
-        $this->view->pager    = $pager;
+        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $this->view->MRList     = $MRList;
+        $this->view->pager      = $pager;
+        $this->view->browseType = $browseType;
+        $this->view->assignee   = $assignee;
+        $this->view->creator    = $creator;
+        $this->view->objectID   = $objectID;
+        $this->view->orderBy    = $orderBy;
         $this->display();
     }
 

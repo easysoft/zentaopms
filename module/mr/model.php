@@ -38,16 +38,22 @@ class mrModel extends model
     /**
      * Get MR list of gitlab project.
      *
+     * @param  string   $browseType
+     * @param  string   $assignee
+     * @param  string   $creator
      * @param  string   $orderBy
      * @param  object   $pager
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($browseType = 'all', $assignee = 'all', $creator = 'all', $orderBy = 'id_desc', $pager) 
     {
         $MRList = $this->dao->select('*')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
+            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($assignee != 'all')->andWhere('assignee')->eq($assignee)->fi()
+            ->beginIF($creator != 'all')->andWhere('createdBy')->eq($creator)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

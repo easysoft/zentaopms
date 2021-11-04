@@ -25,10 +25,20 @@ $lang->mr->commits     = '提交数';
 $lang->mr->changes     = '更改数';
 $lang->mr->gitlabID    = 'GitLab';
 
+$lang->mr->approveStatus     = '审核状态';
+$lang->mr->approveStatusList = array();
+$lang->mr->approveStatusList['approved'] = '通过';
+$lang->mr->approveStatusList['rejected'] = '拒绝';
+
+$lang->mr->notApproved  = '审核拒绝的';
+$lang->mr->assignedToMe = '指派给我的';
+$lang->mr->createdByMe  = '我创建的';
+
 $lang->mr->statusList = array();
+$lang->mr->statusList['all']    = '所有';
 $lang->mr->statusList['opened'] = '开放中';
-$lang->mr->statusList['closed'] = '已关闭';
 $lang->mr->statusList['merged'] = '已合并';
+$lang->mr->statusList['closed'] = '已关闭';
 
 $lang->mr->mergeStatusList = array();
 $lang->mr->mergeStatusList['checking']         = '检查中';

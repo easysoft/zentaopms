@@ -25,10 +25,20 @@ $lang->mr->commits     = 'commits';
 $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
 
+$lang->mr->approveStatus     = 'Approve status';
+$lang->mr->approveStatusList = array();
+$lang->mr->approveStatusList['approved'] = 'Approved';
+$lang->mr->approveStatusList['rejected'] = 'Rejected';
+
+$lang->mr->notApproved  = 'Rejected';
+$lang->mr->assignedToMe = 'AssignedToMe';
+$lang->mr->createdByMe  = 'CreatedByMe';
+
 $lang->mr->statusList = array();
+$lang->mr->statusList['all']    = 'all';
 $lang->mr->statusList['opened'] = 'opened';
-$lang->mr->statusList['closed'] = 'closed';
 $lang->mr->statusList['merged'] = 'merged';
+$lang->mr->statusList['closed'] = 'closed';
 
 $lang->mr->mergeStatusList = array();
 $lang->mr->mergeStatusList['checking']         = 'checking';
