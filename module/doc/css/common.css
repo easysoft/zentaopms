@@ -96,3 +96,5 @@ ol, ul {margin-bottom: 0}
 .c-product, .c-execution, .c-lib {width: 80px !important;}
 
 .header-btn .btn > .text {text-overflow: unset !important;}
+
+.tree li.active > .tree-group a {font-weight: 700; color: #0c64eb;}

@@ -167,6 +167,7 @@ define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
 define('TABLE_EXPECT',        '`' . $config->db->prefix . 'expect`');
+define('TABLE_STAGE',         '`' . $config->db->prefix . 'stage`');
 define('TABLE_STAKEHOLDER',   '`' . $config->db->prefix . 'stakeholder`');
 define('TABLE_STORY',         '`' . $config->db->prefix . 'story`');
 define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');
@@ -192,6 +193,8 @@ define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
 define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
+define('TABLE_DESIGN',          '`' . $config->db->prefix . 'design`');
+define('TABLE_DESIGNSPEC',      '`' . $config->db->prefix . 'designspec`');
 define('TABLE_DOCLIB',          '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',             '`' . $config->db->prefix . 'doc`');
 define('TABLE_API',             '`' . $config->db->prefix . 'api`');

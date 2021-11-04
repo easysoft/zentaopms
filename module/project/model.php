@@ -1427,9 +1427,17 @@ class projectModel extends model
     {
         $canOrder     = common::hasPriv('project', 'updateOrder');
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
-        $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('execution', 'task', "projectID=$project->id");
         $account      = $this->app->user->account;
         $id           = $col->id;
+
+        if($project->model == 'waterfall')
+        {
+            $projectLink = helper::createLink('programplan', 'browse', "projectID=$project->id&productID=0&type=lists", '', '', $project->id); 
+        }
+        else
+        {
+            $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('execution', 'task', "projectID=$project->id");
+        }
 
         if($col->show)
         {
@@ -1480,11 +1488,8 @@ class projectModel extends model
                 case 'name':
                     $prefix = '';
                     $suffix = '';
-                    if(isset($this->config->maxVersion))
-                    {
-                        if($project->model === 'waterfall') $prefix = "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
-                        if($project->model === 'scrum')     $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
-                    }
+                    if($project->model === 'waterfall') $prefix = "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
+                    if($project->model === 'scrum')     $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     if(!empty($suffix) || !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
@@ -1937,6 +1942,15 @@ class projectModel extends model
     {
         global $lang;
         $project = $this->getByID($objectID);
+
+        if(isset($project->model) and $project->model == 'waterfall')
+        {   
+            global $lang;
+            $this->loadModel('execution');
+            $lang->executionCommon = $lang->project->stage;
+
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
 
         $model = 'scrum';
         if($project) $model = $project->model;
