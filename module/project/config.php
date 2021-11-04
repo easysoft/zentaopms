@@ -39,7 +39,7 @@ $config->project->datatable->fieldList['name']['title']    = 'name';
 $config->project->datatable->fieldList['name']['fixed']    = 'left';
 $config->project->datatable->fieldList['name']['width']    = 'auto';
 $config->project->datatable->fieldList['name']['minWidth'] = '180';
-$config->project->datatable->fieldList['name']['required'] = 'no';
+$config->project->datatable->fieldList['name']['required'] = 'yes';
 $config->project->datatable->fieldList['name']['sort']     = 'no';
 $config->project->datatable->fieldList['name']['pri']      = '1';
 
@@ -47,7 +47,7 @@ $config->project->datatable->fieldList['code']['title']    = 'code';
 $config->project->datatable->fieldList['code']['fixed']    = 'left';
 $config->project->datatable->fieldList['code']['width']    = '100';
 $config->project->datatable->fieldList['code']['minWidth'] = '180';
-$config->project->datatable->fieldList['code']['required'] = 'yes';
+$config->project->datatable->fieldList['code']['required'] = 'no';
 $config->project->datatable->fieldList['code']['sort']     = 'no';
 $config->project->datatable->fieldList['code']['pri']      = '1'; 
 
