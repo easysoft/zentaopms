@@ -2503,7 +2503,6 @@ class bugModel extends model
         $allProject    = "`project` = 'all'";
         $projectIDList = $this->getAllProjectIds();
         if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
-        if(strpos($bugQuery, '`project` =') === false) $bugQuery .= ' AND `project` in (' . $projectIDList . ')';
         if(strpos($bugQuery, $allProject) !== false)
         {
            $bugQuery = str_replace($allProject, '1', $bugQuery);
