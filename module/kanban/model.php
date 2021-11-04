@@ -358,12 +358,15 @@ class kanbanModel extends model
             $stories = $this->loadModel('story')->getExecutionStories($executionID);
             foreach($stories as $storyID => $story)
             {
-                if($lane->groupby and $story->{$lane->groupby} != $lane->extra) continue;
-
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
                 {
                     if(strpos(',ready,develop,test,', $colType) !== false) continue;
-                    if($colType == 'backlog' and $story->stage == $stage and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
+
+                    if($lane->groupby and $story->{$lane->groupby} != $lane->extra)
+                    {
+                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
+                    }
+                    elseif($colType == 'backlog' and $story->stage == $stage and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
                     {
                         $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
                     }
@@ -383,12 +386,15 @@ class kanbanModel extends model
             $bugs = $this->loadModel('bug')->getExecutionBugs($executionID);
             foreach($bugs as $bugID => $bug)
             {
-                if($lane->groupby and $bug->{$lane->groupby} != $lane->extra) continue;
-
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
                 {
                     if(strpos(',resolving,fixing,test,testing,tested,', $colType) !== false) continue;
-                    if($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
+
+                    if($lane->groupby and $bug->{$lane->groupby} != $lane->extra)
+                    {
+                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
+                    }
+                    elseif($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
                     {
                         $cardPairs['unconfirmed'] = empty($cardPairs['unconfirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['unconfirmed'];
                         if(strpos($cardPairs['closed'], ",$bugID,") !== false) $cardPairs['closed'] = str_replace(",$bugID,", ',', $cardPairs['closed']);
@@ -418,12 +424,15 @@ class kanbanModel extends model
             $tasks = $this->loadModel('execution')->getKanbanTasks($executionID);
             foreach($tasks as $taskID => $task)
             {
-                if($lane->groupby and $task->{$lane->groupby} != $lane->extra) continue;
-
                 foreach($this->config->kanban->taskColumnStatusList as $colType => $status)
                 {
                     if($colType == 'develop') continue;
-                    if($task->status == $status and strpos($cardPairs[$colType], ",$taskID,") === false)
+
+                    if($lane->groupby and $task->{$lane->groupby} != $lane->extra)
+                    {
+                        $cardPairs[$colType] = str_replace(",$taskID,", ',', $cardPairs[$colType]);
+                    }
+                    elseif($task->status == $status and strpos($cardPairs[$colType], ",$taskID,") === false)
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$taskID," : ",$taskID". $cardPairs[$colType];
                     }
