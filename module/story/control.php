@@ -1474,7 +1474,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             foreach($allChanges as $storyID => $changes)
             {
-                $actionID = $this->action->create('story', $storyID, 'Edited');
+                $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
             }
         }

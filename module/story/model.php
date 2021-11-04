@@ -1863,6 +1863,8 @@ class storyModel extends model
             $story->assignedDate   = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+
+            $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
         return $allChanges;
     }
