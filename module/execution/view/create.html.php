@@ -153,6 +153,35 @@
           <td><?php echo html::select('teams', $teams, $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
         </tr>
         <tr>
+          <th rowspan='2'><?php echo $lang->execution->owner;?></th>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->execution->PO;?></span>
+              <?php echo html::select('PO', $poUsers, '', "class='form-control chosen'");?>
+            </div>
+          </td>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->execution->QD;?></span>
+              <?php echo html::select('QD', $qdUsers, '', "class='form-control chosen'");?>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->execution->PM;?></span>
+              <?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'");?>
+            </div>
+          </td>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->execution->RD;?></span>
+              <?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?>
+            </div>
+          </td>
+        </tr>
+        <tr>
           <th><?php echo $lang->execution->team;?></th>
           <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control chosen' multiple"); ?></td>
         </tr>
