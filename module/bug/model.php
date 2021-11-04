@@ -2501,7 +2501,7 @@ class bugModel extends model
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
         $allProject = "`project` = 'all'";
-        $projectIDList = $this->getAllProjectIDs();
+        $projectIDList = $this->getAllProjectIds();
         if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
         if(strpos($bugQuery, '`project` =') === false) $bugQuery .= ' AND `project` in (' . $projectIDList . ')';
         if(strpos($bugQuery, $allProject) !== false)
@@ -2974,6 +2974,7 @@ class bugModel extends model
 
     /**
      * Get project list
+     *
      * @param  int $productID
      * @access public
      * @return array
@@ -2990,12 +2991,12 @@ class bugModel extends model
     }
 
     /**
-     * get ID list of all projects
+     * Get ID list of all projects
      *
      * @access public
      * @return array
      */
-    public function getAllProjectIDs()
+    public function getAllProjectIds()
     {
         return $this->dao->select('id')
             ->from(TABLE_PROJECT)
