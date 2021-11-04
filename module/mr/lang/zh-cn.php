@@ -70,8 +70,6 @@ $lang->mr->pipelineStatus['canceled'] = "已取消";
 $lang->mr->MRHasConflicts = "是否存在冲突";
 $lang->mr->hasConflicts   = "存在冲突或等待提交";
 $lang->mr->hasNoConflict  = "可以合并";
-$lang->mr->mergeByManual  = "此合并请求可以手动合并，请使用以下";
-$lang->mr->commandLine    = "合并命令";
 $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
 $lang->mr->mergeSuccess   = "已成功合并";
@@ -91,15 +89,15 @@ $lang->mr->todomessage = "项目中指派给你了";
 $lang->mr->commandDocument = <<< EOD
 <div class='detail-title'>在本地检出、审核和手动合并</div>
 <div class='detail-content'>
-  <p><strong>注意：您在本地合并后此合并请求将变为不可合并状态，需要删除此合并请求或者提交新的代码。</strong></p>
+  <p><blockquote>提示：您在本地合并完成后，该合并请求将自动更新为已合并状态。</blockquote></p>
   <p>
-    第 1 步. 获取并查看此合并请求的分支
+    第 1 步. 切换到目标项目所在目录，获取并查看此合并请求的分支
     <pre>
     git fetch "%s" %s
     git checkout -b "%s" FETCH_HEAD</pre>
   </p>
   <p>
-    第 2 步. 在本地查看更改
+    第 2 步. 在本地查看更改，如使用<code>git log</code>等命令
   </p>
   <p>
     第 3 步. 合并分支并解决出现的任何冲突
@@ -114,3 +112,5 @@ $lang->mr->commandDocument = <<< EOD
   </p>
 </div>
 EOD;
+
+$lang->mr->noChanges = "目前在这个合并请求的源分支中没有变化，请推送新的提交或使用不同的分支。";

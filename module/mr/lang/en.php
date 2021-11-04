@@ -70,8 +70,6 @@ $lang->mr->pipelineStatus['canceled'] = "canceled";
 $lang->mr->MRHasConflicts = "Merge Request has a conflict";
 $lang->mr->hasConflicts   = "There are merge conflicts or wait for push";
 $lang->mr->hasNoConflict  = "Can merge";
-$lang->mr->mergeByManual  = "This merge request can be merged manually, please refer to";
-$lang->mr->commandLine    = "Merge Request command";
 $lang->mr->acceptMR       = "Accept Merge request ";
 $lang->mr->mergeFailed    = "Unable to merge request, please check the merge request status";
 $lang->mr->mergeSuccess   = "Merge Request Successfully";
@@ -91,15 +89,15 @@ $lang->mr->todomessage = "project was assigned to you";
 $lang->mr->commandDocument = <<< EOD
 <div class='detail-title'>Check out, review and merge locally</div>
 <div class='detail-content'>
-  <p><strong>Note: This merge request status will be changed after you merge locally and you will need to delete this merge request or submit new code.</strong></p>
+  <p><blockquote>Note: This merge request status will be changed automatically after you merged locally.</blockquote></p>
   <p>
-    step 1. Fetch and check out the branch for this merge request
+    step 1. Change directory to target project. Fetch and check out the branch for this merge request
     <pre>
     git fetch "%s" %s
     git checkout -b "%s" FETCH_HEAD</pre>
   </p>
   <p>
-    step 2. Review the changes locally
+    step 2. Review the changes locally. You can use <code>git log</code> to view the changes
   </p>
   <p>
     step 3. Merge the branch and fix any conflicts that come up
@@ -114,3 +112,5 @@ $lang->mr->commandDocument = <<< EOD
   </p>
 </div>
 EOD;
+
+$lang->mr->noChanges = "Currently there are no changes in this merge request's source branch. Please push new commits or use a different branch.";

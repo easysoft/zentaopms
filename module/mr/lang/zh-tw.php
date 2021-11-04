@@ -70,8 +70,6 @@ $lang->mr->pipelineStatus['canceled'] = "已取消";
 $lang->mr->MRHasConflicts = "是否存在衝突";
 $lang->mr->hasConflicts   = "存在衝突或等待提交";
 $lang->mr->hasNoConflict  = "可以合併";
-$lang->mr->mergeByManual  = "此合併請求可以手動合併，請使用以下";
-$lang->mr->commandLine    = "合併命令";
 $lang->mr->acceptMR       = "合併";
 $lang->mr->mergeFailed    = "無法合併，請核對合併請求狀態";
 $lang->mr->mergeSuccess   = "已成功合併";
@@ -91,15 +89,15 @@ $lang->mr->todomessage = "項目中指派給你了";
 $lang->mr->commandDocument = <<< EOD
 <div class='detail-title'>在本地檢出、審核和手動合併</div>
 <div class='detail-content'>
-  <p><strong>注意：您在本地合併後此合併請求將變為不可合併狀態，需要刪除此合併請求或者提交新的代碼。</strong></p>
+  <p><blockquote>提示：您在本地合併完成後，該合併請求將自動更新為以合併狀態。</blockquote></p>
   <p>
-    第 1 步. 獲取並查看此合併請求的分支
+    第 1 步. 切換到目標項目所在目錄，獲取並查看此合併請求的分支
     <pre>
     git fetch "%s" %s
     git checkout -b "%s" FETCH_HEAD</pre>
   </p>
   <p>
-    第 2 步. 在本地查看更改
+    第 2 步. 在本地查看更改, 如使用<code>git log</code>等命令
   </p>
   <p>
     第 3 步. 合併分支並解決出現的任何衝突
@@ -114,3 +112,5 @@ $lang->mr->commandDocument = <<< EOD
   </p>
 </div>
 EOD;
+
+$lang->mr->noChanges = "目前在這個合併請求的源分支中沒有變化，請推送新的提交或使用不同的分支。";
