@@ -945,10 +945,7 @@ class baseControl
      */
     public function sendError($error)
     {
-        $this->send([
-            'result'  => 'fail',
-            'message' => $error,
-        ]);
+        $this->send(array('result' => 'fail', 'message' => $error));
     }
 
     /**

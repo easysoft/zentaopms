@@ -188,7 +188,7 @@ class kanbanModel extends model
             }
 
             $objectPairs = array();
-            if($groupBy == 'module')     $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetchPairs();
+            if($groupBy == 'module')     $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->in('story,bug,task')->andWhere('deleted')->eq('0')->fetchPairs();
             if($groupBy == 'story')      $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
             if($groupBy == 'assignedTo') $objectPairs = $this->loadModel('user')->getPairs('noletter');
 
