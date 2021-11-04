@@ -78,9 +78,10 @@ class productplan extends control
         $this->view->position[] = $this->lang->productplan->common;
         $this->view->position[] = $this->lang->productplan->create;
 
-        $this->view->lastPlan = $lastPlan;
-        $this->view->branch   = $branchID;
-        $this->view->parent   = $parent;
+        $this->view->productID = $productID;
+        $this->view->lastPlan  = $lastPlan;
+        $this->view->branch    = $branchID;
+        $this->view->parent    = $parent;
         $this->display();
     }
 
@@ -631,5 +632,21 @@ class productplan extends control
     {
         foreach($this->post->unlinkBugs as $bugID) $this->productplan->unlinkBug($bugID);
         die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
+    }
+
+
+    /**
+     * AJAX: Get last plan.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $parent
+     * @access public
+     * @return object
+     */
+    public function ajaxGetLast($productID, $branch = 0, $parent = 0)
+    {
+        $lastPlan = $this->productplan->getLast($productID, $branch, $parent);
+        echo json_encode($lastPlan);
     }
 }

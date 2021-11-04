@@ -60,7 +60,7 @@ class productplanModel extends model
             ->beginIF($parent > 0)->andWhere('parent')->eq((int)$parent)->fi()
             ->andWhere('product')->eq((int)$productID)
             ->andWhere('end')->ne('2030-01-01')
-            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->andWhere('branch')->eq($branch)
             ->orderBy('end desc')
             ->limit(1)
             ->fetch();
