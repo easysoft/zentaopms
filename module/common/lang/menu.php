@@ -240,24 +240,28 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
+$lang->waterfall->menu->index       = array('link' => "$lang->dashboard|project|index|project=%s");
 $lang->waterfall->menu->programplan = array('link' => "{$lang->productplan->shortCommon}|programplan|browse|project=%s&productID=0&type=lists", 'subModule' => 'programplan');
 $lang->waterfall->menu->execution   = array('link' => "{$lang->stage->common}|project|execution|status=all&projectID=%s");
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory,tree', 'exclude' => 'projectstory-track');
 $lang->waterfall->menu->design      = array('link' => "{$lang->design->common}|design|browse|project=%s");
+$lang->waterfall->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
 $lang->waterfall->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->build       = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 
 $lang->waterfall->menu->settings = $lang->scrum->menu->settings;
-$lang->waterfall->dividerMenu = ',build,dynamic,';
+$lang->waterfall->dividerMenu    = ',programplan,build,dynamic,';
 
 /* Waterfall menu order. */
+$lang->waterfall->menuOrder[5]  = 'index';
 $lang->waterfall->menuOrder[15] = 'programplan';
 $lang->waterfall->menuOrder[20] = 'execution';
 $lang->waterfall->menuOrder[25] = 'story';
 $lang->waterfall->menuOrder[30] = 'design';
 $lang->waterfall->menuOrder[35] = 'devops';
+$lang->waterfall->menuOrder[55] = 'qa';
 $lang->waterfall->menuOrder[60] = 'doc';
 $lang->waterfall->menuOrder[65] = 'build';
 $lang->waterfall->menuOrder[70] = 'release';
@@ -274,11 +278,11 @@ $lang->waterfall->menu->qa['subMenu']->testcase = array('link' => "{$lang->testc
 $lang->waterfall->menu->qa['subMenu']->testtask = array('link' => "{$lang->testtask->common}|project|testtask|projectID=%s", 'subModule' => 'testtask', 'class' => 'dropdown dropdown-hover');
 
 $lang->waterfall->menu->design['subMenu'] = new stdclass();
-$lang->waterfall->menu->design['subMenu']->all      = array("link' => '$lang->all|design|browse|projectID=%s&productID=0&browseType=all");
-$lang->waterfall->menu->design['subMenu']->hlds     = array("link' => '{$lang->design->HLDS}|design|browse|projectID=%s&productID=0&browseType=HLDS");
-$lang->waterfall->menu->design['subMenu']->dds      = array("link' => '{$lang->design->DDS}|design|browse|projectID=%s&productID=0&browseType=DDS");
-$lang->waterfall->menu->design['subMenu']->dbds     = array("link' => '{$lang->design->DBDS}|design|browse|projectID=%s&productID=0&browseType=DBDS");
-$lang->waterfall->menu->design['subMenu']->ads      = array("link' => {$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
+$lang->waterfall->menu->design['subMenu']->all      = array('link' => "$lang->all|design|browse|projectID=%s&productID=0&browseType=all");
+$lang->waterfall->menu->design['subMenu']->hlds     = array('link' => "{$lang->design->HLDS}|design|browse|projectID=%s&productID=0&browseType=HLDS");
+$lang->waterfall->menu->design['subMenu']->dds      = array('link' => "{$lang->design->DDS}|design|browse|projectID=%s&productID=0&browseType=DDS");
+$lang->waterfall->menu->design['subMenu']->dbds     = array('link' => "{$lang->design->DBDS}|design|browse|projectID=%s&productID=0&browseType=DBDS");
+$lang->waterfall->menu->design['subMenu']->ads      = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
 $lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
 /* Execution menu. */
