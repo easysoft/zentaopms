@@ -135,6 +135,7 @@ class mr extends control
     /**
      * View a MR.
      *
+     * @param  int $id
      * @access public
      * @return void
      */
@@ -308,5 +309,17 @@ class mr extends control
         $this->view->encoding = $encoding;
         $this->view->arrange  = $arrange;
         $this->display();
+    }
+
+    /**
+     * Approve this MR. Reject or approve it.
+     *
+     * @param  int $MRID
+     * @return void
+     */
+    public function approve($MRID, $action = 'approve')
+    {
+        $MR = $this->mr->getByID($MRID);
+        return $this->send($this->mr->approve($MR, $action));
     }
 }

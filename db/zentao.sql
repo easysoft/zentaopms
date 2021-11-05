@@ -655,6 +655,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `description` text NOT NULL,
   `assignee` varchar(255) NOT NULL,
   `reviewer` varchar(255) NOT NULL,
+  `approver` varchar(255) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
@@ -662,6 +663,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `status` char(30) NOT NULL,
   `mergeStatus` char(30) NOT NULL,
+  `approvalStatus` char(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_notify`;

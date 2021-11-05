@@ -25,10 +25,17 @@ $lang->mr->commits     = 'commits';
 $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
 
-$lang->mr->approveStatus     = 'Approve status';
-$lang->mr->approveStatusList = array();
-$lang->mr->approveStatusList['approved'] = 'Approved';
-$lang->mr->approveStatusList['rejected'] = 'Rejected';
+$lang->mr->approve = 'Approve';
+$lang->mr->reject  = 'Reject';
+$lang->mr->close   = 'Close';
+
+$lang->mr->repeatedOperation = 'Do not repeat operations';
+
+$lang->mr->approvalStatus     = 'Approve status';
+$lang->mr->approvalStatusList = array();
+$lang->mr->approvalStatusList['notReviewed'] = 'notReviewed';
+$lang->mr->approvalStatusList['approved']    = 'Approved';
+$lang->mr->approvalStatusList['rejected']    = 'Rejected';
 
 $lang->mr->notApproved  = 'Rejected';
 $lang->mr->assignedToMe = 'AssignedToMe';

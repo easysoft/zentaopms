@@ -25,10 +25,17 @@ $lang->mr->commits     = '提交數';
 $lang->mr->changes     = '更改數';
 $lang->mr->gitlabID    = 'GitLab';
 
-$lang->mr->approveStatus     = '審核狀態';
-$lang->mr->approveStatusList = array();
-$lang->mr->approveStatusList['approved'] = '通過';
-$lang->mr->approveStatusList['rejected'] = '拒絕';
+$lang->mr->approve = '通過';
+$lang->mr->reject  = '拒絕';
+$lang->mr->close   = '關閉';
+
+$lang->mr->repeatedOperation = '請勿重複操作';
+
+$lang->mr->approvalStatus     = '審核狀態';
+$lang->mr->approvalStatusList = array();
+$lang->mr->approvalStatusList['notReviewed'] = '未評審';
+$lang->mr->approvalStatusList['approved']    = '通過';
+$lang->mr->approvalStatusList['rejected']    = '拒絕';
 
 $lang->mr->notApproved  = '審核拒絕的';
 $lang->mr->assignedToMe = '指派給我的';

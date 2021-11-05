@@ -603,4 +603,32 @@ class mrModel extends model
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
         return json_decode(commonModel::http($url));
     }
+
+    /**
+     * Reject or Approve this MR.
+     *
+     * @param  object $MR
+     * @param  string $action
+     * @return array
+     */
+    public function approve($MR, $action = 'approve')
+    {
+        if(isset($MR->status) and $MR->status == 'opened') {
+            $rawApprovalStatus = '';
+            if(isset($MR->approvalStatus)) $rawApprovalStatus = $MR->approvalStatus;
+            $MR->approver = $this->app->user->account;
+            if ($action == 'reject' and $rawApprovalStatus != 'rejected') $MR->approvalStatus = 'rejected';
+            if ($action == 'approve' and $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
+            if (isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus) {
+                $this->dao->update(TABLE_MR)->data($MR)
+                    ->where('id')->eq($MR->id)
+                    ->exec();
+                if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+                /* Force reload when locate to the url. */
+                $random = uniqid();
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}&random={$random}"));
+            }
+        }
+        return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+    }
 }
