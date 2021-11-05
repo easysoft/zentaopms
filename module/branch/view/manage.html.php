@@ -63,7 +63,7 @@
         <tr>
           <?php if($canBatchAction):?>
           <td class='cell-id'>
-            <?php echo html::checkbox('branchIDList', array($branch->id => ''), '', $branch->id == BRANCH_MAIN ? "disabled='disabled'" : '');?>
+            <?php echo html::checkbox('branchIDList', array($branch->id => ''));?>
           </td>
           <?php endif;?>
           <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
@@ -78,7 +78,7 @@
             common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list', '', '', $disabled);
             if($branch->status == 'active')
             {
-                common::printIcon('branch', 'closed', "branchID=$branch->id", $branch, 'list', 'off', '', $disabled);
+                common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', '', $disabled);
             }
             else
             {

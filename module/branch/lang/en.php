@@ -9,6 +9,9 @@ $lang->branch->manageTitle = '%s Management';
 $lang->branch->all         = 'All ';
 $lang->branch->main        = 'Main';
 
+$lang->branch->edit   = 'Edit';
+$lang->branch->active = 'Active';
+$lang->branch->close  = 'Close';
 $lang->branch->create = 'Create Branch';
 $lang->branch->merge  = 'Merge';
 
