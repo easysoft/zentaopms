@@ -43,6 +43,23 @@ class branch extends control
     }
 
     /**
+     * Create a branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function create($productID)
+    {
+        if($_POST)
+        {
+            $this->branch->create($productID);
+        }
+
+        $this->display();
+    }
+
+    /**
      * Sort branch.
      *
      * @access public

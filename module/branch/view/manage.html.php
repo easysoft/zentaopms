@@ -27,7 +27,7 @@
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if($canCreate) common::printLink('branch', 'create', "productID=$productID", "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-primary'");?>
+    <?php if($canCreate) common::printLink('branch', 'create', "productID=$productID", "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-primary iframe'", true, true);?>
   </div>
 </div>
 <div id="mainContent">
@@ -35,7 +35,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->branch->noData;?></span>
-      <?php if($canCreate) echo html::a($this->createLink('branch', 'create', "productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-info'");?>
+      <?php if($canCreate) echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-info iframe'");?>
     </p>
   </div>
   <?php else:?>

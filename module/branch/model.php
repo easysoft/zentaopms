@@ -124,11 +124,30 @@ class branchModel extends model
     }
 
     /**
-     * Manage branch
+     * Create a branch.
      *
      * @param  int    $productID
      * @access public
-     * @return bool
+     * @return void
+     */
+    public function create($productID)
+    {
+        $branch = fixer::input('post')
+            ->setDefault('product', $productID)
+            ->setDefault('createdDate', helper::today())
+            ->setDefault('status', 'active')
+            ->get();
+
+        $this->dao->insert(TABLE_BRANCH)->data($branch)->exec();
+        if(dao::isError()) return false;
+    }
+
+    /**
+     * Manage branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return bool|array
      */
     public function manage($productID)
     {
