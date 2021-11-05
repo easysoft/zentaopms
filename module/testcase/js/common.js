@@ -126,7 +126,7 @@ function setStories()
     if(typeof(branch) == 'undefined') branch = 0;
     if(tab == 'execution')
     {
-        link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=    ' + branch + '&moduleID=' + moduleID + '&storyID=0');
+        link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch' + branch + '&moduleID=' + moduleID + '&storyID=0');
     }
     else
     {
