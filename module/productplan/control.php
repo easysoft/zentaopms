@@ -413,8 +413,8 @@ class productplan extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($plan->product, 'noempty');
-            if($plan->branch) $branches = array('' => '', $plan->branch => $branches[$plan->branch]);
+            $branches = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($plan->product, 'noempty');
+            if($plan->branch) $branches = array('' => '', '0' => $this->lang->branch->main, $plan->branch => $branches[$plan->branch]);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
@@ -554,8 +554,8 @@ class productplan extends control
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
-            if($plan->branch) $branches = array('' => '', $plan->branch => $branches[$plan->branch]);
+            $branches = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            if($plan->branch) $branches = array('' => '', '0' => $this->lang->branch->main, $plan->branch => $branches[$plan->branch]);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);

@@ -40,6 +40,9 @@ class branchModel extends model
      */
     public function getPairs($productID, $params = '')
     {
+        $product = $this->loadModel('product')->getById($productID);
+        if(!$product or $product->type == 'normal') return array();
+
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
@@ -49,10 +52,12 @@ class branchModel extends model
 
         if(strpos($params, 'noempty') === false)
         {
-            $product = $this->loadModel('product')->getById($productID);
-            if(!$product or $product->type == 'normal') return array();
+            $branches = array('0' => $this->lang->branch->main) + $branches;
+        }
 
-            $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
+        if(strpos($params, 'all') !== false)
+        {
+            $branches = array('all' => $this->lang->branch->all) + $branches;
         }
         return $branches;
     }

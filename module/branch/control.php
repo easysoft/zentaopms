@@ -70,8 +70,7 @@ class branch extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
 
-        $branches = $this->branch->getPairs($productID);
-        $this->view->branches        = $branches;
+        $this->view->branches        = $this->branch->getPairs($productID, 'all');
         $this->view->currentBranchID = $branch;
         $this->view->branchesPinyin  = common::convert2Pinyin($branches);
         $this->display();

@@ -100,6 +100,7 @@ foreach(explode(',', $showFields) as $field)
             <?php echo html::select("modules[$storyID]", $modules, $story->module, "class='form-control chosen'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
+            <?php if($this->session->currentProductType != 'normal') $productPlans = $this->productplan->getPairs($productID, $story->branch, '', true);?>
             <?php echo html::select("plans[$storyID]", $productPlans, $story->plan, "class='form-control chosen'");?>
           </td>
           <td title='<?php echo $story->title?>'>

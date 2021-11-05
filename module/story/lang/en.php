@@ -277,6 +277,7 @@ $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved 
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 $lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
+$lang->story->confirmChangeBranch  = $lang->SRCommon . '%s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';
