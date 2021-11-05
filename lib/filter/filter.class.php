@@ -5,7 +5,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -15,7 +15,7 @@ helper::import(dirname(dirname(__FILE__)) . '/base/filter/filter.class.php');
 /**
  * validater类，检查数据是否符合规则。
  * The validater class, checking data by rules.
- * 
+ *
  * @package framework
  */
 class validater extends baseValidater
@@ -25,7 +25,7 @@ class validater extends baseValidater
 /**
  * fixer类，处理数据。
  * fixer class, to fix data types.
- * 
+ *
  * @package framework
  */
 class fixer extends baseFixer
@@ -60,7 +60,7 @@ class fixer extends baseFixer
                 }
                 if($canImplode) $this->data->$field = implode(',', $value);
             }
-            if(isset($flowFields[$field]) and $flowFields[$field]->control == 'textarea') $this->skipSpecial($field);
+            if(isset($flowFields[$field]) and ($flowFields[$field]->control == 'textarea' or $flowFields[$field]->control == 'richtext')) $this->skipSpecial($field);
             $this->specialChars($field);
         }
 
