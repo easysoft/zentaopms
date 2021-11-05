@@ -453,7 +453,7 @@ class testcase extends control
 
         $this->view->title            = $title;
         $this->view->position         = $position;
-        $this->view->projectID        = $projectID;
+        $this->view->projectID        = isset($projectID) ? $projectID : '';
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
