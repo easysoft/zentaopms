@@ -1692,7 +1692,44 @@ class storyModel extends model
             $story->branch         = $branchID;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if(!dao::isError())
+            {
+                /* If a trunk story to be switched to a non-trunk branch to cancel the association with other non-trunk branch plans. */
+                $removeUnlinkPlan = '';
+                $continueLinkPlan = '';
+                if(empty($oldStory->branch) and $branchID and isset($plans[$storyID]))
+                {
+                    foreach($plans[$storyID] as $planID => $plan)
+                    {
+                        if(!empty($plan->branch) and $plan->branch != $branchID)
+                        {
+                            $removeUnlinkPlan = $planID . ',';
+                            continue;
+                        }
+                        $continueLinkPlan = $planID . ',';
+                    }
+                }
+                /* If a non-trunk story wants to switch to a non-trunk branch, cancel the association with other non-trunk branch plans. */
+                elseif($oldStory->branch and $branchID and isset($plans[$storyID]))
+                {
+                    foreach($plans[$storyID] as $planID => $plan)
+                    {
+                        if(!empty($plan->branch) and $plan->branch != $branchID)
+                        {
+                            $removeUnlinkPlan = $planID . ',';
+                            continue;
+                        }
+                        $continueLinkPlan = $planID . ',';
+                    }
+                }
+                if($removeUnlinkPlan) $this->dao->delete()->from(TABLE_PLANSTORY)->where('story')->eq($storyID)->andWhere('plan')->in($removeUnlinkPlan)->exec();
+                if($continueLinkPlan)
+                {
+                    $story->plan = $continueLinkPlan;
+                    $this->dao->update(TABLE_STORY)->set('plan')->eq($continueLinkPlan)->where('id')->eq($storyID)->exec();
+                }
+                $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            }
         }
         return $allChanges;
     }
@@ -2413,6 +2450,7 @@ class storyModel extends model
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
         if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
+        $allBranch = "`branch` = 'all'";
         if($executionID != '')
         {
             foreach($products as $product) $branches[$product->branch] = $product->branch;
@@ -2430,9 +2468,11 @@ class storyModel extends model
         }
         elseif($branch)
         {
-            $allBranch = "`branch` = 'all'";
             if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in('0','$branch')";
-            if(strpos($storyQuery, $allBranch) !== false) $storyQuery = str_replace($allBranch, '1', $storyQuery);
+        }
+        elseif(strpos($storyQuery, $allBranch) !== false)
+        {
+            $storyQuery = str_replace($allBranch, '1', $storyQuery);
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 

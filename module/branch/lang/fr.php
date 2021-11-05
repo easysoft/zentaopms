@@ -7,6 +7,7 @@ $lang->branch->add    = 'Ajout';
 
 $lang->branch->manageTitle = 'Gestion %s';
 $lang->branch->all         = 'Tous';
+$lang->branch->main        = 'Trunk';
 
 $lang->branch->id      = 'ID';
 $lang->branch->product = 'Product';

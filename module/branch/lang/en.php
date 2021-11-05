@@ -7,6 +7,7 @@ $lang->branch->add    = 'Add';
 
 $lang->branch->manageTitle = '%s Management';
 $lang->branch->all         = 'All ';
+$lang->branch->main        = 'Trunk';
 
 $lang->branch->id      = 'ID';
 $lang->branch->product = 'Product';

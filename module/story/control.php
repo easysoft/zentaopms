@@ -1381,7 +1381,55 @@ class story extends control
      */
     public function batchChangeBranch($branchID)
     {
-        $storyIdList = !empty($_POST['storyIdList']) ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        /* Get the storyIdList value from the post. */
+        if(!empty($_POST['storyIdList'])) $storyIdList = $_POST['storyIdList'];
+        $storyIdList = $storyIdList ? $storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        $plans       = $this->loadModel('productplan')->getListByStories($storyIdList);
+        if(empty($confirm))
+        {
+            $stories             = $this->story->getByList($storyIdList);
+            $conflictStotyIdList = '';
+            $normalStotyIdList   = '';
+            /* Determine whether there are conflicting stories. */
+            foreach($storyIdList as $storyID)
+            {
+                /* If the story of a non-trunk branch needs to be changed to a non-trunk branch, judge whether there is a conflict in the plan. */
+                if($branchID and $stories[$storyID]->branch and $stories[$storyID]->branch != $branchID and isset($plans[$storyID]))
+                {
+                    if(!empty($plan->branch) and $plan->branch != $branchID)
+                    {
+                        $conflictStotyIdList .= '[' . $storyID . ']';
+                        break;
+                    }
+                }
+                /* If a trunk story needs to be switched to a non-trunk branch to determine whether there is a conflicting plan. */
+                elseif($branchID and empty($stories[$storyID]->branch) and $plans[$storyID])
+                {
+                    foreach($plans[$storyID] as $plan)
+                    {
+                        if(!empty($plan->branch) and $plan->branch != $branchID)
+                        {
+                            $conflictStotyIdList .= '[' . $storyID . ']';
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    $normalStotyIdList .= $storyID . ',';
+                }
+            }
+
+            if($conflictStotyIdList)
+            {
+                $storyIdList = implode(',', $storyIdList);
+                $confirmURL  = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList");
+                $cancelURL   = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList");
+                die(js::confirm(sprintf($this->lang->story->confirmChangeBranch, $conflictStotyIdList), $confirmURL, $cancelURL));
+            }
+        }
+
+        if(!is_array($storyIdList)) $storyIdList = explode(',', $storyIdList);
         $storyIdList = array_unique($storyIdList);
         $allChanges  = $this->story->batchChangeBranch($storyIdList, $branchID);
         if(dao::isError()) die(js::error(dao::getError()));
@@ -2039,7 +2087,7 @@ class story extends control
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-            $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
+            $relatedBranch  = array('0' => $this->lang->branch->main) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
             $relatedModules = $this->loadModel('tree')->getAllModulePairs();
 
             foreach($stories as $story)
