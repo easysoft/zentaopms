@@ -7,6 +7,7 @@ $lang->branch->add    = '添加';
 
 $lang->branch->manageTitle = '%s管理';
 $lang->branch->all         = '所有';
+$lang->branch->main        = '主干';
 
 $lang->branch->id      = '编号';
 $lang->branch->product = '所属产品';

@@ -858,7 +858,7 @@ class productModel extends model
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
+            $this->config->product->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
