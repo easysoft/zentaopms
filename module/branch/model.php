@@ -52,7 +52,7 @@ class branchModel extends model
             $product = $this->loadModel('product')->getById($productID);
             if(!$product or $product->type == 'normal') return array();
 
-            $branches = array('0' => $this->lang->branch->main) + $branches;
+            $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
         }
         return $branches;
     }
