@@ -66,15 +66,20 @@ class reportsEntry extends entry
             }
             elseif($field == 'output')
             {
-                $this->loadModel('report');
-                $storyStat = $this->report->getYearObjectStat($accounts, $year, 'story');
-                $report['output']['story'] = $this->processStatus($storyStat['statusStat'], 'story');
+                $report['output'] = $this->loadModel('report')->getOutput4API($accounts, $year);
             }
         }
 
         return $this->send(200, $report);
     }
 
+    /**
+     * Get project overview by status.
+     *
+     * @param  array    $accounts
+     * @access public
+     * @return array
+     */
     public function projectOverview($accounts)
     {
         $statusOverview = $this->loadModel('report')->getProjectStatusOverview(array_keys($accounts));
@@ -100,6 +105,14 @@ class reportsEntry extends entry
         return $projectOverview;
     }
 
+    /**
+     * Get radar data. include product, execution, qa, devel and other.
+     *
+     * @param  array    $accounts
+     * @param  string   $year
+     * @access public
+     * @return array
+     */
     public function radar($accounts, $year)
     {
         $allAccounts      = $this->loadModel('user')->getPairs('noletter|noclosed');
@@ -127,6 +140,12 @@ class reportsEntry extends entry
         return array_values($radar);
     }
 
+    /**
+     * Get project progress.
+     *
+     * @access public
+     * @return array
+     */
     public function projectProgress()
     {
         $projects = $this->loadModel('program')->getProjectStats(0, 'all');
@@ -166,6 +185,12 @@ class reportsEntry extends entry
         return array('statusList' => $statusList, 'projects' => array_values($processedProjects));
     }
 
+    /**
+     * Get execution progress.
+     *
+     * @access public
+     * @return array
+     */
     public function executionProgress()
     {
         $executions = $this->loadModel('project')->getStats(0, 'all', 0, 0, 30, 'id_desc');
@@ -205,10 +230,17 @@ class reportsEntry extends entry
         return array('statusList' => $statusList, 'executions' => array_values($processedExecutions));
     }
 
+    /**
+     * Get product progress with story.
+     *
+     * @access public
+     * @return array
+     */
     public function productProgress()
     {
         $this->app->loadLang('product');
         $this->app->loadLang('story');
+
         $storyStatusStat = $this->dao->select('t1.product,t2.name,t2.status,t1.status as storyStatus,count(*) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t2.deleted')->eq(0)
@@ -240,6 +272,7 @@ class reportsEntry extends entry
             if(isset($productStatusList[$product->status])) $productStatusList[$product->status]['total'] += 1;
         }
 
+        /* Set story status statistics integrate into product. */
         $storyStatusList = array('draft' => array(), 'active' => array(), 'changed' => array(), 'closed' => array());
         foreach($processedProducts as $productID => $product)
         {
@@ -268,10 +301,17 @@ class reportsEntry extends entry
         return array('productStatusList' => $productStatusList, 'products' => array_values($processedProducts), 'storyStatusList' => $storyStatusList);
     }
 
+    /**
+     * Get bug progress by product.
+     *
+     * @access public
+     * @return array
+     */
     public function bugProgress()
     {
         $this->app->loadLang('product');
         $this->app->loadLang('bug');
+
         $bugStatusStat = $this->dao->select('t1.product,t2.name,t2.status,t1.status as bugStatus,count(*) as bugCount')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t2.deleted')->eq(0)
@@ -286,7 +326,7 @@ class reportsEntry extends entry
         $productStatusList['closed']['total'] = 0;
 
         $processedProducts = array();
-        $productBugStat  = array();
+        $productBugStat    = array();
         foreach($bugStatusStat as $product)
         {
             $productBugStat[$product->product][$product->bugStatus] = $product->bugCount;
@@ -303,6 +343,7 @@ class reportsEntry extends entry
             if(isset($productStatusList[$product->status])) $productStatusList[$product->status]['total'] += 1;
         }
 
+        /* Set bug status statistics integrate into product. */
         $bugStatusList = array('active' => array(), 'resolved' => array(), 'closed' => array());
         foreach($processedProducts as $productID => $product)
         {
@@ -329,24 +370,5 @@ class reportsEntry extends entry
         }
 
         return array('productStatusList' => $productStatusList, 'bugs' => array_values($processedProducts), 'bugStatusList' => $bugStatusList);
-    }
-
-    public function processStatus($statusStat, $objectType)
-    {
-        $this->app->loadLang($objectType);
-
-        $processedStatus = array();
-        $total = 0;
-        foreach($this->lang->$objectType->statusList as $status => $statusName)
-        {
-            if(empty($statusStat[$status])) continue;
-
-            $processedStatus[$status]['code']  = $status;
-            $processedStatus[$status]['name']  = $statusName;
-            $processedStatus[$status]['total'] = $statusStat[$status];
-            $total += $statusStat[$status];
-        }
-
-        return array('total' => $total, 'statusList' => array_values($processedStatus));
     }
 }

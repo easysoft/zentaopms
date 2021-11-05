@@ -193,6 +193,10 @@ $lang->report->annualData->actionList['assign']    = '指派';
 $lang->report->annualData->actionList['activate']  = '激活';
 $lang->report->annualData->actionList['resolve']   = '解决';
 $lang->report->annualData->actionList['run']       = '执行';
+$lang->report->annualData->actionList['stop']      = '停止维护';
+
+$lang->report->annualData->actionList['putoff']    = '延期';
+$lang->report->annualData->actionList['suspend']   = '挂起';
 $lang->report->annualData->actionList['change']    = '变更';
 $lang->report->annualData->actionList['pause']     = '暂停';
 $lang->report->annualData->actionList['cancel']    = '取消';

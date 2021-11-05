@@ -1063,6 +1063,71 @@ class reportModel extends model
 
         return $statusOverview;
     }
+
+    /**
+     * Get output data for API.
+     *
+     * @param  array    $accounts
+     * @param  string   $year
+     * @access public
+     * @return array
+     */
+    public function getOutput4API($accounts, $year)
+    {
+        $stmt = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->in(array_keys($this->config->report->outputData))
+            ->andWhere('LEFT(date, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+            ->query();
+
+        $outputData = array();
+        while($action = $stmt->fetch())
+        {
+            if($action->objectType == 'release' and $action->action == 'changestatus')
+            {
+                if($action->extra == 'terminate') $action->action = 'stoped';
+                if($action->extra == 'normal')    $action->action = 'activated';
+            }
+
+            if(!isset($this->config->report->outputData[$action->objectType][$action->action])) continue;
+            if(!isset($outputData[$action->objectType][$action->action])) $outputData[$action->objectType][$action->action] = 0;
+
+            $outputData[$action->objectType][$action->action] += 1;
+        }
+
+        $stmt = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.objectID=t2.id')
+            ->where('t1.objectType')->eq('bug')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t1.action')->eq('opened')
+            ->andWhere('t2.case')->ne('0')
+            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
+            ->query();
+        while($action = $stmt->fetch())
+        {
+            if(!isset($outputData['case']['createBug'])) $outputData['case']['createBug'] = 0;
+            $outputData['case']['createBug'] += 1;
+        }
+
+        $processedOutput = array();
+        foreach($this->config->report->outputData as $objectType => $actions)
+        {
+            $objectActions = $outputData[$objectType];
+            $processedOutput[$objectType]['total'] = array_sum($objectActions);
+
+            foreach($actions as $action => $langCode)
+            {
+                if(empty($objectActions[$action])) continue;
+
+                $processedOutput[$objectType]['actions'][$langCode]['code']  = $langCode;
+                $processedOutput[$objectType]['actions'][$langCode]['name']  = $this->lang->report->annualData->actionList[$langCode];
+                $processedOutput[$objectType]['actions'][$langCode]['total'] = $objectActions[$action];
+            }
+        }
+
+        return $processedOutput;
+    }
 }
 
 /**
