@@ -293,6 +293,87 @@ class gitlab extends control
     }
 
     /**
+     * Browse gitlab project.
+     *
+     * @param  int     $gitlabID
+     * @access public
+     * @return void
+     */
+    public function projectbrowse($gitlabID)
+    {
+        $this->view->gitlabID          = $gitlabID;
+        $this->view->gitlabProjectList = $this->gitlab->apiGetProjects($gitlabID);
+        $this->display();
+    }
+
+    /**
+     * Creat a gitlab project.
+     *
+     * @param  int     $gitlabID
+     * @access public
+     * @return void
+     */
+    public function createProject($gitlabID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->createProject($gitlabID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('projectbrowse', "gitlabID=$gitlabID")));
+        }
+
+        $gitlab = $this->gitlab->getByID($gitlabID);
+        $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+
+        $this->view->gitlab   = $gitlab;
+        $this->view->user     = $user;
+        $this->view->gitlabID = $gitlabID;
+        $this->display();
+    }
+
+    /**
+     * Edit a gitlab project.
+     *
+     * @param  int     $gitlabID
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
+    public function editProject($gitlabID, $projectID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->editProject($gitlabID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('projectbrowse', "gitlabID=$gitlabID")));
+        }
+
+        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+        $this->view->project  = $project;
+        $this->view->gitlabID = $gitlabID;
+        $this->display();
+    }
+
+    /**
+     * Delete a gitlab project.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function deleteProject($gitlabID, $projectID, $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->project->confirmDelete , inlink('deleteProject', "gitlabID=$gitlabID&projectID=$projectID&confirm=yes")));
+
+        $reponse = $this->gitlab->apiDeleteProject($gitlabID, $projectID);
+        if(substr($reponse->message, 0, 2) == '20') die(js::reload('parent'));
+        die(js::alert($reponse->message));
+    }
+
+    /**
      * Import gitlab issue to zentaopms.
      *
      * @param  int    $repoID

@@ -496,6 +496,57 @@ class gitlabModel extends model
     }
 
     /**
+     * Create a gitab project by api.
+     *
+     * @param  int      $gitlabID
+     * @param  object   $project
+     * @access public
+     * @return object
+     */
+    public function apiCreateProject($gitlabID, $project)
+    {
+        if(empty($project->name) and empty($project->path)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects");
+        return json_decode(commonModel::http($url, $project));
+    }
+
+    /**
+     * Update a gitab project by api.
+     *
+     * @param  int      $gitlabID
+     * @param  object   $project
+     * @access public
+     * @return object
+     */
+    public function apiUpdateProject($gitlabID, $project)
+    {
+        if(empty($project->id)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$project->id}");
+        return json_decode(commonModel::http($url, $project, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
+    /**
+     * Delete a gitab project by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function apiDeleteProject($gitlabID, $projectID)
+    {
+        if(empty($projectID)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}");
+        return json_decode(commonModel::http($url, $project, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
      * Get single project by API.
      *
      * @param  int $gitlabID
@@ -1549,5 +1600,62 @@ class gitlabModel extends model
             if($gitlabField == "description") $object->$zentaoField .= "<br><br><a href=\"{$issue->web_url}\" target=\"_blank\">{$issue->web_url}</a>";
         }
         return $object;
+    }
+
+    /**
+     * Create gitlab project.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return bool
+     */
+    public function createProject($gitlabID)
+    {
+        $project = fixer::input('post')->get();
+        if(empty($project->name) and empty($project->path)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyError;
+        if(dao::isError()) return false;
+
+        $reponse = $this->apiCreateProject($gitlabID, $project);
+
+        if($reponse->id) return TRUE;
+        foreach($reponse->message as $field => $fieldErrors)
+        {
+            foreach($fieldErrors as $error)
+            {
+                if($error) dao::$errors[$field][] = $error;
+            }
+        }
+        if(!$reponse) dao::$errors[] = false;
+    }
+
+    /**
+     * Edit gitlab project.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return bool
+     */
+    public function editProject($gitlabID)
+    {
+        $project = fixer::input('post')->get();
+        if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyError;
+        if(dao::isError()) return false;
+
+        $reponse = $this->apiUpdateProject($gitlabID, $project);
+
+        if($reponse->id) return TRUE;
+        if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
+        else
+        {
+            foreach($reponse->message as $field => $fieldErrors)
+            {
+                foreach($fieldErrors as $error)
+                {
+                    if($error) dao::$errors[$field][] = $error;
+                }
+            }
+        }
+
+        if(!$reponse) dao::$errors[] = false;
     }
 }
