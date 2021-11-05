@@ -76,7 +76,7 @@ $lang->mr->at   = "于";
 $lang->mr->pipeline        = "流水线";
 $lang->mr->pipelineSuccess = "已通过";
 $lang->mr->pipelineFailed  = "未通过";
-$lang->mr->pipelineCancled = "已取消";
+$lang->mr->pipelineCanceled = "已取消";
 $lang->mr->pipelineUnknown = "未知";
 
 $lang->mr->pipelineStatus = array();

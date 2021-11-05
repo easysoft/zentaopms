@@ -76,7 +76,7 @@ $lang->mr->at   = "at";
 $lang->mr->pipeline        = "Pipeline";
 $lang->mr->pipelineSuccess = "Success";
 $lang->mr->pipelineFailed  = "Failed";
-$lang->mr->pipelineCancled = "Canceled";
+$lang->mr->pipelineCanceled = "Canceled";
 $lang->mr->pipelineUnknown = "Unknown";
 
 $lang->mr->pipelineStatus = array();
