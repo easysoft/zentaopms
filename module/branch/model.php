@@ -35,12 +35,12 @@ class branchModel extends model
      *
      * @param  int    $productID
      * @param  string $browseType
-     * @param  int    $orderBy
-     * @param  int    $pager
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return void
+     * @return array
      */
-    public function getList($productID, $browseType = 'active', $orderBy, $pager = null)
+    public function getList($productID, $browseType = 'active', $orderBy = 'order_desc', $pager = null)
     {
         $branchList = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
@@ -50,27 +50,22 @@ class branchModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        if($browseType == 'closed')
-        {
-            return $branchList;
-        }
-        else
-        {
-            /* Display the main branch under all and active page. */
-            $mainBranch = new stdclass();
-            $mainBranch->id          = MAIN;
-            $mainBranch->product     = $productID;
-            $mainBranch->name        = $this->lang->branch->main;
-            $mainBranch->default     = 1;
-            $mainBranch->status      = 'active';
-            $mainBranch->createdDate = '';
-            $mainBranch->closedDate  = '';
-            $mainBranch->desc        = $this->lang->branch->mainBranch;
-            $mainBranch->order       = 0;
+        if($browseType == 'closed') return $branchList;
 
-            $pager->recTotal = $pager->recTotal + 1;
-            return array($mainBranch) + $branchList;
-        }
+        /* Display the main branch under all and active page. */
+        $mainBranch = new stdclass();
+        $mainBranch->id          = BRANCH_MAIN;
+        $mainBranch->product     = $productID;
+        $mainBranch->name        = $this->lang->branch->main;
+        $mainBranch->default     = 1;
+        $mainBranch->status      = 'active';
+        $mainBranch->createdDate = '';
+        $mainBranch->closedDate  = '';
+        $mainBranch->desc        = $this->lang->branch->mainBranch;
+        $mainBranch->order       = 0;
+
+        $pager->recTotal = $pager->recTotal + 1;
+        return array($mainBranch) + $branchList;
     }
 
     /**
