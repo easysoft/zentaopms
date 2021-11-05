@@ -666,6 +666,16 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `approvalStatus` char(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF NOT EXISTS `zt_mrapproval`;
+CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `mrID` mediumint(8) unsigned NOT NULL,
+  `account` varchar(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `action` char(30) NOT NULL,
+  `comment` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
