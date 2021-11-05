@@ -131,7 +131,7 @@ class projectModel extends model
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
         $this->loadModel('common')->resetProjectPriv($this->session->project);
-        if(!commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
+        if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
         return $this->session->project;
     }
