@@ -9,6 +9,9 @@ $lang->branch->manageTitle = '%s管理';
 $lang->branch->all         = '所有';
 $lang->branch->main        = '主干';
 
+$lang->branch->edit   = '编辑';
+$lang->branch->active = '激活';
+$lang->branch->close  = '关闭';
 $lang->branch->create = '新增分支';
 $lang->branch->merge  = '合并';
 
