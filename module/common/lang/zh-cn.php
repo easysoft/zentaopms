@@ -310,7 +310,7 @@ $lang->createObjects['doc']       = '文档';
 
 /* 语言 */
 $lang->lang    = 'Language';
-$lang->setLang = '语音设置';
+$lang->setLang = '语言设置';
 
 /* 风格列表。*/
 $lang->theme                = '主题';
