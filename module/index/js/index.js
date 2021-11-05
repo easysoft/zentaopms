@@ -152,7 +152,8 @@
 
                 if(viewType === 'doc' && (link.params.from === 'product' || link.params.$5 == 'product')) return 'product';
                 if(viewType === 'doc' && (link.params.from === 'project' || link.params.$5 == 'project')) return 'project';
-                if(viewType === 'doc') return 'doc';
+                if(viewType === 'doc')   return 'doc';
+                if(viewType === 'story') return 'product';
             }
             else if(methodLowerCase === 'browsetask')
             {

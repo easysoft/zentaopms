@@ -32,9 +32,9 @@ $(function()
     /* Get checked stories. */
     $('#batchToTaskButton').on('click', function()
     {
-        var storyIdList     = '';
-        linedTaskIdList = '';
-        unlinTaskIdList = '';
+        storyIdList      = '';
+        linedTaskIdList  = '';
+        unlinkTaskIdList = '';
         $("input[name^='storyIdList']:checked").each(function()
         {
             if(linkedTaskStories[$(this).val()])
@@ -43,7 +43,7 @@ $(function()
             }
             else
             {
-                unlinTaskIdList += $(this).val() + ',';
+                unlinkTaskIdList += $(this).val() + ',';
             }
             storyIdList += $(this).val() + ',';
         });
@@ -60,7 +60,7 @@ $(function()
             }
             else
             {
-                $('#storyIdList').val(unlinTaskIdList);
+                $('#storyIdList').val(unlinkTaskIdList);
             }
         }
         else

@@ -12,30 +12,33 @@
 class branch extends control
 {
     /**
-     * Manage branch
+     * Manage branch.
      *
      * @param  int    $productID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function manage($productID)
+    public function manage($productID, $browseType = 'active', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product')->setMenu($productID);
 
-        if($_POST)
-        {
-            $newBranches = $this->branch->manage($productID);
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $newBranches));
-            die(js::reload('parent'));
-        }
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $products = $this->loadModel('product')->getPairs('nocode');
-        $position[] = html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID));
-        $position[] = $this->lang->branch->manage;
+        $this->view->title      = $this->lang->branch->manage;
+        $this->view->branchList = $this->branch->getList($productID, $browseType, $orderBy, $pager);
+        $this->view->productID  = $productID;
+        $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
 
-        $this->view->title    = $this->lang->branch->manage;
-        $this->view->position = $position;
-        $this->view->branches = $this->branch->getPairs($productID, 'noempty');
         $this->display();
     }
 

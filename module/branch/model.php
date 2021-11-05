@@ -25,9 +25,47 @@ class branchModel extends model
             if(empty($productID)) $productID = $this->session->product;
             $product = $this->loadModel('product')->getById($productID);
             if(empty($product) or !isset($this->lang->product->branchName[$product->type])) return false;
-            return $this->lang->branch->all . $this->lang->product->branchName[$product->type];
+            return $this->lang->branch->main;
         }
         return htmlspecialchars_decode($this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name'));
+    }
+
+    /**
+     * Get branch list.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getList($productID, $browseType = 'active', $orderBy = 'order_desc', $pager = null)
+    {
+        $branchList = $this->dao->select('*')->from(TABLE_BRANCH)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        if($browseType == 'closed') return $branchList;
+
+        /* Display the main branch under all and active page. */
+        $mainBranch = new stdclass();
+        $mainBranch->id          = BRANCH_MAIN;
+        $mainBranch->product     = $productID;
+        $mainBranch->name        = $this->lang->branch->main;
+        $mainBranch->default     = 1;
+        $mainBranch->status      = 'active';
+        $mainBranch->createdDate = '';
+        $mainBranch->closedDate  = '';
+        $mainBranch->desc        = $this->lang->branch->mainBranch;
+        $mainBranch->order       = 0;
+
+        $pager->recTotal = $pager->recTotal + 1;
+        return array($mainBranch) + $branchList;
     }
 
     /**
@@ -52,7 +90,7 @@ class branchModel extends model
             $product = $this->loadModel('product')->getById($productID);
             if(!$product or $product->type == 'normal') return array();
 
-            $branches = array('0' => $this->lang->branch->all . $this->lang->product->branchName[$product->type]) + $branches;
+            $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
         }
         return $branches;
     }
@@ -81,10 +119,7 @@ class branchModel extends model
             }
         }
 
-        if(strpos($params, 'noempty') === false)
-        {
-            $branchPairs = array('0' => $this->lang->branch->all . $this->lang->product->branchName['branch']) + $branchPairs;
-        }
+        if(strpos($params, 'noempty') === false) $branchPairs = array('0' => $this->lang->branch->main) + $branchPairs;
         return $branchPairs;
     }
 
@@ -154,7 +189,7 @@ class branchModel extends model
             if($product->type == 'normal') continue;
 
             if(!isset($branchGroups[$product->id]))  $branchGroups[$product->id] = array();
-            if(strpos($params, 'noempty') === false) $branchGroups[$product->id] = array('0' => $this->lang->branch->all . $this->lang->product->branchName[$product->type]) + $branchGroups[$product->id];
+            if(strpos($params, 'noempty') === false) $branchGroups[$product->id] = array('0' => $this->lang->branch->main) + $branchGroups[$product->id];
         }
 
         return $branchGroups;
