@@ -276,24 +276,6 @@ class productplanModel extends model
     }
 
     /**
-     * Get plan list by story id list.
-     *
-     * @param  string|array $storyIdList
-     * @access public
-     * @return array
-     */
-    public function getListByStories($storyIdList)
-    {
-        if(empty($storyIdList)) return array();
-        return $this->dao->select('t3.*, t1.id as storyID')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PLANSTORY)->alias('t2')->on('t1.id=t2.story')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t3')->on('t2.plan=t3.id')
-            ->where('t1.id')->in($storyIdList)
-            ->andWhere('t3.deleted')->eq(0)
-            ->fetchGroup('storyID', 'id');
-    }
-
-    /**
      * Get plans for products
      *
      * @param  int    $products
