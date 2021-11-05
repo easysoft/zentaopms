@@ -1113,6 +1113,8 @@ class reportModel extends model
         $processedOutput = array();
         foreach($this->config->report->outputData as $objectType => $actions)
         {
+            if(!isset($outputData[$objectType])) continue;
+
             $objectActions = $outputData[$objectType];
             $processedOutput[$objectType]['total'] = array_sum($objectActions);
 
