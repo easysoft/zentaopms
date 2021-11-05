@@ -31,6 +31,27 @@ class branchModel extends model
     }
 
     /**
+     * Get branch list.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return void
+     */
+    public function getList($productID, $browseType = 'active', $orderBy, $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_BRANCH)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get pairs.
      *
      * @param  int    $productID
