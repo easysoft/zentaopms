@@ -159,7 +159,7 @@ $lang->product->menu->plan     = array('link' => "{$lang->productplan->shortComm
 $lang->product->menu->release  = array('link' => "{$lang->release->common}|release|browse|productID=%s", 'subModule' => 'release');
 $lang->product->menu->roadmap  = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
 if($config->systemMode == 'new')     $lang->product->menu->project  = array('link' => "{$lang->project->common}|product|project|status=all&productID=%s");
-if($config->systemMode == 'classic') $lang->product->menu->project  = array('link' => "{$lang->execution->common}|product|project|status=all&productID=%s"); 
+if($config->systemMode == 'classic') $lang->product->menu->project  = array('link' => "{$lang->execution->common}|product|project|status=all&productID=%s");
 $lang->product->menu->track    = array('link' => "{$lang->track}|story|track|productID=%s");
 $lang->product->menu->doc      = array('link' => "{$lang->doc->common}|doc|tableContents|type=product&objectID=%s", 'subModule' => 'doc');
 $lang->product->menu->dynamic  = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");

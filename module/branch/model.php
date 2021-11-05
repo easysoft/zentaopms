@@ -25,7 +25,7 @@ class branchModel extends model
             if(empty($productID)) $productID = $this->session->product;
             $product = $this->loadModel('product')->getById($productID);
             if(empty($product) or !isset($this->lang->product->branchName[$product->type])) return false;
-            return $this->lang->branch->all . $this->lang->product->branchName[$product->type];
+            return $this->lang->branch->main;
         }
         return htmlspecialchars_decode($this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name'));
     }
@@ -90,7 +90,7 @@ class branchModel extends model
             $product = $this->loadModel('product')->getById($productID);
             if(!$product or $product->type == 'normal') return array();
 
-            $branches = array('0' => $this->lang->branch->all . $this->lang->product->branchName[$product->type]) + $branches;
+            $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
         }
         return $branches;
     }
@@ -119,10 +119,7 @@ class branchModel extends model
             }
         }
 
-        if(strpos($params, 'noempty') === false)
-        {
-            $branchPairs = array('0' => $this->lang->branch->all . $this->lang->product->branchName['branch']) + $branchPairs;
-        }
+        if(strpos($params, 'noempty') === false) $branchPairs = array('0' => $this->lang->branch->main) + $branchPairs;
         return $branchPairs;
     }
 
@@ -192,7 +189,7 @@ class branchModel extends model
             if($product->type == 'normal') continue;
 
             if(!isset($branchGroups[$product->id]))  $branchGroups[$product->id] = array();
-            if(strpos($params, 'noempty') === false) $branchGroups[$product->id] = array('0' => $this->lang->branch->all . $this->lang->product->branchName[$product->type]) + $branchGroups[$product->id];
+            if(strpos($params, 'noempty') === false) $branchGroups[$product->id] = array('0' => $this->lang->branch->main) + $branchGroups[$product->id];
         }
 
         return $branchGroups;

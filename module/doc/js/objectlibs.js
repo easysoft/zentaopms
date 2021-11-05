@@ -45,7 +45,7 @@ function deleteFile(fileID)
 function fullScreen()
 {
     var element       = document.getElementById('content');
-    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
     if(requestMethod)
     {
         var afterEnterFullscreen = function()

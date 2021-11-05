@@ -7,6 +7,7 @@ $lang->branch->add    = 'Thêm';
 
 $lang->branch->manageTitle = 'Quản lý %s';
 $lang->branch->all         = 'Tất cả ';
+$lang->branch->main        = 'Main';
 
 $lang->branch->create = 'Create Branch';
 $lang->branch->merge  = 'Merge';

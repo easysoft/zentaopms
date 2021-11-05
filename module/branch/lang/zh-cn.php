@@ -7,6 +7,7 @@ $lang->branch->add    = '添加';
 
 $lang->branch->manageTitle = '%s管理';
 $lang->branch->all         = '所有';
+$lang->branch->main        = '主干';
 
 $lang->branch->create = '新增分支';
 $lang->branch->merge  = '合并';

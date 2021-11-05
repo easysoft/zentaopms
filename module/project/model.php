@@ -1491,6 +1491,9 @@ class projectModel extends model
                     if(!empty($suffix)) echo $suffix;
                     if(!empty($suffix) || !empty($prefix)) echo '</div>';
                     break;
+                case 'code':
+                    echo $project->code;
+                    break;
                 case 'PM':
                     $user     = $this->loadModel('user')->getByID($project->PM, 'account');
                     $userID   = !empty($user) ? $user->id : '';

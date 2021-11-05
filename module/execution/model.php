@@ -388,6 +388,10 @@ class executionModel extends model
 
             /* Set team of execution. */
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
+	    array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD);
+	    $members = array_unique($members);
+	    $member = array_values($members);
+
             $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
             foreach($members as $account)
             {

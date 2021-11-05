@@ -91,7 +91,7 @@
       $useDatatable     = !commonModel::isTutorialMode() and (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
       $setting          = $this->datatable->getSetting('project');
       $fixedFieldsWidth = $this->datatable->setFixedFieldWidth($setting);
-
+      
       if($useDatatable) include '../../common/view/datatable.html.php';
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>

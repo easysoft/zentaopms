@@ -71,6 +71,7 @@ $config->bug->search['fields']['resolvedBy']     = $lang->bug->resolvedBy;
 $config->bug->search['fields']['status']         = $lang->bug->status;
 $config->bug->search['fields']['confirmed']      = $lang->bug->confirmed;
 
+if($config->systemMode == 'new') $config->bug->search['fields']['project'] = $lang->bug->project;
 $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['branch']         = '';
 $config->bug->search['fields']['plan']           = $lang->bug->productplan;
@@ -114,6 +115,7 @@ $config->bug->search['params']['resolvedBy']    = array('operator' => '=',      
 $config->bug->search['params']['status']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->statusList);
 $config->bug->search['params']['confirmed']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->confirmedList);
 
+if($config->systemMode == 'new') $config->bug->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->bug->search['params']['product']       = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['branch']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['plan']          = array('operator' => '=',       'control' => 'select', 'values' => '');

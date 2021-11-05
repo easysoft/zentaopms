@@ -7,6 +7,7 @@ $lang->branch->add    = 'Ajout';
 
 $lang->branch->manageTitle = 'Gestion %s';
 $lang->branch->all         = 'Tous';
+$lang->branch->main        = 'Main';
 
 $lang->branch->create = 'Create Branch';
 $lang->branch->merge  = 'Merge';
