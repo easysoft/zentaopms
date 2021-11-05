@@ -332,8 +332,29 @@ class productplanModel extends model
             ->leftJoin(TABLE_PLANSTORY)->alias('t2')->on('t1.id=t2.story')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t3')->on('t2.plan=t3.id')
             ->where('t1.id')->in($storyIdList)
-            ->andWhere('t3.deleted')->eq(0)
             ->fetchGroup('storyID', 'id');
+    }
+
+    /**
+     * Get branch plan pairs.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getBranchPlanPairs($productID)
+    {
+        $plans = $this->dao->select('branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->fetchAll('id');
+
+        $planPairs = array();
+        foreach($plans as $planID => $plan)
+        {
+            $planPairs[$plan->branch][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
+        }
+        return $planPairs;
     }
 
     /**

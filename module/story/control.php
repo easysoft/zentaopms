@@ -706,15 +706,12 @@ class story extends control
             $product = $this->product->getByID($productID);
             $branchProduct = $product->type == 'normal' ? false : true;
 
-            /* Set modules and productPlans. */
-            $modules      = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
-            $modules      = array('ditto' => $this->lang->story->ditto) + $modules;
-            $productPlans = $this->productplan->getPairs($productID, $branch, '', true);
-            $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
+            /* Set modules. */
+            $modules = array('ditto' => $this->lang->story->ditto) + $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
             $this->view->modules      = $modules;
             $this->view->branches     = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-            $this->view->productPlans = $productPlans;
+            $this->view->plans        = $this->productplan->getBranchPlanPairs($productID);
             $this->view->position[]   = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
             $this->view->title        = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
         }
@@ -1393,6 +1390,7 @@ class story extends control
             $normalStotyIdList   = '';
             $conflictStoryIdList = '';
             $conflictStoryArray  = array();
+
             /* Determine whether there is a conflict between the branch of the story and the linked plan. */
             foreach($storyIdList as $storyID)
             {
@@ -1400,10 +1398,11 @@ class story extends control
                 {
                     foreach($plans[$storyID] as $plan)
                     {
-                        if($plan->branch != BRANCH_MAIN and $plan->branch != $branchID and strpos($conflictStoryIdList, '[' . $storyID . ']') === false)
+                        if($plan->branch != BRANCH_MAIN and $plan->branch != $branchID)
                         {
                             $conflictStoryIdList .= '[' . $storyID . ']';
                             $conflictStoryArray[] = $storyID;
+                            break;
                         }
                     }
                 }

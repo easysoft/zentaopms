@@ -1678,7 +1678,7 @@ class storyModel extends model
      * @param  string $confirm
      * @param  array  $plans
      * @access public
-     * @return void
+     * @return array
      */
     public function batchChangeBranch($storyIdList, $branchID, $confirm = '', $plans = array())
     {
@@ -1716,7 +1716,7 @@ class storyModel extends model
                             }
                         }
 
-                /* If there is a conflict in the linked plan when the branch story to be modified, the linked with the conflicting plan will be removed. */
+                        /* If there is a conflict in the linked plan when the branch story to be modified, the linked with the conflicting plan will be removed. */
                         if($conflictPlanIdList)
                         {
                             $story->plan = $planIdList;
