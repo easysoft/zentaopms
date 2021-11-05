@@ -8,12 +8,30 @@ $lang->branch->add    = 'Thêm';
 $lang->branch->manageTitle = 'Quản lý %s';
 $lang->branch->all         = 'Tất cả ';
 
-$lang->branch->id      = 'ID';
-$lang->branch->product = 'Sản phẩm';
-$lang->branch->name    = 'Tên';
-$lang->branch->order   = 'Sắp xếp';
-$lang->branch->deleted = 'Xóa';
+$lang->branch->create = 'Create Branch';
+$lang->branch->merge  = 'Merge';
+
+$lang->branch->id          = 'ID';
+$lang->branch->product     = 'Sản phẩm';
+$lang->branch->name        = 'Tên';
+$lang->branch->status      = 'Status';
+$lang->branch->createdDate = 'Created Date';
+$lang->branch->closedDate  = 'Closed Date';
+$lang->branch->desc        = 'Desc';
+$lang->branch->order       = 'Sắp xếp';
+$lang->branch->deleted     = 'Xóa';
 
 $lang->branch->confirmDelete = 'Bạn có muốn xóa @branch@ này?';
 $lang->branch->canNotDelete  = 'Có dữ liệu trong @branch@. Nó không thể bị xóa.';
 $lang->branch->nameNotEmpty  = 'Name must not be empty！';
+
+$lang->branch->noData     = 'No branches.';
+$lang->branch->mainBranch = 'The default main branch of the product.';
+
+$lang->branch->statusList = array();
+$lang->branch->statusList['active'] = 'Active';
+$lang->branch->statusList['closed'] = 'Closed';
+
+$lang->branch->featureBar['manage']['all']    = 'All';
+$lang->branch->featureBar['manage']['active'] = 'Active';
+$lang->branch->featureBar['manage']['closed'] = 'Closed';

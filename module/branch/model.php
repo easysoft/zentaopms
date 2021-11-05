@@ -42,13 +42,35 @@ class branchModel extends model
      */
     public function getList($productID, $browseType = 'active', $orderBy, $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_BRANCH)
+        $branchList = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
+        if($browseType == 'closed')
+        {
+            return $branchList;
+        }
+        else
+        {
+            /* Display the main branch under all and active page. */
+            $mainBranch = new stdclass();
+            $mainBranch->id          = MAIN;
+            $mainBranch->product     = $productID;
+            $mainBranch->name        = $this->lang->branch->main;
+            $mainBranch->default     = 1;
+            $mainBranch->status      = 'active';
+            $mainBranch->createdDate = '';
+            $mainBranch->closedDate  = '';
+            $mainBranch->desc        = $this->lang->branch->mainBranch;
+            $mainBranch->order       = 0;
+
+            $pager->recTotal = $pager->recTotal + 1;
+            return array($mainBranch) + $branchList;
+        }
     }
 
     /**

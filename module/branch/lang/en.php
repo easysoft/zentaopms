@@ -8,12 +8,30 @@ $lang->branch->add    = 'Add';
 $lang->branch->manageTitle = '%s Management';
 $lang->branch->all         = 'All ';
 
-$lang->branch->id      = 'ID';
-$lang->branch->product = 'Product';
-$lang->branch->name    = 'Name';
-$lang->branch->order   = 'Order';
-$lang->branch->deleted = 'Delete';
+$lang->branch->create = 'Create Branch';
+$lang->branch->merge  = 'Merge';
+
+$lang->branch->id          = 'ID';
+$lang->branch->product     = 'Product';
+$lang->branch->name        = 'Name';
+$lang->branch->status      = 'Status';
+$lang->branch->createdDate = 'Created Date';
+$lang->branch->closedDate  = 'Closed Date';
+$lang->branch->desc        = 'Desc';
+$lang->branch->order       = 'Order';
+$lang->branch->deleted     = 'Delete';
 
 $lang->branch->confirmDelete = 'Do you want to delete this @branch@?';
 $lang->branch->canNotDelete  = 'There is data in @branch@. It cannot be deleted.';
 $lang->branch->nameNotEmpty  = 'Name must not be empty！';
+
+$lang->branch->noData     = 'No branches.';
+$lang->branch->mainBranch = 'The default main branch of the product.';
+
+$lang->branch->statusList = array();
+$lang->branch->statusList['active'] = 'Active';
+$lang->branch->statusList['closed'] = 'Closed';
+
+$lang->branch->featureBar['manage']['all']    = 'All';
+$lang->branch->featureBar['manage']['active'] = 'Active';
+$lang->branch->featureBar['manage']['closed'] = 'Closed';

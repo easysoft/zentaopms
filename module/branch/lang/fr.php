@@ -8,12 +8,30 @@ $lang->branch->add    = 'Ajout';
 $lang->branch->manageTitle = 'Gestion %s';
 $lang->branch->all         = 'Tous';
 
-$lang->branch->id      = 'ID';
-$lang->branch->product = 'Product';
-$lang->branch->name    = 'Nom';
-$lang->branch->order   = 'Ordre';
-$lang->branch->deleted = 'Delete';
+$lang->branch->create = 'Create Branch';
+$lang->branch->merge  = 'Merge';
+
+$lang->branch->id          = 'ID';
+$lang->branch->product     = 'Product';
+$lang->branch->name        = 'Nom';
+$lang->branch->status      = 'Status';
+$lang->branch->createdDate = 'Created Date';
+$lang->branch->closedDate  = 'Closed Date';
+$lang->branch->desc        = 'Desc';
+$lang->branch->order       = 'Ordre';
+$lang->branch->deleted     = 'Delete';
 
 $lang->branch->confirmDelete = "Voulez-vous vraiment supprimer l'établissement @branch@ ?";
 $lang->branch->canNotDelete  = 'Attention ! Il y a des données dans @branch@. Suppression impossible !';
 $lang->branch->nameNotEmpty  = 'Name must not be empty！';
+
+$lang->branch->noData     = 'No branches.';
+$lang->branch->mainBranch = 'The default main branch of the product.';
+
+$lang->branch->statusList = array();
+$lang->branch->statusList['active'] = 'Active';
+$lang->branch->statusList['closed'] = 'Closed';
+
+$lang->branch->featureBar['manage']['all']    = 'All';
+$lang->branch->featureBar['manage']['active'] = 'Active';
+$lang->branch->featureBar['manage']['closed'] = 'Closed';

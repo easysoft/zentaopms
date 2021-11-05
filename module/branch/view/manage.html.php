@@ -24,7 +24,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('branch', 'create')):?>
-    <?php common::printLink('branch', 'create', "productID=$productID", "<i class='icon icon-plus'></i>" . $lang->branch->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('branch', 'create', "productID=$productID", "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-primary'");?>
     <?php endif;?>
   </div>
 </div>
@@ -63,7 +63,7 @@
         <tr>
           <?php if(common::hasPriv('branch', 'batchEdit') or common::hasPriv('branch', 'mergeBranch')):?>
           <td class='cell-id'>
-            <?php echo html::checkbox('branchIDList', array($branch->id => ''));?>
+            <?php echo html::checkbox('branchIDList', array($branch->id => ''), '', $branch->id == MAIN ? "disabled='disabled'" : '');?>
           </td>
           <?php endif;?>
           <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
@@ -74,14 +74,15 @@
           <td class='c-name' title='<?php echo $branch->desc;?>'><?php echo $branch->desc;?></td>
           <td class='c-actions'>
           <?php
-            common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list');
+            $disabled = $branch->id == MAIN ? 'disabled' : '';
+            common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list', '', '', $disabled);
             if($branch->status == 'active')
             {
-                common::printIcon('branch', 'closed', "branchID=$branch->id", $branch, 'list', 'off');
+                common::printIcon('branch', 'closed', "branchID=$branch->id", $branch, 'list', 'off', '', $disabled);
             }
             else
             {
-                common::printIcon('branch', 'active', "branchID=$branch->id", $branch, 'list', 'active');
+                common::printIcon('branch', 'active', "branchID=$branch->id", $branch, 'list', 'active', '', $disabled);
             }
           ?>
           </td>

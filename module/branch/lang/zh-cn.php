@@ -25,7 +25,8 @@ $lang->branch->confirmDelete = '是否删除该@branch@？';
 $lang->branch->canNotDelete  = '该@branch@下已经有数据，不能删除！';
 $lang->branch->nameNotEmpty  = '名称不能为空！';
 
-$lang->branch->noData = '暂时没有分支。';
+$lang->branch->noData     = '暂时没有分支。';
+$lang->branch->mainBranch = '产品默认主干分支。';
 
 $lang->branch->statusList = array();
 $lang->branch->statusList['active'] = '激活';
