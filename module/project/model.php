@@ -1429,15 +1429,7 @@ class projectModel extends model
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
         $account      = $this->app->user->account;
         $id           = $col->id;
-
-        if($project->model == 'waterfall')
-        {
-            $projectLink = helper::createLink('programplan', 'browse', "projectID=$project->id&productID=0&type=lists", '', '', $project->id); 
-        }
-        else
-        {
-            $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('execution', 'task', "projectID=$project->id");
-        }
+        $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('execution', 'task', "projectID=$project->id");
 
         if($col->show)
         {

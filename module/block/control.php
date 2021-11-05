@@ -230,7 +230,7 @@ class block extends control
         $commonField = 'common';
         if($module == 'project' and $projectID)
         {
-            $project     = $this->loadModel('project')->getByID($this->session->project);
+            $project     = $this->loadModel('project')->getByID($projectID);
             $commonField = $project->model . 'common';
         }
 

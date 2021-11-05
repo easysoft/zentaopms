@@ -480,8 +480,11 @@ class programplanModel extends model
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
-            $data->planDuration = $this->getDuration($data->begin, $data->end);
-            $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
+            if(isset($this->config->maxVersion))
+            {
+                $data->planDuration = $this->getDuration($data->begin, $data->end);
+                $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
+            }
 
             $projectChanged = false;
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
@@ -671,8 +674,11 @@ class programplanModel extends model
         }
 
         /* Set planDuration and realDuration. */
-        $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
-        $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
+        if(isset($this->config->maxVersion))
+        {
+            $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
+            $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
+        }
 
         if($planChanged)  $plan->version = $oldPlan->version + 1;
         if(empty($plan->parent)) $plan->parent = $projectID;
