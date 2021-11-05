@@ -125,7 +125,7 @@ class treeModel extends model
             $product = $this->loadModel('product')->getById($rootID);
             if($product and $product->type != 'normal')
             {
-                $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+                $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'all');
                 if($branch)
                 {
                     $newBranches['null']  = '';

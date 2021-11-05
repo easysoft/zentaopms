@@ -60,20 +60,20 @@ class productModel extends model
     /**
      * Create the select code of products.
      *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  string $currentModule
-     * @param  string $currentMethod
-     * @param  string $extra
-     * @param  int    $branch
-     * @param  int    $module
-     * @param  string $moduleType
-     * @param  bool   $withBranch      true|false
+     * @param  array       $products
+     * @param  int         $productID
+     * @param  string      $currentModule
+     * @param  string      $currentMethod
+     * @param  string      $extra
+     * @param  int|string  $branch
+     * @param  int         $module
+     * @param  string      $moduleType
+     * @param  bool        $withBranch      true|false
      *
      * @access public
      * @return string
      */
-    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '', $withBranch = true)
+    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 'all', $module = 0, $moduleType = '', $withBranch = true)
     {
         $isBrowseBug = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
 
@@ -114,7 +114,7 @@ class productModel extends model
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
                 $this->lang->product->menu->settings['subMenu']->branch = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch);
 
-                $branches   = $this->loadModel('branch')->getPairs($productID);
+                $branches   = $this->loadModel('branch')->getPairs($productID, 'all');
                 $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
                 if(!$isMobile)
                 {
@@ -441,13 +441,13 @@ class productModel extends model
     /*
      * Get product switcher.
      *
-     * @param  int    $productID
-     * @param  string $extra
-     * @param  int    $branch
+     * @param  int         $productID
+     * @param  string      $extra
+     * @param  int|string  $branch
      * @access public
      * @return void
      */
-    public function getSwitcher($productID = 0, $extra = '', $branch = 0)
+    public function getSwitcher($productID = 0, $extra = '', $branch = '')
     {
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
@@ -475,16 +475,17 @@ class productModel extends model
 
         if($this->app->viewType == 'mhtml' and $productID) return $this->getModuleNav(array($productID => $currentProductName), $productID, $extra, $branch);
 
-
         $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
-        if(isset($currentProduct->type) and $currentProduct->type != 'normal' and $currentModule != 'testsuite' and $currentModule != 'testreport')
+        $notNormalProduct   = (isset($currentProduct->type) and $currentProduct->type != 'normal');
+        $isTrackMethod      = $currentModule == 'story' and $currentMethod == 'track';
+        $isShowBranchMethod = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod;
+        if($notNormalProduct and strpos(',testsuite,testreport,', ',' . $currentModule . ',') === false and ($this->app->tab == 'qa' or $isShowBranchMethod))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
-            $branches     = $this->loadModel('branch')->getPairs($productID);
-            $branch       = (int)$branch;
+            $branches     = $this->loadModel('branch')->getPairs($productID, 'all');
             $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
             $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
 
@@ -1981,16 +1982,16 @@ class productModel extends model
      *
      * Set menu.
      *
-     * @param int    $productID
-     * @param int    $branch
-     * @param int    $module
-     * @param string $moduleType
-     * @param string $extra
+     * @param int         $productID
+     * @param int|string  $branch
+     * @param int         $module
+     * @param string      $moduleType
+     * @param string      $extra
      *
      * @access public
      * @return void
      */
-    public function setMenu($productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
+    public function setMenu($productID, $branch = 'all', $module = 0, $moduleType = '', $extra = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) die(js::error($this->lang->product->accessDenied) . js::locate('back'));
 
