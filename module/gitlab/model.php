@@ -1691,6 +1691,7 @@ class gitlabModel extends model
     public function createUser($gitlabID)
     {
         $user = fixer::input('post')->get();
+
         if(empty($user->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
         if(empty($user->username)) dao::$errors['username'][] = $this->lang->gitlab->user->username . $this->lang->gitlab->user->emptyError;
         if(empty($user->email))    dao::$errors['email'][] = $this->lang->gitlab->user->email . $this->lang->gitlab->user->emptyError;
@@ -1701,11 +1702,34 @@ class gitlabModel extends model
             dao::$errors[] = $this->lang->gitlab->user->passwordError;
             return false;
         }
+        /* Check whether the user has been bind. */
+        if($user->bind)
+        {
+            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->bind)->fetch();
+            if($zentaoBindUser)
+            {
+                dao::$errors['bind'][] = $this->lang->gitlab->user->bindError;
+                return false;
+            }
+        }
 
         $reponse = $this->apiCreateUser($gitlabID, $user);
 
         if(!$reponse) dao::$errors[] = false;
-        if(!empty($reponse->id)) return TRUE;
+        if(!empty($reponse->id))
+        {
+            /* Bind user. */
+            if($user->bind)
+            {
+                $userBind = new stdclass;
+                $userBind->providerID = $gitlabID;
+                $userBind->providerType = 'gitlab';
+                $userBind->account = $user->bind;
+                $userBind->openID  = $reponse->id;
+                $this->dao->insert(TABLE_OAUTH)->data($userBind)->exec();
+            }
+            return TRUE;
+        }
         if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
         else
         {

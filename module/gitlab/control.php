@@ -323,7 +323,10 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('userBrowse', "gitlabID=$gitlabID")));
         }
 
-        $this->view->gitlabID = $gitlabID;
+        $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
+
+        $this->view->userPairs = $userPairs;
+        $this->view->gitlabID  = $gitlabID;
         $this->display();
     }
 

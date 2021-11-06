@@ -65,6 +65,10 @@
             </td> 
           </tr>
           <tr>
+            <th><?php echo $lang->gitlab->user->bind;?></th>
+            <td><?php echo html::select('bind', $userPairs, '', "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->gitlab->user->skype;?></th>
             <td><?php echo html::input('skype', '', "class='form-control' placeholder='{$lang->gitlab->user->skype}'");?></td>
           </tr>
