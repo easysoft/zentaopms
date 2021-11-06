@@ -299,7 +299,42 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function projectbrowse($gitlabID)
+    public function userBrowse($gitlabID)
+    {
+        $this->view->gitlabID       = $gitlabID;
+        $this->view->gitlabUserList = $this->gitlab->apiGetUsers($gitlabID);
+        $this->display();
+    }
+
+    /**
+     * Creat a gitlab project.
+     *
+     * @param  int     $gitlabID
+     * @access public
+     * @return void
+     */
+    public function createUser($gitlabID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->createUser($gitlabID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('userBrowse', "gitlabID=$gitlabID")));
+        }
+
+        $this->view->gitlabID = $gitlabID;
+        $this->display();
+    }
+
+    /**
+     * Browse gitlab project.
+     *
+     * @param  int     $gitlabID
+     * @access public
+     * @return void
+     */
+    public function projectBrowse($gitlabID)
     {
         $this->view->gitlabID          = $gitlabID;
         $this->view->gitlabProjectList = $this->gitlab->apiGetProjects($gitlabID);
@@ -347,7 +382,7 @@ class gitlab extends control
             $this->gitlab->editProject($gitlabID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('projectbrowse', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('projectBrowse', "gitlabID=$gitlabID")));
         }
 
         $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);

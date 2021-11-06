@@ -462,6 +462,8 @@ class gitlabModel extends model
             $user->account  = $gitlabUser->username;
             $user->email    = $gitlabUser->email;
             $user->avatar   = $gitlabUser->avatar_url;
+            $user->createdAt   = $gitlabUser->created_at;
+            $user->lastActivityOn   = $gitlabUser->last_activity_on;
 
             $users[] = $user;
         }
@@ -510,6 +512,23 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects");
         return json_decode(commonModel::http($url, $project));
+    }
+
+    /**
+     * Create a gitab user by api.
+     *
+     * @param  int      $gitlabID
+     * @param  object   $user
+     * @access public
+     * @return object
+     */
+    public function apiCreateUser($gitlabID, $user)
+    {
+        if(empty($user->name) or empty($user->username) or empty($user->email) or empty($user->password)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/users");
+        return json_decode(commonModel::http($url, $user));
     }
 
     /**
@@ -1617,15 +1636,19 @@ class gitlabModel extends model
 
         $reponse = $this->apiCreateProject($gitlabID, $project);
 
-        if($reponse->id) return TRUE;
-        foreach($reponse->message as $field => $fieldErrors)
+        if(!$reponse) dao::$errors[] = false;
+        if(!empty($reponse->id)) return TRUE;
+        if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
+        else
         {
-            foreach($fieldErrors as $error)
+            foreach($reponse->message as $field => $fieldErrors)
             {
-                if($error) dao::$errors[$field][] = $error;
+                foreach($fieldErrors as $error)
+                {
+                    if($error) dao::$errors[$field][] = $error;
+                }
             }
         }
-        if(!$reponse) dao::$errors[] = false;
     }
 
     /**
@@ -1643,7 +1666,8 @@ class gitlabModel extends model
 
         $reponse = $this->apiUpdateProject($gitlabID, $project);
 
-        if($reponse->id) return TRUE;
+        if(!$reponse) dao::$errors[] = false;
+        if(!empty($reponse->id)) return TRUE;
         if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
         else
         {
@@ -1655,7 +1679,43 @@ class gitlabModel extends model
                 }
             }
         }
+    }
+
+    /**
+     * Create gitlab user.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return bool
+     */
+    public function createUser($gitlabID)
+    {
+        $user = fixer::input('post')->get();
+        if(empty($user->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
+        if(empty($user->username)) dao::$errors['username'][] = $this->lang->gitlab->user->username . $this->lang->gitlab->user->emptyError;
+        if(empty($user->email))    dao::$errors['email'][] = $this->lang->gitlab->user->email . $this->lang->gitlab->user->emptyError;
+        if(empty($user->password)) dao::$errors['password'][] = $this->lang->gitlab->user->password . $this->lang->gitlab->user->emptyError;
+        if(dao::isError()) return false;
+        if($user->password != $user->password_repeat)
+        {
+            dao::$errors[] = $this->lang->gitlab->user->passwordError;
+            return false;
+        }
+
+        $reponse = $this->apiCreateUser($gitlabID, $user);
 
         if(!$reponse) dao::$errors[] = false;
+        if(!empty($reponse->id)) return TRUE;
+        if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
+        else
+        {
+            foreach($reponse->message as $field => $fieldErrors)
+            {
+                foreach($fieldErrors as $error)
+                {
+                    if($error) dao::$errors[$field][] = $error;
+                }
+            }
+        }
     }
 }
