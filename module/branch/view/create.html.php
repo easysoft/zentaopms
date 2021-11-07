@@ -26,9 +26,7 @@
         <td><?php echo html::input('desc', '', "class='form-control'");?></td>
       </tr>
       <tr>
-        <td colspan='2' class='text-center'>
-         <?php echo html::submitButton();?>
-        </td>
+        <td colspan='2' class='text-center form-actions'><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>

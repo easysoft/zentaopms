@@ -188,7 +188,7 @@ class actionModel extends model
 
             /* Set fields to fetch. */
             $fields = '*';
-            if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
+            if(strpos('story, productplan, case, branch',  $objectType) !== false) $fields = 'product';
             if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project, execution';
             if(strpos('case, repo', $objectType) !== false) $fields = 'execution';
             if($objectType == 'release') $fields = 'product, build';
@@ -1176,6 +1176,11 @@ class actionModel extends model
                 {
                     $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
                     $params = sprintf($vars, $api->lib, $api->module, $api->id);
+                }
+                elseif($action->objectType == 'branch')
+                {
+                    $productID = $this->dao->select('product')->from(TABLE_BRANCH)->where('id')->eq($action->objectID)->fetch('product');
+                    $params    = sprintf($vars, $productID);
                 }
                 else
                 {

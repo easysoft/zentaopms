@@ -421,12 +421,14 @@ $lang->product->methodOrder[105] = 'unbindWhitelist';
 /* Branch. */
 $lang->resource->branch = new stdclass();
 $lang->resource->branch->manage = 'manage';
+$lang->resource->branch->create = 'create';
 $lang->resource->branch->sort   = 'sort';
 $lang->resource->branch->delete = 'delete';
 
 $lang->branch->methodOrder[0]  = 'manage';
-$lang->branch->methodOrder[5]  = 'sort';
-$lang->branch->methodOrder[10] = 'delete';
+$lang->branch->methodOrder[5]  = 'create';
+$lang->branch->methodOrder[10] = 'sort';
+$lang->branch->methodOrder[15] = 'delete';
 
 /* Story. */
 $lang->resource->story = new stdclass();

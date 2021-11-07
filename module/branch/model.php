@@ -128,18 +128,25 @@ class branchModel extends model
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return int|bool
      */
     public function create($productID)
     {
         $branch = fixer::input('post')
-            ->setDefault('product', $productID)
-            ->setDefault('createdDate', helper::today())
-            ->setDefault('status', 'active')
+            ->add('product', $productID)
+            ->add('createdDate', helper::today())
+            ->add('status', 'active')
             ->get();
 
-        $this->dao->insert(TABLE_BRANCH)->data($branch)->exec();
-        if(dao::isError()) return false;
+        $lastOrder = (int)$this->dao->select('`order`')->from(TABLE_BRANCH)->where('product')->eq($productID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $branch->order = empty($lastOrder) ? 1 : $lastOrder + 1;
+
+        $this->dao->insert(TABLE_BRANCH)->data($branch)
+            ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError()) return $this->dao->lastInsertID();
+        return false;
     }
 
     /**

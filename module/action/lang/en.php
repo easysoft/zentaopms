@@ -506,6 +506,7 @@ $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->api         = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->branch      = 'Branch|branch|manage|prouctID=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

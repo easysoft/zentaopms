@@ -53,7 +53,11 @@ class branch extends control
     {
         if($_POST)
         {
-            $this->branch->create($productID);
+            $branchID = $this->branch->create($productID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('branch', $branchID, 'Opened');
+            die(js::reload('parent.parent'));
         }
 
         $this->display();
