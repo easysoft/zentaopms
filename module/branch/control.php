@@ -64,6 +64,28 @@ class branch extends control
     }
 
     /**
+     * Edit a branch.
+     *
+     * @param  int    $branchID
+     * @access public
+     * @return void
+     */
+    public function edit($branchID)
+    {
+        if($_POST)
+        {
+            $changes = $this->branch->update($branchID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($changes) $this->loadModel('action')->create('branch', $branchID, 'Edited');
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->branch = $this->branch->getById($branchID, 0, true);
+        $this->display();
+    }
+
+    /**
      * Sort branch.
      *
      * @access public

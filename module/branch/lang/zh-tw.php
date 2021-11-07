@@ -8,8 +8,12 @@ $lang->branch->add    = '添加';
 $lang->branch->manageTitle = '%s管理';
 $lang->branch->all         = '所有';
 
-$lang->branch->create = '新增分支';
-$lang->branch->merge  = '合併';
+$lang->branch->edit       = '編輯';
+$lang->branch->editAction = '編輯分支';
+$lang->branch->active     = '啟動';
+$lang->branch->close      = '關閉';
+$lang->branch->create     = '新增分支';
+$lang->branch->merge      = '合併';
 
 $lang->branch->id          = '編號';
 $lang->branch->product     = '所屬產品';

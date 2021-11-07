@@ -4,4 +4,4 @@ $config->branch->create = new stdclass();
 $config->branch->edit   = new stdclass();
 
 $config->branch->create->requiredFields = 'name';
-$config->branch->edit->requiredFields   = 'name';
+$config->branch->edit->requiredFields   = 'name,status';

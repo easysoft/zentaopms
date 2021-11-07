@@ -9,8 +9,12 @@ $lang->branch->manageTitle = 'Quản lý %s';
 $lang->branch->all         = 'Tất cả ';
 $lang->branch->main        = 'Main';
 
-$lang->branch->create = 'Create Branch';
-$lang->branch->merge  = 'Merge';
+$lang->branch->edit       = 'Edit';
+$lang->branch->editAction = 'Edit Branch';
+$lang->branch->active     = 'Active';
+$lang->branch->close      = 'Close';
+$lang->branch->create     = 'Create Branch';
+$lang->branch->merge      = 'Merge';
 
 $lang->branch->id          = 'ID';
 $lang->branch->product     = 'Sản phẩm';

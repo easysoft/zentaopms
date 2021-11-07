@@ -75,7 +75,7 @@
           <td class='c-actions'>
           <?php
             $disabled = $branch->id == BRANCH_MAIN ? 'disabled' : '';
-            common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list', '', '', $disabled);
+            common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list', '', '', "$disabled iframe", true);
             if($branch->status == 'active')
             {
                 common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', '', $disabled);
