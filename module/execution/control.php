@@ -1834,7 +1834,7 @@ class execution extends control
     public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
         if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
-        if(empty($groupBy) and $browseType != 'all') $groupBy = $this->session->kanbanGroupBy ? $this->session->kanbanGroupBy : 'default';
+        if(empty($groupBy) and $browseType != 'all') $groupBy = $this->session->{'kanbanGroupBy' . $browseType} ? $this->session->{'kanbanGroupBy' . $browseType} : 'default';
         if(empty($groupBy) and $browseType == 'all') $groupBy = 'default';
 
         /* Save to session. */
@@ -1842,7 +1842,7 @@ class execution extends control
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
         $this->app->session->set('kanbanType', $browseType, 'execution');
-        $this->app->session->set('kanbanGroupBy', $groupBy, 'execution');
+        $this->app->session->set('kanbanGroupBy' . $browseType, $groupBy, 'execution');
 
         /* Load language. */
         $this->app->loadLang('story');
