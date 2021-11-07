@@ -178,6 +178,38 @@ class branchModel extends model
     }
 
     /**
+     * Close a branch.
+     *
+     * @param  int    $branchID
+     * @access public
+     * @return void
+     */
+    public function close($branchID)
+    {
+        $this->dao->update(TABLE_BRANCH)
+            ->set('status')->eq('closed')
+            ->set('closedDate')->eq(helper::today())
+            ->where('id')->eq($branchID)
+            ->exec();
+    }
+
+    /**
+     * Activate a branch.
+     *
+     * @param  int    $branchID
+     * @access public
+     * @return void
+     */
+    public function activate($branchID)
+    {
+        $this->dao->update(TABLE_BRANCH)
+            ->set('status')->eq('active')
+            ->set('closedDate')->eq('')
+            ->where('id')->eq($branchID)
+            ->exec();
+    }
+
+    /**
      * Manage branch.
      *
      * @param  int    $productID

@@ -9,12 +9,14 @@ $lang->branch->manageTitle = '%s Management';
 $lang->branch->all         = 'Alle ';
 $lang->branch->main        = 'Main';
 
-$lang->branch->edit       = 'Edit';
-$lang->branch->editAction = 'Edit Branch';
-$lang->branch->active     = 'Active';
-$lang->branch->close      = 'Close';
-$lang->branch->create     = 'Create Branch';
-$lang->branch->merge      = 'Merge';
+$lang->branch->edit           = 'Edit';
+$lang->branch->editAction     = 'Edit Branch';
+$lang->branch->activate       = 'Activate';
+$lang->branch->activateAction = 'Activate Branch';
+$lang->branch->close          = 'Close';
+$lang->branch->closeAction    = 'Close Branch';
+$lang->branch->create         = 'Create Branch';
+$lang->branch->merge          = 'Merge';
 
 $lang->branch->id          = 'ID';
 $lang->branch->product     = 'Produkt';
@@ -26,9 +28,11 @@ $lang->branch->desc        = 'Desc';
 $lang->branch->order       = 'Sortierung';
 $lang->branch->deleted     = 'Löscht';
 
-$lang->branch->confirmDelete = 'Möchten Sie diesen @branch@ löschen?';
-$lang->branch->canNotDelete  = 'Es sind Daten im @branch@ vorhanden. Löschen nicht möglich.';
-$lang->branch->nameNotEmpty  = 'Name must not be empty！';
+$lang->branch->confirmDelete   = 'Möchten Sie diesen @branch@ löschen?';
+$lang->branch->canNotDelete    = 'Es sind Daten im @branch@ vorhanden. Löschen nicht möglich.';
+$lang->branch->nameNotEmpty    = 'Name must not be empty！';
+$lang->branch->confirmClose    = 'Do you want to close this @branch@？';
+$lang->branch->confirmActivate = 'Do you want to activate this @branch@？';
 
 $lang->branch->noData     = 'No branches.';
 $lang->branch->mainBranch = 'The default main branch of the product.';

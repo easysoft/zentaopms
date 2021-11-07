@@ -9,12 +9,14 @@ $lang->branch->manageTitle = 'Quản lý %s';
 $lang->branch->all         = 'Tất cả ';
 $lang->branch->main        = 'Main';
 
-$lang->branch->edit       = 'Edit';
-$lang->branch->editAction = 'Edit Branch';
-$lang->branch->active     = 'Active';
-$lang->branch->close      = 'Close';
-$lang->branch->create     = 'Create Branch';
-$lang->branch->merge      = 'Merge';
+$lang->branch->edit           = 'Edit';
+$lang->branch->editAction     = 'Edit Branch';
+$lang->branch->activate       = 'Activate';
+$lang->branch->activateAction = 'Activate Branch';
+$lang->branch->close          = 'Close';
+$lang->branch->closeAction    = 'Close Branch';
+$lang->branch->create         = 'Create Branch';
+$lang->branch->merge          = 'Merge';
 
 $lang->branch->id          = 'ID';
 $lang->branch->product     = 'Sản phẩm';
@@ -26,9 +28,11 @@ $lang->branch->desc        = 'Desc';
 $lang->branch->order       = 'Sắp xếp';
 $lang->branch->deleted     = 'Xóa';
 
-$lang->branch->confirmDelete = 'Bạn có muốn xóa @branch@ này?';
-$lang->branch->canNotDelete  = 'Có dữ liệu trong @branch@. Nó không thể bị xóa.';
-$lang->branch->nameNotEmpty  = 'Name must not be empty！';
+$lang->branch->confirmDelete   = 'Bạn có muốn xóa @branch@ này?';
+$lang->branch->canNotDelete    = 'Có dữ liệu trong @branch@. Nó không thể bị xóa.';
+$lang->branch->nameNotEmpty    = 'Name must not be empty！';
+$lang->branch->confirmClose    = 'Do you want to close this @branch@？';
+$lang->branch->confirmActivate = 'Do you want to activate this @branch@？';
 
 $lang->branch->noData     = 'No branches.';
 $lang->branch->mainBranch = 'The default main branch of the product.';

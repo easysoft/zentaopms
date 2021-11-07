@@ -420,17 +420,21 @@ $lang->product->methodOrder[105] = 'unbindWhitelist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
-$lang->resource->branch->manage = 'manage';
-$lang->resource->branch->create = 'create';
-$lang->resource->branch->edit   = 'editAction';
-$lang->resource->branch->sort   = 'sort';
-$lang->resource->branch->delete = 'delete';
+$lang->resource->branch->manage   = 'manage';
+$lang->resource->branch->create   = 'create';
+$lang->resource->branch->edit     = 'editAction';
+$lang->resource->branch->close    = 'closeAction';
+$lang->resource->branch->activate = 'activateAction';
+$lang->resource->branch->sort     = 'sort';
+$lang->resource->branch->delete   = 'delete';
 
 $lang->branch->methodOrder[0]  = 'manage';
 $lang->branch->methodOrder[5]  = 'create';
 $lang->branch->methodOrder[10] = 'edit';
-$lang->branch->methodOrder[15] = 'sort';
-$lang->branch->methodOrder[20] = 'delete';
+$lang->branch->methodOrder[15] = 'close';
+$lang->branch->methodOrder[20] = 'activate';
+$lang->branch->methodOrder[25] = 'sort';
+$lang->branch->methodOrder[30] = 'delete';
 
 /* Story. */
 $lang->resource->story = new stdclass();

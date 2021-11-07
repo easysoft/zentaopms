@@ -78,11 +78,11 @@
             common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list', '', '', "$disabled iframe", true);
             if($branch->status == 'active')
             {
-                common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', '', $disabled);
+                common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', 'hiddenwin', $disabled);
             }
             else
             {
-                common::printIcon('branch', 'active', "branchID=$branch->id", $branch, 'list', 'active', '', $disabled);
+                common::printIcon('branch', 'activate', "branchID=$branch->id", $branch, 'list', 'active', 'hiddenwin', $disabled);
             }
           ?>
           </td>
