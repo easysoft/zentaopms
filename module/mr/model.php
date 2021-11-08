@@ -445,6 +445,38 @@ class mrModel extends model
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
+     /**
+     * Close MR by API.
+     *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiCloseMR($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=close';
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
+    /**
+     * Reopen MR by API.
+     *
+     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiReopenMR($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
     /**
      * Accept MR by API.
      *
@@ -653,4 +685,40 @@ class mrModel extends model
         }
         return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
     }
+
+    /**
+     * Close this MR.
+     *
+     * @param  mixed $MR
+     * @return void
+     */
+    public function close($MR)
+    {
+        $this->loadModel('action');
+        $actionID = $this->action->create('mr', $MR->id, 'close');
+        $rawMR = $this->apiCloseMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        $changes = common::createChanges($MR, $rawMR);
+        $this->action->logHistory($actionID, $changes);
+        if(isset($rawMR->state) and $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+    }
+
+    /**
+     * Reopen this MR.
+     *
+     * @param  mixed $MR
+     * @return void
+     */
+    public function reopen($MR)
+    {
+        $this->loadModel('action');
+        $actionID = $this->action->create('mr', $MR->id, 'reopen');
+        $rawMR = $this->apiReopenMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        $changes = common::createChanges($MR, $rawMR);
+        $this->action->logHistory($actionID, $changes);
+        if(isset($rawMR->state) and $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+    }
+
 }
+

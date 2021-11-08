@@ -29,6 +29,7 @@ $lang->mr->approval = 'Approval';
 $lang->mr->approve  = 'Approve';
 $lang->mr->reject   = 'Reject';
 $lang->mr->close    = 'Close';
+$lang->mr->reopen   = 'Reopen';
 
 $lang->mr->approvalResult  = 'Approval result';
 $lang->mr->approvalResultList  = array();

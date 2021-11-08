@@ -29,6 +29,7 @@ $lang->mr->approval = '评审';
 $lang->mr->approve  = '通过';
 $lang->mr->reject   = '拒绝';
 $lang->mr->close    = '关闭';
+$lang->mr->reopen   = '重新打开';
 
 $lang->mr->approvalResult  = '评审意见';
 $lang->mr->approvalResultList  = array();

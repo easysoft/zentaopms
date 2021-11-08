@@ -29,6 +29,7 @@ $lang->mr->approval = '評審';
 $lang->mr->approve  = '通過';
 $lang->mr->reject   = '拒絕';
 $lang->mr->close    = '關閉';
+$lang->mr->reopen   = '重新打開';
 
 $lang->mr->approvalResult  = '評審意見';
 $lang->mr->approvalResultList  = array();
