@@ -1857,9 +1857,16 @@ class projectModel extends model
 
         $myProjects    = array();
         $otherProjects = array();
+        $closedCount   = 0;
         foreach($projects as $project)
         {
             if(strpos('wait,doing,closed', $project->status) === false) continue;
+
+            if($project->status == 'closed') 
+            {
+                $closedCount ++;
+                if($closedCount > 2) continue;
+            }
 
             $projectPath = explode(',', trim($project->path, ','));
             $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
