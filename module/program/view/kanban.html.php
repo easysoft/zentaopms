@@ -46,7 +46,6 @@ $userPrivs['release']     = common::hasPriv('release', 'view');
 js::set('kanbanColumns', $kanbanColumns);
 js::set('userPrivs',     $userPrivs);
 js::set('kanbanGroup',   $kanbanGroup);
-js::set('order',         $order);
 js::set('doingText',     $lang->program->statusList['doing']);
 ?>
 <?php endif; ?>
