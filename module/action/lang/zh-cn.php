@@ -312,6 +312,11 @@ $lang->action->dynamicAction->product['closed']    = '关闭' . $lang->productCo
 $lang->action->dynamicAction->product['undeleted'] = '还原' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = '隐藏' . $lang->productCommon;
 
+$lang->action->dynamicAction->branch['opened']    = '创建分支';
+$lang->action->dynamicAction->branch['edited']    = '编辑分支';
+$lang->action->dynamicAction->branch['closed']    = '关闭分支';
+$lang->action->dynamicAction->branch['activated'] = '激活分支';
+
 $lang->action->dynamicAction->productplan['opened'] = "创建计划";
 $lang->action->dynamicAction->productplan['edited'] = "编辑计划";
 
