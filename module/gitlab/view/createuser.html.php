@@ -18,7 +18,7 @@
       <div class='main-header'>
         <h2><?php echo $lang->gitlab->user->create;?></h2>
       </div>
-      <form id='gitlabForm' method='post' class='form-ajax'>
+      <form id='gitlabForm' method='post' class='form-ajax' enctype="multipart/form-data">
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->user->name;?></th>
@@ -68,6 +68,18 @@
             <th><?php echo $lang->gitlab->user->bind;?></th>
             <td><?php echo html::select('bind', $userPairs, '', "class='form-control chosen'");?></td>
           </tr>
+          <?php if(function_exists('curl_file_create')):?>
+          <tr>
+            <th><?php echo $lang->gitlab->user->avatar;?></th>
+            <td>
+              <div id="avatarUpload" class="text-center">
+                <?php echo html::avatar(array('avatar'=>' ', 'account'=>''), 50); ?>
+                <input type="file" name="avatar" id="files" class="form-control hidden">
+                <?php echo html::a('javascript:void(0);', '<i class="icon icon-pencil icon-2x"></i>', '', "class='btn-avatar' id='avatarUploadBtn' data-toggle='tooltip' data-container='body' data-placement='bottom' title='{$lang->gitlab->user->avatar}'");?>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->gitlab->user->skype;?></th>
             <td><?php echo html::input('skype', '', "class='form-control' placeholder='{$lang->gitlab->user->skype}'");?></td>
@@ -92,7 +104,7 @@
             <th></th>
             <td class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php if(!isonlybody()) echo html::a(inlink('projectbrowse', "gitlabID=$gitlabID"), $lang->goback, '', 'class="btn btn-wide"');?>
+              <?php if(!isonlybody()) echo html::a(inlink('userbrowse', "gitlabID=$gitlabID"), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
           </tr>
         </table>

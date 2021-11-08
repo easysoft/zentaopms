@@ -49,8 +49,8 @@
             $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';
             common::printLink('gitlab', 'projectBrowse', "gitlabID=$id", "<i class='icon icon-project'></i> ", '',"title={$lang->gitlab->browseProject} class='btn btn-primary'");
             common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title={$lang->gitlab->edit} class='btn btn-primary'");
-            common::printLink('gitlab', 'userBrowse', "gitlabID=$id", "<i class='icon icon-group'></i> ", '', "title={$lang->gitlab->browseUser}  class='btn {$disabled}' ,'disabled'");
-            common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-group'></i> ", '', "title={$lang->gitlab->bindUser}  class='btn {$disabled}' ,'disabled'");
+            common::printLink('gitlab', 'userBrowse', "gitlabID=$id", "<i class='icon icon-team'></i> ", '', "title={$lang->gitlab->browseUser}  class='btn {$disabled}' ,'disabled'");
+            common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-link'></i> ", '', "title={$lang->gitlab->bindUser}  class='btn {$disabled}' ,'disabled'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn'");
             ?>
           </td>

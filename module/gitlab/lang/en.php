@@ -85,6 +85,7 @@ $lang->gitlab->user->canCreateGroup = "Can create group";
 $lang->gitlab->user->external       = "External";
 $lang->gitlab->user->externalTip    = "External users cannot see internal or private projects unless access is explicitly granted. Also, external users cannot create projects, groups, or personal snippets.";
 $lang->gitlab->user->bind           = "Bind Zentao user";
+$lang->gitlab->user->avatar         = "Avatar";
 $lang->gitlab->user->skype          = "Skype";
 $lang->gitlab->user->linkedin       = "Linkedin";
 $lang->gitlab->user->twitter        = "Twitter";

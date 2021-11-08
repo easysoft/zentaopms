@@ -85,6 +85,7 @@ $lang->gitlab->user->canCreateGroup = "可创建组";
 $lang->gitlab->user->external       = "外部人员";
 $lang->gitlab->user->externalTip    = "除非明确授予访问权限，否则外部用户无法查看内部或私有项目。另外，外部用户无法创建项目，群组或个人代码片段。";
 $lang->gitlab->user->bind           = "绑定禅道用户";
+$lang->gitlab->user->avatar         = "头像";
 $lang->gitlab->user->skype          = "Skype";
 $lang->gitlab->user->linkedin       = "Linkedin";
 $lang->gitlab->user->twitter        = "Twitter";

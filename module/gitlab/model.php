@@ -1691,6 +1691,7 @@ class gitlabModel extends model
     public function createUser($gitlabID)
     {
         $user = fixer::input('post')->get();
+        if($_FILES['avatar']) $user->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
 
         if(empty($user->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
         if(empty($user->username)) dao::$errors['username'][] = $this->lang->gitlab->user->username . $this->lang->gitlab->user->emptyError;
