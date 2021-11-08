@@ -16,11 +16,11 @@ class branchModel extends model
      *
      * @param  int    $branchID
      * @param  int    $productID
-     * @param  bool   $queryAll
+     * @param  string $field
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getById($branchID, $productID = 0, $queryAll = false)
+    public function getById($branchID, $productID = 0, $field = 'name')
     {
         if(empty($branchID))
         {
@@ -30,9 +30,9 @@ class branchModel extends model
             return $this->lang->branch->main;
         }
 
-        if($queryAll) return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
+        if(empty($field)) return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
 
-        return htmlspecialchars_decode($this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name'));
+        return htmlspecialchars_decode($this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch($field));
     }
 
     /**
@@ -168,7 +168,7 @@ class branchModel extends model
      */
     public function update($branchID)
     {
-        $oldBranch = $this->getById($branchID, 0, true);
+        $oldBranch = $this->getById($branchID, 0, '');
 
         $newBranch = fixer::input('post')->get();
         $newBranch->closedDate = $newBranch->status == 'closed' ? helper::today() : '';
