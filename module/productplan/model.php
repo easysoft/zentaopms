@@ -237,7 +237,6 @@ class productplanModel extends model
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('end')->ge($date)
             ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
             ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
@@ -317,6 +316,45 @@ class productplanModel extends model
     public function getChildren($planID)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq((int)$planID)->andWhere('deleted')->eq('0')->fetchAll();
+    }
+
+    /**
+     * Get plan list by story id list.
+     *
+     * @param  string|array $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getPlansByStories($storyIdList)
+    {
+        if(empty($storyIdList)) return array();
+        return $this->dao->select('t1.id as storyID, t3.*')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PLANSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t3')->on('t2.plan=t3.id')
+            ->where('t1.id')->in($storyIdList)
+            ->fetchGroup('storyID', 'id');
+    }
+
+    /**
+     * Get branch plan pairs.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getBranchPlanPairs($productID)
+    {
+        $plans = $this->dao->select('branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->fetchAll('id');
+
+        $planPairs = array();
+        foreach($plans as $planID => $plan)
+        {
+            $planPairs[$plan->branch][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
+        }
+        return $planPairs;
     }
 
     /**
