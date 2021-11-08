@@ -305,7 +305,7 @@ class project extends control
         $this->view->title            = $this->lang->project->kanban;
         $this->view->kanbanGroup      = array_filter($kanbanGroup);
         $this->view->latestExecutions = $latestExecutions;
-        $this->view->programPairs     = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true);
+        $this->view->programPairs     = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true, 'order_asc');
 
         $this->display();
     }
