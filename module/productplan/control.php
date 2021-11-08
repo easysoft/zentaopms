@@ -192,7 +192,7 @@ class productplan extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::locate(inlink('browse', "productID=$plan->product&branch=$plan->branch"), 'parent'));
+            die(js::locate(inlink('browse', "productID=$plan->product"), 'parent'));
         }
     }
 
