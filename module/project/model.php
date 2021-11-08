@@ -1862,12 +1862,6 @@ class projectModel extends model
         {
             if(strpos('wait,doing,closed', $project->status) === false) continue;
 
-            if($project->status == 'closed') 
-            {
-                $closedCount ++;
-                if($closedCount > 2) continue;
-            }
-
             $projectPath = explode(',', trim($project->path, ','));
             $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
 
