@@ -43,10 +43,6 @@ $userPrivs['productplan'] = common::hasPriv('productplan', 'view');
 $userPrivs['project']     = common::hasPriv('project', 'index');
 $userPrivs['execution']   = common::hasPriv('execution', 'task');
 $userPrivs['release']     = common::hasPriv('release', 'view');
-
-$order['my']    = isset($kanbanGroup['my'])    ? array_keys($kanbanGroup['my']) : array();
-$order['other'] = isset($kanbanGroup['other']) ? array_keys($kanbanGroup['other']) : array();
-
 js::set('kanbanColumns', $kanbanColumns);
 js::set('userPrivs',     $userPrivs);
 js::set('kanbanGroup',   $kanbanGroup);
