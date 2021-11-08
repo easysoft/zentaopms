@@ -468,7 +468,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'id_desc')
+    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'order_asc')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -1843,7 +1843,7 @@ class projectModel extends model
     {
         $this->loadModel('program');
 
-        $projects   = $this->program->getProjectStats(0, 'all');
+        $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
         $executions = $this->getStats(0, 'doing');
 
         $doingExecutions  = array();
@@ -1866,11 +1866,11 @@ class projectModel extends model
 
             if($project->PM == $this->app->user->account)
             {
-                $myProjects[$topProgram][$project->status][$project->id] = $project;
+                $myProjects[$topProgram][$project->status][] = $project;
             }
             else
             {
-                $otherProjects[$topProgram][$project->status][$project->id] = $project;
+                $otherProjects[$topProgram][$project->status][] = $project;
             }
         }
 
