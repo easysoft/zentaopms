@@ -1914,7 +1914,7 @@ class execution extends control
     {
         $this->loadModel('project');
         $projects   = $this->project->getPairsByProgram(0, 'noclosed');
-        $executions = $this->project->getStats(0, 'all');
+        $executions = $this->project->getStats(0, 'all', 0, 0, 30, 'id_desc');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
@@ -1942,11 +1942,11 @@ class execution extends control
 
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
 
-                /* Max 5 closed executions. */
+                /* Max 2 closed executions. */
                 if($status == 'closed')
                 {
-                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5) $myExecutions[$status] = array_slice($myExecutions[$status], 0, 5, true);
-                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5) $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 2) $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 2) $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 2, true);
                 }
             }
 
