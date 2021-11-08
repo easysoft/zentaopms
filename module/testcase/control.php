@@ -444,7 +444,7 @@ class testcase extends control
         if($this->app->tab != 'qa')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch);
+            $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
         }
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
 
