@@ -87,7 +87,7 @@ function renderStoryItem(item, $item, col)
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'story', item.id));
 
     var $actions = $item.find('.actions');
-    if(!$actions.length)
+    if(!$actions.length && item.menus.length)
     {
         $actions = $([
             '<div class="actions">',
@@ -136,7 +136,7 @@ function renderBugItem(item, $item, col)
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'bug', item.id));
 
     var $actions = $item.find('.actions');
-    if(!$actions.length)
+    if(!$actions.length && item.menus.length)
     {
         $actions = $([
             '<div class="actions">',
@@ -185,7 +185,7 @@ function renderTaskItem(item, $item, col)
     if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'task', item.id));
 
     var $actions = $item.find('.actions');
-    if(!$actions.length)
+    if(!$actions.length && item.menus.length)
     {
         $actions = $([
             '<div class="actions">',
