@@ -1873,12 +1873,26 @@ class projectModel extends model
 
             if($project->PM == $this->app->user->account)
             {
-                $myProjects[$topProgram][$project->status][] = $project;
+                if($project->status != 'closed')
+                {
+                    $myProjects[$topProgram][$project->status][] = $project;
+                }
+                else 
+                {
+                    if(!isset($myProjects[$topProgram][$project->status]) or count($myProjects[$topProgram][$project->status]) < 2) $myProjects[$topProgram][$project->status][] = $project; 
+                }
             }
             else
             {
-                $otherProjects[$topProgram][$project->status][] = $project;
-            }
+                if($project->status != 'closed')
+                {
+                    $otherProjects[$topProgram][$project->status][] = $project;
+                }
+                else 
+                {
+                    if(!isset($otherProjects[$topProgram][$project->status]) or count($otherProjects[$topProgram][$project->status]) < 2) $otherProjects[$topProgram][$project->status][] = $project; 
+                }
+            } 
         }
 
         return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);
