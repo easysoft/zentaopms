@@ -77,3 +77,20 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   KEY `year` (`year`),
   KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES
+('需求','10','request','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('设计','10','design','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('开发','50','dev','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('测试','15','qa','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
+
+INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
+('all','stage','typeList','request','需求', '1'),
+('all','stage','typeList','design','设计', '1'),
+('all','stage','typeList','dev','开发', '1'),
+('all','stage','typeList','qa','测试', '1'),
+('all','stage','typeList','release','发布', '1'),
+('all','stage','typeList','review','总结评审','1'),
+('all','stage','typeList','other','其他','1');
