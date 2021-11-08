@@ -86,6 +86,7 @@ class branchModel extends model
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF(strpos($params, 'active') !== false)->andWhere('status')->eq('active')->fi()
             ->orderBy('`order`')
             ->fetchPairs('id', 'name');
         foreach($branches as $branchID => $branchName) $branches[$branchID] = htmlspecialchars_decode($branchName);
@@ -97,6 +98,8 @@ class branchModel extends model
 
             $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
         }
+
+        if(strpos($params, 'noall') !== false) unset($branches['all']);
         return $branches;
     }
 
