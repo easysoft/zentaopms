@@ -322,4 +322,31 @@ class mr extends control
         $MR = $this->mr->getByID($MRID);
         return $this->send($this->mr->approve($MR, $action));
     }
+
+    /**
+     * Approval for this MR.
+     *
+     * @param  mixed $MRID
+     * @param  mixed $action
+     * @return void
+     */
+    public function approval($MRID, $action = 'approve')
+    {
+        $MR = $this->mr->getByID($MRID);
+
+        if($_POST)
+        {
+            $action  = $this->post->approveResult;
+            $comment = $this->post->comment;
+            // $assignedTo = $this->post->assignedTo; /* Message to it. */
+            $result = $this->mr->approve($MR, $action, $comment);
+            return $this->send($result);
+        }
+
+        $this->view->MR      = $MR;
+        $this->view->action  = $action;
+        $this->view->actions = $this->loadModel('action')->getList('mrapproval', $MRID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
 }

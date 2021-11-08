@@ -20,3 +20,8 @@ $config->mr->maps->sync['sourceProject'] = 'source_project_id|field|';
 $config->mr->maps->sync['targetProject'] = 'target_project_id|field|';
 $config->mr->maps->sync['status']        = 'state|field|';
 $config->mr->maps->sync['mergeStatus']   = 'merge_status|field|';
+
+$config->mrapproval = new stdclass();
+$config->mrapproval->create = new stdclass();
+$config->mrapproval->create->skippedFields  = '';
+$config->mrapproval->create->requiredFields = 'mrID,account,date,action';

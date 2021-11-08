@@ -25,9 +25,15 @@ $lang->mr->commits     = '提交數';
 $lang->mr->changes     = '更改數';
 $lang->mr->gitlabID    = 'GitLab';
 
-$lang->mr->approve = '通過';
-$lang->mr->reject  = '拒絕';
-$lang->mr->close   = '關閉';
+$lang->mr->approval = '評審';
+$lang->mr->approve  = '通過';
+$lang->mr->reject   = '拒絕';
+$lang->mr->close    = '關閉';
+
+$lang->mr->approvalResult  = '評審意見';
+$lang->mr->approvalResultList  = array();
+$lang->mr->approvalResultList['approve'] = '通過';
+$lang->mr->approvalResultList['reject']  = '拒絕';
 
 $lang->mr->repeatedOperation = '請勿重複操作';
 

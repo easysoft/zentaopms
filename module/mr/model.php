@@ -609,21 +609,43 @@ class mrModel extends model
      *
      * @param  object $MR
      * @param  string $action
+     * @param  string $comment
      * @return array
      */
-    public function approve($MR, $action = 'approve')
+    public function approve($MR, $action = 'approve', $comment = '')
     {
-        if(isset($MR->status) and $MR->status == 'opened') {
+        $this->loadModel('action');
+        $actionID = $this->action->create('mrapproval', $MR->id, $action);
+        $oldMR = $MR;
+        if(isset($MR->status) and $MR->status == 'opened') 
+        {
             $rawApprovalStatus = '';
             if(isset($MR->approvalStatus)) $rawApprovalStatus = $MR->approvalStatus;
             $MR->approver = $this->app->user->account;
             if ($action == 'reject' and $rawApprovalStatus != 'rejected') $MR->approvalStatus = 'rejected';
             if ($action == 'approve' and $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
-            if (isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus) {
+            if (isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus) 
+            {
+                $changes = common::createChanges($oldMR, $MR);
+                $this->action->logHistory($actionID, $changes);
                 $this->dao->update(TABLE_MR)->data($MR)
                     ->where('id')->eq($MR->id)
                     ->exec();
                 if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+                /* Save approval history into db. */
+                $approval = new stdClass;
+                $approval->date    = helper::now();
+                $approval->mrID    = $MR->id;
+                $approval->account = $MR->approver;
+                $approval->action  = $action;
+                $approval->comment = $comment;
+                $this->dao->insert(TABLE_MRAPPROVAL)->data($approval, $this->config->mrapproval->create->skippedFields)
+                    ->batchCheck($this->config->mrapproval->create->requiredFields, 'notempty')
+                    ->autoCheck()
+                    ->exec();
+                if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
                 /* Force reload when locate to the url. */
                 $random = uniqid();
                 return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}&random={$random}"));

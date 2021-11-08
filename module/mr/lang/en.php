@@ -25,9 +25,15 @@ $lang->mr->commits     = 'commits';
 $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
 
-$lang->mr->approve = 'Approve';
-$lang->mr->reject  = 'Reject';
-$lang->mr->close   = 'Close';
+$lang->mr->approval = 'Approval';
+$lang->mr->approve  = 'Approve';
+$lang->mr->reject   = 'Reject';
+$lang->mr->close    = 'Close';
+
+$lang->mr->approvalResult  = 'Approval result';
+$lang->mr->approvalResultList  = array();
+$lang->mr->approvalResultList['approve'] = 'Approve';
+$lang->mr->approvalResultList['reject']  = 'Reject';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
 
