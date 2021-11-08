@@ -143,6 +143,7 @@ class mr extends control
     {
         $MR = $this->mr->getByID($id);
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        $MR = $this->mr->apiSyncMR($MR); /* Sync MR from GitLab to ZentaoPMS. */
 
         $this->view->title = $this->lang->mr->view;
         $this->view->MR    = $MR;
@@ -348,5 +349,29 @@ class mr extends control
         $this->view->actions = $this->loadModel('action')->getList('mrapproval', $MRID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
+    }
+
+    /**
+     * Close this MR.
+     *
+     * @param  mixed $MRID
+     * @return void
+     */
+    public function close($MRID)
+    {
+        $MR = $this->mr->getByID($MRID);
+        return $this->send($this->mr->close($MR));
+    }
+
+    /**
+     * Reopen this MR.
+     *
+     * @param  mixed $MRID
+     * @return void
+     */
+    public function reopen($MRID)
+    {
+        $MR = $this->mr->getByID($MRID);
+        return $this->send($this->mr->reopen($MR));
     }
 }
