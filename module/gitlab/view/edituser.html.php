@@ -15,43 +15,44 @@
   <div class='main-col main-content'>
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->gitlab->user->create;?></h2>
+        <h2><?php echo $lang->gitlab->user->edit;?></h2>
       </div>
       <form id='gitlabForm' method='post' class='form-ajax' enctype="multipart/form-data">
+        <?php echo html::hidden('id', $user->id);?>
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->user->name;?></th>
-            <td class='required'><?php echo html::input('name', '', "class='form-control' placeholder='{$lang->gitlab->user->name}'");?></td>
+            <td class='required'><?php echo html::input('name', $user->name, "class='form-control' placeholder='{$lang->gitlab->user->name}'");?></td>
             <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->username;?></th>
-            <td class='required'><?php echo html::input('username', '', "class='form-control' placeholder='{$lang->gitlab->user->username}'");?></td>
+            <td class='required'><?php echo html::input('username', $user->username, "class='form-control' placeholder='{$lang->gitlab->user->username}'");?></td>
             <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->email;?></th>
-            <td class='required'><?php echo html::input('email', '', "class='form-control' placeholder='{$lang->gitlab->user->email}'");?></td>
+            <td class='required'><?php echo html::input('email', $user->email, "class='form-control' placeholder='{$lang->gitlab->user->email}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->password;?></th>
-            <td class='required'><?php echo html::password('password', '', "class='form-control' placeholder='{$lang->gitlab->user->password}'");?></td>
+            <td><?php echo html::password('password', '', "class='form-control' placeholder='{$lang->gitlab->user->password}'");?></td>
             <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->passwordRepeat;?></th>
-            <td class='required'><?php echo html::password('password_repeat', '', "class='form-control' placeholder='{$lang->gitlab->user->passwordRepeat}'");?></td>
+            <td><?php echo html::password('password_repeat', '', "class='form-control' placeholder='{$lang->gitlab->user->passwordRepeat}'");?></td>
             <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->projectsLimit;?></th>
-            <td><?php echo html::input('projects_limit', 100000, "class='form-control' placeholder='{$lang->gitlab->user->projectsLimit}'");?></td>
+            <td><?php echo html::input('projects_limit', $user->projects_limit, "class='form-control' placeholder='{$lang->gitlab->user->projectsLimit}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->canCreateGroup;?></th>
             <td>
               <div class="checkbox-primary">
-                <input type="checkbox" name='can_create_group' id="canCreateGroup" value='1' checked /><label for="external" class="no-margin">&nbsp;</label>
+                <input type="checkbox" name='can_create_group' id="canCreateGroup" value='1' <?php if($user->can_create_group) echo 'checked';?> /><label for="external" class="no-margin">&nbsp;</label>
               </div>
             </td>
           </tr>
@@ -59,20 +60,20 @@
             <th><?php echo $lang->gitlab->user->external;?></th>
             <td colspan='2'>
               <div class="checkbox-primary">
-                <input type="checkbox" name='external' id="external" value='1'/><label for="external" class="no-margin"><?php echo $lang->gitlab->user->externalTip; ?></label>
+                <input type="checkbox" name='external' id="external" value='1' <?php if($user->external) echo 'checked';?> /><label for="external" class="no-margin"><?php echo $lang->gitlab->user->externalTip; ?></label>
               </div>
             </td> 
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->bind;?></th>
-            <td><?php echo html::select('bind', $userPairs, '', "class='form-control chosen'");?></td>
+            <td><?php echo html::select('bind', $userPairs, $zentaoBindAccount, "class='form-control chosen'");?></td>
           </tr>
           <?php if(function_exists('curl_file_create')):?>
           <tr>
             <th><?php echo $lang->gitlab->user->avatar;?></th>
             <td>
               <div id="avatarUpload" class="text-center">
-                <?php echo html::avatar(array('avatar'=>' ', 'account'=>''), 50); ?>
+                <?php echo html::avatar(array('avatar'=>$user->avatar_url, 'account'=>''), 50); ?>
                 <input type="file" name="avatar" id="files" class="form-control hidden">
                 <?php echo html::a('javascript:void(0);', '<i class="icon icon-pencil icon-2x"></i>', '', "class='btn-avatar' id='avatarUploadBtn' data-toggle='tooltip' data-container='body' data-placement='bottom' title='{$lang->gitlab->user->avatar}'");?>
               </div>
@@ -81,23 +82,23 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->gitlab->user->skype;?></th>
-            <td><?php echo html::input('skype', '', "class='form-control' placeholder='{$lang->gitlab->user->skype}'");?></td>
+            <td><?php echo html::input('skype', $user->skype, "class='form-control' placeholder='{$lang->gitlab->user->skype}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->linkedin;?></th>
-            <td><?php echo html::input('linkedin', '', "class='form-control' placeholder='{$lang->gitlab->user->linkedin}'");?></td>
+            <td><?php echo html::input('linkedin', $user->linkedin, "class='form-control' placeholder='{$lang->gitlab->user->linkedin}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->twitter;?></th>
-            <td><?php echo html::input('twitter', '', "class='form-control' placeholder='{$lang->gitlab->user->twitter}'");?></td>
+            <td><?php echo html::input('twitter', $user->twitter, "class='form-control' placeholder='{$lang->gitlab->user->twitter}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->websiteUrl;?></th>
-            <td><?php echo html::input('website_url', '', "class='form-control' placeholder='{$lang->gitlab->user->websiteUrl}'");?></td>
+            <td><?php echo html::input('website_url', $user->website_url, "class='form-control' placeholder='{$lang->gitlab->user->websiteUrl}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->note;?></th>
-            <td><?php echo html::textarea('note', '', "rows='10' class='form-control' placeholder='{$lang->gitlab->user->note}'");?></td>
+            <td><?php echo html::textarea('note', $user->note, "rows='10' class='form-control' placeholder='{$lang->gitlab->user->note}'");?></td>
           </tr>
           <tr>
             <th></th>

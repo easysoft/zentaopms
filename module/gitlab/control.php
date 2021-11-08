@@ -331,6 +331,35 @@ class gitlab extends control
     }
 
     /**
+     * Edit a gitlab user.
+     *
+     * @param  int     $gitlabID
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
+    public function editUser($gitlabID, $userID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->editUser($gitlabID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('userBrowse', "gitlabID=$gitlabID")));
+        }
+
+        $userPairs         = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $user              = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
+        $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($user->id)->fetch();
+
+        $this->view->user              = $user;
+        $this->view->userPairs         = $userPairs;
+        $this->view->zentaoBindAccount = $zentaoBindAccount;
+        $this->view->gitlabID          = $gitlabID;
+        $this->display();
+    }
+
+    /**
      * Browse gitlab project.
      *
      * @param  int     $gitlabID
