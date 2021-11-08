@@ -365,10 +365,11 @@ class executionModel extends model
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
+            ->checkIF(!empty($sprint->name), 'name', 'unique', "`type` in ('sprint','stage') and `parent` = $sprint->parent")
+            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage') and `parent` = $sprint->parent")
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
-            ->checkIF(!empty($sprint->code), 'code', 'unique', "type in ('sprint','stage')")
             ->exec();
 
         /* Add the creater to the team. */
