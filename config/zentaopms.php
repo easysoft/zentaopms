@@ -206,6 +206,7 @@ define('TABLE_API_LIB_RELEASE', '`' . $config->db->prefix . 'api_lib_release`');
 define('TABLE_MODULE',        '`' . $config->db->prefix . 'module`');
 define('TABLE_ACTION',        '`' . $config->db->prefix . 'action`');
 define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
+define('TABLE_HOLIDAY',       '`' . $config->db->prefix . 'holiday`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_CRON',          '`' . $config->db->prefix . 'cron`');
@@ -216,6 +217,7 @@ define('TABLE_SUITECASE',     '`' . $config->db->prefix . 'suitecase`');
 define('TABLE_TESTREPORT',    '`' . $config->db->prefix . 'testreport`');
 
 define('TABLE_ENTRY',         '`' . $config->db->prefix . 'entry`');
+define('TABLE_WEEKLYREPORT',  '`' . $config->db->prefix . 'weeklyreport`');
 define('TABLE_WEBHOOK',       '`' . $config->db->prefix . 'webhook`');
 define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
