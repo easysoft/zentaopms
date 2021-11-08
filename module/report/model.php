@@ -1074,13 +1074,15 @@ class reportModel extends model
      */
     public function getOutput4API($accounts, $year)
     {
-        $stmt = $this->dao->select('*')->from(TABLE_ACTION)
+        $stmt = $this->dao->select('id,objectType,objectID,action,extra')->from(TABLE_ACTION)
             ->where('objectType')->in(array_keys($this->config->report->outputData))
             ->andWhere('LEFT(date, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
             ->query();
 
-        $outputData = array();
+        $outputData   = array();
+        $actionGroup  = array();
+        $objectIdList = array();
         while($action = $stmt->fetch())
         {
             if($action->objectType == 'release' and $action->action == 'changestatus')
@@ -1088,11 +1090,24 @@ class reportModel extends model
                 if($action->extra == 'terminate') $action->action = 'stoped';
                 if($action->extra == 'normal')    $action->action = 'activated';
             }
+            unset($action->extra);
 
             if(!isset($this->config->report->outputData[$action->objectType][$action->action])) continue;
-            if(!isset($outputData[$action->objectType][$action->action])) $outputData[$action->objectType][$action->action] = 0;
 
-            $outputData[$action->objectType][$action->action] += 1;
+            if(!isset($outputData[$action->objectType][$action->action])) $outputData[$action->objectType][$action->action] = 0;
+            $objectIdList[$action->objectType][$action->objectID] = $action->objectID;
+            $actionGroup[$action->objectType][$action->id] = $action;
+        }
+
+        foreach($actionGroup as $objectType => $actions)
+        {
+            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in($objectIdList[$objectType])->fetchPairs('id', 'id');
+
+            foreach($actions as $action)
+            {
+                if(isset($deletedIdList[$action->objectID])) continue;
+                $outputData[$action->objectType][$action->action] += 1;
+            }
         }
 
         $stmt = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
