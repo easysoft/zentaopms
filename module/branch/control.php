@@ -81,7 +81,7 @@ class branch extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->branch = $this->branch->getById($branchID, 0, true);
+        $this->view->branch = $this->branch->getById($branchID, 0, '');
         $this->display();
     }
 
@@ -159,7 +159,8 @@ class branch extends control
      */
     public function ajaxGetDropMenu($productID, $branch = 0, $module, $method, $extra = '')
     {
-        $branches = $this->branch->getPairs($productID, 'all');
+        $branches   = $this->branch->getPairs($productID, 'all');
+        $statusList = $this->dao->select('id,status')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchPairs();
 
         $this->view->link            = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
         $this->view->productID       = $productID;
