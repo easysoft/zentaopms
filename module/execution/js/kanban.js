@@ -265,6 +265,7 @@ function renderHeaderCol($col, col, $header, kanban)
  */
 function renderLaneName($name, lane, $kanban, columns, kanban)
 {
+    if(lane.id != 'story' && lane.id != 'task' && lane.id != 'bug') return false;
     if(!$name.children('.actions').length && (priv.canSetLane || priv.canMoveLane))
     {
         $([
