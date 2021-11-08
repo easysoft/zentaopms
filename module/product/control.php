@@ -158,7 +158,7 @@ class product extends control
             if($this->app->tab == 'project') setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $_COOKIE['storyBranch'] = 0;
             setcookie('storyBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
         if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
@@ -180,12 +180,12 @@ class product extends control
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
         if($browseType == '')
         {
-            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $browseType = 'unclosed';
         }
         else
         {
-            $branch = (int)$this->cookie->treeBranch;
+            $branch = $this->cookie->treeBranch;
         }
 
         /* If in project story and not chose product, get project story mdoules. */
