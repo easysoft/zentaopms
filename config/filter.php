@@ -92,6 +92,7 @@ $filter->product->default         = new stdclass();
 $filter->product->index           = new stdclass();
 $filter->product->export          = new stdclass();
 $filter->product->project         = new stdclass();
+$filter->product->roadmap         = new stdclass();
 $filter->branch->default          = new stdclass();
 $filter->program->default         = new stdclass();
 $filter->program->pgmproject      = new stdclass();
@@ -112,6 +113,7 @@ $filter->qa->default              = new stdclass();
 $filter->story->create            = new stdclass();
 $filter->story->export            = new stdclass();
 $filter->story->batchcreate       = new stdclass();
+$filter->story->track             = new stdclass();
 $filter->sso->getbindusers        = new stdclass();
 $filter->sso->gettodolist         = new stdclass();
 $filter->sso->getuserpairs        = new stdclass();
@@ -247,13 +249,14 @@ $filter->projectstory->story->cookie['storyModuleParam']   = 'int';
 $filter->projectstory->story->cookie['pagerProductBrowse'] = 'int';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';
-$filter->qa->default->cookie['preBranch']    = 'int';
+$filter->qa->default->cookie['preBranch']    = 'reg::word';
 $filter->qa->default->cookie['preProductID'] = 'int';
 
 $filter->story->create->cookie['lastStoryModule']   = 'int';
 $filter->story->batchcreate->cookie['preProductID'] = 'int';
 $filter->story->export->cookie['checkedItem']       = 'reg::checked';
 $filter->story->track->cookie['preBranch']          = 'reg::word';
+$filter->story->track->cookie['preProductID']       = 'int';
 
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';
@@ -267,12 +270,12 @@ $filter->execution->export->cookie['checkedItem']        = 'reg::checked';
 
 $filter->testcase->browse->cookie['caseModule']     = 'int';
 $filter->testcase->browse->cookie['caseSuite']      = 'int';
-$filter->testcase->browse->cookie['preBranch']      = 'int';
+$filter->testcase->browse->cookie['preBranch']      = 'reg::word';
 $filter->testcase->create->cookie['lastCaseModule'] = 'int';
 $filter->testcase->default->cookie['lastProduct']   = 'int';
 $filter->testcase->default->cookie['preProductID']  = 'int';
 $filter->testcase->export->cookie['checkedItem']    = 'reg::checked';
-$filter->testcase->groupcase->cookie['preBranch']   = 'int';
+$filter->testcase->groupcase->cookie['preBranch']   = 'reg::word';
 
 $filter->testreport->default->cookie['lastProduct']  = 'int';
 $filter->testreport->default->cookie['lastProject']  = 'int';
@@ -285,7 +288,7 @@ $filter->testsuite->default->cookie['preProductID']  = 'int';
 $filter->testsuite->library->cookie['libCaseModule'] = 'int';
 $filter->testsuite->library->cookie['preCaseLibID']  = 'int';
 
-$filter->testtask->browse->cookie['preBranch']     = 'int';
+$filter->testtask->browse->cookie['preBranch']     = 'reg::word';
 $filter->testtask->cases->cookie['preTaskID']      = 'int';
 $filter->testtask->cases->cookie['taskCaseModule'] = 'int';
 $filter->testtask->default->cookie['lastProduct']  = 'int';

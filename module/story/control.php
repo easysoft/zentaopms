@@ -1487,6 +1487,7 @@ class story extends control
      *
      * @param  int         $productID
      * @param  int|string  $branch
+     * @param  int         $projectID
      * @param  int         $recTotal
      * @param  int         $recPerPage
      * @param  int         $pageID

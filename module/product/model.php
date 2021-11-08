@@ -73,7 +73,7 @@ class productModel extends model
      * @access public
      * @return string
      */
-    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 'all', $module = 0, $moduleType = '', $withBranch = true)
+    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '', $module = 0, $moduleType = '', $withBranch = true)
     {
         $isBrowseBug = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
 
@@ -480,7 +480,7 @@ class productModel extends model
         $output .= "</div></div>";
 
         $notNormalProduct   = (isset($currentProduct->type) and $currentProduct->type != 'normal');
-        $isTrackMethod      = $currentModule == 'story' and $currentMethod == 'track';
+        $isTrackMethod      = ($currentModule == 'story' and $currentMethod == 'track');
         $isShowBranchMethod = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod;
         if($notNormalProduct and strpos(',testsuite,testreport,', ',' . $currentModule . ',') === false and ($this->app->tab == 'qa' or $isShowBranchMethod))
         {
