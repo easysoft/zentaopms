@@ -98,8 +98,6 @@ class branchModel extends model
 
             $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
         }
-
-        if(strpos($params, 'noall') !== false) unset($branches['all']);
         return $branches;
     }
 
