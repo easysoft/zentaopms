@@ -27,7 +27,7 @@ class reportsEntry extends entry
 
         $accounts = array();
         if($account) $accounts = array($account => $account);
-        if(empty($accounts) and $dept) $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
+        if(empty($accounts) and $dept) $accounts = array_keys($this->loadModel('dept')->getDeptUserPairs($dept));
 
         $fields = explode(',', strtolower($fields));
         $report = array();
