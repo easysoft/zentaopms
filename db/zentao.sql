@@ -586,6 +586,19 @@ CREATE TABLE IF NOT EXISTS `zt_grouppriv` (
   `method` char(30) NOT NULL default '',
   UNIQUE KEY `group` (`group`,`module`,`method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_holiday`;
+CREATE TABLE IF NOT EXISTS `zt_holiday` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
+  `desc` text NOT NULL,
+  `year` char(4) NOT NULL,
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `year` (`year`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_history`;
 CREATE TABLE IF NOT EXISTS `zt_history` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1476,6 +1489,22 @@ CREATE TABLE IF NOT EXISTS `zt_userview` (
   `projects` mediumtext NOT NULL,
   `sprints` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_weeklyreport`;
+CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `project` mediumint(8) unsigned NOT NULL,
+  `weekStart` date NOT NULL,
+  `pv` float(9,2) NOT NULL,
+  `ev` float(9,2) NOT NULL,
+  `ac` float(9,2) NOT NULL,
+  `sv` float(9,2) NOT NULL,
+  `cv` float(9,2) NOT NULL,
+  `staff` smallint(5) unsigned NOT NULL,
+  `progress` varchar(255) NOT NULL,
+  `workload` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `week` (`project`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
