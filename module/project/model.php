@@ -1877,9 +1877,9 @@ class projectModel extends model
                 {
                     $myProjects[$topProgram][$project->status][] = $project;
                 }
-                else 
+                else
                 {
-                    if(!isset($myProjects[$topProgram][$project->status]) or count($myProjects[$topProgram][$project->status]) < 2) $myProjects[$topProgram][$project->status][] = $project; 
+                    if(!isset($myProjects[$topProgram][$project->status]) or count($myProjects[$topProgram][$project->status]) < 2) $myProjects[$topProgram][$project->status][] = $project;
                 }
             }
             else
@@ -1888,11 +1888,11 @@ class projectModel extends model
                 {
                     $otherProjects[$topProgram][$project->status][] = $project;
                 }
-                else 
+                else
                 {
-                    if(!isset($otherProjects[$topProgram][$project->status]) or count($otherProjects[$topProgram][$project->status]) < 2) $otherProjects[$topProgram][$project->status][] = $project; 
+                    if(!isset($otherProjects[$topProgram][$project->status]) or count($otherProjects[$topProgram][$project->status]) < 2) $otherProjects[$topProgram][$project->status][] = $project;
                 }
-            } 
+            }
         }
 
         return array('kanbanGroup' => array('my' => $myProjects, 'other' => $otherProjects), 'latestExecutions' => $latestExecutions);
