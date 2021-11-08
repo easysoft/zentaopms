@@ -27,14 +27,14 @@ class branch extends control
     {
         $this->loadModel('product')->setMenu($productID);
 
-        $branchList = $this->branch->getList($productID, $browseType, $orderBy, $pager = null);
+        $branchList = $this->branch->getList($productID, $browseType, $orderBy);
 
         /* Load pager. */
-        $recTotal = count($branchList);
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-        $branchList = array_chunk($branchList, $pager->recPerPage);
+        $recTotal   = count($branchList);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $branchList = array_chunk($branchList, $recPerPage);
 
         $this->view->title      = $this->lang->branch->manage;
         $this->view->branchList = empty($branchList) ? $branchList : $branchList[$pageID - 1];
