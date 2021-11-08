@@ -25,6 +25,8 @@ class productplan extends control
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
 
+        $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
         $this->app->loadConfig('execution');
         $this->product->setMenu($productID, $branch);
         $this->session->set('currentProductType', $product->type);
