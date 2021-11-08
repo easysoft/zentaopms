@@ -995,9 +995,9 @@ class gitlabModel extends model
     {
         $type = zget($body, 'object_kind', '');
         if(!$type or !is_callable(array($this, "webhookParse{$type}"))) return false;
-        // fix php 8.0 bug. link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953
-        //return call_user_func_array(array($this, "webhookParse{$type}"), array('body' => $body, $gitlabID));
-        return call_user_func_array(array($this, "webhookParse{$type}"), [$body, $gitlabID]);
+
+        /* fix php 8.0 bug. link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953. */
+        return call_user_func_array(array($this, "webhookParse{$type}"), array($body, $gitlabID));
     }
 
     /**
