@@ -83,7 +83,7 @@ class reportsEntry extends entry
      */
     public function projectOverview($accounts)
     {
-        $statusOverview = $this->loadModel('report')->getProjectStatusOverview(array_keys($accounts));
+        $statusOverview = $this->loadModel('report')->getProjectStatusOverview($accounts);
 
         $this->app->loadLang('project');
         $total    = 0;
@@ -116,8 +116,7 @@ class reportsEntry extends entry
      */
     public function radar($accounts, $year)
     {
-        $allAccounts      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $contributions    = $this->loadModel('report')->getUserYearContributions(empty($accounts) ? array_keys($allAccounts) : $accounts, $year);
+        $contributions    = $this->loadModel('report')->getUserYearContributions($accounts, $year);
         $annualDataConfig = $this->config->report->annualData;
 
         $radarData = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);

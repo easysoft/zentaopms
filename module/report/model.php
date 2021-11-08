@@ -1124,6 +1124,13 @@ class reportModel extends model
             $outputData['case']['createBug'] += 1;
         }
 
+        $outputData['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
+            ->fetch('count');
+
         $processedOutput = array();
         foreach($this->config->report->outputData as $objectType => $actions)
         {
