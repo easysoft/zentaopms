@@ -575,7 +575,7 @@ class reportModel extends model
             ->query();
 
         $filterActions = array();
-        $deletedObject = array();
+        $objectIdList  = array();
         while($action = $stmt->fetch())
         {
             $objectType  = $action->objectType;
@@ -583,15 +583,14 @@ class reportModel extends model
             $lowerAction = strtolower($action->action);
             if(!isset($this->config->report->annualData['contributions'][$objectType][$lowerAction])) continue;
 
-            if($action->action == 'deleted')   $deletedObject[$objectType][$objectID] = $objectID;
-            if($action->action == 'undeleted') unset($deletedObject[$objectType][$objectID]);
-
+            $objectIdList[$objectType][$objectID] = $objectID;
             $filterActions[$objectType][$objectID][$action->id] = $action;
         }
 
-        foreach($deletedObject as $objectType => $idList)
+        foreach($objectIdList as $objectType => $idList)
         {
-            foreach($idList as $id) unset($filterActions[$objectType][$id]);
+            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in($idList)->fetchPairs('id', 'id');
+            foreach($deletedIdList as $id) unset($filterActions[$objectType][$id]);
         }
 
         $actionGroups = array();
