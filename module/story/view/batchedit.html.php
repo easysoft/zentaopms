@@ -108,10 +108,7 @@ foreach(explode(',', $showFields) as $field)
              }
              else
              {
-                 foreach($plans as $branchPlan)
-                 {
-                     $productPlans += $branchPlan;
-                 }
+                 foreach($plans as $branchPlan) $productPlans += $branchPlan;
              }
             ?>
             <?php if($this->session->currentProductType == 'normal') $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;?>

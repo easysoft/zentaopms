@@ -64,13 +64,13 @@ class branch extends control
     public function ajaxGetDropMenu($productID, $branch = 0, $module, $method, $extra = '')
     {
         $branches = $this->branch->getPairs($productID, 'all');
-        $this->view->link      = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
-        $this->view->productID = $productID;
-        $this->view->projectID = $this->session->project;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->extra     = $extra;
 
+        $this->view->link            = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
+        $this->view->productID       = $productID;
+        $this->view->projectID       = $this->session->project;
+        $this->view->module          = $module;
+        $this->view->method          = $method;
+        $this->view->extra           = $extra;
         $this->view->branches        = $branches;
         $this->view->currentBranchID = $branch;
         $this->view->branchesPinyin  = common::convert2Pinyin($branches);
