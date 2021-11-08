@@ -73,10 +73,13 @@ class branch extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
 
+        $statusList = $this->dao->select('id,status')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchPairs();
+
         $branches = $this->branch->getPairs($productID);
         $this->view->branches        = $branches;
         $this->view->currentBranchID = $branch;
         $this->view->branchesPinyin  = common::convert2Pinyin($branches);
+        $this->view->statusList      = $statusList;
         $this->display();
     }
 
