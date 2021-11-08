@@ -1881,6 +1881,7 @@ class execution extends control
         $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs(); 
         foreach($avatarPairs as $account => $avatar)
         {
+            if(!$avatar) continue;
             $userList[$account]['avatar'] = $avatar;
         }
 

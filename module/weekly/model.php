@@ -443,13 +443,26 @@ class weeklyModel extends model
         $executions      = $this->loadModel('execution')->getList($project, 'all', 'all', 0, 0, 0);
         $executionIdList = array_keys($executions);
 
-        $AC = $this->dao->select('sum(consumed) as consumed')
-            ->from(TABLE_EFFORT)
-            ->where('objectType')->eq('task')
-            ->andWhere('execution')->in($executionIdList)
-            ->andWhere('date')->ge($monday)
-            ->andWhere('date')->lt($nextMonday)
-            ->fetch('consumed');
+        if(isset($this->config->proVersion))
+        {
+            $AC = $this->dao->select('sum(consumed) as consumed')
+                ->from(TABLE_EFFORT)
+                ->where('objectType')->eq('task')
+                ->andWhere('execution')->in($executionIdList)
+                ->andWhere('date')->ge($monday)
+                ->andWhere('date')->lt($nextMonday)
+                ->fetch('consumed');
+        }
+        else
+        {
+            $taskIdList = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->fetchPairs();
+            $AC = $this->dao->select('sum(consumed) as consumed')
+                ->from(TABLE_TASKESTIMATE)
+                ->where('task')->in($taskIdList)
+                ->andWhere('date')->ge($monday)
+                ->andWhere('date')->lt($nextMonday)
+                ->fetch('consumed');
+        }
 
         return round($AC, 2);
     }
