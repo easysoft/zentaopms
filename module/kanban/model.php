@@ -702,14 +702,14 @@ class kanbanModel extends model
             ->orderBy('extra_asc')
             ->fetchPairs();
 
-        $laneOrder   = 5;
-        $emptyLaneID = 0;
+        $laneOrder = 5;
+        $noExtra   = 0;
 
         foreach($lanes as $laneID => $extra)
         {
             if(!$extra)
             {
-                $emptyLaneID = $laneID;
+                $noExtra = $laneID;
                 continue;
             }
 
@@ -717,7 +717,7 @@ class kanbanModel extends model
             $laneOrder += 5;
         }
 
-        if($emptyLaneID) $this->dao->update(TABLE_KANBANLANE)->set('order')->eq($laneOrder)->where('id')->eq($emptyLaneID)->exec();
+        if($noExtra) $this->dao->update(TABLE_KANBANLANE)->set('order')->eq($laneOrder)->where('id')->eq($noExtra)->exec();
     }
 
     /**
