@@ -24,6 +24,7 @@ $lang->branch->closedDate  = '关闭时间';
 $lang->branch->desc        = '分支描述';
 $lang->branch->order       = '排序';
 $lang->branch->deleted     = '已删除';
+$lang->branch->closed      = '已关闭';
 
 $lang->branch->confirmDelete = '是否删除该@branch@？';
 $lang->branch->canNotDelete  = '该@branch@下已经有数据，不能删除！';

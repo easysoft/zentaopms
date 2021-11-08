@@ -64,7 +64,7 @@ class branchModel extends model
         $mainBranch->desc        = $this->lang->branch->mainBranch;
         $mainBranch->order       = 0;
 
-        $pager->recTotal = $pager->recTotal + 1;
+        if($pager) $pager->recTotal = $pager->recTotal + 1;
         return array($mainBranch) + $branchList;
     }
 

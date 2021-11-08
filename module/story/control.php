@@ -1524,16 +1524,20 @@ class story extends control
     /**
      * Story track.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $projectID
+     * @param  int         $recTotal
+     * @param  int         $recPerPage
+     * @param  int         $pageID
      * @access public
      * @return void
      */
-    public function track($productID, $branch = 0, $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track($productID, $branch = '', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
         /* Set menu. The projectstory module does not execute. */
         if(!$projectID)
         {

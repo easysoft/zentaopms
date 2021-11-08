@@ -2204,7 +2204,7 @@ class storyModel extends model
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
-            ->beginIF($branch)->andWhere("branch")->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere("branch")->in($branch)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
@@ -2350,13 +2350,15 @@ class storyModel extends model
     /**
      * Get stories by a field.
      *
-     * @param  int    $productID
-     * @param  string $fieldName
-     * @param  mixed  $fieldValue
-     * @param  string $type         requirement|story
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $operator     equal|include
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  string      $modules
+     * @param  string      $fieldName
+     * @param  mixed       $fieldValue
+     * @param  string      $type         requirement|story
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  string      $operator     equal|include
      * @access public
      * @return array
      */
@@ -2367,7 +2369,7 @@ class storyModel extends model
             ->where('product')->in($productID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
-            ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
+            ->beginIF($branch != 'all')->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->beginIF($operator == 'equal')->andWhere($fieldName)->eq($fieldValue)->fi()
             ->beginIF($operator == 'include')->andWhere($fieldName)->like("%$fieldValue%")->fi()
@@ -2407,18 +2409,18 @@ class storyModel extends model
      * Get stories through search.
      *
      * @access public
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  string $executionID
-     * @param  string $type requirement|story
-     * @param  string $excludeStories
-     * @param  object $pager
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $queryID
+     * @param  string      $orderBy
+     * @param  string      $executionID
+     * @param  string      $type requirement|story
+     * @param  string      $excludeStories
+     * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $branch = 0, $queryID, $orderBy, $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
+    public function getBySearch($productID, $branch = '', $queryID, $orderBy, $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
     {
         if(!empty($executionID))
         {
@@ -2458,20 +2460,20 @@ class storyModel extends model
             if($branches) $storyQuery .= " AND `branch`" . helper::dbIN("0,$branches");
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
-                $storyQuery .= " AND `status` NOT IN ('draft')";// Fix bug #990.
+                $storyQuery .= " AND `status` NOT IN ('draft')"; // Fix bug #990.
             }
             else
             {
                 $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
             }
         }
-        elseif($branch)
-        {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in('0','$branch')";
-        }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
             $storyQuery = str_replace($allBranch, '1', $storyQuery);
+        }
+        elseif($branch)
+        {
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in('$branch')";
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 

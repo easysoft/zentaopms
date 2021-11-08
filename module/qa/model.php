@@ -14,20 +14,23 @@ class qaModel extends model
     /**
      * Set menu.
      *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $extra
+     * @param  array       $products
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  string      $extra
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0, $extra = '')
+    public function setMenu($products, $productID, $branch = '', $extra = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
         {
             $this->app->loadLang('product');
             die(js::error($this->lang->product->accessDenied) . js::locate('back'));
         }
+
+        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->loadModel('product')->getSwitcher($productID, $extra, $branch);
         if($this->app->rawModule == 'product' and $this->app->rawMethod == 'showerrornone') $this->lang->switcherMenu = '';

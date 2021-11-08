@@ -77,6 +77,7 @@ class branch extends control
         $this->view->branches        = $branches;
         $this->view->currentBranchID = $branch;
         $this->view->branchesPinyin  = common::convert2Pinyin($branches);
+        $this->view->statusList      = $statusList;
         $this->display();
     }
 
