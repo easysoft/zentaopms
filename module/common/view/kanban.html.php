@@ -429,8 +429,8 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
             doingExecutionCount = $doingProjectItems.find('.execution-item').length;
         }
 
-        if(doingProjectCount > 0)   $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount);
-        if(doingExecutionCount > 0) $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount);
+        $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || 0);
+        $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || 0);
     },
     onCreate(kanban)
     {
