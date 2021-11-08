@@ -428,13 +428,15 @@ class testcase extends control
             if(empty($moduleID)) $moduleID = $story->module;
         }
 
-        $currentModuleID = (int)$moduleID  ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $currentModuleID = $moduleID  ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
         unset($storyStatus['closed']);
         $modules = array();
         if($currentModuleID)
         {
+            $productModules  = $this->tree->getOptionMenu($productID, 'story');
+            $currentModuleID = array_key_exists($currentModuleID,$productModules) ? $currentModuleID : 0;
             $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
@@ -453,11 +455,11 @@ class testcase extends control
 
         $this->view->title            = $title;
         $this->view->position         = $position;
-        $this->view->projectID        = isset($projectID) ? $projectID : '';
+        $this->view->projectID        = isset($projectID) ? $projectID : 0;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (int)$this->cookie->lastCaseModule;
+        $this->view->currentModuleID  = $currentModuleID;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
         $this->view->stories          = $stories;
         $this->view->caseTitle        = $caseTitle;

@@ -17,7 +17,6 @@
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
 <?php js::set('isonlybody', isonlybody());?>
 <?php js::set('executionID', $projectID);?>
-<?php js::set('tab', $this->app->tab);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
