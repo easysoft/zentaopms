@@ -43,6 +43,99 @@ class branch extends control
     }
 
     /**
+     * Create a branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function create($productID)
+    {
+        if($_POST)
+        {
+            $branchID = $this->branch->create($productID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('branch', $branchID, 'Opened');
+            die(js::reload('parent.parent'));
+        }
+
+        $this->display();
+    }
+
+    /**
+     * Edit a branch.
+     *
+     * @param  int    $branchID
+     * @access public
+     * @return void
+     */
+    public function edit($branchID)
+    {
+        if($_POST)
+        {
+            $changes = $this->branch->update($branchID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($changes) $this->loadModel('action')->create('branch', $branchID, 'Edited');
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->branch = $this->branch->getById($branchID, 0, true);
+        $this->display();
+    }
+
+    /**
+     * Close a branch.
+     *
+     * @param  int    $branchID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function close($branchID, $confirm = 'no')
+    {
+        $this->app->loadLang('product');
+        $productType = $this->branch->getProductType($branchID);
+
+        if($confirm == 'no')
+        {
+            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmClose), inlink('close', "branchID=$branchID&confirm=yes")));
+        }
+
+        $this->branch->close($branchID);
+        if(dao::isError()) die(js::error(dao::getError()));
+
+        $this->loadModel('action')->create('branch', $branchID, 'Closed');
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Activate a branch.
+     *
+     * @param  int    $branchID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function activate($branchID, $confirm = 'no')
+    {
+        $this->app->loadLang('product');
+        $productType = $this->branch->getProductType($branchID);
+
+        if($confirm == 'no')
+        {
+            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmActivate), inlink('activate', "branchID=$branchID&confirm=yes")));
+        }
+
+        $this->branch->activate($branchID);
+        if(dao::isError()) die(js::error(dao::getError()));
+
+        $this->loadModel('action')->create('branch', $branchID, 'Activated');
+        die(js::reload('parent'));
+    }
+
+    /**
      * Sort branch.
      *
      * @access public

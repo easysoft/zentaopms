@@ -313,7 +313,7 @@ class story extends control
         $this->view->color            = $color;
         $this->view->pri              = $pri;
         $this->view->branch           = $branch;
-        $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
+        $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         $this->view->productID        = $productID;
         $this->view->product          = $product;
         $this->view->objectID         = $objectID;
