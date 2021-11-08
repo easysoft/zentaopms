@@ -468,7 +468,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'id_desc')
+    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'order_asc')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
