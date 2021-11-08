@@ -1877,6 +1877,13 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
+        $userList    = array();
+        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs(); 
+        foreach($avatarPairs as $account => $avatar)
+        {
+            $userList[$account]['avatar'] = $avatar;
+        }
+
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[]    = $this->lang->execution->kanban;
@@ -1891,6 +1898,7 @@ class execution extends control
         $this->view->execution     = $execution;
         $this->view->groupBy       = $groupBy;
         $this->view->canBeChanged  = $canBeChanged;
+        $this->view->userList      = $userList;
 
         $this->display();
     }
