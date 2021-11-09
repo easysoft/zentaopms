@@ -457,7 +457,7 @@ class programModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        // *Finish task #43918.
+	/* Finish task #43918, Optimize the projects i worked on*/
 	if($this->cookie->involved or $involved)
 	{
 		$stakeholder = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
@@ -467,15 +467,10 @@ class programModel extends model
                 $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
 				              ->where('root')->in(array_keys($projectList))
                                               ->fetchGroup('root','account');
-		a($teamMembers);
 		foreach($projectList as $id => $project)
 		{
 			$whitelist   = explode(",", $project->whitelist);
-			if($project->openedBy == $this->app->user->account || $project->PM == $this->app->user->account || in_array($this->app->user->account, $whitelist) || isset($teamMembers[$project->id][$this->app->user->account]) || isset($stakeholder[$project->id][$this->app->user->account]))
-			{
-		            ;
-			}
-			else
+			if($project->openedBy != $this->app->user->account and $project->PM != $this->app->user->account and !in_array($this->app->user->account, $whitelist) and !isset($teamMembers[$project->id][$this->app->user->account]) and !isset($stakeholder[$project->id][$this->app->user->account]))
 			{
 			    unset($projectList[$id]);
 		            $pager->recTotal -= 1;
