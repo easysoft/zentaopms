@@ -697,9 +697,7 @@ class mrModel extends model
                     ->exec();
                 if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-                /* Force reload when locate to the url. */
-                $random = uniqid();
-                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}&random={$random}"));
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refresh()');
             }
         }
         return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));

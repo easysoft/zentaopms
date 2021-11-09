@@ -49,9 +49,9 @@
         <div class="btn-toolbar">
           <?php common::printBack(inlink('browse', '')); ?>
           <?php if ($rawMR->state == 'opened' and !$rawMR->has_conflicts) echo html::a(inlink('accept', "mr=$MR->id"), '<i class="icon icon-flow"></i> ' . $lang->mr->acceptMR, '', "id='mergeButton' class='btn'"); ?>
-          <?php if ($rawMR->state == 'opened'): ?>
-            <?php echo html::a(inlink('approval', "mr=$MR->id&action=approve&onlybody=yes"), '<i class="icon icon-ok"></i> ' . $lang->mr->approve, '', "id='mergeButton' class='btn'"); ?>
-            <?php echo html::a(inlink('approval', "mr=$MR->id&action=reject&onlybody=yes"), '<i class="icon icon-bug"></i> ' . $lang->mr->reject, '', "id='mergeButton' class='btn'"); ?>
+          <?php if ($rawMR->state == 'opened') : ?>
+            <?php echo html::a(inlink('approval', "mr=$MR->id&action=approve&onlybody=yes"), '<i class="icon icon-ok"></i> ' . $lang->mr->approve, '', "id='mergeButton' class='btn iframe showinonlybody'"); ?>
+            <?php echo html::a(inlink('approval', "mr=$MR->id&action=reject&onlybody=yes"), '<i class="icon icon-bug"></i> ' . $lang->mr->reject, '', "id='mergeButton' class='btn iframe showinonlybody'"); ?>
             <?php echo html::a(inlink('close', "mr=$MR->id"), '<i class="icon icon-close"></i> ' . $lang->mr->close, '', "id='mergeButton' class='btn'"); ?>
             <?php echo html::a(inlink('edit', "mr=$MR->id"), '<i class="icon icon-edit"></i> ' . str_replace($lang->mr->common, '', $lang->mr->edit), '', "id='mergeButton' class='btn'"); ?>
           <?php endif; ?>
@@ -114,4 +114,10 @@
   </div>
   <br>
 <?php endif; ?>
+<script>
+  /* Callback function for approval view. */
+  function refresh() {
+    location.reload();
+  }
+</script>
 <?php include '../../common/view/footer.html.php'; ?>

@@ -290,8 +290,8 @@ class mr extends control
     /**
      * Approval for this MR.
      *
-     * @param  mixed $MRID
-     * @param  mixed $action
+     * @param  int    $MRID
+     * @param  string $action
      * @return void
      */
     public function approval($MRID, $action = 'approve')
@@ -306,6 +306,15 @@ class mr extends control
             $result = $this->mr->approve($MR, $action, $comment);
             return $this->send($result);
         }
+
+        $showCompileResult = false;
+        if(!empty($MR->compileStatus))
+        {
+            $showCompileResult = true;
+            $this->app->loadLang('compile'); /* Import lang. */
+            $this->view->compileUrl = $this->createLink('job', 'view', "jobID={$MR->jobID}&compileID={$MR->compileID}");
+        }
+        $this->view->showCompileResult = $showCompileResult;
 
         $this->view->MR      = $MR;
         $this->view->action  = $action;
