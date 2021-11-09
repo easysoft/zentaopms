@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php js::set('orderBy', $orderBy)?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>
 <?php $canMergeBranch = common::hasPriv('branch', 'mergeBranch');?>
@@ -58,15 +59,18 @@
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
-      <tbody class="sortable">
+      <tbody id='branchTableList'>
         <?php foreach($branchList as $branch):?>
-        <tr>
+        <?php $isMain = $branch->id == BRANCH_MAIN;?>
+        <tr data-id='<?php echo $branch->id;?>'>
           <?php if($canBatchAction):?>
           <td class='cell-id'>
             <?php echo html::checkbox('branchIDList', array($branch->id => ''));?>
           </td>
           <?php endif;?>
-          <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
+          <td class='c-actions <?php echo $isMain ? '' : 'sort-handler';?>'>
+            <?php echo $isMain ? '' : '<i class="icon icon-move"></i>';?>
+          </td>
           <td class='c-name flex' title='<?php echo $branch->name;?>'>
             <span class="text-ellipsis"><?php echo $branch->name;?></span>
             <?php
@@ -90,7 +94,7 @@
           <td class='c-name' title='<?php echo $branch->desc;?>'><?php echo $branch->desc;?></td>
           <td class='c-actions'>
           <?php
-            $disabled = $branch->id == BRANCH_MAIN ? 'disabled' : '';
+            $disabled = $isMain ? 'disabled' : '';
             common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list', '', '', "$disabled iframe", true);
             if($branch->status == 'active')
             {

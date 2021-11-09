@@ -23,7 +23,7 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function manage($productID, $browseType = 'active', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function manage($productID, $browseType = 'active', $orderBy = 'order', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product')->setMenu($productID);
         $this->session->set('branchManage', $this->app->getURI(true), 'product');

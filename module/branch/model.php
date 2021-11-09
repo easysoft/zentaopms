@@ -345,11 +345,18 @@ class branchModel extends model
      */
     public function sort()
     {
-        $data = fixer::input('post')->get();
-        $branches = trim($data->branches, ',');
-        foreach(explode(',', $branches) as $order => $branchID)
+        $orderBy      = $this->post->orderBy;
+        $branchIDList = explode(',', trim($this->post->branches, ','));
+
+        if(strpos($orderBy, 'order') === false) return false;
+        if(in_array(BRANCH_MAIN, $branchIDList)) unset($branchIDList[array_search(BRANCH_MAIN, $branchIDList)]);
+
+        $branches = $this->dao->select('id,`order`')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->orderBy($orderBy)->fetchPairs('order', 'id');
+        foreach($branches as $order => $id)
         {
-            $this->dao->update(TABLE_BRANCH)->set('`order`')->eq($order)->where('id')->eq($branchID)->exec();
+            $newID = array_shift($branchIDList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_BRANCH)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
         }
     }
 
