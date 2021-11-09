@@ -149,5 +149,6 @@ js::set('priv',
 <?php js::set('sortColumn', $lang->execution->sortColumn);?>
 <?php js::set('kanbanLang', $lang->kanban);?>
 <?php js::set('deadlineLang', $lang->task->deadlineAB);?>
+<?php js::set('noAssigned', $lang->task->noAssigned);?>
 <?php js::set('userList', $userList);?>
 <?php include '../../common/view/footer.html.php';?>

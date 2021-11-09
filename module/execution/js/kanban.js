@@ -11,25 +11,20 @@ function changeView(view)
  */
 function renderUserAvatar(user, objectType, objectID)
 {
+    if(objectType == 'task')  var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+    if(objectType == 'story') var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+    if(objectType == 'bug')   var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+
+    if(!user) return $('<a class="avatar has-text avatar-sm avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-account"></i></a>');
+
     if(typeof user === 'string') user = {account: user};
     if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
 
     var $noPrivAvatar = $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
-    if(objectType == 'task')
-    {
-        if(!priv.canAssignTask) return $noPrivAvatar;
-        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
-    }
-    else if(objectType == 'story')
-    {
-        if(!priv.canAssignStory) return $noPrivAvatar;
-        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
-    }
-    else if(objectType == 'bug')
-    {
-        if(!priv.canAssignBug) return $noPrivAvatar;
-        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
-    }
+    if(objectType == 'task' && !priv.canAssignTask)  return $noPrivAvatar;
+    if(objectType == 'task' && !priv.canAssignStory) return $noPrivAvatar;
+    if(objectType == 'bug'  && !priv.canAssignBug)   return $noPrivAvatar;
+
 
     return $('<a class="avatar has-text avatar-sm avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
 }
@@ -84,7 +79,7 @@ function renderStoryItem(item, $item, col)
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
     ].join(''));
-    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'story', item.id));
+    $infos.append(renderUserAvatar(item.assignedTo, 'story', item.id));
 
     var $actions = $item.find('.actions');
     if(!$actions.length && item.menus.length)
@@ -133,7 +128,7 @@ function renderBugItem(item, $item, col)
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
     ].join(''));
     if(item.deadline) $infos.append(renderDeadline(item.deadline));
-    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'bug', item.id));
+    $infos.append(renderUserAvatar(item.assignedTo, 'bug', item.id));
 
     var $actions = $item.find('.actions');
     if(!$actions.length && item.menus.length)
@@ -182,7 +177,7 @@ function renderTaskItem(item, $item, col)
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
     ].join(''));
     if(item.deadline) $infos.append(renderDeadline(item.deadline));
-    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'task', item.id));
+    $infos.append(renderUserAvatar(item.assignedTo, 'task', item.id));
 
     var $actions = $item.find('.actions');
     if(!$actions.length && item.menus.length)
