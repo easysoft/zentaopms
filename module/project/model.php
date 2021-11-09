@@ -1437,7 +1437,7 @@ class projectModel extends model
 
             if($id == 'id') $class .= ' cell-id';
             
-            if($id=='code') $title = "title='{$project->code}'";
+            if($id == 'code') $title = "title={$project->code}";
 
             if($id == 'name')
             {
