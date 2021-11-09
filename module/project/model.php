@@ -561,6 +561,20 @@ class projectModel extends model
     }
 
     /**
+     * Get branches by project id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getBranchesByProject($projectID)
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($projectID)
+            ->fetchGroup('product', 'branch');
+    }
+
+    /**
      * Build the query.
      *
      * @param  int    $projectID
@@ -650,6 +664,20 @@ class projectModel extends model
         }
 
         return $pairs;
+    }
+
+    /**
+     * Get stories by project id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getStoriesByProject($projectID = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECTSTORY)
+            ->beginIF($projectID)->where('project')->eq($projectID)->fi()
+            ->fetchGroup('product', 'branch');
     }
 
     /**
@@ -1601,10 +1629,14 @@ class projectModel extends model
         foreach($products as $i => $productID)
         {
             if(empty($productID)) continue;
-            if(isset($existedProducts[$productID])) continue;
+
+            if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
+
+            if(isset($existedProducts[$productID][$branch])) continue;
+
             if(isset($oldProjectProducts[$productID][$branch]))
             {
                 $oldProjectProduct = $oldProjectProducts[$productID][$branch];
@@ -1615,9 +1647,9 @@ class projectModel extends model
             $data->project = $projectID;
             $data->product = $productID;
             $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
+            $data->plan    = isset($plans[$productID][$branch]) ? $plans[$productID][$branch] : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            $existedProducts[$productID] = true;
+            $existedProducts[$productID][$branch] = true;
         }
 
         /* Delete the execution linked products that is not linked with the execution. */

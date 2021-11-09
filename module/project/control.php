@@ -355,10 +355,17 @@ class project extends control
             /* Link the plan stories. */
             if(!empty($_POST['plans']))
             {
-                foreach($_POST['plans'] as $planID)
+                $planIdList = array();
+                foreach($_POST['plans'] as $plans)
+                {
+                    foreach($plans as $planID) $planIdList[$planID] = $planID;
+                }
+
+                $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);
+                foreach($planIdList as $planID)
                 {
                     $planStories = $planProducts = array();
-                    $planStory   = $this->loadModel('story')->getPlanStories($planID);
+                    $planStory   = isset($planStoryGroup[$planID]) ? $planStoryGroup[$planID] : array();
                     if(!empty($planStory))
                     {
                         foreach($planStory as $id => $story)
@@ -441,28 +448,29 @@ class project extends control
         $this->view->title      = $this->lang->project->create;
         $this->view->position[] = $this->lang->project->create;
 
-        $this->view->gobackLink      = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
-        $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->users           = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->copyProjects    = $this->project->getPairsByModel();
-        $this->view->products        = $products;
-        $this->view->allProducts     = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed');
-        $this->view->productPlans    = array('0' => '') + $productPlans;
-        $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->programID       = $programID;
-        $this->view->model           = $model;
-        $this->view->name            = $name;
-        $this->view->code            = $code;
-        $this->view->team            = $team;
-        $this->view->acl             = $acl;
-        $this->view->auth            = $auth;
-        $this->view->whitelist       = $whitelist;
-        $this->view->copyProjectID   = $copyProjectID;
-        $this->view->programList     = $this->program->getParentPairs();
-        $this->view->parentProgram   = $parentProgram;
-        $this->view->URSRPairs       = $this->loadModel('custom')->getURSRPairs();
-        $this->view->availableBudget = $this->program->getBudgetLeft($parentProgram);
-        $this->view->budgetUnitList  = $this->program->getBudgetUnitList();
+        $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
+        $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->copyProjects        = $this->project->getPairsByModel();
+        $this->view->products            = $products;
+        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed');
+        $this->view->productPlans        = array('0' => '') + $productPlans;
+        $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        $this->view->programID           = $programID;
+        $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs($programID);
+        $this->view->model               = $model;
+        $this->view->name                = $name;
+        $this->view->code                = $code;
+        $this->view->team                = $team;
+        $this->view->acl                 = $acl;
+        $this->view->auth                = $auth;
+        $this->view->whitelist           = $whitelist;
+        $this->view->copyProjectID       = $copyProjectID;
+        $this->view->programList         = $this->program->getParentPairs();
+        $this->view->parentProgram       = $parentProgram;
+        $this->view->URSRPairs           = $this->loadModel('custom')->getURSRPairs();
+        $this->view->availableBudget     = $this->program->getBudgetLeft($parentProgram);
+        $this->view->budgetUnitList      = $this->program->getBudgetUnitList();
 
         $this->display();
     }
@@ -502,10 +510,16 @@ class project extends control
             }
 
             /* Link the plan stories. */
-            $diffResult = array_diff($oldPlans, $_POST['plans']);
-            if(!empty($_POST['plans']) and !empty($diffResult))
+            $newPlans = array();
+            foreach($_POST['plans'] as $plans)
             {
-                $this->loadModel('productplan')->linkProject($projectID, $_POST['plans']);
+                foreach($plans as $planID) $newPlans[$planID] = $planID;
+            }
+
+            $diffResult = array_diff($oldPlans, $newPlans);
+            if(!empty($newPlans) and !empty($diffResult))
+            {
+                $this->loadModel('productplan')->linkProject($projectID, $newPlans);
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -519,24 +533,27 @@ class project extends control
         $allProducts    = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
         $linkedProducts = $this->project->getProducts($projectID);
         $parentProject  = $this->program->getByID($project->parent);
+        $branches       = $this->project->getBranchesByProject($projectID);
+        $plans          = $this->productplan->getGroupByProduct(array_keys($linkedProducts));
+        $projectStories = $this->project->getStoriesByProject($projectID);
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts = array();
+        $unmodifiableBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($projectStories)) array_push($unmodifiableProducts, $productID);
-        }
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $product->name;
+            foreach($branches[$productID] as $branchID => $branch)
+            {
+                $linkedBranches[$productID][$branchID] = $branchID;
+                $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
 
-        foreach($linkedProducts as $product)
-        {
-            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
-            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
-        }
-
-        foreach($linkedProducts as $product)
-        {
-            $productPlans[$product->id] = $this->productplan->getPairs($product->id);
+                if(!empty($projectStories[$productID][$branchID]))
+                {
+                    array_push($unmodifiableProducts, $productID);
+                    array_push($unmodifiableBranches, $branchID);
+                }
+            }
         }
 
         $this->view->title      = $this->lang->project->edit;
@@ -549,10 +566,14 @@ class project extends control
         $this->view->program              = $this->program->getByID($project->parent);
         $this->view->projectID            = $projectID;
         $this->view->allProducts          = array('0' => '') + $allProducts;
-        $this->view->productPlans         = $productPlans;
+        $this->view->multiBranchProducts  = $this->loadModel('product')->getMultiBranchPairs();
+        $this->view->productPlans         = array_filter($productPlans);
         $this->view->linkedProducts       = $linkedProducts;
+        $this->view->linkedBranches       = $linkedBranches;
+        $this->view->branches             = $branches;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->unmodifiableBranches = $unmodifiableBranches;
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed');
         $this->view->URSRPairs            = $this->custom->getURSRPairs();
         $this->view->parentProject        = $parentProject;
         $this->view->parentProgram        = $this->program->getByID($project->parent);
@@ -1684,23 +1705,28 @@ class project extends control
             $this->project->setMenu($projectID);
         }
 
-        $allProducts    = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts = $this->product->getProducts($project->id);
         $linkedBranches = array();
+        $allProducts    = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
+        $linkedProducts = $this->product->getProducts($projectID);
+        $branches       = $this->project->getBranchesByProject($projectID);
+        $projectStories = $this->project->getStoriesByProject($projectID);
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts = array();
+        $unmodifiableBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            $projectStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($projectStories)) array_push($unmodifiableProducts, $productID);
-        }
-
-        /* Merge allProducts and linkedProducts for closed product. */
-        foreach($linkedProducts as $product)
-        {
-            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
-            if(!empty($product->branch)) $linkedBranches[$product->branch] = $product->branch;
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $product->name;
+            $linkedBranches[$productID] = array();
+            foreach($branches[$productID] as $branchID => $branch)
+            {
+                $linkedBranches[$productID][$branchID] = $branchID;
+                if(!empty($projectStories[$productID][$branchID]))
+                {
+                    array_push($unmodifiableProducts, $productID);
+                    array_push($unmodifiableBranches, $branchID);
+                }
+            }
         }
 
         /* Assign. */
@@ -1708,8 +1734,11 @@ class project extends control
         $this->view->position[]           = $this->lang->project->manageProducts;
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
+        $this->view->linkedBranches       = $linkedBranches;
+        $this->view->branches             = $branches;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal', $linkedBranches);
+        $this->view->unmodifiableBranches = $unmodifiableBranches;
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'noclosed');
 
         $this->display();
     }

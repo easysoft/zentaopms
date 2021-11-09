@@ -732,6 +732,7 @@ class upgradeModel extends model
         case '15_7_1':
             $this->saveLogs('Execute 15_7_1');
             $this->execSQL($this->getUpgradeFile('15.7.1'));
+            $this->updateProjectStories();
             $this->appendExec('15_7_1');
         }
 
@@ -5328,6 +5329,26 @@ class upgradeModel extends model
         $data->value = ',' . $data->value . ',';
         $data->value = str_replace(',project,', ',', $data->value);
         $this->dao->update(TABLE_CONFIG)->set('`value`')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
+        return true;
+    }
+
+    /**
+     * Update branch of project linked stories.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateProjectStories()
+    {
+        $storyPairs = $this->dao->select('t1.story, t2.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->fetchPairs();
+
+        foreach($storyPairs as $storyID => $branch)
+        {
+            $this->dao->update(TABLE_PROJECTSTORY)->set('branch')->eq($branch)->where('story')->eq($storyID)->exec();
+        }
+
         return true;
     }
 }

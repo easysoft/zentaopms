@@ -438,6 +438,22 @@ class productModel extends model
         return array_slice($products, 0, $num, true);
     }
 
+    /**
+     * Get Multi-branch product pairs.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getMultiBranchPairs($programID = 0)
+    {
+        return $this->dao->select('id')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+            ->andWhere('type')->in('branch,platform')
+            ->fetchPairs();
+    }
+
     /*
      * Get product switcher.
      *

@@ -3,4 +3,5 @@ ALTER TABLE `zt_branch` ADD `status` enum ('active', 'closed') NOT NULL DEFAULT 
 ALTER TABLE `zt_branch` ADD `desc` varchar(255) NOT NULL AFTER `status`;
 ALTER TABLE `zt_branch` ADD `createdDate` date NOT NULL AFTER `desc`;
 ALTER TABLE `zt_branch` ADD `closedDate` date NOT NULL AFTER `createdDate`;
+ALTER TABLE `zt_projectstory` ADD `branch` mediumint(8) NOT NULL AFTER `product`;
 ALTER TABLE `zt_projectproduct` ADD PRIMARY KEY `project_product_branch` (`project`, `product`, `branch`), DROP INDEX `PRIMARY`;

@@ -758,7 +758,7 @@ class execution extends control
         }
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory');
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $executionID);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->story;
@@ -2426,7 +2426,8 @@ class execution extends control
 
         /* Set modules and branches. */
         $modules     = array();
-        $branches    = array();
+        $branchPairs = array();
+        $branches    = $this->project->getBranchesByProject($objectID);
         $productType = 'normal';
         $this->loadModel('tree');
         $this->loadModel('branch');
@@ -2437,18 +2438,17 @@ class execution extends control
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                $branches[$product->branch] = $product->branch;
-                if($product->branch == 0)
+                if(isset($branches[$product->id]))
                 {
-                    foreach($this->branch->getPairs($product->id, 'noempty') as $branchID => $branchName) $branches[$branchID] = $branchID;
+                    foreach($branches[$product->id] as $branchID => $branch) $branchPairs[$branchID] = $branchID;
                 }
             }
         }
 
         /* Build the search form. */
         $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID");
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $objectID);
 
         if($browseType == 'bySearch')
         {
@@ -2456,7 +2456,7 @@ class execution extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
+            $allStories = $this->story->getProductStories(array_keys($products), $branchPairs, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);

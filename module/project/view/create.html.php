@@ -18,7 +18,9 @@
 <?php js::set('copyProjectID', $copyProjectID);?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
+<?php js::set('errorSameBranches', $lang->project->errorSameBranches);?>
 <?php js::set('longTime', $lang->project->longTime);?>
+<?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -137,7 +139,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[]", '', '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[][]", '', '', "class='form-control chosen'");?></div>
               <?php endif;?>
             </div>
           </td>
