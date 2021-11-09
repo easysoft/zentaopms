@@ -453,22 +453,22 @@ class programModel extends model
 
 	if($this->cookie->involved or $involved)
 	{
-		$stakeholder = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
-		    ->where('deleted')->eq('0')
-	            ->andWhere('objectID')->in(array_keys($projectList))
-		    ->fetchGroup('objectID', 'user');
-                $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
-		    ->where('root')->in(array_keys($projectList))
-                    ->fetchGroup('root','account');
-		foreach($projectList as $id => $project)
+       	    $stakeholder = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
+	        ->where('deleted')->eq('0')
+	        ->andWhere('objectID')->in(array_keys($projectList))
+		->fetchGroup('objectID', 'user');
+            $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
+		->where('root')->in(array_keys($projectList))
+                ->fetchGroup('root','account');
+	    foreach($projectList as $id => $project)
+	    {
+                $whitelist   = explode(",", $project->whitelist);
+	        if($project->openedBy != $this->app->user->account and $project->PM != $this->app->user->account and !in_array($this->app->user->account, $whitelist) and !isset($teamMembers[$project->id][$this->app->user->account]) and !isset($stakeholder[$project->id][$this->app->user->account]))
 		{
-		    $whitelist   = explode(",", $project->whitelist);
-	            if($project->openedBy != $this->app->user->account and $project->PM != $this->app->user->account and !in_array($this->app->user->account, $whitelist) and !isset($teamMembers[$project->id][$this->app->user->account]) and !isset($stakeholder[$project->id][$this->app->user->account]))
-		    {
-			unset($projectList[$id]);
-		        $pager->recTotal -= 1;
-		    }
+	            unset($projectList[$id]);
+		    $pager->recTotal -= 1;
 		}
+            }
 	}
 
         /* Determine how to display the name of the program. */
