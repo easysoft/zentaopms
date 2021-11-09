@@ -98,6 +98,7 @@ $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
 
 $lang->kanbancolumn = new stdclass();
+$lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 
 $lang->kanbanlane = new stdclass();
