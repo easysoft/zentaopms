@@ -1436,6 +1436,8 @@ class projectModel extends model
             $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
             if($id == 'id') $class .= ' cell-id';
+            
+            if($id == 'code') $title = "title={$project->code}";
 
             if($id == 'name')
             {
