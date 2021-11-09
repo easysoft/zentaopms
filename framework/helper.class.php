@@ -228,6 +228,23 @@ class helper extends baseHelper
 			$version
 		);
 	}
+
+    /**
+     * Request API.
+     *
+     * @param  string    $url
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function requestAPI($url)
+    {
+        global $config;
+
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . $config->sessionVar . '=' . session_id();
+        if(isset($_SESSION['user'])) $url .= '&account=' . $_SESSION['user']->account;
+        return common::http($url);
+    }
 }
 
 /**
@@ -261,8 +278,8 @@ function formatTime($time, $format = '')
 
 /**
  * Fix for session error.
- * 
- * @param  int    $class 
+ *
+ * @param  int    $class
  * @access protected
  * @return void
  */

@@ -1399,11 +1399,21 @@ class baseRouter
         /* 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。If extensionLevel == 2 and site extensionFile exists, return it. */
         if($this->config->framework->extensionLevel == 2 and !empty( $moduleExtPaths['site']))
         {
+            $locateFile  = $moduleExtPaths['site'] . $this->methodName . '.302';
+            if(file_exists($locateFile)) $this->sendAPI($locateFile);
+            $requestFile = $moduleExtPaths['site'] . $this->methodName . '.api';
+            if(file_exists($requestFile)) $this->sendAPI($requestFile);
+
             $this->extActionFile = $moduleExtPaths['site'] . $this->methodName . '.php';
             if(file_exists($this->extActionFile)) return true;
         }
 
         /* 然后再尝试寻找公共扩展文件。Then try to find the common extension file. */
+        $locateFile  = $moduleExtPaths['common'] . $this->methodName . '.302';
+        if(file_exists($locateFile)) $this->sendAPI($locateFile);
+        $requestFile = $moduleExtPaths['common'] . $this->methodName . '.api';
+        if(file_exists($requestFile)) $this->sendAPI($requestFile);
+
         $this->extActionFile = $moduleExtPaths['common'] . $this->methodName . '.php';
         return file_exists($this->extActionFile);
     }
@@ -1429,6 +1439,7 @@ class baseRouter
         /* 计算扩展的文件和hook文件。Compute the extension files and hook files. */
         $hookFiles     = array();
         $extFiles      = array();
+        $apiFiles      = array();
         $siteExtended  = false;
 
         $modelExtPaths = $this->getModuleExtPath($appName, $moduleName, 'model');
@@ -1438,14 +1449,16 @@ class baseRouter
 
             $tmpHookFiles = helper::ls($modelExtPath . 'hook/', '.php');
             $tmpExtFiles  = helper::ls($modelExtPath, '.php');
+            $tmpAPIFiles  = helper::ls($modelExtPath, '.api');
             $hookFiles    = array_merge($hookFiles, $tmpHookFiles);
             $extFiles     = array_merge($extFiles,  $tmpExtFiles);
+            $apiFiles     = array_merge($apiFiles,  $tmpAPIFiles);
 
-            if($extType == 'site' and (!empty($tmpHookFiles) or !empty($tmpExtFiles))) $siteExtended = true;
+            if($extType == 'site' and (!empty($tmpHookFiles) or !empty($tmpExtFiles) or !empty($tmpAPIFiles))) $siteExtended = true;
         }
 
         /* 如果没有扩展文件，返回主文件。 If no extension or hook files, return the main file directly. */
-        if(empty($extFiles) and empty($hookFiles)) return $mainModelFile;
+        if(empty($extFiles) and empty($hookFiles) and empty($apiFiles)) return $mainModelFile;
 
         /* 计算合并之后的modelFile路径。Compute the merged model file path. */
         $extModelPrefix  = ($siteExtended and !empty($this->siteCode)) ? $this->siteCode[0] . DS . $this->siteCode : '';
@@ -1454,11 +1467,11 @@ class baseRouter
         if(!is_dir($mergedModelDir)) mkdir($mergedModelDir, 0755, true);
 
         /* 判断生成的缓存文件是否需要更新。 Judge whether the merged model file needed update or not. */
-        if(!$this->needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $modelExtPaths, $mainModelFile)) return $mergedModelFile;
+        if(!$this->needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $apiFiles, $modelExtPaths, $mainModelFile)) return $mergedModelFile;
 
         /* 合并扩展和hook文件。Merge the extension and hook files. */
         $modelLines = $this->mergeModelExtFiles($moduleName, $mainModelFile, $extFiles, $mergedModelDir);
-        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile);
+        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles);
 
         return $mergedModelFile;
     }
@@ -1466,20 +1479,22 @@ class baseRouter
     /**
      * 检查合并之后的model文件是否需要更新。Check whether the merged model file need update or not.
      *
-     * @param  string    $mainModelFile
      * @param  string    $mergedModelFile
-     * @param  string    $modelExtPaths
      * @param  array     $extFiles
      * @param  array     $hookFiles
+     * @param  array     $apiFiles
+     * @param  string    $modelExtPaths
+     * @param  string    $mainModelFile
      * @access public
      * @return bool
      */
-    public function needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $modelExtPaths, $mainModelFile)
+    public function needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $apiFiles, $modelExtPaths, $mainModelFile)
     {
         $lastTime = file_exists($mergedModelFile) ? filemtime($mergedModelFile) : 0;
 
         foreach($extFiles  as $extFile)  if(filemtime($extFile)  > $lastTime) return true;
         foreach($hookFiles as $hookFile) if(filemtime($hookFile) > $lastTime) return true;
+        foreach($apiFiles  as $apiFile)  if(filemtime($apiFile)  > $lastTime) return true;
 
         $modelExtPath  = $modelExtPaths['common'];
         $modelHookPath = $modelExtPaths['common'] . 'hook/';
@@ -1547,7 +1562,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile)
+    public function mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles)
     {
         /* 定义相关变量。Init vars. */
         $modelClass    = $moduleName . 'Model';
@@ -1558,6 +1573,15 @@ class baseRouter
 
         /* 读取hook文件。Get hook codes need to merge. */
         $hookCodes = array();
+        foreach($apiFiles as $apiFile)
+        {
+            /* 通过文件名获得其对应的方法名。Get methods according it's filename. */
+            $fileName = baseName($apiFile);
+            list($method) = explode('.', $fileName);
+
+            $url = self::extractAPIURL($apiFile);
+            if($url) $hookCodes[$method][] = "return helper::requestAPI('$url');";
+        }
         foreach($hookFiles as $hookFile)
         {
             /* 通过文件名获得其对应的方法名。Get methods according it's filename. */
@@ -1609,6 +1633,95 @@ class baseRouter
         if(strpos($code, '<?php') === 0)     $code = ltrim($code, '<?php');
         if(strrpos($code, '?' . '>')   !== false) $code = rtrim($code, '?' . '>');
         return trim($code);
+    }
+
+    /**
+     * Extract API url from api file.
+     *
+     * @param  string    $fileName
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function extractAPIURL($fileName)
+    {
+        global $config;
+
+        $url   = '';
+        $lines = file($fileName);
+        foreach($lines as $line)
+        {
+            $line = trim($line);
+
+            if(empty($line)) continue;
+            if(preg_match('/^https?\:\/\//', $line))
+            {
+                $url = $line;
+                break;
+            }
+        }
+        if(empty($url)) return false;
+        return $url;
+    }
+
+    /**
+     * Send API.
+     *
+     * @param  string    $apiFile
+     * @access public
+     * @return void
+     */
+    public function sendAPI($apiFile)
+    {
+        $extension = substr($apiFile, strrpos($apiFile, '.') + 1);
+        if($extension != '302' and $extension != 'api') return false;
+
+        $lines = file($apiFile);
+        $url   = '';
+        foreach($lines as $line)
+        {
+            $line = trim($line);
+
+            if(empty($line)) continue;
+            if(preg_match('/^https?\:\/\//', $line))
+            {
+                $url = $line;
+                break;
+            }
+        }
+        if(empty($url)) return false;
+
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . $this->config->sessionVar . '=' . session_id() . '&account=' . $_SESSION['user']->account;
+        if($extension == '302')
+        {
+            header("location: $url");
+            exit;
+        }
+
+        if($extension == 'api')
+        {
+            $response = common::http($url);
+            $headFile = $this->moduleRoot . 'common/view/header.html.php';
+            $footFile = $this->moduleRoot . 'common/view/footer.html.php';
+
+            $obLevel = ob_get_level();
+            for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+
+            $controller = new control();
+            $viewFiles  = $controller->setViewFile($this->moduleName, $this->methodName);
+
+            $css = $controller->getCSS($this->moduleName, $this->methodName);
+            $js  = $controller->getJS($this->moduleName, $this->methodName);
+            if($css) $controller->view->pageCSS = $css;
+            if($js)  $controller->view->pageJS  = $js;
+
+            $output  = '';
+            $output .= $controller->printViewFile($headFile);
+            $output .= $response;
+            if(isset($viewFiles['hookFiles'])) foreach($viewFiles['hookFiles'] as $hookFile) $output .= $controller->printViewFile($hookFile);
+            $output .= $controller->printViewFile($footFile);
+            die($output);
+        }
     }
 
     //-------------------- 路由相关方法(Routing related methods) --------------------//

@@ -420,4 +420,29 @@ class control extends baseControl
         }
         if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
+
+    /**
+     * Print view file.
+     *
+     * @param  string    $viewFile
+     * @access public
+     * @return void
+     */
+    public function printViewFile($viewFile)
+    {
+        if(!file_exists($viewFile)) return false;
+
+        $currentPWD = getcwd();
+        chdir(dirname($viewFile));
+
+        extract((array)$this->view);
+        ob_start();
+        include $viewFile;
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        chdir($currentPWD);
+
+        return $output;
+    }
 }

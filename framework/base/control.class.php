@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ZenTaoPHP的baseControl类。
  * The baseControl class file of ZenTaoPHP framework.
