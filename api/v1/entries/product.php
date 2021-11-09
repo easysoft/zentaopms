@@ -58,14 +58,22 @@ class productEntry extends Entry
                     }
                     break;
                 case 'actions':
-                    $actions = $this->loadModel('action')->getList('product', $productID);
-                    $actions = $this->action->transformActions($actions);
+                    $product->addComment = common::hasPriv('action', 'comment') ? true : false;
 
+                    $actions = $this->loadModel('action')->getList('product', $productID);
                     $product->actions = array();
                     foreach($actions as $action)
                     {
-                        $action = $this->filterFields($action, 'id,objectType,objectID,actor,action,date,comment,extra,objectName,originalDate,actionLabel,objectLabel,history');
-                        $action->actor = $this->formatUser($action->actor, $users);
+                        $action->actor = zget($users, $action->actor);
+                        if($action->action == 'assigned') $action->extra = zget($users, $action->extra);
+                        if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+
+                        ob_start();
+                        $this->action->printAction($action);
+                        $action->desc = ob_get_contents();
+                        ob_end_clean();
+
+                        $action = $this->filterFields($action, 'id,objectType,objectID,actor,action,date,comment,extra,desc,history');
                         if($action->history)
                         {
                             foreach($action->history as $i => $history)

@@ -4,8 +4,9 @@
  */
 $routes = array();
 
-$routes['/tokens'] = 'tokens';
-$routes['/langs']  = 'langs';
+$routes['/tokens']   = 'tokens';
+$routes['/langs']    = 'langs';
+$routes['/comments'] = 'comments';
 
 $routes['/tabs/:module'] = 'tabs';
 
