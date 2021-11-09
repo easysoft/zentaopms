@@ -1878,7 +1878,7 @@ class execution extends control
         }
 
         $userList    = array();
-        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs(); 
+        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
         foreach($avatarPairs as $account => $avatar)
         {
             if(!$avatar) continue;
@@ -2079,6 +2079,14 @@ class execution extends control
                 }
             }
 
+            /* Close the page when there is no data. */
+            $hasData = false;
+            foreach($datas as $data)
+            {
+                if(!empty($data)) $hasData = true;
+            }
+            if(!$hasData) die(js::alert($this->lang->execution->noPrintData) . js::close());
+
             $this->execution->saveKanbanData($executionID, $originalDatas);
 
             $hasBurn = $this->post->content == 'all';
@@ -2104,8 +2112,7 @@ class execution extends control
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getById($executionID);
 
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->printKanban;
+        $this->view->executionID = $executionID;
         $this->display();
     }
 

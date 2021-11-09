@@ -50,6 +50,7 @@ $lang->kanban->moveUp             = '泳道上移';
 $lang->kanban->moveDown           = '泳道下移';
 $lang->kanban->laneMove           = '泳道排序';
 $lang->kanban->laneGroup          = '泳道分组';
+$lang->kanban->cardsSort          = '卡片排序';
 $lang->kanban->moreAction         = '更多操作';
 $lang->kanban->noGroup            = '无';
 

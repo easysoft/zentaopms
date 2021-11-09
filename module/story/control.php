@@ -1793,6 +1793,7 @@ class story extends control
         }
 
         $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+        if(empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
 
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
         $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");

@@ -50,6 +50,7 @@ $lang->kanban->moveUp             = 'Swimlane Up';
 $lang->kanban->moveDown           = 'Swimlane Down';
 $lang->kanban->laneMove           = 'Swimlane Sorting';
 $lang->kanban->laneGroup          = 'Lane Group';
+$lang->kanban->cardsSort          = 'Cards Sortting';
 $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
 
