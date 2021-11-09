@@ -464,12 +464,13 @@ class programModel extends model
 					      ->where('deleted')->eq('0')
 				      	      ->andWhere('objectID')->in(array_keys($projectList))
 					      ->fetchGroup('objectID', 'user');
+                $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
+				              ->where('root')->in(array_keys($projectList))
+                                              ->fetchGroup('root','account');
+		a($teamMembers);
 		foreach($projectList as $id => $project)
 		{
 			$whitelist   = explode(",", $project->whitelist);
-			$teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
-						    ->where('root')->eq($project->id)
-						    ->fetchGroup('root','account');
 			if($project->openedBy == $this->app->user->account || $project->PM == $this->app->user->account || in_array($this->app->user->account, $whitelist) || isset($teamMembers[$project->id][$this->app->user->account]) || isset($stakeholder[$project->id][$this->app->user->account]))
 			{
 		            ;
