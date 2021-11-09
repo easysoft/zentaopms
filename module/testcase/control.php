@@ -436,8 +436,8 @@ class testcase extends control
         if($currentModuleID)
         {
             $productModules  = $this->tree->getOptionMenu($productID, 'story');
-            $currentModuleID = array_key_exists($currentModuleID,$productModules) ? $currentModuleID : 0;
-            $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
+            $storyModuleID = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
+            $modules = $this->loadModel('tree')->getStoryModule($storyModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
