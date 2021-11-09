@@ -544,7 +544,7 @@ class baseEntry
             if(!$value or $value == '0000-00-00') return null;
             return $value;
         case 'bool':
-            return boolval($value) ? true : false;
+            return !empty($value);
         case 'idList':
             $values = explode(',', $value);
             if(empty($values)) return array();
