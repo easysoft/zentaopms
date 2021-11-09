@@ -45,6 +45,22 @@ class compileModel extends model
             ->page($pager)
             ->fetchAll('id');
     }
+    
+    /**
+     * Get list by jobID.
+     *
+     * @param  int $jobID
+     * @return array
+     */
+    public function getListByJobID($jobID)
+    {
+        return $this->dao->select('id, name, status')->from(TABLE_COMPILE)
+            ->where('deleted')->eq('0')
+            ->andWhere('job')->ne('0')
+            ->beginIF(!empty($jobID))->andWhere('job')->eq($jobID)->fi()
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
 
     /**
      * Get unexecuted list.

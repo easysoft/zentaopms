@@ -66,7 +66,10 @@ class mr extends control
             return $this->send($result);
         }
 
+        $this->app->loadLang('repo'); /* Import lang in repo module. */
+        $this->app->loadLang('compile');
         $this->view->title       = $this->lang->mr->create;
+        $this->view->jobList     = $this->loadModel('job')->getList();
         $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
         $this->display();
     }
@@ -220,46 +223,6 @@ class mr extends control
     }
 
     /**
-     * AJAX: Get MR target projects.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMRTargetProjects($gitlabID, $projectID)
-    {
-        $this->loadModel('gitlab');
-
-        /* First step: get forks. Only get first level forks(not recursively). */
-        $projects = $this->gitlab->apiGetForks($gitlabID, $projectID);
-
-        /* Second step: get project itself. */
-        $projects[] = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-
-        /* Last step: find its upstream recursively. */
-        $project = $this->gitlab->apiGetUpstream($gitlabID, $projectID);
-        if(!empty($project)) $projects[] = $project;
-
-        while(!empty($project) and isset($project->id))
-        {
-            $project = $this->gitlab->apiGetUpstream($gitlabID, $project->id);
-            if(empty($project)) break;
-            $projects[] = $project;
-        }
-
-        if(!$projects) return $this->send(array('message' => array()));
-
-        $options = "<option value=''></option>";
-        foreach($projects as $project)
-        {
-            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
-        }
-
-        $this->send($options);
-    }
-
-    /**
      * View diff between MR source and target branches.
      *
      * @param  int    $MRID
@@ -374,4 +337,96 @@ class mr extends control
         $MR = $this->mr->getByID($MRID);
         return $this->send($this->mr->reopen($MR));
     }
+
+    /**
+     * AJAX: Get MR target projects.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMRTargetProjects($gitlabID, $projectID)
+    {
+        $this->loadModel('gitlab');
+
+        /* First step: get forks. Only get first level forks(not recursively). */
+        $projects = $this->gitlab->apiGetForks($gitlabID, $projectID);
+
+        /* Second step: get project itself. */
+        $projects[] = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        /* Last step: find its upstream recursively. */
+        $project = $this->gitlab->apiGetUpstream($gitlabID, $projectID);
+        if(!empty($project)) $projects[] = $project;
+
+        while(!empty($project) and isset($project->id))
+        {
+            $project = $this->gitlab->apiGetUpstream($gitlabID, $project->id);
+            if(empty($project)) break;
+            $projects[] = $project;
+        }
+
+        if(!$projects) return $this->send(array('message' => array()));
+
+        $options = "<option value=''></option>";
+        foreach($projects as $project)
+        {
+            $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
+        }
+
+        $this->send($options);
+    }
+
+    /**
+     * AJAX: Get repo list.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @return void
+     */
+    public function ajaxGetRepoList($gitlabID, $projectID)
+    {
+        $this->loadModel('repo');
+        $repoList = $this->repo->getGitLabRepoList($gitlabID, $projectID);
+
+        if(!$repoList) return $this->send(array('message' => array()));
+        $options = "<option value=''></option>";
+        foreach($repoList as $repo) $options .= "<option value='{$repo->id}' data-name='{$repo->name}'>[{$repo->id}] {$repo->name}</option>";
+        $this->send($options);
+    }
+
+    /**
+     * AJAX: Get job list.
+     *
+     * @param  int $repoID
+     * @return void
+     */
+    public function ajaxGetJobList($repoID)
+    {
+        $this->loadModel('job');
+        $jobList = $this->job->getListByRepoID($repoID);
+
+        if(!$jobList) return $this->send(array('message' => array()));
+        $options = "<option value=''></option>";
+        foreach($jobList as $job) $options .= "<option value='{$job->id}' data-name='{$job->name}'>[{$job->id}] {$job->name}</option>";
+        $this->send($options);
+   }
+
+   /**
+    * AJAX: Get compile list.
+    *
+    * @param  int $jobID
+    * @return void
+    */
+   public function ajaxGetCompileList($jobID)
+   {
+        $this->loadModel('compile');
+        $compileList = $this->compile->getListByJobID($jobID);
+
+        if(!$compileList) return $this->send(array('message' => array()));
+        $options = "<option value=''></option>";
+        foreach($compileList as $compile) $options .= "<option value='{$compile->id}' data-name='{$compile->name}'>[{$compile->id}] [{$compile->status}] {$compile->name}</option>";
+        $this->send($options);
+   }
 }

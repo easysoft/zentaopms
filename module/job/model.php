@@ -50,7 +50,23 @@ class jobModel extends model
             ->fetchAll('id');
     }
 
-    /**
+     /**
+     * Get job list by RepoID.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return array
+     */
+    public function getListByRepoID($repoID)
+    {
+        return $this->dao->select('id, name, lastStatus')->from(TABLE_JOB)
+            ->where('deleted')->eq('0')
+            ->andWhere('repo')->eq($repoID)
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+   /**
      * Get list by triggerType field.
      *
      * @param  string  $triggerType

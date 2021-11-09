@@ -85,10 +85,29 @@ class mrModel extends model
      */
     public function create()
     {
-        $MR = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->get();
+        if (!empty($_POST['compile']))
+        {
+            $repoID = $this->post->repo;
+            $jobID  = $this->post->job;
+            $compileID = $this->post->compile;
+            $compileStatus = $this->loadModel('compile')->getByID($this->post->compile)->status;
+
+            $MR = fixer::input('post')
+               ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->add('repoID', $repoID)
+                ->add('jobID', $jobID)
+                ->add('compileID', $compileID)
+                ->add('compileStatus', $compileStatus)
+                ->get();
+        }
+        else
+        {
+            $MR = fixer::input('post')
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->get();
+        }
 
         $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
             ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
@@ -719,6 +738,4 @@ class mrModel extends model
         if(isset($rawMR->state) and $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
         return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
     }
-
 }
-

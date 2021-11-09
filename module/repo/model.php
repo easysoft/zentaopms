@@ -1772,4 +1772,21 @@ class repoModel extends model
         $repo->password = $gitlab->token;
         return $repo;
     }
+
+    /**
+     * Get repositories which scm is GitLab and specified gitlabID and projectID.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @return array
+     */
+    public function getGitLabRepoList($gitlabID, $projectID)
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
+            ->andWhere('SCM')->eq('Gitlab')
+            ->andWhere('synced')->eq(1)
+            ->andWhere('client')->eq($gitlabID)
+            ->andWhere('path')->eq($projectID)
+            ->fetchAll();
+    }
 }
