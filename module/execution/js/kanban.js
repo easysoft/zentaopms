@@ -11,9 +11,22 @@ function changeView(view)
  */
 function renderUserAvatar(user, objectType, objectID)
 {
-    if(objectType == 'task')  var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
-    if(objectType == 'story') var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
-    if(objectType == 'bug')   var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+    var $noPrivAndNoAssigned = $('<div class="avatar has-text avatar-sm avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-account"></i></div>');
+    if(objectType == 'task')  
+    {
+        if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
+        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+    }
+    if(objectType == 'story')
+    {
+        if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
+        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+    }
+    if(objectType == 'bug')   
+    {
+        if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
+        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+    }
 
     if(!user) return $('<a class="avatar has-text avatar-sm avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-account"></i></a>');
 
@@ -21,9 +34,9 @@ function renderUserAvatar(user, objectType, objectID)
     if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
 
     var $noPrivAvatar = $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
-    if(objectType == 'task' && !priv.canAssignTask)  return $noPrivAvatar;
-    if(objectType == 'task' && !priv.canAssignStory) return $noPrivAvatar;
-    if(objectType == 'bug'  && !priv.canAssignBug)   return $noPrivAvatar;
+    if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
+    if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
+    if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
 
     return $('<a class="avatar has-text avatar-sm avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
