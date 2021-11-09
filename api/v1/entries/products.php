@@ -20,6 +20,9 @@ class productsEntry extends entry
      */
     public function get($programID = 0)
     {
+        $fields = strtolower($this->param('fields', ''));
+        if(strpos(",{$fields},", ',dropmenu,') !== false) return $this->getDropMenu();
+
         if(!$programID) $programID = $this->param('program', 0);
 
         if($programID)
@@ -87,5 +90,48 @@ class productsEntry extends entry
         $product = $this->format($product, 'createdDate:time,whitelist:[]string');
 
         $this->send(200, $product);
+    }
+
+    /**
+     * Get dropmenu.
+     *
+     * @access public
+     * @return void
+     */
+    public function getDropMenu()
+    {
+        $control = $this->loadController('product', 'ajaxGetDropMenu');
+        $control->ajaxGetDropMenu($this->request('productID', 0), $this->request('module', 'product'), $this->request('method', 'browse'), $this->request('extra', ''), $this->request('from', ''));
+
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+
+        $dropMenu = array('owner' => array(), 'other' => array(), 'closed' => array());
+        foreach($data->data->products as $programID => $products)
+        {
+            foreach($products as $product)
+            {
+                $newProduct = new stdclass();
+                $newProduct->id      = $product->id;
+                $newProduct->program = $product->program;
+                $newProduct->name    = $product->name;
+                $newProduct->code    = $product->code;
+                $newProduct->status  = $product->status;
+
+                if($product->status == 'closed')
+                {
+                    $dropMenu['closed'][] = $newProduct;
+                }
+                elseif($product->PO == $this->app->user->account)
+                {
+                    $dropMenu['owner'][] = $newProduct;
+                }
+                else
+                {
+                    $dropMenu['other'][] = $newProduct;
+                }
+            }
+        }
+        $this->send(200, $dropMenu);
     }
 }
