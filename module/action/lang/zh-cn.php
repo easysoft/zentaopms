@@ -312,6 +312,11 @@ $lang->action->dynamicAction->product['closed']    = '关闭' . $lang->productCo
 $lang->action->dynamicAction->product['undeleted'] = '还原' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = '隐藏' . $lang->productCommon;
 
+$lang->action->dynamicAction->branch['opened']    = '创建分支';
+$lang->action->dynamicAction->branch['edited']    = '编辑分支';
+$lang->action->dynamicAction->branch['closed']    = '关闭分支';
+$lang->action->dynamicAction->branch['activated'] = '激活分支';
+
 $lang->action->dynamicAction->productplan['opened'] = "创建计划";
 $lang->action->dynamicAction->productplan['edited'] = "编辑计划";
 
@@ -506,6 +511,7 @@ $lang->action->label->issue       = '问题|issue|view|issueID=%s';
 $lang->action->label->design      = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
 $lang->action->label->api         = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->branch      = '分支|branch|manage|productID=%s&browseType=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

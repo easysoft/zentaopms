@@ -63,6 +63,7 @@ $filter->search       = new stdclass();
 $filter->gitlab       = new stdclass();
 $filter->mr           = new stdclass();
 $filter->ci           = new stdclass();
+$filter->tree         = new stdclass();
 
 $filter->block->default           = new stdclass();
 $filter->block->main              = new stdclass();
@@ -78,6 +79,7 @@ $filter->doc->create              = new stdclass();
 $filter->doc->browse              = new stdclass();
 $filter->doc->alllibs             = new stdclass();
 $filter->doc->objectlibs          = new stdclass();
+$filter->doc->tablecontents       = new stdclass();
 $filter->doc->showfiles           = new stdclass();
 $filter->doc->default             = new stdclass();
 $filter->api->index               = new stdClass();
@@ -92,6 +94,8 @@ $filter->product->default         = new stdclass();
 $filter->product->index           = new stdclass();
 $filter->product->export          = new stdclass();
 $filter->product->project         = new stdclass();
+$filter->product->roadmap         = new stdclass();
+$filter->product->dynamic         = new stdclass();
 $filter->branch->default          = new stdclass();
 $filter->program->default         = new stdclass();
 $filter->program->pgmproject      = new stdclass();
@@ -112,6 +116,7 @@ $filter->qa->default              = new stdclass();
 $filter->story->create            = new stdclass();
 $filter->story->export            = new stdclass();
 $filter->story->batchcreate       = new stdclass();
+$filter->story->track             = new stdclass();
 $filter->sso->getbindusers        = new stdclass();
 $filter->sso->gettodolist         = new stdclass();
 $filter->sso->getuserpairs        = new stdclass();
@@ -148,6 +153,7 @@ $filter->gitlab->importissue      = new stdclass();
 $filter->mr->diff                 = new stdclass();
 $filter->ci->checkCompileStatus   = new stdclass();
 $filter->execution->export        = new stdclass();
+$filter->tree->browse             = new stdclass();
 
 $filter->my->work->cookie['pagerMyTask']        = 'int';
 $filter->my->work->cookie['pagerMyRequirement'] = 'int';
@@ -164,16 +170,16 @@ $filter->my->contribute->cookie['pagerMyTestcase']    = 'int';
 $filter->my->contribute->cookie['pagerMyTesttask']    = 'int';
 $filter->my->contribute->cookie['pagerMyDoc']         = 'int';
 
-$filter->bug->batchcreate->cookie['preBranch'] = 'int';
+$filter->bug->batchcreate->cookie['preBranch'] = 'reg::word';
 $filter->bug->browse->cookie['bugModule']      = 'int';
 $filter->bug->browse->cookie['bugBranch']      = 'int';
-$filter->bug->browse->cookie['treeBranch']     = 'int';
-$filter->bug->browse->cookie['preBranch']      = 'int';
+$filter->bug->browse->cookie['treeBranch']     = 'reg::word';
+$filter->bug->browse->cookie['preBranch']      = 'reg::word';
 $filter->bug->browse->cookie['qaBugOrder']     = 'reg::orderBy';
 $filter->bug->browse->cookie['windowWidth']    = 'int';
 $filter->bug->default->cookie['lastProduct']   = 'int';
 $filter->bug->default->cookie['preProductID']  = 'int';
-$filter->bug->create->cookie['preBranch']      = 'int';
+$filter->bug->create->cookie['preBranch']      = 'reg::word';
 $filter->bug->create->cookie['lastBugModule']  = 'int';
 $filter->bug->export->cookie['checkedItem']    = 'reg::checked';
 
@@ -183,9 +189,13 @@ $filter->doc->create->cookie['lastDocModule']       = 'int';
 $filter->doc->browse->cookie['browseType']          = 'reg::browseType';
 $filter->doc->alllibs->cookie['browseType']         = 'reg::browseType';
 $filter->doc->objectlibs->cookie['browseType']      = 'reg::browseType';
+$filter->doc->objectlibs->cookie['preProductID']    = 'int';
+$filter->doc->objectlibs->cookie['preBranch']       = 'reg::word';
 $filter->doc->default->cookie['from']               = 'code';
 $filter->doc->default->cookie['product']            = 'int';
 $filter->doc->showfiles->cookie['docFilesViewType'] = 'code';
+$filter->doc->tablecontents->cookie['preProductID'] = 'int';
+$filter->doc->tablecontents->cookie['preBranch']    = 'reg::word';
 $filter->api->index->get['libID']                   = 'int';
 $filter->api->index->get['module']                  = 'int';
 $filter->api->index->get['apiID']                   = 'int';
@@ -202,19 +212,22 @@ $filter->file->download->cookie[$config->sessionVar] = 'code';
 
 $filter->mail->ztcloud->cookie['ztCloudLicense'] = 'equal::yes';
 
-$filter->product->browse->cookie['preBranch']         = 'int';
+$filter->product->browse->cookie['preBranch']         = 'reg::word';
 $filter->product->browse->cookie['preProductID']      = 'int';
 $filter->product->browse->cookie['productStoryOrder'] = 'reg::orderBy';
 $filter->product->browse->cookie['storyModule']       = 'int';
 $filter->product->browse->cookie['storyBranch']       = 'int';
-$filter->product->browse->cookie['treeBranch']        = 'int';
+$filter->product->browse->cookie['treeBranch']        = 'reg::word';
 $filter->product->default->cookie['lastProduct']      = 'int';
 $filter->product->default->cookie['preProductID']     = 'int';
-$filter->product->index->cookie['preBranch']          = 'int';
+$filter->product->index->cookie['preBranch']          = 'reg::word';
 $filter->product->export->cookie['checkedItem']       = 'reg::checked';
 $filter->product->project->cookie['involved']         = 'code';
+$filter->product->project->cookie['preBranch']        = 'reg::word';
+$filter->product->roadmap->cookie['preBranch']        = 'reg::word';
+$filter->product->dynamic->cookie['preBranch']        = 'reg::word';
 
-$filter->branch->default->cookie['preBranch'] = 'int';
+$filter->branch->default->cookie['preBranch'] = 'reg::word';
 
 $filter->program->default->cookie['lastPGM']            = 'int';
 $filter->program->default->cookie['lastPRJ']            = 'int';
@@ -245,12 +258,14 @@ $filter->projectstory->story->cookie['storyModuleParam']   = 'int';
 $filter->projectstory->story->cookie['pagerProductBrowse'] = 'int';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';
-$filter->qa->default->cookie['preBranch']    = 'int';
+$filter->qa->default->cookie['preBranch']    = 'reg::word';
 $filter->qa->default->cookie['preProductID'] = 'int';
 
 $filter->story->create->cookie['lastStoryModule']   = 'int';
 $filter->story->batchcreate->cookie['preProductID'] = 'int';
 $filter->story->export->cookie['checkedItem']       = 'reg::checked';
+$filter->story->track->cookie['preBranch']          = 'reg::word';
+$filter->story->track->cookie['preProductID']       = 'int';
 
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';
@@ -264,12 +279,12 @@ $filter->execution->export->cookie['checkedItem']        = 'reg::checked';
 
 $filter->testcase->browse->cookie['caseModule']     = 'int';
 $filter->testcase->browse->cookie['caseSuite']      = 'int';
-$filter->testcase->browse->cookie['preBranch']      = 'int';
+$filter->testcase->browse->cookie['preBranch']      = 'reg::word';
 $filter->testcase->create->cookie['lastCaseModule'] = 'int';
 $filter->testcase->default->cookie['lastProduct']   = 'int';
 $filter->testcase->default->cookie['preProductID']  = 'int';
 $filter->testcase->export->cookie['checkedItem']    = 'reg::checked';
-$filter->testcase->groupcase->cookie['preBranch']   = 'int';
+$filter->testcase->groupcase->cookie['preBranch']   = 'reg::word';
 
 $filter->testreport->default->cookie['lastProduct']  = 'int';
 $filter->testreport->default->cookie['lastProject']  = 'int';
@@ -282,7 +297,7 @@ $filter->testsuite->default->cookie['preProductID']  = 'int';
 $filter->testsuite->library->cookie['libCaseModule'] = 'int';
 $filter->testsuite->library->cookie['preCaseLibID']  = 'int';
 
-$filter->testtask->browse->cookie['preBranch']     = 'int';
+$filter->testtask->browse->cookie['preBranch']     = 'reg::word';
 $filter->testtask->cases->cookie['preTaskID']      = 'int';
 $filter->testtask->cases->cookie['taskCaseModule'] = 'int';
 $filter->testtask->default->cookie['lastProduct']  = 'int';
@@ -376,3 +391,6 @@ $filter->gitlab->importissue->get['repo']    = 'int';
 $filter->mr->diff->cookie['arrange'] = 'reg::word';
 
 $filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';
+
+$filter->tree->browse->cookie['preProductID'] = 'int';
+$filter->tree->browse->cookie['preBranch']    = 'reg::word';

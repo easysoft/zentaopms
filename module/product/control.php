@@ -69,17 +69,20 @@ class product extends control
     /**
      * The projects which linked the product.
      *
-     * @param  string $status
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $involved
+     * @param  string      $status
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $involved
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = 0, $involved = 0)
+    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0)
     {
         $this->app->loadLang('execution');
         $this->app->loadLang('project');
+
+        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->product->setMenu($productID, $branch);
 
@@ -107,22 +110,23 @@ class product extends control
     /**
      * Browse a product.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $browseType
-     * @param  int    $param
-     * @param  string $storyType requirement|story
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @param  int    $projectID
+     * @param  int         $productID
+     * @param  int|stirng  $branch
+     * @param  string      $browseType
+     * @param  int         $param
+     * @param  string      $storyType requirement|story
+     * @param  string      $orderBy
+     * @param  int         $recTotal
+     * @param  int         $recPerPage
+     * @param  int         $pageID
+     * @param  int         $projectID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
+        $branch    = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
 
         if($this->app->tab == 'product') $this->product->setMenu($productID, $branch);
         if($this->app->tab == 'project')
@@ -139,9 +143,8 @@ class product extends control
         $this->loadModel('execution');
 
         /* Set product, module and query. */
-        $branch = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
@@ -155,7 +158,7 @@ class product extends control
             if($this->app->tab == 'project') setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $_COOKIE['storyBranch'] = 0;
             setcookie('storyBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
         if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
@@ -177,12 +180,12 @@ class product extends control
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
         if($browseType == '')
         {
-            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $browseType = 'unclosed';
         }
         else
         {
-            $branch = (int)$this->cookie->treeBranch;
+            $branch = $this->cookie->treeBranch;
         }
 
         /* If in project story and not chose product, get project story mdoules. */
@@ -751,12 +754,16 @@ class product extends control
     /**
      * Road map of a product.
      *
-     * @param  int    $productID
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
      * @return void
      */
-    public function roadmap($productID, $branch = 0)
+    public function roadmap($productID, $branch = '')
     {
+        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
         $this->product->setMenu($productID, $branch);
 

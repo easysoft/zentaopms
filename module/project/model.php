@@ -839,9 +839,9 @@ class projectModel extends model
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->code), 'code', 'unique', "type='project'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `parent` = $project->parent")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->check('name', 'unique', "type='project' AND deleted='0'")
             ->exec();
 
         /* Add the creater to the team. */
@@ -1464,6 +1464,8 @@ class projectModel extends model
             $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
             if($id == 'id') $class .= ' cell-id';
+            
+            if($id == 'code') $title = "title={$project->code}";
 
             if($id == 'name')
             {

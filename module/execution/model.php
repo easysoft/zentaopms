@@ -365,10 +365,11 @@ class executionModel extends model
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
+            ->checkIF(!empty($sprint->name), 'name', 'unique', "`type` in ('sprint','stage') and `parent` = $sprint->parent")
+            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage') and `parent` = $sprint->parent")
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
-            ->checkIF(!empty($sprint->code), 'code', 'unique', "type in ('sprint','stage')")
             ->exec();
 
         /* Add the creater to the team. */
@@ -390,7 +391,6 @@ class executionModel extends model
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
 	    array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD);
 	    $members = array_unique($members);
-	    $member = array_values($members);
 
             $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
             foreach($members as $account)
@@ -525,6 +525,7 @@ class executionModel extends model
             ->exec();
 
         $changedAccounts = array();
+	$teamMembers     = array();
         foreach($this->config->execution->ownerFields as $ownerField)
         {
             $owner = zget($execution, $ownerField, '');
@@ -540,8 +541,10 @@ class executionModel extends model
             $member->hours   = $this->config->execution->defaultWorkhours;
             $this->dao->replace(TABLE_TEAM)->data($member)->exec();
 
-            $changedAccounts[$owner] = $owner;
+            $changedAccounts[$owner]  = $owner;
+	    $teamMembers[$ownerField] = $member;
         }
+        if($execution->project) $this->addProjectMembers($execution->project, $teamMembers);	
 
         $whitelist = explode(',', $execution->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);

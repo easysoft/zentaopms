@@ -312,6 +312,11 @@ $lang->action->dynamicAction->product['closed']    = 'Close ' . $lang->productCo
 $lang->action->dynamicAction->product['undeleted'] = 'Restore ' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = 'Hide ' . $lang->productCommon;
 
+$lang->action->dynamicAction->branch['opened']    = 'Create Branch';
+$lang->action->dynamicAction->branch['edited']    = 'Edit Branch';
+$lang->action->dynamicAction->branch['closed']    = 'Close Branch';
+$lang->action->dynamicAction->branch['activated'] = 'Activate Branch';
+
 $lang->action->dynamicAction->productplan['opened'] = 'Create Plan';
 $lang->action->dynamicAction->productplan['edited'] = 'Edit Plan';
 
@@ -506,6 +511,7 @@ $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->api         = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->branch      = 'Branch|branch|manage|prouctID=%s&browseType=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

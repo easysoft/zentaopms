@@ -71,6 +71,7 @@ $('#branch').change(function()
     $.post(link, function(data)
     {
         data = JSON.parse(data);
-        if(data) $('#title').parent().next('td').html('(' + lastLang + ': ' + data.title + ')');
+        var planTitle = data ? '(' + lastLang + ': ' + data.title + ')' : '';
+        $('#title').parent().next('td').html(planTitle);
     })
 })

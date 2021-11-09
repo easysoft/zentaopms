@@ -25,6 +25,8 @@ class productplan extends control
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
 
+        $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
         $this->app->loadConfig('execution');
         $this->product->setMenu($productID, $branch);
         $this->session->set('currentProductType', $product->type);
@@ -192,7 +194,7 @@ class productplan extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::locate(inlink('browse', "productID=$plan->product&branch=$plan->branch"), 'parent'));
+            die(js::locate(inlink('browse', "productID=$plan->product"), 'parent'));
         }
     }
 
@@ -413,7 +415,7 @@ class productplan extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($plan->product, 'noempty');
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($plan->product);
             if($plan->branch) $branches = array('' => '', $plan->branch => $branches[$plan->branch]);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
@@ -554,7 +556,7 @@ class productplan extends control
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $branches = array('' => '') + $this->loadModel('branch')->getPairs($productID);
             if($plan->branch) $branches = array('' => '', $plan->branch => $branches[$plan->branch]);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }

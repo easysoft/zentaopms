@@ -15,10 +15,12 @@ class branchModel extends model
      * Get name by id.
      *
      * @param  int    $branchID
+     * @param  int    $productID
+     * @param  string $field
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getById($branchID, $productID = 0)
+    public function getById($branchID, $productID = 0, $field = 'name')
     {
         if(empty($branchID))
         {
@@ -27,7 +29,10 @@ class branchModel extends model
             if(empty($product) or !isset($this->lang->product->branchName[$product->type])) return false;
             return $this->lang->branch->main;
         }
-        return htmlspecialchars_decode($this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name'));
+
+        if(empty($field)) return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
+
+        return htmlspecialchars_decode($this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch($field));
     }
 
     /**
@@ -64,7 +69,6 @@ class branchModel extends model
         $mainBranch->desc        = $this->lang->branch->mainBranch;
         $mainBranch->order       = 0;
 
-        $pager->recTotal = $pager->recTotal + 1;
         return array($mainBranch) + $branchList;
     }
 
@@ -81,7 +85,7 @@ class branchModel extends model
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
-            ->beginIF(strpos($params, 'noclosed') !== false)->andWhere('status')->eq('active')->fi()
+            ->beginIF(strpos($params, 'active') !== false)->andWhere('status')->eq('active')->fi()
             ->orderBy('`order`')
             ->fetchPairs('id', 'name');
         foreach($branches as $branchID => $branchName) $branches[$branchID] = htmlspecialchars_decode($branchName);
@@ -90,8 +94,12 @@ class branchModel extends model
         {
             $product = $this->loadModel('product')->getById($productID);
             if(!$product or $product->type == 'normal') return array();
+            $branches = array('0' => $this->lang->branch->main) + $branches;
+        }
 
-            $branches = array('all' => $this->lang->branch->all, '0' => $this->lang->branch->main) + $branches;
+        if(strpos($params, 'all') !== false)
+        {
+            $branches = array('all' => $this->lang->branch->all) + $branches;
         }
         return $branches;
     }
@@ -125,11 +133,92 @@ class branchModel extends model
     }
 
     /**
-     * Manage branch
+     * Create a branch.
      *
      * @param  int    $productID
      * @access public
-     * @return bool
+     * @return int|bool
+     */
+    public function create($productID)
+    {
+        $branch = fixer::input('post')
+            ->add('product', $productID)
+            ->add('createdDate', helper::today())
+            ->add('status', 'active')
+            ->get();
+
+        $lastOrder = (int)$this->dao->select('`order`')->from(TABLE_BRANCH)->where('product')->eq($productID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $branch->order = empty($lastOrder) ? 1 : $lastOrder + 1;
+
+        $this->dao->insert(TABLE_BRANCH)->data($branch)
+            ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError()) return $this->dao->lastInsertID();
+        return false;
+    }
+
+    /**
+     * Update branch.
+     *
+     * @param  int    $branchID
+     * @access public
+     * @return array|bool
+     */
+    public function update($branchID)
+    {
+        $oldBranch = $this->getById($branchID, 0, '');
+
+        $newBranch = fixer::input('post')->get();
+        $newBranch->closedDate = $newBranch->status == 'closed' ? helper::today() : '';
+
+        $this->dao->update(TABLE_BRANCH)->data($newBranch)
+            ->where('id')->eq($branchID)
+            ->batchCheck($this->config->branch->edit->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldBranch, $newBranch);
+        return false;
+    }
+
+    /**
+     * Close a branch.
+     *
+     * @param  int    $branchID
+     * @access public
+     * @return void
+     */
+    public function close($branchID)
+    {
+        $this->dao->update(TABLE_BRANCH)
+            ->set('status')->eq('closed')
+            ->set('closedDate')->eq(helper::today())
+            ->where('id')->eq($branchID)
+            ->exec();
+    }
+
+    /**
+     * Activate a branch.
+     *
+     * @param  int    $branchID
+     * @access public
+     * @return void
+     */
+    public function activate($branchID)
+    {
+        $this->dao->update(TABLE_BRANCH)
+            ->set('status')->eq('active')
+            ->set('closedDate')->eq('')
+            ->where('id')->eq($branchID)
+            ->exec();
+    }
+
+    /**
+     * Manage branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return bool|array
      */
     public function manage($productID)
     {
