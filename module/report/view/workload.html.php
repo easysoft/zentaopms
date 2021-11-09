@@ -70,6 +70,7 @@
             <thead>
               <tr class='colhead text-center'>
                 <th class="c-user"><?php echo $lang->report->user;?></th>
+                <th class="c-project"><?php echo $lang->report->project ;?>
                 <th><?php echo $lang->report->execution;?></th>
                 <th class="c-count"><?php echo $lang->report->task;?></th>
                 <th class="c-hours"><?php echo $lang->report->remain;?></th>
@@ -79,28 +80,42 @@
               </tr>
             </thead>
             <tbody>
-              <?php $color = false;?>
+            <?php $color = false;?>
               <?php foreach($workload as $account => $load):?>
-              <?php if(!isset($users[$account])) continue;?>
-              <tr class="text-center">
-                <td rowspan="<?php echo count($load['task']);?>"><?php echo $users[$account];?></td>
-                <?php $id = 1;?>
-                <?php foreach($load['task'] as $execution => $info):?>
-                <?php $class = $color ? 'rowcolor' : '';?>
-                <?php if($id != 1) echo '<tr class="text-center">';?>
-                <td title='<?php echo $execution?>' class="<?php echo $class;?> text-left"><?php echo html::a($this->createLink('execution', 'view', "executionID={$info['executionID']}"), $execution);?></td>
-                <td class="<?php echo $class;?>"><?php echo $info['count'];?></td>
-                <td class="<?php echo $class;?>"><?php echo $info['manhour'];?></td>
-                <?php if($id == 1):?>
-                <td rowspan="<?php echo count($load['task']);?>"><?php echo $load['total']['count'];?></td>
-                <td rowspan="<?php echo count($load['task']);?>"><?php echo $load['total']['manhour'];?></td>
-                <td rowspan="<?php echo count($load['task']);?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
-                <?php endif;?>
-                <?php if($id != 1) echo '</tr>'; $id ++;?>
-                <?php $color = !$color;?>
-                <?php endforeach;?>
-              </tr>
-            <?php endforeach;?>
+                <?php if(!isset($users[$account])) continue;?>
+                <tr class="text-center">
+
+                  <?php $idusername = 1; $countusername = 0;?>
+                  <?php foreach($load['task']['project'] as $project => $info):?>
+                    <?php foreach($info['execution'] as $exec => $execinfo):?>
+                      <?php $countusername ++ ;?>
+                    <?php endforeach;?>
+                  <?php endforeach;?>
+                  <td class="<?php echo $class;?>" rowspan="<?php echo $countusername;?>"><?php echo $users[$account];?></td>
+                  <?php foreach($load['task']['project'] as $project => $info):?>
+                    <?php $idprojectname = 1; $countprojectname = 0;?>
+                    <?php foreach($info['execution'] as $exec):?>
+                      <?php $countprojectname ++ ;?>
+                    <?php endforeach;?>
+                    <?php foreach($info['execution'] as $exec => $execinfo):?>
+                      <?php if($idprojectname != 1 || $idusername != 1) echo "<tr>";?>
+                      <?php if($idprojectname == 1):?>
+                        <td class="text-center" rowspan="<?php echo $countprojectname;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $info['project']);?></td>
+                      <?php endif;?>
+                      <td class="text-center"><?php echo html::a($this->createLink('execution', 'view', "executionID={$execinfo['executionID']}"), $execinfo['name']);?></td>
+                      <td class="text-center"><?php echo $execinfo['count'];?></td>
+                      <td class="text-center"><?php echo $execinfo['manhour'];?></td>
+                      <?php if($idusername == 1):?>
+                        <td rowspan="<?php echo $countusername;?>"><?php echo $load['total']['count'];?></td>
+                        <td rowspan="<?php echo $countusername;?>"><?php echo $load['total']['manhour'];?></td>
+                        <td rowspan="<?php echo $countusername;?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
+                      <?php endif;?>
+                      <?php if($idprojectname != 1 || $idusername != 1) echo "</tr>"; $idprojectname ++; $idusername ++;?>
+                      <?php $color = !$color;?>
+                    <?php endforeach;?>
+                  <?php endforeach;?>
+                </tr>
+              <?php endforeach;?>
             </tbody>
           </table>
         </div>
