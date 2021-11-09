@@ -1953,7 +1953,6 @@ class execution extends control
             if(empty($kanbanGroup[$projectID])) continue;
             $projectCount++;
         }
-        krsort($kanbanGroup);
 
         $this->view->title        = $this->lang->execution->executionKanban;
         $this->view->kanbanGroup  = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
