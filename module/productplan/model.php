@@ -206,15 +206,10 @@ class productplanModel extends model
 
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();
-        $parent      = 0;
         $parentTitle = array();
         foreach($plans as $plan)
         {
-            if($plan->parent == '-1')
-            {
-                $parent = $plan->id;
-                $parentTitle[$parent] = $plan->title;
-            }
+            if($plan->parent == '-1') $parentTitle[$parent] = $plan->title;
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
@@ -257,15 +252,10 @@ class productplanModel extends model
 
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();
-        $parent      = 0;
         $parentTitle = array();
         foreach($plans as $plan)
         {
-            if($plan->parent == '-1')
-            {
-                $parent = $plan->id;
-                $parentTitle[$parent] = $plan->title;
-            }
+            if($plan->parent == '-1') $parentTitle[$parent] = $plan->title;
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
@@ -291,15 +281,10 @@ class productplanModel extends model
 
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();
-        $parent      = 0;
         $parentTitle = array();
         foreach($plans as $plan)
         {
-            if($plan->parent == '-1')
-            {
-                $parent = $plan->id;
-                $parentTitle[$parent] = $plan->title;
-            }
+            if($plan->parent == '-1') $parentTitle[$parent] = $plan->title;
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title;
         }
@@ -323,19 +308,13 @@ class productplanModel extends model
 
         if(!empty($plans)) $plans = $this->reorder4Children($plans);
 
-        $parent      = 0;
         $parentTitle = array();
         $planGroup   = array();
         foreach($plans as $plan)
         {
             if(!isset($planGroup[$plan->product][$plan->branch])) $planGroup[$plan->product][$plan->branch] = array('' => '');
 
-            if($plan->parent == '-1')
-            {
-                $parent = $plan->id;
-                $parentTitle[$parent] = $plan->title;
-            }
-
+            if($plan->parent == '-1') $parentTitle[$parent] = $plan->title;
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
