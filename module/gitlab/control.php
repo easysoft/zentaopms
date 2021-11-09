@@ -293,6 +293,24 @@ class gitlab extends control
     }
 
     /**
+     * Browse gitlab group.
+     *
+     * @param  int     $gitlabID
+     * @param  string  $orderBy
+     * @access public
+     * @return void
+     */
+    public function groupBrowse($gitlabID, $orderBy = 'name_asc')
+    {
+        $gitlabGroupList = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
+
+        $this->view->gitlabID        = $gitlabID;
+        $this->view->gitlabGroupList = $gitlabGroupList;
+        $this->view->orderBy         = $orderBy;
+        $this->display();
+    }
+
+    /**
      * Browse gitlab project.
      *
      * @param  int     $gitlabID
@@ -334,7 +352,7 @@ class gitlab extends control
      * Edit a gitlab user.
      *
      * @param  int     $gitlabID
-     * @param  int     $projectID
+     * @param  int     $userID
      * @access public
      * @return void
      */
@@ -350,13 +368,30 @@ class gitlab extends control
 
         $userPairs         = $this->loadModel('user')->getPairs('noclosed|noletter');
         $user              = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
-        $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($user->id)->fetch();
+        $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($user->id)->fetch('account');
 
         $this->view->user              = $user;
         $this->view->userPairs         = $userPairs;
         $this->view->zentaoBindAccount = $zentaoBindAccount;
         $this->view->gitlabID          = $gitlabID;
         $this->display();
+    }
+
+    /**
+     * Delete a gitlab user.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $userID
+     * @access public
+     * @return void
+     */
+    public function deleteUser($gitlabID, $userID, $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->user->confirmDelete , inlink('deleteUser', "gitlabID=$gitlabID&userID=$userID&confirm=yes")));
+
+        $reponse = $this->gitlab->apiDeleteUser($gitlabID, $userID);
+        if(!$reponse or substr($reponse->message, 0, 2) == '20') die(js::reload('parent'));
+        die(js::alert($reponse->message));
     }
 
     /**

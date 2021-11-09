@@ -472,6 +472,31 @@ class gitlabModel extends model
     }
 
     /**
+     * Get groups of one gitlab.
+     *
+     * @param  int     $gitlabID
+     * @param  string  $orderBy
+     * @access public
+     * @return object
+     */
+    public function apiGetGroups($gitlabID, $orderBy)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/groups");
+        list($order, $sort) = explode('_', $orderBy);
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100"));
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results)<100 or $page > 10) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
      * Get projects of one gitlab.
      *
      * @param  int $gitlabID
@@ -490,8 +515,8 @@ class gitlabModel extends model
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));
-            if(empty($results) or $page > 10) break;
-            $allResults = array_merge($allResults, $results);
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results)<100 or $page > 10) break;
         }
 
         return $allResults;
@@ -579,7 +604,24 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}");
-        return json_decode(commonModel::http($url, $project, $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
+     * Delete a gitab user by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $userID
+     * @access public
+     * @return object
+     */
+    public function apiDeleteUser($gitlabID, $userID)
+    {
+        if(empty($userID)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/users/{$userID}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**

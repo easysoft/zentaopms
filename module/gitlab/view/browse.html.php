@@ -35,7 +35,7 @@
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id);?></th>
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->name);?></th>
           <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gitlab->url);?></th>
-          <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <th class='c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -48,8 +48,9 @@
             <?php
             $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';
             common::printLink('gitlab', 'projectBrowse', "gitlabID=$id", "<i class='icon icon-project'></i> ", '',"title={$lang->gitlab->browseProject} class='btn btn-primary'");
+            common::printLink('gitlab', 'groupBrowse', "gitlabID=$id", "<i class='icon icon-folder-outline'></i> ", '', "title={$lang->gitlab->browseGroup}  class='btn btn-primary'");
             common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title={$lang->gitlab->edit} class='btn btn-primary'");
-            common::printLink('gitlab', 'userBrowse', "gitlabID=$id", "<i class='icon icon-team'></i> ", '', "title={$lang->gitlab->browseUser}  class='btn {$disabled}' ,'disabled'");
+            common::printLink('gitlab', 'userBrowse', "gitlabID=$id", "<i class='icon icon-persons'></i> ", '', "title={$lang->gitlab->browseUser}  class='btn {$disabled}' ,'disabled'");
             common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-link'></i> ", '', "title={$lang->gitlab->bindUser}  class='btn {$disabled}' ,'disabled'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn'");
             ?>
