@@ -1991,7 +1991,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($productID, $branch = 'all', $module = 0, $moduleType = '', $extra = '')
+    public function setMenu($productID, $branch = '', $module = 0, $moduleType = '', $extra = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) die(js::error($this->lang->product->accessDenied) . js::locate('back'));
 
