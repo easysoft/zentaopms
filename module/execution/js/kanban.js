@@ -756,6 +756,9 @@ $(function()
             location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
         }
     })
+
+    $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
+    $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
 });
 
 $('#type').change(function()
