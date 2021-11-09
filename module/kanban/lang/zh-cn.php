@@ -49,8 +49,10 @@ $lang->kanban->noColumnUniqueName = '看板列名称已存在';
 $lang->kanban->moveUp             = '泳道上移';
 $lang->kanban->moveDown           = '泳道下移';
 $lang->kanban->laneMove           = '泳道排序';
+$lang->kanban->laneGroup          = '泳道分组';
 $lang->kanban->cardsSort          = '卡片排序';
 $lang->kanban->moreAction         = '更多操作';
+$lang->kanban->noGroup            = '无';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
@@ -94,8 +96,6 @@ $lang->kanban->taskColumn['developed']  = '研发完毕';
 $lang->kanban->taskColumn['pause']      = '已暂停';
 $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
-
-$lang->kanban->noGroup = '无';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
