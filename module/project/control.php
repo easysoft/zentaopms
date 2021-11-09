@@ -542,7 +542,7 @@ class project extends control
         $unmodifiableBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            if(!isset($allProducts[$productID])) $allProducts[$productID] = $product->name;
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
                 $linkedBranches[$productID][$branchID] = $branchID;
@@ -1716,8 +1716,8 @@ class project extends control
         $unmodifiableBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            if(!isset($allProducts[$productID])) $allProducts[$productID] = $product->name;
             $linkedBranches[$productID] = array();
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
                 $linkedBranches[$productID][$branchID] = $branchID;
