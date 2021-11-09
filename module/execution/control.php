@@ -2440,10 +2440,7 @@ class execution extends control
                 $productType = $product->type;
                 if(isset($branches[$product->id]))
                 {
-                    foreach($branches[$product->id] as $branchID => $branch)
-                    {
-                        $branchPairs[$branchID] = $branchID;
-                    }
+                    foreach($branches[$product->id] as $branchID => $branch) $branchPairs[$branchID] = $branchID;
                 }
             }
         }

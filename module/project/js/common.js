@@ -142,7 +142,7 @@ function loadBranches(product)
     $('#productsBox select').each(function()
     {
         var $product = $(product);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !abnormalProducts[$product.val()] && config.currentMethod != 'create')
+        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !abnormalProducts[$product.val()])
         {
             alert(errorSameProducts);
             $product.val(0);

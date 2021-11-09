@@ -174,6 +174,7 @@ class branchModel extends model
             ->beginIF(strpos($params, 'noclosed') !== false)->andWhere('status')->eq('active')->fi()
             ->orderBy('`order`')
             ->fetchAll('id');
+
         if(!empty($appendBranch)) $branches += $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($appendBranch)->orderBy('`order`')->fetchAll('id');
         $products = $this->loadModel('product')->getByIdList($products);
 

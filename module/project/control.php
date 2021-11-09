@@ -540,7 +540,6 @@ class project extends control
                 {
                     array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
-                    continue;
                 }
             }
         }
@@ -1714,7 +1713,6 @@ class project extends control
                 {
                     array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
-                    continue;
                 }
             }
         }

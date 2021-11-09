@@ -95,6 +95,7 @@ $(function()
    {
        var products      = [];
        var existedBranch = false;
+       /* Determine whether the products of the same branch are linked. */
        $("#productsBox select[name^='products']").each(function()
        {
            var productID       = $(this).val();
@@ -115,10 +116,10 @@ $(function()
                        products[productID][branchID] = branchID;
                    }
                })
-
                if(existedBranch) return false;
            }
        })
+
        if(existedBranch)
        {
            alert(errorSameBranches);

@@ -853,6 +853,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectspec` (
 CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `project` mediumint(8) unsigned NOT NULL default '0',
   `product` mediumint(8) unsigned NOT NULL,
+  `branch` mediumint(8) unsigned NOT NULL,
   `story` mediumint(8) unsigned NOT NULL default '0',
   `version` smallint(6) NOT NULL default '1',
   `order` smallint(6) unsigned NOT NULL,

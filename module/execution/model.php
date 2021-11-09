@@ -2234,16 +2234,17 @@ class executionModel extends model
         $versions      = $this->loadModel('story')->getVersions($stories);
         $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
-        $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
+        $storyList     = $this->dao->select('id, status, branch')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
         foreach($stories as $key => $storyID)
         {
             $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,closed';
-            if(strpos($notAllowedStatus, $statusPairs[$storyID]) !== false) continue;
+            if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $data = new stdclass();
             $data->project = $executionID;
             $data->product = (int)$products[$storyID];
+            $data->branch  = $storyList[$storyID]->branch;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
             $data->order   = ++$lastOrder;
