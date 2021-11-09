@@ -439,7 +439,7 @@ class productModel extends model
     }
 
     /**
-     * Get abnormal product pairs.
+     * Get Multi-branch product pairs.
      *
      * @param  int    $programID
      * @access public

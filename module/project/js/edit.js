@@ -116,7 +116,6 @@ $(function()
                    }
                    else
                    {
-                       products[productID][branchID] = new Array();
                        products[productID][branchID] = branchID;
                    }
                })

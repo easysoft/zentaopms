@@ -676,8 +676,7 @@ class projectModel extends model
     public function getStoriesByProject($projectID = 0)
     {
         return $this->dao->select('*')->from(TABLE_PROJECTSTORY)
-            ->where(true)
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($projectID)->where('project')->eq($projectID)->fi()
             ->fetchGroup('product', 'branch');
     }
 

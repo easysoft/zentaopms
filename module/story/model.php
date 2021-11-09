@@ -2691,6 +2691,22 @@ class storyModel extends model
     }
 
     /**
+     * Get stories by plan id list.
+     *
+     * @param  string|array $planIdList
+     * @access public
+     * @return array
+     */
+    public function getStoriesByPlanIdList($planIdList = '')
+    {
+        return $this->dao->select('t1.plan as planID, t2.*')->from(TABLE_PLANSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->beginIF($planIdList)->andWhere('t1.plan')->in($planIdList)->fi()
+            ->fetchGroup('planID', 'id');
+    }
+
+    /**
      * Get parent story pairs.
      *
      * @param  int    $productID

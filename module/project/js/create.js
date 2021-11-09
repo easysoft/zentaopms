@@ -30,6 +30,7 @@ $(function()
     {
         var products      = [];
         var existedBranch = false;
+
         /* Determine whether the products of the same branch are linked. */
         $("#productsBox select[name^='products']").each(function()
         {
@@ -47,7 +48,6 @@ $(function()
                     }
                     else
                     {
-                        products[productID][branchID] = new Array();
                         products[productID][branchID] = branchID;
                     }
                 })

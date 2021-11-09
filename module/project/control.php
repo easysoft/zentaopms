@@ -355,26 +355,30 @@ class project extends control
             /* Link the plan stories. */
             if(!empty($_POST['plans']))
             {
+                $planIdList = array();
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planID)
+                    foreach($plans as $planID) $planIdList[$planID] = $planID;
+                }
+
+                $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);
+                foreach($planIdList as $planID)
+                {
+                    $planStories = $planProducts = array();
+                    $planStory   = isset($planStoryGroup[$planID]) ? $planStoryGroup[$planID] : array();
+                    if(!empty($planStory))
                     {
-                        $planStories = $planProducts = array();
-                        $planStory   = $this->loadModel('story')->getPlanStories($planID);
-                        if(!empty($planStory))
+                        foreach($planStory as $id => $story)
                         {
-                            foreach($planStory as $id => $story)
+                            if($story->status == 'draft')
                             {
-                                if($story->status == 'draft')
-                                {
-                                    unset($planStory[$id]);
-                                    continue;
-                                }
-                                $planProducts[$story->id] = $story->product;
+                                unset($planStory[$id]);
+                                continue;
                             }
-                            $planStories = array_keys($planStory);
-                            $this->execution->linkStory($projectID, $planStories, $planProducts);
+                            $planProducts[$story->id] = $story->product;
                         }
+                        $planStories = array_keys($planStory);
+                        $this->execution->linkStory($projectID, $planStories, $planProducts);
                     }
                 }
             }
