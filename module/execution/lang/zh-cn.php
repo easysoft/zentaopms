@@ -436,7 +436,7 @@ $lang->execution->doingProject = '进行中的项目';
 $lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . '的' . $lang->execution->common;
 $lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . '的' . $lang->execution->common;
 $lang->execution->kanbanColType['suspended'] = $lang->execution->statusList['suspended'] . '的' . $lang->execution->common;
-$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . '的' . $lang->execution->common;
+$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . '的' . $lang->execution->common . '(最近2期)';
 
 $lang->execution->treeLevel = array();
 $lang->execution->treeLevel['all']   = '全部展开';

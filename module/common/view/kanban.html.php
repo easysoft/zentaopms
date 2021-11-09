@@ -401,6 +401,7 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     itemRender: renderKanbanItem,
     useFlex: false,
     showCount: true,
+    showZeroCount: true,
     onRenderHeaderCol: function($col, col)
     {
         if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
