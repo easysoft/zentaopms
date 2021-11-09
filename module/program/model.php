@@ -447,36 +447,28 @@ class programModel extends model
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            /*
-            ->beginIF($this->cookie->involved or $involved)
-            ->andWhere('openedBy', true)->eq($this->app->user->account)
-            ->orWhere('PM')->eq($this->app->user->account)
-            ->markRight(1)
-            ->fi()
-            */
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-	/* Finish task #43918, Optimize the projects i worked on*/
+
 	if($this->cookie->involved or $involved)
 	{
 		$stakeholder = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
-					      ->where('deleted')->eq('0')
-				      	      ->andWhere('objectID')->in(array_keys($projectList))
-					      ->fetchGroup('objectID', 'user');
+		    ->where('deleted')->eq('0')
+	            ->andWhere('objectID')->in(array_keys($projectList))
+		    ->fetchGroup('objectID', 'user');
                 $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
-				              ->where('root')->in(array_keys($projectList))
-                                              ->fetchGroup('root','account');
+		    ->where('root')->in(array_keys($projectList))
+                    ->fetchGroup('root','account');
 		foreach($projectList as $id => $project)
 		{
-			$whitelist   = explode(",", $project->whitelist);
-			if($project->openedBy != $this->app->user->account and $project->PM != $this->app->user->account and !in_array($this->app->user->account, $whitelist) and !isset($teamMembers[$project->id][$this->app->user->account]) and !isset($stakeholder[$project->id][$this->app->user->account]))
-			{
-			    unset($projectList[$id]);
-		            $pager->recTotal -= 1;
-			}
+		    $whitelist   = explode(",", $project->whitelist);
+	            if($project->openedBy != $this->app->user->account and $project->PM != $this->app->user->account and !in_array($this->app->user->account, $whitelist) and !isset($teamMembers[$project->id][$this->app->user->account]) and !isset($stakeholder[$project->id][$this->app->user->account]))
+		    {
+			unset($projectList[$id]);
+		        $pager->recTotal -= 1;
+		    }
 		}
-
 	}
 
         /* Determine how to display the name of the program. */
