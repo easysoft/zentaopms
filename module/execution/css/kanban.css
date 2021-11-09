@@ -36,7 +36,10 @@
 #kanbans .kanban-lane {min-height: 150px;}
 #kanbans .kanban-affixed > .kanban-header {top: 100px;}
 
+#type_chosen .icon-kanban {padding-right: 10px; font-size: 15px;}
+
 .dropdown-menu a {text-align: left;}
 .scrollbar-hover {max-height: 2000px; overflow: scroll !important;}
-.c-type, .c-group {width: 150px !important; overflow: unset;}
+.c-type {width: 150px !important; overflow: unset;}
+.c-group {width: 190px !important; overflow: unset;}
 .c-type {margin-left: 0px !important;}
