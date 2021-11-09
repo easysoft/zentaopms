@@ -63,6 +63,7 @@ $filter->search       = new stdclass();
 $filter->gitlab       = new stdclass();
 $filter->mr           = new stdclass();
 $filter->ci           = new stdclass();
+$filter->tree         = new stdclass();
 
 $filter->block->default           = new stdclass();
 $filter->block->main              = new stdclass();
@@ -78,6 +79,7 @@ $filter->doc->create              = new stdclass();
 $filter->doc->browse              = new stdclass();
 $filter->doc->alllibs             = new stdclass();
 $filter->doc->objectlibs          = new stdclass();
+$filter->doc->tablecontents       = new stdclass();
 $filter->doc->showfiles           = new stdclass();
 $filter->doc->default             = new stdclass();
 $filter->api->index               = new stdClass();
@@ -93,6 +95,7 @@ $filter->product->index           = new stdclass();
 $filter->product->export          = new stdclass();
 $filter->product->project         = new stdclass();
 $filter->product->roadmap         = new stdclass();
+$filter->product->dynamic         = new stdclass();
 $filter->branch->default          = new stdclass();
 $filter->program->default         = new stdclass();
 $filter->program->pgmproject      = new stdclass();
@@ -150,6 +153,7 @@ $filter->gitlab->importissue      = new stdclass();
 $filter->mr->diff                 = new stdclass();
 $filter->ci->checkCompileStatus   = new stdclass();
 $filter->execution->export        = new stdclass();
+$filter->tree->browse             = new stdclass();
 
 $filter->my->work->cookie['pagerMyTask']        = 'int';
 $filter->my->work->cookie['pagerMyRequirement'] = 'int';
@@ -185,9 +189,13 @@ $filter->doc->create->cookie['lastDocModule']       = 'int';
 $filter->doc->browse->cookie['browseType']          = 'reg::browseType';
 $filter->doc->alllibs->cookie['browseType']         = 'reg::browseType';
 $filter->doc->objectlibs->cookie['browseType']      = 'reg::browseType';
+$filter->doc->objectlibs->cookie['preProductID']    = 'int';
+$filter->doc->objectlibs->cookie['preBranch']       = 'reg::word';
 $filter->doc->default->cookie['from']               = 'code';
 $filter->doc->default->cookie['product']            = 'int';
 $filter->doc->showfiles->cookie['docFilesViewType'] = 'code';
+$filter->doc->tablecontents->cookie['preProductID'] = 'int';
+$filter->doc->tablecontents->cookie['preBranch']    = 'reg::word';
 $filter->api->index->get['libID']                   = 'int';
 $filter->api->index->get['module']                  = 'int';
 $filter->api->index->get['apiID']                   = 'int';
@@ -217,6 +225,7 @@ $filter->product->export->cookie['checkedItem']       = 'reg::checked';
 $filter->product->project->cookie['involved']         = 'code';
 $filter->product->project->cookie['preBranch']        = 'reg::word';
 $filter->product->roadmap->cookie['preBranch']        = 'reg::word';
+$filter->product->dynamic->cookie['preBranch']        = 'reg::word';
 
 $filter->branch->default->cookie['preBranch'] = 'reg::word';
 
@@ -382,3 +391,6 @@ $filter->gitlab->importissue->get['repo']    = 'int';
 $filter->mr->diff->cookie['arrange'] = 'reg::word';
 
 $filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';
+
+$filter->tree->browse->cookie['preProductID'] = 'int';
+$filter->tree->browse->cookie['preBranch']    = 'reg::word';
