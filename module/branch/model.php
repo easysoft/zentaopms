@@ -45,7 +45,7 @@ class branchModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID, $browseType = 'active', $orderBy = 'order_desc', $pager = null)
+    public function getList($productID, $browseType = 'active', $orderBy = 'order', $pager = null)
     {
         $branchList = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)

@@ -14,6 +14,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('orderBy', $orderBy)?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
+<?php $canOrder       = common::hasPriv('branch', 'order');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>
 <?php $canMergeBranch = common::hasPriv('branch', 'mergeBranch');?>
 <?php $canBatchAction = ($canBatchEdit or $canMergeBranch);?>
@@ -50,7 +51,9 @@
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>"><label></label></div>
           </th>
           <?php endif;?>
+          <?php if($canOrder):?>
           <th class='c-order sort-default'><?php echo $lang->branch->order;?></th>
+          <?php endif;?>
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->branch->name);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->branch->status);?></th>
           <th class='c-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->branch->createdDate);?></th>
@@ -68,9 +71,11 @@
             <?php echo html::checkbox('branchIDList', array($branch->id => ''));?>
           </td>
           <?php endif;?>
+          <?php if($canOrder):?>
           <td class='c-actions <?php echo $isMain ? '' : 'sort-handler';?>'>
             <?php echo $isMain ? '' : '<i class="icon icon-move"></i>';?>
           </td>
+          <?php endif;?>
           <td class='c-name flex' title='<?php echo $branch->name;?>'>
             <span class="text-ellipsis"><?php echo $branch->name;?></span>
             <?php
