@@ -462,7 +462,7 @@ class programModel extends model
                 ->fetchGroup('root','account');
 	    foreach($projectList as $id => $project)
 	    {
-                $whitelist   = explode(",", $project->whitelist);
+                $whitelist = explode(",", $project->whitelist);
 	        if($project->openedBy != $this->app->user->account and $project->PM != $this->app->user->account and !in_array($this->app->user->account, $whitelist) and !isset($teamMembers[$project->id][$this->app->user->account]) and !isset($stakeholder[$project->id][$this->app->user->account]))
 		{
 	            unset($projectList[$id]);
