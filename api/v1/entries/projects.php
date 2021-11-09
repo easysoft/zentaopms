@@ -22,6 +22,7 @@ class projectsEntry extends entry
     {
         if(!$programID) $programID = $this->param('program', 0);
         $appendFields = $this->param('fields', '');
+        if(strpos(strtolower(",{$appendFields},"), ',dropmenu,') !== false) return $this->getDropMenu();
 
         $control = $this->loadController('project', 'browse');
         $control->browse($programID, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
@@ -75,5 +76,48 @@ class projectsEntry extends entry
         $project = $this->loadModel('project')->getByID($data->id);
 
         $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+    }
+
+    /**
+     * Get drop menu.
+     *
+     * @access public
+     * @return void
+     */
+    public function getDropMenu()
+    {
+        $control = $this->loadController('project', 'ajaxGetDropMenu');
+        $control->ajaxGetDropMenu($this->request('projectID', 0), $this->request('module', 'project'), $this->request('method', 'browse'));
+
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+
+        $dropMenu = array('owner' => array(), 'other' => array(), 'closed' => array());
+        foreach($data->data->projects as $programID => $projects)
+        {
+            foreach($projects as $project)
+            {
+                $newProject = new stdclass();
+                $newProject->id      = $project->id;
+                $newProject->name    = $project->name;
+                $newProject->code    = $project->code;
+                $newProject->parent  = $project->parent;
+                $newProject->status  = $project->status;
+
+                if($project->status == 'closed')
+                {
+                    $dropMenu['closed'][] = $newProject;
+                }
+                elseif($project->PM == $this->app->user->account)
+                {
+                    $dropMenu['owner'][] = $newProject;
+                }
+                else
+                {
+                    $dropMenu['other'][] = $newProject;
+                }
+            }
+        }
+        $this->send(200, $dropMenu);
     }
 }
