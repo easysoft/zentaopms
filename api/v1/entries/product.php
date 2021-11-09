@@ -33,6 +33,13 @@ class productEntry extends Entry
         }
 
         $product = $this->format($data->data->product, 'createdDate:time');
+
+        $users = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $product->PO        = $this->formatUser($product->PO, $users);
+        $product->QD        = $this->formatUser($product->QD, $users);
+        $product->RD        = $this->formatUser($product->RD, $users);
+        $product->createdBy = $this->formatUser($product->createdBy, $users);
+        if(isset($product->feedback)) $product->feedback = $this->formatUser($product->feedback, $users);
         if(!$fields) return $this->send(200, $product);
 
         /* Set other fields. */
@@ -48,6 +55,27 @@ class productEntry extends Entry
                     if(isset($data->status) and $data->status == 'success')
                     {
                         $product->modules = $data->data->tree;
+                    }
+                    break;
+                case 'actions':
+                    $actions = $this->loadModel('action')->getList('product', $productID);
+                    $actions = $this->action->transformActions($actions);
+
+                    $product->actions = array();
+                    foreach($actions as $action)
+                    {
+                        $action = $this->filterFields($action, 'id,objectType,objectID,actor,action,date,comment,extra,objectName,originalDate,actionLabel,objectLabel,history');
+                        $action->actor = $this->formatUser($action->actor, $users);
+                        if($action->history)
+                        {
+                            foreach($action->history as $i => $history)
+                            {
+                                $history = $this->filterFields($history, 'id,field,old,new,diff');
+                                $history->fieldName = zget($this->lang->product, $history->field);
+                                $action->history[$i] = $history;
+                            }
+                        }
+                        $product->actions[] = $action;
                     }
                     break;
             }

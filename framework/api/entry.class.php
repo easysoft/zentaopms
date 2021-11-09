@@ -547,6 +547,23 @@ class baseEntry
     }
 
     /**
+     * Format user.
+     *
+     * @param  string    $account
+     * @param  array     $users
+     * @access public
+     * @return array
+     */
+    public function formatUser($account, $users)
+    {
+        $user = array();
+        $user['account']  = $account;
+        $user['realname'] = zget($users, $account);
+
+        return $user;
+    }
+
+    /**
      * 类型转换.
      * Typecasting.
      *
