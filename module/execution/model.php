@@ -539,6 +539,7 @@ class executionModel extends model
             $member->type    = 'execution';
             $member->hours   = $this->config->execution->defaultWorkhours;
             $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
             $changedAccounts[$owner]  = $owner;
 	    $teamMembers[$ownerField] = $member;
         }
