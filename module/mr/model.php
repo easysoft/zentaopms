@@ -93,7 +93,7 @@ class mrModel extends model
             $compileStatus = $this->loadModel('compile')->getByID($this->post->compile)->status;
 
             $MR = fixer::input('post')
-               ->add('createdBy', $this->app->user->account)
+                ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->add('repoID', $repoID)
                 ->add('jobID', $jobID)

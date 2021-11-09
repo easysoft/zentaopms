@@ -201,12 +201,30 @@ class mr extends control
     {
         $MR = $this->mr->getByID($MRID);
 
+        /* Judge that if this MR can be accepted. */
+        if(isset($MR->needPassCI) and $MR->needPassCI == '1')
+        {
+            $compileStatus = empty($MR->compileID) ? 'fail' : $this->loadModel('compile')->getByID($MR->compileID)->status;
+
+            if(isset($compileStatus) and $compileStatus != 'success')
+            {
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needPassCI, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+            }
+        }
+        if(isset($MR->needApproved) and $MR->needApproved == '1')
+        {
+            if($MR->approvalStatus != 'approved')
+            {
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needApproved, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+            }
+        }
+
         /* Accept MR by using the mapped user in GitLab. */
         $sudoUser = $this->mr->getSudoUsername($MR->gitlabID, $MR->targetProject);
 
         if(isset($MR->gitlabID))
         {
-            if(!empty($sudoUser)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid, $sudo = $sudoUser);
+            if(!empty($sudoUser)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid, $sudoUser);
             if(empty($sudoUser))  $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         }
         if(isset($rawMR->state) and $rawMR->state == 'merged')
@@ -273,18 +291,6 @@ class mr extends control
         $this->view->encoding = $encoding;
         $this->view->arrange  = $arrange;
         $this->display();
-    }
-
-    /**
-     * Approve this MR. Reject or approve it.
-     *
-     * @param  int $MRID
-     * @return void
-     */
-    public function approve($MRID, $action = 'approve')
-    {
-        $MR = $this->mr->getByID($MRID);
-        return $this->send($this->mr->approve($MR, $action));
     }
 
     /**

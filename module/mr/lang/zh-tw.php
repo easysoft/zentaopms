@@ -36,6 +36,9 @@ $lang->mr->approvalResultList  = array();
 $lang->mr->approvalResultList['approve'] = '通過';
 $lang->mr->approvalResultList['reject']  = '拒絕';
 
+$lang->mr->needApproved = '需要通過評審才能合併';
+$lang->mr->needPassCI   = '需要通過構建才能合併';
+
 $lang->mr->repeatedOperation = '請勿重複操作';
 
 $lang->mr->approvalStatus     = '審核狀態';

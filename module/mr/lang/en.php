@@ -36,6 +36,9 @@ $lang->mr->approvalResultList  = array();
 $lang->mr->approvalResultList['approve'] = 'Approve';
 $lang->mr->approvalResultList['reject']  = 'Reject';
 
+$lang->mr->needApproved = 'This MR should be approved before merge';
+$lang->mr->needPassCI   = 'This MR should be passed CI before merge';
+
 $lang->mr->repeatedOperation = 'Do not repeat operations';
 
 $lang->mr->approvalStatus     = 'Approve status';

@@ -664,6 +664,8 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `status` char(30) NOT NULL,
   `mergeStatus` char(30) NOT NULL,
   `approvalStatus` char(30) NOT NULL,
+  `needApproved` enum('0','1') NOT NULL DEFAULT '0',
+  `needPassCI` enum('0','1') NOT NULL DEFAULT '0',
   `repoID` mediumint(8) unsigned NOT NULL,
   `jobID` mediumint(8) unsigned NOT NULL,
   `compileID` mediumint(8) unsigned NOT NULL,
