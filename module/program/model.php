@@ -447,43 +447,30 @@ class programModel extends model
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
-    /*
+            /*
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('openedBy', true)->eq($this->app->user->account)
             ->orWhere('PM')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-     */
+            */
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-	a($projectList);
+        // *Finish task #43918.
 	if($this->cookie->involved or $involved)
 	{
 		$stakeholder = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
 					      ->where('deleted')->eq('0')
 				      	      ->andWhere('objectID')->in(array_keys($projectList))
 					      ->fetchGroup('objectID', 'user');
-		a($stakeholder);
 		foreach($projectList as $id => $project)
 		{
-			$whitelist = explode(",", $project->whitelist);
-                        a($whitelist);
-			$executionList = $this->dao->select('id,PO,PM,QD,RD')->from(TABLE_EXECUTION)
-							->where('deleted')->eq('0')
-							->andWhere('project')->eq($project->id)
-							->fetchAll();
-			a($executionList);
-			$members = array();
-			foreach($executionList as $execution)
-			{
-			    array_push($members, $execution->PO, $execution->PM, $execution->QD, $execution->RD);
-			}
-			$members = array_unique($members);
-                        $members = array_values($members);
-			a($members);
-			if($project->openedBy == $this->app->user->account || $project->PM == $this->app->user->account || in_array($this->app->user->account, $whitelist) || in_array($this->app->user->account, $members) || isset($stakeholder[$project->id][$this->app->user->account]))
+			$whitelist   = explode(",", $project->whitelist);
+			$teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
+						    ->where('root')->eq($project->id)
+						    ->fetchGroup('root','account');
+			if($project->openedBy == $this->app->user->account || $project->PM == $this->app->user->account || in_array($this->app->user->account, $whitelist) || isset($teamMembers[$project->id][$this->app->user->account]) || isset($stakeholder[$project->id][$this->app->user->account]))
 			{
 		            ;
 			}
