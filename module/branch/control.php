@@ -113,7 +113,7 @@ class branch extends control
      */
     public function ajaxGetBranches($productID, $oldBranch = 0, $param = '')
     {
-        $product = $this->loadModel('product')->getById($productID, $param);
+        $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') die();
 
         $branches = $this->branch->getPairs($productID, $param);

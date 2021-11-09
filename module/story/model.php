@@ -2427,7 +2427,7 @@ class storyModel extends model
         }
         elseif($branch)
         {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` eq($branch)";
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` = $branch";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {

@@ -445,7 +445,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getAbnormalProductPairs($programID = 0)
+    public function getMultiBranchPairs($programID = 0)
     {
         return $this->dao->select('id')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)

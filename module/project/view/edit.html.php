@@ -23,7 +23,7 @@
 <?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
-<?php js::set('abnormalProducts', $abnormalProducts);?>
+<?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>

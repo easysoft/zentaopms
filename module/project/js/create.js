@@ -35,7 +35,7 @@ $(function()
         {
             var productID       = $(this).val();
             products[productID] = new Array();
-            if(abnormalProducts[productID])
+            if(multiBranchProducts[productID])
             {
                 $("#productsBox select[name^='branch']").each(function()
                 {
@@ -57,7 +57,7 @@ $(function()
 
         if(existedBranch)
         {
-            alert(errorSameBranches);
+            bootbox.alert(errorSameBranches);
             return false;
         }
     })
@@ -145,9 +145,9 @@ function loadBranches(product)
     $('#productsBox select').each(function()
     {
         var $product = $(product);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !abnormalProducts[$product.val()])
+        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
-            alert(errorSameProducts);
+            bootbox.alert(errorSameProducts);
             $product.val(0);
             $product.trigger("chosen:updated");
             return false;

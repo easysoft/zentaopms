@@ -81,9 +81,12 @@ $(function()
         if(isExistedBranch != -1)
         {
             var $product = $(this).closest('.has-branch').find("[name^='products']");
-            $(this).prop('disabled', true).trigger("chosen:updated");
-            $product.prop('disabled', true).trigger("chosen:updated");
-            $product.siblings('div').find('span').attr('title', tip);
+            if($.inArray($product.val(), unmodifiableProducts) != -1)
+            {
+                $(this).prop('disabled', true).trigger("chosen:updated");
+                $product.prop('disabled', true).trigger("chosen:updated");
+                $product.siblings('div').find('span').attr('title', tip);
+            }
         }
     });
 
@@ -95,12 +98,13 @@ $(function()
    {
        var products      = [];
        var existedBranch = false;
+
        /* Determine whether the products of the same branch are linked. */
        $("#productsBox select[name^='products']").each(function()
        {
            var productID       = $(this).val();
            products[productID] = new Array();
-           if(abnormalProducts[productID])
+           if(multiBranchProducts[productID])
            {
                $("#productsBox select[name^='branch']").each(function()
                {
@@ -122,7 +126,7 @@ $(function()
 
        if(existedBranch)
        {
-           alert(errorSameBranches);
+           bootbox.alert(errorSameBranches);
            return false;
        }
    })

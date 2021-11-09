@@ -142,9 +142,9 @@ function loadBranches(product)
     $('#productsBox select').each(function()
     {
         var $product = $(product);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !abnormalProducts[$product.val()])
+        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
-            alert(errorSameProducts);
+            bootbox.alert(errorSameProducts);
             $product.val(0);
             $product.trigger("chosen:updated");
             return false;

@@ -178,13 +178,13 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function getPairs($product = 0, $branch = 0, $expired = '', $skipParent = false)
+    public function getPairs($product = 0, $branch = '', $expired = '', $skipParent = false)
     {
         $date = date('Y-m-d');
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('branch')->eq($branch)
+            ->beginIF($branch !== '')->andWhere('branch')->eq($branch)->fi()
             ->beginIF($expired == 'unexpired')->andWhere('end')->ge($date)->fi()
             ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
@@ -305,6 +305,42 @@ class productplanModel extends model
             $planPairs[$plan->id] = $plan->title;
         }
         return array('' => '') + $planPairs;
+    }
+
+    /**
+     * Get plan group by product id list.
+     *
+     * @param  string|array $products
+     * @access public
+     * @return array
+     */
+    public function getGroupByProduct($products = '')
+    {
+        $plans = $this->dao->select('id,title,parent,begin,end,product,branch')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->beginIF($products)->andWhere('product')->in($products)->fi()
+            ->fetchAll('id');
+
+        if(!empty($plans)) $plans = $this->reorder4Children($plans);
+
+        $parent      = 0;
+        $parentTitle = '';
+        $planGroup   = array();
+        foreach($plans as $plan)
+        {
+            if(!isset($planGroup[$plan->product])) $planGroup[$plan->product] = array();
+            if(!isset($planGroup[$plan->product][$plan->branch])) $planGroup[$plan->product][$plan->branch] = array('' => '');
+
+            if($plan->parent == '-1')
+            {
+                $parent      = $plan->id;
+                $parentTitle = $plan->title;
+            }
+            if($plan->parent > 0 and $plan->parent == $parent) $plan->title = $parentTitle . ' /' . $plan->title;
+            $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+        }
+        return $planGroup;
     }
 
     /**

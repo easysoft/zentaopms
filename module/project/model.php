@@ -667,6 +667,21 @@ class projectModel extends model
     }
 
     /**
+     * Get stories by project id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getStoriesByProject($projectID = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECTSTORY)
+            ->where(true)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->fetchGroup('product', 'branch');
+    }
+
+    /**
      * Get the tree menu of project.
      *
      * @param  int       $projectID
@@ -1614,7 +1629,7 @@ class projectModel extends model
         {
             if(empty($productID)) continue;
 
-            $existedProducts[$productID] = array();
+            if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
