@@ -72,9 +72,9 @@
             <?php
             if($branch->default)
             {
-                echo '<span class="label label-primary">' . $lang->branch->default . '</span>';
+                echo '<span class="label label-primary label-badge">' . $lang->branch->default . '</span>';
             }
-            else
+            elseif($branch->status == 'active')
             {
 
                 $setDefaultLink = helper::createLink('branch', 'setDefault', "productID=$productID&branchID=$branch->id", '', true);
