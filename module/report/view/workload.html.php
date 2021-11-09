@@ -80,11 +80,10 @@
               </tr>
             </thead>
             <tbody>
-            <?php $color = false;?>
+              <?php $color = false;?>
               <?php foreach($workload as $account => $load):?>
                 <?php if(!isset($users[$account])) continue;?>
                 <tr class="text-center">
-
                   <?php $idusername = 1; $countusername = 0;?>
                   <?php foreach($load['task']['project'] as $project => $info):?>
                     <?php foreach($info['execution'] as $exec => $execinfo):?>
