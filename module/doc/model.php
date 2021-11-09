@@ -2373,8 +2373,9 @@ EOT;
                     if($currentMethod == 'objectlibs')
                     {
                         $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
-                        $treeMenu[$module->id] .= "<div class='tree-actions pull-right'>";
+                        $treeMenu[$module->id] .= "<div class='tree-actions'>";
                         $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit}");
+                        $treeMenu[$module->id] .= '<div class="dropdown dropdown-hover">';
                         $treeMenu[$module->id] .= "<a class='tree-action' href='javascript:;' data-toggle='dropdown'><i class='icon icon-plus'></i></a>";
                         $treeMenu[$module->id] .= "<ul class='dropdown-menu'>";
                         foreach($this->lang->doc->typeList as $typeKey => $typeName)
@@ -2393,6 +2394,7 @@ EOT;
                             $treeMenu[$module->id] .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), "<i class='icon-doc-lib icon'></i> " . $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
                         }
                         $treeMenu[$module->id] .= "</ul>";
+                        $treeMenu[$module->id] .= "</div>";
                         $treeMenu[$module->id] .= "<a class='sort-handler tree-action' href='javascript:;' data-type='sort' title={$this->lang->tree->dragAndSort}><i class='icon icon-move'></i></a>";
                         $treeMenu[$module->id] .= '</div></div>';
                     }
@@ -2419,9 +2421,10 @@ EOT;
             else
             {
                 $li  = "<div class='tree-group'><span class='module-name'><a title='{$module->name}'>" . $module->name . '</a></span>';
-                $li .= "<div class='tree-actions pull-right'>";
+                $li .= "<div class='tree-actions'>";
                 $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title={$this->lang->doc->editType}");
                 $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editType}");
+                $li .='<div class="dropdown dropdown-hover">';
                 $li .= "<a class='tree-action' href='javascript:;' data-toggle='dropdown'><i class='icon icon-plus'></i></a>";
                 $li .= "<ul class='dropdown-menu'>";
                 foreach($this->lang->doc->typeList as $typeKey => $typeName)
@@ -2440,6 +2443,7 @@ EOT;
                     $li .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), "<i class='icon-doc-lib icon'></i> " . $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
                 }
                 $li .= "</ul>";
+                $li .= '</div>';
                 $li .= "<a class='sort-handler tree-action' href='javascript:;' data-type='sort' title={$this->lang->tree->dragAndSort}><i class='icon icon-move'></i></a>";
                 $li .= '</div></div>';
             }
