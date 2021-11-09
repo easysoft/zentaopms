@@ -39,7 +39,7 @@
     </p>
   </div>
   <?php else:?>
-  <form class='main-table table-branch' data-ride='table' method='post' id='branchForm'>
+  <form class='main-table' data-ride='table' method='post' id='branchForm'>
     <table id="branchList" class="table has-sort-head">
       <thead>
         <tr>
@@ -95,9 +95,14 @@
       <div class="checkbox-primary check-all">
         <label><?php echo $lang->selectAll?></label>
       </div>
+      <?php if($canBatchEdit):?>
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->edit, '', 'btn');?>
+        <?php
+        $batchEditLink = $this->createLink('branch', 'batchEdit', "productID=$productID");
+        echo html::submitButton($lang->edit, "data-form-action='$batchEditLink'", 'btn');
+        ?>
       </div>
+      <?php endif;?>
       <div class="table-actions btn-toolbar">
         <?php echo html::submitButton($lang->branch->merge, '', 'btn');?>
       </div>

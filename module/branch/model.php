@@ -57,12 +57,15 @@ class branchModel extends model
 
         if($browseType == 'closed') return $branchList;
 
+        $defaultBranch = BRANCH_MAIN;
+        foreach($branchList as $branch) $defaultBranch = $branch->default ? $branch->id : $defaultBranch;
+
         /* Display the main branch under all and active page. */
         $mainBranch = new stdclass();
         $mainBranch->id          = BRANCH_MAIN;
         $mainBranch->product     = $productID;
         $mainBranch->name        = $this->lang->branch->main;
-        $mainBranch->default     = 1;
+        $mainBranch->default     = $defaultBranch ? 0 : 1;
         $mainBranch->status      = 'active';
         $mainBranch->createdDate = '';
         $mainBranch->closedDate  = '';
@@ -182,6 +185,39 @@ class branchModel extends model
     }
 
     /**
+     * Batch update branch.
+     *
+     * @access public
+     * @return array
+     */
+    public function batchUpdate()
+    {
+        $data = fixer::input('post')->get();
+        $branchIDList  = array_keys($this->post->branchIDList);
+        $oldBranchList = $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->fetchAll('id');
+
+        foreach($branchIDList as $branchID)
+        {
+            $branch = new stdclass();
+            $branch->name    = $data->name[$branchID];
+            $branch->desc    = $data->desc[$branchID];
+            $branch->status  = $data->status[$branchID];
+            $branch->default = $branchID == $data->default ? 1 : 0;
+
+            $this->dao->update(TABLE_BRANCH)->data($branch)
+                ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
+                ->where('id')->eq($branchID)
+                ->exec();
+
+            if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
+
+            $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
+        }
+
+        return $changes;
+    }
+
+    /**
      * Close a branch.
      *
      * @param  int    $branchID
@@ -193,6 +229,7 @@ class branchModel extends model
         $this->dao->update(TABLE_BRANCH)
             ->set('status')->eq('closed')
             ->set('closedDate')->eq(helper::today())
+            ->set('default')->eq(0)
             ->where('id')->eq($branchID)
             ->exec();
     }

@@ -17,6 +17,8 @@ $lang->branch->close          = 'Close';
 $lang->branch->closeAction    = 'Close Branch';
 $lang->branch->create         = 'Create Branch';
 $lang->branch->merge          = 'Merge';
+$lang->branch->batchEdit      = 'Batch Edit';
+$lang->branch->defaultBranch  = 'Default Branch';
 
 $lang->branch->id          = 'ID';
 $lang->branch->product     = 'Product';

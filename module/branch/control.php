@@ -26,6 +26,7 @@ class branch extends control
     public function manage($productID, $browseType = 'active', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product')->setMenu($productID);
+        $this->session->set('branchManage', $this->app->getURI(true), 'product');
 
         $branchList = $this->branch->getList($productID, $browseType, $orderBy);
 
@@ -86,6 +87,41 @@ class branch extends control
         }
 
         $this->view->branch = $this->branch->getById($branchID, 0, '');
+        $this->display();
+    }
+
+    /**
+     * Batch edit branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function batchEdit($productID)
+    {
+        $this->loadModel('action');
+        $this->loadModel('product')->setMenu($productID);
+
+        if($this->post->name)
+        {
+            $changes = $this->branch->batchUpdate();
+            foreach($changes as $branchID => $change)
+            {
+                if($change) $this->action->create('branch', $branchID, 'Edited');
+            }
+
+            die(js::locate($this->session->branchManage, 'parent'));
+        }
+
+        $branchList   = $this->branch->getList($productID, 'all');
+        $branchIDList = $this->post->branchIDList ? $this->post->branchIDList : die(js::locate($this->session->branchManage, 'parent'));
+
+        foreach($branchList as $branch)
+        {
+            if(!in_array($branch->id, $branchIDList)) unset($branchList[$branch->id]);
+        }
+
+        $this->view->branchList = $branchList;
         $this->display();
     }
 

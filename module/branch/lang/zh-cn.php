@@ -17,6 +17,8 @@ $lang->branch->close          = '关闭';
 $lang->branch->closeAction    = '关闭分支';
 $lang->branch->create         = '新增分支';
 $lang->branch->merge          = '合并';
+$lang->branch->batchEdit      = '批量编辑';
+$lang->branch->defaultBranch  = '默认分支';
 
 $lang->branch->id          = 'ID';
 $lang->branch->product     = '所属产品';
