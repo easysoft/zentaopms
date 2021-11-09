@@ -393,4 +393,24 @@ class branchModel extends model
         $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID, $branch) : sprintf($link, $productID, $branch);
         return $linkHtml;
     }
+
+    /**
+     * Set default branch.
+     *
+     * @param   int    $productID
+     * @param   int    $branchID
+     * @accesss public
+     * @return  void
+     */
+    public function setDefault($productID, $branchID)
+    {
+        $defaultBranch = $this->dao->select('id')->from(TABLE_BRANCH)
+            ->where('product')->eq($productID)
+            ->andWhere('`default`')->eq('1')
+            ->fetch('id');
+
+        $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
+
+        if(!empty($defaultBranch)) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')->where('id')->eq($defaultBranch)->exec();
+    }
 }

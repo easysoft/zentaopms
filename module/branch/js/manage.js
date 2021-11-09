@@ -25,4 +25,12 @@ $(function()
             $.post(createLink('branch', 'sort'), {'branches' : list});
         }
     });
+
+    $('td.c-name.flex').mouseenter(function()
+    {
+        $(this).find('.setDefault').removeClass('hidden');
+    }).mouseleave(function()
+    {
+        $(this).find('.setDefault').addClass('hidden');
+    })
 });

@@ -67,7 +67,23 @@
           </td>
           <?php endif;?>
           <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
-          <td class='c-name' title='<?php echo $branch->name;?>'><?php echo $branch->name;?></td>
+          <td class='c-name flex' title='<?php echo $branch->name;?>'>
+            <span class="text-ellipsis"><?php echo $branch->name;?></span>
+            <?php
+            if($branch->default)
+            {
+                echo '<span class="label label-primary">' . $lang->branch->default . '</span>';
+            }
+            else
+            {
+
+                $setDefaultLink = helper::createLink('branch', 'setDefault', "productID=$productID&branchID=$branch->id", '', true);
+                $setDefaultHtml = html::a($setDefaultLink, "<i class='icon icon-hand-right'></i> <span>{$lang->branch->setDefault}</span>", '', "class='iframe btn btn-icon-left btn-sm setDefault hidden'");
+
+                echo common::hasPriv('branch', 'setDefault') ? $setDefaultHtml : '';
+            }
+            ?>
+          </td>
           <td><?php echo zget($lang->branch->statusList, $branch->status);?></td>
           <td><?php echo helper::isZeroDate($branch->createdDate) ? '' : $branch->createdDate;?></td>
           <td><?php echo helper::isZeroDate($branch->closedDate) ? '' : $branch->closedDate;?></td>

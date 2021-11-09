@@ -254,4 +254,29 @@ class branch extends control
         if($oldBranch) $branches = array($oldBranch => $branches[$oldBranch]);
         die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch(this)'"));
     }
+
+    /**
+     * Set default branch.
+     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  string $confirm    yes|no
+     * @access public
+     * @return void
+     */
+    public function setDefault($productID, $branchID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            $this->app->loadLang('product');
+            $productType = $this->branch->getProductType($branchID);
+            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmSetDefault), inlink('setDefault', "productID=$productID&branchID=$branchID&confirm=yes")));
+        }
+
+        $this->branch->setDefault($productID, $branchID);
+
+        $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch');
+
+        die(js::reload('parent'));
+    }
 }
