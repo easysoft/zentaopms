@@ -2160,12 +2160,7 @@ class storyModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
-        if(is_array($branch))
-        {
-            unset($branch[0]);
-            $branch = join(',', $branch);
-            if($branch) $branch = "0,$branch";
-        }
+        if(is_array($branch)) $branch = join(',', $branch);
 
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
@@ -2419,9 +2414,8 @@ class storyModel extends model
         if($executionID != '')
         {
             foreach($products as $product) $branches[$product->branch] = $product->branch;
-            unset($branches[0]);
             $branches = join(',', $branches);
-            if($branches) $storyQuery .= " AND `branch`" . helper::dbIN("0,$branches");
+            if($branches) $storyQuery .= " AND `branch`" . helper::dbIN($branches);
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
                 $storyQuery .= " AND `status` NOT IN ('draft')";// Fix bug #990.
@@ -2433,7 +2427,7 @@ class storyModel extends model
         }
         elseif($branch)
         {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in('0','$branch')";
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` eq($branch)";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
@@ -2463,7 +2457,7 @@ class storyModel extends model
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
 
-        $sql = str_replace(array('`product`', '`version`'), array('t1.`product`', 't1.`version`'), $sql);
+        $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
         $tmpStories = $this->dao->select('DISTINCT t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where($sql)
@@ -2513,7 +2507,6 @@ class storyModel extends model
         $type = strtolower($type);
         if($type == 'bysearch')
         {
-            if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->storyQuery;
             $queryID  = (int)$param;
             $products = $this->loadModel('execution')->getProducts($executionID);
 
@@ -2523,10 +2516,20 @@ class storyModel extends model
                 $query = $this->loadModel('search')->getQuery($queryID);
                 if($query)
                 {
-                    $this->session->set('executionStoryQuery', $query->sql);
-                    $this->session->set('executionStoryForm', $query->form);
+                    if($this->app->rawModule == 'projectstory')
+                    {
+                        $this->session->set('storyQuery', $query->sql);
+                        $this->session->set('storyForm', $query->form);
+                    }
+                    else
+                    {
+                        $this->session->set('executionStoryQuery', $query->sql);
+                        $this->session->set('executionStoryForm', $query->form);
+                    }
                 }
             }
+
+            if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->storyQuery;
 
             $allProduct = "`product` = 'all'";
             $storyQuery = $this->session->executionStoryQuery;

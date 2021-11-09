@@ -184,7 +184,7 @@ class productplanModel extends model
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+            ->andWhere('branch')->eq($branch)
             ->beginIF($expired == 'unexpired')->andWhere('end')->ge($date)->fi()
             ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')

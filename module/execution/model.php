@@ -1698,25 +1698,30 @@ class executionModel extends model
      * @param  int    $queryID
      * @param  string $actionURL
      * @param  string $type
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory')
+    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory', $objectID = 0)
     {
         $branchPairs  = array();
         $productType  = 'normal';
         $productNum   = count($products);
         $productPairs = array(0 => '');
+        $branches     = $this->loadModel('project')->getBranchesByProject($objectID);
         foreach($products as $product)
         {
             $productPairs[$product->id] = $product->name;
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                if($product->branch)
+                if(isset($branches[$product->id]))
                 {
-                    if(!isset($branchGroups[$product->id][$product->branch])) continue;
-                    $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
+                    foreach($branches[$product->id] as $branchID => $branch)
+                    {
+                        if(!isset($branchGroups[$product->id][$branchID])) continue;
+                        $branchPairs[$branchID] = ((count($products) > 1 and $branchID) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
+                    }
                 }
                 else
                 {

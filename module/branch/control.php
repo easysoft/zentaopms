@@ -107,15 +107,16 @@ class branch extends control
      *
      * @param  int    $productID
      * @param  int    $oldBranch
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function ajaxGetBranches($productID, $oldBranch = 0)
+    public function ajaxGetBranches($productID, $oldBranch = 0, $param = '')
     {
-        $product = $this->loadModel('product')->getById($productID);
+        $product = $this->loadModel('product')->getById($productID, $param);
         if(empty($product) or $product->type == 'normal') die();
 
-        $branches = $this->branch->getPairs($productID);
+        $branches = $this->branch->getPairs($productID, $param);
         if($oldBranch) $branches = array($oldBranch => $branches[$oldBranch]);
         die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch(this)'"));
     }

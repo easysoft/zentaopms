@@ -81,6 +81,7 @@ class branchModel extends model
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF(strpos($params, 'noclosed') !== false)->andWhere('status')->eq('active')->fi()
             ->orderBy('`order`')
             ->fetchPairs('id', 'name');
         foreach($branches as $branchID => $branchName) $branches[$branchID] = htmlspecialchars_decode($branchName);
@@ -167,7 +168,12 @@ class branchModel extends model
      */
     public function getByProducts($products, $params = '', $appendBranch = '')
     {
-        $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->in($products)->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll('id');
+        $branches = $this->dao->select('*')->from(TABLE_BRANCH)
+            ->where('product')->in($products)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(strpos($params, 'noclosed') !== false)->andWhere('status')->eq('active')->fi()
+            ->orderBy('`order`')
+            ->fetchAll('id');
         if(!empty($appendBranch)) $branches += $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($appendBranch)->orderBy('`order`')->fetchAll('id');
         $products = $this->loadModel('product')->getByIdList($products);
 
