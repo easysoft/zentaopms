@@ -435,10 +435,10 @@ class testcase extends control
         $modules = array();
         if($currentModuleID)
         {
-            $productModules  = $this->tree->getOptionMenu($productID, 'story');
-            $storyModuleID = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
-            $modules = $this->loadModel('tree')->getStoryModule($storyModuleID);
-            $modules = $this->tree->getAllChildID($modules);
+            $productModules = $this->tree->getOptionMenu($productID, 'story');
+            $storyModuleID  = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
+            $modules        = $this->loadModel('tree')->getStoryModule($storyModuleID);
+            $modules        = $this->tree->getAllChildID($modules);
         }
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
         if($this->app->tab != 'qa')
