@@ -367,18 +367,17 @@ function affixKanbanHeader($kanbanBoard, affixed)
  */
 function updateKanbanAffixState()
 {
-    var $boards = $('.kanban-board');
+    var $boards           = $('.kanban-board');
     var $lastAffixedBoard = $boards.filter('.kanban-affixed');
+    var containerTop      = window.kanbanAffixContainer ? $(window.kanbanAffixContainer)[0].getBoundingClientRect().top : 0;
     var $currentAffixedBoard;
-    var currentOffsetTop = 0;
-    var scrollTop = $(window).scrollTop();
+
     $('.kanban-board').each(function()
     {
         var $board = $(this);
-        var offsetTop = $board.offset().top;
-        if(scrollTop >= offsetTop && offsetTop > currentOffsetTop && scrollTop < (offsetTop + $board.outerHeight() - 72))
+        var bounds = $board[0].getBoundingClientRect();
+        if(bounds.top < containerTop && bounds.bottom > (containerTop))
         {
-            currentOffsetTop = offsetTop;
             $currentAffixedBoard = $board;
         }
     });
@@ -399,7 +398,6 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
     readonly: true,
     maxColHeight: 260,
-    /* laneItemsClass: 'scrollbar-hover', */ // only show scrollbar on mouse hover
     itemRender: renderKanbanItem,
     useFlex: false,
     showCount: true,
@@ -448,7 +446,7 @@ $(function()
         updateKanbanAffixState();
         updateTimer = null;
     };
-    $(window).on('scroll resize', function(e)
+    $(window.kanbanAffixContainer || window).on('scroll resize', function(e)
     {
         if(updateTimer)
         {

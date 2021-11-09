@@ -636,6 +636,14 @@ function createTaskMenu(options)
     return items;
 }
 
+/** Resize kanban container size */
+function resizeKanbanContainer()
+{
+    var $container = $('#kanbanContainer');
+    var maxHeight = window.innerHeight - 98 - 15;
+    $container.children('.panel-body').css('max-height', maxHeight);
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
@@ -647,6 +655,9 @@ window.menuCreators =
     task:         createTaskMenu,
 };
 
+/* Set kanban affix container */
+window.kanbanAffixContainer = '#kanbanContainer>.panel-body';
+
 /* Overload kanban default options */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
@@ -657,7 +668,7 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
         {
             maxWidth = Math.max(maxWidth, $(this).outerWidth());
         });
-        $('#kanbanContainer').css('min-width', maxWidth + 40);
+        $('#kanbans').css('min-width', maxWidth);
     }
 });
 
@@ -725,6 +736,10 @@ $(function()
 
         $.zui.ContextMenu.show(items, items.$options || {event: event});
     });
+
+    /* Resize kanban container on window resize */
+    resizeKanbanContainer();
+    $(window).on('resize', resizeKanbanContainer);
 
     /* Hide contextmenu when page scroll */
     $(window).on('scroll', function()
