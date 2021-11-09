@@ -430,7 +430,7 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
         $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || 0);
         $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || 0);
     },
-    onCreate(kanban)
+    onCreate: function(kanban)
     {
         kanban.$.on('scroll', updateKanbanAffixState);
         updateKanbanAffixState();
