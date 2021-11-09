@@ -467,9 +467,9 @@ class programModel extends model
                 $whitelist = explode(",", $project->whitelist);
 		if($project->openedBy == $this->app->user->account) continue;
 		if($project->PM == $this->app->user->account) continue;
-		if(!in_array($this->app->user->account, $whitelist)) continue;
-		if(!isset($teamMembers[$project->id][$this->app->user->account])) continue;
-		if(!isset($stakeholder[$project->id][$this->app->user->account])) continue;
+		if(in_array($this->app->user->account, $whitelist)) continue;
+		if(isset($teamMembersGroup[$project->id][$this->app->user->account])) continue;
+		if(isset($stakeholderGroup[$project->id][$this->app->user->account])) continue;
 
 	        unset($projectList[$id]);
 		$pager->recTotal -= 1;
