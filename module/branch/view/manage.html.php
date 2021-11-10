@@ -14,7 +14,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('orderBy', $orderBy)?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
-<?php $canOrder       = common::hasPriv('branch', 'order');?>
+<?php $canOrder       = common::hasPriv('branch', 'sort');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>
 <?php $canMergeBranch = common::hasPriv('branch', 'mergeBranch');?>
 <?php $canBatchAction = ($canBatchEdit or $canMergeBranch);?>
