@@ -9,6 +9,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('gitlabID', $MR->gitlabID);?>
+<?php js::set('projectID', $MR->sourceProject);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -50,6 +52,28 @@
           <tr>
             <th><?php echo $lang->mr->description; ?></th>
             <td colspan='1'><?php echo html::textarea('description', $MR->description, "rows='3' class='form-control'"); ?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->mr->needPassCI; ?></th>
+            <td colspan='1'>
+              <div class="checkbox-primary">
+                <?php $checked = $MR->needPassCI == '1' ? 'checked' : '' ?>
+                <input type="checkbox" <?php echo $checked; ?> name="needPassCI" value="1" id="needPassCI">
+                <label for="needPassCI"></label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->devops->repo; ?></th>
+            <td colspan='1' class='required'><?php echo html::select('repo', $repoList, $MR->repoID, "class='form-control chosen'"); ?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->job->common; ?></th>
+            <td colspan='1'><?php echo html::select('job', $jobList, $MR->jobID, "class='form-control chosen'"); ?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->compile->result; ?></th>
+            <td colspan='1'><?php echo html::select('compile', $compileList, $MR->compileID, "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->mr->assignee;?></th>

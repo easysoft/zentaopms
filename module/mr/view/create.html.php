@@ -52,17 +52,17 @@
             <td colspan='1'><?php echo html::textarea('description', '', "rows='3' class='form-control'"); ?></td>
           </tr>
           <tr>
-            <th></th>
+            <th><?php echo $lang->mr->needPassCI; ?></th>
             <td colspan='1'>
               <div class="checkbox-primary">
                 <input type="checkbox" name="needPassCI" value="1" id="needPassCI">
-                <label for="needPassCI"><?php echo $lang->mr->needPassCI; ?></label>
+                <label for="needPassCI"></label>
               </div>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->devops->repo; ?></th>
-            <td colspan='1'><?php echo html::select('repo', array(''), '', "class='form-control chosen'"); ?></td>
+            <td colspan='1' class='required'><?php echo html::select('repo', array(''), '', "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->common; ?></th>

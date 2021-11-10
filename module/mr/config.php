@@ -6,7 +6,11 @@ $config->mr->create->skippedFields  = 'projectID,repo,job,compile';
 $config->mr->create->requiredFields = 'gitlabID,sourceProject,sourceBranch,targetProject,targetBranch,title';
 
 $config->mr->edit = new stdclass;
+$config->mr->edit->skippedFields  = 'projectID,repo,job,compile';
 $config->mr->edit->requiredFields = 'gitlabID,sourceProject,sourceBranch,targetProject,targetBranch,title';
+
+$config->mr->editor = new stdclass();
+$config->mr->editor->diff = array('id' => 'commentText', 'tools' => 'simpleTools');
 
 $config->mr->maps = new stdclass;
 $config->mr->maps->sync = array();
