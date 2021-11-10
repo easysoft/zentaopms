@@ -39,8 +39,8 @@
               <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], $branchID, "class='form-control chosen' $attr");?>
             </div>
           </div>
-          <?php if(!empty($isDisabled)) echo html::hidden("products[$i]", $productID);?>
-          <?php if(!empty($isDisabled)) echo html::hidden("branch[$i]", $branchID);?>
+          <?php if(!empty($attr)) echo html::hidden("products[$i]", $productID);?>
+          <?php if(!empty($attr)) echo html::hidden("branch[$i]", $branchID);?>
           <?php if(!isset($branchGroups[$productID])) unset($allProducts[$productID]);?>
           <?php if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);?>
           <?php if(isset($branchGroups[$productID]) and empty($branchGroups[$productID])) unset($allProducts[$productID]);?>
