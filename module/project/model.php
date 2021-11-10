@@ -1857,7 +1857,7 @@ class projectModel extends model
 
         $myProjects    = array();
         $otherProjects = array();
-        $closedCount   = 0;
+        $closedGroup   = array();
         foreach($projects as $project)
         {
             if(strpos('wait,doing,closed', $project->status) === false) continue;
@@ -1873,7 +1873,7 @@ class projectModel extends model
                 }
                 else
                 {
-                    if(!isset($myProjects[$topProgram][$project->status]) or count($myProjects[$topProgram][$project->status]) < 2) $myProjects[$topProgram][$project->status][] = $project;
+                    $closedGroup['my'][$topProgram][$project->closedDate] = $project;
                 }
             }
             else
@@ -1884,7 +1884,24 @@ class projectModel extends model
                 }
                 else
                 {
-                    if(!isset($otherProjects[$topProgram][$project->status]) or count($otherProjects[$topProgram][$project->status]) < 2) $otherProjects[$topProgram][$project->status][] = $project;
+                    $closedGroup['other'][$topProgram][$project->closedDate] = $project;
+                }
+            }
+        }
+
+        /* Only display recent two closed projects. */
+        foreach($closedGroup as $group => $closedProjects)
+        {
+            foreach($closedProjects as $topProgram => $projects)
+            {
+                krsort($projects);
+                if($group == 'my')
+                {
+                    $myProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
+                }
+                else
+                {
+                    $otherProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
                 }
             }
         }

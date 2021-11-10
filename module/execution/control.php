@@ -1945,8 +1945,29 @@ class execution extends control
                 /* Max 2 closed executions. */
                 if($status == 'closed')
                 {
-                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 2) $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
-                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 2) $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 2, true);
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) > 2) 
+                    {
+                        foreach($myExecutions[$status] as $executionID => $execution)
+                        {
+                            unset($myExecutions[$status][$executionID]);
+                            $myExecutions[$status][$execution->closedDate] = $execution;
+                        }
+
+                        krsort($myExecutions[$status]);
+                        $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
+                    }
+
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) > 2) 
+                    {
+                        foreach($kanbanGroup[$projectID][$status] as $executionID => $execution)
+                        {
+                            unset($kanbanGroup[$projectID][$status][$executionID]);
+                            $kanbanGroup[$projectID][$status][$execution->closedDate] = $execution;
+                        }
+
+                        krsort($kanbanGroup[$projectID][$status]);
+                        $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 2);
+                    }
                 }
             }
 
