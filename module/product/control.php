@@ -1165,6 +1165,7 @@ class product extends control
         $kanbanGroup = $this->product->getStats4Kanban();
         extract($kanbanGroup);
 
+        $programPairs  = $this->loadModel('program')->getPairs(true);
         $myProducts    = array();
         $otherProducts = array();
         foreach($productList as $productID => $product)
@@ -1186,7 +1187,7 @@ class product extends control
 
         $this->view->title            = $this->lang->product->kanban;
         $this->view->kanbanList       = $kanbanList;
-        $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programList;
+        $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programPairs;
         $this->view->productList      = $productList;
         $this->view->planList         = $planList;
         $this->view->projectList      = $projectList;
