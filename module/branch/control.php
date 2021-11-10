@@ -284,7 +284,7 @@ class branch extends control
         if($confirm == 'no')
         {
             $this->app->loadLang('product');
-            $productType = $this->branch->getProductType($branchID);
+            $productType = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('type');
             die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmSetDefault), inlink('setDefault', "productID=$productID&branchID=$branchID&confirm=yes")));
         }
 
