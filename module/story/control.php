@@ -1828,7 +1828,7 @@ class story extends control
 
         if($executionID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type); 
+            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type);
         }
         else
         {
@@ -1920,7 +1920,7 @@ class story extends control
         $storyInfo['moduleID'] = $story->module;
         $storyInfo['estimate'] = $story->estimate;
         $storyInfo['pri']      = $story->pri;
-        $storyInfo['spec']     = html_entity_decode($story->spec);
+        $storyInfo['spec']     = html_entity_decode($story->spec, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
 
         echo json_encode($storyInfo);
     }
@@ -2209,7 +2209,7 @@ class story extends control
                 $story->reviewedBy = rtrim($story->reviewedBy, ',');
 
                 /* Set child story title. */
-                if($story->parent > 0 && strpos($story->title, htmlentities('>')) !== 0) $story->title = '>' . $story->title;
+                if($story->parent > 0 && strpos($story->title, htmlentities('>'), ENT_COMPAT | ENT_HTML401, 'UTF-8') !== 0) $story->title = '>' . $story->title;
             }
 
             if($executionID)
