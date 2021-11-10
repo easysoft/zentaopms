@@ -190,28 +190,47 @@ class branchModel extends model
      * @access public
      * @return array
      */
-    public function batchUpdate()
+    public function batchUpdate($productID)
     {
         $data = fixer::input('post')->get();
-        $branchIDList  = array_keys($this->post->branchIDList);
-        $oldBranchList = $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->fetchAll('id');
+        $oldBranchList = $this->getList($productID, 'all');
+        $branchIDList  = array_keys($this->post->IDList);
 
         foreach($branchIDList as $branchID)
         {
-            $branch = new stdclass();
-            $branch->name    = $data->name[$branchID];
-            $branch->desc    = $data->desc[$branchID];
-            $branch->status  = $data->status[$branchID];
-            $branch->default = $branchID == $data->default ? 1 : 0;
+            if($branchID == BRANCH_MAIN)
+            {
+                if($data->default != BRANCH_MAIN) continue;
 
-            $this->dao->update(TABLE_BRANCH)->data($branch)
-                ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
-                ->where('id')->eq($branchID)
-                ->exec();
+                $this->dao->update(TABLE_BRANCH)
+                    ->set('default')->eq(0)
+                    ->where('product')->eq($productID)
+                    ->exec();
 
-            if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
+                if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
 
-            $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
+                $newMainBranch = new stdClass();
+                $newMainBranch->default = 1;
+
+                $changes[$branchID] = common::createChanges($oldBranchList[BRANCH_MAIN], $newMainBranch);
+            }
+            else
+            {
+                $branch = new stdclass();
+                $branch->name    = $data->name[$branchID];
+                $branch->desc    = $data->desc[$branchID];
+                $branch->status  = $data->status[$branchID];
+                $branch->default = $branchID == $data->default ? 1 : 0;
+
+                $this->dao->update(TABLE_BRANCH)->data($branch)
+                    ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
+                    ->where('id')->eq($branchID)
+                    ->exec();
+
+                if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
+
+                $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
+            }
         }
 
         return $changes;

@@ -102,12 +102,13 @@ class branch extends control
         $this->loadModel('action');
         $this->loadModel('product')->setMenu($productID);
 
-        if($this->post->name)
+        if($this->post->IDList)
         {
-            $changes = $this->branch->batchUpdate();
+            $changes = $this->branch->batchUpdate($productID);
             foreach($changes as $branchID => $change)
             {
-                if($change) $this->action->create('branch', $branchID, 'Edited');
+                $extra = $branchID == BRANCH_MAIN ? $productID : '';
+                if($change) $this->action->create('branch', $branchID, 'Edited', '', $extra);
             }
 
             die(js::locate($this->session->branchManage, 'parent'));

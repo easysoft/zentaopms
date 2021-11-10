@@ -30,7 +30,7 @@
         <?php foreach($branchList as $branch):?>
         <?php $disabled = $branch->id == BRANCH_MAIN ? 'disabled' : '';?>
         <tr>
-          <td><?php echo $branch->id == BRANCH_MAIN ? '' : $branch->id . html::hidden("branchIDList[$branch->id]", $branch);?></td>
+          <td><?php echo ($branch->id == BRANCH_MAIN ? '' : $branch->id) . html::hidden("IDList[$branch->id]", $branch);?></td>
           <td><?php echo html::input("name[$branch->id]", $branch->name,  "class='form-control chosen' $disabled");?></td>
           <td><?php echo html::input("desc[$branch->id]", $branch->desc, "class='form-control' $disabled");?></td>
           <td><?php echo html::select("status[$branch->id]", $lang->branch->statusList, $branch->status, "class='form-control' chosen $disabled onchange='canSetDefaultBranch(this)'");?></td>
