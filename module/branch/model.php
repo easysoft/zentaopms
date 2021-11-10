@@ -150,6 +150,16 @@ class branchModel extends model
             ->add('status', 'active')
             ->get();
 
+        $existBranchName = $this->dao->select('name')->from(TABLE_BRANCH)->where('name')->eq($branch->name)->fetch('name');
+        if(!empty($existBranchName))
+        {
+            $this->app->loadLang('product');
+            $productType = $this->dao->select('`type`')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('type');
+
+            dao::$errors['name'] = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
+            return false;
+        }
+
         $lastOrder = (int)$this->dao->select('`order`')->from(TABLE_BRANCH)->where('product')->eq($productID)->orderBy('order_desc')->limit(1)->fetch('order');
         $branch->order = empty($lastOrder) ? 1 : $lastOrder + 1;
 

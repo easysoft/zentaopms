@@ -40,6 +40,7 @@ $lang->branch->canNotDelete      = 'There is data in @branch@. It cannot be dele
 $lang->branch->nameNotEmpty      = 'Name must not be empty！';
 $lang->branch->confirmClose      = 'Do you want to close this @branch@？';
 $lang->branch->confirmActivate   = 'Do you want to activate this @branch@？';
+$lang->branch->existName         = '@branch@ name already exists.';
 
 $lang->branch->noData     = 'No branches.';
 $lang->branch->mainBranch = 'The default main branch of the product.';
