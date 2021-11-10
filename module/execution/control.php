@@ -1387,12 +1387,12 @@ class execution extends control
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
         $this->view->products            = $products;
-        $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();
+        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs();
         $this->view->productPlan         = array(0 => '') + $productPlan;
         $this->view->productPlans        = array(0 => '') + $productPlans;
         $this->view->whitelist           = $whitelist;
         $this->view->copyExecutionID     = $copyExecutionID;
-        $this->view->branchGroups        = isset($branchGroups) ? $branchGroups : $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        $this->view->branchGroups        = isset($branchGroups) ? $branchGroups : $this->execution->getBranchByProduct(array_keys($products), $projectID);
         $this->view->poUsers             = $poUsers;
         $this->view->pmUsers             = $pmUsers;
         $this->view->qdUsers             = $qdUsers;
@@ -1545,7 +1545,7 @@ class execution extends control
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->multiBranchProducts  = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
-        $this->view->branchGroups         = $this->execution->getByProducts(array_keys($linkedProducts), $execution->project);
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project);
         $this->display();
     }
 

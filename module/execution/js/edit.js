@@ -4,7 +4,7 @@ $().ready(function()
     {
         $('#products0').removeAttr("disabled");
         $('#branch0').removeAttr("disabled");
-        var products      = [];
+        var products      = new Array();
         var existedBranch = false;
 
         /* Determine whether the products of the same branch are linked. */
