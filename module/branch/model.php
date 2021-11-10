@@ -45,7 +45,7 @@ class branchModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID, $browseType = 'active', $orderBy = 'order_desc', $pager = null)
+    public function getList($productID, $browseType = 'active', $orderBy = 'order', $pager = null)
     {
         $branchList = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
@@ -57,12 +57,15 @@ class branchModel extends model
 
         if($browseType == 'closed') return $branchList;
 
+        $defaultBranch = BRANCH_MAIN;
+        foreach($branchList as $branch) $defaultBranch = $branch->default ? $branch->id : $defaultBranch;
+
         /* Display the main branch under all and active page. */
         $mainBranch = new stdclass();
         $mainBranch->id          = BRANCH_MAIN;
         $mainBranch->product     = $productID;
         $mainBranch->name        = $this->lang->branch->main;
-        $mainBranch->default     = 1;
+        $mainBranch->default     = $defaultBranch ? 0 : 1;
         $mainBranch->status      = 'active';
         $mainBranch->createdDate = '';
         $mainBranch->closedDate  = '';
@@ -182,6 +185,52 @@ class branchModel extends model
     }
 
     /**
+     * Batch update branch.
+     *
+     * @access public
+     * @return array
+     */
+    public function batchUpdate($productID)
+    {
+        $data = fixer::input('post')->get();
+        $oldBranchList = $this->getList($productID, 'all');
+        $branchIDList  = array_keys($this->post->IDList);
+
+        foreach($branchIDList as $branchID)
+        {
+            if($branchID == BRANCH_MAIN)
+            {
+                $newMainBranch = new stdClass();
+                $newMainBranch->default = (isset($data->default) and $data->default == BRANCH_MAIN) ? 1 : 0;
+
+                $changes[$branchID] = common::createChanges($oldBranchList[BRANCH_MAIN], $newMainBranch);
+            }
+            else
+            {
+                $branch = new stdclass();
+                $branch->name       = $data->name[$branchID];
+                $branch->desc       = $data->desc[$branchID];
+                $branch->status     = $data->status[$branchID];
+                $branch->default    = (isset($data->default) and $branchID == $data->default) ? 1 : 0;
+                $branch->closedDate = $branch->status == 'closed' ? helper::today() : '';
+
+                $this->dao->update(TABLE_BRANCH)->data($branch, 'default')
+                    ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
+                    ->where('id')->eq($branchID)
+                    ->exec();
+
+                if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
+
+                $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
+            }
+        }
+
+        if(isset($data->default)) $this->setDefault($productID, $data->default);
+
+        return $changes;
+    }
+
+    /**
      * Close a branch.
      *
      * @param  int    $branchID
@@ -193,6 +242,7 @@ class branchModel extends model
         $this->dao->update(TABLE_BRANCH)
             ->set('status')->eq('closed')
             ->set('closedDate')->eq(helper::today())
+            ->set('`default`')->eq('0')
             ->where('id')->eq($branchID)
             ->exec();
     }
@@ -314,11 +364,18 @@ class branchModel extends model
      */
     public function sort()
     {
-        $data = fixer::input('post')->get();
-        $branches = trim($data->branches, ',');
-        foreach(explode(',', $branches) as $order => $branchID)
+        $orderBy      = $this->post->orderBy;
+        $branchIDList = explode(',', trim($this->post->branches, ','));
+
+        if(strpos($orderBy, 'order') === false) return false;
+        if(in_array(BRANCH_MAIN, $branchIDList)) unset($branchIDList[array_search(BRANCH_MAIN, $branchIDList)]);
+
+        $branches = $this->dao->select('id,`order`')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->orderBy($orderBy)->fetchPairs('order', 'id');
+        foreach($branches as $order => $id)
         {
-            $this->dao->update(TABLE_BRANCH)->set('`order`')->eq($order)->where('id')->eq($branchID)->exec();
+            $newID = array_shift($branchIDList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_BRANCH)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
         }
     }
 
@@ -361,5 +418,25 @@ class branchModel extends model
     {
         $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID, $branch) : sprintf($link, $productID, $branch);
         return $linkHtml;
+    }
+
+    /**
+     * Set default branch.
+     *
+     * @param   int    $productID
+     * @param   int    $branchID
+     * @accesss public
+     * @return  void
+     */
+    public function setDefault($productID, $branchID)
+    {
+        $defaultBranch = $this->dao->select('id')->from(TABLE_BRANCH)
+            ->where('product')->eq($productID)
+            ->andWhere('`default`')->eq('1')
+            ->fetch('id');
+
+        if(!empty($defaultBranch)) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')->where('id')->eq($defaultBranch)->exec();
+
+        $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
     }
 }

@@ -23,9 +23,10 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function manage($productID, $browseType = 'active', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function manage($productID, $browseType = 'active', $orderBy = 'order', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product')->setMenu($productID);
+        $this->session->set('branchManage', $this->app->getURI(true), 'product');
 
         $branchList = $this->branch->getList($productID, $browseType, $orderBy);
 
@@ -86,6 +87,43 @@ class branch extends control
         }
 
         $this->view->branch = $this->branch->getById($branchID, 0, '');
+        $this->display();
+    }
+
+    /**
+     * Batch edit branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function batchEdit($productID)
+    {
+        $this->loadModel('action');
+        $this->loadModel('product')->setMenu($productID);
+
+        if($this->post->IDList)
+        {
+            $changes = $this->branch->batchUpdate($productID);
+            foreach($changes as $branchID => $change)
+            {
+                $extra = $branchID == BRANCH_MAIN ? $productID : '';
+                if($change) $this->action->create('branch', $branchID, 'Edited', '', $extra);
+            }
+
+            die(js::locate($this->session->branchManage, 'parent'));
+        }
+
+        $branchList   = $this->branch->getList($productID, 'all');
+        $branchIDList = $this->post->branchIDList;
+        if(empty($branchIDList)) die(js::locate($this->session->branchManage, 'parent'));
+
+        foreach($branchList as $branch)
+        {
+            if(!in_array($branch->id, $branchIDList)) unset($branchList[$branch->id]);
+        }
+
+        $this->view->branchList = $branchList;
         $this->display();
     }
 
@@ -230,5 +268,30 @@ class branch extends control
 
         if($oldBranch) $branches = array($oldBranch => $branches[$oldBranch]);
         die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch(this)'"));
+    }
+
+    /**
+     * Set default branch.
+     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  string $confirm    yes|no
+     * @access public
+     * @return void
+     */
+    public function setDefault($productID, $branchID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            $this->app->loadLang('product');
+            $productType = $this->branch->getProductType($branchID);
+            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmSetDefault), inlink('setDefault', "productID=$productID&branchID=$branchID&confirm=yes")));
+        }
+
+        $this->branch->setDefault($productID, $branchID);
+
+        $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch', '', $productID);
+
+        die(js::reload('parent'));
     }
 }

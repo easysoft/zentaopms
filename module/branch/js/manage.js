@@ -13,16 +13,35 @@ function deleteItem(obj)
 
 $(function()
 {
-    $('#branches').sortable(
+    $('#branchTableList').addClass('sortable').sortable(
     {
-        selector: '.input-group',
+        reverse: orderBy === 'order_desc',
+        selector: 'tr',
         dragCssClass: 'drag-row',
-        trigger: $('#branches').find('.sort-handler').length ? '.sort-handler' : null,
+        trigger: $('#branchTableList').find('.sort-handler').length ? '.sort-handler' : null,
+
+        canMoveHere: function($ele, $target)
+        {
+            return $target.data('id') != 0;
+        },
+
         finish: function(e)
         {
-            var list = '';
-            $('#branches').find('.input-group').each(function(){list += $(this).attr('data-id') + ',';});
-            $.post(createLink('branch', 'sort'), {'branches' : list});
+            var branches = '';
+            e.list.each(function()
+            {
+                branches += $(this.item).data('id') + ',';
+            });
+
+            $.post(createLink('branch', 'sort'), {'branches': branches, 'orderBy': orderBy});
         }
     });
+
+    $('td.c-name.flex').mouseenter(function()
+    {
+        $(this).find('.setDefault').removeClass('hidden');
+    }).mouseleave(function()
+    {
+        $(this).find('.setDefault').addClass('hidden');
+    })
 });
