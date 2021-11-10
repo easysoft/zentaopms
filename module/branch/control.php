@@ -217,6 +217,8 @@ class branch extends control
         if(empty($product) or $product->type == 'normal') die();
 
         $branches = $this->branch->getPairs($productID, $param);
+
+        /* Remove unlinked branches of the project. */
         if($projectID)
         {
             $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);

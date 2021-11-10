@@ -1275,25 +1275,17 @@ class execution extends control
         $productPlans = array();
         if($copyExecutionID)
         {
-            $copyExecution   = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch();
-            $name            = $copyExecution->name;
-            $code            = $copyExecution->code;
-            $team            = $copyExecution->team;
-            $acl             = $copyExecution->acl;
-            $whitelist       = $copyExecution->whitelist;
-            $projectID       = $copyExecution->project;
-            $products        = $this->execution->getProducts($copyExecutionID);
-            $branches        = $this->project->getBranchesByProject($copyExecutionID);
-            $plans           = $this->loadModel('productplan')->getGroupByProduct(array_keys($products));
-            $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
-            $branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
-            foreach($branchGroups as $productID => $branchPairs)
-            {
-                foreach($branchPairs as $branchID => $branchName)
-                {
-                    if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
-                }
-            }
+            $copyExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch();
+            $name          = $copyExecution->name;
+            $code          = $copyExecution->code;
+            $team          = $copyExecution->team;
+            $acl           = $copyExecution->acl;
+            $whitelist     = $copyExecution->whitelist;
+            $projectID     = $copyExecution->project;
+            $products      = $this->execution->getProducts($copyExecutionID);
+            $branches      = $this->project->getBranchesByProject($copyExecutionID);
+            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products));
+            $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
 
             $linkedBranches = array();
             foreach($products as $productID => $product)
@@ -1401,7 +1393,7 @@ class execution extends control
         $this->view->whitelist           = $whitelist;
         $this->view->copyExecutionID     = $copyExecutionID;
         $this->view->branchGroups        = isset($branchGroups) ? $branchGroups : $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
-        $this->view->poUsers                 = $poUsers;
+        $this->view->poUsers             = $poUsers;
         $this->view->pmUsers             = $pmUsers;
         $this->view->qdUsers             = $qdUsers;
         $this->view->rdUsers             = $rdUsers;
@@ -1502,15 +1494,7 @@ class execution extends control
         $branches         = $this->project->getBranchesByProject($executionID);
         $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts));
         $executionStories = $this->project->getStoriesByProject($executionID);
-        $projectProducts  = $this->loadModel('project')->getBranchesByProject($execution->project);
-        $branchGroups     = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed');
-        foreach($branchGroups as $productID => $branchPairs)
-        {
-            foreach($branchPairs as $branchID => $branchName)
-            {
-                if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
-            }
-        }
+        $branchGroups     = $this->execution->getByProducts(array_keys($linkedProducts), $execution->project);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
@@ -2292,15 +2276,7 @@ class execution extends control
         $linkedBranches   = array();
         $branches         = $this->project->getBranchesByProject($executionID);
         $executionStories = $this->project->getStoriesByProject($executionID);
-        $projectProducts  = $this->loadModel('project')->getBranchesByProject($execution->project);
-        $branchGroups     = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed');
-        foreach($branchGroups as $productID => $branchPairs)
-        {
-            foreach($branchPairs as $branchID => $branchName)
-            {
-                if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
-            }
-        }
+        $branchGroups     = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();

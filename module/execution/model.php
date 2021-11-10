@@ -1656,6 +1656,28 @@ class executionModel extends model
     }
 
     /**
+     * Get branch pairs by product id list.
+     *
+     * @param  array  $products
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getBranchByProduct($products, $projectID)
+    {
+        $branchGroups    = $this->loadModel('branch')->getByProducts($products, 'noclosed');
+        $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
+        foreach($branchGroups as $productID => $branchPairs)
+        {
+            foreach($branchPairs as $branchID => $branchName)
+            {
+                if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+            }
+        }
+        return $branchGroups;
+    }
+
+    /**
      * Get ordered executions.
      *
      * @param  int    $executionID
