@@ -1,3 +1,10 @@
+/**
+ * Can set default branch.
+ *
+ * @param  obj $obj
+ * @access public
+ * @return void
+ */
 function canSetDefaultBranch(obj)
 {
     if(obj.value == 'active')
