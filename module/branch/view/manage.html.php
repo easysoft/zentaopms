@@ -86,7 +86,7 @@
             elseif($branch->status == 'active')
             {
                 $setDefaultLink = helper::createLink('branch', 'setDefault', "productID=$productID&branchID=$branch->id", '', true);
-                $setDefaultHtml = html::a($setDefaultLink, "<i class='icon icon-hand-right'></i> <span>{$lang->branch->setDefault}</span>", '', "class='iframe btn btn-icon-left btn-sm setDefault hidden'");
+                $setDefaultHtml = html::a($setDefaultLink, "<i class='icon icon-hand-right'></i> <span>{$lang->branch->setDefault}</span>", 'hiddenwin', "class='btn btn-icon-left btn-sm setDefault hidden'");
 
                 echo common::hasPriv('branch', 'setDefault') ? $setDefaultHtml : '';
             }
