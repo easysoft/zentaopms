@@ -6,7 +6,7 @@ $lastReview  = $this->mr->getLastReviewInfo($file);
 $repoModule  = isset($lastReview) && isset($lastReview->module) ? $lastReview->module : '';
 
 /* Get product pairs. */
-if($repo->product)
+if(isset($repo->product) and $repo->product)
 {
     $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('`id`')->in($repo->product)->fetchPairs();
 }

@@ -89,6 +89,11 @@ class mr extends control
         }
 
         $MR = $this->mr->getByID($MRID);
+        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        $this->view->title = $this->lang->mr->edit;
+        $this->view->MR    = $MR;
+        $this->view->rawMR = isset($rawMR) ? $rawMR : false;
+        if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
         $branchList       = $this->loadModel('gitlab')->getBranches($MR->gitlabID, $MR->targetProject);
         $targetBranchList = array();
@@ -167,12 +172,12 @@ class mr extends control
     {
         $MR = $this->mr->getByID($id);
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
-        $MR = $this->mr->apiSyncMR($MR); /* Sync MR from GitLab to ZentaoPMS. */
-
         $this->view->title = $this->lang->mr->view;
         $this->view->MR    = $MR;
         $this->view->rawMR = isset($rawMR) ? $rawMR : false;
+        if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
+        $MR = $this->mr->apiSyncMR($MR); /* Sync MR from GitLab to ZentaoPMS. */
         $this->loadModel('gitlab');
         $sourceProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->sourceProject);
         $targetProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->targetProject);
@@ -273,7 +278,12 @@ class mr extends control
         $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
 
-        $MR      = $this->mr->getByID($MRID);
+        $MR = $this->mr->getByID($MRID);
+        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        $this->view->title = $this->lang->mr->viewDiff;
+        $this->view->rawMR = $rawMR;
+        if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
+
         $diffs   = $this->mr->getDiffs($MR, $encoding = '');
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
 
@@ -309,7 +319,6 @@ class mr extends control
 
         $this->view->repo     = $this->loadModel('repo')->getRepoByID($MR->repoID);
         $this->view->repoID   = $MR->repoID;
-        $this->view->title    = $this->lang->mr->viewDiff;
         $this->view->diffs    = $diffs;
         $this->view->encoding = $encoding;
         $this->view->arrange  = $arrange;
@@ -388,6 +397,9 @@ class mr extends control
      */
     public function addBug($repoID, $file, $v1, $v2)
     {
+        /* Handle the exception that when $repoID is empty. */
+        if($repoID == "0") $this->send(array());
+
         $this->loadModel('repo');
         if($this->get->repoPath) $file = $this->get->repoPath;
         if(!empty($_POST))
@@ -397,7 +409,10 @@ class mr extends control
 
             $bugID    = $result['id'];
             $repo     = $this->repo->getRepoById($repoID);
-            $entry    = $repo->name . '/' . $this->repo->decodePath($file);
+            /* Handle the exception that when $repo is empty. */
+            if(empty($repo)) $this->send(array());
+
+            $entry    = isset($repo->name) ? $repo->name . '/' . $this->repo->decodePath($file) : '';
             $location = sprintf($this->lang->repo->reviewLocation, $entry, $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2, $this->post->begin, $this->post->end);
             if(empty($v1))
             {

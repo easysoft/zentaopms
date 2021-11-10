@@ -1,16 +1,26 @@
 <?php include '../../common/view/header.html.php'; ?>
-<?php if (!isset($MR->id)) : ?>
+<?php if(!isset($MR->id)): ?>
   <div id='mainContent'>
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->mr->notFound; ?></span>
-        <?php if (common::hasPriv('mr', 'create')) : ?>
+        <?php if(common::hasPriv('mr', 'create')): ?>
           <?php echo html::a($this->createLink('mr', 'create'), "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-info'"); ?>
         <?php endif; ?>
       </p>
     </div>
   </div>
-<?php else : ?>
+<!-- If this mr is deleted in GitLab, then show this part to user. -->
+<?php elseif(empty($rawMR) or !isset($rawMR->id)): ?>
+  <div id='mainContent'>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->mr->notFound; ?></span>
+        <?php echo html::a($this->createLink('mr', 'browse'), "<i class='icon icon-plus'></i> " . $lang->mr->browse, '', "class='btn btn-info'"); ?>
+      </p>
+    </div>
+  </div>
+<?php else: ?>
   <div class="btn-toolbar pull-left">
     <?php echo html::a($this->createLink('mr', 'browse'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'"); ?>
     <div class="divider"></div>

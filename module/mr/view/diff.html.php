@@ -11,6 +11,18 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<!-- If this mr is deleted in GitLab, then show this part to user. -->
+<?php if(empty($rawMR) or !isset($rawMR->id)): ?>
+  <div id='mainContent'>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->mr->notFound; ?></span>
+        <?php echo html::a($this->createLink('mr', 'browse'), "<i class='icon icon-plus'></i> " . $lang->mr->browse, '', "class='btn btn-info'"); ?>
+      </p>
+    </div>
+  </div>
+<?php die; endif;?>
+
 <?php include 'header.review.html.php';?>
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
