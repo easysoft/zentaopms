@@ -200,17 +200,22 @@ class branchModel extends model
         {
             if($branchID == BRANCH_MAIN)
             {
-                if($data->default != BRANCH_MAIN) continue;
-
-                $this->dao->update(TABLE_BRANCH)
-                    ->set('default')->eq(0)
-                    ->where('product')->eq($productID)
-                    ->exec();
-
-                if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
-
                 $newMainBranch = new stdClass();
-                $newMainBranch->default = 1;
+                if($data->default == BRANCH_MAIN)
+                {
+                    $this->dao->update(TABLE_BRANCH)
+                        ->set('default')->eq(0)
+                        ->where('product')->eq($productID)
+                        ->exec();
+
+                    if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
+
+                    $newMainBranch->default = 1;
+                }
+                else
+                {
+                    $newMainBranch->default = 0;
+                }
 
                 $changes[$branchID] = common::createChanges($oldBranchList[BRANCH_MAIN], $newMainBranch);
             }
