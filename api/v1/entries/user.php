@@ -71,7 +71,7 @@ class userEntry extends Entry
                     $products = $this->my->getProducts('ownbyme');
                     if($products)
                     {
-                        $info->product['total']    = $products->allCount;
+                        $info->product['total']    = $products->unclosedCount;
                         $info->product['products'] = $products->products;
                     }
                     break;
@@ -95,6 +95,41 @@ class userEntry extends Entry
                         $info->project['projects'] = $projects->projects;
                     }
                     break;
+                case 'lastproject':
+                    $info->lastProject = array('total' => 0, 'projects' => array());
+
+                    $control = $this->loadController('project', 'ajaxGetDropMenu');
+                    $control->ajaxGetDropMenu(0, 'project', 'index');
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $myProjects['owner'] = array();
+                        $myProjects['other'] = array();
+                        foreach($data->data->projects as $programID => $programProjects)
+                        {
+                            foreach($programProjects as $project)
+                            {
+                                if($project->status == 'closed') continue;
+
+                                $project = $this->filterFields($project, 'id,model,type,name,code,parent,status,PM');
+                                if($project->PM == $this->app->user->account)
+                                {
+                                    $myProjects['owner'][] = $project;
+                                }
+                                else
+                                {
+                                    $myProjects['other'][] = $project;
+                                }
+                            }
+                        }
+                        $lastProjects = array_merge($myProjects['owner'], $myProjects['other']);
+                        $lastProjects = array_slice($lastProjects, 0, 3);
+
+                        $info->lastProject['total']    = count($lastProjects);
+                        $info->lastProject['projects'] = $lastProjects;
+                    }
+                    break;
                 case 'execution':
                     $info->execution = array('total' => 0, 'executions' => array());
                     if(!common::hasPriv('my', 'execution')) break;
@@ -107,6 +142,41 @@ class userEntry extends Entry
                     {
                         $info->execution['total'] = $data->data->pager->recTotal;
                         $info->execution['executions'] = array_values((array)$data->data->executions);
+                    }
+                    break;
+                case 'lastexecution':
+                    $info->lastExecution = array('total' => 0, 'executions' => array());
+
+                    $control = $this->loadController('execution', 'ajaxGetDropMenu');
+                    $control->ajaxGetDropMenu(0, 'execution', 'browse', '');
+                    $data = $this->getData();
+
+                    $account = $this->app->user->account;
+                    if($data->status == 'success')
+                    {
+                        $myExecutions['owner'] = array();
+                        $myExecutions['other'] = array();
+                        foreach($data->data->executions as $projectID => $projectExecutions)
+                        {
+                            foreach($projectExecutions as $execution)
+                            {
+                                if($execution->status == 'done' or $execution->status == 'closed') continue;
+
+                                if($execution->PM == $account or isset($execution->teams->$account))
+                                {
+                                    $myExecutions['owner'][] = $this->filterFields($execution, 'id,model,type,name,code,parent,status,PM');
+                                }
+                                else
+                                {
+                                    $myExecutions['other'][] = $this->filterFields($execution, 'id,model,type,name,code,parent,status,PM');
+                                }
+                            }
+                        }
+                        $lastExecutions = array_merge($myExecutions['owner'], $myExecutions['other']);
+                        $lastExecutions = array_slice($lastExecutions, 0, 3);
+
+                        $info->lastExecution['total']      = count($lastExecutions);
+                        $info->lastExecution['executions'] = $lastExecutions;
                     }
                     break;
                 case 'actions':
