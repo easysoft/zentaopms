@@ -614,7 +614,7 @@ class bug extends control
         $this->view->testtask         = $testtask;
         $this->view->bugTitle         = $title;
         $this->view->pri              = $pri;
-        $this->view->steps            = htmlspecialchars($steps);
+        $this->view->steps            = htmlSpecialString($steps);
         $this->view->os               = $os;
         $this->view->browser          = $browser;
         $this->view->productMembers   = $productMembers;

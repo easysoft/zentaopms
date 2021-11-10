@@ -882,3 +882,17 @@ function isHttps()
     if(!empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') return true;
     return false;
 }
+
+/**
+ * Compatibility for htmlspecialchars.
+ *
+ * @param  string $string
+ * @param  int    $flags
+ * @param  string $encoding
+ * @access public
+ * @return string
+ */
+function htmlSpecialString($string, $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, $encoding = 'UTF-8')
+{
+    return htmlspecialchars($string, $flags, $encoding);
+}

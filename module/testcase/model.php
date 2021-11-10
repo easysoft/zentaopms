@@ -79,8 +79,8 @@ class testcaseModel extends model
                 $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                 $step->case    = $caseID;
                 $step->version = 1;
-                $step->desc    = htmlspecialchars($stepDesc);
-                $step->expect  = $step->type == 'group' ? '' : htmlspecialchars($this->post->expects[$stepID]);
+                $step->desc    = htmlSpecialString($stepDesc);
+                $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($this->post->expects[$stepID]);
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                 if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                 if($step->type == 'step')  $parentStepID = 0;
@@ -173,7 +173,7 @@ class testcaseModel extends model
                 $data[$i]->{$extendField->field} = $this->post->{$extendField->field}[$i];
                 if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
 
-                $data[$i]->{$extendField->field} = htmlspecialchars($data[$i]->{$extendField->field});
+                $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -714,8 +714,8 @@ class testcaseModel extends model
                         $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                         $step->case    = $caseID;
                         $step->version = $version;
-                        $step->desc    = htmlspecialchars($stepDesc);
-                        $step->expect  = $step->type == 'group' ? '' : htmlspecialchars($this->post->expects[$stepID]);
+                        $step->desc    = htmlSpecialString($stepDesc);
+                        $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($this->post->expects[$stepID]);
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                         if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($step->type == 'step')  $parentStepID = 0;
@@ -893,7 +893,7 @@ class testcaseModel extends model
                 $case->{$extendField->field} = $this->post->{$extendField->field}[$caseID];
                 if(is_array($case->{$extendField->field})) $case->{$extendField->field} = join(',', $case->{$extendField->field});
 
-                $case->{$extendField->field} = htmlspecialchars($case->{$extendField->field});
+                $case->{$extendField->field} = htmlSpecialString($case->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $case->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -1193,8 +1193,8 @@ class testcaseModel extends model
                         if(empty($desc)) continue;
                         $step = new stdclass();
                         $step->type   = $data->stepType[$key][$id];
-                        $step->desc   = htmlspecialchars($desc);
-                        $step->expect = htmlspecialchars(trim($this->post->expect[$key][$id]));
+                        $step->desc   = htmlSpecialString($desc);
+                        $step->expect = htmlSpecialString(trim($this->post->expect[$key][$id]));
 
                         $steps[] = $step;
                     }
@@ -1285,8 +1285,8 @@ class testcaseModel extends model
                             $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                             $stepData->case    = $caseID;
                             $stepData->version = 1;
-                            $stepData->desc    = htmlspecialchars($desc);
-                            $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
+                            $stepData->desc    = htmlSpecialString($desc);
+                            $stepData->expect  = htmlSpecialString($this->post->expect[$key][$id]);
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;

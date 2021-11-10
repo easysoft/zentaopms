@@ -55,7 +55,7 @@ js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget(
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->bug->legendSteps;?></div>
             <div class='detail-content'>
-              <?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12' class='form-control kindeditor' hidefocus='true'");?>
+              <?php echo html::textarea('steps', htmlSpecialString($bug->steps), "rows='12' class='form-control kindeditor' hidefocus='true'");?>
             </div>
           </div>
           <div class='detail'>

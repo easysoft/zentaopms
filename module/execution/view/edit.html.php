@@ -161,7 +161,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->execution->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($execution->desc), "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($execution->desc), "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
         <?php $this->printExtendFields($execution, 'table');?>
         <tr>

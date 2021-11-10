@@ -43,7 +43,7 @@
                 $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
             }
         }
-        echo "<pre>" . htmlspecialchars($fileContent) . "</pre>";
+        echo "<pre>" . htmlSpecialString($fileContent) . "</pre>";
         ?>
     </div>
     <?php endif;?>

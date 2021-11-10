@@ -201,7 +201,7 @@
           <th><?php echo $lang->task->desc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=task&link=desc');?>
-            <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='10' class='form-control'");?>
+            <?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows='10' class='form-control'");?>
           </td>
         </tr>
         <tr>

@@ -325,7 +325,7 @@ class taskModel extends model
                 $data[$i]->{$extendField->field} = $this->post->{$extendField->field}[$i];
                 if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
 
-                $data[$i]->{$extendField->field} = htmlspecialchars($data[$i]->{$extendField->field});
+                $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
                 if($message)
                 {
@@ -1140,7 +1140,7 @@ class taskModel extends model
                 $task->{$extendField->field} = $this->post->{$extendField->field}[$taskID];
                 if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
 
-                $task->{$extendField->field} = htmlspecialchars($task->{$extendField->field});
+                $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
                 if($message) die(js::alert($message));
             }

@@ -56,7 +56,7 @@
           <?php $this->printExtendFields($plan, 'table', 'columns=3');?>
           <tr>
             <th><?php echo $lang->productplan->desc;?></th>
-            <td colspan='3'><?php echo html::textarea('desc', htmlspecialchars($plan->desc), "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
+            <td colspan='3'><?php echo html::textarea('desc', htmlSpecialString($plan->desc), "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
           <tr>
             <td colspan='4' class='text-center form-actions'>

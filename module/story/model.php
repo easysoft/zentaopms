@@ -474,7 +474,7 @@ class storyModel extends model
                 $story->{$extendField->field} = $this->post->{$extendField->field}[$i];
                 if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
 
-                $story->{$extendField->field} = htmlspecialchars($story->{$extendField->field});
+                $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -1190,7 +1190,7 @@ class storyModel extends model
                     $story->{$extendField->field} = $this->post->{$extendField->field}[$storyID];
                     if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
 
-                    $story->{$extendField->field} = htmlspecialchars($story->{$extendField->field});
+                    $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
                     $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
                     if($message) die(js::alert($message));
                 }

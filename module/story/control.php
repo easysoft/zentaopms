@@ -224,8 +224,8 @@ class story extends control
             $moduleID   = $story->module;
             $estimate   = $story->estimate;
             $title      = $story->title;
-            $spec       = htmlspecialchars($story->spec);
-            $verify     = htmlspecialchars($story->verify);
+            $spec       = htmlSpecialString($story->spec);
+            $verify     = htmlSpecialString($story->verify);
             $keywords   = $story->keywords;
             $mailto     = $story->mailto;
         }
@@ -1205,7 +1205,7 @@ class story extends control
             {
                 foreach($allChanges as $storyID => $changes)
                 {
-                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
+                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
                     $this->action->logHistory($actionID, $changes);
                 }
             }

@@ -75,7 +75,7 @@
           <?php $this->printExtendFields($product, 'table');?>
           <tr>
             <th><?php echo $lang->product->desc;?></th>
-            <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($product->desc), "rows='8' class='form-control'");?></td>
+            <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($product->desc), "rows='8' class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->acl;?></th>

@@ -76,7 +76,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->build->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($build->desc), "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($build->desc), "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
         <tr>
           <td colspan="3" class="text-center form-actions">

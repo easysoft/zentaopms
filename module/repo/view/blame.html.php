@@ -93,7 +93,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
           }
           ?>
           <td class="line"><?php echo $blame['line'];?></td>
-          <td><pre><?php echo htmlspecialchars($blame['content']);?></pre></td>
+          <td><pre><?php echo htmlSpecialString($blame['content']);?></pre></td>
         </tr>
         <?php endforeach?>
       </tbody>

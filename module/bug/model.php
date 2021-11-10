@@ -193,7 +193,7 @@ class bugModel extends model
                 $bug->{$extendField->field} = $this->post->{$extendField->field}[$i];
                 if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = join(',', $bug->{$extendField->field});
 
-                $bug->{$extendField->field} = htmlspecialchars($bug->{$extendField->field});
+                $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -770,7 +770,7 @@ class bugModel extends model
                     $bug->{$extendField->field} = $this->post->{$extendField->field}[$bugID];
                     if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = join(',', $bug->{$extendField->field});
 
-                    $bug->{$extendField->field} = htmlspecialchars($bug->{$extendField->field});
+                    $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                     $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
                     if($message) die(js::alert($message));
                 }

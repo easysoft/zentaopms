@@ -76,7 +76,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
       <?php elseif($suffix == 'binary'):?>
       <div class='binary'><?php echo html::a($this->repo->createLink('download', "repoID=$repoID&path=" . $this->repo->encodePath($entry) . "&fromRevision=$revision"), "<i class='icon-download'></i>", 'hiddenwin', "title='{$lang->repo->download}'"); ?></div>
       <?php else:?>
-      <pre class="<?php echo $config->program->suffix[$suffix];?>"><?php echo trim(htmlspecialchars($content, defined('ENT_SUBSTITUTE') ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES));?></pre>
+      <pre class="<?php echo $config->program->suffix[$suffix];?>"><?php echo trim(htmlSpecialString($content, defined('ENT_SUBSTITUTE') ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES));?></pre>
       <?php endif;?>
     </div>
   </div>
