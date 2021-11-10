@@ -201,33 +201,20 @@ class branchModel extends model
             if($branchID == BRANCH_MAIN)
             {
                 $newMainBranch = new stdClass();
-                if($data->default == BRANCH_MAIN)
-                {
-                    $this->dao->update(TABLE_BRANCH)
-                        ->set('default')->eq(0)
-                        ->where('product')->eq($productID)
-                        ->exec();
-
-                    if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
-
-                    $newMainBranch->default = 1;
-                }
-                else
-                {
-                    $newMainBranch->default = 0;
-                }
+                $newMainBranch->default = (isset($data->default) and $data->default == BRANCH_MAIN) ? 1 : 0;
 
                 $changes[$branchID] = common::createChanges($oldBranchList[BRANCH_MAIN], $newMainBranch);
             }
             else
             {
                 $branch = new stdclass();
-                $branch->name    = $data->name[$branchID];
-                $branch->desc    = $data->desc[$branchID];
-                $branch->status  = $data->status[$branchID];
-                $branch->default = $branchID == $data->default ? 1 : 0;
+                $branch->name       = $data->name[$branchID];
+                $branch->desc       = $data->desc[$branchID];
+                $branch->status     = $data->status[$branchID];
+                $branch->default    = (isset($data->default) and $branchID == $data->default) ? 1 : 0;
+                $branch->closedDate = $branch->status == 'closed' ? helper::today() : '';
 
-                $this->dao->update(TABLE_BRANCH)->data($branch)
+                $this->dao->update(TABLE_BRANCH)->data($branch, 'default')
                     ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
                     ->where('id')->eq($branchID)
                     ->exec();
@@ -237,6 +224,8 @@ class branchModel extends model
                 $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
             }
         }
+
+        if(isset($data->default)) $this->setDefault($productID, $data->default);
 
         return $changes;
     }
