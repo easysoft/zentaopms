@@ -279,6 +279,7 @@ $lang->action->label->reviewrejected        = '拒绝';
 $lang->action->label->reviewclarified       = '有待明确';
 $lang->action->label->commitsummary         = '提交培训总结';
 $lang->action->label->updatetrainee         = '更新培训人员';
+$lang->action->label->setdefaultbranch      = '设置了默认分支';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -312,10 +313,11 @@ $lang->action->dynamicAction->product['closed']    = '关闭' . $lang->productCo
 $lang->action->dynamicAction->product['undeleted'] = '还原' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = '隐藏' . $lang->productCommon;
 
-$lang->action->dynamicAction->branch['opened']    = '创建分支';
-$lang->action->dynamicAction->branch['edited']    = '编辑分支';
-$lang->action->dynamicAction->branch['closed']    = '关闭分支';
-$lang->action->dynamicAction->branch['activated'] = '激活分支';
+$lang->action->dynamicAction->branch['opened']           = '创建分支';
+$lang->action->dynamicAction->branch['edited']           = '编辑分支';
+$lang->action->dynamicAction->branch['closed']           = '关闭分支';
+$lang->action->dynamicAction->branch['activated']        = '激活分支';
+$lang->action->dynamicAction->branch['setdefaultbranch'] = '设置默认分支';
 
 $lang->action->dynamicAction->productplan['opened'] = "创建计划";
 $lang->action->dynamicAction->productplan['edited'] = "编辑计划";

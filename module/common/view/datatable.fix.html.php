@@ -6,7 +6,7 @@
 $(function()
 {
     <?php if(!empty($setModule)):?>
-    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='btn btn-info btn-wide'><?php echo $lang->datatable->moduleSetting?></a><hr class='space-sm' />");
+    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='btn btn-info btn-wide'><?php echo $app->moduleName=='product' ? $lang->datatable->listSetting : $lang->datatable->moduleSetting?></a><hr class='space-sm' />");
     <?php endif;?>
 
     var addSettingButton = function()
@@ -36,10 +36,12 @@ $(function()
     $('#setShowModule').click(function()
     {
         if('<?php echo $this->app->user->account?>' == 'guest') return;
-        datatableId   = '<?php echo $datatableId?>';
-        var value     = $('#showModuleModal input[name="showModule"]:checked').val();
-        var allModule = $('#showModuleModal input[name="showAllModule"]:checked').val();
-        if(typeof allModule === 'undefined') allModule = false;
+        datatableId    = '<?php echo $datatableId?>';
+        var value      = $('#showModuleModal input[name="showModule"]:checked').val();
+        var allModule  = $('#showModuleModal input[name="showAllModule"]:checked').val();
+        var showBranch = $('#showModuleModal input[name="showBranch"]:checked').val();
+        if(typeof allModule  === 'undefined') allModule  = false;
+        if(typeof showBranch === 'undefined') showBranch = false;
         $.ajax(
         {
             type: "POST",
@@ -50,6 +52,7 @@ $(function()
                 name: 'showModule',
                 value: value,
                 allModule: allModule,
+                showBranch: showBranch,
             },
             success:function(){window.location.reload();},
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
@@ -80,7 +83,7 @@ $(function()
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><i class="icon-cog-outline"></i> <?php echo $lang->datatable->moduleSetting;?></h4>
+        <h4 class="modal-title"><i class="icon-cog-outline"></i> <?php echo $app->moduleName=='product' ? $lang->datatable->listSetting : $lang->datatable->moduleSetting;?></h4>
       </div>
       <div class="modal-body">
         <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
@@ -93,6 +96,12 @@ $(function()
             <tr>
               <td><?php echo $lang->datatable->showAllModule;?></td>
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>
+            </tr>
+            <?php endif;?>
+            <?php if($app->moduleName == 'product' && $app->methodName == 'browse'):?>
+            <tr>
+              <td><?php echo $lang->datatable->showBranch;?></td>
+              <td><?php echo html::radio('showBranch', $lang->datatable->showBranchList, isset($config->product->browse->showBranch) ? $config->product->browse->showBranch : 1);?></td>
             </tr>
             <?php endif;?>
             <tr>

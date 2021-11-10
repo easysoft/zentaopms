@@ -12,7 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php js::set('orderBy', $orderBy)?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
+<?php $canOrder       = common::hasPriv('branch', 'sort');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>
 <?php $canMergeBranch = common::hasPriv('branch', 'mergeBranch');?>
 <?php $canBatchAction = ($canBatchEdit or $canMergeBranch);?>
@@ -39,7 +41,7 @@
     </p>
   </div>
   <?php else:?>
-  <form class='main-table table-branch' data-ride='table' method='post' id='branchForm'>
+  <form class='main-table' data-ride='table' method='post' id='branchForm'>
     <table id="branchList" class="table has-sort-head">
       <thead>
         <tr>
@@ -49,7 +51,9 @@
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>"><label></label></div>
           </th>
           <?php endif;?>
+          <?php if($canOrder):?>
           <th class='c-order sort-default'><?php echo $lang->branch->order;?></th>
+          <?php endif;?>
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->branch->name);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->branch->status);?></th>
           <th class='c-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->branch->createdDate);?></th>
@@ -58,23 +62,43 @@
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
-      <tbody class="sortable">
+      <tbody id='branchTableList'>
         <?php foreach($branchList as $branch):?>
-        <tr>
+        <?php $isMain = $branch->id == BRANCH_MAIN;?>
+        <tr data-id='<?php echo $branch->id;?>'>
           <?php if($canBatchAction):?>
           <td class='cell-id'>
             <?php echo html::checkbox('branchIDList', array($branch->id => ''));?>
           </td>
           <?php endif;?>
-          <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
-          <td class='c-name' title='<?php echo $branch->name;?>'><?php echo $branch->name;?></td>
+          <?php if($canOrder):?>
+          <td class='c-actions <?php echo $isMain ? '' : 'sort-handler';?>'>
+            <?php echo $isMain ? '' : '<i class="icon icon-move"></i>';?>
+          </td>
+          <?php endif;?>
+          <td class='c-name flex' title='<?php echo $branch->name;?>'>
+            <span class="text-ellipsis"><?php echo $branch->name;?></span>
+            <?php
+            if($branch->default)
+            {
+                echo '&nbsp;<span class="label label-primary label-badge">' . $lang->branch->default . '</span>';
+            }
+            elseif($branch->status == 'active')
+            {
+                $setDefaultLink = helper::createLink('branch', 'setDefault', "productID=$productID&branchID=$branch->id", '', true);
+                $setDefaultHtml = html::a($setDefaultLink, "<i class='icon icon-hand-right'></i> <span>{$lang->branch->setDefault}</span>", '', "class='iframe btn btn-icon-left btn-sm setDefault hidden'");
+
+                echo common::hasPriv('branch', 'setDefault') ? $setDefaultHtml : '';
+            }
+            ?>
+          </td>
           <td><?php echo zget($lang->branch->statusList, $branch->status);?></td>
           <td><?php echo helper::isZeroDate($branch->createdDate) ? '' : $branch->createdDate;?></td>
           <td><?php echo helper::isZeroDate($branch->closedDate) ? '' : $branch->closedDate;?></td>
           <td class='c-name' title='<?php echo $branch->desc;?>'><?php echo $branch->desc;?></td>
           <td class='c-actions'>
           <?php
-            $disabled = $branch->id == BRANCH_MAIN ? 'disabled' : '';
+            $disabled = $isMain ? 'disabled' : '';
             common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list', '', '', "$disabled iframe", true);
             if($branch->status == 'active')
             {
@@ -95,12 +119,14 @@
       <div class="checkbox-primary check-all">
         <label><?php echo $lang->selectAll?></label>
       </div>
+      <?php if($canBatchEdit):?>
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->edit, '', 'btn');?>
+        <?php
+        $batchEditLink = $this->createLink('branch', 'batchEdit', "productID=$productID");
+        echo html::submitButton($lang->edit, "data-form-action='$batchEditLink'", 'btn');
+        ?>
       </div>
-      <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->branch->merge, '', 'btn');?>
-      </div>
+      <?php endif;?>
       <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>

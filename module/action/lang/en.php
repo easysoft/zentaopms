@@ -279,6 +279,7 @@ $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
+$lang->action->label->setdefaultbranch      = 'Set default branch';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -312,10 +313,11 @@ $lang->action->dynamicAction->product['closed']    = 'Close ' . $lang->productCo
 $lang->action->dynamicAction->product['undeleted'] = 'Restore ' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = 'Hide ' . $lang->productCommon;
 
-$lang->action->dynamicAction->branch['opened']    = 'Create Branch';
-$lang->action->dynamicAction->branch['edited']    = 'Edit Branch';
-$lang->action->dynamicAction->branch['closed']    = 'Close Branch';
-$lang->action->dynamicAction->branch['activated'] = 'Activate Branch';
+$lang->action->dynamicAction->branch['opened']           = 'Create Branch';
+$lang->action->dynamicAction->branch['edited']           = 'Edit Branch';
+$lang->action->dynamicAction->branch['closed']           = 'Close Branch';
+$lang->action->dynamicAction->branch['activated']        = 'Activate Branch';
+$lang->action->dynamicAction->branch['setdefaultbranch'] = 'Set Default Branch';
 
 $lang->action->dynamicAction->productplan['opened'] = 'Create Plan';
 $lang->action->dynamicAction->productplan['edited'] = 'Edit Plan';

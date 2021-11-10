@@ -34,11 +34,13 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('holders', $lang->execution->placeholder);?>
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
+<?php js::set('errorSameBranches', $lang->execution->errorSameBranches);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
 <?php js::set('isStage', false);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectCommon', $lang->project->common);?>
+<?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -132,12 +134,14 @@
               <?php elseif($copyExecutionID):?>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
-              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, '', "class='form-control chosen'");?></div>
+              <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
+              <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][$branchID]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
               <?php $i++;?>
               <?php endforeach;?>
+              <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[]", $productPlan, '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][]", $productPlan, '', "class='form-control chosen'");?></div>
               <?php js::set('currentPlanID', '')?>
               <?php endif;?>
             </div>

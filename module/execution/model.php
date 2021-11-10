@@ -525,7 +525,7 @@ class executionModel extends model
             ->exec();
 
         $changedAccounts = array();
-	$teamMembers     = array();
+        $teamMembers     = array();
         foreach($this->config->execution->ownerFields as $ownerField)
         {
             $owner = zget($execution, $ownerField, '');
@@ -542,7 +542,7 @@ class executionModel extends model
             $this->dao->replace(TABLE_TEAM)->data($member)->exec();
 
             $changedAccounts[$owner]  = $owner;
-	    $teamMembers[$ownerField] = $member;
+            $teamMembers[$ownerField] = $member;
         }
         if($execution->project) $this->addProjectMembers($execution->project, $teamMembers);	
 
@@ -1656,6 +1656,28 @@ class executionModel extends model
     }
 
     /**
+     * Get branch pairs by product id list.
+     *
+     * @param  array  $products
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getBranchByProduct($products, $projectID)
+    {
+        $branchGroups    = $this->loadModel('branch')->getByProducts($products, 'noclosed');
+        $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
+        foreach($branchGroups as $productID => $branchPairs)
+        {
+            foreach($branchPairs as $branchID => $branchName)
+            {
+                if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+            }
+        }
+        return $branchGroups;
+    }
+
+    /**
      * Get ordered executions.
      *
      * @param  int    $executionID
@@ -1817,10 +1839,13 @@ class executionModel extends model
         foreach($products as $i => $productID)
         {
             if(empty($productID)) continue;
-            if(isset($existedProducts[$productID])) continue;
+            if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
+
+            if(isset($existedProducts[$productID][$branch])) continue;
+
             if(isset($oldProducts[$productID][$branch]))
             {
                 $oldProduct = $oldProducts[$productID][$branch];
@@ -1831,9 +1856,9 @@ class executionModel extends model
             $data->project = $executionID;
             $data->product = $productID;
             $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
+            $data->plan    = isset($plans[$productID][$branch]) ? $plans[$productID][$branch] : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            $existedProducts[$productID] = true;
+            $existedProducts[$productID][$branch] = true;
         }
 
         $oldProductKeys = array_keys($oldProducts);
