@@ -128,9 +128,6 @@
         ?>
       </div>
       <?php endif;?>
-      <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->branch->merge, '', 'btn');?>
-      </div>
       <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
