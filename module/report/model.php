@@ -296,25 +296,25 @@ class reportModel extends model
                 ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
                 ->fetchGroup('account', 'name');
 
-            $workload = array();
+	    $workload = array();
             if(!empty($members))
             {
                 foreach($members as $member => $executions)
                 {
+		    $project = array();
                     if(!empty($executions))
                     {
                         foreach($executions as $name => $execution)
                         {
-			    $workload[$member]['task']['project'][$execution->projectname]['project']                         = $execution->projectname;
-                            $workload[$member]['task']['project'][$execution->projectname]['projectID']                       = $execution->project;
-                            $workload[$member]['task']['project'][$execution->projectname]['execution'][$name]['name']        = $name;
-                            $workload[$member]['task']['project'][$execution->projectname]['execution'][$name]['executionID'] = $execution->root;
-                            $workload[$member]['task']['project'][$execution->projectname]['execution'][$name]['count']       = 0;
-                            $workload[$member]['task']['project'][$execution->projectname]['execution'][$name]['manhour']     = 0;
-                            $workload[$member]['total']['count']                                                              = 0;
-                            $workload[$member]['total']['manhour']                                                            = 0;
+			    $project[$execution->projectname]['projectID']                       = $execution->project;
+			    $project[$execution->projectname]['execution'][$name]['executionID'] = $execution->root;
+			    $project[$execution->projectname]['execution'][$name]['count']       = 0;
+			    $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
+                            $workload[$member]['total']['count']                                 = 0;
+                            $workload[$member]['total']['manhour']                               = 0;
                         }
                     }
+                    $workload[$member]['task']['project'] = $project;
                 }
             }
             return $workload;
@@ -376,20 +376,21 @@ class reportModel extends model
         {
             if($user)
             {
+		$project = array();
                 foreach($userTasks as $task)
                 {
                     if(isset($parents[$task->id])) continue;
-		    $workload[$user]['task']['project'][$task->projectname]['projectID']                                      = isset($workload[$user]['task']['project'][$task->projectname]['projectID']) ? $workload[$user]['task']['project'][$task->projectname]['projectID'] : $task->project;
-                    $workload[$user]['task']['project'][$task->projectname]['project']                                        = isset($workload[$user]['task']['project'][$task->projectname]['project'])   ? $workload[$user]['task']['project'][$task->projectname]['project']   : $task->projectname;
-                    $workload[$user]['task']['project'][$task->projectname]['execution'][$task->executionName]['count']       = isset($workload[$user]['task']['project'][$task->projectname]['execution'][$task->executionName]['count'])   ? $workload[$user]['task']['project'][$task->projectname]['execution'][$task->executionName]['count'] + 1 : 1;
-                    $workload[$user]['task']['project'][$task->projectname]['execution'][$task->executionName]['manhour']     = isset($workload[$user]['task']['project'][$task->projectname]['execution'][$task->executionName]['manhour']) ? $workload[$user]['task']['project'][$task->projectname]['execution'][$task->executionName]['manhour'] + $task->left : $task->left;
-                    $workload[$user]['task']['project'][$task->projectname]['execution'][$task->executionName]['executionID'] = $task->execution;
-                    $workload[$user]['task']['project'][$task->projectname]['execution'][$task->executionName]['name']        = $task->executionName;
-                    $workload[$user]['total']['count']                                                                        = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
-                    $workload[$user]['total']['manhour']                                                                      = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
+
+	            $project[$task->projectname]['projectID']                                      = isset($project[$task->projectname]['projectID']) ? $project[$task->projectname]['projectID'] : $task->project; 
+	            $project[$task->projectname]['execution'][$task->executionName]['executionID'] = isset($project[$task->projectname]['execution'][$task->executionName]['executionID']) ? $project[$task->projectname]['execution'][$task->executionName]['executionID'] : $task->execution; 
+	            $project[$task->projectname]['execution'][$task->executionName]['count']       = isset($project[$task->projectname]['execution'][$task->executionName]['count'])       ? $project[$task->projectname]['execution'][$task->executionName]['count'] + 1 : 1; 
+	            $project[$task->projectname]['execution'][$task->executionName]['manhour']     = isset($project[$task->projectname]['execution'][$task->executionName]['manhour'])     ? $project[$task->projectname]['execution'][$task->executionName]['manhour'] + $task->left : $task->left; 
+                    $workload[$user]['total']['count']                                             = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
+                    $workload[$user]['total']['manhour']                                           = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
+		$workload[$user]['task']['project'] = $project;
             }
-        }
+	}
         unset($workload['closed']);
         return $workload;
     }
