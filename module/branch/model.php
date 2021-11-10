@@ -449,9 +449,9 @@ class branchModel extends model
         $defaultBranch = $this->dao->select('id')->from(TABLE_BRANCH)
             ->where('product')->eq($productID)
             ->andWhere('`default`')->eq('1')
-            ->fetch('id');
+            ->fetchPairs('id');
 
-        if(!empty($defaultBranch)) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')->where('id')->eq($defaultBranch)->exec();
+        if(!empty($defaultBranch)) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')->where('id')->in($defaultBranch)->exec();
 
         $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
     }
