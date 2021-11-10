@@ -173,10 +173,29 @@ class mrModel extends model
      */
     public function update($MRID)
     {
-        $MR = fixer::input('post')
-            ->setDefault('editedBy', $this->app->user->account)
-            ->setDefault('editedDate', helper::now())
-            ->get();
+        if (!empty($_POST['compile']))
+        {
+            $repoID = $this->post->repo;
+            $jobID  = $this->post->job;
+            $compileID = $this->post->compile;
+            $compileStatus = $this->loadModel('compile')->getByID($this->post->compile)->status;
+
+            $MR = fixer::input('post')
+                ->setDefault('editedBy', $this->app->user->account)
+                ->setDefault('editedDate', helper::now())
+                ->add('repoID', $repoID)
+                ->add('jobID', $jobID)
+                ->add('compileID', $compileID)
+                ->add('compileStatus', $compileStatus)
+                ->get();
+        }
+        else
+        {
+            $MR = fixer::input('post')
+                ->setDefault('editedBy', $this->app->user->account)
+                ->setDefault('editedDate', helper::now())
+                ->get();
+        }
 
         /* Update MR in GitLab. */
         $newMR = new stdclass;
@@ -195,7 +214,7 @@ class mrModel extends model
         $MR->assignee = zget($gitlabUsers, $MR->assignee, '');
 
         /* Update MR in Zentao database. */
-        $this->dao->update(TABLE_MR)->data($MR)
+        $this->dao->update(TABLE_MR)->data($MR, $this->config->mr->edit->skippedFields)
             ->where('id')->eq($MRID)
             ->batchCheck($this->config->mr->edit->requiredFields, 'notempty')
             ->autoCheck()
@@ -736,4 +755,197 @@ class mrModel extends model
         if(isset($rawMR->state) and $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
         return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
     }
+
+
+    /**
+     * Get review.
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  string $revision
+     * @access public
+     * @return array
+     */
+    public function getReview($repoID, $entry, $revision)
+    {
+        $reviews = array();
+        $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')
+            ->on('t1.openedBy = t2.account')
+            ->where('t1.repo')->eq($repoID)
+            ->andWhere('t1.entry')->eq($entry)
+            ->andWhere('t1.v2')->eq($revision)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+        $comments = $this->dao->select('t1.*, t2.realname')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')
+            ->on('t1.actor = t2.account')
+            ->where('t1.objectType')->eq('bug')
+            ->andWhere('t1.objectID')->in(array_keys($bugs))
+            ->andWhere('t1.action')->eq('commented')
+            ->fetchGroup('objectID', 'id');
+        foreach($bugs as $bug)
+        {
+            if(common::hasPriv('bug', 'edit'))   $bug->edit   = true;
+            if(common::hasPriv('bug', 'delete')) $bug->delete = true;
+            $lines = explode(',', trim($bug->lines, ','));
+            $line  = $lines[0];
+            $reviews[$line]['bugs'][$bug->id] = $bug;
+
+            if(isset($comments[$bug->id]))
+            {
+                foreach($comments[$bug->id] as $key => $comment)
+                {
+                    if($comment->actor == $this->app->user->account) $comment->edit = true;
+                }
+                $reviews[$line]['comments'] = $comments;
+            }
+        }
+
+        return $reviews;
+    }
+
+    /**
+     * Get bugs by repo.
+     *
+     * @param  int    $repoID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getBugsByRepo($repoID, $browseType, $orderBy, $pager)
+    {
+        /* Get execution that user can access. */
+        $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty|withdelete');
+
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)
+            ->where('repo')->eq($repoID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in(array_keys($executions))->fi()
+            ->beginIF($browseType == 'assigntome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'resolvedbyme')->andWhere('resolvedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'assigntonull')->andWhere('assignedTo')->eq('')->fi()
+            ->beginIF($browseType == 'unresolved')->andWhere('resolvedBy')->eq('')->fi()
+            ->beginIF($browseType == 'unclosed')->andWhere('status')->ne('closed')->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+        return $bugs;
+    }
+
+    /**
+     * Get execution pairs.
+     *
+     * @param  int    $product
+     * @param  int    $branch
+     * @access public
+     * @return array
+     */
+    public function getExecutionPairs($product, $branch = 0)
+    {
+        $pairs = array();
+        $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
+        foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
+        return $pairs;
+    }
+
+    /**
+     * Save bug.
+     *
+     * @param  int    $repoID
+     * @param  string $file
+     * @param  int    $v1
+     * @param  int    $v2
+     * @access public
+     * @return array
+     */
+    public function saveBug($repoID, $file, $v1, $v2)
+    {
+        $now  = helper::now();
+        $data = fixer::input('post')
+            ->add('severity', 3)
+            ->add('openedBy', $this->app->user->account)
+            ->add('openedDate', $now)
+            ->add('openedBuild', 'trunk')
+            ->add('assignedDate', $now)
+            ->add('type', 'codeimprovement')
+            ->add('repo', $repoID)
+            ->add('entry', $file)
+            ->add('lines', $this->post->begin . ',' . $this->post->end)
+            ->add('v1', $v1)
+            ->add('v2', $v2)
+            ->remove('commentText,begin,end,uid')
+            ->get();
+
+        $data->steps = $this->loadModel('file')->pasteImage($this->post->commentText, $this->post->uid);
+        $this->dao->insert(TABLE_BUG)->data($data)->exec();
+
+        if(!dao::isError())
+        {
+            $bugID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
+            setcookie("repoPairs[$repoID]", $data->product);
+
+            return array('result' => 'success', 'id' => $bugID, 'realname' => $this->app->user->realname, 'openedDate' => substr($now, 5, 11), 'edit' => true, 'delete' => true, 'lines' => $data->lines, 'line' => $this->post->begin, 'steps' => $data->steps, 'title' => $data->title);
+        }
+
+        return array('result' => 'fail', 'message' => join("\n", dao::getError()));
+    }
+
+    /**
+     * Update bug.
+     *
+     * @param  int    $bugID
+     * @param  string $title
+     * @access public
+     * @return string
+     */
+    public function updateBug($bugID, $title)
+    {
+        $this->dao->update(TABLE_BUG)->set('title')->eq($title)->where('id')->eq($bugID)->exec();
+        return $title;
+    }
+
+    /**
+     * Update comment.
+     *
+     * @param  int    $commentID
+     * @param  string $comment
+     * @access public
+     * @return string
+     */
+    public function updateComment($commentID, $comment)
+    {
+        $this->dao->update(TABLE_ACTION)->set('comment')->eq($comment)->where('id')->eq($commentID)->exec();
+        return $comment;
+    }
+
+    /**
+     * Delete comment.
+     *
+     * @param  int    $commentID
+     * @access public
+     * @return void
+     */
+    public function deleteComment($commentID)
+    {
+        return $this->dao->delete()->from(TABLE_ACTION)->where('id')->eq($commentID)->exec();
+    }
+
+    /**
+     * Get last review info.
+     *
+     * @param  string $entry
+     * @access public
+     * @return object
+     */
+    public function getLastReviewInfo($entry)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)->where('entry')->eq($entry)->orderby('id_desc')->fetch();
+    }
+
 }

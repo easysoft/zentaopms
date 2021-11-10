@@ -1,0 +1,187 @@
+a {color: #169;}
+a:hover, a:active {text-decoration:underline; color: #C61A1A;}
+#swapper a {text-decoration: none;}
+#swapper .col-footer a:hover {color: #0c64eb;}
+h2,h3 {font-size: 20px; margin: 0; clear: both;}
+h3 {font-size: 16px;}
+.revision {font-size: 12px; line-height: 20px; text-align: right; padding-right: 8px;}
+.directory {background-image:url('theme/default/images/repo/dir.png');}
+.file {background-image:url('theme/default/images/repo/txt.png');}
+//.icon {width: 17px; padding-left: 10px; padding-right: 2px;}
+.mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom;}
+.action {float: left;}
+.input-group select#encrypt {border-left: 0px;}
+.arrange {float: right;}
+.versions {position: relative;}
+#diffRepo {position: absolute; left: 20px; z-index: 1000;}
+#repoID {display: inline-block; width: auto;}
+.repoCode a:hover {text-decoration: none;}
+.commentButton
+{
+    background-repeat: no-repeat;
+    position: absolute;
+    left: -28px;
+    width: 40px;
+    z-index: 10;
+    cursor:pointer;
+    font-size: 18px;
+    color: #4183C4;
+    display: none;
+}
+.repoCode tr.over .commentButton {display: block;}
+.bug
+{
+    background-repeat: no-repeat;
+    position: absolute;
+    left: -7px;
+    width: 20px;
+    z-index: 0;
+    cursor:pointer;
+    font-size: 18px;
+    color: #4183C4;
+    line-height: 18px;
+}
+.repoCode .icon {opacity: 1;}
+.icon-comment-add:before {content: '\e74c'; transform: scale(-1, 1); display: inline-block; font-weight: normal;}
+.icon-comment-add:after {content: '+'; display: block; font-weight: normal; position: absolute; left: 16px; top: 1px; font-family: Arial; font-weight: bold; font-size: 12px;}
+.icon-comments:before {content: '\e750'; transform: scale(-1, 1); display: inline-block; font-weight: normal; font-size: 18px; line-height: 18px;}
+.commentButton:hover,.bug:hover {color: #d20b0b;}
+.commentBoard {border-top: 1px solid #E4E4E4; border-bottom: 1px solid #E4E4E4; padding: 0; white-space: normal; background-color: #eee; padding: 10px;}
+.commentBoard .table-form th {background: none;}
+.lines input {width: 40px;}
+.commentSubmit, .commentCancel {margin-right: 10px;}
+.commentFoot .optional {float: left;}
+.commentBoard.using .bugContainer {border: 1px solid #ddd; background: #fff;}
+.commentBoard.using .bugContainer > .commentHeader {background: #f1f1f1; padding: 0 10px; border-bottom: 1px solid #ddd;}
+.commentHeaderAuthor {max-width: 600px; line-height: 33px; font-weight: bold; color: #222; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.comment {width: 100%; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.commentContent {margin: 10px;}
+.commentHeaderRight {float: right;}
+
+/* Sider */
+#mainContent > #sidebar > .side-body.affix {top: 0px; z-index: 10000;}
+
+/* Pre row */
+.repoCode table > tbody > tr.over td {background: #f8eec7;}
+.repoCode table > tbody > tr.over th {background: #cdcdcd; color: #333;}
+
+/* Comment-btn */
+.comment-btn {position: relative; margin: 0; padding: 0; display: none;}
+.repoCode tr.over .comment-btn {display: block;}
+.comment-btn .icon-wrapper {display: block; position: absolute; background: #4183C4; border-radius: 2px; width: 24px; height: 20px; left: -6px; top: 0; line-height: 20px; text-align: center; color: #fff; cursor: pointer; transition: transform 0.2s;}
+.comment-btn .icon-wrapper:before {display: block; content: ' '; right: -4px; top: 6px; position: absolute; border-left: 4px solid #4183C4; border-right: 0 solid transparent; border-bottom: 4px solid transparent; border-top: 4px solid transparent; width: 0; height: 0;}
+.comment-btn .icon-wrapper:hover {background: #169; transform: scale(1.1);}
+.comment-btn .icon-wrapper:hover:before {border-left-color: #169;}
+
+.repoCode tr.commented {cursor: pointer;}
+
+.repoCode tr.commented .comment-btn {display: block;}
+.repoCode tr.commented .comment-btn .icon-wrapper {background: none; border: none; width: 24px; line-height: 18px; height: 18px; left: -6px; color: #4183c4;}
+.repoCode tr.commented .comment-btn .icon-wrapper:hover {border-color: #169; color: #169;}
+.repoCode tr.commented .comment-btn .icon-wrapper > i:before {font-size: 18px; transform: scale(-1, 1); display: inline-block;}
+.repoCode tr.commented .comment-btn .icon-wrapper:before {display: none;}
+
+.repoCode tr.over.commented .comment-btn .icon-wrapper, .repoCode tr.selected.commented .comment-btn .icon-wrapper {line-height: 20px; height: 20px; background: #4183C4; color: #fff; left: -6px;}
+.repoCode tr.over.commented .comment-btn .icon-wrapper > i:before {font-size: 14px;}
+.repoCode tr.selected.commented .comment-btn .icon-wrapper > i:before {font-size: 14px;}
+.repoCode tr.over.commented .comment-btn .icon-wrapper:before, .repoCode tr.selected.commented .comment-btn .icon-wrapper:before {display: block;}
+
+/* repo action form */
+.repoCode .comment-list, .repoCode .comment-actions {max-width: 900px;}
+.repoCode .bugFormContainer {border: 1px solid #bbb; margin: 0 0 0 15px; padding: 10px 20px 10px 10px; max-width: 880px; background: #fff;}
+.repoCode .bugFormContainer th {width: 70px;}
+
+.repoCode .action-row {display: none;}
+.repoCode .with-action-row .action-row {display: table-row;}
+.repoCode .action-cell {background: #EEE; white-space: normal; padding: 10px 15px 10px 0;}
+.repoCode .with-action-row table tr.selected .comment-btn:last-child {display: block;}
+.repoCode .with-action-row table tr.selected td {background: #f8eec7;}
+.repoCode .with-action-row table tr.selected th {background: #cdcdcd;}
+.repoCode .with-action-row table tr.selected .comment-btn .icon-wrapper > i:before, .repoCode #diff.with-action-row tr.selected .comment-btn .icon-wrapper > i:before {content: '\d7';}
+
+.repoCode .comment-row {display: none;}
+.repoCode .comment-row.show {display: table-row !important;}
+.repoCode .comment-cell {background: #eee; white-space: normal;}
+.repoCode .comment-cell .panel {margin: 10px; border-color: #bbb;}
+.repoCode .comment-cell .panel-body {padding: 6px 10px;}
+.repoCode .comment-cell .panel-actions.pull-right {margin-right: 0; margin-top: 0;}
+.repoCode .comment-cell .editing .panel-body, .repoCode .comment-cell .commentContainer.show-form .panel-body {display: none;}
+.repoCode .comment-cell .bug-edit-form,  {padding: 10px; display: none;}
+.repoCode .comment-cell .editing .bug-edit-form, .repoCode .comment-cell .commentContainer.show-form .comment-edit-form {display: block;}
+
+.repoCode .comment {border: 1px solid #e5e5e5; background: #fafafa; padding: 5px 10px; margin-bottom: 10px;}
+.repoCode .comment .comment-edit-form {margin-top: 10px;}
+.repoCode .panel-bug .steps {background: #f1f1f1; padding: 5px 10px;}
+.repoCode .panel-bug .bug-edit-form {margin-bottom: 10px;}
+.repoCode .panel-bug .panel-body {display: none;}
+.repoCode .panel-bug .panel-heading {cursor: pointer;}
+.repoCode .panel-bug.show .panel-body {display: block;}
+.repoCode .panel-bug.show .icon-chevron-sign-down:before {content: '\e711';}
+.repoCode .panel-bug.show-edit-form .bug-edit-form,
+.repoCode .panel-bug.show-form .commentForm,
+.repoCode .comment.show-form .comment-edit-form {display: block;}
+.repoCode .panel-bug .bug-edit-form,
+.repoCode .panel-bug.show-form .addComment,
+.repoCode .panel-bug .commentForm,
+.repoCode .comment .comment-edit-form,
+.repoCode .panel-bug.show-edit-form .panel-body .title,
+.repoCode .panel-bug.show-edit-form .bug-date,
+.repoCode .comment.show-form .comment-content, .repoCode .comment.show-form .comment-date {display: none;}
+
+.repoCode .text-content {white-space: normal; white-space: pre-line;}
+.repoCode .text-muted {color: #aaa;}
+
+.repoCode tr {transition: all 1s;}
+.repoCode tr.highlight {background: #fff4e5;}
+.repoCode tr.highlight td, .repoCode tr.highlight th {background: none; border-top: 1px solid #e48600; border-bottom: 1px solid #e48600;}
+.repoCode tr.highlight.commented th {color: #e48600;}
+.repoCode tr.highlight.commented td, .repoCode tr.highlight.commented th {border-bottom: none;}
+.repoCode tr.highlight + tr.highlight td, .repoCode tr.highlight + tr.highlight th {border-top: none;}
+
+.repoCode .row-tip {display: none;}
+.repoCode tr.commented .row-tip {display: block; position: relative; right: -3px; bottom: -1px;}
+.repoCode tr.commented .tip, .repoCode tr.commented.open .tip.on-collapse {display: block; position: absolute; right: 0; bottom: 0; color: #4183c4; opacity: 0; padding: 0 5px; background: #edf3ff; height: 20px; line-height: 20px; transition: opacity 0.2s;}
+.repoCode tr.commented:hover .tip.on-expand {opacity: 1;}
+.repoCode tr.commented.open .tip.on-collapse {opacity: 1;}
+.repoCode tr.commented.open .tip.on-expand {display: none;}
+.repoCode tr.commented.open .tip.on-collapse span {display: none;}
+.repoCode tr.commented.open:hover .tip.on-collapse span {display: inline;}
+.repoCode tr.commented.open {background: #f8fafe;}
+.repoCode tr.commented .preview-icon {position: absolute; left: -6px; bottom: 0; width: 20px; height: 20px; line-height: 20px; text-align: center; color: #4183c4; background: #edf3ff; display: none;}
+.repoCode tr.commented:hover .preview-icon {display: block; transform: scale(-1, 1);}
+.repoCode tr.commented .preview-icon:before {font-size: 18px;}
+
+.repoCode #diff tr.commented .row-tip {right: 0;}
+.repoCode #diff tr.commented .icon-chat-dot {left: 0;}
+
+.repoCode .panel, .bugFormContainer {transition: border 0.4s;}
+.repoCode .panel.highlight, #bugForm.highlight .bugFormContainer {border-color: #e48600;}
+
+#bugsPreview {white-space: normal;}
+#bugsPreview .dropdown-menu {top: -100%; left: 30%; padding-top: 0; min-width: 300px; max-width: 500px;}
+#bugsPreview .dropdown-menu > li.dropdown-header {background: #f1f1f1; padding-top: 8px;}
+#bugsPreview .dropdown-menu > li > a {border-top: 1px solid #e5e5e5; text-overflow : ellipsis; overflow: hidden;}
+#bugsPreview .dropdown-menu.show {display: block;}
+
+.icon-comments {position: relative; left: -50px;}
+
+/* bug form */
+#bugForm, #bugForm table {margin: 0; padding: 0;}
+
+.panel .table + .panel-footer {border-top: 0; background: #fff;}
+
+.transparent {border-color:transparent; background: none repeat scroll 0 0 transparent;}
+.transparent:hover {border-color:transparent; background: none repeat scroll 0 0 transparent;}
+
+.side-col {width: 600px;}
+#sidebar > .side-body {width: 580px;}
+.hide-sidebar #sidebar > .side-body {display: none;}
+
+#sidebar>.sidebar-toggle {left: 5px; right: auto;}
+#sidebar>.sidebar-toggle>.icon {right: -4px; left: auto;}
+
+#logForm .fixed-footer a.allLogs {color: #fff !important;}
+
+#submitLabel {text-align: left;}
+
+.header-btn .btn > .text {text-overflow: unset !important;}

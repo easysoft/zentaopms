@@ -106,6 +106,27 @@ class mr extends control
 
         $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->gitlabID);
 
+        /* Import lang for required modules. */
+        $this->loadModel('repo');
+        $this->loadModel('job');
+        $this->loadModel('compile');
+
+        $repoList = array();
+        $rawRepoList = $this->repo->getGitLabRepoList($MR->gitlabID, $MR->sourceProject);
+        foreach($rawRepoList as $rawRepo) $repoList[$rawRepo->id] = "[$rawRepo->id] $rawRepo->name";
+
+        $jobList = array();
+        $rawJobList = $this->job->getListByRepoID($MR->repoID);
+        foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
+
+        $compileList = array();
+        $rawCompileList = $this->compile->getListByJobID($MR->jobID);
+        foreach($rawCompileList as $rawCompile) $compileList[$rawCompile->id] = "[$rawCompile->id] [{$this->lang->compile->statusList[$rawCompile->status]}] $rawCompile->name";
+
+        $this->view->repoList         = $repoList;
+        $this->view->jobList          = !empty($MR->repoID) ? $jobList : array();
+        $this->view->compileList      = !empty($MR->jobID)  ? $compileList : array();
+
         $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
         $this->view->targetBranchList = $targetBranchList;
@@ -286,6 +307,8 @@ class mr extends control
             }
         }
 
+        $this->view->repo     = $this->loadModel('repo')->getRepoByID($MR->repoID);
+        $this->view->repoID   = $MR->repoID;
         $this->view->title    = $this->lang->mr->viewDiff;
         $this->view->diffs    = $diffs;
         $this->view->encoding = $encoding;
@@ -351,6 +374,49 @@ class mr extends control
     {
         $MR = $this->mr->getByID($MRID);
         return $this->send($this->mr->reopen($MR));
+    }
+
+    /**
+     * Add a Bug for this review.
+     *
+     * @param  int    $repoID
+     * @param  string $file
+     * @param  int    $v1
+     * @param  int    $v2
+     * @access public
+     * @return void
+     */
+    public function addBug($repoID, $file, $v1, $v2)
+    {
+        $this->loadModel('repo');
+        if($this->get->repoPath) $file = $this->get->repoPath;
+        if(!empty($_POST))
+        {
+            $result = $this->mr->saveBug($repoID, $file, $v1, $v2);
+            if(dao::isError()) die(json_encode($result));
+
+            $bugID    = $result['id'];
+            $repo     = $this->repo->getRepoById($repoID);
+            $entry    = $repo->name . '/' . $this->repo->decodePath($file);
+            $location = sprintf($this->lang->repo->reviewLocation, $entry, $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2, $this->post->begin, $this->post->end);
+            if(empty($v1))
+            {
+                $revision = $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2;
+                $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$file}&revision=$v2&showBug=true") . '#L' . $this->post->begin;
+            }
+            else
+            {
+                $revision  = $repo->SCM != 'Subversion' ? substr($v1, 0, 10) : $v1;
+                $revision .= ' : ';
+                $revision .= $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2;
+                $link = $this->repo->createLink('diff', "repoID=$repoID&objectID=0&entry={$file}&oldRevision=$v1&newRevision=$v2&showBug=true") . '#L' . $this->post->begin;
+            }
+
+            $actionID = $this->loadModel('action')->create('bug', $bugID, 'repoCreated', '', html::a($link, $location));
+            $this->loadModel('mail')->sendmail($bugID, $actionID);
+
+            echo json_encode($result);
+        }
     }
 
     /**
@@ -441,7 +507,7 @@ class mr extends control
 
         if(!$compileList) return $this->send(array('message' => array()));
         $options = "<option value=''></option>";
-        foreach($compileList as $compile) $options .= "<option value='{$compile->id}' data-name='{$compile->name}'>[{$compile->id}] [{$compile->status}] {$compile->name}</option>";
+        foreach($compileList as $compile) $options .= "<option value='{$compile->id}' data-name='{$compile->name}'>[{$compile->id}] [{$this->lang->compile->statusList[$compile->status]}] {$compile->name}</option>";
         $this->send($options);
    }
 }
