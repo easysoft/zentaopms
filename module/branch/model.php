@@ -242,7 +242,7 @@ class branchModel extends model
         $this->dao->update(TABLE_BRANCH)
             ->set('status')->eq('closed')
             ->set('closedDate')->eq(helper::today())
-            ->set('default')->eq(0)
+            ->set('`default`')->eq('0')
             ->where('id')->eq($branchID)
             ->exec();
     }
@@ -429,8 +429,8 @@ class branchModel extends model
             ->andWhere('`default`')->eq('1')
             ->fetch('id');
 
-        $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
-
         if(!empty($defaultBranch)) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')->where('id')->eq($defaultBranch)->exec();
+
+        $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
     }
 }

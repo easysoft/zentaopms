@@ -1069,7 +1069,7 @@ class actionModel extends model
                 {
                     $this->app->loadLang('branch');
                     $objectName = $this->dao->select("id,name")->from(TABLE_BRANCH)->where('id')->in($objectIdList)->fetchPairs();
-                    if(in_array(0, $objectIdList)) $objectName[0] = $this->lang->branch->main;
+                    if(in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
                 }
                 else
                 {

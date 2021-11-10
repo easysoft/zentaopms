@@ -115,7 +115,8 @@ class branch extends control
         }
 
         $branchList   = $this->branch->getList($productID, 'all');
-        $branchIDList = $this->post->branchIDList ? $this->post->branchIDList : die(js::locate($this->session->branchManage, 'parent'));
+        $branchIDList = $this->post->branchIDList;
+        if(empty($branchIDList)) die(js::locate($this->session->branchManage, 'parent'));
 
         foreach($branchList as $branch)
         {
