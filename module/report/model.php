@@ -306,10 +306,11 @@ class reportModel extends model
                     {
                         foreach($executions as $name => $execution)
                         {
-			    $project[$execution->projectname]['projectID']                       = $execution->project;
+			    $project[$execution->projectname]['projectID'] = $execution->project;
 			    $project[$execution->projectname]['execution'][$name]['executionID'] = $execution->root;
 			    $project[$execution->projectname]['execution'][$name]['count']       = 0;
 			    $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
+
                             $workload[$member]['total']['count']                                 = 0;
                             $workload[$member]['total']['manhour']                               = 0;
                         }
@@ -381,12 +382,13 @@ class reportModel extends model
                 {
                     if(isset($parents[$task->id])) continue;
 
-	            $project[$task->projectname]['projectID']                                      = isset($project[$task->projectname]['projectID']) ? $project[$task->projectname]['projectID'] : $task->project; 
+	            $project[$task->projectname]['projectID'] = isset($project[$task->projectname]['projectID']) ? $project[$task->projectname]['projectID'] : $task->project; 
 	            $project[$task->projectname]['execution'][$task->executionName]['executionID'] = isset($project[$task->projectname]['execution'][$task->executionName]['executionID']) ? $project[$task->projectname]['execution'][$task->executionName]['executionID'] : $task->execution; 
 	            $project[$task->projectname]['execution'][$task->executionName]['count']       = isset($project[$task->projectname]['execution'][$task->executionName]['count'])       ? $project[$task->projectname]['execution'][$task->executionName]['count'] + 1 : 1; 
 	            $project[$task->projectname]['execution'][$task->executionName]['manhour']     = isset($project[$task->projectname]['execution'][$task->executionName]['manhour'])     ? $project[$task->projectname]['execution'][$task->executionName]['manhour'] + $task->left : $task->left; 
-                    $workload[$user]['total']['count']                                             = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
-                    $workload[$user]['total']['manhour']                                           = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
+
+                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
+                    $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
 		$workload[$user]['task']['project'] = $project;
             }
