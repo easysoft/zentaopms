@@ -1494,7 +1494,6 @@ class execution extends control
         $branches         = $this->project->getBranchesByProject($executionID);
         $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts));
         $executionStories = $this->project->getStoriesByProject($executionID);
-        $branchGroups     = $this->execution->getByProducts(array_keys($linkedProducts), $execution->project);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
@@ -1546,7 +1545,7 @@ class execution extends control
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->multiBranchProducts  = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
-        $this->view->branchGroups         = $branchGroups;
+        $this->view->branchGroups         = $this->execution->getByProducts(array_keys($linkedProducts), $execution->project);
         $this->display();
     }
 
@@ -2276,7 +2275,6 @@ class execution extends control
         $linkedBranches   = array();
         $branches         = $this->project->getBranchesByProject($executionID);
         $executionStories = $this->project->getStoriesByProject($executionID);
-        $branchGroups     = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
@@ -2300,12 +2298,12 @@ class execution extends control
         $this->view->title                = $title;
         $this->view->position             = $position;
         $this->view->allProducts          = $allProducts;
-        $this->view->execution              = $execution;
+        $this->view->execution            = $execution;
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
-        $this->view->branchGroups         = $branchGroups;
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project);
 
         $this->display();
     }
