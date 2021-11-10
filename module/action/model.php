@@ -972,7 +972,7 @@ class actionModel extends model
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
             $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
-            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $requirements);
+            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
@@ -1093,11 +1093,12 @@ class actionModel extends model
      *
      * @param  string $objectType
      * @param  int    $objectID
+     * @param  string $actionType
      * @param  array  $requirements
      * @access public
      * @return string
      */
-    public function getObjectLabel($objectType, $objectID, $requirements)
+    public function getObjectLabel($objectType, $objectID, $actionType, $requirements)
     {
         $actionObjectLabel = $objectType;
         if(isset($this->lang->action->label->$objectType))

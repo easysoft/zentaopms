@@ -111,24 +111,19 @@ class productsEntry extends entry
         {
             foreach($products as $product)
             {
-                $newProduct = new stdclass();
-                $newProduct->id      = $product->id;
-                $newProduct->program = $product->program;
-                $newProduct->name    = $product->name;
-                $newProduct->code    = $product->code;
-                $newProduct->status  = $product->status;
+                $product = $this->filterFields($product, 'id,program,name,code,status,PO');
 
                 if($product->status == 'closed')
                 {
-                    $dropMenu['closed'][] = $newProduct;
+                    $dropMenu['closed'][] = $product;
                 }
                 elseif($product->PO == $this->app->user->account)
                 {
-                    $dropMenu['owner'][] = $newProduct;
+                    $dropMenu['owner'][] = $product;
                 }
                 else
                 {
-                    $dropMenu['other'][] = $newProduct;
+                    $dropMenu['other'][] = $product;
                 }
             }
         }

@@ -34,7 +34,7 @@ class projectsEntry extends entry
             $result = array();
             foreach($data->data->projectStats as $project)
             {
-                $project = $this->filterFields($project, 'id,name,code,type,parent,begin,end,status,openedBy,openedDate,' . $appendFields);
+                $project = $this->filterFields($project, 'id,name,code,model,type,parent,begin,end,status,openedBy,openedDate,' . $appendFields);
                 $result[] = $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => (int)$pager->recPerPage, 'projects' => $result));
@@ -97,24 +97,20 @@ class projectsEntry extends entry
         {
             foreach($projects as $project)
             {
-                $newProject = new stdclass();
-                $newProject->id      = $project->id;
-                $newProject->name    = $project->name;
-                $newProject->code    = $project->code;
-                $newProject->parent  = $project->parent;
-                $newProject->status  = $project->status;
+                if(helper::diffDate(date('Y-m-d'), $project->end) > 0) $project->delay = true;
+                $project = $this->filterFields($project, 'id,model,type,name,code,parent,status,PM,delay');
 
                 if($project->status == 'closed')
                 {
-                    $dropMenu['closed'][] = $newProject;
+                    $dropMenu['closed'][] = $project;
                 }
                 elseif($project->PM == $this->app->user->account)
                 {
-                    $dropMenu['owner'][] = $newProject;
+                    $dropMenu['owner'][] = $project;
                 }
                 else
                 {
-                    $dropMenu['other'][] = $newProject;
+                    $dropMenu['other'][] = $project;
                 }
             }
         }
