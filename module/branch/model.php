@@ -221,10 +221,10 @@ class branchModel extends model
                 $branch->name       = $data->name[$branchID];
                 $branch->desc       = $data->desc[$branchID];
                 $branch->status     = $data->status[$branchID];
-                $branch->default    = (isset($data->default) and $branchID == $data->default) ? 1 : 0;
+                $branch->default    = (isset($data->default) and $branchID == $data->default and $branch->status != 'active') ? 1 : 0;
                 $branch->closedDate = $branch->status == 'closed' ? helper::today() : '';
 
-                $this->dao->update(TABLE_BRANCH)->data($branch, 'default')
+                $this->dao->update(TABLE_BRANCH)->data($branch)
                     ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
                     ->where('id')->eq($branchID)
                     ->exec();
