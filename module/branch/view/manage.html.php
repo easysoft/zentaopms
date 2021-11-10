@@ -81,7 +81,7 @@
             <?php
             if($branch->default)
             {
-                echo '<span class="label label-primary label-badge">' . $lang->branch->default . '</span>';
+                echo '&nbsp;<span class="label label-primary label-badge">' . $lang->branch->default . '</span>';
             }
             elseif($branch->status == 'active')
             {

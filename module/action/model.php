@@ -240,6 +240,12 @@ class actionModel extends model
                 $record->execution = $testtask->execution;
             }
 
+            if($objectType == 'branch' and $objectID == 0)
+            {
+                $record = new stdclass();
+                $record->product = $extra;
+            }
+
             if($objectType == 'whitelist' and $extra == 'product') $record->product = $objectID;
             if($objectType == 'whitelist' and $extra == 'project') $record->project = $objectID;
             if($objectType == 'whitelist' and ($extra == 'sprint' or $extra == 'stage')) $record->execution = $objectID;
@@ -1059,6 +1065,12 @@ class actionModel extends model
                         ->where('t1.id')->in($objectIdList)
                         ->fetchPairs();
                 }
+                elseif($objectType == 'branch')
+                {
+                    $this->app->loadLang('branch');
+                    $objectName = $this->dao->select("id,name")->from(TABLE_BRANCH)->where('id')->in($objectIdList)->fetchPairs();
+                    if(in_array(0, $objectIdList)) $objectName[0] = $this->lang->branch->main;
+                }
                 else
                 {
                     $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
@@ -1179,8 +1191,7 @@ class actionModel extends model
                 }
                 elseif($action->objectType == 'branch')
                 {
-                    $productID = $this->dao->select('product')->from(TABLE_BRANCH)->where('id')->eq($action->objectID)->fetch('product');
-                    $params    = sprintf($vars, $productID);
+                    $params = sprintf($vars, trim($action->product, ','));
                 }
                 else
                 {

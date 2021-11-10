@@ -275,7 +275,7 @@ class branch extends control
 
         $this->branch->setDefault($productID, $branchID);
 
-        $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch');
+        $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch', '', $productID);
 
         die(js::reload('parent'));
     }
