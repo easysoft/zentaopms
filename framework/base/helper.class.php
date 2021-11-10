@@ -892,7 +892,8 @@ function isHttps()
  * @access public
  * @return string
  */
-function htmlSpecialString($string, $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, $encoding = 'UTF-8')
+function htmlSpecialString($string, $flags = '', $encoding = 'UTF-8')
 {
+    if(!$flags) $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401;
     return htmlspecialchars($string, $flags, $encoding);
 }
