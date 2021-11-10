@@ -27,9 +27,9 @@
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
-          <?php $attr .= ($attr != "disabled='disabled'" and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) ? "disabled='disabled'" : '';?>
-          <?php $title      = in_array($productID, $unmodifiableProducts) ? $lang->execution->notAllowRemoveProducts : $productName;?>
-          <?php $checked    = 'checked';?>
+          <?php if(($attr != "disabled='disabled'" and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))) $attr .= "disabled='disabled'";?>
+          <?php $title = in_array($productID, $unmodifiableProducts) ? $lang->execution->notAllowRemoveProducts : $productName;?>
+          <?php $checked = 'checked';?>
           <div class='col-sm-4'>
             <div class='product <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>
               <div class="checkbox-primary" title='<?php echo $title;?>'>
