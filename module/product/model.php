@@ -146,7 +146,7 @@ class productModel extends model
     public function saveState($productID, $products)
     {
         if($productID > 0) $this->session->set('product', (int)$productID);
-        if($productID == 0 and $this->cookie->preProductID)     $this->session->set('product', (int)$this->cookie->preProductID);
+        if($productID == 0 and $this->cookie->preProductID) $this->session->set('product', (int)$this->cookie->preProductID);
         if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
         if(!isset($products[$this->session->product]))
         {
