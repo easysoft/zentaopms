@@ -13,15 +13,15 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('gitlab', 'createProject')) common::printLink('gitlab', 'createProject', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('gitlab', 'create')) common::printLink('gitlab', 'createGroup', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($gitlabGroupList)):?>
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php if(common::hasPriv('gitlab', 'createProject')):?>
-    <?php echo html::a($this->createLink('gitlab', 'createProject', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-info'");?>
+    <?php if(common::hasPriv('gitlab', 'create')):?>
+    <?php echo html::a($this->createLink('gitlab', 'createGroup', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
 </div>

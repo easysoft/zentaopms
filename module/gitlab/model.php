@@ -472,6 +472,29 @@ class gitlabModel extends model
     }
 
     /**
+     * Get namespaces of one gitlab.
+     *
+     * @param  int     $gitlabID
+     * @access public
+     * @return object
+     */
+    public function apiGetNamespaces($gitlabID)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/namespaces");
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results)<100) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
      * Get groups of one gitlab.
      *
      * @param  int     $gitlabID
@@ -494,6 +517,23 @@ class gitlabModel extends model
         }
 
         return $allResults;
+    }
+
+    /**
+     * Create a gitab group by api.
+     *
+     * @param  int      $gitlabID
+     * @param  object   $group
+     * @access public
+     * @return object
+     */
+    public function apiCreateGroup($gitlabID, $group)
+    {
+        if(empty($group->name) or empty($group->path)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/groups");
+        return json_decode(commonModel::http($url, $group));
     }
 
     /**
@@ -556,8 +596,8 @@ class gitlabModel extends model
         return json_decode(commonModel::http($url, $user));
     }
 
-     /**
-     * Create a gitab user by api.
+    /**
+     * Update a gitab user by api.
      *
      * @param  int      $gitlabID
      * @param  object   $user
@@ -571,6 +611,23 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/users/{$user->id}");
         return json_decode(commonModel::http($url, $user, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
+    /**
+     * Update a gitab group by api.
+     *
+     * @param  int      $gitlabID
+     * @param  object   $group
+     * @access public
+     * @return object
+     */
+    public function apiUpdateGroup($gitlabID, $group)
+    {
+        if(empty($group->id)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/groups/{$group->id}");
+        return json_decode(commonModel::http($url, $group, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**
@@ -649,6 +706,20 @@ class gitlabModel extends model
     public function apiGetSingleUser($gitlabID, $userID)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/users/$userID");
+        return json_decode(commonModel::http($url));
+    }
+
+     /**
+     * Get single group by API.
+     *
+     * @param  int $gitlabID
+     * @param  int $groupID
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleGroup($gitlabID, $groupID)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/groups/$groupID");
         return json_decode(commonModel::http($url));
     }
 
@@ -1875,6 +1946,90 @@ class gitlabModel extends model
             }
             return TRUE;
         }
+        /* Error handling. */
+        if(!empty($reponse->error))
+        {
+            dao::$errors[] = $reponse->error;
+            return FALSE;
+        }
+        if(!empty($reponse->message))
+        {
+            if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
+            else
+            {
+                foreach($reponse->message as $field => $fieldErrors)
+                {
+                    foreach($fieldErrors as $error)
+                    {
+                        if($error) dao::$errors[$field][] = $error;
+                    }
+                }
+            }
+        }
+        if(!$reponse) dao::$errors[] = false;
+    }
+
+    /**
+     * Create a gitlab group.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return bool
+     */
+    public function createGroup($gitlabID)
+    {
+        $group = fixer::input('post')->setDefault('request_access_enabled,lfs_enabled', 0)->get();
+
+        if(empty($group->name)) dao::$errors['name'][] = $this->lang->gitlab->group->name . $this->lang->gitlab->group->emptyError;
+        if(empty($group->path)) dao::$errors['path'][] = $this->lang->gitlab->group->path . $this->lang->gitlab->group->emptyError;
+        if(dao::isError()) return false;
+
+        $reponse = $this->apiCreateGroup($gitlabID, $group);
+
+        if(!empty($reponse->id)) return TRUE;
+
+        /* Error handling. */
+        if(!empty($reponse->error))
+        {
+            dao::$errors[] = $reponse->error;
+            return FALSE;
+        }
+        if(!empty($reponse->message))
+        {
+            if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
+            else
+            {
+                foreach($reponse->message as $field => $fieldErrors)
+                {
+                    foreach($fieldErrors as $error)
+                    {
+                        if($error) dao::$errors[$field][] = $error;
+                    }
+                }
+            }
+        }
+        if(!$reponse) dao::$errors[] = false;
+    }
+
+    /**
+     * Edit a gitlab group.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return bool
+     */
+    public function editGroup($gitlabID)
+    {
+        $group = fixer::input('post')->setDefault('request_access_enabled,lfs_enabled', 0)->get();
+
+        if(empty($group->name)) dao::$errors['name'][] = $this->lang->gitlab->group->name . $this->lang->gitlab->group->emptyError;
+        if(empty($group->path)) dao::$errors['path'][] = $this->lang->gitlab->group->path . $this->lang->gitlab->group->emptyError;
+        if(dao::isError()) return false;
+
+        $reponse = $this->apiUpdateGroup($gitlabID, $group);
+
+        if(!empty($reponse->id)) return TRUE;
+
         /* Error handling. */
         if(!empty($reponse->error))
         {

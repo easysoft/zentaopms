@@ -26,7 +26,16 @@
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->project->url;?></th>
-            <td><?php echo html::input('url', $gitlab->url . '/' . $user->username . '/', "class='form-control' disabled");?></td>
+            <td>
+              <div class='input-group'>
+                <?php if(count($namespaces) < 2):?>
+                  <?php echo html::input('url', $gitlab->url . '/' . $user->username . '/', "class='form-control' disabled");?>
+                <?php else:?>
+                  <span class='input-group-addon'><?php echo $gitlab->url . '/';?></span>
+                  <?php echo html::select('namespace_id', $namespaces, $user->username, "class='form-control'");?>
+                <?php endif;?>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->project->path;?></th>

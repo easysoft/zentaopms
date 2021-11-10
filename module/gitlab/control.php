@@ -311,6 +311,57 @@ class gitlab extends control
     }
 
     /**
+     * Creat a gitlab group.
+     *
+     * @param  int     $gitlabID
+     * @access public
+     * @return void
+     */
+    public function createGroup($gitlabID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->createGroup($gitlabID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('groupBrowse', "gitlabID=$gitlabID")));
+        }
+
+        $gitlab = $this->gitlab->getByID($gitlabID);
+
+        $this->view->gitlab   = $gitlab;
+        $this->view->gitlabID = $gitlabID;
+        $this->display();
+    }
+
+    /**
+     * Edit a gitlab group.
+     *
+     * @param  int     $gitlabID
+     * @param  int     $userID
+     * @access public
+     * @return void
+     */
+    public function editGroup($gitlabID, $groupID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->editGroup($gitlabID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('groupBrowse', "gitlabID=$gitlabID")));
+        }
+
+        $gitlab = $this->gitlab->getByID($gitlabID);
+        $group  = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
+
+        $this->view->gitlab   = $gitlab;
+        $this->view->group    = $group;
+        $this->view->gitlabID = $gitlabID;
+        $this->display();
+    }
+
+    /**
      * Browse gitlab project.
      *
      * @param  int     $gitlabID
@@ -428,9 +479,19 @@ class gitlab extends control
         $gitlab = $this->gitlab->getByID($gitlabID);
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
 
-        $this->view->gitlab   = $gitlab;
-        $this->view->user     = $user;
-        $this->view->gitlabID = $gitlabID;
+        /* Get namespaces data */
+        $namespacesList = $this->gitlab->apiGetNamespaces($gitlabID);
+        $namespaces = array();
+        foreach($namespacesList as $namespace)
+        {
+            if($namespace->kind == 'user' and $namespace->path == $user->username) $namespaces[$namespace->id] = $namespace->path;
+            if($namespace->kind == 'group') $namespaces[$namespace->id] = $namespace->path;
+        }
+
+        $this->view->gitlab     = $gitlab;
+        $this->view->user       = $user;
+        $this->view->namespaces = $namespaces;
+        $this->view->gitlabID   = $gitlabID;
         $this->display();
     }
 
