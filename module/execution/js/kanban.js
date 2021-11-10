@@ -725,7 +725,9 @@ $(function()
     /* Init iframe modals */
     $(document).on('click', '#kanbans .iframe,.contextmenu-menu .iframe', function(event)
     {
-        $(this).modalTrigger({show: true});
+        var $link = $(this);
+        if($link.data('zui.modaltrigger')) return;
+        $link.modalTrigger({show: true});
         event.preventDefault();
     });
 
