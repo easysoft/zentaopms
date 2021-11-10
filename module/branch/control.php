@@ -207,15 +207,27 @@ class branch extends control
      * @param  int    $productID
      * @param  int    $oldBranch
      * @param  string $param
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetBranches($productID, $oldBranch = 0, $param = '')
+    public function ajaxGetBranches($productID, $oldBranch = 0, $param = '', $projectID = 0)
     {
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') die();
 
         $branches = $this->branch->getPairs($productID, $param);
+
+        /* Remove unlinked branches of the project. */
+        if($projectID)
+        {
+            $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
+            foreach($branches as $branchID => $branchName)
+            {
+                if(!isset($projectProducts[$productID][$branchID])) unset($branches[$branchID]);
+            }
+        }
+
         if($oldBranch) $branches = array($oldBranch => $branches[$oldBranch]);
         die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch(this)'"));
     }

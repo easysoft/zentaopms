@@ -78,6 +78,42 @@ $(function()
 
     var acl = $("[name^='acl']:checked").val();
     setWhite(acl);
+
+    $('#submit').click(function()
+    {
+        var products      = new Array();
+        var existedBranch = false;
+
+        /* Determine whether the products of the same branch are linked. */
+        $("#productsBox select[name^='products']").each(function()
+        {
+            var productID       = $(this).val();
+            products[productID] = new Array();
+            if(multiBranchProducts[productID])
+            {
+                $("#productsBox select[name^='branch']").each(function()
+                {
+                    var branchID = $(this).val();
+                    if(products[productID][branchID])
+                    {
+                        existedBranch = true;
+                        return false;
+                    }
+                    else
+                    {
+                        products[productID][branchID] = branchID;
+                    }
+                })
+                if(existedBranch) return false;
+            }
+        })
+
+        if(existedBranch)
+        {
+            bootbox.alert(errorSameBranches);
+            return false;
+        }
+    })
 });
 
 function showLifeTimeTips()

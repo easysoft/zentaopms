@@ -28,7 +28,7 @@ $(function()
 
     $('#submit').click(function()
     {
-        var products      = [];
+        var products      = new Array();
         var existedBranch = false;
 
         /* Determine whether the products of the same branch are linked. */
