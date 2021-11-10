@@ -19,10 +19,14 @@ $lang->datatable->branch   = '分支';
 $lang->datatable->platform = '平台';
 
 $lang->datatable->moduleSetting          = '模块设置';
+$lang->datatable->listSetting            = '列表设置';
 $lang->datatable->showModule             = '列表页是否显示模块名';
+$lang->datatable->showBranch             = '列表页是否显示分支名';
 $lang->datatable->showAllModule          = '是否显示完整产品模块';
 $lang->datatable->showModuleList[]       = '不显示';
 $lang->datatable->showModuleList['base'] = '只显示一级模块';
 $lang->datatable->showModuleList['end']  = '只显示最后一级模块';
 $lang->datatable->showAllModuleList[0]   = '不显示';
 $lang->datatable->showAllModuleList[1]   = '显示';
+$lang->datatable->showBranchList[0]      = '不显示';
+$lang->datatable->showBranchList[1]      = '显示';
