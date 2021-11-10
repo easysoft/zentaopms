@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `product` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
-  `default` enum ('0', '1') NOT NULL DEFAULT '0'
+  `default` enum ('0', '1') NOT NULL DEFAULT '0',
   `status` enum ('active', 'closed') NOT NULL DEFAULT 'active'
   `desc` varchar(255) NOT NULL,
   `createdDate` date NOT NULL,
