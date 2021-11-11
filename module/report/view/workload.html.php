@@ -93,9 +93,9 @@
                 <?php foreach($info['execution'] as $exec => $execinfo):?>
                 <?php if($idprojectname != 1 || $idusername != 1) echo "<tr>";?>
                 <?php if($idprojectname == 1):?>
-                <td class="text-center" rowspan="<?php echo $countprojectname;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
+		<td class="text-center" rowspan="<?php echo $countprojectname;?>" title="<?php echo $project;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
                 <?php endif;?>
-                <td class="text-center"><?php echo html::a($this->createLink('execution', 'view', "executionID={$execinfo['executionID']}"), $exec);?></td>
+		<td class="text-center" title="<?php echo $exec;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$execinfo['executionID']}"), $exec);?></td>
                 <td class="text-center"><?php echo $execinfo['count'];?></td>
                 <td class="text-center"><?php echo $execinfo['manhour'];?></td>
                 <?php if($idusername == 1):?>
