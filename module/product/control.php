@@ -976,7 +976,7 @@ class product extends control
      */
     public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $from = '')
     {
-        $loadModel('productplan');
+        $this->loadModel('productplan');
         if($from == 'story' and $branch == BRANCH_MAIN)
         {
             $plans = $this->productplan->getPairs($productID, '', $expired);
