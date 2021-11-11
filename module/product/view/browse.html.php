@@ -23,7 +23,7 @@ body {margin-bottom: 25px;}
 <?php js::set('projectID', $projectID);?>
 <?php js::set('branch', $branch);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
-<?php js::set('productType', $product->type);?>
+<?php js::set('productType', $this->app->tab == 'product' ? $product->type : '');?>
 <?php
 $unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());
