@@ -510,7 +510,7 @@ class testcaseModel extends model
         }
 
         $allBranch = "`branch` = 'all'";
-        if($branch !== 'all' and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('0','$branch')";
+        if($branch !== 'all' and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('$branch')";
         if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
         $caseQuery .= ')';
         $caseQuery  = str_replace('`version`', 't1.`version`', $caseQuery);
