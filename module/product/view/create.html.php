@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', false);?>
 <?php js::set('programID', $programID);?>
+<?php js::set('systemMode', $this->config->systemMode);?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">

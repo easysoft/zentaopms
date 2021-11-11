@@ -4654,11 +4654,17 @@ class upgradeModel extends model
         }
 
         /* Set product and project relation. */
+        $projectProducts = $this->dao->select('product,branch,plan')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in($sprintIdList)
+            ->andWhere('product')->in($productIdList)
+            ->fetchAll('product');
         foreach($productIdList as $productID)
         {
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
+            $data->plan    = ($_POST['projectType'] == 'project' and isset($projectProducts[$productID])) ? $projectProducts[$productID]->plan : 0;
+            $data->branch  = isset($projectProducts[$productID]) ? $projectProducts[$productID]->branch : 0;
 
             $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
         }
