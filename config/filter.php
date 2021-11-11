@@ -371,8 +371,8 @@ $filter->repo->diff->cookie['repoPairs']            = 'array';
 $filter->repo->view->cookie['repoPairs']            = 'array';
 $filter->repo->ajaxsynccommit->cookie['syncBranch'] = 'reg::any';
 
-$filter->webhook->bind->get['selectedDepts']    = 'reg::checked';
-$filter->webhook->bind->cookie['selectedDepts'] = 'reg::checked';
+$filter->webhook->bind->get['selectedDepts']    = 'reg::any';
+$filter->webhook->bind->cookie['selectedDepts'] = 'reg::any';
 
 $filter->search->index->get['words'] = 'reg::any';
 $filter->search->index->get['type']  = 'code';

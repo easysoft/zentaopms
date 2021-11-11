@@ -211,14 +211,14 @@ class webhook extends control
         elseif($webhook->type == 'wechatuser')
         {
             $this->app->loadClass('wechatapi', true);
-            $wechatApi  = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response = $wechatApi->getAllUsers();
+            $wechatApi = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            $response  = $wechatApi->getAllUsers();
         }
         elseif($webhook->type == 'feishuuser')
         {
             $this->app->loadClass('feishuapi', true);
-            $feishuApi  = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
-            $response = $feishuApi->getAllUsers();
+            $feishuApi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+            $response  = $feishuApi->getAllUsers($selectedDepts);
         }
 
         if($response['result'] == 'fail')
@@ -275,7 +275,7 @@ class webhook extends control
     public function chooseDept($id)
     {
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser')
+        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser')
         {
             echo js::alert($this->lang->webhook->note->bind);
             die(js::locate($this->createLink('webhook', 'browse')));
@@ -287,6 +287,13 @@ class webhook extends control
             $this->app->loadClass('dingapi', true);
             $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
             $response = $dingapi->getDeptTree();
+        }
+
+        if($webhook->type == 'feishuuser')
+        {
+            $this->app->loadClass('feishuapi', true);
+            $feishuApi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+            $response  = $feishuApi->getDeptTree();
         }
 
         if($response['result'] == 'fail')

@@ -305,4 +305,127 @@ class sso extends control
         $datas['bug']  = $this->dao->select("id, title")->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('status')->eq('active')->andWhere('deleted')->eq(0)->fetchPairs();
         die(json_encode($datas));
     }
+
+    /**
+     * Get the link to the Feishu single sign-on configuration.
+     *
+     * @access public
+     * @return void
+     */
+    public function getFeishuSSO()
+    {
+        $httpType = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        $applicationHome = $httpType . $_SERVER['HTTP_HOST'] . $this->createLink('sso', 'feishuAuthen');
+        $redirectLink    = $httpType . $_SERVER['HTTP_HOST'] . $this->createLink('sso', 'feishuLogin');
+
+        echo $this->lang->sso->homeURL . $applicationHome;
+        echo '<br>';
+        echo $this->lang->sso->redirectURL . $redirectLink;
+    }
+
+    /**
+     * Get the pre-authorization code for Feishu code.
+     *
+     * @access public
+     * @return void
+     */
+    public function feishuAuthen()
+    {
+        $httpType    = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        $redirectURI = $httpType . $_SERVER['HTTP_HOST'] . $this->createLink('sso', 'feishuLogin');
+        $redirectURI = urlencode($redirectURI);
+
+        $feishuConfig = $this->loadModel('webhook')->getByType('feishuuser');
+        if(empty($feishuConfig)) $this->showError($this->lang->sso->feishuConfigEmpty);
+
+        $appConfig = json_decode($feishuConfig->secret);
+        $appID     = $appConfig->appId;
+
+        $url = "https://open.feishu.cn/open-apis/authen/v1/index?redirect_uri=%s&app_id=%s";
+        $url = sprintf($url, $redirectURI, $appID, $state);
+        header("location: $url");
+    }
+
+    /**
+     * Get the identity of the logged-in user.
+     *
+     * @param  string  $code
+     * @access public
+     * @return void
+     */
+    public function feishuLogin($code = '')
+    {
+        if($this->config->requestType == 'PATH_INFO')
+        {
+            $params = $_SERVER["QUERY_STRING"];
+            parse_str($params, $params);
+            if(isset($params['code'])) $code = $params['code'];
+        }
+
+        $feishuConfig = $this->loadModel('webhook')->getByType('feishuuser');
+        if(empty($feishuConfig)) $this->showError($this->lang->sso->feishuConfigEmpty);
+        $appConfig = json_decode($feishuConfig->secret);
+
+        /* Obtain the access credentials of the Feishu app. */
+        $appUrl    = 'https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal';
+        $appParams = array('app_id' => $appConfig->appId, 'app_secret' => $appConfig->appSecret);
+        $appResult = common::http($appUrl, $appParams, array(), array(), 'json');
+
+        if(empty($appResult)) $this->showError($this->lang->sso->feishuResponseEmpty);
+        $appInfo = json_decode($appResult);
+
+        if(!isset($appInfo->msg) or $appInfo->msg != 'ok') $this->showError($appResult);
+        $accessToken = $appInfo->app_access_token;
+
+        /* Verify the identity of the logged in user. */
+        $tokenUrl     = 'https://open.feishu.cn/open-apis/authen/v1/refresh_access_token';
+        $tokenHeaders = array('Authorization: Bearer ' . $accessToken);
+        $tokenParams  = array('grant_type' => 'authorization_code', 'code' => $code);
+        $tokenResult  = common::http($tokenUrl, $tokenParams, array(), $tokenHeaders, 'json');
+
+        if(empty($tokenResult)) $this->showError($this->lang->sso->feishuResponseEmpty);
+        $tokenInfo = json_decode($tokenResult);
+
+        if(!isset($tokenInfo->msg) or $tokenInfo->msg != 'success') $this->showError($tokenResult);
+        $userToken = $tokenInfo->data->access_token;
+
+        /* Get login user information. */
+        $userUrl     = 'https://open.feishu.cn/open-apis/authen/v1/user_info';
+        $userHeaders = array('Authorization: Bearer ' . $userToken);
+        $userResult  = common::http($userUrl, array(), array(), $userHeaders, 'json');
+
+        if(empty($userResult)) $this->showError($this->lang->sso->feishuResponseEmpty);
+        $userInfo = json_decode($userResult);
+
+        if(!isset($userInfo->msg) or $userInfo->msg != 'success') $this->showError($userResult);
+        $openID = $userInfo->data->open_id;
+
+        /* Get the user relationship bound in webhook. */
+        $account  = $this->loadModel('webhook')->getBindAccount($feishuConfig->id, 'webhook', $openID);
+        if(empty($account)) $this->showError($this->lang->sso->unbound);
+
+        $user     = $this->loadModel('user')->getById($account);
+        $password = $user->password;
+        $this->session->set('rand', '');
+        $user = $this->user->identify($account, $password);
+        $this->user->login($user);
+
+        $indexUrl = $this->createLink('my', 'index');
+        header("location: $indexUrl");
+    }
+
+    /**
+     * Display the error message.
+     *
+     * @param  string  $message
+     * @access public
+     * @return void
+     */
+    public function showError($message = '')
+    {
+        $this->view->title   = $this->lang->sso->deny;
+        $this->view->message = $message;
+        $this->display('sso', 'error');
+        die();
+    }
 }
