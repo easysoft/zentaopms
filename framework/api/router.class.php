@@ -230,7 +230,7 @@ class api extends router
     public function loadApiLang()
     {
         global $lang;
-        include($this->appRoot . "api/$this->version/lang/$this->clientLang.php");
+        if($this->version) include($this->appRoot . "api/$this->version/lang/$this->clientLang.php");
     }
 
     /**
