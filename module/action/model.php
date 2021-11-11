@@ -635,7 +635,7 @@ class actionModel extends model
     /**
      * Print actions of an object.
      *
-     * @param  array    $action
+     * @param  object    $action
      * @param  string   $desc
      * @access public
      * @return void
@@ -939,9 +939,9 @@ class actionModel extends model
     /**
      * Transform the actions for display.
      *
-     * @param  int    $actions
+     * @param  array    $actions
      * @access public
-     * @return void
+     * @return object
      */
     public function transformActions($actions)
     {
@@ -1529,7 +1529,7 @@ class actionModel extends model
     /**
      * Print actions of an object for API(JIHU).
      *
-     * @param  array    $action
+     * @param  object    $action
      * @access public
      * @return void
      */

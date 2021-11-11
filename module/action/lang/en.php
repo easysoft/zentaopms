@@ -674,3 +674,9 @@ $lang->action->apiTitle->reviewrejected        = 'Review rejected';
 $lang->action->apiTitle->reviewclarified       = 'Review clarified';
 $lang->action->apiTitle->commitsummary         = 'Commit summary';
 $lang->action->apiTitle->updatetrainee         = 'Update trainee';
+
+/* Code Review in Repo or Merge Request module. */
+$lang->action->desc->repocreated                  = '$date, created and reviewed by <strong>$actor</strong>: $extra.' . "\n";
+$lang->action->label->repocreated                 = "create and review";
+$lang->action->dynamicAction->task['gitcommited'] = 'Git Commit';
+$lang->action->dynamicAction->bug['repocreated']  = $lang->action->label->repocreated;
