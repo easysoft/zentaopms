@@ -1,6 +1,8 @@
 <?php
 class repoModel extends model
 {
+    const HOOK_PUSH_EVENT = 'Push Hook';
+
     /**
      * Check repo priv.
      *
@@ -1434,8 +1436,11 @@ class repoModel extends model
      */
     public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn')
     {
-        $account = $this->app->user->account;
-        $this->app->user->account = $log->author;
+        if(isset($this->app->user))
+        {
+            $account = $this->app->user->account;
+            $this->app->user->account = $log->author;
+        }
 
         $action  = new stdclass();
         $action->actor   = $log->author;
@@ -1613,7 +1618,7 @@ class repoModel extends model
             }
         }
 
-        $this->app->user->account = $account;
+        if(isset($this->app->user)) $this->app->user->account = $account;
     }
 
     /**
@@ -1789,4 +1794,30 @@ class repoModel extends model
             ->andWhere('path')->eq($projectID)
             ->fetchAll();
     }
+
+        /**
+     * Handle gitlab webhook.
+     *
+     * @param  string $event
+     * @param  string $token
+     * @param  string $data
+     * @param  object $repo
+     * @access public
+     * @return void
+     */
+    public function handleWebhook($event, $token, $data, $repo)
+    {
+        /* Check gitlab token */
+        switch($event)
+        {
+            case static::HOOK_PUSH_EVENT:
+                unset($repo->acl);
+                unset($repo->desc);
+                /* Update code commit history. */
+                $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
+                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+                break;
+        }
+    }
+
 }
