@@ -850,7 +850,7 @@ function getWebRoot($full = false)
  * @param  mixed           $valueWhenNone     value when the key not exits.
  * @param  mixed           $valueWhenExists   value when the key exits.
  * @access public
- * @return string
+ * @return mixed
  */
 function zget($var, $key, $valueWhenNone = false, $valueWhenExists = false)
 {
