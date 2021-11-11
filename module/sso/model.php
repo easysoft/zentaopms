@@ -105,4 +105,60 @@ class ssoModel extends model
         if(dao::isError()) return array('status' => 'fail', 'data' => dao::getError());
         return array('status' => 'success', 'id' => $this->dao->lastInsertId());
     }
+
+     /**
+      * Initiate a request.
+      *
+      * @param  string       $url
+      * @param  array        $data
+      * @param  string       $mehtod    GET|POST|PATCH
+      * @param  string       $dataType  data|json
+      * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
+      * @param  array        $headers   Set request headers.
+      * @static
+      * @access public
+      * @return string
+      */
+     public function http($url, $data = array(), $method = 'POST', $dataType = 'data', $options = array(), $headers = array())
+     {
+         global $lang, $app;
+         if(!extension_loaded('curl')) die($this->lang->error->noCurlExt);
+     
+         if(!is_array($headers)) $headers = (array)$headers;
+         $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
+         if($dataType == 'json')
+         {
+             $headers[] = 'Content-Type: application/json;charset=utf-8';
+             if(!empty($data)) $data = json_encode($data);
+         }
+     
+         $curl = curl_init();
+         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+         curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
+         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+         curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+         curl_setopt($curl, CURLOPT_ENCODING, "");
+         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+         curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+         curl_setopt($curl, CURLOPT_HEADER, FALSE);
+         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+         curl_setopt($curl, CURLOPT_URL, $url);
+     
+         if(!empty($data))
+         {
+             if($method == 'POST')  curl_setopt($curl, CURLOPT_POST, true);
+             if($method == 'PATCH') curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+         }
+     
+         if($options) curl_setopt_array($curl, $options);
+     
+         $response = curl_exec($curl);
+         curl_close($curl);
+
+         return $response;
+    }
 }
