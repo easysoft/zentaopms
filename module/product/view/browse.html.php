@@ -47,7 +47,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <div class="title" title="<?php echo $moduleName;?>">
       <?php
       echo $moduleName;
-      if($moduleID)
+      if($moduleID and $moduleID !== 'all')
       {
           $removeLink = $browseType == 'bymodule' ? $this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");

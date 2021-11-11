@@ -155,19 +155,19 @@ class product extends control
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
-            $_COOKIE['storyModule'] = 0;
-            setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            $_COOKIE['storyModule'] = 'all';
+            setcookie('storyModule', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
 
         if($browseType == 'bymodule' or $browseType == '')
         {
             setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($this->app->tab == 'project') setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $_COOKIE['storyBranch'] = 0;
-            setcookie('storyBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            $_COOKIE['storyBranch'] = 'all';
+            setcookie('storyBranch', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
-        if($browseType == 'bybranch') setcookie('storyBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
         $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($cookieModule ? $cookieModule : 0));
@@ -297,7 +297,7 @@ class product extends control
         $this->view->browseType      = $browseType;
         $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
         $this->view->moduleID        = $moduleID;
-        $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch          = $branch;
         $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
