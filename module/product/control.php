@@ -979,12 +979,12 @@ class product extends control
         $this->loadModel('productplan');
         if($from == 'story' and $branch == BRANCH_MAIN)
         {
-            $plans = $this->productplan->getPairs($productID, '', $expired);
+            $plans = $this->productplan->getPairs($productID);
         }
         elseif($from == 'story' and $branch)
         {
-            $plans  = $this->productplan->getPairs($productID, 0, $expired);
-            $plans += $this->productplan->getPairs($productID, $branch, $expired);
+            $plans  = $this->productplan->getPairs($productID, 0);
+            $plans += $this->productplan->getPairs($productID, $branch);
         }
         else
         {
