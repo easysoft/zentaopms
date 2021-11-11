@@ -52,20 +52,20 @@
           </div>
         </div>
       </div>
-      <?php if ($rawMR->state == 'opened') : ?>
+      <?php if($rawMR->state == 'opened'): ?>
         <div class="cell"><?php echo sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch); ?></div>
       <?php endif; ?>
       <div class='main-actions'>
         <div class="btn-toolbar">
           <?php common::printBack(inlink('browse', '')); ?>
-          <?php if ($rawMR->state == 'opened' and !$rawMR->has_conflicts) echo html::a(inlink('accept', "mr=$MR->id"), '<i class="icon icon-flow"></i> ' . $lang->mr->acceptMR, '', "id='mergeButton' class='btn'"); ?>
-          <?php if ($rawMR->state == 'opened') : ?>
+          <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) echo html::a(inlink('accept', "mr=$MR->id"), '<i class="icon icon-flow"></i> ' . $lang->mr->acceptMR, '', "id='mergeButton' class='btn'"); ?>
+          <?php if($rawMR->state == 'opened'): ?>
             <?php echo html::a(inlink('approval', "mr=$MR->id&action=approve&onlybody=yes"), '<i class="icon icon-ok"></i> ' . $lang->mr->approve, '', "id='mergeButton' class='btn iframe showinonlybody'"); ?>
             <?php echo html::a(inlink('approval', "mr=$MR->id&action=reject&onlybody=yes"), '<i class="icon icon-bug"></i> ' . $lang->mr->reject, '', "id='mergeButton' class='btn iframe showinonlybody'"); ?>
             <?php echo html::a(inlink('close', "mr=$MR->id"), '<i class="icon icon-close"></i> ' . $lang->mr->close, '', "id='mergeButton' class='btn'"); ?>
             <?php echo html::a(inlink('edit', "mr=$MR->id"), '<i class="icon icon-edit"></i> ' . str_replace($lang->mr->common, '', $lang->mr->edit), '', "id='mergeButton' class='btn'"); ?>
           <?php endif; ?>
-          <?php if ($rawMR->state == 'closed') echo html::a(inlink('reopen', "mr=$MR->id"), '<i class="icon icon-restart"></i> ' . $lang->mr->reopen, '', "id='mergeButton' class='btn'"); ?>
+          <?php if($rawMR->state == 'closed') echo html::a(inlink('reopen', "mr=$MR->id"), '<i class="icon icon-restart"></i> ' . $lang->mr->reopen, '', "id='mergeButton' class='btn'"); ?>
           <?php echo html::a(inlink('delete', "mr=$MR->id"), '<i class="icon icon-trash"></i> ' . str_replace($lang->mr->common, '', $lang->mr->delete), '', "id='mergeButton' class='btn'"); ?>
         </div>
       </div>
@@ -81,7 +81,7 @@
               <strong><?php echo $lang->mr->status; ?></strong>
               <?php echo zget($lang->mr->statusList, $MR->status); ?>
               <br>
-              <?php if (isset($rawMR->head_pipeline->status)) : ?>
+              <?php if(isset($rawMR->head_pipeline->status)): ?>
                 <div>
                   <strong><?php echo "{$lang->mr->pipeline}{$lang->mr->status}"; ?></strong>
                   <?php echo zget($lang->mr->pipelineStatus, $rawMR->head_pipeline->status, $lang->mr->pipelineUnknown); ?>
@@ -89,9 +89,9 @@
               <?php endif; ?>
               <strong><?php echo $lang->mr->mergeStatus; ?> </strong>
               <?php
-              if (empty($rawMR->changes_count)) :
+              if(empty($rawMR->changes_count)):
                 echo $lang->mr->noChanges;
-              else :
+              else:
                 echo zget($lang->mr->mergeStatusList, $rawMR->merge_status); ?>
                 <br>
                 <strong><?php echo $lang->mr->MRHasConflicts; ?></strong>
@@ -112,7 +112,7 @@
               <strong><?php echo $lang->mr->approvalStatus; ?></strong>
               <?php echo zget($lang->mr->approvalStatusList, $MR->approvalStatus, $lang->mr->approvalStatusList['notReviewed']); ?>
               <br>
-              <?php if ($MR->approvalStatus != '' and $MR->approvalStatus != 'notReviewed') : ?>
+              <?php if($MR->approvalStatus != '' and $MR->approvalStatus != 'notReviewed'): ?>
                 <strong><?php echo $lang->mr->reviewer; ?></strong>
                 <?php echo $MR->approver; ?>
               <?php endif; ?>
