@@ -84,26 +84,26 @@
               <?php foreach($workload as $account => $load):?>
               <?php if(!isset($users[$account])) continue;?>
               <tr class="text-center">
-                <?php $idUserName = 1; $countUserName = 0;?>
-                <?php foreach($load['task']['project'] as $projectName => $info) foreach($info['execution'] as $executionName => $executionInfo) $countUserName ++;?> 
-                <td class="<?php echo $class;?>" rowspan="<?php echo $countUserName;?>"><?php echo $users[$account];?></td>
+                <?php $userTimes = 1; $userCount = 0;?>
+                <?php foreach($load['task']['project'] as $projectName => $info) foreach($info['execution'] as $executionName => $executionInfo) $userCount ++;?> 
+                <td class="<?php echo $class;?>" rowspan="<?php echo $userCount;?>"><?php echo $users[$account];?></td>
                 <?php foreach($load['task']['project'] as $projectName => $info):?>
-                <?php $idProjectName = 1; $countProjectName = 0;?>
-                <?php foreach($info['execution'] as $executionName => $executionInfo) $countProjectName ++ ;?>
+                <?php $projectTimes = 1; $projectCount = 0;?>
+                <?php foreach($info['execution'] as $executionName => $executionInfo) $projectCount ++ ;?>
                 <?php foreach($info['execution'] as $executionName => $executionInfo):?>
-                <?php if($idProjectName != 1 || $idUserName != 1) echo "<tr>";?>
-                <?php if($idProjectName == 1):?>
-		<td class="text-center" rowspan="<?php echo $countProjectName;?>" title="<?php echo $projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $projectName);?></td>
+                <?php if($projectTimes != 1 || $userTimes != 1) echo "<tr>";?>
+                <?php if($projectTimes == 1):?>
+		<td class="text-center" rowspan="<?php echo $projectCount;?>" title="<?php echo $projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $projectName);?></td>
                 <?php endif;?>
 		<td class="text-center" title="<?php echo $executionName;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$executionInfo['executionID']}"), $executionName);?></td>
                 <td class="text-center"><?php echo $executionInfo['count'];?></td>
                 <td class="text-center"><?php echo $executionInfo['manhour'];?></td>
-                <?php if($idUserName == 1):?>
-                <td rowspan="<?php echo $countUserName;?>"><?php echo $load['total']['count'];?></td>
-                <td rowspan="<?php echo $countUserName;?>"><?php echo $load['total']['manhour'];?></td>
-                <td rowspan="<?php echo $countUserName;?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
+                <?php if($userTimes == 1):?>
+                <td rowspan="<?php echo $userCount;?>"><?php echo $load['total']['count'];?></td>
+                <td rowspan="<?php echo $userCount;?>"><?php echo $load['total']['manhour'];?></td>
+                <td rowspan="<?php echo $userCount;?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
                 <?php endif;?>
-                <?php if($idProjectName != 1 || $idUserName != 1) echo "</tr>"; $idProjectName ++; $idUserName ++;?>
+                <?php if($projectTimes != 1 || $userTimes != 1) echo "</tr>"; $projectTimes ++; $userTimes ++;?>
                 <?php $color = !$color;?>
                 <?php endforeach;?>
                 <?php endforeach;?>
