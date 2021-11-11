@@ -817,6 +817,7 @@ class gitlabModel extends model
      * @param  int $gitlabID
      * @param  int $projectID
      * @access public
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-project-hooks
      * @return array
      */
     public function apiGetHooks($gitlabID, $projectID)
@@ -835,6 +836,7 @@ class gitlabModel extends model
      * @param  int $projectID
      * @param  int $hookID
      * @access public
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#get-project-hook
      * @return object
      */
     public function apiGetHook($gitlabID, $projectID, $hookID)
@@ -851,29 +853,23 @@ class gitlabModel extends model
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  string $url
+     * @param  object $hook
      * @access public
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#add-project-hook
      * @return object
      */
-    public function apiCreateHook($gitlabID, $projectID, $url)
+    public function apiCreateHook($gitlabID, $projectID, $hook)
     {
+        if(!isset($hook->url)) return false;
+
+        $newHook = new stdclass;
+        $newHook->enable_ssl_verification = "false"; /* Disable ssl verification for every hook. */
+
+        foreach($hook as $index => $item) $newHook->$index= $item;
+
         $apiRoot = $this->getApiRoot($gitlabID);
-
-        $accessToken = $this->dao->select('private as accessToken')->from(TABLE_PIPELINE)
-            ->where('id')->eq($gitlabID)
-            ->fetch('accessToken');
-
-        $postData                          = new stdclass;
-        $postData->enable_ssl_verification = "false";
-        $postData->issues_events           = "true";
-        $postData->merge_requests_events   = "true";
-        $postData->push_events             = "true";
-        $postData->tag_push_events         = "true";
-        $postData->url                     = $url;
-        $postData->token                   = $accessToken;
-
         $url = sprintf($apiRoot, "/projects/{$projectID}/hooks");
-        return commonModel::http($url, $postData);
+        return commonModel::http($url, $newHook);
     }
 
     /**
@@ -883,6 +879,7 @@ class gitlabModel extends model
      * @param  int $projectID
      * @param  int $hookID
      * @access public
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#delete-project-hook
      * @return null|object
      */
     public function apiDeleteHook($gitlabID, $projectID, $hookID)
@@ -896,27 +893,28 @@ class gitlabModel extends model
     /**
      * Update hook by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @param  int $hookID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $hookID
+     * @param  object $hook
      * @access public
+     * @docs   https://docs.gitlab.com/ee/api/projects.html#edit-project-hook
      * @return object
      */
-    public function apiUpdateHook($gitlabID, $projectID, $hookID)
+    public function apiUpdateHook($gitlabID, $projectID, $hookID, $hook)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
-        $postData                          = new stdclass;
-        $postData->enable_ssl_verification = "false";
-        $postData->issues_events           = "true";
-        $postData->merge_requests_events   = "true";
-        $postData->push_events             = "true";
-        $postData->tag_push_events         = "true";
-        $postData->note_events             = "true";
+        if(!isset($hook->url)) return false;
+
+        $newHook = new stdclass;
+        $newHook->enable_ssl_verification = "false"; /* Disable ssl verification for every hook. */
+
+        foreach($hook as $index => $item) $newHook->$index= $item;
 
         $url = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
-        return commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
+        return commonModel::http($url, $newHook, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
     }
 
     /**
