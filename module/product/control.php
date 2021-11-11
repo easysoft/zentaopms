@@ -216,8 +216,8 @@ class product extends control
 
         if($product->type != 'normal')
         {
-            global $lang;
-            $lang->datatable->showBranch = sprintf($lang->datatable->showBranch, $lang->product->branchName[$product->type]);
+            $this->app->loadLang('datatable');
+            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
         }
         
         /* Get stories. */
