@@ -98,15 +98,16 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
               if(!e.changed) return;
 
               var orders = {};
-              $('#modules').find('li.has-list').each(function()
+              $('#modules').find('li.can-sort').each(function()
               {
                   var $li = $(this);
 
                   var item = $li.data();
-                  orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
+                  '<?php echo $type;?>' == 'book' ? orders['sort[' + item.id + ']'] = $li.attr('data-order') || item.order : orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
               });
 
-              $.post('<?php echo $this->createLink('tree', 'updateOrder');?>', orders, function(data){}).error(function()
+              var link = '<?php echo $type;?>' == 'book' ? createLink('doc', 'sortBookOrder') : createLink('tree', 'updateOrder');
+              $.post(link, orders, function(data){}).error(function()
               {
                   bootbox.alert(lang.timeout);
               });
