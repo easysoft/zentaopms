@@ -85,7 +85,7 @@
               <?php if(!isset($users[$account])) continue;?>
               <tr class="text-center">
                 <?php $idUserName = 1; $countUserName = 0;?>
-                <?php foreach($load['task']['project'] as $projectName => $info) foreach($info['execution'] as $exec => $executionInfo) $countUserName ++;?> 
+                <?php foreach($load['task']['project'] as $projectName => $info) foreach($info['execution'] as $executionName => $executionInfo) $countUserName ++;?> 
                 <td class="<?php echo $class;?>" rowspan="<?php echo $countUserName;?>"><?php echo $users[$account];?></td>
                 <?php foreach($load['task']['project'] as $projectName => $info):?>
                 <?php $idProjectName = 1; $countProjectName = 0;?>
