@@ -11,4 +11,14 @@ $(function()
         var $cb = $(this);
         $cb.closest('.product').toggleClass('checked', $cb.prop('checked'));
     });
+
+    $("select[id^=branch]").change(function()
+    {
+        var checked = $(this).closest('div').hasClass('checked');
+        if(!checked)
+        {
+            $(this).closest('div').addClass('checked');
+            $(this).closest('div').find("input[id^=products]").prop('checked', true);
+        }
+    });
 });
