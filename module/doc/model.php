@@ -2433,7 +2433,7 @@ EOT;
             }
         }
 
-        $treeMenu[$module->parent] .= '<li class="' . implode(' ', $class) . '" data-id=' . $module->id . '>' . $li . '</li>';
+        $treeMenu[$module->parent] .= '<li class=" can-sort ' . implode(' ', $class) . '" data-id=' . $module->id . '>' . $li . '</li>';
     }
 
     /**
