@@ -104,8 +104,8 @@ foreach(explode(',', $showFields) as $field)
              $productPlans = array('' => '');
              if($story->branch != BRANCH_MAIN)
              {
-                 if(isset($plans[$story->branch])) $productPlans .= $plans[$story->branch];
-                 if(isset($plans[0])) $productPlans .= $plans[0];
+                 if(isset($plans[$story->branch])) $productPlans += $plans[$story->branch];
+                 if(isset($plans[0])) $productPlans += $plans[0];
              }
              else
              {
