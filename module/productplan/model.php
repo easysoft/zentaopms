@@ -344,10 +344,10 @@ class productplanModel extends model
     public function getPlansByStories($storyIdList)
     {
         if(empty($storyIdList)) return array();
-        return $this->dao->select('t1.id as storyID, t3.*')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PLANSTORY)->alias('t2')->on('t1.id=t2.story')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t3')->on('t2.plan=t3.id')
-            ->where('t1.id')->in($storyIdList)
+        return $this->dao->select('t2.id as storyID, t3.*')->from(TABLE_PLANSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t2.id=t1.story')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t3')->on('t3.id=t1.plan')
+            ->where('t2.id')->in($storyIdList)
             ->fetchGroup('storyID', 'id');
     }
 
