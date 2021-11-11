@@ -84,26 +84,26 @@
               <?php foreach($workload as $account => $load):?>
               <?php if(!isset($users[$account])) continue;?>
               <tr class="text-center">
-                <?php $idusername = 1; $countusername = 0;?>
-                <?php foreach($load['task']['project'] as $project => $info) foreach($info['execution'] as $exec => $execinfo) $countusername ++;?> 
-                <td class="<?php echo $class;?>" rowspan="<?php echo $countusername;?>"><?php echo $users[$account];?></td>
-                <?php foreach($load['task']['project'] as $project => $info):?>
-                <?php $idprojectname = 1; $countprojectname = 0;?>
-                <?php foreach($info['execution'] as $exec) $countprojectname ++ ;?>
-                <?php foreach($info['execution'] as $exec => $execinfo):?>
-                <?php if($idprojectname != 1 || $idusername != 1) echo "<tr>";?>
-                <?php if($idprojectname == 1):?>
-		<td class="text-center" rowspan="<?php echo $countprojectname;?>" title="<?php echo $project;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
+                <?php $idUserName = 1; $countUserName = 0;?>
+                <?php foreach($load['task']['project'] as $projectName => $info) foreach($info['execution'] as $exec => $executionInfo) $countUserName ++;?> 
+                <td class="<?php echo $class;?>" rowspan="<?php echo $countUserName;?>"><?php echo $users[$account];?></td>
+                <?php foreach($load['task']['project'] as $projectName => $info):?>
+                <?php $idProjectName = 1; $countProjectName = 0;?>
+                <?php foreach($info['execution'] as $executionName => $executionInfo) $countProjectName ++ ;?>
+                <?php foreach($info['execution'] as $executionName => $executionInfo):?>
+                <?php if($idProjectName != 1 || $idUserName != 1) echo "<tr>";?>
+                <?php if($idProjectName == 1):?>
+		<td class="text-center" rowspan="<?php echo $countProjectName;?>" title="<?php echo $projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $projectName);?></td>
                 <?php endif;?>
-		<td class="text-center" title="<?php echo $exec;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$execinfo['executionID']}"), $exec);?></td>
-                <td class="text-center"><?php echo $execinfo['count'];?></td>
-                <td class="text-center"><?php echo $execinfo['manhour'];?></td>
-                <?php if($idusername == 1):?>
-                <td rowspan="<?php echo $countusername;?>"><?php echo $load['total']['count'];?></td>
-                <td rowspan="<?php echo $countusername;?>"><?php echo $load['total']['manhour'];?></td>
-                <td rowspan="<?php echo $countusername;?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
+		<td class="text-center" title="<?php echo $executionName;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$executionInfo['executionID']}"), $executionName);?></td>
+                <td class="text-center"><?php echo $executionInfo['count'];?></td>
+                <td class="text-center"><?php echo $executionInfo['manhour'];?></td>
+                <?php if($idUserName == 1):?>
+                <td rowspan="<?php echo $countUserName;?>"><?php echo $load['total']['count'];?></td>
+                <td rowspan="<?php echo $countUserName;?>"><?php echo $load['total']['manhour'];?></td>
+                <td rowspan="<?php echo $countUserName;?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
                 <?php endif;?>
-                <?php if($idprojectname != 1 || $idusername != 1) echo "</tr>"; $idprojectname ++; $idusername ++;?>
+                <?php if($idProjectName != 1 || $idUserName != 1) echo "</tr>"; $idProjectName ++; $idUserName ++;?>
                 <?php $color = !$color;?>
                 <?php endforeach;?>
                 <?php endforeach;?>
