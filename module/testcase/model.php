@@ -218,11 +218,13 @@ class testcaseModel extends model
     /**
      * Get cases of a module.
      *
-     * @param  int    $productID
-     * @param  int    $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $moduleIdList
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  string      $browseType
+     * @param  string      $auto   no|unit
      * @access public
      * @return array
      */
@@ -232,7 +234,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
@@ -246,11 +248,13 @@ class testcaseModel extends model
     /**
      * Get project cases of a module.
      *
-     * @param  int    $productID
-     * @param  int    $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int        $moduleIdList
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  string     $browseType
+     * @param  string     $auto   no|unit
      * @access public
      * @return array
      */
@@ -263,7 +267,7 @@ class testcaseModel extends model
             ->where('1=1')
             ->beginIF(!empty($productID))->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
-            ->beginIF($branch)->andWhere('t2.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
@@ -321,13 +325,13 @@ class testcaseModel extends model
     /**
      * Get cases by suite.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $suiteID
-     * @param  array  $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto    no|unit
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $suiteID
+     * @param  array       $moduleIdList
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  string      $auto    no|unit
      * @access public
      * @return array
      */
@@ -339,7 +343,7 @@ class testcaseModel extends model
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t3.suite')->eq((int)$suiteID)
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
@@ -399,14 +403,14 @@ class testcaseModel extends model
     /**
      * Get test cases.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $sort
-     * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $browseType
+     * @param  int        $queryID
+     * @param  int        $moduleID
+     * @param  string     $sort
+     * @param  object     $pager
+     * @param  string     $auto   no|unit
      * @access public
      * @return array
      */
@@ -441,7 +445,7 @@ class testcaseModel extends model
                 ->andWhere('t2.version > t1.storyVersion')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
-                ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
                 ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
@@ -465,11 +469,12 @@ class testcaseModel extends model
     /**
      * Get cases by search.
      *
-     * @param  int    $productID
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  int         $productID
+     * @param  int         $queryID
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int|string  $branch
+     * @param  string      $auto   no|unit
      * @access public
      * @return array
      */
@@ -505,7 +510,7 @@ class testcaseModel extends model
         }
 
         $allBranch = "`branch` = 'all'";
-        if($branch and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('0','$branch')";
+        if($branch !== 'all' and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('$branch')";
         if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
         $caseQuery .= ')';
         $caseQuery  = str_replace('`version`', 't1.`version`', $caseQuery);

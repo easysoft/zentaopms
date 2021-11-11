@@ -84,14 +84,15 @@ class testcase extends control
     /**
      * Browse cases.
      *
-     * @param  int    $productID
-     * @param  string $browseType
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @param  int    $projectID
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $browseType
+     * @param  int        $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
+     * @param  int        $projectID
      * @access public
      * @return void
      */
@@ -104,9 +105,9 @@ class testcase extends control
 
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
+        $branch    = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
