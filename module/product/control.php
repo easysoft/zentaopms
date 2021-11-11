@@ -211,7 +211,7 @@ class product extends control
 
         $product = $this->product->getById($productID);
 
-        if($product->type != 'normal')
+        if($product and $product->type != 'normal')
         {
             $this->app->loadLang('datatable');
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
