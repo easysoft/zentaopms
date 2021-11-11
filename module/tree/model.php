@@ -87,7 +87,7 @@ class treeModel extends model
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
-                ->beginIF(((!empty($branch) or $branch === 0) and $branch !== 'null'))->andWhere("branch")->eq($branch)->fi()
+                ->beginIF((($branch or $branch === 0) and $branch !== 'null'))->andWhere("branch")->eq($branch)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('grade desc, `order`, type desc')
                 ->get();
@@ -99,7 +99,7 @@ class treeModel extends model
             ->andWhere('type')->eq($type)
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
-            ->beginIF(((!empty($branch) or $branch === 0) and $branch !== 'null'))->andWhere("branch")->eq($branch)->fi()
+            ->beginIF((($branch or $branch === 0) and $branch !== 'null'))->andWhere("branch")->eq($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->get();
