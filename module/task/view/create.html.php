@@ -79,7 +79,7 @@
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
-        <?php if(strpos(",$showFields,", ',story,') !== false and $execution->type != 'ops'):?>
+        <?php if(strpos(",$showFields,", ',story,') !== false and $execution->lifetime != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
