@@ -79,7 +79,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
       /* Make modules tree sortable */
       $('#modules').sortable(
       {
-          trigger: '.module-name>a',
+          trigger: '.module-name>a.sort-module',
           dropToClass: 'sort-to',
           stopPropagation: true,
           nested: true,
@@ -97,7 +97,19 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
           {
               if(!e.changed) return;
 
-              /* TODO(@sunguangming): console.log('sort.finish', e); */
+              var orders = {};
+              $('#modules').find('li.has-list').each(function()
+              {
+                  var $li = $(this);
+
+                  var item = $li.data();
+                  orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
+              });
+
+              $.post('<?php echo $this->createLink('tree', 'updateOrder');?>', orders, function(data){}).error(function()
+              {
+                  bootbox.alert(lang.timeout);
+              });
           }
       });
   });

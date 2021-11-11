@@ -633,6 +633,7 @@ class bugModel extends model
             ->join('openedBuild', ',')
             ->join('mailto', ',')
             ->join('linkBug', ',')
+            ->setIF(count($this->post->mailto) == 1 and !$this->post->mailto[0], 'mailto', '')
             ->setIF($this->post->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->resolvedBy  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($this->post->resolution  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
