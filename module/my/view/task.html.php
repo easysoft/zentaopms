@@ -92,7 +92,7 @@
             <?php 
             if($task->parent > 0)
             {
-                echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ' . html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->parentName . ' / '. $task->name, '', "title=$task->parentName / $task->name");
+                echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ' . html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->parentName . ' / '. $task->name, '', "title='{$task->parentName} / {$task->name}'");
             }
             else 
             {
