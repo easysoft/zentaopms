@@ -365,7 +365,7 @@ class mr extends control
     /**
      * Close this MR.
      *
-     * @param  mixed $MRID
+     * @param  int $MRID
      * @return void
      */
     public function close($MRID)
@@ -377,7 +377,7 @@ class mr extends control
     /**
      * Reopen this MR.
      *
-     * @param  mixed $MRID
+     * @param  int $MRID
      * @return void
      */
     public function reopen($MRID)

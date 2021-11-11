@@ -87,9 +87,9 @@ class mrModel extends model
     {
         if (!empty($_POST['compile']))
         {
-            $repoID = $this->post->repo;
-            $jobID  = $this->post->job;
-            $compileID = $this->post->compile;
+            $repoID        = $this->post->repo;
+            $jobID         = $this->post->job;
+            $compileID     = $this->post->compile;
             $compileStatus = $this->loadModel('compile')->getByID($this->post->compile)->status;
 
             $MR = fixer::input('post')
@@ -175,9 +175,9 @@ class mrModel extends model
     {
         if (!empty($_POST['compile']))
         {
-            $repoID = $this->post->repo;
-            $jobID  = $this->post->job;
-            $compileID = $this->post->compile;
+            $repoID        = $this->post->repo;
+            $jobID         = $this->post->job;
+            $compileID     = $this->post->compile;
             $compileStatus = $this->loadModel('compile')->getByID($this->post->compile)->status;
 
             $MR = fixer::input('post')

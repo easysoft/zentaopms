@@ -102,7 +102,7 @@ $(document).ready(function()
         $bug.data('data', bug);
         $bug.toggleClass('show', show > 1);
         if(show > 2) highlight($bug);
-        
+
         if(bug.comments)
         {
             commentCount = bug.comments.length;

@@ -674,3 +674,9 @@ $lang->action->apiTitle->reviewrejected        = '拒绝';
 $lang->action->apiTitle->reviewclarified       = '有待明确';
 $lang->action->apiTitle->commitsummary         = '提交培训总结';
 $lang->action->apiTitle->updatetrainee         = '更新培训人员';
+
+/* Code Review in Repo or Merge Request module. */
+$lang->action->desc->repocreated                  = '$date, 由 <strong>$actor</strong> 评审创建：$extra。' . "\n";
+$lang->action->label->repocreated                 = "创建评审";
+$lang->action->dynamicAction->task['gitcommited'] = 'git提交';
+$lang->action->dynamicAction->bug['repocreated']  = '创建代码评审';
