@@ -102,33 +102,29 @@ $(function()
        /* Determine whether the products of the same branch are linked. */
        $("#productsBox select[name^='products']").each(function()
        {
-           var productID       = $(this).val();
-           products[productID] = new Array();
+           var productID = $(this).val();
+           if(typeof(products[productID]) == 'undefined') products[productID] = new Array();
            if(multiBranchProducts[productID])
            {
-               $("#productsBox select[name^='branch']").each(function()
+               var branchID = $(this).closest('.input-group').find("select[id^=branch]").val();
+               if(products[productID][branchID])
                {
-                   var branchID = $(this).val();
-                   if(products[productID][branchID])
-                   {
-                       existedBranch = true;
-                       return false;
-                   }
-                   else
-                   {
-                       products[productID][branchID] = branchID;
-                   }
-               })
+                   existedBranch = true;
+               }
+               else
+               {
+                   products[productID][branchID] = branchID;
+               }
                if(existedBranch) return false;
            }
-       })
+       });
 
        if(existedBranch)
        {
            bootbox.alert(errorSameBranches);
            return false;
        }
-   })
+   });
 });
 
 /**
