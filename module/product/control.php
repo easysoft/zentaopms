@@ -214,6 +214,12 @@ class product extends control
 
         $product = $this->product->getById($productID);
 
+        if($product->type != 'normal')
+        {
+            global $lang;
+            $lang->datatable->showBranch = sprintf($lang->datatable->showBranch, $lang->product->branchName[$product->type]);
+        }
+        
         /* Get stories. */
         if($this->app->rawModule == 'projectstory')
         {
