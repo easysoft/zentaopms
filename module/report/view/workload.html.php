@@ -103,7 +103,8 @@
                 <td rowspan="<?php echo $userCount;?>"><?php echo $load['total']['manhour'];?></td>
                 <td rowspan="<?php echo $userCount;?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
                 <?php endif;?>
-                <?php if($projectTimes != 1 || $userTimes != 1) echo "</tr>"; $projectTimes ++; $userTimes ++;?>
+                <?php if($projectTimes != 1 || $userTimes != 1) echo "</tr>";?>
+                <?php $projectTimes ++; $userTimes ++;?>
                 <?php $color = !$color;?>
                 <?php endforeach;?>
                 <?php endforeach;?>
