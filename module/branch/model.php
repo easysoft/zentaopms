@@ -448,7 +448,6 @@ class branchModel extends model
     {
         $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')
             ->where('product')->eq($productID)
-            ->andWhere('`default`')->eq('1')
             ->exec();
 
         if($branchID) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
