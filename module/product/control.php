@@ -128,7 +128,14 @@ class product extends control
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
 
-        if($this->app->tab == 'product') $this->product->setMenu($productID, $branch);
+        /* Set menu. */
+        if($this->app->tab == 'product')
+        {
+            $this->session->set('storyList',   $this->app->getURI(true), 'product');
+            $this->session->set('productList', $this->app->getURI(true), 'product');
+
+            $this->product->setMenu($productID, $branch, 0, '', "storyType=$storyType");
+        }
         if($this->app->tab == 'project')
         {
             $this->session->set('storyList', $this->app->getURI(true), 'project');
@@ -165,16 +172,6 @@ class product extends control
         $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($cookieModule ? $cookieModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
-
-        /* Set menu. The projectstory module does not execute. */
-        if($this->app->tab == 'product')
-        {
-            /* Save session. */
-            $this->session->set('storyList',   $this->app->getURI(true), 'product');
-            $this->session->set('productList', $this->app->getURI(true), 'product');
-
-            $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, "storyType=$storyType", $branch);
-        }
 
         /* Set moduleTree. */
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
