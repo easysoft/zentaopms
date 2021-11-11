@@ -101,16 +101,19 @@ foreach(explode(',', $showFields) as $field)
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
             <?php
-             $productPlans = array('' => '');
-             if($story->branch != BRANCH_MAIN)
-             {
-                 if(isset($plans[$story->branch])) $productPlans += $plans[$story->branch];
-                 if(isset($plans[0])) $productPlans += $plans[0];
-             }
-             else
-             {
-                 foreach($plans as $branchPlan) $productPlans += $branchPlan;
-             }
+            if($productID)
+            {
+                $productPlans = array('' => '');
+                if($story->branch != BRANCH_MAIN)
+                {
+                    if(isset($plans[$story->branch])) $productPlans += $plans[$story->branch];
+                    if(isset($plans[0])) $productPlans += $plans[0];
+                }
+                else
+                {
+                    foreach($plans as $branchPlan) $productPlans += $branchPlan;
+                }
+            }
             ?>
             <?php if($this->session->currentProductType == 'normal') $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;?>
             <?php echo html::select("plans[$storyID]", $productPlans, $story->plan, "class='form-control chosen'");?>
