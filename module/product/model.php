@@ -2027,6 +2027,7 @@ class productModel extends model
         {
             $branchLink = $this->lang->product->menu->settings['subMenu']->branch['link'];
             $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         }
     }
 }
