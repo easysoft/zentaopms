@@ -149,8 +149,7 @@ class productModel extends model
         if($productID == 0) $productID = key($products);
         if(!isset($products[$productID]))
         {
-            $product = $this->getById($productID);
-            if(empty($product)) $productID = key($products);;
+            $productID = key($products);
             if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false) $this->accessDenied();
         }
         $this->session->set('product', $productID);
