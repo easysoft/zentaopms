@@ -1,8 +1,6 @@
 <?php
 class repoModel extends model
 {
-    const HOOK_PUSH_EVENT = 'Push Hook';
-
     /**
      * Check repo priv.
      *
@@ -772,7 +770,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getUnsyncCommits($repo)
+    public function getUnsyncedCommits($repo)
     {
         $repoID   = $repo->id;
         $lastInDB = $this->getLatestCommit($repoID);
@@ -1795,8 +1793,8 @@ class repoModel extends model
             ->fetchAll();
     }
 
-        /**
-     * Handle gitlab webhook.
+    /**
+     * Handle received GitLab webhook.
      *
      * @param  string $event
      * @param  string $token
@@ -1807,17 +1805,11 @@ class repoModel extends model
      */
     public function handleWebhook($event, $token, $data, $repo)
     {
-        /* Check gitlab token */
-        switch($event)
+        if($event == 'Push Hook' or $event == 'Merge Request Hook')
         {
-            case static::HOOK_PUSH_EVENT:
-                unset($repo->acl);
-                unset($repo->desc);
-                /* Update code commit history. */
-                $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-                break;
+            /* Update code commit history. */
+            $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
+            $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
         }
     }
-
 }

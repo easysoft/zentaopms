@@ -20,20 +20,20 @@ class repoEntry extends baseEntry
      */
     public function post()
     {
-        $id= $this->param('id');
+        $repoID= $this->param('repoID');
         if(empty($id)) return;
 
-        $model = $this->loadModel('repo');
+        $this->loadModel('repo');
 
-        $repo = $model->getRepoByID($id);
+        $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) return;
 
-        $headers = getallheaders();
+        $headers = getallheaders(); /* Fetch all HTTP request headers. */
         $event   = isset($headers['X-Gitlab-Event']) ? $headers['X-Gitlab-Event'] : '';
         $token   = isset($headers['X-Gitlab-Token']) ? $headers['X-Gitlab-Token'] : '';
         if(empty($event) || empty($token)) return;
 
-        $model->handleWebhook($event, $token, $this->requestBody, $repo);
+        $this->repo->handleWebhook($event, $token, $this->requestBody, $repo);
     }
 
 }
