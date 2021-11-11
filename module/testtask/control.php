@@ -82,12 +82,13 @@ class testtask extends control
     /**
      * Browse test tasks.
      *
-     * @param  int    $productID
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  string      $type
+     * @param  string      $orderBy
+     * @param  int         $recTotal
+     * @param  int         $recPerPage
+     * @param  int         $pageID
      * @access public
      * @return void
      */
@@ -108,7 +109,7 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
+        $branch    = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
         $this->loadModel('qa')->setMenu($this->products, $productID, $branch, $type);
 
         /* Load pager. */
