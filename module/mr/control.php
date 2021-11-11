@@ -255,9 +255,10 @@ class mr extends control
         }
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
-            /* Force reload when locate to the url. */
-            $random = uniqid();
-            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse', "random={$random}")));
+            ///* Force reload when locate to the url. */
+            //$random = uniqid();
+            //return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse', "random={$random}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse')));
         }
 
         /* The type of variable `$rawMR->message` is string. This is different with apiCreateMR. */

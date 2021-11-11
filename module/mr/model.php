@@ -865,7 +865,7 @@ class mrModel extends model
      */
     public function saveBug($repoID, $file, $v1, $v2)
     {
-        $now  = helper::now();
+        $now  = (string) helper::now();
         $data = fixer::input('post')
             ->add('severity', 3)
             ->add('openedBy', $this->app->user->account)
