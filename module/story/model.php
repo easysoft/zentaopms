@@ -402,18 +402,6 @@ class storyModel extends model
     public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
         $forceReview = $this->checkForceReview();
-        foreach($_POST['needReview'] as $index => $value)
-        {
-            if($_POST['title'][$index] and isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
-            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]))
-            {
-                if($value || $forceReview)
-                {
-                    dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-                    return false;
-                }
-            }
-        }
 
         $this->loadModel('action');
         $branch    = (int)$branch;
@@ -440,6 +428,8 @@ class storyModel extends model
             $stories->plan[$i]   = $plan;
             $stories->pri[$i]    = (int)$pri;
             $stories->source[$i] = $source;
+
+            if(isset($stories->reviewer[$i])) $stories->reviewer[$i] = array_filter($stories->reviewer[$i]);
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
@@ -460,7 +450,7 @@ class storyModel extends model
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
-            $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
+            $story->status     = (empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'draft';
             $story->stage      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
