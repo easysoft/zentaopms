@@ -42,14 +42,9 @@
 .title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
 
-#custom, .tree {overflow: visible}
 .tree li>.list-toggle {left: -4px; top: 0;}
 .tree-group {position: relative;}
 .tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
 .tree-group .treeActions {display: none; position: absolute; right: 0; top: 0; background-color: #fff; white-space: nowrap;}
-.tree-group:hover > .module-name {width: calc(100% - 84px);}
+.tree-group:hover > .module-name {width: calc(100% - 20px);}
 .tree-group:hover .treeActions {display: block}
-.tree-group .treeActions > .dropdown {display: inline-block;}
-.tree-group .dropdown-menu {position: absolute; right: 0; left: auto; margin-top: -2px;}
-.tree-group .dropdown-menu > li > a {max-width: 100%; color: #3c4353!important; font-weight: normal!important;}
-.tree-group .dropdown-menu > li > a:hover {color: #fff !important;}
