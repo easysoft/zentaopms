@@ -21,9 +21,9 @@
     <thead>
       <tr>
         <th class='projectColor'></th>
-        <th><?php echo $lang->execution->doingProject . ' (' . $projectCount . ')';?></th>
+        <th><?php echo $lang->execution->doingProject . ' <span class="count">' . $projectCount . '</span>';?></th>
         <?php foreach($lang->execution->kanbanColType as $status => $colName):?>
-        <th><?php echo $colName . ($status != 'closed' ? ' (' . $statusCount[$status] . ')' : '');?></th>
+        <th><?php echo $colName . ($status != 'closed' ? ' <span class="count">' . $statusCount[$status] . '</span>' : '');?></th>
         <?php endforeach;?>
       </tr>
     </thead>
