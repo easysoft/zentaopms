@@ -161,7 +161,6 @@ class productModel extends model
                 setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
             }
         }
-
         return $this->session->product;
     }
 
