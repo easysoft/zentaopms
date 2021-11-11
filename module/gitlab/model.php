@@ -12,6 +12,9 @@
 
 class gitlabModel extends model
 {
+
+    const HOOK_PUSH_EVENT = 'Push Hook';
+
     /**
      * Get a gitlab by id.
      *
@@ -2052,4 +2055,5 @@ class gitlabModel extends model
         }
         if(!$reponse) dao::$errors[] = false;
     }
+
 }
