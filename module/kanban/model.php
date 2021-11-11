@@ -795,13 +795,13 @@ class kanbanModel extends model
 
             if($type == 'task')
             {
-                $unlindedTask = $this->dao->select('id')->from(TABLE_TASK)
+                $unlinkedTask = $this->dao->select('id')->from(TABLE_TASK)
                     ->where('execution')->eq($executionID)
                     ->andWhere('parent')->ge(0)
                     ->andWhere('story')->eq(0)
                     ->andWhere('deleted')->eq(0)
                     ->fetch('id');
-                if($unlindedTask) $groupList[0] = 0;
+                if($unlinkedTask) $groupList[0] = 0;
             }
         }
         else
