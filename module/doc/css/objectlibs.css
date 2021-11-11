@@ -45,6 +45,6 @@
 .tree li>.list-toggle {left: -4px; top: 0;}
 .tree-group {position: relative;}
 .tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
-.tree-group .treeActions {display: none; position: absolute; right: 0; top: 0; background-color: #fff; white-space: nowrap;}
+.tree-group .tree-actions {display: none; position: absolute; right: 0; top: 0; background-color: #fff; white-space: nowrap;}
 .tree-group:hover > .module-name {width: calc(100% - 20px);}
-.tree-group:hover .treeActions {display: block}
+.tree-group:hover .tree-actions {display: block}

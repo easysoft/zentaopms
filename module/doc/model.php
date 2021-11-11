@@ -2373,7 +2373,7 @@ EOT;
                     if($currentMethod == 'objectlibs')
                     {
                         $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
-                        $treeMenu[$module->id] .= "<div class='treeActions'>";
+                        $treeMenu[$module->id] .= "<div class='tree-actions'>";
                         $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit}");
                         $treeMenu[$module->id] .= '</div></div>';
                     }
@@ -2400,7 +2400,7 @@ EOT;
             else
             {
                 $li  = "<div class='tree-group'><span class='module-name'><a title='{$module->name}'>" . $module->name . '</a></span>';
-                $li .= "<div class='treeActions'>";
+                $li .= "<div class='tree-actions'>";
                 $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title={$this->lang->doc->editType}");
                 $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editType}");
                 $li .= '</div></div>';

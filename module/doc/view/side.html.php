@@ -69,7 +69,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
   .sortable-sorting .drop-here .tree-group {background-color: #fff3e0;}
   .sortable-sorting .drop-here .tree-group > * {opacity: .1;}
   .sortable-sorting .drag-shadow .tree-group {opacity: 1!important;}
-  .sortable-sorting .drag-shadow .treeActions {visibility: hidden;}
+  .sortable-sorting .drag-shadow .tree-actions {visibility: hidden;}
   .is-sorting > li > .tree-group {opacity: 1; border-radius: 4px;}
   .is-sorting > li ul {display: none!important;}
   </style>
