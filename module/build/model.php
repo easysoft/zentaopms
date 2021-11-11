@@ -385,6 +385,7 @@ class buildModel extends model
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
 
+        if(isset($_POST['branch']) and $_POST['branch'] == 0) $build->branch = 0;
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()

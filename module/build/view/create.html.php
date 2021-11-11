@@ -32,9 +32,9 @@
             <div class='input-group' id='productBox'>
               <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
               <?php
-              if(!empty($product) and $product->type != 'normal' and isset($branches[$product->branch]))
+              if(!empty($product) and $product->type != 'normal' and isset($branches[$product->id]))
               {
-                  if($product->branch) $branches = array($product->branch => $branches[$product->branch]);
+                  $branches = $branches[$product->id];
                   echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $product->branch, "class='form-control chosen'");
               }
               ?>
@@ -94,4 +94,5 @@
   </div>
 </div>
 <?php js::set('productGroups', $productGroups)?>
+<?php js::set('executionID', $executionID)?>
 <?php include '../../common/view/footer.html.php';?>
