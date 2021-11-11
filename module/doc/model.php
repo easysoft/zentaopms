@@ -2275,7 +2275,7 @@ EOT;
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        $docs       = $this->dao->select('*')->from(TABLE_DOC)
+        $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('lib')->eq($rootID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
@@ -2363,7 +2363,7 @@ EOT;
                 else
                 {
                     if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
-                    $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
+                    $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . " data-id=$doc->id>";
 
                     if($currentMethod == 'tablecontents')
                     {
@@ -2373,7 +2373,7 @@ EOT;
                     if($currentMethod == 'objectlibs')
                     {
                         $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
-                        $treeMenu[$module->id] .= "<div class='treeActions'>";
+                        $treeMenu[$module->id] .= "<div class='tree-actions'>";
                         $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit}");
                         $treeMenu[$module->id] .= '</div></div>';
                     }
@@ -2399,8 +2399,8 @@ EOT;
             }
             else
             {
-                $li  = "<div class='tree-group'><span class='module-name'><a title='{$module->name}'>" . $module->name . '</a></span>';
-                $li .= "<div class='treeActions'>";
+                $li  = "<div class='tree-group'><span class='module-name'><a class='sort-module' title='{$module->name}'>" . $module->name . '</a></span>';
+                $li .= "<div class='tree-actions'>";
                 $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title={$this->lang->doc->editType}");
                 $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editType}");
                 $li .= '</div></div>';
@@ -2433,7 +2433,7 @@ EOT;
             }
         }
 
-        $treeMenu[$module->parent] .= '<li class="' . implode(' ', $class) . '">' . $li . '</li>';
+        $treeMenu[$module->parent] .= '<li class="' . implode(' ', $class) . '" data-id=' . $module->id . '>' . $li . '</li>';
     }
 
     /**

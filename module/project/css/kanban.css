@@ -20,5 +20,4 @@
 table th, td {border: 2px solid #fff !important;}
 
 #kanban {padding-bottom: 10px}
-
-.kanban-col[data-type='closedProject'] span.count {display: none}
+.kanban-col[data-type='closedProject'] .count {display: none}
