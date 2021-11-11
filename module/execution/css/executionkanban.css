@@ -21,3 +21,4 @@
 .table-grouped > tbody > tr:hover {background: #fff !important;}
 
 .projectColor {width: 5px; padding: 0px !important; border-right: unset !important}
+th .count {font-weight: 500; color: #8b91a2;}

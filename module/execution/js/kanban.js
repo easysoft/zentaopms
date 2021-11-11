@@ -12,7 +12,7 @@ function changeView(view)
 function renderUserAvatar(user, objectType, objectID)
 {
     var $noPrivAndNoAssigned = $('<div class="avatar has-text avatar-sm avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-account"></i></div>');
-    if(objectType == 'task')  
+    if(objectType == 'task')
     {
         if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
         var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
@@ -22,7 +22,7 @@ function renderUserAvatar(user, objectType, objectID)
         if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
         var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
     }
-    if(objectType == 'bug')   
+    if(objectType == 'bug')
     {
         if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
         var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
@@ -538,7 +538,7 @@ function createColumnCreateMenu(options)
     if(col.laneType == 'story')
     {
         if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
-        if(priv.canBatchCreateStory) items.push({label: storyLang.batchCreate, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
     }

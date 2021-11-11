@@ -529,7 +529,7 @@ class kanbanModel extends model
             $lane->type      = $type;
             $lane->groupby   = $groupBy;
             $lane->extra     = $groupKey;
-            $lane->name      = $laneName;
+            $lane->name      = $this->lang->$type->$groupBy . ": " . $laneName;
             $lane->color     = $this->config->kanban->laneColorList[$colorIndex];
 
             $colorIndex += 1;
