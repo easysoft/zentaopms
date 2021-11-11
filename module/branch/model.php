@@ -153,8 +153,13 @@ class branchModel extends model
         $lastOrder = (int)$this->dao->select('`order`')->from(TABLE_BRANCH)->where('product')->eq($productID)->orderBy('order_desc')->limit(1)->fetch('order');
         $branch->order = empty($lastOrder) ? 1 : $lastOrder + 1;
 
+        $this->app->loadLang('product');
+        $productType = $this->dao->select('`type`')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('type');
+        $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
+
         $this->dao->insert(TABLE_BRANCH)->data($branch)
             ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
+            ->checkIF(!empty($branch->name), 'name', 'unique', "product = $productID")
             ->exec();
 
         if(!dao::isError()) return $this->dao->lastInsertID();
@@ -175,9 +180,14 @@ class branchModel extends model
         $newBranch = fixer::input('post')->get();
         $newBranch->closedDate = $newBranch->status == 'closed' ? helper::today() : '';
 
+        $this->app->loadLang('product');
+        $productType = $this->getProductType($branchID);
+        $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
+
         $this->dao->update(TABLE_BRANCH)->data($newBranch)
             ->where('id')->eq($branchID)
             ->batchCheck($this->config->branch->edit->requiredFields, 'notempty')
+            ->checkIF(!empty($newBranch->name) and $newBranch->name != $oldBranch->name, 'name', 'unique', "product = $oldBranch->product")
             ->exec();
 
         if(!dao::isError()) return common::createChanges($oldBranch, $newBranch);
@@ -195,6 +205,10 @@ class branchModel extends model
         $data = fixer::input('post')->get();
         $oldBranchList = $this->getList($productID, 'all');
         $branchIDList  = array_keys($this->post->IDList);
+
+        $this->app->loadLang('product');
+        $productType = $this->dao->select('`type`')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('type');
+        $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
 
         foreach($branchIDList as $branchID)
         {
@@ -214,8 +228,10 @@ class branchModel extends model
                 $branch->default    = (isset($data->default) and $branchID == $data->default) ? 1 : 0;
                 $branch->closedDate = $branch->status == 'closed' ? helper::today() : '';
 
-                $this->dao->update(TABLE_BRANCH)->data($branch, 'default')
+
+                $this->dao->update(TABLE_BRANCH)->data($branch)
                     ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
+                    ->checkIF(!empty($branch->name) and $branch->name != $oldBranchList[$branchID]->name, 'name', 'unique', "product = $productID")
                     ->where('id')->eq($branchID)
                     ->exec();
 
@@ -430,13 +446,10 @@ class branchModel extends model
      */
     public function setDefault($productID, $branchID)
     {
-        $defaultBranch = $this->dao->select('id')->from(TABLE_BRANCH)
+        $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')
             ->where('product')->eq($productID)
-            ->andWhere('`default`')->eq('1')
-            ->fetch('id');
+            ->exec();
 
-        if(!empty($defaultBranch)) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('0')->where('id')->eq($defaultBranch)->exec();
-
-        $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
+        if($branchID) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
     }
 }

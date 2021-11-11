@@ -40,14 +40,15 @@ $lang->branch->canNotDelete      = '该@branch@下已经有数据，不能删除
 $lang->branch->nameNotEmpty      = '名称不能为空！';
 $lang->branch->confirmClose      = '是否关闭该@branch@？';
 $lang->branch->confirmActivate   = '是否激活该@branch@？';
+$lang->branch->existName         = '@branch@名称已存在';
 
 $lang->branch->noData     = '暂时没有分支。';
 $lang->branch->mainBranch = '产品默认主干分支。';
 
 $lang->branch->statusList = array();
 $lang->branch->statusList['active'] = '激活';
-$lang->branch->statusList['closed'] = '关闭';
+$lang->branch->statusList['closed'] = '已关闭';
 
 $lang->branch->featureBar['manage']['all']    = '所有';
 $lang->branch->featureBar['manage']['active'] = '激活';
-$lang->branch->featureBar['manage']['closed'] = '关闭';
+$lang->branch->featureBar['manage']['closed'] = '已关闭';

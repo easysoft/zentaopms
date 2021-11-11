@@ -9,7 +9,7 @@ function canSetDefaultBranch(obj)
 {
     if(obj.value == 'active')
     {
-        $(obj).closest('tr').find("input[name^='default']").removeAttr('disabled');
+        if(canSetDefault) $(obj).closest('tr').find("input[name^='default']").removeAttr('disabled');
     }
     else
     {

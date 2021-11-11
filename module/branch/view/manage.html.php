@@ -77,11 +77,11 @@
           </td>
           <?php endif;?>
           <td class='c-name flex' title='<?php echo $branch->name;?>'>
-            <span class="text-ellipsis"><?php echo $branch->name;?></span>
+            <span class="text-ellipsis"><?php echo $branch->name;?>&nbsp;</span>
             <?php
             if($branch->default)
             {
-                echo '&nbsp;<span class="label label-primary label-badge">' . $lang->branch->default . '</span>';
+                echo '<span class="label label-primary label-badge">' . $lang->branch->default . '</span>';
             }
             elseif($branch->status == 'active')
             {

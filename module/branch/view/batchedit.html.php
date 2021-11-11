@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('canSetDefault', common::hasPriv('branch', 'setDefault'));?>
 <div id="mainContent" class="main-content fade">
   <div class="main-header">
     <h2><?php echo $lang->branch->common . '-' . $lang->branch->batchEdit;?></h2>
@@ -34,7 +35,7 @@
           <td><?php echo html::input("name[$branch->id]", $branch->name,  "class='form-control chosen' $disabled");?></td>
           <td><?php echo html::input("desc[$branch->id]", $branch->desc, "class='form-control' $disabled");?></td>
           <td><?php echo html::select("status[$branch->id]", $lang->branch->statusList, $branch->status, "class='form-control' chosen $disabled onchange='canSetDefaultBranch(this)'");?></td>
-          <td class='text-center'><input type='radio' name='default' value='<?php echo $branch->id;?>' <?php if($branch->default) echo 'checked';?> <?php if($branch->status == 'closed') echo 'disabled';?>></td>
+          <td class='text-center'><input type='radio' name='default' value='<?php echo $branch->id;?>' <?php if($branch->default) echo 'checked';?> <?php if($branch->status == 'closed' or !common::hasPriv('branch', 'setDefault')) echo 'disabled';?>></td>
         </tr>
         <?php endforeach;?>
         <tr>
