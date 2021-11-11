@@ -156,7 +156,7 @@ class productModel extends model
         }
 
         setcookie('preProductID', $this->session->product, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        if($this->cookie->preProductID != $productID)
+        if($this->cookie->preProductID != $this->session->product)
         {
             $this->cookie->set('preBranch', 0);
             setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
