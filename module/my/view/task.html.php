@@ -33,7 +33,7 @@
     <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>
   </div>
   <?php else:?>
-  <form id='myTaskForm' class="main-table table-task" method="post">
+  <form id='myTaskForm' class="main-table table-task skip-iframe-modal" method="post">
     <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <table class="table has-sort-head table-fixed" id='taskTable'>
@@ -73,7 +73,7 @@
           <th class='c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id='myTaskList'>
         <?php foreach($tasks as $task):?>
         <?php $canBeChanged = common::canBeChanged('task', $task);?>
         <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
@@ -257,6 +257,8 @@ $(function()
 
     $('#myTaskForm').table(
     {
+        hot: true,
+        replaceId: 'myTaskList',
         statisticCreator: function(table)
         {
             var $table = table.getTable();
