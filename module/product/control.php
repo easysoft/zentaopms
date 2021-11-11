@@ -970,12 +970,27 @@ class product extends control
      * @param  int    $planID
      * @param  bool   $needCreate
      * @param  string $expired
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '')
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $from = '')
     {
-        $plans = $this->loadModel('productplan')->getPairs($productID, $branch, $expired);
+        $this->loadModel('productplan');
+        if($from == 'story' and $branch == BRANCH_MAIN)
+        {
+            $plans = $this->productplan->getPairs($productID);
+        }
+        elseif($from == 'story' and $branch)
+        {
+            $plans  = $this->productplan->getPairs($productID, 0);
+            $plans += $this->productplan->getPairs($productID, $branch);
+        }
+        else
+        {
+            $plans = $this->productplan->getPairs($productID, $branch, $expired);
+        }
+
         $field = $fieldID ? "plans[$fieldID]" : 'plan';
         $output = html::select($field, $plans, $planID, "class='form-control chosen'");
         if(count($plans) == 1 and $needCreate)
