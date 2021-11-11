@@ -145,13 +145,17 @@ class productModel extends model
      */
     public function saveState($productID, $products)
     {
-        if($productID == 0 and $this->cookie->preProductID) $productID = (int)$this->cookie->preProductID;
-        if($productID == 0 or !isset($products[$productID]) $productID = key($products);
-        if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false) $this->accessDenied();
+		if($productID > 0) $this->session->set('product', (int)$productID);
+		if($productID == 0 and $this->cookie->preProductID) $this->session->set('product', (int)$this->cookie->preProductID);
+		if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
+		if(!isset($products[$this->session->product]))
+		{
+			$product = $this->getById($productID);
+			if(empty($product)) $this->session->set('product', key($products));
+			if($productID && strpos(",{$this->app->user->view->products},", ",{$this->session->product},") === false) $this->accessDenied();
 
-        $this->session->set('product', $productID);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        if($this->cookie->preProductID != $productID)
+        if($this->cookie->preProductID != $this->session->productID)
         {
             $this->cookie->set('preBranch', 0);
             setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
