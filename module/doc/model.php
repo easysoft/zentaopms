@@ -2375,22 +2375,6 @@ EOT;
                         $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
                         $treeMenu[$module->id] .= "<div class='treeActions'>";
                         $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit}");
-                        $treeMenu[$module->id] .= '<div class="dropdown dropdown-hover">';
-                        $treeMenu[$module->id] .= "<a class='tree-action' href='javascript:;' data-toggle='dropdown'><i class='icon icon-plus'></i></a>";
-                        $treeMenu[$module->id] .= "<ul class='dropdown-menu'>";
-                        foreach($this->lang->doc->typeList as $typeKey => $typeName)
-                        {
-                            $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-                            $icon  = zget($this->config->doc->iconList, $typeKey);
-                            $treeMenu[$module->id]   .= "<li>";
-                            $treeMenu[$module->id]   .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                            $treeMenu[$module->id]   .= "</li>";
-                            if($typeKey == 'url') $treeMenu[$module->id] .= '<li class="divider"></li>';
-                        }
-
-                        $treeMenu[$module->id] .= "</ul>";
-                        $treeMenu[$module->id] .= "</div>";
-                        $treeMenu[$module->id] .= "<a class='sort-handler tree-action' href='javascript:;' data-type='sort' title={$this->lang->tree->dragAndSort}><i class='icon icon-move'></i></a>";
                         $treeMenu[$module->id] .= '</div></div>';
                     }
                     elseif($currentMethod == 'tablecontents')
@@ -2419,22 +2403,6 @@ EOT;
                 $li .= "<div class='treeActions'>";
                 $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title={$this->lang->doc->editType}");
                 $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editType}");
-                $li .='<div class="dropdown dropdown-hover">';
-                $li .= "<a class='tree-action' href='javascript:;' data-toggle='dropdown'><i class='icon icon-plus'></i></a>";
-                $li .= "<ul class='dropdown-menu'>";
-                foreach($this->lang->doc->typeList as $typeKey => $typeName)
-                {
-                    $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-                    $icon  = zget($this->config->doc->iconList, $typeKey);
-                    $li   .= "<li>";
-                    $li   .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                    $li   .= "</li>";
-                    if($typeKey == 'url') $li .= '<li class="divider"></li>';
-                }
-
-                $li .= "</ul>";
-                $li .= '</div>';
-                $li .= "<a class='sort-handler tree-action' href='javascript:;' data-type='sort' title={$this->lang->tree->dragAndSort}><i class='icon icon-move'></i></a>";
                 $li .= '</div></div>';
             }
         }
