@@ -2506,15 +2506,24 @@ EOD;
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array())
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data')
     {
         global $lang, $app;
-        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+        if(!extension_loaded('curl'))
+        {
+             if($dataType == 'json') die($this->lang->error->noCurlExt);
+             return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+        }
 
         commonModel::$requestErrors = array();
 
         if(!is_array($headers)) $headers = (array)$headers;
         $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
+        if($dataType == 'json')
+        {
+            $headers[] = 'Content-Type: application/json;charset=utf-8';
+            if(!empty($data)) $data = json_encode($data);
+        }
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
