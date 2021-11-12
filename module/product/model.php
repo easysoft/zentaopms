@@ -642,6 +642,8 @@ class productModel extends model
             $whitelist = explode(',', $product->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+            if($product->type == 'normal' and $oldProduct->type != 'normal') $this->loadModel('branch')->unlinkBranch4Project($productID);
+
             return common::createChanges($oldProduct, $product);
         }
     }
@@ -682,6 +684,7 @@ class productModel extends model
         }
         if(dao::isError()) die(js::error(dao::getError()));
 
+        $unlinkProducts = array();
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
@@ -698,9 +701,13 @@ class productModel extends model
             /* When acl is open, white list set empty. When acl is private,update user view. */
             if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
+            if($product->type == 'normal' and $oldProduct->type != 'normal') $unlinkProducts[] = $productID;
 
             $allChanges[$productID] = common::createChanges($oldProduct, $product);
         }
+
+        if(!empty($unlinkProducts)) $this->loadModel('branch')->unlinkBranch4Project($unlinkProducts);
+
         return $allChanges;
     }
 
