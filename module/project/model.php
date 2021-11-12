@@ -575,6 +575,24 @@ class projectModel extends model
     }
 
     /**
+     * Get branch group by project id.
+     *
+     * @param  int          $projectID
+     * @param  array|string $productIdList
+     * @access public
+     * @return array
+     */
+    public function getBranchGroupByProject($projectID, $productIdList)
+    {
+        return $this->dao->select('t1.product as productID, t1.branch as branchID, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.project')->eq($projectID)
+            ->fetchGroup('productID', 'branchID');
+    }
+
+    /**
      * Build the query.
      *
      * @param  int    $projectID

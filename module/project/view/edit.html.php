@@ -21,6 +21,7 @@
 <?php js::set('longTime', $lang->project->longTime);?>
 <?php js::set('unmodifiableProducts', $unmodifiableProducts)?>
 <?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
+<?php js::set('unmodifiableMainBranches', $unmodifiableMainBranches)?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
