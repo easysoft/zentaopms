@@ -74,7 +74,7 @@ function renderStoryItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
                 .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
         $title.appendTo($item);
     }
@@ -122,7 +122,7 @@ function renderBugItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
                 .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true));
         $title.appendTo($item);
     }
@@ -171,7 +171,7 @@ function renderTaskItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
                 .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
         $title.appendTo($item);
     }
