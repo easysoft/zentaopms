@@ -437,6 +437,8 @@ class story extends control
         $products = $this->product->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
+        if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
         /* Init vars. */
         $planID   = $plan;
         $pri      = 0;
