@@ -1399,13 +1399,35 @@ class baseRouter
         /* 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。If extensionLevel == 2 and site extensionFile exists, return it. */
         if($this->config->framework->extensionLevel == 2 and !empty( $moduleExtPaths['site']))
         {
+            $this->extActionFile = $moduleExtPaths['site'] . $this->methodName . '.php';
+            if(file_exists($this->extActionFile)) return true;
+        }
+
+        /* 然后再尝试寻找公共扩展文件。Then try to find the common extension file. */
+        $this->extActionFile = $moduleExtPaths['common'] . $this->methodName . '.php';
+        return file_exists($this->extActionFile);
+    }
+
+    /**
+     * Check for API extend.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkAPIFile()
+    {
+        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+
+        /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
+        if(empty($moduleExtPaths)) return false;
+
+        /* 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。If extensionLevel == 2 and site extensionFile exists, return it. */
+        if($this->config->framework->extensionLevel == 2 and !empty( $moduleExtPaths['site']))
+        {
             $locateFile  = $moduleExtPaths['site'] . $this->methodName . '.302';
             if(file_exists($locateFile)) $this->sendAPI($locateFile);
             $requestFile = $moduleExtPaths['site'] . $this->methodName . '.api';
             if(file_exists($requestFile)) $this->sendAPI($requestFile);
-
-            $this->extActionFile = $moduleExtPaths['site'] . $this->methodName . '.php';
-            if(file_exists($this->extActionFile)) return true;
         }
 
         /* 然后再尝试寻找公共扩展文件。Then try to find the common extension file. */
@@ -1414,8 +1436,7 @@ class baseRouter
         $requestFile = $moduleExtPaths['common'] . $this->methodName . '.api';
         if(file_exists($requestFile)) $this->sendAPI($requestFile);
 
-        $this->extActionFile = $moduleExtPaths['common'] . $this->methodName . '.php';
-        return file_exists($this->extActionFile);
+        return false;
     }
 
     /**
@@ -1707,19 +1728,16 @@ class baseRouter
             $obLevel = ob_get_level();
             for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
-            $controller = new control();
-            $viewFiles  = $controller->setViewFile($this->moduleName, $this->methodName);
+            $viewFiles = $this->control->setViewFile($this->moduleName, $this->methodName);
 
-            $css = $controller->getCSS($this->moduleName, $this->methodName);
-            $js  = $controller->getJS($this->moduleName, $this->methodName);
-            if($css) $controller->view->pageCSS = $css;
-            if($js)  $controller->view->pageJS  = $js;
+            if($css) $this->control->view->pageCSS = $css;
+            if($js)  $this->control->view->pageJS  = $js;
 
             $output  = '';
-            $output .= $controller->printViewFile($headFile);
+            $output .= $this->control->printViewFile($headFile);
             $output .= $response;
-            if(isset($viewFiles['hookFiles'])) foreach($viewFiles['hookFiles'] as $hookFile) $output .= $controller->printViewFile($hookFile);
-            $output .= $controller->printViewFile($footFile);
+            if(isset($viewFiles['hookFiles'])) foreach($viewFiles['hookFiles'] as $hookFile) $output .= $this->control->printViewFile($hookFile);
+            $output .= $this->control->printViewFile($footFile);
             die($output);
         }
     }
@@ -1893,6 +1911,7 @@ class baseRouter
 
         /* 调用该方法   Call the method. */
         call_user_func_array(array($module, $methodName), $this->params);
+        $this->checkAPIFile();
         return $module;
     }
 

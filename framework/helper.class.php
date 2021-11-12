@@ -243,7 +243,10 @@ class helper extends baseHelper
 
         $url .= (strpos($url, '?') !== false ? '&' : '?') . $config->sessionVar . '=' . session_id();
         if(isset($_SESSION['user'])) $url .= '&account=' . $_SESSION['user']->account;
-        return common::http($url);
+        $response = common::http($url);
+        $jsonDecode = json_decode($response);
+        if(empty($jsonDecode)) return $response;
+        return $jsonDecode;
     }
 }
 

@@ -20,11 +20,18 @@ class viewsEntry extends entry
     public function get()
     {
         $position = $this->param('position', '');
-        $lite = $this->param('lite', '');
+        $tab      = $this->param('tab', '');
+        $lite     = $this->param('lite', '');
 
         if(empty($position)) return $this->sendError(400, 'Need position param.');
         if($position != 'header' and $position != 'footer') return $this->sendError(400, 'Value of position param only is header or footer.');
         if(!empty($lite)) $lite .= 'lite.';
+
+        if($tab)
+        {
+            $_COOKIE['tab'] = $tab;
+            $this->app->setOpenApp();
+        }
 
         $viewFile = $this->app->moduleRoot . "common/view/{$position}.{$lite}html.php";
         if(!file_exists($viewFile)) return $this->sendError(400, 'This view file is not exists.');
