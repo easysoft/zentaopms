@@ -55,6 +55,12 @@ $lang->gitlab->bindUserError      = "Can not bind users repeatedly %s";
 $lang->gitlab->importIssueError   = "The execution to which this issue belongs is not selected.";
 $lang->gitlab->importIssueWarn    = "There is a problem of import failure, you can try to import again.";
 
+$lang->gitlab->accessLevel[10] = 'Guest';
+$lang->gitlab->accessLevel[20] = 'Reporter';
+$lang->gitlab->accessLevel[30] = 'Developer';
+$lang->gitlab->accessLevel[40] = 'Maintainer';
+$lang->gitlab->accessLevel[50] = 'Owner';
+
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "Project ID";
 $lang->gitlab->project->name                       = "Project name";
@@ -131,3 +137,8 @@ $lang->gitlab->group->createOn                                = "Created on";
 $lang->gitlab->group->members                                 = "Group Members";
 $lang->gitlab->group->confirmDelete                           = 'Do you want to delete this GitLab group?';
 $lang->gitlab->group->emptyError                              = "cannot be empty";
+$lang->gitlab->group->manageMembers                           = 'Manage Group Members';
+$lang->gitlab->group->memberName                              = 'Account';
+$lang->gitlab->group->memberAccessLevel                       = 'Access Level';
+$lang->gitlab->group->memberExpiresAt                         = 'Expiration time';
+$lang->gitlab->group->repeatError                             = "Group members cannot be added repeatedly";
