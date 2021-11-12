@@ -611,6 +611,7 @@ class kanbanModel extends model
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
         }
+        $column->limit = (int)$column->limit;
 
         /* Check column limit. */
         $sumChildLimit = 0;
