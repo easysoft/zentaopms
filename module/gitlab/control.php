@@ -640,6 +640,36 @@ class gitlab extends control
     }
 
     /**
+     * Create Webhook by repoID.
+     *
+     * @param  int    $repoID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function createWebhook($repoID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->gitlab->confirmAddWebhook, $this->createLink('gitlab', 'createWebhook', "repoID=$repoID&confirm=yes")));
+        }
+        else
+        {
+            $repo = $this->loadModel('repo')->getRepoByID($repoID);
+            $res = $this->gitlab->addPushWebhook($repo);
+
+            if(!$res)
+            {
+                die(js::error($this->lang->gitlab->failCreateWebhook));
+            }
+            else
+            {
+                die(js::locate($this->createLink('repo', 'maintain'), 'parent'));
+            }
+        }
+    }
+
+    /**
      * AJAX: Get executions by productID.
      *
      * @param  int    $productID

@@ -232,7 +232,16 @@ class repoModel extends model
 
         if(!dao::isError()) $this->rmClientVersionFile();
 
-        return $this->dao->lastInsertID();
+        $repoID = $this->dao->lastInsertID();
+
+        if($this->post->SCM == 'Gitlab')
+        {
+            /* Add webhook. */
+            $repo = $this->getRepoByID($repoID);
+            $this->loadModel('gitlab')->addPushWebhook($repo);
+        }
+
+        return $repoID;
     }
 
     /**

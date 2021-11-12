@@ -859,7 +859,7 @@ class gitlabModel extends model
      * @param  object $hook
      * @access public
      * @docs   https://docs.gitlab.com/ee/api/projects.html#add-project-hook
-     * @return object
+     * @return string
      */
     public function apiCreateHook($gitlabID, $projectID, $hook)
     {
@@ -891,6 +891,27 @@ class gitlabModel extends model
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
         return commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete'));
+    }
+
+    /**
+     * Add push web hook
+     *
+     * @param  object $repo`
+     * @access public
+     * @return void
+     */
+    public function addPushWebhook($repo)
+    {
+        $hook = new stdClass;
+        $hook->id  = $repo->path;
+        $hook->url = common::getSysURL() . '/api.php/v1/gitlab/webhook?repoID='. $repo->id;
+        $hook->push_events           = true;
+        $hook->merge_requests_events = true;
+        $res = $this->apiCreateHook($repo->gitlab, $repo->extra, $hook);
+        $data = json_decode($res, true);
+
+        if(!empty($data['id'])) return true;
+        return false;
     }
 
     /**
