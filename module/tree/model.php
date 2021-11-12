@@ -685,24 +685,6 @@ class treeModel extends model
             if($tree && ($productNum > 1 or $manage)) $tree = "<ul>" . $tree . "</ul>\n</li>";
             $menu .= $tree;
         }
-
-        /* Get execution module. */
-        if($startModule == 0)
-        {
-            /* tree menu. */
-            $treeMenu = array();
-            $query = $this->dao->select('*')->from(TABLE_MODULE)
-                ->where('root')->eq((int)$rootID)
-                ->andWhere('type')->eq('bug')
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('grade desc, `order`, type')
-                ->get();
-            $stmt  = $this->dbh->query($query);
-            while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'bug', $userFunc, $extra);
-
-            $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
-            $menu .= $tree . '</li>';
-        }
         $menu .= '</ul>';
         return $menu;
     }
@@ -770,24 +752,6 @@ class treeModel extends model
 
             if($tree) $tree = "<ul>" . $tree . "</ul>\n</li>";
             $menu .= $tree;
-        }
-
-        /* Get case module. */
-        if($startModule == 0)
-        {
-            /* tree menu. */
-            $treeMenu = array();
-            $query = $this->dao->select('*')->from(TABLE_MODULE)
-                ->where('root')->eq((int)$rootID)
-                ->andWhere('type')->eq('case')
-                ->andWhere('deleted')->eq(0)
-                ->orderBy('grade desc, `order`, type')
-                ->get();
-            $stmt  = $this->dbh->query($query);
-            while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'case', $userFunc, $extra);
-
-            $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
-            $menu .= $tree . '</li>';
         }
         $menu .= '</ul>';
         return $menu;
