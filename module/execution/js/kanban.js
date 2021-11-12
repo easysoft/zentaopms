@@ -649,6 +649,7 @@ function resizeKanbanContainer()
 {
     var $container = $('#kanbanContainer');
     var maxHeight = window.innerHeight - 98 - 15;
+    if($.cookie('isFullScreen') == 1) maxHeight = window.innerHeight - 15;
     $container.children('.panel-body').css('max-height', maxHeight);
 }
 
@@ -683,6 +684,8 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
 /* Example code: */
 $(function()
 {
+    $.cookie('isFullScreen', 0);
+
     /* Common options 用于初始化看板的通用选项 */　
     var commonOptions =
     {
