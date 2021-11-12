@@ -457,10 +457,13 @@ class story extends control
         }
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
-        $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
-        $plans['ditto']      = $this->lang->story->ditto;
-        $priList             = (array)$this->lang->story->priList;
-        $priList['ditto']    = $this->lang->story->ditto;
+
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, true);
+        $plans['ditto'] = $this->lang->story->ditto;
+
+        $priList          = (array)$this->lang->story->priList;
+        $priList['ditto'] = $this->lang->story->ditto;
+
         $sourceList          = (array)$this->lang->story->sourceList;
         $sourceList['ditto'] = $this->lang->story->ditto;
 

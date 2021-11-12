@@ -329,13 +329,25 @@ class productplan extends control
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $number
-     *
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function ajaxGetProductplans($productID, $branch = 0, $number = '')
+    public function ajaxGetProductplans($productID, $branch = 0, $number = '', $from = '')
     {
-        $plans = $this->productplan->getPairs($productID, $branch);
+        if($from == 'story' and $branch == BRANCH_MAIN)
+        {
+            $plans = $this->productplan->getPairs($productID);
+        }
+        elseif($from == 'story' and $branch)
+        {
+            $plans  = $this->productplan->getPairs($productID, 0);
+            $plans += $this->productplan->getPairs($productID, $branch);
+        }
+        else
+        {
+            $plans = $this->productplan->getPairs($productID, $branch, $expired);
+        }
 
         $planName = $number === '' ? 'plan' : "plan[$number]";
         $plans    = empty($plans) ? array('' => '') : $plans;
