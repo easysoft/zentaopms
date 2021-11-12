@@ -1173,28 +1173,4 @@ class repo extends control
         echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
     }
 
-        /**
-     * Handle gitlab webhook.
-     *
-     * @param  string $event
-     * @param  string $token
-     * @param  string $data
-     * @param  object $gitlab
-     * @access public
-     * @return void
-     */
-    public function handleWebhook($event, $token, $data, $gitlab)
-    {
-        /* Check gitlab token */
-        switch($event)
-        {
-            case static::HOOK_PUSH_EVENT:
-                $repo = $this->loadModel('repo')->getRepoByPipeline($gitlab->type, $gitlab->id);
-                /* Update code commit history. */
-                $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-                break;
-        }
-    }
-
 }
