@@ -499,11 +499,11 @@ class kanbanModel extends model
             else
             {
                 /* Update kanban lanes by group. */
-                $laneName = $this->lang->kanban->noGroup;
+                $laneName = $this->lang->$type->$groupBy . ': ' . $this->lang->kanban->noGroup;
                 if($lane->extra)
                 {
                     $namePairs = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
-                    $laneName  = zget($namePairs, $lane->extra);
+                    $laneName  = $this->lang->$type->$groupBy . ': ' . zget($namePairs, $lane->extra);
                 }
 
                 $this->dao->update(TABLE_KANBANLANE)->set('name')->eq($laneName)->where('id')->eq($laneID)->exec();
@@ -611,6 +611,7 @@ class kanbanModel extends model
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
         }
+        $column->limit = (int)$column->limit;
 
         /* Check column limit. */
         $sumChildLimit = 0;
@@ -735,7 +736,7 @@ class kanbanModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->fetch();
 
-        if(!empty($column->parent)) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
+        if($column->parent > 0) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
 
         return $column;
     }
