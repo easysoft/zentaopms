@@ -226,13 +226,13 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function getPairsForStory($product = 0, $branch = 0, $skipParent = false)
+    public function getPairsForStory($product = 0, $branch = '', $skipParent = false)
     {
         $date = date('Y-m-d');
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+            ->beginIF($branch !== '')->andWhere("branch")->eq($branch)->fi()
             ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
