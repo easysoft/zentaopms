@@ -1867,6 +1867,7 @@ class productModel extends model
         }
         else if($module == 'doc')
         {
+            if($method == 'create' or $method == 'edit') $method = 'tableContents';
             $link = helper::createLink('doc', $method, "type=product&objectID=%s&from=product");
         }
         elseif($module == 'design')
