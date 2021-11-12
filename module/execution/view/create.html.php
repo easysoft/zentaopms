@@ -87,9 +87,31 @@
         </tr>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
-          <td><?php echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control chosen' onchange='showLifeTimeTips()'"); ?></td>
+          <td>
+          <?php
+          if($isStage)
+          {
+              echo html::select('attribute', $lang->stage->typeList, '', "class='form-control chosen'");
+          }
+          else
+          {
+              echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");
+          }
+          ?>
+          </td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
+        <?php if($isStage):?>
+        <tr>
+          <th><?php echo $lang->stage->percent;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('percent', '', "class='form-control'");?>
+              <span class='input-group-addon'>%</span>
+            </div>
+          </td>
+        </tr>
+        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->execution->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>

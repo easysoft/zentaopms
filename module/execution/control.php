@@ -1234,6 +1234,8 @@ class execution extends control
             unset($this->lang->doc->menu->execution['subMenu']);
         }
 
+        $project = $this->project->getByID($projectID);
+
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -1358,6 +1360,7 @@ class execution extends control
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
         $this->view->projectID       = $projectID;
+        $this->view->isStage         = $project->model == 'waterfall' ? true : false;
         $this->view->products        = $products;
         $this->view->productPlan     = array(0 => '') + $productPlan;
         $this->view->productPlans    = array(0 => '') + $productPlans;
@@ -1436,7 +1439,8 @@ class execution extends control
 
         $executions = array('' => '') + $this->executions;
         $execution  = $this->execution->getById($executionID);
-        $managers = $this->execution->getDefaultManagers($executionID);
+        $managers   = $this->execution->getDefaultManagers($executionID);
+
 
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
@@ -2925,7 +2929,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');

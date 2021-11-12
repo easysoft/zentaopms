@@ -450,6 +450,11 @@ class programplanModel extends model
                 dao::$errors['message'][] = $this->lang->programplan->error->planFinishSmall;
                 return false;
             }
+            if(isset($parentStage) and ($plan->end > $parentStage->end || $plan->begin < $parentStage->begin))
+            {
+                dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
+                return false;
+            }
 
             if($plan->begin == '0000-00-00') $plan->begin = '';
             if($plan->end   == '0000-00-00') $plan->end   = '';
