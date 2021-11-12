@@ -65,14 +65,31 @@ class build extends control
 
         $productGroups = $this->execution->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
+        $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID);
+        $branchPairs   = $this->loadModel('branch')->getPairs($productID, 'active');
+        $branches      = array();
         $products      = array();
-        foreach($productGroups as $product) $products[$product->id] = $product->name;
+        foreach($productGroups as $product)
+        {
+            $products[$product->id] = $product->name;
+            if(isset($productGroups[$productID]) and $productGroups[$productID]->type != 'normal')
+            {
+                $branches[$product->id] = array();
+                if(isset($branchGroups[$product->id]))
+                {
+                    foreach($branchGroups[$product->id] as $branchID => $branch)
+                    {
+                        $branches[$product->id][$branchID] = $branchPairs[$branchID];
+                    }
+                }
+            }
+        }
 
         $this->view->title      = $this->lang->build->create;
         $this->view->position[] = $this->lang->build->create;
 
         $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
-        $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches      = $branches;
         $this->view->executionID   = $executionID;
         $this->view->products      = $products;
         $this->view->projectID     = $projectID;
@@ -148,14 +165,32 @@ class build extends control
             $productGroups[$build->product] = $product;
         }
 
-        $products = array();
-        foreach($productGroups as $product) $products[$product->id] = $product->name;
+        $products     = array();
+        $branchGroups = $this->loadModel('project')->getBranchesByProject($build->execution);
+        $branchPairs  = $this->loadModel('branch')->getPairs($build->product, 'active');
+        $branches     = array();
+
+        foreach($productGroups as $product)
+        {
+            $products[$product->id] = $product->name;
+            if(isset($productGroups[$build->product]) and $productGroups[$build->product]->type != 'normal')
+            {
+                $branches[$product->id] = array();
+                if(isset($branchGroups[$product->id]))
+                {
+                    foreach($branchGroups[$product->id] as $branchID => $branch)
+                    {
+                        $branches[$product->id][$branchID] = $branchPairs[$branchID];
+                    }
+                }
+            }
+        }
 
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->build->edit;
         $this->view->position[] = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $execution->name);
         $this->view->position[] = $this->lang->build->edit;
         $this->view->product    = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
-        $this->view->branches   = (isset($productGroups[$build->product]) and $productGroups[$build->product]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
+        $this->view->branches   = $branches;
         $this->view->executions = $executions;
         $this->view->orderBy    = $orderBy;
 

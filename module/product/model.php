@@ -155,11 +155,12 @@ class productModel extends model
             if($productID && strpos(",{$this->app->user->view->products},", ",{$this->session->product},") === false) $this->accessDenied();
 
             setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            if($this->cookie->preProductID != $this->session->product)
-            {
-                $this->cookie->set('preBranch', 0);
-                setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            }
+        }
+
+        if($this->cookie->preProductID != $this->session->product)
+        {
+            $this->cookie->set('preBranch', 0);
+            setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
         return $this->session->product;
     }
