@@ -267,7 +267,7 @@ $lang->project->cannotCancelCat        = "It has child projects, so you cannot u
 $lang->project->parentBeginEnd         = "Parent begin&end date: %s ~ %s";
 $lang->project->childLongTime          = "If a child as long-term projects, the parent should be long-term too.";
 $lang->project->readjustTime           = 'Change the project begin&end date.';
-$lang->project->notAllowRemoveProducts = 'The story of this product is linked with the project. Unlink it before doing any action.';
+$lang->project->notAllowRemoveProducts = "Stories of this product are linked to projects or {$lang->execution->common} of this project is linked to this product. Please unlink it and try again.";
 
 $lang->project->programTitle['0']    = 'Hidden';
 $lang->project->programTitle['base'] = 'Base-level project only';

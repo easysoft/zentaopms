@@ -77,15 +77,19 @@ $(function()
 
     $("#productsBox select[name^='branch']").each(function()
     {
-        var isExistedBranch = $.inArray($(this).attr('data-last'), unmodifiableBranches);
+        var branchID        = $(this).attr('data-last');
+        var isExistedBranch = $.inArray(branchID, unmodifiableBranches);
         if(isExistedBranch != -1)
         {
             var $product = $(this).closest('.has-branch').find("[name^='products']");
             if($.inArray($product.val(), unmodifiableProducts) != -1)
             {
-                $(this).prop('disabled', true).trigger("chosen:updated");
-                $product.prop('disabled', true).trigger("chosen:updated");
-                $product.siblings('div').find('span').attr('title', tip);
+                if((branchID == 0 && unmodifiableMainBranches[$product.val()]) || branchID != 0)
+                {
+                    $(this).prop('disabled', true).trigger("chosen:updated");
+                    $product.prop('disabled', true).trigger("chosen:updated");
+                    $product.siblings('div').find('span').attr('title', tip);
+                }
             }
         }
     });
