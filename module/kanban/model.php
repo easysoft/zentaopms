@@ -499,11 +499,11 @@ class kanbanModel extends model
             else
             {
                 /* Update kanban lanes by group. */
-                $laneName = $this->lang->kanban->noGroup;
+                $laneName = $this->lang->$type->$groupBy . ': ' . $this->lang->kanban->noGroup;
                 if($lane->extra)
                 {
                     $namePairs = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
-                    $laneName  = zget($namePairs, $lane->extra);
+                    $laneName  = $this->lang->$type->$groupBy . ': ' . zget($namePairs, $lane->extra);
                 }
 
                 $this->dao->update(TABLE_KANBANLANE)->set('name')->eq($laneName)->where('id')->eq($laneID)->exec();
