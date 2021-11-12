@@ -29,7 +29,7 @@ class qaModel extends model
             die(js::error($this->lang->product->accessDenied) . js::locate('back'));
         }
 
-        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->loadModel('product')->getSwitcher($productID, $extra, $branch);
