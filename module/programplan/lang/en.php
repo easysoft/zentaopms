@@ -16,7 +16,7 @@ $lang->programplan->list          = 'Stage List';
 $lang->programplan->create        = 'Create';
 $lang->programplan->edit          = 'Edit';
 $lang->programplan->delete        = 'Delete Stage';
-$lang->programplan->createSubPlan = 'Create Sub Plan';
+$lang->programplan->createSubPlan = 'Create Sub Stage';
 
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
