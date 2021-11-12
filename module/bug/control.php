@@ -111,9 +111,9 @@ class bug extends control
         $browseType = strtolower($browseType);
 
         /* Set productID, moduleID, queryID and branch. */
-        $branch = ($branch == '') ? (int)$this->cookie->preBranch : (int)$branch;
+        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
@@ -127,7 +127,7 @@ class bug extends control
             setcookie('bugBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             if($browseType == '') setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
-        if($browseType == 'bybranch') setcookie('bugBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        if($browseType == 'bybranch') setcookie('bugBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('bugBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
@@ -139,7 +139,7 @@ class bug extends control
         /* Set moduleTree. */
         if($browseType == '')
         {
-            setcookie('treeBranch', (int)$branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $browseType = 'unclosed';
         }
 
@@ -149,7 +149,7 @@ class bug extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), '', $browseType == '' ? $branch : (int)$this->cookie->treeBranch);
+            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), '', $browseType == '' ? $branch : $this->cookie->treeBranch);
         }
 
         if(($browseType != 'bymodule' && $browseType != 'bybranch')) $this->session->set('bugBrowseType', $browseType);
