@@ -33,7 +33,7 @@ class webhookModel extends model
      */
     public function getByType($type)
     {
-        $webhook = $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->fetch();
+        $webhook = $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
         return $webhook;
     }
 
