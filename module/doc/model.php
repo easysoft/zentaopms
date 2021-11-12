@@ -2309,7 +2309,7 @@ EOT;
             {
                 if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
 
-                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . "data-id=$doc->id>";
+                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . " data-id=$doc->id>";
 
                 if($currentMethod == 'tablecontents')
                 {
