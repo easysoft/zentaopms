@@ -87,7 +87,12 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
           dragCssClass: 'drop-here',
           targetSelector: function($ele, $root)
           {
-              return $ele.closest('ul').addClass('is-sorting').children('li');
+              var $ul = $ele.closest('ul');
+              setTimeout(function()
+              {
+                  if($('#modules').hasClass('sortable-sorting')) $ul.addClass('is-sorting');
+              }, 100);
+              return $ul.children('li');
           },
           always: function()
           {
