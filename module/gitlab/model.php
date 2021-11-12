@@ -396,7 +396,7 @@ class gitlabModel extends model
     /**
      * Get a list of to-do items by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/todos.html
+     * @link   https://docs.gitlab.com/ee/api/todos.html
      * @param  int $gitlabID
      * @param  int $projectID
      * @param  int $sudo
@@ -880,7 +880,7 @@ class gitlabModel extends model
     /**
      * Get Forks of a project by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
+     * @link   https://docs.gitlab.com/ee/api/projects.html#list-forks-of-a-project
      * @param  int $gitlabID
      * @param  int $projectID
      * @access public
@@ -913,16 +913,16 @@ class gitlabModel extends model
      * @param  int $gitlabID
      * @param  int $projectID
      * @access public
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#list-project-hooks
-     * @return array
+     * @link   https://docs.gitlab.com/ee/api/projects.html#list-project-hooks
+     * @return mixed
      */
     public function apiGetHooks($gitlabID, $projectID)
     {
         $apiRoot  = $this->getApiRoot($gitlabID);
         $apiPath  = "/projects/{$projectID}/hooks";
         $url      = sprintf($apiRoot, $apiPath);
-        $response = json_decode(commonModel::http($url));
-        return $response;
+
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -932,16 +932,16 @@ class gitlabModel extends model
      * @param  int $projectID
      * @param  int $hookID
      * @access public
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#get-project-hook
-     * @return object
+     * @link   https://docs.gitlab.com/ee/api/projects.html#get-project-hook
+     * @return mixed
      */
     public function apiGetHook($gitlabID, $projectID, $hookID)
     {
         $apiRoot  = $this->getApiRoot($gitlabID);
         $apiPath  = "/projects/$projectID/hooks/$hookID)";
         $url      = sprintf($apiRoot, $apiPath);
-        $response = commonModel::http($url);
-        return $response;
+
+        return json_decode(commonModel::http($url));
     }
 
     /**
@@ -951,8 +951,8 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  object $hook
      * @access public
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#add-project-hook
-     * @return string
+     * @link   https://docs.gitlab.com/ee/api/projects.html#add-project-hook
+     * @return mixed
      */
     public function apiCreateHook($gitlabID, $projectID, $hook)
     {
@@ -964,8 +964,9 @@ class gitlabModel extends model
         foreach($hook as $index => $item) $newHook->$index= $item;
 
         $apiRoot = $this->getApiRoot($gitlabID);
-        $url = sprintf($apiRoot, "/projects/{$projectID}/hooks");
-        return commonModel::http($url, $newHook);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks");
+
+        return json_decode(commonModel::http($url, $newHook));
     }
 
     /**
@@ -975,35 +976,54 @@ class gitlabModel extends model
      * @param  int $projectID
      * @param  int $hookID
      * @access public
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#delete-project-hook
-     * @return null|object
+     * @link   https://docs.gitlab.com/ee/api/projects.html#delete-project-hook
+     * @return mixed
      */
     public function apiDeleteHook($gitlabID, $projectID, $hookID)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
-        return commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete'));
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete')));
     }
 
     /**
-     * Add push web hook
+     * Add webhook with push and merge request events to GitLab project.
      *
-     * @param  object $repo`
+     * @param  object $repo
      * @access public
-     * @return void
+     * @return bool
      */
     public function addPushWebhook($repo)
     {
         $hook = new stdClass;
-        $hook->id  = $repo->path;
         $hook->url = common::getSysURL() . '/api.php/v1/gitlab/webhook?repoID='. $repo->id;
         $hook->push_events           = true;
         $hook->merge_requests_events = true;
-        $res = $this->apiCreateHook($repo->gitlab, $repo->extra, $hook);
-        $data = json_decode($res, true);
 
-        if(!empty($data['id'])) return true;
+        /* Return a empty array if where is a existing webhook. */
+        if($this->isWebhookExists($repo, $hook->url)) return array();
+
+        $result  = $this->apiCreateHook($repo->gitlab, $repo->project, $hook);
+
+        if(!empty($result->id)) return true;
+        return false;
+    }
+
+    /**
+     * Check if Webhook exists.
+     *
+     * @param  object $repo
+     * @param  string $url
+     * @return bool
+     */
+    public function isWebhookExists($repo, $url = '')
+    {
+        $hookList = $this->apiGetHooks($repo->gitlab, $repo->project);
+        foreach($hookList as $hook)
+        {
+            if($hook->url == $url) return true;
+        }
         return false;
     }
 
@@ -1015,7 +1035,7 @@ class gitlabModel extends model
      * @param  int    $hookID
      * @param  object $hook
      * @access public
-     * @docs   https://docs.gitlab.com/ee/api/projects.html#edit-project-hook
+     * @link   https://docs.gitlab.com/ee/api/projects.html#edit-project-hook
      * @return object
      */
     public function apiUpdateHook($gitlabID, $projectID, $hookID, $hook)

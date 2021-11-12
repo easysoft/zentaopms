@@ -782,15 +782,15 @@ class gitlab extends control
         else
         {
             $repo = $this->loadModel('repo')->getRepoByID($repoID);
-            $res = $this->gitlab->addPushWebhook($repo);
+            $res  = $this->gitlab->addPushWebhook($repo);
 
-            if(!$res)
+            if($res or is_array($res))
             {
-                die(js::error($this->lang->gitlab->failCreateWebhook));
+                die(js::locate($this->createLink('repo', 'maintain'), 'parent'));
             }
             else
             {
-                die(js::locate($this->createLink('repo', 'maintain'), 'parent'));
+                die(js::error($this->lang->gitlab->failCreateWebhook));
             }
         }
     }
