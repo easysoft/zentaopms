@@ -316,6 +316,12 @@ class mrModel extends model
                 $condition = (array)$newMR;
                 if(empty($condition)) continue;
 
+                /* Update compile status of current MR object */
+                if(isset($MR->needPassCI) and $MR->needPassCI == '1')
+                {
+                    $newMR->compileStatus = empty($MR->compileID) ? 'fail' : $this->loadModel('compile')->getByID($MR->compileID)->status;
+                }
+
                 /* Update MR in Zentao database. */
                 $this->dao->update(TABLE_MR)->data($newMR)
                     ->where('id')->eq($MR->id)
