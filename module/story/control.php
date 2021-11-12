@@ -437,6 +437,8 @@ class story extends control
         $products = $this->product->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
+        if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
         /* Init vars. */
         $planID   = $plan;
         $pri      = 0;
@@ -457,10 +459,13 @@ class story extends control
         }
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
-        $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
-        $plans['ditto']      = $this->lang->story->ditto;
-        $priList             = (array)$this->lang->story->priList;
-        $priList['ditto']    = $this->lang->story->ditto;
+
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, true);
+        $plans['ditto'] = $this->lang->story->ditto;
+
+        $priList          = (array)$this->lang->story->priList;
+        $priList['ditto'] = $this->lang->story->ditto;
+
         $sourceList          = (array)$this->lang->story->sourceList;
         $sourceList['ditto'] = $this->lang->story->ditto;
 
@@ -1535,7 +1540,7 @@ class story extends control
      */
     public function track($productID, $branch = '', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Set menu. The projectstory module does not execute. */
