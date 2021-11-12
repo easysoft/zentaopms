@@ -562,7 +562,7 @@ class productModel extends model
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = $product->program")
-            ->checkIF(!empty($product->code), 'code', 'unique', "`program` = $product->program")
+            ->checkIF(!empty($product->code), 'code', 'unique')
             ->exec();
 
         if(!dao::isError())
@@ -631,8 +631,8 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
+            ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $product->program")
             ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID")
-            ->check('name', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
             ->exec();
 
@@ -659,6 +659,7 @@ class productModel extends model
         $data        = fixer::input('post')->get();
         $oldProducts = $this->getByIdList($this->post->productIDList);
         $nameList    = array();
+
         foreach($data->productIDList as $productID)
         {
             $productName = $data->names[$productID];
@@ -675,10 +676,6 @@ class productModel extends model
             $products[$productID]->status  = $data->statuses[$productID];
             $products[$productID]->desc    = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->acl     = $data->acls[$productID];
-
-            /* Check unique name for edited products. */
-            if(isset($nameList[$productName])) dao::$errors['name'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->name, $productName);
-            $nameList[$productName] = $productName;
         }
         if(dao::isError()) die(js::error(dao::getError()));
 
@@ -690,7 +687,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->check('name', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
+                ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $oldProduct->program")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
