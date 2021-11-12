@@ -304,6 +304,7 @@ class gitlab extends control
     {
         $gitlabGroupList = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
 
+        $this->view->title           = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabGroupList = $gitlabGroupList;
         $this->view->orderBy         = $orderBy;
@@ -329,6 +330,7 @@ class gitlab extends control
 
         $gitlab = $this->gitlab->getByID($gitlabID);
 
+        $this->view->title    = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->group->create;
         $this->view->gitlab   = $gitlab;
         $this->view->gitlabID = $gitlabID;
         $this->display();
@@ -355,9 +357,126 @@ class gitlab extends control
         $gitlab = $this->gitlab->getByID($gitlabID);
         $group  = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
 
+        $this->view->title    = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->group->edit;
         $this->view->gitlab   = $gitlab;
         $this->view->group    = $group;
         $this->view->gitlabID = $gitlabID;
+        $this->display();
+    }
+
+    /**
+     * Delete a gitlab group.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function deleteGroup($gitlabID, $groupID, $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
+
+        $reponse = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);
+        if(!$reponse or substr($reponse->message, 0, 2) == '20') die(js::reload('parent'));
+        die(js::alert($reponse->message));
+    }
+
+    /**
+     * Manage a gitlab group members.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function manageGroupMembers($gitlabID, $groupID)
+    {
+        if($_POST)
+        {
+            $data = (array) fixer::input('post')->get();
+            extract($data);
+
+            $ids = array_filter($ids);
+            if(count($ids) != count(array_unique($ids))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
+            $newMembers = array();
+            foreach($ids as $key => $id)
+            {
+                /* Check whether each member has selected accesslevel. */
+                if(empty($levels[$key])) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->memberAccessLevel . $this->lang->gitlab->group->emptyError ));
+
+                $newMembers[$id] = (object)array('access_level'=>$levels[$key], 'expires_at'=>$expires[$key]);
+            }
+
+            $currentMembers = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID);
+
+            /* Get the updated,deleted data. */
+            $addedMembers = $deletedMembers = $updatedMembers = array();
+            foreach($currentMembers as $currentMember)
+            {
+                if(empty($newMembers[$currentMember->id]))
+                {
+                    $deletedMembers[] = $currentMember->id;
+                }
+                else
+                {
+                    if($newMembers[$currentMember->id]->access_level != $currentMember->access_level or $newMembers[$currentMember->id]->expires_at != $currentMember->expires_at) $updatedMembers[] = (object)array('user_id' => $currentMember->id, 'access_level' => $newMembers[$currentMember->id]->access_level, 'expires_at' => $newMembers[$currentMember->id]->expires_at);
+                }
+            }
+            /* Get the added data. */
+            foreach($newMembers as $id => $newMember)
+            {
+                $exist = FALSE;
+                foreach($currentMembers as $currentMember)
+                {
+                    if($currentMember->id == $id)
+                    {
+                        $exist = TRUE;
+                        break;
+                    }
+                }
+                if($exist == FALSE) $addedMembers[] = (object)array('user_id' => $id, 'access_level' => $newMembers[$id]->access_level, 'expires_at' => $newMembers[$id]->expires_at);
+            }
+
+            if(count($addedMembers) > 0)
+            {
+                foreach($addedMembers as $addedMember)
+                {
+                    $this->gitlab->apiCreateGroupMember($gitlabID, $groupID, $addedMember);
+                }
+            }
+            if(count($updatedMembers) > 0)
+            {
+                foreach($updatedMembers as $updatedMember)
+                {
+                    $this->gitlab->apiUpdateGroupMember($gitlabID, $groupID, $updatedMember);
+                }
+            }
+            if(count($deletedMembers) > 0)
+            {
+                foreach($deletedMembers as $deletedMemberID)
+                {
+                    $this->gitlab->apiDeleteGroupMember($gitlabID, $groupID, $deletedMemberID);
+                }
+            }
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('groupBrowse', "gitlabID=$gitlabID")));
+        }
+
+        /* Get gitlab users data. */
+        $gitlabUserList = $this->gitlab->apiGetUsers($gitlabID);
+        $gitlabUsers = array(''=>'');
+        foreach($gitlabUserList as $gitlabUser)
+        {
+            $gitlabUsers[$gitlabUser->id] = $gitlabUser->realname;
+        }
+
+        $accessLevels   = $this->lang->gitlab->accessLevels;
+        $currentMembers = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID);
+
+        $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->group->manageMembers;
+        $this->view->currentMembers = $currentMembers;
+        $this->view->gitlabUsers    = $gitlabUsers;
+        $this->view->gitlabID       = $gitlabID;
         $this->display();
     }
 
@@ -370,6 +489,7 @@ class gitlab extends control
      */
     public function userBrowse($gitlabID)
     {
+        $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseUser;
         $this->view->gitlabID       = $gitlabID;
         $this->view->gitlabUserList = $this->gitlab->apiGetUsers($gitlabID);
         $this->display();
@@ -394,6 +514,7 @@ class gitlab extends control
 
         $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
 
+        $this->view->title     = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->create;
         $this->view->userPairs = $userPairs;
         $this->view->gitlabID  = $gitlabID;
         $this->display();
@@ -421,6 +542,7 @@ class gitlab extends control
         $user              = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
         $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($user->id)->fetch('account');
 
+        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->edit;
         $this->view->user              = $user;
         $this->view->userPairs         = $userPairs;
         $this->view->zentaoBindAccount = $zentaoBindAccount;
@@ -454,6 +576,7 @@ class gitlab extends control
      */
     public function projectBrowse($gitlabID)
     {
+        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseProject;
         $this->view->gitlabID          = $gitlabID;
         $this->view->gitlabProjectList = $this->gitlab->apiGetProjects($gitlabID);
         $this->display();
@@ -488,6 +611,7 @@ class gitlab extends control
             if($namespace->kind == 'group') $namespaces[$namespace->id] = $namespace->path;
         }
 
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->project->create;
         $this->view->gitlab     = $gitlab;
         $this->view->user       = $user;
         $this->view->namespaces = $namespaces;
@@ -514,6 +638,8 @@ class gitlab extends control
         }
 
         $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        $this->view->title    = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->project->edit;
         $this->view->project  = $project;
         $this->view->gitlabID = $gitlabID;
         $this->display();
