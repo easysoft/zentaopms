@@ -155,8 +155,8 @@ class product extends control
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
-            $_COOKIE['storyModule'] = 'all';
-            setcookie('storyModule', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            $_COOKIE['storyModule'] = 0;
+            setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
 
         if($browseType == 'bymodule' or $browseType == '')
