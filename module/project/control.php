@@ -272,7 +272,7 @@ class project extends control
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
-        
+
         $this->view->projectStats = $projectStats;
         $this->view->pager        = $pager;
         $this->view->programID    = $programID;
@@ -1738,7 +1738,7 @@ class project extends control
         $this->view->branches             = $branches;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
-        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'noclosed');
+        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal,noclosed');
 
         $this->display();
     }

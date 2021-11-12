@@ -313,6 +313,21 @@ class branchModel extends model
     }
 
     /**
+     * Unlink branches for projects when product type is normal.
+     *
+     * @param  int    $productIDList
+     * @access public
+     * @return void
+     */
+    public function unlinkBranch4Project($productIDList)
+    {
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)
+            ->where('product')->in($productIDList)
+            ->andWhere('branch')->gt(0)
+            ->exec();
+    }
+
+    /**
      * Get branch group by products
      *
      * @param  array  $products
