@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class programsEntry extends Entry
+class ProgramsEntry extends Entry
 {
     /**
      * GET method.
@@ -19,35 +19,34 @@ class programsEntry extends Entry
      */
     public function get()
     {
-        $_COOKIE['showClosed'] = $this->param('showClosed', 0);
-        $mergeChildren = $this->param('mergeChildren', 0);
-
         $program = $this->loadController('program', 'browse');
         $program->browse($this->param('status', 'all'), $this->param('order', 'order_asc'));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'success')
         {
-            $programs     = (array)$data->data->programs;
-            $progressList = $data->data->progressList;
-            $users        = $data->data->users;
-            $result       = array();
+            $programs = $data->data->programs;
+            $result   = array();
             foreach($programs as $program)
             {
-                $program->progress   = zget($progressList, $program->id, 0);
-                $program->openedBy   = zget($users, $program->openedBy);
-                $program->closedBy   = zget($users, $program->closedBy);
-                $program->canceledBy = zget($users, $program->canceledBy);
-                $program->PO         = zget($users, $program->PO);
-                $program->PM         = zget($users, $program->PM);
-                $program->QD         = zget($users, $program->QD);
-                $program->RD         = zget($users, $program->RD);
-                unset($program->desc);
-
+                $program->progress = zget($progressList, $program->id, 0);
                 $param = $this->format($program, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
 
                 if($mergeChildren)
                 {
+                    unset($program->desc);
+                    $program->openedBy   = zget($users, $program->openedBy);
+                    $program->closedBy   = zget($users, $program->closedBy);
+                    $program->canceledBy = zget($users, $program->canceledBy);
+                    $program->PO         = zget($users, $program->PO);
+                    $program->PM         = zget($users, $program->PM);
+                    $program->QD         = zget($users, $program->QD);
+                    $program->RD         = zget($users, $program->RD);
+                    $program->end        = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
+
+                    $programBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$program->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$program->budget, 2);
+                    $program->labelBudget = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
+
                     if(empty($program->parent)) $result[$program->parent][$program->id] = $program;
                     if(isset($programs[$program->parent]))
                     {
