@@ -475,6 +475,30 @@ class gitlabModel extends model
     }
 
     /**
+     * Get group members of one gitlab.
+     *
+     * @param  int     $gitlabID
+     * @param  int     $groupID
+     * @access public
+     * @return object
+     */
+    public function apiGetGroupMembers($gitlabID, $groupID)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/groups/$groupID/members/all");
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results)<100) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
      * Get namespaces of one gitlab.
      *
      * @param  int     $gitlabID
@@ -583,6 +607,58 @@ class gitlabModel extends model
     }
 
     /**
+     * Add a gitab group member by api.
+     *
+     * @param  int      $gitlabID
+     * @param  int      $groupID
+     * @param  object   $member
+     * @access public
+     * @return object
+     */
+    public function apiCreateGroupMember($gitlabID, $groupID, $member)
+    {
+        if(empty($member->user_id) or empty($member->access_level)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/groups/{$groupID}/members");
+        return json_decode(commonModel::http($url, $member));
+    }
+
+    /**
+     * Update a gitab group member by api.
+     *
+     * @param  int      $gitlabID
+     * @param  int      $groupID
+     * @param  object   $member
+     * @access public
+     * @return object
+     */
+    public function apiUpdateGroupMember($gitlabID, $groupID, $member)
+    {
+        if(empty($member->user_id) or empty($member->access_level)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/groups/{$groupID}/members/{$member->user_id}");
+        return json_decode(commonModel::http($url, $member, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
+    /**
+     * Delete a gitab group member by api.
+     *
+     * @param  int      $gitlabID
+     * @param  int      $groupID
+     * @param  int      $memberID
+     * @access public
+     * @return object
+     */
+    public function apiDeleteGroupMember($gitlabID, $groupID, $memberID)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/groups/{$groupID}/members/{$memberID}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
      * Create a gitab user by api.
      *
      * @param  int      $gitlabID
@@ -631,6 +707,23 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/{$group->id}");
         return json_decode(commonModel::http($url, $group, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
+    /**
+     * Delete a gitab group by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @access public
+     * @return object
+     */
+    public function apiDeleteGroup($gitlabID, $groupID)
+    {
+        if(empty($groupID)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/groups/{$groupID}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**

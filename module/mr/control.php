@@ -41,6 +41,9 @@ class mr extends control
         /* Sync GitLab MR to ZenTao Database. */
         $MRList = $this->mr->batchSyncMR($MRList);
 
+        /* Load lang from compile module */
+        $this->app->loadLang('compile');
+
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
         $this->view->pager      = $pager;

@@ -55,6 +55,12 @@ $lang->gitlab->bindUserError      = "不能重复绑定用户 %s";
 $lang->gitlab->importIssueError   = "未选择该issue所属的执行。";
 $lang->gitlab->importIssueWarn    = "存在导入失败的issue，可再次尝试导入。";
 
+$lang->gitlab->accessLevels[10] = '客人';
+$lang->gitlab->accessLevels[20] = '报告者';
+$lang->gitlab->accessLevels[30] = '开发者';
+$lang->gitlab->accessLevels[40] = '维护者';
+$lang->gitlab->accessLevels[50] = '所有者';
+
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "项目ID";
 $lang->gitlab->project->name                       = "项目名称";
@@ -131,3 +137,8 @@ $lang->gitlab->group->createOn                                = "创建于";
 $lang->gitlab->group->members                                 = "群组成员";
 $lang->gitlab->group->confirmDelete                           = '确认删除该GitLab群组吗？';
 $lang->gitlab->group->emptyError                              = "不能为空";
+$lang->gitlab->group->manageMembers                           = '群组成员管理';
+$lang->gitlab->group->memberName                              = '账号';
+$lang->gitlab->group->memberAccessLevel                       = '角色权限';
+$lang->gitlab->group->memberExpiresAt                         = '过期时间';
+$lang->gitlab->group->repeatError                             = "群组成员不能重复添加";

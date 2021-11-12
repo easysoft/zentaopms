@@ -54,6 +54,7 @@
           <th class='text-left'><?php common::printOrderLink('targetProject', $orderBy, $vars, $lang->mr->targetProject); ?></th>
           <th class='w-120px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch); ?></th>
           <th class='w-120px text-left'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus); ?></th>
+          <th class='w-120px text-left'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus); ?></th>
           <th class='w-120px c-actions-3'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
@@ -66,7 +67,18 @@
           <td class='text'><?php echo $MR->sourceBranch;?></td>
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace; ?></td>
           <td class='text'><?php echo $MR->targetBranch;?></td>
-          <td class='text'><?php echo ($MR->status == 'merged') ? zget($lang->mr->statusList, $MR->status) : zget($lang->mr->mergeStatusList, $MR->mergeStatus); ?></td>
+
+          <?php if($MR->status == 'closed'): ?>
+            <td class='text'><?php echo zget($lang->mr->statusList, $MR->status); ?></td>
+          <?php else: ?>
+            <td class='text'><?php echo ($MR->status == 'merged') ? zget($lang->mr->statusList, $MR->status) : zget($lang->mr->mergeStatusList, $MR->mergeStatus); ?></td>
+          <?php endif; ?>
+
+          <?php if($MR->status == 'merged' or $MR->status == 'closed'): ?>
+            <td class='text'><?php echo '-'; ?></td> <!-- Keep page clean that make user focus to the MR not reviewed. -->
+          <?php else: ?>
+            <td><?php echo empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus]; ?></td>
+          <?php endif; ?>
           <td class='c-actions'>
             <?php
             common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
