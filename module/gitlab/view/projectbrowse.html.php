@@ -42,7 +42,7 @@
         <?php foreach ($gitlabProjectList as $id => $gitlabProject): ?>
         <tr class='text'>
           <td class='text-center'><?php echo $gitlabProject->id;?></td>
-          <td class='text-c-name' title='<?php echo $gitlabProject->name;?>'><?php echo $gitlabProject->name;?></td>
+          <td class='text-c-name' title='<?php echo $gitlabProject->name;?>'><?php echo $gitlabProject->name_with_namespace;?></td>
           <td class='text text-c-counts'>
             <span title="<?php echo $lang->gitlab->project->star;?>"><i class="icon icon-star"></i> <?php echo $gitlabProject->star_count;?></span>
             <span title="<?php echo $lang->gitlab->project->fork;?>"><i class="icon icon-treemap"></i> <?php echo $gitlabProject->forks_count;?></span>
