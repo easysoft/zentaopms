@@ -81,7 +81,7 @@ class product extends control
         $this->app->loadLang('execution');
         $this->app->loadLang('project');
 
-        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->product->setMenu($productID, $branch);
@@ -126,7 +126,7 @@ class product extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branch    = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
 
         /* Set menu. */
         if($this->app->tab == 'product')
@@ -764,7 +764,7 @@ class product extends control
      */
     public function roadmap($productID, $branch = '')
     {
-        $branch = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);

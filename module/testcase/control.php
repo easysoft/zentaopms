@@ -105,7 +105,7 @@ class testcase extends control
 
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branch    = ($this->cookie->preBranch and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
@@ -227,7 +227,7 @@ class testcase extends control
     {
         $groupBy   = empty($groupBy) ? 'story' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
+        if($branch === '') $branch = $this->cookie->preBranch;
 
         $this->app->loadLang('testtask');
 
@@ -352,7 +352,7 @@ class testcase extends control
 
         /* Set productID and branch. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
+        if($branch === '') $branch = $this->cookie->preBranch;
 
         /* Set menu. */
         if($this->app->tab == 'project')
@@ -510,7 +510,7 @@ class testcase extends control
 
         /* Set productID and currentModuleID. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
+        if($branch === '') $branch = $this->cookie->preBranch;
         if($storyID and empty($moduleID))
         {
             $story    = $this->loadModel('story')->getByID($storyID);
