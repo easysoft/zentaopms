@@ -26,8 +26,9 @@
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
-          <?php $isDisabled = ($branchID == BRANCH_MAIN and isset($unmodifiableMainBranches[$productID])) ? "disabled='disabled'" : '';?>
-          <?php $isDisabled = ($branchID != BRANCH_MAIN and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) ? "disabled='disabled'" : '';?>
+          <?php $isDisabled = '';?>
+          <?php if($branchID == BRANCH_MAIN and isset($unmodifiableMainBranches[$productID])) $isDisabled = "disabled='disabled'";?>
+          <?php if($branchID != BRANCH_MAIN and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) $isDisabled = "disabled='disabled'";?>
           <?php $title      = in_array($productID, $unmodifiableProducts) ? $lang->project->notAllowRemoveProducts : $productName;?>
           <?php $checked    = 'checked';?>
           <div class='col-sm-4'>
