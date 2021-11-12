@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('example', $example);?>
 <?php js::set('libID', $libID);?>
 <?php
 js::set('typeOptions', $typeOptions);
