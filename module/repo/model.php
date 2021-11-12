@@ -1228,10 +1228,10 @@ class repoModel extends model
     /**
      * Add link.
      *
-     * @param  string $matches
+     * @param  array  $matches
      * @param  string $method
      * @access public
-     * @return string
+     * @return array
      */
     public function addLink($matches, $method)
     {

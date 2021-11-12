@@ -412,7 +412,7 @@ class mrModel extends model
     /**
      * Create MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  object $MR
@@ -428,7 +428,7 @@ class mrModel extends model
     /**
      * Get MR list by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
@@ -443,7 +443,7 @@ class mrModel extends model
     /**
      * Get single MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
      * @param  int    $gitlabID
      * @param  int    $projectID  targetProject
      * @param  int    $MRID
@@ -459,7 +459,7 @@ class mrModel extends model
     /**
      * Update MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
@@ -476,7 +476,7 @@ class mrModel extends model
     /**
      * Delete MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#delete-a-merge-request
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#delete-a-merge-request
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
@@ -492,7 +492,7 @@ class mrModel extends model
      /**
      * Close MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
@@ -508,7 +508,7 @@ class mrModel extends model
     /**
      * Reopen MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
@@ -524,7 +524,7 @@ class mrModel extends model
     /**
      * Accept MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
@@ -542,7 +542,7 @@ class mrModel extends model
     /**
      * Get MR diff versions by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-mr-diff-versions
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#get-mr-diff-versions
      * @param  object    $MR
      * @param  string    $encoding
      * @access public
