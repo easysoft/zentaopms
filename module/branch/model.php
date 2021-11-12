@@ -55,6 +55,7 @@ class branchModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        $product       = $this->loadModel('product')->getById($productID);
         if($browseType == 'closed') return $branchList;
 
         $defaultBranch = BRANCH_MAIN;
@@ -69,7 +70,7 @@ class branchModel extends model
         $mainBranch->status      = 'active';
         $mainBranch->createdDate = '';
         $mainBranch->closedDate  = '';
-        $mainBranch->desc        = $this->lang->branch->mainBranch;
+        $mainBranch->desc        = sprintf($this->lang->branch->mainBranch, $this->lang->product->branchName[$product->type]);
         $mainBranch->order       = 0;
 
         return array($mainBranch) + $branchList;

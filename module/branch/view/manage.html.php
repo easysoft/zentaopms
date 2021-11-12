@@ -29,7 +29,7 @@
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if($canCreate) common::printLink('branch', 'create', "productID=$productID", "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-primary iframe'", true, true);?>
+    <?php if($canCreate) common::printLink('branch', 'create', "productID=$productID", "<i class='icon icon-plus'></i> " . sprintf($lang->branch->create, $lang->product->branchName[$product->type]), '', "class='btn btn-primary iframe'", true, true);?>
   </div>
 </div>
 <div id="mainContent">
@@ -54,11 +54,11 @@
           <?php if($canOrder):?>
           <th class='c-order sort-default'><?php echo $lang->branch->order;?></th>
           <?php endif;?>
-          <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->branch->name);?></th>
+          <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, sprintf($lang->branch->name, $lang->product->branchName[$product->type]));?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->branch->status);?></th>
           <th class='c-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->branch->createdDate);?></th>
           <th class='c-date'><?php common::printOrderLink('closedDate', $orderBy, $vars, $lang->branch->closedDate);?></th>
-          <th class='c-desc'><?php echo $lang->branch->desc;?></th>
+          <th class='c-desc'><?php echo sprintf($lang->branch->desc, $lang->product->branchName[$product->type]);?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
