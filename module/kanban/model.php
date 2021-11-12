@@ -735,7 +735,7 @@ class kanbanModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->fetch();
 
-        if(!empty($column->parent)) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
+        if($column->parent > 0) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
 
         return $column;
     }
