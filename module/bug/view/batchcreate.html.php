@@ -15,7 +15,7 @@
   <div class='main-header'>
     <h2>
       <?php echo $lang->bug->batchCreate;?>
-      <?php if($this->session->currentProductType !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
+      <?php if($this->session->currentProductType !== 'normal' and $branch !== 'all') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
     </h2>
     <div class="pull-right btn-toolbar">
       <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=bug&params=' . helper::safe64Encode("productID=$productID&executionID=$executionID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
