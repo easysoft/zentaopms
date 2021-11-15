@@ -657,6 +657,7 @@ class productModel extends model
         $products    = array();
         $allChanges  = array();
         $data        = fixer::input('post')->get();
+        a($data);
         $oldProducts = $this->getByIdList($this->post->productIDList);
         $nameList    = array();
 
@@ -682,12 +683,13 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
+            $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
 
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $product->program")
+                ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $programID")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
