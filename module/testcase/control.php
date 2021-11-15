@@ -459,7 +459,6 @@ class testcase extends control
         $this->view->projectID        = isset($projectID) ? $projectID : 0;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
-        a($this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch));
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
