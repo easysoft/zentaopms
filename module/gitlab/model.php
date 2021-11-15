@@ -607,6 +607,58 @@ class gitlabModel extends model
     }
 
     /**
+     * Add a gitab project member by api.
+     *
+     * @param  int      $gitlabID
+     * @param  int      $projectID
+     * @param  object   $member
+     * @access public
+     * @return object
+     */
+    public function apiCreateProjectMember($gitlabID, $projectID, $member)
+    {
+        if(empty($member->user_id) or empty($member->access_level)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/members");
+        return json_decode(commonModel::http($url, $member));
+    }
+
+    /**
+     * Update a gitab project member by api.
+     *
+     * @param  int      $gitlabID
+     * @param  int      $projectID
+     * @param  object   $member
+     * @access public
+     * @return object
+     */
+    public function apiUpdateProjectMember($gitlabID, $projectID, $member)
+    {
+        if(empty($member->user_id) or empty($member->access_level)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/members/{$member->user_id}");
+        return json_decode(commonModel::http($url, $member, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
+    /**
+     * Delete a gitab project member by api.
+     *
+     * @param  int      $gitlabID
+     * @param  int      $groupID
+     * @param  int      $memberID
+     * @access public
+     * @return object
+     */
+    public function apiDeleteProjectMember($gitlabID, $groupID, $memberID)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$groupID}/members/{$memberID}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
      * Add a gitab group member by api.
      *
      * @param  int      $gitlabID

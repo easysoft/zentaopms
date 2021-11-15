@@ -796,6 +796,138 @@ class gitlab extends control
     }
 
     /**
+     * Manage a gitlab project members.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function manageProjectMembers($repoID)
+    {
+        if($_POST)
+        {
+            $data = (array) fixer::input('post')->get();
+            extract($data);
+
+            $accounts = array_filter($accounts);
+            if(count($accounts) != count(array_unique($accounts))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
+
+            $repo        = $this->loadModel('repo')->getRepoByID($repoID);
+            $users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+            $bindedUsers = $this->dao->select('account,openID')
+                ->from(TABLE_OAUTH)
+                ->where('providerType')->eq('gitlab')
+                ->andWhere('providerID')->eq($repo->gitlab)
+                ->fetchPairs();
+
+            $newGitlabMembers = array();
+            foreach($accounts as $key => $account)
+            {
+                /* If the user has set permissions, check whether they are bound. */
+                if(!empty($levels[$key]))
+                {
+                    if(!isset($bindedUsers[$account])) return $this->send(array('result' => 'fail', 'message' => $users[$account] . ' ' . $this->lang->gitlab->project->notbindedError));
+                    $newGitlabMembers[$bindedUsers[$account]] = (object) array('access_level' => $levels[$key], 'expires_at' => $expires[$key]);
+                }
+            }
+
+            $gitlabCurrentMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);
+
+            $addedMembers = $updatedMembers = $deletedMembers = array();
+            /* Get the updated data. */
+            foreach($gitlabCurrentMembers as $gitlabCurrentMember)
+            {
+                if(!isset($newGitlabMembers[$gitlabCurrentMember->id])) continue;
+                if($newGitlabMembers[$gitlabCurrentMember->id]->access_level != $gitlabCurrentMember->access_level or $newGitlabMembers[$gitlabCurrentMember->id]->expires_at != $gitlabCurrentMember->expires_at) $updatedMembers[] = (object) array('user_id' => $gitlabCurrentMember->id, 'access_level' => $newGitlabMembers[$gitlabCurrentMember->id]->access_level, 'expires_at' => $newGitlabMembers[$gitlabCurrentMember->id]->expires_at);
+            }
+            /* Get the added data. */
+            foreach($newGitlabMembers as $id => $newMember)
+            {
+                $exist = FALSE;
+                foreach($gitlabCurrentMembers as $gitlabCurrentMember)
+                {
+                    if($gitlabCurrentMember->id == $id)
+                    {
+                        $exist = TRUE;
+                        break;
+                    }
+                }
+                if($exist == FALSE) $addedMembers[] = (object) array('user_id' => $id, 'access_level' => $newGitlabMembers[$id]->access_level, 'expires_at' => $newGitlabMembers[$id]->expires_at);
+            }
+            /* Get the deleted data. */
+            $originalUsers = $repo->acl->users;
+            foreach($originalUsers as $user)
+            {
+                if(!in_array($user, $accounts) and isset($bindedUsers[$user]))
+                {
+                    $exist = FALSE;
+                    foreach($gitlabCurrentMembers as $gitlabCurrentMember)
+                    {
+                        if($gitlabCurrentMember->id == $bindedUsers[$user])
+                        {
+                            $exist            = TRUE;
+                            $deletedMembers[] = $gitlabCurrentMember->id;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(count($addedMembers) > 0)
+            {
+                foreach($addedMembers as $addedMember)
+                {
+                    $this->gitlab->apiCreateProjectMember($repo->gitlab, $repo->project, $addedMember);
+                }
+            }
+            if(count($updatedMembers) > 0)
+            {
+                foreach($updatedMembers as $updatedMember)
+                {
+                    $this->gitlab->apiUpdateProjectMember($repo->gitlab, $repo->project, $updatedMember);
+                }
+            }
+            if(count($deletedMembers) > 0)
+            {
+                foreach($deletedMembers as $deletedMemberID)
+                {
+                    $this->gitlab->apiDeleteProjectMember($repo->gitlab, $repo->project, $deletedMemberID);
+                }
+            }
+
+            $repo->acl->users = array_values($accounts);
+            $this->dao->update(TABLE_REPO)->data(array('acl'=>json_encode($repo->acl)))->where('id')->eq($repoID)->exec();
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('repo', 'maintain')));
+        }
+
+        $repo           = $this->loadModel('repo')->getRepoByID($repoID);
+        $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);
+
+        /* Get users accesslevel */
+        $userAccessData = array();
+        $bindedUsers    = $this->dao->select('openID,account')
+            ->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('providerID')->eq($repo->gitlab)
+            ->fetchPairs();
+        foreach($projectMembers as $projectMember)
+        {
+            if(isset($bindedUsers[$projectMember->id]))
+            {
+                $account                  = $bindedUsers[$projectMember->id];
+                $userAccessData[$account] = $projectMember;
+            }
+        }
+
+        $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->manageProjectMembers;
+        $this->view->userAccessData = $userAccessData;
+        $this->view->users          = $users;
+        $this->view->repo           = $repo;
+        $this->display();
+    }
+
+    /**
      * AJAX: Get executions by productID.
      *
      * @param  int    $productID

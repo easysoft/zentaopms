@@ -27,7 +27,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
           <th class='c-product text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
           <th class='text-left'><?php echo $lang->repo->path; ?></th>
-          <th class='c-actions-3  w-120px'><?php echo $lang->actions; ?></th>
+          <th class='c-actions-3  w-150px'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
@@ -55,6 +55,7 @@
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
             echo html::a($this->createLink('gitlab', 'createWebhook', "repoID=$repo->id"), '<i class="icon-change"></i>', 'hiddenwin', "title='{$lang->repo->addWebHook}'");
             if(strtolower($repo->SCM) == "gitlab") common::printIcon('gitlab', 'importIssue', "repo={$repo->id}", '', 'list', 'link');
+            if(strtolower($repo->SCM) == "gitlab") common::printIcon('gitlab', 'manageProjectMembers', "repo={$repo->id}", '', 'list', 'team');
             if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
             ?>
           </td>
