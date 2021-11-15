@@ -35,3 +35,4 @@ a.removeModule:hover {color: red;}
 #batchUnlinkStoryTip .table tfoot {position: relative; bottom: -30px;}
 #batchUnlinkStoryTip .table td {border-bottom: 0px;}
 #batchUnlinkStoryTip .table th:first-child {width: 460px;}
+#mainMenu .dropdown-menu>li>a>.icon {top: 4px;}
