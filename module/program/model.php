@@ -741,7 +741,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->check('name', 'unique', "id!=$programID and deleted='0' and `type`='program'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent")
             ->where('id')->eq($programID)
             ->limit(1)
             ->exec();
