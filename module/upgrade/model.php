@@ -732,6 +732,7 @@ class upgradeModel extends model
         case '15_7_1':
             $this->saveLogs('Execute 15_7_1');
             $this->execSQL($this->getUpgradeFile('15.7.1'));
+            $this->updateObjectBranch();
             $this->updateProjectStories();
             $this->appendExec('15_7_1');
         }
@@ -5329,6 +5330,28 @@ class upgradeModel extends model
         $data->value = ',' . $data->value . ',';
         $data->value = str_replace(',project,', ',', $data->value);
         $this->dao->update(TABLE_CONFIG)->set('`value`')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
+        return true;
+    }
+
+    /**
+     * Update branch when object have module.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateObjectBranch()
+    {
+        $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->fetchPairs();
+
+        $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->ne(0)->fetchPairs();
+        foreach($storyModulePairs as $moduleID) $this->dao->update(TABLE_STORY)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+
+        $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->ne(0)->fetchPairs();
+        foreach($bugModulePairs as $moduleID) $this->dao->update(TABLE_BUG)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+
+        $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->ne(0)->fetchPairs();
+        foreach($caseModulePairs as $moduleID) $this->dao->update(TABLE_CASE)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+
         return true;
     }
 
