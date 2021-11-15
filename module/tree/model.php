@@ -87,7 +87,7 @@ class treeModel extends model
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
-                ->beginIF((($branch or $branch === 0) and $branch !== 'null'))->andWhere("branch")->eq($branch)->fi()
+                ->beginIF((($branch or $branch === 0) and $branch !== 'null' and $branch !== 'all'))->andWhere("branch")->eq($branch)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('grade desc, `order`, type desc')
                 ->get();
@@ -99,7 +99,7 @@ class treeModel extends model
             ->andWhere('type')->eq($type)
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
-            ->beginIF((($branch or $branch === 0) and $branch !== 'null'))->andWhere("branch")->eq($branch)->fi()
+            ->beginIF((($branch or $branch === 0) and $branch !== 'null' and $branch !== 'all'))->andWhere("branch")->eq($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->get();
@@ -126,13 +126,11 @@ class treeModel extends model
             $product = $this->loadModel('product')->getById($rootID);
             if($product and $product->type != 'normal')
             {
-                $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'all');
-                if($branch)
-                {
-                    $newBranches['null']  = '';
-                    $newBranches[$branch] = $branches[$branch];
-                    $branches = $newBranches;
-                }
+                $branchList = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'all');
+
+                if(!$branch) $newBranches['null']  = '';
+                $newBranches[$branch] = $branchList[$branch];
+                $branches = $branch === 'all' ? $branchList : $newBranches;
             }
             elseif($product and $product->type == 'normal')
             {
