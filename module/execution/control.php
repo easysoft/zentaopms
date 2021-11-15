@@ -1360,7 +1360,7 @@ class execution extends control
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
         $this->view->projectID       = $projectID;
-        $this->view->isStage         = $project->model == 'waterfall' ? true : false;
+        $this->view->isStage         = isset($project->model) and $project->model == 'waterfall' ? true : false;
         $this->view->products        = $products;
         $this->view->productPlan     = array(0 => '') + $productPlan;
         $this->view->productPlans    = array(0 => '') + $productPlans;
@@ -1949,7 +1949,7 @@ class execution extends control
                 /* Max 2 closed executions. */
                 if($status == 'closed')
                 {
-                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) > 2) 
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) > 2)
                     {
                         foreach($myExecutions[$status] as $executionID => $execution)
                         {
@@ -1961,7 +1961,7 @@ class execution extends control
                         $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
                     }
 
-                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) > 2) 
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) > 2)
                     {
                         foreach($kanbanGroup[$projectID][$status] as $executionID => $execution)
                         {
