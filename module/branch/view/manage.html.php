@@ -37,7 +37,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->branch->noData;?></span>
-      <?php if($canCreate) echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-info iframe'");?>
+      <?php if($canCreate) echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . sprintf($lang->branch->create, $lang->product->branchName[$product->type]), '', "class='btn btn-info iframe'");?>
     </p>
   </div>
   <?php else:?>
@@ -99,7 +99,7 @@
           <td class='c-actions'>
           <?php
             $disabled = $isMain ? 'disabled' : '';
-            common::printIcon('branch', 'edit', "branchID=$branch->id", $branch, 'list', '', '', "$disabled iframe", true);
+            common::printIcon('branch', 'edit', "branchID=$branch->id&productID=$productID", $branch, 'list', '', '', "$disabled iframe", true);
             if($branch->status == 'active')
             {
                 common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', 'hiddenwin', $disabled);
