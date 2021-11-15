@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class repoEntry extends baseEntry
+class gitlabWebhookEntry extends baseEntry
 {
 
     /**
