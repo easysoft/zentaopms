@@ -376,7 +376,7 @@ class treeModel extends model
         if($branch)
         {
             $branchName = $this->loadModel('branch')->getById($branch);
-            $branches   = array('null' => '', $branch => $branchName);
+            $branches   = array($branch => $branchName);
             $extra      = array('rootID' => $rootID, 'branch' => $branch);
         }
 
@@ -384,7 +384,7 @@ class treeModel extends model
         $product = $this->loadModel('product')->getById($rootID);
         if(strpos('story|bug|case', $type) !== false and $branch === 'all')
         {
-            if($product->type != 'normal') $branches = array('null' => '', BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+            if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
         }
 
         /* Add for task #1945. check the module has case or no. */
