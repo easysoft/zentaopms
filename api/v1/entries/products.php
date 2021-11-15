@@ -63,6 +63,7 @@ class productsEntry extends entry
                         $programs[$programID]->name = $program->programName;
                         $programs[$programID]->type = 'program';
 
+                        $unclosedTotal = 0;
                         foreach($program as $field => $value)
                         {
                             if(!isset($programs[$programID]->children)) $programs[$programID]->children = array();
@@ -80,6 +81,7 @@ class productsEntry extends entry
                                         $allTotal    = (array_sum($product->stories) + array_sum($product->requirements));
                                         $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
                                         $programs[$programID]->children[$product->id] = $product;
+                                        if($product->status != 'closed') $unclosedTotal += 1;
                                     }
                                 }
                                 else
@@ -99,10 +101,12 @@ class productsEntry extends entry
                                         $allTotal    = (array_sum($product->stories) + array_sum($product->requirements));
                                         $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
                                         $line->children[$product->id] = $product;
+                                        if($product->status != 'closed') $unclosedTotal += 1;
                                     }
 
                                     $programs[$programID]->children[$lineID] = $line;
                                 }
+                                $programs[$programID]->unclosedTotal = $unclosedTotal;
                             }
                         }
                     }
