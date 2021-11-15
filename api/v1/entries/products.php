@@ -106,7 +106,7 @@ class productsEntry extends entry
                             }
                         }
                     }
-                    return $this->send(200, $programs);
+                    return $this->send(200, array_values($programs));
                 }
                 else
                 {
