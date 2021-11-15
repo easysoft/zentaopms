@@ -66,6 +66,7 @@ class branch extends control
             die(js::reload('parent.parent'));
         }
 
+        $this->view->product = $this->loadModel('product')->getById($productID);
         $this->display();
     }
 
@@ -76,7 +77,7 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function edit($branchID)
+    public function edit($branchID, $productID)
     {
         if($_POST)
         {
@@ -87,7 +88,8 @@ class branch extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->branch = $this->branch->getById($branchID, 0, '');
+        $this->view->product = $this->loadModel('product')->getById($productID);
+        $this->view->branch  = $this->branch->getById($branchID, 0, '');
         $this->display();
     }
 
@@ -124,6 +126,7 @@ class branch extends control
             if(!in_array($branch->id, $branchIDList)) unset($branchList[$branch->id]);
         }
 
+        $this->view->product    = $this->product->getById($productID);
         $this->view->branchList = $branchList;
         $this->display();
     }
