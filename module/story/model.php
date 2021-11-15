@@ -2461,10 +2461,6 @@ class storyModel extends model
                 $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
             }
         }
-        elseif($branch)
-        {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` = $branch";
-        }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
             $storyQuery = str_replace($allBranch, '1', $storyQuery);
