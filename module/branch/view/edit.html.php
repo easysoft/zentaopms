@@ -18,7 +18,7 @@
   <form class='main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->branch->name;?></th>
+        <th><?php echo sprintf($lang->branch->name, $lang->product->branchName[$product->type]);?></th>
         <td><?php echo html::input('name', $branch->name, "class='form-control'");?></td>
       </tr>
       <tr>
@@ -26,7 +26,7 @@
         <td><?php echo html::select('status', $lang->branch->statusList, $branch->status, "class='form-control chosen'");?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->branch->desc;?></th>
+        <th><?php echo sprintf($lang->branch->desc, $lang->product->branchName[$product->type]);?></th>
         <td><?php echo html::input('desc', $branch->desc, "class='form-control'");?></td>
       </tr>
       <tr>
