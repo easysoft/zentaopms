@@ -1486,6 +1486,16 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
+        $this->app->loadClass('date', true);
+        $weekDate     = date::getThisWeek();
+        $thisWeekBugs = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andWhere('openedDate')->between($weekDate['begin'], $weekDate['end'])
+            ->andWhere('product')->in($productKeys)
+            ->groupBy('product')
+            ->fetchPairs();
+
         $assignToNull = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -1517,6 +1527,7 @@ class productModel extends model
             $product->unResolved   = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
             $product->closedBugs   = isset($closedBugs[$product->id]) ? $closedBugs[$product->id] : 0;
             $product->fixedBugs    = isset($fixedBugs[$product->id]) ? $fixedBugs[$product->id] : 0;
+            $product->thisWeekBugs = isset($thisWeekBugs[$product->id]) ? $thisWeekBugs[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
             $stats[] = $product;
         }
