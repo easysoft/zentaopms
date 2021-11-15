@@ -103,9 +103,11 @@ class productsEntry extends entry
                                         $line->children[$product->id] = $product;
                                         if($product->status != 'closed') $unclosedTotal += 1;
                                     }
+                                    if(isset($line->children)) $line->children = array_values($line->children);
 
                                     $programs[$programID]->children[$lineID] = $line;
                                 }
+                                if(isset($programs[$programID]->children)) $programs[$programID]->children = array_values($programs[$programID]->children);
                                 $programs[$programID]->unclosedTotal = $unclosedTotal;
                             }
                         }

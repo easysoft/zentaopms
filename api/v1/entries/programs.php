@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class ProgramsEntry extends Entry
+class programsEntry extends Entry
 {
     /**
      * GET method.
@@ -19,17 +19,20 @@ class ProgramsEntry extends Entry
      */
     public function get()
     {
+        $mergeChildren = $this->param('mergeChildren', '');
+
         $program = $this->loadController('program', 'browse');
         $program->browse($this->param('status', 'all'), $this->param('order', 'order_asc'));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'success')
         {
-            $programs = $data->data->programs;
+            $programs = (array)$data->data->programs;
+            $users    = $data->data->users;
             $result   = array();
             foreach($programs as $program)
             {
-                $program->progress = zget($progressList, $program->id, 0);
+                $program->progress = zget($data->data->progressList, $program->id, 0);
                 $param = $this->format($program, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
 
                 if($mergeChildren)
