@@ -643,6 +643,7 @@ class executionModel extends model
         {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+            $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
@@ -650,7 +651,7 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-                ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $oldExecution->project")
+                ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
                 ->where('id')->eq($executionID)
                 ->limit(1)

@@ -687,7 +687,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $oldProduct->program")
+                ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $product->program")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
