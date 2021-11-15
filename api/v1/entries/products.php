@@ -43,6 +43,8 @@ class productsEntry extends entry
         }
         else
         {
+            $mergeChildren = $this->param('mergeChildren', '');
+
             $control = $this->loadController('product', 'all');
             $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'));
 
@@ -51,10 +53,67 @@ class productsEntry extends entry
             if(isset($data->status) and $data->status == 'success')
             {
                 $result   = array();
-                $products = $data->data->productStats;
-                foreach($products as $product) $result[] = $this->format($product, 'createdDate:time');
+                if($mergeChildren)
+                {
+                    $programs = array();
+                    foreach($data->data->productStructure as $programID => $program)
+                    {
+                        $programs[$programID] = new stdclass();
+                        $programs[$programID]->id   = $programID;
+                        $programs[$programID]->name = $program->programName;
+                        $programs[$programID]->type = 'program';
 
-                return $this->send(200, array('products' => $result));
+                        foreach($program as $field => $value)
+                        {
+                            if(!isset($programs[$programID]->children)) $programs[$programID]->children = array();
+                            if(isset($value->products))
+                            {
+                                $lineID = $field;
+                                if(empty($lineID))
+                                {
+                                    foreach($value->products as $product)
+                                    {
+                                        unset($product->desc);
+                                        $product->stories      = (array)$product->stories;
+                                        $product->requirements = (array)$product->requirements;
+                                        $closedTotal = ($product->stories['closed'] + $product->requirements['closed']);
+                                        $allTotal    = (array_sum($product->stories) + array_sum($product->requirements));
+                                        $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
+                                        $programs[$programID]->children[$product->id] = $product;
+                                    }
+                                }
+                                else
+                                {
+                                    $line = new stdclass();
+                                    $line->id   = $lineID;
+                                    $line->name = $value->lineName;
+                                    $line->type = 'line';
+
+                                    $line->children = array();
+                                    foreach($value->products as $product)
+                                    {
+                                        unset($product->desc);
+                                        $product->stories      = (array)$product->stories;
+                                        $product->requirements = (array)$product->requirements;
+                                        $closedTotal = ($product->stories['closed'] + $product->requirements['closed']);
+                                        $allTotal    = (array_sum($product->stories) + array_sum($product->requirements));
+                                        $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
+                                        $line->children[$product->id] = $product;
+                                    }
+
+                                    $programs[$programID]->children[$lineID] = $line;
+                                }
+                            }
+                        }
+                    }
+                    return $this->send(200, $programs);
+                }
+                else
+                {
+                    $products = $data->data->productStats;
+                    foreach($products as $product) $result[] = $this->format($product, 'createdDate:time');
+                    return $this->send(200, array('products' => $result));
+                }
             }
         }
 

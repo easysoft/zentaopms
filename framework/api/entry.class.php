@@ -633,7 +633,7 @@ class baseEntry
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if($module and $method and !commonModel::hasPriv($module, $method))
+        if($module and $method and !$this->loadModel('common')->isOpenMethod($module, $method) and !commonModel::hasPriv($module, $method))
         {
             $this->send(403, array('error' => 'Access not allowed'));
         }
