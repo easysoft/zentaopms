@@ -51,7 +51,8 @@
           <tr>
             <th><?php echo $lang->productplan->end;?></th>
             <td><?php echo html::input('end', $plan->end != '2030-01-01' ? formatTime($plan->end) : '', 'class="form-control form-date"');?></td>
-            <td colspan='2'><?php echo html::radio('delta', $lang->productplan->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+            <?php $deltaValue = $plan->end == '2030-01-01' ? 0 : (strtotime($plan->end) - strtotime($plan->begin)) / 3600 / 24 + 1;?>
+            <td colspan='2'><?php echo html::radio('delta', $lang->productplan->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
           </tr>
           <?php $this->printExtendFields($plan, 'table', 'columns=3');?>
           <tr>
