@@ -59,9 +59,12 @@ class productsEntry extends entry
                     foreach($data->data->productStructure as $programID => $program)
                     {
                         $programs[$programID] = new stdclass();
-                        $programs[$programID]->id   = $programID;
-                        $programs[$programID]->name = $program->programName;
-                        $programs[$programID]->type = 'program';
+                        if(!empty($programID))
+                        {
+                            $programs[$programID]->id   = $programID;
+                            $programs[$programID]->name = $program->programName;
+                            $programs[$programID]->type = 'program';
+                        }
 
                         $unclosedTotal = 0;
                         foreach($program as $field => $value)
@@ -111,8 +114,20 @@ class productsEntry extends entry
                                 $programs[$programID]->unclosedTotal = $unclosedTotal;
                             }
                         }
+
                     }
-                    return $this->send(200, array_values($programs));
+
+                    $topProducts = array();
+                    if(isset($programs[0]))
+                    {
+                        $topProducts = $programs[0]->children;
+                        unset($programs[0]);
+                    }
+
+                    $programs = array_values($programs);
+                    foreach($topProducts as $product) $programs[] = $product;
+
+                    return $this->send(200, $programs);
                 }
                 else
                 {
