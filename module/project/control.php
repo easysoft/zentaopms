@@ -663,11 +663,11 @@ class project extends control
 
         $this->project->setMenu($projectID);
 
-        $products = $this->loadModel('product')->getProducts($projectID);
+        $products = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
         $linkedBranches = array();
-        foreach($products as $product)
+        foreach($products as $productID => $product)
         {
-            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
+            if($product->branch) $linkedBranches = $product->branch;
         }
 
         /* Load pager. */

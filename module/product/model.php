@@ -333,18 +333,52 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProducts($projectID = 0, $status = 'all', $orderBy = '')
+    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $test = false)
     {
-        return $this->dao->select('t1.*, t2.branch, t2.plan')
-            ->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
-            ->on('t1.id = t2.product')
-            ->where('t1.deleted')->eq(0)
-            ->beginIF(!empty($projectID))->andWhere('t2.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->orderBy($orderBy . 't1.order asc')
-            ->fetchAll('id');
+        if($test)
+        {
+            $productList = $this->dao->select('t1.*, t2.branch, t2.plan')
+                ->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
+                ->on('t1.id = t2.product')
+                ->where('t1.deleted')->eq(0)
+                ->beginIF(!empty($projectID))->andWhere('t2.project')->eq($projectID)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+                ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+                ->orderBy($orderBy . 't1.order asc')
+                ->fetchGroup('id', 'branch');
+
+            $products = array();
+            foreach($productList as $productID => $branches)
+            {
+                $branch = array();
+                $plan   = array();
+                foreach($branches as $branchID => $productInfo)
+                {
+                    $branch[$productInfo->branch] = $productInfo->branch;
+                    $plan[$productInfo->plan]     = $productInfo->plan;
+
+                    $productInfo->branch = $branch;
+                    $productInfo->plan   = $plan;
+
+                    $products[$productID] = $productInfo;
+                }
+            }
+            return $products;
+        }
+        else
+        {
+            $productList = $this->dao->select('t1.*, t2.branch, t2.plan')
+                ->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
+                ->on('t1.id = t2.product')
+                ->where('t1.deleted')->eq(0)
+                ->beginIF(!empty($projectID))->andWhere('t2.project')->eq($projectID)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+                ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+                ->orderBy($orderBy . 't1.order asc')
+                ->fetchAll('id');
+        }
     }
 
     /**
