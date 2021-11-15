@@ -22,6 +22,9 @@ class programsEntry extends Entry
         $_COOKIE['showClosed'] = $this->param('showClosed', 0);
         $mergeChildren = $this->param('mergeChildren', 0);
 
+        $fields = $this->param('fields', '');
+        if(stripos(",{$fields},", ",dropmenu,") !== false) return $this->getDropMenu();
+
         $program = $this->loadController('program', 'browse');
         $program->browse($this->param('status', 'all'), $this->param('order', 'order_asc'));
 
@@ -65,7 +68,7 @@ class programsEntry extends Entry
                     $result[] = $program;
                 }
             }
-            return $this->send(200, array('programs' => $result));
+            return $this->send(200, array('programs' => array_values($result)));
         }
         if(isset($data->status) and $data->status == 'fail')
         {
@@ -73,5 +76,39 @@ class programsEntry extends Entry
         }
 
         return $this->sendError(400, 'error');
+    }
+
+    /**
+     * Get drop menu.
+     *
+     * @access public
+     * @return void
+     */
+    public function getDropMenu()
+    {
+
+        $programs = $this->dao->select('id,name,parent,path,grade,`order`')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->eq('program')
+            ->andWhere('id')->in($this->app->user->view->programs)
+            ->beginIF(empty($_COOKIE['showClosed']))->andWhere('status')->ne('closed')->fi()
+            ->orderBy('grade desc, `order`')
+            ->fetchAll('id');
+
+        $dropMenu = array();
+        foreach($programs as $programID => $program)
+        {
+            if(empty($program->parent))
+            {
+                $dropMenu[] = $program;
+            }
+            elseif(isset($programs[$program->parent]))
+            {
+                if(!isset($programs[$program->parent]->children)) $programs[$program->parent]->children = array();
+                $programs[$program->parent]->children[] = $program;
+            }
+        }
+
+        $this->send(200, $dropMenu);
     }
 }
