@@ -10,7 +10,7 @@ $lang->branch->all         = '所有';
 $lang->branch->main        = '主干';
 
 $lang->branch->edit             = '编辑';
-$lang->branch->editAction       = '编辑分支';
+$lang->branch->editAction       = '编辑%s';
 $lang->branch->activate         = '激活';
 $lang->branch->activateAction   = '激活分支';
 $lang->branch->close            = '关闭';

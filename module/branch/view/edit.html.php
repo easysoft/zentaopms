@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->branch->editAction;?></h2>
+    <h2><?php echo sprintf($lang->branch->editAction, $lang->product->branchName[$product->type]);?></h2>
   </div>
   <form class='main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>

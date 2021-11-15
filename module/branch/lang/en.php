@@ -10,7 +10,7 @@ $lang->branch->all         = 'All ';
 $lang->branch->main        = 'Main';
 
 $lang->branch->edit             = 'Edit';
-$lang->branch->editAction       = 'Edit Branch';
+$lang->branch->editAction       = 'Edit %s';
 $lang->branch->activate         = 'Activate';
 $lang->branch->activateAction   = 'Activate Branch';
 $lang->branch->close            = 'Close';
