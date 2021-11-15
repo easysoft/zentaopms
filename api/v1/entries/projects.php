@@ -22,7 +22,9 @@ class projectsEntry extends entry
     {
         if(!$programID) $programID = $this->param('program', 0);
         $appendFields = $this->param('fields', '');
-        if(strpos(strtolower(",{$appendFields},"), ',dropmenu,') !== false) return $this->getDropMenu();
+        if(stripos(strtolower(",{$appendFields},"), ',dropmenu,') !== false) return $this->getDropMenu();
+
+        $_COOKIE['involved'] = $this->param('involved', 0);
 
         $control = $this->loadController('project', 'browse');
         $control->browse($programID, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
@@ -34,7 +36,9 @@ class projectsEntry extends entry
             $result = array();
             foreach($data->data->projectStats as $project)
             {
-                $project = $this->filterFields($project, 'id,name,code,model,type,parent,begin,end,status,openedBy,openedDate,' . $appendFields);
+                foreach($project->hours as $field => $value) $project->$field = $value;
+
+                $project  = $this->filterFields($project, 'id,name,code,model,type,parent,begin,end,status,openedBy,openedDate,' . $appendFields);
                 $result[] = $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => (int)$pager->recPerPage, 'projects' => $result));
