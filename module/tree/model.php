@@ -857,7 +857,7 @@ class treeModel extends model
                 if(is_array($extra))
                 {
                     $table   = $this->config->objectTables[$type];
-                    $objects = $this->dao->select('module')->from($table)->where('product')->eq((int)$extra['rootID'])->andWhere('branch')->eq((int)$extra['branch'])->fetchAll('module');
+                    $objects = $this->dao->select('module')->from($table)->where('product')->eq((int)$extra['rootID'])->andWhere('branch')->eq($extra['branch'])->fetchAll('module');
                 }
                 else
                 {

@@ -4544,6 +4544,7 @@ class storyModel extends model
      */
     public function updateStoryByReview($storyID, $oldStory, $story)
     {
+        $now          = helper::now();
         $reviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
         $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
