@@ -43,7 +43,7 @@ class branch extends control
         $this->view->browseType = $browseType;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->product    = $this->loadModel('product')->getById($productID);
+        $this->view->product    = $this->product->getById($productID);
 
         $this->display();
     }

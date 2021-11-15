@@ -55,9 +55,9 @@ class branchModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $product       = $this->loadModel('product')->getById($productID);
         if($browseType == 'closed') return $branchList;
 
+        $product       = $this->loadModel('product')->getById($productID);
         $defaultBranch = BRANCH_MAIN;
         foreach($branchList as $branch) $defaultBranch = $branch->default ? $branch->id : $defaultBranch;
 
