@@ -449,21 +449,17 @@ class api extends control
 
         $this->setMenu($api->lib);
 
-        $example = array('example' => 'type,description');
-        $example = json_encode($example, JSON_PRETTY_PRINT);
-
         $options = array();
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
             $options[] = array('label' => $item, 'value' => $key);
         }
-        $this->view->typeOptions = $options;
-        $this->view->gobackLink  = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
-        $this->view->user        = $this->app->user->account;
-        $this->view->allUsers    = $this->loadModel('user')->getPairs('devfirst|noclosed');;
+        $this->view->typeOptions      = $options;
+        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
+        $this->view->user             = $this->app->user->account;
+        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
         $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
-        $this->view->example          = $example;
         $this->view->title            = $api->title . $this->lang->api->edit;
 
         $this->display();
@@ -508,9 +504,6 @@ class api extends control
         $lib     = $this->doc->getLibByID($libID);
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
-        $example = array('example' => 'type,description');
-        $example = json_encode($example, JSON_PRETTY_PRINT);
-
         $this->getTypeOptions($libID);
         $this->view->gobackLink       = $this->createLink('api', 'index', "libID=$libID&moduleID=$moduleID");
         $this->view->user             = $this->app->user->account;
@@ -520,7 +513,6 @@ class api extends control
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'api', $startModuleID = 0);
         $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         $this->view->libs             = $libs;
-        $this->view->example          = $example;
         $this->view->title            = $libName . $this->lang->api->create;
         $this->view->users            = $this->user->getPairs('nocode');
 
