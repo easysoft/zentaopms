@@ -5337,7 +5337,7 @@ class upgradeModel extends model
      * Update branch when object have module.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function updateObjectBranch()
     {
