@@ -468,8 +468,8 @@ $lang->admin->menu->message   = array('link' => "{$lang->message->common}|messag
 $lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
 
 $lang->admin->menu->model['dropMenu'] = new stdclass();
-$lang->admin->menu->model['dropMenu']->allModel  = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'subject,custom,meetingroom,baseline');
-$lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,measurement,auditcl,cmcl,process,activity,zoutput,classify,sqlbuilder,reviewcl,reviewsetting,report');
+$lang->admin->menu->model['dropMenu']->allModel  = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
+$lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting');
 
 $lang->admin->menu->allModel['subMenu'] = new stdclass();
 $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
