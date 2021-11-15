@@ -372,10 +372,11 @@ class treeModel extends model
     {
         if($type == 'line') $rootID = 0;
 
+        $this->loadModel('branch');
         $branches = array($branch => '');
         if($branch)
         {
-            $branchName = $this->loadModel('branch')->getById($branch);
+            $branchName = $this->branch->getById($branch);
             $branches   = array($branch => $branchName);
             $extra      = array('rootID' => $rootID, 'branch' => $branch);
         }
@@ -385,6 +386,22 @@ class treeModel extends model
         if(strpos('story|bug|case', $type) !== false and $branch === 'all')
         {
             if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+        }
+        elseif($type == 'story' and $this->app->rawModule == 'projectstory')
+        {
+            $projectID = zget($extra, 'projectID', 0);
+            if($product->type != 'normal' and $projectID)
+            {
+                $projectBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
+                    ->where('project')->eq($projectID)
+                    ->andWhere('product')->eq($product->id)
+                    ->fetchPairs();
+
+                if(isset($projectBranches[BRANCH_MAIN])) $branches = array(BRANCH_MAIN => $this->lang->branch->main);
+                $branches += $this->dao->select('id, name')->from(TABLE_BRANCH)
+                    ->where('id')->in($projectBranches)
+                    ->fetchPairs();
+            }
         }
 
         /* Add for task #1945. check the module has case or no. */
