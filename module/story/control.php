@@ -711,14 +711,35 @@ class story extends control
             $product = $this->product->getByID($productID);
             $branchProduct = $product->type == 'normal' ? false : true;
 
-            /* Set modules. */
-            $modules = array('ditto' => $this->lang->story->ditto) + $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+            /* Set branches and modules. */
+            $branches = array();
+            $modules  = array();
+            if($product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getPairs($productID);
+                if($branch === 'all')
+                {
+                    $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+                    foreach($branches as $branchID => $branchName)
+                    {
+                        $modules[$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branchID);
+                    }
+                }
+                else
+                {
+                    $modules[$branch] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+                }
+            }
+            else
+            {
+                $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+            }
 
-            $this->view->modules      = $modules;
-            $this->view->branches     = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-            $this->view->plans        = $this->productplan->getBranchPlanPairs($productID);
-            $this->view->position[]   = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
-            $this->view->title        = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->modules    = $modules;
+            $this->view->branches   = $branches;
+            $this->view->plans      = $this->productplan->getBranchPlanPairs($productID);
+            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
+            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
         }
         elseif($executionID)
         {

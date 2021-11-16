@@ -865,7 +865,6 @@ class testcase extends control
 
                 /* Set modules. */
                 $modules = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0, $branch);
-                $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
 
                 $this->view->modules    = $modules;
                 $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
@@ -877,11 +876,31 @@ class testcase extends control
 
                 if($product->type != 'normal') $branchProduct = true;
 
-                /* Set modules. */
-                $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-                $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
+                /* Set branches and modules. */
+                $branches = array();
+                $modules  = array();
+                if($product->type != 'normal')
+                {
+                    $branches = $this->loadModel('branch')->getPairs($productID);
+                    if($branch === 'all')
+                    {
+                        $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branch);
+                        foreach($branches as $branchID => $branchName)
+                        {
+                            $modules[$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branchID);
+                        }
+                    }
+                    else
+                    {
+                        $modules[$branch] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branch);
+                    }
+                }
+                else
+                {
+                    $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branch);
+                }
 
-                $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+                $this->view->branches   = $branches;
                 $this->view->modules    = $modules;
                 $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
                 $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
@@ -906,7 +925,6 @@ class testcase extends control
             $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
             $this->view->title      = $this->lang->testcase->batchEdit;
 
-            /* Set modules. */
             $productIdList = array();
             foreach($cases as $case) $productIdList[$case->product] = $case->product;
 

@@ -76,15 +76,12 @@ foreach(explode(',', $showFields) as $field)
             if($product->type != 'normal')
             {
                 foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
-                $branches = array('ditto' => $this->lang->story->ditto) + $branches;
             }
 
-            $modules = $this->tree->getOptionMenu($story->product, $viewType = 'story', 0, $story->branch);
-            foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
-            $modules = array('ditto' => $this->lang->story->ditto) + $modules;
+            if(!isset($modules[$story->branch])) $modules[$story->branch] = $this->tree->getOptionMenu($story->product, $viewType = 'story', 0, $story->branch);
+            foreach($modules[$story->branch] as $moduleID => $moduleName) $modules[$story->branch][$moduleID] = '/' . $product->name . $moduleName;
 
             $productPlans = $this->productplan->getPairs($story->product, $branch);
-            $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
         }
         ?>
         <tr>
@@ -97,7 +94,7 @@ foreach(explode(',', $showFields) as $field)
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
-            <?php echo html::select("modules[$storyID]", $modules, $story->module, "class='form-control chosen'");?>
+            <?php echo html::select("modules[$storyID]", $modules[$story->branch], $story->module, "class='form-control chosen'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
             <?php
