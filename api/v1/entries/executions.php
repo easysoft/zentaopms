@@ -23,34 +23,51 @@ class executionsEntry extends entry
         $appendFields = $this->param('fields', '');
         $withProject  = $this->param('withProject', '');
 
-        $control = $this->loadController('execution', 'all');
-        $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
-        $data = $this->getData();
-
-        if(isset($data->status) and $data->status == 'success')
+        if($projectID)
         {
-            $pager    = $data->data->pager;
-            $projects = $data->data->projects;
-            $result   = array();
-            foreach($data->data->executionStats as $execution)
-            {
-                foreach($execution->hours as $field => $value) $execution->$field = $value;
+            $control = $this->loadController('project', 'execution');
+            $control->execution($this->param('status', 'undone'), $projectID, $this->param('order', 'id_desc'), $this->param('product', 0), 0, $this->param('limit', 20), $this->param('page', 1));
 
-                $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,' . $appendFields);
-                $result[] = $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
-            }
+            /* Response */
+            $data = $this->getData();
+            if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
+            if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-            $data = array();
-            $data['page']       = $pager->pageID;
-            $data['total']      = $pager->recTotal;
-            $data['limit']      = $pager->recPerPage;
-            $data['executions'] = $result;
-            if(!empty($withProject)) $data['projects'] = $projects;
-            return $this->send(200, $data);
+            $executions = $data->data->executionStats;
+            $pager      = $data->data->pager;
+            $projects   = $data->data->projects;
         }
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        else
+        {
+            $control = $this->loadController('execution', 'all');
+            $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
+            $data = $this->getData();
 
-        return $this->sendError(400, 'error');
+            if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
+            if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+
+            $executions = $data->data->executionStats;
+            $pager      = $data->data->pager;
+            $projects   = $data->data->projects;
+        }
+
+        $result = array();
+        foreach($data->data->executionStats as $execution)
+        {
+            foreach($execution->hours as $field => $value) $execution->$field = $value;
+
+            $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,' . $appendFields);
+            $result[]  = $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
+        }
+
+        $data = array();
+        $data['page']       = $pager->pageID;
+        $data['total']      = $pager->recTotal;
+        $data['limit']      = $pager->recPerPage;
+        $data['executions'] = $result;
+        if(!empty($withProject)) $data['projects'] = $projects;
+
+        return $this->send(200, $data);
     }
 
     /**
