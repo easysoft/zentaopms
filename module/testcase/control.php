@@ -884,7 +884,7 @@ class testcase extends control
                     $branches = $this->loadModel('branch')->getPairs($productID);
                     if($branch === 'all')
                     {
-                        $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branch);
+                        $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, 0);
                         foreach($branches as $branchID => $branchName)
                         {
                             $modules[$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branchID);
@@ -897,7 +897,7 @@ class testcase extends control
                 }
                 else
                 {
-                    $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branch);
+                    $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, 0);
                 }
 
                 $this->view->branches   = $branches;
