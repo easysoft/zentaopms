@@ -2461,10 +2461,6 @@ class storyModel extends model
                 $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
             }
         }
-        elseif($branch)
-        {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` = $branch";
-        }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
             $storyQuery = str_replace($allBranch, '1', $storyQuery);
@@ -4017,7 +4013,7 @@ class storyModel extends model
             }
             else
             {
-                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
+                $stories = $this->getProductStories($productID, $branch, 0, 'all', 'story', 'id_desc', true, $excludeStories);
             }
         }
         else
@@ -4028,7 +4024,7 @@ class storyModel extends model
             }
             else
             {
-                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
+                $stories = $this->getProductStories($productID, $branch, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
             }
         }
 

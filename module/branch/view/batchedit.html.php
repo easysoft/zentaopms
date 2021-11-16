@@ -21,8 +21,8 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->branch->id;?></th>
-          <th class='required c-name'><?php echo $lang->branch->name;?></th>
-          <th class='c-desc'><?php echo $lang->branch->desc;?></th>
+          <th class='required c-name'><?php echo sprintf($lang->branch->name, $lang->product->branchName[$product->type]);?></th>
+          <th class='c-desc'><?php echo sprintf($lang->branch->desc, $lang->product->branchName[$product->type]);?></th>
           <th class='c-status'><?php echo $lang->branch->status;?></th>
           <th class='c-default text-center'><?php echo $lang->branch->defaultBranch;?></th>
         </tr>
@@ -31,7 +31,7 @@
         <?php foreach($branchList as $branch):?>
         <?php $disabled = $branch->id == BRANCH_MAIN ? 'disabled' : '';?>
         <tr>
-          <td><?php echo ($branch->id == BRANCH_MAIN ? '' : $branch->id) . html::hidden("IDList[$branch->id]", $branch);?></td>
+          <td><?php echo ($branch->id == BRANCH_MAIN ? '' : $branch->id) . html::hidden("IDList[$branch->id]", $branch->id);?></td>
           <td><?php echo html::input("name[$branch->id]", $branch->name,  "class='form-control chosen' $disabled");?></td>
           <td><?php echo html::input("desc[$branch->id]", $branch->desc, "class='form-control' $disabled");?></td>
           <td><?php echo html::select("status[$branch->id]", $lang->branch->statusList, $branch->status, "class='form-control' chosen $disabled onchange='canSetDefaultBranch(this)'");?></td>

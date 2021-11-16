@@ -13,16 +13,16 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->branch->create;?></h2>
+    <h2><?php echo sprintf($lang->branch->create, $lang->product->branchName[$product->type]);?></h2>
   </div>
   <form class='main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->branch->name;?></th>
+        <th><?php echo sprintf($lang->branch->name, $lang->product->branchName[$product->type]);?></th>
         <td><?php echo html::input('name', '', "class='form-control'");?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->branch->desc;?></th>
+        <th><?php echo sprintf($lang->branch->desc, $lang->product->branchName[$product->type]);?></th>
         <td><?php echo html::input('desc', '', "class='form-control'");?></td>
       </tr>
       <tr>

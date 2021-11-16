@@ -325,7 +325,7 @@ class bug extends control
         }
         else
         {
-            $this->qa->setMenu($this->products, $productID);
+            $this->qa->setMenu($this->products, $productID, $branch);
         }
 
         foreach($output as $paramKey => $paramValue)

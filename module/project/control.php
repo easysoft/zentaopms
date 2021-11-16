@@ -511,9 +511,12 @@ class project extends control
 
             /* Link the plan stories. */
             $newPlans = array();
-            foreach($_POST['plans'] as $plans)
+            if(isset($_POST['plans']))
             {
-                foreach($plans as $planID) $newPlans[$planID] = $planID;
+                foreach($_POST['plans'] as $plans)
+                {
+                    foreach($plans as $planID) $newPlans[$planID] = $planID;
+                }
             }
 
             $diffResult = array_diff($oldPlans, $newPlans);
