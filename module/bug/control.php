@@ -706,8 +706,7 @@ class bug extends control
         }
         else
         {
-            $this->config->bug->custom->batchCreateFields = sprintf($this->config->bug->custom->batchCreateFields, '');
-            $this->config->bug->custom->batchCreateFields = trim($this->config->bug->custom->batchCreateFields, ',');
+            $this->config->bug->custom->batchCreateFields = trim(sprintf($this->config->bug->custom->batchCreateFields, ''), ',');
         }
 
         $showFields = $this->config->bug->custom->batchCreateFields;

@@ -543,8 +543,7 @@ class testcase extends control
         }
         else
         {
-            $this->config->testcase->custom->batchCreateFields = sprintf($this->config->testcase->custom->batchCreateFields, '');
-            $this->config->testcase->custom->batchCreateFields = trim($this->config->testcase->custom->batchCreateFields, ',');
+            $this->config->testcase->custom->batchCreateFields = trim(sprintf($this->config->testcase->custom->batchCreateFields, ''), ',');
         }
 
         $showFields = $this->config->testcase->custom->batchCreateFields;

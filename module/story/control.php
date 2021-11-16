@@ -482,8 +482,7 @@ class story extends control
         }
         else
         {
-            $this->config->story->custom->batchCreateFields = sprintf($this->config->story->custom->batchCreateFields, '');
-            $this->config->story->custom->batchCreateFields = trim($this->config->story->custom->batchCreateFields, ',');
+            $this->config->story->custom->batchCreateFields = trim(sprintf($this->config->story->custom->batchCreateFields, ''), ',');
         }
 
         $showFields = $this->config->story->custom->batchCreateFields;
