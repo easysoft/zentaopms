@@ -391,18 +391,17 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $data = (array) fixer::input('post')->get();
-            extract($data);
+            $data = fixer::input('post')->get();
 
-            $ids = array_filter($ids);
+            $ids = array_filter($data->ids);
             if(count($ids) != count(array_unique($ids))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
             $newMembers = array();
             foreach($ids as $key => $id)
             {
                 /* Check whether each member has selected accesslevel. */
-                if(empty($levels[$key])) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->memberAccessLevel . $this->lang->gitlab->group->emptyError ));
+                if(empty($data->levels[$key])) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->memberAccessLevel . $this->lang->gitlab->group->emptyError ));
 
-                $newMembers[$id] = (object)array('access_level'=>$levels[$key], 'expires_at'=>$expires[$key]);
+                $newMembers[$id] = (object)array('access_level'=>$data->levels[$key], 'expires_at'=>$data->expires[$key]);
             }
 
             $currentMembers = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID);
@@ -812,10 +811,9 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $data = (array) fixer::input('post')->get();
-            extract($data);
+            $data = fixer::input('post')->get();
 
-            $accounts = array_filter($accounts);
+            $accounts = array_filter($data->accounts);
             if(count($accounts) != count(array_unique($accounts))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
 
             $repo        = $this->loadModel('repo')->getRepoByID($repoID);
@@ -830,10 +828,10 @@ class gitlab extends control
             foreach($accounts as $key => $account)
             {
                 /* If the user has set permissions, check whether they are bound. */
-                if(!empty($levels[$key]))
+                if(!empty($data->levels[$key]))
                 {
                     if(!isset($bindedUsers[$account])) return $this->send(array('result' => 'fail', 'message' => $users[$account] . ' ' . $this->lang->gitlab->project->notbindedError));
-                    $newGitlabMembers[$bindedUsers[$account]] = (object) array('access_level' => $levels[$key], 'expires_at' => $expires[$key]);
+                    $newGitlabMembers[$bindedUsers[$account]] = (object) array('access_level' => $data->levels[$key], 'expires_at' => $data->expires[$key]);
                 }
             }
 
@@ -918,7 +916,7 @@ class gitlab extends control
         $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
         $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);
 
-        /* Get users accesslevel */
+        /* Get users accesslevel. */
         $userAccessData = array();
         $bindedUsers    = $this->dao->select('openID,account')
             ->from(TABLE_OAUTH)

@@ -65,7 +65,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->bind;?></th>
-            <td><?php echo html::select('bind', $userPairs, '', "class='form-control chosen'");?></td>
+            <td><?php echo html::select('account', $userPairs, '', "class='form-control chosen'");?></td>
           </tr>
           <?php if(function_exists('curl_file_create')):?>
           <tr>

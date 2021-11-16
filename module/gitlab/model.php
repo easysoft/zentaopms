@@ -2015,12 +2015,12 @@ class gitlabModel extends model
             return false;
         }
         /* Check whether the user has been bind. */
-        if($user->bind)
+        if($user->account)
         {
-            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->bind)->fetch();
+            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();
             if($zentaoBindUser)
             {
-                dao::$errors['bind'][] = $this->lang->gitlab->user->bindError;
+                dao::$errors['account'][] = $this->lang->gitlab->user->bindError;
                 return false;
             }
         }
@@ -2030,12 +2030,12 @@ class gitlabModel extends model
         if(!empty($reponse->id))
         {
             /* Bind user. */
-            if($user->bind)
+            if($user->account)
             {
                 $userBind = new stdclass;
                 $userBind->providerID   = $gitlabID;
                 $userBind->providerType = 'gitlab';
-                $userBind->account      = $user->bind;
+                $userBind->account      = $user->account;
                 $userBind->openID       = $reponse->id;
                 $this->dao->insert(TABLE_OAUTH)->data($userBind)->exec();
             }
@@ -2067,9 +2067,9 @@ class gitlabModel extends model
             return false;
         }
         /* Check whether the user has been bind. */
-        if($user->bind)
+        if($user->account)
         {
-            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->bind)->fetch();
+            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();
             $changeBind = (!$zentaoBindUser or $zentaoBindUser->openID != $user->id) ? true : false;
             if($zentaoBindUser && $changeBind)
             {
@@ -2083,12 +2083,12 @@ class gitlabModel extends model
         if(!empty($reponse->id))
         {
             /* Bind user. */
-            if($user->bind && $changeBind)
+            if($user->account && $changeBind)
             {
                 $userBind = new stdclass;
                 $userBind->providerID   = $gitlabID;
                 $userBind->providerType = 'gitlab';
-                $userBind->account      = $user->bind;
+                $userBind->account      = $user->account;
                 $userBind->openID       = $reponse->id;
                 $this->dao->replace(TABLE_OAUTH)->data($userBind)->exec();
             }
