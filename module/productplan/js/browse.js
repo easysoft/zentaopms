@@ -25,6 +25,9 @@ $(function()
         var projectID = $('#project').val();
         var planID    = $('#planID').val();
         $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+        $("#projects").hide();
+        $('.modal-backdrop').remove();
+
     });
 });
 $(document).on('click', 'td.content .more', function(e)
