@@ -1573,6 +1573,7 @@ class project extends control
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
 
             $url = $this->createLink('project', 'browse');
+            if($this->app->tab == 'program') $url = $this->createLink('program', 'browse');
 
             if(empty($executionIdList))
             {
