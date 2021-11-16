@@ -22,6 +22,7 @@ class executionsEntry extends entry
     {
         $appendFields = $this->param('fields', '');
         $withProject  = $this->param('withProject', '');
+        if(strpos(strtolower(",{$appendFields},"), ',dropmenu,') !== false) return $this->getDropMenu();
 
         if($projectID)
         {
@@ -100,5 +101,51 @@ class executionsEntry extends entry
         $execution = $this->loadModel('execution')->getByID($data->id);
 
         $this->send(201, $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+    }
+
+    /**
+     * Get drop menu.
+     *
+     * @access public
+     * @return void
+     */
+    public function getDropMenu()
+    {
+        $control = $this->loadController('execution', 'ajaxGetDropMenu');
+        $control->ajaxGetDropMenu($this->request('executionID', 0), $this->request('module', 'execution'), $this->request('method', 'task'), $this->request('extra', ''));
+
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+
+        $account  = $this->app->user->account;
+        $projects = $data->data->projects;
+        $dropMenu = array('involved' => array(), 'other' => array(), 'closed' => array());
+        foreach($data->data->executions as $projectID => $projectExecutions)
+        {
+            foreach($projectExecutions as $execution)
+            {
+                if(helper::diffDate(date('Y-m-d'), $execution->end) > 0) $execution->delay = true;
+                $teams     = $execution->teams;
+                $execution = $this->filterFields($execution, 'id,project,model,type,name,code,status,PM,delay');
+
+                $projectName = zget($projects, $execution->project, '');
+                if($projectName) $execution->name = $projectName . '/' . $execution->name;
+
+                if($execution->status == 'closed')
+                {
+                    $dropMenu['closed'][] = $execution;
+                }
+                elseif($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $account or isset($teams->$account)))
+                {
+                    $dropMenu['involved'][] = $execution;
+                }
+                else
+                {
+                    $dropMenu['other'][] = $execution;
+                }
+            }
+        }
+
+        $this->send(200, $dropMenu);
     }
 }

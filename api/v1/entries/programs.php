@@ -23,7 +23,7 @@ class programsEntry extends Entry
         $mergeChildren = $this->param('mergeChildren', 0);
 
         $fields = $this->param('fields', '');
-        if(stripos(",{$fields},", ",dropmenu,") !== false) return $this->getDropMenu();
+        if(stripos(strtolower(",{$fields},"), ",dropmenu,") !== false) return $this->getDropMenu();
 
         $program = $this->loadController('program', 'browse');
         $program->browse($this->param('status', 'all'), $this->param('order', 'order_asc'));

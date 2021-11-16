@@ -20,8 +20,8 @@ class productsEntry extends entry
      */
     public function get($programID = 0)
     {
-        $fields = strtolower($this->param('fields', ''));
-        if(strpos(",{$fields},", ',dropmenu,') !== false) return $this->getDropMenu();
+        $fields = $this->param('fields', '');
+        if(strpos(strtolower(",{$fields},"), ',dropmenu,') !== false) return $this->getDropMenu();
 
         if(!$programID) $programID = $this->param('program', 0);
 
