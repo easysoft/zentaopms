@@ -512,7 +512,7 @@ class baseHelper
      *  Get now time use the DT_DATETIME1 constant defined in the lang file.
      *
      * @access  public
-     * @return  datetime  now
+     * @return  string  now
      */
     static public function now()
     {
@@ -524,7 +524,7 @@ class baseHelper
      *  Get today according to the  DT_DATE1 constant defined in the lang file.
      *
      * @access  public
-     * @return  date  today
+     * @return  string  today
      */
     static public function today()
     {
@@ -536,7 +536,7 @@ class baseHelper
      *  Get now time use the DT_TIME1 constant defined in the lang file.
      *
      * @access  public
-     * @return  date  today
+     * @return  string  today
      */
     static public function time()
     {
