@@ -31,13 +31,13 @@ $lang->mr->reject   = '拒絕';
 $lang->mr->close    = '關閉';
 $lang->mr->reopen   = '重新打開';
 
-$lang->mr->approvalResult  = '評審意見';
-$lang->mr->approvalResultList  = array();
+$lang->mr->approvalResult = '評審意見';
+$lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = '通過';
 $lang->mr->approvalResultList['reject']  = '拒絕';
 
 $lang->mr->needApproved = '需要通過評審才能合併';
-$lang->mr->needPassCI   = '需要通過構建才能合併';
+$lang->mr->needCI       = '需要通過構建才能合併';
 
 $lang->mr->repeatedOperation = '請勿重複操作';
 

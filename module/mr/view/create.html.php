@@ -52,11 +52,11 @@
             <td colspan='1'><?php echo html::textarea('description', '', "rows='3' class='form-control'"); ?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->mr->needPassCI; ?></th>
+            <th><?php echo $lang->mr->needCI; ?></th>
             <td colspan='1'>
               <div class="checkbox-primary">
-                <input type="checkbox" name="needPassCI" value="1" id="needPassCI">
-                <label for="needPassCI"></label>
+                <input type="checkbox" name="needCI" value="1" id="needCI">
+                <label for="needCI"></label>
               </div>
             </td>
           </tr>

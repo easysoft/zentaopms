@@ -31,13 +31,13 @@ $lang->mr->reject   = 'Reject';
 $lang->mr->close    = 'Close';
 $lang->mr->reopen   = 'Reopen';
 
-$lang->mr->approvalResult  = 'Approval result';
-$lang->mr->approvalResultList  = array();
+$lang->mr->approvalResult = 'Approval result';
+$lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = 'Approve';
 $lang->mr->approvalResultList['reject']  = 'Reject';
 
 $lang->mr->needApproved = 'This MR should be approved before merge';
-$lang->mr->needPassCI   = 'This MR should be passed CI before merge';
+$lang->mr->needCI       = 'This MR should be passed CI before merge';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
 

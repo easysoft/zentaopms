@@ -38,22 +38,21 @@ class mrModel extends model
     /**
      * Get MR list of gitlab project.
      *
-     * @param  string   $browseType
-     * @param  string   $assignee
-     * @param  string   $creator
+     * @param  string   $mode
+     * @param  string   $param
      * @param  string   $orderBy
      * @param  object   $pager
      * @access public
      * @return array
      */
-    public function getList($browseType = 'all', $assignee = 'all', $creator = 'all', $orderBy = 'id_desc', $pager) 
+    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager)
     {
         $MRList = $this->dao->select('*')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
-            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
-            ->beginIF($assignee != 'all')->andWhere('assignee')->eq($assignee)->fi()
-            ->beginIF($creator != 'all')->andWhere('createdBy')->eq($creator)->fi()
+            ->beginIF($mode == 'status' and $param != 'all')->andWhere('status')->eq($param)->fi()
+            ->beginIF($mode == 'assignee' and $param != 'all')->andWhere('assignee')->eq($param)->fi()
+            ->beginIF($mode == 'creator' and $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -317,7 +316,7 @@ class mrModel extends model
                 if(empty($condition)) continue;
 
                 /* Update compile status of current MR object */
-                if(isset($MR->needPassCI) and $MR->needPassCI == '1')
+                if(isset($MR->needCI) and $MR->needCI == '1')
                 {
                     $newMR->compileStatus = empty($MR->compileID) ? 'fail' : $this->loadModel('compile')->getByID($MR->compileID)->status;
                 }
@@ -564,8 +563,8 @@ class mrModel extends model
         $repo->account  = '';
         $repo->encoding = $encoding;
 
-        $lines        = array();
-        $commitsAdded = array();
+        $lines      = array();
+        $commitList = array();
         foreach ($diffVersions as $diffVersion)
         {
             $singleDiff = $this->apiGetSingleDiffVersion($MR->gitlabID, $MR->targetProject, $MR->mriid, $diffVersion->id);
@@ -576,8 +575,8 @@ class mrModel extends model
             {
                 /* Make sure every file with same commitID is unique in $lines. */
                 $shortID = $commits[$index]->short_id;
-                if(in_array($shortID, $commitsAdded)) continue;
-                $commitsAdded[] = $shortID;
+                if(in_array($shortID, $commitList)) continue;
+                $commitList[] = $shortID;
 
                 $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
                 $lines[] = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
@@ -631,7 +630,7 @@ class mrModel extends model
             if(!empty($bindedUsers[$rawProjectUser->username])) $users[$rawProjectUser->username] = $bindedUsers[$rawProjectUser->username];
         }
         if(!empty($users[$zentaoUser])) return $users[$zentaoUser];
-        return "";
+        return '';
     }
 
     /**
@@ -692,15 +691,16 @@ class mrModel extends model
     {
         $this->loadModel('action');
         $actionID = $this->action->create('mrapproval', $MR->id, $action);
+
         $oldMR = $MR;
-        if(isset($MR->status) and $MR->status == 'opened') 
+        if(isset($MR->status) and $MR->status == 'opened')
         {
             $rawApprovalStatus = '';
             if(isset($MR->approvalStatus)) $rawApprovalStatus = $MR->approvalStatus;
             $MR->approver = $this->app->user->account;
             if ($action == 'reject' and $rawApprovalStatus != 'rejected') $MR->approvalStatus = 'rejected';
             if ($action == 'approve' and $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
-            if (isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus) 
+            if (isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus)
             {
                 $changes = common::createChanges($oldMR, $MR);
                 $this->action->logHistory($actionID, $changes);

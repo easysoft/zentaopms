@@ -31,13 +31,13 @@ $lang->mr->reject   = '拒绝';
 $lang->mr->close    = '关闭';
 $lang->mr->reopen   = '重新打开';
 
-$lang->mr->approvalResult  = '评审意见';
-$lang->mr->approvalResultList  = array();
+$lang->mr->approvalResult = '评审意见';
+$lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = '通过';
 $lang->mr->approvalResultList['reject']  = '拒绝';
 
 $lang->mr->needApproved = '需要通过评审才能合并';
-$lang->mr->needPassCI   = '需要通过构建才能合并';
+$lang->mr->needCI       = '需要通过构建才能合并';
 
 $lang->mr->repeatedOperation = '请勿重复操作';
 

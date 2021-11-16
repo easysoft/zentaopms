@@ -18,6 +18,8 @@ class mr extends control
     /**
      * Browse mr.
      *
+     * @param  string $mode
+     * @param  string $param
      * @param  int    $objectID
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -26,14 +28,13 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $assignee = 'all', $creator = 'all', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($mode = 'all', $param = 'all', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $assignee =  isset($_GET['assignee']) ? $this->get->assignee : "all";
-        $creator  = isset($_GET['creator']) ? $this->get->creator : "all";
+        $param  = isset($_GET['param']) ? $this->get->param : "all";
 
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $MRList = $this->mr->getList($browseType, $assignee, $creator, $orderBy, $pager);
+        $MRList = $this->mr->getList($mode, $param, $orderBy, $pager);
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
@@ -47,9 +48,8 @@ class mr extends control
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
         $this->view->pager      = $pager;
-        $this->view->browseType = $browseType;
-        $this->view->assignee   = $assignee;
-        $this->view->creator    = $creator;
+        $this->view->mode       = $mode;
+        $this->view->param      = $param;
         $this->view->objectID   = $objectID;
         $this->view->orderBy    = $orderBy;
         $this->display();
@@ -231,13 +231,13 @@ class mr extends control
         $MR = $this->mr->getByID($MRID);
 
         /* Judge that if this MR can be accepted. */
-        if(isset($MR->needPassCI) and $MR->needPassCI == '1')
+        if(isset($MR->needCI) and $MR->needCI == '1')
         {
             $compileStatus = empty($MR->compileID) ? 'fail' : $this->loadModel('compile')->getByID($MR->compileID)->status;
 
             if(isset($compileStatus) and $compileStatus != 'success')
             {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needPassCI, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needCI, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
             }
         }
         if(isset($MR->needApproved) and $MR->needApproved == '1')

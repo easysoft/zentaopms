@@ -137,7 +137,7 @@
   </div>
   <?php endforeach?>
 </div>
-<?php if(empty($diffs)): echo $lang->mr->noChanges; endif;?>
+<?php if(empty($diffs)) echo $lang->mr->noChanges;?>
 <form method="post" id="exchange" class="hidden">
   <input type="hidden" name="revision[]" value="<?php echo $oldRevision;?>"/>
   <input type="hidden" name="revision[]" value="<?php echo $newRevision;?>"/>

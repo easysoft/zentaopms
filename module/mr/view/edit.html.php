@@ -66,12 +66,12 @@
             <td colspan='1'><?php echo html::textarea('description', $MR->description, "rows='3' class='form-control'"); ?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->mr->needPassCI; ?></th>
+            <th><?php echo $lang->mr->needCI; ?></th>
             <td colspan='1'>
               <div class="checkbox-primary">
-                <?php $checked = $MR->needPassCI == '1' ? 'checked' : '' ?>
-                <input type="checkbox" <?php echo $checked; ?> name="needPassCI" value="1" id="needPassCI">
-                <label for="needPassCI"></label>
+                <?php $checked = $MR->needCI == '1' ? 'checked' : '' ?>
+                <input type="checkbox" <?php echo $checked; ?> name="needCI" value="1" id="needCI">
+                <label for="needCI"></label>
               </div>
             </td>
           </tr>

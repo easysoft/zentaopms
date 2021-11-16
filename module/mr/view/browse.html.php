@@ -19,13 +19,13 @@
   <?php endif;?>
   <div class="btn-toolBar pull-left">
     <?php foreach($lang->mr->statusList as $key => $label):?>
-    <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
+    <?php $active = $param == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
-    <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "browseType=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php if($param == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a(inlink('browse', "mode=status&param=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::a(inlink('browse', "browseType=all&assignee={$this->app->user->account}&creator=all"), $lang->mr->assignedToMe, '', "class='btn btn-link $active'");?>
-    <?php echo html::a(inlink('browse', "browseType=all&assignee=all&creator={$this->app->user->account}"), $lang->mr->createdByMe, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "mode=assignee&param={$this->app->user->account}"), $lang->mr->assignedToMe, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "mode=creator&param={$this->app->user->account}"), $lang->mr->createdByMe, '', "class='btn btn-link $active'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('mr', 'create', '', "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>
@@ -46,7 +46,7 @@
     <table id='gitlabProjectList' class='table has-sort-head table-fixed'>
       <thead>
         <tr>
-          <?php $vars = "browseType=$browseType&assignee=$assignee&creator=$creator&objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
+          <?php $vars = "mode=$mode&param=$param&objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
           <th class='w-60px  text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id); ?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title); ?></th>
           <th class='text-left'><?php common::printOrderLink('sourceProject', $orderBy, $vars, $lang->mr->sourceProject); ?></th>

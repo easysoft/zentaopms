@@ -375,7 +375,8 @@ $filter->gitlab->importissue->get['project'] = 'int';
 $filter->gitlab->importissue->get['repo']    = 'int';
 
 $filter->mr->diff->cookie['arrange'] = 'reg::word';
-$filter->mr->browse->get['assignee'] = 'string';
-$filter->mr->browse->get['creator']  = 'string';
+
+$filter->mr->browse->get['mode']  = 'string';
+$filter->mr->browse->get['param'] = 'string';
 
 $filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';

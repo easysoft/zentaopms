@@ -1053,10 +1053,10 @@ class gitlabModel extends model
         $hook->push_events           = true;
         $hook->merge_requests_events = true;
 
-        /* Return a empty array if where is a existing webhook. */
+        /* Return an empty array if where is one existing webhook. */
         if($this->isWebhookExists($repo, $hook->url)) return array();
 
-        $result  = $this->apiCreateHook($repo->gitlab, $repo->project, $hook);
+        $result = $this->apiCreateHook($repo->gitlab, $repo->project, $hook);
 
         if(!empty($result->id)) return true;
         return false;
