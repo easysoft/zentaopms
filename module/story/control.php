@@ -475,6 +475,17 @@ class story extends control
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
             $customFields[$field] = $this->lang->story->$field;
         }
+
+        if($product->type != 'normal')
+        {
+            $this->config->story->custom->batchCreateFields = sprintf($this->config->story->custom->batchCreateFields, $product->type);
+        }
+        else
+        {
+            $this->config->story->custom->batchCreateFields = sprintf($this->config->story->custom->batchCreateFields, '');
+            $this->config->story->custom->batchCreateFields = trim($this->config->story->custom->batchCreateFields, ',');
+        }
+
         $showFields = $this->config->story->custom->batchCreateFields;
         if($product->type == 'normal')
         {
