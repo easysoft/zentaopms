@@ -210,7 +210,6 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $product = $this->product->getById($productID);
-
         if($product and $product->type != 'normal')
         {
             $this->app->loadLang('datatable');
@@ -271,10 +270,10 @@ class product extends control
 
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
-
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
-        $this->view->showBranch  = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
+        $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
+        $this->view->showBranch  = $showBranch;
 
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 

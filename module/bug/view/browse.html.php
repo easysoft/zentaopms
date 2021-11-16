@@ -264,7 +264,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <tbody>
           <?php foreach($bugs as $bug):?>
           <tr data-id='<?php echo $bug->id?>'>
-            <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $showBranch);?>
           </tr>
           <?php endforeach;?>
         </tbody>

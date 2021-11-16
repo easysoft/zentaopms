@@ -208,13 +208,20 @@ class bug extends control
         $showBranch  = isset($this->config->bug->browse->showBranch) ? $this->config->bug->browse->showBranch : 1;
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
+        
+        $product = $this->product->getById($productID);
+        if($product and $product->type != 'normal')
+        {
+            $this->app->loadLang('datatable');
+            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
+        }
 
         /* Set view. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->bug->common;
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName,'','title=' . $productName);
         $this->view->position[]      = $this->lang->bug->common;
         $this->view->productID       = $productID;
-        $this->view->product         = $this->product->getById($productID);
+        $this->view->product         = $product;
         $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
         $this->view->builds          = $this->loadModel('build')->getProductBuildPairs($productID);

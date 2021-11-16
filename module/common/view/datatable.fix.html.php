@@ -1,6 +1,6 @@
 <?php $currentModule = $this->moduleName;?>
-<?php $currentMethod = ucfirst($this->methodName);?>
-<?php $datatableId = $currentModule . $currentMethod;?>
+<?php $currentMethod = $this->methodName;?>
+<?php $datatableId = $currentModule . ucfirst($this->methodName);?>
 
 <style>
 #setShowModule {margin-left: 30px;}
