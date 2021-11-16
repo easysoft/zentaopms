@@ -43,7 +43,6 @@
       <table class="table table-form">
         <thead>
           <tr>
-            <th class='c-id'><?php echo $lang->idAB;?></th>
             <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
             <th class='c-module<?php echo zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->story->module;?></th>
             <?php if(!isonlybody()):?>
@@ -67,7 +66,6 @@
         </thead>
         <tbody>
           <tr class="template">
-            <td class="c-id">$idPlus</td>
             <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select('branch[$id]', $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, \$id)'");?></td>
             <td class='text-left' style='overflow:visible'><?php echo html::select('module[$id]', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
             <?php if(!isonlybody()):?>
