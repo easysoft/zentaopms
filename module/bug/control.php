@@ -699,6 +699,16 @@ class bug extends control
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
             $customFields[$field] = $this->lang->bug->$field;
         }
+
+        if($product->type != 'normal')
+        {
+            $this->config->bug->custom->batchCreateFields = sprintf($this->config->bug->custom->batchCreateFields, $product->type);
+        }
+        else
+        {
+            $this->config->bug->custom->batchCreateFields = trim(sprintf($this->config->bug->custom->batchCreateFields, ''), ',');
+        }
+
         $showFields = $this->config->bug->custom->batchCreateFields;
         if($product->type == 'normal')
         {

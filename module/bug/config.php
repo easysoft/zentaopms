@@ -44,7 +44,7 @@ $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,ass
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchCreateFields = 'execution,deadline,steps,type,severity,os,browser';
+$config->bug->custom->batchCreateFields = 'execution,deadline,steps,type,severity,os,browser,%s';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,branch,assignedTo,deadline,status,resolvedBy,resolution';
 
 $config->bug->editor = new stdclass();
