@@ -274,6 +274,7 @@ class product extends control
 
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
+        $this->view->showBranch  = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
 
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 

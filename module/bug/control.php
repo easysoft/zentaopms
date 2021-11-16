@@ -205,6 +205,7 @@ class bug extends control
         $this->config->bug->search['onMenuBar'] = 'yes';
         $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
+        $showBranch  = isset($this->config->bug->browse->showBranch) ? $this->config->bug->browse->showBranch : 1;
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
 
@@ -238,6 +239,7 @@ class bug extends control
         $this->view->setModule       = true;
         $this->view->isProjectBug    = ($productID and !$this->projectID) ? false : true;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->showBranch      = $showBranch;
 
         $this->display();
     }

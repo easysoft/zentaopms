@@ -175,6 +175,7 @@ class testcase extends control
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
+        $this->view->showBranch  = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
 
         /* Get module tree.*/
         if($projectID and empty($productID))

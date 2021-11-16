@@ -1,4 +1,7 @@
-<?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
+<?php $currentModule = $this->moduleName;?>
+<?php $currentMethod = ucfirst($this->methodName);?>
+<?php $datatableId = $currentModule . $currentMethod;?>
+
 <style>
 #setShowModule {margin-left: 30px;}
 </style>
@@ -37,6 +40,8 @@ $(function()
     {
         if('<?php echo $this->app->user->account?>' == 'guest') return;
         datatableId    = '<?php echo $datatableId?>';
+        currentModule  = '<?php echo $currentModule?>';
+        currentMethod  = '<?php echo $currentMethod?>';
         var value      = $('#showModuleModal input[name="showModule"]:checked').val();
         var allModule  = $('#showModuleModal input[name="showAllModule"]:checked').val();
         var showBranch = $('#showModuleModal input[name="showBranch"]:checked').val();
@@ -53,6 +58,8 @@ $(function()
                 value: value,
                 allModule: allModule,
                 showBranch: showBranch,
+                currentModule: currentModule,
+                currentMethod: currentMethod,
             },
             success:function(){window.location.reload();},
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
@@ -98,10 +105,10 @@ $(function()
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>
             </tr>
             <?php endif;?>
-            <?php if($this->app->tab == 'product' and $app->moduleName == 'product' and $app->methodName == 'browse'):?>
+            <?php if($this->app->tab == 'product' or $this->app->tab == 'qa'):?>
             <tr>
               <td><?php echo $lang->datatable->showBranch;?></td>
-              <td><?php echo html::radio('showBranch', $lang->datatable->showBranchList, isset($config->product->browse->showBranch) ? $config->product->browse->showBranch : 1);?></td>
+              <td><?php echo html::radio('showBranch', $lang->datatable->showBranchList, isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : 1);?></td>
             </tr>
             <?php endif;?>
             <tr>
