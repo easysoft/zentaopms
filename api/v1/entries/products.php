@@ -132,8 +132,35 @@ class productsEntry extends entry
                 else
                 {
                     $products = $data->data->productStats;
-                    foreach($products as $product) $result[] = $this->format($product, 'createdDate:time');
-                    return $this->send(200, array('products' => $result));
+                    $accounts = array();
+                    foreach($products as $product)
+                    {
+                        $accounts[$product->PO]        = $product->PO;
+                        $accounts[$product->QD]        = $product->QD;
+                        $accounts[$product->RD]        = $product->RD;
+                        $accounts[$product->createdBy] = $product->createdBy;
+                        if(isset($product->feedback)) $accounts[$product->feedback] = $product->feedback;
+                        if(!empty($product->mailto))
+                        {
+                            foreach(explode(',', $product->mailto) as $account)
+                            {
+                                $account = trim($account);
+                                if(empty($account)) continue;
+                                $accounts[$account] = $account;
+                            }
+                        }
+
+                        $result[] = $this->format($product, 'createdDate:time');
+                    }
+
+                    $data = array();
+                    $data['total']    = count($result);
+                    $data['products'] = $result;
+
+                    $withUser = $this->param('withUser', '');
+                    if(!empty($withUser)) $data['users'] = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+
+                    return $this->send(200, $data);
                 }
             }
         }
