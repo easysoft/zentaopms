@@ -657,7 +657,6 @@ class productModel extends model
         $products    = array();
         $allChanges  = array();
         $data        = fixer::input('post')->get();
-        a($data);
         $oldProducts = $this->getByIdList($this->post->productIDList);
         $nameList    = array();
 
