@@ -6,7 +6,7 @@
 $(function()
 {
     <?php if(!empty($setModule)):?>
-    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='btn btn-info btn-wide'><?php echo $app->moduleName=='product' ? $lang->datatable->listSetting : $lang->datatable->moduleSetting?></a><hr class='space-sm' />");
+    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='btn btn-info btn-wide'><?php echo $lang->datatable->displaySetting;?></a><hr class='space-sm' />");
     <?php endif;?>
 
     var addSettingButton = function()
