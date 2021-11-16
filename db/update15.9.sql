@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `zt_stage` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0', 
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `product` varchar(255) NOT NULL,
   `commit` text NOT NULL,
   `commitedBy` varchar(30) NOT NULL,
-  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0', 
+  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
   `status` varchar(30) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `assignedTo` varchar(30) NOT NULL,
   `assignedBy` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0', 
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `story` char(30) NOT NULL,
   `desc` text NOT NULL,
   `version` smallint(6) NOT NULL,
@@ -94,3 +94,7 @@ INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VA
 ('all','stage','typeList','release','发布', '1'),
 ('all','stage','typeList','review','总结评审','1'),
 ('all','stage','typeList','other','其他','1');
+
+ALTER TABLE `zt_bug`
+ADD `feedbackBy` varchar(100) NOT NULL AFTER `activatedDate`,
+ADD `notifyEmail` varchar(100) NOT NULL AFTER `feedbackBy`;

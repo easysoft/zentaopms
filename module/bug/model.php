@@ -85,7 +85,12 @@ class bugModel extends model
         /* Use classic mode to replace required project. */
         if($this->config->systemMode == 'classic' and strpos($this->config->bug->create->requiredFields, 'project') !== false) $this->config->bug->create->requiredFields = str_replace('project', 'execution', $this->config->bug->create->requiredFields);
 
-        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_BUG)->data($bug)
+            ->autoCheck()
+            ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
+            ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
+            ->exec();
+
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
@@ -658,6 +663,7 @@ class bugModel extends model
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
             ->checkIF($bug->resolvedBy, 'resolution',  'notempty')
             ->checkIF($bug->closedBy,   'resolution',  'notempty')
+            ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
