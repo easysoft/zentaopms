@@ -1018,6 +1018,42 @@ class reportModel extends model
 
         return $overview;
     }
+
+    /**
+     * Get project and execution name.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectExecutions()
+    {
+        $mode = $this->cookie->executionMode;
+
+        $executions = $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status')
+            ->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->in('stage,sprint')
+            ->fetchAll();
+        $pairs = array();
+        foreach($executions as $execution)
+        {
+            if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
+            if(strpos($mode, 'stagefilter') !== false and isset($executionModel) and $executionModel == 'waterfall' and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
+            $pairs[$execution->id] = $this->config->systemMode == 'new' ? $execution->projectname . '/' .$execution->name : $execution->name;
+        }
+
+        if(strpos($mode, 'empty') !== false) $pairs[0] = '';
+
+        /* If the pairs is empty, to make sure there's an execution in the pairs. */
+        if(empty($pairs) and isset($executions[0]))
+        {
+            $firstExecution = $executions[0];
+            $pairs[$firstExecution->id] = $firstExecution->name;
+        }
+
+        return $pairs;
+    }
 }
 
 /**
