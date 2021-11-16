@@ -41,7 +41,7 @@
             <div class="detail-title"><strong><?php echo $lang->product->manager;?></strong></div>
             <div class="detail-content">
               <table class="table table-data">
-                <tbody class="detail-users">
+                <tbody>
                   <tr>
                     <th class='w-65px'><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
                     <td><strong><?php echo zget($users, $product->PO);?></strong></td>

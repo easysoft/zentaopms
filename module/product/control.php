@@ -1016,7 +1016,7 @@ class product extends control
         $storyReviewers = '';
         if($storyID)
         {
-            $story        = $this->loadModel('story')->getByID($storyID);
+            $story          = $this->loadModel('story')->getByID($storyID);
             $storyReviewers = $this->story->getReviewerPairs($story->id, $story->version);
             $storyReviewers = implode(',', array_keys($storyReviewers));
         }
