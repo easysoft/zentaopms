@@ -1967,19 +1967,9 @@ class gitlabModel extends model
 
         $reponse = $this->apiCreateProject($gitlabID, $project);
 
-        if(!$reponse) dao::$errors[] = false;
-        if(!empty($reponse->id)) return TRUE;
-        if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
-        else
-        {
-            foreach($reponse->message as $field => $fieldErrors)
-            {
-                foreach($fieldErrors as $error)
-                {
-                    if($error) dao::$errors[$field][] = $error;
-                }
-            }
-        }
+        if(!empty($reponse->id)) return true;
+
+        return $this->apiErrorHandling($reponse);
     }
 
     /**
@@ -1997,19 +1987,9 @@ class gitlabModel extends model
 
         $reponse = $this->apiUpdateProject($gitlabID, $project);
 
-        if(!$reponse) dao::$errors[] = false;
-        if(!empty($reponse->id)) return TRUE;
-        if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
-        else
-        {
-            foreach($reponse->message as $field => $fieldErrors)
-            {
-                foreach($fieldErrors as $error)
-                {
-                    if($error) dao::$errors[$field][] = $error;
-                }
-            }
-        }
+        if(!empty($reponse->id)) return true;
+
+        return $this->apiErrorHandling($reponse);
     }
 
     /**
@@ -2059,29 +2039,10 @@ class gitlabModel extends model
                 $userBind->openID       = $reponse->id;
                 $this->dao->insert(TABLE_OAUTH)->data($userBind)->exec();
             }
-            return TRUE;
+            return true;
         }
-        /* Error handling. */
-        if(!empty($reponse->error))
-        {
-            dao::$errors[] = $reponse->error;
-            return FALSE;
-        }
-        if(!empty($reponse->message))
-        {
-            if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
-            else
-            {
-                foreach($reponse->message as $field => $fieldErrors)
-                {
-                    foreach($fieldErrors as $error)
-                    {
-                        if($error) dao::$errors[$field][] = $error;
-                    }
-                }
-            }
-        }
-        if(!$reponse) dao::$errors[] = false;
+
+        return $this->apiErrorHandling($reponse);
     }
 
     /**
@@ -2131,29 +2092,10 @@ class gitlabModel extends model
                 $userBind->openID       = $reponse->id;
                 $this->dao->replace(TABLE_OAUTH)->data($userBind)->exec();
             }
-            return TRUE;
+            return true;
         }
-        /* Error handling. */
-        if(!empty($reponse->error))
-        {
-            dao::$errors[] = $reponse->error;
-            return FALSE;
-        }
-        if(!empty($reponse->message))
-        {
-            if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
-            else
-            {
-                foreach($reponse->message as $field => $fieldErrors)
-                {
-                    foreach($fieldErrors as $error)
-                    {
-                        if($error) dao::$errors[$field][] = $error;
-                    }
-                }
-            }
-        }
-        if(!$reponse) dao::$errors[] = false;
+
+        return $this->apiErrorHandling($reponse);
     }
 
     /**
@@ -2173,29 +2115,9 @@ class gitlabModel extends model
 
         $reponse = $this->apiCreateGroup($gitlabID, $group);
 
-        if(!empty($reponse->id)) return TRUE;
+        if(!empty($reponse->id)) return true;
 
-        /* Error handling. */
-        if(!empty($reponse->error))
-        {
-            dao::$errors[] = $reponse->error;
-            return FALSE;
-        }
-        if(!empty($reponse->message))
-        {
-            if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
-            else
-            {
-                foreach($reponse->message as $field => $fieldErrors)
-                {
-                    foreach($fieldErrors as $error)
-                    {
-                        if($error) dao::$errors[$field][] = $error;
-                    }
-                }
-            }
-        }
-        if(!$reponse) dao::$errors[] = false;
+        return $this->apiErrorHandling($reponse);
     }
 
     /**
@@ -2215,13 +2137,24 @@ class gitlabModel extends model
 
         $reponse = $this->apiUpdateGroup($gitlabID, $group);
 
-        if(!empty($reponse->id)) return TRUE;
+        if(!empty($reponse->id)) return true;
 
-        /* Error handling. */
+        return $this->apiErrorHandling($reponse);
+    }
+
+    /**
+     * Api error handling.
+     *
+     * @param  object $reponse
+     * @access public
+     * @return bool
+     */
+    public function apiErrorHandling($reponse)
+    {
         if(!empty($reponse->error))
         {
             dao::$errors[] = $reponse->error;
-            return FALSE;
+            return false;
         }
         if(!empty($reponse->message))
         {
@@ -2237,7 +2170,9 @@ class gitlabModel extends model
                 }
             }
         }
+
         if(!$reponse) dao::$errors[] = false;
+        return false;
     }
 
 }

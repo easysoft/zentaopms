@@ -300,13 +300,11 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function groupBrowse($gitlabID, $orderBy = 'name_asc')
+    public function browseGroup($gitlabID, $orderBy = 'name_asc')
     {
-        $gitlabGroupList = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
-
         $this->view->title           = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
         $this->view->gitlabID        = $gitlabID;
-        $this->view->gitlabGroupList = $gitlabGroupList;
+        $this->view->gitlabGroupList = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
         $this->view->orderBy         = $orderBy;
         $this->display();
     }
@@ -325,7 +323,7 @@ class gitlab extends control
             $this->gitlab->createGroup($gitlabID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('groupBrowse', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseGroup', "gitlabID=$gitlabID")));
         }
 
         $gitlab = $this->gitlab->getByID($gitlabID);
@@ -351,7 +349,7 @@ class gitlab extends control
             $this->gitlab->editGroup($gitlabID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('groupBrowse', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseGroup', "gitlabID=$gitlabID")));
         }
 
         $gitlab = $this->gitlab->getByID($gitlabID);
@@ -413,53 +411,61 @@ class gitlab extends control
             $addedMembers = $deletedMembers = $updatedMembers = array();
             foreach($currentMembers as $currentMember)
             {
-                if(empty($newMembers[$currentMember->id]))
+                $memberID = $currentMember->id;
+                if(empty($newMembers[$memberID]))
                 {
-                    $deletedMembers[] = $currentMember->id;
+                    $deletedMembers[] = $memberID;
                 }
                 else
                 {
-                    if($newMembers[$currentMember->id]->access_level != $currentMember->access_level or $newMembers[$currentMember->id]->expires_at != $currentMember->expires_at) $updatedMembers[] = (object)array('user_id' => $currentMember->id, 'access_level' => $newMembers[$currentMember->id]->access_level, 'expires_at' => $newMembers[$currentMember->id]->expires_at);
+                    if($newMembers[$memberID]->access_level != $currentMember->access_level or $newMembers[$memberID]->expires_at != $currentMember->expires_at)
+                    {
+                        $updatedData = new stdClass();
+                        $updatedData->user_id      = $memberID;
+                        $updatedData->access_level = $newMembers[$memberID]->access_level;
+                        $updatedData->expires_at   = $newMembers[$memberID]->expires_at;
+                        $updatedMembers[] = $updatedData;
+                    }
                 }
             }
             /* Get the added data. */
             foreach($newMembers as $id => $newMember)
             {
-                $exist = FALSE;
+                $exist = false;
                 foreach($currentMembers as $currentMember)
                 {
                     if($currentMember->id == $id)
                     {
-                        $exist = TRUE;
+                        $exist = true;
                         break;
                     }
                 }
-                if($exist == FALSE) $addedMembers[] = (object)array('user_id' => $id, 'access_level' => $newMembers[$id]->access_level, 'expires_at' => $newMembers[$id]->expires_at);
-            }
-
-            if(count($addedMembers) > 0)
-            {
-                foreach($addedMembers as $addedMember)
+                if($exist == false)
                 {
-                    $this->gitlab->apiCreateGroupMember($gitlabID, $groupID, $addedMember);
-                }
-            }
-            if(count($updatedMembers) > 0)
-            {
-                foreach($updatedMembers as $updatedMember)
-                {
-                    $this->gitlab->apiUpdateGroupMember($gitlabID, $groupID, $updatedMember);
-                }
-            }
-            if(count($deletedMembers) > 0)
-            {
-                foreach($deletedMembers as $deletedMemberID)
-                {
-                    $this->gitlab->apiDeleteGroupMember($gitlabID, $groupID, $deletedMemberID);
+                    $addedData = new stdClass();
+                    $addedData->user_id      = $id;
+                    $addedData->access_level = $newMembers[$id]->access_level;
+                    $addedData->expires_at   = $newMembers[$id]->expires_at;
+                    $addedMembers[] = $addedData;
                 }
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('groupBrowse', "gitlabID=$gitlabID")));
+            foreach($addedMembers as $addedMember)
+            {
+                $this->gitlab->apiCreateGroupMember($gitlabID, $groupID, $addedMember);
+            }
+
+            foreach($updatedMembers as $updatedMember)
+            {
+                $this->gitlab->apiUpdateGroupMember($gitlabID, $groupID, $updatedMember);
+            }
+
+            foreach($deletedMembers as $deletedMemberID)
+            {
+                $this->gitlab->apiDeleteGroupMember($gitlabID, $groupID, $deletedMemberID);
+            }
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseGroup', "gitlabID=$gitlabID")));
         }
 
         /* Get gitlab users data. */
@@ -487,7 +493,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function userBrowse($gitlabID)
+    public function browseUser($gitlabID)
     {
         $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseUser;
         $this->view->gitlabID       = $gitlabID;
@@ -509,7 +515,7 @@ class gitlab extends control
             $this->gitlab->createUser($gitlabID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('userBrowse', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
         $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -535,7 +541,7 @@ class gitlab extends control
             $this->gitlab->editUser($gitlabID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('userBrowse', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
         $userPairs         = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -563,7 +569,7 @@ class gitlab extends control
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->user->confirmDelete , inlink('deleteUser', "gitlabID=$gitlabID&userID=$userID&confirm=yes")));
 
         $reponse = $this->gitlab->apiDeleteUser($gitlabID, $userID);
-        if(!$reponse or substr($reponse->message, 0, 2) == '20') die(js::reload('parent'));
+        if(!$reponse or substr($reponse->message, 0, 2) == '20') die(js::reload('parent')); /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
         die(js::alert($reponse->message));
     }
 
@@ -574,7 +580,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function projectBrowse($gitlabID)
+    public function browseProject($gitlabID)
     {
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseProject;
         $this->view->gitlabID          = $gitlabID;
@@ -596,7 +602,7 @@ class gitlab extends control
             $this->gitlab->createProject($gitlabID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('projectbrowse', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
         }
 
         $gitlab = $this->gitlab->getByID($gitlabID);
@@ -634,7 +640,7 @@ class gitlab extends control
             $this->gitlab->editProject($gitlabID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('projectBrowse', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
         }
 
         $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
@@ -658,7 +664,7 @@ class gitlab extends control
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->project->confirmDelete , inlink('deleteProject', "gitlabID=$gitlabID&projectID=$projectID&confirm=yes")));
 
         $reponse = $this->gitlab->apiDeleteProject($gitlabID, $projectID);
-        if(substr($reponse->message, 0, 2) == '20') die(js::reload('parent'));
+        if(substr($reponse->message, 0, 2) == '20') die(js::reload('parent')); /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
         die(js::alert($reponse->message));
     }
 
@@ -837,22 +843,37 @@ class gitlab extends control
             /* Get the updated data. */
             foreach($gitlabCurrentMembers as $gitlabCurrentMember)
             {
-                if(!isset($newGitlabMembers[$gitlabCurrentMember->id])) continue;
-                if($newGitlabMembers[$gitlabCurrentMember->id]->access_level != $gitlabCurrentMember->access_level or $newGitlabMembers[$gitlabCurrentMember->id]->expires_at != $gitlabCurrentMember->expires_at) $updatedMembers[] = (object) array('user_id' => $gitlabCurrentMember->id, 'access_level' => $newGitlabMembers[$gitlabCurrentMember->id]->access_level, 'expires_at' => $newGitlabMembers[$gitlabCurrentMember->id]->expires_at);
+                $memberID = $gitlabCurrentMember->id;
+                if(!isset($newGitlabMembers[$memberID])) continue;
+                if($newGitlabMembers[$memberID]->access_level != $gitlabCurrentMember->access_level or $newGitlabMembers[$memberID]->expires_at != $gitlabCurrentMember->expires_at)
+                {
+                    $updatedData = new stdClass();
+                    $updatedData->user_id      = $memberID;
+                    $updatedData->access_level = $newGitlabMembers[$memberID]->access_level;
+                    $updatedData->expires_at   = $newGitlabMembers[$memberID]->expires_at;
+                    $updatedMembers[] = $updatedData;
+                }
             }
             /* Get the added data. */
             foreach($newGitlabMembers as $id => $newMember)
             {
-                $exist = FALSE;
+                $exist = false;
                 foreach($gitlabCurrentMembers as $gitlabCurrentMember)
                 {
                     if($gitlabCurrentMember->id == $id)
                     {
-                        $exist = TRUE;
+                        $exist = true;
                         break;
                     }
                 }
-                if($exist == FALSE) $addedMembers[] = (object) array('user_id' => $id, 'access_level' => $newGitlabMembers[$id]->access_level, 'expires_at' => $newGitlabMembers[$id]->expires_at);
+                if($exist == false)
+                {
+                    $addedData = new stdClass();
+                    $addedData->user_id      = $id;
+                    $addedData->access_level = $newGitlabMembers[$id]->access_level;
+                    $addedData->expires_at   = $newGitlabMembers[$id]->expires_at;
+                    $addedMembers[] = $addedData;
+                }
             }
             /* Get the deleted data. */
             $originalUsers = $repo->acl->users;
@@ -860,12 +881,12 @@ class gitlab extends control
             {
                 if(!in_array($user, $accounts) and isset($bindedUsers[$user]))
                 {
-                    $exist = FALSE;
+                    $exist = false;
                     foreach($gitlabCurrentMembers as $gitlabCurrentMember)
                     {
                         if($gitlabCurrentMember->id == $bindedUsers[$user])
                         {
-                            $exist            = TRUE;
+                            $exist            = true;
                             $deletedMembers[] = $gitlabCurrentMember->id;
                             break;
                         }
@@ -873,26 +894,19 @@ class gitlab extends control
                 }
             }
 
-            if(count($addedMembers) > 0)
+            foreach($addedMembers as $addedMember)
             {
-                foreach($addedMembers as $addedMember)
-                {
-                    $this->gitlab->apiCreateProjectMember($repo->gitlab, $repo->project, $addedMember);
-                }
+                $this->gitlab->apiCreateProjectMember($repo->gitlab, $repo->project, $addedMember);
             }
-            if(count($updatedMembers) > 0)
+
+            foreach($updatedMembers as $updatedMember)
             {
-                foreach($updatedMembers as $updatedMember)
-                {
-                    $this->gitlab->apiUpdateProjectMember($repo->gitlab, $repo->project, $updatedMember);
-                }
+                $this->gitlab->apiUpdateProjectMember($repo->gitlab, $repo->project, $updatedMember);
             }
-            if(count($deletedMembers) > 0)
+
+            foreach($deletedMembers as $deletedMemberID)
             {
-                foreach($deletedMembers as $deletedMemberID)
-                {
-                    $this->gitlab->apiDeleteProjectMember($repo->gitlab, $repo->project, $deletedMemberID);
-                }
+                $this->gitlab->apiDeleteProjectMember($repo->gitlab, $repo->project, $deletedMemberID);
             }
 
             $repo->acl->users = array_values($accounts);
