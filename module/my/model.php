@@ -302,30 +302,10 @@ class myModel extends model
             $simplifyUsers[$user->account] = $simplifyUser;
         }
 
-        $i = 1;
         $maxCount = 5;
-        $filterActions = array();
-        foreach($actions as $key => $action)
-        {
-            if($i > $maxCount) break;
-            if($action->objectType == 'user') continue;
+        $actions  = $this->action->processDynamicForAPI($actions);
+        $actions  = array_slice($actions, 0, $maxCount);
 
-            $simplifyUser = zget($simplifyUsers, $action->actor, '');
-            $actionActor  = $simplifyUser;
-            if(empty($simplifyUser))
-            {
-                $actionActor = new stdclass();
-                $actionActor->id = 0;
-                $actionActor->account  = $action->actor;
-                $actionActor->realname = $action->actor;
-                $actionActor->avatar   = '';
-            }
-
-            $action->actor = $actionActor;
-            $filterActions[] = $action;
-            $i++;
-        }
-
-        return $filterActions;
+        return $actions;
     }
 }

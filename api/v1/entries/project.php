@@ -20,20 +20,68 @@ class projectEntry extends entry
      */
     public function get($projectID)
     {
+        $fields = strtolower($this->param('fields'));
+
         $control = $this->loadController('project', 'view');
         $control->view($projectID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
 
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->project, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool'));
         if(isset($data->status) and $data->status == 'fail')
         {
             if(isset($data->code) and $data->code == 404) $this->send404();
             return $this->sendError(400, $data->message);
         }
 
-        $this->sendError(400, 'error');
+        $project = $this->format($data->data->project, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
+        if(empty($fields)) return $this->send(200, $project);
+
+        /* Set other fields. */
+        $fields = explode(',', $fields);
+        foreach($fields as $field)
+        {
+            switch($field)
+            {
+                case 'team':
+                    $teams    = array();
+                    $accounts = array();
+                    foreach($data->data->teamMembers as $account => $team)
+                    {
+                        $team = $this->filterFields($team, "account,role,join,realname");
+
+                        $teams[$account]    = $team;
+                        $accounts[$account] = $account;
+                    }
+                    $users = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+                    foreach($teams as $account => $team)
+                    {
+                        $user = zget($users, $account, '');
+                        $team->avatar = $user->avatar;
+                    }
+
+                    $project->teams = $teams;
+                    break;
+                case "stat":
+                    $project->stat = $data->data->statData;
+                    break;
+                case "workhour":
+                    $workhour = $data->data->workhour;
+                    $workhour->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
+                    $project->workhour  = $workhour;
+                    break;
+                case "actions":
+                    $actions = $data->data->actions;
+                    $project->actions = $this->loadModel('action')->processActionForAPI($actions, (array)$data->data->users, $this->lang->project);
+                    break;
+                case "dynamics":
+                    $dynamics = $data->data->dynamics;
+                    $project->dynamics = $this->loadModel('action')->processDynamicForAPI($dynamics);
+                    break;
+            }
+        }
+
+        return $this->send(200, $project);
     }
 
     /**

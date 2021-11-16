@@ -1565,4 +1565,83 @@ class actionModel extends model
             echo $actionType;
         }
     }
+
+    /**
+     * Process action for API.
+     *
+     * @param  array  $actions
+     * @param  array  $users
+     * @param  array  $objectLang
+     * @access public
+     * @return array
+     */
+    public function processActionForAPI($actions, $users = array(), $objectLang = array())
+    {
+        $actions = (array)$actions;
+        foreach($actions as $action)
+        {
+            $action->actor = zget($users, $action->actor);
+            if($action->action == 'assigned') $action->extra = zget($users, $action->extra);
+            if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+
+            ob_start();
+            $this->printAction($action);
+            $action->desc = ob_get_contents();
+            ob_end_clean();
+
+            if($action->history)
+            {
+                foreach($action->history as $i => $history)
+                {
+                    $history->fieldName = zget($objectLang, $history->field);
+                    $action->history[$i] = $history;
+                }
+            }
+        }
+        return array_values($actions);
+    }
+
+    /**
+     * Process dynamic for API.
+     *
+     * @param  array    $dynamics
+     * @access public
+     * @return array
+     */
+    public function processDynamicForAPI($dynamics)
+    {
+        $users = $this->loadModel('user')->getList();
+        $simplifyUsers = array();
+        foreach($users as $user)
+        {
+            $simplifyUser = new stdclass();
+            $simplifyUser->id       = $user->id;
+            $simplifyUser->account  = $user->account;
+            $simplifyUser->realname = $user->realname;
+            $simplifyUser->avatar   = $user->avatar;
+            $simplifyUsers[$user->account] = $simplifyUser;
+        }
+
+        $actions = array();
+        foreach($dynamics as $key => $dynamic)
+        {
+            if($dynamic->objectType == 'user') continue;
+
+            $simplifyUser = zget($simplifyUsers, $dynamic->actor, '');
+            $actor = $simplifyUser;
+            if(empty($simplifyUser))
+            {
+                $actor = new stdclass();
+                $actor->id       = 0;
+                $actor->account  = $dynamic->actor;
+                $actor->realname = $dynamic->actor;
+                $actor->avatar   = '';
+            }
+
+            $dynamic->actor = $actor;
+            $actions[]      = $dynamic;
+        }
+
+        return $actions;
+    }
 }
