@@ -1349,6 +1349,10 @@ class productModel extends model
         $product->bugs       = $bugs       ? $bugs->count : 0;
         $product->docs       = $docs       ? $docs->count : 0;
 
+        $closedTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('status')->eq('closed')->andWhere('product')->eq($productID)->fetch('count');
+        $allTotal    = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch('count');
+        $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
+
         return $product;
     }
 

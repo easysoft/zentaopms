@@ -43,7 +43,7 @@ class productEntry extends Entry
         if(!$fields) return $this->send(200, $product);
 
         /* Set other fields. */
-        $fields = explode(',', $fields);
+        $fields = explode(',', strtolower($fields));
         foreach($fields as $field)
         {
             switch($field)
@@ -62,6 +62,23 @@ class productEntry extends Entry
 
                     $actions = $data->data->actions;
                     $product->actions = $this->loadModel('action')->processActionForAPI($actions, $users, $this->lang->product);
+                    break;
+                case 'lastexecution':
+                    $execution = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                        ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                        ->where('t2.deleted')->eq(0)
+                        ->andWhere('t1.product')->eq($productID)
+                        ->andWhere('t2.type')->in('sprint,stage')
+                        ->orderBy('t2.id desc')
+                        ->limit(1)
+                        ->fetch();
+                    if($execution)
+                    {
+                        $workhour = $this->loadModel('project')->computerProgress(array($execution->id => $execution));
+                        if(isset($workhour[$execution->id])) $execution->progress = $workhour[$execution->id]->progress;
+                    }
+
+                    $product->lastExecution = $execution;
                     break;
             }
         }
