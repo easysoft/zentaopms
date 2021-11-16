@@ -1572,7 +1572,7 @@ class project extends control
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
 
-            $url = $this->createLink('project', 'browse');
+            $url = $this->createLink('program', 'browse');
 
             if(empty($executionIdList))
             {
