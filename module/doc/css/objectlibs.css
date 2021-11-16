@@ -42,7 +42,6 @@
 .title {font-size: 20px !important;}
 .article-content.comment {width: 100% !important;}
 
-.tree li>.list-toggle {left: -4px; top: 0;}
 .tree-group {position: relative;}
 .tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
 .tree-group .tree-actions {display: none; position: absolute; right: 0; top: 0; background-color: #fff; white-space: nowrap;}
