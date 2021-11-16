@@ -21,6 +21,7 @@ class executionsEntry extends entry
     public function get($projectID = 0)
     {
         $appendFields = $this->param('fields', '');
+        $withProject  = $this->param('withProject', '');
 
         $control = $this->loadController('execution', 'all');
         $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
@@ -28,14 +29,24 @@ class executionsEntry extends entry
 
         if(isset($data->status) and $data->status == 'success')
         {
-            $pager  = $data->data->pager;
-            $result = array();
+            $pager    = $data->data->pager;
+            $projects = $data->data->projects;
+            $result   = array();
             foreach($data->data->executionStats as $execution)
             {
-                $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,' . $appendFields);
+                foreach($execution->hours as $field => $value) $execution->$field = $value;
+
+                $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,' . $appendFields);
                 $result[] = $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
             }
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'executions' => $result));
+
+            $data = array();
+            $data['page']       = $pager->pageID;
+            $data['total']      = $pager->recTotal;
+            $data['limit']      = $pager->recPerPage;
+            $data['executions'] = $result;
+            if(!empty($withProject)) $data['projects'] = $projects;
+            return $this->send(200, $data);
         }
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 

@@ -34,7 +34,7 @@ class productEntry extends Entry
 
         $product = $this->format($data->data->product, 'createdDate:time');
 
-        $users = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $users = $data->data->users;
         $product->PO        = $this->formatUser($product->PO, $users);
         $product->QD        = $this->formatUser($product->QD, $users);
         $product->RD        = $this->formatUser($product->RD, $users);
@@ -60,31 +60,8 @@ class productEntry extends Entry
                 case 'actions':
                     $product->addComment = common::hasPriv('action', 'comment') ? true : false;
 
-                    $actions = $this->loadModel('action')->getList('product', $productID);
-                    $product->actions = array();
-                    foreach($actions as $action)
-                    {
-                        $action->actor = zget($users, $action->actor);
-                        if($action->action == 'assigned') $action->extra = zget($users, $action->extra);
-                        if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
-
-                        ob_start();
-                        $this->action->printAction($action);
-                        $action->desc = ob_get_contents();
-                        ob_end_clean();
-
-                        $action = $this->filterFields($action, 'id,objectType,objectID,actor,action,date,comment,extra,desc,history');
-                        if($action->history)
-                        {
-                            foreach($action->history as $i => $history)
-                            {
-                                $history = $this->filterFields($history, 'id,field,old,new,diff');
-                                $history->fieldName = zget($this->lang->product, $history->field);
-                                $action->history[$i] = $history;
-                            }
-                        }
-                        $product->actions[] = $action;
-                    }
+                    $actions = $data->data->actions;
+                    $product->actions = $this->loadModel('action')->processActionForAPI($actions, $users, $this->lang->product);
                     break;
             }
         }
