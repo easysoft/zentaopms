@@ -70,7 +70,7 @@
             <th></th>
             <td class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php if(!isonlybody()) echo html::a(inlink('groupbrowse', "gitlabID=$gitlabID"), $lang->goback, '', 'class="btn btn-wide"');?>
+              <?php if(!isonlybody()) echo html::a(inlink('browseGroup', "gitlabID=$gitlabID"), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
           </tr>
         </table>
