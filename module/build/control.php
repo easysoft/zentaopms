@@ -66,7 +66,7 @@ class build extends control
         $productGroups = $this->execution->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
         $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID);
-        $branchPairs   = $this->loadModel('branch')->getPairs($productID, 'active');
+        $branchPairs   = $this->loadModel('branch')->getPairs($productID);
         $branches      = array();
         $products      = array();
         foreach($productGroups as $product)
