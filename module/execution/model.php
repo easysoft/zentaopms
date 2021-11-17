@@ -544,7 +544,7 @@ class executionModel extends model
             $changedAccounts[$owner]  = $owner;
             $teamMembers[$ownerField] = $member;
         }
-        if($execution->project) $this->addProjectMembers($execution->project, $teamMembers);	
+        if($execution->project) $this->addProjectMembers($execution->project, $teamMembers);
 
         $whitelist = explode(',', $execution->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
@@ -1626,33 +1626,6 @@ class executionModel extends model
         $managers->QD = '';
         $managers->RD = '';
         return $managers;
-    }
-
-    /**
-     * Get products of a execution.
-     *
-     * @param  int    $executionID
-     * @param  bool   $withBranch
-     * @access public
-     * @return array
-     */
-    public function getProducts($executionID, $withBranch = true, $status = 'all')
-    {
-        if(defined('TUTORIAL'))
-        {
-            if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
-            return $this->loadModel('tutorial')->getExecutionProducts();
-        }
-
-        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
-            ->where('t1.project')->eq((int)$executionID)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi();
-        if(!$withBranch) return $query->fetchPairs('id', 'name');
-        return $query->fetchAll('id');
     }
 
     /**
@@ -3108,7 +3081,7 @@ class executionModel extends model
             }
         }
 
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $branchPairs  = array();
         $productType  = 'normal';
         $productNum   = count($products);
@@ -3119,9 +3092,12 @@ class executionModel extends model
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                if($product->branch and isset($branchGroups[$product->id][$product->branch]))
+                if(isset($product->branches))
                 {
-                    $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
+                    foreach($product->branches as $branch)
+                    {
+                        if(isset($branchGroups[$product->id][$branch])) $branchPairs[$branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$branch];
+                    }
                 }
                 else
                 {
@@ -3681,7 +3657,7 @@ class executionModel extends model
         $productPlans = array();
         foreach($products as $productID => $product)
         {
-            foreach($product->branch as $branchID)
+            foreach($product->branches as $branchID)
             {
                 $planInfo = $this->productplan->getPairs($product->id, $branchID);
                 foreach($planInfo as $planID => $plan)
@@ -3760,7 +3736,7 @@ class executionModel extends model
     {
         $this->loadModel('user')->updateUserView($executionID, $objectType, $users);
 
-        $products = $this->getProducts($executionID, $withBranch = false);
+        $products = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);
     }
 

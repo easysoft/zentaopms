@@ -70,6 +70,8 @@ class project extends control
 
             $projects = $this->project->getInfoList($status, 30, $orderBy, null);
             $users    = $this->loadModel('user')->getPairs('noletter');
+
+            $this->loadModel('product');
             foreach($projects as $i => $project)
             {
                 $project->PM       = zget($users, $project->PM);
@@ -79,7 +81,7 @@ class project extends control
                 $project->budget   = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
                 $project->parent   = $project->parentName;
 
-                $linkedProducts = $this->project->getProducts($project->id, false);
+                $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
                 $project->linkedProducts = implode('，', $linkedProducts);
 
                 if($this->post->exportType == 'selected')
@@ -344,6 +346,7 @@ class project extends control
     public function create($model = 'scrum', $programID = 0, $copyProjectID = 0, $extra = '')
     {
         $this->loadModel('execution');
+        $this->loadModel('product');
 
         if($_POST)
         {
@@ -397,7 +400,7 @@ class project extends control
             {
                 if($model == 'waterfall')
                 {
-                    $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
+                    $productID = $this->product->getProductIDByProject($projectID, true);
                     $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
                     return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
@@ -436,7 +439,7 @@ class project extends control
             $programID   = $copyProject->parent;
             $model       = $copyProject->model;
 
-            $products = $this->project->getProducts($copyProjectID);
+            $products = $this->product->getProducts($copyProjectID);
             foreach($products as $product)
             {
                 $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
@@ -457,7 +460,7 @@ class project extends control
         $this->view->productPlans        = array('0' => '') + $productPlans;
         $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->programID           = $programID;
-        $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs($programID);
+        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs($programID);
         $this->view->model               = $model;
         $this->view->name                = $name;
         $this->view->code                = $code;
@@ -531,7 +534,7 @@ class project extends control
         $linkedBranches  = array();
         $productPlans    = array(0 => '');
         $allProducts     = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts  = $this->project->getProducts($projectID);
+        $linkedProducts  = $this->loadModel('product')->getProducts($projectID);
         $parentProject   = $this->program->getByID($project->parent);
         $branches        = $this->project->getBranchesByProject($projectID);
         $plans           = $this->productplan->getGroupByProduct(array_keys($linkedProducts));
@@ -667,7 +670,10 @@ class project extends control
         $linkedBranches = array();
         foreach($products as $productID => $product)
         {
-            if($product->branch) $linkedBranches = $product->branch;
+            if(isset($product->branches))
+            {
+                foreach($product->branches as $branchID) $linkedBranches[$branchID] = $branchID;
+            }
         }
 
         /* Load pager. */
@@ -887,8 +893,8 @@ class project extends control
         $project  = $this->project->getByID($projectID);
         $type     = strtolower($type);
         $queryID  = ($type == 'bysearch') ? (int)$param : 0;
-        $products = $this->project->getProducts($projectID);
-        $branchID = isset($products[$productID]) ? $products[$productID]->branch : 0;
+        $products = $this->product->getProducts($projectID);
+        $branchID = isset($products[$productID]) ? current($products[$productID]->branches) : 0;
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $product) $productPairs[$product->id] = $product->name;
@@ -955,7 +961,7 @@ class project extends control
     {
         $this->loadModel('product');
         $this->session->set('bugList', $this->app->getURI(true), 'project');
-        $products = array('0' => $this->lang->product->all) + $this->project->getProducts($projectID, false);
+        $products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
         $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', '', $branch, 0, '', false);
 
         echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=$orderBy&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
@@ -1039,13 +1045,14 @@ class project extends control
     {
         /* Load module and get project. */
         $this->loadModel('build');
+        $this->loadModel('product');
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
         $this->session->set('buildList', $this->app->getURI(true), 'project');
 
         /* Get products' list. */
-        $products = $this->project->getProducts($projectID, false);
+        $products = $this->product->getProducts($projectID, 'all', '', false);
         $products = array('' => '') + $products;
 
         /* Build the search form. */
@@ -1070,7 +1077,7 @@ class project extends control
 
         /* Set project builds. */
         $projectBuilds = array();
-        $productList   = $this->project->getProducts($projectID);
+        $productList   = $this->product->getProducts($projectID);
         if(!empty($builds))
         {
             foreach($builds as $build)
@@ -1683,12 +1690,12 @@ class project extends control
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            $oldProducts = $this->project->getProducts($projectID);
+            $oldProducts = $this->product->getProducts($projectID);
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $oldProducts  = array_keys($oldProducts);
-            $newProducts  = $this->project->getProducts($projectID);
+            $newProducts  = $this->product->getProducts($projectID);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');

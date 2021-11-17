@@ -50,12 +50,12 @@ class testcase extends control
             if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
-                $products  = $this->loadModel('project')->getProducts($objectID, false);
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
-                $products = $this->loadModel('execution')->getProducts($objectID, false);
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else
             {
@@ -125,7 +125,7 @@ class testcase extends control
         /* Set menu, save session. */
         if($this->app->tab == 'project')
         {
-            $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($projectID, false);
+            $this->products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
             $this->loadModel('project')->setMenu($projectID);
         }
         else

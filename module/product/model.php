@@ -330,55 +330,52 @@ class productModel extends model
      * @param  int    $projectID
      * @param  int    $status   all|noclosed
      * @param  string $orderBy
+     * @param  bool   $withBranch
      * @access public
      * @return array
      */
-    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $test = false)
+    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $withBranch = true)
     {
-        if($test)
+        if(defined('TUTORIAL'))
         {
-            $productList = $this->dao->select('t1.*, t2.branch, t2.plan')
-                ->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
-                ->on('t1.id = t2.product')
-                ->where('t1.deleted')->eq(0)
-                ->beginIF(!empty($projectID))->andWhere('t2.project')->eq($projectID)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-                ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-                ->orderBy($orderBy . 't1.order asc')
-                ->fetchGroup('id', 'branch');
+            if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
+            return $this->loadModel('tutorial')->getExecutionProducts();
+        }
 
-            $products = array();
-            foreach($productList as $productID => $branches)
+        $projectProducts = $this->dao->select('t1.branch, t1.plan, t2.*')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')
+            ->on('t1.product = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
+            ->orderBy($orderBy . 't2.order asc')
+            ->fetchAll();
+
+        $products = array();
+        foreach($projectProducts as $product)
+        {
+            if(!$withBranch)
             {
-                $branch = array();
-                $plan   = array();
-                foreach($branches as $branchID => $productInfo)
-                {
-                    $branch[$productInfo->branch] = $productInfo->branch;
-                    $plan[$productInfo->plan]     = $productInfo->plan;
-
-                    $productInfo->branch = $branch;
-                    $productInfo->plan   = $plan;
-
-                    $products[$productID] = $productInfo;
-                }
+                $products[$product->id] = $product->name;
+                continue;
             }
-            return $products;
+
+            if(!isset($products[$product->id]))
+            {
+                $products[$product->id] = $product;
+                $products[$product->id]->branches = array();
+                $products[$product->id]->plans    = array();
+            }
+            $products[$product->id]->branches[$product->branch] = $product->branch;
+            if($product->plan) $products[$product->id]->plans[$product->plan] = $product->plan;
+
+            unset($product->branch);
+            unset($product->plan);
         }
-        else
-        {
-            $productList = $this->dao->select('t1.*, t2.branch, t2.plan')
-                ->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
-                ->on('t1.id = t2.product')
-                ->where('t1.deleted')->eq(0)
-                ->beginIF(!empty($projectID))->andWhere('t2.project')->eq($projectID)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-                ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-                ->orderBy($orderBy . 't1.order asc')
-                ->fetchAll('id');
-        }
+
+        return $products;
     }
 
     /**

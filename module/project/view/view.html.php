@@ -140,7 +140,7 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php foreach($product->branch as $branchID):?>
+                <?php foreach($product->branches as $branchID):?>
                 <?php $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';?>
                 <div class="col-xs-6">
                   <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branchID"), "<i class='icon icon-product text-muted'></i> " . $product->name . $branchName);?>
@@ -155,7 +155,7 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php foreach($product->plan as $planID):?>
+                <?php foreach($product->plans as $planID):?>
                 <?php if(isset($planGroup[$productID][$planID])):?>
                 <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroup[$productID][$planID]);?></div>
                 <?php endif;?>

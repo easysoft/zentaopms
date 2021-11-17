@@ -535,32 +535,6 @@ class projectModel extends model
     }
 
     /**
-     * Get products of a project.
-     *
-     * @param  int    $projectID
-     * @param  bool   $withBranch
-     * @access public
-     * @return array
-     */
-    public function getProducts($projectID, $withBranch = true, $status = 'all')
-    {
-        if(defined('TUTORIAL'))
-        {
-            if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
-            return $this->loadModel('tutorial')->getExecutionProducts();
-        }
-
-        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t1.project')->eq((int)$projectID)
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
-            ->andWhere('t2.deleted')->eq(0);
-        if(!$withBranch) return $query->fetchPairs('id', 'name');
-        return $query->fetchAll('id');
-    }
-
-    /**
      * Get branches by project id.
      *
      * @param  int    $projectID
@@ -1482,7 +1456,7 @@ class projectModel extends model
             $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
             if($id == 'id') $class .= ' cell-id';
-            
+
             if($id == 'code') $title = "title={$project->code}";
 
             if($id == 'name')

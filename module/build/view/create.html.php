@@ -35,7 +35,7 @@
               if(!empty($product) and $product->type != 'normal' and isset($branches[$product->id]))
               {
                   $branches = $branches[$product->id];
-                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $product->branch, "class='form-control chosen'");
+                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, key($product->branches), "class='form-control chosen'");
               }
               ?>
             </div>

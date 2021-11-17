@@ -216,12 +216,12 @@ class product extends control
             $this->app->loadLang('datatable');
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
         }
-        
+
         /* Get stories. */
         if($this->app->rawModule == 'projectstory')
         {
             if(!empty($product)) $this->session->set('currentProductType', $product->type);
-            $this->products  = $this->loadModel('project')->getProducts($projectID, false);
+            $this->products  = $this->product->getProducts($projectID, 'all', '', false);
             $projectProducts = $this->product->getProducts($projectID);
             $productPlans    = $this->execution->getPlans($projectProducts);
 
