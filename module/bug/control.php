@@ -207,7 +207,7 @@ class bug extends control
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
-        
+
         $product = $this->product->getById($productID);
         if($product and $product->type != 'normal')
         {

@@ -269,6 +269,7 @@ class buildModel extends model
      */
     public function getProductBuildPairs($products, $branch = 0, $params = 'noterminate, nodone', $replace = true)
     {
+        if($branch == 'all') $branch = 0;
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
@@ -278,9 +279,23 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.product')->in($products)
-            ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
+            ->beginIF($branch)->andWhere('t1.branch')->in("$branch")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
+
+        $productBuildss = array();
+        if($branch != 0)
+        {
+            $productBuildss = $this->dao->select('t1.id, t1.name, t1.execution, t2.status as executionStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+                ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
+                ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
+                ->where('t1.product')->in($products)
+                ->beginIF($branch)->andWhere('t1.branch')->in("0")->fi()
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
+        }
+
 
         /* Set builds and filter done executions and terminate releases. */
         $builds = array();
@@ -290,6 +305,17 @@ class buildModel extends model
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
             $builds[$key] = ((strpos($params, 'withbranch') !== false and $build->branchName) ? $build->branchName . '/' : '') . $build->name;
         }
+        if($branch != 0)
+        {
+            $builds = $builds + $sysBuilds;
+            foreach($productBuildss as $key => $build)
+            {
+                if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->executionStatus === 'done')) continue;
+                if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
+                $builds[$key] = ((strpos($params, 'withbranch') !== false and $build->branchName) ? $build->branchName . '/' : '') . $build->name;
+            }
+        }
+
 
         if(!$builds) return $sysBuilds;
 
@@ -305,7 +331,8 @@ class buildModel extends model
             foreach($releases as $buildID => $releaseName) $builds[$buildID] = ((strpos($params, 'withbranch') !== false and $productBuilds[$buildID]->branchName) ? $productBuilds[$buildID]->branchName . '/' : '') . $releaseName;
         }
 
-        return $sysBuilds + $builds;
+        if($branch != 0) return $builds;
+        else return $sysBuilds + $builds;
     }
 
     /**
