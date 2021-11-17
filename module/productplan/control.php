@@ -265,6 +265,7 @@ class productplan extends control
         }
 
         $uri = $this->app->getURI(true);
+        $uri = substr($uri,0,strpos($uri,'&type=') ? strpos($uri,'&type=') : strlen($uri));
         $storySessionParam = strpos($uri, '&type=story') !== false ? '' : '&type=story';
         $bugSessionParam   = strpos($uri, '&type=bug') !== false ? '' : '&type=bug';
         $this->session->set('storyList', $uri . $storySessionParam, 'product');
