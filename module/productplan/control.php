@@ -313,7 +313,7 @@ class productplan extends control
         $this->view->canBeChanged = $canBeChanged;
 
         if($this->app->getViewType() == 'json')
-        {   
+        {
             unset($this->view->storyPager);
             unset($this->view->bugPager);
         }
@@ -629,7 +629,7 @@ class productplan extends control
      */
     public function batchUnlinkBug($planID, $orderBy = 'id_desc')
     {
-        foreach($this->post->unlinkBugs as $bugID) $this->productplan->unlinkBug($bugID);
+        foreach($this->post->bugIDList as $bugID) $this->productplan->unlinkBug($bugID);
         die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
     }
 }

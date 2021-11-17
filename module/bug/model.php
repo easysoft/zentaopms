@@ -1094,6 +1094,35 @@ class bugModel extends model
     }
 
     /**
+     * Batch change the plan of bug.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $planID
+     * @access public
+     * @return array
+     */
+    public function batchChangePlan($bugIDList, $planID)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+        $oldBugs    = $this->getByList($bugIDList);
+        foreach($bugIDList as $bugID)
+        {
+            $oldBug = $oldBugs[$bugID];
+            if($planID == $oldBug->plan) continue;
+
+            $bug = new stdclass();
+            $bug->lastEditedBy   = $this->app->user->account;
+            $bug->lastEditedDate = $now;
+            $bug->plan           = $planID;
+
+            $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+            if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+        }
+        return $allChanges;
+    }
+
+    /**
      * Batch resolve bugs.
      *
      * @param  array    $bugIDList

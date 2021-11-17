@@ -361,7 +361,12 @@
         <?php endif;?>
         <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='bugList'>
-            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('productplan', 'batchUnlinkBug');?>
+            <?php
+            $canBatchUnlink     = common::hasPriv('productplan', 'batchUnlinkBug');
+            $canBatchEdit       = common::hasPriv('bug', 'batchEdit');
+            $canBatchChangePlan = common::hasPriv('bug','');
+            $canBatchAction     = $canBeChanged and ($canBatchUnlink or $canBatchEdit or $canBatchChangePlan);
+            ?>
             <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
             <thead>
               <tr class='text-center'>
@@ -386,7 +391,7 @@
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)));?>
+                  <?php echo html::checkbox('bugIDList', array($bug->id => sprintf('%03d', $bug->id)));?>
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
@@ -415,10 +420,46 @@
           </table>
           <?php if($planBugs):?>
           <div class='table-footer'>
-            <?php if($canBatchUnlink):?>
+            <?php if($canBatchAction):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
-              <?php echo html::submitButton($lang->productplan->batchUnlink, '', 'btn');?>
+              <div class='btn-group dropup'>
+                <?php $actionLink = inlink('batchUnlinkbug', "planID=$plan->id&orderBy=$orderBy");?>
+                <?php echo html::commonButton($lang->productplan->batchUnlink, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"");?>
+                <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+                <ul class='dropdown-menu'>
+                  <?php
+                  $class = "class='disabled'";
+                  $actionLink = $this->createLink('bug', 'batchEdit', "productID=$plan->product&branch=$branch");
+                  $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', this)\"" : $class;
+                  echo "<li>" . html::a('#', $lang->edit, '', $misc) . "</li>";
+
+                  if($canBatchChangePlan)
+                  {
+                      unset($plans['']);
+                      unset($plans[$plan->id]);
+                      $plans      = array(0 => $lang->null) + $plans;
+                      $withSearch = count($plans) > 8;
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript:;', $lang->bug->productplan, '', "id='planItem'");
+                      echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo '<ul class="dropdown-list">';
+                      foreach($plans as $planID => $planName)
+                      {
+                          $actionLink = $this->createLink('bug', 'batchChangePlan', "planID=$planID");
+                          echo "<li class='option' data-key='$planID'>" . html::a('#', $planName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"") . "</li>";
+                      }
+                      echo '</ul>';
+                      if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                      echo '</div></li>';
+                  }
+                  else
+                  {
+                     echo '<li>' . html::a('javascript:;', $lang->story->moduleAB, '', $class) . '</li>';
+                  }
+                  ?>
+                </ul>
+              </div>
             </div>
             <?php endif;?>
             <div class='table-statistic'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?></div>

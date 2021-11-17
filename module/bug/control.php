@@ -1169,6 +1169,33 @@ class bug extends control
     }
 
     /**
+     * Batch change the plan of bug.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return void
+     */
+    public function batchChangePlan($planID)
+    {
+        if($this->post->bugIDList)
+        {
+            $bugIDList = $this->post->bugIDList;
+            $bugIDList = array_unique($bugIDList);
+            unset($_POST['bugIDList']);
+            $allChanges = $this->bug->batchChangePlan($bugIDList, $planID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            foreach($allChanges as $bugID => $changes)
+            {
+                $this->loadModel('action');
+                $actionID = $this->action->create('bug', $bugID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        die(js::locate($this->session->bugList, 'parent'));
+    }
+
+    /**
      * Batch update assign of bug.
      *
      * @param  int     $objectID  projectID|executionID
