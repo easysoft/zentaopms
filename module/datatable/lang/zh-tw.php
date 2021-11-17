@@ -19,6 +19,7 @@ $lang->datatable->branch   = '分支';
 $lang->datatable->platform = '平台';
 
 $lang->datatable->displaySetting         = '顯示設定';
+$lang->datatable->moduleSetting          = '模組設置';
 $lang->datatable->showModule             = '列表頁是否顯示模組名';
 $lang->datatable->showAllModule          = '是否顯示完整產品模組';
 $lang->datatable->showModuleList[]       = '不顯示';

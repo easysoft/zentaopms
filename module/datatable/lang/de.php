@@ -19,6 +19,7 @@ $lang->datatable->branch   = 'Branch';
 $lang->datatable->platform = 'Platform';
 
 $lang->datatable->displaySetting         = 'Set list';
+$lang->datatable->moduleSetting          = 'Set Module';
 $lang->datatable->showModule             = 'Anzeigen/Verstecken des Modul Names';
 $lang->datatable->showAllModule          = 'Show product modules';
 $lang->datatable->showModuleList[]       = 'N/A';

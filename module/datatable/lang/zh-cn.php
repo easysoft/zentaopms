@@ -18,6 +18,8 @@ $lang->datatable->resetGlobal       = '全局恢复默认';
 $lang->datatable->branch   = '分支';
 $lang->datatable->platform = '平台';
 
+$lang->datatable->moduleSetting          = '模块设置';
+$lang->datatable->listSetting            = '列表设置';
 $lang->datatable->displaySetting         = '显示设置';
 $lang->datatable->showModule             = '列表页是否显示模块名';
 $lang->datatable->showBranch             = '列表页是否显示%s名';
