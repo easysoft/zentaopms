@@ -381,9 +381,11 @@ class buildModel extends model
         $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->setIF($this->post->branch === '', 'branch', $oldBuild->branch)
             ->setDefault('product', $oldBuild->product)
+            ->setDefault('branch', $oldBuild->branch)
             ->cleanInt('product,branch,execution')
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
+        if(isset($_POST['branch'])) $build->branch = (int)$_POST['branch'];
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_BUILD)->data($build)
@@ -392,7 +394,6 @@ class buildModel extends model
             ->where('id')->eq($buildID)
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
             ->exec();
-        if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
