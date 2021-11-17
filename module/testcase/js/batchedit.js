@@ -31,13 +31,39 @@ function loadBranches(product, branch, caseID)
     if(!branch) branch = 0;
 
     moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + caseID + '&needManage=true');
-    $('#modules' + caseID).parent('td').load(moduleLink, function(){$('#modules' + caseID).chosen();})
+    $('#modules' + caseID).parent('td').load(moduleLink, function()
+    {
+        $("#modules" + caseID).attr('onchange', "loadStories("+ product + ", this.value, " + caseID + ")").chosen();
+    });
+
+    loadStories(product, 0, caseID);
 }
 
 $(function()
 {
     removeDitto();  //Remove 'ditto' in first row.
     $('#subNavbar li[data-id="testcase"]').addClass('active');
+    if($("[name^='story']").length > 0)
+    {
+        $("[name^='story']").each(function()
+        {
+            var id        = $(this).attr('id');
+            var num       = id.substring(5);
+            var moduleID  = $('#modules' + num).val();
+            var branchID  = $('#branches' + num).val();
+            var storyID   = $("#story" + num).val();
+            var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
+            $.get(storyLink, function(stories)
+            {
+                if(!stories) modules = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
+                $('#story' + num).replaceWith(stories);
+                $('#story' + num + "_chosen").remove();
+                $('#story' + num).next('.picker').remove();
+                $('#story' + num).attr('name', 'story[' + num + ']').chosen();
+                $('#story' + num).val(storyID).trigger('chosen:updated');
+            });
+        });
+    }
 });
 
 $(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev('select').val();})//Save old value.

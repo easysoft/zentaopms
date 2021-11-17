@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('dittoNotice', $this->lang->testcase->dittoNotice);?>
+<?php js::set('productID', $productID);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></h2>
@@ -103,8 +104,8 @@
               <?php echo html::select("branches[$caseID]",  $branches,   $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules[$caseBranch],   $cases[$caseID]->module, "class='form-control chosen'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("stories[$caseID]",  $stories,   $cases[$caseID]->story, "class='form-control chosen'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules[$caseBranch],   $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]",  $stories,   $cases[$caseID]->story, "class='form-control chosen'");?></td>
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>
                 <div class="input-control has-icon-right">

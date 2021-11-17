@@ -355,14 +355,16 @@ function updateStepID()
  */
 function loadStories(productID, moduleID, num)
 {
-    var branchID  = $('#branch' + num).val();
-    var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
+    var branchIDName = config.currentMethod == 'batchcreate' ? '#branch' : '#branches';
+    var branchID     = $(branchIDName + num).val();
+    var storyLink    = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
     $.get(storyLink, function(stories)
     {
         if(!stories) modules = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
         $('#story' + num).replaceWith(stories);
-        $("#story" + num + "_chosen").remove();
-        $("#story" + num).next('.picker').remove();
-        $("#story" + num).chosen();
+        $('#story' + num + "_chosen").remove();
+        $('#story' + num).next('.picker').remove();
+        $('#story' + num).attr('name', 'story[' + num + ']');
+        $('#story' + num).chosen();
     });
 }
