@@ -995,9 +995,7 @@ class product extends control
         $field = $fieldID ? "plans[$fieldID]" : 'plan';
 
         $output = '';
-        $isBatchEdit = false;
-        if(strpos($param, 'batchEdit') !== false) $isBatchEdit = true;
-        if($isBatchEdit)
+        if(strpos($param, 'batchEdit') !== false)
         {
             $output  = "<div class='table-row'>";
             $output .= "<div class='table-col'>";
