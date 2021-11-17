@@ -46,8 +46,16 @@ class tabsEntry extends baseEntry
 
             foreach($tabs as $menuKey)
             {
-                if(!common::hasPriv('product', $menuKey)) continue;
                 if($menuKey == 'requirement' and empty($this->config->URAndSR)) continue;
+                if(isset($this->lang->product->menu->$menuKey))
+                {
+                    list($label, $module, $method) = explode('|', $this->lang->product->menu->$menuKey['link']);
+                    if(!common::hasPriv($module, $method)) continue;
+                }
+                else
+                {
+                    if(!common::hasPriv('product', $menuKey)) continue;
+                }
 
                 $label = zget($this->lang->product, $menuKey, '');
                 if($menuKey == 'view')        $label = $this->lang->overview;
