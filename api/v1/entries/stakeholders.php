@@ -1,6 +1,6 @@
 <?php
 /**
- * The project entry point of ZenTaoPMS.
+ * The stakeholder entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class projectsEntry extends entry
+class stakeholdersEntry extends entry
 {
     /**
      * GET method.
@@ -21,42 +21,33 @@ class projectsEntry extends entry
     public function get($programID = 0)
     {
         if(!$programID) $programID = $this->param('program', 0);
-        $appendFields = $this->param('fields', '');
-        if(stripos(strtolower(",{$appendFields},"), ',dropmenu,') !== false) return $this->getDropMenu();
-
-        $_COOKIE['involved'] = $this->param('involved', 0);
 
         if($programID)
         {
-            $control = $this->loadController('program', 'project');
-            $control->project($programID, $this->param('status', 'all'), $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
-            $data = $this->getData();
-        }
-        else
-        {
-            $control = $this->loadController('project', 'browse');
-            $control->browse($programID, $this->param('status', 'all'), 0, $this->param('order', 'order_asc'), 0, $this->param('limit', 20), $this->param('page', 1));
+            $control = $this->loadController('program', 'stakeholder');
+            $control->stakeholder($programID, $this->param('order', 't1.id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
             $data = $this->getData();
         }
 
         if(isset($data->status) and $data->status == 'success')
         {
+            $this->app->loadLang('stakeholder');
             $pager  = $data->data->pager;
             $users  = $data->data->users;
             $result = array();
-            foreach($data->data->projectStats as $project)
+            foreach($data->data->stakeholders as $stakeholder)
             {
-                foreach($project->hours as $field => $value) $project->$field = $value;
+                $stakeholder->roleName = zget($this->lang->user->roleList, $stakeholder->role, '');
+                $stakeholder->typeName = zget($this->lang->stakeholder->fromList, $stakeholder->from, '');
 
-                $project  = $this->filterFields($project, 'id,name,code,model,type,budget,budgetUnit,parent,begin,end,status,openedBy,openedDate,PM,delay,progress,' . $appendFields);
-                $result[] = $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
+                $result[] = $stakeholder;
             }
 
             $data = array();
-            $data['page']     = $pager->pageID;
-            $data['total']    = $pager->recTotal;
-            $data['limit']    = (int)$pager->recPerPage;
-            $data['projects'] = $result;
+            $data['page']         = $pager->pageID;
+            $data['total']        = $pager->recTotal;
+            $data['limit']        = (int)$pager->recPerPage;
+            $data['stakeholders'] = $result;
 
             $withUser = $this->param('withUser', '');
             if(!empty($withUser)) $data['users'] = $users;

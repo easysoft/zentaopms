@@ -64,6 +64,8 @@ $routes['/user']      = 'user';
 $routes['/programs']     = 'programs';
 $routes['/programs/:id'] = 'program';
 
+$routes['/programs/:id/stakeholders'] = 'stakeholders';
+
 $routes['/products/:productID/issues'] = 'productIssues';
 $routes['/projects/:projectID/issues'] = 'issues';
 $routes['/issues']                     = 'issues';
