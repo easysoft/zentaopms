@@ -105,7 +105,7 @@ $(function()
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>
             </tr>
             <?php endif;?>
-            <?php if($this->app->tab == 'product' or $this->app->tab == 'qa'):?>
+            <?php if(!empty($product) and $product->type != 'normal' and $this->app->tab == 'product' or $this->app->tab == 'qa'):?>
             <tr>
               <td><?php echo $lang->datatable->showBranch;?></td>
               <td><?php echo html::radio('showBranch', $lang->datatable->showBranchList, isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : 1);?></td>
