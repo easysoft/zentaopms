@@ -152,10 +152,9 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->gitlabRepo);
+            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
             $project = zget($repo, 'project');
 
-            $job->repo     = $job->gitlabRepo;
             $job->server   = (int)zget($repo, 'gitlab', 0);
             $job->pipeline = json_encode(array('project' => $project, 'reference' => $this->post->reference));
         }

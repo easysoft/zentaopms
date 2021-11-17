@@ -84,12 +84,11 @@ class mrModel extends model
      */
     public function create()
     {
-        if (!empty($_POST['compile']))
+        if (!empty($_POST['job']))
         {
             $repoID        = $this->post->repo;
             $jobID         = $this->post->job;
             $compileID     = $this->post->compile;
-            $compileStatus = $this->loadModel('compile')->getByID($this->post->compile)->status;
 
             $MR = fixer::input('post')
                 ->add('createdBy', $this->app->user->account)
@@ -97,7 +96,6 @@ class mrModel extends model
                 ->add('repoID', $repoID)
                 ->add('jobID', $jobID)
                 ->add('compileID', $compileID)
-                ->add('compileStatus', $compileStatus)
                 ->get();
         }
         else
@@ -106,6 +104,18 @@ class mrModel extends model
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->get();
+        }
+
+        /* Exec Job */
+        if($MR->jobID)
+        {
+            $pipeline = $this->loadModel('job')->exec($MR->jobID);
+            if($pipeline->queue)
+            {
+                $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
+                $MR->compileID = $compile->id;
+                $MR->compileStatus = $compile->status;
+            }
         }
 
         $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
@@ -172,20 +182,16 @@ class mrModel extends model
      */
     public function update($MRID)
     {
-        if (!empty($_POST['compile']))
+        if (!empty($_POST['job']))
         {
             $repoID        = $this->post->repo;
             $jobID         = $this->post->job;
-            $compileID     = $this->post->compile;
-            $compileStatus = $this->loadModel('compile')->getByID($this->post->compile)->status;
 
             $MR = fixer::input('post')
                 ->setDefault('editedBy', $this->app->user->account)
                 ->setDefault('editedDate', helper::now())
                 ->add('repoID', $repoID)
                 ->add('jobID', $jobID)
-                ->add('compileID', $compileID)
-                ->add('compileStatus', $compileStatus)
                 ->get();
         }
         else
@@ -195,6 +201,20 @@ class mrModel extends model
                 ->setDefault('editedDate', helper::now())
                 ->get();
         }
+        $oldMR = $this->getByID($MRID);
+
+        /* Exec Job */
+        if($MR->jobID)
+        {
+            $pipeline = $this->loadModel('job')->exec($MR->jobID);
+
+            if($pipeline->queue && $MR->jobID != $oldMR->jobID)
+            {
+                $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
+                $MR->compileID = $compile->id;
+                $MR->compileStatus = $compile->status;
+            }
+        }
 
         /* Update MR in GitLab. */
         $newMR = new stdclass;
@@ -202,8 +222,6 @@ class mrModel extends model
         $newMR->description   = $MR->description;
         $newMR->assignee_ids  = $MR->assignee;
         $newMR->target_branch = $MR->targetBranch;
-
-        $oldMR = $this->getByID($MRID);
 
         /* Known issue: `reviewer_ids` takes no effect. */
         $rawMR = $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);

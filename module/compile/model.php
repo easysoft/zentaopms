@@ -24,6 +24,18 @@ class compileModel extends model
     }
 
     /**
+     * Get By Queue.
+     *
+     * @param  int    $queue
+     * @access public
+     * @return void
+     */
+    public function getByQueue($queue)
+    {
+        return $this->dao->select('*')->from(TABLE_COMPILE)->where('queue')->eq($queue)->fetch();
+    }
+
+    /**
      * Get build list.
      *
      * @param  int    $jobID
@@ -45,7 +57,7 @@ class compileModel extends model
             ->page($pager)
             ->fetchAll('id');
     }
-    
+
     /**
      * Get list by jobID.
      *
