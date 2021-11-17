@@ -23,6 +23,7 @@ $lang->productplan->project    = 'Project';
 $lang->productplan->plan       = 'Plan';
 
 $lang->productplan->batchUnlink      = "Batch Unlink";
+$lang->productplan->unlinkAB         = "Unlink";
 $lang->productplan->linkStory        = "Link Story";
 $lang->productplan->unlinkStory      = "Unlink Story";
 $lang->productplan->unlinkStoryAB    = "Unlink";
