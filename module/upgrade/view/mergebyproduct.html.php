@@ -35,7 +35,7 @@
                 <a href='#' id='sprintEdit' class='hidden'><i class="icon-common-edit icon-edit muted"></i></a>
               </div>
               <div class="sprintRename hidden">
-                <?php echo html::input("sprintRename[$sprint->id]", $sprint->name, "class='form-control'");?>
+                <?php echo html::input("sprintRename_$sprint->id", $sprint->name, "class='form-control'");?>
                 <div class="btn-group">
                   <button type="button" class="btn btn-success name-confirm"><i class='icon icon-check'></i></button>
                   <button type="button" class="btn btn-gray name-cancel"><i class='icon icon-close'></i></button>

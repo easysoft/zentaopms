@@ -1167,9 +1167,28 @@ $(function()
         $(this).parents('.sprintItem').next('.sprintRename').removeClass('hidden');
     })
 
+    $('.sprintRename button.name-confirm').click(function()
+    {
+        var execution        = $(this).parent().siblings('input').attr('name').split('_');
+        var newExecutionName = $(this).parent().siblings('input').val();
+        var link = createLink('execution', 'ajaxUpdateExecutionName', 'executionID=' + execution[1] + '&newExecutionName=' + newExecutionName);
+        var $this = $(this);
+
+        $.post(link, function(data)
+        {
+            if(data)
+            {
+                $this.closest('.sprintRename').addClass('hidden');
+                $this.closest('.sprintRename').prev('.sprintItem').removeClass('hidden').find('.checkbox-primary label').text(newExecutionName);
+            }
+        })
+    })
+
     $('.sprintRename button.name-cancel').click(function()
     {
+        var oldValue = $(this).closest('.sprintRename').prev('.sprintItem').find('.checkbox-primary label').text();
         $(this).closest('.sprintRename').addClass('hidden');
         $(this).closest('.sprintRename').prev('.sprintItem').removeClass('hidden');
+        $(this).parent().siblings('input').val(oldValue);
     })
 })
