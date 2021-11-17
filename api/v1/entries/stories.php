@@ -9,53 +9,35 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class storiesEntry extends entry 
+class storiesEntry extends entry
 {
     /**
      * GET method.
      *
      * @param  int    $productID
-     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function get($productID = 0, $projectID = 0)
+    public function get($productID = 0)
     {
         if(!$productID) $productID = $this->param('product');
-        if(!$projectID) $projectID = $this->param('project');
-        if(!$productID and !$projectID) return $this->sendError(400, 'Need product or project id.');
+        if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        if($projectID)
-        {
-            $control = $this->loadController('projectstory', 'story');
-            $control->story($projectID, $productID, $this->param('branch', 0), $this->param('type', ''), 0, 'story', $this->param('order', ''), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
-            $data = $this->getData();
-        }
-        else
-        {
-            $control = $this->loadController('product', 'browse');
-            $control->browse($productID, $this->param('branch', 0), $this->param('type', ''), 0, 'story', $this->param('order', ''), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
-            $data = $this->getData();
-        }
+        $control = $this->loadController('product', 'browse');
+        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'unclosed'), 0, $this->param('type', 'story'), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
-        if(isset($data->status) and $data->status == 'success')
-        {
-            $stories = $data->data->stories;
-            $pager   = $data->data->pager;
-            $result  = array();
-            foreach($stories as $story)
-            {
-                $result[] = $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool');
-            }
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
-        }
+        $data = $this->getData();
+        if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-        if(isset($data->status) and $data->status == 'fail')
+        $stories = $data->data->stories;
+        $pager   = $data->data->pager;
+        $result  = array();
+        foreach($stories as $story)
         {
-            return $this->sendError(400, $data->message);
+            $result[] = $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool');
         }
-
-        return $this->sendError(400, 'error');
+        return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
     }
 
     /**
@@ -83,7 +65,7 @@ class storiesEntry extends entry
         $this->requireFields('title,spec,pri,category');
 
         $control->create($productID);
-        
+
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
         if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
