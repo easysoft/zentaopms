@@ -67,6 +67,17 @@ function setModuleAndPlan(branchID, productID, num)
         $("#plan" + num).next('.picker').remove();
         $("#plan" + num).chosen();
     });
+
+    /* If the branch of the current row is inconsistent with the one below, clear the module and plan of the nex row. */
+    var nextBranchID = $('#branch' + (num + 1)).val();
+    if(nextBranchID != branchID)
+    {
+        $('#module' + (num + 1)).find("option[value='ditto']").remove();
+        $('#module' + (num + 1)).trigger("chosen:updated");
+
+        $('#plan' + (num + 1)).find("option[value='ditto']").remove();
+        $('#plan' + (num + 1)).trigger("chosen:updated");
+    }
 }
 
 /* Copy story title as story spec. */

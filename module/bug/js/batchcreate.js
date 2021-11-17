@@ -39,6 +39,17 @@ function setBranchRelated(branchID, productID, num)
 
     buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
 
+    /* If the branch of the current row is inconsistent with the one below, clear the module and execution of the nex row. */
+    var nextBranchID = $('#branch' + (num + 1)).val();
+    if(nextBranchID != branchID)
+    {
+        $('#modules' + (num + 1)).find("option[value='ditto']").remove();
+        $('#modules' + (num + 1)).trigger("chosen:updated");
+
+        $('#executions' + (num + 1)).find("option[value='ditto']").remove();
+        $('#executions' + (num + 1)).trigger("chosen:updated");
+    }
+
     setOpenedBuilds(buildLink, num);
 }
 
