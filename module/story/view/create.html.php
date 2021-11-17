@@ -104,7 +104,7 @@
             <td colspan='2' id='reviewerBox'>
               <div class="table-row">
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
                 </div>
                 <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col w-130px">

@@ -513,6 +513,7 @@ class productModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
+            ->join('reviewer', ',')
             ->remove('uid,newLine,lineName')
             ->get();
 
@@ -586,6 +587,7 @@ class productModel extends model
         $product = fixer::input('post')
             ->setDefault('line', 0)
             ->join('whitelist', ',')
+            ->join('reviewer', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,changeProjects')
             ->get();

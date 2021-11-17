@@ -105,6 +105,7 @@ $lang->product->QD             = 'QA Manager';
 $lang->product->RD             = 'Release Manager';
 $lang->product->feedback       = 'Feedback Manger';
 $lang->product->acl            = 'Access Control';
+$lang->product->reviewer       = 'Reviewer';
 $lang->product->whitelist      = 'Whitelist';
 $lang->product->branch         = '%s';
 $lang->product->qa             = 'Test';

@@ -299,6 +299,10 @@ class story extends control
                 ->fetch('id');
         }
 
+        /* Get reviewers. */
+        $reviewers = $product->reviewer;
+        if(!$reviewers) $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
@@ -323,6 +327,7 @@ class story extends control
         $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
         $this->view->productID        = $productID;
         $this->view->product          = $product;
+        $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->objectID         = $objectID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
@@ -627,6 +632,10 @@ class story extends control
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
+        /* Get product reviewers. */
+        $productReviewers = $product->reviewer;
+        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+
         $this->story->replaceURLang($story->type);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -639,6 +648,7 @@ class story extends control
         $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
         $this->view->reviewers        = implode(',', $reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
+        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewerList, 0, $productReviewers);
         $this->view->isShowReviewer   = $isShowReviewer;
         $this->display();
     }
