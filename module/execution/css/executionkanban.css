@@ -1,24 +1,7 @@
-.main-table .table {cursor: default; border-collapse: unset;}
-
-.boards {display: table; table-layout: fixed; width: 100%; min-width: 140px;}
-.board {display: table-cell; width: 25%; padding: 10px;}
-.board > div {max-height: 230px; overflow: auto;}
-.board:not(:last-child), .board-project {border-right: 2px solid #fff;}
-.board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: default; border-radius: 2px; background-color: #fff;}
-.board-item:hover {border-color: #ccc;}
-.board-item + .board-item {margin-top: 10px;}
-
-#kanban {overflow-y: auto;}
-#kanban thead > tr > th:not(:last-child) {border-right: 2px solid #efefef;}
-#kanban tbody > tr > td {line-height: 24px;}
-#kanban tbody > tr > td {background-color: #F5F5F5;}
-#kanban tbody > tr:not(:last-child) > td {border-bottom: 5px solid #fff !important;}
-
-.s-doing .table-row .table-col:last-child, .c-progress {width: 30px; padding-left: 3px; padding-top: 1px;}
-.table-row .table-col:first-child, .board-project {overflow: hidden; white-space: nowrap;}
-
-.table-grouped > tbody > tr,
-.table-grouped > tbody > tr:hover {background: #fff !important;}
-
-.projectColor {width: 5px; padding: 0px !important; border-right: unset !important}
-th .count {font-weight: 500; color: #8b91a2;}
+#kanbanList .panel-body {padding: 10px!important;}
+#kanbanList .kanban-header {min-height: 32px!important;}
+#kanbanList .kanban-header-col {height: 32px!important; padding: 0!important;}
+#kanbanList .kanban-header-col > .title {padding: 0 5px!important;}
+#kanbanList .kanban-col[data-type="project"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center;}
+#kanbanList .kanban-lane-name {width: 5px; margin-right: 15px;}
+#kanbanList .kanban-lane-name > .text {display: none;}

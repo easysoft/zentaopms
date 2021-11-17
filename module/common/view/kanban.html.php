@@ -43,9 +43,13 @@
 #kanbanList .kanban-header-col[data-type="doingProject"] + .kanban-header-col[data-type="doingExecution"] {padding: 38px 10px 0;}
 #kanbanList .kanban-header-col[data-type="doingProject"]:after {content: attr(data-span-text); display: block; position: absolute; z-index: 10; left: 0; right:  -100%; right: calc(-100% - 2px); top: 0; line-height: 36px; text-align: center; font-weight: bold; border-bottom: 2px solid #fff; background-color: #ededed;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center;}
+#kanbanList .kanban-item.kanban-item-span,
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {background-color: transparent; border: none; padding: 0; text-align: center; box-shadow: none!important;}
+#kanbanList .kanban-item.kanban-item-span:hover,
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item:hover {box-shadow: none;}
+#kanbanList .kanban-item.kanban-item-span > .title,
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item > .title {white-space: normal;}
+
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; height: 38px;}
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: block; white-space: nowrap; text-overflow: clip; overflow: hidden;}
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title.has-icon > .text {margin-right: 5px; max-width: calc(100% - 20px);}
@@ -82,6 +86,25 @@ function isEarlierThanToday(date)
         window.todayBegin = now.getTime();
     }
     return $.zui.createDate(date).getTime() < window.todayBegin;
+}
+
+/**
+ * Render normal text span item
+ * @param {Object} item  Product item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderSpanItem(item, $item)
+{
+    console.log('renderSpanItem', item, $item);
+    var $title = $item.find('.title');
+    if(!$title.length)
+    {
+        $title = $('<div class="title" />').appendTo($item);
+    }
+    $title.text(item.name).attr('title', item.name);
+    return $item.addClass('kanban-item-span');
 }
 
 /**
@@ -301,6 +324,8 @@ function renderDoingProjectItem(item, $item)
 /** All build-in columns renderers */
 if(!window.columnRenderers) window.columnRenderers =
 {
+    span: renderSpanItem,
+    execution: renderExecutionItem,
     unclosedProduct: renderProductItem,
     unexpiredPlan: renderPlanItem,
     waitProject: renderProjectItem,
@@ -334,8 +359,7 @@ function addColumnRenderer(columnType, renderer)
 function renderKanbanItem(item, $item, col, lane, kanban)
 {
     var columnRenderers = window.columnRenderers;
-    var cardType        = col.cardType || lane.defaultCardType || kanban.defaultCardType;
-    var renderer        = columnRenderers[col.type] || columnRenderers[cardType];
+    var renderer        = columnRenderers[col.cardType] || columnRenderers[col.type] || columnRenderers[lane.defaultCardType || kanban.defaultCardType];
     if(renderer) return renderer(item, $item, col);
     return $item;
 }
@@ -404,7 +428,7 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     showZeroCount: true,
     onRenderHeaderCol: function($col, col)
     {
-        if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
+        if(col.type === 'doingProject' && window.doingText) $col.attr('data-span-text', window.doingText);
     },
     onRenderKanban: function($kanban, kanbanData)
     {
