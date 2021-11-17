@@ -837,6 +837,7 @@ $lang->resource->bug->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->bug->delete             = 'deleteAction';
 $lang->resource->bug->batchChangeModule  = 'batchChangeModule';
 $lang->resource->bug->batchChangeBranch  = 'batchChangeBranch';
+$lang->resource->bug->batchChangePlan    = 'batchChangePlan';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';
