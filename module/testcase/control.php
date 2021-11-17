@@ -234,7 +234,7 @@ class testcase extends control
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
         if($this->app->tab == 'project')
         {
-            $products = array('0' => $this->lang->product->all) + $this->project->getProducts($this->session->project, false);
+            $products = array('0' => $this->lang->product->all) + $this->product->getProducts($this->session->project, 'all', '', false);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
         }
 

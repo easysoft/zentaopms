@@ -726,7 +726,7 @@ class story extends control
             $execution = $this->execution->getByID($executionID);
 
             $branchProduct  = false;
-            $linkedProducts = $this->execution->getProducts($executionID);
+            $linkedProducts = $this->loadModel('product')->getProducts($executionID);
             foreach($linkedProducts as $linkedProduct)
             {
                 if($linkedProduct->type != 'normal')
@@ -1651,7 +1651,7 @@ class story extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $this->app->rawModule = 'qa';
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
-            $products  = $this->project->getProducts($this->session->project, false);
+            $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase');
         }

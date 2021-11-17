@@ -2548,7 +2548,7 @@ class storyModel extends model
         if($type == 'bysearch')
         {
             $queryID  = (int)$param;
-            $products = $this->loadModel('execution')->getProducts($executionID);
+            $products = $this->loadModel('product')->getProducts($executionID);
 
             if($this->session->executionStoryQuery == false) $this->session->set('executionStoryQuery', ' 1 = 1');
             if($queryID)

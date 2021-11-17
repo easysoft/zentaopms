@@ -1849,7 +1849,7 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $products = $this->getProducts($toExecution);
+        $products = $this->loadModel('product')->getProducts($toExecution);
         if(empty($products)) return array();
 
         $execution  = $this->getById($toExecution);
