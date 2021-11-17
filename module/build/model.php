@@ -241,7 +241,7 @@ class buildModel extends model
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.execution')->eq((int)$executionID)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->andWhere('t1.branch')->in($branch)->fi()
+            ->andWhere('t1.branch')->eq($branch)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
