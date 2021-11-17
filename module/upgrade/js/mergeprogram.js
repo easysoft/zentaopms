@@ -1150,3 +1150,26 @@ function isSelectAll(lineID = 0, type = 'product')
     if(objectNum > checkedObjectNum || objectNum == 0) checked = false;
     return checked;
 }
+
+$(function()
+{
+    $('.sprintItem').mouseover(function()
+    {
+        $(this).find('#sprintEdit').removeClass('hidden');
+    }).mouseout(function()
+    {
+        $(this).find('#sprintEdit').addClass('hidden');
+    })
+
+    $(document).on('click', '#sprintEdit i', function()
+    {
+        $(this).parents('.sprintItem').addClass('hidden');
+        $(this).parents('.sprintItem').next('.sprintRename').removeClass('hidden');
+    })
+
+    $('.sprintRename button.name-cancel').click(function()
+    {
+        $(this).closest('.sprintRename').addClass('hidden');
+        $(this).closest('.sprintRename').prev('.sprintItem').removeClass('hidden');
+    })
+})

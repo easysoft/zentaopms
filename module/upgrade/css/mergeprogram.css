@@ -34,3 +34,8 @@ div.divider {vertical-align: middle;}
 .sprintGroup {margin-left: 6px;}
 .programParams td > label:first-child {margin-right: 10px;}
 .programParams td > label:last-child {margin-left: 0px;}
+
+.projectList .scroll-handle .checkbox-primary {display: inline-block;}
+.sprintRename {margin-top: 5px;}
+.sprintRename input {display: inline-block; width: auto;}
+.sprintRename .btn-group {display: inline-block;}

@@ -3317,5 +3317,4 @@ class execution extends control
         $groups = $this->lang->kanban->group->$type;
         die(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
     }
-
 }
