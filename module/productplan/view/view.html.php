@@ -441,7 +441,7 @@
                       $plans      = array(0 => $lang->null) + $plans;
                       $withSearch = count($plans) > 8;
                       echo "<li class='dropdown-submenu'>";
-                      echo html::a('javascript:;', $lang->bug->productplan, '', "id='planItem'");
+                      echo html::a('javascript:;', $lang->productplan->plan, '', "id='planItem'");
                       echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       echo '<ul class="dropdown-list">';
                       foreach($plans as $planID => $planName)
@@ -455,7 +455,7 @@
                   }
                   else
                   {
-                     echo '<li>' . html::a('javascript:;', $lang->bug->productplan, '', $class) . '</li>';
+                     echo '<li>' . html::a('javascript:;', $lang->productplan->plan, '', $class) . '</li>';
                   }
                   ?>
                 </ul>

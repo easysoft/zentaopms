@@ -20,6 +20,7 @@ $lang->productplan->bugSummary = "Total <strong>%s</strong> Bugs on this page.";
 $lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 $lang->productplan->project    = 'Project';
+$lang->productplan->plan       = 'Plan';
 
 $lang->productplan->batchUnlink      = "Batch Unlink";
 $lang->productplan->linkStory        = "Link Story";
