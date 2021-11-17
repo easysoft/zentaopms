@@ -232,6 +232,10 @@
                   <td><?php echo $bug->notifyEmail;?></td>
                 </tr>
                 <tr>
+                  <th><?php echo $lang->bug->os;?></th>
+                  <td><?php echo $lang->bug->osList[$bug->os];?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->bug->browser;?></th>
                   <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
                 </tr>
