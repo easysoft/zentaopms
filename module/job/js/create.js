@@ -2,7 +2,6 @@ $(document).ready(function()
 {
     $(document).on('change', '#repo', function()
     {
-        var _this = this;
         var repoID = $(this).val();
         if(repoID <= 0) return;
 
@@ -80,7 +79,8 @@ $(document).ready(function()
         {
             html    = '';
             length  = $('#svnDirBox .input-group [name^=svnDir]').length;
-            length += 1;
+            length++;
+
             if(tags.length != 0)
             {
                 html = "<select id='svnDir" + length + "' name='svnDir[]' class='form-control'>";
@@ -94,6 +94,7 @@ $(document).ready(function()
                 }
                 html += '</select>';
             }
+
             $('#svnDirBox .loading').remove();
             $('#svnDirBox .input-group').append(html);
             $('#svnDirBox #svnDir' + length).chosen();

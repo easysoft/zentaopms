@@ -303,11 +303,17 @@ class gitlabModel extends model
         $refList = array();
 
         $branches = $this->apiGetBranches($gitlabID, $projectID);
-        if(is_array($branches)) foreach($branches as $branch) $refList[$branch->name] = "Branch::" . $branch->name;
+        if(is_array($branches))
+        {
+            foreach($branches as $branch) $refList[$branch->name] = "Branch::" . $branch->name;
+        }
 
         $tags = $this->apiGetTags($gitlabID, $projectID);
-        if(is_array($tags)) foreach($tags as $tag) $refList[$tag->name] = "Tag::" . $tag->name;
 
+        if(is_array($tags))
+        {
+            foreach($tags as $tag) $refList[$tag->name] = "Tag::" . $tag->name;
+        }
         return $refList;
 
     }
