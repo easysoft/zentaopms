@@ -394,6 +394,7 @@ class buildModel extends model
             ->where('id')->eq($buildID)
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
             ->exec();
+        if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
