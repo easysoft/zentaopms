@@ -97,7 +97,6 @@ function isEarlierThanToday(date)
  */
 function renderSpanItem(item, $item)
 {
-    console.log('renderSpanItem', item, $item);
     var $title = $item.find('.title');
     if(!$title.length)
     {
