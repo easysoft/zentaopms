@@ -35,6 +35,7 @@ class storiesEntry extends entry
         $result  = array();
         foreach($stories as $story)
         {
+            if(isset($story->children)) $story->children = array_values((array)$story->children);
             $result[] = $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool');
         }
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
