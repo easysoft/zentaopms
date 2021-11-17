@@ -1421,6 +1421,7 @@ class project extends control
                     }
                 }
             }
+            $this->loadModel('common')->syncPPEStatus($projectID);
 
             $this->executeHooks($projectID);
             die(js::reload('parent.parent'));

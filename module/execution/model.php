@@ -583,6 +583,7 @@ class executionModel extends model
         $oldExecutions = $this->getByIdList($this->post->executionIDList);
         $nameList    = array();
         $codeList    = array();
+        $projectModel = '';
 
         /* Replace required language. */
         if($this->app->tab == 'project')
