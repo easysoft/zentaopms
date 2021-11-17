@@ -34,6 +34,7 @@ $routes['/releases/:id']          = 'release';
 
 $routes['/stories']                = 'stories';
 $routes['/products/:id/stories']   = 'stories';
+$routes['/projects/:id/stories']   = 'projectStories';
 $routes['/executions/:id/stories'] = 'executionStories';
 $routes['/stories/:id']            = 'story';
 $routes['/stories/:id/change']     = 'storyChange';
