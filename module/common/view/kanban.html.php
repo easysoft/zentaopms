@@ -232,6 +232,11 @@ function renderExecutionItem(item, $item)
     }
     $title.text(item.name).attr('title', item.name);
 
+    if(window.statusColorList && window.statusColorList[item.status])
+    {
+        $item.css('borderLeftColor', window.statusColorList[item.status]);
+    }
+
     var progress = item.progress || (item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress) : undefined);
     if(progress === undefined && window.hourList)
     {
