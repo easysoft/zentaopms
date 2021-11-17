@@ -33,15 +33,26 @@ class projectsEntry extends entry
         if(isset($data->status) and $data->status == 'success')
         {
             $pager  = $data->data->pager;
+            $users  = $data->data->users;
             $result = array();
             foreach($data->data->projectStats as $project)
             {
                 foreach($project->hours as $field => $value) $project->$field = $value;
 
-                $project  = $this->filterFields($project, 'id,name,code,model,type,parent,begin,end,status,openedBy,openedDate,' . $appendFields);
+                $project  = $this->filterFields($project, 'id,name,code,model,type,budget,budgetUnit,parent,begin,end,status,openedBy,openedDate,PM,delay,progress,' . $appendFields);
                 $result[] = $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
             }
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => (int)$pager->recPerPage, 'projects' => $result));
+
+            $data = array();
+            $data['page']     = $pager->pageID;
+            $data['total']    = $pager->recTotal;
+            $data['limit']    = (int)$pager->recPerPage;
+            $data['projects'] = $result;
+
+            $withUser = $this->param('withUser', '');
+            if(!empty($withUser)) $data['users'] = $users;
+
+            return $this->send(200, $data);
         }
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
