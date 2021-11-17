@@ -1,6 +1,13 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <script>
+/**
+ * Load product.
+ *
+ * @param  int   $productID
+ * @access public
+ * @return void
+ */
 function loadProduct(productID)
 {
     if(typeof parentStory != 'undefined' && parentStory)
@@ -30,8 +37,15 @@ function loadProduct(productID)
     loadProductBranches(productID)
     loadProductModules(productID);
     loadProductPlans(productID);
+    loadProductReviewers(productID);
 }
 
+/**
+ * Load branch.
+ *
+ * @access public
+ * @return void
+ */
 function loadBranch()
 {
     var branch = $('#branch').val();
@@ -40,6 +54,13 @@ function loadBranch()
     loadProductPlans($('#product').val(), branch);
 }
 
+/**
+ * Load branches when change product.
+ *
+ * @param  int   $productID
+ * @access public
+ * @return void
+ */
 function loadProductBranches(productID)
 {
     $('#branch').remove();
@@ -58,6 +79,14 @@ function loadProductBranches(productID)
     })
 }
 
+/**
+ * Load modules when change product.
+ *
+ * @param  int    $productID
+ * @param  int    $branch
+ * @access public
+ * @return void
+ */
 function loadProductModules(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
@@ -72,6 +101,14 @@ function loadProductModules(productID, branch)
     });
 }
 
+/**
+ * Load plans when change product.
+ *
+ * @param  int    $productID
+ * @param  int    $branch
+ * @access public
+ * @return void
+ */
 function loadProductPlans(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
@@ -82,6 +119,30 @@ function loadProductPlans(productID, branch)
     {
         $planIdBox.find('#plan').chosen();
         $planIdBox.fixInputGroup();
+    });
+}
+
+/**
+ * Load reviewers when change product.
+ *
+ * @param  int    $productID
+ * @access public
+ * @return void
+ */
+function loadProductReviewers(productID)
+{
+    var storyID       = <?php echo isset($story->id) ? $story->id : 0;?>;
+    var reviewerLink  = createLink('product', 'ajaxGetReviewers', 'productID=' + productID + '&storyID=' + storyID);
+    var needNotReview = $('#needNotReview').attr('checked');
+    $.get(reviewerLink, function(data)
+    {
+        if(data)
+        {
+            $('#reviewer').replaceWith(data);
+            $('#reviewer_chosen').remove();
+            $('#reviewer').chosen();
+            if(needNotReview == 'checked') $('#reviewer').attr('disabled', 'disabled').trigger('chosen:updated');
+        }
     });
 }
 </script>
