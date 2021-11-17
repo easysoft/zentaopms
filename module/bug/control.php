@@ -238,7 +238,7 @@ class bug extends control
         $this->view->moduleID        = $moduleID;
         $this->view->memberPairs     = $this->user->getPairs('noletter|nodeleted');
         $this->view->branch          = $branch;
-        $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches        = $showBranch ? $this->loadModel('branch')->getPairs($productID) : array();
         $this->view->executions      = $executions;
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories         = $storyList;
@@ -246,7 +246,6 @@ class bug extends control
         $this->view->setModule       = true;
         $this->view->isProjectBug    = ($productID and !$this->projectID) ? false : true;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
-        $this->view->showBranch      = $showBranch;
 
         $this->display();
     }

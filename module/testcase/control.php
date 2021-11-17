@@ -174,8 +174,7 @@ class testcase extends control
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
-        $this->view->showBranch  = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
+        $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
 
         /* Get module tree.*/
         if($projectID and empty($productID))
@@ -215,10 +214,11 @@ class testcase extends control
         $this->view->param         = $param;
         $this->view->cases         = $cases;
         $this->view->branch        = $branch;
-        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches      = $showBranch ? $this->loadModel('branch')->getPairs($productID) : array();
         $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->suiteID       = $suiteID;
         $this->view->setModule     = true;
+        $this->view->modulePairs   = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
 
         $this->display();
     }

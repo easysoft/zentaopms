@@ -313,7 +313,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php foreach($stories as $story):?>
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php $story->from = $from;?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType = 'story', $showBranch);?>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType = 'story');?>
           </tr>
           <?php if(!empty($story->children)):?>
           <?php $i = 0;?>
