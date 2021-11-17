@@ -213,7 +213,7 @@ class productplanModel extends model
         {
             if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
-            $planPairs[$plan->id] = '[' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . '] ' . $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+            $planPairs[$plan->id] = '<span class="label label-outline label-badge">' . ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . '</span> ' . $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
         }
         return array('' => '') + $planPairs;
