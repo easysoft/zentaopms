@@ -364,7 +364,7 @@
             <?php
             $canBatchUnlink     = common::hasPriv('productplan', 'batchUnlinkBug');
             $canBatchEdit       = common::hasPriv('bug', 'batchEdit');
-            $canBatchChangePlan = common::hasPriv('bug','');
+            $canBatchChangePlan = common::hasPriv('bug', 'batchChangePlan');
             $canBatchAction     = $canBeChanged and ($canBatchUnlink or $canBatchEdit or $canBatchChangePlan);
             ?>
             <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
