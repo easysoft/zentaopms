@@ -1510,7 +1510,7 @@ class productModel extends model
 
         if(empty($programID))
         {
-            $programKeys = array(0=>0);
+            $programKeys = array(0 => 0);
             foreach($products as $product) $programKeys[] = $product->program;
             $programs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
                 ->where('id')->in(array_unique($programKeys))
@@ -1533,6 +1533,11 @@ class productModel extends model
             $product->fixedBugs    = isset($fixedBugs[$product->id]) ? $fixedBugs[$product->id] : 0;
             $product->thisWeekBugs = isset($thisWeekBugs[$product->id]) ? $thisWeekBugs[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
+
+            $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];
+            $allTotal          = array_sum($product->stories) + array_sum($product->requirements);
+            $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
+
             $stats[] = $product;
         }
 
