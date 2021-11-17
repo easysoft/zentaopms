@@ -98,3 +98,7 @@ INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VA
 ALTER TABLE `zt_bug`
 ADD `feedbackBy` varchar(100) NOT NULL AFTER `activatedDate`,
 ADD `notifyEmail` varchar(100) NOT NULL AFTER `feedbackBy`;
+
+ALTER TABLE `zt_story`
+ADD `feedbackBy` varchar(100) NOT NULL AFTER `version`,
+ADD `notifyEmail` varchar(100) NOT NULL AFTER `feedbackBy`;
