@@ -265,12 +265,9 @@ class productplan extends control
         }
 
         $uri = $this->app->getURI(true);
-        $uri = substr($uri,0,strpos($uri,'&type=') ? strpos($uri,'&type=') : strlen($uri));
-        $storySessionParam = strpos($uri, '&type=story') !== false ? '' : '&type=story';
-        $bugSessionParam   = strpos($uri, '&type=bug') !== false ? '' : '&type=bug';
-        $this->session->set('storyList', $uri . $storySessionParam, 'product');
-        $this->session->set('bugList', $uri . $bugSessionParam, 'qa');
-
+        $uri = substr($uri, 0, strpos($uri, '&type=') !== false ? strpos($uri, '&type=') : strlen($uri));
+        $this->session->set('storyList', $uri . '&type=' . 'story', 'product');
+        $this->session->set('bugList', $uri . '&type=' . 'bug', 'qa');
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('plan', $plan);
 
