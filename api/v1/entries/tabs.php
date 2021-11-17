@@ -39,6 +39,30 @@ class tabsEntry extends baseEntry
                 $menus[] = $menu;
             }
         }
+        elseif($moduleName == 'product')
+        {
+            $this->app->loadLang('product');
+            $tabs = array('story', 'plan', 'project', 'release', 'requirement', 'doc', 'view');
+
+            foreach($tabs as $menuKey)
+            {
+                if(!common::hasPriv('product', $menuKey)) continue;
+                if($menuKey == 'requirement' and empty($this->config->URAndSR)) continue;
+
+                $label = zget($this->lang->product, $menuKey, '');
+                if($menuKey == 'view')        $label = $this->lang->overview;
+                if($menuKey == 'doc')         $label = $this->lang->doc->common;
+                if($menuKey == 'project')     $label = $this->lang->project->common;
+                if($menuKey == 'story')       $label = $this->lang->createObjects['story'];
+                if($menuKey == 'requirement') $label = $this->lang->URCommon;
+
+                $menu = new stdclass();
+                $menu->code = $menuKey;
+                $menu->name = $label;
+
+                $menus[] = $menu;
+            }
+        }
 
         $this->send(200, array('tabs' => $menus));
     }
