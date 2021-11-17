@@ -875,14 +875,15 @@ class productModel extends model
         }
         $this->config->product->search['params']['module']['values'] = $module;
 
-        if($this->session->currentProductType == 'normal' or $this->app->tab == 'assetlib')
+        $productInfo = $this->getById($productID);
+        if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
         }
         else
         {
-            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
             $this->config->product->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
 
