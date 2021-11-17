@@ -647,7 +647,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $programID = 0)
+    public function getPairsByModel($model = 'all', $programID = 0, $param = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -655,6 +655,7 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
+            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_desc')
