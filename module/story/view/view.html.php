@@ -349,6 +349,14 @@
                   <td title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                 </tr>
                 <tr>
+                  <th><?php echo $lang->story->feedbackBy;?></th>
+                  <td><?php echo $story->feedbackBy;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->story->notifyEmail;?></th>
+                  <td><?php echo $story->notifyEmail;?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->story->keywords;?></th>
                   <td><?php echo $story->keywords;?></td>
                 </tr>

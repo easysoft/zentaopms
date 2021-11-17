@@ -183,6 +183,14 @@
                 <td><?php echo $story->parent >= 0 ? html::input('estimate', $story->estimate, "class='form-control'") : $story->estimate;?></td>
               </tr>
               <tr>
+                <th><?php echo $lang->story->feedbackBy;?></th>
+                <td><?php echo html::input('feedbackBy', $story->feedbackBy, "class='form-control'");?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->story->notifyEmail;?></th>
+                <td><?php echo html::input('notifyEmail', $story->notifyEmail, "class='form-control'");?></td>
+              </tr>
+              <tr>
                 <th><?php echo $lang->story->keywords;?></th>
                 <td><?php echo html::input('keywords', $story->keywords, "class='form-control'");?></td>
               </tr>

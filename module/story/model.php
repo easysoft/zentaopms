@@ -233,7 +233,11 @@ class storyModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
+            ->autoCheck()
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
+            ->batchCheck($requiredFields, 'notempty')
+            ->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -820,6 +824,7 @@ class storyModel extends model
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError())
