@@ -523,7 +523,7 @@ class testcase extends control
 
         /* Set story list. */
         $story      = $storyID ? $this->story->getByID($storyID) : '';
-        $storyList  = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $storyList  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch);
         $storyList += $storyID ? array($storyID => $story->id . ':' . $story->title) : array('');
 
         /* Set module option menu. */
