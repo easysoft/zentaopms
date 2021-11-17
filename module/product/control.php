@@ -970,10 +970,11 @@ class product extends control
      * @param  bool   $needCreate
      * @param  string $expired
      * @param  string $from
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $from = '')
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $from = '', $param = '')
     {
         $this->loadModel('productplan');
         if($from == 'story' and $branch == BRANCH_MAIN)
@@ -991,24 +992,43 @@ class product extends control
         }
 
         $field = $fieldID ? "plans[$fieldID]" : 'plan';
-        $output  = "<div class='table-row'>";
-        $output .= "<div class='table-col'>";
-        $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
-        $output .= "</div>";
-        if(count($plans) == 1 and $needCreate)
+
+        $output = '';
+        if(strpos($param, 'batchEdit') !== false)
         {
+            $output  = "<div class='table-row'>";
             $output .= "<div class='table-col'>";
-            $output .= "<div class='input-group-btn'>";
-            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= "<div class='table-col'>";
-            $output .= "<div class='input-group-btn'>";
-            $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
-            $output .= '</div>';
-            $output .= '</div>';
+            $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
+            $output .= "</div>";
+            if(count($plans) == 1 and $needCreate)
+            {
+                $output .= "<div class='table-col'>";
+                $output .= "<div class='input-group-btn'>";
+                $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
+                $output .= '</div>';
+                $output .= '</div>';
+                $output .= "<div class='table-col'>";
+                $output .= "<div class='input-group-btn'>";
+                $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
+                $output .= '</div>';
+                $output .= '</div>';
+            }
+            $output .= "</div>";
         }
-        $output .= "</div>";
+        else
+        {
+            $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
+            if(count($plans) == 1 and $needCreate)
+            {
+                $output .= "<div class='input-group-btn'>";
+                $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
+                $output .= '</div>';
+                $output .= "<div class='input-group-btn'>";
+                $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
+                $output .= '</div>';
+            }
+
+        }
         die($output);
     }
 
