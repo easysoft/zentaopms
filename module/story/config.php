@@ -5,6 +5,7 @@ $config->story->batchCreate      = 10;
 $config->story->affectedFixedNum = 7;
 $config->story->needReview       = 1;
 $config->story->removeFields     = 'objectTypeList,productList,executionList,execution';
+$config->story->feedbackSource   = array('customer', 'user', 'market', 'service', 'operation', 'support', 'forum');
 
 $config->story->batchClose = new stdclass();
 $config->story->batchClose->columns = 10;

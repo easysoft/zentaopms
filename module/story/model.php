@@ -207,6 +207,8 @@ class storyModel extends model
             ->setIF($this->post->needNotReview, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
@@ -233,7 +235,11 @@ class storyModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
+            ->autoCheck()
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
+            ->batchCheck($requiredFields, 'notempty')
+            ->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -744,6 +750,8 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
             ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
             ->join('reviewedBy', ',')
@@ -820,6 +828,7 @@ class storyModel extends model
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError())
