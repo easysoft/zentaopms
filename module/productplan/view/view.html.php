@@ -455,7 +455,7 @@
                   }
                   else
                   {
-                     echo '<li>' . html::a('javascript:;', $lang->story->moduleAB, '', $class) . '</li>';
+                     echo '<li>' . html::a('javascript:;', $lang->bug->productplan, '', $class) . '</li>';
                   }
                   ?>
                 </ul>
