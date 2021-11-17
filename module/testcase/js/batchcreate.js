@@ -3,66 +3,6 @@ $(document).ready(function()
     removeDitto();//Remove 'ditto' in first row.
     if($('#batchCreateForm table thead tr th.c-title').width() < 150) $('#batchCreateForm table thead tr th.c-title').width('150');
 
-    $(document).on('mouseup', '.chosen-with-drop', function()
-    {
-        var select = $(this).prev('select');
-        var id     = $(select).attr('id');
-        if(id.indexOf('story') != -1)
-        {
-            var index    = id.substring(5);
-            var moduleID = $('#module' + index).val();
-            var branch   = $('#branch' + index).length > 0 ? $('#branch' + index).val() : 0;
-            if(moduleID == 'ditto')
-            {
-                for(var i = index - 1; i >=0; i--)
-                {
-                    if($('#module' + i).val() != 'ditto')
-                    {
-                        moduleID = $('#module' + i).val();
-                        break;
-                    }
-                }
-            }
-            var link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID='+ ($(select).val() || '0') + '&onlyOption=true&status=noclosed&limit=0&type=null&hasParent=0');
-            var $story = $('#story' + index);
-            if($story.data('loadLink') !== link)
-            {
-                $story.load(link, function(){$story.data('loadLink', link).trigger("chosen:updated");});
-            }
-        }
-        if($(select).val() == 'ditto')
-        {
-            var index = $(select).closest('td').index();
-            var row   = $(select).closest('tr').index();
-            var table = $(select).closest('tr').parent();
-            var value = '';
-            for(i = row - 1; i >= 0; i--)
-            {
-                value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
-                if(value != 'ditto') break;
-            }
-            $(select).val(value);
-            $(select).trigger("chosen:updated");
-        }
-    });
-
-    $(document).on('mousedown', 'select', function()
-    {
-        if($(this).val() == 'ditto')
-        {
-            var index = $(this).closest('td').index();
-            var row   = $(this).closest('tr').index();
-            var table = $(this).closest('tr').parent();
-            var value = '';
-            for(i = row - 1; i >= 0; i--)
-            {
-                value = $(table).find('tr').eq(i).find('td').eq(index).find('select').val();
-                if(value != 'ditto') break;
-            }
-            $(this).val(value);
-        }
-    });
-
     $(document).keydown(function(event)
     {
         if(event.ctrlKey && event.keyCode == 38)
@@ -106,6 +46,19 @@ function setModules(branchID, productID, num)
         $('#module' + num).replaceWith(modules);
         $("#module" + num + "_chosen").remove();
         $("#module" + num).next('.picker').remove();
-        $("#module" + num).chosen();
+        $("#module" + num).attr('onchange', "loadStories("+ productID + ", this.value, " + num + ")").chosen();
     });
+
+    loadStories(productID, 0, num);
+
+    /* If the branch of the current row is inconsistent with the one below, clear the module and story of the nex row. */
+    var nextBranchID = $('#branch' + (num + 1)).val();
+    if(nextBranchID != branchID)
+    {
+        $('#module' + (num + 1)).find("option[value='ditto']").remove();
+        $('#module' + (num + 1)).trigger("chosen:updated");
+
+        $('#plan' + (num + 1)).find("option[value='ditto']").remove();
+        $('#plan' + (num + 1)).trigger("chosen:updated");
+    }
 }

@@ -1828,15 +1828,20 @@ class story extends control
      * AJAX: get stories of a product in html select.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
      * @param  string $onlyOption
      * @param  string $status
      * @param  int    $limit
+     * @param  string $type
+     * @param  bool   $hasParent
+     * @param  int    $executionID
+     * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0)
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0, $number = '')
     {
         if($moduleID)
         {
@@ -1858,11 +1863,11 @@ class story extends control
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
 
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
-        $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
+        $select  = html::select('story' . $number, empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));

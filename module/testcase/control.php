@@ -522,8 +522,9 @@ class testcase extends control
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Set story list. */
-        $story     = $storyID ? $this->story->getByID($storyID) : '';
-        $storyList = $storyID ? array($storyID => $story->id . ':' . $story->title) : array('');
+        $story      = $storyID ? $this->story->getByID($storyID) : '';
+        $storyList  = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $storyList += $storyID ? array($storyID => $story->id . ':' . $story->title) : array('');
 
         /* Set module option menu. */
         $moduleOptionMenu          = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);

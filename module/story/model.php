@@ -2228,13 +2228,12 @@ class storyModel extends model
      */
     public function getProductStoryPairs($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full', $storyType = 'story', $hasParent = true)
     {
-        if($branch) $branch = "0,$branch";//Fix bug 1059.
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1')
             ->beginIF($productID)->andWhere('t1.product')->in($productID)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$hasParent)->andWhere('t1.parent')->ge(0)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
@@ -2673,7 +2672,7 @@ class storyModel extends model
             ->where('t1.project')->eq((int)$executionID)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
-            ->beginIF($branch)->andWhere('t2.branch')->in("0,$branch")->fi()
+            ->beginIF($branch != 'all')->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy('t1.`order` desc')
