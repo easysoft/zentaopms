@@ -876,7 +876,7 @@ class productModel extends model
         $this->config->product->search['params']['module']['values'] = $module;
 
         $productInfo = $this->getById($productID);
-        if(!$productID or ($productID and $productInfo->type == 'normal') or $this->app->tab == 'assetlib')
+        if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
