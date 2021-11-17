@@ -272,7 +272,6 @@ class product extends control
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
-        $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
 
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
@@ -298,7 +297,7 @@ class product extends control
         $this->view->moduleID        = $moduleID;
         $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch          = $branch;
-        $this->view->branches        = $showBranch ? $this->loadModel('branch')->getPairs($productID) : array();
+        $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;
         $this->view->storyTasks      = $storyTasks;
