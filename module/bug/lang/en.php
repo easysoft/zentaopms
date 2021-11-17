@@ -101,6 +101,7 @@ $lang->bug->edit               = 'Edit Bug';
 $lang->bug->batchEdit          = 'Batch Edit';
 $lang->bug->batchChangeModule  = 'Batch Edit Modules';
 $lang->bug->batchChangeBranch  = 'Batch Edit Branches';
+$lang->bug->batchChangePlan    = 'Batch Edit Plans'
 $lang->bug->batchClose         = 'Batch Close';
 $lang->bug->assignTo           = 'Assign';
 $lang->bug->assignAction       = 'Assign Bug';

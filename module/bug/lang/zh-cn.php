@@ -101,6 +101,7 @@ $lang->bug->edit               = '编辑Bug';
 $lang->bug->batchEdit          = '批量编辑';
 $lang->bug->batchChangeModule  = '批量修改模块';
 $lang->bug->batchChangeBranch  = '批量修改分支';
+$lang->bug->batchChangePlan    = '批量修改计划';
 $lang->bug->batchClose         = '批量关闭';
 $lang->bug->assignTo           = '指派';
 $lang->bug->assignAction       = '指派Bug';
