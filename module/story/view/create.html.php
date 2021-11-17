@@ -17,6 +17,7 @@
 </style>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
+<?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
@@ -131,7 +132,7 @@
             </td>
             <?php endif;?>
             <?php else:?>
-            <td colspan="2">
+            <td colspan="2" id='feedbackBox' class='hidden'>
               <div class="input-group">
                 <div class="input-group">
                   <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->feedbackBy;?></div>

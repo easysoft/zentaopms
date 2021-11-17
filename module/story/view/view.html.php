@@ -348,6 +348,7 @@
                   <th><?php echo $lang->story->estimate;?></th>
                   <td title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                 </tr>
+                <?php if(in_array($story->source, $config->story->feedbackSource)):?>
                 <tr>
                   <th><?php echo $lang->story->feedbackBy;?></th>
                   <td><?php echo $story->feedbackBy;?></td>
@@ -356,6 +357,7 @@
                   <th><?php echo $lang->story->notifyEmail;?></th>
                   <td><?php echo $story->notifyEmail;?></td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->keywords;?></th>
                   <td><?php echo $story->keywords;?></td>

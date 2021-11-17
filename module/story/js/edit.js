@@ -19,4 +19,17 @@ $(function()
             reviewers = $('#reviewer').val();
         }
     })
+
+    $('#source').on('change', function()
+    {
+        var source = $(this).val();
+        if($.inArray(source, feedbackSource) != -1)
+        {
+            $('.feedbackBox').removeClass('hidden');
+        }
+        else
+        {
+            $('.feedbackBox').addClass('hidden');
+        }
+    });
 })
