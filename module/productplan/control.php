@@ -264,8 +264,11 @@ class productplan extends control
             die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
         }
 
-        $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story', 'product');
-        $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug', 'qa');
+        $uri = $this->app->getURI(true);
+        $storySessionParam = strpos($uri, '&type=story') !== false ? '' : '&type=story';
+        $bugSessionParam   = strpos($uri, '&type=bug') !== false ? '' : '&type=bug';
+        $this->session->set('storyList', $uri . $storySessionParam, 'product');
+        $this->session->set('bugList', $uri . $bugSessionParam, 'qa');
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('plan', $plan);

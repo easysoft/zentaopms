@@ -23,6 +23,7 @@ $lang->productplan->project    = '项目';
 $lang->productplan->plan       = '计划';
 
 $lang->productplan->batchUnlink      = "批量移除";
+$lang->productplan->unlinkAB         = "移除";
 $lang->productplan->linkStory        = "关联{$lang->SRCommon}";
 $lang->productplan->unlinkStory      = "移除{$lang->SRCommon}";
 $lang->productplan->unlinkStoryAB    = "移除";

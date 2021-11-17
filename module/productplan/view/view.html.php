@@ -425,7 +425,7 @@
             <div class="table-actions btn-toolbar">
               <div class='btn-group dropup'>
                 <?php $actionLink = inlink('batchUnlinkbug', "planID=$plan->id&orderBy=$orderBy");?>
-                <?php echo html::commonButton($lang->productplan->batchUnlink, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"");?>
+                <?php echo html::commonButton($lang->productplan->unlinkAB, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"");?>
                 <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
                 <ul class='dropdown-menu'>
                   <?php
