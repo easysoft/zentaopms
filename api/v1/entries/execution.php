@@ -34,8 +34,8 @@ class executionEntry extends Entry
 
         $execution = $this->format($data->data->execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
 
-        $this->app->loadConfig('testcase');
-        $execution->caseReview = ($config->testcase->needReview or !empty($config->testcase->forceReview));
+        $this->loadModel('testcase');
+        $execution->caseReview = ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview));
 
         if(!$fields) $this->send(200, $execution);
 

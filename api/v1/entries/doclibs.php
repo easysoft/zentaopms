@@ -31,6 +31,7 @@ class doclibsEntry extends Entry
             $lib->name = $libName;
             $result[] = $lib;
         }
+        krsort($result);
 
         $lib = new stdclass();
         $lib->id   = 'files';
