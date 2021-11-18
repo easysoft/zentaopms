@@ -346,7 +346,7 @@ class productplan extends control
         }
         else
         {
-            $plans = $this->productplan->getPairs($productID, $branch, $expired);
+            $plans = $this->productplan->getPairs($productID, $branch);
         }
 
         $planName = $number === '' ? 'plan' : "plan[$number]";

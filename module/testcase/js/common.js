@@ -343,3 +343,28 @@ function updateStepID()
     var i = 1;
     $('.stepID').each(function(){$(this).html(i ++)});
 }
+
+/**
+ * Set stories.
+ *
+ * @param  int     productID
+ * @param  int     moduleID
+ * @param  int     num
+ * @access public
+ * @return void
+ */
+function loadStories(productID, moduleID, num)
+{
+    var branchIDName = config.currentMethod == 'batchcreate' ? '#branch' : '#branches';
+    var branchID     = $(branchIDName + num).val();
+    var storyLink    = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
+    $.get(storyLink, function(stories)
+    {
+        if(!stories) modules = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
+        $('#story' + num).replaceWith(stories);
+        $('#story' + num + "_chosen").remove();
+        $('#story' + num).next('.picker').remove();
+        $('#story' + num).attr('name', 'story[' + num + ']');
+        $('#story' + num).chosen();
+    });
+}

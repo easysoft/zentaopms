@@ -1147,10 +1147,35 @@ class bug extends control
     {
         if($this->post->bugIDList)
         {
-            $bugIDList = $this->post->bugIDList;
-            $bugIDList = array_unique($bugIDList);
+            $bugIDList     = $this->post->bugIDList;
+            $bugIDList     = array_unique($bugIDList);
+            $oldBugs       = $this->bug->getByList($bugIDList);
+            $skipBugIDList = '';
             unset($_POST['bugIDList']);
-            $allChanges = $this->bug->batchChangeBranch($bugIDList, $branchID);
+
+            /* Remove condition mismatched bugs. */
+            foreach($bugIDList as $key => $bugID)
+            {
+                $oldBug = $oldBugs[$bugID];
+                if($branchID == $oldBug->branch)
+                {
+                    unset($bugIDList[$key]);
+                    continue;
+                }
+                elseif($branchID != $oldBug->branch and !empty($oldBug->module))
+                {
+                    $skipBugIDList .= '[' . $bugID . ']';
+                    unset($bugIDList[$key]);
+                    continue;
+                }
+            }
+
+            if(!empty($skipBugIDList))
+            {
+                echo js::alert(sprintf($this->lang->bug->noSwitchBranch, $skipBugIDList));
+            }
+
+            $allChanges = $this->bug->batchChangeBranch($bugIDList, $branchID, $oldBugs);
             if(dao::isError()) die(js::error(dao::getError()));
             foreach($allChanges as $bugID => $changes)
             {
