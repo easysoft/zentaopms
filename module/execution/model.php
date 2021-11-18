@@ -578,11 +578,12 @@ class executionModel extends model
         $this->loadModel('user');
 
         $executions    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
+        $allChanges    = array();
+        $data          = fixer::input('post')->get();
         $oldExecutions = $this->getByIdList($this->post->executionIDList);
-        $nameList    = array();
-        $codeList    = array();
+        $nameList      = array();
+        $codeList      = array();
+        $projectModel  = 'scrum';
 
         /* Replace required language. */
         if($this->app->tab == 'project')
@@ -1717,7 +1718,7 @@ class executionModel extends model
                     foreach($branches[$product->id] as $branchID => $branch)
                     {
                         if(!isset($branchGroups[$product->id][$branchID])) continue;
-                        $branchPairs[$branchID] = ((count($products) > 1 and $branchID) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
+                        $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
                     }
                 }
                 else

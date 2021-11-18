@@ -37,6 +37,122 @@ class commonModel extends model
     }
 
     /**
+     * Set the status of execution, project, and program to doing.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function syncPPEStatus($objectID)
+    {
+        global $app;
+        $thisModule = $app->rawModule;
+
+        if($this->config->systemMode == 'classic')
+        {
+            if($thisModule == 'task') $this->syncExecutionStatus($objectID);
+        }
+
+        if($this->config->systemMode == 'new')
+        {
+            if($thisModule == 'task')
+            {
+                $taskID    = $objectID;
+                $execution = $this->syncExecutionStatus($taskID);
+                $project   = $this->syncProjectStatus($execution);
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'execution')
+            {
+                $executionID = $objectID;
+                $execution   = $this->dao->select('id, project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+                $project     = $this->syncProjectStatus($execution);
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'project')
+            {
+                $projectID = $objectID;
+                $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'program')
+            {
+                $programID = $objectID;
+                $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+                $this->syncProgramStatus($program);
+            }
+        }
+    }
+
+   /**
+     * Set the status of the program to which theproject is linked as Ongoing.
+     *
+     * @param  object   $project
+     * @access public
+     * @return void
+     */
+    public function syncProgramStatus($project)
+    {
+        if($project->parent == 0) return;
+
+        $parentPath = str_replace(",{$project->id},", '', $project->path);
+        $parentPath = explode(',', trim($parentPath, ','));
+        $waitList   = $this->dao->select('id')->from(TABLE_PROGRAM)
+            ->where('id')->in($parentPath)
+            ->andWhere('status')->eq('wait')
+            ->orderBy('id_desc')
+            ->fetchPairs();
+
+        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->where('id')->in($waitList)->exec();
+        foreach($waitList as $programID)
+        {
+            $this->loadModel('action')->create('program', $programID, 'syncprogram');
+        }
+    }
+
+    /**
+     * Set the status of the project to which the execution is linked as Ongoing.
+     *
+     * @param  object  $execution
+     * @access public
+     * @return object  $project
+     */
+    public function syncProjectStatus($execution)
+    {
+        $projectID = $execution->project;
+        $project   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+
+        if($project->status == 'wait')
+        {
+            $this->dao->update(TABLE_PROJECT)->set('status')->eq('doing')->where('id')->eq($projectID)->exec();
+            $this->loadModel('action')->create('project', $projectID, 'syncproject');
+        }
+        return $project;
+    }
+
+    /**
+     * Set the status of the execution to which the task is linked as Ongoing.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return object $execution
+     */
+    public function syncExecutionStatus($taskID)
+    {
+        $execution = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.id=t2.execution')
+            ->where('t2.id')->eq($taskID)
+            ->fetch();
+
+        if($execution->status == 'wait')
+        {
+            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($execution->id)->exec();
+            $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
+        }
+        return $execution;
+    }
+
+    /**
      * Set the header info.
      *
      * @access public

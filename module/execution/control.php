@@ -757,7 +757,7 @@ class execution extends control
             }
         }
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $executionID);
 
         /* Header and position. */
@@ -1399,6 +1399,7 @@ class execution extends control
         $this->view->qdUsers             = $qdUsers;
         $this->view->rdUsers             = $rdUsers;
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
         $this->display();
     }
@@ -1471,6 +1472,7 @@ class execution extends control
             }
 
             $this->executeHooks($executionID);
+            if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
 
@@ -1574,6 +1576,17 @@ class execution extends control
 
                     $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
+
+                    $syncExecution = '';
+                    foreach($changes as $changeField)
+                    {
+                        if($changeField['field'] == 'status' && $changeField['old'] =='wait' && $changeField['new'] =='doing')
+                        {
+                            $syncExecution = $executionID;
+                            break;
+                        }
+                    }
+                    $this->loadModel('common')->syncPPEStatus($syncExecution);
                 }
             }
             die(js::locate($this->session->executionList, 'parent'));
@@ -1651,6 +1664,8 @@ class execution extends control
                 $actionID = $this->action->create($this->objectType, $executionID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->loadModel('common')->syncPPEStatus($executionID);
             $this->executeHooks($executionID);
             die(js::reload('parent.parent'));
         }
