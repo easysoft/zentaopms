@@ -224,10 +224,10 @@ class userEntry extends Entry
                             ->where('t1.id')->in(array_keys($bugs))
                             ->andWhere('t1.story')->ne('0')
                             ->andWhere('t1.storyVersion != t2.version')
-                            ->fetchAll();
+                            ->fetchPairs('id', 'id');
                         foreach($storyChangeds as $bugID)
                         {
-                            $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->storyChanged);
+                            $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->changed);
                             $bugs[$bugID]->status = $status;
                         }
 

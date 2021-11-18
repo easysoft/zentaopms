@@ -158,6 +158,7 @@ $lang->bug->noModule       = '<div>您现在还没有模块信息</div><div>请�
 $lang->bug->delayWarning   = " <strong class='text-danger'> 延期%s天 </strong>";
 $lang->bug->labelConfirmed = '已确认';
 $lang->bug->labelPostponed = '被延期';
+$lang->bug->changed        = '已变动';
 $lang->bug->storyChanged   = '需求变动';
 
 /* 页面标签。*/

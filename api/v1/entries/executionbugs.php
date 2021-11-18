@@ -49,10 +49,10 @@ class executionBugsEntry extends entry
                 ->where('t1.id')->in(array_keys($result))
                 ->andWhere('t1.story')->ne('0')
                 ->andWhere('t1.storyVersion != t2.version')
-                ->fetchAll();
+                ->fetchPairs('id', 'id');
             foreach($storyChangeds as $bugID)
             {
-                $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->storyChanged);
+                $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->changed);
                 $result[$bugID]->status = $status;
             }
 

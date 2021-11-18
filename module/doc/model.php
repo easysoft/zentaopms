@@ -80,7 +80,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
-                ->beginIF($objectID and strpos(',product,project,execution,', ",$type,"))->andWhere($type)->eq($objectID)->fi()
+                ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
                 ->orderBy('`order`, id desc')->query();
         }
 

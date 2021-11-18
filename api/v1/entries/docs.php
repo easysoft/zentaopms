@@ -33,6 +33,6 @@ class docsEntry extends Entry
             }
         }
 
-        return $this->send(200, array_values($docTree));
+        return $this->send(200, array('docs' => array_values($docTree)));
     }
 }
