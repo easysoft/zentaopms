@@ -97,6 +97,11 @@ $routes['/risks/:id']                 = 'risk';
 $routes['/departments']     = 'departments';
 $routes['/departments/:id'] = 'department';
 
+$routes['/doclibs']      = 'doclibs';
+$routes['/doclibs/:id']  = 'docs';
+$routes['/docs']         = 'docs';
+$routes['/docs/:id']     = 'doc';
+
 $routes['/reports'] = 'reports';
 
 $routes['/z/folders']           = 'zfolders';

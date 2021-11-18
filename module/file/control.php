@@ -333,7 +333,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxPasteImage($uid = '')
+    public function ajaxPasteImg($uid = '')
     {
         if($_POST) die($this->file->pasteImage($this->post->editor, $uid));
     }

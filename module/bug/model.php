@@ -1511,7 +1511,7 @@ class bugModel extends model
                 ->beginIF(!empty($productID))->andWhere('product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
-                ->beginIF($type == 'assigntome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'assignedtome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
