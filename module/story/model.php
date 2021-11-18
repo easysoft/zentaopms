@@ -3749,6 +3749,12 @@ class storyModel extends model
             case 'lastEditedDate':
                 echo substr($story->lastEditedDate, 5, 11);
                 break;
+            case 'feedbackBy':
+                echo $story->feedbackBy;
+                break;
+            case 'notifyEmail':
+                echo $story->notifyEmail;
+                break;
             case 'mailto':
                 $mailto = explode(',', $story->mailto);
                 foreach($mailto as $account)
