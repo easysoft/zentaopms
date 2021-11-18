@@ -295,7 +295,6 @@ class buildModel extends model
             $builds[$key] = ((strpos($params, 'withbranch') !== false and $build->branchName) ? $build->branchName . '/' : '') . $build->name;
         }
 
-
         if(!$builds) return $sysBuilds;
 
         /* if the build has been released and replace is true, replace build name with release name. */
