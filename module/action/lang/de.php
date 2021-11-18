@@ -150,6 +150,9 @@ $lang->action->desc->resolved        = '$date, resolved by <strong>$actor</stron
 $lang->action->desc->managed         = '$date, by <strong>$actor</strong> managed.' . "\n";
 $lang->action->desc->estimated       = '$date, by <strong>$actor</strong> estimated.' . "\n";
 $lang->action->desc->run             = '$date, by <strong>$actor</strong> executed.' . "\n";
+$lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(The start of the project sets the status of the program as Ongoing)' . "\n";
+$lang->action->desc->syncproject     = '$date, The start of the execution sets the status of the project as Ongoing' . "\n";
+$lang->action->desc->syncexecution   = '$date, The start of the task sets the status of the execution as Ongoing' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -265,6 +268,10 @@ $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
+$lang->action->label->syncprogram           = 'start';
+$lang->action->label->syncproject           = 'start';
+$lang->action->label->syncexecution         = 'start';
+$lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass;

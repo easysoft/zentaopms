@@ -164,6 +164,9 @@ $lang->action->desc->resolved        = '$date, 由 <strong>$actor</strong> 解�
 $lang->action->desc->managed         = '$date, 由 <strong>$actor</strong> 維護。' . "\n";
 $lang->action->desc->estimated       = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 $lang->action->desc->run             = '$date, 由 <strong>$actor</strong> 執行。' . "\n";
+$lang->action->desc->syncprogram     = '$date, 由 <strong>$actor</strong> 啟動(因項目開始而啟動項目集)。' . "\n";
+$lang->action->desc->syncproject     = '$date, 系統判斷由執行開始，將項目狀態置為進行中。' . "\n";
+$lang->action->desc->syncexecution   = '$date, 系統判斷由任務開始，將執行狀態置為進行中。' . "\n";
 
 /* 用來描述和父子任務相關的操作歷史記錄。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 創建子任務 <strong>$extra</strong>。' . "\n";
@@ -279,6 +282,10 @@ $lang->action->label->reviewrejected        = '拒絶';
 $lang->action->label->reviewclarified       = '有待明確';
 $lang->action->label->commitsummary         = '提交培訓總結';
 $lang->action->label->updatetrainee         = '更新培訓人員';
+$lang->action->label->syncprogram           = '開始了';
+$lang->action->label->syncproject           = '開始了';
+$lang->action->label->syncexecution         = '開始了';
+$lang->action->label->startProgram          = '（因項目開始而啟動項目集）';
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction                    = new stdclass();

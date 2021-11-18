@@ -16,6 +16,7 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
 <?php js::set('caseID', $case->id);?>
+<?php js::set('executionID', $case->execution);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>

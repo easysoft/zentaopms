@@ -350,7 +350,6 @@ class build extends control
      */
     public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 0, $index = 0, $type = 'normal')
     {
-        $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {

@@ -105,9 +105,9 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
-              <?php foreach($product->branches as $branchID):?>
+              <?php $hasBranch = ($product->type != 'normal' and isset($branchGroups[$product->id]));?>
+              <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4'>
-                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
@@ -163,13 +163,13 @@
           <td>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->execution->PO;?></span>
-              <?php echo html::select('PO', $poUsers, '', "class='form-control chosen'");?>
+              <?php echo html::select('PO', $poUsers, empty($copyExecution) ? '' : $copyExecution->PO, "class='form-control chosen'");?>
             </div>
           </td>
           <td>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->execution->QD;?></span>
-              <?php echo html::select('QD', $qdUsers, '', "class='form-control chosen'");?>
+              <?php echo html::select('QD', $qdUsers, empty($copyExecution) ? '' : $copyExecution->QD, "class='form-control chosen'");?>
             </div>
           </td>
         </tr>
@@ -177,13 +177,13 @@
           <td>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->execution->PM;?></span>
-              <?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'");?>
+              <?php echo html::select('PM', $pmUsers, empty($copyExecution) ? '' : $copyExecution->PM, "class='form-control chosen'");?>
             </div>
           </td>
           <td>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->execution->RD;?></span>
-              <?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?>
+              <?php echo html::select('RD', $rdUsers, empty($copyExecution) ? '' : $copyExecution->RD, "class='form-control chosen'");?>
             </div>
           </td>
         </tr>

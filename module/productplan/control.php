@@ -346,7 +346,7 @@ class productplan extends control
         }
         else
         {
-            $plans = $this->productplan->getPairs($productID, $branch, $expired);
+            $plans = $this->productplan->getPairs($productID, $branch);
         }
 
         $planName = $number === '' ? 'plan' : "plan[$number]";
@@ -415,7 +415,7 @@ class productplan extends control
         $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->productplan->getForProducts(array($plan->product => $plan->product));
-        $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($plan->product, $viewType = 'story', $startModuleID = 0);
+        $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($plan->product, 'story', 0, 'all');
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
@@ -451,7 +451,7 @@ class productplan extends control
         $this->view->plans       = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType  = $browseType;
-        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product);
+        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
@@ -554,7 +554,7 @@ class productplan extends control
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->productplan->getForProducts(array($productID => $productID));
-        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, 'bug', 0, 'all');
         $this->config->bug->search['params']['project']['values']       = $this->product->getExecutionPairsByProduct($productID);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID, $branch = 0, $params = '');

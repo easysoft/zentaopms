@@ -969,6 +969,11 @@ class actionModel extends model
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
+            if($action->objectType =='program' and strpos('syncexecution,syncproject,syncprogram', $action->action) !==false)
+            {
+                $action->objectName .= $this->lang->action->label->startProgram;
+            }
+
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
             $actionType = strtolower($action->action);
