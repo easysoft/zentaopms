@@ -232,7 +232,7 @@ class bug extends control
         $this->view->moduleID        = $moduleID;
         $this->view->memberPairs     = $this->user->getPairs('noletter|nodeleted');
         $this->view->branch          = $branch;
-        $this->view->branches        = $this->loadModel('branch')->getPairs($productID, 'active');
+        $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
         $this->view->executions      = $executions;
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories         = $storyList;
@@ -788,7 +788,7 @@ class bug extends control
         /* Get product info. */
         $productID   = $bug->product;
         $product     = $this->loadModel('product')->getByID($productID);
-        $branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product, 'active');
+        $branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
         $this->executeHooks($bugID);
 
@@ -950,7 +950,7 @@ class bug extends control
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->executions       = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
         $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
-        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product, 'active');
+        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
@@ -1018,7 +1018,7 @@ class bug extends control
             $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
             $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
             $this->view->plans      = $plans;
-            $this->view->branches   = $product->type == 'normal' ? array() : array('' => '', 'ditto' => $this->lang->bug->ditto) + $this->loadModel('branch')->getPairs($product->id, 'active');
+            $this->view->branches   = $product->type == 'normal' ? array() : array('' => '', 'ditto' => $this->lang->bug->ditto) + $this->loadModel('branch')->getPairs($product->id);
         }
         /* The bugs of my. */
         else
