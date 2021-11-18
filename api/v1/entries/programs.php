@@ -38,7 +38,7 @@ class programsEntry extends Entry
         $result       = array();
         foreach($programs as $program)
         {
-            $program->progress = zget($progressList, $program->id, 0);
+            if(isset($progressList[$program->id])) $program->progress = $progressList[$program->id];
             $param = $this->format($program, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
 
             if($mergeChildren)
