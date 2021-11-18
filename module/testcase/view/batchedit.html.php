@@ -68,7 +68,7 @@
           <?php foreach($caseIDList as $caseID):?>
           <?php
           if(!isset($cases[$caseID])) continue;
-          $caseBranch = $cases[$caseID]->branch;
+          $caseBranch = isset($cases[$caseID]->branch) ? $cases[$caseID]->branch : 0;
           if((!$productID and !$cases[$caseID]->lib) or $app->tab != 'qa')
           {
               $product  = $this->product->getByID($cases[$caseID]->product);
@@ -141,4 +141,5 @@
   </form>
 <?php endif;?>
 </div>
+<?php js::set('hasStory', isset($visibleFields['story']));?>
 <?php include '../../common/view/footer.html.php';?>

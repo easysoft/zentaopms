@@ -43,7 +43,7 @@ $(function()
 {
     removeDitto();  //Remove 'ditto' in first row.
     $('#subNavbar li[data-id="testcase"]').addClass('active');
-    if($("[name^='story']").length > 0)
+    if(hasStory)
     {
         $("[name^='story']").each(function()
         {
