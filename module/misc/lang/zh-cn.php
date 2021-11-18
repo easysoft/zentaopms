@@ -86,6 +86,7 @@ $lang->misc->feature->detailed       = '详情';
 $lang->misc->feature->introduction   = '新功能介绍';
 $lang->misc->feature->tutorial       = '新手引导教程';
 $lang->misc->feature->youngBlueTheme = '全新青春蓝主题';
+$lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme.png';
 $lang->misc->feature->nextStep       = '下一步';
 $lang->misc->feature->close          = '关闭';
 $lang->misc->feature->downloadFile   = '下载新版本功能介绍文档';

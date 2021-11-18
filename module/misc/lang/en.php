@@ -86,6 +86,7 @@ $lang->misc->feature->detailed       = 'Detail';
 $lang->misc->feature->introduction   = 'Features';
 $lang->misc->feature->tutorial       = 'Tutorial';
 $lang->misc->feature->youngBlueTheme = 'Young Blue Theme';
+$lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme_en.png';
 $lang->misc->feature->nextStep       = 'Next step';
 $lang->misc->feature->close          = 'Close';
 $lang->misc->feature->downloadFile   = 'Download introduction';

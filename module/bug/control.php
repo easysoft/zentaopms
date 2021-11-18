@@ -52,15 +52,10 @@ class bug extends control
         $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
         if(!isonlybody())
         {
-            if($this->app->tab == 'project')
+            if($this->app->tab == 'project' or $this->app->tab == 'execution')
             {
-                $objectID = $this->session->project;
-                $products = $this->loadModel('project')->getProducts($objectID, false);
-            }
-            elseif($this->app->tab == 'execution')
-            {
-                $objectID = $this->session->execution;
-                $products = $this->loadModel('execution')->getProducts($objectID, false);
+                $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else
             {
@@ -208,12 +203,19 @@ class bug extends control
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
 
+        $product = $this->product->getById($productID);
+        if($product and $product->type != 'normal')
+        {
+            $this->app->loadLang('datatable');
+            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
+        }
+
         /* Set view. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->bug->common;
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName,'','title=' . $productName);
         $this->view->position[]      = $this->lang->bug->common;
         $this->view->productID       = $productID;
-        $this->view->product         = $this->product->getById($productID);
+        $this->view->product         = $product;
         $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
         $this->view->builds          = $this->loadModel('build')->getProductBuildPairs($productID);
@@ -432,8 +434,9 @@ class bug extends control
 
         /* Get product, then set menu. */
         $productID = $this->product->saveState($productID, $this->products);
+        $product   = $this->product->getById($productID);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
-        $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
 
         /* Init vars. */
         $projectID   = 0;
@@ -541,7 +544,7 @@ class bug extends control
         if($executionID)
         {
             $products       = array();
-            $linkedProducts = $this->loadModel('execution')->getProducts($executionID);
+            $linkedProducts = $this->loadModel('product')->getProducts($executionID);
             foreach($linkedProducts as $product) $products[$product->id] = $product->name;
 
             if($projectID)
@@ -628,6 +631,7 @@ class bug extends control
         $this->view->keywords         = $keywords;
         $this->view->severity         = $severity;
         $this->view->type             = $type;
+        $this->view->product          = $product;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         $this->view->blockID          = $blockID;
@@ -699,6 +703,16 @@ class bug extends control
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
             $customFields[$field] = $this->lang->bug->$field;
         }
+
+        if($product->type != 'normal')
+        {
+            $this->config->bug->custom->batchCreateFields = sprintf($this->config->bug->custom->batchCreateFields, $product->type);
+        }
+        else
+        {
+            $this->config->bug->custom->batchCreateFields = trim(sprintf($this->config->bug->custom->batchCreateFields, ''), ',');
+        }
+
         $showFields = $this->config->bug->custom->batchCreateFields;
         if($product->type == 'normal')
         {

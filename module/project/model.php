@@ -535,32 +535,6 @@ class projectModel extends model
     }
 
     /**
-     * Get products of a project.
-     *
-     * @param  int    $projectID
-     * @param  bool   $withBranch
-     * @access public
-     * @return array
-     */
-    public function getProducts($projectID, $withBranch = true, $status = 'all')
-    {
-        if(defined('TUTORIAL'))
-        {
-            if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
-            return $this->loadModel('tutorial')->getExecutionProducts();
-        }
-
-        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t1.project')->eq((int)$projectID)
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
-            ->andWhere('t2.deleted')->eq(0);
-        if(!$withBranch) return $query->fetchPairs('id', 'name');
-        return $query->fetchAll('id');
-    }
-
-    /**
      * Get branches by project id.
      *
      * @param  int    $projectID
@@ -647,7 +621,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $programID = 0)
+    public function getPairsByModel($model = 'all', $programID = 0, $param = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -655,6 +629,7 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
+            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_desc')

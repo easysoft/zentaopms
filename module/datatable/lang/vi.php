@@ -18,6 +18,7 @@ $lang->datatable->resetGlobal        = 'Thiết lập lại toàn cục';
 $lang->datatable->branch   = 'Nhánh';
 $lang->datatable->platform = 'Platform';
 
+$lang->datatable->displaySetting         = 'Set list';
 $lang->datatable->moduleSetting          = 'Thiết lập Module';
 $lang->datatable->showModule             = 'Hiện modules theo danh sách';
 $lang->datatable->showAllModule          = 'Hiện module sản phẩm';

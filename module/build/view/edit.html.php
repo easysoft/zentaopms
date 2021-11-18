@@ -33,9 +33,8 @@
             <div class='input-group'>
               <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen' $disabled required");?>
               <?php
-              if($build->productType != 'normal' and isset($branches[$build->product]))
+              if($build->productType != 'normal')
               {
-                  $branches = $branches[$build->product];
                   echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $build->branch, "class='form-control chosen' $disabled");
               }
               ?>

@@ -447,7 +447,7 @@ class gitlab
                             $newLine->type  = $type;
                             $newLine->oldlc = $type != 'new' ? $oldCurrentLine : '';
                             $newLine->newlc = $type != 'old' ? $newCurrentLine : '';
-                            $newLine->line  = htmlspecialchars($line);
+                            $newLine->line  = htmlSpecialString($line);
 
                             if($type != 'new') $oldCurrentLine++;
                             if($type != 'old') $newCurrentLine++;

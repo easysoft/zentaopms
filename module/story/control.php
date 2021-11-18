@@ -475,6 +475,16 @@ class story extends control
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
             $customFields[$field] = $this->lang->story->$field;
         }
+
+        if($product->type != 'normal')
+        {
+            $this->config->story->custom->batchCreateFields = sprintf($this->config->story->custom->batchCreateFields, $product->type);
+        }
+        else
+        {
+            $this->config->story->custom->batchCreateFields = trim(sprintf($this->config->story->custom->batchCreateFields, ''), ',');
+        }
+
         $showFields = $this->config->story->custom->batchCreateFields;
         if($product->type == 'normal')
         {
@@ -726,7 +736,7 @@ class story extends control
             $execution = $this->execution->getByID($executionID);
 
             $branchProduct  = false;
-            $linkedProducts = $this->execution->getProducts($executionID);
+            $linkedProducts = $this->loadModel('product')->getProducts($executionID);
             foreach($linkedProducts as $linkedProduct)
             {
                 if($linkedProduct->type != 'normal')
@@ -1651,7 +1661,7 @@ class story extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $this->app->rawModule = 'qa';
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
-            $products  = $this->project->getProducts($this->session->project, false);
+            $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase');
         }
