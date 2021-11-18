@@ -467,19 +467,19 @@ class task extends control
             if(!empty($allChanges))
             {
                 /* updateStatus is a description of whether to update the responsibility performance*/
-                $updateStatus = false;
+                $waitTaskID = false;
                 foreach($allChanges as $taskID => $changes)
                 {
                     if(empty($changes)) continue;
 
                     /* Determine whether the status of a task has been changed, if the status of a task has been changed, set $updateStatus to taskID*/
-                    if($updateStatus == false)
+                    if($waitTaskID == false)
                     {
                         foreach($changes as $changeField)
                         {
                             if($changeField['field'] == 'status' && $changeField['new'] == 'doing')
                             {
-                                $updateStatus = $taskID;
+                                $waitTaskID = $taskID;
                                 break;
                             }
                         }
@@ -501,7 +501,7 @@ class task extends control
                             }
                         }
                     }
-                    if($updateStatus !== false) $this->loadModel('common')->syncPPEStatus($updateStatus);
+                    if($waitTaskID !== false) $this->loadModel('common')->syncPPEStatus($waitTaskID);
                 }
             }
             $this->loadModel('score')->create('ajax', 'batchOther');

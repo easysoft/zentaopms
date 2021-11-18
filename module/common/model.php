@@ -65,20 +65,20 @@ class commonModel extends model
             if($thisModule == 'execution')
             {
                 $executionID = $objectID;
-                $execution   = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+                $execution   = $this->dao->select('id, project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
                 $project     = $this->syncProjectStatus($execution);
                 $this->syncProgramStatus($project);
             }
             if($thisModule == 'project')
             {
                 $projectID = $objectID;
-                $project   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+                $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
                 $this->syncProgramStatus($project);
             }
             if($thisModule == 'program')
             {
                 $programID = $objectID;
-                $program   = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+                $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
                 $this->syncProgramStatus($program);
             }
         }
@@ -103,9 +103,9 @@ class commonModel extends model
             ->orderBy('id_desc')
             ->fetchPairs();
 
+        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->where('id')->in($waitList)->exec();
         foreach($waitList as $programID)
         {
-            $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->where('id')->eq($programID)->exec();
             $this->loadModel('action')->create('program', $programID, 'syncprogram');
         }
     }

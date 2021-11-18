@@ -1576,6 +1576,7 @@ class execution extends control
                     $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
 
+                    $syncExecution = '';
                     foreach($changes as $changeField)
                     {
                         if($changeField['field'] == 'status' && $changeField['old'] =='wait' && $changeField['new'] =='doing')
