@@ -34,7 +34,6 @@
               <?php
               if(!empty($product) and $product->type != 'normal')
               {
-                  $branches = $branches[$product->id];
                   echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, key($product->branches), "class='form-control chosen'");
               }
               ?>
