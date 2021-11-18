@@ -574,11 +574,12 @@ class gitlabModel extends model
      *
      * @param  int    $gitlabID
      * @param  string $keyword
+     * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function apiGetProjects($gitlabID, $keyword = '', $pager)
+    public function apiGetProjects($gitlabID, $keyword = '', $orderBy, $pager)
     {
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();
@@ -586,7 +587,10 @@ class gitlabModel extends model
         $host = rtrim($gitlab->url, '/');
         $host .= '/api/v4/projects';
 
-        $result = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by=id&page={$pager->pageID}&search={$keyword}");
+        /* Parse order string. */
+        $order = explode('_', $orderBy);
+
+        $result = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}");
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];

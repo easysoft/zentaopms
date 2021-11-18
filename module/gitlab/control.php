@@ -583,13 +583,13 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function browseProject($gitlabID, $keyword = '',$recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browseProject($gitlabID, $keyword = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $result = $this->gitlab->apiGetProjects($gitlabID, $keyword, $pager);
+        $result = $this->gitlab->apiGetProjects($gitlabID, $keyword, $orderBy, $pager);
 
         $gitlab = $this->gitlab->getByID($gitlabID);
 
@@ -599,6 +599,7 @@ class gitlab extends control
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseProject;
         $this->view->gitlabID          = $gitlabID;
         $this->view->gitlabProjectList = $result['projects'];
+        $this->view->orderBy           = $orderBy;
         $this->display();
     }
 

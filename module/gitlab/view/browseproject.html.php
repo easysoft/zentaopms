@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('vars', "keyword=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID=1")?>
+<?php js::set('vars', "keyword=%s&orderBy=id_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID=1")?>
 <?php js::set('gitlabID', $gitlabID)?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
@@ -40,10 +40,11 @@
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='gitlabProjectList' class='table has-sort-head table-fixed'>
+      <?php $vars = "gitlabID={$gitlabID}&keyword={$keyword}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
-          <th class='c-id'><?php echo $lang->gitlab->project->id;?></th>
-          <th class='c-name text-left'><?php echo $lang->gitlab->project->name;?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id);?></th>
+          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->project->name);?></th>
           <th class='text-left'></th>
           <th class='text-left'><?php echo $lang->gitlab->lastUpdate;?></th>
           <th class='c-actions-4'><?php echo $lang->actions;?></th>
