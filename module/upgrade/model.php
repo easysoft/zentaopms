@@ -4416,10 +4416,11 @@ class upgradeModel extends model
             else
             {
                 /* Use historical projects as project upgrades. */
-
                 $projects = $this->dao->select('id,name,begin,end,status,PM,acl')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
                 $hasExistedProjects = $this->dao->select('name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('name');
+
+                $this->lang->error->unique = $this->lang->upgrade->projectNameUnique;
 
                 $nameList = array();
                 foreach($projectIdList as $projectID)
