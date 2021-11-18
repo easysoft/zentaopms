@@ -40,6 +40,7 @@ $routes['/stories/:id']            = 'story';
 $routes['/stories/:id/change']     = 'storyChange';
 
 $routes['/products/:id/bugs'] = 'bugs';
+$routes['/projects/:id/bugs'] = 'projectBugs';
 $routes['/bugs']              = 'bugs';
 $routes['/bugs/:id']          = 'bug';
 
