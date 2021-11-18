@@ -2495,6 +2495,90 @@ EOD;
         }
     }
 
+
+    /**
+     * Http response with header.
+     *
+     * @param  string       $url
+     * @param  string|array $data
+     * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
+     * @param  array        $headers   Set request headers.
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function httpWithHeader($url, $data = null, $options = array(), $headers = array())
+    {
+        global $lang, $app;
+        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+
+        commonModel::$requestErrors = array();
+
+        if(!is_array($headers)) $headers = (array)$headers;
+        $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_ENCODING, "");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_URL, $url);
+
+        if(!empty($data))
+        {
+            if(is_object($data)) $data = (array) $data;
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+
+        if($options) curl_setopt_array($curl, $options);
+        $response = curl_exec($curl);
+        $errors   = curl_error($curl);
+
+        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        $headerString = substr($response, 0, $headerSize);
+        $body       = substr($response, $headerSize);
+
+        /* Parse header. */
+        $header = explode("\n", $headerString);
+        $newHeader = array();
+        foreach($header as $item)
+        {
+            $field = explode(':', $item);
+            if(count($field) < 2) continue;
+            $headerkey = array_shift($field);
+            $newHeader[$headerkey] = join('', $field);
+        }
+        curl_close($curl);
+
+
+        $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
+        if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+
+        $fh = @fopen($logFile, 'a');
+        if($fh)
+        {
+            fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+            fwrite($fh, "url:    " . $url . "\n");
+            if(!empty($data)) fwrite($fh, "data:   " . print_r($data, true) . "\n");
+            fwrite($fh, "results:" . print_r($response, true) . "\n");
+            if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
+            fclose($fh);
+        }
+
+        if($errors) commonModel::$requestErrors[] = $errors;
+
+        return array('body' => $body, 'header' => $newHeader);
+    }
+
     /**
      * Http.
      *

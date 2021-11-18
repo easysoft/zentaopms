@@ -11,7 +11,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('vars', "keyword=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID=1")?>
+<?php js::set('gitlabID', $gitlabID)?>
 <div id="mainMenu" class="clearfix">
+  <div id="sidebarHeader">
+    <div class="title">所有模块</div>
+  </div>
+  <div class="btn-toolbar pull-left">
+    <div>
+      <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
+      <a id="projectSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
+    </div>
+  </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('gitlab', 'createProject')) common::printLink('gitlab', 'createProject', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->project->create, '', "class='btn btn-primary'");?>
   </div>
@@ -58,6 +69,9 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <?php if($gitlabProjectList):?>
+    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+    <?php endif;?>
   </form>
 </div>
 <?php endif;?>

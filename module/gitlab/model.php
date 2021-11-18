@@ -572,11 +572,13 @@ class gitlabModel extends model
     /**
      * Get projects of one gitlab.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
+     * @param  string $keyword
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function apiGetProjects($gitlabID)
+    public function apiGetProjects($gitlabID, $keyword = '', $pager)
     {
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();
@@ -584,15 +586,14 @@ class gitlabModel extends model
         $host = rtrim($gitlab->url, '/');
         $host .= '/api/v4/projects';
 
-        $allResults = array();
-        for($page = 1; true; $page++)
-        {
-            $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));
-            if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
-        }
+        $result = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by=id&page={$pager->pageID}&search={$keyword}");
 
-        return $allResults;
+        $header     = $result['header'];
+        $recTotal   = $header['X-Total'];
+        $recPerPage = $header['X-Per-Page'];
+        $pager = pager::init($recTotal, $recPerPage, $pager->pageID);
+
+        return array('pager' => $pager, 'projects' => json_decode($result['body']));
     }
 
     /**

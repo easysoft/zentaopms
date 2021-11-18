@@ -2,6 +2,7 @@
 $lang->gitlab = new stdclass;
 $lang->gitlab->common               = 'GitLab';
 $lang->gitlab->browse               = 'GitLab Browse';
+$lang->gitlab->search               = 'Search';
 $lang->gitlab->create               = 'Create GitLab';
 $lang->gitlab->edit                 = 'Edit GitLab';
 $lang->gitlab->view                 = 'View GitLab';
@@ -20,6 +21,7 @@ $lang->gitlab->lastUpdate           = 'Last Update';
 $lang->gitlab->confirmAddWebhook    = 'Are you sure about creating Webhook？';
 $lang->gitlab->failCreateWebhook    = 'Failed to create Webhook, please view the log';
 $lang->gitlab->manageProjectMembers = 'Manage project member';
+$lang->gitlab->placeholderSearch    = 'Project name';
 
 $lang->gitlab->browseAction  = 'GitLab List';
 $lang->gitlab->deleteAction  = 'Delete GitLab';

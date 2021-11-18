@@ -575,15 +575,27 @@ class gitlab extends control
     /**
      * Browse gitlab project.
      *
-     * @param  int     $gitlabID
+     * @param  int    $gitlabID
+     * @param  string $keyword
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseProject($gitlabID)
+    public function browseProject($gitlabID, $keyword = '',$recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $result = $this->gitlab->apiGetProjects($gitlabID, $keyword, $pager);
+
+        $this->view->keyword           = $keyword;
+        $this->view->pager             = $result['pager'];
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseProject;
         $this->view->gitlabID          = $gitlabID;
-        $this->view->gitlabProjectList = $this->gitlab->apiGetProjects($gitlabID);
+        $this->view->gitlabProjectList = $result['projects'];
         $this->display();
     }
 

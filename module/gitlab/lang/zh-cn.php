@@ -2,6 +2,7 @@
 $lang->gitlab = new stdclass;
 $lang->gitlab->common               = 'GitLab';
 $lang->gitlab->browse               = '浏览GitLab';
+$lang->gitlab->search               = '搜索';
 $lang->gitlab->create               = '添加GitLab';
 $lang->gitlab->edit                 = '编辑GitLab';
 $lang->gitlab->view                 = '查看GitLab';
@@ -20,6 +21,7 @@ $lang->gitlab->lastUpdate           = '最后更新';
 $lang->gitlab->confirmAddWebhook    = '您确定创建Webhook吗？';
 $lang->gitlab->failCreateWebhook    = 'Webhook创建失败，请查看日志';
 $lang->gitlab->manageProjectMembers = '项目成员管理';
+$lang->gitlab->placeholderSearch    = '请输入项目名称';
 
 $lang->gitlab->browseAction  = 'GitLab列表';
 $lang->gitlab->deleteAction  = '删除GitLab';
