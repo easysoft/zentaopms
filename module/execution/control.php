@@ -40,6 +40,7 @@ class execution extends control
 
         $this->loadModel('project');
 
+        if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
         $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers');
         if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
@@ -3318,4 +3319,19 @@ class execution extends control
         die(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
     }
 
+    /**
+     * AJAX: Update the execution name.
+     *
+     * @param  int     $executionID
+     * @param  string  $newExecutionName
+     * @access public
+     * @return bool
+     */
+    public function ajaxUpdateExecutionName($executionID, $newExecutionName)
+    {
+        $this->dao->update(TABLE_EXECUTION)->set('name')->eq($newExecutionName)->where('id')->eq($executionID)->exec();
+        if(dao::isError()) echo false;
+
+        echo true;
+    }
 }
