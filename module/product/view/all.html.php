@@ -60,18 +60,18 @@
           </tr>
           <tr class="text-center">
             <?php if($this->config->URAndSR):?>
-            <th class='c-requirement-draft' style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
-            <th class='c-requirement-activate'><?php echo $lang->story->activate;?></th>
-            <th class='c-requirement-change'><?php echo $lang->story->change;?></th>
-            <th class='c-requirement-completeRate'><?php echo $lang->story->completeRate;?></th>
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
+            <th><?php echo $lang->story->activate;?></th>
+            <th><?php echo $lang->story->change;?></th>
+            <th><div class='en-wrap-text'><?php echo $lang->story->completeRate;?></div></th>
             <?php endif;?>
-            <th class='c-story-draft' style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
-            <th class='c-story-activate'><?php echo $lang->story->activate;?></th>
-            <th class='c-story-change'><?php echo $lang->story->change;?></th>
-            <th class='c-story-completeRate'><?php echo $lang->story->completeRate;?></th>
-            <th class='c-bug-activate' style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
-            <th class='c-bug-close'><?php echo $lang->close;?></th>
-            <th class='c-bug-fixedRate'><?php echo $lang->bug->fixedRate;?></th>
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
+            <th><?php echo $lang->story->activate;?></th>
+            <th><?php echo $lang->story->change;?></th>
+            <th><div class='en-wrap-text'><?php echo $lang->story->completeRate;?></div></th>
+            <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
+            <th><?php echo $lang->close;?></th>
+            <th><?php echo $lang->bug->fixedRate;?></th>
           </tr>
         </thead>
         <tbody id="productTableList">

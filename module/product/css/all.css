@@ -44,6 +44,8 @@ th.c-bug {width: 200px;}
 th.c-plan {width: 45px;}
 th.c-release {width: 50px;}
 th.c-actions {width: 60px;}
+[lang='en'] .en-wrap-text {white-space: normal; height: 24px; line-height: 1; font-size: 12px;}
+
 
 #productListForm thead>tr>th,
 #productListForm tbody>tr>td {text-align: center; text-overflow: unset!important}
@@ -66,6 +68,8 @@ th.c-actions {width: 60px;}
 @media screen and (max-width: 1460px)
 {
     th.c-name {width: auto;}
+    [lang^='zh-'] th.c-requirement {width: 260px;}
+    [lang^='zh-'] th.c-story {width: 260px;}
 }
 @media screen and (max-width: 1300px)
 {
@@ -76,9 +80,8 @@ th.c-actions {width: 60px;}
 @media screen and (max-width: 1250px)
 {
     #productListForm thead>tr>th {font-size: 12px;}
-    th.c-requirement {width: 280px;}
-    th.c-story {width: 280px;}
-    th.c-actions {width: 50px;}
+    th.c-requirement {width: 265px;}
+    th.c-story {width: 265px;}
     [lang^='zh-'] th.c-requirement {width: 220px;}
     [lang^='zh-'] th.c-story {width: 220px;}
 }
