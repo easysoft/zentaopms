@@ -50,7 +50,7 @@ js::set('moduleID', $moduleID);
             <td>
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
-                <?php if($product->type != 'normal' and isset($products[$productID])):?>
+                <?php if($productInfo->type != 'normal' and isset($products[$productID])):?>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
               </div>
