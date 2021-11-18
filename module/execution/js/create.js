@@ -35,7 +35,6 @@ $(function()
     if(copyExecutionID) productID = $product.val();
     $product.val(productID);
     $product.trigger("chosen:updated");
-    loadBranches($product);
 
     var adjustMainCol = function()
     {
