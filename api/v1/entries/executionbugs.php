@@ -41,10 +41,22 @@ class executionBugsEntry extends entry
                 if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
                 $bug->status = $status;
 
-                $result[] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool');
+                $result[$bug->id] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool');
             }
 
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'bugs' => $result));
+            $storyChangeds = $this->dao->select('t1.id')->from(TABLE_BUG)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+                ->where('t1.id')->in(array_keys($result))
+                ->andWhere('t1.story')->ne('0')
+                ->andWhere('t1.storyVersion != t2.version')
+                ->fetchAll();
+            foreach($storyChangeds as $bugID)
+            {
+                $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->storyChanged);
+                $result[$bugID]->status = $status;
+            }
+
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'bugs' => array_values($result)));
         }
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
