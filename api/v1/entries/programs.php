@@ -33,7 +33,7 @@ class programsEntry extends Entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         $programs     = (array)$data->data->programs;
-        $progressList = $data->data->progressList;
+        $progressList = (array)$data->data->progressList;
         $users        = $data->data->users;
         $result       = array();
         foreach($programs as $program)
