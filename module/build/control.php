@@ -71,14 +71,11 @@ class build extends control
         $products      = array();
 
         /* Set branches and products. */
-        if(!empty($productGroups) and isset($productGroups[$productID]))
+        if(isset($productGroups[$productID]) and $productGroups[$productID]->type != 'normal' and isset($branchGroups[$productID]))
         {
-            if($productGroups[$productID]->type != 'normal' and isset($branchGroups[$productID]))
+            foreach($branchGroups[$productID] as $branchID => $branch)
             {
-                foreach($branchGroups[$productID] as $branchID => $branch)
-                {
-                    $branches[$branchID] = $branchPairs[$branchID];
-                }
+                $branches[$branchID] = $branchPairs[$branchID];
             }
         }
 
