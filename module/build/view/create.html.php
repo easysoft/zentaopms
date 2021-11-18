@@ -93,5 +93,4 @@
   </div>
 </div>
 <?php js::set('productGroups', $productGroups)?>
-<?php js::set('executionID', $executionID)?>
 <?php include '../../common/view/footer.html.php';?>
