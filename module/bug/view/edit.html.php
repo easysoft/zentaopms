@@ -19,7 +19,7 @@ js::set('changeProductConfirmed' , false);
 js::set('changeExecutionConfirmed' , false);
 js::set('confirmChangeProduct'   , $lang->bug->confirmChangeProduct);
 js::set('planID'                 , $bug->plan);
-js::set('oldExecutionID'         , $bug->execution);
+js::set('oldProjectID'           , $bug->project);
 js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);

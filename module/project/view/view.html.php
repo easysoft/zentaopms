@@ -140,10 +140,12 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : '';?>
+                <?php foreach($product->branches as $branchID):?>
+                <?php $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';?>
                 <div class="col-xs-6">
-                  <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), "<i class='icon icon-product text-muted'></i> " . $product->name . $branchName);?>
+                  <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branchID"), "<i class='icon icon-product text-muted'></i> " . $product->name . $branchName);?>
                 </div>
+                <?php endforeach;?>
                 <?php endforeach;?>
               </div>
             </div>
@@ -153,9 +155,11 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php if(isset($planGroup[$productID][$product->plan])):?>
-                <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$product->plan}"), $product->name . '/' . $planGroup[$productID][$product->plan]);?></div>
+                <?php foreach($product->plans as $planID):?>
+                <?php if(isset($planGroup[$productID][$planID])):?>
+                <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroup[$productID][$planID]);?></div>
                 <?php endif;?>
+                <?php endforeach;?>
                 <?php endforeach;?>
               </div>
             </div>

@@ -50,12 +50,12 @@ class testcase extends control
             if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
-                $products  = $this->loadModel('project')->getProducts($objectID, false);
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
-                $products = $this->loadModel('execution')->getProducts($objectID, false);
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else
             {
@@ -125,7 +125,7 @@ class testcase extends control
         /* Set menu, save session. */
         if($this->app->tab == 'project')
         {
-            $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($projectID, false);
+            $this->products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
             $this->loadModel('project')->setMenu($projectID);
         }
         else
@@ -241,7 +241,7 @@ class testcase extends control
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
         if($this->app->tab == 'project')
         {
-            $products = array('0' => $this->lang->product->all) + $this->project->getProducts($this->session->project, false);
+            $products = array('0' => $this->lang->product->all) + $this->product->getProducts($this->session->project, 'all', '', false);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
         }
 
@@ -529,8 +529,9 @@ class testcase extends control
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Set story list. */
-        $story     = $storyID ? $this->story->getByID($storyID) : '';
-        $storyList = $storyID ? array($storyID => $story->id . ':' . $story->title) : array('');
+        $story       = $storyID ? $this->story->getByID($storyID) : '';
+        $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch);
+        $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array('');
 
         /* Set module option menu. */
         $moduleOptionMenu          = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
@@ -569,7 +570,7 @@ class testcase extends control
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->story            = $story;
-        $this->view->storyList        = $storyList;
+        $this->view->storyPairs       = $storyPairs;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->currentModuleID  = $currentModuleID;
@@ -882,7 +883,6 @@ class testcase extends control
 
                 /* Set modules. */
                 $modules = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0, $branch);
-                $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
 
                 $this->view->modules    = $modules;
                 $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
@@ -894,11 +894,31 @@ class testcase extends control
 
                 if($product->type != 'normal') $branchProduct = true;
 
-                /* Set modules. */
-                $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-                $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
+                /* Set branches and modules. */
+                $branches = array();
+                $modules  = array();
+                if($product->type != 'normal')
+                {
+                    $branches = $this->loadModel('branch')->getPairs($productID);
+                    if($branch === 'all')
+                    {
+                        $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, 0);
+                        foreach($branches as $branchID => $branchName)
+                        {
+                            $modules[$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branchID);
+                        }
+                    }
+                    else
+                    {
+                        $modules[$branch] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branch);
+                    }
+                }
+                else
+                {
+                    $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, 0);
+                }
 
-                $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+                $this->view->branches   = $branches;
                 $this->view->modules    = $modules;
                 $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
                 $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
@@ -923,7 +943,6 @@ class testcase extends control
             $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
             $this->view->title      = $this->lang->testcase->batchEdit;
 
-            /* Set modules. */
             $productIdList = array();
             foreach($cases as $case) $productIdList[$case->product] = $case->product;
 

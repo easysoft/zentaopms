@@ -63,7 +63,7 @@ class build extends control
             $executions = $this->execution->getPairs($execution->project);
         }
 
-        $productGroups = $this->execution->getProducts($executionID);
+        $productGroups = $this->loadModel('product')->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
         $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID);
         $branchPairs   = $this->loadModel('branch')->getPairs($productID);
@@ -152,7 +152,7 @@ class build extends control
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
         if(!isset($executions[$build->execution])) $executions[$build->execution] = $execution->name;
 
-        $productGroups = $this->execution->getProducts($build->execution);
+        $productGroups = $this->product->getProducts($build->execution);
 
         if(!isset($productGroups[$build->product]))
         {
@@ -350,7 +350,6 @@ class build extends control
      */
     public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 0, $index = 0, $type = 'normal')
     {
-        $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {

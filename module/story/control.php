@@ -721,14 +721,35 @@ class story extends control
             $product = $this->product->getByID($productID);
             $branchProduct = $product->type == 'normal' ? false : true;
 
-            /* Set modules. */
-            $modules = array('ditto' => $this->lang->story->ditto) + $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+            /* Set branches and modules. */
+            $branches = array();
+            $modules  = array();
+            if($product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getPairs($productID);
+                if($branch === 'all')
+                {
+                    $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+                    foreach($branches as $branchID => $branchName)
+                    {
+                        $modules[$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branchID);
+                    }
+                }
+                else
+                {
+                    $modules[$branch] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+                }
+            }
+            else
+            {
+                $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+            }
 
-            $this->view->modules      = $modules;
-            $this->view->branches     = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-            $this->view->plans        = $this->productplan->getBranchPlanPairs($productID);
-            $this->view->position[]   = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
-            $this->view->title        = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->modules    = $modules;
+            $this->view->branches   = $branches;
+            $this->view->plans      = $this->productplan->getBranchPlanPairs($productID);
+            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
+            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
         }
         elseif($executionID)
         {
@@ -736,7 +757,7 @@ class story extends control
             $execution = $this->execution->getByID($executionID);
 
             $branchProduct  = false;
-            $linkedProducts = $this->execution->getProducts($executionID);
+            $linkedProducts = $this->loadModel('product')->getProducts($executionID);
             foreach($linkedProducts as $linkedProduct)
             {
                 if($linkedProduct->type != 'normal')
@@ -1661,7 +1682,7 @@ class story extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $this->app->rawModule = 'qa';
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
-            $products  = $this->project->getProducts($this->session->project, false);
+            $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
             $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase');
         }
@@ -1817,15 +1838,20 @@ class story extends control
      * AJAX: get stories of a product in html select.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
      * @param  string $onlyOption
      * @param  string $status
      * @param  int    $limit
+     * @param  string $type
+     * @param  bool   $hasParent
+     * @param  int    $executionID
+     * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0)
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0, $number = '')
     {
         if($moduleID)
         {
@@ -1847,11 +1873,11 @@ class story extends control
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
 
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
-        $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
+        $select  = html::select('story' . $number, empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));

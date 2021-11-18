@@ -85,6 +85,7 @@ $lang->misc->feature->lastest        = 'Latest Version';
 $lang->misc->feature->detailed       = 'Detail';
 $lang->misc->feature->introduction   = 'Features';
 $lang->misc->feature->tutorial       = 'Tutorial';
+$lang->misc->feature->tutorialImage  = 'theme/default/images/main/tutorial_en.png';
 $lang->misc->feature->youngBlueTheme = 'Young Blue Theme';
 $lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme_en.png';
 $lang->misc->feature->nextStep       = 'Next step';

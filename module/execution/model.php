@@ -578,11 +578,12 @@ class executionModel extends model
         $this->loadModel('user');
 
         $executions    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
+        $allChanges    = array();
+        $data          = fixer::input('post')->get();
         $oldExecutions = $this->getByIdList($this->post->executionIDList);
-        $nameList    = array();
-        $codeList    = array();
+        $nameList      = array();
+        $codeList      = array();
+        $projectModel  = 'scrum';
 
         /* Replace required language. */
         if($this->app->tab == 'project')
@@ -1628,33 +1629,6 @@ class executionModel extends model
     }
 
     /**
-     * Get products of a execution.
-     *
-     * @param  int    $executionID
-     * @param  bool   $withBranch
-     * @access public
-     * @return array
-     */
-    public function getProducts($executionID, $withBranch = true, $status = 'all')
-    {
-        if(defined('TUTORIAL'))
-        {
-            if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
-            return $this->loadModel('tutorial')->getExecutionProducts();
-        }
-
-        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
-            ->where('t1.project')->eq((int)$executionID)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi();
-        if(!$withBranch) return $query->fetchPairs('id', 'name');
-        return $query->fetchAll('id');
-    }
-
-    /**
      * Get branch pairs by product id list.
      *
      * @param  array  $products
@@ -1744,7 +1718,7 @@ class executionModel extends model
                     foreach($branches[$product->id] as $branchID => $branch)
                     {
                         if(!isset($branchGroups[$product->id][$branchID])) continue;
-                        $branchPairs[$branchID] = ((count($products) > 1 and $branchID) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
+                        $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
                     }
                 }
                 else
@@ -1875,7 +1849,7 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $products = $this->getProducts($toExecution);
+        $products = $this->loadModel('product')->getProducts($toExecution);
         if(empty($products)) return array();
 
         $execution  = $this->getById($toExecution);
@@ -3107,7 +3081,7 @@ class executionModel extends model
             }
         }
 
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $branchPairs  = array();
         $productType  = 'normal';
         $productNum   = count($products);
@@ -3118,9 +3092,12 @@ class executionModel extends model
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                if($product->branch and isset($branchGroups[$product->id][$product->branch]))
+                if(isset($product->branches))
                 {
-                    $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
+                    foreach($product->branches as $branch)
+                    {
+                        if(isset($branchGroups[$product->id][$branch])) $branchPairs[$branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$branch];
+                    }
                 }
                 else
                 {
@@ -3677,11 +3654,32 @@ class executionModel extends model
     public function getPlans($products)
     {
         $this->loadModel('productplan');
-        $productPlans = array();
-        foreach($products as $productID => $product)
+
+        $branchIDList = array();
+        foreach($products as $product)
         {
-            $productPlans[$productID] = $this->productplan->getPairs($product->id, isset($product->branch) ? $product->branch : '');
+            foreach($product->branches as $branchID) $branchIDList[$branchID] = $branchID;
         }
+
+        $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in(array_keys($products))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('branch')->in($branchIDList)->fi()
+            ->orderBy('begin desc')
+            ->fetchAll('id');
+
+        $plans        = $this->productplan->reorder4Children($plans);
+        $productPlans = array();
+        $parentTitle  = array();
+        foreach($plans as $plan)
+        {
+            if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
+            if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
+
+            $productPlans[$plan->product][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $productPlans[$plan->product][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+        }
+
         return $productPlans;
     }
 
@@ -3751,7 +3749,7 @@ class executionModel extends model
     {
         $this->loadModel('user')->updateUserView($executionID, $objectType, $users);
 
-        $products = $this->getProducts($executionID, $withBranch = false);
+        $products = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);
     }
 
