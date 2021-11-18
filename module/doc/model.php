@@ -1647,6 +1647,7 @@ class docModel extends model
                 $docItem->type  = 'doc';
                 $docItem->id    = $doc->id;
                 $docItem->title = $doc->title;
+                $docItem->acl   = $doc->acl;
                 $docItem->url   = helper::createLink('doc', 'view', "doc=$doc->id");
 
                 $buttons = '';

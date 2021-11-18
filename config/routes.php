@@ -39,10 +39,11 @@ $routes['/executions/:id/stories'] = 'executionStories';
 $routes['/stories/:id']            = 'story';
 $routes['/stories/:id/change']     = 'storyChange';
 
-$routes['/products/:id/bugs'] = 'bugs';
-$routes['/projects/:id/bugs'] = 'projectBugs';
-$routes['/bugs']              = 'bugs';
-$routes['/bugs/:id']          = 'bug';
+$routes['/products/:id/bugs']   = 'bugs';
+$routes['/projects/:id/bugs']   = 'projectBugs';
+$routes['/executions/:id/bugs'] = 'executionBugs';
+$routes['/bugs']                = 'bugs';
+$routes['/bugs/:id']            = 'bug';
 
 $routes['/programs/:id/projects'] = 'projects';
 $routes['/projects']              = 'projects';
