@@ -1718,7 +1718,7 @@ class executionModel extends model
                     foreach($branches[$product->id] as $branchID => $branch)
                     {
                         if(!isset($branchGroups[$product->id][$branchID])) continue;
-                        $branchPairs[$branchID] = ((count($products) > 1 and $branchID) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
+                        $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
                     }
                 }
                 else
