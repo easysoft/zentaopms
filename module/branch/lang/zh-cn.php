@@ -11,11 +11,13 @@ $lang->branch->main        = '主干';
 
 $lang->branch->edit             = '编辑';
 $lang->branch->editAction       = '编辑%s';
+$lang->branch->editBranch       = '编辑分支';
 $lang->branch->activate         = '激活';
 $lang->branch->activateAction   = '激活分支';
 $lang->branch->close            = '关闭';
 $lang->branch->closeAction      = '关闭分支';
 $lang->branch->create           = '新增%s';
+$lang->branch->createBranch     = '新增分支';
 $lang->branch->merge            = '合并';
 $lang->branch->batchEdit        = '批量编辑';
 $lang->branch->defaultBranch    = '默认分支';

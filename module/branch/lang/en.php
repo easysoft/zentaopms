@@ -11,11 +11,13 @@ $lang->branch->main        = 'Main';
 
 $lang->branch->edit             = 'Edit';
 $lang->branch->editAction       = 'Edit %s';
+$lang->branch->editBranch       = 'Edit Branch';
 $lang->branch->activate         = 'Activate';
 $lang->branch->activateAction   = 'Activate Branch';
 $lang->branch->close            = 'Close';
 $lang->branch->closeAction      = 'Close Branch';
 $lang->branch->create           = 'Create %s';
+$lang->branch->createBranch     = 'Create Branch';
 $lang->branch->merge            = 'Merge';
 $lang->branch->batchEdit        = 'Batch Edit';
 $lang->branch->defaultBranch    = 'Default Branch';
