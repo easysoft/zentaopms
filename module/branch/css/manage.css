@@ -2,6 +2,8 @@
 .c-order {width: 70px;}
 .c-check {width: 40px}
 
+a.setDefault {padding-left: 8px !important}
+
 td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
 td.flex .label-primary {min-width: 40px;}
 td.flex .setDefault {min-width: 120px;}

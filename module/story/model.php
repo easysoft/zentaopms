@@ -2461,10 +2461,6 @@ class storyModel extends model
                 $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
             }
         }
-        elseif($branch)
-        {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` = $branch";
-        }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
             $storyQuery = str_replace($allBranch, '1', $storyQuery);
@@ -3723,7 +3719,7 @@ class storyModel extends model
                 $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
                 if($storyType == 'requirement') echo '<span class="label label-badge label-light">SR</span> ';
                 if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
-                if($story->branch and isset($branches[$story->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
+                if(isset($branches[$story->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                 if($story->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
                 echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";
@@ -4017,7 +4013,7 @@ class storyModel extends model
             }
             else
             {
-                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories);
+                $stories = $this->getProductStories($productID, $branch, 0, 'all', 'story', 'id_desc', true, $excludeStories);
             }
         }
         else
@@ -4028,7 +4024,7 @@ class storyModel extends model
             }
             else
             {
-                $stories = $this->getProductStories($productID, 0, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
+                $stories = $this->getProductStories($productID, $branch, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
             }
         }
 

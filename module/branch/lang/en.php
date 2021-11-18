@@ -10,12 +10,12 @@ $lang->branch->all         = 'All ';
 $lang->branch->main        = 'Main';
 
 $lang->branch->edit             = 'Edit';
-$lang->branch->editAction       = 'Edit Branch';
+$lang->branch->editAction       = 'Edit %s';
 $lang->branch->activate         = 'Activate';
 $lang->branch->activateAction   = 'Activate Branch';
 $lang->branch->close            = 'Close';
 $lang->branch->closeAction      = 'Close Branch';
-$lang->branch->create           = 'Create Branch';
+$lang->branch->create           = 'Create %s';
 $lang->branch->merge            = 'Merge';
 $lang->branch->batchEdit        = 'Batch Edit';
 $lang->branch->defaultBranch    = 'Default Branch';
@@ -43,7 +43,7 @@ $lang->branch->confirmActivate   = 'Do you want to activate this @branch@？';
 $lang->branch->existName         = '@branch@ name already exists.';
 
 $lang->branch->noData     = 'No branches.';
-$lang->branch->mainBranch = 'The default main branch of the product.';
+$lang->branch->mainBranch = 'The default main %s of the product.';
 
 $lang->branch->statusList = array();
 $lang->branch->statusList['active'] = 'Active';

@@ -1,7 +1,5 @@
 $(function()
 {
-    if(productType == 'normal') $('.table-form>tbody>tr').next().addClass('hidden');
-
     if(typeof(rawModule) == 'undefined') rawModule = 'product';
     if(rawModule != 'projectstory')
     {

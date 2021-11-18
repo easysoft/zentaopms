@@ -514,9 +514,12 @@ class project extends control
 
             /* Link the plan stories. */
             $newPlans = array();
-            foreach($_POST['plans'] as $plans)
+            if(isset($_POST['plans']))
             {
-                foreach($plans as $planID) $newPlans[$planID] = $planID;
+                foreach($_POST['plans'] as $plans)
+                {
+                    foreach($plans as $planID) $newPlans[$planID] = $planID;
+                }
             }
 
             $diffResult = array_diff($oldPlans, $newPlans);
@@ -1577,6 +1580,7 @@ class project extends control
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
 
             $url = $this->createLink('project', 'browse');
+            if($this->app->tab == 'program') $url = $this->createLink('program', 'browse');
 
             if(empty($executionIdList))
             {

@@ -365,8 +365,8 @@ class executionModel extends model
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
-            ->checkIF(!empty($sprint->name), 'name', 'unique', "`type` in ('sprint','stage') and `parent` = $sprint->parent")
-            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage') and `parent` = $sprint->parent")
+            ->checkIF(!empty($sprint->name), 'name', 'unique', "`type` in ('sprint','stage') and `project` = $sprint->project")
+            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage')")
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
@@ -519,6 +519,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
+            ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $execution->project")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
             ->where('id')->eq($executionID)
             ->limit(1)
@@ -624,10 +625,6 @@ class executionModel extends model
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
 
-            /* Check unique name for edited executions. */
-            if(isset($nameList[$executionName])) dao::$errors['name'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->execution->name, $executionName);
-            $nameList[$executionName] = $executionName;
-
             /* Check unique code for edited executions. */
             if($projectModel == 'scrum' and empty($executionCode))
             {
@@ -646,6 +643,7 @@ class executionModel extends model
         {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+            $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
@@ -653,7 +651,8 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-                ->checkIF(!empty($execution->code), 'code', 'unique', "id NOT " . helper::dbIN($data->executionIDList) . " and type in ('sprint','stage')")
+                ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
+                ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
