@@ -1,14 +1,5 @@
-@media screen and (min-width: 2048px)
-{
-    max-width: 2000px;
-}
-
-@media screen and (min-width: 2560px)
-{
-    max-width: 2380px;
-}
-
-.container {max-width: 2400px!important}
+@media screen and (min-width: 2048px) {.container {max-width: 2000px!important;}}
+@media screen and (min-width: 2560px) {.container {max-width: 2380px!important;}}
 
 .side-col .detail-content {padding-left: 10px; margin-top: 0px;}
 .tree li.has-list.open:before {border-left: none;}
@@ -47,6 +38,7 @@
 #sidebar>.cell {width: 100%;}
 
 .main-table thead>tr:first-of-type>th {border-left: 1px solid #ddd;}
+.main-table thead>tr:first-of-type>th:first-child {border-left: none;}
 th.table-nest-title .nest-has-checkbox {margin-top: 7px; margin-left: 35px;}
 th.table-nest-title .nest-none-checkbox {margin-top: 8px; margin-left: 5px;}
 th.table-nest-title .header {margin-left: 5px;}

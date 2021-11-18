@@ -83,7 +83,7 @@
         $trAttrs .= " class='$trClass'";
         ?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
-          <tr <?php echo $trAttrs;?>>
+          <tr class="row-program" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
             <td><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
@@ -127,7 +127,7 @@
               $trAttrs .= " class='$trClass'";
           }
           ?>
-          <tr <?php echo $trAttrs;?>>
+          <tr class="row-line" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
             <td><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
@@ -183,9 +183,9 @@
           }
           $trAttrs .= " class='$trClass'";
           ?>
-          <tr class="text-center" <?php echo $trAttrs;?>>
+          <tr class="row-product" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
-            <td><?php echo $canBatchEdit ? html::checkbox('productIDList', array($product->id => '')) : '';?></td>
+            <td><?php echo html::checkbox('productIDList', array($product->id => ''));?></td>
             <?php endif;?>
             <td class="c-name text-left table-nest-title" title='<?php echo $product->name?>'>
               <?php

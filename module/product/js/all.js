@@ -2,14 +2,13 @@ $("#" + browseType + "Tab").addClass('btn-active-text');
 $(function()
 {
     /* Init table sort. */
-    var $list = $('#productTableList');
-    $list.addClass('sortable').sortable(
+    $('#productTableList').addClass('sortable').sortable(
     {
         /* Init vars. */
         reverse: orderBy === 'order_desc',
         selector: 'tr',
         dragCssClass: 'drag-row',
-        trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
+        trigger: '.sort-handler',
 
         /* Set movable conditions. */
         canMoveHere: function($ele, $target)
@@ -35,59 +34,51 @@ $(function()
         }
     });
 
-    /* Update program checkboxes */
+    /* Update parent checkbox */
+    function updatePrarentCheckbox($parent)
+    {
+        var $row          = $parent.closest('tr');
+        var $checkbox     = $row.find('.program-checkbox');
+        var rowID         = $row.data('id');
+        var $subRows      = $('#productTableList').children('.row-product[data-nest-path^="' + rowID + ',"],.row-product[data-nest-path*=",' + rowID + ',"]');
+        var allCount      = $subRows.length;
+        var selectedCount = $subRows.find('input:checkbox:checked').length;
+        var isAllChecked  = allCount > 0 && allCount === selectedCount;
+        $checkbox.toggleClass('checked', isAllChecked)
+            .toggleClass('indeterminate', selectedCount > 0 && selectedCount < allCount);
+        $row.toggleClass('checked', isAllChecked);
+    }
+
+    /* Update checkboxes */
     function updateCheckboxes()
     {
-        var $tbody = $('#productTableList');
-        $tbody.find('.program-checkbox').each(function()
+        $('#productTableList').children('.row-program,.row-line').each(function()
         {
-            var $checkbox       = $(this);
-            var $tr             = $checkbox.closest('tr');
-            var rowID           = $tr.data('id');
-            if($tbody.find('tr[data-parent="' + rowID + '"] .program-checkbox').length > 0)
-            {
-                var notCheckedCount = 0;
-                $tbody.find('tr[data-parent="' + rowID + '"]').each(function()
-                {
-                    if($(this).find('.program-checkbox').length > 0)
-                    {
-                        /* Get lines input length. */
-                        var lineRowID   = $(this).data('id');
-                        notCheckedCount = $tbody.find('tr[data-parent="' + lineRowID + '"] input:checkbox:not(:checked)').length + notCheckedCount;
-                    }
-                    else
-                    {
-                        notCheckedCount = $(this).find('input:checkbox:not(:checked)').length + notCheckedCount;
-                    }
-                });
-
-                var isAllRowChecked = !notCheckedCount;
-            }
-            else
-            {
-                var isAllRowChecked = !$tbody.find('tr[data-parent="' + rowID + '"] input:checkbox:not(:checked)').length;
-            }
-            $checkbox.toggleClass('checked', isAllRowChecked);
+            updatePrarentCheckbox($(this))
         });
     }
 
-    $('#productTableList').on('click', '.program-checkbox', function()
+    $('#productTableList').on('click', '.row-program,.row-line', function()
     {
-        var $checkbox = $(this).toggleClass('checked');
-        var $tr = $checkbox.closest('tr');
-        var rowID = $tr.data('id');
-        var checked = $checkbox.hasClass('checked');
-        $('#productTableList').children('tr').each(function()
+        var $row      = $(this);
+        var $checkbox = $row.find('.program-checkbox').toggleClass('checked').removeClass('indeterminate');
+        var isChecked = $checkbox.hasClass('checked');
+        var rowID     = $row.data('id');
+        var $subRows  = $('#productTableList').children('tr[data-nest-path^="' + rowID + ',"],tr[data-nest-path*=",' + rowID + ',"]');
+        $row.toggleClass('checked', isChecked);
+        $subRows.toggleClass('checked', isChecked);
+        $subRows.find('input:checkbox').prop('checked', isChecked);
+        $subRows.find('.program-checkbox').toggleClass('checked', isChecked).removeClass('indeterminate');
+
+        var parentID = $row.attr('data-parent');
+        if(parentID && parentID !== '0')
         {
-            var $tr = $(this);
-            var nestPath = $tr.attr('data-nest-path');
-            if(!nestPath) return;
-            if(!nestPath.split(',').includes(rowID)) return;
-            var $checkbox = $tr.find('input:checkbox');
-            if($checkbox.length) $checkbox.prop('checked', checked);
-            else $tr.find('.program-checkbox').toggleClass('checked', checked);
-        });
+            updatePrarentCheckbox($('#productTableList>tr[data-id="' + parentID + '"]'));
+        }
     });
     $('#productListForm').on('checkChange', updateCheckboxes);
     updateCheckboxes();
+
+    /* Disable animation for large rows */
+    $('#productListForm').toggleClass('no-animation', $('#productTableList>tr').length > 40)
 });
