@@ -83,9 +83,10 @@ $routes['/projects/:projectID/builds'] = 'builds';
 $routes['/builds']                     = 'builds';
 $routes['/builds/:id']                 = 'build';
 
-$routes['/products/:id/testcases'] = 'testcases';
-$routes['/testcases']              = 'testcases';
-$routes['/testcases/:id']          = 'testcase';
+$routes['/products/:id/testcases']   = 'testcases';
+$routes['/executions/:id/testcases'] = 'executioncases';
+$routes['/testcases']                = 'testcases';
+$routes['/testcases/:id']            = 'testcase';
 
 $routes['/projects/:projectID/testtasks'] = 'testtasks';
 $routes['/testtasks']                     = 'testtasks';
