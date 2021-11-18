@@ -111,6 +111,33 @@ $(function()
         $("#sidebarHeader").toggle("fast");
     });
     if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
+
+    /* Shift key selection. */
+    var lastStorySelected = '';
+    $("input[name^='storyIdList'").on('click', function (e)
+    {
+        if(e.shiftKey)
+        {
+            nowStorySelected = $(this).val();
+            if(lastStorySelected != '' && nowStorySelected != '' && lastStorySelected != nowStorySelected)
+            {
+                var isStartStorySelected = false;
+                var isEndStorySelected   = false;
+                $("input[name^='storyIdList']").each(function()
+                {
+                    isEndStorySelected   = ((nowStorySelected == $(this).val() || lastStorySelected == $(this).val()) && isStartStorySelected ) || isEndStorySelected ? true : false;
+                    isStartStorySelected = nowStorySelected == $(this).val() || lastStorySelected == $(this).val() || isStartStorySelected ? true : false;
+
+                    $(this)['context'].checked = $(this)['context'].checked || (isStartStorySelected && !isEndStorySelected) ? true : false;
+                });
+            }
+
+        }
+        else
+        {
+            lastStorySelected = $(this).val();
+        }
+    });
 });
 
 /**
