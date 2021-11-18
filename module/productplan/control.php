@@ -266,8 +266,8 @@ class productplan extends control
 
         $uri = $this->app->getURI(true);
         $uri = substr($uri, 0, strpos($uri, '&id=') !== false ? strpos($uri, '&id=') : strlen($uri));
-        $this->session->set('storyList', $uri . "&id=$planID" . '&type=story', 'product');
-        $this->session->set('bugList', $uri . "&id=$planID" . '&type=bug', 'qa');
+        $this->session->set('storyList', $this->createLink('productplan', 'view', "planID=$planID&type=story"), 'product');
+        $this->session->set('bugList', $this->createLink('productplan', 'view', "planID=$planID&type=bug"), 'qa');
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('plan', $plan);
 
