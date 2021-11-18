@@ -1821,4 +1821,18 @@ class repoModel extends model
             $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
         }
     }
+
+    /**
+     * Get products which scm is GitLab by projects.
+     *
+     * @param  array $projectIDs
+     * @return array
+     */
+    public function getGitlabProductsByProjects($projectIDs)
+    {
+        return $this->dao->select('path,product')->from(TABLE_REPO)->where('deleted')->eq('0')
+            ->andWhere('SCM')->eq('Gitlab')
+            ->andWhere('path')->in($projectIDs)
+            ->fetchPairs('path', 'product');
+    }
 }
