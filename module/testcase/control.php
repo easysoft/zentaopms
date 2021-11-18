@@ -481,7 +481,7 @@ class testcase extends control
         $this->view->steps            = $steps;
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->branch           = $branch;
-        $this->view->branches         = $this->session->currentProductType != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
+        $this->view->branches         = $this->session->currentProductType != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
 
         $this->display();
     }
