@@ -163,13 +163,13 @@
           <td>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->execution->PO;?></span>
-              <?php echo html::select('PO', $poUsers, isset($copyExecution->PO) ? $copyExecution->PO : '', "class='form-control chosen'");?>
+              <?php echo html::select('PO', $poUsers, empty($copyExecution) ? '' : $copyExecution->PO, "class='form-control chosen'");?>
             </div>
           </td>
           <td>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->execution->QD;?></span>
-              <?php echo html::select('QD', $qdUsers, isset($copyExecution->QD) ? $copyExecution->QD : '', "class='form-control chosen'");?>
+              <?php echo html::select('QD', $qdUsers, empty($copyExecution) ? '' : $copyExecution->QD, "class='form-control chosen'");?>
             </div>
           </td>
         </tr>
@@ -177,13 +177,13 @@
           <td>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->execution->PM;?></span>
-              <?php echo html::select('PM', $pmUsers, isset($copyExecution->PM) ? $copyExecution->PM : '', "class='form-control chosen'");?>
+              <?php echo html::select('PM', $pmUsers, empty($copyExecution) ? '' : $copyExecution->PM, "class='form-control chosen'");?>
             </div>
           </td>
           <td>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->execution->RD;?></span>
-              <?php echo html::select('RD', $rdUsers, isset($copyExecution->RD) ? $copyExecution->RD : '', "class='form-control chosen'");?>
+              <?php echo html::select('RD', $rdUsers, empty($copyExecution) ? '' : $copyExecution->RD, "class='form-control chosen'");?>
             </div>
           </td>
         </tr>

@@ -1398,7 +1398,7 @@ class execution extends control
         $this->view->qdUsers             = $qdUsers;
         $this->view->rdUsers             = $rdUsers;
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : array();
+        $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
         $this->display();
     }
