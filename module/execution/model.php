@@ -3654,16 +3654,32 @@ class executionModel extends model
     public function getPlans($products)
     {
         $this->loadModel('productplan');
-        $productPlans = array();
-        foreach($products as $productID => $product)
+
+        $branchIDList = array();
+        foreach($products as $product)
         {
-            $planInfo = $this->productplan->getPairs($product->id, implode(',', $product->branches));
-            foreach($planInfo as $planID => $plan)
-            {
-                if(empty($planID)) continue;
-                $productPlans[$productID][$planID] = $plan;
-            }
+            foreach($product->branches as $branchID) $branchIDList[$branchID] = $branchID;
         }
+
+        $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in(array_keys($products))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('branch')->in($branchIDList)->fi()
+            ->orderBy('begin desc')
+            ->fetchAll('id');
+
+        $plans        = $this->productplan->reorder4Children($plans);
+        $productPlans = array();
+        $parentTitle  = array();
+        foreach($plans as $plan)
+        {
+            if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
+            if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
+
+            $productPlans[$plan->product][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $productPlans[$plan->product][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+        }
+
         return $productPlans;
     }
 
