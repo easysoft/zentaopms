@@ -290,7 +290,8 @@ class buildModel extends model
         {
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->executionStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            $builds[$key] = ((strpos($params, 'withbranch') !== false and $build->branchName) ? $build->branchName . '/' : '') . $build->name;
+            $branchName = $build->branchName ? $build->branchName : $this->lang->branch->main;
+            $builds[$key] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $build->name;
         }
 
         if(!$builds) return $sysBuilds;
@@ -304,7 +305,11 @@ class buildModel extends model
                 ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchPairs();
-            foreach($releases as $buildID => $releaseName) $builds[$buildID] = ((strpos($params, 'withbranch') !== false and $productBuilds[$buildID]->branchName) ? $productBuilds[$buildID]->branchName . '/' : '') . $releaseName;
+            foreach($releases as $buildID => $releaseName)
+            {
+                $branchName = $productBuilds[$buildID]->branchName ? $productBuilds[$buildID]->branchName : $this->lang->branch->main;
+                $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+            }
         }
 
         return $sysBuilds + $builds;
