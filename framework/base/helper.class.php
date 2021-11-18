@@ -894,6 +894,6 @@ function isHttps()
  */
 function htmlSpecialString($string, $flags = '', $encoding = 'UTF-8')
 {
-    if(!$flags) $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401;
+    if(!$flags) $flags = defined('ENT_SUBSTITUTE') ? ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401 : ENT_QUOTES;
     return htmlspecialchars($string, $flags, $encoding);
 }
