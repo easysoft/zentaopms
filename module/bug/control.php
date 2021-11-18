@@ -519,7 +519,6 @@ class bug extends control
             $builds  = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'noempty,noterminate,nodone');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
-        $builds[''] = '';
 
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
 
