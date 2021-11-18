@@ -31,10 +31,12 @@ $(function()
         if($.inArray(source, feedbackSource) != -1)
         {
             $('#feedbackBox').removeClass('hidden');
+            $('#reviewerBox').attr('colspan', 2);
         }
         else
         {
             $('#feedbackBox').addClass('hidden');
+            $('#reviewerBox').attr('colspan', 4);
         }
     });
 });
