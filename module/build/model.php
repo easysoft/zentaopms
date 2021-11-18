@@ -227,7 +227,6 @@ class buildModel extends model
      */
     public function getExecutionBuildPairs($executionID, $productID, $branch = 0, $params = '', $buildIdList = '')
     {
-        $branch = str_replace('0,', '', $branch);
         if($branch == 'all') $branch = 0;
         $sysBuilds      = array();
         $selectedBuilds = array();
@@ -271,7 +270,6 @@ class buildModel extends model
      */
     public function getProductBuildPairs($products, $branch = 0, $params = 'noterminate, nodone', $replace = true)
     {
-        $branch = str_replace('0,', '', $branch);
         if($branch == 'all') $branch = 0;
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
