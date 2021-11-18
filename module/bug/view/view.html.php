@@ -224,6 +224,14 @@
                   </td>
                 </tr>
                 <tr>
+                  <th><?php echo $lang->bug->feedbackBy;?></th>
+                  <td><?php echo $bug->feedbackBy;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->notifyEmail;?></th>
+                  <td><?php echo $bug->notifyEmail;?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->bug->os;?></th>
                   <td><?php echo $lang->bug->osList[$bug->os];?></td>
                 </tr>

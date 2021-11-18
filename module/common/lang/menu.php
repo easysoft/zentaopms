@@ -467,18 +467,16 @@ $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' 
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
 
-if($config->systemMode == 'new')
-{
-    $lang->admin->menu->model['dropMenu'] = new stdclass();
-    $lang->admin->menu->model['dropMenu']->allModel  = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'subject,custom,meetingroom,baseline');
-    $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,measurement,auditcl,cmcl,process,activity,zoutput,classify,sqlbuilder,reviewcl,reviewsetting,report');
+$lang->admin->menu->model['dropMenu'] = new stdclass();
+$lang->admin->menu->model['dropMenu']->allModel  = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
+$lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting');
 
-    $lang->admin->menu->allModel['subMenu'] = new stdclass();
-    $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => '需求概念|custom|browsestoryconcept|');
+$lang->admin->menu->allModel['subMenu'] = new stdclass();
+$lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
+$lang->admin->menu->allModel['menuOrder'][5] = 'storyConcept';
 
-    $lang->admin->menu->waterfall['subMenu'] = new stdclass();
-    $lang->admin->menu->waterfall['subMenu']->stage = array('link' => '阶段|stage|setType|', 'subModule' => 'stage');
-}
+$lang->admin->menu->waterfall['subMenu'] = new stdclass();
+$lang->admin->menu->waterfall['subMenu']->stage = array('link' => '阶段|stage|setType|', 'subModule' => 'stage');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
@@ -489,11 +487,6 @@ $lang->admin->menuOrder[25] = 'message';
 $lang->admin->menuOrder[30] = 'extension';
 $lang->admin->menuOrder[35] = 'dev';
 $lang->admin->menuOrder[40] = 'system';
-
-$lang->admin->menu->model['subMenu']               = new stdclass();
-$lang->admin->menu->model['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
-
-$lang->admin->menu->model['menuOrder'][5] = 'storyConcept';
 
 $lang->admin->menu->message['subMenu']          = new stdclass();
 $lang->admin->menu->message['subMenu']->message = new stdclass();

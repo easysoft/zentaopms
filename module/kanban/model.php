@@ -486,7 +486,7 @@ class kanbanModel extends model
         if($groupBy == 'story')      $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
         if($groupBy == 'assignedTo') $objectPairs = $this->loadModel('user')->getPairs('noletter');
 
-        $laneOrder = $colorIndex = 0;
+        $colorIndex = 0;
 
         foreach($lanes as $laneID => $lane)
         {
@@ -499,21 +499,18 @@ class kanbanModel extends model
             else
             {
                 /* Update kanban lanes by group. */
-                $laneName = $this->lang->kanban->noGroup;
+                $laneName = $this->lang->$type->$groupBy . ': ' . $this->lang->kanban->noGroup;
                 if($lane->extra)
                 {
                     $namePairs = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
-                    $laneName  = zget($namePairs, $lane->extra);
+                    $laneName  = $this->lang->$type->$groupBy . ': ' . zget($namePairs, $lane->extra);
                 }
 
-                $data = new stdClass();
-                $data->name  = $laneName;
-                $data->order = $laneOrder;
-                $laneOrder  += 5;
-                $colorIndex += 1;
-
-                $this->dao->update(TABLE_KANBANLANE)->data($lane)->where('id')->eq($laneID)->exec();
+                $this->dao->update(TABLE_KANBANLANE)->set('name')->eq($laneName)->where('id')->eq($laneID)->exec();
                 $this->updateCards($lane);
+
+                $colorIndex += 1;
+                if($colorIndex == count($this->config->kanban->laneColorList)) $colorIndex = 0;
             }
         }
 
@@ -532,18 +529,70 @@ class kanbanModel extends model
             $lane->type      = $type;
             $lane->groupby   = $groupBy;
             $lane->extra     = $groupKey;
-            $lane->name      = $laneName;
+            $lane->name      = $this->lang->$type->$groupBy . ": " . $laneName;
             $lane->color     = $this->config->kanban->laneColorList[$colorIndex];
-            $lane->order     = $laneOrder;
 
-            $laneOrder  += 5;
             $colorIndex += 1;
-            if($colorIndex == count($this->config->kanban->laneColorList) + 1) $colorIndex = 0;
+            if($colorIndex == count($this->config->kanban->laneColorList)) $colorIndex = 0;
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
             $this->createColumns($laneID, $type, $executionID, $groupBy, $groupKey);
         }
+
+        $this->resetLaneOrder($executionID, $type, $groupBy);
+    }
+
+    /**
+     * Update lane column.
+     *
+     * @param  int    $columnID
+     * @param  object $column
+     * @access public
+     * @return array
+     */
+    public function updateLaneColumn($columnID, $column)
+    {
+        $data = fixer::input('post')->get();
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
+            ->autoCheck()
+            ->batchcheck($this->config->kanban->setlaneColumn->requiredFields, 'notempty')
+            ->where('id')->eq($columnID)
+            ->exec();
+
+        if(dao::isError()) return;
+
+        $changes = common::createChanges($column, $data);
+        return $changes;
+    }
+
+    /**
+     * Change the order through the lane move up and down.
+     *
+     * @param  int     $executionID
+     * @param  string  $currentType
+     * @param  string  $targetType
+     * @access public
+     * @return void
+     */
+    public function updateLaneOrder($executionID, $currentType, $targetType)
+    {
+        $orderList = $this->dao->select('id,type,`order`')->from(TABLE_KANBANLANE)
+            ->where('execution')->eq($executionID)
+            ->andWhere('type')->in(array($currentType, $targetType))
+            ->andWhere('groupby')->eq('')
+            ->fetchAll('type');
+
+        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$targetType]->order)
+            ->where('id')->eq($orderList[$currentType]->id)
+            ->andWhere('groupby')->eq('')
+            ->exec();
+
+        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$currentType]->order)
+            ->where('id')->eq($orderList[$targetType]->id)
+            ->andWhere('groupby')->eq('')
+            ->exec();
     }
 
     /**
@@ -562,6 +611,7 @@ class kanbanModel extends model
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
         }
+        $column->limit = (int)$column->limit;
 
         /* Check column limit. */
         $sumChildLimit = 0;
@@ -636,55 +686,39 @@ class kanbanModel extends model
     }
 
     /**
-     * Update lane column.
+     * Reset order of lane.
      *
-     * @param  int    $columnID
-     * @param  object $column
-     * @access public
-     * @return array
-     */
-    public function updateLaneColumn($columnID, $column)
-    {
-        $data = fixer::input('post')->get();
-
-        $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
-            ->autoCheck()
-            ->batchcheck($this->config->kanban->setlaneColumn->requiredFields, 'notempty')
-            ->where('id')->eq($columnID)
-            ->exec();
-
-        if(dao::isError()) return;
-
-        $changes = common::createChanges($column, $data);
-        return $changes;
-    }
-
-    /**
-     * Change the order through the lane move up and down.
-     *
-     * @param  int     $executionID
-     * @param  string  $currentType
-     * @param  string  $targetType
+     * @param  int    $executionID
+     * @param  int    $type
+     * @param  int    $groupBy
      * @access public
      * @return void
      */
-    public function updateLaneOrder($executionID, $currentType, $targetType)
+    public function resetLaneOrder($executionID, $type, $groupBy)
     {
-        $orderList = $this->dao->select('id,type,`order`')->from(TABLE_KANBANLANE)
+        $lanes = $this->dao->select('id,extra')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
-            ->andWhere('type')->in(array($currentType, $targetType))
-            ->andWhere('groupby')->eq('')
-            ->fetchAll('type');
+            ->andWhere('type')->eq($type)
+            ->andWhere('groupBy')->eq($groupBy)
+            ->orderBy('extra_asc')
+            ->fetchPairs();
 
-        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$targetType]->order)
-            ->where('id')->eq($orderList[$currentType]->id)
-            ->andWhere('groupby')->eq('')
-            ->exec();
+        $laneOrder = 5;
+        $noExtra   = 0;
 
-        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$currentType]->order)
-            ->where('id')->eq($orderList[$targetType]->id)
-            ->andWhere('groupby')->eq('')
-            ->exec();
+        foreach($lanes as $laneID => $extra)
+        {
+            if(!$extra)
+            {
+                $noExtra = $laneID;
+                continue;
+            }
+
+            $this->dao->update(TABLE_KANBANLANE)->set('order')->eq($laneOrder)->where('id')->eq($laneID)->exec();
+            $laneOrder += 5;
+        }
+
+        if($noExtra) $this->dao->update(TABLE_KANBANLANE)->set('order')->eq($laneOrder)->where('id')->eq($noExtra)->exec();
     }
 
     /**
@@ -702,7 +736,7 @@ class kanbanModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->fetch();
 
-        if(!empty($column->parent)) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
+        if($column->parent > 0) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
 
         return $column;
     }
@@ -759,6 +793,17 @@ class kanbanModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($groupBy . '_desc')
                 ->fetchPairs();
+
+            if($type == 'task')
+            {
+                $unlinkedTask = $this->dao->select('id')->from(TABLE_TASK)
+                    ->where('execution')->eq($executionID)
+                    ->andWhere('parent')->ge(0)
+                    ->andWhere('story')->eq(0)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('id');
+                if($unlinkedTask) $groupList[0] = 0;
+            }
         }
         else
         {

@@ -316,6 +316,7 @@ $lang->execution->byPeriod            = '按时间段';
 $lang->execution->byUser              = '按用户';
 $lang->execution->noExecution         = "暂时没有{$lang->executionCommon}。";
 $lang->execution->noExecutions        = "暂时没有{$lang->execution->common}。";
+$lang->execution->noPrintData         = "暂无数据可打印";
 $lang->execution->noMembers           = '暂时没有团队成员。';
 $lang->execution->workloadTotal       = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
@@ -436,7 +437,7 @@ $lang->execution->doingProject = '进行中的项目';
 $lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . '的' . $lang->execution->common;
 $lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . '的' . $lang->execution->common;
 $lang->execution->kanbanColType['suspended'] = $lang->execution->statusList['suspended'] . '的' . $lang->execution->common;
-$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . '的' . $lang->execution->common;
+$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . '的' . $lang->execution->common . '(最近2期)';
 
 $lang->execution->treeLevel = array();
 $lang->execution->treeLevel['all']   = '全部展开';

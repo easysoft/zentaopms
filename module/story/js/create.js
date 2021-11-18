@@ -24,6 +24,19 @@ $(function()
         var value = $select.val();
         $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
     });
+
+    $('#source').on('change', function()
+    {
+        var source = $(this).val();
+        if($.inArray(source, feedbackSource) != -1)
+        {
+            $('#feedbackBox').removeClass('hidden');
+        }
+        else
+        {
+            $('#feedbackBox').addClass('hidden');
+        }
+    });
 });
 
 function refreshPlan()

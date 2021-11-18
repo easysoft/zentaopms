@@ -1018,6 +1018,30 @@ class reportModel extends model
 
         return $overview;
     }
+
+    /**
+     * Get project and execution name.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectExecutions()
+    {
+        $executions = $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status')
+            ->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->in('stage,sprint')
+            ->fetchAll();
+
+        $pairs = array();
+        foreach($executions as $execution)
+        {
+            $pairs[$execution->id] = $this->config->systemMode == 'new' ? $execution->projectname . '/' .$execution->name : $execution->name;
+        }
+
+        return $pairs;
+    }
 }
 
 /**

@@ -177,6 +177,8 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `confirmed` tinyint(1) NOT NULL default '0',
   `activatedCount` smallint(6) NOT NULL,
   `activatedDate` datetime NOT NULL,
+  `feedbackBy` varchar(100) NOT NULL,
+  `notifyEmail` varchar(100) NOT NULL,
   `mailto` text,
   `openedBy` varchar(30) NOT NULL default '',
   `openedDate` datetime NOT NULL,
@@ -395,7 +397,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `product` varchar(255) NOT NULL,
   `commit` text NOT NULL,
   `commitedBy` varchar(30) NOT NULL,
-  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0', 
+  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL,
   `status` varchar(30) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
@@ -405,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `assignedTo` varchar(30) NOT NULL,
   `assignedBy` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0', 
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `story` char(30) NOT NULL,
   `desc` text NOT NULL,
   `version` smallint(6) NOT NULL,
@@ -585,6 +587,19 @@ CREATE TABLE IF NOT EXISTS `zt_grouppriv` (
   `module` char(30) NOT NULL default '',
   `method` char(30) NOT NULL default '',
   UNIQUE KEY `group` (`group`,`module`,`method`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_holiday`;
+CREATE TABLE IF NOT EXISTS `zt_holiday` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
+  `desc` text NOT NULL,
+  `year` char(4) NOT NULL,
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `year` (`year`),
+  KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_history`;
 CREATE TABLE IF NOT EXISTS `zt_history` (
@@ -788,6 +803,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `RD` varchar(30) NOT NULL,
   `acl` enum('open','private','custom') NOT NULL default 'open',
   `whitelist` text NOT NULL,
+  `reviewer` varchar(255) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `createdVersion` varchar(20) NOT NULL,
@@ -1054,7 +1070,7 @@ CREATE TABLE IF NOT EXISTS `zt_stage` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0', 
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_stakeholder`;
@@ -1111,6 +1127,8 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `linkStories` varchar(255) NOT NULL,
   `duplicateStory` mediumint(8) unsigned NOT NULL,
   `version` smallint(6) NOT NULL default '1',
+  `feedbackBy` varchar(100) NOT NULL,
+  `notifyEmail` varchar(100) NOT NULL,
   `URChanged` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -1476,6 +1494,22 @@ CREATE TABLE IF NOT EXISTS `zt_userview` (
   `projects` mediumtext NOT NULL,
   `sprints` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_weeklyreport`;
+CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `project` mediumint(8) unsigned NOT NULL,
+  `weekStart` date NOT NULL,
+  `pv` float(9,2) NOT NULL,
+  `ev` float(9,2) NOT NULL,
+  `ac` float(9,2) NOT NULL,
+  `sv` float(9,2) NOT NULL,
+  `cv` float(9,2) NOT NULL,
+  `staff` smallint(5) unsigned NOT NULL,
+  `progress` varchar(255) NOT NULL,
+  `workload` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `week` (`project`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
@@ -5763,7 +5797,22 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) V
 ('zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),('zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1'),
 ('zh-cn', 'custom', 'URSRList', '5', '{\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
 ('en', 'custom', 'URSRList', '1', '{\"SRName\":\"Story\",\"URName\":\"Epic\"}', '0'),
-('en', 'custom', 'URSRList', '2', '{\"SRName\":\"Software Requirement\",\"URName\":\"User Requirement\"}', '0');
+('en', 'custom', 'URSRList', '2', '{\"SRName\":\"Software Requirement\",\"URName\":\"User Requirement\"}', '0'),
+('all','stage','typeList','request','需求', '1'),
+('all','stage','typeList','design','设计', '1'),
+('all','stage','typeList','dev','开发', '1'),
+('all','stage','typeList','qa','测试', '1'),
+('all','stage','typeList','release','发布', '1'),
+('all','stage','typeList','review','总结评审','1'),
+('all','stage','typeList','other','其他','1');
+
+REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES
+('需求','10','request','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('设计','10','design','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('开发','50','dev','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('测试','15','qa','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
+('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'hourPoint',   '0');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct',   '1');

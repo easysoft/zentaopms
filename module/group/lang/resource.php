@@ -609,11 +609,13 @@ $lang->resource->kanban->setLane   = 'setLane';
 $lang->resource->kanban->setColumn = 'setColumn';
 $lang->resource->kanban->setWIP    = 'setWIP';
 $lang->resource->kanban->laneMove  = 'laneMove';
+$lang->resource->kanban->cardsSort = 'cardsSort';
 
 $lang->kanban->methodOrder[5]  = 'setLane';
 $lang->kanban->methodOrder[10] = 'setColumn';
 $lang->kanban->methodOrder[15] = 'setWIP';
 $lang->kanban->methodOrder[20] = 'laneMove';
+$lang->kanban->methodOrder[25] = 'cardsSort';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
@@ -835,6 +837,7 @@ $lang->resource->bug->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->bug->delete             = 'deleteAction';
 $lang->resource->bug->batchChangeModule  = 'batchChangeModule';
 $lang->resource->bug->batchChangeBranch  = 'batchChangeBranch';
+$lang->resource->bug->batchChangePlan    = 'batchChangePlan';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';

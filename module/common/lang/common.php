@@ -4,6 +4,7 @@ $lang->index       = new stdclass();
 $lang->my          = new stdclass();
 $lang->todo        = new stdclass();
 $lang->program     = new stdclass();
+$lang->programplan = new stdclass();
 $lang->product     = new stdclass();
 $lang->project     = new stdclass();
 $lang->design      = new stdclass();

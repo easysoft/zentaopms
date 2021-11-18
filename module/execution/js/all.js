@@ -1,10 +1,10 @@
 $(function()
 {
-    $('#projectTableList').on('sort.sortable', function(e, data)
+    $('#executionTableList').on('sort.sortable', function(e, data)
     {
         var list = '';
         for(i = 0; i < data.list.length; i++) list += $(data.list[i].item).attr('data-id') + ',';
-        $.post(createLink('project', 'updateOrder'), {'projects' : list, 'orderBy' : orderBy});
+        $.post(createLink('execution', 'updateOrder'), {'executions' : list, 'orderBy' : orderBy});
     });
 });
 

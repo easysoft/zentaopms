@@ -11,25 +11,32 @@ function changeView(view)
  */
 function renderUserAvatar(user, objectType, objectID)
 {
+    var $noPrivAndNoAssigned = $('<div class="avatar has-text avatar-sm avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-account"></i></div>');
+    if(objectType == 'task')
+    {
+        if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
+        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+    }
+    if(objectType == 'story')
+    {
+        if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
+        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+    }
+    if(objectType == 'bug')
+    {
+        if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
+        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+    }
+
+    if(!user) return $('<a class="avatar has-text avatar-sm avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-account"></i></a>');
+
     if(typeof user === 'string') user = {account: user};
     if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
 
     var $noPrivAvatar = $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
-    if(objectType == 'task')
-    {
-        if(!priv.canAssignTask) return $noPrivAvatar;
-        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
-    }
-    else if(objectType == 'story')
-    {
-        if(!priv.canAssignStory) return $noPrivAvatar;
-        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
-    }
-    else if(objectType == 'bug')
-    {
-        if(!priv.canAssignBug) return $noPrivAvatar;
-        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
-    }
+    if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
+    if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
+    if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
     return $('<a class="avatar has-text avatar-sm avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
 }
@@ -67,7 +74,7 @@ function renderStoryItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
                 .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
         $title.appendTo($item);
     }
@@ -84,10 +91,10 @@ function renderStoryItem(item, $item, col)
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
     ].join(''));
-    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'story', item.id));
+    $infos.append(renderUserAvatar(item.assignedTo, 'story', item.id));
 
     var $actions = $item.find('.actions');
-    if(!$actions.length)
+    if(!$actions.length && item.menus.length)
     {
         $actions = $([
             '<div class="actions">',
@@ -115,7 +122,7 @@ function renderBugItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
                 .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true));
         $title.appendTo($item);
     }
@@ -133,10 +140,10 @@ function renderBugItem(item, $item, col)
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
     ].join(''));
     if(item.deadline) $infos.append(renderDeadline(item.deadline));
-    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'bug', item.id));
+    $infos.append(renderUserAvatar(item.assignedTo, 'bug', item.id));
 
     var $actions = $item.find('.actions');
-    if(!$actions.length)
+    if(!$actions.length && item.menus.length)
     {
         $actions = $([
             '<div class="actions">',
@@ -164,7 +171,7 @@ function renderTaskItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
                 .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
         $title.appendTo($item);
     }
@@ -182,10 +189,10 @@ function renderTaskItem(item, $item, col)
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
     ].join(''));
     if(item.deadline) $infos.append(renderDeadline(item.deadline));
-    if(item.assignedTo) $infos.append(renderUserAvatar(item.assignedTo, 'task', item.id));
+    $infos.append(renderUserAvatar(item.assignedTo, 'task', item.id));
 
     var $actions = $item.find('.actions');
-    if(!$actions.length)
+    if(!$actions.length && item.menus.length)
     {
         $actions = $([
             '<div class="actions">',
@@ -265,6 +272,7 @@ function renderHeaderCol($col, col, $header, kanban)
  */
 function renderLaneName($name, lane, $kanban, columns, kanban)
 {
+    if(lane.id != 'story' && lane.id != 'task' && lane.id != 'bug') return false;
     if(!$name.children('.actions').length && (priv.canSetLane || priv.canMoveLane))
     {
         $([
@@ -497,6 +505,7 @@ function handleFinishDrop(event)
 function handleSortColCards()
 {
     /* TODO: handle sort cards from column contextmenu */
+    return false;
 }
 
 /**
@@ -512,7 +521,7 @@ function createColumnMenu(options)
 	var items = [];
 	if(priv.canEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
 	if(priv.canSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
-	items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
+	if(priv.canSortCards) items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
     return items;
 }
 
@@ -529,7 +538,7 @@ function createColumnCreateMenu(options)
     if(col.laneType == 'story')
     {
         if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
-        if(priv.canBatchCreateStory) items.push({label: storyLang.batchCreate, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
     }
@@ -635,6 +644,15 @@ function createTaskMenu(options)
     return items;
 }
 
+/** Resize kanban container size */
+function resizeKanbanContainer()
+{
+    var $container = $('#kanbanContainer');
+    var maxHeight = window.innerHeight - 98 - 15;
+    if($.cookie('isFullScreen') == 1) maxHeight = window.innerHeight - 15;
+    $container.children('.panel-body').css('max-height', maxHeight);
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
@@ -646,6 +664,9 @@ window.menuCreators =
     task:         createTaskMenu,
 };
 
+/* Set kanban affix container */
+window.kanbanAffixContainer = '#kanbanContainer>.panel-body';
+
 /* Overload kanban default options */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
@@ -656,13 +677,15 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
         {
             maxWidth = Math.max(maxWidth, $(this).outerWidth());
         });
-        $('#kanbanContainer').css('min-width', maxWidth + 40);
+        $('#kanbans').css('min-width', maxWidth);
     }
 });
 
 /* Example code: */
 $(function()
 {
+    $.cookie('isFullScreen', 0);
+
     /* Common options 用于初始化看板的通用选项 */　
     var commonOptions =
     {
@@ -705,7 +728,9 @@ $(function()
     /* Init iframe modals */
     $(document).on('click', '#kanbans .iframe,.contextmenu-menu .iframe', function(event)
     {
-        $(this).modalTrigger({show: true});
+        var $link = $(this);
+        if($link.data('zui.modaltrigger')) return;
+        $link.modalTrigger({show: true});
         event.preventDefault();
     });
 
@@ -725,6 +750,10 @@ $(function()
         $.zui.ContextMenu.show(items, items.$options || {event: event});
     });
 
+    /* Resize kanban container on window resize */
+    resizeKanbanContainer();
+    $(window).on('resize', resizeKanbanContainer);
+
     /* Hide contextmenu when page scroll */
     $(window).on('scroll', function()
     {
@@ -739,6 +768,9 @@ $(function()
             location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
         }
     })
+
+    $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
+    $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
 });
 
 $('#type').change(function()

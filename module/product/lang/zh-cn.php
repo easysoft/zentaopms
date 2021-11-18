@@ -105,6 +105,7 @@ $lang->product->QD             = '测试负责人';
 $lang->product->RD             = '发布负责人';
 $lang->product->feedback       = '反馈负责人';
 $lang->product->acl            = '访问控制';
+$lang->product->reviewer       = '评审人';
 $lang->product->whitelist      = '白名单';
 $lang->product->branch         = '所属%s';
 $lang->product->qa             = '测试';

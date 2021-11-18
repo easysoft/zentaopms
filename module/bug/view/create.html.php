@@ -129,21 +129,31 @@ js::set('moduleID', $moduleID);
           <tr>
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
             <td>
-              <div class='input-group'>
-                <?php echo html::select('assignedTo', $productMembers, $assignedTo, "class='form-control chosen'");?>
-                <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+              <div class='table-row'>
+                <div class='table-col' id='assignedBox'>
+                  <?php echo html::select('assignedTo', $productMembers, $assignedTo, "class='form-control chosen'");?>
+                  <span class='input-group-btn load-all-user'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+                </div>
+                <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
+                <?php if($showDeadline):?>
+                <div class='table-col'>
+                  <div class='input-group' id='deadlineBox'>
+                    <span class='input-group-addon fix-border'><?php echo $lang->bug->deadline;?></span>
+                    <?php echo html::input('deadline', $deadline, "class='form-control form-date'");?>
+                  </div>
+                </div>
+                <?php endif;?>
               </div>
             </td>
-          <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
-          <?php if($showDeadline):?>
-            <td id='deadlineTd'>
-              <div class='input-group'>
-                <span class='input-group-addon'><?php echo $lang->bug->deadline?></span>
-                <span><?php echo html::input('deadline', $deadline, "class='form-control form-date'");?></span>
+            <td>
+              <div class='input-group' id='feedback'>
+                <span class="input-group-addon"><?php echo $lang->bug->feedbackBy?></span>
+                <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+                <span class="input-group-addon"><?php echo $lang->bug->notifyEmail?></span>
+                <?php echo html::input('notifyEmail', '', "class='form-control'");?>
               </div>
             </td>
           </tr>
-          <?php endif;?>
           <?php if($showExecution):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>

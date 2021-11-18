@@ -29,8 +29,18 @@
             <div class='scroll-handle'>
             <?php if(isset($productGroups[$productID])):?>
             <?php foreach($productGroups[$productID] as $sprint):?>
-            <?php echo html::checkBox("sprints[$productID]", array($sprint->id => $sprint->name), '', "data-product='{$productID}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
-            <?php echo html::hidden("sprintIdList[$productID][$sprint->id]", $sprint->id);?>
+              <div class="sprintItem">
+                <?php echo html::checkBox("sprints[$productID]", array($sprint->id => $sprint->name), '', "data-product='{$productID}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
+                <?php echo html::hidden("sprintIdList[$productID][$sprint->id]", $sprint->id);?>
+                <a href='#' id='sprintEdit' class='hidden'><i class="icon-common-edit icon-edit muted"></i></a>
+              </div>
+              <div class="sprintRename hidden">
+                <?php echo html::input("sprintRename_$sprint->id", $sprint->name, "class='form-control'");?>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-success name-confirm"><i class='icon icon-check'></i></button>
+                  <button type="button" class="btn btn-gray name-cancel"><i class='icon icon-close'></i></button>
+                </div>
+              </div>
             <?php endforeach;?>
             <?php endif;?>
             </div>

@@ -40,6 +40,7 @@ class execution extends control
 
         $this->loadModel('project');
 
+        if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
         $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers');
         if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
@@ -1234,6 +1235,8 @@ class execution extends control
             unset($this->lang->doc->menu->execution['subMenu']);
         }
 
+        $project = $this->project->getByID($projectID);
+
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -1358,6 +1361,7 @@ class execution extends control
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
         $this->view->projectID       = $projectID;
+        $this->view->isStage         = isset($project->model) and $project->model == 'waterfall' ? true : false;
         $this->view->products        = $products;
         $this->view->productPlan     = array(0 => '') + $productPlan;
         $this->view->productPlans    = array(0 => '') + $productPlans;
@@ -1436,7 +1440,8 @@ class execution extends control
 
         $executions = array('' => '') + $this->executions;
         $execution  = $this->execution->getById($executionID);
-        $managers = $this->execution->getDefaultManagers($executionID);
+        $managers   = $this->execution->getDefaultManagers($executionID);
+
 
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
@@ -1877,6 +1882,14 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
+        $userList    = array();
+        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!$avatar) continue;
+            $userList[$account]['avatar'] = $avatar;
+        }
+
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[]    = $this->lang->execution->kanban;
@@ -1891,6 +1904,7 @@ class execution extends control
         $this->view->execution     = $execution;
         $this->view->groupBy       = $groupBy;
         $this->view->canBeChanged  = $canBeChanged;
+        $this->view->userList      = $userList;
 
         $this->display();
     }
@@ -1905,7 +1919,7 @@ class execution extends control
     {
         $this->loadModel('project');
         $projects   = $this->project->getPairsByProgram(0, 'noclosed');
-        $executions = $this->project->getStats(0, 'all');
+        $executions = $this->project->getStats(0, 'all', 0, 0, 30, 'id_desc');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
@@ -1933,18 +1947,38 @@ class execution extends control
 
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
 
-                /* Max 5 closed executions. */
+                /* Max 2 closed executions. */
                 if($status == 'closed')
                 {
-                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5) $myExecutions[$status] = array_slice($myExecutions[$status], 0, 5, true);
-                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5) $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) > 2)
+                    {
+                        foreach($myExecutions[$status] as $executionID => $execution)
+                        {
+                            unset($myExecutions[$status][$executionID]);
+                            $myExecutions[$status][$execution->closedDate] = $execution;
+                        }
+
+                        krsort($myExecutions[$status]);
+                        $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
+                    }
+
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) > 2)
+                    {
+                        foreach($kanbanGroup[$projectID][$status] as $executionID => $execution)
+                        {
+                            unset($kanbanGroup[$projectID][$status][$executionID]);
+                            $kanbanGroup[$projectID][$status][$execution->closedDate] = $execution;
+                        }
+
+                        krsort($kanbanGroup[$projectID][$status]);
+                        $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 2);
+                    }
                 }
             }
 
             if(empty($kanbanGroup[$projectID])) continue;
             $projectCount++;
         }
-        krsort($kanbanGroup);
 
         $this->view->title        = $this->lang->execution->executionKanban;
         $this->view->kanbanGroup  = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
@@ -2070,6 +2104,14 @@ class execution extends control
                 }
             }
 
+            /* Close the page when there is no data. */
+            $hasData = false;
+            foreach($datas as $data)
+            {
+                if(!empty($data)) $hasData = true;
+            }
+            if(!$hasData) die(js::alert($this->lang->execution->noPrintData) . js::close());
+
             $this->execution->saveKanbanData($executionID, $originalDatas);
 
             $hasBurn = $this->post->content == 'all';
@@ -2095,8 +2137,7 @@ class execution extends control
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getById($executionID);
 
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->printKanban;
+        $this->view->executionID = $executionID;
         $this->display();
     }
 
@@ -2889,7 +2930,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
@@ -3278,4 +3319,19 @@ class execution extends control
         die(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
     }
 
+    /**
+     * AJAX: Update the execution name.
+     *
+     * @param  int     $executionID
+     * @param  string  $newExecutionName
+     * @access public
+     * @return bool
+     */
+    public function ajaxUpdateExecutionName($executionID, $newExecutionName)
+    {
+        $this->dao->update(TABLE_EXECUTION)->set('name')->eq($newExecutionName)->where('id')->eq($executionID)->exec();
+        if(dao::isError()) echo false;
+
+        echo true;
+    }
 }

@@ -718,6 +718,7 @@ class product extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->reviewers  = explode(',', $product->reviewer);
 
         $this->display();
     }
@@ -998,6 +999,34 @@ class product extends control
     }
 
     /**
+     * Ajax get reviewers.
+     *
+     * @param  int    $productID
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetReviewers($productID, $storyID = 0)
+    {
+        /* Get product reviewers. */
+        $product          = $this->product->getByID($productID);
+        $productReviewers = $product->reviewer;
+        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+
+        $storyReviewers = '';
+        if($storyID)
+        {
+            $story          = $this->loadModel('story')->getByID($storyID);
+            $storyReviewers = $this->story->getReviewerPairs($story->id, $story->version);
+            $storyReviewers = implode(',', array_keys($storyReviewers));
+        }
+
+        $reviewers = $this->loadModel('user')->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
+
+        die(html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple"));
+    }
+
+    /**
      * Drop menu page.
      *
      * @param  int    $productID
@@ -1165,6 +1194,7 @@ class product extends control
         $kanbanGroup = $this->product->getStats4Kanban();
         extract($kanbanGroup);
 
+        $programPairs  = $this->loadModel('program')->getPairs(true);
         $myProducts    = array();
         $otherProducts = array();
         foreach($productList as $productID => $product)
@@ -1186,7 +1216,7 @@ class product extends control
 
         $this->view->title            = $this->lang->product->kanban;
         $this->view->kanbanList       = $kanbanList;
-        $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programList;
+        $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programPairs;
         $this->view->productList      = $productList;
         $this->view->planList         = $planList;
         $this->view->projectList      = $projectList;

@@ -137,4 +137,7 @@ $lang->upgrade->createExecutionTip = <<<EOT
 <p>ZenTao will upgrade existing {$lang->projectCommon} as execution.</p>
 <p>After the upgrade, the data of existing {$lang->projectCommon} will be in a Project - Execute of the new version .</p>
 EOT;
+
+$lang->upgrade->projectNameUnique = "『%s』has the same『%s』. Click {$lang->projectCommon} on the left and edit the name of {$lang->projectCommon}.";
+
 include dirname(__FILE__) . '/version.php';

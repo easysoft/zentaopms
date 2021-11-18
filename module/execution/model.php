@@ -1330,6 +1330,10 @@ class executionModel extends model
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
         }
+        elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
+        {
+            $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
+        }
         else
         {
             $link = helper::createLink($module, $method, "executionID=%s");

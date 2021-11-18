@@ -111,6 +111,35 @@ $(function()
         $("#sidebarHeader").toggle("fast");
     });
     if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
+
+    /* Shift key selection. */
+    var lastStorySelected = '';
+    $("#storyList tbody").on("click","tr",function(e)
+    {
+      var nowCheckbox = $(this)['context'].cells[0].childNodes[0].childNodes[0];
+      if(e.shiftKey)
+      {
+          nowStorySelected = nowCheckbox.value;
+          if(lastStorySelected != '' && nowStorySelected != '' && lastStorySelected != nowStorySelected)
+          {
+              var isStartStorySelected = false;
+              var isEndStorySelected   = false;
+              $("input[name^='storyIdList']").each(function()
+              {
+                  isEndStorySelected   = ((nowStorySelected == $(this).val() || lastStorySelected == $(this).val()) && isStartStorySelected ) || isEndStorySelected ? true : false;
+
+                  $(this)['context'].checked = $(this)['context'].checked || (isStartStorySelected && !isEndStorySelected) ? true : false;
+
+                  isStartStorySelected = nowStorySelected == $(this).val() || lastStorySelected == $(this).val() || isStartStorySelected ? true : false;
+              });
+          }
+      }
+      else
+      {
+          lastStorySelected = nowCheckbox.value;
+      }
+
+  });
 });
 
 /**

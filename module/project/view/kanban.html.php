@@ -24,7 +24,7 @@
       <strong><?php echo $lang->project->typeList[$type];?></strong>
     </div>
     <div class='panel-body'>
-      <div id='kanban-<?php echo $type;?>' class='kanban'></div>
+      <div id='kanban-<?php echo $type;?>' class='kanban' data-id='<?php echo $type;?>'></div>
     </div>
   </div>
   <?php endforeach; ?>

@@ -468,7 +468,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'id_desc')
+    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'order_asc')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -1843,7 +1843,7 @@ class projectModel extends model
     {
         $this->loadModel('program');
 
-        $projects   = $this->program->getProjectStats(0, 'all');
+        $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
         $executions = $this->getStats(0, 'doing');
 
         $doingExecutions  = array();
@@ -1857,6 +1857,7 @@ class projectModel extends model
 
         $myProjects    = array();
         $otherProjects = array();
+        $closedGroup   = array();
         foreach($projects as $project)
         {
             if(strpos('wait,doing,closed', $project->status) === false) continue;
@@ -1866,11 +1867,42 @@ class projectModel extends model
 
             if($project->PM == $this->app->user->account)
             {
-                $myProjects[$topProgram][$project->status][$project->id] = $project;
+                if($project->status != 'closed')
+                {
+                    $myProjects[$topProgram][$project->status][] = $project;
+                }
+                else
+                {
+                    $closedGroup['my'][$topProgram][$project->closedDate] = $project;
+                }
             }
             else
             {
-                $otherProjects[$topProgram][$project->status][$project->id] = $project;
+                if($project->status != 'closed')
+                {
+                    $otherProjects[$topProgram][$project->status][] = $project;
+                }
+                else
+                {
+                    $closedGroup['other'][$topProgram][$project->closedDate] = $project;
+                }
+            }
+        }
+
+        /* Only display recent two closed projects. */
+        foreach($closedGroup as $group => $closedProjects)
+        {
+            foreach($closedProjects as $topProgram => $projects)
+            {
+                krsort($projects);
+                if($group == 'my')
+                {
+                    $myProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
+                }
+                else
+                {
+                    $otherProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
+                }
             }
         }
 

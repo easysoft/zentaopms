@@ -264,8 +264,8 @@ class productplan extends control
             die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
         }
 
-        $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story', 'product');
-        $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug', 'qa');
+        $this->session->set('storyList', $this->createLink('productplan', 'view', "planID=$planID&type=story"), 'product');
+        $this->session->set('bugList', $this->createLink('productplan', 'view', "planID=$planID&type=bug"), 'qa');
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canBeChanged('plan', $plan);
@@ -313,7 +313,7 @@ class productplan extends control
         $this->view->canBeChanged = $canBeChanged;
 
         if($this->app->getViewType() == 'json')
-        {   
+        {
             unset($this->view->storyPager);
             unset($this->view->bugPager);
         }
@@ -629,7 +629,7 @@ class productplan extends control
      */
     public function batchUnlinkBug($planID, $orderBy = 'id_desc')
     {
-        foreach($this->post->unlinkBugs as $bugID) $this->productplan->unlinkBug($bugID);
+        foreach($this->post->bugIDList as $bugID) $this->productplan->unlinkBug($bugID);
         die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
     }
 }

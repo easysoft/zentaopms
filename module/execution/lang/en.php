@@ -316,6 +316,7 @@ $lang->execution->byPeriod            = 'By Time';
 $lang->execution->byUser              = 'By User';
 $lang->execution->noExecution         = "No {$lang->executionCommon}. ";
 $lang->execution->noExecutions        = "No {$lang->execution->common}.";
+$lang->execution->noPrintData         = "No data can be printed.";
 $lang->execution->noMembers           = 'No team members yet. ';
 $lang->execution->workloadTotal       = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
@@ -436,7 +437,7 @@ $lang->execution->doingProject = 'Ongoing Projects';
 $lang->execution->kanbanColType['wait']      = $lang->execution->statusList['wait']      . ' ' . $lang->execution->common;
 $lang->execution->kanbanColType['doing']     = $lang->execution->statusList['doing']     . ' ' . $lang->execution->common;
 $lang->execution->kanbanColType['suspended'] = $lang->execution->statusList['suspended'] . ' ' . $lang->execution->common;
-$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . ' ' . $lang->execution->common;
+$lang->execution->kanbanColType['closed']    = $lang->execution->statusList['closed']    . ' ' . $lang->execution->common . '(The recent two executions)';
 
 $lang->execution->treeLevel = array();
 $lang->execution->treeLevel['all']   = 'Expand All';
