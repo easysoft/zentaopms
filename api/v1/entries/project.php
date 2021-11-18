@@ -46,7 +46,7 @@ class projectEntry extends entry
     public function put($projectID)
     {
         $oldProject     = $this->loadModel('project')->getByID($projectID);
-        $linkedProducts = $this->project->getProducts($projectID);
+        $linkedProducts = $this->loadModel('product')->getProducts($projectID);
 
         /* Set $_POST variables. */
         $fields = 'name,begin,end,acl,parent,desc,PM,whitelist';
@@ -56,8 +56,8 @@ class projectEntry extends entry
         $plans    = array();
         foreach($linkedProducts as $product)
         {
-            $products[] =  $product->id;
-            $plans[]    =  $product->plan;
+            $products[] = $product->id;
+            foreach($product->plans as $planID) $plans[] = $planID;
         }
         $this->setPost('products', $products);
         $this->setPost('plans', $plans);

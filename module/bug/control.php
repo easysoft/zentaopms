@@ -52,15 +52,10 @@ class bug extends control
         $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
         if(!isonlybody())
         {
-            if($this->app->tab == 'project')
+            if($this->app->tab == 'project' or $this->app->tab == 'execution')
             {
-                $objectID = $this->session->project;
-                $products = $this->loadModel('project')->getProducts($objectID, false);
-            }
-            elseif($this->app->tab == 'execution')
-            {
-                $objectID = $this->session->execution;
-                $products = $this->loadModel('execution')->getProducts($objectID, false);
+                $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else
             {
@@ -207,7 +202,7 @@ class bug extends control
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
-        
+
         $product = $this->product->getById($productID);
         if($product and $product->type != 'normal')
         {
@@ -549,7 +544,7 @@ class bug extends control
         if($executionID)
         {
             $products       = array();
-            $linkedProducts = $this->loadModel('execution')->getProducts($executionID);
+            $linkedProducts = $this->loadModel('product')->getProducts($executionID);
             foreach($linkedProducts as $product) $products[$product->id] = $product->name;
 
             if($projectID)

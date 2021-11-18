@@ -12,7 +12,7 @@ function loadBranches(productID)
     var oldBranch = 0;
     if(typeof(productGroups[productID]) != "undefined")
     {
-        oldBranch = productGroups[productID]['branch'];
+        oldBranch = productGroups[productID]['branches'];
     }
 
     $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=&projectID=' + executionID), function(data)
