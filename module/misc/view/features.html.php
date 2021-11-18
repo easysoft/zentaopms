@@ -35,7 +35,7 @@
         <?php elseif($feature == 'tutorial'):?>
         <div class='text-center'>
           <?php echo $lang->misc->feature->tutorialDesc;?>
-          <img class='text-center' src='<?php echo $config->webRoot . 'theme/default/images/main/tutorial.png';?>' />
+          <img class='text-center' src='<?php echo $config->webRoot . $lang->misc->feature->tutorialImage;?>' />
         </div>
         <?php elseif($feature == 'youngBlueTheme'):?>
         <div class='text-center'>
