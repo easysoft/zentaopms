@@ -426,13 +426,14 @@
               <div class='btn-group dropup'>
                 <?php $actionLink = inlink('batchUnlinkbug', "planID=$plan->id&orderBy=$orderBy");?>
                 <?php echo html::commonButton($lang->productplan->unlinkAB, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"");?>
+                <?php if($canBatchChangePlan || $canBatchEdit):?>
                 <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
                 <ul class='dropdown-menu'>
                   <?php
                   $class = "class='disabled'";
                   $actionLink = $this->createLink('bug', 'batchEdit', "productID=$plan->product&branch=$branch");
                   $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', this)\"" : $class;
-                  echo "<li>" . html::a('#', $lang->edit, '', $misc) . "</li>";
+                  if($canBatchEdit) echo "<li>" . html::a('#', $lang->edit, '', $misc) . "</li>";
 
                   if($canBatchChangePlan)
                   {
@@ -453,12 +454,9 @@
                       if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
                       echo '</div></li>';
                   }
-                  else
-                  {
-                     echo '<li>' . html::a('javascript:;', $lang->productplan->plan, '', $class) . '</li>';
-                  }
                   ?>
                 </ul>
+                <?php endif;?>
               </div>
             </div>
             <?php endif;?>
