@@ -58,8 +58,10 @@ $(function()
         });
     }
 
-    $('#productTableList').on('click', '.row-program,.row-line', function()
+    $('#productTableList').on('click', '.row-program,.row-line', function(e)
     {
+        if($(e.target).closest('.table-nest-toggle,a').length) return;
+
         var $row      = $(this);
         var $checkbox = $row.find('.program-checkbox').toggleClass('checked').removeClass('indeterminate');
         var isChecked = $checkbox.hasClass('checked');
