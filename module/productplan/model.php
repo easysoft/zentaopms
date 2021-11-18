@@ -209,6 +209,7 @@ class productplanModel extends model
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();
         $parentTitle = array();
+        $this->app->loadLang('branch');
         foreach($plans as $plan)
         {
             if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
