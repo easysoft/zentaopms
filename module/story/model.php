@@ -2417,14 +2417,9 @@ class storyModel extends model
      */
     public function getBySearch($productID, $branch = '', $queryID, $orderBy, $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
     {
-        if(!empty($executionID))
-        {
-            $products = $this->loadModel('project')->getProducts($executionID);
-        }
-        else
-        {
-            $products = $this->loadModel('product')->getProducts();
-        }
+        $executionID = empty($executionID) ? 0 : $executionID;
+        $products    = $this->loadModel('product')->getProducts($executionID);
+
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
         /* Get the sql and form status from the query. */
@@ -2449,9 +2444,14 @@ class storyModel extends model
         $allBranch = "`branch` = 'all'";
         if($executionID != '')
         {
-            foreach($products as $product) $branches[$product->branch] = $product->branch;
+            $branches = array();
+            foreach($products as $product)
+            {
+                foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
+            }
             $branches = join(',', $branches);
             if($branches) $storyQuery .= " AND `branch`" . helper::dbIN($branches);
+
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
                 $storyQuery .= " AND `status` NOT IN ('draft')"; // Fix bug #990.
@@ -2544,7 +2544,7 @@ class storyModel extends model
         if($type == 'bysearch')
         {
             $queryID  = (int)$param;
-            $products = $this->loadModel('execution')->getProducts($executionID);
+            $products = $this->loadModel('product')->getProducts($executionID);
 
             if($this->session->executionStoryQuery == false) $this->session->set('executionStoryQuery', ' 1 = 1');
             if($queryID)

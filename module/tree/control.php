@@ -258,7 +258,7 @@ class tree extends control
         $this->view->root = $execution;
 
         /* Get all associated products. */
-        $products             = $this->execution->getProducts($rootID);
+        $products             = $this->loadModel('product')->getProducts($rootID);
         $this->view->products = $products;
 
         $executions = $this->execution->getPairs($this->session->project);

@@ -22,12 +22,13 @@ class projectBuild extends control
     public function browse($projectID = 0, $type = 'all', $param = 0)
     {
         $this->loadModel('project');
+        $this->loadModel('product');
         $this->loadModel('execution');
         $this->loadModel('build');
         $project = $this->project->getByID($projectID);
 
         /* Get products' list. */
-        $products = $this->project->getProducts($projectID, false);
+        $products = $this->product->getProducts($projectID, 'all', '', false);
         $products = array('' => '') + $products;
 
         /* Build the search form. */
