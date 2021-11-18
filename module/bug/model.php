@@ -742,6 +742,7 @@ class bugModel extends model
                 $bug->title          = $data->titles[$bugID];
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
                 $bug->branch         = empty($data->branches[$bugID]) ? 0 : $data->branches[$bugID];
+                $bug->module         = $data->modules[$bugID];
                 $bug->assignedTo     = $data->assignedTos[$bugID];
                 $bug->deadline       = $data->deadlines[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];

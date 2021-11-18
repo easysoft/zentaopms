@@ -1013,12 +1013,38 @@ class bug extends control
             $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
+            /* Set branches and modules. */
+            $branches = array();
+            $modules  = array();
+            if($product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getPairs($productID);
+                if($branch === 'all')
+                {
+                    $modules[0] = $this->tree->getOptionMenu($productID, 'bug', 0, 0);
+                    foreach($branches as $branchID => $branchName)
+                    {
+                        $modules[$branchID] = $this->tree->getOptionMenu($productID, 'bug', 0, $branchID);
+                    }
+                }
+                else
+                {
+                    $modules[$branch] = $this->tree->getOptionMenu($productID, 'bug', 0, $branch);
+                }
+            }
+            else
+            {
+                $modules[0] = $this->tree->getOptionMenu($productID, 'bug', 0, 0);
+            }
+
             /* Set product menu. */
             $this->qa->setMenu($this->products, $productID, $branch);
+
             $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
             $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
             $this->view->plans      = $plans;
-            $this->view->branches   = $product->type == 'normal' ? array() : array('' => '', 'ditto' => $this->lang->bug->ditto) + $this->loadModel('branch')->getPairs($product->id);
+            $this->view->branches   = $branches;
+            $this->view->modules    = $modules;
         }
         /* The bugs of my. */
         else
