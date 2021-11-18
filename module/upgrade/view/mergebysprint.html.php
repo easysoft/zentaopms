@@ -14,7 +14,17 @@
       </div>
       <div class='line-groups sprintGroup'>
         <?php foreach($noMergedSprints as $sprintID => $sprint):?>
-        <?php echo html::checkBox("sprints", array($sprint->id => $sprint->name), '', "data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
+        <div class="sprintItem">
+          <?php echo html::checkBox("sprints", array($sprint->id => $sprint->name), '', "data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
+          <a href='#' id='sprintEdit' class='hidden'><i class="icon-common-edit icon-edit muted"></i></a>
+        </div>
+        <div class="sprintRename hidden">
+          <?php echo html::input("sprintRename_$sprint->id", $sprint->name, "class='form-control'");?>
+          <div class="btn-group">
+            <button type="button" class="btn btn-success name-confirm"><i class='icon icon-check'></i></button>
+            <button type="button" class="btn btn-gray name-cancel"><i class='icon icon-close'></i></button>
+          </div>
+        </div>
         <?php endforeach;?>
       </div>
     </div>
