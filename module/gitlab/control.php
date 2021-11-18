@@ -591,6 +591,9 @@ class gitlab extends control
 
         $result = $this->gitlab->apiGetProjects($gitlabID, $keyword, $pager);
 
+        $gitlab = $this->gitlab->getByID($gitlabID);
+
+        $this->view->gitlab            = $gitlab;
         $this->view->keyword           = $keyword;
         $this->view->pager             = $result['pager'];
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseProject;

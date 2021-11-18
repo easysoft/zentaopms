@@ -15,7 +15,7 @@
 <?php js::set('gitlabID', $gitlabID)?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
-    <div class="title">所有模块</div>
+    <div class="title"><?php echo $this->lang->gitlab->common . ':' . $gitlab->name; ?></div>
   </div>
   <div class="btn-toolbar pull-left">
     <div>
