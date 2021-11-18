@@ -1043,18 +1043,17 @@ class bugModel extends model
      *
      * @param  array  $bugIDList
      * @param  int    $branchID
+     * @param  array  $oldBugs
      * @access public
      * @return array
      */
-    public function batchChangeBranch($bugIDList, $branchID)
+    public function batchChangeBranch($bugIDList, $branchID, $oldBugs)
     {
         $now        = helper::now();
         $allChanges = array();
-        $oldBugs    = $this->getByList($bugIDList);
         foreach($bugIDList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
-            if($branchID == $oldBug->branch) continue;
 
             $bug = new stdclass();
             $bug->lastEditedBy   = $this->app->user->account;
