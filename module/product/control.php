@@ -210,13 +210,12 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $product = $this->product->getById($productID);
-
         if($product and $product->type != 'normal')
         {
             $this->app->loadLang('datatable');
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
         }
-        
+
         /* Get stories. */
         if($this->app->rawModule == 'projectstory')
         {
@@ -273,7 +272,6 @@ class product extends control
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
 
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
@@ -311,6 +309,7 @@ class product extends control
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->view->storyType       = $storyType;
         $this->view->from            = $this->app->tab;
+        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
         $this->display();
     }
 
@@ -971,10 +970,11 @@ class product extends control
      * @param  bool   $needCreate
      * @param  string $expired
      * @param  string $from
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $from = '')
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $from = '', $param = '')
     {
         $this->loadModel('productplan');
         if($from == 'story' and $branch == BRANCH_MAIN)
@@ -992,15 +992,42 @@ class product extends control
         }
 
         $field = $fieldID ? "plans[$fieldID]" : 'plan';
-        $output = html::select($field, $plans, $planID, "class='form-control chosen'");
-        if(count($plans) == 1 and $needCreate)
+
+        $output = '';
+        if(strpos($param, 'batchEdit') !== false)
         {
-            $output .= "<div class='input-group-btn'>";
-            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
-            $output .= '</div>';
-            $output .= "<div class='input-group-btn'>";
-            $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
-            $output .= '</div>';
+            $output  = "<div class='table-row'>";
+            $output .= "<div class='table-col'>";
+            $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
+            $output .= "</div>";
+            if(count($plans) == 1 and $needCreate)
+            {
+                $output .= "<div class='table-col'>";
+                $output .= "<div class='input-group-btn'>";
+                $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
+                $output .= '</div>';
+                $output .= '</div>';
+                $output .= "<div class='table-col'>";
+                $output .= "<div class='input-group-btn'>";
+                $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
+                $output .= '</div>';
+                $output .= '</div>';
+            }
+            $output .= "</div>";
+        }
+        else
+        {
+            $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
+            if(count($plans) == 1 and $needCreate)
+            {
+                $output .= "<div class='input-group-btn'>";
+                $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
+                $output .= '</div>';
+                $output .= "<div class='input-group-btn'>";
+                $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
+                $output .= '</div>';
+            }
+
         }
         die($output);
     }

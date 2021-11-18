@@ -477,7 +477,8 @@ class productModel extends model
             if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
             if($currentMethod == 'view' or $currentMethod == 'change' or $currentMethod == 'review') $currentMethod = 'browse';
         }
-        if($currentModule == 'testcase' and $currentMethod == 'view') $currentMethod = 'browse';
+        if($currentModule == 'testcase' and strpos(',view,edit,', ",$currentMethod,") !== false) $currentMethod = 'browse';
+        if($currentModule == 'bug' and $currentMethod == 'edit') $currentMethod = 'browse';
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $currentProductName = $this->lang->product->common;
@@ -562,7 +563,7 @@ class productModel extends model
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = $product->program")
-            ->checkIF(!empty($product->code), 'code', 'unique', "`program` = $product->program")
+            ->checkIF(!empty($product->code), 'code', 'unique')
             ->exec();
 
         if(!dao::isError())
@@ -631,8 +632,8 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
+            ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $product->program")
             ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID")
-            ->check('name', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
             ->exec();
 
@@ -661,6 +662,7 @@ class productModel extends model
         $data        = fixer::input('post')->get();
         $oldProducts = $this->getByIdList($this->post->productIDList);
         $nameList    = array();
+
         foreach($data->productIDList as $productID)
         {
             $productName = $data->names[$productID];
@@ -677,10 +679,6 @@ class productModel extends model
             $products[$productID]->status  = $data->statuses[$productID];
             $products[$productID]->desc    = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->acl     = $data->acls[$productID];
-
-            /* Check unique name for edited products. */
-            if(isset($nameList[$productName])) dao::$errors['name'][] = 'product#' . $productID .  sprintf($this->lang->error->unique, $this->lang->product->name, $productName);
-            $nameList[$productName] = $productName;
         }
         if(dao::isError()) die(js::error(dao::getError()));
 
@@ -688,12 +686,13 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
+            $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
 
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->check('name', 'unique', "id NOT " . helper::dbIN($data->productIDList) . " and deleted='0'")
+                ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $programID")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
@@ -876,15 +875,16 @@ class productModel extends model
         }
         $this->config->product->search['params']['module']['values'] = $module;
 
-        if($this->session->currentProductType == 'normal' or $this->app->tab == 'assetlib')
+        $productInfo = $this->getById($productID);
+        if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
         }
         else
         {
-            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
+            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
+            $this->config->product->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);

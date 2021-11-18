@@ -1,4 +1,7 @@
-<?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
+<?php $currentModule = $this->moduleName;?>
+<?php $currentMethod = $this->methodName;?>
+<?php $datatableId   = $this->moduleName . ucfirst($this->methodName);?>
+
 <style>
 #setShowModule {margin-left: 30px;}
 </style>
@@ -6,7 +9,7 @@
 $(function()
 {
     <?php if(!empty($setModule)):?>
-    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='btn btn-info btn-wide'><?php echo $app->moduleName=='product' ? $lang->datatable->listSetting : $lang->datatable->moduleSetting?></a><hr class='space-sm' />");
+    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='btn btn-info btn-wide'><?php echo ($app->tab == 'product' or $app->tab == 'qa') ? $lang->datatable->displaySetting : $lang->datatable->moduleSetting;?></a><hr class='space-sm' />");
     <?php endif;?>
 
     var addSettingButton = function()
@@ -37,6 +40,8 @@ $(function()
     {
         if('<?php echo $this->app->user->account?>' == 'guest') return;
         datatableId    = '<?php echo $datatableId?>';
+        currentModule  = '<?php echo $currentModule?>';
+        currentMethod  = '<?php echo $currentMethod?>';
         var value      = $('#showModuleModal input[name="showModule"]:checked').val();
         var allModule  = $('#showModuleModal input[name="showAllModule"]:checked').val();
         var showBranch = $('#showModuleModal input[name="showBranch"]:checked').val();
@@ -53,6 +58,8 @@ $(function()
                 value: value,
                 allModule: allModule,
                 showBranch: showBranch,
+                currentModule: currentModule,
+                currentMethod: currentMethod,
             },
             success:function(){window.location.reload();},
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
@@ -83,7 +90,7 @@ $(function()
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><i class="icon-cog-outline"></i> <?php echo $app->moduleName=='product' ? $lang->datatable->listSetting : $lang->datatable->moduleSetting;?></h4>
+        <h4 class="modal-title"><i class="icon-cog-outline"></i> <?php echo ($app->tab == 'product' or $app->tab == 'qa') ? $lang->datatable->displaySetting : $lang->datatable->moduleSetting;?></h4>
       </div>
       <div class="modal-body">
         <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
@@ -98,10 +105,10 @@ $(function()
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>
             </tr>
             <?php endif;?>
-            <?php if($this->app->tab == 'product' and $app->moduleName == 'product' and $app->methodName == 'browse'):?>
+            <?php if(!empty($product) and $product->type != 'normal' and ($this->app->tab == 'product' or $this->app->tab == 'qa')):?>
             <tr>
               <td><?php echo $lang->datatable->showBranch;?></td>
-              <td><?php echo html::radio('showBranch', $lang->datatable->showBranchList, isset($config->product->browse->showBranch) ? $config->product->browse->showBranch : 1);?></td>
+              <td><?php echo html::radio('showBranch', $lang->datatable->showBranchList, isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : 1);?></td>
             </tr>
             <?php endif;?>
             <tr>

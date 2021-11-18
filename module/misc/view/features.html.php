@@ -40,7 +40,7 @@
         <?php elseif($feature == 'youngBlueTheme'):?>
         <div class='text-center'>
           <?php echo $lang->misc->feature->themeDesc;?>
-          <img class='text-center' src='<?php echo $config->webRoot . 'theme/default/images/main/new_theme.png';?>' />
+          <img class='text-center' src='<?php echo $config->webRoot . $lang->misc->feature->youngBlueImage;?>' />
         </div>
         <?php endif;?>
       </div>

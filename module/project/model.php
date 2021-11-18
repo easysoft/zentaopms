@@ -647,7 +647,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $programID = 0)
+    public function getPairsByModel($model = 'all', $programID = 0, $param = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -655,6 +655,7 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
+            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_desc')
@@ -858,7 +859,7 @@ class projectModel extends model
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
             ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `parent` = $project->parent")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->exec();
 
@@ -1049,8 +1050,8 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and type='project'")
-            ->check('name', 'unique', "id != $projectID AND type='project' AND deleted='0'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project'")
             ->where('id')->eq($projectID)
             ->exec();
 
@@ -1114,10 +1115,6 @@ class projectModel extends model
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
             $projects[$projectID]->lastEditedDate = helper::now();
 
-            /* Check unique name for edited projects. */
-            if(isset($nameList[$projectName])) dao::$errors['name'][] = 'project#' . $projectID . sprintf($this->lang->error->unique, $this->lang->project->name, $projectName);
-            $nameList[$projectName] = $projectName;
-
             if($projects[$projectID]->parent)
             {
                 $parentProject = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($projects[$projectID]->parent)->fetch();
@@ -1137,12 +1134,16 @@ class projectModel extends model
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
+            $parentID   = !isset($project->parent) ? $oldProject->parent : $project->parent;
+
             $this->dao->update(TABLE_PROJECT)->data($project)
                 ->autoCheck($skipFields = 'begin,end')
                 ->batchCheck($this->config->project->edit->requiredFields , 'notempty')
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID")
+                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project'")
                 ->where('id')->eq($projectID)
                 ->exec();
 
@@ -1483,8 +1484,12 @@ class projectModel extends model
 
             if($id == 'id') $class .= ' cell-id';
             
-            if($id == 'code') $title = "title={$project->code}";
-
+            if($id == 'code')
+            {
+                $class .= ' c-name'; 
+                $title  = "title={$project->code}";
+            }   
+            
             if($id == 'name')
             {
                 $class .= ' text-left';

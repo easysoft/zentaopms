@@ -197,7 +197,7 @@ class story extends control
         }
 
         $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Init vars. */
@@ -435,7 +435,7 @@ class story extends control
         /* Set products and module. */
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
 
         if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
@@ -475,6 +475,16 @@ class story extends control
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
             $customFields[$field] = $this->lang->story->$field;
         }
+
+        if($product->type != 'normal')
+        {
+            $this->config->story->custom->batchCreateFields = sprintf($this->config->story->custom->batchCreateFields, $product->type);
+        }
+        else
+        {
+            $this->config->story->custom->batchCreateFields = trim(sprintf($this->config->story->custom->batchCreateFields, ''), ',');
+        }
+
         $showFields = $this->config->story->custom->batchCreateFields;
         if($product->type == 'normal')
         {

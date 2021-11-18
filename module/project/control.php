@@ -511,9 +511,12 @@ class project extends control
 
             /* Link the plan stories. */
             $newPlans = array();
-            foreach($_POST['plans'] as $plans)
+            if(isset($_POST['plans']))
             {
-                foreach($plans as $planID) $newPlans[$planID] = $planID;
+                foreach($_POST['plans'] as $plans)
+                {
+                    foreach($plans as $planID) $newPlans[$planID] = $planID;
+                }
             }
 
             $diffResult = array_diff($oldPlans, $newPlans);
@@ -684,7 +687,7 @@ class project extends control
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->statData     = $this->project->getStatData($projectID);
         $this->view->workhour     = $this->project->getWorkhour($projectID);
-        $this->view->planGroup    = $this->loadModel('execution')->getPlans($products);;
+        $this->view->planGroup    = $this->loadModel('execution')->getPlans($products);
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
 
@@ -1570,6 +1573,7 @@ class project extends control
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
 
             $url = $this->createLink('project', 'browse');
+            if($this->app->tab == 'program') $url = $this->createLink('program', 'browse');
 
             if(empty($executionIdList))
             {
@@ -1746,7 +1750,7 @@ class project extends control
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
-        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'noclosed');
+        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'noclosed,ignoreNormal');
 
         $this->display();
     }

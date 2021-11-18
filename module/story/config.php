@@ -44,7 +44,7 @@ $config->story->list->customBatchEditFields   = 'branch,plan,estimate,pri,assign
 
 $config->story->custom = new stdclass();
 $config->story->custom->createFields      = $config->story->list->customCreateFields;
-$config->story->custom->batchCreateFields = 'module,branch,platform,plan,spec,pri,estimate,review';
+$config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->story->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
 $config->story->datatable = new stdclass();

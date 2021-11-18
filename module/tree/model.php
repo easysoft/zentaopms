@@ -87,7 +87,7 @@ class treeModel extends model
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
-                ->beginIF((($branch or $branch === 0) and $branch !== 'null'))->andWhere("branch")->eq($branch)->fi()
+                ->beginIF((($branch or $branch === 0) and $branch !== 'null' and $branch !== 'all'))->andWhere("branch")->eq($branch)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('grade desc, `order`, type desc')
                 ->get();
@@ -99,7 +99,7 @@ class treeModel extends model
             ->andWhere('type')->eq($type)
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->beginIF($branch === 'null')->andWhere('branch')->eq(0)->fi()
-            ->beginIF((($branch or $branch === 0) and $branch !== 'null'))->andWhere("branch")->eq($branch)->fi()
+            ->beginIF((($branch or $branch === 0) and $branch !== 'null' and $branch !== 'all'))->andWhere("branch")->eq($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->get();
@@ -126,13 +126,11 @@ class treeModel extends model
             $product = $this->loadModel('product')->getById($rootID);
             if($product and $product->type != 'normal')
             {
-                $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'all');
-                if($branch)
-                {
-                    $newBranches['null']  = '';
-                    $newBranches[$branch] = $branches[$branch];
-                    $branches = $newBranches;
-                }
+                $branchList = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'all');
+
+                if(!$branch) $newBranches['null']  = '';
+                $newBranches[$branch] = $branchList[$branch];
+                $branches = $branch === 'all' ? $branchList : $newBranches;
             }
             elseif($product and $product->type == 'normal')
             {
@@ -374,11 +372,12 @@ class treeModel extends model
     {
         if($type == 'line') $rootID = 0;
 
+        $this->loadModel('branch');
         $branches = array($branch => '');
         if($branch)
         {
-            $branchName = $this->loadModel('branch')->getById($branch);
-            $branches   = array('null' => '', $branch => $branchName);
+            $branchName = $this->branch->getById($branch);
+            $branches   = array($branch => $branchName);
             $extra      = array('rootID' => $rootID, 'branch' => $branch);
         }
 
@@ -386,7 +385,23 @@ class treeModel extends model
         $product = $this->loadModel('product')->getById($rootID);
         if(strpos('story|bug|case', $type) !== false and $branch === 'all')
         {
-            if($product->type != 'normal') $branches = array('null' => '', BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+            if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+        }
+        elseif($type == 'story' and $this->app->rawModule == 'projectstory')
+        {
+            $projectID = zget($extra, 'projectID', 0);
+            if($product->type != 'normal' and $projectID)
+            {
+                $projectBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
+                    ->where('project')->eq($projectID)
+                    ->andWhere('product')->eq($product->id)
+                    ->fetchPairs();
+
+                if(isset($projectBranches[BRANCH_MAIN])) $branches = array(BRANCH_MAIN => $this->lang->branch->main);
+                $branches += $this->dao->select('id, name')->from(TABLE_BRANCH)
+                    ->where('id')->in($projectBranches)
+                    ->fetchPairs();
+            }
         }
 
         /* Add for task #1945. check the module has case or no. */
@@ -859,7 +874,7 @@ class treeModel extends model
                 if(is_array($extra))
                 {
                     $table   = $this->config->objectTables[$type];
-                    $objects = $this->dao->select('module')->from($table)->where('product')->eq((int)$extra['rootID'])->andWhere('branch')->eq((int)$extra['branch'])->fetchAll('module');
+                    $objects = $this->dao->select('module')->from($table)->where('product')->eq((int)$extra['rootID'])->andWhere('branch')->eq($extra['branch'])->fetchAll('module');
                 }
                 else
                 {
