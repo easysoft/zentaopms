@@ -1080,8 +1080,14 @@ class project extends control
             foreach($builds as $build)
             {
                 /* If product is normal, unset branch name. */
-                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
-                else $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
+                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
+                {
+                    $build->branchName = '';
+                }
+                else
+                {
+                    $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
+                }
 
                 $projectBuilds[$build->product][] = $build;
             }
