@@ -607,7 +607,7 @@ class personnelModel extends model
                 if($oldWhitelist) $accounts = array_unique(array_merge($accounts, $oldWhitelist));
             }
         }
-        $whitelist = ',' . implode(',', $accounts);
+        $whitelist = !empty($accounts) ? ',' . implode(',', $accounts) : '';
         $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
 
         $deletedAccounts = array();

@@ -130,11 +130,11 @@ js::set('moduleID', $moduleID);
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
             <td>
               <div class='table-row'>
-                <div class='table-col' id='assignedBox'>
+                <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
+                <div class='table-col <?php echo $showDeadline ? 'deadline-box' : 'assigned-box';?>'>
                   <?php echo html::select('assignedTo', $productMembers, $assignedTo, "class='form-control chosen'");?>
                   <span class='input-group-btn load-all-user'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
                 </div>
-                <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
                 <?php if($showDeadline):?>
                 <div class='table-col'>
                   <div class='input-group' id='deadlineBox'>
