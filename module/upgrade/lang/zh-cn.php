@@ -137,4 +137,7 @@ $lang->upgrade->createExecutionTip = <<<EOT
 <p>系统会把历史的{$lang->projectCommon}作为执行进行升级。</p>
 <p>升级后历史的{$lang->projectCommon}数据将对应新版本中项目下的执行。</p>
 EOT;
+
+$lang->upgrade->projectNameUnique = "『%s』已经有『%s』这条记录了。请至左侧{$lang->projectCommon}处修改该{$lang->projectCommon}名称。";
+
 include dirname(__FILE__) . '/version.php';
