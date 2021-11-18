@@ -213,7 +213,7 @@ class testcase extends control
         $this->view->param         = $param;
         $this->view->cases         = $cases;
         $this->view->branch        = $branch;
-        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches      = $this->loadModel('branch')->getPairs($productID, 'active');
         $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->suiteID       = $suiteID;
         $this->view->setModule     = true;
@@ -814,7 +814,7 @@ class testcase extends control
             }
 
             $this->view->productID        = $productID;
-            $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+            $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
@@ -899,7 +899,7 @@ class testcase extends control
                 $modules  = array();
                 if($product->type != 'normal')
                 {
-                    $branches = $this->loadModel('branch')->getPairs($productID);
+                    $branches = $this->loadModel('branch')->getPairs($productID, 'active');
                     if($branch === 'all')
                     {
                         $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, 0);
