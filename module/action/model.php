@@ -1346,15 +1346,8 @@ class actionModel extends model
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
 
         $this->loadModel('product');
-        /* Revert userView products when undelete project. */
-        if($action->objectType == 'project')
-        {
-            $products = $this->product->getProducts($project->id, 'all', '', false);
-            if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
-        }
-
-        /* Revert userView products when undelete execution. */
-        if($action->objectType == 'execution')
+        /* Revert userView products when undelete project or execution. */
+        if($action->objectType == 'project' or $action->objectType == 'execution')
         {
             $products = $this->product->getProducts($project->id, 'all', '', false);
             if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');

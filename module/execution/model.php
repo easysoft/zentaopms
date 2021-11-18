@@ -3657,14 +3657,11 @@ class executionModel extends model
         $productPlans = array();
         foreach($products as $productID => $product)
         {
-            foreach($product->branches as $branchID)
+            $planInfo = $this->productplan->getPairs($product->id, implode(',', $product->branches));
+            foreach($planInfo as $planID => $plan)
             {
-                $planInfo = $this->productplan->getPairs($product->id, $branchID);
-                foreach($planInfo as $planID => $plan)
-                {
-                    if(empty($planID)) continue;
-                    $productPlans[$productID][$planID] = $plan;
-                }
+                if(empty($planID)) continue;
+                $productPlans[$productID][$planID] = $plan;
             }
         }
         return $productPlans;

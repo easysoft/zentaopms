@@ -52,14 +52,9 @@ class bug extends control
         $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
         if(!isonlybody())
         {
-            if($this->app->tab == 'project')
+            if($this->app->tab == 'project' or $this->app->tab == 'execution')
             {
-                $objectID = $this->session->project;
-                $products = $this->product->getProducts($objectID, 'all', '', false);
-            }
-            elseif($this->app->tab == 'execution')
-            {
-                $objectID = $this->session->execution;
+                $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
                 $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else

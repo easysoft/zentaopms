@@ -105,15 +105,17 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
+              <?php foreach($product->branches as $branchID):?>
               <div class='col-sm-4'>
                 <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
               <?php $i++;?>
+              <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4'>
                 <div class="input-group">
