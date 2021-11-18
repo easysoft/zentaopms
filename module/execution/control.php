@@ -1472,6 +1472,7 @@ class execution extends control
             }
 
             $this->executeHooks($executionID);
+            if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
 
@@ -1575,6 +1576,17 @@ class execution extends control
 
                     $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
+
+                    $syncExecution = '';
+                    foreach($changes as $changeField)
+                    {
+                        if($changeField['field'] == 'status' && $changeField['old'] =='wait' && $changeField['new'] =='doing')
+                        {
+                            $syncExecution = $executionID;
+                            break;
+                        }
+                    }
+                    $this->loadModel('common')->syncPPEStatus($syncExecution);
                 }
             }
             die(js::locate($this->session->executionList, 'parent'));
@@ -1652,6 +1664,8 @@ class execution extends control
                 $actionID = $this->action->create($this->objectType, $executionID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->loadModel('common')->syncPPEStatus($executionID);
             $this->executeHooks($executionID);
             die(js::reload('parent.parent'));
         }

@@ -395,6 +395,8 @@ class task extends control
 
             $this->executeHooks($taskID);
 
+            if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
+
             if($task->fromBug != 0)
             {
                 foreach($changes as $change)
@@ -464,9 +466,24 @@ class task extends control
 
             if(!empty($allChanges))
             {
+                /* updateStatus is a description of whether to update the responsibility performance*/
+                $waitTaskID = false;
                 foreach($allChanges as $taskID => $changes)
                 {
                     if(empty($changes)) continue;
+
+                    /* Determine whether the status of a task has been changed, if the status of a task has been changed, set $updateStatus to taskID*/
+                    if($waitTaskID == false)
+                    {
+                        foreach($changes as $changeField)
+                        {
+                            if($changeField['field'] == 'status' && $changeField['new'] == 'doing')
+                            {
+                                $waitTaskID = $taskID;
+                                break;
+                            }
+                        }
+                    }
 
                     $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
@@ -484,6 +501,7 @@ class task extends control
                             }
                         }
                     }
+                    if($waitTaskID !== false) $this->loadModel('common')->syncPPEStatus($waitTaskID);
                 }
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
@@ -792,6 +810,7 @@ class task extends control
             }
 
             $this->executeHooks($taskID);
+            $this->loadModel('common')->syncPPEStatus($taskID);
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             if($changes and $this->task->needUpdateBugStatus($task))
@@ -837,6 +856,8 @@ class task extends control
         {
             $changes = $this->task->recordEstimate($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('common')->syncPPEStatus($taskID);
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);

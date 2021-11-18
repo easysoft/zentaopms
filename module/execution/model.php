@@ -578,11 +578,12 @@ class executionModel extends model
         $this->loadModel('user');
 
         $executions    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
+        $allChanges    = array();
+        $data          = fixer::input('post')->get();
         $oldExecutions = $this->getByIdList($this->post->executionIDList);
-        $nameList    = array();
-        $codeList    = array();
+        $nameList      = array();
+        $codeList      = array();
+        $projectModel  = 'scrum';
 
         /* Replace required language. */
         if($this->app->tab == 'project')
