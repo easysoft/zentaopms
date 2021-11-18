@@ -435,8 +435,8 @@ class bug extends control
         /* Get product, then set menu. */
         $productID     = $this->product->saveState($productID, $this->products);
         $productInfo   = $this->product->getById($productID);
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
         $branches      = $productInfo->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        if($branch === '') $branch = (int)$this->cookie->preBranch;
 
         /* Init vars. */
         $projectID   = 0;
