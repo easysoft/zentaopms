@@ -299,8 +299,9 @@ class testcase extends control
      */
     public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
-        $testcaseID = ($from and strpos('testcase|work|contribute', $from) !== false) ? $param : 0;
-        $bugID      = $from == 'bug' ? $param : 0;
+        $testcaseID  = ($from and strpos('testcase|work|contribute', $from) !== false) ? $param : 0;
+        $bugID       = $from == 'bug' ? $param : 0;
+        $executionID = $from == 'execution' ? $param : 0;
 
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
@@ -471,6 +472,7 @@ class testcase extends control
         $this->view->position         = $position;
         $this->view->projectID        = isset($projectID) ? $projectID : 0;
         $this->view->productID        = $productID;
+        $this->view->executionID      = $executionID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
         $this->view->currentModuleID  = $currentModuleID;
@@ -805,8 +807,8 @@ class testcase extends control
 
             /* Set menu. */
             if($this->app->tab == 'project' or $this->app->tab == 'execution') $this->loadModel('execution');
-            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
-            if($this->app->tab == 'execution') $this->execution->setMenu($this->session->execution);
+            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($case->project);
+            if($this->app->tab == 'execution') $this->execution->setMenu($case->execution);
             if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
@@ -825,7 +827,7 @@ class testcase extends control
             $product = $this->product->getById($productID);
             if($this->app->tab == 'execution' or $this->app->tab == 'project')
             {
-                $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+                $objectID        = $this->app->tab == 'project' ? $case->project : $case->execution;
                 $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
                 $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             }

@@ -18,8 +18,8 @@
 <?php js::set('isonlybody', isonlybody());?>
 <?php js::set('executionID', $projectID);?>
 <?php js::set('tab', $this->app->tab);?>
-<?php if($this->app->tab == 'execution') js::set('objectID', $this->session->execution);?>
-<?php if($this->app->tab == 'project') js::set('objectID', $this->session->project);?>
+<?php if($this->app->tab == 'execution') js::set('objectID', $executionID);?>
+<?php if($this->app->tab == 'project') js::set('objectID', $projectID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
