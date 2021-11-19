@@ -15,28 +15,16 @@ class testcasesEntry extends entry
      * GET method.
      *
      * @param  int    $productID
-     * @param  int    $projectID
-     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function get($productID = 0, $projectID = 0, $executionID = 0)
+    public function get($productID = 0)
     {
-        if(!$productID)   $productID   = $this->param('product', 0);
-        if(!$projectID)   $projectID   = $this->param('project', 0);
-        if(!$executionID) $executionID = $this->param('execution', 0);
-        if(!$productID and !$projectID and !$executionID) return $this->sendError(400, 'Need product or project or execution id.');
+        if(empty($productID)) $productID = $this->param('product', 0);
+        if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
-        if($executionID)
-        {
-            $control = $this->loadController('execution', 'testcase');
-            $control->testcase($executionID, $this->param('status', 'all'), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
-        }
-        else
-        {
-            $control = $this->loadController('testcase', 'browse');
-            $control->browse($productID, $this->param('branch', ''), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1), $projectID);
-        }
+        $control = $this->loadController('testcase', 'browse');
+        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1), $projectID);
 
         $data = $this->getData();
 
