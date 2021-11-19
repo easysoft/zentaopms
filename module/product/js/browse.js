@@ -112,12 +112,6 @@ $(function()
     });
     if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
 
-    var isClickStoryToggle = false;
-    $(".story-toggle").click(function()
-    {
-        isClickStoryToggle = true;
-    });
-
     /* Shift key selection. */
     var isClickStoryToggle = false;
     var lastStorySelected = '';
