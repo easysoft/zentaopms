@@ -69,7 +69,7 @@ class actionModel extends model
 
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
-        $actionID = $this->dbh->lastInsertID();
+        $actionID = $this->dao->lastInsertID();
 
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
@@ -983,7 +983,7 @@ class actionModel extends model
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
             $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
-            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $requirements);
+            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
@@ -1110,11 +1110,12 @@ class actionModel extends model
      *
      * @param  string $objectType
      * @param  int    $objectID
+     * @param  string $actionType
      * @param  array  $requirements
      * @access public
      * @return string
      */
-    public function getObjectLabel($objectType, $objectID, $requirements)
+    public function getObjectLabel($objectType, $objectID, $actionType, $requirements)
     {
         $actionObjectLabel = $objectType;
         if(isset($this->lang->action->label->$objectType))
@@ -1578,5 +1579,84 @@ class actionModel extends model
         {
             echo $actionType;
         }
+    }
+
+    /**
+     * Process action for API.
+     *
+     * @param  array  $actions
+     * @param  array  $users
+     * @param  array  $objectLang
+     * @access public
+     * @return array
+     */
+    public function processActionForAPI($actions, $users = array(), $objectLang = array())
+    {
+        $actions = (array)$actions;
+        foreach($actions as $action)
+        {
+            $action->actor = zget($users, $action->actor);
+            if($action->action == 'assigned') $action->extra = zget($users, $action->extra);
+            if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+
+            ob_start();
+            $this->printAction($action);
+            $action->desc = ob_get_contents();
+            ob_end_clean();
+
+            if($action->history)
+            {
+                foreach($action->history as $i => $history)
+                {
+                    $history->fieldName = zget($objectLang, $history->field);
+                    $action->history[$i] = $history;
+                }
+            }
+        }
+        return array_values($actions);
+    }
+
+    /**
+     * Process dynamic for API.
+     *
+     * @param  array    $dynamics
+     * @access public
+     * @return array
+     */
+    public function processDynamicForAPI($dynamics)
+    {
+        $users = $this->loadModel('user')->getList();
+        $simplifyUsers = array();
+        foreach($users as $user)
+        {
+            $simplifyUser = new stdclass();
+            $simplifyUser->id       = $user->id;
+            $simplifyUser->account  = $user->account;
+            $simplifyUser->realname = $user->realname;
+            $simplifyUser->avatar   = $user->avatar;
+            $simplifyUsers[$user->account] = $simplifyUser;
+        }
+
+        $actions = array();
+        foreach($dynamics as $key => $dynamic)
+        {
+            if($dynamic->objectType == 'user') continue;
+
+            $simplifyUser = zget($simplifyUsers, $dynamic->actor, '');
+            $actor = $simplifyUser;
+            if(empty($simplifyUser))
+            {
+                $actor = new stdclass();
+                $actor->id       = 0;
+                $actor->account  = $dynamic->actor;
+                $actor->realname = $dynamic->actor;
+                $actor->avatar   = '';
+            }
+
+            $dynamic->actor = $actor;
+            $actions[]      = $dynamic;
+        }
+
+        return $actions;
     }
 }
