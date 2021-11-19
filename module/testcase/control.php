@@ -448,6 +448,7 @@ class testcase extends control
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
         }
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
+        $productInfo = $this->loadModel('product')->getById($productID);
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
@@ -473,6 +474,7 @@ class testcase extends control
         $this->view->projectID        = isset($projectID) ? $projectID : 0;
         $this->view->productID        = $productID;
         $this->view->executionID      = $executionID;
+        $this->view->productInfo      = $productInfo;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
         $this->view->currentModuleID  = $currentModuleID;
@@ -1383,7 +1385,7 @@ class testcase extends control
             {
                 $cases   = array();
                 $orderBy = " ORDER BY " . str_replace(array('|', '^A', '_'), ' ', $orderBy);
-                $stmt    = $this->dbh->query($this->session->testcaseQueryCondition . $orderBy . ($this->post->limit ? ' LIMIT ' . $this->post->limit : ''));
+                $stmt    = $this->dao->query($this->session->testcaseQueryCondition . $orderBy . ($this->post->limit ? ' LIMIT ' . $this->post->limit : ''));
                 while($row = $stmt->fetch())
                 {
                     $caseID = isset($row->case) ? $row->case : $row->id;
@@ -1444,7 +1446,7 @@ class testcase extends control
                 $result = isset($results[$case->id]) ? $results[$case->id] : array();
 
                 $case->real = '';
-                if(!empty($result))
+                if(!empty($result) and !isset($relatedSteps[$case->id]))
                 {
                     $firstStep  = reset($result);
                     $case->real = $firstStep['real'];

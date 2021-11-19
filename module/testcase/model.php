@@ -307,12 +307,27 @@ class testcaseModel extends model
      * @param  int    $executionID
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $browseType
+     * @param  string $browseType   all|wait|needconfirm
      * @access public
      * @return array
      */
     public function getExecutionCases($executionID, $orderBy = 'id_desc', $pager = null, $browseType = '')
     {
+        if($browseType == 'needconfirm')
+        {
+            return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+                ->where('t1.project')->eq((int)$executionID)
+                ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t3.version > t2.storyVersion')
+                ->andWhere("t3.status")->eq('active')
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t1.project')->eq((int)$executionID)
@@ -1536,7 +1551,7 @@ class testcaseModel extends model
                 break;
             case 'title':
                 $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
-                if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-info label-outline'>{$branches[$case->branch]}</span> ";
+                if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                 echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]", '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";
                 break;
@@ -1721,6 +1736,13 @@ class testcaseModel extends model
         return false;
     }
 
+    /**
+     * Summary cases
+     *
+     * @param  array    $cases
+     * @access public
+     * @return string
+     */
     public function summary($cases)
     {
         $executed = 0;

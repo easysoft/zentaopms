@@ -9,6 +9,6 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class ProgramEntry extends Entry
+class programEntry extends Entry
 {
 }

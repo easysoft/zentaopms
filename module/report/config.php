@@ -54,3 +54,11 @@ $config->report->annualData['month']['story'] = array('opened' => 'create', 'act
 $config->report->annualData['month']['task']  = array('opened' => 'create', 'started' => 'start', 'finished' => 'finish', 'paused' => 'pause', 'activated' => 'activate', 'canceled' => 'cancel', 'closed' => 'close');
 $config->report->annualData['month']['bug']   = array('opened' => 'create', 'bugconfirmed' => 'confirm', 'activated' => 'activate', 'resolved' => 'resolve', 'closed' => 'close');
 $config->report->annualData['month']['case']  = array('opened' => 'create', 'run' => 'run', 'createBug' => 'createBug');
+
+$config->report->outputData['story']       = array('opened' => 'create', 'changed' => 'change', 'reviewed' => 'review', 'closed' => 'close');
+$config->report->outputData['productplan'] = array('opened' => 'create');
+$config->report->outputData['release']     = array('opened' => 'create', 'stoped' => 'stop', 'activated' => 'activate');
+$config->report->outputData['execution']   = array('opened' => 'create', 'started' => 'start', 'delayed' => 'putoff', 'suspended' => 'suspend', 'closed' => 'close');
+$config->report->outputData['task']        = array('opened' => 'create', 'assigned' => 'assign', 'finished' => 'finish', 'activated' => 'activate', 'closed' => 'close');
+$config->report->outputData['bug']         = array('opened' => 'create', 'resolved' => 'resolve', 'activated' => 'activate', 'closed' => 'close');
+$config->report->outputData['case']        = array('opened' => 'create', 'run' => 'run', 'createBug' => 'createBug');

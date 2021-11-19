@@ -16,7 +16,7 @@ function loadBranches(productID)
     }
 
     executionID = $('#execution').val();
-    $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=&projectID=' + executionID), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + executionID), function(data)
     {
         if(data)
         {

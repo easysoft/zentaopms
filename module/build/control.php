@@ -16,6 +16,7 @@ class build extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -62,11 +63,17 @@ class build extends control
             $execution  = $this->execution->getByID($executionID);
             $executions = $this->execution->getPairs($execution->project);
         }
+        
+        $executionList = $this->execution->getByIdList(array_keys($executions));
+        foreach($executionList as $execution)
+        {
+            if($execution->lifetime == 'ops') unset($executions[$execution->id]);
+        }
 
         $productGroups = $this->loadModel('product')->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
         $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID);
-        $branchPairs   = $this->loadModel('branch')->getPairs($productID);
+        $branchPairs   = $this->loadModel('branch')->getPairs($productID, 'active');
         $branches      = array();
         $products      = array();
 
@@ -75,7 +82,7 @@ class build extends control
         {
             foreach($branchGroups[$productID] as $branchID => $branch)
             {
-                $branches[$branchID] = $branchPairs[$branchID];
+                if(isset($branchPairs[$branchID])) $branches[$branchID] = $branchPairs[$branchID];
             }
         }
 
