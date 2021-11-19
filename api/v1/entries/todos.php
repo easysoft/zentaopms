@@ -20,7 +20,7 @@ class todosEntry extends entry
     public function get()
     {
         $control = $this->loadController('my', 'todo');
-        $control->todo($this->param('date', 'all'), $this->param('user', ''), $this->param('status', 'all'), $this->param('order', 'date_desc'), 0, $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+        $control->todo($this->param('type', 'all'), $this->param('userID', ''), $this->param('status', 'all'), $this->param('order', 'date_desc,status,begin'), $this->param('total', 0), $this->param('limit', 100), $this->param('page', 1));
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
@@ -63,7 +63,7 @@ class todosEntry extends entry
         if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
 
         $todo = $this->loadModel('todo')->getByID($data->id);
-        
+
         $this->send(201, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
     }
 }

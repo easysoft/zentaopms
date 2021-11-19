@@ -443,7 +443,8 @@ class programModel extends model
         $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
             ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
@@ -507,7 +508,7 @@ class programModel extends model
      */
     public function getStakeholders($programID = 0, $orderBy, $pager = null)
     {
-        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.objectID')->eq($programID)
             ->andWhere('t1.objectType')->eq('program')
