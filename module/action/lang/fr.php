@@ -150,9 +150,9 @@ $lang->action->desc->resolved        = '$date, resolved by <strong>$actor</stron
 $lang->action->desc->managed         = '$date, by <strong>$actor</strong> managed.' . "\n";
 $lang->action->desc->estimated       = '$date, by <strong>$actor</strong> estimated.' . "\n";
 $lang->action->desc->run             = '$date, by <strong>$actor</strong> executed.' . "\n";
-$lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(The start of the project sets the status of the program as Ongoing)' . "\n";
-$lang->action->desc->syncproject     = '$date, The start of the execution sets the status of the project as Ongoing' . "\n";
-$lang->action->desc->syncexecution   = '$date, The start of the task sets the status of the execution as Ongoing' . "\n";
+$lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
+$lang->action->desc->syncproject     = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
