@@ -3355,7 +3355,7 @@ class storyModel extends model
     {
         $action = strtolower($action);
 
-        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
+        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate' and $action != 'change') return false;
 
         global $app;
 
