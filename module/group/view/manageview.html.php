@@ -26,7 +26,7 @@
           <?php foreach($lang->mainNav as $menuKey => $menu):?>
           <?php if(!is_string($menu)) continue;?>
           <?php list($moduleName, $module) = explode('|', $menu);?>
-          <?php if($module == 'my') continue;?>
+          <?php if($menuKey == 'my') continue;?>
           <?php $moduleName = strip_tags($moduleName);?>
           <div class='group-item'>
             <div class='checkbox-primary'>
