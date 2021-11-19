@@ -98,6 +98,10 @@ $routes['/projects/:projectID/risks'] = 'risks';
 $routes['/risks']                     = 'risks';
 $routes['/risks/:id']                 = 'risk';
 
+$routes['/projects/:id/meetings'] = 'meetings';
+$routes['/meetings']              = 'meetings';
+$routes['/meetings/:id']          = 'meeting';
+
 $routes['/departments']     = 'departments';
 $routes['/departments/:id'] = 'department';
 
