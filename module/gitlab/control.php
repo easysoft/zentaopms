@@ -589,7 +589,7 @@ class gitlab extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $result = $this->gitlab->apiGetProjects($gitlabID, $keyword, $orderBy, $pager);
+        $result = $this->gitlab->apiGetProjectsPager($gitlabID, $keyword, $orderBy, $pager);
 
         $gitlab = $this->gitlab->getByID($gitlabID);
 
