@@ -151,12 +151,16 @@ $lang->bug->assignToMeAB   = '指派给我';
 $lang->bug->openedByMeAB   = '由我创建';
 $lang->bug->resolvedByMeAB = '由我解决';
 
-$lang->bug->ditto         = '同上';
-$lang->bug->dittoNotice   = '该bug与上一bug不属于同一产品！';
-$lang->bug->noAssigned    = '未指派';
-$lang->bug->noBug         = '暂时没有Bug。';
-$lang->bug->noModule      = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
-$lang->bug->delayWarning  = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->ditto          = '同上';
+$lang->bug->dittoNotice    = '该bug与上一bug不属于同一产品！';
+$lang->bug->noAssigned     = '未指派';
+$lang->bug->noBug          = '暂时没有Bug。';
+$lang->bug->noModule       = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
+$lang->bug->delayWarning   = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->labelConfirmed = '已确认';
+$lang->bug->labelPostponed = '被延期';
+$lang->bug->changed        = '已变动';
+$lang->bug->storyChanged   = '需求变动';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = '当前指派';
@@ -192,6 +196,7 @@ $lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭
 $lang->bug->executionAccessDenied = "您无权访问该Bug所属的{$lang->executionCommon}！";
 $lang->bug->stepsNotEmpty         = "重现步骤不能为空。";
 $lang->bug->confirmUnlinkBuild    = "更换解决版本将取消与旧版本的关联，您确定取消该bug与%s的关联吗？";
+$lang->bug->noSwitchBranch        = 'Bug%s所属模块不在当前分支下，将自动忽略。';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p><br/>";

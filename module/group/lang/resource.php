@@ -421,7 +421,7 @@ $lang->product->methodOrder[105] = 'unbindWhitelist';
 /* Branch. */
 $lang->resource->branch = new stdclass();
 $lang->resource->branch->manage     = 'manage';
-$lang->resource->branch->create     = 'create';
+$lang->resource->branch->create     = 'createAction';
 $lang->resource->branch->edit       = 'editAction';
 $lang->resource->branch->close      = 'closeAction';
 $lang->resource->branch->activate   = 'activateAction';

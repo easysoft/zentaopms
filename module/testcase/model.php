@@ -306,12 +306,27 @@ class testcaseModel extends model
      * @param  int    $executionID
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $browseType
+     * @param  string $browseType   all|wait|needconfirm
      * @access public
      * @return array
      */
     public function getExecutionCases($executionID, $orderBy = 'id_desc', $pager = null, $browseType = '')
     {
+        if($browseType == 'needconfirm')
+        {
+            return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+                ->where('t1.project')->eq((int)$executionID)
+                ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t3.version > t2.storyVersion')
+                ->andWhere("t3.status")->eq('active')
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t1.project')->eq((int)$executionID)
@@ -863,13 +878,13 @@ class testcaseModel extends model
             if($data->pris[$caseID]     == 'ditto') $data->pris[$caseID]     = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
             if($data->modules[$caseID]  == 'ditto') $data->modules[$caseID]  = isset($prev['module']) ? $prev['module'] : 0;
-            if($data->stories[$caseID]  == 'ditto') $data->stories[$caseID]  = isset($prev['story'])  ? $prev['story']  : 0;
+            if($data->story[$caseID]    == 'ditto') $data->story[$caseID]    = isset($prev['story'])  ? $prev['story']  : 0;
             if($data->types[$caseID]    == 'ditto') $data->types[$caseID]    = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->stories[$caseID]  == '')      $data->stories[$caseID]  = 0;
+            if($data->story[$caseID]  == '')      $data->story[$caseID]  = 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['type']   = $data->types[$caseID];
-            $prev['story']  = $data->stories[$caseID];
+            $prev['story']  = $data->story[$caseID];
             $prev['branch'] = $data->branches[$caseID];
             $prev['module'] = $data->modules[$caseID];
         }
@@ -885,7 +900,7 @@ class testcaseModel extends model
             $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
             $case->status         = $data->statuses[$caseID];
-            $case->story          = $data->stories[$caseID];
+            $case->story          = $data->story[$caseID];
             $case->color          = $data->color[$caseID];
             $case->title          = $data->title[$caseID];
             $case->precondition   = $data->precondition[$caseID];
@@ -1707,6 +1722,13 @@ class testcaseModel extends model
         return false;
     }
 
+    /**
+     * Summary cases
+     *
+     * @param  array    $cases
+     * @access public
+     * @return string
+     */
     public function summary($cases)
     {
         $executed = 0;

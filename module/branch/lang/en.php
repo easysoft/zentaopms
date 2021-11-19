@@ -9,13 +9,14 @@ $lang->branch->manageTitle = '%s Management';
 $lang->branch->all         = 'All ';
 $lang->branch->main        = 'Main';
 
-$lang->branch->edit             = 'Edit';
-$lang->branch->editAction       = 'Edit %s';
+$lang->branch->edit             = 'Edit %s';
+$lang->branch->editAction       = 'Edit Branch';
 $lang->branch->activate         = 'Activate';
 $lang->branch->activateAction   = 'Activate Branch';
 $lang->branch->close            = 'Close';
 $lang->branch->closeAction      = 'Close Branch';
 $lang->branch->create           = 'Create %s';
+$lang->branch->createAction     = 'Create Branch';
 $lang->branch->merge            = 'Merge';
 $lang->branch->batchEdit        = 'Batch Edit';
 $lang->branch->defaultBranch    = 'Default Branch';

@@ -134,7 +134,7 @@ class action extends control
         $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
         if(defined('RUN_MODE') && RUN_MODE == 'api')
         {
-            die(array('status' => 'success', 'data' => $actionID));
+            return $this->send(array('status' => 'success', 'data' => $actionID));
         }
         else
         {

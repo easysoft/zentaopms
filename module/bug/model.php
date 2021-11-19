@@ -623,7 +623,7 @@ class bugModel extends model
 
         $now = helper::now();
         $bug = fixer::input('post')
-            ->cleanInt('product,module,severity,execution,story,task,branch')
+            ->cleanInt('product,module,severity,project,execution,story,task,branch')
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('product,module,execution,story,task,duplicateBug,branch', 0)
             ->setDefault('openedBuild', '')
@@ -742,6 +742,7 @@ class bugModel extends model
                 $bug->title          = $data->titles[$bugID];
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
                 $bug->branch         = empty($data->branches[$bugID]) ? 0 : $data->branches[$bugID];
+                $bug->module         = $data->modules[$bugID];
                 $bug->assignedTo     = $data->assignedTos[$bugID];
                 $bug->deadline       = $data->deadlines[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];
@@ -1043,18 +1044,17 @@ class bugModel extends model
      *
      * @param  array  $bugIDList
      * @param  int    $branchID
+     * @param  array  $oldBugs
      * @access public
      * @return array
      */
-    public function batchChangeBranch($bugIDList, $branchID)
+    public function batchChangeBranch($bugIDList, $branchID, $oldBugs)
     {
         $now        = helper::now();
         $allChanges = array();
-        $oldBugs    = $this->getByList($bugIDList);
         foreach($bugIDList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
-            if($branchID == $oldBug->branch) continue;
 
             $bug = new stdclass();
             $bug->lastEditedBy   = $this->app->user->account;
@@ -1313,7 +1313,7 @@ class bugModel extends model
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'withbranch');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($this->session->currentProductType == 'normal')
         {
@@ -1514,6 +1514,8 @@ class bugModel extends model
                 ->beginIF(!empty($productID))->andWhere('product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
+                ->beginIF($type == 'assignedtome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)->page($pager)->fetchAll();

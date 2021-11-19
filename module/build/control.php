@@ -71,7 +71,7 @@ class build extends control
         $products      = array();
 
         /* Set branches and products. */
-        if($productGroups[$productID]->type != 'normal' and isset($branchGroups[$productID]))
+        if(isset($productGroups[$productID]) and $productGroups[$productID]->type != 'normal' and isset($branchGroups[$productID]))
         {
             foreach($branchGroups[$productID] as $branchID => $branch)
             {
@@ -350,7 +350,6 @@ class build extends control
      */
     public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 0, $index = 0, $type = 'normal')
     {
-        $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {

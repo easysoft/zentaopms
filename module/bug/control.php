@@ -433,10 +433,10 @@ class bug extends control
         }
 
         /* Get product, then set menu. */
-        $productID = $this->product->saveState($productID, $this->products);
-        $product   = $this->product->getById($productID);
+        $productID   = $this->product->saveState($productID, $this->products);
+        $productInfo = $this->product->getById($productID);
+        $branches    = $productInfo->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
         if($branch === '') $branch = (int)$this->cookie->preBranch;
-        $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
 
         /* Init vars. */
         $projectID   = 0;
@@ -522,7 +522,6 @@ class bug extends control
             $builds  = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'noempty,noterminate,nodone');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
-        $builds[''] = '';
 
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
 
@@ -631,7 +630,7 @@ class bug extends control
         $this->view->keywords         = $keywords;
         $this->view->severity         = $severity;
         $this->view->type             = $type;
-        $this->view->product          = $product;
+        $this->view->productInfo      = $productInfo;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         $this->view->blockID          = $blockID;
@@ -739,7 +738,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
         $this->view->moduleID         = $moduleID;
         $this->view->branch           = $branch;
-        $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches         = $this->loadModel('branch')->getPairs($productID, 'active');
         $this->display();
     }
 
@@ -1014,12 +1013,38 @@ class bug extends control
             $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
+            /* Set branches and modules. */
+            $branches = array();
+            $modules  = array();
+            if($product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getPairs($productID);
+                if($branch === 'all')
+                {
+                    $modules[0] = $this->tree->getOptionMenu($productID, 'bug', 0, 0);
+                    foreach($branches as $branchID => $branchName)
+                    {
+                        $modules[$branchID] = $this->tree->getOptionMenu($productID, 'bug', 0, $branchID);
+                    }
+                }
+                else
+                {
+                    $modules[$branch] = $this->tree->getOptionMenu($productID, 'bug', 0, $branch);
+                }
+            }
+            else
+            {
+                $modules[0] = $this->tree->getOptionMenu($productID, 'bug', 0, 0);
+            }
+
             /* Set product menu. */
             $this->qa->setMenu($this->products, $productID, $branch);
+
             $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
             $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
             $this->view->plans      = $plans;
-            $this->view->branches   = $product->type == 'normal' ? array() : array('' => '', 'ditto' => $this->lang->bug->ditto) + $this->loadModel('branch')->getPairs($product->id);
+            $this->view->branches   = $branches;
+            $this->view->modules    = $modules;
         }
         /* The bugs of my. */
         else
@@ -1147,10 +1172,35 @@ class bug extends control
     {
         if($this->post->bugIDList)
         {
-            $bugIDList = $this->post->bugIDList;
-            $bugIDList = array_unique($bugIDList);
+            $bugIDList     = $this->post->bugIDList;
+            $bugIDList     = array_unique($bugIDList);
+            $oldBugs       = $this->bug->getByList($bugIDList);
+            $skipBugIDList = '';
             unset($_POST['bugIDList']);
-            $allChanges = $this->bug->batchChangeBranch($bugIDList, $branchID);
+
+            /* Remove condition mismatched bugs. */
+            foreach($bugIDList as $key => $bugID)
+            {
+                $oldBug = $oldBugs[$bugID];
+                if($branchID == $oldBug->branch)
+                {
+                    unset($bugIDList[$key]);
+                    continue;
+                }
+                elseif($branchID != $oldBug->branch and !empty($oldBug->module))
+                {
+                    $skipBugIDList .= '[' . $bugID . ']';
+                    unset($bugIDList[$key]);
+                    continue;
+                }
+            }
+
+            if(!empty($skipBugIDList))
+            {
+                echo js::alert(sprintf($this->lang->bug->noSwitchBranch, $skipBugIDList));
+            }
+
+            $allChanges = $this->bug->batchChangeBranch($bugIDList, $branchID, $oldBugs);
             if(dao::isError()) die(js::error(dao::getError()));
             foreach($allChanges as $bugID => $changes)
             {

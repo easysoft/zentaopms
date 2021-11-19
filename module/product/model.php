@@ -145,14 +145,16 @@ class productModel extends model
      */
     public function saveState($productID, $products)
     {
-        if($productID > 0) $this->session->set('product', (int)$productID);
-        if($productID == 0 and $this->cookie->preProductID) $this->session->set('product', (int)$this->cookie->preProductID);
-        if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
+        if($productID == 0 and $this->cookie->preProductID)   $productID = $this->cookie->preProductID;
+        if($productID == 0 and $this->session->product == '') $productID = key($products);
+        $this->session->set('product', (int)$productID, $this->app->tab);
+
         if(!isset($products[$this->session->product]))
         {
             $product = $this->getById($productID);
-            if(empty($product)) $this->session->set('product', key($products));
-            if($productID && strpos(",{$this->app->user->view->products},", ",{$this->session->product},") === false) $this->accessDenied();
+            if(empty($product)) $productID = key($products);
+            $this->session->set('product', (int)$productID, $this->app->tab);
+            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false) $this->accessDenied();
 
             setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
@@ -1410,6 +1412,10 @@ class productModel extends model
         $product->bugs       = $bugs       ? $bugs->count : 0;
         $product->docs       = $docs       ? $docs->count : 0;
 
+        $closedTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('status')->eq('closed')->andWhere('product')->eq($productID)->fetch('count');
+        $allTotal    = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch('count');
+        $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
+
         return $product;
     }
 
@@ -1547,6 +1553,16 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
+        $this->app->loadClass('date', true);
+        $weekDate     = date::getThisWeek();
+        $thisWeekBugs = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andWhere('openedDate')->between($weekDate['begin'], $weekDate['end'])
+            ->andWhere('product')->in($productKeys)
+            ->groupBy('product')
+            ->fetchPairs();
+
         $assignToNull = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -1557,7 +1573,7 @@ class productModel extends model
 
         if(empty($programID))
         {
-            $programKeys = array(0=>0);
+            $programKeys = array(0 => 0);
             foreach($products as $product) $programKeys[] = $product->program;
             $programs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
                 ->where('id')->in(array_unique($programKeys))
@@ -1578,7 +1594,13 @@ class productModel extends model
             $product->unResolved   = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
             $product->closedBugs   = isset($closedBugs[$product->id]) ? $closedBugs[$product->id] : 0;
             $product->fixedBugs    = isset($fixedBugs[$product->id]) ? $fixedBugs[$product->id] : 0;
+            $product->thisWeekBugs = isset($thisWeekBugs[$product->id]) ? $thisWeekBugs[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
+
+            $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];
+            $allTotal          = array_sum($product->stories) + array_sum($product->requirements);
+            $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
+
             $stats[] = $product;
         }
 
