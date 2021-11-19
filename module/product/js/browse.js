@@ -113,7 +113,12 @@ $(function()
     if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
 
     /* Shift key selection. */
+    var isClickStoryToggle = false;
     var lastStorySelected = '';
+    $(".story-toggle").click(function()
+    {
+        isClickStoryToggle = true;
+    });
     $("#storyList tbody").on("click","tr",function(e)
     {
       var nowCheckbox = $(this)['context'].cells[0].childNodes[0].childNodes[0];
@@ -131,14 +136,16 @@ $(function()
                   $(this)['context'].checked = $(this)['context'].checked || (isStartStorySelected && !isEndStorySelected) ? true : false;
 
                   isStartStorySelected = nowStorySelected == $(this).val() || lastStorySelected == $(this).val() || isStartStorySelected ? true : false;
+
+                  if(isEndStorySelected) return;
               });
           }
       }
-      else
+      else if(!isClickStoryToggle)
       {
           lastStorySelected = nowCheckbox.value;
       }
-
+      isClickStoryToggle = false;
   });
 });
 
