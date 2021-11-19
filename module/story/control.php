@@ -522,7 +522,7 @@ class story extends control
         $this->view->spec             = $spec;
         $this->view->type             = $type;
         $this->view->branch           = $branch;
-        $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches         = $this->loadModel('branch')->getPairs($productID, 'active');
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
         $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
 

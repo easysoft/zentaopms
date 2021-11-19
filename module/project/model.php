@@ -131,7 +131,7 @@ class projectModel extends model
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
         $this->loadModel('common')->resetProjectPriv($this->session->project);
-        if(!commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
+        if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
         return $this->session->project;
     }
@@ -284,20 +284,22 @@ class projectModel extends model
             ->andWhere('type')->eq('project')
             ->groupBy('root')->fetchPairs();
 
-        $hours = $this->dao->select('t2.parent as project, sum(t1.consumed) as consumed, sum(t1.estimate) as estimate')->from(TABLE_TASK)->alias('t1')
+        $hours = $this->dao->select('t2.parent as project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.parent')->in($projectIdList)
+            ->where('t2.project')->in($projectIdList)
+            ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
-            ->groupBy('t2.parent')
+            ->groupBy('t2.project')
             ->fetchAll('project');
 
         $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.parent')->in($projectIdList)
+            ->where('t2.project')->in($projectIdList)
+            ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait,doing,pause')
-            ->groupBy('t2.parent')
+            ->groupBy('t2.project')
             ->fetchPairs();
 
         $this->loadModel('product');
@@ -367,32 +369,38 @@ class projectModel extends model
      */
     public function getWorkhour($projectID)
     {
-        $executions = $this->loadModel('execution')->getPairs($projectID);
-
-        $total = $this->dao->select('
-            ROUND(SUM(estimate), 1) AS totalEstimate,
-            ROUND(SUM(`left`), 2) AS totalLeft')
-            ->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
+        $total = $this->dao->select('ROUND(SUM(estimate), 1) AS totalEstimate, ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t2.project')->in($projectID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
             ->fetch();
 
-        $totalConsumed = $this->dao->select('ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
+        $totalConsumed = $this->dao->select('ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t2.project')->in($projectID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
             ->fetch('totalConsumed');
 
-        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('status')->in('closed,cancel')
+        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t2.project')->in($projectID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
+            ->andWhere('t1.status')->in('closed,cancel')
             ->fetch('totalLeft');
 
         $workhour = new stdclass();
-        $workhour->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->in(array_keys($executions))->andWhere('type')->eq('project')->fetch('totalHours');
+        $workhour->totalHours    = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
+            ->where('t2.project')->in($projectID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('project')
+            ->fetch('totalHours');
         $workhour->totalEstimate = $total->totalEstimate;
         $workhour->totalConsumed = $totalConsumed;
         $workhour->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
@@ -412,13 +420,13 @@ class projectModel extends model
     {
         $projects = array();
 
-        $totalConsumeds = $this->dao->select('project,ROUND(SUM(consumed), 1) AS totalConsumed')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectIdList)
-            ->beginIF($time == 'THIS_YEAR')->andWhere('realStarted')->ge(date("Y-01-01 00:00:00"))->fi()
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('project')
+        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_TASKESTIMATE)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+            ->where('t2.project')->in($projectIdList)
+            ->beginIF($time == 'THIS_YEAR')->andWhere('LEFT(t1.`date`, 4)')->eq(date('Y'))->fi()
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.parent')->lt(1)
+            ->groupBy('t2.project')
             ->fetchAll('project');
 
         foreach($projectIdList as $projectID)
@@ -447,13 +455,27 @@ class projectModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->fetch('storyCount');
 
-        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('project')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('taskCount');
-        $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('bugCount');
+        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetch('taskCount');
+        $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->in($projectID)->andWhere('deleted')->eq(0)->fetch('bugCount');
+
+        $statusPairs   = $this->dao->select('status,count(id) as count')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('deleted')->eq(0)->groupBy('status')->fetchPairs('status', 'count');
+        $finishedCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere('finishedBy')->ne('')->andWhere('deleted')->eq(0)->fetch('taskCount');
+        $delayedCount  = $this->dao->select('count(id) as count')->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('deadline')->ne('0000-00-00')
+            ->andWhere('deadline')->lt(helper::today())
+            ->andWhere('status')->in('wait,doing')
+            ->andWhere('deleted')->eq(0)
+            ->fetch('count');
 
         $statData = new stdclass();
-        $statData->storyCount = $storyCount;
-        $statData->taskCount  = $taskCount;
-        $statData->bugCount   = $bugCount;
+        $statData->storyCount    = $storyCount;
+        $statData->taskCount     = $taskCount;
+        $statData->bugCount      = $bugCount;
+        $statData->waitCount     = zget($statusPairs, 'wait', 0);
+        $statData->doingCount    = zget($statusPairs, 'doing', 0);
+        $statData->finishedCount = $finishedCount;
+        $statData->delayedCount  = $delayedCount;
 
         return $statData;
     }
@@ -1953,7 +1975,7 @@ class projectModel extends model
             $hour->totalConsumed = round($hour->totalConsumed, 1);
             $hour->totalLeft     = round($hour->totalLeft, 1);
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal * 100, 2) : 0;
         }
 
         return $hours;

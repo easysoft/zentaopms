@@ -62,6 +62,12 @@ class build extends control
             $execution  = $this->execution->getByID($executionID);
             $executions = $this->execution->getPairs($execution->project);
         }
+        
+        $executionList = $this->execution->getByIdList(array_keys($executions));
+        foreach($executionList as $execution)
+        {
+            if($execution->lifetime == 'ops') unset($executions[$execution->id]);
+        }
 
         $productGroups = $this->loadModel('product')->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
@@ -71,7 +77,7 @@ class build extends control
         $products      = array();
 
         /* Set branches and products. */
-        if($productGroups[$productID]->type != 'normal' and isset($branchGroups[$productID]))
+        if(isset($productGroups[$productID]) and $productGroups[$productID]->type != 'normal' and isset($branchGroups[$productID]))
         {
             foreach($branchGroups[$productID] as $branchID => $branch)
             {

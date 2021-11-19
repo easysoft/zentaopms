@@ -1080,7 +1080,7 @@ class project extends control
 
         /* Set project builds. */
         $projectBuilds = array();
-        $productList   = $this->project->getProducts($projectID);
+        $productList   = $this->product->getProducts($projectID);
         $this->app->loadLang('branch');
         if(!empty($builds))
         {

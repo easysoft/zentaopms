@@ -124,7 +124,7 @@ function computeEndDate(delta)
  */
 function loadBranches(product)
 {
-    $('#productsBox select').each(function()
+    $("#productsBox select[name^='products']").each(function()
     {
         var $product = $(product);
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
@@ -215,8 +215,6 @@ function adjustPlanBoxMargin()
         }
     }
 }
-
-function loadBranch(){}
 
 /* Auto compute the work days. */
 $(function()
