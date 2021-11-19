@@ -698,6 +698,21 @@ class mrModel extends model
     }
 
     /**
+     * Get diff commits of MR from GitLab API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiGetDiffCommits($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/commits");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
      * Reject or Approve this MR.
      *
      * @param  object $MR
@@ -972,4 +987,130 @@ class mrModel extends model
         return $this->dao->select('*')->from(TABLE_BUG)->where('entry')->eq($entry)->orderby('id_desc')->fetch();
     }
 
+    /**
+     * Get mr link list.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $type
+     * @param string $orderBy
+     * @param object $pager
+     * @access public
+     * @return array
+     */
+    public function getLinkList($MRID, $productID, $type, $orderBy, $pager = null)
+    {
+        $linkIDs = $this->dao->select('BID')->from(TABLE_RELATION)
+            ->where('product')->eq($productID)
+            ->andWhere('relation')->eq('interrated')
+            ->andWhere('AType')->eq('mr')
+            ->andWhere('AID')->eq($MRID)
+            ->andWhere('BType')->eq($type)
+            ->fetchPairs('BID');
+
+        $links = array();
+        if($type == 'story' and !empty($linkIDs))
+        {
+            $orderBy = str_replace('name_', 'title_', $orderBy);
+            $links = $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle')
+                ->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.version=t2.version')
+                ->andWhere('t1.id')->in($linkIDs)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        if($type == 'bug' and !empty($linkIDs))
+        {
+            $orderBy = str_replace('name_', 'title_', $orderBy);
+            $links = $this->dao->select('*')->from(TABLE_BUG)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($linkIDs)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        if($type == 'task' and !empty($linkIDs))
+        {
+            $orderBy = str_replace('title_', 'name_', $orderBy);
+            $links = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($linkIDs)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
+        return $links;
+    }
+
+    /**
+     * Create an mr link.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $type
+     * @access public
+     * @return void
+     */
+    public function link($MRID, $productID, $type)
+    {
+        if($type == 'story') $links = $this->post->stories;
+        if($type == 'bug') $links = $this->post->bugs;
+        if($type == 'task') $links = $this->post->tasks;
+
+        foreach($links as $linkID)
+        {
+            $relation           = new stdclass;
+            $relation->product  = $productID;
+            $relation->AType    = 'mr';
+            $relation->AID      = $MRID;
+            $relation->relation = 'interrated';
+            $relation->BType    = $type;
+            $relation->BID      = $linkID;
+
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+    }
+
+    /**
+     * unLink an mr link.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $type
+     * @param int    $linkID
+     * @access public
+     * @return void
+     */
+    public function unlink($MRID, $productID, $type, $linkID)
+    {
+        return $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq($productID)->andWhere('AType')->eq('mr')->andWhere('AID')->eq($MRID)->andWhere('BType')->eq($type)->andWhere('BID')->eq($linkID)->exec();
+    }
+
+    /**
+     * Get links by mr commites.
+     *
+     * @param int    $gitlabID
+     * @param int    $projectID
+     * @param int    $MRID
+     * @param string $type
+     * @access public
+     * @return array
+     */
+    public function getCommitedLink($gitlabID, $projectID, $MRID, $type)
+    {
+        $DiffCommits = $this->apiGetDiffCommits($gitlabID, $projectID, $MRID);
+
+        $commits = array();
+        foreach($DiffCommits as $DiffCommit)
+        {
+            $commits[] = substr($DiffCommit->id, 0, 10);
+        }
+
+        return $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq($type)->andWhere('extra')->in($commits)->fetchPairs('objectID');
+    }
 }

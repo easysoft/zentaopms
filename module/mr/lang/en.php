@@ -12,6 +12,7 @@ $lang->mr->source       = 'source';
 $lang->mr->target       = 'target';
 $lang->mr->viewDiff     = 'View diff';
 $lang->mr->viewInGitlab = 'View in GitLab';
+$lang->mr->link         = 'Link stories,bugs,tasks';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";
@@ -141,3 +142,10 @@ $lang->mr->commandDocument = <<< EOD
 EOD;
 
 $lang->mr->noChanges = "Currently there are no changes in this merge request's source branch. Please push new commits or use a different branch.";
+
+$lang->mr->linkTask          = "Link task";
+$lang->mr->unlinkTask        = "Remove task";
+$lang->mr->linkedTasks       = 'Task';
+$lang->mr->unlinkedTasks     = 'Task not linked';
+$lang->mr->confirmUnlinkTask = "Are you sure to remove this task?";
+$lang->mr->taskSummary       = "There are <strong>%s</strong> tasks on this page";

@@ -390,6 +390,333 @@ class mr extends control
     }
 
     /**
+     * link MR list.
+     *
+     * @param  int    $MRID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  string $link
+     * @param  string $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @return void
+     */
+    public function link($MRID, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        $this->app->loadLang('productplan');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('task');
+
+        $MR       = $this->mr->getByID($MRID);
+        $products = $this->loadModel('gitlab')->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
+        $product  = $this->loadModel('product')->getById(array_shift($products));
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static     = true);
+        $storyPager = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
+        $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $taskPager  = new pager(0, $recPerPage, $type == 'task' ? $pageID : 1);
+
+        $stories = $this->mr->getLinkList($MRID, $product->id, 'story', $orderBy, $storyPager);
+        $bugs    = $this->mr->getLinkList($MRID, $product->id, 'bug', $orderBy, $bugPager);
+        $tasks   = $this->mr->getLinkList($MRID, $product->id, 'task', $orderBy, $taskPager);
+
+        $this->view->MR           = $MR;
+        $this->view->canBeChanged = true;
+        $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->stories      = $stories;
+        $this->view->summary      = $this->product->summary($stories);
+        $this->view->bugs         = $bugs;
+        $this->view->tasks        = $tasks;
+        $this->view->products     = $products;
+        $this->view->product      = $product;
+        $this->view->storyPager   = $storyPager;
+        $this->view->bugPager     = $bugPager;
+        $this->view->taskPager    = $taskPager;
+        $this->view->type         = $type;
+        $this->view->orderBy      = $orderBy;
+        $this->view->link         = $link;
+        $this->view->param        = $param;
+        $this->display();
+    }
+
+    /**
+     * Link story to mr.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $browseType
+     * @param int    $param
+     * @param string $orderBy
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkStory($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['stories']))
+        {
+            $this->mr->link($MRID, $productID, 'story');
+            die(js::locate(inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy"), 'parent'));
+        }
+
+        $this->loadModel('story');
+        $this->app->loadLang('productplan');
+
+        $product = $this->loadModel('product')->getById($productID);
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story');
+
+        /* Build search form. */
+        $storyStatusList = $this->lang->story->statusList;
+        unset($storyStatusList['closed']);
+        $queryID         = ($browseType == 'bySearch') ? (int) $param : 0;
+
+        unset($this->config->product->search['fields']['product']);
+        $this->config->product->search['actionURL']                   = $this->createLink('mr', 'link', "$MRID=$MRID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['style']                       = 'simple';
+        $this->config->product->search['params']['product']['values'] = array($product) + array('all' => $this->lang->product->allProductsOfProject);
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
+        $this->config->product->search['params']['module']['values']  = $modules;
+        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch']           = $this->lang->product->branch;
+            $branches                                                    = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $this->config->product->search['params']['branch']['values'] = $branches;
+        }
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+
+        $MR             = $this->mr->getByID($MRID);
+        $relatedStories = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'story');
+
+        $linkedStories = $this->mr->getLinkList($MRID, $product->id, '', 'story');
+        if($browseType == 'bySearch')
+        {
+            $allStories = $this->story->getBySearch($productID, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), null);
+        }
+        else
+        {
+            $allStories = $this->story->getProductStories($productID, 0, $moduleID   = '0', $status     = 'draft,active,changed', 'story', 'id_desc', $hasParent  = false, array_keys($linkedStories), null);
+        }
+
+        $this->view->modules        = $modules;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allStories     = $allStories;
+        $this->view->relatedStories = $relatedStories;
+        $this->view->product        = $product;
+        $this->view->MRID           = $MRID;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->orderBy        = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * Link bug to mr.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $browseType
+     * @param int    $param
+     * @param string $orderBy
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkBug($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['bugs']))
+        {
+            $this->mr->link($MRID, $productID, 'bug');
+            die(js::locate(inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy"), 'parent'));
+        }
+
+        $this->loadModel('bug');
+        $this->app->loadLang('productplan');
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        $product = $this->loadModel('product')->getById($productID);
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug');
+
+        /* Build search form. */
+        $this->config->bug->search['actionURL']                         = $this->createLink('mr', 'link', "$MRID=$MRID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->bug->search['queryID']                           = $queryID;
+        $this->config->bug->search['style']                             = 'simple';
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
+        $this->config->bug->search['params']['module']['values']        = $modules;
+        $this->config->bug->search['params']['project']['values']       = $this->product->getExecutionPairsByProduct($productID);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, $branch                                                         = 0, $params                                                         = '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getProductBuildPairs($productID, $branch                                                         = 0, $params                                                         = '');
+
+        unset($this->config->bug->search['fields']['product']);
+        if($this->session->currentProductType == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
+            $branches                                                = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $this->config->bug->search['params']['branch']['values'] = $branches;
+        }
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+
+        $MR          = $this->mr->getByID($MRID);
+        $relatedBugs = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'bug');
+
+        $linkedBugs = $this->mr->getLinkList($MRID, $product->id, '','bug');
+        if($browseType == 'bySearch')
+        {
+            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, 'id_desc', array_keys($linkedBugs), null);
+        }
+        else
+        {
+            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), null);
+        }
+
+        $this->view->modules     = $modules;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allBugs     = $allBugs;
+        $this->view->relatedBugs = $relatedBugs;
+        $this->view->product     = $product;
+        $this->view->MRID        = $MRID;
+        $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * Link task to mr.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $browseType
+     * @param int    $param
+     * @param string $orderBy
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkTask($MRID, $productID = 0, $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['tasks']))
+        {
+            $this->mr->link($MRID, $productID, 'task');
+            die(js::locate(inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy"), 'parent'));
+        }
+
+        $this->loadModel('execution');
+        $this->loadModel('product');
+        $this->app->loadLang('task');
+
+        /* Set browse type. */
+        $browseType = strtolower($browseType);
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        $product = $this->loadModel('product')->getById($productID);
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'task');
+
+        /* Build search form. */
+        $this->config->execution->search['actionURL']                  = $this->createLink('mr', 'link', "$MRID=$MRID&type=task&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->execution->search['queryID']                    = $queryID;
+        $this->config->execution->search['params']['module']['values'] = $modules;
+        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+
+        $MR           = $this->mr->getByID($MRID);
+        $relatedTasks = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'task');
+        $linkedTasks  = $this->mr->getLinkList($MRID, $product->id, '','task');
+
+        /* Get executions by product. */
+        $productExecutions   = $this->product->getExecutionPairsByProduct($productID);
+        $productExecutionIDs = array_filter(array_keys($productExecutions));
+        $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
+
+        /* Get tasks by executions. */
+        $allTasks = array();
+        foreach($productExecutionIDs as $productExecutionID)
+        {
+            $tasks    = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+            $allTasks = array_merge($tasks, $allTasks);
+        }
+        /* Filter linked tasks. */
+        $linkedTaskIDs = array_keys($linkedTasks);
+        foreach($allTasks as $key => $task)
+        {
+            if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
+        }
+
+        $this->view->modules      = $modules;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allTasks     = $allTasks;
+        $this->view->relatedTasks = $relatedTasks;
+        $this->view->product      = $product;
+        $this->view->MRID         = $MRID;
+        $this->view->browseType   = $browseType;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * UnLink an mr link.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $type
+     * @param int    $linkID
+     * @param string $confirm
+     * @access public
+     * @return mix
+     */
+    public function unlink($MRID, $productID, $type, $linkID, $confirm = 'no')
+    {
+        $this->app->loadLang('productplan');
+
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('mr', 'unlink', "MRID=$MRID&productID=$productID&linkID=$linkID&type=$type&confirm=yes")));
+        }
+        else
+        {
+            $this->mr->unlink($MRID, $productID, $type, $linkID);
+
+            /* if ajax request, send result. */
+            if($this->server->ajax)
+            {
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                }
+                else
+                {
+                    $response['result']  = 'success';
+                    $response['message'] = '';
+                }
+                return $this->send($response);
+            }
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
      * Add a Bug for this review.
      *
      * @param  int    $repoID

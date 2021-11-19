@@ -486,7 +486,7 @@ class gitlab extends control
     }
 
     /**
-     * Browse gitlab project.
+     * Browse gitlab user.
      *
      * @param  int     $gitlabID
      * @access public
@@ -501,7 +501,7 @@ class gitlab extends control
     }
 
     /**
-     * Creat a gitlab project.
+     * Creat a gitlab user.
      *
      * @param  int     $gitlabID
      * @access public

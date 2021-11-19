@@ -12,6 +12,7 @@ $lang->mr->source       = '源项目分支';
 $lang->mr->target       = '目标项目分支';
 $lang->mr->viewDiff     = '比对代码';
 $lang->mr->viewInGitlab = '在GitLab查看';
+$lang->mr->link         = '关联需求、bug、任务';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "MR原始ID";
@@ -141,3 +142,10 @@ $lang->mr->commandDocument = <<< EOD
 EOD;
 
 $lang->mr->noChanges = "目前在这个合并请求的源分支中没有变化，请推送新的提交或使用不同的分支。";
+
+$lang->mr->linkTask          = "关联任务";
+$lang->mr->unlinkTask        = "移除任务";
+$lang->mr->linkedTasks       = '任务';
+$lang->mr->unlinkedTasks     = '未关联任务';
+$lang->mr->confirmUnlinkTask = "您确认移除该任务吗？";
+$lang->mr->taskSummary       = "本页共 <strong>%s</strong> 个任务";
