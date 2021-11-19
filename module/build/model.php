@@ -286,6 +286,7 @@ class buildModel extends model
 
         /* Set builds and filter done executions and terminate releases. */
         $builds = array();
+        $this->app->loadLang('branch');
         foreach($productBuilds as $key => $build)
         {
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->executionStatus === 'done')) continue;
