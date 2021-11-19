@@ -120,6 +120,50 @@
           </div>
         </div>
       </div>
+      <div class="cell">
+        <div class='tabs'>
+          <ul class='nav nav-tabs'>
+            <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $lang->productplan->linkedStories; ?></a></li>
+            <li><a href='#legendBugs' data-toggle='tab'><?php echo $lang->productplan->linkedBugs; ?></a></li>
+            <li><a href='#legendTasks' data-toggle='tab'><?php echo $lang->mr->linkedTasks ?></a></li>
+          </ul>
+          <div class='tab-content'>
+                <div class='tab-pane active' id='legendStories'>
+                  <ul class="list-unstyled">
+                      <?php
+                      foreach($stories as $id => $story)
+                      {
+                          echo "<li title='$story->title'>" . html::a($this->createLink('story', 'view', "id=$id", '', true), "#$id $story->title", '', "class='iframe' data-width='80%'") . '</li>';
+                      }
+                      ?>
+                    <li><?php echo html::a($this->createLink('mr', 'link', "MRID=$MR->id&type=story&orderBy=id_desc&link=true", '', true), $lang->productplan->linkStory, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'"); ?></li>
+                  </ul>
+                </div>
+                <div class="tab-pane" id='legendBugs'>
+                  <ul class="list-unstyled">
+                      <?php
+                      foreach($bugs as $id => $bug)
+                      {
+                          echo "<li title='$bug->title'>" . html::a($this->createLink('bug', 'view', "id=$id", '', true), "#$id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
+                      }
+                      ?>
+                    <li><?php echo html::a($this->createLink('mr', 'link', "MRID=$MR->id&type=bug&orderBy=id_desc&link=true", '', true), $lang->productplan->linkBug, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'"); ?></li>
+                  </ul>
+                </div>
+            <div class="tab-pane" id='legendTasks'>
+              <ul class="list-unstyled">
+                      <?php
+                      foreach($tasks as $id => $task)
+                      {
+                          echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "id=$id", '', true), "#$id $task->name", '', "class='iframe' data-width='80%'") . '</li>';
+                      }
+                      ?>
+                    <li><?php echo html::a($this->createLink('mr', 'link', "MRID=$MR->id&type=task&orderBy=id_desc&link=true", '', true), $lang->mr->linkTask, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'"); ?></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <br>

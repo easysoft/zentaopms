@@ -998,7 +998,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getLinkList($MRID, $productID, $type, $orderBy, $pager = null)
+    public function getLinkList($MRID, $productID, $type, $orderBy = 'id_desc', $pager = null)
     {
         $linkIDs = $this->dao->select('BID')->from(TABLE_RELATION)
             ->where('product')->eq($productID)

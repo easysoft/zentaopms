@@ -42,6 +42,14 @@ class mr extends control
         /* Sync GitLab MR to ZenTao Database. */
         $MRList = $this->mr->batchSyncMR($MRList);
 
+        /* Check whether Mr is linked with the product. */
+        $this->loadModel('gitlab');
+        foreach($MRList as $MR)
+        {
+            $products       = $this->gitlab->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
+            $MR->linkButton = empty($products) ? false : true;
+        }
+
         /* Load lang from compile module */
         $this->app->loadLang('compile');
 
@@ -195,6 +203,15 @@ class mr extends control
         /* Those variables are used to render $lang->mr->commandDocument. */
         $this->view->httpRepoURL = $sourceProject->http_url_to_repo;
         $this->view->branchPath  = $sourceProject->path_with_namespace . '-' . $rawMR->source_branch;
+
+        /* Get mr linked list. */
+        $this->app->loadLang('productplan');
+        $products = $this->loadModel('gitlab')->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
+        $product  = $this->loadModel('product')->getById(array_shift($products));
+        $this->view->product = $product;
+        $this->view->stories = $this->mr->getLinkList($MR->id, $product->id, 'story');
+        $this->view->bugs    = $this->mr->getLinkList($MR->id, $product->id, 'bug');
+        $this->view->tasks   = $this->mr->getLinkList($MR->id, $product->id, 'task');
 
         $this->display();
     }
@@ -413,7 +430,7 @@ class mr extends control
         $product  = $this->loadModel('product')->getById(array_shift($products));
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static     = true);
+        $this->app->loadClass('pager', $static = true);
         $storyPager = new pager(0, $recPerPage, $type == 'story' ? $pageID : 1);
         $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $taskPager  = new pager(0, $recPerPage, $type == 'task' ? $pageID : 1);
@@ -422,6 +439,7 @@ class mr extends control
         $bugs    = $this->mr->getLinkList($MRID, $product->id, 'bug', $orderBy, $bugPager);
         $tasks   = $this->mr->getLinkList($MRID, $product->id, 'task', $orderBy, $taskPager);
 
+        $this->view->title        = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
         $this->view->MR           = $MR;
         $this->view->canBeChanged = true;
         $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
@@ -500,7 +518,7 @@ class mr extends control
         $MR             = $this->mr->getByID($MRID);
         $relatedStories = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'story');
 
-        $linkedStories = $this->mr->getLinkList($MRID, $product->id, '', 'story');
+        $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
         {
             $allStories = $this->story->getBySearch($productID, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), null);
@@ -578,7 +596,7 @@ class mr extends control
         $MR          = $this->mr->getByID($MRID);
         $relatedBugs = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'bug');
 
-        $linkedBugs = $this->mr->getLinkList($MRID, $product->id, '','bug');
+        $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
         {
             $allBugs = $this->bug->getBySearch($productID, 0, $queryID, 'id_desc', array_keys($linkedBugs), null);
@@ -641,7 +659,7 @@ class mr extends control
 
         $MR           = $this->mr->getByID($MRID);
         $relatedTasks = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'task');
-        $linkedTasks  = $this->mr->getLinkList($MRID, $product->id, '','task');
+        $linkedTasks  = $this->mr->getLinkList($MRID, $product->id, 'task');
 
         /* Get executions by product. */
         $productExecutions   = $this->product->getExecutionPairsByProduct($productID);
