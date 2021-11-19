@@ -92,7 +92,6 @@ function findDropColumns($element, $root)
 
 /**
  * Change column type for a card
- * 变更卡片类型
  * @param {Object} card        Card object
  * @param {String} fromColType The column type before change
  * @param {String} toColType   The column type after change
@@ -100,8 +99,37 @@ function findDropColumns($element, $root)
  */
 function changeCardColType(card, fromColType, toColType, kanbanID)
 {
-    /* TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器  */
-    console.log('TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器', {card, fromColType, toColType, kanbanID});
+    var cardID     = card.id;
+    var projectID  = cardID.substr(cardID.indexOf("-") + 1);;
+    var showIframe = false;
+
+    if(toColType == 'doingProject')
+    {
+        if(fromColType == 'waitProject' && priv.canStart)
+        {
+            var link   = createLink('project', 'start', 'project=' + projectID, '', true);
+            showIframe = true;
+        }
+        if(fromColType == 'closedProject' && priv.canActivate)
+        {
+            var link = createLink('project', 'activate', 'projectID=' + projectID, '', true);
+            showIframe = true;
+        }
+    }
+    else if(toColType == 'closedProject')
+    {
+        if(priv.canClose)
+        {
+            var link = createLink('project', 'close', 'projectID=' + projectID, '', true);
+            showIframe = true;
+        }
+    }
+
+    if(showIframe)
+    {
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
+        modalTrigger.show();
+    }
 
     /*
         // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
@@ -118,15 +146,17 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
  */
 function handleFinishDrop(event)
 {
-    var $card = $(event.element); // The drag card
+    var $card    = $(event.element); // The drag card
     var $dragCol = $card.closest('.kanban-lane-col');
     var $dropCol = $(event.target);
 
-    /* Get d-n-d(drag and drop) infos  获取拖放操作相关信息 */
-    var card = $card.data('item');
+    /* Get d-n-d(drag and drop) infos. */
+    var card        = $card.data('item');
     var fromColType = $dragCol.data('type');
-    var toColType = $dropCol.data('type');
-    var kanbanID = $card.closest('.kanban').data('id');
+    var toColType   = $dropCol.data('type');
+    var kanbanID    = $card.closest('.kanban').data('id');
+
+    if(fromColType == 'doingProject') card = $card.parent().parent().data('item');
 
     changeCardColType(card, fromColType, toColType, kanbanID);
 }

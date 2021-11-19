@@ -32,6 +32,14 @@ js::set('statusColorList', $lang->execution->statusColorList);
 js::set('langMyExecutions', $lang->execution->myExecutions);
 js::set('langDoingProject', $lang->execution->doingProject);
 js::set('projectNames', $projects);
+js::set('priv',
+    array(
+        'canStart'    => common::hasPriv('execution', 'start'),
+        'canSuspend'  => common::hasPriv('execution', 'suspend'),
+        'canClose'    => common::hasPriv('execution', 'close'),
+        'canActivate' => common::hasPriv('execution', 'activate'),
+    )
+);
 ?>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

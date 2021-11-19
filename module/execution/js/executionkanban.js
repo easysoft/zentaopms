@@ -50,7 +50,6 @@ function findDropColumns($element, $root)
     var col         = $col.data();
     var lane        = $col.closest('.kanban-lane').data();
     var kanbanID    = $root.data('id');
-    console.log('findDropColumns', {$element, $root, kanbanID, col, lane});
     var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
 
     if(!kanbanRules) return $root.find('.kanban-lane[data-id="' + lane.id + '"] .kanban-lane-col:not([data-type="project"],[data-type="' + col.type + '"])');
@@ -74,7 +73,7 @@ function findDropColumns($element, $root)
 
 /**
  * Change column type for a card
- * 变更卡片类型
+
  * @param {Object} card        Card object
  * @param {String} fromColType The column type before change
  * @param {String} toColType   The column type after change
@@ -82,8 +81,45 @@ function findDropColumns($element, $root)
  */
 function changeCardColType(card, fromColType, toColType, kanbanID)
 {
-    /* TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器  */
-    console.log('TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器', {card, fromColType, toColType, kanbanID});
+    var cardID      = card.id;
+    var executionID = cardID.substr(cardID.indexOf("-") + 1);;
+    var showIframe  = false;
+
+    if(toColType == 'doing')
+    {
+        if(fromColType == 'wait' && priv.canStart)
+        {
+            var link   = createLink('execution', 'start', 'executionID=' + executionID, '', true);
+            showIframe = true;
+        }
+        if((fromColType == 'suspended' || fromColType == 'closed') && priv.canActivate)
+        {
+            var link = createLink('execution', 'activate', 'executionID=' + executionID, '', true);
+            showIframe = true;
+        }
+    }
+    else if(toColType == 'suspended')
+    {
+        if((fromColType == 'wait' || fromColType == 'doing') && priv.canSuspend)
+        {
+            var link = createLink('execution', 'suspend', 'executionID=' + executionID, '', true);
+            showIframe = true;
+        }
+    }
+    else if(toColType == 'closed')
+    {
+        if(priv.canClose)
+        {
+            var link = createLink('execution', 'close', 'executionID=' + executionID, '', true);
+            showIframe = true;
+        }
+    }
+
+    if(showIframe)
+    {
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
+        modalTrigger.show();
+    }
 
     /*
         // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
