@@ -70,7 +70,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->mr->assignee;?></th>
-            <td><?php echo html::select('assignee', array(''), '', "class='form-control chosen'");?></td>
+            <td><?php echo html::select('assignee', $users, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th></th>

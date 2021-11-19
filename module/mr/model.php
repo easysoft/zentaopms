@@ -107,7 +107,7 @@ class mrModel extends model
         }
 
         /* Exec Job */
-        if(isset($MR->$jobID) && $MR->jobID)
+        if(isset($MR->jobID) && $MR->jobID)
         {
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
             if($pipeline->queue)
@@ -132,7 +132,11 @@ class mrModel extends model
         $MRObject->target_branch     = $MR->targetBranch;
         $MRObject->title             = $MR->title;
         $MRObject->description       = $MR->description;
-        $MRObject->assignee_ids      = $MR->assignee;
+        if($MR->assignee)
+        {
+            $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($this->post->gitlabID, $MR->assignee);
+            if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
+        }
 
         $rawMR = $this->apiCreateMR($this->post->gitlabID, $this->post->sourceProject, $MRObject);
 
@@ -160,10 +164,6 @@ class mrModel extends model
         $newMR->mriid       = $rawMR->iid;
         $newMR->status      = $rawMR->state;
         $newMR->mergeStatus = $rawMR->merge_status;
-
-        /* Change gitlab user ID to zentao account. */
-        $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
-        $newMR->assignee = zget($gitlabUsers, $MR->assignee, '');
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($newMR)
@@ -204,7 +204,7 @@ class mrModel extends model
         $oldMR = $this->getByID($MRID);
 
         /* Exec Job */
-        if($MR->jobID)
+        if(isset($MR->jobID) && $MR->jobID)
         {
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
 
@@ -220,15 +220,15 @@ class mrModel extends model
         $newMR = new stdclass;
         $newMR->title         = $MR->title;
         $newMR->description   = $MR->description;
-        $newMR->assignee_ids  = $MR->assignee;
         $newMR->target_branch = $MR->targetBranch;
+        if($MR->assignee)
+        {
+            $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->gitlabID, $MR->assignee);
+            if($gitlabAssignee) $newMR->assignee_ids = $gitlabAssignee;
+        }
 
         /* Known issue: `reviewer_ids` takes no effect. */
         $rawMR = $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
-
-        /* Change gitlab user ID to zentao account. */
-        $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($oldMR->gitlabID);
-        $MR->assignee = zget($gitlabUsers, $MR->assignee, '');
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR, $this->config->mr->edit->skippedFields)

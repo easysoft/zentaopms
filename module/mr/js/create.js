@@ -44,6 +44,7 @@ $(function()
         });
     });
 
+    /*
     $('#targetProject').change(function()
     {
         targetProject = $(this).val();
@@ -58,6 +59,7 @@ $(function()
             reviewer.chosen().trigger("chosen:updated");;
         });
     });
+    */
 
     $('#repo').change(function()
     {

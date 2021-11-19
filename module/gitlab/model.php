@@ -116,6 +116,22 @@ class gitlabModel extends model
     }
 
     /**
+     * Get gitlab user id by zentao account.
+     *
+     * @param  int $gitlabID
+     * @access public
+     * @return array
+     */
+    public function getUserIDByZentaoAccount($gitlabID, $zentaoAccount)
+    {
+        return $this->dao->select('openID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('providerID')->eq($gitlabID)
+            ->andWhere('account')->eq($zentaoAccount)
+            ->fetch('openID');
+    }
+
+    /**
      * Get project pairs of one gitlab.
      *
      * @param  int $gitlabID
