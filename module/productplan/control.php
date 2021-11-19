@@ -63,6 +63,7 @@ class productplan extends control
 
         $this->commonAction($productID, $branchID);
         $lastPlan = $this->productplan->getLast($productID, $branchID, $parent);
+        $product  = $this->loadModel('product')->getById($productID);
 
         if($lastPlan)
         {
@@ -83,6 +84,7 @@ class productplan extends control
         $this->view->productID = $productID;
         $this->view->lastPlan  = $lastPlan;
         $this->view->branch    = $branchID;
+        $this->view->branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
         $this->view->parent    = $parent;
         $this->display();
     }
