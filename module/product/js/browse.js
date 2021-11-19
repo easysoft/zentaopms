@@ -114,7 +114,7 @@ $(function()
 
     /* Shift key selection. */
     var isClickStoryToggle = false;
-    var lastStorySelected = '';
+    var lastStorySelected  = '';
     $(".story-toggle").click(function()
     {
         isClickStoryToggle = true;
