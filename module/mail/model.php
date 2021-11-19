@@ -266,40 +266,45 @@ class mailModel extends model
      * @param  string  $body
      * @param  array   $ccList
      * @param  bool    $includeMe
+     * @param  array   $emails
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false)
+    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
     {
         if(!$this->config->mail->turnon) return;
         if(!empty($this->config->mail->async)) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
 
         ob_start();
-        $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
-        $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
 
-        /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
-        if($includeMe == false)
+        if(empty($emails))
         {
-            $account = isset($this->app->user->account) ? $this->app->user->account : '';
+            $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
+            $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
 
-            foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
-            foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
+            /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
+            if($includeMe == false)
+            {
+                $account = isset($this->app->user->account) ? $this->app->user->account : '';
+
+                foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
+                foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
+            }
+
+            /* Remove deleted users. */
+            $users = $this->loadModel('user')->getPairs('nodeleted|all');
+            foreach($toList as $key => $to) if(!isset($users[trim($to)])) unset($toList[$key]);
+            foreach($ccList as $key => $cc) if(!isset($users[trim($cc)])) unset($ccList[$key]);
+
+            if(!$toList and !$ccList) return;
+            if(!$toList and $ccList) $toList = array(array_shift($ccList));
+            $toList = join(',', $toList);
+            $ccList = join(',', $ccList);
+
+            /* Get realname and email of users. */
+            $this->loadModel('user');
+            $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
         }
-
-        /* Remove deleted users. */
-        $users = $this->loadModel('user')->getPairs('nodeleted|all');
-        foreach($toList as $key => $to) if(!isset($users[trim($to)])) unset($toList[$key]);
-        foreach($ccList as $key => $cc) if(!isset($users[trim($cc)])) unset($ccList[$key]);
-
-        if(!$toList and !$ccList) return;
-        if(!$toList and $ccList) $toList = array(array_shift($ccList));
-        $toList = join(',', $toList);
-        $ccList = join(',', $ccList);
-
-        /* Get realname and email of users. */
-        $this->loadModel('user');
-        $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
 
         $this->clear();
 
@@ -741,7 +746,12 @@ class mailModel extends model
         }
         else
         {
-            $sendUsers  = $this->{$objectType}->getToAndCcList($object);
+            $sendUsers = $this->{$objectType}->getToAndCcList($object);
+        }
+
+        if($objectType == 'release' and strpos(",{$object->notify},", ',FB,') !== false)
+        {
+            $this->release->sendMail2Feedback($object, $subject);
         }
 
         if(!$sendUsers) return;
