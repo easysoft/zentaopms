@@ -172,7 +172,7 @@
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
-                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $case->branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $case->branch, "onchange='loadBranch();' class='form-control'");?>
                   </div>
                 </td>
               </tr>

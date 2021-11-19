@@ -977,6 +977,11 @@ class testcase extends control
                     break;
                 }
             }
+
+            if($this->app->tab == 'project') $productBranches = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project);
+
+            $this->view->products        = $products;
+            $this->view->productBranches = isset($productBranches) ? $productBranches : $this->loadModel('branch')->getByProducts(array_keys($products), 'ignoreNormal');
         }
 
         // if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']); /* Bug#1343 */
