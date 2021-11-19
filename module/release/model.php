@@ -46,10 +46,11 @@ class releaseModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getList($productID, $branch = 0, $type = 'all')
+    public function getList($productID, $branch = 0, $type = 'all', $orderBy = 't1.date_desc')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as projectName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -60,7 +61,7 @@ class releaseModel extends model
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.date DESC')
+            ->orderBy($orderBy)
             ->fetchAll();
     }
 

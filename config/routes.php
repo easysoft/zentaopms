@@ -28,8 +28,8 @@ $routes['/products/:id/plans'] = 'productPlans';
 $routes['/productplans/:id']   = 'productPlan';
 
 $routes['/releases']              = 'releases';
-$routes['/product/:id/releases']  = 'releases';
-$routes['/projects/:id/releases'] = 'projectreleases';
+$routes['/products/:id/releases'] = 'releases';
+$routes['/projects/:id/releases'] = 'projectReleases';
 $routes['/releases/:id']          = 'release';
 
 $routes['/stories']                = 'stories';
