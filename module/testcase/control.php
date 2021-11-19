@@ -455,6 +455,7 @@ class testcase extends control
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
         }
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
+        $productInfo = $this->loadModel('product')->getById($productID);
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
@@ -465,6 +466,7 @@ class testcase extends control
         $this->view->position         = $position;
         $this->view->projectID        = isset($projectID) ? $projectID : 0;
         $this->view->productID        = $productID;
+        $this->view->productInfo      = $productInfo;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
         $this->view->currentModuleID  = $currentModuleID;
@@ -481,7 +483,7 @@ class testcase extends control
         $this->view->steps            = $steps;
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->branch           = $branch;
-        $this->view->branches         = $this->session->currentProductType != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
+        $this->view->branches         = $productInfo->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
 
         $this->display();
     }
