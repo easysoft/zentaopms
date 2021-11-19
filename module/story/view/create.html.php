@@ -101,7 +101,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <td colspan='2' id='reviewerBox'>
+            <td colspan='4' id='reviewerBox'>
               <div class="table-row">
                 <div class="table-col">
                   <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
