@@ -647,7 +647,7 @@ function setBranchRelated(branchID, productID, num)
     buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
 
     /* If the branch of the current row is inconsistent with the one below, clear the module and execution of the nex row. */
-    if(config.currentMethod == 'batchCreate')
+    if(config.currentMethod == 'batchcreate')
     {
         var nextBranchID = $('#branch' + (num + 1)).val();
         if(nextBranchID != branchID)

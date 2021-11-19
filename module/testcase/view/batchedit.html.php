@@ -71,10 +71,12 @@
           $caseBranch = isset($cases[$caseID]->branch) ? $cases[$caseID]->branch : 0;
           if((!$productID and !$cases[$caseID]->lib) or $app->tab != 'qa')
           {
-              $product  = $this->product->getByID($cases[$caseID]->product);
-              $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
+              $caseProductID = $cases[$caseID]->product;
+              $product       = $products[$caseProductID];
+              $branches      = array('' => '');
               if($product->type != 'normal')
               {
+                  $branches = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
                   foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
               }
 

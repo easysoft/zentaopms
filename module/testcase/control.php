@@ -299,17 +299,9 @@ class testcase extends control
      */
     public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
-        if($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($this->session->execution);
-        }
-        else
-        {
-            $this->qa->setMenu($this->products, $productID, $branch);
-        }
-
-        $testcaseID = ($from and strpos('testcase|work|contribute', $from) !== false) ? $param : 0;
-        $bugID      = $from == 'bug' ? $param : 0;
+        $testcaseID  = ($from and strpos('testcase|work|contribute', $from) !== false) ? $param : 0;
+        $bugID       = $from == 'bug' ? $param : 0;
+        $executionID = $from == 'execution' ? $param : 0;
 
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
@@ -362,13 +354,14 @@ class testcase extends control
         if($branch === '') $branch = $this->cookie->preBranch;
 
         /* Set menu. */
+        if($this->app->tab == 'project' or $this->app->tab == 'execution') $this->loadModel('execution');
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
         }
         elseif($this->app->tab == 'execution')
         {
-            $this->loadModel('execution')->setMenu($this->session->execution);
+            $this->execution->setMenu($this->session->execution);
         }
         else
         {
@@ -459,6 +452,20 @@ class testcase extends control
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+
+        $product = $this->product->getById($productID);
+        if($this->app->tab == 'execution' or $this->app->tab == 'project')
+        {
+            $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID) : array();
+        }
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->createFields;
 
@@ -466,6 +473,7 @@ class testcase extends control
         $this->view->position         = $position;
         $this->view->projectID        = isset($projectID) ? $projectID : 0;
         $this->view->productID        = $productID;
+        $this->view->executionID      = $executionID;
         $this->view->productInfo      = $productInfo;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
@@ -483,7 +491,8 @@ class testcase extends control
         $this->view->steps            = $steps;
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->branch           = $branch;
-        $this->view->branches         = $productInfo->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        $this->view->product          = $product;
+        $this->view->branches         = $branches;
 
         $this->display();
     }
@@ -799,8 +808,9 @@ class testcase extends control
             $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             /* Set menu. */
-            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
-            if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+            if($this->app->tab == 'project' or $this->app->tab == 'execution') $this->loadModel('execution');
+            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($case->project);
+            if($this->app->tab == 'execution') $this->execution->setMenu($case->execution);
             if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
@@ -815,8 +825,22 @@ class testcase extends control
                 }
             }
 
+            /* Get product and branches. */
+            $product = $this->product->getById($productID);
+            if($this->app->tab == 'execution' or $this->app->tab == 'project')
+            {
+                $objectID        = $this->app->tab == 'project' ? $case->project : $case->execution;
+                $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
+                $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            }
+            else
+            {
+                $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID) : array();
+            }
+
             $this->view->productID        = $productID;
-            $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+            $this->view->product          = $product;
+            $this->view->branches         = $branches;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
@@ -957,6 +981,18 @@ class testcase extends control
                     break;
                 }
             }
+
+            if($this->app->tab == 'project')
+            {
+                $productBranches = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project);
+            }
+            else
+            {
+                $productBranches = $this->loadModel('branch')->getByProducts(array_keys($products), 'ignoreNormal');
+            }
+
+            $this->view->products        = $products;
+            $this->view->productBranches = $productBranches;
         }
 
         // if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']); /* Bug#1343 */
