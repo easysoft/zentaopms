@@ -672,7 +672,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `compileStatus` char(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF NOT EXISTS `zt_mrapproval`;
+-- DROP TABLE IF EXISTS `zt_mrapproval`;
 CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `mrID` mediumint(8) unsigned NOT NULL,
