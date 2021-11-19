@@ -804,8 +804,9 @@ class testcase extends control
             $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             /* Set menu. */
+            if($this->app->tab == 'project' or $this->app->tab == 'execution') $this->loadModel('execution');
             if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
-            if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+            if($this->app->tab == 'execution') $this->execution->setMenu($this->session->execution);
             if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
@@ -820,8 +821,22 @@ class testcase extends control
                 }
             }
 
+            /* Get product and branches. */
+            $product = $this->product->getById($productID);
+            if($this->app->tab == 'execution' or $this->app->tab == 'project')
+            {
+                $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+                $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
+                $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            }
+            else
+            {
+                $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID) : array();
+            }
+
             $this->view->productID        = $productID;
-            $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+            $this->view->product          = $product;
+            $this->view->branches         = $branches;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);

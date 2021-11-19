@@ -48,6 +48,7 @@ class testcaseModel extends model
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->config->systemMode == 'new' and $this->app->tab == 'project', 'project', $this->session->project)
+            ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -364,6 +365,19 @@ class testcaseModel extends model
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         if(!$case) return false;
         foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
+
+        /* Get project and execution. */
+        $objects = $this->dao->select('t1.*, t1.project as objectID, t2.type')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.case')->eq($caseID)
+            ->fetchAll('objectID');
+
+        foreach($objects as $objectID => $object)
+        {
+            if($object->type == 'project') $case->project = $objectID;
+            if(in_array($object->type, array('sprint', 'stage'))) $case->execution = $objectID;
+        }
+
         if($case->story)
         {
             $story = $this->dao->findById($case->story)->from(TABLE_STORY)->fields('title, status, version')->fetch();

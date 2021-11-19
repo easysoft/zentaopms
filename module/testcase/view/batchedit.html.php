@@ -65,6 +65,8 @@
           </tr>
         </thead>
         <tbody>
+          <?php $this->loadModel('branch');?>
+          <?php $this->loadModel('execution');?>
           <?php foreach($caseIDList as $caseID):?>
           <?php
           if(!isset($cases[$caseID])) continue;
@@ -72,9 +74,11 @@
           if((!$productID and !$cases[$caseID]->lib) or $app->tab != 'qa')
           {
               $product  = $this->product->getByID($cases[$caseID]->product);
-              $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
+              $branches = array('' => '');
               if($product->type != 'normal')
               {
+                  if($this->app->tab == 'project') $productBranches = $this->execution->getBranchByProduct($product->id, $this->session->project);
+                  $branches = isset($productBranches[$product->id]) ? $productBranches[$product->id] : $this->branch->getPairs($product->id);
                   foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
               }
 
