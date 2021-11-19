@@ -19,7 +19,7 @@ class build extends control
      * @access public
      * @return void
      */
-    public function create($executionID = 0, $productID = 0, $projectID = 0)
+    public function create($executionID = 0, $productID = 0, $projectID = 0, $param = '')
     {
         /* Load these models. */
         $this->loadModel('execution');
@@ -66,7 +66,7 @@ class build extends control
         $productGroups = $this->loadModel('product')->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
         $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID);
-        $branchPairs   = $this->loadModel('branch')->getPairs($productID);
+        $branchPairs   = $this->loadModel('branch')->getPairs($productID, $param);
         $branches      = array();
         $products      = array();
 
@@ -75,7 +75,7 @@ class build extends control
         {
             foreach($branchGroups[$productID] as $branchID => $branch)
             {
-                $branches[$branchID] = $branchPairs[$branchID];
+                if(isset($branchPairs[$branchID])) $branches[$branchID] = $branchPairs[$branchID];
             }
         }
 
