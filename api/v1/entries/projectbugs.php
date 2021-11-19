@@ -20,7 +20,7 @@ class projectBugsEntry extends entry
      */
     public function get($projectID = 0)
     {
-        if(!$projectID) $projectID   = $this->param('project', 0);
+        if(empty($projectID)) $projectID = $this->param('project', 0);
         if(empty($projectID)) return $this->sendError(400, 'Need project id.');
 
         $control = $this->loadController('project', 'bug');
