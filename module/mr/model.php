@@ -107,7 +107,7 @@ class mrModel extends model
         }
 
         /* Exec Job */
-        if($MR->jobID)
+        if(isset($MR->$jobID) && $MR->jobID)
         {
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
             if($pipeline->queue)
