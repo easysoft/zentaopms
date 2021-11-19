@@ -312,7 +312,7 @@ class testcaseModel extends model
         {
             return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-                ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->where('t1.project')->eq((int)$executionID)
                 ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
                 ->andWhere('t2.deleted')->eq('0')

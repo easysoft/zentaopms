@@ -46,6 +46,7 @@ $routes['/bugs']                = 'bugs';
 $routes['/bugs/:id']            = 'bug';
 
 $routes['/programs/:id/projects'] = 'projects';
+$routes['/products/:id/projects'] = 'productProjects';
 $routes['/projects']              = 'projects';
 $routes['/projects/:id']          = 'project';
 
@@ -69,10 +70,10 @@ $routes['/programs/:id'] = 'program';
 
 $routes['/programs/:id/stakeholders'] = 'stakeholders';
 
-$routes['/products/:productID/issues'] = 'productIssues';
-$routes['/projects/:projectID/issues'] = 'issues';
-$routes['/issues']                     = 'issues';
-$routes['/issues/:issueID']            = 'issue';
+$routes['/products/:id/issues'] = 'productIssues';
+$routes['/projects/:id/issues'] = 'issues';
+$routes['/issues']              = 'issues';
+$routes['/issues/:issueID']     = 'issue';
 
 $routes['/todos']              = 'todos';
 $routes['/todos/:id']          = 'todo';
