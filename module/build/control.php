@@ -63,7 +63,7 @@ class build extends control
             $execution  = $this->execution->getByID($executionID);
             $executions = $this->execution->getPairs($execution->project);
         }
-        
+
         $executionList = $this->execution->getByIdList(array_keys($executions));
         foreach($executionList as $execution)
         {
@@ -395,7 +395,6 @@ class build extends control
      */
     public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
     {
-        $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
