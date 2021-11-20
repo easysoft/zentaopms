@@ -34,13 +34,13 @@ class release extends control
     /**
      * Browse releases.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $type
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  string     $type
      * @access public
      * @return void
      */
-    public function browse($productID, $branch = 0, $type = 'all')
+    public function browse($productID, $branch = 'all', $type = 'all')
     {
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true), 'product');
@@ -55,12 +55,12 @@ class release extends control
     /**
      * Create a release.
      *
-     * @param  int    $productID
-     * @param  int    $branch
+     * @param  int        $productID
+     * @param  string|int $branch
      * @access public
      * @return void
      */
-    public function create($productID, $branch = 0)
+    public function create($productID, $branch = 'all')
     {
         if(!empty($_POST))
         {

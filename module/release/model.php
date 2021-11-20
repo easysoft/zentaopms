@@ -43,13 +43,13 @@ class releaseModel extends model
     /**
      * Get list of releases.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $type
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  string     $type
      * @access public
      * @return array
      */
-    public function getList($productID, $branch = 0, $type = 'all')
+    public function getList($productID, $branch = 'all', $type = 'all')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as projectName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -57,7 +57,7 @@ class releaseModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
             ->where('t1.product')->eq((int)$productID)
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC')
@@ -85,17 +85,17 @@ class releaseModel extends model
     /**
      * Get released builds from product.
      *
-     * @param  int    $productID
-     * @param  int    $branch
+     * @param  int        $productID
+     * @param  string|int $branch
      * @access public
      * @return void
      */
-    public function getReleasedBuilds($productID, $branch = 0)
+    public function getReleasedBuilds($productID, $branch = 'all')
     {
         $releases = $this->dao->select('build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
-            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->fetchAll('build');
         return array_keys($releases);
     }
