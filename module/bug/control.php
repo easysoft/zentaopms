@@ -807,7 +807,7 @@ class bug extends control
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
+        $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID, 'all', '');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
 
