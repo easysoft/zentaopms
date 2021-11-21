@@ -217,17 +217,16 @@ class buildModel extends model
     /**
      * Get builds of a execution in pairs.
      *
-     * @param  int    $executionID
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $params       noempty|notrunk, can be a set of them
-     * @param  string $buildIdList
+     * @param  int        $executionID
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  string     $params       noempty|notrunk, can be a set of them
+     * @param  string     $buildIdList
      * @access public
      * @return array
      */
-    public function getExecutionBuildPairs($executionID, $productID, $branch = 0, $params = '', $buildIdList = '')
+    public function getExecutionBuildPairs($executionID, $productID, $branch = 'all', $params = '', $buildIdList = '')
     {
-        if($branch == 'all') $branch = 0;
         $sysBuilds      = array();
         $selectedBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
@@ -240,7 +239,7 @@ class buildModel extends model
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.execution')->eq((int)$executionID)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->andWhere('t1.branch')->eq($branch)
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
@@ -260,15 +259,15 @@ class buildModel extends model
     /**
      * Get builds of a product in pairs.
      *
-     * @param mix    $products int|array
-     * @param int    $branch
-     * @param string $params   noempty|notrunk, can be a set of them
-     * @param bool   $replace
+     * @param mix        $products int|array
+     * @param string|int $branch
+     * @param string     $params   noempty|notrunk, can be a set of them
+     * @param bool       $replace
      *
      * @access public
      * @return array
      */
-    public function getProductBuildPairs($products, $branch = 0, $params = 'noterminate, nodone', $replace = true)
+    public function getProductBuildPairs($products, $branch = 'all', $params = 'noterminate, nodone', $replace = true)
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
@@ -302,7 +301,7 @@ class buildModel extends model
             $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
                 ->where('build')->in(array_keys($builds))
                 ->andWhere('product')->in($products)
-                ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
+                ->beginIF($branch !== 'all')->andWhere('branch')->in("$branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchPairs();
             foreach($releases as $buildID => $releaseName)
