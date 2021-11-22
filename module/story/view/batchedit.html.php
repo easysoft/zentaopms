@@ -78,8 +78,8 @@ foreach(explode(',', $showFields) as $field)
                 foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
             }
 
-            if(!isset($modules[$story->branch])) $modules[$story->branch] = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
-            foreach($modules[$story->branch] as $moduleID => $moduleName) $modules[$story->branch][$moduleID] = '/' . $product->name . $moduleName;
+            if(!isset($modules[$story->product][$story->branch])) $modules[$story->product][$story->branch] = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
+            foreach($modules[$story->product][$story->branch] as $moduleID => $moduleName) $modules[$story->product][$story->branch][$moduleID] = '/' . $product->name . $moduleName;
 
             $productPlans = $this->productplan->getPairs($story->product, $branch);
         }
@@ -94,7 +94,7 @@ foreach(explode(',', $showFields) as $field)
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
-            <?php echo html::select("modules[$storyID]", $modules[$story->branch], $story->module, "class='form-control chosen'");?>
+            <?php echo html::select("modules[$storyID]", $modules[$story->product][$story->branch], $story->module, "class='form-control chosen'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
             <?php

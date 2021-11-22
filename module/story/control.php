@@ -731,22 +731,14 @@ class story extends control
             if($product->type != 'normal')
             {
                 $branches = $this->loadModel('branch')->getPairs($productID);
-                if($branch === 'all')
+                foreach($branches as $branchID => $branchName)
                 {
-                    $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
-                    foreach($branches as $branchID => $branchName)
-                    {
-                        $modules[$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branchID);
-                    }
-                }
-                else
-                {
-                    $modules[$branch] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+                    $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branchID);
                 }
             }
             else
             {
-                $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+                $modules[$productID][0] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
             }
 
             $this->view->modules    = $modules;
