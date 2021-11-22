@@ -183,9 +183,12 @@ class story extends control
         /* Set products, users and module. */
         if($objectID != 0)
         {
-            $products  = $this->product->getProductPairsByProject($objectID);
-            $productID = empty($productID) ? key($products) : $productID;
-            $product   = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
+            $products        = $this->product->getProductPairsByProject($objectID);
+            $productID       = empty($productID) ? key($products) : $productID;
+            $product         = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
         }
         else
         {
@@ -194,6 +197,7 @@ class story extends control
             foreach($productList as $product) $products[$product->id] = $product->name;
             $product = $this->product->getById($productID ? $productID : key($products));
             if(!isset($products[$product->id])) $products[$product->id] = $product->name;
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
         $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
@@ -313,7 +317,7 @@ class story extends control
         $this->view->color            = $color;
         $this->view->pri              = $pri;
         $this->view->branch           = $branch;
-        $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        $this->view->branches         = $branches;
         $this->view->productID        = $productID;
         $this->view->product          = $product;
         $this->view->objectID         = $objectID;
