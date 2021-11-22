@@ -119,7 +119,7 @@
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4' style="padding-right: 6px;">
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' data-placeholder={$lang->project->errorNoProducts} onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                   <span class='input-group-addon fix-border'></span>
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\" data-last='" . $branchID . "'");?>
                 </div>
