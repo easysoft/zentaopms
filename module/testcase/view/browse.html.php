@@ -182,7 +182,7 @@ js::set('suiteID',        $suiteID);
           <?php if(common::hasPriv('testcase', 'batchChangeBranch') and $this->session->currentProductType != 'normal'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
-            <?php $withSearch = count($branches) > 10;?>
+            <?php $withSearch = count($branches) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -210,7 +210,7 @@ js::set('suiteID',        $suiteID);
           <?php if($canBatchChangeModule and !empty($productID) and $branch !== 'all'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
-            <?php $withSearch = count($modules) > 10;?>
+            <?php $withSearch = count($modules) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
