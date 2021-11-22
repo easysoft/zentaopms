@@ -26,6 +26,9 @@ js::set('isStepsTemplate', $isStepsTemplate);
 js::set('oldProjectID', $projectID);
 js::set('blockID', $blockID);
 js::set('moduleID', $moduleID);
+js::set('tab', $this->app->tab);
+if($this->app->tab == 'execution') js::set('objectID', $executionID);
+if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
@@ -50,7 +53,7 @@ js::set('moduleID', $moduleID);
             <td>
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
-                <?php if($this->session->currentProductType != 'normal' and isset($products[$productID])):?>
+                <?php if($productInfo->type != 'normal' and isset($products[$productID])):?>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
               </div>

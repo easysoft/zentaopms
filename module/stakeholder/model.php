@@ -328,7 +328,7 @@ class stakeholderModel extends model
             }
         }
 
-        if(empty($parents)) return false;
+        if(empty($parents)) return array();
 
         /* Get all parent stakeholders.*/
         $parentStakeholders = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();

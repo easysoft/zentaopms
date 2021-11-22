@@ -22,6 +22,6 @@ docker
 .docker-sync
 composer.lock
 .editorconfig
-
+CodeSniffer.conf
 test/runtime/*
 test/www

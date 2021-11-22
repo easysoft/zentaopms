@@ -32,9 +32,10 @@ class productplansEntry extends entry
         {
             $result = array();
             $plans  = $data->data->plans;
+            $pager  = $data->data->pager;
             foreach($plans as $plan) $result[] = $plan;
 
-            return $this->send(200, array('plans' => $result));
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'plans' => array_values($result)));
         }
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);

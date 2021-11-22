@@ -34,6 +34,7 @@ $lang->logout         = '退出';
 $lang->login          = '登录';
 $lang->help           = '帮助';
 $lang->aboutZenTao    = '关于禅道';
+$lang->ztWebsite      = '禅道系统网址';
 $lang->profile        = '个人档案';
 $lang->changePassword = '修改密码';
 $lang->unfoldMenu     = '展开导航';
@@ -104,9 +105,10 @@ $lang->customField     = '自定义表单项';
 $lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 
-$lang->preShortcutKey  = '[快捷键:←]';
-$lang->nextShortcutKey = '[快捷键:→]';
-$lang->backShortcutKey = '[快捷键:Alt+↑]';
+$lang->preShortcutKey    = '[快捷键:←]';
+$lang->nextShortcutKey   = '[快捷键:→]';
+$lang->backShortcutKey   = '[快捷键:Alt+↑]';
+$lang->shortcutOperation = '快捷操作';
 
 $lang->select        = '选择';
 $lang->selectAll     = '全选';
@@ -307,7 +309,8 @@ $lang->createObjects['program']   = '项目集';
 $lang->createObjects['doc']       = '文档';
 
 /* 语言 */
-$lang->lang = 'Language';
+$lang->lang    = 'Language';
+$lang->setLang = '语言设置';
 
 /* 风格列表。*/
 $lang->theme                = '主题';
@@ -402,18 +405,19 @@ $lang->pasteImgFail      = "贴图失败，请稍后重试。";
 $lang->pasteImgUploading = "正在上传图片，请稍后...";
 
 /* 时间格式设置。*/
-if(!defined('DT_DATETIME1')) define('DT_DATETIME1', 'Y-m-d H:i:s');
-if(!defined('DT_DATETIME2')) define('DT_DATETIME2', 'y-m-d H:i');
+if(!defined('DT_DATETIME1'))  define('DT_DATETIME1', 'Y-m-d H:i:s');
+if(!defined('DT_DATETIME2'))  define('DT_DATETIME2', 'y-m-d H:i');
 if(!defined('DT_MONTHTIME1')) define('DT_MONTHTIME1', 'n/d H:i');
 if(!defined('DT_MONTHTIME2')) define('DT_MONTHTIME2', 'n月d日 H:i');
-if(!defined('DT_DATE1')) define('DT_DATE1', 'Y-m-d');
-if(!defined('DT_DATE2')) define('DT_DATE2', 'Ymd');
-if(!defined('DT_DATE3')) define('DT_DATE3', 'Y年m月d日');
-if(!defined('DT_DATE4')) define('DT_DATE4', 'n月j日');
-if(!defined('DT_DATE5')) define('DT_DATE5', 'j/n');
-if(!defined('DT_TIME1')) define('DT_TIME1', 'H:i:s');
-if(!defined('DT_TIME2')) define('DT_TIME2', 'H:i');
-if(!defined('LONG_TIME')) define('LONG_TIME', '2059-12-31');
+if(!defined('DT_DATE1'))      define('DT_DATE1', 'Y-m-d');
+if(!defined('DT_DATE2'))      define('DT_DATE2', 'Ymd');
+if(!defined('DT_DATE3'))      define('DT_DATE3', 'Y年m月d日');
+if(!defined('DT_DATE4'))      define('DT_DATE4', 'n月j日');
+if(!defined('DT_DATE5'))      define('DT_DATE5', 'j/n');
+if(!defined('DT_TIME1'))      define('DT_TIME1', 'H:i:s');
+if(!defined('DT_TIME2'))      define('DT_TIME2', 'H:i');
+if(!defined('LONG_TIME'))     define('LONG_TIME', '2059-12-31');
+if(!defined('BRANCH_MAIN'))   define('BRANCH_MAIN', '0');
 
 /* datepicker 时间*/
 $lang->datepicker = new stdclass();

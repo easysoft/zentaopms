@@ -33,7 +33,7 @@
     <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>
   </div>
   <?php else:?>
-  <form id='myTaskForm' class="main-table table-task" method="post">
+  <form id='myTaskForm' class="main-table table-task skip-iframe-modal" method="post">
     <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <table class="table has-sort-head table-fixed" id='taskTable'>
@@ -73,7 +73,7 @@
           <th class='c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id='myTaskList'>
         <?php foreach($tasks as $task):?>
         <?php $canBeChanged = common::canBeChanged('task', $task);?>
         <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
@@ -89,8 +89,16 @@
           <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
           <td class='c-name <?php if(!empty($task->children)) echo 'has-child';?>' title='<?php echo $task->name?>'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
-            <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color' data-group='execution'");?>
+            <?php 
+            if($task->parent > 0)
+            {
+                echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ' . html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->parentName . ' / '. $task->name, '', "title='{$task->parentName} / {$task->name}'");
+            }
+            else 
+            {
+                echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color' data-group='execution'");
+            }
+            ?>
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
           <?php if($config->systemMode == 'new'):?>
@@ -249,6 +257,8 @@ $(function()
 
     $('#myTaskForm').table(
     {
+        hot: true,
+        replaceId: 'myTaskList',
         statisticCreator: function(table)
         {
             var $table = table.getTable();

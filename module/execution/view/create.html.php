@@ -11,7 +11,7 @@
  */
 ?>
 <?php if(isset($tips)):?>
-<?php $defaultURL = $config->systemMode == 'new' ? $this->createLink('project', 'execution', "status=all&projectID=$projectID") : $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
+<?php $defaultURL = $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
 <?php include '../../common/view/header.html.php';?>
 <body>
   <div class='modal-dialog mw-500px' id='tipsModal'>
@@ -34,11 +34,13 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('holders', $lang->execution->placeholder);?>
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
+<?php js::set('errorSameBranches', $lang->execution->errorSameBranches);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
 <?php js::set('isStage', false);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectCommon', $lang->project->common);?>
+<?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -103,15 +105,17 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
+              <?php $hasBranch = ($product->type != 'normal' and isset($branchGroups[$product->id]));?>
+              <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4'>
-                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
               <?php $i++;?>
+              <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4'>
                 <div class="input-group">
@@ -132,12 +136,14 @@
               <?php elseif($copyExecutionID):?>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
-              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, '', "class='form-control chosen'");?></div>
+              <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
+              <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][$branchID]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
               <?php $i++;?>
               <?php endforeach;?>
+              <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[]", $productPlan, '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][]", $productPlan, '', "class='form-control chosen'");?></div>
               <?php js::set('currentPlanID', '')?>
               <?php endif;?>
             </div>
@@ -151,6 +157,35 @@
         <tr>
           <th><?php echo $lang->execution->copyTeam;?></th>
           <td><?php echo html::select('teams', $teams, $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
+        </tr>
+        <tr>
+          <th rowspan='2'><?php echo $lang->execution->owner;?></th>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->execution->PO;?></span>
+              <?php echo html::select('PO', $poUsers, empty($copyExecution) ? '' : $copyExecution->PO, "class='form-control chosen'");?>
+            </div>
+          </td>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->execution->QD;?></span>
+              <?php echo html::select('QD', $qdUsers, empty($copyExecution) ? '' : $copyExecution->QD, "class='form-control chosen'");?>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->execution->PM;?></span>
+              <?php echo html::select('PM', $pmUsers, empty($copyExecution) ? '' : $copyExecution->PM, "class='form-control chosen'");?>
+            </div>
+          </td>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->execution->RD;?></span>
+              <?php echo html::select('RD', $rdUsers, empty($copyExecution) ? '' : $copyExecution->RD, "class='form-control chosen'");?>
+            </div>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->execution->team;?></th>

@@ -32,10 +32,9 @@
             <div class='input-group' id='productBox'>
               <?php echo html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
               <?php
-              if(!empty($product) and $product->type != 'normal' and isset($branches[$product->branch]))
+              if(!empty($product) and $product->type != 'normal')
               {
-                  if($product->branch) $branches = array($product->branch => $branches[$product->branch]);
-                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $product->branch, "class='form-control chosen'");
+                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, key($product->branches), "class='form-control chosen'");
               }
               ?>
             </div>

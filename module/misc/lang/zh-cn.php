@@ -85,13 +85,16 @@ $lang->misc->feature->lastest        = '最新版本';
 $lang->misc->feature->detailed       = '详情';
 $lang->misc->feature->introduction   = '新功能介绍';
 $lang->misc->feature->tutorial       = '新手引导教程';
+$lang->misc->feature->tutorialImage  = 'theme/default/images/main/tutorial.png';
 $lang->misc->feature->youngBlueTheme = '全新青春蓝主题';
+$lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme.png';
 $lang->misc->feature->nextStep       = '下一步';
 $lang->misc->feature->close          = '关闭';
 $lang->misc->feature->downloadFile   = '下载新版本功能介绍文档';
 $lang->misc->feature->tutorialDesc   = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
 $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
 
+$lang->misc->releaseDate['15.8']        = '2021-11-19';
 $lang->misc->releaseDate['15.7.1']      = '2021-11-02';
 $lang->misc->releaseDate['15.7']        = '2021-10-18';
 $lang->misc->releaseDate['15.6']        = '2021-10-12';
@@ -160,6 +163,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['15.8'][]   = array('title' => '完善分支管理和细节。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['15.7.1'][] = array('title' => '修复Bug。', 'desc' => '');
 $lang->misc->feature->all['15.7'][]   = array('title' => '新增接口库。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['15.6'][]   = array('title' => '修复Bug。', 'desc' => '');

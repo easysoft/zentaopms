@@ -116,16 +116,24 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
+              <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+              <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4'>
-                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $class onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $class onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='". $product->type ."'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' $class onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' $class onchange=\"loadPlans('#products{$i}', this.value)\" data-last='" . $branchID . "'");?>
                 </div>
               </div>
-              <?php if(in_array($product->id, $unmodifiableProducts)) echo html::hidden("products[$i]", $product->id);?>
-              <?php $i++;?>
+              <?php
+              if(in_array($product->id, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))
+              {
+                  echo html::hidden("products[$i]", $product->id);
+                  echo html::hidden("branch[$i]", $branchID);
+              }
+              $i++;
+              ?>
+              <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4'>
                 <div class="input-group">
@@ -142,16 +150,18 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
-              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
+              <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
+              <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][{$branchID}]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
               <?php $i++;?>
+              <?php endforeach;?>
               <?php endforeach;?>
             </div>
           </td>
         </tr>
         <tr>
           <th><?php echo $lang->execution->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($execution->desc), "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($execution->desc), "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
         <?php $this->printExtendFields($execution, 'table');?>
         <tr>
@@ -171,7 +181,10 @@
 </div>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
+<?php js::set('errorSameBranches', $lang->execution->errorSameBranches);?>
 <?php js::set('unmodifiableProducts',$unmodifiableProducts);?>
+<?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
+<?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <?php js::set('confirmSyncStories', $lang->execution->confirmSyncStories);?>
 <?php include '../../common/view/footer.html.php';?>

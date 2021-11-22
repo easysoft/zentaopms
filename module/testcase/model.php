@@ -48,6 +48,7 @@ class testcaseModel extends model
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->config->systemMode == 'new' and $this->app->tab == 'project', 'project', $this->session->project)
+            ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -79,8 +80,8 @@ class testcaseModel extends model
                 $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                 $step->case    = $caseID;
                 $step->version = 1;
-                $step->desc    = htmlspecialchars($stepDesc);
-                $step->expect  = $step->type == 'group' ? '' : htmlspecialchars($this->post->expects[$stepID]);
+                $step->desc    = htmlSpecialString($stepDesc);
+                $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($this->post->expects[$stepID]);
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                 if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                 if($step->type == 'step')  $parentStepID = 0;
@@ -173,7 +174,7 @@ class testcaseModel extends model
                 $data[$i]->{$extendField->field} = $this->post->{$extendField->field}[$i];
                 if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
 
-                $data[$i]->{$extendField->field} = htmlspecialchars($data[$i]->{$extendField->field});
+                $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -218,11 +219,13 @@ class testcaseModel extends model
     /**
      * Get cases of a module.
      *
-     * @param  int    $productID
-     * @param  int    $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $moduleIdList
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  string      $browseType
+     * @param  string      $auto   no|unit
      * @access public
      * @return array
      */
@@ -232,7 +235,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
@@ -246,11 +249,13 @@ class testcaseModel extends model
     /**
      * Get project cases of a module.
      *
-     * @param  int    $productID
-     * @param  int    $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int        $moduleIdList
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  string     $browseType
+     * @param  string     $auto   no|unit
      * @access public
      * @return array
      */
@@ -263,7 +268,7 @@ class testcaseModel extends model
             ->where('1=1')
             ->beginIF(!empty($productID))->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
-            ->beginIF($branch)->andWhere('t2.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
@@ -302,12 +307,27 @@ class testcaseModel extends model
      * @param  int    $executionID
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $browseType
+     * @param  string $browseType   all|wait|needconfirm
      * @access public
      * @return array
      */
     public function getExecutionCases($executionID, $orderBy = 'id_desc', $pager = null, $browseType = '')
     {
+        if($browseType == 'needconfirm')
+        {
+            return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+                ->where('t1.project')->eq((int)$executionID)
+                ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t3.version > t2.storyVersion')
+                ->andWhere("t3.status")->eq('active')
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t1.project')->eq((int)$executionID)
@@ -321,13 +341,13 @@ class testcaseModel extends model
     /**
      * Get cases by suite.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $suiteID
-     * @param  array  $moduleIdList
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto    no|unit
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $suiteID
+     * @param  array       $moduleIdList
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  string      $auto    no|unit
      * @access public
      * @return array
      */
@@ -339,7 +359,7 @@ class testcaseModel extends model
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t3.suite')->eq((int)$suiteID)
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
@@ -360,6 +380,19 @@ class testcaseModel extends model
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         if(!$case) return false;
         foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
+
+        /* Get project and execution. */
+        $objects = $this->dao->select('t1.*, t1.project as objectID, t2.type')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.case')->eq($caseID)
+            ->fetchAll('objectID');
+
+        foreach($objects as $objectID => $object)
+        {
+            if($object->type == 'project') $case->project = $objectID;
+            if(in_array($object->type, array('sprint', 'stage'))) $case->execution = $objectID;
+        }
+
         if($case->story)
         {
             $story = $this->dao->findById($case->story)->from(TABLE_STORY)->fields('title, status, version')->fetch();
@@ -399,14 +432,14 @@ class testcaseModel extends model
     /**
      * Get test cases.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $sort
-     * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $browseType
+     * @param  int        $queryID
+     * @param  int        $moduleID
+     * @param  string     $sort
+     * @param  object     $pager
+     * @param  string     $auto   no|unit
      * @access public
      * @return array
      */
@@ -441,7 +474,7 @@ class testcaseModel extends model
                 ->andWhere('t2.version > t1.storyVersion')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
-                ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
                 ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
@@ -465,11 +498,12 @@ class testcaseModel extends model
     /**
      * Get cases by search.
      *
-     * @param  int    $productID
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $auto   no|unit
+     * @param  int         $productID
+     * @param  int         $queryID
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int|string  $branch
+     * @param  string      $auto   no|unit
      * @access public
      * @return array
      */
@@ -505,7 +539,7 @@ class testcaseModel extends model
         }
 
         $allBranch = "`branch` = 'all'";
-        if($branch and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('0','$branch')";
+        if($branch !== 'all' and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('$branch')";
         if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
         $caseQuery .= ')';
         $caseQuery  = str_replace('`version`', 't1.`version`', $caseQuery);
@@ -714,8 +748,8 @@ class testcaseModel extends model
                         $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                         $step->case    = $caseID;
                         $step->version = $version;
-                        $step->desc    = htmlspecialchars($stepDesc);
-                        $step->expect  = $step->type == 'group' ? '' : htmlspecialchars($this->post->expects[$stepID]);
+                        $step->desc    = htmlSpecialString($stepDesc);
+                        $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($this->post->expects[$stepID]);
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                         if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($step->type == 'step')  $parentStepID = 0;
@@ -858,13 +892,13 @@ class testcaseModel extends model
             if($data->pris[$caseID]     == 'ditto') $data->pris[$caseID]     = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
             if($data->modules[$caseID]  == 'ditto') $data->modules[$caseID]  = isset($prev['module']) ? $prev['module'] : 0;
-            if($data->stories[$caseID]  == 'ditto') $data->stories[$caseID]  = isset($prev['story'])  ? $prev['story']  : 0;
+            if($data->story[$caseID]    == 'ditto') $data->story[$caseID]    = isset($prev['story'])  ? $prev['story']  : 0;
             if($data->types[$caseID]    == 'ditto') $data->types[$caseID]    = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->stories[$caseID]  == '')      $data->stories[$caseID]  = 0;
+            if($data->story[$caseID]  == '')      $data->story[$caseID]  = 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['type']   = $data->types[$caseID];
-            $prev['story']  = $data->stories[$caseID];
+            $prev['story']  = $data->story[$caseID];
             $prev['branch'] = $data->branches[$caseID];
             $prev['module'] = $data->modules[$caseID];
         }
@@ -880,7 +914,7 @@ class testcaseModel extends model
             $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
             $case->status         = $data->statuses[$caseID];
-            $case->story          = $data->stories[$caseID];
+            $case->story          = $data->story[$caseID];
             $case->color          = $data->color[$caseID];
             $case->title          = $data->title[$caseID];
             $case->precondition   = $data->precondition[$caseID];
@@ -893,7 +927,7 @@ class testcaseModel extends model
                 $case->{$extendField->field} = $this->post->{$extendField->field}[$caseID];
                 if(is_array($case->{$extendField->field})) $case->{$extendField->field} = join(',', $case->{$extendField->field});
 
-                $case->{$extendField->field} = htmlspecialchars($case->{$extendField->field});
+                $case->{$extendField->field} = htmlSpecialString($case->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $case->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -1193,8 +1227,8 @@ class testcaseModel extends model
                         if(empty($desc)) continue;
                         $step = new stdclass();
                         $step->type   = $data->stepType[$key][$id];
-                        $step->desc   = htmlspecialchars($desc);
-                        $step->expect = htmlspecialchars(trim($this->post->expect[$key][$id]));
+                        $step->desc   = htmlSpecialString($desc);
+                        $step->expect = htmlSpecialString(trim($this->post->expect[$key][$id]));
 
                         $steps[] = $step;
                     }
@@ -1285,8 +1319,8 @@ class testcaseModel extends model
                             $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                             $stepData->case    = $caseID;
                             $stepData->version = 1;
-                            $stepData->desc    = htmlspecialchars($desc);
-                            $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
+                            $stepData->desc    = htmlSpecialString($desc);
+                            $stepData->expect  = htmlSpecialString($this->post->expect[$key][$id]);
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;
@@ -1439,7 +1473,7 @@ class testcaseModel extends model
         else
         {
             $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->testcase->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
+            $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->config->testcase->search['actionURL'] = $actionURL;
@@ -1516,7 +1550,8 @@ class testcaseModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                if($case->branch) echo "<span class='label label-info label-outline'>{$branches[$case->branch]}</span> ";
+                $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
+                if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                 echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]", '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";
                 break;
@@ -1701,6 +1736,13 @@ class testcaseModel extends model
         return false;
     }
 
+    /**
+     * Summary cases
+     *
+     * @param  array    $cases
+     * @access public
+     * @return string
+     */
     public function summary($cases)
     {
         $executed = 0;

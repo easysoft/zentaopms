@@ -191,7 +191,7 @@ class gitlabModel extends model
      */
     public function getProjectsByExecution($executionID)
     {
-        $products      = $this->loadModel('execution')->getProducts($executionID, false);
+        $products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         $productIdList = array_keys($products);
 
         return $this->dao->select('AID,BID as gitlabProject')

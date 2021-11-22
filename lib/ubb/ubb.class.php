@@ -2,17 +2,17 @@
 /**
  * ubb2html support for php
  * @requires xhEditor
- * 
+ *
  * @author Yanis.Wang<yanis.wang@gmail.com>
  * @site http://xheditor.com/
  * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
- * 
+ *
  * @Version: 0.9.8 (build 100505)
  */
 class ubb
 {
     public static function parseUBB($sUBB)
-    {   
+    {
         $sHtml=$sUBB;
 
         global $emotPath,$cnum,$arrcode,$bUbb2htmlFunctionInit;$cnum=0;$arrcode=array();
@@ -68,7 +68,7 @@ class ubb
             function getEmot($match)
             {
                 global $emotPath;
-                $arr=split(',',$match[1]);
+                $arr=preg_split('/,/',$match[1]);
                 if(!isset($arr[1])){$arr[1]=$arr[0];$arr[0]='default';}
                 $path=$emotPath.$arr[0].'/'.$arr[1].'.gif';
                 return '<img src="'.$path.'" alt="'.$arr[1].'" />';

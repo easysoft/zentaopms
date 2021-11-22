@@ -23,6 +23,7 @@ body {margin-bottom: 25px;}
 <?php js::set('projectID', $projectID);?>
 <?php js::set('branch', $branch);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
+<?php js::set('productType', $this->app->tab == 'product' ? $product->type : '');?>
 <?php
 $unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());
@@ -46,7 +47,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <div class="title" title="<?php echo $moduleName;?>">
       <?php
       echo $moduleName;
-      if($moduleID)
+      if($moduleID and $moduleID !== 'all')
       {
           $removeLink = $browseType == 'bymodule' ? $this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
@@ -436,7 +437,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             </ul>
           </div>
 
-          <?php if($canBatchChangeModule):?>
+          <?php if($canBatchChangeModule and $branch !== 'all'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>
@@ -484,9 +485,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 <?php
                 foreach($plans as $planID => $plan)
                 {
-                    $searchKey = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
+                    $position   = stripos($plan, '/');
+                    $planLabel  = $position === false ? $plan : ('<span class="label label-outline label-badge">' . substr($plan, 0, $position) . '</span>' . substr($plan, $position + 1));
+                    $searchKey  = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                    echo html::a('#', $plan, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
+                    echo html::a('#', $planLabel, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\" onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
                 }
                 ?>
               </div>
@@ -658,5 +661,26 @@ $(function()
         }
     });
 });
+
+/**
+ * Set the color of the badge to white.
+ *
+ * @param  object  obj
+ * @param  bool    isShow
+ * @access public
+ * @return void
+ */
+function setBadgeStyle(obj, isShow)
+{
+    var $label = $(obj);
+    if(isShow == true)
+    {
+        $label.find('.label-badge').css({"color":"#fff", "border-color":"#fff"});
+    }
+    else
+    {
+        $label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
+    }
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -44,8 +44,8 @@ $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,ass
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchCreateFields = 'execution,deadline,steps,type,severity,os,browser';
-$config->bug->custom->batchEditFields   = 'type,severity,pri,branch,assignedTo,deadline,status,resolvedBy,resolution';
+$config->bug->custom->batchCreateFields = 'execution,deadline,steps,type,severity,os,browser,%s';
+$config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline,status,resolvedBy,resolution';
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');
@@ -71,6 +71,7 @@ $config->bug->search['fields']['resolvedBy']     = $lang->bug->resolvedBy;
 $config->bug->search['fields']['status']         = $lang->bug->status;
 $config->bug->search['fields']['confirmed']      = $lang->bug->confirmed;
 
+if($config->systemMode == 'new') $config->bug->search['fields']['project'] = $lang->bug->project;
 $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['branch']         = '';
 $config->bug->search['fields']['plan']           = $lang->bug->productplan;
@@ -114,6 +115,7 @@ $config->bug->search['params']['resolvedBy']    = array('operator' => '=',      
 $config->bug->search['params']['status']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->statusList);
 $config->bug->search['params']['confirmed']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->confirmedList);
 
+if($config->systemMode == 'new') $config->bug->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->bug->search['params']['product']       = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['branch']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['plan']          = array('operator' => '=',       'control' => 'select', 'values' => '');

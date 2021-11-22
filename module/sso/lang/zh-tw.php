@@ -33,7 +33,14 @@ $lang->sso->help = <<<EOD
 <p>1、介面地址的填寫，如果是PATH_INFO ：http://ZDOO網址/sys/sso-check.html，如果是GET：http://ZDOO網址/sys/index.php?m=sso&f=check</p>
 <p>2、代號和密鑰必須與ZDOO後台設置的一致。</p>
 EOD;
+$lang->sso->deny           = '訪問受限';
 $lang->sso->bindNotice     = '添加的新用戶暫時沒有權限，需要聯繫禪道管理員，給該用戶分配權限。';
 $lang->sso->bindNoPassword = '密碼不能為空';
 $lang->sso->bindNoUser     = '該用戶的登錄密碼錯誤，或該用戶不存在！';
 $lang->sso->bindHasAccount = '該用戶名已經存在，請更換用戶名，或直接綁定到該用戶。';
+
+$lang->sso->homeURL             = '飛書主頁配置URL：';
+$lang->sso->redirectURL         = '飛書重定向配置URL：';
+$lang->sso->feishuConfigEmpty   = '請在[後台][通知][Webhook]功能中配置(飛書工作消息通知)';
+$lang->sso->feishuResponseEmpty = '請求響應信息為空';
+$lang->sso->unbound             = '當前飛書用戶未在禪道webhook功能中進行用戶關係綁定';

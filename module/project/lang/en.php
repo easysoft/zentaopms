@@ -43,6 +43,7 @@ $lang->project->unbindWhitelist   = 'Project Remove Whitelist';
 $lang->project->manageProducts    = 'Manage Products';
 $lang->project->copyTitle         = 'Please select an project to copy';
 $lang->project->errorSameProducts = 'Project cannot be associated with multiple identical products.';
+$lang->project->errorSameBranches = 'Project cannot be associated with multiple identical branches.';
 $lang->project->errorNoProducts   = 'At least one product is associated';
 $lang->project->copyNoProject     = 'There are no items available to copy.';
 $lang->project->searchByName      = 'Enter the project name to retrieve';
@@ -266,7 +267,7 @@ $lang->project->cannotCancelCat        = "It has child projects, so you cannot u
 $lang->project->parentBeginEnd         = "Parent begin&end date: %s ~ %s";
 $lang->project->childLongTime          = "If a child as long-term projects, the parent should be long-term too.";
 $lang->project->readjustTime           = 'Change the project begin&end date.';
-$lang->project->notAllowRemoveProducts = 'The story of this product is linked with the project. Unlink it before doing any action.';
+$lang->project->notAllowRemoveProducts = "Stories of this product are linked to projects or {$lang->execution->common} of this project is linked to this product. Please unlink it and try again.";
 
 $lang->project->programTitle['0']    = 'Hidden';
 $lang->project->programTitle['base'] = 'Base-level project only';

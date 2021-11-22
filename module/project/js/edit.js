@@ -64,19 +64,71 @@ $(function()
     adjustPlanBoxMargin();
 
     /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
-    $("#productsBox select").each(function()
+    $("#productsBox select[name^='products']").each(function()
     {
-        var isExisted = $.inArray($(this).attr('data-last'), unmodifiableProducts);
-        if(isExisted != -1)
+        var isExistedProduct = $.inArray($(this).attr('data-last'), unmodifiableProducts);
+        var productType      = $(this).attr('data-type');
+        if(isExistedProduct != -1 && productType == 'normal')
         {
             $(this).prop('disabled', true).trigger("chosen:updated");
             $(this).siblings('div').find('span').attr('title', tip);
         }
     });
 
+    $("#productsBox select[name^='branch']").each(function()
+    {
+        var branchID        = $(this).attr('data-last');
+        var isExistedBranch = $.inArray(branchID, unmodifiableBranches);
+        if(isExistedBranch != -1)
+        {
+            var $product = $(this).closest('.has-branch').find("[name^='products']");
+            if($.inArray($product.val(), unmodifiableProducts) != -1)
+            {
+                if((branchID == 0 && unmodifiableMainBranches[$product.val()]) || branchID != 0)
+                {
+                    $(this).prop('disabled', true).trigger("chosen:updated");
+                    $product.prop('disabled', true).trigger("chosen:updated");
+                    $product.siblings('div').find('span').attr('title', tip);
+                }
+            }
+        }
+    });
+
    /* If end is longtime, set the default date to today */
    var today = $.zui.formatDate(new Date(), 'yyyy-MM-dd');
    if($('#end').val() == longTime) $('#end').val(today).datetimepicker('update').val(longTime);
+
+   $('#submit').click(function()
+   {
+       var products      = new Array();
+       var existedBranch = false;
+
+       /* Determine whether the products of the same branch are linked. */
+       $("#productsBox select[name^='products']").each(function()
+       {
+           var productID = $(this).val();
+           if(typeof(products[productID]) == 'undefined') products[productID] = new Array();
+           if(multiBranchProducts[productID])
+           {
+               var branchID = $(this).closest('.input-group').find("select[id^=branch]").val();
+               if(products[productID][branchID])
+               {
+                   existedBranch = true;
+               }
+               else
+               {
+                   products[productID][branchID] = branchID;
+               }
+               if(existedBranch) return false;
+           }
+       });
+
+       if(existedBranch)
+       {
+           bootbox.alert(errorSameBranches);
+           return false;
+       }
+   });
 });
 
 /**

@@ -70,6 +70,9 @@
             <thead>
               <tr class='colhead text-center'>
                 <th class="c-user"><?php echo $lang->report->user;?></th>
+                <?php if($this->config->systemMode == 'new'):?>
+                <th class="c-project"><?php echo $lang->report->project ;?>
+                <?php endif;?>
                 <th><?php echo $lang->report->execution;?></th>
                 <th class="c-count"><?php echo $lang->report->task;?></th>
                 <th class="c-hours"><?php echo $lang->report->remain;?></th>
@@ -83,24 +86,32 @@
               <?php foreach($workload as $account => $load):?>
               <?php if(!isset($users[$account])) continue;?>
               <tr class="text-center">
-                <td rowspan="<?php echo count($load['task']);?>"><?php echo $users[$account];?></td>
-                <?php $id = 1;?>
-                <?php foreach($load['task'] as $execution => $info):?>
-                <?php $class = $color ? 'rowcolor' : '';?>
-                <?php if($id != 1) echo '<tr class="text-center">';?>
-                <td title='<?php echo $execution?>' class="<?php echo $class;?> text-left"><?php echo html::a($this->createLink('execution', 'view', "executionID={$info['executionID']}"), $execution);?></td>
-                <td class="<?php echo $class;?>"><?php echo $info['count'];?></td>
-                <td class="<?php echo $class;?>"><?php echo $info['manhour'];?></td>
-                <?php if($id == 1):?>
-                <td rowspan="<?php echo count($load['task']);?>"><?php echo $load['total']['count'];?></td>
-                <td rowspan="<?php echo count($load['task']);?>"><?php echo $load['total']['manhour'];?></td>
-                <td rowspan="<?php echo count($load['task']);?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
+                <?php $userTimes = 1; $userCount = 0;?>
+                <?php foreach($load['task']['project'] as $projectName => $info) foreach($info['execution'] as $executionName => $executionInfo) $userCount ++;?> 
+                <td class="<?php echo $class;?>" rowspan="<?php echo $userCount;?>"><?php echo $users[$account];?></td>
+                <?php foreach($load['task']['project'] as $projectName => $info):?>
+                <?php $projectTimes = 1; $projectCount = 0;?>
+                <?php foreach($info['execution'] as $executionName => $executionInfo) $projectCount ++ ;?>
+                <?php foreach($info['execution'] as $executionName => $executionInfo):?>
+                <?php if($projectTimes != 1 || $userTimes != 1) echo "<tr>";?>
+                <?php if($projectTimes == 1 && $this->config->systemMode == 'new'):?>
+		<td class="text-center" rowspan="<?php echo $projectCount;?>" title="<?php echo $projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $projectName);?></td>
                 <?php endif;?>
-                <?php if($id != 1) echo '</tr>'; $id ++;?>
+		<td class="text-center" title="<?php echo $executionName;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$executionInfo['executionID']}"), $executionName);?></td>
+                <td class="text-center"><?php echo $executionInfo['count'];?></td>
+                <td class="text-center"><?php echo $executionInfo['manhour'];?></td>
+                <?php if($userTimes == 1):?>
+                <td rowspan="<?php echo $userCount;?>"><?php echo $load['total']['count'];?></td>
+                <td rowspan="<?php echo $userCount;?>"><?php echo $load['total']['manhour'];?></td>
+                <td rowspan="<?php echo $userCount;?>"><?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?></td>
+                <?php endif;?>
+                <?php if($projectTimes != 1 || $userTimes != 1) echo "</tr>";?>
+                <?php $projectTimes ++; $userTimes ++;?>
                 <?php $color = !$color;?>
                 <?php endforeach;?>
+                <?php endforeach;?>
               </tr>
-            <?php endforeach;?>
+              <?php endforeach;?>
             </tbody>
           </table>
         </div>

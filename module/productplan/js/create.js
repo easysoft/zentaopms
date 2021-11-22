@@ -62,3 +62,16 @@ $('#future').on('change', function()
         $('#end').removeAttr('disabled').parents('tr').show();
     }
 });
+
+$('#branch').change(function()
+{
+    var branchID = $(this).val();
+    var link     = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchID);
+
+    $.post(link, function(data)
+    {
+        data = JSON.parse(data);
+        var planTitle = data ? '(' + lastLang + ': ' + data.title + ')' : '';
+        $('#title').parent().next('td').html(planTitle);
+    })
+})

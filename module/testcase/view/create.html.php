@@ -16,6 +16,10 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
 <?php js::set('isonlybody', isonlybody());?>
+<?php js::set('executionID', $projectID);?>
+<?php js::set('tab', $this->app->tab);?>
+<?php if($this->app->tab == 'execution') js::set('objectID', $executionID);?>
+<?php if($this->app->tab == 'project') js::set('objectID', $projectID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -39,7 +43,7 @@
             <td>
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen'");?>
-                <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
+                <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
               </div>
             </td>
             <td style='padding-left:15px;'>

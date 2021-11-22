@@ -20,20 +20,64 @@ class projectEntry extends entry
      */
     public function get($projectID)
     {
+        $fields = strtolower($this->param('fields'));
+
         $control = $this->loadController('project', 'view');
         $control->view($projectID);
 
         $data = $this->getData();
-        if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
 
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->project, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool'));
-        if(isset($data->status) and $data->status == 'fail')
+        if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+
+        $project = $this->format($data->data->project, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
+        if(empty($fields)) return $this->send(200, $project);
+
+        /* Set other fields. */
+        $fields = explode(',', $fields);
+        foreach($fields as $field)
         {
-            if(isset($data->code) and $data->code == 404) $this->send404();
-            return $this->sendError(400, $data->message);
+            switch($field)
+            {
+                case 'team':
+                    $teams    = array();
+                    $accounts = array();
+                    foreach($data->data->teamMembers as $account => $team)
+                    {
+                        $team = $this->filterFields($team, "account,role,join,realname");
+
+                        $teams[$account]    = $team;
+                        $accounts[$account] = $account;
+                    }
+                    $users = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+                    foreach($teams as $account => $team)
+                    {
+                        $user = zget($users, $account, '');
+                        $team->avatar = $user->avatar;
+                    }
+
+                    $project->teams = $teams;
+                    break;
+                case "stat":
+                    $project->stat = $data->data->statData;
+                    break;
+                case "workhour":
+                    $workhour = $data->data->workhour;
+                    $workhour->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
+                    $project->workhour  = $workhour;
+                    break;
+                case "actions":
+                    $actions = $data->data->actions;
+                    $project->actions = $this->loadModel('action')->processActionForAPI($actions, (array)$data->data->users, $this->lang->project);
+                    break;
+                case "dynamics":
+                    $dynamics = $data->data->dynamics;
+                    $project->dynamics = $this->loadModel('action')->processDynamicForAPI($dynamics);
+                    break;
+            }
         }
 
-        $this->sendError(400, 'error');
+        return $this->send(200, $project);
     }
 
     /**
@@ -46,7 +90,7 @@ class projectEntry extends entry
     public function put($projectID)
     {
         $oldProject     = $this->loadModel('project')->getByID($projectID);
-        $linkedProducts = $this->project->getProducts($projectID);
+        $linkedProducts = $this->loadModel('product')->getProducts($projectID);
 
         /* Set $_POST variables. */
         $fields = 'name,begin,end,acl,parent,desc,PM,whitelist';
@@ -56,8 +100,8 @@ class projectEntry extends entry
         $plans    = array();
         foreach($linkedProducts as $product)
         {
-            $products[] =  $product->id;
-            $plans[]    =  $product->plan;
+            $products[] = $product->id;
+            foreach($product->plans as $planID) $plans[] = $planID;
         }
         $this->setPost('products', $products);
         $this->setPost('plans', $plans);

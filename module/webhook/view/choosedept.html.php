@@ -28,9 +28,13 @@
 <script>
 $(function()
 {
-    var ztreeSettings = 
+    var ztreeSettings =
     {
-        check: 
+        view:
+        {
+            showIcon: false
+        },
+        check:
         {
             enable: true,
             chkStyle: "checkbox",

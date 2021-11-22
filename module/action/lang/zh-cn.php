@@ -164,6 +164,9 @@ $lang->action->desc->resolved        = '$date, 由 <strong>$actor</strong> 解�
 $lang->action->desc->managed         = '$date, 由 <strong>$actor</strong> 维护。' . "\n";
 $lang->action->desc->estimated       = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 $lang->action->desc->run             = '$date, 由 <strong>$actor</strong> 执行。' . "\n";
+$lang->action->desc->syncprogram     = '$date, 由 <strong>$actor</strong> 启动(因项目开始而启动项目集)。' . "\n";
+$lang->action->desc->syncproject     = '$date, 系统判断由于执行开始，将项目状态置为进行中。' . "\n";
+$lang->action->desc->syncexecution   = '$date, 系统判断由于任务开始，将执行状态置为进行中。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -279,6 +282,11 @@ $lang->action->label->reviewrejected        = '拒绝';
 $lang->action->label->reviewclarified       = '有待明确';
 $lang->action->label->commitsummary         = '提交培训总结';
 $lang->action->label->updatetrainee         = '更新培训人员';
+$lang->action->label->setdefaultbranch      = '设置了默认分支';
+$lang->action->label->syncprogram           = '开始了';
+$lang->action->label->syncproject           = '开始了';
+$lang->action->label->syncexecution         = '开始了';
+$lang->action->label->startProgram          = '（因项目开始而启动项目集）';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -311,6 +319,12 @@ $lang->action->dynamicAction->product['deleted']   = '删除' . $lang->productCo
 $lang->action->dynamicAction->product['closed']    = '关闭' . $lang->productCommon;
 $lang->action->dynamicAction->product['undeleted'] = '还原' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = '隐藏' . $lang->productCommon;
+
+$lang->action->dynamicAction->branch['opened']           = '创建分支';
+$lang->action->dynamicAction->branch['edited']           = '编辑分支';
+$lang->action->dynamicAction->branch['closed']           = '关闭分支';
+$lang->action->dynamicAction->branch['activated']        = '激活分支';
+$lang->action->dynamicAction->branch['setdefaultbranch'] = '设置默认分支';
 
 $lang->action->dynamicAction->productplan['opened'] = "创建计划";
 $lang->action->dynamicAction->productplan['edited'] = "编辑计划";
@@ -506,6 +520,7 @@ $lang->action->label->issue       = '问题|issue|view|issueID=%s';
 $lang->action->label->design      = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
 $lang->action->label->api         = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->branch      = '分支|branch|manage|productID=%s&browseType=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

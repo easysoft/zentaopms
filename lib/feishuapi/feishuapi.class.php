@@ -52,17 +52,23 @@ class feishuapi
      * @access public
      * @return array
      */
-    public function getAllUsers()
+    public function getAllUsers($selectedDepts = '')
     {
+        $selectedDepts = trim($selectedDepts);
+        if(empty($selectedDepts)) return array('result' => 'fail', 'message' => 'nodept');
+
         set_time_limit(0);
 
         $users = array();
-        $depts = $this->getDepts();
+        $depts = explode(',', $selectedDepts);
+        $depts = array_flip($depts);
+        unset($depts[1]);
+        if(empty($depts)) return array('result' => 'fail', 'message' => 'nodept');
 
         /* Get users by dept. */
         foreach($depts as $deptID => $count)
         {
-            if($deptID and empty($count)) continue;
+            if(empty($deptID)) continue;
 
             $pageToken = '';
             while(true)
@@ -139,6 +145,46 @@ class feishuapi
     }
 
     /**
+     * Get department tree structure.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDeptTree()
+    {
+        $depts = array('result' => 'success', 'data' => array());
+
+        /* Gets the enterprise name. */
+        $response = $this->queryAPI($this->apiUrl . "tenant/v2/tenant/query", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+        $company  = array('id' => '1', 'pId' => '0', 'name' => $response->data->tenant->name, 'open' => 1);
+        $data     = array($company);
+
+        /* Get depts by parent dept. */
+        $pageToken = '';
+        while(true)
+        {
+            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id=0" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=true", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            if(isset($response->data->items))
+            {
+                foreach($response->data->items as $key => $dept)
+                {
+                    $key ++;
+                    $data[$key]['id']   = $dept->open_department_id;
+                    $data[$key]['pId']  = empty($dept->parent_department_id) ? 1 : $dept->parent_department_id;
+                    $data[$key]['name'] = $dept->name;
+                    $data[$key]['open'] = 1;
+                }
+            }
+
+            if(!isset($response->data->page_token)) break;
+            $pageToken = $response->data->page_token;
+        }
+
+        $depts['data'] = $data;
+        return $depts;
+    }
+
+    /**
      * Send message 
      * 
      * @param  string $userList 
@@ -179,6 +225,11 @@ class feishuapi
 
         if(empty($response)) $this->errors = $errors;
         if(isset($response->code)) $this->errors[$response->code] = "Errcode:{$response->code}, Errmsg:{$response->msg}";
+        if(!empty($this->errors))
+        {
+            echo js::error(array_shift($this->errors));
+            die(js::locate(helper::createLink('webhook', 'browse')));
+        }
         return false;
     }
 

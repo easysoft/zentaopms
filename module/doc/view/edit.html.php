@@ -59,7 +59,7 @@
         </tr>
         <tr id='contentBox' <?php if($doc->type == 'url') echo "class='hidden'"?>>
           <th><?php echo $lang->doc->content;?></th>
-          <td colspan='2'><?php echo html::textarea('content', $doc->type == 'url' ? '' : htmlspecialchars($doc->content), "style='width:100%; height:200px'") . html::hidden('contentType', $doc->contentType);?></td>
+          <td colspan='2'><?php echo html::textarea('content', $doc->type == 'url' ? '' : htmlSpecialString($doc->content), "style='width:100%; height:200px'") . html::hidden('contentType', $doc->contentType);?></td>
         </tr>
         <tr id='urlBox' <?php if($doc->type != 'url') echo "class='hidden'"?>>
           <th><?php echo $lang->doc->url;?></th>

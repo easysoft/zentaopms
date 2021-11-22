@@ -37,5 +37,5 @@ function loadExecutions(productID)
 $(function()
 {
     adjustPriBoxWidth();
-    if($('#execution').val()) loadExecutionBuilds($('#execution').val());
+    if($('#execution').val() != 0) loadExecutionBuilds($('#execution').val());
 });

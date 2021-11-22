@@ -78,6 +78,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
+                ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
                 ->orderBy('`order`, id desc')->query();
         }
 
@@ -86,7 +87,7 @@ class docModel extends model
         $executions = $this->loadModel('execution')->getPairs();
 
         $libPairs = array();
-        while ($lib = $stmt->fetch())
+        while($lib = $stmt->fetch())
         {
             if($lib->product != 0 and !isset($products[$lib->product])) continue;
             if($lib->execution != 0 and !isset($executions[$lib->execution])) continue;
@@ -108,7 +109,7 @@ class docModel extends model
         if(!empty($appendLibs))
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy('`order`, id desc')->query();
-            while ($lib = $stmt->fetch())
+            while($lib = $stmt->fetch())
             {
                 if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
             }
@@ -1621,10 +1622,7 @@ class docModel extends model
         static $docGroups;
         if(empty($docGroups))
         {
-            $docs      = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('lib')->eq((int)$libID)
-                ->andWhere('deleted')->eq(0)
-                ->fetchAll();
+            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq((int)$libID)->andWhere('deleted')->eq(0)->fetchAll();
             $docGroups = array();
             foreach($docs as $doc)
             {
@@ -1647,6 +1645,7 @@ class docModel extends model
                 $docItem->type  = 'doc';
                 $docItem->id    = $doc->id;
                 $docItem->title = $doc->title;
+                $docItem->acl   = $doc->acl;
                 $docItem->url   = helper::createLink('doc', 'view', "doc=$doc->id");
 
                 $buttons = '';

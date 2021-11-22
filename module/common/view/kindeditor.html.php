@@ -52,7 +52,7 @@ $uid = uniqid('');
         cssData: 'html,body {background: none}.article-content{overflow:visible}.article-content, .article-content table td, .article-content table th {line-height: 1.3846153846; font-size: 13px;}.article-content .table-auto {width: auto!important; max-width: 100%;}',
         placeholder: <?php echo json_encode($lang->noticePasteImg);?>,
         placeholderStyle: {fontSize: '13px', color: '#888'},
-        pasteImage: {postUrl: createLink('file', 'ajaxPasteImage', 'uid=' + kuid)},
+        pasteImage: {postUrl: createLink('file', 'ajaxPasteImg', 'uid=' + kuid)},
         syncAfterBlur: true,
         allowFileManager: false,
         spellcheck: false
@@ -90,7 +90,7 @@ $uid = uniqid('');
         {
             items: editorTool,
             placeholder: $editor.attr('placeholder') || options.placeholder || '',
-            pasteImage: {postUrl: createLink('file', 'ajaxPasteImage', 'uid=' + kuid), placeholder: $editor.attr('placeholder') || <?php echo json_encode($lang->noticePasteImg);?>},
+            pasteImage: {postUrl: createLink('file', 'ajaxPasteImg', 'uid=' + kuid), placeholder: $editor.attr('placeholder') || <?php echo json_encode($lang->noticePasteImg);?>},
         });
 
         try

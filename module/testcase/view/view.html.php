@@ -103,7 +103,7 @@
       <?php if(!empty($case->xml)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->xml;?></div>
-        <div class="detail-content article-content"><?php echo nl2br(htmlspecialchars($case->xml));?></div>
+        <div class="detail-content article-content"><?php echo nl2br(htmlSpecialString($case->xml));?></div>
       </div>
       <?php endif;?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case));?>

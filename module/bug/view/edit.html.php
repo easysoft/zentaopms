@@ -19,13 +19,16 @@ js::set('changeProductConfirmed' , false);
 js::set('changeExecutionConfirmed' , false);
 js::set('confirmChangeProduct'   , $lang->bug->confirmChangeProduct);
 js::set('planID'                 , $bug->plan);
-js::set('oldExecutionID'         , $bug->execution);
+js::set('oldProjectID'           , $bug->project);
 js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
 js::set('systemMode'             , $config->systemMode);
 js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+js::set('tab'                    , $this->app->tab);
+if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
+if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
 
 <div class='main-content' id='mainContent'>
@@ -55,7 +58,7 @@ js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget(
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->bug->legendSteps;?></div>
             <div class='detail-content'>
-              <?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12' class='form-control kindeditor' hidefocus='true'");?>
+              <?php echo html::textarea('steps', htmlSpecialString($bug->steps), "rows='12' class='form-control kindeditor' hidefocus='true'");?>
             </div>
           </div>
           <div class='detail'>

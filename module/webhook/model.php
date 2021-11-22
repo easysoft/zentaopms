@@ -25,6 +25,32 @@ class webhookModel extends model
     }
 
     /**
+     * Get a webhook by type.
+     *
+     * @param  int    $type
+     * @access public
+     * @return object
+     */
+    public function getByType($type)
+    {
+        $webhook = $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
+        return $webhook;
+    }
+
+    /**
+     * Get a webhook by type.
+     *
+     * @param  int    $type
+     * @access public
+     * @return object
+     */
+    public function getBindAccount($webhookID, $webhookType, $openID)
+    {
+        $account = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerID')->eq($webhookID)->andWhere('providerType')->eq($webhookType)->andWhere('openID')->eq($openID)->fetch('account');
+        return $account;
+    }
+
+    /**
      * Get webhook list.
      *
      * @param  string $orderBy

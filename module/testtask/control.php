@@ -48,12 +48,12 @@ class testtask extends control
             if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
-                $products  = $this->loadModel('project')->getProducts($objectID, false);
+                $products  = $this->product->getProducts($objectID, 'all', '', false);
             }
             elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
-                $products = $this->loadModel('execution')->getProducts($objectID, false);
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else
             {
@@ -82,12 +82,13 @@ class testtask extends control
     /**
      * Browse test tasks.
      *
-     * @param  int    $productID
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  string      $type
+     * @param  string      $orderBy
+     * @param  int         $recTotal
+     * @param  int         $recPerPage
+     * @param  int         $pageID
      * @access public
      * @return void
      */
@@ -108,7 +109,7 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
+        $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         $this->loadModel('qa')->setMenu($this->products, $productID, $branch, $type);
 
         /* Load pager. */
@@ -251,7 +252,7 @@ class testtask extends control
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 'all', 'notrunk', true);
 
         $testreports = $this->testtask->getTestReportPairsByBuild($build);
 
@@ -1254,7 +1255,7 @@ class testtask extends control
             {
                 $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             }
-            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case');
+            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, 'all');
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
         }

@@ -365,10 +365,11 @@ class executionModel extends model
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
+            ->checkIF(!empty($sprint->name), 'name', 'unique', "`type` in ('sprint','stage') and `project` = $sprint->project")
+            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage')")
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
-            ->checkIF(!empty($sprint->code), 'code', 'unique', "type in ('sprint','stage')")
             ->exec();
 
         /* Add the creater to the team. */
@@ -388,6 +389,9 @@ class executionModel extends model
 
             /* Set team of execution. */
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
+	    array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD);
+	    $members = array_unique($members);
+
             $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
             foreach($members as $account)
             {
@@ -515,12 +519,14 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
+            ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $execution->project")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
 
         $changedAccounts = array();
+        $teamMembers     = array();
         foreach($this->config->execution->ownerFields as $ownerField)
         {
             $owner = zget($execution, $ownerField, '');
@@ -536,8 +542,10 @@ class executionModel extends model
             $member->hours   = $this->config->execution->defaultWorkhours;
             $this->dao->replace(TABLE_TEAM)->data($member)->exec();
 
-            $changedAccounts[$owner] = $owner;
+            $changedAccounts[$owner]  = $owner;
+            $teamMembers[$ownerField] = $member;
         }
+        if($execution->project) $this->addProjectMembers($execution->project, $teamMembers);
 
         $whitelist = explode(',', $execution->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
@@ -570,11 +578,12 @@ class executionModel extends model
         $this->loadModel('user');
 
         $executions    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
+        $allChanges    = array();
+        $data          = fixer::input('post')->get();
         $oldExecutions = $this->getByIdList($this->post->executionIDList);
-        $nameList    = array();
-        $codeList    = array();
+        $nameList      = array();
+        $codeList      = array();
+        $projectModel  = 'scrum';
 
         /* Replace required language. */
         if($this->app->tab == 'project')
@@ -617,10 +626,6 @@ class executionModel extends model
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
 
-            /* Check unique name for edited executions. */
-            if(isset($nameList[$executionName])) dao::$errors['name'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->execution->name, $executionName);
-            $nameList[$executionName] = $executionName;
-
             /* Check unique code for edited executions. */
             if($projectModel == 'scrum' and empty($executionCode))
             {
@@ -639,6 +644,7 @@ class executionModel extends model
         {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+            $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
@@ -646,7 +652,8 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-                ->checkIF(!empty($execution->code), 'code', 'unique', "id NOT " . helper::dbIN($data->executionIDList) . " and type in ('sprint','stage')")
+                ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
+                ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
@@ -1316,7 +1323,7 @@ class executionModel extends model
         {
             $link = helper::createLink($module, $method, "productID=0&branch=0&extra=executionID=%s");
         }
-        elseif(in_array($module, array('bug', 'case', 'testtask', 'testreport')) and $method == 'view')
+        elseif(in_array($module, array('bug', 'case', 'testtask', 'testreport')) and strpos(',view,edit,', ",$method,") !== false)
         {
             $link = helper::createLink('execution', $module, "executionID=%s");
         }
@@ -1622,30 +1629,25 @@ class executionModel extends model
     }
 
     /**
-     * Get products of a execution.
+     * Get branch pairs by product id list.
      *
-     * @param  int    $executionID
-     * @param  bool   $withBranch
+     * @param  array  $products
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getProducts($executionID, $withBranch = true, $status = 'all')
+    public function getBranchByProduct($products, $projectID)
     {
-        if(defined('TUTORIAL'))
+        $branchGroups    = $this->loadModel('branch')->getByProducts($products, 'noclosed');
+        $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
+        foreach($branchGroups as $productID => $branchPairs)
         {
-            if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
-            return $this->loadModel('tutorial')->getExecutionProducts();
+            foreach($branchPairs as $branchID => $branchName)
+            {
+                if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+            }
         }
-
-        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
-            ->where('t1.project')->eq((int)$executionID)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi();
-        if(!$withBranch) return $query->fetchPairs('id', 'name');
-        return $query->fetchAll('id');
+        return $branchGroups;
     }
 
     /**
@@ -1694,25 +1696,30 @@ class executionModel extends model
      * @param  int    $queryID
      * @param  string $actionURL
      * @param  string $type
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory')
+    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory', $objectID = 0)
     {
         $branchPairs  = array();
         $productType  = 'normal';
         $productNum   = count($products);
         $productPairs = array(0 => '');
+        $branches     = $this->loadModel('project')->getBranchesByProject($objectID);
         foreach($products as $product)
         {
             $productPairs[$product->id] = $product->name;
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                if($product->branch)
+                if(isset($branches[$product->id]))
                 {
-                    if(!isset($branchGroups[$product->id][$product->branch])) continue;
-                    $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
+                    foreach($branches[$product->id] as $branchID => $branch)
+                    {
+                        if(!isset($branchGroups[$product->id][$branchID])) continue;
+                        $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
+                    }
                 }
                 else
                 {
@@ -1805,10 +1812,13 @@ class executionModel extends model
         foreach($products as $i => $productID)
         {
             if(empty($productID)) continue;
-            if(isset($existedProducts[$productID])) continue;
+            if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
             $branch  = isset($branches[$i]) ? $branches[$i] : 0;
+
+            if(isset($existedProducts[$productID][$branch])) continue;
+
             if(isset($oldProducts[$productID][$branch]))
             {
                 $oldProduct = $oldProducts[$productID][$branch];
@@ -1819,9 +1829,9 @@ class executionModel extends model
             $data->project = $executionID;
             $data->product = $productID;
             $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
+            $data->plan    = isset($plans[$productID][$branch]) ? $plans[$productID][$branch] : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            $existedProducts[$productID] = true;
+            $existedProducts[$productID][$branch] = true;
         }
 
         $oldProductKeys = array_keys($oldProducts);
@@ -1839,7 +1849,7 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $products = $this->getProducts($toExecution);
+        $products = $this->loadModel('product')->getProducts($toExecution);
         if(empty($products)) return array();
 
         $execution  = $this->getById($toExecution);
@@ -2225,16 +2235,17 @@ class executionModel extends model
         $versions      = $this->loadModel('story')->getVersions($stories);
         $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
-        $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
+        $storyList     = $this->dao->select('id, status, branch')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
         foreach($stories as $key => $storyID)
         {
             $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,closed';
-            if(strpos($notAllowedStatus, $statusPairs[$storyID]) !== false) continue;
+            if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $data = new stdclass();
             $data->project = $executionID;
             $data->product = (int)$products[$storyID];
+            $data->branch  = $storyList[$storyID]->branch;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
             $data->order   = ++$lastOrder;
@@ -3059,7 +3070,7 @@ class executionModel extends model
         foreach($products as $product)
         {
             $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
-            $productBuilds  = $this->loadModel('build')->getProductBuildPairs($product->id, 0, $params = 'noempty|notrunk');
+            $productBuilds  = $this->loadModel('build')->getProductBuildPairs($product->id, 'all', $params = 'noempty|notrunk|withbranch');
             foreach($productModules as $moduleID => $moduleName)
             {
                 $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
@@ -3070,7 +3081,7 @@ class executionModel extends model
             }
         }
 
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $branchPairs  = array();
         $productType  = 'normal';
         $productNum   = count($products);
@@ -3081,9 +3092,12 @@ class executionModel extends model
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                if($product->branch and isset($branchGroups[$product->id][$product->branch]))
+                if(isset($product->branches))
                 {
-                    $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
+                    foreach($product->branches as $branch)
+                    {
+                        if(isset($branchGroups[$product->id][$branch])) $branchPairs[$branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$branch];
+                    }
                 }
                 else
                 {
@@ -3640,11 +3654,32 @@ class executionModel extends model
     public function getPlans($products)
     {
         $this->loadModel('productplan');
-        $productPlans = array();
-        foreach($products as $productID => $product)
+
+        $branchIDList = array();
+        foreach($products as $product)
         {
-            $productPlans[$productID] = $this->productplan->getPairs($product->id, isset($product->branch) ? $product->branch : '');
+            foreach($product->branches as $branchID) $branchIDList[$branchID] = $branchID;
         }
+
+        $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in(array_keys($products))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('branch')->in($branchIDList)->fi()
+            ->orderBy('begin desc')
+            ->fetchAll('id');
+
+        $plans        = $this->productplan->reorder4Children($plans);
+        $productPlans = array();
+        $parentTitle  = array();
+        foreach($plans as $plan)
+        {
+            if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
+            if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
+
+            $productPlans[$plan->product][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $productPlans[$plan->product][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+        }
+
         return $productPlans;
     }
 
@@ -3714,7 +3749,7 @@ class executionModel extends model
     {
         $this->loadModel('user')->updateUserView($executionID, $objectType, $users);
 
-        $products = $this->getProducts($executionID, $withBranch = false);
+        $products = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product', $users);
     }
 

@@ -43,7 +43,7 @@
       <?php endif;?>
       <td class='c-id-sm'><?php echo sprintf('%03d', $caseID);?></td>
       <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-      <td class='text-left title' title='<?php echo $case->title . "\n" . htmlspecialchars($case->xml)?>'><?php if(!common::printLink('testcase', 'view', "case=$case->case&version={$case->version}&from=testtask&task=$taskID", $case->title)) echo $case->title;?></td>
+      <td class='text-left title' title='<?php echo $case->title . "\n" . htmlSpecialString($case->xml)?>'><?php if(!common::printLink('testcase', 'view', "case=$case->case&version={$case->version}&from=testtask&task=$taskID", $case->title)) echo $case->title;?></td>
       <td><?php echo zget($users, $case->lastRunner);?></td>
       <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
       <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>

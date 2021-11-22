@@ -16,6 +16,7 @@ class build extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -63,16 +64,35 @@ class build extends control
             $executions = $this->execution->getPairs($execution->project);
         }
 
-        $productGroups = $this->execution->getProducts($executionID);
+        $executionList = $this->execution->getByIdList(array_keys($executions));
+        foreach($executionList as $execution)
+        {
+            if($execution->lifetime == 'ops') unset($executions[$execution->id]);
+        }
+
+        $productGroups = $this->loadModel('product')->getProducts($executionID);
         $productID     = $productID ? $productID : key($productGroups);
+        $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID);
+        $branchPairs   = $this->loadModel('branch')->getPairs($productID, 'active');
+        $branches      = array();
         $products      = array();
+
+        /* Set branches and products. */
+        if(isset($productGroups[$productID]) and $productGroups[$productID]->type != 'normal' and isset($branchGroups[$productID]))
+        {
+            foreach($branchGroups[$productID] as $branchID => $branch)
+            {
+                if(isset($branchPairs[$branchID])) $branches[$branchID] = $branchPairs[$branchID];
+            }
+        }
+
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
         $this->view->title      = $this->lang->build->create;
         $this->view->position[] = $this->lang->build->create;
 
         $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
-        $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches      = $branches;
         $this->view->executionID   = $executionID;
         $this->view->products      = $products;
         $this->view->projectID     = $projectID;
@@ -139,7 +159,7 @@ class build extends control
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project, 'stagefilter');
         if(!isset($executions[$build->execution])) $executions[$build->execution] = $execution->name;
 
-        $productGroups = $this->execution->getProducts($build->execution);
+        $productGroups = $this->product->getProducts($build->execution);
 
         if(!isset($productGroups[$build->product]))
         {
@@ -148,14 +168,27 @@ class build extends control
             $productGroups[$build->product] = $product;
         }
 
-        $products = array();
+        $branchGroups = $this->loadModel('project')->getBranchesByProject($build->execution);
+        $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
+        $products     = array();
+        $branches     = array();
+
+        /* Set branches and products. */
+        if($productGroups[$build->product]->type != 'normal' and isset($branchGroups[$build->product]))
+        {
+            foreach($branchGroups[$build->product] as $branchID => $branch)
+            {
+                $branches[$branchID] = $branchPairs[$branchID];
+            }
+        }
+
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->build->edit;
         $this->view->position[] = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $execution->name);
         $this->view->position[] = $this->lang->build->edit;
         $this->view->product    = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
-        $this->view->branches   = (isset($productGroups[$build->product]) and $productGroups[$build->product]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
+        $this->view->branches   = $branches;
         $this->view->executions = $executions;
         $this->view->orderBy    = $orderBy;
 
@@ -313,18 +346,17 @@ class build extends control
     /**
      * AJAX: get builds of a product in html select.
      *
-     * @param  int    $productID
-     * @param  string $varName      the name of the select object to create
-     * @param  string $build        build to selected
-     * @param  int    $branch
-     * @param  int    $index        the index of batch create bug.
-     * @param  string $type         get all builds or some builds belong to normal releases and executions are not done.
+     * @param  int        $productID
+     * @param  string     $varName      the name of the select object to create
+     * @param  string     $build        build to selected
+     * @param  string|int $branch
+     * @param  int        $index        the index of batch create bug.
+     * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 0, $index = 0, $type = 'normal')
+    public function ajaxGetProductBuilds($productID, $varName, $build = '', $branch = 'all', $index = 0, $type = 'normal')
     {
-        $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {
@@ -351,19 +383,18 @@ class build extends control
     /**
      * AJAX: get builds of an execution in html select.
      *
-     * @param  int    $executionID
-     * @param  string $varName      the name of the select object to create
-     * @param  string $build        build to selected
-     * @param  int    $branch
-     * @param  int    $index        the index of batch create bug.
-     * @param  bool   $needCreate   if need to append the link of create build
-     * @param  string $type         get all builds or some builds belong to normal releases and executions are not done.
+     * @param  int        $executionID
+     * @param  string     $varName      the name of the select object to create
+     * @param  string     $build        build to selected
+     * @param  string|int $branch
+     * @param  int        $index        the index of batch create bug.
+     * @param  bool       $needCreate   if need to append the link of create build
+     * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 0, $index = 0, $needCreate = false, $type = 'normal')
+    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal')
     {
-        $branch = $branch ? "0,$branch" : $branch;
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {

@@ -43,6 +43,7 @@ $lang->project->unbindWhitelist   = '项目删除白名单';
 $lang->project->manageProducts    = '关联产品';
 $lang->project->copyTitle         = '请选择要复制的项目';
 $lang->project->errorSameProducts = '项目不能关联多个相同的产品。';
+$lang->project->errorSameBranches = '项目不能关联多个相同的分支。';
 $lang->project->errorNoProducts   = '最少关联一个产品';
 $lang->project->copyNoProject     = '没有可用的项目来复制';
 $lang->project->searchByName      = '输入项目名称进行检索';
@@ -266,7 +267,7 @@ $lang->project->cannotCancelCat        = "该项目下已经有子项目，无�
 $lang->project->parentBeginEnd         = "父项目起止时间：%s ~ %s";
 $lang->project->childLongTime          = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->project->readjustTime           = '重新调整项目起止时间';
-$lang->project->notAllowRemoveProducts = '该产品中的需求已与项目进行了关联，请取消关联后再操作。';
+$lang->project->notAllowRemoveProducts = "该产品中的需求与项目进行了关联或者项目下的{$lang->execution->common}关联了该产品，请取消关联后再操作。";
 
 $lang->project->programTitle['0']    = '不显示';
 $lang->project->programTitle['base'] = '只显示一级项目集';

@@ -729,6 +729,12 @@ class upgradeModel extends model
             $this->saveLogs('Execute 15_7');
             $this->execSQL($this->getUpgradeFile('15.7'));
             $this->appendExec('15_7');
+        case '15_7_1':
+            $this->saveLogs('Execute 15_7_1');
+            $this->execSQL($this->getUpgradeFile('15.7.1'));
+            $this->updateObjectBranch();
+            $this->updateProjectStories();
+            $this->appendExec('15_7_1');
         }
 
         $this->deletePatch();
@@ -934,6 +940,7 @@ class upgradeModel extends model
             case '15_5': $confirmContent .= file_get_contents($this->getUpgradeFile('15.5'));
             case '15_6': $confirmContent .= file_get_contents($this->getUpgradeFile('15.6'));
             case '15_7': $confirmContent .= file_get_contents($this->getUpgradeFile('15.7'));
+            case '15_7_1': $confirmContent .= file_get_contents($this->getUpgradeFile('15.7.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -5330,6 +5337,48 @@ class upgradeModel extends model
         $data->value = ',' . $data->value . ',';
         $data->value = str_replace(',project,', ',', $data->value);
         $this->dao->update(TABLE_CONFIG)->set('`value`')->eq(trim($data->value, ','))->where('id')->eq($data->id)->exec();
+        return true;
+    }
+
+    /**
+     * Update branch when object have module.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateObjectBranch()
+    {
+        $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->fetchPairs();
+
+        $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->ne(0)->fetchPairs();
+        foreach($storyModulePairs as $moduleID) $this->dao->update(TABLE_STORY)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+
+        $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->ne(0)->fetchPairs();
+        foreach($bugModulePairs as $moduleID) $this->dao->update(TABLE_BUG)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+
+        $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->ne(0)->fetchPairs();
+        foreach($caseModulePairs as $moduleID) $this->dao->update(TABLE_CASE)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
+
+        return true;
+    }
+
+    /**
+     * Update branch of project linked stories.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateProjectStories()
+    {
+        $storyPairs = $this->dao->select('t1.story, t2.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->fetchPairs();
+
+        foreach($storyPairs as $storyID => $branch)
+        {
+            $this->dao->update(TABLE_PROJECTSTORY)->set('branch')->eq($branch)->where('story')->eq($storyID)->exec();
+        }
+
         return true;
     }
 }

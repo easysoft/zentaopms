@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('dittoNotice', $this->lang->testcase->dittoNotice);?>
+<?php js::set('productID', $productID);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></h2>
@@ -48,7 +49,7 @@
             <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->priAB;?></th>
             <th class='c-status<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->statusAB;?></th>
             <?php if($branchProduct):?>
-            <th class='c-branch<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->testcase->branch;?></th>
+            <th class='c-branch'><?php echo $lang->testcase->branch;?></th>
             <?php endif;?>
             <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
             <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->testcase->story;?></th>
@@ -67,17 +68,19 @@
           <?php foreach($caseIDList as $caseID):?>
           <?php
           if(!isset($cases[$caseID])) continue;
+          $caseBranch = isset($cases[$caseID]->branch) ? $cases[$caseID]->branch : 0;
           if((!$productID and !$cases[$caseID]->lib) or $app->tab != 'qa')
           {
-              $product  = $this->product->getByID($cases[$caseID]->product);
-              $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
+              $caseProductID = $cases[$caseID]->product;
+              $product       = isset($product) ? $product : $products[$caseProductID];
+              $branches      = isset($branches) ? $branches : array('' => '');
               if($product->type != 'normal')
               {
+                  $branches = isset($productBranches[$product->id]) ? $productBranches[$product->id] : $branches;
                   foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
-                  $branches = array('ditto' => $this->lang->story->ditto) + $branches;
               }
 
-              $modules = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', 0, $cases[$caseID]->branch);
+              $modules[$caseProductID][$caseBranch] = $this->tree->getOptionMenu($cases[$caseID]->product, 'case', 0, $caseBranch);
           }
           ?>
           <tr class='text-center'>
@@ -97,14 +100,15 @@
               ?>
             </td>
             <?php if($branchProduct):?>
-            <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>
+            <td class='text-left' style='overflow:visible'>
               <?php $branchProductID = $productID ? $productID : $product->id;?>
               <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
               <?php echo html::select("branches[$caseID]",  $branches,   $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules,   $cases[$caseID]->module, "class='form-control chosen'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("stories[$caseID]",  $stories,   $cases[$caseID]->story, "class='form-control chosen'");?></td>
+            <?php $caseProductID = isset($caseProductID) ? $caseProductID : $productID;?>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules[$caseProductID][$caseBranch],   $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]",  $stories,   $cases[$caseID]->story, "class='form-control chosen'");?></td>
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>
                 <div class="input-control has-icon-right">
@@ -140,4 +144,5 @@
   </form>
 <?php endif;?>
 </div>
+<?php js::set('hasStory', isset($visibleFields['story']));?>
 <?php include '../../common/view/footer.html.php';?>

@@ -138,7 +138,7 @@ class task extends control
             $this->executeHooks($taskID);
 
             /* Return task id when call the API. */
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
 
             /* If link from no head then reload. */
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -300,7 +300,7 @@ class task extends control
             foreach($mails as $mail) $taskIDList[] = $mail->taskID;
 
             /* Return task id list when call the API. */
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
 
             /* Locate the browser. */
             if(!empty($iframe)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -395,6 +395,8 @@ class task extends control
 
             $this->executeHooks($taskID);
 
+            if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
+
             if($task->fromBug != 0)
             {
                 foreach($changes as $change)
@@ -408,7 +410,7 @@ class task extends control
                 }
             }
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api'))
             {
                 return $this->send(array('status' => 'success', 'data' => $taskID));
             }
@@ -464,9 +466,24 @@ class task extends control
 
             if(!empty($allChanges))
             {
+                /* updateStatus is a description of whether to update the responsibility performance*/
+                $waitTaskID = false;
                 foreach($allChanges as $taskID => $changes)
                 {
                     if(empty($changes)) continue;
+
+                    /* Determine whether the status of a task has been changed, if the status of a task has been changed, set $updateStatus to taskID*/
+                    if($waitTaskID == false)
+                    {
+                        foreach($changes as $changeField)
+                        {
+                            if($changeField['field'] == 'status' && $changeField['new'] == 'doing')
+                            {
+                                $waitTaskID = $taskID;
+                                break;
+                            }
+                        }
+                    }
 
                     $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
@@ -484,6 +501,7 @@ class task extends control
                             }
                         }
                     }
+                    if($waitTaskID !== false) $this->loadModel('common')->syncPPEStatus($waitTaskID);
                 }
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
@@ -576,7 +594,7 @@ class task extends control
 
             if(dao::isError())
             {
-                if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 die(js::error(dao::getError()));
             }
 
@@ -585,7 +603,7 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -780,7 +798,7 @@ class task extends control
 
             if(dao::isError())
             {
-                if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 die(js::error(dao::getError()));
             }
 
@@ -792,6 +810,7 @@ class task extends control
             }
 
             $this->executeHooks($taskID);
+            $this->loadModel('common')->syncPPEStatus($taskID);
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             if($changes and $this->task->needUpdateBugStatus($task))
@@ -808,7 +827,7 @@ class task extends control
                 }
             }
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -837,6 +856,8 @@ class task extends control
         {
             $changes = $this->task->recordEstimate($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('common')->syncPPEStatus($taskID);
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
@@ -940,7 +961,7 @@ class task extends control
             $changes = $this->task->finish($taskID);
             if(dao::isError())
             {
-                if($this->viewType == 'json') return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 die(js::error(dao::getError()));
             }
             $files = $this->loadModel('file')->saveUpload('task', $taskID);

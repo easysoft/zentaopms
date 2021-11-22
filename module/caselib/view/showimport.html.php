@@ -75,7 +75,7 @@ $(function()
         <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control chosen'")?></td>
         <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : (!empty($case->id) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
         <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control'")?></td>
-        <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
+        <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlSpecialString($case->precondition) : "", "class='form-control'")?></td>
         <td class='col-content'>
           <?php if(isset($stepData[$key]['desc'])):?>
           <table class='w-p100 bd-0'>
@@ -86,8 +86,8 @@ $(function()
           ?>
             <tr class='step'>
               <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
-              <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc['content']), "class='form-control'")?></td>
-              <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlspecialchars($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
+              <td><?php echo html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'")?></td>
+              <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
             </tr>
           <?php endforeach;?>
           </table>

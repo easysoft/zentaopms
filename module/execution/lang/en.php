@@ -328,6 +328,7 @@ $lang->execution->notAllowedUnlinkStory       = "This {$lang->SRCommon} is linke
 $lang->execution->notAllowRemoveProducts      = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
 $lang->execution->errorNoLinkedProducts       = "No {$lang->productCommon} is linked to {$lang->executionCommon}. You will be directed to {$lang->productCommon} page to link one.";
 $lang->execution->errorSameProducts           = "{$lang->executionCommon} cannot be linked to the same {$lang->productCommon} twice.";
+$lang->execution->errorSameBranches           = "{$lang->executionCommon} cannot be linked to the same branch twice";
 $lang->execution->errorBegin                  = "The start time of {$lang->executionCommon} cannot be less than the start time of the project %s.";
 $lang->execution->errorEnd                    = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
 $lang->execution->accessDenied                = "Your access to {$lang->executionCommon} is denied!";
@@ -345,6 +346,7 @@ $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} h
 $lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
+$lang->execution->confirmStoryToTask          = $lang->SRCommon . '%s are converted to tasks in the current. Do you want to convert them anyways?';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

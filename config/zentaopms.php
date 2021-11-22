@@ -142,6 +142,9 @@ $config->openMethods[] = 'my.changepassword';
 $config->openMethods[] = 'my.profile';
 $config->openMethods[] = 'my.settutorialconfig';
 $config->openMethods[] = 'doc.selectlibtype';
+$config->openMethods[] = 'sso.getfeishusso';
+$config->openMethods[] = 'sso.feishuauthen';
+$config->openMethods[] = 'sso.feishulogin';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');

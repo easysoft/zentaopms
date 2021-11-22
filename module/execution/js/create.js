@@ -35,7 +35,6 @@ $(function()
     if(copyExecutionID) productID = $product.val();
     $product.val(productID);
     $product.trigger("chosen:updated");
-    loadBranches($product);
 
     var adjustMainCol = function()
     {
@@ -78,6 +77,38 @@ $(function()
 
     var acl = $("[name^='acl']:checked").val();
     setWhite(acl);
+
+    $('#submit').click(function()
+    {
+        var products      = new Array();
+        var existedBranch = false;
+
+        /* Determine whether the products of the same branch are linked. */
+        $("#productsBox select[name^='products']").each(function()
+        {
+            var productID = $(this).val();
+            if(typeof(products[productID]) == 'undefined') products[productID] = new Array();
+            if(multiBranchProducts[productID])
+            {
+                var branchID = $(this).closest('.input-group').find("select[id^=branch]").val();
+                if(products[productID][branchID])
+                {
+                    existedBranch = true;
+                }
+                else
+                {
+                    products[productID][branchID] = branchID;
+                }
+                if(existedBranch) return false;
+            }
+        });
+
+        if(existedBranch)
+        {
+            bootbox.alert(errorSameBranches);
+            return false;
+        }
+    });
 });
 
 function showLifeTimeTips()

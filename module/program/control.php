@@ -288,6 +288,8 @@ class program extends control
                 $actionID = $this->action->create('program', $programID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->loadModel('common')->syncPPEStatus($programID);
             $this->executeHooks($programID);
             die(js::reload('parent.parent'));
         }

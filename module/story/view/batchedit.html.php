@@ -76,15 +76,15 @@ foreach(explode(',', $showFields) as $field)
             if($product->type != 'normal')
             {
                 foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
-                $branches = array('ditto' => $this->lang->story->ditto) + $branches;
             }
 
-            $modules = $this->tree->getOptionMenu($story->product, $viewType = 'story', 0, $story->branch);
-            foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
-            $modules = array('ditto' => $this->lang->story->ditto) + $modules;
+            if(!isset($modules[$story->product][$story->branch]))
+            {
+                $modules[$story->product][$story->branch] = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
+                foreach($modules[$story->product][$story->branch] as $moduleID => $moduleName) $modules[$story->product][$story->branch][$moduleID] = '/' . $product->name . $moduleName;
+            }
 
             $productPlans = $this->productplan->getPairs($story->product, $branch);
-            $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
         }
         ?>
         <tr>
@@ -97,9 +97,25 @@ foreach(explode(',', $showFields) as $field)
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
-            <?php echo html::select("modules[$storyID]", $modules, $story->module, "class='form-control chosen'");?>
+            <?php echo html::select("modules[$storyID]", $modules[$story->product][$story->branch], $story->module, "class='form-control chosen'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
+            <?php
+            if($productID)
+            {
+                $productPlans = array('' => '');
+                if($story->branch != BRANCH_MAIN)
+                {
+                    if(isset($plans[$story->branch])) $productPlans += $plans[$story->branch];
+                    if(isset($plans[0])) $productPlans += $plans[0];
+                }
+                else
+                {
+                    foreach($plans as $branchPlan) $productPlans += $branchPlan;
+                }
+            }
+            ?>
+            <?php if($this->session->currentProductType == 'normal') $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;?>
             <?php echo html::select("plans[$storyID]", $productPlans, $story->plan, "class='form-control chosen'");?>
           </td>
           <td title='<?php echo $story->title?>'>
