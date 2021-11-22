@@ -151,12 +151,16 @@ $lang->bug->assignToMeAB   = 'AssignedToMe';
 $lang->bug->openedByMeAB   = 'ReportedByMe';
 $lang->bug->resolvedByMeAB = 'ResolvedByMe';
 
-$lang->bug->ditto        = 'Ditto';
-$lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one is!';
-$lang->bug->noAssigned   = 'Unassigned';
-$lang->bug->noBug        = 'No bugs yet.';
-$lang->bug->noModule     = '<div>You have no modules.</div><div>Manage now</div>';
-$lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->ditto          = 'Ditto';
+$lang->bug->dittoNotice    = 'This bug is not linked to the same product as the last one is!';
+$lang->bug->noAssigned     = 'Unassigned';
+$lang->bug->noBug          = 'No bugs yet.';
+$lang->bug->noModule       = '<div>You have no modules.</div><div>Manage now</div>';
+$lang->bug->delayWarning   = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->labelConfirmed = 'Confirmed';
+$lang->bug->labelPostponed = 'Postponed';
+$lang->bug->changed        = 'Changed';
+$lang->bug->storyChanged   = 'Story Changed';
 
 /* Page tags. */
 $lang->bug->lblAssignedTo = 'AssignTo';

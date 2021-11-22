@@ -43,6 +43,7 @@ $lang->project->unbindWhitelist   = '項目刪除白名單';
 $lang->project->manageProducts    = '關聯產品';
 $lang->project->copyTitle         = '請選擇要複製的項目';
 $lang->project->errorSameProducts = '項目不能關聯多個相同的產品。';
+$lang->project->errorSameBranches = '項目不能關聯多個相同的分支。';
 $lang->project->errorNoProducts   = '最少關聯一個產品';
 $lang->project->copyNoProject     = '沒有可用的項目來複制';
 $lang->project->searchByName      = '輸入項目名稱進行檢索';
@@ -266,7 +267,7 @@ $lang->project->cannotCancelCat        = "該項目下已經有子項目，無�
 $lang->project->parentBeginEnd         = "父項目起止時間：%s ~ %s";
 $lang->project->childLongTime          = "子項目中有長期項目，父項目也應該是長期項目";
 $lang->project->readjustTime           = '重新調整項目起止時間';
-$lang->project->notAllowRemoveProducts = '該產品中的需求已與項目進行了關聯，請取消關聯後再操作。';
+$lang->project->notAllowRemoveProducts = "該產品中的需求與項目進行了關聯或者項目下的{$lang->execution->common}關聯了該產品，請取消關聯後再操作。";
 
 $lang->project->programTitle['0']    = '不顯示';
 $lang->project->programTitle['base'] = '只顯示一級項目集';

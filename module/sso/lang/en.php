@@ -33,7 +33,14 @@ $lang->sso->help = <<<EOD
 <p>1. Zdoo address is required. If use PATH_INFO, it is http://YOUR ZDOO ADDRESS/sys/sso-check.html If GET, it is http://YOUR ZDOO ADDRESS/sys/index.php?m=sso&f=check</p>
 <p>2. Code and Secret Key must be the same as set in Zdoo.</p>
 EOD;
+$lang->sso->deny           = 'Access Limited';
 $lang->sso->bindNotice     = 'User that is just added has no permissions. You have to ask ZenTao Admin to grant permissions to the User.';
 $lang->sso->bindNoPassword = 'Password should not be empty.';
 $lang->sso->bindNoUser     = 'Password is wrong/User cannot be found!';
 $lang->sso->bindHasAccount = 'This username already exists. Change your username or bind to it.';
+
+$lang->sso->homeURL             = 'Feishu Page Config URL：';
+$lang->sso->redirectURL         = 'Feishu Redirect URL：';
+$lang->sso->feishuConfigEmpty   = 'Go to [Admin]-[Notification]-[Webhook] to set ( Feishu Work Notification)';
+$lang->sso->feishuResponseEmpty = 'Request response is empty';
+$lang->sso->unbound             = 'Current Feishu user is not bound in ZenTao-Wwebhook.';

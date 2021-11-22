@@ -168,7 +168,6 @@ $lang->action->desc->syncprogram     = '$date, 由 <strong>$actor</strong> 启�
 $lang->action->desc->syncproject     = '$date, 系统判断由于执行开始，将项目状态置为进行中。' . "\n";
 $lang->action->desc->syncexecution   = '$date, 系统判断由于任务开始，将执行状态置为进行中。' . "\n";
 
-
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> 关联子任务 <strong>$extra</strong>。' . "\n";
