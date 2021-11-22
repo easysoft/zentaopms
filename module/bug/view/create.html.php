@@ -162,6 +162,7 @@ js::set('moduleID', $moduleID);
               <?php echo html::input('notifyEmail', '', "class='form-control'");?>
               </div>
             </td>
+          </tr>
           <?php endif;?>
           <?php if($showExecution):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
