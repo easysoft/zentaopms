@@ -665,21 +665,21 @@ $(function()
 /**
  * Set the color of the badge to white.
  *
- * @param  obj $obj
- * @param  isshow $isshow
+ * @param  object  obj
+ * @param  bool    isShow
  * @access public
  * @return void
  */
-function setBadgeStyle(obj, isshow)
+function setBadgeStyle(obj, isShow)
 {
-    var label = $(obj);
-    if(isshow == true)
+    var $label = $(obj);
+    if(isShow == true)
     {
-        label.find('.label-badge').css({"color":"#fff", "border-color":"#fff"});
+        $label.find('.label-badge').css({"color":"#fff", "border-color":"#fff"});
     }
     else
     {
-        label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
+        $label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
     }
 }
 </script>
