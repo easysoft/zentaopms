@@ -512,7 +512,7 @@ class bug extends control
         }
         else
         {
-            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+            $branches = $productInfo->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
         /* Replace the value of bug that needs to be replaced with the value of the object that is transferred to bug. */
