@@ -78,7 +78,7 @@ foreach(explode(',', $showFields) as $field)
                 foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
             }
 
-            if(!isset($story->product][$story->branch]))
+            if(!isset($modules[$story->product][$story->branch]))
             {
                 $modules[$story->product][$story->branch] = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
                 foreach($modules[$story->product][$story->branch] as $moduleID => $moduleName) $modules[$story->product][$story->branch][$moduleID] = '/' . $product->name . $moduleName;
