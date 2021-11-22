@@ -72,11 +72,11 @@
           if((!$productID and !$cases[$caseID]->lib) or $app->tab != 'qa')
           {
               $caseProductID = $cases[$caseID]->product;
-              $product       = $products[$caseProductID];
-              $branches      = array('' => '');
+              $product       = isset($product) ? $product : $products[$caseProductID];
+              $branches      = isset($branches) ? $branches : array('' => '');
               if($product->type != 'normal')
               {
-                  $branches = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
+                  $branches = isset($productBranches[$product->id]) ? $productBranches[$product->id] : $branches;
                   foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
               }
 
