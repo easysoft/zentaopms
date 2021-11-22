@@ -99,6 +99,7 @@ function findDropColumns($element, $root)
  */
 function changeCardColType(card, fromColType, toColType, kanbanID)
 {
+    if(typeof card == 'undefined') return false;
     var cardID     = card.id;
     var projectID  = cardID.substr(cardID.indexOf("-") + 1);;
     var showIframe = false;
