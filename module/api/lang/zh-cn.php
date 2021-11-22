@@ -176,6 +176,7 @@ $lang->api->paramsScopeOptions = array(
 /* Api global common params */
 $lang->api->paramsTypeOptions = array(
     'object'   => 'object',
+    'array'    => 'array',
     'string'   => 'string',
     'date'     => 'date',
     'datetime' => 'datetime',

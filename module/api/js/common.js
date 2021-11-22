@@ -250,7 +250,7 @@ try {
             <input type="text" :placeholder="langDesc" autocomplete="off" class="form-control" v-model="value.desc">
           </td>
           <td>
-              <button class="btn btn-link" type="button" @click="addSub" v-if="value.structType != 'formData' && value.paramsType == 'object'">${addSubField}</button>
+              <button class="btn btn-link" type="button" @click="addSub" v-if="value.structType != 'formData' && ['object', 'array'].indexOf(value.paramsType) != -1">${addSubField}</button>
               <button class="btn btn-link" type="button" @click="add">${structAdd}</button>
               <button class="btn btn-link" type="button" @click="del">${structDelete}</button>
            </td>
