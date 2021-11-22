@@ -819,22 +819,7 @@ class treeModel extends model
 
         /* Get module according to product. */
         $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
-        $branchGroups = $this->dao->select('t1.product as product,branch,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch=t3.id')
-            ->where('t1.project')->eq($rootID)
-            ->andWhere('t2.type')->ne('normal')
-            ->andWhere('t1.product')->in(array_keys($products))
-            ->andWhere('t2.deleted')->eq('0')
-            ->fetchGroup('product', 'branch');
-
-        foreach($branchGroups as $productID => $branches)
-        {
-            foreach($branches as $branchID => $branchInfo)
-            {
-                $branchGroups[$productID][$branchID] = $branchID == BRANCH_MAIN ? $this->lang->branch->main : $branchInfo->name;
-            }
-        }
+        $branchGroups = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $rootID);
 
         $productNum = count($products);
         foreach($products as $id => $product)
