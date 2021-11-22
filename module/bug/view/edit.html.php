@@ -149,6 +149,14 @@ js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget(
                   <td><?php echo html::input('deadline', $bug->deadline, "class='form-control form-date'");?></td>
                 </tr>
                 <tr>
+                  <th><?php echo $lang->bug->feedbackBy;?></th>
+                  <td><?php echo html::input('feedbackBy', $bug->feedbackBy, "class='form-control'");?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->notifyEmail;?></th>
+                  <td><?php echo html::input('notifyEmail', $bug->notifyEmail, "class='form-control'");?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->bug->os;?></th>
                   <td><?php echo html::select('os', $lang->bug->osList, $bug->os, "class='form-control chosen'");?></td>
                 </tr>

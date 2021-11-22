@@ -37,6 +37,9 @@
   </div>
   <?php endif;?>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="wholeContent">
+<?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
@@ -224,6 +227,14 @@
                   </td>
                 </tr>
                 <tr>
+                  <th><?php echo $lang->bug->feedbackBy;?></th>
+                  <td><?php echo $bug->feedbackBy;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->notifyEmail;?></th>
+                  <td><?php echo $bug->notifyEmail;?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->bug->os;?></th>
                   <td><?php echo $lang->bug->osList[$bug->os];?></td>
                 </tr>
@@ -398,6 +409,9 @@
     <?php $this->printExtendFields($bug, 'div', "position=right&inForm=0&inCell=1");?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+</div>
+<?php endif;?>
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>

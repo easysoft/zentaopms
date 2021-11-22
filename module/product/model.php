@@ -513,6 +513,7 @@ class productModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
+            ->join('reviewer', ',')
             ->remove('uid,newLine,lineName')
             ->get();
 
@@ -586,6 +587,7 @@ class productModel extends model
         $product = fixer::input('post')
             ->setDefault('line', 0)
             ->join('whitelist', ',')
+            ->join('reviewer', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,changeProjects')
             ->get();
@@ -1362,7 +1364,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0)
+    public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0)
     {
         $this->loadModel('report');
         $this->loadModel('story');
@@ -1867,6 +1869,7 @@ class productModel extends model
         }
         else if($module == 'doc')
         {
+            if($method == 'create' or $method == 'edit') $method = 'tableContents';
             $link = helper::createLink('doc', $method, "type=product&objectID=%s&from=product");
         }
         elseif($module == 'design')

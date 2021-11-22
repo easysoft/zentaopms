@@ -48,9 +48,7 @@ class docModel extends model
             ->andWhere('type')->eq('api')
             ->orderBy('id_desc')
             ->fetchAll('id');
-        $libs = array_filter($libs, function ($value) {
-            return $this->checkPrivLib($value);
-        });
+        $libs = array_filter($libs, array($this, 'checkPrivLib'));
         return $libs;
     }
 
@@ -2277,7 +2275,7 @@ EOT;
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        $docs       = $this->dao->select('*')->from(TABLE_DOC)
+        $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('lib')->eq($rootID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll();
@@ -2311,14 +2309,26 @@ EOT;
             {
                 if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
 
-                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . '>';
+                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . " data-id=$doc->id>";
 
                 if($currentMethod == 'tablecontents')
                 {
                     $treeMenu[0] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                 }
-
-                $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                if($currentMethod == 'objectlibs')
+                {
+                    $treeMenu[0] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
+                    if(common::hasPriv('doc', 'edit'))
+                    {
+                        $treeMenu[0] .= "<div class='tree-actions'>";
+                        $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$rootID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit}");
+                        $treeMenu[0] .= '</div></div>';
+                    }
+                }
+                else
+                {
+                    $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                }
 
                 $treeMenu[0] .= '</li>';
             }
@@ -2365,13 +2375,28 @@ EOT;
                 else
                 {
                     if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
-                    $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . '>';
+                    $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . " data-id=$doc->id>";
 
                     if($currentMethod == 'tablecontents')
                     {
                         $treeMenu[$module->id] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
                     }
-                    $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+
+                    if($currentMethod == 'objectlibs')
+                    {
+                        $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
+                        if(common::hasPriv('doc', 'edit'))
+                        {
+                            $treeMenu[$module->id] .= "<div class='tree-actions'>";
+                            $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit}");
+                            $treeMenu[$module->id] .= '</div>';
+                        }
+                        $treeMenu[$module->id] .= '</div>';
+                    }
+                    elseif($currentMethod == 'tablecontents')
+                    {
+                        $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                    }
 
                     $treeMenu[$module->id] .= '</li>';
                 }
@@ -2384,7 +2409,22 @@ EOT;
         }
         else
         {
-            $li = "<a title='{$module->name}'>" . $module->name . '</a>';
+            if($currentMethod == 'tablecontents')
+            {
+                $li = "<a title='{$module->name}'>" . $module->name . '</a>';
+            }
+            else
+            {
+                $li = "<div class='tree-group'><span class='module-name'><a class='sort-module' title='{$module->name}'>" . $module->name . '</a></span>';
+                if(common::hasPriv('tree', 'edit') or common::hasPriv('tree', 'browse'))
+                {
+                    $li .= "<div class='tree-actions'>";
+                    if(common::hasPriv('tree', 'edit'))   $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title={$this->lang->doc->editType}");
+                    if(common::hasPriv('tree', 'browse')) $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editType}");
+                    $li .= '</div>';
+                }
+                $li .= '</div>';
+            }
         }
         if($treeMenu[$module->id])
         {
@@ -2393,7 +2433,7 @@ EOT;
 
         if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
 
-        $class = ['catalog'];
+        $class = array('catalog');
         if($treeMenu[$module->id])
         {
             array_push($class, 'closed');
@@ -2413,7 +2453,7 @@ EOT;
             }
         }
 
-        $treeMenu[$module->parent] .= '<li class="' . implode(' ', $class) . '">' . $li . '</li>';
+        $treeMenu[$module->parent] .= '<li class=" can-sort ' . implode(' ', $class) . '" data-id=' . $module->id . '>' . $li . '</li>';
     }
 
     /**

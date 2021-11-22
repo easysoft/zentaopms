@@ -230,7 +230,7 @@ class block extends control
         $commonField = 'common';
         if($module == 'project' and $projectID)
         {
-            $project     = $this->loadModel('project')->getByID($this->session->project);
+            $project     = $this->loadModel('project')->getByID($projectID);
             $commonField = $project->model . 'common';
         }
 
@@ -881,7 +881,7 @@ class block extends control
         }
 
         $today  = helper::today();
-        if(isset($this->config->maxVersion)) $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
         $tasks  = $this->dao->select("project,
             sum(consumed) as totalConsumed,
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
@@ -901,7 +901,7 @@ class block extends control
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
                 $project->executions = $this->project->getStats($projectID, 'all', 0, 0, 30, 'id_desc', $pager);
             }
-            elseif($project->model == 'waterfall' and isset($this->config->maxVersion))
+            elseif($project->model == 'waterfall')
             {
                 $begin   = $project->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);

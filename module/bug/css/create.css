@@ -45,3 +45,8 @@ html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 #osBox .required:after {right: 1px;}
 #osBox {width: 190px;}
 #projectBox .required:after {right: 1px;}
+#assignedTo_chosen, .load-all-user {float: left;;}
+.assigned-box #assignedTo_chosen {width: 81% !important;}
+.deadline-box #assignedTo_chosen {width: 153px !important;}
+.assigned-box .load-all-user {float: left;}
+.assigned-box .load-all-user .btn {border-left: none;}

@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'vue/vue.js');?>
-<?php js::set('example', $example);?>
 <?php js::set('libID', $api->lib);?>
 <?php
 js::set('typeOptions', $typeOptions);

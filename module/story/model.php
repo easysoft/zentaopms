@@ -207,6 +207,8 @@ class storyModel extends model
             ->setIF($this->post->needNotReview, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
@@ -233,7 +235,11 @@ class storyModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
+            ->autoCheck()
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
+            ->batchCheck($requiredFields, 'notempty')
+            ->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -402,16 +408,13 @@ class storyModel extends model
     public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
         $forceReview = $this->checkForceReview();
-        foreach($_POST['needReview'] as $index => $value)
+        foreach($_POST['title'] as $index => $value)
         {
             if($_POST['title'][$index] and isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
-            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]))
+            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]) and $forceReview)
             {
-                if($value || $forceReview)
-                {
-                    dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-                    return false;
-                }
+                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+                return false;
             }
         }
 
@@ -460,7 +463,7 @@ class storyModel extends model
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
-            $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
+            $story->status     = (empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'draft';
             $story->stage      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
@@ -747,6 +750,8 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
             ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
             ->join('reviewedBy', ',')
@@ -823,6 +828,7 @@ class storyModel extends model
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError())
@@ -3349,7 +3355,7 @@ class storyModel extends model
     {
         $action = strtolower($action);
 
-        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
+        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate' and $action != 'change') return false;
 
         global $app;
 
@@ -3742,6 +3748,12 @@ class storyModel extends model
                 break;
             case 'lastEditedDate':
                 echo substr($story->lastEditedDate, 5, 11);
+                break;
+            case 'feedbackBy':
+                echo $story->feedbackBy;
+                break;
+            case 'notifyEmail':
+                echo $story->notifyEmail;
                 break;
             case 'mailto':
                 $mailto = explode(',', $story->mailto);

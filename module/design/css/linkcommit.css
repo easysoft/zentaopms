@@ -1,0 +1,8 @@
+#mainContent {min-height: 350px;}
+.searchBox{min-height: 45px;}
+.searchBox .srearch-date{float: left; width: 20%}
+.searchBox h4{float:left;display: inline-block}
+.searchBox span{float:left;line-height:30px}
+#logForm .table thead th{background: #efefef}
+#begin{margin-right:5px}
+#end{margin-left:5px}

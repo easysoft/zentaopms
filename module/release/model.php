@@ -519,4 +519,82 @@ class releaseModel extends model
 
         return array($toList, $ccList);
     }
+
+    /**
+     * Send mail to feedback user.
+     *
+     * @param  object $release
+     * @param  string $subject
+     * @access public
+     * @return void
+     */
+    public function sendMail2Feedback($release, $subject)
+    {
+        $stories = $bugs = array();
+
+        $buildObjects   = $this->dao->select('stories,bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
+        $releaseObjects = $this->dao->select('stories,bugs')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch();
+
+        $stories = explode(',', trim($buildObjects->stories, ',')) + explode(',', trim($releaseObjects->stories, ','));
+        $bugs    = explode(',', trim($buildObjects->bugs, ','))    + explode(',', trim($releaseObjects->bugs, ','));
+
+        if(!empty($stories))
+        {
+            $storyNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
+                ->where('id')->in($stories)
+                ->andWhere('notifyEmail')->ne('')
+                ->fetchGroup('notifyEmail', 'id');
+
+            $bugNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
+                ->where('id')->in($bugs)
+                ->andWhere('notifyEmail')->ne('')
+                ->fetchGroup('notifyEmail', 'id');
+
+            $toList     = array();
+            $emails     = array();
+            $storyNames = array();
+            $bugNames   = array();
+            foreach($storyNotifyList as $storyList)
+            {
+                $email = new stdClass();
+                foreach($storyList as $story)
+                {
+                    $storyNames[] = $story->title;
+
+                    if(isset($email->account)) continue;
+                    $email->account  = $story->notifyEmail;
+                    $email->email    = $story->notifyEmail;
+                    $email->realname = '';
+                    $emails[$story->notifyEmail] = $email;
+                    $toList[$story->notifyEmail] = $story->notifyEmail;
+                }
+            }
+            foreach($bugNotifyList as $bugList)
+            {
+                $email = new stdClass();
+                foreach($bugList as $bug)
+                {
+                    $bugNames[] = $bug->title;
+
+                    if(isset($email->account)) continue;
+                    $email->account  = $bug->notifyEmail;
+                    $email->email    = $bug->notifyEmail;
+                    $email->realname = '';
+                    $emails[$bug->notifyEmail] = $email;
+                    $toList[$bug->notifyEmail] = $bug->notifyEmail;
+                }
+            }
+
+            if(!empty($toList))
+            {
+                $storyNames = implode(',', $storyNames);
+                $bugNames   = implode(',', $bugNames);
+                $mailContent = sprintf($this->lang->release->mailContent, $release->name);
+                if($storyNames) $mailContent .= sprintf($this->lang->release->storyList, $storyNames);
+                if($bugNames)   $mailContent .= sprintf($this->lang->release->bugList,   $bugNames);
+                $this->loadModel('mail')->send(implode(',', $toList), $subject, $mailContent, '', false, $emails);
+            }
+        }
+
+    }
 }

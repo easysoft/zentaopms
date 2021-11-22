@@ -1,373 +1,69 @@
-/**
- * Get story demo kanban data
- * 获取“软件需求”看板演示数据
- * @returns {Object} Kanban data
- * @todo 该方法作为演示，应该在最终版本中移除
- */
-function getStoryKanbanDemoData()
+function changeView(view)
 {
-    /* Define kanban columns  定义看板列 */
-    var columns =
-    [
-        /* 看板列定义数据结构：
-           id:         列 ID（确保在页面上唯一）,
-           type:       类型,
-           name:       显示的名称,
-           color:      列名称颜色,
-           parentType: 所属的父级列类型
-           asParent:   是否作为父级列
-           itemType:   看板条目类型，例如：'story'（需求）
-           maxCount:   最大数目，该列上允许展示的条目最大数目，如果为 0 表示无限制 */
-        {id: 'story-blacklog',   type: 'blacklog',   name: 'Blacklog', color: '', maxCount: 0},
-        {id: 'story-ready',      type: 'ready',      name: '准备好',    color: '', maxCount: 4},
-        {id: 'story-dev',        type: 'dev',        name: '开发',      color: '', maxCount: 4, asParent: true},
-        {id: 'story-dev-doing',  type: 'dev-doing',  name: '进行中',    color: '#126eed', maxCount: 2, parentType: 'dev'},
-        {id: 'story-dev-done',   type: 'dev-done',   name: '完成',      color: '#2fab8e', maxCount: 2, parentType: 'dev'},
-        {id: 'story-test',        type: 'test',       name: '测试',     color: '', maxCount: 4, asParent: true},
-        {id: 'story-test-doing', type: 'test-doing', name: '进行中',    color: '#126eed', maxCount: 2, parentType: 'test'},
-        {id: 'story-test-done',  type: 'test-done',  name: '完成',      color: '#2fab8e', maxCount: 2, parentType: 'test'},
-        {id: 'story-accepted',   type: 'accepted',   name: '已验收',    color: '', maxCount: 0},
-        {id: 'story-published',  type: 'published',  name: '已发布',    color: '', maxCount: 0},
-    ];
-
-    /* Define items in blacklog column  定义 Blacklog 列上的条目 */
-    var blacklogColItems =
-    [
-        /* 需求数据结构：
-           id:          ID，通常为需求 ID,
-           title:        名称,
-           order:       显示顺序，如果指定为 0，则按 ID 倒序排序,
-           pri:         优先级,
-           estimate:    预估时间,
-           assignedTo:  指派给,
-           deadline:    截止日期 */
-        {id: 10010, title: '第一条 Blacklog',     order: 1, pri: 1, estimate: 2,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10011, title: '文档模块的实现',        order: 2, pri: 2,  estimate: 0,  assignedTo: 'sunhao'},
-        {id: 10012, title: '实现软件需求看板视图中不同分组条件的看板展示方式', order: 3, pri: 3, estimate: 10, assignedTo: 'admin'},
-        {id: 10013, title: 'Blacklog 3',         order: 4, pri: 0, estimate: 0,  assignedTo: 'sunhao'},
-        {id: 10014, title: '实现泳道的更多操作菜单', order: 5, pri: 0, estimate: 0,  assignedTo: 'sunhao'},
-    ];
-    /* Define items in ready column  定义 准备好 列上的条目 */
-    var readyColItems =
-    [
-        /* 需求数据结构参见 blacklogColItems 定义 */
-        {id: 10020, title: '在看板列中实现创建任务功能', order: 10, pri: 1, estimate: 2,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10021, title: '实现泳道的上下移动',       order: 11, pri: 2,  estimate: 0,  assignedTo: 'sunhao'},
-        {id: 10024, title: '实现泳道的更多操作菜单',    order: 15, pri: 0, estimate: 0,  assignedTo: 'sunhao'},
-    ];
-    var devDoingColItems = /* Define items in dev/doing column  定义 开发/进行中 列上的条目 */
-    [
-        /* 需求数据结构参见 blacklogColItems 定义 */
-        {id: 10030, title: '实现看板的更多操作菜单', order: 10, pri: 3, estimate: 0,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10031, title: '实现卡片拖动效果功能',  order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
-    ];
-    var devDoneColItems = /* Define items in dev/done column  定义 开发/完成 列上的条目 */
-    [
-        /* 需求数据结构参见 blacklogColItems 定义 */
-        {id: 10040, title: '实现看板列卡片排序功能',  order: 10, pri: 1, estimate: 4,  assignedTo: 'admin', deadline: '2021-10-30'},
-    ];
-    var testDoingColItems = /* Define items in test/doing column  定义 测试/进行中 列上的条目 */
-    [
-        /* 需求数据结构参见 blacklogColItems 定义 */
-        {id: 10050, title: '实现看板列的更多操作菜单',  order: 10, pri: 3, estimate: 0,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10051, title: '实现Bug卡片的更多操作功能', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
-    ];
-    var testDoneColItems = /* Define items in test/done column  定义 测试/完成 列上的条目 */
-    [
-        /* 需求数据结构参见 blacklogColItems 定义 */
-        {id: 10060, title: '实现任务卡片的更多操作功能', order: 10, pri: 1, estimate: 4,  assignedTo: 'admin', deadline: '2021-10-30'},
-    ];
-    var acceptedColItems =
-    [
-        /* 需求数据结构参见 blacklogColItems 定义 */
-        {id: 10070, title: '实现执行看板的新建按钮组功能',  order: 10, pri: 3, estimate: 12,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10071, title: '在看板列中实现提交Bug功能', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
-        {id: 10072, title: '在看板列中实现需求的添加和关联功能',  order: 10, pri: 3, estimate: 10,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10073, title: '实现任务看板视图中不同分组条件的看板展示方式', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
-    ];
-    var publishedColItems =
-    [
-        /* 需求数据结构参见 blacklogColItems 定义 */
-        {id: 10080, title: '实现任务看板视图中泳道分组下拉菜单功能',  order: 10, pri: 3, estimate: 2,  assignedTo: 'admin'},
-    ];
-
-    /* Define kanban items in lane  定义看板泳道内每一列的条目，属性名为看板列类型，属性值为条目列表 */
-    var items =
-    {
-        /* 看板列类型:  条目列表 */
-        blacklog:     blacklogColItems,
-        ready:        readyColItems,
-        'dev-doing':  devDoingColItems,
-        'dev-done':   devDoneColItems,
-        'test-doing': testDoingColItems,
-        'test-done':  testDoneColItems,
-        accepted:     acceptedColItems,
-        published:    publishedColItems,
-    };
-
-    /* Define kanban lanes  定义看板泳道 */
-    var lanes =
-    [
-        /* 泳道数据结构：
-           id:              泳道 ID，确保页面上唯一，可以为数字或字符串,
-           name:            名称,
-           items:           定义每列上的条目
-           color:           泳道名称背景色
-           defaultItemType: 看板泳道上的条目默认类型，例如：'story'（需求） */
-        {id: 'story', name: '软件需求', items: items, color: '#3dc6fc', defaultItemType: 'story'},
-    ]
-
-    /* Return kanban data  返回看板数据 */
-    /* 看板数据结构：
-       id:       ID，确保页面上唯一，可以为数字或字符串,
-       columns:  定义看板上的所有列,
-       lanes:    定义看板上的所有泳道
-       defaultItemType: 看板上的条目默认类型，例如：'story'（需求） */
-    return {id: 'story', columns: columns, lanes: lanes, defaultItemType: 'story'};
+    var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + view);
+    location.href = link;
 }
 
 /**
- * Get bug demo kanban data
- * 获取“Bug”看板演示数据
- * @returns {Object} Kanban data
- * @todo 该方法作为演示，应该在最终版本中移除
- */
-function getBugKanbanDemoData()
-{
-    /* Define kanban columns  定义看板列 */
-    var columns =
-    [
-        /* 看板列定义数据结构：
-        id:         列 ID（确保在页面上唯一）,
-        type:       类型,
-        name:       显示的名称,
-        color:      列名称颜色,
-        parentType: 所属的父级列类型
-        asParent:   是否作为父级列
-        itemType:   看板条目类型，例如：'story'（需求）
-        maxCount:   最大数目，该列上允许展示的条目最大数目，如果为 0 表示无限制 */
-        {id: 'bug-wait',            type: 'wait',            name: '待确认',  color: '', maxCount: 0},
-        {id: 'bug-confirmed',       type: 'confirmed',      name: '已确认',  color: '', maxCount: 4},
-        {id: 'bug-resolving',       type: 'resolving',      name: '解决中',  color: '', maxCount: 4, asParent: true},
-        {id: 'bug-resolving-doing', type: 'resolving-doing',name: '进行中',  color: '#126eed', maxCount: 2, parentType: 'resolving'},
-        {id: 'bug-resolving-done',  type: 'resolving-done', name: '完成',    color: '#2fab8e', maxCount: 2, parentType: 'resolving'},
-        {id: 'bug-test',            type: 'test',           name: '测试',    color: '', maxCount: 4, asParent: true},
-        {id: 'bug-test-doing',      type: 'test-doing',     name: '测试中',  color: '#126eed', maxCount: 2, parentType: 'test'},
-        {id: 'bug-test-done',       type: 'test-done',      name: '测试完毕', color: '#2fab8e', maxCount: 2, parentType: 'test'},
-        {id: 'bug-closed',          type: 'closed',         name: '已关闭',   color: '', maxCount: 0},
-    ];
-
-    /* Define items in wait column  定义 待确认 列上的条目 */
-    var waitColItems =
-    [
-        /* bug 数据结构：
-        id:          ID，通常为 Bug ID,
-        title:       名称,
-        order:       显示顺序，如果指定为 0，则按 ID 倒序排序,
-        pri:         优先级,
-        severity:    紧急程度,
-        assignedTo:  指派给 */
-        {id: 10010, title: '在看板列中实现创建任务功能', order: 10, pri: 1, severity: 2,  assignedTo: 'admin'},
-        {id: 10011, title: '实现泳道的上下移动',       order: 11, pri: 2,  severity: 1,  assignedTo: 'sunhao'},
-        {id: 10014, title: '实现泳道的更多操作菜单',    order: 15, pri: 0, severity: 1,  assignedTo: 'sunhao'},
-    ];
-    /* Define items in confirmed column  定义 已确认 列上的条目 */
-    var confirmedColItems =
-    [
-        /* Bug 数据结构参见 waitColItems 定义 */
-        {id: 10020, title: '在看板列中实现创建任务功能', order: 10, pri: 1, severity: 2,  assignedTo: 'admin'},
-        {id: 10021, title: '实现泳道的上下移动',       order: 11, pri: 2,  severity: 1,  assignedTo: 'sunhao'},
-        {id: 10024, title: '实现泳道的更多操作菜单',    order: 15, pri: 0, severity: 1,  assignedTo: 'sunhao'},
-    ];
-    var resolvingDoingColItems = /* Define items in resolving/doing column  定义 开发/进行中 列上的条目 */
-    [
-        /* Bug 数据结构参见 waitColItems 定义 */
-        {id: 10030, title: '实现看板的更多操作菜单', order: 10, pri: 3, severity: 1,  assignedTo: 'admin'},
-        {id: 10031, title: '实现卡片拖动效果功能',  order: 11, pri: 2,  severity: 2,  assignedTo: 'sunhao'},
-    ];
-    var resolvingDoneColItems = /* Define items in resolving/done column  定义 开发/完成 列上的条目 */
-    [
-        /* Bug 数据结构参见 waitColItems 定义 */
-        {id: 10040, title: '实现看板列卡片排序功能',  order: 10, pri: 1, severity: 4,  assignedTo: 'admin'},
-    ];
-    var testDoingColItems = /* Define items in test/doing column  定义 测试/进行中 列上的条目 */
-    [
-        /* Bug 数据结构参见 waitColItems 定义 */
-        {id: 10050, title: '实现看板列的更多操作菜单',  order: 10, pri: 3, severity: 3,  assignedTo: 'admin'},
-        {id: 10051, title: '实现Bug卡片的更多操作功能', order: 11, pri: 2,  severity: 2,  assignedTo: 'sunhao'},
-    ];
-    var testDoneColItems = /* Define items in test/done column  定义 测试/完成 列上的条目 */
-    [
-        /* Bug 数据结构参见 waitColItems 定义 */
-        {id: 10060, title: '实现任务卡片的更多操作功能', order: 10, pri: 1, severity: 4,  assignedTo: 'admin'},
-    ];
-    var closedColItems =
-    [
-        /* Bug 数据结构参见 waitColItems 定义 */
-        {id: 10070, title: '实现执行看板的新建按钮组功能',  order: 10, pri: 3, severity: 3,  assignedTo: 'admin'},
-        {id: 10071, title: '在看板列中实现提交Bug功能', order: 11, pri: 2,  severity: 2,  assignedTo: 'sunhao'},
-        {id: 10072, title: '在看板列中实现需求的添加和关联功能',  order: 10, pri: 3, severity: 3,  assignedTo: 'admin'},
-        {id: 10073, title: '实现任务看板视图中不同分组条件的看板展示方式', order: 11, pri: 2,  severity: 2,  assignedTo: 'sunhao'},
-    ];
-
-    /* Define kanban items in lane  定义看板泳道内每一列的条目，属性名为看板列类型，属性值为条目列表 */
-    var items =
-    {
-        /* 看板列类型:  条目列表 */
-        wait:              waitColItems,
-        confirmed:         confirmedColItems,
-        'resolving-doing': resolvingDoingColItems,
-        'resolving-done':  resolvingDoneColItems,
-        'test-doing':      testDoingColItems,
-        'test-done':       testDoneColItems,
-        closed:            closedColItems,
-    };
-
-    /* Define kanban lanes  定义看板泳道 */
-    var lanes =
-    [
-        /* 泳道数据结构：
-        id:              泳道 ID，确保页面上唯一，可以为数字或字符串,
-        name:            名称,
-        items:           定义每列上的条目
-        color:           泳道名称背景色
-        defaultItemType: 看板泳道上的条目默认类型，例如：'bug'（Bug） */
-        {id: 'bug', name: 'Bug', items: items, color: '#9c30b0', defaultItemType: 'bug'},
-    ]
-
-    /* Return kanban data  返回看板数据 */
-    /* 看板数据结构：
-    id:       ID，确保页面上唯一，可以为数字或字符串,
-    columns:  定义看板上的所有列,
-    lanes:    定义看板上的所有泳道
-    defaultItemType: 看板上的条目默认类型，例如：'bug'（Bug） */
-    return {id: 'bug', columns: columns, lanes: lanes, defaultItemType: 'bug'};
-}
-
-/**
- * Get task demo kanban data
- * 获取“任务”看板演示数据
- * @returns {Object} Kanban data
- * @todo 该方法作为演示，应该在最终版本中移除
- */
-function getTaskKanbanDemoData()
-{
-    /* Define kanban columns  定义看板列 */
-    var columns =
-    [
-        /* 看板列定义数据结构：
-        id:         列 ID（确保在页面上唯一）,
-        type:       类型,
-        name:       显示的名称,
-        color:      列名称颜色,
-        parentType: 所属的父级列类型
-        asParent:   是否作为父级列
-        itemType:   看板条目类型，例如：'task'（任务）
-        maxCount:   最大数目，该列上允许展示的条目最大数目，如果为 0 表示无限制 */
-        {id: 'task-wait',      type: 'wait',      name: '未开始',   color: '', maxCount: 0},
-        {id: 'task-dev',       type: 'dev',       name: '开发',     color: '', maxCount: 4, asParent: true},
-        {id: 'task-dev-doing', type: 'dev-doing', name: '研发中',   color: '#126eed', maxCount: 2, parentType: 'dev'},
-        {id: 'task-dev-done',  type: 'dev-done',  name: '研发完成', color: '#2fab8e', maxCount: 2, parentType: 'dev'},
-        {id: 'task-pause',     type: 'pause',     name: '已暂停',   color: '', maxCount: 0},
-        {id: 'task-cancel',    type: 'cancel',    name: '已取消',   color: '', maxCount: 0},
-        {id: 'task-closed',    type: 'closed',    name: '已关闭',   color: '', maxCount: 0},
-    ];
-
-    /* Define items in wait column  定义 未开始 列上的条目 */
-    var waitColItems =
-    [
-        /* 任务数据结构：
-        id:          ID，通常为任务 ID,
-        name:       名称,
-        order:       显示顺序，如果指定为 0，则按 ID 倒序排序,
-        pri:         优先级,
-        estimate:    预估时间,
-        assignedTo:  指派给,
-        deadline:    截止日期 */
-        {id: 10020, name: '在看板列中实现创建任务功能', order: 10, pri: 1, estimate: 2,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10021, name: '实现泳道的上下移动',       order: 11, pri: 2,  estimate: 0,  assignedTo: 'sunhao', deadline: '2021-10-22'},
-        {id: 10024, name: '实现泳道的更多操作菜单',    order: 15, pri: 0, estimate: 0,  assignedTo: 'sunhao'},
-    ];
-    var devDoingColItems = /* Define items in dev/doing column  定义 开发/进行中 列上的条目 */
-    [
-        /* 任务数据结构参见 waitColItems 定义 */
-        {id: 10030, name: '实现看板的更多操作菜单', order: 10, pri: 3, estimate: 0,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10031, name: '实现卡片拖动效果功能',  order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
-    ];
-    var devDoneColItems = /* Define items in dev/done column  定义 开发/完成 列上的条目 */
-    [
-        /* 任务数据结构参见 waitColItems 定义 */
-        {id: 10040, name: '实现看板列卡片排序功能',  order: 10, pri: 1, estimate: 4,  assignedTo: 'admin', deadline: '2021-10-30'},
-    ];
-    var pauseColItems = /* Define items in pause column  定义 已暂停 列上的条目 */
-    [
-        /* 任务数据结构参见 waitColItems 定义 */
-        {id: 10050, name: '实现看板列的更多操作菜单',  order: 10, pri: 3, estimate: 0,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10051, name: '实现Bug卡片的更多操作功能', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
-    ];
-    var cancelColItems = /* Define items in cancel column  定义 已取消 列上的条目 */
-    [
-        /* 任务数据结构参见 waitColItems 定义 */
-        {id: 10060, name: '实现任务卡片的更多操作功能', order: 10, pri: 1, estimate: 4,  assignedTo: 'admin', deadline: '2021-10-30'},
-    ];
-    var closedColItems =
-    [
-        /* 任务数据结构参见 waitColItems 定义 */
-        {id: 10070, name: '实现执行看板的新建按钮组功能',  order: 10, pri: 3, estimate: 12,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10071, name: '在看板列中实现提交Bug功能', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
-        {id: 10072, name: '在看板列中实现任务的添加和关联功能',  order: 10, pri: 3, estimate: 10,  assignedTo: 'admin', deadline: '2021-10-30'},
-        {id: 10073, name: '实现任务看板视图中不同分组条件的看板展示方式', order: 11, pri: 2,  estimate: 2,  assignedTo: 'sunhao'},
-    ];
-
-    /* Define kanban items in lane  定义看板泳道内每一列的条目，属性名为看板列类型，属性值为条目列表 */
-    var items =
-    {
-        /* 看板列类型:  条目列表 */
-        wait:        waitColItems,
-        'dev-doing': devDoingColItems,
-        'dev-done':  devDoneColItems,
-        pause:       pauseColItems,
-        cancel:      cancelColItems,
-        closed:      closedColItems,
-    };
-
-    /* Define kanban lanes  定义看板泳道 */
-    var lanes =
-    [
-        /* 泳道数据结构：
-        id:              泳道 ID，确保页面上唯一，可以为数字或字符串,
-        name:            名称,
-        items:           定义每列上的条目
-        color:           泳道名称背景色
-        defaultItemType: 看板泳道上的条目默认类型，例如：'task'（任务） */
-        {id: 'task', name: '任务', items: items, color: '#126eed', defaultItemType: 'task'},
-    ]
-
-    /* Return kanban data  返回看板数据 */
-    /* 看板数据结构：
-    id:       ID，确保页面上唯一，可以为数字或字符串,
-    columns:  定义看板上的所有列,
-    lanes:    定义看板上的所有泳道
-    defaultItemType: 看板上的条目默认类型，例如：'task'（任务） */
-    return {id: 'task', columns: columns, lanes: lanes, defaultItemType: 'task'};
-}
-
-
-/**
- * Render user account
- * @param {String} userAccount User account
+ * Render user avatar
+ * @param {String|{account: string, avatar: string}} user User account or user object
  * @returns {string}
  */
-function renderUserAvatar(userAccount)
+function renderUserAvatar(user, objectType, objectID)
 {
-    var hue = $.zui.strCode(userAccount) * 43 / 360;
-    return ('<div class="avatar has-text avatar-sm avatar-circle" style="background: hsl(' + hue + ', 40%, 60%);"><span>'
-        + userAccount[0].toUpperCase()
-        + '</span></div>');
+    var $noPrivAndNoAssigned = $('<div class="avatar has-text avatar-sm avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-account"></i></div>');
+    if(objectType == 'task')
+    {
+        if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
+        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+    }
+    if(objectType == 'story')
+    {
+        if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
+        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+    }
+    if(objectType == 'bug')
+    {
+        if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
+        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+    }
+
+    if(!user) return $('<a class="avatar has-text avatar-sm avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-account"></i></a>');
+
+    if(typeof user === 'string') user = {account: user};
+    if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+
+    var $noPrivAvatar = $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
+    if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
+    if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
+    if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
+
+    return $('<a class="avatar has-text avatar-sm avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
 }
 
 /**
- * Render story item  提供方法渲染看板中的需求条目
+ * Render deadline
+ * @param {String|Date} deadline Deadline
+ * @returns {JQuery}
+ */
+function renderDeadline(deadline)
+{
+    if(deadline == '0000-00-00') return;
+
+    var date = $.zui.createDate(deadline);
+    var now  = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    var isEarlyThanToday = date.getTime() < now.getTime();
+    var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
+
+    return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(isEarlyThanToday ? 'text-red' : 'text-muted');
+}
+
+/**
+ * Render story item  提供方法渲染看板中的需求卡片
  * @param {Object} item  Story item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -378,8 +74,8 @@ function renderStoryItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('story', 'view', 'storyID=' + item.id));
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
+                .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
         $title.appendTo($item);
     }
     $title.attr('title', item.title).find('.text').text(item.title);
@@ -394,17 +90,28 @@ function renderStoryItem(item, $item, col)
         '<span class="info info-id text-muted">#' + item.id + '</span>',
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
-        item.assignedTo ? renderUserAvatar(item.assignedTo) : '',
     ].join(''));
+    $infos.append(renderUserAvatar(item.assignedTo, 'story', item.id));
+
+    var $actions = $item.find('.actions');
+    if(!$actions.length && item.menus.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="story" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
 
     $item.attr('data-type', 'story').addClass('kanban-item-story');
 
     return $item;
 }
 
-
 /**
- * Render bug item  提供方法渲染看板中的 Bug 条目
+ * Render bug item  提供方法渲染看板中的 Bug 卡片
  * @param {Object} item  Bug item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -415,8 +122,8 @@ function renderBugItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id));
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
+                .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true));
         $title.appendTo($item);
     }
     $title.attr('title', item.title).find('.text').text(item.title);
@@ -431,8 +138,21 @@ function renderBugItem(item, $item, col)
         '<span class="info info-id text-muted">#' + item.id + '</span>',
         '<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>',
         '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
-        item.assignedTo ? renderUserAvatar(item.assignedTo) : '',
     ].join(''));
+    if(item.deadline) $infos.append(renderDeadline(item.deadline));
+    $infos.append(renderUserAvatar(item.assignedTo, 'bug', item.id));
+
+    var $actions = $item.find('.actions');
+    if(!$actions.length && item.menus.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="bug" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
 
     $item.attr('data-type', 'bug').addClass('kanban-item-bug');
 
@@ -440,7 +160,7 @@ function renderBugItem(item, $item, col)
 }
 
 /**
- * Render task item  提供方法渲染看板中的任务条目
+ * Render task item  提供方法渲染看板中的任务卡片
  * @param {Object} item  Task item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -451,8 +171,8 @@ function renderTaskItem(item, $item, col)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title iframe"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('task', 'view', 'taskID=' + item.id));
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
+                .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
         $title.appendTo($item);
     }
     $title.attr('title', item.name).find('.text').text(item.name);
@@ -465,33 +185,104 @@ function renderTaskItem(item, $item, col)
     $infos.html(
     [
         '<span class="info info-id text-muted">#' + item.id + '</span>',
-        '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
+        '<span class="info i nfo-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
         item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
-        item.assignedTo ? renderUserAvatar(item.assignedTo) : '',
     ].join(''));
+    if(item.deadline) $infos.append(renderDeadline(item.deadline));
+    $infos.append(renderUserAvatar(item.assignedTo, 'task', item.id));
+
+    var $actions = $item.find('.actions');
+    if(!$actions.length && item.menus.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="task" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
 
     $item.attr('data-type', 'task').addClass('kanban-item-task');
 
     return $item;
 }
 
-
 /* Add column renderer/  添加特定列类型或列条目类型渲染方法 */
 addColumnRenderer('story', renderStoryItem);
-addColumnRenderer('bug', renderBugItem);
-addColumnRenderer('task', renderTaskItem);
+addColumnRenderer('bug',   renderBugItem);
+addColumnRenderer('task',  renderTaskItem);
 
 /**
- * Render column count 渲染看板列头上的条目数目
+ * Render column count 渲染看板列头上的卡片数目
  * @param {JQuery} $count Kanban count element
- * @param {number} count  Column items count
+ * @param {number} count  Column cards count
  * @param {number} col    Column object
  * @param {Object} kanban Kanban intance
  */
 function renderColumnCount($count, count, col)
 {
-    var text = count + '/' + (!col.maxCount ? '<i class="icon icon-infinite"></i>' : '');
+    var text = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
+}
+
+/**
+ * Render header column 渲染看板列头部
+ * @param {JQuery} $col    Header column element
+ * @param {Object} col     Header column object
+ * @param {JQuery} $header Header element
+ * @param {Object} kanban  Kanban object
+ */
+function renderHeaderCol($col, col, $header, kanban)
+{
+    if(col.asParent) $col = $col.children('.kanban-header-col');
+    if(!$col.children('.actions').length)
+    {
+        var $actions = $('<div class="actions" />');
+        var printStoryButton =  printTaskButton = printBugButton = false;
+        if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlane) printStoryButton = true;
+        if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
+        if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
+
+        if((col.type === 'backlog' && printStoryButton) || (col.type === 'wait' && printTaskButton) || (col.type == 'unconfirmed' && printBugButton))
+        {
+            $actions.append([
+                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
+                    '<i class="icon icon-expand-alt"></i>',
+                '</a>'
+            ].join(''));
+        }
+
+        $actions.append([
+            '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+                '<i class="icon icon-ellipsis-v"></i>',
+            '</a>'
+        ].join(''));
+        $actions.appendTo($col);
+    }
+}
+
+/**
+ * Render lane name 渲染看板泳道名称
+ * @param {JQuery} $name    Name element
+ * @param {Object} lane     Lane object
+ * @param {JQuery} $kanban  $kanban element
+ * @param {Object} columns  Kanban columns
+ * @param {Object} kanban   Kanban object
+ */
+function renderLaneName($name, lane, $kanban, columns, kanban)
+{
+    if(lane.id != 'story' && lane.id != 'task' && lane.id != 'bug') return false;
+    if(!$name.children('.actions').length && (priv.canSetLane || priv.canMoveLane))
+    {
+        $([
+            '<div class="actions" title="' + kanbanLang.moreAction + '">',
+                '<a data-contextmenu="lane" data-lane="' + lane.id + '" data-kanban="' + kanban.id + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($name);
+    }
 }
 
 /**
@@ -520,30 +311,492 @@ function createKanban(kanbanID, data, options)
     var $kanban = $('#kanban-' + kanbanID);
     if($kanban.length) return updateKanban(kanbanID, data);
 
-    $kanban = $('<div id="kanban-' + kanbanID + '"></div>').appendTo('#kanbans');
+    $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>').appendTo('#kanbans');
     $kanban.kanban($.extend({data: data}, options));
 }
+
+function fullScreen()
+{
+    var element       = document.getElementById('kanbanContainer');
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    if(requestMethod)
+    {
+        var afterEnterFullscreen = function()
+        {
+            $('#kanbanContainer').addClass('scrollbar-hover');
+            $('.actions').hide();
+            $('#kanbanContainer a.iframe').each(function()
+            {
+                if($(this).hasClass('iframe'))
+                {
+                    var href = $(this).attr('href');
+                    $(this).removeClass('iframe');
+                    $(this).attr('href', 'javascript:void(0)');
+                    $(this).attr('href-bak', href);
+                }
+            })
+            $.cookie('isFullScreen', 1);
+        }
+
+        var whenFailEnterFullscreen = function()
+        {
+            exitFullScreen();
+        }
+
+        try
+        {
+            var result = requestMethod.call(element);
+            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
+            {
+                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
+            }
+            else
+            {
+                afterEnterFullscreen();
+            }
+        }
+        catch (error)
+        {
+            whenFailEnterFullscreen(error);
+        }
+    }
+}
+
+/**
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
+function exitFullScreen()
+{
+    $('#kanbanContainer').removeClass('scrollbar-hover');
+    $('.actions').show();
+    $('#kanbanContainer a').each(function()
+    {
+        var hrefBak = $(this).attr('href-bak');
+        if(hrefBak)
+        {
+            $(this).addClass('iframe');
+            $(this).attr('href', hrefBak);
+        }
+    })
+    $.cookie('isFullScreen', 0);
+}
+
+document.addEventListener('fullscreenchange', function (e)
+{
+    if(!document.fullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('webkitfullscreenchange', function (e)
+{
+    if(!document.webkitFullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('mozfullscreenchange', function (e)
+{
+    if(!document.mozFullScreenElement) exitFullScreen();
+});
+
+document.addEventListener('msfullscreenChange', function (e)
+{
+    if(!document.msfullscreenElement) exitFullScreen();
+});
+
+/* Define drag and drop rules */
+if(!window.kanbanDropRules)
+{
+    window.kanbanDropRules =
+    {
+        story:
+        {
+            blacklog: true,
+            ready: ['blacklog', 'dev-doing'],
+            'dev-doing': ['dev-done'],
+            'dev-done': ['test-doing'],
+            'test-doing': ['test-done'],
+            'test-done': ['accepted'],
+            'accepted': ['published'],
+            'published': false,
+        }
+    }
+}
+
+/*
+ * Find drop columns
+ * @param {JQuery} $element Drag element
+ * @param {JQuery} $root Dnd root element
+ */
+function findDropColumns($element, $root)
+{
+    var $col        = $element.closest('.kanban-col');
+    var col         = $col.data();
+    var kanbanID    = $root.data('id');
+    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
+
+    if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
+
+    var colRules = kanbanRules[col.type];
+    var lane     = $col.closest('.kanban-lane').data('lane');
+    return $root.find('.kanban-lane-col').filter(function()
+    {
+        if(!colRules) return false;
+        if(colRules === true) return true;
+
+        var $newCol = $(this);
+        var newCol = $newCol.data();
+        if(newCol.id === col.id) return false;
+
+        var $newLane = $newCol.closest('.kanban-lane');
+        var newLane = $newLane.data('lane');
+        var canDropHere = colRules.indexOf(newCol.type) > -1 && newLane.id === lane.id;
+        if(canDropHere) $newCol.addClass('can-drop-here');
+        return canDropHere;
+    });
+}
+
+/**
+ * Change column type for a card
+ * 变更卡片类型
+ * @param {Object} card        Card object
+ * @param {String} fromColType The column type before change
+ * @param {String} toColType   The column type after change
+ * @param {String} kanbanID    Kanban ID
+ */
+function changeCardColType(card, fromColType, toColType, kanbanID)
+{
+    /* TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器  */
+    console.log('TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器', {card, fromColType, toColType, kanbanID});
+
+    /*
+        // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
+
+        // 调用 updateKanban 更新看板数据
+        updateKanban(kanbanID, newKanbanData);
+    */
+}
+
+/**
+ * Handle finish drop task
+ * @param {Object} event Event object
+ * @returns {void}
+ */
+function handleFinishDrop(event)
+{
+    var $card = $(event.element); // The drag card
+    var $dragCol = $card.closest('.kanban-lane-col');
+    var $dropCol = $(event.target);
+
+    /* Get d-n-d(drag and drop) infos  获取拖放操作相关信息 */
+    var card = $card.data('item');
+    var fromColType = $dragCol.data('type');
+    var toColType = $dropCol.data('type');
+    var kanbanID = $card.closest('.kanban').data('id');
+
+    changeCardColType(card, fromColType, toColType, kanbanID);
+
+    $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
+}
+
+/**
+ * Handle sort cards in column 处理对列卡片进行排序
+ */
+function handleSortColCards()
+{
+    /* TODO: handle sort cards from column contextmenu */
+    return false;
+}
+
+/**
+ * Create column menu  创建列操作菜单
+ * @returns {Object[]}
+ */
+function createColumnMenu(options)
+{
+    var $col     = options.$trigger.closest('.kanban-col');
+    var col      = $col.data('col');
+    var kanbanID = options.kanban;
+
+	var items = [];
+	if(priv.canEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
+	if(priv.canSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
+	if(priv.canSortCards) items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
+    return items;
+}
+
+/**
+ * Create column create button menu  创建列添加按钮操作菜单
+ * @returns {Object[]}
+ */
+function createColumnCreateMenu(options)
+{
+    var $col  = options.$trigger.closest('.kanban-col');
+    var col   = $col.data('col');
+    var items = [];
+
+    if(col.laneType == 'story')
+    {
+        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
+        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
+        if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
+    }
+    else if(col.laneType == 'bug')
+    {
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID, '', true), className: 'iframe'});
+    }
+    else
+    {
+        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe'});
+    }
+    return items;
+}
+
+/**
+ * Create lane menu  创建泳道操作菜单
+ * @returns {Object[]}
+ */
+function createLaneMenu(options)
+{
+    var $lane            = options.$trigger.closest('.kanban-lane');
+    var $kanban          = $lane.closest('.kanban');
+    var lane             = $lane.data('lane');
+    var kanbanID         = options.kanban;
+    var upTargetKanban   = $kanban.prev('.kanban').length ? $kanban.prev('.kanban').data('id') : '';
+    var downTargetKanban = $kanban.next('.kanban').length ? $kanban.next('.kanban').data('id') : '';
+
+    var items = [];
+    if(priv.canSetLane)  items.push({label: kanbanLang.setLane, icon: 'edit', url: $.createLink('kanban', 'setLane', 'lane=' + lane.laneID + '&executionID=' + executionID), className: 'iframe'});
+    if(priv.canMoveLane) items.push(
+        {label: kanbanLang.moveUp, icon: 'arrow-up', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + upTargetKanban), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
+        {label: kanbanLang.moveDown, icon: 'arrow-down', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + downTargetKanban), className: 'iframe', disabled: !$kanban.next('.kanban').length}
+    );
+
+    var bounds = options.$trigger[0].getBoundingClientRect();
+    items.$options = {x: bounds.right, y: bounds.top};
+    return items;
+}
+
+/**
+ * Create story menu  创建需求卡片操作菜单
+ * @returns {Object[]}
+ */
+function createStoryMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var story = $card.data('item');
+
+    var items = [];
+    $.each(story.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        if(this.icon == 'unlink') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
+        items.push(item);
+    });
+
+    return items;
+}
+
+/**
+ * Create bug menu  创建 Bug 卡片操作菜单
+ * @returns {Object[]}
+ */
+function createBugMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var bug   = $card.data('item');
+
+    var items = [];
+    $.each(bug.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
+    });
+
+    return items;
+}
+
+ /**
+ * Create task menu  创建任务卡片操作菜单
+ * @returns {Object[]}
+ */
+function createTaskMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var task  = $card.data('item');
+
+    var items = [];
+    $.each(task.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
+    });
+
+    return items;
+}
+
+/** Resize kanban container size */
+function resizeKanbanContainer()
+{
+    var $container = $('#kanbanContainer');
+    var maxHeight = window.innerHeight - 98 - 15;
+    if($.cookie('isFullScreen') == 1) maxHeight = window.innerHeight - 15;
+    $container.children('.panel-body').css('max-height', maxHeight);
+}
+
+/* Define menu creators */
+window.menuCreators =
+{
+    column:       createColumnMenu,
+    columnCreate: createColumnCreateMenu,
+    lane:         createLaneMenu,
+    story:        createStoryMenu,
+    bug:          createBugMenu,
+    task:         createTaskMenu,
+};
+
+/* Set kanban affix container */
+window.kanbanAffixContainer = '#kanbanContainer>.panel-body';
+
+/* Overload kanban default options */
+$.extend($.fn.kanban.Constructor.DEFAULTS,
+{
+    onRender: function()
+    {
+        var maxWidth = 0;
+        $('#kanbans .kanban-board').each(function()
+        {
+            maxWidth = Math.max(maxWidth, $(this).outerWidth());
+        });
+        $('#kanbans').css('min-width', maxWidth);
+    }
+});
 
 /* Example code: */
 $(function()
 {
+    $.cookie('isFullScreen', 0);
+
     /* Common options 用于初始化看板的通用选项 */　
     var commonOptions =
     {
-        maxColHeight:  'auto',
-        minColWidth:    240,
-        dropable:       true,
-        showCount:      true,
-        showZeroCount:  true,
-        countRender:    renderColumnCount
+        maxColHeight:   'auto',
+        minColWidth:     240,
+        maxColWidth:     240,
+        showCount:       true,
+        showZeroCount:   true,
+        fluidBoardWidth: true,
+        droppable:
+        {
+            target:       findDropColumns,
+            finish:       handleFinishDrop,
+            mouseButton: 'left'
+        },
+        onRenderHeaderCol: renderHeaderCol,
+        onRenderLaneName:  renderLaneName,
+        onRenderCount:     renderColumnCount
     };
 
-    /* Create story kanban 创建需求看板 */
-    createKanban('story', getStoryKanbanDemoData(), commonOptions);
+    /* Create kanban 创建看板 */
+    if(groupBy == 'default')
+    {
+        var kanbanLane = '';
+        for(var i in kanbanList)
+        {
+            if(kanbanList[i] == 'story') kanbanLane = kanbanGroup.story;
+            if(kanbanList[i] == 'bug')   kanbanLane = kanbanGroup.bug;
+            if(kanbanList[i] == 'task')  kanbanLane = kanbanGroup.task;
 
-    /* Create bug kanban 创建 Bug 看板 */
-    createKanban('bug', getBugKanbanDemoData(), commonOptions);
+            if(browseType == kanbanList[i] || browseType == 'all') createKanban(kanbanList[i], kanbanLane, commonOptions);
+        }
+    }
+    else
+    {
+        /* Create kanban by group. 分泳道创建看板. */
+        createKanban(browseType, kanbanGroup[groupBy], commonOptions);
+    }
 
-    /* Create task kanban 创建 任务 看板 */
-    createKanban('task', getTaskKanbanDemoData(), commonOptions);
+    /* Init iframe modals */
+    $(document).on('click', '#kanbans .iframe,.contextmenu-menu .iframe', function(event)
+    {
+        var $link = $(this);
+        if($link.data('zui.modaltrigger')) return;
+        $link.modalTrigger({show: true});
+        event.preventDefault();
+    });
+
+    /* Init contextmenu */
+    $('#kanbans').on('click', '[data-contextmenu]', function(event)
+    {
+        var $trigger    = $(this);
+        var menuType    = $trigger.data('contextmenu');
+
+        var menuCreator = window.menuCreators[menuType];
+        if(!menuCreator) return;
+
+        var options = $.extend({event, $trigger: $trigger}, $trigger.data());
+        var items   = menuCreator(options);
+        if(!items || !items.length) return;
+
+        $.zui.ContextMenu.show(items, items.$options || {event: event});
+    });
+
+    /* Resize kanban container on window resize */
+    resizeKanbanContainer();
+    $(window).on('resize', resizeKanbanContainer);
+
+    /* Hide contextmenu when page scroll */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
+
+    $('#toStoryButton').on('click', function()
+    {
+        var planID = $('#plan').val();
+        if(planID)
+        {
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
+        }
+    })
+
+    $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
+    $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
+});
+
+$('#type').change(function()
+{
+    var type = $('#type').val();
+    if(type != 'all')
+    {
+        $('.c-group').show();
+        $.get(createLink('execution', 'ajaxGetGroup', 'type=' + type), function(data)
+        {
+            $('#group_chosen').remove();
+            $('#group').replaceWith(data);
+            $('#group').chosen();
+        })
+    }
+
+    var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + type);
+    location.href = link;
+});
+
+$('.c-group').change(function()
+{
+    $('.c-group').show();
+
+    var type  = $('#type').val();
+    var group = $('#group').val();
+    var link  = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
+    location.href = link;
 });

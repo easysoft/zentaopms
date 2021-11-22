@@ -136,8 +136,15 @@ class story extends control
 
             if($objectID != 0)
             {
-                if($objectID != $this->session->project) $this->loadModel('action')->create('story', $storyID, 'linked2execution', '', $objectID);
-                if($this->config->systemMode == 'new') $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $this->session->project);
+                $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
+                if($object->type != 'project')
+                {
+                    $this->loadModel('action')->create('story', $storyID, 'linked2execution', '', $objectID);
+                }
+                else
+                {
+                    $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
+                }
             }
 
             if($todoID > 0)
@@ -292,6 +299,10 @@ class story extends control
                 ->fetch('id');
         }
 
+        /* Get reviewers. */
+        $reviewers = $product->reviewer;
+        if(!$reviewers) $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
@@ -316,6 +327,7 @@ class story extends control
         $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
         $this->view->productID        = $productID;
         $this->view->product          = $product;
+        $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->objectID         = $objectID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
@@ -468,6 +480,7 @@ class story extends control
         foreach(explode(',', $this->config->story->list->customBatchCreateFields) as $field)
         {
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+            if(isonlybody() and $field == 'plan') continue;
             $customFields[$field] = $this->lang->story->$field;
         }
         $showFields = $this->config->story->custom->batchCreateFields;
@@ -582,6 +595,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
+            if(isonlybody()) die(js::reload('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
             die(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
         }
@@ -618,6 +632,10 @@ class story extends control
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
+        /* Get product reviewers. */
+        $productReviewers = $product->reviewer;
+        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+
         $this->story->replaceURLang($story->type);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -630,6 +648,7 @@ class story extends control
         $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
         $this->view->reviewers        = implode(',', $reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
+        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewerList, 0, $productReviewers);
         $this->view->isShowReviewer   = $isShowReviewer;
         $this->display();
     }
@@ -831,6 +850,7 @@ class story extends control
 
             $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
 
+            if(isonlybody()) die(js::reload('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
         }
@@ -1784,6 +1804,7 @@ class story extends control
         }
 
         $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+        if(empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
 
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
         $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");

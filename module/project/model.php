@@ -468,7 +468,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'id_desc')
+    public function getPairsByProgram($programID = 0, $status = 'all', $isQueryAll = false, $orderBy = 'order_asc')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -868,6 +868,7 @@ class projectModel extends model
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();
+                $this->loadModel('action')->create('product', $productID, 'opened');
                 $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
                 if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
@@ -1426,9 +1427,9 @@ class projectModel extends model
     {
         $canOrder     = common::hasPriv('project', 'updateOrder');
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
-        $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('execution', 'task', "projectID=$project->id");
         $account      = $this->app->user->account;
         $id           = $col->id;
+        $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('execution', 'task', "projectID=$project->id");
 
         if($col->show)
         {
@@ -1479,11 +1480,8 @@ class projectModel extends model
                 case 'name':
                     $prefix = '';
                     $suffix = '';
-                    if(isset($this->config->maxVersion))
-                    {
-                        if($project->model === 'waterfall') $prefix = "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
-                        if($project->model === 'scrum')     $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
-                    }
+                    if($project->model === 'waterfall') $prefix = "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
+                    if($project->model === 'scrum')     $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     if(!empty($suffix) || !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
@@ -1845,7 +1843,7 @@ class projectModel extends model
     {
         $this->loadModel('program');
 
-        $projects   = $this->program->getProjectStats(0, 'all');
+        $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
         $executions = $this->getStats(0, 'doing');
 
         $doingExecutions  = array();
@@ -1859,6 +1857,7 @@ class projectModel extends model
 
         $myProjects    = array();
         $otherProjects = array();
+        $closedGroup   = array();
         foreach($projects as $project)
         {
             if(strpos('wait,doing,closed', $project->status) === false) continue;
@@ -1868,11 +1867,42 @@ class projectModel extends model
 
             if($project->PM == $this->app->user->account)
             {
-                $myProjects[$topProgram][$project->status][$project->id] = $project;
+                if($project->status != 'closed')
+                {
+                    $myProjects[$topProgram][$project->status][] = $project;
+                }
+                else
+                {
+                    $closedGroup['my'][$topProgram][$project->closedDate] = $project;
+                }
             }
             else
             {
-                $otherProjects[$topProgram][$project->status][$project->id] = $project;
+                if($project->status != 'closed')
+                {
+                    $otherProjects[$topProgram][$project->status][] = $project;
+                }
+                else
+                {
+                    $closedGroup['other'][$topProgram][$project->closedDate] = $project;
+                }
+            }
+        }
+
+        /* Only display recent two closed projects. */
+        foreach($closedGroup as $group => $closedProjects)
+        {
+            foreach($closedProjects as $topProgram => $projects)
+            {
+                krsort($projects);
+                if($group == 'my')
+                {
+                    $myProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
+                }
+                else
+                {
+                    $otherProjects[$topProgram]['closed'] = array_slice($projects, 0, 2);
+                }
             }
         }
 
@@ -1936,6 +1966,15 @@ class projectModel extends model
     {
         global $lang;
         $project = $this->getByID($objectID);
+
+        if(isset($project->model) and $project->model == 'waterfall')
+        {   
+            global $lang;
+            $this->loadModel('execution');
+            $lang->executionCommon = $lang->project->stage;
+
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
 
         $model = 'scrum';
         if($project) $model = $project->model;

@@ -142,7 +142,7 @@
           <tr>
             <td colspan='<?php echo $branchProduct ? $columns : ($columns - 1);?>' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::backButton();?>
+              <?php echo $this->app->tab == 'product' ? html::a($this->session->bugList, $lang->goback, '', "class='btn btn-back btn-wide'") : html::backButton();?>
             </td>
           </tr>
         </tfoot>
