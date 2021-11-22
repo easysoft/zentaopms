@@ -1255,7 +1255,7 @@ class testtask extends control
             {
                 $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             }
-            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case');
+            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, 'all');
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
         }

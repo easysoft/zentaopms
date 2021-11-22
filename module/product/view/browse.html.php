@@ -485,10 +485,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 <?php
                 foreach($plans as $planID => $plan)
                 {
-                    $planTitle  = strip_tags($plan);
+                    $position   = stripos($plan, '/');
+                    $planLabel  = $position === false ? $plan : ('<span class="label label-outline label-badge">' . substr($plan, 0, $position) . '</span>' . substr($plan, $position + 1));
                     $searchKey  = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                    echo html::a('#', $plan, '', "$searchKey title='{$planTitle}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
+                    echo html::a('#', $planLabel, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
                 }
                 ?>
               </div>

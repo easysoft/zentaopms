@@ -50,7 +50,8 @@ function loadBranch()
 function loadProductBranches(productID)
 {
     $('#branch').remove();
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
+    var param = (typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) ? "productID=" + productID + "&oldBranch=0&param=&projectID=" + objectID : "productID=" + productID;
+    $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
     {
         if(data)
         {
