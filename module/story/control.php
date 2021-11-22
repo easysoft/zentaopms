@@ -449,6 +449,10 @@ class story extends control
         $products = $this->product->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
+        /* Get reviewers. */
+        $reviewers = $product->reviewer;
+        if(!$reviewers) $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+
         /* Init vars. */
         $planID   = $plan;
         $pri      = 0;
@@ -509,6 +513,7 @@ class story extends control
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $plans;
+        $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->users            = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $this->view->priList          = $priList;
         $this->view->sourceList       = $sourceList;
@@ -864,13 +869,19 @@ class story extends control
 
         $story    = $this->story->getById($storyID);
         $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
+        $product  = $this->loadModel('product')->getByID($story->product);
+
+        /* Get product reviewers. */
+        $productReviewers = $product->reviewer;
+        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         /* Assign. */
-        $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
-        $this->view->position[] = $this->lang->story->change;
-        $this->view->needReview = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
-        $this->view->reviewer   = implode(',', array_keys($reviewer));
+        $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
+        $this->view->position[]       = $this->lang->story->change;
+        $this->view->needReview       = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->reviewer         = implode(',', array_keys($reviewer));
+        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
 
         $this->display();
     }

@@ -3621,6 +3621,14 @@ class storyModel extends model
                     }
                 }
             }
+            else if($id == 'feedbackBy')
+            {
+                $title = $story->feedbackBy;
+            }
+            else if($id == 'notifyEmail')
+            {
+                $title = $story->notifyEmail;
+            }
             else if($id == 'actions')
             {
                 $class .= ' text-center';
