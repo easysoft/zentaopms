@@ -191,21 +191,6 @@ class productplanModel extends model
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
-        if($expired == 'unexpired')
-        {
-            $plans += $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName')->from(TABLE_PRODUCTPLAN)->alias('t1')
-                ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t2.id=t1.branch')
-                ->where('t1.product')->in($product)
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t1.end')->lt($date)
-                ->beginIF($branch)->andWhere("t1.branch")->in("0,$branch")->fi()
-                ->beginIF($plans)->andWhere("t1.id")->notIN(array_keys($plans))->fi()
-                ->beginIF($skipParent)->andWhere('t1.parent')->ne(-1)->fi()
-                ->orderBy('t1.begin desc')
-                ->limit(5)
-                ->fetchAll('id');
-        }
-
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();
         $parentTitle = array();
