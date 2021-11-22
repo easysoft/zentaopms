@@ -178,7 +178,7 @@ function loadPlans(product, branchID)
     {
         if(typeof(planID) == 'undefined') planID = 0;
         planID = $("select#plans" + productID).val() != '' ? $("select#plans" + productID).val() : planID;
-        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID), function(data)
+        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + ((config.currentMethod == 'create' || config.currentMethod == 'edit') ? 'unexpired' : '')), function(data)
         {
             if(data)
             {
