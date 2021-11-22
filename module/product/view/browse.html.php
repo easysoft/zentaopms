@@ -662,6 +662,14 @@ $(function()
     });
 });
 
+/**
+ * Set the color of the badge to white.
+ *
+ * @param  obj $obj
+ * @param  isshow $isshow
+ * @access public
+ * @return void
+ */
 function setBadgeStyle(obj, isshow)
 {
     var label = $(obj);
