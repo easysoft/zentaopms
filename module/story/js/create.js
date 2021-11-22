@@ -27,6 +27,8 @@ $(function()
 
     $('#source').on('change', function()
     {
+        if(storyType == 'requirement') return false;
+
         var source = $(this).val();
         if($.inArray(source, feedbackSource) != -1)
         {
