@@ -62,6 +62,9 @@
   </div>
   <?php endif;?>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="wholeContent">
+<?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
@@ -531,6 +534,9 @@
     <?php $this->printExtendFields($story, 'div', "position=right&inForm=0&inCell=1");?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+</div>
+<?php endif;?>
 
 <div class="modal fade" id="importToLib">
   <div class="modal-dialog mw-500px">
