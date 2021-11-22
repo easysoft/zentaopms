@@ -82,11 +82,11 @@
               $plans     = $this->loadModel('productplan')->getPairs($bug->product, $branch);
               $branches  = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
 
-              $modules[$bug->product][0] = $this->tree->getOptionMenu($bug->product, $viewType = 'case', 0, 0);
+              $modules[$bug->product][0] = $this->tree->getOptionMenu($bug->product, 'bug', 0, 0);
               if($product->type != 'normal')
               {
                   foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
-                  $modules[$bug->product][$bugBranch] = $this->tree->getOptionMenu($bug->product, $viewType = 'case', 0, $bugBranch);
+                  $modules[$bug->product][$bugBranch] = $this->tree->getOptionMenu($bug->product, 'bug', 0, $bugBranch);
               }
           }
           ?>

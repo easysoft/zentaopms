@@ -733,12 +733,12 @@ class story extends control
                 $branches = $this->loadModel('branch')->getPairs($productID);
                 foreach($branches as $branchID => $branchName)
                 {
-                    $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branchID);
+                    $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
                 }
             }
             else
             {
-                $modules[$productID][0] = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+                $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
             }
 
             $this->view->modules    = $modules;
