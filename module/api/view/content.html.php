@@ -9,18 +9,13 @@
             <div class="info">
               <div class="version">
                 <div class='btn-group'>
-                  <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis'
-                     data-toggle='dropdown' style="max-width: 120px;">
+                  <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
                     #<?php echo $version ? $version : $api->version;?>
                     <span class="caret"></span>
                   </a>
-                  <ul class='dropdown-menu api-version-menu'
-                      style='max-height:240px; max-width: 300px; overflow-y:auto'>
+                  <ul class='dropdown-menu api-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
                     <?php for($version = $api->version; $version > 0; $version--):?>
-                    <li>
-                      <a href='javascript:void(0)'
-                         data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$version&release=$release");?>'>#<?php echo $version;?></a>
-                    </li>
+                    <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$version&release=$release");?>'>#<?php echo $version;?></a></li>
                     <?php endfor;?>
                   </ul>
                 </div>
@@ -60,10 +55,8 @@
             <?php foreach($api->params['header'] as $param):?>
             <tr>
               <td><?php echo $param['field'];?></td>
-              <td>
-                String
-              </td>
-              <td><?php echo $param['required'] ? '是' : '否';?></td>
+              <td>String</td>
+              <td><?php echo $lang->api->boolList[$param['required']];?></td>
               <td><?php echo $param['desc'];?></td>
             <tr>
             <?php endforeach;
@@ -86,10 +79,8 @@
             <?php foreach($api->params['query'] as $param):?>
             <tr>
               <td><?php echo $param['field'];?></td>
-              <td>
-                String
-              </td>
-              <td><?php echo $param['required'] ? '是' : '否';?></td>
+              <td>String</td>
+              <td><?php echo $lang->api->boolList[$param['required']];?></td>
               <td><?php echo $param['desc'];?></td>
             <tr>
             <?php endforeach;
