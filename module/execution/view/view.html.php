@@ -271,12 +271,17 @@
                 <table class="table table-data data-basic">
                   <tbody>
                     <tr>
+                      <?php if($execution->lifetime == 'ops'):?>
+                      <th><?php echo $lang->task->common;?></th>
+                      <td><?php echo $statData->taskCount;?></td>
+                      <?php else:?>
                       <th><?php echo $lang->story->common;?></th>
                       <td><?php echo $statData->storyCount;?></td>
                       <th><?php echo $lang->task->common;?></th>
                       <td><?php echo $statData->taskCount;?></td>
                       <th><?php echo $lang->bug->common;?></th>
                       <td><?php echo $statData->bugCount;?></td>
+                      <?php endif;?>
                     </tr>
                   </tbody>
                 </table>
