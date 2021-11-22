@@ -1,7 +1,11 @@
 .main-actions {display: none;}
-#main {margin-bottom: 40px;}
+#main {margin-bottom: 40px;min-width: unset;}
 #mainMenu .pull-left>a {display: none;}
 #mainMenu .pull-left .divider {display: none;}
 #mainMenu .pull-right {display: none;}
 #mainContent .col-4 {display: none;}
 .modal-dialog {width: 90%;}
+::-webkit-scrollbar {width: 10px;height: 10px;}
+::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%);background-color: rgba(0, 0, 0, 0.2);border-radius: 10px;opacity: 0;transition: opacity 0.1s;}
+.m-bug-view:hover{overflow: overlay;}
+.m-bug-view{overflow: hidden;}
