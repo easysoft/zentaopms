@@ -1,21 +1,26 @@
-/** Update zentao client app menu */
-function updateAppMenu()
+if(window.navigator.userAgent.indexOf('xuanxuan') > 0)
 {
-    const menuItems = appsMenuItems.map(function(item)
+    $('html').addClass('xxc-embed');
+
+    /** Update zentao client app menu */
+    function updateAppMenu()
     {
-        if (item === 'divider') return '-';
-        var $title = $('<div>' + item.title + '</div>');
-        return [item.code, ($title.find('.icon').attr('class') || '').replace('icon ', ''),$title.text().trim()];
+        const menuItems = appsMenuItems.map(function(item)
+        {
+            if (item === 'divider') return '-';
+            var $title = $('<div>' + item.title + '</div>');
+            return [item.code, ($title.find('.icon').attr('class') || '').replace('icon ', ''),$title.text().trim()];
+        });
+        window.open('xxc://extension.zentao-integrated.updateAppMenu/' + encodeURIComponent(JSON.stringify(menuItems)));
+    }
+
+    updateAppMenu();
+
+    $(function()
+    {
+        $(document).on('showapp', function(e, app)
+        {
+            window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + app.code);
+        });
     });
-    window.open('xxc://extension.zentao-integrated.updateAppMenu/' + encodeURIComponent(JSON.stringify(menuItems)));
 }
-
-updateAppMenu();
-
-$(function()
-{
-    $(document).on('showapp', function(e, app)
-    {
-        window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + app.code);
-    });
-});
