@@ -738,7 +738,7 @@ class story extends control
             }
             else
             {
-                $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+                $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'story');
             }
 
             $this->view->modules    = $modules;

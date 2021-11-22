@@ -1051,7 +1051,7 @@ class bug extends control
             }
             else
             {
-                $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'bug', 0, 0);
+                $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'bug');
             }
 
             /* Set product menu. */
