@@ -50,7 +50,7 @@ class tree extends control
             if(empty($product)) $this->locate($this->createLink('product', 'create'));
             if(!empty($product->type) && $product->type != 'normal')
             {
-                $branches = $this->loadModel('branch')->getPairs($product->id, 'active');
+                $branches = $this->loadModel('branch')->getPairs($product->id);
                 if($currentModuleID)
                 {
                     $branchName = $branches[$branch];
