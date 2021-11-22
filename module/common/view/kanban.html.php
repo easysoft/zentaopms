@@ -59,8 +59,7 @@
 #kanbanList .kanban-affixed .kanban-header-col[data-type="doingProject"]:after {background-color: #606060;}
 
 /* Show project and execution in one row */
-#kanbanList .kanban-lane-col[data-type="doingProject"] {box-shadow: 2px 0 0 #fff;}
-#kanbanList .kanban-lane-col[data-type="doingProject"] + .kanban-lane-col {border-left: none;}
+#kanbanList .kanban-lane-col[data-type="doingProject"] + .kanban-lane-col {border-left: none; box-shadow: inset 2px 0 0 #fff;}
 #kanbanList .kanban-lane-col[data-type="doingProject"] > .kanban-lane-items {padding: 0; overflow: visible; max-height: none!important;}
 #kanbanList .project-row {position: relative; width: 200%; width: calc(200% + 2px);}
 #kanbanList .project-row + .project-row {border-top: 2px solid #fff;}

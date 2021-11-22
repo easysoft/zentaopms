@@ -44,6 +44,13 @@ js::set('kanbanGroup',      $kanbanGroup);
 js::set('latestExecutions', $latestExecutions);
 js::set('programPairs',     $programPairs);
 js::set('doingText',        $lang->project->statusList['doing']);
+js::set('priv',
+    array(
+        'canStart'    => common::hasPriv('project', 'start'),
+        'canClose'    => common::hasPriv('project', 'close'),
+        'canActivate' => common::hasPriv('project', 'activate'),
+    )
+);
 ?>
 <?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>
