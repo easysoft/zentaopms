@@ -155,7 +155,7 @@ $lang->product->menu            = new stdclass();
 $lang->product->menu->dashboard = array('link' => "{$lang->dashboard}|product|dashboard|productID=%s");
 if($config->URAndSR) $lang->product->menu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->story    = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->menu->plan     = array('link' => "{$lang->productplan->shortCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan');
+$lang->product->menu->plan     = array('link' => "{$lang->productplan->shortCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan,bug');
 $lang->product->menu->release  = array('link' => "{$lang->release->common}|release|browse|productID=%s", 'subModule' => 'release');
 $lang->product->menu->roadmap  = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
 $lang->product->menu->project  = array('link' => "{$lang->project->common}|product|project|status=all&productID=%s");
