@@ -571,6 +571,20 @@ class testcase extends control
             $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
             $showFields = trim($showFields, ',');
         }
+
+        if($this->app->tab == 'project' and $product->type != 'normal')
+        {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
+            $productBranches = $this->loadModel('execution')->getBranchByProduct($productID, $this->session->project);
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = $this->loadModel('branch')->getPairs($productID, 'active');
+        }
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
@@ -586,7 +600,7 @@ class testcase extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->branch           = $branch;
-        $this->view->branches         = $this->loadModel('branch')->getPairs($productID, 'active');
+        $this->view->branches         = $branches;
         $this->view->needReview       = $this->testcase->forceNotReview() == true ? 0 : 1;
 
         $this->display();
