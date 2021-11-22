@@ -26,6 +26,9 @@ js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
 js::set('systemMode'             , $config->systemMode);
 js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+js::set('tab'                    , $this->app->tab);
+if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
+if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
 
 <div class='main-content' id='mainContent'>

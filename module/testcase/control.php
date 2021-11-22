@@ -456,14 +456,14 @@ class testcase extends control
         $product = $this->product->getById($productID);
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
-            $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $objectID        = $this->app->tab == 'project' ? $projectID : $executionID;
             $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }
         else
         {
-            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID) : array();
+            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
         $this->view->customFields = $customFields;
