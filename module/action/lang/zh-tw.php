@@ -165,8 +165,8 @@ $lang->action->desc->managed         = '$date, 由 <strong>$actor</strong> 維�
 $lang->action->desc->estimated       = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 $lang->action->desc->run             = '$date, 由 <strong>$actor</strong> 執行。' . "\n";
 $lang->action->desc->syncprogram     = '$date, 由 <strong>$actor</strong> 啟動(因項目開始而啟動項目集)。' . "\n";
-$lang->action->desc->syncproject     = '$date, 系統判斷由執行開始，將項目狀態置為進行中。' . "\n";
-$lang->action->desc->syncexecution   = '$date, 系統判斷由任務開始，將執行狀態置為進行中。' . "\n";
+$lang->action->desc->syncproject     = '$date, 系統判斷由於執行開始，將項目狀態置為進行中。' . "\n";
+$lang->action->desc->syncexecution   = '$date, 系統判斷由於任務開始，將執行狀態置為進行中。' . "\n";
 
 /* 用來描述和父子任務相關的操作歷史記錄。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 創建子任務 <strong>$extra</strong>。' . "\n";
