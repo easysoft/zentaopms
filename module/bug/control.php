@@ -949,6 +949,11 @@ class bug extends control
      */
     public function batchEdit($productID = 0, $branch = 0)
     {
+        if($this->app->tab == 'product')
+        {
+            $this->product->setMenu($productID);
+        }
+
         if($this->post->titles)
         {
             $allChanges = $this->bug->batchUpdate();
