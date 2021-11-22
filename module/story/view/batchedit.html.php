@@ -79,7 +79,7 @@ foreach(explode(',', $showFields) as $field)
             }
 
             if(!isset($modules[$story->product][$story->branch])) $modules[$story->product][$story->branch] = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
-            foreach($modules[$story->product][$story->branch] as $moduleID => $moduleName) $modules[$story->product][$story->branch][$moduleID] = '/' . $product->name . $moduleName;
+            foreach($modules[$story->product][$story->branch] as $moduleID => $moduleName) $modules[$story->product][$story->branch][$moduleID] = isset($modules[$story->product][$story->branch][$moduleID]) ? $moduleName : '/' . $product->name . $moduleName;
 
             $productPlans = $this->productplan->getPairs($story->product, $branch);
         }
