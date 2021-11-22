@@ -449,6 +449,10 @@ class story extends control
         $products = $this->product->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
+        /* Get reviewers. */
+        $reviewers = $product->reviewer;
+        if(!$reviewers) $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+
         /* Init vars. */
         $planID   = $plan;
         $pri      = 0;
@@ -509,6 +513,7 @@ class story extends control
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $plans;
+        $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->users            = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $this->view->priList          = $priList;
         $this->view->sourceList       = $sourceList;
