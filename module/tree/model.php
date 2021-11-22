@@ -1199,7 +1199,7 @@ class treeModel extends model
         $moduleName   = $this->app->tab == 'project' ? 'project'  : 'testcase';
         $methodName   = $this->app->tab == 'project' ? 'testcase' : 'browse';
         $projectParam = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-        return html::a(helper::createLink($moduleName, $methodName, $projectParam . "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
+        return html::a(helper::createLink($moduleName, $methodName, $projectParam . "root={$module->root}&branch={$module->branch}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
     }
 
     /**
