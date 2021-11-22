@@ -486,10 +486,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 foreach($plans as $planID => $plan)
                 {
                     $position   = stripos($plan, '/');
-                    $planLabel  = $position === false ? $plan : ('<span class="label label-outline label-badge">' . substr($plan, 0, $position) . '</span>' . substr($plan, $position + 1));
+                    $planLabel  = $position === false ? $plan : ('<span class="label label-outline label-badge" id="changetowhite">' . substr($plan, 0, $position) . '</span>' . substr($plan, $position + 1));
                     $searchKey  = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                    echo html::a('#', $planLabel, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
+                    echo html::a('#', $planLabel, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\" onmouseover=\"setBadgeStyle(this);\" onmouseout=\"removeBadgeStyle()\"");
                 }
                 ?>
               </div>
@@ -661,5 +661,16 @@ $(function()
         }
     });
 });
+
+function setBadgeStyle(obj)
+{
+    var label = $(obj);
+    label.find('#changetowhite').css({"color":"#fff", "border-color":"#fff"});
+}
+
+function removeBadgeStyle()
+{
+    $('#changetowhite').css({"color":"#838a9d", "border-color":"#838a9d"});
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>
