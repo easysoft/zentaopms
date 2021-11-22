@@ -328,6 +328,7 @@ $lang->execution->notAllowedUnlinkStory       = "該{$lang->SRCommon}已經與�
 $lang->execution->notAllowRemoveProducts      = "該{$lang->productCommon}中的{$lang->SRCommon}已與該{$lang->executionCommon}進行了關聯，請取消關聯後再操作。";
 $lang->execution->errorNoLinkedProducts       = "該{$lang->executionCommon}沒有關聯的{$lang->productCommon}，系統將轉到{$lang->productCommon}關聯頁面";
 $lang->execution->errorSameProducts           = "{$lang->executionCommon}不能關聯多個相同的{$lang->productCommon}。";
+$lang->execution->errorSameBranches           = "{$lang->executionCommon}不能關聯多個相同的分支。";
 $lang->execution->errorBegin                  = "{$lang->executionCommon}的開始時間不能小於所屬項目的開始時間%s。";
 $lang->execution->errorEnd                    = "{$lang->executionCommon}的截止時間不能大於所屬項目的結束時間%s。";
 $lang->execution->accessDenied                = "您無權訪問該{$lang->executionCommon}！";
@@ -345,6 +346,7 @@ $lang->execution->unfinishedExecution         = "該{$lang->executionCommon}下�
 $lang->execution->unfinishedTask              = "[%s]個未完成的任務，";
 $lang->execution->unresolvedBug               = "[%s]個未解決的bug，";
 $lang->execution->projectNotEmpty             = '所屬項目不能為空。';
+$lang->execution->confirmStoryToTask          = '%s' . $lang->SRCommon . '已經在當前' . $lang->execution->common . '中轉了任務，請確認是否重複轉任務。';
 
 /* 統計。*/
 $lang->execution->charts = new stdclass();

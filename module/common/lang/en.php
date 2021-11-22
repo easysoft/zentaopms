@@ -34,6 +34,7 @@ $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->help           = 'Help';
 $lang->aboutZenTao    = 'About';
+$lang->ztWebsite      = 'ZenTao Address';
 $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';
 $lang->unfoldMenu     = 'Unfold';
@@ -104,9 +105,10 @@ $lang->customField     = 'Custom Field';
 $lang->lineNumber      = 'Line No.';
 $lang->tutorialConfirm = 'You are using ZenTao tutorial. Do you want to quit right now？';
 
-$lang->preShortcutKey  = '[Shortcut:←]';
-$lang->nextShortcutKey = '[Shortcut:→]';
-$lang->backShortcutKey = '[Shortcut:Alt+↑]';
+$lang->preShortcutKey    = '[Shortcut:←]';
+$lang->nextShortcutKey   = '[Shortcut:→]';
+$lang->backShortcutKey   = '[Shortcut:Alt+↑]';
+$lang->shortcutOperation = 'Quick Start';
 
 $lang->select        = 'Select';
 $lang->selectAll     = 'Select All';
@@ -307,7 +309,8 @@ $lang->createObjects['program']   = 'Program';
 $lang->createObjects['doc']       = 'Doc';
 
 /* Language. */
-$lang->lang = 'Language';
+$lang->lang    = 'Language';
+$lang->setLang = 'Language Setting';
 
 /* Theme style. */
 $lang->theme                = 'Theme';

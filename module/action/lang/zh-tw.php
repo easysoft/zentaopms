@@ -282,6 +282,7 @@ $lang->action->label->reviewrejected        = '拒絶';
 $lang->action->label->reviewclarified       = '有待明確';
 $lang->action->label->commitsummary         = '提交培訓總結';
 $lang->action->label->updatetrainee         = '更新培訓人員';
+$lang->action->label->setdefaultbranch      = '設置了預設分支';
 $lang->action->label->syncprogram           = '開始了';
 $lang->action->label->syncproject           = '開始了';
 $lang->action->label->syncexecution         = '開始了';
@@ -318,6 +319,12 @@ $lang->action->dynamicAction->product['deleted']   = '刪除' . $lang->productCo
 $lang->action->dynamicAction->product['closed']    = '關閉' . $lang->productCommon;
 $lang->action->dynamicAction->product['undeleted'] = '還原' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = '隱藏' . $lang->productCommon;
+
+$lang->action->dynamicAction->branch['opened']           = '創建分支';
+$lang->action->dynamicAction->branch['edited']           = '編輯分支';
+$lang->action->dynamicAction->branch['closed']           = '關閉分支';
+$lang->action->dynamicAction->branch['activated']        = '激活分支';
+$lang->action->dynamicAction->branch['setdefaultbranch'] = '設置預設分支';
 
 $lang->action->dynamicAction->productplan['opened'] = "創建計劃";
 $lang->action->dynamicAction->productplan['edited'] = "編輯計劃";

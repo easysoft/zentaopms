@@ -3,6 +3,7 @@ global $config;
 
 /* Method List。*/
 $lang->my->index           = 'Home';
+$lang->my->data            = 'My Data';
 $lang->my->todo            = 'My Todos';
 $lang->my->calendar        = 'Schedule';
 $lang->my->work            = 'Work';

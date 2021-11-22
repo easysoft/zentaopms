@@ -18,12 +18,15 @@ $lang->datatable->resetGlobal       = '全局恢復預設';
 $lang->datatable->branch   = '分支';
 $lang->datatable->platform = '平台';
 
-$lang->datatable->displaySetting         = '顯示設定';
 $lang->datatable->moduleSetting          = '模組設置';
+$lang->datatable->displaySetting         = '顯示設置';
 $lang->datatable->showModule             = '列表頁是否顯示模組名';
+$lang->datatable->showBranch             = '列表頁是否顯示%s名';
 $lang->datatable->showAllModule          = '是否顯示完整產品模組';
 $lang->datatable->showModuleList[]       = '不顯示';
 $lang->datatable->showModuleList['base'] = '只顯示一級模組';
 $lang->datatable->showModuleList['end']  = '只顯示最後一級模組';
 $lang->datatable->showAllModuleList[0]   = '不顯示';
 $lang->datatable->showAllModuleList[1]   = '顯示';
+$lang->datatable->showBranchList[0]      = '不顯示';
+$lang->datatable->showBranchList[1]      = '顯示';
