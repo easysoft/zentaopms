@@ -435,7 +435,7 @@ class bug extends control
         /* Get product, then set menu. */
         $productID   = $this->product->saveState($productID, $this->products);
         $productInfo = $this->product->getById($productID);
-        $branches    = $productInfo->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
+
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
         /* Init vars. */
@@ -506,7 +506,7 @@ class bug extends control
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $projectID : $executionID;
-            $productBranches = (isset($productInfo->type) and $productInfo->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
+            $productBranches = $productInfo->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }
