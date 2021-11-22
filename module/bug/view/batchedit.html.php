@@ -51,7 +51,7 @@
             <th class='c-type<?php echo zget($visibleFields, 'type', ' hidden') . zget($requiredFields, 'type', '', ' required');?>'><?php echo $lang->bug->type;?></th>
             <th class='c-severity<?php echo zget($visibleFields, 'severity', ' hidden') . zget($requiredFields, 'severity', '', ' required');?>'><?php echo $lang->bug->severity;?></th>
             <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->bug->pri;?></th>
-            <th class="required <?php if(count($visibleFields) >= 9) echo ' c-title';?>"><?php echo $lang->bug->title;?></th>
+            <th class="required <?php if(count($visibleFields) >= 8) echo ' c-title';?>"><?php echo $lang->bug->title;?></th>
             <?php if($branchProduct):?>
             <th class='c-branch'><?php echo $lang->bug->branch;?></th>
             <?php endif;?>
