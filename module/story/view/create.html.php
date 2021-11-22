@@ -91,7 +91,7 @@
                   <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                   <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
                   <span class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></span>
-                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 70px;'" : "style='width: 140px;'"?>
+                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 89px;'" : "style='width: 180px;'"?>
                   <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
                 </div>
               </div>
