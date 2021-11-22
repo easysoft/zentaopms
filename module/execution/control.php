@@ -1361,7 +1361,7 @@ class execution extends control
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
         $this->view->projectID       = $projectID;
-        $this->view->isStage         = isset($project->model) and $project->model == 'waterfall' ? true : false;
+        $this->view->isStage         = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->view->products        = $products;
         $this->view->productPlan     = array(0 => '') + $productPlan;
         $this->view->productPlans    = array(0 => '') + $productPlans;
