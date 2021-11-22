@@ -1044,22 +1044,14 @@ class bug extends control
             if($product->type != 'normal')
             {
                 $branches = $this->loadModel('branch')->getPairs($productID);
-                if($branch === 'all')
+                foreach($branches as $branchID => $branchName)
                 {
-                    $modules[0] = $this->tree->getOptionMenu($productID, 'bug', 0, 0);
-                    foreach($branches as $branchID => $branchName)
-                    {
-                        $modules[$branchID] = $this->tree->getOptionMenu($productID, 'bug', 0, $branchID);
-                    }
-                }
-                else
-                {
-                    $modules[$branch] = $this->tree->getOptionMenu($productID, 'bug', 0, $branch);
+                    $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'bug', 0, $branchID);
                 }
             }
             else
             {
-                $modules[0] = $this->tree->getOptionMenu($productID, 'bug', 0, 0);
+                $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'bug');
             }
 
             /* Set product menu. */
