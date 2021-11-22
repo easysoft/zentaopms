@@ -182,7 +182,7 @@ class testcase extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $branch);
         }
 
         $product = $this->product->getById($productID);
@@ -880,6 +880,8 @@ class testcase extends control
      * Batch edit case.
      *
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -922,7 +924,7 @@ class testcase extends control
                 $libraries = $this->loadModel('caselib')->getLibraries();
 
                 /* Set modules. */
-                $modules = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0, $branch);
+                $modules[$productID][$branch] = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
 
                 $this->view->modules    = $modules;
                 $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
@@ -940,17 +942,23 @@ class testcase extends control
                 if($product->type != 'normal')
                 {
                     $branches = $this->loadModel('branch')->getPairs($productID);
-                    foreach($branches as $branchID => $branchName) $modules[$branchID] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, $branchID);
+
+                    if($this->app->tab == 'project')
+                    {
+                        $branches = $this->loadModel('branch')->getPairsByProjectProduct($this->session->project, $productID);
+                    }
+                    foreach($branches as $branchID => $branchName) $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
                 }
                 else
                 {
-                    $modules[0] = $this->tree->getOptionMenu($productID, $viewType = 'case', 0, 0);
+                    $modules[$productID][BRANCH_MAIN] = $this->tree->getOptionMenu($productID, 'case');
                 }
 
                 $this->view->branches   = $branches;
                 $this->view->modules    = $modules;
                 $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
                 $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+                $this->view->product    = $product;
             }
         }
         else

@@ -468,4 +468,28 @@ class branchModel extends model
 
         if($branchID) $this->dao->update(TABLE_BRANCH)->set('`default`')->eq('1')->where('id')->eq($branchID)->exec();
     }
+
+    /**
+     * Get branches of product which linked project.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getPairsByProjectProduct($projectID, $productID)
+    {
+        $branches = $this->dao->select('branch,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t1.branch=t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.product')->eq($productID)
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchPairs('branch', 'name');
+
+        $projectProduct = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('product')->eq($productID)->fetchAll('branch');
+
+        if(isset($projectProduct[BRANCH_MAIN])) $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $branches;
+
+        return $branches;
+    }
 }

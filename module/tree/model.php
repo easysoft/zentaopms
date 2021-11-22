@@ -387,7 +387,7 @@ class treeModel extends model
         {
             if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
         }
-        elseif($type == 'story' and $this->app->rawModule == 'projectstory')
+        elseif(($type == 'story' and $this->app->rawModule == 'projectstory') or ($type == 'case' and $this->app->tab == 'project'))
         {
             $projectID = zget($extra, 'projectID', 0);
             if($product->type != 'normal' and $projectID)
@@ -721,7 +721,22 @@ class treeModel extends model
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
         $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $branchGroups = $this->dao->select('t1.product as product,branch,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch=t3.id')
+            ->where('t1.project')->eq($rootID)
+            ->andWhere('t2.type')->ne('normal')
+            ->andWhere('t1.product')->in(array_keys($products))
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchGroup('product', 'branch');
+
+        foreach($branchGroups as $productID => $branches)
+        {
+            foreach($branches as $branchID => $branchInfo)
+            {
+                $branchGroups[$productID][$branchID] = $branchID == BRANCH_MAIN ? $this->lang->branch->main : $branchInfo->name;
+            }
+        }
 
         /* createdVersion > 4.1. */
         $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-case'>";
@@ -751,7 +766,7 @@ class treeModel extends model
             foreach($branchGroups[$id] as $branch => $branchName)
             {
                 $treeMenu = array();
-                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $id and type = 'case') OR (root = $id and type = 'story' and branch ='$branch'))")
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $id and type = 'case' and branch = '$branch') OR (root = $id and type = 'story' and branch = '$branch'))")
                     ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, `order`, type')
@@ -804,22 +819,7 @@ class treeModel extends model
 
         /* Get module according to product. */
         $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
-        $branchGroups = $this->dao->select('t1.product as product,branch,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch=t3.id')
-            ->where('t1.project')->eq($rootID)
-            ->andWhere('t2.type')->ne('normal')
-            ->andWhere('t1.product')->in(array_keys($products))
-            ->andWhere('t2.deleted')->eq('0')
-            ->fetchGroup('product', 'branch');
-
-        foreach($branchGroups as $productID => $branches)
-        {
-            foreach($branches as $branchID => $branchInfo)
-            {
-                $branchGroups[$productID][$branchID] = $branchID == BRANCH_MAIN ? $this->lang->branch->main : $branchInfo->name;
-            }
-        }
+        $branchGroups = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $rootID);
 
         $productNum = count($products);
         foreach($products as $id => $product)
