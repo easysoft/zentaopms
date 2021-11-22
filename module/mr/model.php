@@ -1058,6 +1058,7 @@ class mrModel extends model
      */
     public function link($MRID, $productID, $type)
     {
+        $this->loadModel('action');
         if($type == 'story') $links = $this->post->stories;
         if($type == 'bug')   $links = $this->post->bugs;
         if($type == 'task')  $links = $this->post->tasks;
@@ -1079,9 +1080,9 @@ class mrModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            if($type == 'story') $this->loadModel('action')->create('story', $linkID, 'createmr', '', $MRCreateAction);
-            if($type == 'bug')   $this->loadModel('action')->create('bug', $linkID, 'createmr', '', $MRCreateAction);
-            if($type == 'task')  $this->loadModel('action')->create('task', $linkID, 'createmr', '', $MRCreateAction);
+            if($type == 'story') $this->action->create('story', $linkID, 'createmr', '', $MRCreateAction);
+            if($type == 'bug')   $this->action->create('bug', $linkID, 'createmr', '', $MRCreateAction);
+            if($type == 'task')  $this->action->create('task', $linkID, 'createmr', '', $MRCreateAction);
         }
     }
 
@@ -1121,5 +1122,61 @@ class mrModel extends model
         }
 
         return $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq($type)->andWhere('extra')->in($commits)->fetchPairs('objectID');
+    }
+
+    /**
+     * Get mr product.
+     *
+     * @param object $MR
+     * @access public
+     * @return mix
+     */
+    public function getMRProduct($MR)
+    {
+        $product = array();
+
+        if($MR->repoID)
+        {
+            $productID = $this->dao->select('product')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('product');
+        }
+        else
+        {
+            $products  = $this->loadModel('gitlab')->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
+            $productID = array_shift($products);
+        }
+
+        if($productID) $product = $this->loadModel('product')->getById($productID);
+        return $product;
+    }
+
+    /**
+     * Log merged action to links.
+     *
+     * @param object $MR
+     * @access public
+     * @return void
+     */
+    public function logMergedAction($MR)
+    {
+        $this->loadModel('action');
+        $product = $this->getMRProduct($MR);
+
+        $stories = $this->getLinkList($MR->id, $product->id, 'story');
+        foreach($stories as $story)
+        {
+            $this->action->create('story', $story->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+        }
+
+        $bugs = $this->getLinkList($MR->id, $product->id, 'bug');
+        foreach($bugs as $bug)
+        {
+            $this->action->create('bug', $bug->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+        }
+
+        $tasks = $this->getLinkList($MR->id, $product->id, 'task');
+        foreach($tasks as $task)
+        {
+            $this->action->create('task', $task->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+        }
     }
 }

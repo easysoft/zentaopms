@@ -13,7 +13,7 @@ $lang->mr->target       = 'target';
 $lang->mr->viewDiff     = 'View diff';
 $lang->mr->viewInGitlab = 'View in GitLab';
 $lang->mr->link         = 'Link stories,bugs,tasks';
-$lang->mr->createAction = '%s <strong>%s</strong> submitted a <a href="%s">Merge Request</a>';
+$lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";

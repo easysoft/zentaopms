@@ -280,6 +280,7 @@ $lang->action->label->reviewclarified       = '有待明确';
 $lang->action->label->commitsummary         = '提交培训总结';
 $lang->action->label->updatetrainee         = '更新培训人员';
 $lang->action->label->createmr              = 'MR关联了';
+$lang->action->label->mergedmr              = 'MR合并了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -682,3 +683,4 @@ $lang->action->label->repocreated                 = "创建评审";
 $lang->action->dynamicAction->task['gitcommited'] = 'git提交';
 $lang->action->dynamicAction->bug['repocreated']  = '创建代码评审';
 $lang->action->desc->createmr                     = '$extra';
+$lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了 <a href="$extra">代码</a>。';

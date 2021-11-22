@@ -46,8 +46,8 @@ class mr extends control
         $this->loadModel('gitlab');
         foreach($MRList as $MR)
         {
-            $products       = $this->gitlab->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
-            $MR->linkButton = empty($products) ? false : true;
+            $product        = $this->mr->getMRProduct($MR);
+            $MR->linkButton = empty($product) ? false : true;
         }
 
         /* Load lang from compile module */
@@ -207,8 +207,8 @@ class mr extends control
 
         /* Get mr linked list. */
         $this->app->loadLang('productplan');
-        $products = $this->loadModel('gitlab')->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
-        $product  = $this->loadModel('product')->getById(array_shift($products));
+        $product  = $this->mr->getMRProduct($MR);
+
         $this->view->product = $product;
         $this->view->stories = $this->mr->getLinkList($MR->id, $product->id, 'story');
         $this->view->bugs    = $this->mr->getLinkList($MR->id, $product->id, 'bug');
@@ -279,6 +279,9 @@ class mr extends control
             ///* Force reload when locate to the url. */
             //$random = uniqid();
             //return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse', "random={$random}")));
+
+            $this->mr->logMergedAction($MR);
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse')));
         }
 
@@ -427,8 +430,7 @@ class mr extends control
         $this->app->loadLang('task');
 
         $MR       = $this->mr->getByID($MRID);
-        $products = $this->loadModel('gitlab')->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
-        $product  = $this->loadModel('product')->getById(array_shift($products));
+        $product  = $this->mr->getMRProduct($MR);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -446,10 +448,9 @@ class mr extends control
         $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->stories      = $stories;
-        $this->view->summary      = $this->product->summary($stories);
+        $this->view->summary      = $this->loadModel('product')->summary($stories);
         $this->view->bugs         = $bugs;
         $this->view->tasks        = $tasks;
-        $this->view->products     = $products;
         $this->view->product      = $product;
         $this->view->storyPager   = $storyPager;
         $this->view->bugPager     = $bugPager;
