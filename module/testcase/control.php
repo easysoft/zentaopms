@@ -924,7 +924,7 @@ class testcase extends control
                 $libraries = $this->loadModel('caselib')->getLibraries();
 
                 /* Set modules. */
-                $modules[$productID][$branch] = $this->tree->getOptionMenu($libID, $viewType = 'caselib', 0, $branch);
+                $modules[$productID][$branch] = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
 
                 $this->view->modules    = $modules;
                 $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
@@ -951,7 +951,7 @@ class testcase extends control
                 }
                 else
                 {
-                    $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'case', 0, 0);
+                    $modules[$productID][BRANCH_MAIN] = $this->tree->getOptionMenu($productID, 'case');
                 }
 
                 $this->view->branches   = $branches;
