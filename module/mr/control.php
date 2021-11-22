@@ -480,6 +480,8 @@ class mr extends control
         if(!empty($_POST['stories']))
         {
             $this->mr->link($MRID, $productID, 'story');
+
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate(inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy"), 'parent'));
         }
 
@@ -560,6 +562,8 @@ class mr extends control
         if(!empty($_POST['bugs']))
         {
             $this->mr->link($MRID, $productID, 'bug');
+
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate(inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy"), 'parent'));
         }
 
@@ -638,6 +642,8 @@ class mr extends control
         if(!empty($_POST['tasks']))
         {
             $this->mr->link($MRID, $productID, 'task');
+
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate(inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy"), 'parent'));
         }
 

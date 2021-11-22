@@ -1059,8 +1059,13 @@ class mrModel extends model
     public function link($MRID, $productID, $type)
     {
         if($type == 'story') $links = $this->post->stories;
-        if($type == 'bug') $links = $this->post->bugs;
-        if($type == 'task') $links = $this->post->tasks;
+        if($type == 'bug')   $links = $this->post->bugs;
+        if($type == 'task')  $links = $this->post->tasks;
+
+        /* Get link action text. */
+        $MR       = $this->getByID($MRID);
+        $users    = $this->loadModel('user')->getPairs('noletter');
+        $MRCreateAction = sprintf($this->lang->mr->createAction, $MR->createdDate, zget($users, $MR->createdBy), helper::createLink('mr', 'view', "mr={$MR->id}"));
 
         foreach($links as $linkID)
         {
@@ -1073,6 +1078,10 @@ class mrModel extends model
             $relation->BID      = $linkID;
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+            if($type == 'story') $this->loadModel('action')->create('story', $linkID, 'createmr', '', $MRCreateAction);
+            if($type == 'bug')   $this->loadModel('action')->create('bug', $linkID, 'createmr', '', $MRCreateAction);
+            if($type == 'task')  $this->loadModel('action')->create('task', $linkID, 'createmr', '', $MRCreateAction);
         }
     }
 

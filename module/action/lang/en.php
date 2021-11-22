@@ -279,6 +279,7 @@ $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
+$lang->action->label->createmr              = 'MR Linked';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -680,3 +681,4 @@ $lang->action->desc->repocreated                  = '$date, created and reviewed
 $lang->action->label->repocreated                 = "create and review";
 $lang->action->dynamicAction->task['gitcommited'] = 'Git Commit';
 $lang->action->dynamicAction->bug['repocreated']  = $lang->action->label->repocreated;
+$lang->action->desc->createmr                     = '$extra';
