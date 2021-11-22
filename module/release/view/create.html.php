@@ -51,7 +51,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->release->notify;?></th>
-            <td colspan='2'><?php echo html::checkbox('notify', $lang->release->notifyList);?></td>
+            <td colspan='2'><?php echo html::checkbox('notify', $lang->release->notifyList, 'FB');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->release->mailto;?></th>
