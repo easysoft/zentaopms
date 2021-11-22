@@ -78,8 +78,11 @@ foreach(explode(',', $showFields) as $field)
                 foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
             }
 
-            $modules[$story->product][$story->branch] = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
-            foreach($modules[$story->product][$story->branch] as $moduleID => $moduleName) $modules[$story->product][$story->branch][$moduleID] = '/' . $product->name . $moduleName;
+            if(!isset($story->product][$story->branch]))
+            {
+                $modules[$story->product][$story->branch] = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
+                foreach($modules[$story->product][$story->branch] as $moduleID => $moduleName) $modules[$story->product][$story->branch][$moduleID] = '/' . $product->name . $moduleName;
+            }
 
             $productPlans = $this->productplan->getPairs($story->product, $branch);
         }
