@@ -501,6 +501,16 @@ class story extends control
             $showFields = str_replace('plan', '', $showFields);
         }
 
+        if($executionID != 0)
+        {
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+        }
+        else
+        {
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
@@ -526,7 +536,7 @@ class story extends control
         $this->view->spec             = $spec;
         $this->view->type             = $type;
         $this->view->branch           = $branch;
-        $this->view->branches         = $this->loadModel('branch')->getPairs($productID, 'active');
+        $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
         $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
 
@@ -637,6 +647,17 @@ class story extends control
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
+        if($this->app->tab = 'project' or $this->app->tab = 'execution')
+        {
+            $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID) : array();
+            $branches        = isset($productBranches[$story->product]) ? $productBranches[$story->product] : array();
+        }
+        else
+        {
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
         $this->story->replaceURLang($story->type);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -647,7 +668,7 @@ class story extends control
         $this->view->product          = $product;
         $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, true);
         $this->view->products         = $myProducts + $othersProducts;
-        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
+        $this->view->branches         = $branches;
         $this->view->reviewers        = implode(',', $reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
         $this->view->isShowReviewer   = $isShowReviewer;
