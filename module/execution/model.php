@@ -1638,15 +1638,19 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getBranchByProduct($products, $projectID)
+    public function getBranchByProduct($products, $projectID = 0)
     {
-        $branchGroups    = $this->loadModel('branch')->getByProducts($products, 'noclosed');
-        $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
-        foreach($branchGroups as $productID => $branchPairs)
+        $branchGroups = $this->loadModel('branch')->getByProducts($products, 'noclosed');
+
+        if($projectID)
         {
-            foreach($branchPairs as $branchID => $branchName)
+            $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
+            foreach($branchGroups as $productID => $branchPairs)
             {
-                if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+                foreach($branchPairs as $branchID => $branchName)
+                {
+                    if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+                }
             }
         }
         return $branchGroups;

@@ -1393,7 +1393,7 @@ class execution extends control
         $this->view->productPlans        = array(0 => '') + $productPlans;
         $this->view->whitelist           = $whitelist;
         $this->view->copyExecutionID     = $copyExecutionID;
-        $this->view->branchGroups        = isset($branchGroups) ? $branchGroups : $this->execution->getBranchByProduct(array_keys($products), $projectID);
+        $this->view->branchGroups        = isset($branchGroups) ? $branchGroups : $this->execution->getBranchByProduct(array_keys($products), $this->config->systemMode == 'new' ? $projectID : 0);
         $this->view->poUsers             = $poUsers;
         $this->view->pmUsers             = $pmUsers;
         $this->view->qdUsers             = $qdUsers;
@@ -1550,7 +1550,7 @@ class execution extends control
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $execution->project);
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
         $this->display();
     }
 
@@ -2324,7 +2324,7 @@ class execution extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $execution->project);
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
 
         $this->display();
     }
