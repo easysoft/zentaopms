@@ -41,3 +41,5 @@ $lang->message->label->canceled     = '取消';
 $lang->message->label->restarted    = '继续';
 $lang->message->label->blocked      = '阻塞';
 $lang->message->label->bugconfirmed = '确认';
+$lang->message->label->compilepass  = '构建通过';
+$lang->message->label->compilefail  = '构建失败';

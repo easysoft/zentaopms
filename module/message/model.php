@@ -163,6 +163,7 @@ class messageModel extends model
         if(empty($toList) and $objectType == 'todo') $toList = $object->account;
         if(empty($toList) and $objectType == 'testtask') $toList = $object->owner;
         if(empty($toList) and $objectType == 'meeting') $toList = $object->host . $object->participant;
+        if(empty($toList) and $objectType == 'mr') $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'release')
         {
             /* Get notifiy persons. */

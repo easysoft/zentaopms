@@ -11,6 +11,7 @@ $config->message->objectTypes['testtask']    = array('opened', 'edited', 'starte
 $config->message->objectTypes['todo']        = array('opened', 'edited');
 $config->message->objectTypes['doc']         = array('created', 'edited');
 $config->message->objectTypes['release']     = array('opened', 'edited');
+$config->message->objectTypes['mr']          = array('compilepass', 'compilefail');
 
 $config->message->available = array();
 $config->message->available['mail']['story']    = $config->message->objectTypes['story'];
@@ -19,6 +20,7 @@ $config->message->available['mail']['bug']      = $config->message->objectTypes[
 $config->message->available['mail']['testtask'] = array('opened', 'edited', 'closed');
 $config->message->available['mail']['doc']      = $config->message->objectTypes['doc'];
 $config->message->available['mail']['release']  = $config->message->objectTypes['release'];
+$config->message->available['mail']['mr']       = $config->message->objectTypes['mr'];
 
 $config->message->available['webhook']  = $config->message->objectTypes;
 
@@ -29,6 +31,7 @@ $config->message->available['message']['testtask'] = $config->message->objectTyp
 $config->message->available['message']['todo']     = $config->message->objectTypes['todo'];
 $config->message->available['message']['doc']      = $config->message->objectTypes['doc'];
 $config->message->available['message']['release']  = $config->message->objectTypes['release'];
+$config->message->available['message']['mr']       = $config->message->objectTypes['mr'];
 
 $config->message->typeLink = array();
 $config->message->typeLink['mail']    = 'mail|index';
