@@ -440,21 +440,24 @@ class programModel extends model
             $path    = $program->path;
         }
 
-        $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-            ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('status')->eq($browseType)->fi()
-            ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
-            ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
+        $projectList = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->where('t1.deleted')->eq('0')
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
+            ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->cookie->involved or $involved)
-            ->andWhere('openedBy', true)->eq($this->app->user->account)
-            ->orWhere('PM')->eq($this->app->user->account)
+            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->orWhere('t2.account')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
