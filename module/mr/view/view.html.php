@@ -36,8 +36,8 @@
 <div id="mainContent" class="main-content">
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
-      <li class='active'><?php echo html::a(inlink('view', "mr={$MR->id}"), $lang->mr->overview);?></li>
-      <li><?php echo html::a(inlink('viewDiff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
+      <li class='active'><?php echo html::a('###', $lang->mr->overview);?></li>
+      <li><?php echo html::a(inlink('diff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
       <li><?php echo html::a(inlink('link', "mr={$MR->id}") . "#story", html::icon($lang->icons['story'], 'text-info') . ' ' . $lang->productplan->linkedStories);?></a></li>
       <li><?php echo html::a(inlink('link', "mr={$MR->id}") . "#bugs",  html::icon($lang->icons['bug'], 'text-info') . ' ' . $lang->productplan->linkedBugs);?></a></li>
       <li><?php echo html::a(inlink('link', "mr={$MR->id}") . "#tasks", html::icon($lang->icons['todo'], 'text-info') . ' ' . $lang->mr->linkedTasks);?></a></li>
