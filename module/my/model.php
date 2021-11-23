@@ -192,7 +192,7 @@ class myModel extends model
         foreach($myProjects as $key => $project)
         {
             $workhour = $this->project->getWorkhour($project->id);
-            $project->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;
+            $project->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? round($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 100, 1) : 0;
             $project->delay    = (helper::diffDate(helper::today(), $project->end) > 0);
             $project->link     = common::hasPriv('project', 'view') ? helper::createLink('project', 'view', "projectID={$project->id}") : '';
         }
