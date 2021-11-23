@@ -183,6 +183,7 @@ $lang->bug->legendComment               = '备注';
 $lang->bug->legendLife                  = 'Bug的一生';
 $lang->bug->legendMisc                  = '其他相关';
 $lang->bug->legendRelated               = '其他信息';
+$lang->bug->legendThisWeekCreated       = '本周新增';
 
 /* 功能按钮。*/
 $lang->bug->buttonConfirm = '确认';
