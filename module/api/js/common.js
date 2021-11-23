@@ -218,7 +218,7 @@ try {
         },
         methods: {
             add() {
-                this.$emit('add', this.value.sub)
+                this.$emit('add', this.value)
             },
             del() {
                 this.$emit('del')
@@ -401,7 +401,8 @@ try {
             },
             add(data, sub) {
                 const field = this.getInitField();
-                field.sub = sub;
+                field.sub = sub.sub;
+                field.parentKey = sub.parentKey;
                 data.push({...field});
             },
             del(data, index) {
