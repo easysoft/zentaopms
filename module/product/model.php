@@ -593,10 +593,10 @@ class productModel extends model
         }
 
         $product        = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
-        $productProgram = isset($product->program) ? $product->program : '';
+        $programID = isset($product->program) ? $product->program : '';
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
-            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $productProgram")
+            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $programID")
             ->checkIF(!empty($product->code), 'code', 'unique')
             ->exec();
 
@@ -721,13 +721,13 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
+            if($this->config->systemMode == 'new') $programID  = !isset($product->program) ? $oldProduct->program : (empty($product->program) ? 0 : $product->program);
 
             $this->dao->update(TABLE_PRODUCT)
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $programID")
+                ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
