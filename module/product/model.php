@@ -595,7 +595,7 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
-            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = $product->program")
+            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = " . isset($product->program) ? $product->program : '')
             ->checkIF(!empty($product->code), 'code', 'unique')
             ->exec();
 
