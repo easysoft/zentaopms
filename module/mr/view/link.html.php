@@ -34,7 +34,6 @@
       <?php endif; ?>
     </div>
   </div>
-
 </div>
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
