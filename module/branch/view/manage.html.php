@@ -99,7 +99,7 @@
           <td class='c-actions'>
           <?php
             $disabled = $isMain ? 'disabled' : '';
-            common::printIcon('branch', 'edit', "branchID=$branch->id&productID=$productID", $branch, 'list', '', '', "$disabled iframe", true);
+            common::printIcon('branch', 'edit', "branchID=$branch->id&productID=$productID", $branch, 'list', '', '', "$disabled iframe", true, '', sprintf($lang->branch->edit, $lang->product->branchName[$product->type]));
             if($branch->status == 'active')
             {
                 common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', 'hiddenwin', $disabled);
