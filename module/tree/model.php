@@ -382,7 +382,8 @@ class treeModel extends model
         if($type == 'line') $rootID = 0;
 
         $this->loadModel('branch');
-        $branches = array($branch => '');
+        $projectID = zget($extra, 'projectID', 0);
+        $branches  = array($branch => '');
         if($branch)
         {
             $branchName = $this->branch->getById($branch);
@@ -398,7 +399,6 @@ class treeModel extends model
         }
         elseif(($type == 'story' and $this->app->rawModule == 'projectstory') or ($type == 'case' and $this->app->tab == 'project'))
         {
-            $projectID = zget($extra, 'projectID', 0);
             if($product->type != 'normal' and $projectID)
             {
                 $projectBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
@@ -406,6 +406,7 @@ class treeModel extends model
                     ->andWhere('product')->eq($product->id)
                     ->fetchPairs();
 
+                $branches = array();
                 if(isset($projectBranches[BRANCH_MAIN])) $branches = array(BRANCH_MAIN => $this->lang->branch->main);
                 $branches += $this->dao->select('id, name')->from(TABLE_BRANCH)
                     ->where('id')->in($projectBranches)

@@ -766,7 +766,8 @@ class testtask extends control
         $productID   = $productID ? $productID : key($this->products);
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds      = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $executionID = $task->execution;
+        $builds      = empty($productID) ? array() : $this->loadModel('build')->getExecutionBuildPairs($executionID, $productID, 'all', 'noempty,notrunk');
         $testreports = $this->testtask->getTestReportPairsByBuild($task->build);
 
         $this->view->task         = $task;
