@@ -303,12 +303,17 @@ class mr extends control
      */
     public function diff($MRID, $encoding= '')
     {
+        $this->app->loadLang('productplan');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('task');
+
         $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
 
         $MR = $this->mr->getByID($MRID);
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         $this->view->title = $this->lang->mr->viewDiff;
+        $this->view->MR    = $MR;
         $this->view->rawMR = $rawMR;
         if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
