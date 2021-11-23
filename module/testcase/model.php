@@ -1472,7 +1472,8 @@ class testcaseModel extends model
         }
         else
         {
-            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
+            $productInfo = $this->loadModel('product')->getByID($productID);
+            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
             $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
