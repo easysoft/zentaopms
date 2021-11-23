@@ -104,6 +104,7 @@ $lang->customMenu      = '自定义导航';
 $lang->customField     = '自定义表单项';
 $lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
+$lang->levelExceeded   = '层级已超过显示范围，更多信息请前往网页端查看或者是通过搜索方式查看。';
 
 $lang->preShortcutKey    = '[快捷键:←]';
 $lang->nextShortcutKey   = '[快捷键:→]';

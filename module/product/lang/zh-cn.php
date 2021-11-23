@@ -55,6 +55,7 @@ $lang->product->project     = $lang->executionCommon . '列表';
 $lang->product->build       = '版本列表';
 $lang->product->moreProduct = "更多产品";
 $lang->product->projectInfo = "所有与此产品关联的项目";
+$lang->product->progress    = "产品完成度";
 
 $lang->product->currentExecution      = "当前执行";
 $lang->product->activeStories         = "激活{$lang->SRCommon}";
@@ -77,6 +78,7 @@ $lang->product->assignToNullBugs      = '未指派Bug';
 $lang->product->assignToNullBugsTitle = '未指派Bug';
 $lang->product->closedBugs            = '关闭Bug';
 $lang->product->bugFixedRate          = 'Bug修复率';
+$lang->product->unfoldClosed          = '展开已关闭';
 
 $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon}吗？";
 $lang->product->errorNoProduct       = "还没有创建{$lang->productCommon}！";
