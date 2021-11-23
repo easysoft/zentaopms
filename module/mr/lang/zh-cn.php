@@ -27,6 +27,9 @@ $lang->mr->commits     = '提交数';
 $lang->mr->changes     = '更改数';
 $lang->mr->gitlabID    = 'GitLab';
 
+$lang->mr->canMerge  = "可合并";
+$lang->mr->cantMerge = "不可合并";
+
 $lang->mr->approval = '评审';
 $lang->mr->approve  = '通过';
 $lang->mr->reject   = '拒绝';
@@ -64,12 +67,14 @@ $lang->mr->mergeStatusList['checking']         = '检查中';
 $lang->mr->mergeStatusList['can_be_merged']    = '可合并';
 $lang->mr->mergeStatusList['cannot_be_merged'] = '不可自动合并';
 
-$lang->mr->description   = '描述';
-$lang->mr->confirmDelete = '确认删除该合并请求吗？';
-$lang->mr->sourceProject = '源项目';
-$lang->mr->sourceBranch  = '源分支';
-$lang->mr->targetProject = '目标项目';
-$lang->mr->targetBranch  = '目标分支';
+$lang->mr->description       = '描述';
+$lang->mr->confirmDelete     = '确认删除该合并请求吗？';
+$lang->mr->sourceProject     = '源项目';
+$lang->mr->sourceBranch      = '源分支';
+$lang->mr->targetProject     = '目标项目';
+$lang->mr->targetBranch      = '目标分支';
+$lang->mr->noCompileJob      = '没有构建任务';
+$lang->mr->compileUnexecuted = '还未执行';
 
 $lang->mr->usersTips = '提示：如果无法选择指派人，请先前往GitLab页面绑定用户。';
 $lang->mr->notFound  = "此{$lang->mr->common}不存在。";

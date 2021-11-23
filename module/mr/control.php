@@ -184,9 +184,6 @@ class mr extends control
     {
         $MR = $this->mr->getByID($id);
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
-        $this->view->title = $this->lang->mr->view;
-        $this->view->MR    = $MR;
-        $this->view->rawMR = isset($rawMR) ? $rawMR : false;
         if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
         $MR = $this->mr->apiSyncMR($MR); /* Sync MR from GitLab to ZentaoPMS. */
@@ -209,6 +206,12 @@ class mr extends control
         $this->app->loadLang('productplan');
         $product  = $this->mr->getMRProduct($MR);
 
+        $this->view->compile    = $this->loadModel('compile')->getById($MR->compileID);
+        $this->view->compileJob = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;
+
+        $this->view->title   = $this->lang->mr->view;
+        $this->view->MR      = $MR;
+        $this->view->rawMR   = isset($rawMR) ? $rawMR : false;
         $this->view->product = $product;
         $this->view->stories = $this->mr->getLinkList($MR->id, $product->id, 'story');
         $this->view->bugs    = $this->mr->getLinkList($MR->id, $product->id, 'bug');

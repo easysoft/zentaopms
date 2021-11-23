@@ -1,1 +1,7 @@
 #legendStories ul li, #legendBugs ul li, #legendTasks ul li {padding: 10px 0 0 12px; line-height: 20px;}
+.side-col .cell {padding: 0px;}
+.table-content tbody tr th{padding-left: 0; font-weight: 400; color: #838a9d; text-align: right; vertical-align: middle; border:none;}
+.table-content tbody tr td{border:none;}
+.table-content thead tr th{text-align: left; vertical-align: middle;}
+.detail-content{margin-top:0;}
+

@@ -60,7 +60,7 @@
         <?php foreach($MRList as $MR):?>
         <tr>
           <td class='text'><?php echo $MR->id;?></td>
-          <td class='text'><?php echo $MR->title;?></td>
+          <td class='text'><?php echo html::a(inlink('view', "mr={$MR->id}"), $MR->title);?></td>
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->sourceProject)->name_with_namespace . ':' . $MR->sourceBranch;?></td>
           <td class='text'><?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace . ':' . $MR->targetBranch;?></td>
           <?php if($MR->status == 'closed'):?>
