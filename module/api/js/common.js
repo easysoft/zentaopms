@@ -8,6 +8,7 @@ function loadDocModule(libID)
         $('#module').chosen();
     });
 }
+
 /**
  * Toggle acl.
  *
@@ -18,7 +19,6 @@ function loadDocModule(libID)
  */
 function toggleAcl(acl, type)
 {
-    console.log(noticeAcl, acl);
     if(acl == 'custom')
     {
         $('#whiteListBox').removeClass('hidden');
@@ -141,12 +141,7 @@ $(document).ready(function()
     };
 
     /* default options. */
-    SplitRow.DEFAULTS =
-        {
-            spliter: '<div class="col-spliter"></div>',
-            smallSize: 700,
-            middleSize: 850
-        };
+    SplitRow.DEFAULTS = { spliter: '<div class="col-spliter"></div>', smallSize: 700, middleSize: 850 };
 
     /* Extense jquery element. */
     $.fn.splitRow = function(option)
