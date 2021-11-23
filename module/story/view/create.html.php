@@ -18,6 +18,7 @@
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
+<?php js::set('storyType', $type);?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
