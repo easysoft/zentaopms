@@ -741,14 +741,37 @@ class mailModel extends model
         }
         else
         {
-            $sendUsers  = $this->{$objectType}->getToAndCcList($object);
+            $sendUsers = $this->{$objectType}->getToAndCcList($object);
         }
 
         if(!$sendUsers) return;
         list($toList, $ccList) = $sendUsers;
 
         /* Send it. */
-        $this->send($toList, $subject, $mailContent, $ccList);
+        if($objectType == 'mr')
+        {
+            $MRLink = common::getSysURL() . helper::createLink('mr', 'view', "id={$object->id}");
+            if($action->action == 'compilepass')
+            {
+                $mailContent = sprintf($this->lang->mr->toCreatedMessage, $MRLink, $title);
+                $this->send($toList, $subject, $mailContent);
+
+                $mailContent = sprintf($this->lang->mr->toReviewerMessage, $MRLink, $title);
+                $this->send($ccList, $subject, $mailContent);
+
+                /* Create a todo item for this MR. */
+                $this->loadModel('mr')->apiCreateMRTodo($object->gitlabID, $object->targetProject, $object->mriid);
+            }
+            elseif($action->action == 'compilefail')
+            {
+                $mailContent = sprintf($this->lang->mr->failMessage, $MRLink, $title);
+                $this->send($toList, $subject, $mailContent, $ccList);
+            }
+        }
+        else
+        {
+            $this->send($toList, $subject, $mailContent, $ccList);
+        }
         if($this->isError()) error_log(join("\n", $this->getError()));
     }
 

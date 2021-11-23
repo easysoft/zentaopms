@@ -114,6 +114,7 @@ $lang->action->objectTypes['whitelist']   = 'Whitelist';
 $lang->action->objectTypes['pipeline']    = 'GitLab';
 $lang->action->objectTypes['gitlab']      = 'GitLab';
 $lang->action->objectTypes['jenkins']     = 'Jenkins';
+$lang->action->objectTypes['mr']          = 'Merge Request';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

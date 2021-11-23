@@ -41,3 +41,5 @@ $lang->message->label->canceled     = 'cancel';
 $lang->message->label->restarted    = 'continue';
 $lang->message->label->blocked      = 'block';
 $lang->message->label->bugconfirmed = 'confirm';
+$lang->message->label->compilepass  = 'compile pass';
+$lang->message->label->compilefail  = 'compile fail';

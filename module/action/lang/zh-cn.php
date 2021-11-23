@@ -114,6 +114,7 @@ $lang->action->objectTypes['whitelist']   = '白名单';
 $lang->action->objectTypes['pipeline']    = 'GitLab';
 $lang->action->objectTypes['gitlab']      = 'GitLab';
 $lang->action->objectTypes['jenkins']     = 'Jenkins';
+$lang->action->objectTypes['mr']          = '合并请求';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -281,6 +282,8 @@ $lang->action->label->commitsummary         = '提交培训总结';
 $lang->action->label->updatetrainee         = '更新培训人员';
 $lang->action->label->createmr              = 'MR关联了';
 $lang->action->label->mergedmr              = 'MR合并了';
+$lang->action->label->compilepass           = '构建成功';
+$lang->action->label->compilefail           = '构建失败';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

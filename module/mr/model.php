@@ -45,7 +45,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager)
+    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null)
     {
         $MRList = $this->dao->select('*')
             ->from(TABLE_MR)
@@ -158,7 +158,7 @@ class mrModel extends model
         }
 
         /* Create a todo item for this MR. */
-        $this->apiCreateMRTodo($this->post->gitlabID, $this->post->targetProject, $rawMR->iid);
+        if(empty($MR->jobID)) $this->apiCreateMRTodo($this->post->gitlabID, $this->post->targetProject, $rawMR->iid);
 
         $newMR = new stdclass;
         $newMR->mriid       = $rawMR->iid;
@@ -1147,6 +1147,18 @@ class mrModel extends model
 
         if($productID) $product = $this->loadModel('product')->getById($productID);
         return $product;
+    }
+
+    /**
+     * Get toList and ccList.
+     *
+     * @param  object $mr
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($mr)
+    {
+        return array($mr->createdBy, $mr->assignee);
     }
 
     /**
