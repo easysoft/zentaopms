@@ -127,6 +127,7 @@ class product extends control
     {
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branchID  = $branch;
 
         /* Set menu. */
         if($this->app->tab == 'product')
@@ -224,12 +225,13 @@ class product extends control
             $projectProducts = $this->product->getProducts($projectID);
             $productPlans    = $this->execution->getPlans($projectProducts);
 
-            if($browseType == 'bybranch') $param = $branch;
-            $stories = $this->story->getExecutionStories($projectID, $productID, $branch, $sort, $browseType, $param, 'story', '', $pager);
+            if($browseType == 'bybranch') $param = $branchID;
+            $stories = $this->story->getExecutionStories($projectID, $productID, $branchID, $sort, $browseType, $param, 'story', '', $pager);
         }
         else
         {
-            $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+            $branchID = $browseType == 'bymodule' ? 'all' : $branchID;
+            $stories  = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
@@ -293,10 +295,11 @@ class product extends control
         $this->view->users           = $this->user->getPairs('noletter|pofirst|nodeleted');
         $this->view->orderBy         = $orderBy;
         $this->view->browseType      = $browseType;
-        $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+        $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
         $this->view->moduleID        = $moduleID;
         $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch          = $branch;
+        $this->view->branchID        = $branchID;
         $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;
