@@ -740,53 +740,42 @@ class story extends control
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
 
-        /* The stories of a product. */
-        if($productID)
+        if($productID or $executionID)
         {
-            $product = $this->product->getByID($productID);
-            $branchProduct = $product->type == 'normal' ? false : true;
-
-            /* Set branches and modules. */
-            $branches = array();
-            $modules  = array();
-            if($product->type != 'normal')
+            $this->loadModel('branch');
+            if($productID)
             {
-                $branches = $this->loadModel('branch')->getPairs($productID);
-                foreach($branches as $branchID => $branchName)
-                {
-                    $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
-                }
+                $branches      = $this->branch->getPairs($productID);
+                $product       = $this->product->getByID($productID);
+                $branchProduct = $product->type == 'normal' ? false : true;
+                $modules       = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches));
+                $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID));
+                $products      = array($productID => $product);
             }
             else
             {
-                $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'story');
-            }
-
-            $this->view->modules    = $modules;
-            $this->view->branches   = $branches;
-            $this->view->plans      = $this->productplan->getBranchPlanPairs($productID);
-            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
-            $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
-        }
-        elseif($executionID)
-        {
-            /* The stories of a execution. */
-            $execution = $this->execution->getByID($executionID);
-
-            $branchProduct  = false;
-            $linkedProducts = $this->loadModel('product')->getProducts($executionID);
-            foreach($linkedProducts as $linkedProduct)
-            {
-                if($linkedProduct->type != 'normal')
+                $modules        = array();
+                $branches       = array();
+                $execution      = $this->execution->getByID($executionID);
+                $branchProduct  = false;
+                $linkedProducts = $this->loadModel('product')->getProducts($executionID);
+                foreach($linkedProducts as $linkedProduct)
                 {
-                    $branchProduct = true;
-                    break;
+                    $branchList = $this->branch->getPairs($linkedProduct->id, '', $executionID);
+                    $modules[$linkedProduct->id]  = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
+                    $branches[$linkedProduct->id] = $branchList;
+                    $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList));
+
+                    if($linkedProduct->type != 'normal') $branchProduct = true;
                 }
+
+                $products = $linkedProducts;
             }
 
-            $this->view->position[]  = html::a($this->createLink('execution', 'story', "execution=$execution->id"), $execution->name);
-            $this->view->title       = $execution->name . $this->lang->colon . $this->lang->story->batchEdit;
-            $this->view->resetActive = true;
+            $this->view->branches    = $branches;
+            $this->view->modules     = $modules;
+            $this->view->productName = isset($product) ? $product->name : '';
+            $this->view->title       = (isset($product) ? $product->name : $execution->name) . $this->lang->colon . $this->lang->story->batchEdit;
         }
         else
         {
@@ -804,8 +793,7 @@ class story extends control
                 }
             }
 
-            $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
-            $this->view->title      = $this->lang->story->batchEdit;
+            $this->view->title = $this->lang->story->batchEdit;
         }
 
         /* Set ditto option for users. */
@@ -838,12 +826,13 @@ class story extends control
         $this->view->reasonList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->reasonList;
         $this->view->stageList         = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->stageList;
         $this->view->productID         = $productID;
+        $this->view->products          = $products;
         $this->view->branchProduct     = $branchProduct;
         $this->view->storyIdList       = $storyIdList;
         $this->view->branch            = $branch;
+        $this->view->plans             = $plans;
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
-        $this->view->productName       = isset($product) ? $product->name : '';
         $this->view->executionID       = $executionID;
         $this->display();
     }

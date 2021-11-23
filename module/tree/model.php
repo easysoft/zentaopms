@@ -118,6 +118,15 @@ class treeModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getModulePairs();
 
+        /* If type of $branch is array, get modules of these branches. */
+        if(gettype($branch) == 'array')
+        {
+            $modules = array();
+            foreach($branch as $b) $modules[$b] = $this->getOptionMenu($rootID, $type, $startModule, $b);
+
+            return $modules;
+        }
+
         if($type == 'line') $rootID = 0;
 
         $branches = array($branch => '');
