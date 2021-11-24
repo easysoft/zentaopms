@@ -95,7 +95,7 @@ foreach(explode(',', $showFields) as $field)
             }
             ?>
             <?php if($this->session->currentProductType == 'normal') $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;?>
-            <?php echo html::select("plans[$storyID]", $plans[$story->product][$story->branch], $story->plan, "class='form-control chosen'");?>
+            <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control chosen'");?>
           </td>
           <td title='<?php echo $story->title?>'>
             <div class="input-group">
