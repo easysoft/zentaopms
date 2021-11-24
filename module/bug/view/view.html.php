@@ -38,7 +38,7 @@
   <?php endif;?>
 </div>
 <?php if($this->app->getViewType() == 'xhtml'):?>
-<div id="wholeContent">
+<div id="scrollContent">
 <?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
@@ -68,7 +68,9 @@
       ?>
     </div>
     <?php $this->printExtendFields($bug, 'div', "position=left&inForm=0&inCell=1");?>
-    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
+    <?php if($this->app->getViewType() != 'xhtml'):?>
+    <div class="cell"><?php include '../../common/view/action.html.php';?></div>
+    <?php endif;?>
     <?php
     $params        = "bugID=$bug->id";
     $extraParams   = "extras=bugID=$bug->id";
