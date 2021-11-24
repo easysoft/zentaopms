@@ -75,7 +75,7 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->create;
+        $this->view->title = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->lblCreate;
 
         $this->display();
     }
