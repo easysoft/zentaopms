@@ -2090,10 +2090,7 @@ class userModel extends model
         }
 
         $stmt = $this->dao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($users);
-        if($whiteList)
-        {
-            foreach($products as $productID => $product) $stmt->orWhere("CONCAT(',', products, ',')")->like("%,{$productID},%");
-        }
+        foreach($products as $productID => $product) $stmt->orWhere("CONCAT(',', products, ',')")->like("%,{$productID},%");
         $userViews = $stmt->fetchPairs('account', 'products');
 
         /* Process user view. */
