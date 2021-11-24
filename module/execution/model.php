@@ -2502,17 +2502,17 @@ class executionModel extends model
     }
 
     /**
-     * Get team of the project and its executions by projectID.
+     * Get projects and executions that copy the team.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getTeamPairsByProject($projectID = 0)
+    public function getCanCopyObjects($projectID = 0)
     {
         if(empty($projectID) and $this->config->systemMode == 'new') return array();
 
-        $teamPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
+        $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
             ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
@@ -2520,7 +2520,7 @@ class executionModel extends model
             ->orderBy('project_asc')
             ->fetchPairs();
 
-        return $teamPairs;
+        return $objectPairs;
     }
 
     /**
