@@ -1040,7 +1040,7 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
-        if($this->session->currentProductType == 'normal')
+        if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);
             unset($this->config->testcase->search['params']['branch']);

@@ -472,7 +472,7 @@ class projectrelease extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts(array($release->product => $release->product));
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($release->product, $viewType = 'story', $startModuleID = 0);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
-        if($this->session->currentProductType == 'normal')
+        if($release->productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
@@ -592,7 +592,7 @@ class projectrelease extends control
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, 0, 'id_desc', $release->project);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($release->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
-        if($this->session->currentProductType == 'normal')
+        if($release->productType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
             unset($this->config->bug->search['params']['branch']);
