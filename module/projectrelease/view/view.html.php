@@ -343,7 +343,7 @@
                     </tr>
                       <?php if($release->productType != 'normal'):?>
                         <tr>
-                          <th><?php echo $lang->product->branch;?></th>
+                          <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
                           <td><?php echo $branchName;?></td>
                         </tr>
                       <?php endif;?>
