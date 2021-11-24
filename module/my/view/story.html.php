@@ -143,10 +143,10 @@
             {
                 $vars = "story={$child->id}";
                 common::printIcon('story', 'change',     $vars, $child, 'list', 'alter', '', 'iframe', true);
-                common::printIcon('story', 'review',     $vars, $child, 'list', 'search');
+                common::printIcon('story', 'review',     $vars, $child, 'list', 'search', '', 'iframe', true);
                 common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $child, 'list', '', '', 'iframe', true, "data-width='95%'");
-                common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
+                common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
             }
             ?>
           </td>
