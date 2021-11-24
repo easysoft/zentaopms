@@ -599,7 +599,7 @@ class projectrelease extends control
         }
         else
         {
-            $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->bug->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$release->productType]);
             $branches = array('' => '') + $this->loadModel('branch')->getPairs($release->product, 'noempty');
             if($release->branch) $branches = array('' => '', $release->branch => $branches[$release->branch]);
             $this->config->bug->search['params']['branch']['values'] = $branches;
