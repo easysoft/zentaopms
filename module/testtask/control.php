@@ -1047,7 +1047,7 @@ class testtask extends control
         }
         else
         {
-            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$task->productType]);
             $branches = array('' => '') + $this->loadModel('branch')->getPairs($task->product, 'noempty');
             if($task->branch) $branches = array('' => '', $task->branch => $branches[$task->branch]);
             $this->config->testcase->search['params']['branch']['values'] = $branches;
