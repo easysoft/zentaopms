@@ -740,10 +740,10 @@ class story extends control
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
 
+        $this->loadModel('branch');
         if($productID or $executionID)
         {
-            $this->loadModel('branch');
-            if($productID)
+            if(!$executionID)
             {
                 $branches      = $this->branch->getPairs($productID);
                 $product       = $this->product->getByID($productID);
@@ -751,6 +751,7 @@ class story extends control
                 $modules       = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches));
                 $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID));
                 $products      = array($productID => $product);
+                $branches      = array($productID => $branches);
             }
             else
             {
@@ -762,9 +763,10 @@ class story extends control
                 foreach($linkedProducts as $linkedProduct)
                 {
                     $branchList = $this->branch->getPairs($linkedProduct->id, '', $executionID);
-                    $modules[$linkedProduct->id]  = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
                     $branches[$linkedProduct->id] = $branchList;
+                    $modules[$linkedProduct->id]  = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
                     $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList));
+                    if(empty($plans[$linkedProduct->id])) $plans[$linkedProduct->id][0] = $plans[$linkedProduct->id];
 
                     if($linkedProduct->type != 'normal') $branchProduct = true;
                 }
@@ -772,10 +774,10 @@ class story extends control
                 $products = $linkedProducts;
             }
 
+            $this->view->title       = (isset($product) ? $product->name : $execution->name) . $this->lang->colon . $this->lang->story->batchEdit;
             $this->view->branches    = $branches;
             $this->view->modules     = $modules;
             $this->view->productName = isset($product) ? $product->name : '';
-            $this->view->title       = (isset($product) ? $product->name : $execution->name) . $this->lang->colon . $this->lang->story->batchEdit;
         }
         else
         {
@@ -786,14 +788,22 @@ class story extends control
             $products = $this->product->getByIdList($productIdList);
             foreach($products as $storyProduct)
             {
-                if($storyProduct->type != 'normal')
-                {
-                    $branchProduct = true;
-                    break;
-                }
+                $branchList   = $this->branch->getPairs($storyProduct->id);
+                $branchIdList = array_keys($branchList) ? array_keys($branchList) : 0;
+                $branches[$storyProduct->id] = $branchList;
+
+                $modules[$storyProduct->id] = $this->tree->getOptionMenu($storyProduct->id, 'story', 0, $branchIdList);
+                if($storyProduct->type == 'normal') $modules[$storyProduct->id][0] = $modules[$storyProduct->id];
+
+                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, array_keys($branchList));
+                if(empty($plans[$storyProduct->id])) $plans[$storyProduct->id][0] = $plans[$storyProduct->id];
+
+                if($storyProduct->type != 'normal') $branchProduct = true;
             }
 
-            $this->view->title = $this->lang->story->batchEdit;
+            $this->view->title    = $this->lang->story->batchEdit;
+            $this->view->branches = $branches;
+            $this->view->modules  = $modules;
         }
 
         /* Set ditto option for users. */
