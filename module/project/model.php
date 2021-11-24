@@ -1669,15 +1669,23 @@ class projectModel extends model
      * Get team member pairs by projectID.
      *
      * @param  int    $projectID
+     * @param  string $type project|execution
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($projectID)
+    public function getTeamMemberPairs($projectID, $type = 'project')
     {
-        $project = $this->getByID($projectID);
+
+        if($type == 'execution') $type = 'sprint,stage';
+        $project = $this->getByID($projectID, $type);
+
         if(empty($project)) return array();
 
-        $type    = $this->config->systemMode == 'new' ? $project->type : 'project';
+        $type = 'project';
+        if($this->config->systemMode == 'new')
+        {
+            if($project->type == 'sprint' or $project->type == 'stage') $type = 'execution';
+        }
 
         $members = $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
@@ -1971,7 +1979,7 @@ class projectModel extends model
         $project = $this->getByID($objectID);
 
         if(isset($project->model) and $project->model == 'waterfall')
-        {   
+        {
             global $lang;
             $this->loadModel('execution');
             $lang->executionCommon = $lang->project->stage;
