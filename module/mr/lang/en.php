@@ -74,8 +74,8 @@ $lang->mr->targetBranch  = 'Target branch';
 $lang->mr->usersTips         = 'Tip: If you cannot choose the assignee, please go to the GitLab page to bind the user first.';
 $lang->mr->notFound          = "Merge Request does not exist!";
 $lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the build task succeeded.";
-$lang->mr->toReviewerMessage = "有一个合并请求：<a href='%s'>%s</a> 待审核。";
-$lang->mr->failMessage       = "您提交的合并请求：<a href='%s'>%s</a> 构建任务执行失败，查看执行结果。";
+$lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
+$lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. Please check its execution result. ";
 
 $lang->mr->apiError = new stdclass;
 $lang->mr->apiError->createMR = "Failed to create a merge request through API. Reason: %s";

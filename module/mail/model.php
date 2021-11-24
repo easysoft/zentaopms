@@ -724,7 +724,7 @@ class mailModel extends model
             chdir($modulePath . 'ext/view');
         }
         ob_start();
-        include $viewFile;
+        if($objectType != 'mr') include $viewFile;
         foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
         $mailContent = ob_get_contents();
         ob_end_clean();
