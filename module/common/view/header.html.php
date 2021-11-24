@@ -25,7 +25,7 @@ include 'chosen.html.php';
       </div>
     </div>
   </div>
-  <?php if(isset($lang->{$app->tab}->menu->$activeMenu) and isset($lang->{$app->tab}->menu->$activeMenu['subMenu'])):?>
+  <?php if(isset($lang->{$app->tab}->menu->$activeMenu) and is_array($lang->{$app->tab}->menu->$activeMenu) and isset($lang->{$app->tab}->menu->{$activeMenu}['subMenu'])):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
