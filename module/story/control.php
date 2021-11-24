@@ -748,7 +748,7 @@ class story extends control
                 $branches      = $this->branch->getPairs($productID);
                 $product       = $this->product->getByID($productID);
                 $branchProduct = $product->type == 'normal' ? false : true;
-                $modules       = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches));
+                $modules       = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
                 $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID));
                 $products      = array($productID => $product);
                 $branches      = array($productID => $branches);
