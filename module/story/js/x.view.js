@@ -29,10 +29,13 @@ $(function()
         xuanAction += "<a href='" + url + "'" + title + target + btnClass + '>' + action + "</a>";
     });
 
-    if(xuanAction != "<div class='xuancard-actions fixed'>"){
+    if(xuanAction != "<div class='xuancard-actions fixed'>")
+    {
         xuanAction += '</div>';
         $('body').append(xuanAction);
-    }else{
+    }
+    else
+    {
         $('#scrollContent').css('height', 'calc(100% - 36px)');
     }
     $('.xuancard-actions a.iframe').modalTrigger();
