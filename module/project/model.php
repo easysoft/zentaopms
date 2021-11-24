@@ -204,7 +204,7 @@ class projectModel extends model
     public function getInfoList($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
-        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager);
+        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, 1);
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
@@ -1614,8 +1614,11 @@ class projectModel extends model
         }
 
         /* Delete the execution linked products that is not linked with the execution. */
-        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
+        if($projectID)
+        {
+            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
+            $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
+        }
 
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
