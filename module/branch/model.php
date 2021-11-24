@@ -376,6 +376,7 @@ class branchModel extends model
             }
             else
             {
+                $branchGroups[$branch->product][0] = $this->lang->branch->main;
                 $branchGroups[$branch->product][$branch->id] = htmlspecialchars_decode($branch->name);
             }
         }
@@ -387,7 +388,6 @@ class branchModel extends model
             if(!isset($branchGroups[$product->id]))  $branchGroups[$product->id] = array();
             if(strpos($params, 'noempty') === false) $branchGroups[$product->id] = array('0' => $this->lang->branch->main) + $branchGroups[$product->id];
         }
-
         return $branchGroups;
     }
 
