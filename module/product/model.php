@@ -1934,6 +1934,10 @@ class productModel extends model
             {
                 $link = helper::createLink('testsuite', 'browse', "productID=%s");
             }
+            elseif(($module == 'testcase' and $method == 'groupCase') or ($module == 'story' and $method == 'zeroCase') and $this->app->tab == 'project')
+            {
+                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : '')) . "#app=project";
+            }
             else
             {
                 $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
