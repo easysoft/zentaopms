@@ -655,7 +655,7 @@ class story extends control
         }
         else
         {
-            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id, 'active') : array();
         }
 
         $this->story->replaceURLang($story->type);
