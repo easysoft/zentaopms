@@ -647,7 +647,7 @@ class story extends control
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
-        if($this->app->tab = 'project' or $this->app->tab = 'execution')
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID) : array();
@@ -840,7 +840,7 @@ class story extends control
         $this->view->branchProduct     = $branchProduct;
         $this->view->storyIdList       = $storyIdList;
         $this->view->branch            = $branch;
-        $this->view->plans             = $plans;
+        $this->view->plans             = array('' => '') + $plans;
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
         $this->view->executionID       = $executionID;
