@@ -647,7 +647,7 @@ class story extends control
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
-        if($this->app->tab = 'project' or $this->app->tab = 'execution')
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID) : array();
@@ -748,7 +748,7 @@ class story extends control
                 $branches      = $this->branch->getPairs($productID);
                 $product       = $this->product->getByID($productID);
                 $branchProduct = $product->type == 'normal' ? false : true;
-                $modules       = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches));
+                $modules       = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
                 $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID));
                 $products      = array($productID => $product);
                 $branches      = array($productID => $branches);
@@ -840,7 +840,7 @@ class story extends control
         $this->view->branchProduct     = $branchProduct;
         $this->view->storyIdList       = $storyIdList;
         $this->view->branch            = $branch;
-        $this->view->plans             = $plans;
+        $this->view->plans             = array('' => '') + $plans;
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
         $this->view->executionID       = $executionID;
@@ -1700,7 +1700,7 @@ class story extends control
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase');
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase', '', $branchID);
         }
         else
         {
