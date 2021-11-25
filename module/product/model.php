@@ -75,8 +75,7 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '', $module = 0, $moduleType = '', $withBranch = true)
     {
-        $browseBugMethod = ',bug,testcase,testtask,ajaxselectstory,groupcase,zerocase,browseunits,';
-        $isBrowseBug     = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos($browseBugMethod, ",{$this->app->rawMethod},") !== false and isset($products)) ? true : false;
+        $isBrowseBug = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
 
         $this->app->loadLang('product');
         if(!$isBrowseBug and !$productID)

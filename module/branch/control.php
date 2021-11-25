@@ -205,8 +205,8 @@ class branch extends control
      */
     public function ajaxGetDropMenu($productID, $branch = 0, $module, $method, $extra = '')
     {
-        $products   = $this->loadModel('execution')->getBranchByProduct($productID, $extra, 'all');
-        $branches   = $products[$productID];
+        parse_str($extra, $output);
+        $branches   = $this->branch->getPairs($productID, 'all', isset($output['projectID']) ? $output['projectID'] : 0);
         $statusList = $this->dao->select('id,status')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchPairs();
 
         $this->view->link            = $this->loadModel('product')->getProductLink($module, $method, $extra, true);

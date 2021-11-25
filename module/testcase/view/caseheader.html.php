@@ -89,7 +89,7 @@
         $active  = !empty($groupBy) ? 'btn-active-text' : '';
 
         echo "<div id='groupTab' class='btn-group'>";
-        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story"), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID"), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active' data-app='{$this->app->tab}'");
         echo '</div>';
     }
     elseif($hasZeroPriv and $menuType == 'zerocase')
@@ -99,7 +99,7 @@
     }
     elseif($hasUnitPriv and $menuType == 'browseunits')
     {
-        echo html::a($this->createLink('testtask', 'browseUnits', "productID=$productID"), "<span class='text'>{$lang->testcase->browseUnits}</span>", '', "class='btn btn-link' id='browseunitsTab' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID"), "<span class='text'>{$lang->testcase->browseUnits}</span>", '', "class='btn btn-link' id='browseunitsTab' data-app='{$this->app->tab}'");
     }
     ?>
     <?php endforeach;?>

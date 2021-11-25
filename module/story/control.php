@@ -1687,7 +1687,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc')
+    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0)
     {
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
@@ -1700,7 +1700,7 @@ class story extends control
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase', '', $branchID);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase', "projectID=$projectID", $branchID);
         }
         else
         {
@@ -1721,6 +1721,7 @@ class story extends control
 
         $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->projectID  = $projectID;
         $this->view->productID  = $productID;
         $this->view->branchID   = $branchID;
         $this->view->orderBy    = $orderBy;
