@@ -451,10 +451,11 @@ class gitlabModel extends model
      * Get gitlab user list.
      *
      * @param  int    $gitlabID
+     * @param  bool   $onlyLinked
      * @access public
      * @return array
      */
-    public function apiGetUsers($gitlabID)
+    public function apiGetUsers($gitlabID, $onlyLinked = false)
     {
         /* GitLab API '/users' can only return 20 users per page in default, so we use a loop to fetch all users. */
         $page     = 1;
@@ -478,17 +479,23 @@ class gitlabModel extends model
 
         if(!$response) return array();
 
+        /* Get linked users. */
+        $linkedUsers = array();
+        if($onlyLinked) $linkedUsers = $this->getUserIdAccountPairs($gitlabID);
+
         $users = array();
         foreach($response as $gitlabUser)
         {
-            $user           = new stdclass;
-            $user->id       = $gitlabUser->id;
-            $user->realname = $gitlabUser->name;
-            $user->account  = $gitlabUser->username;
-            $user->email    = $gitlabUser->email;
-            $user->avatar   = $gitlabUser->avatar_url;
-            $user->createdAt   = $gitlabUser->created_at;
-            $user->lastActivityOn   = $gitlabUser->last_activity_on;
+            if(!isset($linkedUsers[$gitlabUser->id])) continue;
+
+            $user = new stdclass;
+            $user->id             = $gitlabUser->id;
+            $user->realname       = $gitlabUser->name;
+            $user->account        = $gitlabUser->username;
+            $user->email          = $gitlabUser->email;
+            $user->avatar         = $gitlabUser->avatar_url;
+            $user->createdAt      = $gitlabUser->created_at;
+            $user->lastActivityOn = $gitlabUser->last_activity_on;
 
             $users[] = $user;
         }
@@ -2128,7 +2135,7 @@ class gitlabModel extends model
         /* Check whether the user has been bind. */
         if($user->account)
         {
-            $zentaoBindUser = $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();
+            $zentaoBindUser = $this->dao->select('account,openID')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();
             $changeBind = (!$zentaoBindUser or $zentaoBindUser->openID != $user->id) ? true : false;
             if($zentaoBindUser && $changeBind)
             {
