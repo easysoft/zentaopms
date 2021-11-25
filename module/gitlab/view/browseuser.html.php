@@ -26,11 +26,12 @@
 <?php else:?>
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
-    <table id='gitlabUserList' class='table table-borderless'>
+    <table id='gitlabUserList' class='table has-sort-head table-borderless'>
       <thead>
         <tr>
-          <th class='c-id'><?php echo $lang->gitlab->user->id;?></th>
-          <th class='c-name text-left w-60px'><?php echo $lang->gitlab->user->name;?></th>
+          <?php $vars = "gitlabID=$gitlabID&orderBy=%s";?>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->user->id);?></th>
+          <th class='c-name text-left w-60px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->user->name);?></th>
           <th class='c-name text-left'></th>
           <th class='text-left'><?php echo $lang->gitlab->user->createOn;?></th>
           <th class='text-left'><?php echo $lang->gitlab->user->lastActivity;?></th>

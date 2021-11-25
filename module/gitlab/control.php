@@ -492,11 +492,12 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function browseUser($gitlabID)
+    public function browseUser($gitlabID, $orderBy = 'id_desc')
     {
         $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseUser;
         $this->view->gitlabID       = $gitlabID;
-        $this->view->gitlabUserList = $this->gitlab->apiGetUsers($gitlabID);
+        $this->view->gitlabUserList = $this->gitlab->apiGetUsers($gitlabID, false, $orderBy);
+        $this->view->orderBy        = $orderBy;
         $this->display();
     }
 
