@@ -215,13 +215,13 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function getPairsForStory($product = 0, $branch = 0, $skipParent = false)
+    public function getPairsForStory($product = 0, $branch = '', $skipParent = false)
     {
         $date = date('Y-m-d');
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+            ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
             ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
@@ -345,15 +345,17 @@ class productplanModel extends model
      *
      * @param  int    $productID
      * @param  array  $branches
+     * @param  bool   $skipParent
      * @access public
      * @return array
      */
-    public function getBranchPlanPairs($productID, $branches = '')
+    public function getBranchPlanPairs($productID, $branches = '', $skipParent = false)
     {
         $plans = $this->dao->select('branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branches))->andWhere('branch')->in($branches)->fi()
+            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->fetchAll('id');
 
         $planPairs = array();

@@ -972,32 +972,19 @@ class product extends control
      * @param  int    $planID
      * @param  bool   $needCreate
      * @param  string $expired
-     * @param  string $from
      * @param  string $param
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $from = '', $param = '')
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
     {
-        $this->loadModel('productplan');
-        if($from == 'story' and $branch == BRANCH_MAIN)
-        {
-            $plans = $this->productplan->getPairs($productID);
-        }
-        elseif($from == 'story' and $branch)
-        {
-            $plans  = $this->productplan->getPairs($productID, 0);
-            $plans += $this->productplan->getPairs($productID, $branch);
-        }
-        else
-        {
-            $plans = $this->productplan->getPairs($productID, $branch, $expired);
-        }
+        $param      = strtolower($param);
+        $skipParent = strpos($param, 'skipparent') !== false ? true : false;
+        $plans      = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, $skipParent);
+        $field      = $fieldID ? "plans[$fieldID]" : 'plan';
+        $output     = '';
 
-        $field = $fieldID ? "plans[$fieldID]" : 'plan';
-
-        $output = '';
-        if(strpos($param, 'batchEdit') !== false)
+        if(strpos($param, 'batchedit') !== false)
         {
             $output  = "<div class='table-row'>";
             $output .= "<div class='table-col'>";

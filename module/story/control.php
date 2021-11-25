@@ -749,7 +749,7 @@ class story extends control
                 $product       = $this->product->getByID($productID);
                 $branchProduct = $product->type == 'normal' ? false : true;
                 $modules       = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
-                $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID));
+                $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID, '', true));
                 $products      = array($productID => $product);
                 $branches      = array($productID => $branches);
             }
@@ -765,7 +765,7 @@ class story extends control
                     $branchList = $this->branch->getPairs($linkedProduct->id, '', $executionID);
                     $branches[$linkedProduct->id] = $branchList;
                     $modules[$linkedProduct->id]  = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
-                    $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList));
+                    $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
                     if(empty($plans[$linkedProduct->id])) $plans[$linkedProduct->id][0] = $plans[$linkedProduct->id];
 
                     if($linkedProduct->type != 'normal') $branchProduct = true;
@@ -795,7 +795,7 @@ class story extends control
                 $modules[$storyProduct->id] = $this->tree->getOptionMenu($storyProduct->id, 'story', 0, $branchIdList);
                 if($storyProduct->type == 'normal') $modules[$storyProduct->id][0] = $modules[$storyProduct->id];
 
-                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, array_keys($branchList));
+                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, array_keys($branchList), true);
                 if(empty($plans[$storyProduct->id])) $plans[$storyProduct->id][0] = $plans[$storyProduct->id];
 
                 if($storyProduct->type != 'normal') $branchProduct = true;

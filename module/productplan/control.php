@@ -331,26 +331,12 @@ class productplan extends control
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $number
-     * @param  string $from
      * @access public
      * @return void
      */
-    public function ajaxGetProductplans($productID, $branch = 0, $number = '', $from = '')
+    public function ajaxGetProductplans($productID, $branch = 0, $number = '')
     {
-        if($from == 'story' and $branch == BRANCH_MAIN)
-        {
-            $plans = $this->productplan->getPairs($productID);
-        }
-        elseif($from == 'story' and $branch)
-        {
-            $plans  = $this->productplan->getPairs($productID, 0);
-            $plans += $this->productplan->getPairs($productID, $branch);
-        }
-        else
-        {
-            $plans = $this->productplan->getPairs($productID, $branch);
-        }
-
+        $plans    = $this->productplan->getPairs($productID, $branch, '', true);
         $planName = $number === '' ? 'plan' : "plan[$number]";
         $plans    = empty($plans) ? array('' => '') : $plans;
         die(html::select($planName, $plans, '', "class='form-control'"));

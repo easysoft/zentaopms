@@ -58,7 +58,7 @@ function setModuleAndPlan(branchID, productID, num)
         $("#module" + num).chosen();
     });
 
-    planLink = createLink('productPlan', 'ajaxGetProductPlans', 'productID=' + productID + '&branch=' + branchID + '&num=' + num + "&from=story");
+    planLink = createLink('productPlan', 'ajaxGetProductPlans', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
     $.get(planLink, function(plans)
     {
         if(!plans) plans = '<select id="plan' + num + '" name="plan[' + num + ']" class="form-control"></select>';
