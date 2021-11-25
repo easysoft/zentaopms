@@ -1759,7 +1759,7 @@ class block extends control
             $meetingCount = isset($params->meetingCount) ? isset($params->meetingCount) : 0;
 
             $meetings = $this->dao->select('*')->from(TABLE_MEETING)
-                ->Where('deleted')->eq('0')
+                ->where('deleted')->eq('0')
                 ->andWhere('(date')->gt($today)
                 ->orWhere('(begin')->gt($now)
                 ->andWhere('date')->eq($today)
