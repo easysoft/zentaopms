@@ -1669,15 +1669,12 @@ class projectModel extends model
      * Get team member pairs by projectID.
      *
      * @param  int    $projectID
-     * @param  string $type project|execution
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($projectID, $type = 'project')
+    public function getTeamMemberPairs($projectID)
     {
-
-        if($type == 'execution') $type = 'sprint,stage';
-        $project = $this->getByID($projectID, $type);
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch();
 
         if(empty($project)) return array();
 
