@@ -2499,7 +2499,7 @@ class bugModel extends model
         }
 
         $allBranch = "`branch` = 'all'";
-        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('$branch')";
+        if($branch !== 'all' and $branch !== '' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
         $allProject = "`project` = 'all'";
@@ -2519,7 +2519,7 @@ class bugModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->rawModule == 'productplan' and $this->app->rawMethod == 'linkbug')->andWhere('branch')->in("0,$branch")->fi()
+            ->beginIF($this->app->rawModule == 'productplan' and $this->app->rawMethod == 'linkbug')->andWhere('branch')->in("0,{$this->session->planBranch}")->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;

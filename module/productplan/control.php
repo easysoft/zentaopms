@@ -426,7 +426,7 @@ class productplan extends control
         if($browseType == 'bySearch')
         {
             $this->session->set('planBranch', $plan->branch);
-            $allStories = $this->story->getBySearch($plan->product, $plan->branch, $queryID, 'id', '', 'story', array_keys($planStories), $pager);
+            $allStories = $this->story->getBySearch($plan->product, '', $queryID, 'id', '', 'story', array_keys($planStories), $pager);
         }
         else
         {
@@ -567,7 +567,8 @@ class productplan extends control
 
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($productID, $plan->branch, $queryID, 'id_desc', array_keys($planBugs), $pager);
+            $this->session->set('planBranch', $plan->branch);
+            $allBugs = $this->bug->getBySearch($productID, '', $queryID, 'id_desc', array_keys($planBugs), $pager);
         }
         else
         {
