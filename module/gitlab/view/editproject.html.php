@@ -28,11 +28,6 @@
             <td class='required'><?php echo html::input('name', $project->name, "class='form-control' placeholder='{$lang->gitlab->project->name}'");?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->gitlab->project->tagList;?></th>
-            <td><?php echo html::input('tag_list', join(',', $project->tag_list), "class='form-control'");?></td>
-            <td class="tips-git"><?php echo $lang->gitlab->project->tagListTips;?></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->gitlab->project->description;?></th>
             <td><?php echo html::textarea('description', $project->description, "rows='10' class='form-control' placeholder='{$lang->gitlab->project->description}'");?></td>
           </tr>
