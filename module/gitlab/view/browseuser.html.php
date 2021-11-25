@@ -44,7 +44,6 @@
           <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
           <td class='text-left'>
               <strong><?php echo $gitlabUser->realname;?></strong>
-              <br>
               <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
           </td>
           <td class='text' title='<?php echo substr($gitlabUser->createdAt, 0, 10);?>'><?php echo substr($gitlabUser->createdAt, 0, 10);?></td>
