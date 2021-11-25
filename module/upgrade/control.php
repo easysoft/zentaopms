@@ -341,7 +341,7 @@ class upgrade extends control
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
                 if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
             }
-            elseif($type == 'sprint' or $type == 'noProject')
+            elseif($type == 'sprint' or $type == 'noProject' or $type == 'moreLink')
             {
                 $linkedSprints = $this->post->sprints;
 
@@ -367,16 +367,6 @@ class upgrade extends control
                     {
                         $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $productIdList, array($sprint => $sprint));
                     }
-                }
-            }
-            elseif($type == 'moreLink')
-            {
-                foreach($this->post->projects as $i => $projectID)
-                {
-                    $sprintID = $this->post->sprints[$i];
-
-                    /* Change program field for product and project. */
-                    $this->upgrade->processMergedData(0, $projectID, 0, array(), array($sprintID));
                 }
             }
 

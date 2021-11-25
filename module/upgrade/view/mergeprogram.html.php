@@ -24,38 +24,8 @@
         <?php include './mergebyline.html.php';?>
         <?php elseif($type == 'product'):?>
         <?php include './mergebyproduct.html.php';?>
-        <?php elseif($type == 'sprint' or $type == 'noProject'):?>
+        <?php elseif($type == 'sprint' or $type == 'noProject' or $type == 'moreLink'):?>
         <?php include './mergebysprint.html.php';?>
-        <?php elseif($type == 'moreLink'):?>
-        <div class='alert alert-info'>
-          <?php
-          printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
-          echo '<br />' . $lang->upgrade->mergeByMoreLink;
-          ?>
-        </div>
-        <table class='table table-hover table-form'>
-          <thead>
-            <tr>
-              <th><?php echo $lang->projectCommon;?></th>
-              <th class='divider'></th>
-              <th class='w-p50'><?php echo $lang->upgrade->selectProject;?></th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php foreach($noMergedSprints as $sprintID => $sprint):?>
-          <tr>
-            <td><?php echo "{$sprint->name}" . html::hidden("sprints[]", $sprint->id);?></td>
-            <td class='divider'><i class='icon icon-angle-double-right'></i></td>
-            <td><?php echo html::select("projects[]", $sprint->projects, '', "class='form-control chosen'");?></td>
-          </tr>
-          <?php endforeach;?>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td class='text-center' colspan='3'><?php echo html::submitButton();?></td>
-            </tr>
-          </tfoot>
-        </table>
         <?php endif;?>
       </div>
     </div>
