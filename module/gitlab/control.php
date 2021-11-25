@@ -468,8 +468,8 @@ class gitlab extends control
         }
 
         /* Get gitlab users data. */
-        $gitlabUserList = $this->gitlab->apiGetUsers($gitlabID);
-        $gitlabUsers = array(''=>'');
+        $gitlabUserList = $this->gitlab->apiGetUsers($gitlabID, true);
+        $gitlabUsers    = array(''=>'');
         foreach($gitlabUserList as $gitlabUser)
         {
             $gitlabUsers[$gitlabUser->id] = $gitlabUser->realname;
