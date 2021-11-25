@@ -2057,6 +2057,7 @@ class gitlabModel extends model
         $user = fixer::input('post')->remove('avatar')->get();
         if(!empty($_FILES['avatar'])) $user->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
 
+        if(empty($user->account))  dao::$errors['account'][] = $this->lang->gitlab->user->bind . $this->lang->gitlab->user->emptyError;
         if(empty($user->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
         if(empty($user->username)) dao::$errors['username'][] = $this->lang->gitlab->user->username . $this->lang->gitlab->user->emptyError;
         if(empty($user->email))    dao::$errors['email'][] = $this->lang->gitlab->user->email . $this->lang->gitlab->user->emptyError;
@@ -2107,9 +2108,15 @@ class gitlabModel extends model
      */
     public function editUser($gitlabID)
     {
-        $user = fixer::input('post')->remove('username')->removeIF(!$this->post->password, 'password,password_repeat')->remove('avatar')->get();
+        $user = fixer::input('post')
+            ->setDefault('can_create_group', 0)
+            ->setDefault('external', 0)
+            ->remove('username,avatar')
+            ->removeIF(!$this->post->password, 'password,password_repeat')
+            ->get();
         if(!empty($_FILES['avatar'])) $user->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
 
+        if(empty($user->account))  dao::$errors['account'][] = $this->lang->gitlab->user->bind . $this->lang->gitlab->user->emptyError;
         if(empty($user->name))     dao::$errors['name'][] = $this->lang->gitlab->user->name . $this->lang->gitlab->user->emptyError;
         if(empty($user->email))    dao::$errors['email'][] = $this->lang->gitlab->user->email . $this->lang->gitlab->user->emptyError;
         if(dao::isError()) return false;
@@ -2121,7 +2128,7 @@ class gitlabModel extends model
         /* Check whether the user has been bind. */
         if($user->account)
         {
-            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();
+            $zentaoBindUser = $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();
             $changeBind = (!$zentaoBindUser or $zentaoBindUser->openID != $user->id) ? true : false;
             if($zentaoBindUser && $changeBind)
             {
