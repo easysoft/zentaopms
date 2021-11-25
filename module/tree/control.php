@@ -36,7 +36,7 @@ class tree extends control
         else if($this->app->tab == 'qa' and $viewType != 'caselib')
         {
             $products = $this->product->getPairs('noclosed');
-            $this->loadModel('qa')->setMenu($products, $rootID, 0, $viewType);
+            $this->loadModel('qa')->setMenu($products, $rootID, $branch, $viewType);
         }
         else if($this->app->tab == 'project')
         {
@@ -229,13 +229,12 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
-        $this->view->modules         = $this->tree->getTreeMenu($rootID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
         $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
         $this->view->branch          = $branch;
         $this->view->from            = $from;
-        $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType);
+        $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType, $branch);
         $this->view->canBeChanged    = isset($canBeChanged) ? $canBeChanged : true;
         $this->display();
     }
