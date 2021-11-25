@@ -1700,7 +1700,7 @@ class story extends control
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase', $projectID, $branchID);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase', "projectID=$projectID", $branchID);
         }
         else
         {

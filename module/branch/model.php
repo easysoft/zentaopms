@@ -93,7 +93,7 @@ class branchModel extends model
             $executionBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
                 ->where('project')->eq($executionID)
                 ->andWhere('product')->eq($productID)
-                ->fetchAll();
+                ->fetchAll('branch');
             if(empty($executionBranches)) return array();
         }
 

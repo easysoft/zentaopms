@@ -175,7 +175,7 @@ class testtask extends control
             }
 
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', $projectID);
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID");
         }
         else
         {
