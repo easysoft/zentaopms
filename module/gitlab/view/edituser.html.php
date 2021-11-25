@@ -21,6 +21,10 @@
         <?php echo html::hidden('id', $user->id);?>
         <table class='table table-form'>
           <tr>
+            <th><?php echo $lang->gitlab->user->bind;?></th>
+            <td class='required'><?php echo html::select('account', $userPairs, $zentaoBindAccount, "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->gitlab->user->name;?></th>
             <td class='required'><?php echo html::input('name', $user->name, "class='form-control' placeholder='{$lang->gitlab->user->name}'");?></td>
             <td class="tips-git"></td>
@@ -44,7 +48,7 @@
             <td><?php echo html::password('password_repeat', '', "class='form-control' placeholder='{$lang->gitlab->user->passwordRepeat}'");?></td>
             <td class="tips-git"></td>
           </tr>
-          <tr>
+          <tr class="hidden">
             <th><?php echo $lang->gitlab->user->projectsLimit;?></th>
             <td><?php echo html::input('projects_limit', $user->projects_limit, "class='form-control' placeholder='{$lang->gitlab->user->projectsLimit}'");?></td>
           </tr>
@@ -64,10 +68,6 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <th><?php echo $lang->gitlab->user->bind;?></th>
-            <td><?php echo html::select('account', $userPairs, $zentaoBindAccount, "class='form-control chosen'");?></td>
-          </tr>
           <?php if(function_exists('curl_file_create')):?>
           <tr>
             <th><?php echo $lang->gitlab->user->avatar;?></th>
@@ -80,26 +80,6 @@
             </td>
           </tr>
           <?php endif;?>
-          <tr>
-            <th><?php echo $lang->gitlab->user->skype;?></th>
-            <td><?php echo html::input('skype', $user->skype, "class='form-control' placeholder='{$lang->gitlab->user->skype}'");?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->gitlab->user->linkedin;?></th>
-            <td><?php echo html::input('linkedin', $user->linkedin, "class='form-control' placeholder='{$lang->gitlab->user->linkedin}'");?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->gitlab->user->twitter;?></th>
-            <td><?php echo html::input('twitter', $user->twitter, "class='form-control' placeholder='{$lang->gitlab->user->twitter}'");?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->gitlab->user->websiteUrl;?></th>
-            <td><?php echo html::input('website_url', $user->website_url, "class='form-control' placeholder='{$lang->gitlab->user->websiteUrl}'");?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->gitlab->user->note;?></th>
-            <td><?php echo html::textarea('note', $user->note, "rows='10' class='form-control' placeholder='{$lang->gitlab->user->note}'");?></td>
-          </tr>
           <tr>
             <th></th>
             <td class='text-center form-actions'>
