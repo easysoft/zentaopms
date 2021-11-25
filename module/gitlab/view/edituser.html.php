@@ -27,7 +27,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->username;?></th>
-            <td class='required'><?php echo html::input('username', $user->username, "class='form-control' placeholder='{$lang->gitlab->user->username}'");?></td>
+            <td><?php echo html::input('username', $user->username, "readonly class='form-control' placeholder='{$lang->gitlab->user->username}'");?></td>
             <td class="tips-git"></td>
           </tr>
           <tr>
@@ -62,7 +62,7 @@
               <div class="checkbox-primary">
                 <input type="checkbox" name='external' id="external" value='1' <?php if($user->external) echo 'checked';?> /><label for="external" class="no-margin"><?php echo $lang->gitlab->user->externalTip; ?></label>
               </div>
-            </td> 
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->user->bind;?></th>
