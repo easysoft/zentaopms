@@ -134,7 +134,7 @@ js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget(
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td><?php echo html::select('status', $lang->bug->statusList, $bug->status, "class='form-control chosen'");?></td>
+                  <td><?php echo $lang->bug->statusList[$bug->status];?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->confirmed;?></th>
