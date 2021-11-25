@@ -549,8 +549,11 @@ class executionModel extends model
         }
         if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
 
-        $whitelist = explode(',', $execution->whitelist);
-        $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
+        if(!empty($execution->whitelist))
+        {
+            $whitelist = explode(',', $execution->whitelist);
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
+        }
 
         /* Fix bug#3074, Update views for team members. */
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
