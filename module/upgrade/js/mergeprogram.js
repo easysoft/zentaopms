@@ -639,7 +639,7 @@ function getLineByProgram()
 function toggleProgram(obj)
 {
     var $obj = $(obj);
-    if($obj.length == 0 && type != 'noProject') return false;
+    if($obj.length == 0) return false;
 
     var $programs = $obj.closest('table').find('#programs');
     if($obj.prop('checked'))

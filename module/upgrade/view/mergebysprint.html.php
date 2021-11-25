@@ -2,7 +2,6 @@
   <?php
   printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
   if($type == 'sprint') echo '<br />' . $lang->upgrade->mergeByProject;
-  if($type == 'noProject') echo '<br />' . $lang->upgrade->needCreateProject;
   if($type == 'moreLink') echo '<br />' . $lang->upgrade->mergeByMoreLink;
   ?>
 </div>

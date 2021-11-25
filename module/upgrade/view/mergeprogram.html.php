@@ -24,7 +24,7 @@
         <?php include './mergebyline.html.php';?>
         <?php elseif($type == 'product'):?>
         <?php include './mergebyproduct.html.php';?>
-        <?php elseif($type == 'sprint' or $type == 'noProject' or $type == 'moreLink'):?>
+        <?php elseif($type == 'sprint' or $type == 'moreLink'):?>
         <?php include './mergebysprint.html.php';?>
         <?php endif;?>
       </div>
