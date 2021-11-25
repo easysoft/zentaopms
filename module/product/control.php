@@ -226,7 +226,6 @@ class product extends control
                 $this->session->set('currentProductType', $product->type);
                 $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($product->id, $projectID) : array();
                 $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
-
             }
 
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);

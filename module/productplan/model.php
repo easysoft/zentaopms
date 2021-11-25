@@ -221,6 +221,7 @@ class productplanModel extends model
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('end')->ge($date)
             ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
             ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
