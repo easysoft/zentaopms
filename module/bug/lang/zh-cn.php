@@ -274,8 +274,9 @@ $lang->bug->statusList['active']   = '激活';
 $lang->bug->statusList['resolved'] = '已解决';
 $lang->bug->statusList['closed']   = '已关闭';
 
-$lang->bug->confirmedList[1] = '是';
-$lang->bug->confirmedList[0] = '否';
+$lang->bug->confirmedList[''] = '';
+$lang->bug->confirmedList[1]  = '是';
+$lang->bug->confirmedList[0]  = '否';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '设计如此';
