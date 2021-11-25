@@ -766,7 +766,8 @@ class testtask extends control
         $productID   = $productID ? $productID : key($this->products);
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds      = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $executionID = $task->execution;
+        $builds      = empty($productID) ? array() : $this->loadModel('build')->getExecutionBuildPairs($executionID, $productID, 'all', 'noempty,notrunk');
         $testreports = $this->testtask->getTestReportPairsByBuild($task->build);
 
         $this->view->task         = $task;
@@ -1039,14 +1040,14 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
-        if($this->session->currentProductType == 'normal')
+        if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);
             unset($this->config->testcase->search['params']['branch']);
         }
         else
         {
-            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$task->productType]);
             $branches = array('' => '') + $this->loadModel('branch')->getPairs($task->product, 'noempty');
             if($task->branch) $branches = array('' => '', $task->branch => $branches[$task->branch]);
             $this->config->testcase->search['params']['branch']['values'] = $branches;

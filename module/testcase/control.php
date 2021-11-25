@@ -182,7 +182,7 @@ class testcase extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $branch);
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? 0 : $branch);
         }
 
         $product = $this->product->getById($productID);

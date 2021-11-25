@@ -362,10 +362,11 @@ class executionModel extends model
             $this->lang->project->code = $this->lang->execution->execCode;
         }
 
+        $sprintProject = isset($sprint->project) ? $sprint->project : '';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
-            ->checkIF(!empty($sprint->name), 'name', 'unique', "`type` in ('sprint','stage') and `project` = $sprint->project")
+            ->checkIF((!empty($sprint->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`type` in ('sprint','stage') and `project` = $sprintProject")
             ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage')")
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
@@ -513,13 +514,14 @@ class executionModel extends model
         }
 
         /* Update data. */
+        $executionProject = isset($execution->project) ? $execution->project : '';
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $execution->project")
+            ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $executionProject")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
             ->where('id')->eq($executionID)
             ->limit(1)
@@ -545,7 +547,7 @@ class executionModel extends model
             $changedAccounts[$owner]  = $owner;
             $teamMembers[$ownerField] = $member;
         }
-        if($execution->project) $this->addProjectMembers($execution->project, $teamMembers);
+        if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
 
         $whitelist = explode(',', $execution->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
@@ -652,7 +654,7 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
-                ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
+                ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
                 ->where('id')->eq($executionID)
                 ->limit(1)
@@ -1636,15 +1638,19 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getBranchByProduct($products, $projectID)
+    public function getBranchByProduct($products, $projectID = 0)
     {
-        $branchGroups    = $this->loadModel('branch')->getByProducts($products, 'noclosed');
-        $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
-        foreach($branchGroups as $productID => $branchPairs)
+        $branchGroups = $this->loadModel('branch')->getByProducts($products, 'noclosed');
+
+        if($projectID)
         {
-            foreach($branchPairs as $branchID => $branchName)
+            $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
+            foreach($branchGroups as $productID => $branchPairs)
             {
-                if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+                foreach($branchPairs as $branchID => $branchName)
+                {
+                    if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
+                }
             }
         }
         return $branchGroups;
@@ -2496,17 +2502,17 @@ class executionModel extends model
     }
 
     /**
-     * Get team of the project and its executions by projectID.
+     * Get projects and executions that copy the team.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getTeamPairsByProject($projectID = 0)
+    public function getCanCopyObjects($projectID = 0)
     {
         if(empty($projectID) and $this->config->systemMode == 'new') return array();
 
-        $teamPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
+        $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
             ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
@@ -2514,7 +2520,7 @@ class executionModel extends model
             ->orderBy('project_asc')
             ->fetchPairs();
 
-        return $teamPairs;
+        return $objectPairs;
     }
 
     /**

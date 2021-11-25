@@ -344,14 +344,16 @@ class productplanModel extends model
      * Get branch plan pairs.
      *
      * @param  int    $productID
+     * @param  array  $branches
      * @access public
      * @return array
      */
-    public function getBranchPlanPairs($productID)
+    public function getBranchPlanPairs($productID, $branches = '')
     {
         $plans = $this->dao->select('branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->eq($productID)
+            ->where('product')->eq($productID)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!empty($branches))->andWhere('branch')->in($branches)->fi()
             ->fetchAll('id');
 
         $planPairs = array();

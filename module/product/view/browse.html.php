@@ -401,10 +401,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
                   echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                   echo "<ul class='dropdown-list'>";
-                  foreach($branches as $branchID => $branchName)
+                  foreach($branches as $id => $branchName)
                   {
-                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
-                      echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
+                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$id");
+                      echo "<li class='option' data-key='$id'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
                   }
                   echo '</ul>';
                   if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
@@ -437,7 +437,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             </ul>
           </div>
 
-          <?php if($canBatchChangeModule and $branch !== 'all'):?>
+          <?php $isShowModuleBTN = ($this->app->tab == 'project' and $browseType != 'bybranch') ? false : true;?>
+          <?php if($canBatchChangeModule and $productID and $branchID !== 'all' and $isShowModuleBTN):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>

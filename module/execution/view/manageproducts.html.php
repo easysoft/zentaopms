@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('systemMode', $config->systemMode);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->manageProducts;?></span></span>

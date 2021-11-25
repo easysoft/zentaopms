@@ -187,4 +187,5 @@
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <?php js::set('confirmSyncStories', $lang->execution->confirmSyncStories);?>
+<?php js::set('systemMode', $config->systemMode);?>
 <?php include '../../common/view/footer.html.php';?>

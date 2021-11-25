@@ -81,18 +81,36 @@ class branchModel extends model
      *
      * @param  int    $productID
      * @param  string $params
+     * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function getPairs($productID, $params = '')
+    public function getPairs($productID, $params = '', $executionID = 0)
     {
+        $executionBranches = array();
+        if($executionID)
+        {
+            $executionBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
+                ->where('project')->eq($executionID)
+                ->andWhere('product')->eq($productID)
+                ->fetchAll();
+            if(empty($executionBranches)) return array();
+        }
+
         $branches = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($productID and $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
             ->beginIF(strpos($params, 'active') !== false)->andWhere('status')->eq('active')->fi()
             ->orderBy('`order`')
             ->fetchPairs('id', 'name');
         foreach($branches as $branchID => $branchName) $branches[$branchID] = htmlspecialchars_decode($branchName);
+
+        if($executionID)
+        {
+            if(isset($executionBranches['0'])) $branches = array('0' => $this->lang->branch->main) + $branches;
+            return $branches;
+        }
 
         if(strpos($params, 'noempty') === false)
         {
@@ -358,6 +376,7 @@ class branchModel extends model
             }
             else
             {
+                $branchGroups[$branch->product][0] = $this->lang->branch->main;
                 $branchGroups[$branch->product][$branch->id] = htmlspecialchars_decode($branch->name);
             }
         }
@@ -369,7 +388,6 @@ class branchModel extends model
             if(!isset($branchGroups[$product->id]))  $branchGroups[$product->id] = array();
             if(strpos($params, 'noempty') === false) $branchGroups[$product->id] = array('0' => $this->lang->branch->main) + $branchGroups[$product->id];
         }
-
         return $branchGroups;
     }
 

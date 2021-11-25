@@ -2590,9 +2590,9 @@ class storyModel extends model
         else
         {
             $productParam = ($type == 'byproduct' and $param) ? $param : $this->cookie->storyProductParam;
-            $branchParam  = $branchID = ($type == 'bybranch'  and $param) ? $param : $this->cookie->storyBranchParam;
+            $branchParam  = $branchID = ($type == 'bybranch' and $param !== '') ? $param : $this->cookie->storyBranchParam;
             $moduleParam  = ($type == 'bymodule'  and $param) ? $param : $this->cookie->storyModuleParam;
-            $modules      = empty($moduleParam) ? array() : $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            $modules      = (empty($moduleParam) or $type != 'bymodule') ? array() : $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
             if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
 
             $unclosedStatus = $this->lang->story->statusList;
@@ -2606,6 +2606,8 @@ class storyModel extends model
                 $storyIdList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs();
             }
 
+            $type = ($type == 'bymodule' and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $type;
+
             $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
@@ -2615,7 +2617,7 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($execution->type == 'project')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
-                ->beginIF($type == 'bybranch' and strpos($branchID, ',') !== false)->andWhere('t2.branch')->eq($branchParam)->fi()
+                ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()

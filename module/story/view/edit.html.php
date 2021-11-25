@@ -87,7 +87,7 @@
               </tr>
               <?php elseif($product->type != 'normal'):?>
               <tr>
-                <th class='thWidth'><?php echo $lang->product->branch;?></th>
+                <th class='thWidth'><?php echo $lang->product->branch = sprintf($lang->product->branch, $lang->product->branchName['branch']);?></th>
                 <td>
                   <div class='input-group'><?php if($product->type != 'normal') echo html::select('branch', $branches, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?></div>
                 </td>
