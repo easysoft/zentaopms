@@ -486,7 +486,7 @@ class gitlabModel extends model
         $users = array();
         foreach($response as $gitlabUser)
         {
-            if(!isset($linkedUsers[$gitlabUser->id])) continue;
+            if($onlyLinked and !isset($linkedUsers[$gitlabUser->id])) continue;
 
             $user = new stdclass;
             $user->id             = $gitlabUser->id;
