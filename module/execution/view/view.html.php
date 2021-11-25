@@ -238,24 +238,38 @@
                     <tr>
                       <th><?php echo $lang->execution->begin;?></th>
                       <td><?php echo $execution->begin;?></td>
-                      <th><?php echo $lang->execution->totalEstimate;?></th>
-                      <td><?php echo (float)$execution->totalEstimate . $lang->execution->workHour;?></td>
+                      <th><?php echo $lang->execution->realBegan;?></th>
+                      <?php if ($execution->realBegan == 0000-00-00): ?>
+                      <td><?php echo '';?></td>
+                      <?php else :;?>
+                      <td><?php echo $execution->realBegan;?></td>
+                      <?php endif;?>
                     </tr>
                     <tr>
                       <th><?php echo $lang->execution->end;?></th>
                       <td><?php echo $execution->end;?></td>
-                      <th><?php echo $lang->execution->totalConsumed;?></th>
-                      <td><?php echo (float)$execution->totalConsumed . $lang->execution->workHour;?></td>
+                      <th><?php echo $lang->execution->realEnd;?></th>
+                      <?php if ($execution->realEnd == 0000-00-00): ?>
+                      <td><?php echo '';?></td>
+                      <?php else :;?>
+                      <td><?php echo $execution->realEnd;?></td>
+                      <?php endif;?>
                     </tr>
                     <tr>
+                      <th><?php echo $lang->execution->totalEstimate;?></th>
+                      <td><?php echo (float)$execution->totalEstimate . $lang->execution->workHour;?></td>                     
                       <th><?php echo $lang->execution->totalDays;?></th>
                       <td><?php echo $execution->days;?></td>
-                      <th><?php echo $lang->execution->totalLeft;?></th>
-                      <td><?php echo (float)$execution->totalLeft . $lang->execution->workHour;?></td>
                     </tr>
                     <tr>
+                      <th><?php echo $lang->execution->totalConsumed;?></th>
+                      <td><?php echo (float)$execution->totalConsumed . $lang->execution->workHour;?></td>
                       <th><?php echo $lang->execution->totalHours;?></th>
-                      <td><?php echo (float)$execution->totalHours . $lang->execution->workHour;?></td>
+                      <td><?php echo (float)$execution->totalHours . $lang->execution->workHour;?></td>                     
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->execution->totalLeft;?></th>
+                      <td><?php echo (float)$execution->totalLeft . $lang->execution->workHour;?></td>                    
                     </tr>
                   </tbody>
                 </table>
