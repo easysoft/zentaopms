@@ -414,7 +414,19 @@ class productplanModel extends model
             $planID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
             $this->loadModel('score')->create('productplan', 'create', $planID);
-            if(!empty($plan->parent)) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+            if(!empty($plan->parent))
+            {
+                $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+                $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
+                $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
+                $stories = $this->dao->select('*')->from(TABLE_STORY)->where('plan')->like("%{$plan->parent}%")->fetchAll('id');
+                foreach($stories as $storyID => $story)
+                {
+                    if(strpos(",$story->plan,", ",{$plan->parent},") === false) continue;
+                    $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$story->plan,");
+                    $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
+                }
+            }
             return $planID;
         }
     }
