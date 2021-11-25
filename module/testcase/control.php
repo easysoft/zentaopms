@@ -197,6 +197,7 @@ class testcase extends control
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->testcase->common;
+        $this->view->projectID     = $projectID;
         $this->view->productID     = $productID;
         $this->view->product       = $product;
         $this->view->productName   = $this->products[$productID];
@@ -230,7 +231,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function groupCase($productID = 0, $branch = '', $groupBy = 'story')
+    public function groupCase($productID = 0, $branch = '', $groupBy = 'story', $projectID = 0)
     {
         $groupBy   = empty($groupBy) ? 'story' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
@@ -242,7 +243,7 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $products = array('0' => $this->lang->product->all) + $this->product->getProducts($this->session->project, 'all', '', false);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', $projectID, $branch);
         }
 
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
@@ -269,6 +270,7 @@ class testcase extends control
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->position[]  = html::a($this->createLink('testcase', 'groupTask', "productID=$productID&groupBy=$groupBy"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testcase->common;
+        $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->users       = $this->user->getPairs('noletter');

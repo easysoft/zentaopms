@@ -152,7 +152,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browseUnits($productID = 0, $browseType = 'newest', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseUnits($productID = 0, $browseType = 'newest', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
@@ -175,7 +175,7 @@ class testtask extends control
             }
 
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', $projectID);
         }
         else
         {
@@ -194,6 +194,7 @@ class testtask extends control
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->position[]  = html::a($this->createLink('testtask', 'browseUnits', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testtask->common;
+        $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;
