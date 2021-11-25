@@ -62,11 +62,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->devops->repo;?></th>
-            <td colspan='1' class='required'><?php echo html::select('repo', array(''), '', "class='form-control chosen'");?></td>
+            <td colspan='1' class='required'><?php echo html::select('repoID', array(''), '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->common;?></th>
-            <td colspan='1'><?php echo html::select('job', array(''), '', "class='form-control chosen'");?></td>
+            <td colspan='1'><?php echo html::select('jobID', array(''), '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->mr->assignee;?></th>

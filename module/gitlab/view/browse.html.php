@@ -48,7 +48,7 @@
             <?php
             $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';
             common::printLink('gitlab', 'browseProject', "gitlabID=$id", "<i class='icon icon-list'></i> ", '',"title={$lang->gitlab->browseProject} class='btn btn-primary'");
-            common::printLink('gitlab', 'browseGroup', "gitlabID=$id", "<i class='icon icon-group'></i> ", '', "title={$lang->gitlab->browseGroup}  class='btn btn-primary'");
+            common::printLink('gitlab', 'browseGroup', "gitlabID=$id", "<i class='icon icon-groups'></i> ", '', "title={$lang->gitlab->browseGroup}  class='btn btn-primary'");
             common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title={$lang->gitlab->edit} class='btn btn-primary'");
             common::printLink('gitlab', 'browseUser', "gitlabID=$id", "<i class='icon icon-persons'></i> ", '', "title={$lang->gitlab->browseUser}  class='btn {$disabled}' ,'disabled'");
             common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-link'></i> ", '', "title={$lang->gitlab->bindUser}  class='btn {$disabled}' ,'disabled'");

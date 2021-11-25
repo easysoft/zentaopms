@@ -84,27 +84,10 @@ class mrModel extends model
      */
     public function create()
     {
-        if (!empty($_POST['job']))
-        {
-            $repoID        = $this->post->repo;
-            $jobID         = $this->post->job;
-            $compileID     = $this->post->compile;
-
-            $MR = fixer::input('post')
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->add('repoID', $repoID)
-                ->add('jobID', $jobID)
-                ->add('compileID', $compileID)
-                ->get();
-        }
-        else
-        {
-            $MR = fixer::input('post')
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->get();
-        }
+        $MR = fixer::input('post')
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
+            ->get();
 
         /* Exec Job */
         if(isset($MR->jobID) && $MR->jobID)
