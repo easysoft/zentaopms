@@ -455,7 +455,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function apiGetUsers($gitlabID, $onlyLinked = false, $orderBy)
+    public function apiGetUsers($gitlabID, $onlyLinked = false, $orderBy = 'id_desc')
     {
         /* GitLab API '/users' can only return 20 users per page in default, so we use a loop to fetch all users. */
         $page     = 1;
