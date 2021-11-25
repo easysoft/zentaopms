@@ -1674,7 +1674,7 @@ class projectModel extends model
      */
     public function getTeamMemberPairs($projectID)
     {
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch();
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         if(empty($project)) return array();
 
