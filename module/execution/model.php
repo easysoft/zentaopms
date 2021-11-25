@@ -1635,6 +1635,7 @@ class executionModel extends model
      *
      * @param  array  $products
      * @param  int    $projectID
+     * @param  string $status
      * @access public
      * @return array
      */
