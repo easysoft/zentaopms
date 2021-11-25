@@ -1450,7 +1450,7 @@ class story extends control
                 {
                     foreach($plans[$storyID] as $plan)
                     {
-                        if($plan->branch != BRANCH_MAIN and $plan->branch != $branchID)
+                        if($plan->branch != $branchID)
                         {
                             $conflictStoryIdList .= '[' . $storyID . ']';
                             $conflictStoryArray[] = $storyID;

@@ -217,10 +217,18 @@ class product extends control
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
         }
 
-        /* Get stories. */
+        /* Get stories and branches. */
         if($this->app->rawModule == 'projectstory')
         {
-            if(!empty($product)) $this->session->set('currentProductType', $product->type);
+            $branches = array();
+            if(!empty($product))
+            {
+                $this->session->set('currentProductType', $product->type);
+                $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($product->id, $projectID) : array();
+                $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
+
+            }
+
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
             $projectProducts = $this->product->getProducts($projectID);
             $productPlans    = $this->execution->getPlans($projectProducts);
@@ -231,6 +239,7 @@ class product extends control
         else
         {
             $branchID = $browseType == 'bymodule' ? 'all' : $branchID;
+            $branches = $this->loadModel('branch')->getPairs($productID);
             $stories  = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
 
@@ -300,7 +309,7 @@ class product extends control
         $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
-        $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches        = $branches;
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;
         $this->view->storyTasks      = $storyTasks;
