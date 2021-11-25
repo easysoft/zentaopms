@@ -2519,6 +2519,7 @@ class bugModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($this->app->rawModule == 'productplan' and $this->app->rawMethod == 'linkbug')->andWhere('branch')->in("0,$branch")->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;

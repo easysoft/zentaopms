@@ -2507,6 +2507,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
+            ->beginIF($this->app->rawModule == 'productplan' and $this->app->rawMethod == 'linkstory')->andWhere('t1.`branch`')->in("0,{$this->session->planBranch}")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq($type)
             ->orderBy($orderBy)
