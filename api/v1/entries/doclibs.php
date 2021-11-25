@@ -33,11 +33,6 @@ class doclibsEntry extends Entry
         }
         krsort($result);
 
-        $lib = new stdclass();
-        $lib->id   = 'files';
-        $lib->name = $this->lang->doclib->files;
-        $result[] = $lib;
-
         return $this->send(200, array('libs' => array_values($result)));
     }
 }

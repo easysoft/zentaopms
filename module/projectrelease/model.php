@@ -45,10 +45,11 @@ class projectreleaseModel extends model
      *
      * @param  int    $projectID
      * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getList($projectID, $type = 'all')
+    public function getList($projectID, $type = 'all', $orderBy = 't1.date_desc')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.execution, t4.name as executionName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -58,7 +59,7 @@ class projectreleaseModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.date DESC')
+            ->orderBy($orderBy)
             ->fetchAll();
     }
 

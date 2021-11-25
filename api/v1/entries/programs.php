@@ -32,13 +32,13 @@ class programsEntry extends Entry
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-        $programs     = (array)$data->data->programs;
-        $progressList = (array)$data->data->progressList;
+        $programs     = $data->data->programs;
+        $progressList = $data->data->progressList;
         $users        = $data->data->users;
         $result       = array();
         foreach($programs as $program)
         {
-            if(isset($progressList[$program->id])) $program->progress = $progressList[$program->id];
+            if(isset($progressList->{$program->id})) $program->progress = $progressList->{$program->id};
             $param = $this->format($program, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
 
             if($mergeChildren)
@@ -57,9 +57,9 @@ class programsEntry extends Entry
                 $program->labelBudget = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
 
                 if(empty($program->parent)) $result[$program->id] = $program;
-                if(isset($programs[$program->parent]))
+                if(isset($programs->{$program->parent}))
                 {
-                    $parentProgram = $programs[$program->parent];
+                    $parentProgram = $programs->{$program->parent};
                     if(!isset($parentProgram->children)) $parentProgram->children = array();
                     $parentProgram->children[] = $program;
                 }

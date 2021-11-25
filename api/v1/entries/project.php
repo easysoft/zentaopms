@@ -31,6 +31,10 @@ class projectEntry extends entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
         $project = $this->format($data->data->project, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
+
+        $this->loadModel('testcase');
+        $project->caseReview = ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview));
+
         if(empty($fields)) return $this->send(200, $project);
 
         /* Set other fields. */

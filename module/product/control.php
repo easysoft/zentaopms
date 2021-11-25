@@ -69,14 +69,15 @@ class product extends control
     /**
      * The projects which linked the product.
      *
-     * @param  string      $status
-     * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  int         $involved
+     * @param  string $status
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $involved
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0)
+    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc')
     {
         $this->app->loadLang('execution');
         $this->app->loadLang('project');
@@ -88,7 +89,7 @@ class product extends control
 
         /* Get PM id list. */
         $accounts     = array();
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved);
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy);
 
         foreach($projectStats as $project)
         {

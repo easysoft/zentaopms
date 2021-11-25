@@ -34,20 +34,21 @@ class release extends control
     /**
      * Browse releases.
      *
-     * @param  int        $productID
-     * @param  string|int $branch
-     * @param  string     $type
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function browse($productID, $branch = 'all', $type = 'all')
+    public function browse($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc')
     {
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID, $branch, $type);
+        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy);
         $this->view->type       = $type;
         $this->display();
     }
