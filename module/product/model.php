@@ -534,7 +534,8 @@ class productModel extends model
 
         $notNormalProduct   = (isset($currentProduct->type) and $currentProduct->type != 'normal');
         $isTrackMethod      = ($currentModule == 'story' and $currentMethod == 'track');
-        $isShowBranchMethod = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod;
+        $isTreeBrowseMethod = ($currentModule == 'tree' and $currentMethod == 'browse');
+        $isShowBranchMethod = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod || $isTreeBrowseMethod;
         if($notNormalProduct and strpos(',testsuite,testreport,', ',' . $currentModule . ',') === false and ($this->app->tab == 'qa' or $isShowBranchMethod))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
