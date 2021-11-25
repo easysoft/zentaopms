@@ -2182,10 +2182,9 @@ class gitlabModel extends model
      */
     public function editGroup($gitlabID)
     {
-        $group = fixer::input('post')->setDefault('request_access_enabled,lfs_enabled', 0)->get();
+        $group = fixer::input('post')->remove('path')->setDefault('request_access_enabled,lfs_enabled', 0)->get();
 
         if(empty($group->name)) dao::$errors['name'][] = $this->lang->gitlab->group->name . $this->lang->gitlab->group->emptyError;
-        if(empty($group->path)) dao::$errors['path'][] = $this->lang->gitlab->group->path . $this->lang->gitlab->group->emptyError;
         if(dao::isError()) return false;
 
         $reponse = $this->apiUpdateGroup($gitlabID, $group);

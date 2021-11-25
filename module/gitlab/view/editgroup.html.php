@@ -27,12 +27,12 @@
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->group->path;?></th>
-            <td class='required'>
+            <td>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $gitlab->url . '/';?></span>
-                <span><?php echo html::input('path', $group->path, "class='form-control' placeholder='{$lang->gitlab->group->path}'");?></span>
+                <span><?php echo html::input('path', $group->path, "readonly class='form-control' placeholder='{$lang->gitlab->group->path}'");?></span>
               </div>
-              <div class="alert alert-warning"><?php echo $lang->gitlab->group->pathTip;?></div>
+              <div class="alert alert-warning hidden"><?php echo $lang->gitlab->group->pathTip;?></div>
             </td>
             <td class="tips-git"></td>
           </tr>
@@ -58,7 +58,7 @@
               <div class="checkbox-primary">
                 <input type="checkbox" name='lfs_enabled' id="lfsEnabled" value='1' <?php if($group->lfs_enabled) echo 'checked';?> /><label for="external" class="no-margin"><?php echo $lang->gitlab->group->lfsEnabledTip; ?></label>
               </div>
-            </td> 
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->group->projectCreationLevel;?></th>
