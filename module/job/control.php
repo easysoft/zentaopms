@@ -369,8 +369,8 @@ class job extends control
     public function ajaxGetRefList($repoID)
     {
         $repo = $this->loadModel('repo')->getRepoByID($repoID);
-        if($repo->SCM != 'Gitlab') $this->send(array('result' => 'fail'));
-        $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitlab, $repo->project);
+        if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitlab, $repo->project);
+        if($repo->SCM != 'Gitlab') $refList = $this->repo->getBranches($repo, true);
         $this->send(array('result' => 'success', 'refList' => $refList));
     }
 

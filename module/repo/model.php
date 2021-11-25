@@ -416,15 +416,23 @@ class repoModel extends model
     /**
      * Get git branches.
      *
-     * @param  object    $repo
+     * @param  object  $repo
+     * @param  bool    $printLabel
      * @access public
      * @return array
      */
-    public function getBranches($repo)
+    public function getBranches($repo, $printLabel = false)
     {
         $this->scm = $this->app->loadClass('scm');
         $this->scm->setEngine($repo);
-        return $this->scm->branch();
+        $branches = $this->scm->branch();
+
+        if($printLabel)
+        {
+            foreach($branches as &$branch) $branch = 'Branch::' . $branch;
+        }
+
+        return $branches;
     }
 
     /**

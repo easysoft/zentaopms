@@ -22,7 +22,7 @@ $(document).ready(function()
         {
             if(data.result == 'success')
             {
-                if(data.type == 'gitlab')
+                if(data.type.indexOf('git') != -1)
                 {
                     $('.reference').show();
                     $('.svn-fields').addClass('hidden');
