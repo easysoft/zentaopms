@@ -36,7 +36,7 @@ class tree extends control
         else if($this->app->tab == 'qa' and $viewType != 'caselib')
         {
             $products = $this->product->getPairs('noclosed');
-            $this->loadModel('qa')->setMenu($products, $rootID, 0, $viewType);
+            $this->loadModel('qa')->setMenu($products, $rootID, $branch, $viewType);
         }
         else if($this->app->tab == 'project')
         {
