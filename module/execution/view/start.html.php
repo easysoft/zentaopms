@@ -27,6 +27,14 @@
       <tbody>
         <?php $this->printExtendFields($execution, 'table', 'columns=2');?>
         <tr>
+          <th><?php echo $lang->execution->realBegan;?></th>
+          <td>
+            <div class = 'w-150px'>       
+              <?php echo html::input('realBegan',(!empty($execution->realBegan) && $execution->realBegan != '0000-00-00' ? $execution->realBegan : date('Y-m-d')), "class='form-control form-date'");?>
+            </div>         
+          </td>
+        </tr>     
+        <tr>
           <th class='w-40px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>

@@ -700,7 +700,6 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
-            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)

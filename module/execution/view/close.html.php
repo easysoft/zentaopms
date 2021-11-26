@@ -31,6 +31,14 @@
         </tr>
         <?php $this->printExtendFields($execution, 'table');?>
         <tr>
+          <th><?php echo $lang->execution->realEnd;?></th>
+          <td>
+            <div class='w-150px'>       
+              <?php echo html::input('realEnd',(!empty($execution->realEnd) && $execution->realEnd != '0000-00-00' ? $execution->realEnd : date('Y-m-d')), "class='form-control form-date'");?>
+            </div>         
+          </td>
+        </tr>        
+        <tr>
           <th class='w-50px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>

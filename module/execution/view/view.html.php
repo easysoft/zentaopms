@@ -239,7 +239,7 @@
                       <th><?php echo $lang->execution->begin;?></th>
                       <td><?php echo $execution->begin;?></td>
                       <th><?php echo $lang->execution->realBegan;?></th>
-                      <?php if ($execution->realBegan == 0000-00-00): ?>
+                      <?php if ($execution->realBegan == '0000-00-00'): ?>
                       <td><?php echo '';?></td>
                       <?php else :;?>
                       <td><?php echo $execution->realBegan;?></td>
@@ -249,7 +249,7 @@
                       <th><?php echo $lang->execution->end;?></th>
                       <td><?php echo $execution->end;?></td>
                       <th><?php echo $lang->execution->realEnd;?></th>
-                      <?php if ($execution->realEnd == 0000-00-00): ?>
+                      <?php if ($execution->realEnd == '0000-00-00'): ?>
                       <td><?php echo '';?></td>
                       <?php else :;?>
                       <td><?php echo $execution->realEnd;?></td>
