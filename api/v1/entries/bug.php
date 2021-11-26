@@ -24,7 +24,11 @@ class bugEntry extends entry
         $control->view($bugID);
 
         $data = $this->getData();
-        $bug  = $data->data->bug;
+
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
+
+        $bug = $data->data->bug;
 
         /* Set product name */
         $bug->productName = $data->data->product->name;

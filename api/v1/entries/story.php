@@ -23,7 +23,11 @@ class storyEntry extends Entry
         $control = $this->loadController('story', 'view');
         $control->view($storyID);
 
-        $data  = $this->getData();
+        $data = $this->getData();
+
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
+
         $story = $data->data->story;
 
         if(!empty($story->children)) $story->children  = array_values((array)$story->children);

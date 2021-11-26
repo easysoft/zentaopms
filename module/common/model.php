@@ -1865,9 +1865,10 @@ EOD;
         {
             $queryObjects = $this->dao->query($sql);
             $objectList   = array();
+            $key          = 'id';
             while($object = $queryObjects->fetch())
             {
-                $key = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? 'case' : 'id';
+                if(!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) $key = 'case';
                 $id  = $object->$key;
                 $objectList[$id] = $id;
             }
