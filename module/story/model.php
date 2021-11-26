@@ -2640,7 +2640,6 @@ class storyModel extends model
                 ->beginIF($this->session->storyBrowseType and strpos('changed|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
-                ->beginIF($this->app->rawModule == 'release' and $this->app->rawMethod == 'linkstory')->andWhere('t2.branch')->in($branch)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')

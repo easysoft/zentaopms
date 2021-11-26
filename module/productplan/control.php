@@ -428,7 +428,7 @@ class productplan extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", $queryID, 'id', '', 'story', array_keys($planStories), $pager);
+            $allStories = $this->story->getBySearch($plan->product, $plan->branch ? "0,{$plan->branch}" : 0, $queryID, 'id', '', 'story', array_keys($planStories), $pager);
         }
         else
         {
