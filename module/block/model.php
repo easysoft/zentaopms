@@ -166,9 +166,18 @@ class blockModel extends model
     {
         $data = array();
 
-        $getTaskCount       = "SELECT count(*) AS count FROM `zt_task` WHERE assignedTo  = 'admin' AND deleted  = '0'"
-            . " AND (project not in (select id from zt_project where deleted = '0' and status ='suspended' and type = 'project') AND execution not in (select id from zt_project where deleted = '0' and status ='suspended' and type ='sprint'))";
-        $data['tasks']      = (int)$this->dao->query($getTaskCount)->fetchAll();
+        $tasks = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.execution=t3.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('t2.status')->ne('suspended')
+            ->andWhere('t3.status')->ne('suspended')
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t3.type')->eq('sprint')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0);
+        $data['tasks']      = count($tasks);
         $data['doneTasks']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
         $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)

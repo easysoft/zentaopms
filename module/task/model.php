@@ -2178,11 +2178,8 @@ class taskModel extends model
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->leftjoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.status')->ne('suspended')
-            ->andWhere('t3.status')->ne('suspended')
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
             ->query();
