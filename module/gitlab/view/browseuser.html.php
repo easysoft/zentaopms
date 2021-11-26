@@ -52,7 +52,7 @@
           <td class='c-actions text-left'>
             <?php
             common::printLink('gitlab', 'editUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->user->edit} class='btn btn-primary'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteUser', "gitlabID=$gitlabID&userID=$gitlabUser->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->project->confirmDelete}' class='btn'");
+            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteUser', "gitlabID=$gitlabID&userID=$gitlabUser->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteUser}' class='btn'");
             ?>
           </td>
         </tr>

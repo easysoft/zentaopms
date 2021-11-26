@@ -53,7 +53,7 @@
             <?php
             common::printLink('gitlab', 'manageGroupMembers', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-team'></i> ", '',"title={$lang->gitlab->group->manageMembers} class='btn btn-primary'");
             common::printLink('gitlab', 'editGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->group->edit} class='btn btn-primary'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->group->confirmDelete}' class='btn'");
+            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteGroup}' class='btn'");
             ?>
           </td>
         </tr>
