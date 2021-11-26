@@ -2140,7 +2140,7 @@ class taskModel extends model
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
-            ->beginIF($this->app->rawModule == 'my' || $this->app->rawModule == 'block')->andWhere('t2.status')->ne('suspended')->andWhere('t4.status')->ne('suspended')->fi()
+            ->beginIF($this->app->rawModule == 'my' or $this->app->rawModule == 'block')->andWhere('t2.status')->ne('suspended')->andWhere('t4.status')->ne('suspended')->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy')->andWhere("t1.`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -2181,9 +2181,10 @@ class taskModel extends model
             ->leftjoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.status')->ne('suspended')
+            ->andWhere('t3.status')->ne('suspended')
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
-            ->andWhere('t2.status')->ne('suspended')->andWhere('t3.status')->ne('suspended')->fi()
             ->query();
 
         $tasks = array();
