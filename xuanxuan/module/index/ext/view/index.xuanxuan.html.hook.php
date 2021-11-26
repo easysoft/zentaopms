@@ -67,7 +67,7 @@ Xuanxuan.setGlobalOptions(
     onNotice:   handleXuanNoticeChange
 });
 
-var $chatBtn = $('<a href="javascript:void(0)" id="chatBtn" class="btn btn-link"><i class="text-primary icon icon-chat"></i><span class="badge bg-red" id="chatNoticeBadge"></span></a>');
+var $chatBtn = $('<a href="javascript:void(0)" id="chatBtn" class="btn btn-link"><i class="text-primary icon icon-chat-solid"></i><span class="badge bg-red" id="chatNoticeBadge"></span></a>');
 $chatBtn.insertBefore('#globalSearchDiv').on('click', showXuanClient);
 window.xuan = new Xuanxuan(xuanConfig);
 </script>
