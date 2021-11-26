@@ -38,6 +38,7 @@ class taskEntry extends Entry
 
         /* Set module title */
         $moduleTitle = '';
+        if(empty($task->module)) $moduleTitle = '/';
         if($task->module)
         {
             $modulePath = $data->data->modulePath;

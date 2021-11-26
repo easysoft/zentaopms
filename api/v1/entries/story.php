@@ -35,6 +35,7 @@ class storyEntry extends Entry
 
         /* Set module title */
         $moduleTitle = '';
+        if(empty($story->module)) $moduleTitle = '/';
         if($story->module)
         {
             $modulePath = $data->data->modulePath;

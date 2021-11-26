@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class bugEntry extends entry 
+class bugEntry extends entry
 {
     /**
      * GET method.
@@ -25,6 +25,66 @@ class bugEntry extends entry
 
         $data = $this->getData();
         $bug  = $data->data->bug;
+
+        /* Set product name */
+        $bug->productName = $data->data->product->name;
+
+        /* Set module title */
+        $moduleTitle = '';
+        if(empty($bug->module)) $moduleTitle = '/';
+        if($bug->module)
+        {
+            $modulePath = $data->data->modulePath;
+            foreach($modulePath as $key => $module)
+            {
+                $moduleTitle .= $module->name;
+                if(isset($modulePath[$key + 1])) $moduleTitle .= '/';
+            }
+        }
+        $bug->moduleTitle = $moduleTitle;
+
+        if($bug->openedBy)     $bug->openedBy     = $this->formatUser($bug->openedBy,     $data->data->users);
+        if($bug->resolvedBy)   $bug->resolvedBy   = $this->formatUser($bug->resolvedBy,   $data->data->users);
+        if($bug->closedBy)     $bug->closedBy     = $this->formatUser($bug->closedBy,     $data->data->users);
+        if($bug->lastEditedBy) $bug->lastEditedBy = $this->formatUser($bug->lastEditedBy, $data->data->users);
+        if($bug->assignedTo)
+        {
+            $usersWithAvatar = $this->loadModel('user')->getListByAccounts(array($bug->assignedTo), 'account');
+            $bug->assignedTo = zget($usersWithAvatar, $bug->assignedTo);
+        }
+
+        $mailto = array();
+        if($bug->mailto)
+        {
+            foreach(explode(',', $bug->mailto) as $account)
+            {
+                if(empty($account)) continue;
+                $mailto[] = $this->formatUser($account, $data->data->users);
+            }
+        }
+        $bug->mailto = $mailto;
+
+        $openedBuilds = array();
+        foreach(explode(',', $bug->openedBuild) as $buildID)
+        {
+            if(empty($buildID)) continue;
+
+            $openedBuild        = new stdclass();
+            $openedBuild->id    = $buildID;
+            $openedBuild->title = zget($data->data->builds, $buildID, '');
+
+            $openedBuilds[] = $openedBuild;
+        }
+        $bug->openedBuild = $openedBuilds;
+
+        if($bug->resolvedBuild)
+        {
+            $resolvedBuild = new stdclass();
+            $resolvedBuild->id    = $bug->resolvedBuild;
+            $resolvedBuild->title = zget($data->data->builds, $bug->resolvedBuild, '');
+            $bug->resolvedBuild   = $resolvedBuild;
+        }
+
         $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
