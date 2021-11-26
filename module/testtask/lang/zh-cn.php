@@ -118,7 +118,6 @@ $lang->testtask->statusList['doing']   = '进行中';
 $lang->testtask->statusList['done']    = '已关闭';
 $lang->testtask->statusList['blocked'] = '被阻塞';
 
-$lang->testtask->priList[0] = '';
 $lang->testtask->priList[3] = '3';
 $lang->testtask->priList[1] = '1';
 $lang->testtask->priList[2] = '2';
