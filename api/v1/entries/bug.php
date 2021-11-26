@@ -85,6 +85,8 @@ class bugEntry extends entry
             $bug->resolvedBuild   = $resolvedBuild;
         }
 
+        $bug->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->bug);
+
         $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
