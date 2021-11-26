@@ -15,6 +15,24 @@ class myIndex extends index
         {
             $this->view->pageBodyClass = 'xxc-embed';
         }
+        else
+        {
+            $this->loadModel('im');
+
+            $xuanConfig      = new stdclass();
+            $token           = $this->im->userGetAuthToken($this->app->user->id, 'zentaoweb');
+            $clientUrl       = isset($this->config->webClientUrl) ? $this->config->webClientUrl : 'data/xuanxuan/web/';
+
+            $xuanConfig->clientUrl        =  $clientUrl;
+            $xuanConfig->server           = $this->im->getServer('zentao');
+            $xuanConfig->account          = $this->app->user->account;
+            $xuanConfig->authKey          = $token->token;
+            $xuanConfig->debug            = $this->config->debug;
+            $xuanConfig->serverTime       = (int)(microtime(true) * 1000);
+            $xuanConfig->serverNowTime    = (int)round(time() / $tokenAuthWindow);
+
+            $this->view->xuanConfig = $xuanConfig;
+        }
 
         return parent::index($open);
     }
