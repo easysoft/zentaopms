@@ -736,7 +736,7 @@ class docModel extends model
         }
         unset($doc->contentType);
 
-        $doc->draft = $doc->content;
+        $doc->draft = isset($doc->content) ? $doc->content : '';
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
