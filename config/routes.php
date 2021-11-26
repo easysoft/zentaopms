@@ -80,9 +80,10 @@ $routes['/todos/:id']          = 'todo';
 $routes['/todos/:id/finish']   = 'todoFinish';
 $routes['/todos/:id/activate'] = 'todoActivate';
 
-$routes['/projects/:projectID/builds'] = 'builds';
-$routes['/builds']                     = 'builds';
-$routes['/builds/:id']                 = 'build';
+$routes['/projects/:id/builds']   = 'builds';
+$routes['/executions/:id/builds'] = 'executionBuilds';
+$routes['/builds']                = 'builds';
+$routes['/builds/:id']            = 'build';
 
 $routes['/products/:id/testcases']   = 'testcases';
 $routes['/projects/:id/testcases']   = 'projectCases';

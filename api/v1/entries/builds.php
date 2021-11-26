@@ -33,10 +33,7 @@ class buildsEntry extends entry
         $result = array();
         foreach($data->data->projectBuilds as $productID => $builds)
         {
-            foreach($builds as $build)
-            {
-                $result[] = $this->format($build, 'bugs:idList,stories:idList,deleted:bool');
-            }
+            foreach($builds as $build) $result[] = $this->format($build, 'bugs:idList,stories:idList,deleted:bool');
         }
 
         return $this->send(200, array('total' => count($result), 'builds' => $result));
