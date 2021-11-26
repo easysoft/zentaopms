@@ -34,7 +34,7 @@
           <th><?php echo $lang->project->realEnd;?></th>
           <td>
             <div class='w-150px'>       
-              <?php echo html::input('realEnd',(!empty($project->realEnd) && $project->realEnd != '0000-00-00' ? $project->realEnd : date('Y-m-d')), "class='form-control form-date'");?>
+              <?php echo html::input('realEnd',(!empty($project->realEnd) && $project->realEnd != '0000-00-00' ? $project->realEnd : date('Y-m-d')), "class='form-control form-date' required");?>
             </div>         
           </td>
         </tr>        

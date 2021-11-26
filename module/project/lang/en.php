@@ -177,6 +177,9 @@ $lang->project->createExecution        = "There is no {$lang->executionCommon} u
 $lang->project->unlinkExecutionMember  = "The user participated in %s executions such as %s%s. Do you want to remove the user from those executions as well? (The data related to this user will not be deleted.)";
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
 
+$lang->project->realEndNotEmpty  = 'Real End should not be empty.';
+$lang->project->realEndNotFuture = 'Real End should not be a feture date.';
+
 $lang->project->tenThousand = '';
 
 $lang->project->unitList['CNY'] = 'RMB';

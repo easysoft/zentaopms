@@ -30,7 +30,7 @@
           <th><?php echo $lang->execution->realBegan;?></th>
           <td>
             <div class = 'w-150px'>       
-              <?php echo html::input('realBegan',(!empty($execution->realBegan) && $execution->realBegan != '0000-00-00' ? $execution->realBegan : date('Y-m-d')), "class='form-control form-date'");?>
+              <?php echo html::input('realBegan',(!empty($execution->realBegan) && $execution->realBegan != '0000-00-00' ? $execution->realBegan : date('Y-m-d')), "class='form-control form-date' required");?>
             </div>         
           </td>
         </tr>     

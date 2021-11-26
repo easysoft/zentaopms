@@ -351,6 +351,11 @@ $lang->execution->unfinishedExecution         = "该{$lang->executionCommon}下�
 $lang->execution->unfinishedTask              = "[%s]个未完成的任务，";
 $lang->execution->unresolvedBug               = "[%s]个未解决的bug，";
 $lang->execution->projectNotEmpty             = '所属项目不能为空。';
+$lang->execution->realBeganNotEmpty           = "实际开始不能为空。";
+$lang->execution->realBeganNotFuture          = "实际开始不能为未来日期。";
+$lang->execution->realEndNotEmpty             = "实际完成不能为空。";
+$lang->execution->realEndNotFuture            = "实际完成不能为未来日期。";
+
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();

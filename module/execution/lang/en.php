@@ -351,6 +351,10 @@ $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} h
 $lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
+$lang->execution->realBeganNotEmpty           = 'Real Began should not be empty.';
+$lang->execution->realBeganNotFuture          = 'Real Began should not be a feture date.';
+$lang->execution->realEndNotEmpty             = 'Real End should not be empty.';
+$lang->execution->realEndNotFuture            = 'Real End should not be a feture date.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

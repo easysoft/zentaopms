@@ -1206,6 +1206,7 @@ class projectModel extends model
         $now        = helper::now();
 
         $project = fixer::input('post')
+            ->setDefault('realEnd','')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -1288,6 +1289,18 @@ class projectModel extends model
             ->exec();
         if(!dao::isError())
         {
+            if($project->realEnd == '')
+            {
+                dao::$errors['realEnd'] = $this->lang->project->realEndNotEmpty;
+                return false;
+            }
+
+            if($project->realEnd > $now)
+            {
+                dao::$errors['realEnd'] = $this->lang->project->realEndNotFuture; 
+                return false;
+            }
+
             $this->loadModel('score')->create('project', 'close', $oldProject);
             return common::createChanges($oldProject, $project);
         }

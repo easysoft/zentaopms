@@ -706,8 +706,23 @@ class executionModel extends model
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)->autoCheck()->where('id')->eq((int)$executionID)->exec();
+        
+        if(!dao::isError())
+        {
+            if($execution->realBegan == '')
+            {
+                dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
+                return false;
+            }
 
-        if(!dao::isError()) return common::createChanges($oldExecution, $execution);
+            if($execution->realBegan > $now)
+            {
+                dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
+                return false;
+            }
+
+            return common::createChanges($oldExecution, $execution);
+        }
     }
 
     /**
@@ -778,6 +793,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->setDefault('realEnd','')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -847,7 +863,6 @@ class executionModel extends model
 
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
-            ->setDefault('realEnd', helper::today())
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -861,6 +876,18 @@ class executionModel extends model
             ->exec();
         if(!dao::isError())
         {
+            if($execution->realEnd == '')
+            {
+                dao::$errors['realEnd'] = $this->lang->execution->realEndNotEmpty;
+                return false;
+            }
+
+            if($execution->realEnd > $now)
+            {
+                dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
+                return false;
+            }
+
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
             return common::createChanges($oldExecution, $execution);
         }

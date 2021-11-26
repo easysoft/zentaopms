@@ -177,6 +177,9 @@ $lang->project->createExecution        = "该项目下没有{$lang->executionCom
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了项目下的执行，是否同步从执行团队中移除？";
 
+$lang->project->realEndNotEmpty        = "实际完成不能为空。";
+$lang->project->realEndNotFuture       = "实际完成不能为未来日期。";
+
 $lang->project->tenThousand = '万';
 
 $lang->project->unitList['CNY'] = '人民币';
