@@ -273,6 +273,7 @@ class productplan extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
