@@ -34,7 +34,7 @@ class productsEntry extends entry
             /* Response */
             $data = $this->getData();
             if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
-            if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+            if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
             $products = $data->data->products;
 
@@ -113,7 +113,7 @@ class productsEntry extends entry
         $control->create($this->request('program', 0));
 
         $data = $this->getData();
-        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         /* Response */
         $product = $this->loadModel('product')->getByID($data->id);
@@ -134,7 +134,7 @@ class productsEntry extends entry
         $control->ajaxGetDropMenu($this->request('productID', 0), $this->request('module', 'product'), $this->request('method', 'browse'), $this->request('extra', ''), $this->request('from', ''));
 
         $data = $this->getData();
-        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $dropMenu = array('owner' => array(), 'other' => array(), 'closed' => array());
         foreach($data->data->products as $programID => $products)

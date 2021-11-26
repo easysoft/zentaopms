@@ -48,8 +48,7 @@ class tasksEntry extends entry
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'tasks' => $result));
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
-
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         return $this->sendError(400, 'error');
     }
 

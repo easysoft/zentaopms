@@ -24,6 +24,10 @@ class docEntry extends entry
         $control->view($docID);
 
         $data = $this->getData();
+
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+
         $doc  = $data->data->doc;
 
         unset($doc->draft);

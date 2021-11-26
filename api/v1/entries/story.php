@@ -26,7 +26,7 @@ class storyEntry extends Entry
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $story = $data->data->story;
 
@@ -89,7 +89,7 @@ class storyEntry extends Entry
             foreach($executionTasks as $task)
             {
                 if(!isset($data->data->executions->{$task->execution})) continue;
-                $storyTasks[] = $this->filterFields($task, 'id,name');
+                $storyTasks[] = $this->filterFields($task, 'id,name,type');
             }
         }
         $story->tasks = $storyTasks;

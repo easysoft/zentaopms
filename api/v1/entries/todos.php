@@ -24,7 +24,7 @@ class todosEntry extends entry
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $pager  = $data->data->pager;
         $result = array();

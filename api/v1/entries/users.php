@@ -73,7 +73,7 @@ class usersEntry extends entry
         $control->create();
 
         $data = $this->getData();
-        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
 
         $user = $this->loadModel('user')->getByID($data->id, 'id');

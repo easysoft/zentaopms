@@ -32,7 +32,7 @@ class executionsEntry extends entry
             /* Response */
             $data = $this->getData();
             if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
-            if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+            if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
             $executions = $data->data->executionStats;
             $pager      = $data->data->pager;

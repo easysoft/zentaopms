@@ -24,7 +24,8 @@ class todoActivateEntry extends Entry
         $control->activate($todoID);
 
         $data = $this->getData();
-        if($data->status == 'fail') return $this->sendError(400, $data->message);
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $todo = $this->loadModel('todo')->getByID($todoID);
         $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
