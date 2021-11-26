@@ -239,21 +239,13 @@
                       <th><?php echo $lang->execution->begin;?></th>
                       <td><?php echo $execution->begin;?></td>
                       <th><?php echo $lang->execution->realBegan;?></th>
-                      <?php if ($execution->realBegan == 0000-00-00): ?>
-                      <td><?php echo '';?></td>
-                      <?php else :;?>
-                      <td><?php echo $execution->realBegan;?></td>
-                      <?php endif;?>
+                      <td><?php echo $execution->realBegan == '0000-00-00' ? '' : $execution->realBegan;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->execution->end;?></th>
                       <td><?php echo $execution->end;?></td>
                       <th><?php echo $lang->execution->realEnd;?></th>
-                      <?php if ($execution->realEnd == 0000-00-00): ?>
-                      <td><?php echo '';?></td>
-                      <?php else :;?>
-                      <td><?php echo $execution->realEnd;?></td>
-                      <?php endif;?>
+                      <td><?php echo $execution->realEnd == '0000-00-00' ? '' : $execution->realEnd;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->execution->totalEstimate;?></th>
