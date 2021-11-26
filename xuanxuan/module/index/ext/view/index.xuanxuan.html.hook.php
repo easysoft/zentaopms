@@ -41,6 +41,7 @@ $(function()
 #xx-embed-container .xx-embed-has-animation {transition-property: transform, opacity!important;}
 #xx-embed-container .xx-embed {width: 280px; height: 100%;}
 #xx-embed-container .xx-embed.xx-embed-collapsed {width: 280px!important; height: 100%!important; opacity: 0; pointer-events: none; transform: translateY(100%);}
+#xx-embed-container .xx-embed-body {min-height: initial!important;}
 </style>
 <?php js::import($webRoot . 'data/xuanxuan/sdk/sdk.min.js'); ?>
 <?php js::import($jsRoot . 'md5.js'); ?>
