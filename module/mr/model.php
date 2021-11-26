@@ -85,6 +85,9 @@ class mrModel extends model
     public function create()
     {
         $MR = fixer::input('post')
+            ->setDefault('jobID', 0)
+            ->setDefault('repoID', 0)
+            ->setDefault('needCI', 0)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
@@ -103,6 +106,7 @@ class mrModel extends model
 
         $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
             ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
+            ->checkIF($MR->needCI, 'jobID',  'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());

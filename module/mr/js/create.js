@@ -83,4 +83,10 @@ $(function()
         });
     });
 
+   $("#needCI").change(function()
+   {
+       if(this.checked == false) $("#jobID").parent().parent().addClass('hidden');
+       if(this.checked == true) $("#jobID").parent().parent().removeClass('hidden');
+   });
+
 });

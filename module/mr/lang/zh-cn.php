@@ -34,6 +34,7 @@ $lang->mr->commits     = '提交数';
 $lang->mr->changes     = '更改数';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = '版本库';
+$lang->mr->jobID       = '构建任务';
 
 $lang->mr->canMerge  = "可合并";
 $lang->mr->cantMerge = "不可合并";

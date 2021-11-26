@@ -52,6 +52,10 @@
             <td colspan='1'><?php echo html::textarea('description', '', "rows='3' class='form-control'");?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->devops->repo;?></th>
+            <td colspan='1' class='required'><?php echo html::select('repoID', array(''), '', "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->mr->needCI;?></th>
             <td colspan='1'>
               <div class="checkbox-primary">
@@ -60,13 +64,9 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <th><?php echo $lang->devops->repo;?></th>
-            <td colspan='1' class='required'><?php echo html::select('repoID', array(''), '', "class='form-control chosen'");?></td>
-          </tr>
-          <tr>
+          <tr class='hidden'>
             <th><?php echo $lang->job->common;?></th>
-            <td colspan='1'><?php echo html::select('jobID', array(''), '', "class='form-control chosen'");?></td>
+            <td colspan='1' class='required'><?php echo html::select('jobID', array(''), '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->mr->assignee;?></th>

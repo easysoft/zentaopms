@@ -34,6 +34,7 @@ $lang->mr->commits     = 'commits';
 $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
+$lang->mr->jobID       = 'Compile job';
 
 $lang->mr->approval = 'Approval';
 $lang->mr->approve  = 'Approve';
