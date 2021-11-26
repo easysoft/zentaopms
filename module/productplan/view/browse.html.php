@@ -128,7 +128,7 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
-          if(common::hasPriv('execution', 'create', $plan))
+          if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
               $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$productID");
               if($config->systemMode == 'new')

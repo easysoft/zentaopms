@@ -233,7 +233,7 @@ class productplanModel extends model
                 ->where('product')->in($product)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('end')->lt($date)
-                ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+                ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
                 ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
                 ->orderBy('begin desc')
                 ->limit(5)
@@ -417,13 +417,16 @@ class productplanModel extends model
             if(!empty($plan->parent))
             {
                 $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+
+                /* Transfer stories and bugs linked with the parent plan to the child plan. */
                 $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
                 $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
                 $stories = $this->dao->select('*')->from(TABLE_STORY)->where('plan')->like("%{$plan->parent}%")->fetchAll('id');
                 foreach($stories as $storyID => $story)
                 {
-                    if(strpos(",$story->plan,", ",{$plan->parent},") === false) continue;
-                    $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$story->plan,");
+                    $storyPlan = trim($story->plan, ',');
+                    if(strpos(",$storyPlan,", ",{$plan->parent},") === false) continue;
+                    $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$storyPlan,");
                     $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
                 }
             }

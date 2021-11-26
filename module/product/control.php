@@ -991,41 +991,15 @@ class product extends control
         $plans      = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, $skipParent);
         $field      = $fieldID ? "plans[$fieldID]" : 'plan';
         $output     = '';
-
-        if(strpos($param, 'batchedit') !== false)
+        $output    .= html::select($field, $plans, $planID, "class='form-control chosen'");
+        if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
         {
-            $output  = "<div class='table-row'>";
-            $output .= "<div class='table-col'>";
-            $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
-            $output .= "</div>";
-            if(count($plans) == 1 and $needCreate)
-            {
-                $output .= "<div class='table-col'>";
-                $output .= "<div class='input-group-btn'>";
-                $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
-                $output .= '</div>';
-                $output .= '</div>';
-                $output .= "<div class='table-col'>";
-                $output .= "<div class='input-group-btn'>";
-                $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
-                $output .= '</div>';
-                $output .= '</div>';
-            }
-            $output .= "</div>";
-        }
-        else
-        {
-            $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
-            if(count($plans) == 1 and $needCreate)
-            {
-                $output .= "<div class='input-group-btn'>";
-                $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
-                $output .= '</div>';
-                $output .= "<div class='input-group-btn'>";
-                $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
-                $output .= '</div>';
-            }
-
+            $output .= "<div class='input-group-btn'>";
+            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
+            $output .= '</div>';
+            $output .= "<div class='input-group-btn'>";
+            $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
+            $output .= '</div>';
         }
         die($output);
     }

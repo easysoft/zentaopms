@@ -666,7 +666,7 @@ class story extends control
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
-        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, true);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, $story->branch, '', true);
         $this->view->products         = $myProducts + $othersProducts;
         $this->view->branches         = $branches;
         $this->view->reviewers        = implode(',', $reviewerList);

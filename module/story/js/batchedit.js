@@ -34,8 +34,8 @@ function loadBranches(product, branch, storyID)
     $('#modules' + storyID).parent('td').load(moduleLink, function(){$('#modules' + storyID).chosen();});
 
     planID = $('#plans' + storyID).val();
-    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=false&expired=&param=batchEdit,skipParent');
-    $('#plans' + storyID).closest('td').load(planLink, function(){$('#plans' + storyID).chosen();});
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=false&expired=&param=skipParent');
+    $('#plans' + storyID).parent('td').load(planLink, function(){$('#plans' + storyID).chosen();});
 }
 
 $(function()
