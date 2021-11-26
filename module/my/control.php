@@ -304,7 +304,6 @@ class my extends control
                     $task->parentName = $parent->name;
                 }
             }
-            if($task->isSuspened) unset($tasks[$task->id]);
         }
 
         /* Get the story language configuration. */

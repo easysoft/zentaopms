@@ -166,7 +166,9 @@ class blockModel extends model
     {
         $data = array();
 
-        $data['tasks']      = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+        $getTaskCount = "SELECT count(*) AS count FROM `zt_task` WHERE assignedTo  = 'admin' AND deleted  = '0'"
+            . " AND (project not in (select id from zt_project where deleted = '0' and status ='suspended') AND execution not in (select id from zt_project where deleted = '0' and status ='suspended'))";
+        $data['tasks']      = (int)$this->dao->query($getTaskCount)->fetchAll();
         $data['doneTasks']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
         $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)

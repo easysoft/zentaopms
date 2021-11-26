@@ -586,7 +586,7 @@ class block extends control
 
         $this->session->set('todoList',     $uri, 'my');
         $this->session->set('bugList',      $uri, 'qa');
-        $this->session->set('taskList',     $uri, 'execution');
+        //$this->session->set('taskList',     $uri, 'execution');
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
 
@@ -1736,6 +1736,8 @@ class block extends control
             {
                 $this->app->loadLang('task');
                 $this->app->loadLang('execution');
+
+                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', $limitCount);
             }
 
             if($objectType == 'bug')   $this->app->loadLang('bug');

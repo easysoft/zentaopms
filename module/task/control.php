@@ -1349,6 +1349,8 @@ class task extends control
         $account = $user->account;
 
         $tasks = $this->task->getUserTaskPairs($account, $status);
+        //$tasks = $this->task->getUserTasks($account, 'assignedTo');
+        //foreach($tasks as $task) if($task->status != 'wait' and $task->status != 'doing') unset($tasks[$task->id]);
 
         if($id) die(html::select("tasks[$id]", $tasks, '', 'class="form-control"'));
         die(html::select('task', $tasks, '', 'class=form-control'));
