@@ -590,9 +590,33 @@ class block extends control
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
 
+        $tasks = $this->dao->select('t1.name')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('(t2.status')->eq('suspended')
+            ->orWhere('t3.status')->eq('suspended')
+            ->markRight(1)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->fetchAll('name');
         foreach($todos as $key => $todo)
         {
-            if($todo->date == '2030-01-01') unset($todos[$key]);
+            if($todo->date == '2030-01-01')
+            {
+                unset($todos[$key]);
+                continue;
+            }
+            foreach($tasks as $task)
+            {
+                if($todo->type == 'task' and $todo->name == $task->name)
+                {
+                    unset($todos[$key]);
+                    break;
+                }
+            }
         }
 
         $this->view->todos = $todos;
