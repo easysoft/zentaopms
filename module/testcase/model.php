@@ -1446,6 +1446,7 @@ class testcaseModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  string $projectID
      * @access public
      * @return void
      */
