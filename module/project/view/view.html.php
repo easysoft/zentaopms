@@ -179,21 +179,13 @@
                     <th><?php echo $lang->project->begin;?></th>
                     <td><?php echo $project->begin;?></td>
                     <th><?php echo $lang->project->realBegan;?></th>
-                    <?php if ($project->realBegan == 0000-00-00):;?>
-                    <td><?php echo '';?></td>
-                    <?php else :;?>
-                    <td><?php echo $project->realBegan;?></td>
-                    <?php endif;?>
+                    <td><?php echo $project->realBegan == '0000-00-00' ? '' : $project->realBegan;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->end;?></th>
                     <td><?php echo $project->end;?></td>
                     <th><?php echo $lang->project->realEnd;?></th>
-                    <?php if ($project->realEnd == 0000-00-00):;?>
-                    <td><?php echo '';?></td>
-                    <?php else :;?>
-                    <td><?php echo $project->realEnd;?></td>
-                    <?php endif;?>                 
+                    <td><?php echo $project->realEnd == '0000-00-00' ? '' : $project->realEnd;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->execution->totalEstimate;?></th>
