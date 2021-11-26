@@ -2482,7 +2482,6 @@ class taskModel extends model
                 }
             }
         }
-
         return $tasks;
     }
 

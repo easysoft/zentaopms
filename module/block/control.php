@@ -586,7 +586,7 @@ class block extends control
 
         $this->session->set('todoList',     $uri, 'my');
         $this->session->set('bugList',      $uri, 'qa');
-        //$this->session->set('taskList',     $uri, 'execution');
+        $this->session->set('taskList',     $uri, 'execution');
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
 

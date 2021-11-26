@@ -51,7 +51,6 @@ class todoModel extends model
             if($todo->pri == 'low')    $todo->pri = 3;
         }
 
-        a($todo->type . '11111');
         if($todo->type != 'custom')
         {
             $type   = $todo->type;
