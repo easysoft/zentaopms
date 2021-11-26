@@ -2193,7 +2193,7 @@ class taskModel extends model
     }
 
     /**
-     * get suspended tasks of a user
+     * Get suspended tasks of a user.
      *
      * @param  string $account
      * @access public
