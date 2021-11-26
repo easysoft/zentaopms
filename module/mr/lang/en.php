@@ -1,6 +1,7 @@
 <?php
 $lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
+$lang->mr->overview     = "Survey";
 $lang->mr->create       = "Create";
 $lang->mr->browse       = "Browse";
 $lang->mr->list         = "List";
