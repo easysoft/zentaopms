@@ -374,8 +374,16 @@ class gitlab extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
 
+        $group   = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
         $reponse = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);
-        if(!$reponse or substr($reponse->message, 0, 2) == '20') die(js::reload('parent'));
+
+        /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
+        if(!$reponse or substr($reponse->message, 0, 2) == '20')
+        {
+            $this->loadModel('action')->create('gitlabgroup', $groupID, 'deleted', '', $group->name);
+            die(js::reload('parent'));
+        }
+
         die(js::alert($reponse->message));
     }
 
@@ -568,8 +576,20 @@ class gitlab extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->user->confirmDelete , inlink('deleteUser', "gitlabID=$gitlabID&userID=$userID&confirm=yes")));
 
+        $user    = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
         $reponse = $this->gitlab->apiDeleteUser($gitlabID, $userID);
-        if(!$reponse or substr($reponse->message, 0, 2) == '20') die(js::reload('parent')); /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
+
+        /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
+        if(!$reponse or substr($reponse->message, 0, 2) == '20')
+        {
+            $this->loadModel('action')->create('gitlabuser', $userID, 'deleted', '', $user->name);
+
+            /* Delete user bind. */
+            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($userID)->exec();
+
+            die(js::reload('parent'));
+        }
+
         die(js::alert($reponse->message));
     }
 
@@ -679,8 +699,16 @@ class gitlab extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->project->confirmDelete , inlink('deleteProject', "gitlabID=$gitlabID&projectID=$projectID&confirm=yes")));
 
+        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
         $reponse = $this->gitlab->apiDeleteProject($gitlabID, $projectID);
-        if(substr($reponse->message, 0, 2) == '20') die(js::reload('parent')); /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
+
+        /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
+        if(!$reponse or substr($reponse->message, 0, 2) == '20')
+        {
+            $this->loadModel('action')->create('gitlabproject', $projectID, 'deleted', '', $project->name);
+            die(js::reload('parent'));
+        }
+
         die(js::alert($reponse->message));
     }
 

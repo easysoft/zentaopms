@@ -2033,7 +2033,11 @@ class gitlabModel extends model
 
         $reponse = $this->apiCreateProject($gitlabID, $project);
 
-        if(!empty($reponse->id)) return true;
+        if(!empty($reponse->id))
+        {
+            $this->loadModel('action')->create('gitlabproject', $reponse->id, 'created', '', $reponse->name);
+            return true;
+        }
 
         return $this->apiErrorHandling($reponse);
     }
@@ -2053,8 +2057,11 @@ class gitlabModel extends model
 
         $reponse = $this->apiUpdateProject($gitlabID, $project);
 
-        if(!empty($reponse->id)) return true;
-
+        if(!empty($reponse->id))
+        {
+            $this->loadModel('action')->create('gitlabproject', $project->id, 'edited', '', $project->name);
+            return true;
+        }
         return $this->apiErrorHandling($reponse);
     }
 
@@ -2096,6 +2103,8 @@ class gitlabModel extends model
 
         if(!empty($reponse->id))
         {
+            $this->loadModel('action')->create('gitlabuser', $reponse->id, 'created', '', $reponse->name);
+
             /* Bind user. */
             if($user->account)
             {
@@ -2154,6 +2163,8 @@ class gitlabModel extends model
 
         if(!empty($reponse->id))
         {
+            $this->loadModel('action')->create('gitlabuser', $reponse->id, 'edited', '', $reponse->name);
+
             /* Bind user. */
             if($user->account && $changeBind)
             {
@@ -2187,7 +2198,11 @@ class gitlabModel extends model
 
         $reponse = $this->apiCreateGroup($gitlabID, $group);
 
-        if(!empty($reponse->id)) return true;
+        if(!empty($reponse->id))
+        {
+            $this->loadModel('action')->create('gitlabgroup', $reponse->id, 'created', '', $reponse->name);
+            return true;
+        }
 
         return $this->apiErrorHandling($reponse);
     }
@@ -2208,7 +2223,11 @@ class gitlabModel extends model
 
         $reponse = $this->apiUpdateGroup($gitlabID, $group);
 
-        if(!empty($reponse->id)) return true;
+        if(!empty($reponse->id))
+        {
+            $this->loadModel('action')->create('gitlabgroup', $reponse->id, 'edited', '', $reponse->name);
+            return true;
+        }
 
         return $this->apiErrorHandling($reponse);
     }
