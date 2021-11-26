@@ -40,7 +40,7 @@ $(function()
         $.get(repoUrl, function(response)
         {
             $('#repoID').html('').append(response);
-            $('#repo').chosen().trigger("chosen:updated");;
+            $('#repoID').chosen().trigger("chosen:updated");;
         });
     });
 
