@@ -47,10 +47,14 @@ class storyEntry extends Entry
         $story->moduleTitle = $moduleTitle;
 
         /* Format user for api. */
-        if($story->openedBy)     $story->openedBy     = $this->formatUser($story->openedBy, $data->data->users);
         if($story->assignedTo)   $story->assignedTo   = $this->formatUser($story->assignedTo, $data->data->users);
         if($story->closedBy)     $story->closedBy     = $this->formatUser($story->closedBy, $data->data->users);
         if($story->lastEditedBy) $story->lastEditedBy = $this->formatUser($story->lastEditedBy, $data->data->users);
+        if($story->openedBy)
+        {
+            $usersWithAvatar = $this->loadModel('user')->getListByAccounts(array($story->openedBy), 'account');
+            $story->openedBy = zget($usersWithAvatar, $story->openedBy);
+        }
 
         $mailto = array();
         if($story->mailto)
