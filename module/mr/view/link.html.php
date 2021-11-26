@@ -1,6 +1,6 @@
 <?php
 /**
- * The view of productplan module of ZenTaoPMS.
+ * The view of mr link module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -117,7 +117,7 @@
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
-                  if($canBeChanged and common::hasPriv('productplan', 'unlinkStory'))
+                  if($canBeChanged and common::hasPriv('mr', 'unlink'))
                   {
                       $unlinkURL = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=story&linkID=$story->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkStory}'");
@@ -147,7 +147,7 @@
         <div class='linkBox cell hidden'></div>
         <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$MR->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='bugList'>
-            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('productplan', 'batchUnlinkBug');?>
+            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('mr', 'unlink');?>
             <?php $vars = "planID={$MR->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
             <thead>
               <tr class='text-center'>
@@ -179,7 +179,7 @@
                 </td>
                 <td class='c-actions'>
                   <?php
-                  if($canBeChanged and common::hasPriv('productplan', 'unlinkBug'))
+                  if($canBeChanged and common::hasPriv('mr', 'unlink'))
                   {
                       $unlinkURL = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=bug&linkID=$bug->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkBug}'");
@@ -209,7 +209,7 @@
         <div class='linkBox cell hidden'></div>
         <form class='main-table table-task' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkTask', "planID=$MR->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='taskList'>
-            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('productplan', 'batchUnlinkTask');?>
+            <?php $canBatchUnlink = $canBeChanged and common::hasPriv('mr', 'unlink');?>
             <?php $vars = "MRID={$MR->id}&type=task&orderBy=%s&link=$link&param=$param"; ?>
             <thead>
               <tr class='text-center'>

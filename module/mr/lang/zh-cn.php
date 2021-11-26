@@ -16,6 +16,12 @@ $lang->mr->viewInGitlab = '在GitLab查看';
 $lang->mr->link         = '关联需求、bug、任务';
 $lang->mr->createAction = '%s, 由 <strong>%s</strong> 提交了 <a href="%s">合并请求</a>。';
 
+$lang->mr->linkList  = '浏览关联需求、bug、任务';
+$lang->mr->linkStory = '关联需求';
+$lang->mr->linkBug   = '关联Bug';
+$lang->mr->linkTask  = '关联任务';
+$lang->mr->unlink    = '取消关联需求、bug、任务';
+
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "MR原始ID";
 $lang->mr->title       = '名称';
