@@ -1722,6 +1722,18 @@ class block extends control
             $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount');
         }
 
+        $tasks = $this->dao->select('t1.name')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('(t2.status')->eq('suspended')
+            ->orWhere('t3.status')->eq('suspended')
+            ->markRight(1)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->fetchAll('name');
         foreach($objectCountList as $objectType => $objectCount)
         {
             if(!isset($hasViewPriv[$objectType])) continue;
@@ -1743,18 +1755,6 @@ class block extends control
             {
                 $this->app->loadClass('date');
                 $this->app->loadLang('todo');
-                $tasks = $this->dao->select('t1.name')
-                    ->from(TABLE_TASK)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
-                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
-                    ->where('t1.assignedTo')->eq($this->app->user->account)
-                    ->andWhere('(t2.status')->eq('suspended')
-                    ->orWhere('t3.status')->eq('suspended')
-                    ->markRight(1)
-                    ->andWhere('t1.deleted')->eq(0)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->andWhere('t3.deleted')->eq(0)
-                    ->fetchAll('name');
 
                 foreach($objects as $key => $todo)
                 {
