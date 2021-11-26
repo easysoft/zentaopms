@@ -465,7 +465,7 @@ class testcaseModel extends model
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
         {
-            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+            $cases = $this->dao->select('distinct t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
                 ->where("t2.status = 'active'")

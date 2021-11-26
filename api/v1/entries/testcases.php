@@ -24,7 +24,7 @@ class testcasesEntry extends entry
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('testcase', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1), $projectID);
+        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 
@@ -35,6 +35,7 @@ class testcasesEntry extends entry
             $result = array();
             foreach($cases as $case)
             {
+                $case->status = array('code' => $case->status, 'name' => $this->lang->testcase->statusList[$case->status]);
                 $result[] = $this->format($case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool');
             }
 
