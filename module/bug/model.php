@@ -1205,7 +1205,7 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
-        $openedBuilds = $this->post->openedBuild;
+        $openedBuilds = array('0' => $oldBug->openedBuild);
         if($openedBuilds)
         {
             $this->loadModel('build');
