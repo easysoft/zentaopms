@@ -1309,7 +1309,11 @@ class execution extends control
                 ->where('t1.id')->eq($plan->product)
                 ->fetchAll('id');
 
-            $productPlan = $this->loadModel('productplan')->getPairs($plan->product, $plan->branch, 'unexpired');
+            $productPlan    = $this->loadModel('productplan')->getPairs($plan->product, $plan->branch, 'unexpired');
+            $linkedBranches = array();
+            $linkedBranches[$plan->product][$plan->branch] = $plan->branch;
+
+            $this->view->linkedBranches = $linkedBranches;
         }
 
         if(!empty($_POST))
@@ -2481,15 +2485,18 @@ class execution extends control
 
         /* Set modules and branches. */
         $modules     = array();
-        $branchPairs = array();
+        $branchPairs = array(BRANCH_MAIN);
         $branches    = $this->project->getBranchesByProject($objectID);
         $productType = 'normal';
         $this->loadModel('tree');
         $this->loadModel('branch');
         foreach($products as $product)
         {
-            $productModules = $this->tree->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
+            $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys(array(BRANCH_MAIN) + $branches[$product->id]));
+            foreach($productModules as $branch => $branchModules)
+            {
+                foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
+            }
             if($product->type != 'normal')
             {
                 $productType = $product->type;

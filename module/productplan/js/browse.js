@@ -58,11 +58,20 @@ $(document).on('click', 'td.content .more', function(e)
  * Get planID
  *
  * @param  object $obj
+ * @param  int    $branch
  * @access public
  * @return void
  */
-function getPlanID(obj)
+function getPlanID(obj, branch)
 {
     var planID = $(obj).attr("data-id");
     $('#planID').val(planID);
+
+    link = createLink('productplan', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch);
+    $.get(link, function(projects)
+    {
+        $('#project').replaceWith(projects);
+        $("#project_chosen").remove();
+        $("#project").chosen();
+    });
 }

@@ -363,6 +363,20 @@ class productplan extends control
     }
 
     /**
+     * Get projects by product id.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjects($productID, $branch = 0)
+    {
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch);
+        die(html::select('projects', $projects, '', "class='form-control chosen' id=project"));
+    }
+
+    /**
      * Link stories.
      *
      * @param int    $planID
