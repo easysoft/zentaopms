@@ -3667,14 +3667,14 @@ class executionModel extends model
      * Get plans by $productID.
      *
      * @param int|array $productID
-     *
+     * @param bool      $skipParent
      * @return mixed
      */
-    public function getPlans($products)
+    public function getPlans($products, $skipParent = false, $withMainPlan = false)
     {
         $this->loadModel('productplan');
 
-        $branchIDList = array();
+        $branchIDList = $withMainPlan ? array(BRANCH_MAIN) : array();
         foreach($products as $product)
         {
             foreach($product->branches as $branchID) $branchIDList[$branchID] = $branchID;
@@ -3684,6 +3684,7 @@ class executionModel extends model
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
             ->andWhere('branch')->in($branchIDList)->fi()
+            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
