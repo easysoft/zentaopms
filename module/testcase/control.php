@@ -1595,7 +1595,8 @@ class testcase extends control
             $fields['stageValue'] = $this->lang->testcase->lblStageValue;
             if($product->type != 'normal') $fields['branchValue'] = $this->lang->product->branchName[$product->type];
 
-            $branches = $this->loadModel('branch')->getPairs($productID);
+            $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
+            $branches  = $this->loadModel('branch')->getPairs($productID, '' ,$projectID);
             foreach($branches as $branchID => $branchName) $branches[$branchID] = $branchName . "(#$branchID)";
 
             $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case');
