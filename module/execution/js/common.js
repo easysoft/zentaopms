@@ -164,7 +164,11 @@ function loadBranches(product)
         }
     });
 
-    loadPlans(product);
+    setTimeout(function()
+    {
+        var branchID = $('#branch0').val();
+        loadPlans(product, branchID);
+    },100)
 }
 
 function loadPlans(product, branchID)
@@ -177,7 +181,7 @@ function loadPlans(product, branchID)
 
     if(typeof(planID) == 'undefined') planID = 0;
     planID = $("select#plans" + productID).val() != '' ? $("select#plans" + productID).val() : planID;
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + ((config.currentMethod == 'create' || config.currentMethod == 'edit') ? 'unexpired' : '')), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent'), function(data)
     {
         if(data)
         {
@@ -188,7 +192,6 @@ function loadPlans(product, branchID)
         }
     });
 }
-
 
 function adjustProductBoxMargin()
 {

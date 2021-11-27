@@ -181,11 +181,12 @@ class productplanModel extends model
     public function getPairs($product = 0, $branch = '', $expired = '', $skipParent = false)
     {
         $date = date('Y-m-d');
-        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName,t3.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t2.id=t1.branch')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($branch !== '')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF($expired == 'unexpired')->andWhere('t1.end')->ge($date)->fi()
             ->beginIF($skipParent)->andWhere('t1.parent')->ne(-1)->fi()
             ->orderBy('t1.begin desc')
@@ -201,7 +202,7 @@ class productplanModel extends model
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
-            $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
+            if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
         }
         return array('' => '') + $planPairs;
     }
@@ -285,14 +286,19 @@ class productplanModel extends model
      * Get plan group by product id list.
      *
      * @param  string|array $products
+     * @param  bool         $skipParent
+     * @param  string       $expired
      * @access public
      * @return array
      */
-    public function getGroupByProduct($products = '')
+    public function getGroupByProduct($products = '', $skipParent = false, $expired = '')
     {
+        $date  = date('Y-m-d');
         $plans = $this->dao->select('id,title,parent,begin,end,product,branch')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->beginIF($products)->andWhere('product')->in($products)->fi()
+            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
+            ->beginIF($expired == 'unexpired')->andWhere('end')->ge($date)->fi()
             ->orderBy('id_desc')
             ->fetchAll('id');
 

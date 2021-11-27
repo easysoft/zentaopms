@@ -1284,7 +1284,7 @@ class execution extends control
             $projectID     = $copyExecution->project;
             $products      = $this->loadModel('product')->getProducts($copyExecutionID);
             $branches      = $this->project->getBranchesByProject($copyExecutionID);
-            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products));
+            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), true, 'unexpired');
             $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
 
             $linkedBranches = array();
@@ -1501,7 +1501,7 @@ class execution extends control
         $linkedBranches   = array();
         $linkedProducts   = $this->product->getProducts($executionID);
         $branches         = $this->project->getBranchesByProject($executionID);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts));
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), true);
         $executionStories = $this->project->getStoriesByProject($executionID);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */

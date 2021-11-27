@@ -188,7 +188,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->productplan->project?></th>
-            <td><?php echo html::select('projects', $projects, '', "class='form-control chosen' id=project");?></td>
+            <td><?php echo html::select('project', $projects, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <td colspan='2' class='text-center'>
