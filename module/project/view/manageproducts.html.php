@@ -37,11 +37,11 @@
                 <?php echo "<input type='checkbox' name='products[$i]' value='$productID' $checked id='products{$productID}' $isDisabled>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], $branchID, "class='form-control chosen' $isDisabled");?>
+              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], $branchID, "class='form-control chosen' disabled='disabled'");?>
             </div>
           </div>
           <?php if(!empty($isDisabled)) echo html::hidden("products[$i]", $productID);?>
-          <?php if(!empty($isDisabled)) echo html::hidden("branch[$i]", $branchID);?>
+          <?php echo html::hidden("branch[$i]", $branchID);?>
           <?php if(!isset($branchGroups[$productID])) unset($allProducts[$productID]);?>
           <?php if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);?>
           <?php if(isset($branchGroups[$productID]) and empty($branchGroups[$productID])) unset($allProducts[$productID]);?>
