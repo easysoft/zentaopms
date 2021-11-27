@@ -1229,6 +1229,7 @@ class testtask extends control
      */
     public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0)
     {
+        $this->loadModel('tree');
         $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
         if($this->post->results)
         {
@@ -1256,7 +1257,7 @@ class testtask extends control
             {
                 $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             }
-            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, 'all');
+            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, 'all');
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
         }
