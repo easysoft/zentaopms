@@ -2446,10 +2446,14 @@ class storyModel extends model
             $branches = array();
             foreach($products as $product)
             {
-                foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
+                foreach($product->branches as $branchID)
+                {
+                    if($branch == BRANCH_MAIN and $branchID) continue;
+                    $branches[$branchID] = $branchID;
+                }
             }
             $branches = join(',', $branches);
-            if($branches) $storyQuery .= " AND `branch`" . helper::dbIN($branches);
+            $storyQuery .= " AND `branch`" . helper::dbIN($branches);
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
@@ -2590,10 +2594,9 @@ class storyModel extends model
         else
         {
             $productParam = ($type == 'byproduct' and $param) ? $param : $this->cookie->storyProductParam;
-            $branchParam  = $branchID = ($type == 'bybranch' and $param !== '') ? $param : $this->cookie->storyBranchParam;
+            $branchParam  = ($type == 'bybranch' and $param !== '') ? $param : $this->cookie->storyBranchParam;
             $moduleParam  = ($type == 'bymodule'  and $param) ? $param : $this->cookie->storyModuleParam;
             $modules      = (empty($moduleParam) or $type != 'bymodule') ? array() : $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-            if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
 
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
@@ -2617,7 +2620,7 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($execution->type == 'project')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
-                ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->eq($branchParam)->fi()
+                ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
                 ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
@@ -2628,7 +2631,6 @@ class storyModel extends model
                 ->beginIF($this->session->executionStoryBrowseType and strpos('changed|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
                 ->beginIF($this->session->storyBrowseType and strpos('changed|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
-                ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)

@@ -135,17 +135,14 @@ class treeModel extends model
 
         if($type == 'line') $rootID = 0;
 
-        $branches = array($branch => '');
+        $branches = array();
         if(strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
             if($product and $product->type != 'normal')
             {
-                $branchList = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'all');
-
-                if(!$branch) $newBranches['null']  = '';
-                $newBranches[$branch] = $branchList[$branch];
-                $branches = $branch === 'all' ? $branchList : $newBranches;
+                $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
+                $branches    = $branch === 'all' ? $branchPairs : array($branch => $branchPairs[$branch]);
             }
             elseif($product and $product->type == 'normal')
             {
@@ -156,11 +153,15 @@ class treeModel extends model
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
         {
-            $stmt     = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID));
-            $modules  = array();
+            $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID));
+            $modules = array();
             while($module = $stmt->fetch()) $modules[$module->id] = $module;
 
-            foreach($modules as $module) $this->buildTreeArray($treeMenu, $modules, $module, (empty($branch) or $branch == 'null') ? '/' : "/$branch/");
+            foreach($modules as $module)
+            {
+                $branchName = ($product->type != 'normal' and $module->branch == BRANCH_MAIN) ? $this->lang->branch->main : $branch;
+                $this->buildTreeArray($treeMenu, $modules, $module, (empty($branchName)) ? '/' : "/$branchName/");
+            }
         }
 
         ksort($treeMenu);

@@ -2507,7 +2507,7 @@ class execution extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch('', 0, $queryID, 'id', $objectID);
+            $allStories = $this->story->getBySearch('', '', $queryID, 'id', $objectID);
         }
         else
         {
