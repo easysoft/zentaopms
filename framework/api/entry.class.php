@@ -589,6 +589,8 @@ class baseEntry
             return $value;
         case 'bool':
             return !empty($value);
+        case 'int':
+            return (int) $value;
         case 'idList':
             $values = explode(',', $value);
             if(empty($values)) return array();

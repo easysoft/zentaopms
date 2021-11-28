@@ -97,7 +97,7 @@ class projectsEntry extends entry
 
         $project = $this->loadModel('project')->getByID($data->id);
 
-        $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+        $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,budget:int'));
     }
 
     /**
