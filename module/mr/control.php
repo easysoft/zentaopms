@@ -78,7 +78,7 @@ class mr extends control
         $this->app->loadLang('repo'); /* Import lang in repo module. */
         $this->app->loadLang('compile');
         $this->view->title       = $this->lang->mr->create;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->jobList     = $this->loadModel('job')->getList();
         $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
         $this->display();
@@ -145,7 +145,7 @@ class mr extends control
         $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
         $this->view->targetBranchList = $targetBranchList;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->assignee         = $MR->assignee;
         $this->view->reviewer         = zget($gitlabUsers, $MR->reviewer, '');
 
@@ -389,7 +389,7 @@ class mr extends control
         $this->view->MR      = $MR;
         $this->view->action  = $action;
         $this->view->actions = $this->loadModel('action')->getList('mrapproval', $MRID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display();
     }
 
