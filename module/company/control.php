@@ -243,12 +243,10 @@ class company extends control
             if(!$productID) $productID = 'all';
             if(!$projectID) $projectID = 'all';
             if(!$executionID) $executionID = 'all';
-
             $actions = $this->action->getDynamic($account, $browseType, $sort, $pager, $productID, $projectID, $executionID, $date, $direction);
         }
         else
         {
-
             $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $sort, $pager, $date, $direction);
         }
 
