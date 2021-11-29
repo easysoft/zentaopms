@@ -28,7 +28,6 @@
     <div class='page-title'>
       <span class='label label-id'><?php echo $MR->id;?></span>
       <span title='<?php echo $MR->title;?>' class='text'><?php echo $MR->title;?></span>
-      <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branches[$branch] . '</span>';?>
       <?php if($MR->deleted):?>
       <span class='label label-danger'><?php echo $lang->product->deleted;?></span>
       <?php endif; ?>
