@@ -43,7 +43,6 @@ $lang->report->bugCreate        = 'Bug创建表';
 $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '员工负载表';
 $lang->report->workloadAB       = '工作负载';
-$lang->report->annualDataAction = '年度总结';
 $lang->report->bugOpenedDate    = 'Bug创建时间';
 $lang->report->beginAndEnd      = '起止时间';
 $lang->report->begin            = '起始日期';
