@@ -2469,9 +2469,8 @@ class storyModel extends model
             {
                 $branches[$branch] = $branch;
             }
-            $branches = join(',', $branches);
 
-            if($this->app->moduleName == 'release') $branches = $branch;
+            $branches = join(',', $branches);
             $storyQuery .= " AND `branch`" . helper::dbIN($branches);
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
