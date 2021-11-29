@@ -771,7 +771,7 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans    = $this->execution->getPlans($products, true, true);
+        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan');
         $allPlans = array('' => '');
         if(!empty($plans))
         {
@@ -1284,7 +1284,7 @@ class execution extends control
             $projectID     = $copyExecution->project;
             $products      = $this->loadModel('product')->getProducts($copyExecutionID);
             $branches      = $this->project->getBranchesByProject($copyExecutionID);
-            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), true, 'unexpired');
+            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
             $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
 
             $linkedBranches = array();
@@ -1501,7 +1501,7 @@ class execution extends control
         $linkedBranches   = array();
         $linkedProducts   = $this->product->getProducts($executionID);
         $branches         = $this->project->getBranchesByProject($executionID);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), true);
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
         $executionStories = $this->project->getStoriesByProject($executionID);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
@@ -1514,6 +1514,7 @@ class execution extends control
             {
                 $linkedBranches[$productID][$branchID] = $branchID;
                 $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID][$branchID] += $plans[$productID][BRANCH_MAIN];
                 if(!empty($executionStories[$productID][$branchID]))
                 {
                     array_push($unmodifiableProducts, $productID);
@@ -2492,7 +2493,7 @@ class execution extends control
         $this->loadModel('branch');
         foreach($products as $product)
         {
-            $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys(array(BRANCH_MAIN) + $branches[$product->id]));
+            $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, $branches[$product->id]);
             foreach($productModules as $branch => $branchModules)
             {
                 foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;

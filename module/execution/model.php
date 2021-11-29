@@ -1728,18 +1728,6 @@ class executionModel extends model
                         if($branchID != BRANCH_MAIN) $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
                     }
                 }
-                else
-                {
-                    $productBranches = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(0);
-                    if(count($products) > 1)
-                    {
-                        foreach($productBranches as $branchID => $branchName)
-                        {
-                            if($branchID !== BRANCH_MAIN) $productBranches[$branchID] = $product->name . '/' . $branchName;
-                        }
-                    }
-                    $branchPairs += $productBranches;
-                }
             }
         }
 
@@ -3667,14 +3655,15 @@ class executionModel extends model
      * Get plans by $productID.
      *
      * @param int|array $productID
-     * @param bool      $skipParent
+     * @param string    $param withMainPlan|skipParent
      * @return mixed
      */
-    public function getPlans($products, $skipParent = false, $withMainPlan = false)
+    public function getPlans($products, $param = '')
     {
         $this->loadModel('productplan');
 
-        $branchIDList = $withMainPlan ? array(BRANCH_MAIN) : array();
+        $param        = strtolower($param);
+        $branchIDList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
         foreach($products as $product)
         {
             foreach($product->branches as $branchID) $branchIDList[$branchID] = $branchID;
@@ -3684,7 +3673,7 @@ class executionModel extends model
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
             ->andWhere('branch')->in($branchIDList)->fi()
-            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
+            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 

@@ -212,34 +212,23 @@ class productplanModel extends model
      *
      * @param  array|int    $product
      * @param  int          $branch
-     * @param  bool         $skipParent
+     * @param  string       $param skipParent|withMainPlan|unexpired
      * @access public
      * @return array
      */
-    public function getPairsForStory($product = 0, $branch = '', $skipParent = false)
+    public function getPairsForStory($product = 0, $branch = '', $param = '')
     {
-        $date = date('Y-m-d');
-        $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
+        $date   = date('Y-m-d');
+        $param  = strtolower($param);
+        $branch = strpos($param, 'withmainplan') !== false ? "0,$branch" : $branch;
+        $plans  = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('end')->ge($date)
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
-            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
+            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
-
-        if(!$plans)
-        {
-            $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
-                ->where('product')->in($product)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('end')->lt($date)
-                ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
-                ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
-                ->orderBy('begin desc')
-                ->limit(5)
-                ->fetchAll('id');
-        }
 
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();
@@ -286,19 +275,19 @@ class productplanModel extends model
      * Get plan group by product id list.
      *
      * @param  string|array $products
-     * @param  bool         $skipParent
-     * @param  string       $expired
+     * @param  string       $param skipParent|unexpired
      * @access public
      * @return array
      */
-    public function getGroupByProduct($products = '', $skipParent = false, $expired = '')
+    public function getGroupByProduct($products = '', $param = '')
     {
         $date  = date('Y-m-d');
+        $param = strtolower($param);
         $plans = $this->dao->select('id,title,parent,begin,end,product,branch')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->beginIF($products)->andWhere('product')->in($products)->fi()
-            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
-            ->beginIF($expired == 'unexpired')->andWhere('end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->orderBy('id_desc')
             ->fetchAll('id');
 
@@ -422,18 +411,21 @@ class productplanModel extends model
             $this->loadModel('score')->create('productplan', 'create', $planID);
             if(!empty($plan->parent))
             {
-                $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
-
-                /* Transfer stories and bugs linked with the parent plan to the child plan. */
-                $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
-                $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
-                $stories = $this->dao->select('*')->from(TABLE_STORY)->where('plan')->like("%{$plan->parent}%")->fetchAll('id');
-                foreach($stories as $storyID => $story)
+                $parentPlan = $this->getByID($plan->parent);
+                if($parentPlan->parent == '0')
                 {
-                    $storyPlan = trim($story->plan, ',');
-                    if(strpos(",$storyPlan,", ",{$plan->parent},") === false) continue;
-                    $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$storyPlan,");
-                    $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
+                    $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+
+                    /* Transfer stories and bugs linked with the parent plan to the child plan. */
+                    $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
+                    $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
+                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
+                    foreach($stories as $storyID => $story)
+                    {
+                        $storyPlan = trim($story->plan, ',');
+                        $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$storyPlan,");
+                        $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
+                    }
                 }
             }
             return $planID;

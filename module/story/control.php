@@ -310,7 +310,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
+        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch, 'skipParent');
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
@@ -464,7 +464,7 @@ class story extends control
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
 
-        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, true);
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, 'skipParent');
         $plans['ditto'] = $this->lang->story->ditto;
 
         $priList          = (array)$this->lang->story->priList;
@@ -666,7 +666,7 @@ class story extends control
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, $story->branch, '', true);
+        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, 'skipParent');
         $this->view->products         = $myProducts + $othersProducts;
         $this->view->branches         = $branches;
         $this->view->reviewers        = implode(',', $reviewerList);

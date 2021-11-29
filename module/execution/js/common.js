@@ -162,13 +162,10 @@ function loadBranches(product)
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
         }
-    });
 
-    setTimeout(function()
-    {
-        var branchID = $('#branch0').val();
+        var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
-    },100)
+    });
 }
 
 function loadPlans(product, branchID)

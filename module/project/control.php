@@ -542,7 +542,7 @@ class project extends control
         $linkedProducts  = $this->loadModel('product')->getProducts($projectID);
         $parentProject   = $this->program->getByID($project->parent);
         $branches        = $this->project->getBranchesByProject($projectID);
-        $plans           = $this->productplan->getGroupByProduct(array_keys($linkedProducts), true);
+        $plans           = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
         $projectStories  = $this->project->getStoriesByProject($projectID);
         $projectBranches = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
