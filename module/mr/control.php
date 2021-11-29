@@ -195,8 +195,8 @@ class mr extends control
 
         $this->view->sourceProjectName = $sourceProject->name_with_namespace;
         $this->view->targetProjectName = $targetProject->name_with_namespace;
-        $this->view->sourceProjectURL  = $sourceBranch ->web_url;
-        $this->view->targetProjectURL  = $targetBranch ->web_url;
+        $this->view->sourceProjectURL  = isset($sourceBranch->web_url) ? $sourceBranch->web_url : '';
+        $this->view->targetProjectURL  = isset($targetBranch->web_url) ? $targetBranch->web_url : '';
 
         /* Those variables are used to render $lang->mr->commandDocument. */
         $this->view->httpRepoURL = $sourceProject->http_url_to_repo;
