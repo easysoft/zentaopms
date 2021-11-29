@@ -147,8 +147,24 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
+        $tasks  = $this->loadModel('task')->getUserSuspendedTasks($account);
+        foreach($todos as $key => $todo)
+        {
+            foreach($tasks as $task)
+            {
+                if($todo->type == 'task' and $todo->idvalue = $task->id)
+                {
+                    unset($todos[$key]);
+                    break;
+                }
+            }
+        }
+
+        $pager->recTotal = count($todos);
+
         /* Assign. */
-        $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
+        $this->view->todos        = $todos;
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = $type;
         $this->view->recTotal     = $recTotal;
