@@ -1,0 +1,14 @@
+#mainMenu {display: none;}
+#sidebar {display: none;}
+.table-footer>.table-statistic {display: none;}
+.checkbox-primary {display: none !important;}
+.dropdown {display: none;}
+#xx-title {background-color: #F2F2F2; padding-left: 15px; line-height: 40px;}
+body {width: 700px; margin-bottom: 0px !important;}
+#main {min-width: 100%;}
+#main > .container {width: 100% !important;}
+#mainContent > .main-col {margin-top: 0px;}
+.pager > li > .pager-size-menu {display: none;}
+.table-footer > .table-actions {display: none;}
+.table-footer{position: fixed; width: 100%; bottom: 0;}
+.c-status {width: 70px;}

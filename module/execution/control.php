@@ -206,7 +206,7 @@ class execution extends control
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get tasks. */
@@ -734,6 +734,7 @@ class execution extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, 'story', '', $pager);
@@ -878,6 +879,7 @@ class execution extends control
 
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
         $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
