@@ -176,8 +176,9 @@ class blockModel extends model
             ->andWhere('t3.type')->eq('sprint')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0);
-        $data['tasks']      = count($tasks);
+            ->andWhere('t3.deleted')->eq(0)
+            ->fetchAll('id');
+        $data['tasks']      = isset($tasks) ? count($tasks) : 0;
         $data['doneTasks']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
         $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)
