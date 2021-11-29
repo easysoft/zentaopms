@@ -220,7 +220,7 @@ class execution extends control
         $product = $this->product->getById($productID);
         if(!empty($product) and $product->type != 'normal')
         {
-            $lang->datatable->showBranch = sprintf($lang->datatable->showBranch, $lang->product->branchName[$product->type]);
+            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
         }
 
         /* Build the search form. */
