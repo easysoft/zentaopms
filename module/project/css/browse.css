@@ -11,7 +11,8 @@ td.c-PM {white-space: nowrap; overflow: hidden;}
 .icon-cards-view {padding-left: 7px; font-size: 16px;}
 .icon-list {padding-left: 7px;}
 .panel-actions {position: relative; padding: 0 0;}
-@media screen and (max-width: 1460px)
+th.c-name {width: 360px !important;}
+@media screen and (min-width: 1460px)
 {
-    th.c-name {width: 360px !important;}
+    th.c-name {width: auto;}
 }
