@@ -19,6 +19,6 @@ class pingEntry extends entry
      */
     public function get()
     {
-        $this->send(200, date('Y-m-d H:i:s'));
+        $this->send(200, array('token' => session_id(), 'tokenLife' => ini_get('session.gc_maxlifetime')));
     }
 }
